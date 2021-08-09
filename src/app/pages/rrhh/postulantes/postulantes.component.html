@@ -1,0 +1,199 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+
+
+
+                <div class="card-body">
+
+                    <div class="row mb-2">
+                        <div class="col-md-9">
+                            <h5>Hojas de Vida </h5>
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <button type="button" class=" btn btn-primary btn-sm" (click)="modalNuevaHoja.show()">
+                                <i class="fa fa-plus"></i>Nuevo postulante
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped" style="font-size: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th>Nombres</th>
+                                        <th>Identificación</th>
+                                        <th>Grupo</th>
+                                        <th>Dependencia</th>
+                                        <th>Cargo</th>
+                                        <th>Departamento</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <th class="tabla-filtro">
+                                            <input type="text" class="form-control form-control-sm  " [(ngModel)]="filtro_nom" (change)="filtros()" placeholder="Filtro Nombre">
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" class="form-control form-control-sm " [(ngModel)]="filtro_iden" (change)="filtros()" placeholder="Filtro Identificacion">
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <select class="form-control form-control-sm" name="Id_Grupo" [(ngModel)]="filto_grupo" (change)="Grupo_Dependencia($event.target.value);filtros()" id="grupo">
+                        <option value="">Seleccione Grupo</option>
+                        <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
+                      </select>
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <select class="form-control form-control-sm" name="Id_Dependencia" [(ngModel)]="filtro_depen" (change)="Dependencia_Cargo($event.target.value);filtros()" id="dependencia">
+                        <option value="">Seleccione Dependencia</option>
+                        <option *ngFor="let Dependencia of Dependencias " [value]="Dependencia.Id_Dependencia">{{Dependencia.Nombre}}</option>
+                      </select>
+
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <select class="form-control form-control-sm" name="Id_Cargo" [(ngModel)]="filtro_cargo" id="cargo" (change)="filtros()">
+                          <option value="">Seleccione Cargo</option>
+                          <option *ngFor="let Cargo of Cargos " [value]="Cargo.Id_Cargo">{{Cargo.Nombre}}</option>
+                        </select>
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" class="form-control form-control-sm " [(ngModel)]="filtro_dep" (change)="filtros()" placeholder="Filtro Departamento">
+                                        </th>
+                                        <th class="tabla-filtro"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of Postulantes; let i = index">
+                                        <td style="max-width: 200px; width: 200px !important;" class="text-left">
+                                            {{item.Postulante}}
+                                        </td>
+                                        <td style="max-width: 70px; width: 70px !important;">
+                                            {{item.Identificacion}}
+                                        </td>
+                                        <td style="max-width: 50px; width: 50px !important;">
+                                            {{item.Grupo}}
+                                        </td>
+                                        <td style="max-width: 900px !important; width: 90px !important">
+                                            {{item.Dependencia}}
+                                        </td>
+                                        <td style="max-width: 120px !important; width: 120px !important">
+                                            {{item.Cargo}}
+                                        </td>
+                                        <td style="max-width: 70px !important;width: 70px !important;">
+                                            {{item.Departamento}}
+                                        </td>
+
+                                        <td style="max-width: 70px !important; width: 70px !important;">
+                                            <div class="text-center">
+                                                <div ngbDropdown class="dropdown-primary ">
+                                                    <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                                        <i class="mdi mdi-chevron-down "></i>
+                                                    </button>
+                                                    <div ngbDropdownMenu>
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank"><i class="fa fa-file-pdf-o"></i>Ver Documento</a>
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" (click)="EditarPostulante(i)"><i class="fa fa-pencil"></i>Editar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <span *ngIf="Postulantes.length>0">{{(page*30)-30+1}} al {{((page*30) > TotalItems ? TotalItems :
+              (page*30))}} de {{ TotalItems }}</span>
+                    <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="15" [rotate]="true" size="sm" (pageChange)="paginacion()" [boundaryLinks]="true"></ngb-pagination>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal-basic #modalNuevaHoja [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">Nuevo postulante</h4>
+        <button type="button" class="close basic-close" (click)="modalNuevaHoja.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="app-modal-body">
+        <form #FormHojaVida="ngForm">
+            <div class="row">
+                <div class="col-md-3">
+
+                    <label>Grupo</label>
+                    <select class="form-control form-control-sm" name="Id_Grupo" [(ngModel)]="Hoja.Id_Grupo" (change)="Grupo_Dependencia($event.target.value)" required id="grupo">
+              <option value="">Seleccione Grupo</option>
+              <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
+            </select>
+
+
+                </div>
+
+                <div class="col-md-3">
+                    <label>Dependencia</label>
+                    <select class="form-control form-control-sm" name="Id_Dependencia" [(ngModel)]="Hoja.Id_Dependencia" (change)="Dependencia_Cargo($event.target.value)" id="dependencia" required>
+              <option value="">Seleccione Dependencia</option>
+              <option *ngFor="let Dependencia of Dependencias " [value]="Dependencia.Id_Dependencia">{{Dependencia.Nombre}}</option>
+            </select>
+
+                </div>
+                <div class="col-md-3">
+                    <label>Cargo</label>
+                    <select class="form-control form-control-sm" name="Id_Cargo" [(ngModel)]="Hoja.Id_Cargo" required id="cargo">
+              <option value="">Seleccione Cargo</option>
+              <option *ngFor="let Cargo of Cargos " [value]="Cargo.Id_Cargo">{{Cargo.Nombre}}</option>
+            </select>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="from-group">
+                        <label>Departamento</label>
+                        <select id="Departamento" name="Id_Departamento" class="form-control form-control-sm" (change)="cargarPuntos($event.target.value)" [(ngModel)]="Hoja.Id_Departamento">
+                        <option value="" selected>Seleccione Departamento</option>
+                        <option *ngFor="let item of Departamentos; let i=index" [value]="item.Id_Departamento">{{ item.Nombre }}</option>
+                      </select>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Numero Documento</label>
+                        <input [(ngModel)]="Hoja.Identificacion" name="Identificacion" class="form-control form-control-sm" type="number">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input [(ngModel)]="Hoja.Nombres" name="Nombres" class="form-control form-control-sm" type="text">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Apellidos</label>
+                        <input [(ngModel)]="Hoja.Apellidos" name="Apellidos" class="form-control form-control-sm" type="text">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Archivo PDF</label>
+                        <input [(ngModel)]="Hoja.Archivo" type="file" accept="application/pdf" name="Soporte" id="soporte" placeholder="" class="form-control form-control-sm" (change)="CargaArchivo($event,0)" style="height: 28px !important" required>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-default btn-sm" (click)="modalNuevaHoja.hide()">Cancelar</button>
+            <button type="button" (click)="GuardarHojaVida()" [disabled]="!FormHojaVida.valid" class="btn btn-primary btn-sm">Guardar</button>
+            <!--             <button type="button" [swal]="{ title: '¿Está Seguro?', text: 'Se dispone a guardar esta hoja de Vida \n¿Está seguro(a)?', type: 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }" (confirm)="GuardarHojaVida()"
+                [disabled]="!FormHojaVida.valid" class="btn btn-primary btn-sm">Guardar</button> -->
+        </div>
+    </div>
+</app-modal-basic>
+<!-- <swal #confirmacionSwal title="" text="" type=""></swal> -->

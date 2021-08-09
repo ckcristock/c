@@ -1,0 +1,128 @@
+<div class="card">
+
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col-md-9">
+                <h5>Vacantes</h5>
+            </div>
+            <div class="col-md-3 text-right">
+                <button type="button" class=" btn btn-primary btn-sm" [routerLink]="['/rrhh/vacantescrear']">
+                    <i class="fa fa-plus"></i> Nueva Vacante 
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Publicación</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Título</th>
+                            <th>Dependencia</th>
+                            <th>Cargo</th>
+                            <th>Departamento</th>
+                            <th>Municipio</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                        <tr>
+                            <th class="tabla-filtro" style="max-width: 100px; width: 100px !important;">
+                                <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_Fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fecha Publicación"></my-date-range-picker>
+                            </th>
+                            <th class="tabla-filtro" style="max-width: 110px; width: 90px !important;">
+                                <input type="date" [(ngModel)]="filtro_Fecha_Inicio" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Fecha Inicio">
+                            </th>
+                            <th class="tabla-filtro" style="max-width: 110px; width: 80px !important;">
+                                <input type="date" [(ngModel)]="filtro_Fecha_Fin" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Fecha Fin">
+                            </th>
+                            <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
+                                <input type="text" [(ngModel)]="filtro_titulo" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Título">
+                            </th>
+                            <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
+                                <input type="text" [(ngModel)]="filtro_dependencia" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Dependencia">
+                            </th>
+                            <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
+                                <input type="text" [(ngModel)]="filtro_Cargo" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Cargo">
+                            </th>
+                            <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
+                                <input type="text" [(ngModel)]="filtro_departamento" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Departamento">
+                            </th>
+                            <th class="tabla-filtro" style="max-width: 130px; width: 130px !important;">
+                                <input type="text" [(ngModel)]="filtro_municipio" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Municipio">
+                            </th>
+                            <th class="tabla-filtro" style="max-width: 70px; width: 70px !important;">
+                                <select [(ngModel)]="filtro_estado" (change)="filtros()" class="form-control input-sm">
+                                    <option value="">Todos</option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Anulada">Anulada</option>
+                                </select>
+                            </th>
+                            <th class="tabla-filtro" style="max-width: 50px; width: 50px !important;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr *ngFor="let vacante of Lista_Vacantes " class="{{vacante.Estado=='Anulada' ? 'bg-danger' : ''}}">
+                            <td style="max-width: 80px; width: 80px !important;">
+                                {{vacante.Fecha}}
+                            </td>
+                            <td style="max-width: 80px; width: 80px !important;">
+                                {{vacante.Fecha_Inicio}}
+                            </td>
+                            <td style="max-width: 80px; width: 80px !important;">
+                                {{vacante.Fecha_Fin}}
+                            </td>
+                            <td style="max-width: 100px; width: 100px !important;">
+                                {{vacante.Titulo_Vacante}}
+                            </td>
+                            <td style="max-width: 70px; width: 70px !important;">
+                                {{vacante.NDependencia}}
+                            </td>
+                            <td style="max-width: 70px; width: 70px !important;">
+                                {{vacante.NCargo}}
+                            </td>
+                            <td style="max-width: 70px; width: 70px !important;">
+                                {{vacante.NDepartamento}}
+                            </td>
+                            <td style="max-width: 120px !important; width: 120px !important">
+                                {{vacante.NMunicipio}}
+                            </td>
+                            <td style="max-width: 50px; width: 50px !important;">
+                                <div class="text-center">
+                                    <span class="label {{vacante.Estado=='Activo' ? 'label-success' : 'label-primary'}}">{{vacante.Estado}}
+                        </span>
+                                </div>
+                            </td>
+                            <td style="max-width: 70px !important; width: 70px !important;">
+                                <div class="text-center">
+                                    <div ngbDropdown class="dropdown-primary">
+                                        <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                            <i class="mdi mdi-chevron-down "></i>
+                                        </button>
+                                        <div ngbDropdownMenu>
+                                            <a *ngIf="vacante.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" href="" [routerLink]="['/vacanteseditar',vacante.Id_Vacante]">
+                                                <i class="ti-pencil"></i> Editar</a>
+                                            <a class="dropdown-item waves-light waves-effect caja-botones" href="" [routerLink]="['/vacantesver',vacante.Id_Vacante]">
+                                                <i class="ti-eye"></i> Ver</a>
+                                            <a *ngIf="vacante.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" href="" [swal]="{title:'¿Está Seguro?',text : 'Se dispone anular la vacante' , type:'warning', showCancelButton: true, confirmButtonText: 'Si', cancelButtonText:'Dejame verificar'}"
+                                                (confirm)="AnularVacante(vacante.Id_Vacante)">
+                                                <i class="fa fa-times"></i> Anular</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {{(page*maxSize)-maxSize+1}} al {{(page*maxSize)}} de {{ TotalItems }}
+        <ngb-pagination class="pull-right" [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="10" [pageSize]="maxSize" size="sm" (pageChange)="paginacion()" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+    </div>
+</div>
+
+<!-- <swal #deleteSwal title="Vacante Anulada" text="Se ha Anulado Correctamente la vacante" type="success">
+</swal>
+<swal #confirmacionSwal title="" text="" type=""></swal> -->

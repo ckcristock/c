@@ -1,0 +1,215 @@
+<div class="page-body">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Fecha Inicio</label>
+                                <input type="date" [(ngModel)]="firstDay" (change)="filtroFecha()" id="Fecha_Inicio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Fecha Fin</label>
+                                <input type="date" [(ngModel)]="lastDay" (change)="filtroFecha()" id="Fecha_Fin" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card">
+
+                <div class="card-body ">
+
+                    <p class="d-block text-c-blue f-24 f-w-600 text-center" style="font-size: 20px; margin-bottom: 0;">Llegadas tarde de los últimos 15 días </p>
+
+                    <div #studentChart>
+                        <!--  <chart id="llegadas_tarde_chart" [type]="'line'" [data]="llegadasTardeChartData" [options]="llegadasTardeChartOption"></chart> -->
+                        <canvas baseChart [datasets]="donutChart.datasets" chartType="doughnut" [options]="donutChart.options" height="260"> 
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+
+                <div class="card-body ">
+
+                    <p class="d-block text-c-blue f-24 f-w-600 text-center" style="font-size: 20px; margin-bottom: 0;">Estadisticas</p>
+
+                    <div #studentChart>
+                        <!--  <chart id="llegadas_tarde_chart" [type]="'line'" [data]="llegadasTardeChartData" [options]="llegadasTardeChartOption"></chart> -->
+                        <canvas baseChart [datasets]="donutChart.datasets" chartType="doughnut" [options]="donutChart.options" height="260"> 
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="row">
+
+                <div class="col-md-12 col-xl-12">
+                    <div class="card bg-c-blue notification-card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-4 notify-icon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <div class="col-8 notify-cont">
+                                    <h4>5</h4>
+                                    <p> Total llegadas Tarde </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-xl-12">
+                    <div class="card bg-c-blue notification-card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-4 notify-icon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <div class="col-8 notify-cont">
+                                    <h4>15%</h4>
+                                    <p> Porcentaje LLegadas Tarde </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12">
+                    <div class="card bg-c-pink notification-card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-4 notify-icon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <div class="col-8 notify-cont">
+                                    <h4>15 Min.</h4>
+                                    <p>Tiempo Acumulado </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h5><i class="fa fa-users" style="color: #57a5ff;"></i> Funcionarios que llegaron tarde </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped" style="font-size: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Funcionario</th>
+                                        <th>Llegadas Tarde</th>
+                                        <th>Tiempo Promedio</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <th class="tabla-filtro"></th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" [(ngModel)]="filtro_nom" (change)="filtros()" class="form-control form-sm" placeholder="Filtro Funcionario">
+                                        </th>
+                                        <th class="tabla-filtro">
+
+                                        </th>
+                                        <th class="tabla-filtro"></th>
+                                        <th class="tabla-filtro"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr *ngFor="let llegada of Llegadas">
+                                        <td>
+                                            <!--  <img *ngIf="llegada.Imagen != ''" class="img-radius img-50 imagen" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{llegada.Imagen}}" alt="">
+                                            <img *ngIf="llegada.Imagen == ''" class="img-radius img-50 imagen" src="assets/images/user.jpg" alt=""> -->
+                                        </td>
+                                        <td>{{ llegada.Nombres }}</td>
+                                        <td class="text-center">{{ llegada.Llegadas_Tardes }}</td>
+                                        <td class="text-center">{{ llegada.Tiempo_Promedio }}</td>
+                                        <td class="pull-right">
+                                            <button class="btn btn-primary btn-xs btn-search" (click)="Detalle(llegada.id,modalDetalleLlegada)" title="Ver detalle" style="display: inline-block;">
+                               <i class="fa fa-search"></i>
+                                </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <span *ngIf="Llegadas.length>0">{{(page*maxSize)-maxSize+1}} al {{(page*maxSize)}} de {{ TotalItems }}  </span>
+                    <ngb-pagination class="pull-right" [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="10" [pageSize]="maxSize" size="sm" (pageChange)="filtros(true)" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal-basic #modalDetalleLlegada [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">Detalle</h4>
+        <button type="button" class="close basic-close" (click)="modalDetalleLlegada.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="card">
+            <div class="card-block table-border-style">
+                <div class="table-responsive">
+                    <table class="table detalles-table table-styling table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Entrada Turno</th>
+                                <th>Entrada Real</th>
+                                <th>Tiempo Retraso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let detalle of Detalles_LLegadas">
+                                <td>{{detalle.Fecha}}</td>
+                                <td>{{detalle.Entrada_Turno}}</td>
+                                <td>{{detalle.Entrada_Real}}</td>
+                                <td>{{detalle.Tiempo_Retraso}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-default btn-sm" (click)="modalDetalleLlegada.hide()">Cancelar</button>
+        </div>
+    </div>
+
+</app-modal-basic>
+
+<!-- <swal #deleteSwal title="Llegada Tarde Eliminada" text="Se ha Eliminado Correctamente la llegada tarde" type="success">
+  </swal>
+  <swal #confirmacionSwal title="" text="" type=""></swal> -->

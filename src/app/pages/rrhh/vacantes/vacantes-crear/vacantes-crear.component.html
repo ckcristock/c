@@ -1,0 +1,223 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-md-offset-4">
+
+            <div class="card">
+                <form #FormVacante="ngForm" ng-submit="" style="padding-bottom: 0px;">
+                    <div class="row invoice-contact" style="align-items:flex-start !important;">
+                        <div class="col-md-8">
+                            <div class="invoice-box row">
+                                <div class="col-sm-12">
+                                    <table class="table table-responsive invoice-table table-borderless">
+                                        <tbody>
+                                            <tr>
+                                                <td style="width:100px;">
+                                                    <!--  <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="Pro-H Software"> -->
+                                                </td>
+                                                <td>
+                                                    <!--  {{globales.Nombre}}
+                                                    <br> {{globales.Nit}}
+                                                    <br> {{globales.Direccion}}
+                                                    <br> {{globales.Telefono}} -->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <h4>Nueva Vacante</h4>
+                        </div>
+                    </div>
+                    <div class="card-body" style="padding-bottom: 0px;">
+                        <div class="row invoive-info" style="margin-bottom: 0; padding-bottom: 0px;">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>Titulo de vacante</label>
+                                    <input type="text" ngModel name="Titulo_Vacante" id="Titulo_Vacante" class="form-control form-control-sm f-9" required/>
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Fecha inicio</label>
+                                    <input type="date" [(ngModel)]="Fecha_Inicio" name="Fecha_Inicio" id="Fecha_Inicio" class="form-control form-control-sm f-9" (change)="validarFechas()" required/>
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Fecha fin</label>
+                                    <input type="date" [(ngModel)]="Fecha_Fin" name="Fecha_Fin" id="Fecha_Fin" class="form-control form-control-sm f-9" (change)="validarFechas()" required/>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Grupo</label>
+                                    <select id="Grupo" ngModel name="Grupo" class="form-control form-control-sm tipo-dis-select" (change)="ListarDependencias($event.target.value)" required>
+                                      <option value="">Seleccione</option>
+                                      <option *ngFor="let grupo of Grupos" [value]="grupo.Id_Grupo">{{ grupo.Nombre }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Dependencia</label>
+                                    <select id="Dependencia" ngModel name="Dependencia" class="form-control form-control-sm tipo-dis-select" (change)="ListarCargos($event.target.value)" required>
+                                      <option value="">Seleccione</option>
+                                      <option *ngFor="let dependencia of Dependencias" [value]="dependencia.Id_Dependencia">{{ dependencia.Nombre }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Cargo</label>
+                                    <select id="Cargo" ngModel name="Cargo" class="form-control form-control-sm tipo-dis-select" required>
+                                      <option value="">Seleccione</option>
+                                      <option *ngFor="let cargo of Cargos" [value]="cargo.Id_Cargo">{{ cargo.Nombre }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Departamento</label>
+                                    <select ngModel name="Departamento" id="Departamento" class="form-control form-control-sm tipo-dis-select" (change)="ListarMunicipios($event.target.value)" required>
+                                      <option value="">Seleccione</option>
+                                      <option *ngFor="let departamento of Departamentos" [value]="departamento.Id_Departamento">{{ departamento.Nombre }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Municipio</label>
+                                    <select ngModel name="Municipio" id="Municipio" class="form-control form-control-sm tipo-dis-select" required>
+                                        <option value="">Seleccione</option>
+                                        <option *ngFor="let municipio of Municipios" [value]="municipio.Id_Municipio">{{ municipio.Nombre }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Salario</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="number" [(ngModel)]="Salario_Inferior" name="Salario_Inferior" id="Salario_Inferior" placeholder="Rango 1" class="form-control form-control-sm f-9" min="1" (change)="validarSalarios()" required/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="number" [(ngModel)]="Salario_Superior" name="Salario_Superior" id="Salario_Superior" placeholder="Rango 2" class="form-control form-control-sm f-9" min="1" (change)="validarSalarios()" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Horario</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="time" [(ngModel)]="Horario_Inferior" name="Horario_Inferior" id="Horario_Inferior" placeholder="Rango 1" class="form-control form-control-sm f-9" (change)="validarHorarios()" required/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="time" [(ngModel)]="Horario_Superior" name="Horario_Superior" id="Horario_Superior" placeholder="Rango 2" class="form-control form-control-sm f-9" (change)="validarHorarios()" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="row invoive-info" style="margin-bottom: 0;">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Descripción</label>
+                                    <textarea id="Descripcion" ngModel name="Descripcion" type="text" rows="3" class="form-control" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="requisitos-vacantes text-center">
+                                    <h6 style="margin-bottom: 10px">Requisitos</h6>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Educación Mínima</label>
+                                                <input type="text" ngModel name="Educacion" id="Educacion" placeholder="Ejm: Universidad / Carrera técnica" class="form-control form-control-sm f-9" required/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Años de experiencia</label>
+                                                <input type="number" ngModel name="Experiencia" id="Experiencia" placeholder="" class="form-control form-control-sm f-9" min="0" required />
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Desde (Edad) </label>
+                                                        <input type="number" ngModel name="Edad" id="Edad" min="18" placeholder="Rango Desde" class="form-control form-control-sm f-9" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Hasta (Edad)</label>
+                                                        <input type="number" ngModel name="Edad_Max" id="Edad" min="18" placeholder="Rango Hasta" class="form-control form-control-sm f-9" required />
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Disponibilidad de viajar</label>
+                                                <select ngModel name="Viajar" id="Viajar" class="form-control form-control-sm tipo-dis-select" required>
+                                                      <option value="">Seleccione</option>
+                                                      <option value="Si">Sí</option>
+                                                      <option value="No">No</option>
+                                                  </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Disponibilidad cambio residencia</label>
+                                                <select ngModel name="Cambio_Residencia" id="Cambio_Residencia" class="form-control form-control-sm tipo-dis-select" required>
+                                                      <option value="">Seleccione</option>
+                                                      <option value="Si">Sí</option>
+                                                      <option value="No">No</option>
+                                                  </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                <div class="card-body" style="padding-top: 0px;">
+
+                    <hr>
+
+                    <div class="text-right mrg-top-5">
+                        <button type="button" class="btn btn-primary btn-sm btn-block" (click)="GuardarVacante(FormVacante)" [disabled]="!FormVacante.valid">Guardar Información</button>
+                        <!-- <button type="button" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Guardar una vacante' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }" class="btn btn-primary btn-sm btn-block"
+                            (confirm)="GuardarVacante(FormVacante)" [disabled]="!FormVacante.valid">Guardar Información</button> -->
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<ng-template #rt let-r="result" let-t="term">
+    <span class="f-9">{{ r.Nombre }} </span>
+</ng-template>
+<!-- <swal #confirmacionSwal title="" text="" type=""></swal> -->

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { personsList } from './data';
 import { PersonService } from '../persons/person.service'
 import { Person } from 'src/app/core/models/person.model';
+import { DependenciesService } from '../services/dependencies.service';
 
 
 @Component({
@@ -19,79 +20,23 @@ export class FuncionariosComponent implements OnInit {
   }
   loading = false;
   breadCrumbItems: Array<{}>;
-  people: Array<Person>;
+  people: Person[];
 
-  public dependencies: any = [
-    {
-      id: 1,
-      name: 'Talento Humano'
-    },
-    {
-      id: 2,
-      name: 'Contabilidad'
-    },
-    {
-      id: 3,
-      name: 'Facturacion'
-    },
-    {
-      id: 4,
-      name: 'Calidad'
-    },
-    {
-      id: 5,
-      name: 'Centro Contacto'
-    },
-    {
-      id: 6,
-      name: 'Tecnología'
-    }
-  ]
+  status: any[] = [
+    { id: 1, name: 'Activo', selected: true },
+    { id: 2, name: 'Suspendido', selected: true },
+    { id: 3, name: 'Liquidado', selected: true },
+  ];
 
-  public companies: any = [
-    {
-      id: 1,
-      name: "HEMOPLIFE SALUD"
-    },
-    {
-      id: 2,
-      name: "MEGSALUD IPS"
-    },
-    {
-      id: 3,
-      name: "ECOMEDIS"
-    },
-    {
-      id: 4,
-      name: "VIDASER"
-    },
-    {
-      id: 5,
-      name: "MEDISERRANO"
-    },
-    {
-      id: 6,
-      name: "SALUD VITAL"
-    },
-    {
-      id: 7,
-      name: "MASCORP"
-    },
-    {
-      id: 2,
-      name: "INGBUS"
-    },
-    {
-      id: 2,
-      name: "INNOVATING"
-    }
-  ]
+  public dependencies: any[]
+
   isCollapsed: boolean;
   collapsed: boolean;
   collapsed3: boolean;
 
-  constructor(private _person: PersonService) {
-    this.getPeople();
+  constructor(private _person: PersonService, private _dependencies: DependenciesService) {
+    this.getDependencies();
+
   }
 
   ngOnInit(): void {
@@ -102,16 +47,30 @@ export class FuncionariosComponent implements OnInit {
 
   }
 
+  getDependencies() {
+    this._dependencies.getDependencies().subscribe((r: any) => {
+      this.dependencies = r.data
+      this.dependencies = this.dependencies.map(r => {
+        r.selected = true;
+        return r
+      })
+      this.getPeople();
+    })
+  }
 
   getPeople(page = 1, name = '') {
-    
+
     this.pagination.page = page;
-    let params:any = {...this.pagination}
+    let params: any = { ...this.pagination }
     console.log(params);
+    params.status = this.statusFilter();
+    params.dependencies = this.dependenciesFilter();
     params.name = name ? name : ''
+  console.log(params);
+  
     this.loading = true;
     
-    this._person.getPeople(params)
+    this._person.getPeople({data:JSON.stringify( params )})
       .subscribe(d => {
         this.loading = false;
         this.people = d['data']['data']
@@ -119,5 +78,19 @@ export class FuncionariosComponent implements OnInit {
       })
   }
 
+  getData() {
 
+
+  }
+
+  statusFilter() {
+    return this.status.
+      reduce((acc: Array<any>, el) => el.selected == true ? acc.concat([el.name]) : acc
+        , [])
+  }
+  dependenciesFilter() {
+    return this.dependencies.
+      reduce((acc: Array<any>, el) => el.selected == true ? acc.concat([el.id]) : acc
+        , [])
+  }
 }

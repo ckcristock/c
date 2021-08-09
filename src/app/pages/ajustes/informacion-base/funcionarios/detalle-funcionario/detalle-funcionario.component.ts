@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./detalle-funcionario.component.scss']
 })
 export class DetalleFuncionarioComponent implements OnInit {
-
+  habilitado = true;
   constructor() { }
 
   ngOnInit(): void {

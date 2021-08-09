@@ -14,6 +14,7 @@ import { PipesModule } from "src/app/core/pipes/pipes.module";
 import { DetalleFuncionarioComponent } from './funcionarios/detalle-funcionario/detalle-funcionario.component';
 import { PermissionsComponent } from "./funcionarios/detalle-funcionario/permissions/permissions.component";
 import { MenuChildComponent } from './funcionarios/detalle-funcionario/permissions/menu-child/menu-child.component';
+import { SetFuncionarioComponent } from './funcionarios/detalle-funcionario/set-funcionario/set-funcionario.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { MenuChildComponent } from './funcionarios/detalle-funcionario/permissio
         RegimenesNivelesComponent, AseguradorasComponent, 
         DetalleFuncionarioComponent,
         PermissionsComponent,
-        MenuChildComponent],
+        MenuChildComponent,
+        SetFuncionarioComponent],
 
     imports: [CommonModule, InformacionBaseRoutingModule,
         NgbPaginationModule, NgbDropdownModule, ChartsModule,

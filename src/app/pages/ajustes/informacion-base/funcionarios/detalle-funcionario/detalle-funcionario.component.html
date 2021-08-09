@@ -1,0 +1,23 @@
+<div class="card">
+    <div class="card-body">
+        <ul ngbNav #customNav="ngbNav" [activeId]="1" class="nav-tabs nav-tabs-custom nav-justified">
+            <li [ngbNavItem]="1">
+                <a ngbNavLink> Información</a>
+                <ng-template ngbNavContent>
+                    <div class="mt-4">
+                        <app-building></app-building>
+
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+                <a ngbNavLink>Privilegios</a>
+                <ng-template ngbNavContent>
+                    <div class="mt-4">
+                        <app-permissions></app-permissions>
+                    </div>
+                </ng-template>
+            </li>
+        </ul>
+        <div [ngbNavOutlet]="customNav"></div>
+    </div>

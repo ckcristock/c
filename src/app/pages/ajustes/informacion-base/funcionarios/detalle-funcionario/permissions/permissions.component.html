@@ -1,0 +1,16 @@
+<div>
+    <app-menu-child *ngIf="!loading && menues.length > 0; else notData" [navItems]="menues"></app-menu-child>
+    <div class="row" *ngIf="menues.length > 0">
+        <button [disabled]="saving" class="btn-block btn btn-sm btn-primary" (click)="save()">
+            <span *ngIf="!saving ;else status" >Guardar Permisos</span>
+            <ng-template #status>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Guardando permisos...
+            </ng-template>
+        </button>
+    </div>
+</div>
+
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

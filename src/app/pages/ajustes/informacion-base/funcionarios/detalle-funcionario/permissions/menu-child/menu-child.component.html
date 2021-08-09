@@ -1,0 +1,36 @@
+<ng-container *ngFor="let item of navItems;let x=index">
+    <ng-container class="mb-4" *ngIf="!item.link">
+        <!--   <ng-template #childernT> <span class="mb-4"> {{item.name}}  </span></ng-template> -->
+        <span *ngIf="item.child &&  item.child.length>0 && item.child[0].permissions ">
+           <h5>{{item.name}} </h5> 
+                 <!--    <hr> -->
+                </span>
+    </ng-container>
+
+    <ng-container *ngIf="item.link">
+
+        <div class=" col-4 ">
+            <div class="card">
+
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 class="card-title ">{{item.name}}</h4>
+                        </div>
+                        <div *ngFor="let permit of item.permissions;let i=index" class="col-6 custom-control custom-switch mb-2 " dir="ltr ">
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{permit.description}}">
+                        <input type="checkbox" class="custom-control-input "   [checked]="permit.Activo"  (change)="(permit.Activo = !permit.Activo)" id="{{permit.menu_id + '-'+permit.permission_id}}">
+                        <label class="custom-control-label " for="{{permit.menu_id + '-'+permit.permission_id}}">{{permit.public_name}}</label>
+                        <!-- <pre>
+                 
+                            {{permit | json}}
+                        </pre> -->
+                    </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <app-menu-child *ngIf="item.child.length>0" [ngClass]="{'row mb-4': ( item.child[0].permissions )} " [navItems]="item.child"></app-menu-child>
+</ng-container>

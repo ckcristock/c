@@ -8,13 +8,19 @@ import { AseguradorasComponent } from './aseguradoras/aseguradoras.component';
 import { NgbPaginationModule, NgbDropdownModule, NgbCollapseModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { ComponentsModule } from "src/app/components/components.module";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from "@ng-select/ng-select";
 import { PipesModule } from "src/app/core/pipes/pipes.module";
 import { DetalleFuncionarioComponent } from './funcionarios/detalle-funcionario/detalle-funcionario.component';
 import { PermissionsComponent } from "./funcionarios/detalle-funcionario/permissions/permissions.component";
 import { MenuChildComponent } from './funcionarios/detalle-funcionario/permissions/menu-child/menu-child.component';
 import { SetFuncionarioComponent } from './funcionarios/detalle-funcionario/set-funcionario/set-funcionario.component';
+import { CreateComponent } from './funcionarios/create/create.component';
+import {ArchwizardModule} from "angular-archwizard";
+import { DatosFuncionarioComponent } from './funcionarios/create/datos-funcionario/datos-funcionario.component';
+import { InformacionEmpresaComponent } from './funcionarios/create/informacion-empresa/informacion-empresa.component';
+import { PrestacionesSocialesComponent } from './funcionarios/create/prestaciones-sociales/prestaciones-sociales.component';
+import { DotacionTallasComponent } from './funcionarios/create/dotacion-tallas/dotacion-tallas.component';
 
 
 @NgModule({
@@ -24,7 +30,12 @@ import { SetFuncionarioComponent } from './funcionarios/detalle-funcionario/set-
         DetalleFuncionarioComponent,
         PermissionsComponent,
         MenuChildComponent,
-        SetFuncionarioComponent],
+        SetFuncionarioComponent,
+        CreateComponent,
+        DatosFuncionarioComponent,
+        InformacionEmpresaComponent,
+        PrestacionesSocialesComponent,
+        DotacionTallasComponent],
 
     imports: [CommonModule, InformacionBaseRoutingModule,
         NgbPaginationModule, NgbDropdownModule, ChartsModule,
@@ -34,7 +45,10 @@ import { SetFuncionarioComponent } from './funcionarios/detalle-funcionario/set-
         NgbDropdownModule,
         NgbCollapseModule,
         PipesModule,
-        NgbNavModule
+        NgbNavModule,
+        ReactiveFormsModule
+,
+	ArchwizardModule
     ]
 })
 

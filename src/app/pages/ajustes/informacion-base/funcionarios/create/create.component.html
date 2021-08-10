@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Agendar Cita</h4>
+            </div>
+            <div class="card-body">
+                <aw-wizard [navBarLayout]="'large-empty-symbols'">
+                    <aw-wizard-step stepTitle="Disponibilidad">
+                        <ng-template awWizardStepSymbol>1</ng-template>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <app-datos-funcionario (siguiente)="siguiente(next1)"></app-datos-funcionario>
+                            </div>
+                        </div>
+                        <ul class="list-inline wizard mb-0">
+                            <li class="next list-inline-item float-right">
+                                <button style="visibility: hidden;" #next1 class="btn btn-primary" awNextStep>Next</button>
+                            </li>
+                        </ul>
+                    </aw-wizard-step>
+
+                    <aw-wizard-step stepTitle="Detalles">
+                        <ng-template awWizardStepSymbol>2</ng-template>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <app-informacion-empresa (siguiente)="siguiente(next2)"></app-informacion-empresa>
+                            </div>
+                        </div>
+                        <ul class="list-inline wizard mb-0">
+                            <li style="visibility: hidden" class="previous list-inline-item">
+                                <button class="btn btn-primary" awPreviousStep>Previous</button>
+                            </li>
+                            <li style="visibility: hidden" class="next list-inline-item float-right">
+                                <button #next2 class="btn btn-primary">Next</button>
+                            </li>
+                        </ul>
+                    </aw-wizard-step>
+
+                    <aw-wizard-step stepTitle="Finalizar">
+                        <ng-template awWizardStepSymbol>3</ng-template>
+
+                        3
+                    </aw-wizard-step>
+                </aw-wizard>
+            </div>
+        </div>
+    </div>
+</div>

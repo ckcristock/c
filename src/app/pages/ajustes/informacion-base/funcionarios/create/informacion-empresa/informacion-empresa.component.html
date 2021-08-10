@@ -1,0 +1,128 @@
+<form [formGroup]="formCompany" (ngSubmit)="save()">
+
+    <div class="form-row mt-4">
+        <div class="col-md-5 offset-1">
+            <!--     <div class="form-group row">
+        <label
+          for="centro_costo_id"
+          class="col-md-4 col-form-label custom-label text-right"
+        >Centro de costos</label>
+        <multiselect
+          name="centro_costo_id"
+          placeholder="Seleccione una opción"
+          selectLabel="Enter para seleccionar"
+          deselectLabel="Enter para remover"
+          v-validate="'required'"
+          data-vv-as="Centro de costos"
+          v-model="multiSelect.centro_costo_id"
+          :options="centrosCostosDatos"
+          class="col-md-7 font-weight-bold"
+          label="nombre"
+          track-by="id"
+          @input="getDependencias(multiSelect.centro_costo_id)"
+        >
+          <template slot="noOptions">La lista está vacía</template>
+          <template slot="noResult">No existen resultados!</template>
+        </multiselect>
+        <div class="col-md-7 offset-4" v-if="errors.has('centro_costo_id')">
+          <small class="invalid">{{errors.first('centro_costo_id')}}</small>
+        </div>
+      </div> -->
+
+            <div class="form-group row">
+                <label for="dependency_id" class="col-md-4 col-form-label  text-right">Empresa</label>
+
+                <ng-select class="col-md-7 p-0" formControlName="company_id" [items]="companies" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                </ng-select>
+
+                <small class="invalid col-md-7 offset-4 "></small>
+
+            </div>
+            <div class="form-group row ">
+                <label for="dependency_id " class="col-md-4 col-form-label custom-label text-right ">Dependencia</label>
+
+                <ng-select class="col-md-7 p-0" formControlName="dependency_id" (change)="getPositions($event.value)" [items]="dependencies" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+
+                <small class="invalid col-md-7 offset-4"></small>
+            </div>
+
+            <div class="form-group row">
+                <label for="cargo_id" class="col-md-4 col-form-label custom-label text-right">Cargo</label>
+                <ng-select class="col-md-7 p-0" formControlName="dependency_id" [items]="positions" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+
+                <div class="col-md-12 text-center">
+                    <small class="invalid"></small>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="salario" class="col-md-4 col-form-label custom-label text-right">Salario</label>
+                <input type="text" name="salario" formControlName="salary" class="form-control custom-control col-md-7">
+                <div class="col-md-7 offset-4">
+                    <small class="invalid"></small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="form-group row">
+                <label for="fecha_ingreso" class="col-md-4 col-form-label custom-label text-right">Fecha de Ingreso</label>
+                <input type="date" formControlName="date_of_admission" class="form-control custom-control col-md-7" id="">
+            </div>
+
+            <div class="form-group row">
+                <label for="work_contract_type_id" class="col-md-4 col-form-label text-right">Tipo de Contrato</label>
+                <ng-select class="col-md-7 p-0" formControlName="work_contract_type_id" [items]="workContractTypes" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+                <small class="invalid col-md-7 offset-4"></small>
+            </div>
+
+            <div class="form-group row">
+                <label for="fecha_retiro" class="col-md-4 col-form-label custom-label text-right">Fecha de retiro</label>
+                <input type="date" formControlName="date_end" class="form-control custom-control col-md-7" id="">
+            </div>
+
+            <div class="form-group row">
+                <label for="tipo_turno" class="col-md-4 col-form-label custom-label text-right">Tipo de Turno</label>
+                <select formControlName="turn_type" class="form-control custom-control col-md-7">
+                <option 
+                    [value]="turn.value"  *ngFor="let turn of turnos ">
+                        {{turn.text}}
+                </option>
+        </select>
+                <small class="invalid col-md-7 offset-4 "></small>
+            </div>
+            <div class="form-group row " *ngIf="turnSelected == 'Rotativo'">
+                <label for="turno_fijo_id " class="col-md-4 col-form-label custom-label text-right ">Turno Asignado</label>
+                <!--  <select name="turno_fijo_id " class="form-control custom-control col-md-7 ">
+                <option
+                    [value]="turn.value"  *ngFor="let turno of turnos ">
+                        {{turn.text}}
+                </option> 
+                </select>-->
+                <small class="invalid col-md-7 offset-4 "></small>
+            </div>
+
+
+            <div class="form-group row ">
+                <label for="jefe " class="col-md-4 col-form-label custom-label text-right ">Jefe Directo</label>
+                <select name="turno_fijo_id " class="form-control custom-control col-md-7 ">
+                <option
+                    [value]="dependency.id "  *ngFor="let dependency of dependencies ">
+                        {{dependency.name}}
+                </option>
+        </select>
+
+                <div class="col-md-12 text-center ">
+                    <small class="invalid "></small>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 text-right">
+            <button type="submit" class="btn btn-sm btn-primary"> Siguiente</button>
+        </div>
+    </div>
+
+</form>

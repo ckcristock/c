@@ -1,0 +1,54 @@
+<form [formGroup]="form" (ngSubmit)="save()">
+
+    <div class="form-row">
+        <div class="col-md-5 offset-1">
+            <div class="form-group row mt-4">
+                <label for="eps_id" class="col-md-4 col-form-label custom-label text-right">EPS</label>
+                <select name="turno_fijo_id " formControlName="eps_id" id="eps_id" class="form-control custom-control col-md-7 ">
+            <option
+                [value]="dependency.id"  *ngFor="let dependency of dependencies ">
+                    {{dependency.name}}
+            </option>
+        </select>
+                <small class="invalid col-md-7 offset-4"></small>
+            </div>
+            <div class="form-group row">
+                <label for="compensation_id" class="col-md-4 col-form-label custom-label text-right">C Compensación</label>
+                <select name="turno_fijo_id " formControlName="compensation_id" id="compensation_id" class="form-control custom-control col-md-7 ">
+            <option
+                [value]="dependency.id"  *ngFor="let dependency of dependencies ">
+                    {{dependency.name}}
+            </option>
+        </select>
+                <small class="invalid col-md-7 offset-4"></small>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="form-group row mt-4">
+                <label for="cesantias_id" class="col-md-4 col-form-label custom-label text-right">Fondo Cesantías</label>
+                <select name="turno_fijo_id " formControlName="cesantias_id" id="cesantias_id" class="form-control custom-control col-md-7 ">
+            <option
+                [value]="dependency.id"  *ngFor="let dependency of dependencies ">
+                    {{dependency.name}}
+            </option>
+             </select>
+                <small class="invalid col-md-7 offset-4"></small>
+            </div>
+
+            <div class="form-group row">
+                <label for="pensiones_id" class="col-md-4 col-form-label custom-label text-right">Fondo Pensiones</label>
+                <select name="turno_fijo_id " formControlName="pensiones_id" id="pensiones_id" class="form-control custom-control col-md-7 ">
+                <option
+                    [value]="dependency.id"  *ngFor="let dependency of dependencies ">
+                        {{dependency.name}}
+                </option>
+            </select>
+                <small class="invalid col-md-7 offset-4"></small>
+            </div>
+        </div>
+        <div class="col-12 text-right">
+            <button type="submit" class="btn btn-sm btn-primary"> Siguiente</button>
+        </div>
+    </div>
+</form>

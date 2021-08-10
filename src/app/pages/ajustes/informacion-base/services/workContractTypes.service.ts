@@ -5,13 +5,12 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class DependenciesService {
+export class WorkContractTypesService {
 
   constructor(private http : HttpClient) { }
   
- 
-  getDependencies( params = {} ){
-    return this.http.get(`${ environment.base_url }/dependencies`,{params})
+  getWorkContractTypes(){
+    return this.http.get(`${ environment.base_url }/work-contract-type`)
   }
 
 }

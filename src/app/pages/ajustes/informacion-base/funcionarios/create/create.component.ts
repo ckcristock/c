@@ -28,7 +28,7 @@ export class CreateComponent implements OnInit {
     this.$person.unsubscribe();
   }
 
-  siguiente( next : any ) {
+  pressed( next : any ) {
     next.click();
   }
 }

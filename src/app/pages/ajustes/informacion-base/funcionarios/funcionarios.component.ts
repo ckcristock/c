@@ -90,7 +90,7 @@ export class FuncionariosComponent implements OnInit {
   }
   dependenciesFilter() {
     return this.dependencies.
-      reduce((acc: Array<any>, el) => el.selected == true ? acc.concat([el.id]) : acc
+      reduce((acc: Array<any>, el) => el.selected == true ? acc.concat([el.value]) : acc
         , [])
   }
 }

@@ -1,8 +1,8 @@
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-12 mt-2">
         <div class="card">
             <div class="card-header">
-                <h4 class="mb-0">Agendar Cita</h4>
+                <h4 class="mb-0">Nuevo funcionario</h4>
             </div>
             <div class="card-body">
                 <aw-wizard [navBarLayout]="'large-empty-symbols'">
@@ -15,8 +15,7 @@
                         </div>
                         <ul class="list-inline wizard mb-0">
                             <li class="next list-inline-item float-right">
-                                <button style="visibility: hidden;" #next1 class="btn btn-primary"
-                                    awNextStep>Next</button>
+                                <button style="visibility: hidden;" #next1 class="btn btn-primary" awNextStep>Next</button>
                             </li>
                         </ul>
                     </aw-wizard-step>
@@ -31,8 +30,7 @@
                         </div>
                         <ul class="list-inline wizard mb-0">
                             <li class="previous list-inline-item">
-                                <button class="btn btn-primary" style="visibility: hidden" #prev2
-                                    awPreviousStep>Previous</button>
+                                <button class="btn btn-primary" style="visibility: hidden" #prev2 awPreviousStep>Previous</button>
                             </li>
                             <li style="visibility: hidden" class="next list-inline-item float-right">
                                 <button #next2 class="btn btn-primary" awNextStep>Next</button>
@@ -49,8 +47,7 @@
                             </div>
                         </div>
                         <li class="previous list-inline-item">
-                            <button class="btn btn-primary" style="visibility: hidden" #prev3
-                                awPreviousStep>Previous</button>
+                            <button class="btn btn-primary" style="visibility: hidden" #prev3 awPreviousStep>Previous</button>
                         </li>
                         <li class="next list-inline-item float-right">
                             <button style="visibility: hidden" #next3 class="btn btn-primary" awNextStep>Next</button>
@@ -67,11 +64,27 @@
                         </div>
                         <ul class="list-inline wizard mb-0">
                             <li class="previous list-inline-item">
-                                <button class="btn btn-primary" style="visibility: hidden" #prev4
-                                    awPreviousStep>Previous</button>
+                                <button class="btn btn-primary" style="visibility: hidden" #prev4 awPreviousStep>Previous</button>
                             </li>
                             <li style="visibility: hidden" class="next list-inline-item float-right">
-                                <button #next4 class="btn btn-primary">Next</button>
+                                <button #next4 awNextStep class="btn btn-primary">Next</button>
+                            </li>
+                        </ul>
+                    </aw-wizard-step>
+                    <aw-wizard-step stepTitle="Permisos">
+                        <ng-template awWizardStepSymbol>5</ng-template>
+
+                        <div class="row mt-3">
+                            <div class="col-12" *ngIf="person.id">
+                                <app-permissions [person_id]="person.id"></app-permissions>
+                            </div>
+                        </div>
+                        <ul class="list-inline wizard mb-0">
+                            <li class="previous list-inline-item">
+                                <button class="btn btn-primary" style="visibility: hidden" #prev5 awPreviousStep>Previous</button>
+                            </li>
+                            <li style="visibility: hidden" class="next list-inline-item float-right">
+                                <button #next5 class="btn btn-primary">Next</button>
                             </li>
                         </ul>
                     </aw-wizard-step>

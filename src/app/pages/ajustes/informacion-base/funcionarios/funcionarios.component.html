@@ -34,7 +34,7 @@
                             <div class="mt-4">
                                 <div class="custom-control custom-checkbox mt-2" *ngFor="let dependency of dependencies; let i = index">
                                     <input type="checkbox" id="dependencia{{ i }}" (change)="dependency.selected = !dependency.selected ;getPeople()" name="dependecy_id" [checked]="dependency.selected" class="custom-control-input" />
-                                    <label class="custom-control-label" for="dependencia{{ i }}">{{ dependency.name }}</label
+                                    <label class="custom-control-label" for="dependencia{{ i }}">{{ dependency.text }}</label
                   >
                 </div>
               </div>
@@ -55,10 +55,8 @@
 
             <div class="col-md-6">
               
-              <button   [routerLink]="[
-              '/ajustes/informacion-base/funcionario',
-              '0'
-               ]"    class="btn btn-primary">
+              <button   [routerLink]="['/ajustes/informacion-base/funcionario-crear']" 
+                 class="btn btn-primary">
                 <i class="fa fa-user-plus"></i> Nuevo Funcionario
               </button>
               <div class="form-inline float-md-right">
@@ -107,7 +105,7 @@
                     <a href="javascript: void(0);" class="text-dark">
                       {{person.first_name}} {{person.first_surname}}</a>
                   </h5>
-                  <p class="mt-0 mb-0">{{ person.pople_type }}</p>
+                  <p class="mt-0 mb-0">{{ person.dependency }}</p>
                 </div>
               </div>
             </div>

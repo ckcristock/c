@@ -2,7 +2,9 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { consts } from 'src/app/core/utils/consts';
+import { PersonService } from '../../../services/person.service';
 import { PersonDataService } from '../personData.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dotacion-tallas',
@@ -12,18 +14,19 @@ import { PersonDataService } from '../personData.service';
 export class DotacionTallasComponent implements OnInit {
   @Output('siguiente') siguiente = new EventEmitter();
   @Output('anterior') anterior = new EventEmitter();
+  saving = false;
 
   shirtSize = consts.shirtSize;
   pantSizes = consts.pantSizes;
   shueSizes = consts.shueSizes;
-
   formDotation: FormGroup
 
   person:any
   $person: Subscription;
 
   constructor(
-    private _person: PersonDataService,
+    private _personData: PersonDataService,
+    private _person:PersonService,
     private fb: FormBuilder
   ) { }
 
@@ -33,7 +36,7 @@ export class DotacionTallasComponent implements OnInit {
     this.pantSizes.unshift({text:'Seleccione',value:''})
     this.shueSizes.unshift({text:'Seleccione',value:''})
 
-    this.$person = this._person.person.subscribe(r => {
+    this.$person = this._personData.person.subscribe(r => {
        this.person=r
     })
   }
@@ -64,11 +67,37 @@ export class DotacionTallasComponent implements OnInit {
 
   save(){
     this.formDotation.markAllAsTouched();
+    if(this.formDotation.invalid){return false}
+
+    Swal.fire({
+      title: '¿Seguro?',
+      text: 'Se va a crear un nuevo funcionario',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#34c38f',
+      cancelButtonColor: '#f46a6a',
+      confirmButtonText: 'Si, Hazlo!'
+    }).then(result => {
+      if (result.value) {
+        this.sendData()
+      }
+    });
+    
+    
+  }
+
+  sendData(){
+  
+    this.saving = true;
     this.person =  {...this.person,...this.formDotation.value }
-    
-    this._person.person.next(this.person);
-    this.siguiente.emit({});
-    
+    this._person.savePerson({person:this.person}).subscribe( (r:any )=>{
+      this.person.id = r.data.id
+      this._personData.person.next(this.person);
+      this.siguiente.emit({});
+      this.saving = false;
+    },err=>{
+
+    })
   }
   previus(){
     this.anterior.emit()

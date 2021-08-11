@@ -37,7 +37,9 @@ export class DatosFuncionarioComponent implements OnInit {
       image: ['', Validators.required],
       identifier: ['', Validators.required],
       first_name: ['', Validators.required],
+      second_name: ['', ],
       first_surname: ['', Validators.required],
+      second_surname: ['', ],
       email: [
         '',
         [
@@ -74,10 +76,19 @@ export class DatosFuncionarioComponent implements OnInit {
       this.form.get('first_name').invalid && this.form.get('first_name').touched
     );
   }
+  get second_name_valid() {
+    return (
+      this.form.get('second_name').invalid && this.form.get('second_name').touched
+    );
+  }
   get first_surname_valid() {
     return (
-      this.form.get('first_surname').invalid &&
-      this.form.get('first_surname').touched
+      this.form.get('first_surname').invalid && this.form.get('first_surname').touched
+    );
+  }
+  get second_surname_valid() {
+    return (
+      this.form.get('second_surname').invalid && this.form.get('second_surname').touched
     );
   }
   get email_valid() {
@@ -137,10 +148,9 @@ export class DatosFuncionarioComponent implements OnInit {
 
   save() {
     this.form.markAllAsTouched();
-    if (this.form.valid) {
-      this.siguiente.emit({});
-    }
-    this.person = { ...this.form.value };
+    if (this.form.invalid) { return false;}
+
+    this.person = { ...this.person,...this.form.value };
     this.person.image = this.file;
     this._person.person.next(this.person);
     this.siguiente.emit({});

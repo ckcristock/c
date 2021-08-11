@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { PermissionService } from '../../../../../../core/services/permission.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 interface NavItem {
   name: string;
@@ -14,15 +14,20 @@ interface NavItem {
   styleUrls: ['./permissions.component.scss']
 })
 export class PermissionsComponent implements OnInit {
+  @Input('person_id') person_id_: string = ''
   person_id: string
   temporalMenues: Array<NavItem> = [];
   menues: Array<NavItem> = [];
   loading = false;
   saving = false;
-  constructor( private _permissions: PermissionService, private route: ActivatedRoute) { }
-  
+  constructor(
+    private _permissions: PermissionService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
+
   ngOnInit(): void {
-    this.person_id = this.route.snapshot.params.id;
+    this.person_id = this.route.snapshot.params.id || this.person_id_;
     this.getMenues();
   }
 
@@ -66,8 +71,13 @@ export class PermissionsComponent implements OnInit {
           title: 'Actualización exitosa',
           text: 'Felicidades, los permisos del usuario se han actualizado',
           icon: 'success',
-       
-        })
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        }).then(result => {
+          if (result.value) {
+            this.router.navigateByUrl('/ajustes/informacion-base/funcionarios')
+          }
+        });
       }
       this.saving = false;
     })

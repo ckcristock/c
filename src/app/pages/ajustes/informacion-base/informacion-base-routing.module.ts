@@ -6,6 +6,7 @@ import { AseguradorasComponent } from './aseguradoras/aseguradoras.component';
 import { RegimenesNivelesComponent } from './regimenes-niveles/regimenes-niveles.component';
 import { DetalleFuncionarioComponent } from './funcionarios/detalle-funcionario/detalle-funcionario.component';
 import {CreateComponent} from "./funcionarios/create/create.component";
+import { EstructuraEmpresaComponent } from './estructura-empresa/estructura-empresa.component';
 
 
 const routes : Routes = [
@@ -15,6 +16,7 @@ const routes : Routes = [
     {path:'funcionario-crear',component:CreateComponent},
     {path:'regimenes-niveles',component:RegimenesNivelesComponent},
     {path:'aseguradoras',component:AseguradorasComponent},
+    {path:'estructura-empresa',component:EstructuraEmpresaComponent},
 ]
 
 @NgModule({

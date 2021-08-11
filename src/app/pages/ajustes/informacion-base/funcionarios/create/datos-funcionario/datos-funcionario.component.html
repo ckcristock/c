@@ -37,18 +37,37 @@
         <label
           for="nombres"
           class="col-md-4 col-form-label custom-label text-right"
-          >Nombres</label
+          >Primer Nombre</label
         >
         <input
           type="text"
           formControlName="first_name"
           [class.is-invalid]="first_name_valid"
           class="form-control custom-control col-md-7"
-          placeholder="Nombres"
+          placeholder="Primer Nombre"
         />
         <div class="col-md-7 offset-4">
           <small class="invalid text-danger"
-            *ngIf="first_name_valid"> Es nesario el nombre
+            *ngIf="first_name_valid"> Es nesario el primer nombre
+          </small>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label
+          for="nombres"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Segundo Nombre</label
+        >
+        <input
+          type="text"
+          formControlName="second_name"
+          [class.is-invalid]="second_name_valid"
+          class="form-control custom-control col-md-7"
+          placeholder="Segundo nombre"
+        />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger"
+            *ngIf="second_name_valid"> Es nesario el segundo nombre
           </small>
         </div>
       </div>
@@ -57,18 +76,37 @@
         <label
           for="apellidos"
           class="col-md-4 col-form-label custom-label text-right"
-          >Apellidos</label
+          >Primer Apellido</label
         >
         <input
           type="text"
           formControlName="first_surname"
           [class.is-invalid]="first_surname_valid"
           class="form-control custom-control col-md-7"
-          placeholder="Apellidos"
+          placeholder="Primer Apellido"
         />
         <div class="col-md-7 offset-4">
           <small class="invalid text-danger"
-          *ngIf="first_surname_valid"> Es nesario el apellido
+          *ngIf="first_surname_valid"> Es nesario el primer apellido
+        </small>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label
+          for="apellidos"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Segundo Apellidos</label
+        >
+        <input
+          type="text"
+          formControlName="second_surname"
+          [class.is-invalid]="second_surname_valid"
+          class="form-control custom-control col-md-7"
+          placeholder="Segundo Apellido"
+        />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger"
+          *ngIf="second_surname_valid"> Es nesario el segundo apellido
         </small>
         </div>
       </div>
@@ -151,10 +189,14 @@
         </div>
       </div>
 
-      <div class="form-group row">
+   
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group row mt-3">
         <label
           for="telefono"
-          class="col-md-4 col-form-label custom-label text-right"
+          class="col-md-3 col-form-label custom-label text-right"
           >Teléfono</label
         >
         <input
@@ -170,10 +212,7 @@
 
         </div>
       </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="form-group row mt-3">
+      <div class="form-group row ">
         <label
           for="sexo"
           class="col-md-3 col-form-label custom-label text-right"
@@ -317,7 +356,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12 text-right">
+    <div class="col-12 text-right mt-4">
       <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
     </div>
   </div>

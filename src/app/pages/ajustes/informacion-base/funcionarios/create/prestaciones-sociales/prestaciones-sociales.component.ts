@@ -73,12 +73,9 @@ export class PrestacionesSocialesComponent implements OnInit {
   }
   save() {
     this.formPrestation.markAllAsTouched()
-    if (this.formPrestation.valid) {
-      this.siguiente.emit({})
-    }
+    if (this.formPrestation.invalid) {return false;}
     this.person = { ...this.person, ...this.formPrestation.value }
     this._person.person.next(this.person)
-
     this.siguiente.emit({})
   }
 

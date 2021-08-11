@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { PersonDataService } from './personData.service';
 import { Subscription } from 'rxjs';
+import { PersonService } from '../../services/person.service';
 
 @Component({
   selector: 'app-create',
@@ -12,13 +13,13 @@ export class CreateComponent implements OnInit {
   person:any = {}
   @ViewChild('next1') next1: ElementRef;
 
-  constructor( private _person:PersonDataService ) { 
+  constructor( private _personData:PersonDataService ) { 
     
   }
 
 
   ngOnInit(): void {
-    this.$person = this._person.person.subscribe( r=>{
+    this.$person = this._personData.person.subscribe( r=>{
       console.log(r);
       this.person=r
     })

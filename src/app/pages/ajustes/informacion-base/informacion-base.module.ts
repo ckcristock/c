@@ -21,6 +21,7 @@ import { DatosFuncionarioComponent } from './funcionarios/create/datos-funcionar
 import { InformacionEmpresaComponent } from './funcionarios/create/informacion-empresa/informacion-empresa.component';
 import { PrestacionesSocialesComponent } from './funcionarios/create/prestaciones-sociales/prestaciones-sociales.component';
 import { DotacionTallasComponent } from './funcionarios/create/dotacion-tallas/dotacion-tallas.component';
+import { EstructuraEmpresaComponent } from './estructura-empresa/estructura-empresa.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { DotacionTallasComponent } from './funcionarios/create/dotacion-tallas/d
         DatosFuncionarioComponent,
         InformacionEmpresaComponent,
         PrestacionesSocialesComponent,
-        DotacionTallasComponent],
+        DotacionTallasComponent,
+        EstructuraEmpresaComponent],
 
     imports: [CommonModule, InformacionBaseRoutingModule,
         NgbPaginationModule, NgbDropdownModule, ChartsModule,

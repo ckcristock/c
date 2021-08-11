@@ -119,13 +119,9 @@ export class InformacionEmpresaComponent implements OnInit {
     }
   }
   save() {
-    console.log('0saving', this.formCompany.value, this.formCompany);
     this.formCompany.markAllAsTouched()
-    if (this.formCompany.valid) {
-
-    }
-
-    this.person.worContract = { ...this.formCompany.value };
+    if (this.formCompany.invalid) { return false;}
+    this.person.workContract = { ...this.formCompany.value };
     this._person.person.next(this.person)
     this.siguiente.emit({})
   }

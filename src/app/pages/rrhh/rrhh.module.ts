@@ -17,11 +17,12 @@ import { ChartsModule } from 'ng2-charts';
 import { NovedadesComponent } from './novedades/novedades.component';
 import { NgSelectModule } from "@ng-select/ng-select";
 import { VacantesVerComponent } from './vacantes/vacantes-ver/vacantes-ver.component';
+import { CrearNovedadComponent } from './novedades/crear-novedad/crear-novedad.component';
 
 
 
 @NgModule({
-    declarations:[VacantesComponent, PostulantesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent],
+    declarations:[VacantesComponent, PostulantesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent],
     imports:[RrhhRouterModule,
         CommonModule,
         ChartsModule,

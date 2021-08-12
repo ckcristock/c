@@ -8,6 +8,7 @@ import { PositionService } from '../../../services/positions.service';
 import { WorkContractTypesService } from '../../../services/workContractTypes.service';
 import { consts } from '../../../../../../core/utils/consts';
 import { RotatingTurnsService } from '../../../services/rotating-turns.service';
+import { GroupService } from '../../../services/group.service';
 
 @Component({
   selector: 'app-informacion-empresa',
@@ -22,6 +23,8 @@ export class InformacionEmpresaComponent implements OnInit {
   positions: any[];
   workContractTypes: any[];
   rotatingTurns: any[];
+  groups: any[];
+
   $person: Subscription;
   formCompany: FormGroup;
 
@@ -34,7 +37,9 @@ export class InformacionEmpresaComponent implements OnInit {
     private _company: CompanyService,
     private _positions: PositionService,
     private _workContractTypes: WorkContractTypesService,
-    private _rotatingTurns: RotatingTurnsService
+    private _rotatingTurns: RotatingTurnsService,
+    private _group: GroupService,
+
   ) { }
 
   person: any;
@@ -43,18 +48,24 @@ export class InformacionEmpresaComponent implements OnInit {
     this.getCompanies();
     this.getworkContractTypes();
     this.getRotatingTurns();
+    this.getGroups();
     this.$person = this._person.person.subscribe((r) => {
       this.person = r
     });
   }
 
+  getGroups() {
+    this._group.getGroup().subscribe((r: any) => {
+      this.groups = r.data
+      this.groups.unshift({ text: 'Seleccione uno', value: '' });
+    })
+  }
   getCompanies() {
     this._company.getCompanies().subscribe((d: any) => {
       this.companies = d.data;
       d.data[0]
         ? this.formCompany.patchValue({ company_id: d.data[0].value })
         : '';
-      this.getDependencies(d.data[0].value);
     });
   }
   getDependencies(company_id) {
@@ -88,6 +99,7 @@ export class InformacionEmpresaComponent implements OnInit {
   crearForm() {
     this.formCompany = this.fb.group({
       company_id: ['', Validators.required],
+      group_id: ['', Validators.required],
       dependency_id: ['', Validators.required],
       position_id: ['', Validators.required],
       salary: ['', Validators.required],
@@ -120,7 +132,7 @@ export class InformacionEmpresaComponent implements OnInit {
   }
   save() {
     this.formCompany.markAllAsTouched()
-    if (this.formCompany.invalid) { return false;}
+    if (this.formCompany.invalid) { return false; }
     this.person.workContract = { ...this.formCompany.value };
     this._person.person.next(this.person)
     this.siguiente.emit({})
@@ -128,6 +140,9 @@ export class InformacionEmpresaComponent implements OnInit {
 
   get turnSelected() {
     return this.formCompany.get('turn_type').value;
+  }
+  get group_id_invalid() {
+    return this.formCompany.get('group_id').invalid && this.formCompany.get('group_id').touched;
   }
   get company_id_invalid() {
     return (
@@ -178,7 +193,7 @@ export class InformacionEmpresaComponent implements OnInit {
     this.$person.unsubscribe();
   }
 
-  previus(){
+  previus() {
     this.anterior.emit()
   }
 }

@@ -15,5 +15,8 @@ export class PersonService {
   getPeople(params = {}) {
     return this.httpClient.get(`${environment.base_url}/people-paginate`, { params })
   }
+  getPeopleIndex(params = {}) {
+    return this.httpClient.get(`${environment.base_url}/people`, { params })
+  }
 
 }

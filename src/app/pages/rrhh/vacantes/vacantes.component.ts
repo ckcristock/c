@@ -33,7 +33,7 @@ export class VacantesComponent implements OnInit {
   filtro_Fecha_Fin: string='';
   filtro_titulo: string='';
   filtro_dependencia: string='';
-   filtro_Cargo: string='';
+  filtro_Cargo: string='';
   filtro_departamento: any='';
   filtro_municipio: any='';
   filtro_estado: string='';

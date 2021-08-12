@@ -10,26 +10,32 @@
                     </div>
                     <div class="card-body" style="padding-bottom: 0px;">
                         <div class="row invoive-info" style="margin-bottom: 0; padding-bottom: 0px;">
-                            <div class="col-md-8">
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label>Empresa</label>
+                                    <ng-select formControlName="company_id" [items]="companies" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                                    </ng-select>
+                                    <div class="col-md-7 offset-4">
+                                        <small class="invalid text-danger" *ngIf="company_id_invalid"> Es nesaria la empresa
+                                    </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Título de vacante</label>
-                                    <input type="text"  
-                                        formControlName="title"
-                                        class="form-control  f-9" 
-                                         />
+                                    <input type="text" formControlName="title" class="form-control  f-9" />
                                     <div *ngIf="title_invalid">
                                         <small class="invalid text-danger"> Es nesario el título
                                         </small>
-                                     </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Fecha inicio</label>
-                                    <input type="date" 
-                                        formControlName="date_start"
-                                        class="form-control  f-9" 
-                                        (change)="validarFechas()"  />
+                                    <input type="date" formControlName="date_start" class="form-control  f-9" (change)="validarFechas()" />
                                     <div *ngIf="date_start_invalid">
                                         <small class="invalid text-danger"> Es nesaria la fecha de inicio
                                         </small>
@@ -39,11 +45,8 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Fecha fin</label>
-                                    <input type="date"
-                                        formControlName="date_end"
-                                        class="form-control  f-9" 
-                                        (change)="validarFechas()"  />
-                                    <div  *ngIf="date_end_invalid">
+                                    <input type="date" formControlName="date_end" class="form-control  f-9" (change)="validarFechas()" />
+                                    <div *ngIf="date_end_invalid">
                                         <small class="invalid text-danger"> Es nesaria la fecha de fin
                                         </small>
                                     </div>
@@ -52,16 +55,11 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Grupo</label>
-                                  
-                                    <ng-select class="" 
-                                    formControlName="group_id"
-                                    (change)="getDependencies($event.value)"
-                                    [items]="groups"
-                                    bindLabel="text" bindValue="value" 
-                                    loadingText="loading" ngDefaultControl>
+
+                                    <ng-select class="" formControlName="group_id" (change)="getDependencies($event.value)" [items]="groups" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
                                     </ng-select>
 
-                                    <div  *ngIf="group_id_invalid">
+                                    <div *ngIf="group_id_invalid">
                                         <small class="invalid text-danger"> Es nesario el grupo
                                         </small>
                                     </div>
@@ -70,14 +68,9 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Dependencia</label>
-                                    <ng-select 
-                                    formControlName="dependency_id"
-                                    (change)="getPosition($event.value)"
-                                    [items]="dependencies"
-                                    bindLabel="text" bindValue="value" 
-                                    loadingText="loading" ngDefaultControl>
+                                    <ng-select formControlName="dependency_id" (change)="getPosition($event.value)" [items]="dependencies" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
                                     </ng-select>
-                          
+
                                     <div *ngIf="dependency_id_invalid">
                                         <small class="invalid text-danger"> Es nesaria la dependencia
                                         </small>
@@ -87,24 +80,19 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Cargo</label>
-                                    <ng-select formControlName="position_id"
-                                     [items]="positions" bindLabel="text"
-                                    bindValue="value" loadingText="loading" ngDefaultControl>
-                                  </ng-select>
-                          
-                                  <div class="col-md-12" *ngIf="position_id_invalid">
-                                    <small class="invalid text-danger"> Es nesario el cargo
+                                    <ng-select formControlName="position_id" [items]="positions" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                                    </ng-select>
+
+                                    <div class="col-md-12" *ngIf="position_id_invalid">
+                                        <small class="invalid text-danger"> Es nesario el cargo
                                     </small>
-                                  </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Departamento</label>
-                                    <ng-select formControlName="department_id"
-                                    [items]="departments" bindLabel="text"
-                                    (change)="getMunicipalities($event.value)"
-                                     bindValue="value" loadingText="loading" ngDefaultControl>
+                                    <ng-select formControlName="department_id" [items]="departments" bindLabel="text" (change)="getMunicipalities($event.value)" bindValue="value" loadingText="loading" ngDefaultControl>
                                     </ng-select>
                                     <div *ngIf="department_id_invalid">
                                         <small class="invalid text-danger"> Es nesario el departamento
@@ -115,9 +103,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Municipio</label>
-                                    <ng-select formControlName="municipality_id"
-                                    [items]="municipalities" bindLabel="text"
-                                    bindValue="value" loadingText="loading" ngDefaultControl>
+                                    <ng-select formControlName="municipality_id" [items]="municipalities" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
                                     </ng-select>
                                     <div *ngIf="municipality_id_invalid">
                                         <small class="invalid text-danger"> Es nesario el municipio
@@ -130,22 +116,14 @@
                                     <label>Salario</label>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="number" 
-                                                formControlName="min_salary"
-                                                placeholder="Rango 1"
-                                                class="form-control  f-9" min="1"
-                                                (change)="validarSalarios()"  />
+                                            <input type="number" formControlName="min_salary" placeholder="Rango 1" class="form-control  f-9" min="1" (change)="validarSalarios()" />
                                             <div *ngIf="min_salary_invalid">
                                                 <small class="invalid text-danger"> El rango 1 es necesario
                                                 </small>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="number"                        
-                                                formControlName="max_salary"
-                                                placeholder="Rango 2"
-                                                class="form-control  f-9" min="1"
-                                                (change)="validarSalarios()"  />
+                                            <input type="number" formControlName="max_salary" placeholder="Rango 2" class="form-control  f-9" min="1" (change)="validarSalarios()" />
                                             <div *ngIf="max_salary_invalid">
                                                 <small class="invalid text-danger">  El rango 2 es necesario
                                                 </small>
@@ -157,10 +135,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Tipo de turno</label>
-                                    <select
-                                        formControlName="turn_type" 
-                                        class="form-control custom-control "
-                                    >
+                                    <select formControlName="turn_type" class="form-control custom-control ">
                                         <option [value]="turn.value" *ngFor="let turn of turns">
                                             {{ turn.text }}
                                         </option>
@@ -178,10 +153,8 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Descripción</label>
-                                    <textarea 
-                                    formControlName="description"  type="text" rows="3"
-                                        class="form-control" ></textarea>
-                                    <div  *ngIf="description_invalid">
+                                    <textarea formControlName="description" type="text" rows="3" class="form-control"></textarea>
+                                    <div *ngIf="description_invalid">
                                         <small class="invalid text-danger">Es necesaria la descripcion
                                         </small>
                                     </div>
@@ -194,100 +167,81 @@
                                 <hr>
                             </div>
                             <div class="col-md-12">
-                                
-                                    <div class="row mt-3">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Educación Mínima</label>
-                                                <input type="text" 
-                                                formControlName="education" 
-                                                    placeholder="Ejm: Universidad / Carrera técnica"
-                                                    class="form-control  f-9"  />
-                                                <div  *ngIf="education_invalid">
-                                                    <small class="invalid text-danger">Es necesario el campo
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Años de experiencia</label>
-                                                <input type="number"
-                                                    formControlName="experience_year" 
-                                                    placeholder="" 
-                                                    class="form-control  f-9" min="0"
-                                                     />
-                                                    <div  *ngIf="experience_year_invalid">
-                                                    <small class="invalid text-danger">La experiencia es necesaria
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Desde (Edad) </label>
-                                                        <input type="number" 
-                                                        formControlName="min_age" 
-                                                             min="18"
-                                                            placeholder="Rango Desde"
-                                                            class="form-control  f-9"  />
-                                                        <div  *ngIf="min_age_invalid">
-                                                            <small class="invalid text-danger">Es el rango 1
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Hasta (Edad)</label>
-                                                        <input type="number"        
-                                                            formControlName="max_age" 
-                                                             min="18"
-                                                            placeholder="Rango Hasta"
-                                                            class="form-control  f-9"  />
-                                                        <div  *ngIf="max_age_invalid">
-                                                            <small class="invalid text-danger">Es el rango 2
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
+                                <div class="row mt-3">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Educación Mínima</label>
+                                            <input type="text" formControlName="education" placeholder="Ejm: Universidad / Carrera técnica" class="form-control  f-9" />
+                                            <div *ngIf="education_invalid">
+                                                <small class="invalid text-danger">Es necesario el campo
+                                                    </small>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Disponibilidad de viajar</label>
-                                                <select                                        
-                                                    formControlName="can_trip" 
-                                                    class="form-control  tipo-dis-select" >
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Años de experiencia</label>
+                                            <input type="number" formControlName="experience_year" placeholder="" class="form-control  f-9" min="0" />
+                                            <div *ngIf="experience_year_invalid">
+                                                <small class="invalid text-danger">La experiencia es necesaria
+                                                    </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Desde (Edad) </label>
+                                                    <input type="number" formControlName="min_age" min="18" placeholder="Rango Desde" class="form-control  f-9" />
+                                                    <div *ngIf="min_age_invalid">
+                                                        <small class="invalid text-danger">Es el rango 1
+                                                            </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Hasta (Edad)</label>
+                                                    <input type="number" formControlName="max_age" min="18" placeholder="Rango Hasta" class="form-control  f-9" />
+                                                    <div *ngIf="max_age_invalid">
+                                                        <small class="invalid text-danger">Es el rango 2
+                                                            </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Disponibilidad de viajar</label>
+                                            <select formControlName="can_trip" class="form-control  tipo-dis-select">
                                                     <option value="">Seleccione</option>
                                                     <option value="1">Sí</option>
                                                     <option value="0">No</option>
                                                 </select>
-                                                <div  *ngIf="can_trip_invalid">
-                                                    <small class="invalid text-danger">Es el campo de disponibilidad
+                                            <div *ngIf="can_trip_invalid">
+                                                <small class="invalid text-danger">Es el campo de disponibilidad
                                                     </small>
-                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Disponibilidad cambio residencia</label>
-                                                <select 
-                                                    formControlName="change_residence"
-                                                    class="form-control  tipo-dis-select" >
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Disponibilidad cambio residencia</label>
+                                            <select formControlName="change_residence" class="form-control  tipo-dis-select">
                                                     <option value="">Seleccione</option>
                                                     <option value="1">Sí</option>
                                                     <option value="0">No</option>
                                                 </select>
-                                                <div  *ngIf="change_residence_invalid">
-                                                    <small class="invalid text-danger">Es el campo de disponibilidad
+                                            <div *ngIf="change_residence_invalid">
+                                                <small class="invalid text-danger">Es el campo de disponibilidad
                                                     </small>
-                                                </div>
                                             </div>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -12,6 +12,7 @@ import { MinicipalityService } from 'src/app/core/services/municipality.service'
 import { DepartmentService } from 'src/app/core/services/department.service'
 import { JobService } from '../job.service';
 import Swal from 'sweetalert2';
+import { CompanyService } from 'src/app/pages/ajustes/informacion-base/services/company.service';
 
 @Component({
     selector: 'app-vacantes-crear',
@@ -26,11 +27,13 @@ export class VacantesCrearComponent implements OnInit {
     departments: any[] = [];
     municipalities: any[] = [];
 
+    companies: any[] = [];
     groups: any[] = [];
     dependencies: any[] = [];
     positions: any[] = [];
 
     turns = consts.turnTypes
+
 
     constructor(
         private router: Router,
@@ -40,12 +43,14 @@ export class VacantesCrearComponent implements OnInit {
         private _position: PositionService,
         private _municipality: MinicipalityService,
         private _department: DepartmentService,
-        private _job: JobService
+        private _job: JobService,
+        private _company: CompanyService,
 
     ) { }
 
     ngOnInit() {
         this.createForm()
+        this.getCompanies()
         this.getGroups()
         this.getDepartments()
     }
@@ -66,59 +71,43 @@ export class VacantesCrearComponent implements OnInit {
 
 
     validarFechas() {
-
-        var fecha_inicio = ((document.getElementById("Fecha_Inicio") as HTMLInputElement).value);
-        var fecha_fin = ((document.getElementById("Fecha_Fin") as HTMLInputElement).value);
-
+        var fecha_inicio = this.form.get('date_start').value
+        var fecha_fin = this.form.get('date_end').value
 
         if (fecha_inicio >= fecha_fin && fecha_fin != "") {
-         /*    this.Fecha_Inicio = '';
-            this.Fecha_Fin = '';
-            this.confirmacionSwal.title = "Fechas invalidas";
-            this.confirmacionSwal.text = "Fecha Inicio no puede ser mayor a Fecha Fin";
-            this.confirmacionSwal.type = "error";
-            this.confirmacionSwal.show(); */
+            this.form.get('date_start').patchValue('')
+            this.form.get('date_end').patchValue('')
+            Swal.fire({
+                title: 'Fechas invalidas',
+                text: 'Fecha Inicio no puede ser mayor a Fecha Fin',
+                icon: 'error',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
         }
-
     }
 
     validarSalarios() {
-
-        var salario_inferior = ((document.getElementById("Salario_Inferior") as HTMLInputElement).value);
-        var salario_superior = ((document.getElementById("Salario_Superior") as HTMLInputElement).value);
-
+        var salario_inferior = this.form.get('min_salary').value
+        var salario_superior = this.form.get('max_salary').value
         if (salario_inferior >= salario_superior && salario_superior != "") {
-           /*  this.Salario_Inferior = '';
-            this.Salario_Superior = '';
-            this.confirmacionSwal.title = "Salarios invalidos";
-            this.confirmacionSwal.text = "Salario Inferior no puede ser mayor al Superior";
-            this.confirmacionSwal.type = "error";
-            this.confirmacionSwal.show(); */
+            this.form.get('min_salary').patchValue('')
+            this.form.get('max_salary').patchValue('')
+            Swal.fire({
+                title: 'Salarios invalidos',
+                text: 'Salario Inferior no puede ser mayor al Superior',
+                icon: 'error',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
         }
-
-    }
-
-    validarHorarios() {
-
-        var horario_inferior = ((document.getElementById("Horario_Inferior") as HTMLInputElement).value);
-        var horario_superior = ((document.getElementById("Horario_Superior") as HTMLInputElement).value);
-
-        if (horario_inferior >= horario_superior && horario_superior != "") {
-          /*   this.Horario_Inferior = '';
-            this.Horario_Superior = '';
-            this.confirmacionSwal.title = "Horarios invalidos";
-            this.confirmacionSwal.text = "Horario Inferior no puede ser mayor al Superior";
-            this.confirmacionSwal.type = "error";
-            this.confirmacionSwal.show(); */
-        }
-
     }
 
     save() {
- 
+
         this.form.markAllAsTouched()
         if (this.form.invalid) { return false }
-        
+
         Swal.fire({
             title: '¿Seguro?',
             text: 'Se va a crear una nueva vacante',
@@ -127,29 +116,37 @@ export class VacantesCrearComponent implements OnInit {
             confirmButtonColor: '#34c38f',
             cancelButtonColor: '#f46a6a',
             confirmButtonText: 'Si, Hazlo!'
-          }).then(result => {
+        }).then(result => {
             if (result.value) {
-              this.sendData()
+                this.sendData()
             }
-          });
+        });
     }
 
-    sendData(){
-        this._job.save(this.form.value).subscribe((r:any)=>{
-            if( r.code == 200 ){
+    sendData() {
+        this._job.save(this.form.value).subscribe((r: any) => {
+            if (r.code == 200) {
                 Swal.fire({
                     title: 'Creación exitosa',
                     text: 'Felicidades, se ha creado una nueva vacante',
                     icon: 'success',
                     allowOutsideClick: false,
                     allowEscapeKey: false,
-                  }).then(result => {
+                }).then(result => {
                     if (result.value) {
-                      this.router.navigateByUrl('/rrhh/vacantes')
+                        this.router.navigateByUrl('/rrhh/vacantes')
                     }
-                  });
+                });
             }
         })
+    }
+    getCompanies() {
+        this._company.getCompanies().subscribe((d: any) => {
+            this.companies = d.data;
+            d.data[0]
+                ? this.form.patchValue({ company_id: d.data[0].value })
+                : '';
+        });
     }
     getPosition(dependency_id) {
         this._position.getPositions({ dependency_id }).subscribe((r: any) => {
@@ -172,6 +169,7 @@ export class VacantesCrearComponent implements OnInit {
 
     createForm() {
         this.form = this.fb.group({
+            company_id: ['', Validators.required],
             title: ['', Validators.required],
             date_start: ['', Validators.required],
             date_end: ['', Validators.required],
@@ -193,6 +191,9 @@ export class VacantesCrearComponent implements OnInit {
         })
     }
 
+    get company_id_invalid() {
+        return (this.form.get('company_id').invalid && this.form.get('company_id').touched);
+    }
     get title_invalid() {
         return this.form.get('title').invalid && this.form.get('title').touched;
     }

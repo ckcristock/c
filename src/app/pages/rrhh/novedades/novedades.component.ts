@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
+import { DisabilityLeavesService } from './disability-leaves.service';
+import { PayrollFactorService } from './payroll-factor.service';
 
 @Component({
   selector: 'app-novedades',
@@ -6,10 +9,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./novedades.component.scss']
 })
 export class NovedadesComponent implements OnInit {
+  openModal = new EventEmitter<any>()
+  people: any[] = []
+  loading = false
+  constructor(
+    private _payroll: PayrollFactorService
+  ) {
 
-  constructor() { }
-
-  ngOnInit(): void {
+  }
+  ngOnInit() {
   }
 
+  cargarNovedades(form: NgForm) {
+    this.loading = true;
+    this._payroll.getPayrollFactorPeople(form.value).subscribe((r: any) => {
+      this.loading = false;
+      this.people = r.data
+    })
+  }
 }

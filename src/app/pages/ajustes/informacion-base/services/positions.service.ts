@@ -12,5 +12,7 @@ export class PositionService {
   getPositions( params = {} ){
     return this.http.get(`${ environment.base_url }/positions`,{params})
   }
-
+  save( form ){
+    return this.http.post(`${ environment.base_url }/positions`,form)
+  }
 }

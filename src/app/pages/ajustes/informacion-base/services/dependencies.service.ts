@@ -14,4 +14,7 @@ export class DependenciesService {
     return this.http.get(`${ environment.base_url }/dependencies`,{params})
   }
 
+  save( form ){
+    return this.http.post(`${ environment.base_url }/dependencies`,form)
+  }
 }

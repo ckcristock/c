@@ -1,9 +1,16 @@
+<div class="row mt-3 mb-3">
+    <div class="col-12 text-center">
+        <h3>Estructura de la empresa</h3>
+      <hr>
+    </div>
+</div>
 <div class="row">
+
     <div class="col-4 ">
         <div class="card">
             <div class="card-body">
-                <div class="col-12 mb-4 ">
-                    Grupos
+                <div class="col-12 mb-4  d-flex justify-content-between">
+                    <strong>Grupos</strong>
                     <button class="btn btn-primary btn-sm" (click)="openModal('grupos')"><i class="fa fa-plus"></i></button>
                 </div>
 
@@ -30,7 +37,7 @@
                                                 <i class="mdi mdi-chevron-down "></i>
                                             </button>
                                             <div ngbDropdownMenu>
-                                                <a class="dropdown-item waves-light waves-effect caja-botones" href="">
+                                                <a class="dropdown-item waves-light waves-effect caja-botones" (click)="editar('grupos',grupo)">
                                                     <i class="ti-pencil"></i> Editar</a>
                                             </div>
                                         </div>
@@ -47,8 +54,8 @@
 
         <div class="card">
             <div class="card-body">
-                <div class="col-12 mb-4">
-                    Dependencias
+                <div class="col-12 mb-4 d-flex justify-content-between">
+                    <strong>Dependen</strong>
                     <button class="btn btn-primary btn-sm" (click)="openModal('dependencias')"><i class="fa fa-plus"></i></button>
                 </div>
 
@@ -75,7 +82,7 @@
                                                 <i class="mdi mdi-chevron-down "></i>
                                             </button>
                                             <div ngbDropdownMenu>
-                                                <a class="dropdown-item waves-light waves-effect caja-botones" href="">
+                                                <a class="dropdown-item waves-light waves-effect caja-botones" (click)="editar('dependencias',dependency)">
                                                     <i class="ti-pencil"></i> Editar</a>
                                             </div>
                                         </div>
@@ -92,8 +99,8 @@
     <div class="col-4">
         <div class="card">
             <div class="card-body row">
-                <div class="col-12 mb-4">
-                    Cargos
+                <div class="col-12 mb-4 d-flex justify-content-between">
+                    <strong>Cargos</strong>
                     <button class="btn btn-primary btn-sm" (click)="openModal('cargos')"><i class="fa fa-plus"></i></button>
                 </div>
 
@@ -120,7 +127,7 @@
                                                 <i class="mdi mdi-chevron-down "></i>
                                             </button>
                                             <div ngbDropdownMenu>
-                                                <a class="dropdown-item waves-light waves-effect caja-botones" href="">
+                                                <a class="dropdown-item waves-light waves-effect caja-botones" (click)="editar('cargos',position)">
                                                     <i class="ti-pencil"></i> Editar</a>
                                             </div>
                                         </div>
@@ -140,17 +147,16 @@
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
         <div class="row">
-            <h4 class=" text text-center justify-content-center modal-title   p-1">Nuevo
-            </h4>
+            <h5 class=" text text-center justify-content-center modal-title   p-1">Agregar nuevo a la lista de {{tipo}}
+            </h5>
         </div>
     </div>
     <div class="app-modal-body">
         <form changeForm="ngForm">
-            <p class="card-subtitle mb-2 ">Es necesario Cambiar la contraseña</p>
             <div class="row mt-3 ">
                 <div class="form-group col-12">
                     <label for="new-password"></label>
-                    <input type="password" name="new-password" class="form-control" id="new-password" autocomplete="on" placeholder="Nueva Contraseña">
+                    <input type="text" name="name" [(ngModel)]="name" class="form-control" id="new-password" autocomplete="on" placeholder="Nombre">
                 </div>
             </div>
         </form>
@@ -159,8 +165,7 @@
         <div class="text-right ">
             <button type="button " (click)="modal.hide()" class="btn btn-danger btn-sm mr-4 ">Cerrar
              </button>
-            <button type="button " class="btn btn-success btn-sm ">Cambiar
-                Contraseña</button>
+            <button type="button " class="btn btn-success btn-sm " (click)="save()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

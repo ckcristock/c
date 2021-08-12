@@ -13,4 +13,8 @@ export class GroupService {
     return this.http.get(`${ environment.base_url }/group`)
   }
 
+  save( form ){
+    return this.http.post(`${ environment.base_url }/group`,form)
+  }
+
 }

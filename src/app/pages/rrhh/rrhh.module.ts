@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { RrhhRouterModule } from "./rrhh-routing.module";
 import { VacantesComponent } from './vacantes/vacantes.component';
 import { PostulantesComponent } from './postulantes/postulantes.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 /* import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2'; */
 
 import { NgbPaginationModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
@@ -15,21 +15,25 @@ import { LlegadasTardesComponent } from './llegadas-tardes/llegadas-tardes.compo
 
 import { ChartsModule } from 'ng2-charts';
 import { NovedadesComponent } from './novedades/novedades.component';
+import { NgSelectModule } from "@ng-select/ng-select";
+import { VacantesVerComponent } from './vacantes/vacantes-ver/vacantes-ver.component';
 
 
 
 @NgModule({
-    declarations:[VacantesComponent, PostulantesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent],
+    declarations:[VacantesComponent, PostulantesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent],
     imports:[RrhhRouterModule,
         CommonModule,
         ChartsModule,
         FormsModule,
+        ReactiveFormsModule,
 /*         SweetAlert2Module, */
         NgbPaginationModule,
         NgbDropdownModule,
         MyDateRangePickerModule,
         PipesModule,
-        ComponentsModule
+        ComponentsModule,
+        NgSelectModule,
     ],
     exports:[],
 })

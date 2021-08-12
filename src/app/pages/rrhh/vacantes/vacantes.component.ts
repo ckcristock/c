@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from "@angular/common";
 import { IMyDrpOptions } from 'mydaterangepicker';
 import { environment } from 'src/environments/environment';
+import { JobService } from './job.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-vacantes',
@@ -16,40 +18,29 @@ import { environment } from 'src/environments/environment';
 
 export class VacantesComponent implements OnInit {
 
-  @ViewChild('PlantillaBotones') PlantillaBotones: TemplateRef<any>;
-  @ViewChild('PlantillaEstado') PlantillaEstado: TemplateRef<any>;
-  @ViewChild('deleteSwal') deleteSwal: any;
-  @ViewChild('confirmacionSwal') confirmacionSwal: any;
-  @ViewChild('PlantillaFoto') PlantillaFoto: TemplateRef<any>;
-  
-   
+  pagination = {
+    pageSize: 15,
+    page: 1,
+    collectionSize: 0,
+  }
+  loading = false;
+
   timeout: any;
-  public user: any;
-  public page = 1;
-  public filtro_Fecha: any='';
-  public filtro_Fecha_Inicio: string='';
-  public filtro_Fecha_Fin: string='';
-  public filtro_titulo: string='';
-  public filtro_dependencia: string='';
-  public  filtro_Cargo: string='';
-  public filtro_departamento: any='';
-  public filtro_municipio: any='';
-  public filtro_estado: string='';
-  public Cargando: boolean=false;
-  public Lista_Vacantes:any = [
-    { Fecha:'04/08/2021', Fecha_Inicio:'04/08/2021' , Fecha_Fin:'09/08/2021' , Titulo_Vacante:'Pruebas ', NDependencia:'Tecnología', NCargo:'Analista de datos' , NDepartamento:'Santander', NMunicipio:'Santander', Estado:'Activo' },
-    { Fecha:'04/08/2021', Fecha_Inicio:'04/08/2021' , Fecha_Fin:'09/08/2021' , Titulo_Vacante:'Pruebas ', NDependencia:'Tecnología', NCargo:'Analista de datos' , NDepartamento:'Santander', NMunicipio:'Santander', Estado:'Activo' },
-    { Fecha:'04/08/2021', Fecha_Inicio:'04/08/2021' , Fecha_Fin:'09/08/2021' , Titulo_Vacante:'Pruebas ', NDependencia:'Tecnología', NCargo:'Analista de datos' , NDepartamento:'Santander', NMunicipio:'Santander', Estado:'Activo' },
-    { Fecha:'04/08/2021', Fecha_Inicio:'04/08/2021' , Fecha_Fin:'09/08/2021' , Titulo_Vacante:'Pruebas ', NDependencia:'Tecnología', NCargo:'Analista de datos' , NDepartamento:'Santander', NMunicipio:'Santander', Estado:'Activo' },
-    { Fecha:'04/08/2021', Fecha_Inicio:'04/08/2021' , Fecha_Fin:'09/08/2021' , Titulo_Vacante:'Pruebas ', NDependencia:'Tecnología', NCargo:'Analista de datos' , NDepartamento:'Santander', NMunicipio:'Santander', Estado:'Activo' },
-    { Fecha:'04/08/2021', Fecha_Inicio:'04/08/2021' , Fecha_Fin:'09/08/2021' , Titulo_Vacante:'Pruebas ', NDependencia:'Tecnología', NCargo:'Analista de datos' , NDepartamento:'Santander', NMunicipio:'Santander', Estado:'Activo' },
-    { Fecha:'04/08/2021', Fecha_Inicio:'04/08/2021' , Fecha_Fin:'09/08/2021' , Titulo_Vacante:'Pruebas ', NDependencia:'Tecnología', NCargo:'Analista de datos' , NDepartamento:'Santander', NMunicipio:'Santander', Estado:'Activo' },
-    { Fecha:'04/08/2021', Fecha_Inicio:'04/08/2021' , Fecha_Fin:'09/08/2021' , Titulo_Vacante:'Pruebas ', NDependencia:'Tecnología', NCargo:'Analista de datos' , NDepartamento:'Santander', NMunicipio:'Santander', Estado:'Activo' },
-    { Fecha:'04/08/2021', Fecha_Inicio:'04/08/2021' , Fecha_Fin:'09/08/2021' , Titulo_Vacante:'Pruebas ', NDependencia:'Tecnología', NCargo:'Analista de datos' , NDepartamento:'Santander', NMunicipio:'Santander', Estado:'Activo' },
-    { Fecha:'04/08/2021', Fecha_Inicio:'04/08/2021' , Fecha_Fin:'09/08/2021' , Titulo_Vacante:'Pruebas ', NDependencia:'Tecnología', NCargo:'Analista de datos' , NDepartamento:'Santander', NMunicipio:'Santander', Estado:'Activo' },
-  ];
-  public maxSize = 15;
-  public TotalItems:number;
+  user: any;
+  page = 1;
+  filtro_Fecha: any='';
+  filtro_Fecha_Inicio: string='';
+  filtro_Fecha_Fin: string='';
+  filtro_titulo: string='';
+  filtro_dependencia: string='';
+   filtro_Cargo: string='';
+  filtro_departamento: any='';
+  filtro_municipio: any='';
+  filtro_estado: string='';
+  Cargando: boolean=false;
+  jobs:any = [];
+  maxSize = 15;
+  TotalItems:number;
   myDateRangePickerOptions: IMyDrpOptions = {
     width:'100px',
     height: '21px',
@@ -59,8 +50,13 @@ export class VacantesComponent implements OnInit {
     dateFormat: 'yyyy-mm-dd',
   };
 
-  constructor( private http: HttpClient, private location: Location, private route: ActivatedRoute) {
-   /*  this.ListarVacantes(); */
+  constructor( 
+    private http: HttpClient, 
+    private location: Location,
+    private route: ActivatedRoute,
+    private _job: JobService
+    ) {
+    this.getJobs(1);
   }
 
   ngOnInit() {
@@ -106,12 +102,18 @@ export class VacantesComponent implements OnInit {
       queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     }
 
-    this.http.get( environment.base_url + 'php/vacantes/vacantes.php'+queryString).subscribe((data: any) => {
-      this.Cargando = false;
-     /*  this.Lista_Vacantes = data.vacantes; */
-      this.TotalItems = data.numReg;
-    });
+    
 
+  }
+
+  getJobs(page){
+    this.loading = true;
+    this.pagination.page = page;
+    this._job.getJobs().subscribe((r:any)=>{
+      this.jobs = r.data.data
+      this.loading = false;
+      this.pagination.collectionSize = r.data.total
+    })
   }
 
   paginacion() {
@@ -228,14 +230,35 @@ export class VacantesComponent implements OnInit {
     }
   }
 
-  AnularVacante(id){
-    let datos = new FormData();
-    datos.append("modulo", 'Vacante');
-    datos.append("id", id);
-    this.http.post( environment.base_url+ 'php/vacantes/vacante_anular.php', datos).subscribe((data: any) => {
-    this.deleteSwal.show();
-    this.ListarVacantes();
+  cancelar(id){
+    Swal.fire({
+      title: '¿Seguro?',
+      text: 'Se va a CANCELAR una nueva vacante',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#34c38f',
+      cancelButtonColor: '#f46a6a',
+      confirmButtonText: 'Si, Hazlo!'
+    }).then(result => {
+      if (result.value) {
+        this.sendData(id);
+      }
     });
+   
   }
 
+  sendData(id){
+    this._job.setState(id,{ state:'Cancelada' }).subscribe((r: any) => {
+
+      if( r.code == 200 ){
+        Swal.fire({
+            title: 'Creación exitosa',
+            text: 'Felicidades, se ha actualizado la vacante',
+            icon: 'success',
+           
+          })
+    }
+       this.getJobs(1);
+    });
+  }
 }

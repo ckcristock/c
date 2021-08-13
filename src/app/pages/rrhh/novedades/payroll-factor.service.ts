@@ -16,11 +16,7 @@ export class PayrollFactorService {
     getPayrollFactorPeople(params) {
         return this.http.get(`${environment.base_url}/payroll-factor-people`, { params }).pipe(
             map(( r:any )=> {
-                if (r.data) {
-                    r.data = r.data.map(r=> { r.selected = false; return r })
-                }
-                console.log(r);
-                
+                if (r.data) { r.data = r.data.map(r=> { r.selected = false; return r }) }
                 return r
             })
         )

@@ -1,188 +1,182 @@
-<app-crear-novedad [open]="openModal"></app-crear-novedad>
+<app-crear-novedad [open]="openModal" (saving)="cargarNovedades()"></app-crear-novedad>
 
-<div class="container">
-    <div class="row">
-        <div class="col-8">
-            <div class="card">
-                <div class="card-title mt-2 ml-4">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h3 class="font-weight-bold mt-2">Listado de Novedades </h3>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <button class="btn btn-link mr-4 mt-2" (click)="openModal.emit()">
-                  <i class="simple-icon-plus"></i> Nueva
-                </button>
-                        </div>
+<div class="row">
+    <div class="col-8">
+        <div class="card">
+            <div class="card-title mt-2 ml-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="font-weight-bold mt-2">Listado de Novedades </h3>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button class="btn btn-link mr-4 mt-2" (click)="openModal.emit()">
+                            <i class="simple-icon-plus"></i> Nueva
+                        </button>
                     </div>
                 </div>
-                <div class="card-body">
-                    <form #form="ngForm" action="">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label for="fecha_inicio" class="custom-label">Fecha de Inicio</label>
-                                    <input type="date" name="date_start" ngModel class="form-control custom-control" />
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label for="fecha_fin" class="custom-label">Fecha de Fin</label>
-                                    <input type="date" name="date_end" ngModel class="form-control custom-control" />
-                                </div>
-                            </div>
-                            <div class="col-md-2 pt-4 text-center">
-                                <button class="btn btn-outline-secondary default btn-xs mt-2 w-100" (click)="cargarNovedades(form)">
-                        <i class="iconsmind-Search-People"></i> Filtrar
-                        </button>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="cargarNovedades()">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="fecha_inicio" class="custom-label">Fecha de Inicio</label>
+                                <input type="date" formControlName="date_start" class="form-control custom-control" />
                             </div>
                         </div>
-                    </form>
-                    <div class="row mt-2" *ngIf="!loading && people.length > 0; else notData">
-                        <div class="col-12 mt-2">
-                            <h4 class="font-weight-bold mb-4">Funcionarios</h4>
-                        </div>
-
-                        <div class="col-12 mb-4 fila-novedad" *ngFor="let person of people">
-                            <div class="align-self-center d-flex flex-column flex-md-row justify-content-between min-width-zero align-items-md-center">
-                                <p class="w-40 w-xs-100 mb-0">
-                                    <!--  <img
-                      v-if="nov.image != null"
-                      :src="`${nov.image}`"
-                      class="img-funcionario mr-1"
-                      alt
-                    /> -->
-                                    <!-- <img v-else :src="`/img/robot.jpg`" class="img-funcionario mr-1" alt /> -->
-                                    <span class="font-weight-bold">
-                      {{ person.first_name }}
-                      {{ person.first_surname }}
-                    </span>
-                                </p>
-
-                                <p class="mb-1 font-weight-bold w-40 w-xs-100">{{ person.contractultimate.position.dependency.name }}</p>
-                                <div class="w-xs-100 detalles">
-                                    <button class="btn btn-primary btn-sm" (click)="person.selected = !person.selected">
-                                        <!-- <button class="btn btn-link" @click="mostrarDetalles(nov.id, index)"> -->
-                                        <i class="fa fa-search font-weight-bold"></i>
-                                    </button>
-                                </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="fecha_fin" class="custom-label">Fecha de Fin</label>
+                                <input type="date" formControlName="date_end" class="form-control custom-control" />
                             </div>
-                            <div class="mt-3">
-                                <!--       <detalles-novedad
-                    :novedades="nov.novedades"
-                    :funcionario="nov.id"
-                    :ref="'detallesNovedad' + nov.id"
-                    @editar="editarNovedad"
-                    @eliminar="eliminarNovedad"
-                  ></detalles-novedad> -->
-                                <tr>
-                                    <td colspan="6" class="text-center">
-                                        <td [ngClass]="{  'display-none': (!person.selected ) } " colspan="6" class="text-center">
-                                            <table class="table table-hover table-bordered detalles">
-                                                <tr>
-                                                    <td class="text-center"><strong>Fecha</strong></td>
-                                                    <td class="text-center"><strong>Novedad</strong></td>
-                                                    <td class="text-center"><strong>Descripción</strong></td>
-                                                    <td class="text-center"><strong>Inicio</strong></td>
-                                                    <td class="text-center"><strong>Fin</strong></td>
-                                                    <td style="width:80px;"></td>
-                                                </tr>
-                                                <tr *ngFor="let fact of person.payroll_factors">
-                                                    <td class="text-center"><strong>{{fact.created_at | date }}</strong></td>
-                                                    <td class="text-center"><strong>{{fact.disability_leave.concept}}</strong></td>
-                                                    <td class="text-center"><strong>{{fact.observation}}</strong></td>
-                                                    <td class="text-center"><strong>{{fact.date_start}}</strong></td>
-                                                    <td class="text-center"><strong>{{fact.date_end}}</strong></td>
-                                                    <td style="width:80px;">
-                                                        <div class="text-center">
-                                                            <div ngbDropdown class="dropdown-primary">
-                                                                <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
-                                                                <div ngbDropdownMenu>
-                                                                    <!--  <a class="dropdown-item waves-light waves-effect caja-botones" (click)="editarNovedad(novedad.Id_Novedad)">
-                                                    <i class="ti-pencil"></i> Edi.</a> -->
-                                                                    <!-- <a class="dropdown-item waves-light waves-effect caja-botones" href="" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a eliminar la novedad' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'Dejame verificar'}"
+                        </div>
+                        <div class="col-md-2 pt-4 text-center">
+                            <button type="submit" class="btn btn-outline-secondary default btn-xs mt-2 w-100">
+                                <i class="iconsmind-Search-People"></i> Filtrar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="row mt-2" *ngIf="!loading && people.length > 0; else notData">
+                    <div class="col-12 mt-2">
+                        <h4 class="font-weight-bold mb-4">Funcionarios</h4>
+                    </div>
+
+                    <div class="col-12 mb-4 fila-novedad" *ngFor="let person of people">
+                        <div
+                            class="align-self-center d-flex flex-column flex-md-row justify-content-between min-width-zero align-items-md-center">
+                            <p class="w-40 w-xs-100 mb-0 d-flex align-items-center">
+                                <img src="{{person?.image| image:'users' }}" alt=""
+                                class="img-thumbnail rounded-circle header-profile-user mx-auto d-block">
+                                <span class="font-weight-bold ml-2">
+                                    {{ person.first_name }}
+                                    {{ person.first_surname }}
+                                </span>
+                            </p>
+
+                            <p class="mb-1 font-weight-bold w-40 w-xs-100">{{
+                                person.contractultimate.position.dependency.name }}</p>
+                            <div class="w-xs-100 detalles">
+                                <button class="btn btn-primary btn-sm" (click)="person.selected = !person.selected">
+                                    <i class="fas fa-sort-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+  
+                            <div [ngClass]="{  'display-none': (!person.selected ) } " colspan="6" class="text-center">
+                                <table class="table table-hover table-bordered detalles">
+                                    <tr>
+                                        <td class="text-center"><strong>Fecha</strong></td>
+                                        <td class="text-center"><strong>Novedad</strong></td>
+                                        <td class="text-center"><strong>Descripción</strong></td>
+                                        <td class="text-center"><strong>Inicio</strong></td>
+                                        <td class="text-center"><strong>Fin</strong></td>
+                                        <td style="width:80px;"></td>
+                                    </tr>
+                                    <tr *ngFor="let fact of person.payroll_factors">
+                                        <td class="text-center"><strong>{{fact.created_at | date }}</strong>
+                                        </td>
+                                        <td class="text-center">
+                                            <strong>{{fact.disability_leave.concept}}</strong>
+                                        </td>
+                                        <td class="text-center"><strong>{{fact.observation}}</strong></td>
+                                        <td class="text-center"><strong>{{fact.date_start}}</strong></td>
+                                        <td class="text-center"><strong>{{fact.date_end}}</strong></td>
+                                        <td style="width:80px;">
+                                            <div class="text-center">
+                                                <div ngbDropdown class="dropdown-primary">
+                                                    <button ngbDropdownToggle
+                                                        class="btn btn-secondary btn-sm waves-effect waves-light "
+                                                        type="button">
+                                                        <i class="fa fa-search "></i>
+
+                                                    </button>
+                                                    <div ngbDropdownMenu>
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones"
+                                                            (click)="editarNovedad(fact)">
+                                                            <i class="ti-pencil"></i> Edi.</a>
+                                                        <!-- <a class="dropdown-item waves-light waves-effect caja-botones" href="" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a eliminar la novedad' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'Dejame verificar'}"
                                                     (confirm)="EliminarNovedad(novedad.Id_Novedad)">
                                                     <i class="fa fa-times"></i> Elim.</a> -->
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
-                                </tr>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
 
-            <ng-template #notData>
-                <app-not-data [loading]="loading"></app-not-data>
-            </ng-template>
+            </div>
         </div>
 
-        <div class="col-4">
-            <div class="row">
-                <div class="col-6">
-                    <div class="card mb-4">
-                        <div class="card-body text-center incapacidades">
-                            <i class="iconsmind-Plane"></i>
-                            <p class="card-text mb-0">Vacaciones</p>
-                            <!--   <p class="lead text-center">{{ cantidadTiposNov("Vacaciones") || "0" }}</p> -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="card mb-4">
-                        <div class="card-body text-center incapacidades">
-                            <i class="iconsmind-Ambulance"></i>
-                            <p class="card-text mb-0">Incapacidades</p>
-                            <!-- <p class="lead text-center">{{ cantidadTiposNov("Incapacidad") || "0" }}</p> -->
-                        </div>
+        <ng-template #notData>
+            <app-not-data [loading]="loading"></app-not-data>
+        </ng-template>
+    </div>
+
+    <div class="col-4">
+        <div class="row">
+            <div class="col-6">
+                <div class="card mb-4">
+                    <div class="card-body text-center incapacidades">
+                        <i class="ri-suitcase-3-fill "></i>
+                        <p class="card-text mb-0">Vacaciones</p>
+                        <p class="lead text-center">{{ totalVacaciones }}</p>
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-6">
-                    <div class="card mb-4">
-                        <div class="card-body text-center incapacidades">
-                            <i class="iconsmind-Baby-Clothes"></i>
-                            <p class="card-text mb-0">Licencias</p>
-                            <!--  <p class="lead text-center">{{ cantidadTiposNov("Licencia") || "0" }}</p> -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="card mb-4">
-                        <div class="card-body text-center incapacidades">
-                            <i class="iconsmind-Calendar-3"></i>
-                            <p class="card-text mb-0">Permisos</p>
-                            <!-- <p class="lead text-center">{{ cantidadTiposNov("Permiso") || "0" }}</p> -->
-                        </div>
+            <div class="col-6">
+                <div class="card mb-4">
+                    <div class="card-body text-center incapacidades">
+                        <i class="fas fa-heartbeat"></i>
+                        <p class="card-text mb-0">Incapacidades</p>
+                        <p class="lead text-center">{{ totalIncapacidades }}</p>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-6">
-                    <div class="card mb-4">
-                        <div class="card-body text-center incapacidades">
-                            <i class="iconsmind-Door"></i>
-                            <p class="card-text mb-0">Abandonos</p>
-                            <!-- <p class="lead text-center">{{ cantidadTiposNov("Abandono") || "0" }}</p> -->
-                        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card mb-4">
+                    <div class="card-body text-center incapacidades">
+                        <i class="fas fa-baby"></i>
+                        <p class="card-text mb-0">Licencias</p>
+                        <p class="lead text-center">{{ totalLicencias }}</p>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="card mb-4">
-                        <div class="card-body text-center incapacidades">
-                            <i class="iconsmind-Lock-User"></i>
-                            <p class="card-text mb-0">Suspensiones</p>
-                            <!-- <p class="lead text-center">{{ cantidadTiposNov("Suspensión") || "0" }}</p> -->
-                        </div>
+            </div>
+            <div class="col-6">
+                <div class="card mb-4">
+                    <div class="card-body text-center incapacidades">
+                        <i class="ri-calendar-check-line"></i>
+                        <p class="card-text mb-0">Permisos</p>
+                        <p class="lead text-center">{{ totalPermisos }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card mb-4">
+                    <div class="card-body text-center incapacidades">
+                        <i class="fas fa-door-open"></i>
+                        <p class="card-text mb-0">Abandonos</p>
+                        <p class="lead text-center">{{ totalAbandonos }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card mb-4">
+                    <div class="card-body text-center incapacidades">
+                        <i class="ri-user-unfollow-line"></i>
+                        <p class="card-text mb-0">Suspensiones</p>
+                        <p class="lead text-center">{{ totalSuspensiones }}</p>
                     </div>
                 </div>
             </div>

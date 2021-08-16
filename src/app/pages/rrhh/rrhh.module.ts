@@ -5,7 +5,7 @@ import { PostulantesComponent } from './postulantes/postulantes.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 /* import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2'; */
 
-import { NgbPaginationModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPaginationModule, NgbDropdownModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { VacantesCrearComponent } from './vacantes/vacantes-crear/vacantes-crear.component';
 import { PipesModule } from '../../core/pipes/pipes.module';
@@ -18,11 +18,13 @@ import { NovedadesComponent } from './novedades/novedades.component';
 import { NgSelectModule } from "@ng-select/ng-select";
 import { VacantesVerComponent } from './vacantes/vacantes-ver/vacantes-ver.component';
 import { CrearNovedadComponent } from './novedades/crear-novedad/crear-novedad.component';
+import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
+import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
 
 
 
 @NgModule({
-    declarations:[VacantesComponent, PostulantesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent],
+    declarations:[VacantesComponent, PostulantesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent, InventarioDotacionComponent, DotacionesComponent],
     imports:[RrhhRouterModule,
         CommonModule,
         ChartsModule,
@@ -35,6 +37,7 @@ import { CrearNovedadComponent } from './novedades/crear-novedad/crear-novedad.c
         PipesModule,
         ComponentsModule,
         NgSelectModule,
+        NgbTypeaheadModule
     ],
     exports:[],
 })

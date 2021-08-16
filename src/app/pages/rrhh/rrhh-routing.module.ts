@@ -6,6 +6,8 @@ import { VacantesCrearComponent } from "./vacantes/vacantes-crear/vacantes-crear
 import { LlegadasTardesComponent } from "./llegadas-tardes/llegadas-tardes.component";
 import { VacantesVerComponent } from "./vacantes/vacantes-ver/vacantes-ver.component";
 import { NovedadesComponent } from './novedades/novedades.component';
+import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
+import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 
 
 
@@ -16,6 +18,8 @@ const routes: Routes = [
     { path: 'postulantes', component: PostulantesComponent },
     { path: 'novedades', component: NovedadesComponent },
     { path: 'llegadas-tarde', component: LlegadasTardesComponent },
+    { path: 'dotacion/dotaciones', component: DotacionesComponent },
+    { path: 'dotacion/inventario', component: InventarioDotacionComponent },
 ]
 
 

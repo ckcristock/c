@@ -145,7 +145,6 @@ export class CrearNovedadComponent implements OnInit {
   get observation_invalid() {
     return this.form.get('observation').invalid && this.form.get('observation').touched;
   }
-
-
-
 }
+
+

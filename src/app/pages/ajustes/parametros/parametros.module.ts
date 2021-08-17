@@ -3,12 +3,35 @@ import { ParametrosRoutingModule } from "./parametros-routing.module";
 import { PerfilesComponent } from './perfiles/perfiles.component';
 import { RgpComponent } from './rgp/rgp.component';
 import { NotasTecnicasComponent } from './notas-tecnicas/notas-tecnicas.component';
+import { ZonasComponent } from './zonas/zonas.component';
+import { ComponentsModule } from "src/app/components/components.module";
+import { HttpClientModule } from "@angular/common/http";
+import { NgbDropdownModule, NgbPagination, NgbPaginationModule } from "@ng-bootstrap/ng-bootstrap";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { CommonModule } from "@angular/common";
+import { EpsComponent } from './eps/eps.component';
 
 
 
 @NgModule({
-    declarations : [PerfilesComponent, RgpComponent, NotasTecnicasComponent] , 
-    imports: [ ParametrosRoutingModule ],
+    declarations : [
+        NotasTecnicasComponent, 
+        PerfilesComponent, 
+        ZonasComponent, 
+        RgpComponent, EpsComponent
+    ],
+    imports: [ 
+        ParametrosRoutingModule,
+        ReactiveFormsModule,
+        ComponentsModule,
+        HttpClientModule,
+        NgbDropdownModule,
+        NgbPaginationModule,
+        FormsModule,
+        NgSelectModule,
+        CommonModule
+    ],
     exports: []
 })
 

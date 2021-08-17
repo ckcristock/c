@@ -93,11 +93,11 @@ export class InventarioDotacionComponent implements OnInit {
   }
 
   sendData(form) {
-    this._dotation.saveGroup(form.value).subscribe((data: any) => {
+    this._dotation.saveProductDotationTypes(form.value).subscribe((data: any) => {
       if (data.code == 200) {
         Swal.fire({
           title: 'Opersación exitosa',
-          text: 'Felicidades, se han creado un nuevo grupo',
+          text: 'Felicidades, se han creado una nueva categoria',
           icon: 'success',
           allowOutsideClick: false,
           allowEscapeKey: false,
@@ -116,7 +116,7 @@ export class InventarioDotacionComponent implements OnInit {
     });
   }
   listarGrupo() {
-    this._dotation.getInventaryGrops().subscribe((data: any) => {
+    this._dotation.getProductDotationTypes().subscribe((data: any) => {
       this.Lista_Grupos_Inventario = data.data;
     });
   }

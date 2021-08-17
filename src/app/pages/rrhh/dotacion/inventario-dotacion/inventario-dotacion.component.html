@@ -7,7 +7,7 @@
                         <h5>Inventario de Dotación y EPP</h5>
                         <button type="button" class="activar pull-right btn btn-sm btn-primary" (click)="modalGrupo.show(); listarGrupo()">
                                       <i class="fa fa-plus"></i>
-                                       Grupos
+                                       Categorias
                           </button>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                                         <td><strong>{{ inventario.status }}</strong></td>
                                         <td><strong>{{ inventario.type }}</strong></td>
                                         <td class="text-right"><strong>$ {{ inventario.cost | number | puntos }}</strong></td>
-                                        <td class="text-right"><strong>{{ inventario.amount }}</strong></td>
+                                        <td class="text-right"><strong>{{ inventario.stock }}</strong></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -76,7 +76,7 @@
 
 <app-modal-basic [dialogClass]="'modal-md'" id="modalGrupo" #modalGrupo>
     <div class="app-modal-header">
-        <h4 class="modal-title">Nuevo Grupo</h4>
+        <h4 class="modal-title">Nueva Categoría</h4>
         <button type="button" class="close basic-close" (click)="modalGrupo.hide();">
     <span aria-hidden="true">&times;</span>
     </button>
@@ -84,13 +84,13 @@
     <div class="app-modal-body">
         <form #FormGrupo="ngForm">
             <div class="d-flex align-items-end justify-content-between ">
-                <div class="col-md-5">
+                <div class="col-md-8">
                     <!-- <input type="hidden" name="id" [ngModel]="idGroup"> -->
-                    <label for="grupo">Nombre Tipo grupo</label>
+                    <label for="grupo">Nombre Categorías</label>
                     <input type="text" name="name" ngModel id="grupo" class="form-control form-control-sm" required>
-                </div>
-                <div class="col-md-4 ">
-                    <button class="btn btn-outline-primary text-end btn-sm rounded" [disabled]="(FormGrupo.invalid)" (click)="GuardarGrupo(FormGrupo);"><i class="ti-save mr-2" ></i>Guardar Grupo
+                </div> 
+                <div class="col-md-4 text-right ">
+                    <button class="btn btn-outline-primary text-center btn-sm rounded" [disabled]="(FormGrupo.invalid)" (click)="GuardarGrupo(FormGrupo);"><i class="ti-save mr-2" ></i>Guardar
                     </button>
                 </div>
 
@@ -99,7 +99,7 @@
         </form>
         <div class="form-row">
             <div class="col-md-12">
-                <h6 class="modal-title mt-3">Grupos</h6><br>
+                <h6 class="modal-title mt-3">Categorías</h6><br>
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>

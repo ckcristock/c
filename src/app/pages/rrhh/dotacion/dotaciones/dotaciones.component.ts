@@ -11,6 +11,7 @@ import { debounceTime, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { DotacionService } from '../dotacion.service';
 import { PersonService } from '../../../ajustes/informacion-base/persons/person.service';
+import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 
 @Component({
   selector: 'app-dotaciones',
@@ -18,7 +19,7 @@ import { PersonService } from '../../../ajustes/informacion-base/persons/person.
   styleUrls: ['./dotaciones.component.scss']
 })
 export class DotacionesComponent implements OnInit {
-
+  loading = false;
   public maxSize = 15;
   public TotalItems: number;
   public page = 1;
@@ -64,14 +65,14 @@ export class DotacionesComponent implements OnInit {
   ];
 
   public Lista_Dotaciones: any = [];
-  public Lista_Grupos: any = [];
+  public Lista_Grupos: any[] = [];
   public Lista_Grupos_Inventario: any = [];
   public Lista_Grupos_Inventario1: any = [];
   public Pro_Van: any = {
     Empleado: '',
     Fecha: '',
     prod: [],
-    Detalles_Entrega: ''
+    description: ''
   };
   myDateRangePickerOptions: IMyDrpOptions = {
     width: '100px',
@@ -87,17 +88,17 @@ export class DotacionesComponent implements OnInit {
   /*  public func : any  = JSON.parse(localStorage.getItem('User')); */
   public Empleado_Entrega: any = [];
   public Entrega: any = {
-    Identificacion_Funcionario: '',
-    Funcionario_Recibe: this.Empleado_Entrega.Identificacion_Funcionario,
-    Costo: 0,
-    Detalles_Entrega: '',
-    Tipo: 'Dotacion'
+
+    person_id: '' ,
+    cost: 0,
+    description: '',
+    type: 'Dotacion'
   }
   public Devolucion: any = {
     Detalles: '',
     Entrega: '',
     Recibe: '',
-    Fecha_Entrega: ''
+    dispatched_at: ''
   }
   public alertOptionEntrega: any
   public alertOptionDevolucion: any
@@ -122,8 +123,8 @@ export class DotacionesComponent implements OnInit {
   constructor(
     private _dotation: DotacionService,
     private location: Location, private route: ActivatedRoute,
-    private _person : PersonService
-    ) {
+    private _person: PersonService
+  ) {
 
   }
 
@@ -140,6 +141,8 @@ export class DotacionesComponent implements OnInit {
     this.Lista_Empleados();
     this.Graficar();
     this.Lista_Productos();
+    this.stockGroup()
+    this.onChange1()
   }
   dateRangeChanged(event) {
     if (event.formatted != "") {
@@ -151,8 +154,8 @@ export class DotacionesComponent implements OnInit {
   }
   Lista_Empleados() {
     this._person.getPeopleIndex().subscribe((r: any) => {
-       this.Empleados = r.data;
-     });
+      this.Empleados = r.data;
+    });
   }///FINAL LISTAR EMPLEADOS
   Lista_Productos() {
     /* this.http.get(this.globales.ruta + 'php/lista_generales.php', { params: { modulo: 'Inventario_Dotacion' } }).subscribe((data: any) => {
@@ -198,28 +201,29 @@ export class DotacionesComponent implements OnInit {
      }); */
   }
   listarGrupos() {
-    this._dotation.getInventaryGrops().subscribe((data: any) => {
+    this._dotation.getProductDotationTypes().subscribe((data: any) => {
       this.Lista_Grupos = data.data;
+      /*   this.Lista_Grupos.unshift({'text':'Todos',value:''}) */
+
     });
   }
   // metodo para listar en pantalla principal
-  onChange(inventary_dotation_group_id) {
-    this._dotation.getInventaryBYGrops({inventary_dotation_group_id}).subscribe((r:any)=>{
-      
+  stockGroup() {
+    this._dotation.getInventaryGroupByCategory().subscribe((r: any) => {
       this.Lista_Grupos_Inventario = r.data;
     })
- 
+
   }
   // metodo para listar en el modal
-  onChange1(inventary_dotation_group_id) {
+  onChange1() {
 
-    this._dotation.getStok({inventary_dotation_group_id}).subscribe((r: any) => {
-    this.Lista_Grupos_Inventario1 = r.data;
+    this._dotation.getStok().subscribe((r: any) => {
+      this.Lista_Grupos_Inventario1 = r.data;
     });
   }
   cambio(prod) {
     Object.keys(prod).forEach(x => {
-      if (prod["Cantidad_Seleccionada"] > prod["Cantidad"]) {
+      if (prod["quantity"] > prod["Cantidad"]) {
         this.cam = true;
         console.log("aqui");
       } else {
@@ -233,14 +237,14 @@ export class DotacionesComponent implements OnInit {
       object.value = object.value.slice(0, object.max)
   }
   listarTotales(cantMes) {
-   /*   this.http.get(this.globales.ruta + 'php/dotaciones/lista_dotaciones.php', { params: { cantMes: cantMes } }).subscribe((data: any) => {
-     this.TotalesMes = data.CantidadMes.CantidadMes;
-     this.SumaMes = data.CantidadMes.SumaMes;
-     }); */
-     this._dotation.getCuantityDispatched({cantMes}).subscribe((r: any) => {
+    /*   this.http.get(this.globales.ruta + 'php/dotaciones/lista_dotaciones.php', { params: { cantMes: cantMes } }).subscribe((data: any) => {
+      this.TotalesMes = data.CantidadMes.CantidadMes;
+      this.SumaMes = data.CantidadMes.SumaMes;
+      }); */
+    this._dotation.getCuantityDispatched({ cantMes }).subscribe((r: any) => {
       this.TotalesMes = r.data.CantidadMes;
       this.SumaMes = r.data.SumaMes;
-     });
+    });
 
   }
   ListarDotaciones() {
@@ -264,8 +268,14 @@ export class DotacionesComponent implements OnInit {
      this.TotalItems = data.Totales.Cantidad;
      this.Totales = data.Totales;
      this.Cantidades = data.Cantidades;
-     this.CantidadTotal = data.Costos.SumaAno;
+     this.CantidadTotal = data.costs.SumaAno;
    }); */
+
+   this.loading = true;
+   this._dotation.getDotations().subscribe( (r:any)=>{
+    this.Lista_Dotaciones = r.data.data;
+    this.loading = false
+   })
   }
   filtros() {
     let params: any = {};
@@ -301,7 +311,7 @@ export class DotacionesComponent implements OnInit {
        this.Lista_Dotaciones = data.Listado;
        this.TotalItems = data.Totales.Cantidad;
        this.Totales = data.Totales;
-       this.CantidadTotal = data.Costos.TotalesCostos;
+       this.CantidadTotal = data.costs.Totalescosts;
  
      }); */
   }
@@ -333,7 +343,7 @@ export class DotacionesComponent implements OnInit {
         Detalles : '',
         Entrega :'',
         Recibe : '',
-        Fecha_Entrega : ''
+        dispatched_at : ''
       }
       this.Lista_Productos();
       this.ListarDotaciones();
@@ -346,30 +356,38 @@ export class DotacionesComponent implements OnInit {
   }
   GuardarEntrega() {
     // this.modalEntrega.hide();
-    this.Entrega.Funcionario_Recibe = this.Empleado_Entrega.Identificacion_Funcionario;
-   /*  let datos = new FormData();
-        let entrega =  this.globales.normalize(JSON.stringify(this.Entrega));
-        let prods   =  this.globales.normalize(JSON.stringify(this.Lista_Grupos_Inventario1));
-        datos.append("Entrega", entrega);
-        datos.append("Productos", prods); 
+   
+    let datos = new FormData();
+    let entrega = this.Entrega;
+    let prods:Array<any> = this.Lista_Grupos_Inventario1;
+    prods = prods.reduce( (acc,el) =>{
+      console.log( el );
+      
+        let prod:Array<any> = el.inventary.filter(r=>( r.quantity && r.quantity != "0"))
+        console.log(prod);
+        
+        return  ( prod.length==0 ? acc  : [...acc, ...prod] )
+    } , []) 
+    this._dotation.saveDotation({ entrega, prods }).subscribe(r => {
 
-     this.http.post(this.globales.ruta + 'php/dotaciones/guardar_entrega.php', datos).subscribe((data: any) => { */
-    /*   this.Empleado_Entrega = {};
+    })
+    /*  this.http.post(this.globales.ruta + 'php/dotaciones/guardar_entrega.php', datos).subscribe((data: any) => { 
+      this.Empleado_Entrega = {};
       this.Entrega = {
       
         Funcionario_Recibe : this.Empleado_Entrega.id,
-        Costo : 0,
-        Detalles_Entrega : '',
+        cost : 0,
+        description : '',
         Tipo: 'Dotacion'
       } */
-/*       this.Lista_Productos();
-      this.Swal.title ='Entrega de Dotación Guardada Correctamente';
-      this.Swal.text="Se ha reportado correctamente la entrega de Dotación";
-      this.Swal.type="success";
-      this.Swal.show();
-      this.ListarDotaciones(); 
-
-    });*/
+    /*       this.Lista_Productos();
+          this.Swal.title ='Entrega de Dotación Guardada Correctamente';
+          this.Swal.text="Se ha reportado correctamente la entrega de Dotación";
+          this.Swal.type="success";
+          this.Swal.show();
+          this.ListarDotaciones(); 
+    
+        });*/
   }
   paginacion() {
   }

@@ -17,9 +17,10 @@
                         <div class="col-md-6 text-center">
                             <p>Costos Mes</p>
                             <div class="form-group">
-                                <select [(ngModel)]="selectedMes" (change)="listarTotales($event.target.value)" class="form-control mb-2">
-                                  <option value="" disabled selected>Seleccionar</option>
-                                  <option *ngFor="let Mes of Meses" [value]="Mes.id">{{Mes.name}}</option>
+                                <select [(ngModel)]="selectedMes" (change)="listarTotales($event.target.value)"
+                                    class="form-control mb-2">
+                                    <option value="" disabled selected>Seleccionar</option>
+                                    <option *ngFor="let Mes of Meses" [value]="Mes.id">{{Mes.name}}</option>
                                 </select>
                                 <p>Costos Totales por Mes de Dotación y EPP</p>
                                 <h5> {{SumaMes| number | puntos}}</h5>
@@ -32,21 +33,25 @@
                     <hr class="hr">
                 </div>
 
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="card-block">
-                        <div class="form-group">
+                        <!--   <div class="form-group">
                             <label>Seleccione Grupo</label>
                             <select class="form-control" (change)="onChange($event.target.value)">
-                          <option value="" disabled selected>Seleccionar</option>
-                          <option *ngFor="let Grupo of Lista_Grupos" [value]="Grupo.id">{{Grupo.name}}</option>
-                    </select>
-                        </div>
+                                <option value="" disabled selected>Seleccionar</option>
+                                <option *ngFor="let Grupo of Lista_Grupos" [value]="Grupo.id">{{Grupo.name}}</option>
+                              </select>
+                        </div> -->
+
                         <div class="row" style="margin-top:5px;">
+                            <div class="col-12 text-center">
+                                <h4>Stock por categorias</h4>
+                            </div>
                             <div class="col-md-12 text-center">
                                 <table class="table table-hover table-bordered">
                                     <tr *ngFor="let lgi of Lista_Grupos_Inventario">
                                         <td>{{lgi.name}}</td>
-                                        <td style="width:50px;">{{lgi.amount}}</td>
+                                        <td style="width:50px;">{{lgi.stock}}</td>
                                     </tr>
                                     <!-- <tr>
                                   <td colspan="4" class="text-center" style="padding:2px;"><a style="margin-top: 0 !important;" class="btn btn-sm btn-info btn-block" href="" [routerLink]="['/inventariodotacion']">Ver Más Detalles</a></td>
@@ -84,13 +89,16 @@
                             <h5>Listado de Entregas de Dotación y EPP</h5>
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="modalEntrega.show()"><i class="fa fa-plus"></i> Entrega Dotación</button>
+                            <button class="btn btn-info btn-block btn-sm f-9"
+                                style="margin-top:0 !important;margin-bottom: 10px;" (click)="modalEntrega.show()"><i
+                                    class="fa fa-plus"></i> Entrega Dotación</button>
                         </div>
                     </div>
 
                 </div>
                 <div class="card-block">
-                    <table class="table table-striped" style="font-size: 10px;">
+                    <table class="table table-striped" style="font-size: 10px;"
+                        *ngIf="!loading && Lista_Dotaciones.length > 0; else notData">
                         <thead>
                             <tr>
                                 <th style="width:80px;">Código</th>
@@ -98,7 +106,6 @@
                                 <th style="width:135px;">Funcionario Entrega</th>
                                 <th style="width:135px;">Funcionario Recibe</th>
                                 <th style="width:135px;">Detalles</th>
-                                <th style="width:135px;">Categoria</th>
                                 <th>Artículos</th>
                                 <th style="width:90px;">Valor</th>
                                 <th style="width:80px;">Estado</th>
@@ -106,24 +113,30 @@
                             </tr>
                             <tr>
                                 <th class="tabla-filtro">
-                                    <input type="text" [(ngModel)]="filtro_cod" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Cod.">
+                                    <input type="text" [(ngModel)]="filtro_cod" (blur)="filtros()"
+                                        class="form-control input-sm" placeholder="Filtro Cod.">
                                 </th>
                                 <th class="tabla-filtro" style="max-width: 100px; width: 100px !important;">
-                                    <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
+                                    <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions"
+                                        [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)"
+                                        placeholder="Filtro Fechas"></my-date-range-picker>
                                 </th>
                                 <th>
-                                    <input type="text" [(ngModel)]="filtro_entrega" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Entrega">
+                                    <input type="text" [(ngModel)]="filtro_entrega" (blur)="filtros()"
+                                        class="form-control input-sm" placeholder="Filtro Entrega">
                                 </th>
                                 <th>
-                                    <input type="text" [(ngModel)]="filtro_recibe" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Recibe">
+                                    <input type="text" [(ngModel)]="filtro_recibe" (blur)="filtros()"
+                                        class="form-control input-sm" placeholder="Filtro Recibe">
                                 </th>
                                 <th>
-                                    <input type="text" [(ngModel)]="filtro_detalles" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Detalles">
+                                    <input type="text" [(ngModel)]="filtro_detalles" (blur)="filtros()"
+                                        class="form-control input-sm" placeholder="Filtro Detalles">
                                 </th>
+
                                 <th>
-                                </th>
-                                <th>
-                                    <input type="text" [(ngModel)]="filtro_valor" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Valor">
+                                    <input type="text" [(ngModel)]="filtro_valor" (blur)="filtros()"
+                                        class="form-control input-sm" placeholder="Filtro Valor">
                                 </th>
                                 <th></th>
                                 <th>
@@ -132,29 +145,27 @@
                         </thead>
                         <tbody>
 
-                            <tr>
-                                <td colspan="9" class="text-center">
-                                    <i class="fa fa-exclamation-circle fa-5x"></i>
-                                    <h4>No hay Entregas Dotación para mostrar. </h4>
-                                </td>
-                            </tr>
-                            <tr *ngFor="let item of Lista_Dotaciones" [ngClass]="{'bg-danger': item.Estado == 'Anulada'}">
-                                <td>ED00{{item.Id_Dotacion}}</td>
-                                <td>{{item.Fecha | date:'dd/MM/yyyy'}}</td>
-                                <td>{{item.Entrega}}</td>
-                                <td>{{item.Recibe}}</td>
-                                <td>{{item.Detalles_Entrega}}</td>
-                                <td>{{item.NombreGrupo}}</td>
+
+                            <tr *ngFor="let item of Lista_Dotaciones"
+                                [ngClass]="{'bg-danger': item.Estado == 'Anulada'}">
+                                <td>ED00{{item.id}}</td>
+                                <td>{{item.created_at | date:'dd/MM/yyyy'}}</td>
+                                <td>{{item.entrega}}</td>
+                                <td>{{item.recibe}}</td>
+                                <td>{{item.description}}</td>
                                 <td>
                                     <div class="articulos-table">
-                                        {{item.NombresProducto}}
+                                        {{item.product_name}}
                                     </div>
                                 </td>
-                                <td>$ {{item.Total | number | puntos}}</td>
-                                <td><span class="label {{item.Estado=='Activa' ? 'label-warning' : ''}}{{item.Estado=='Devuelta' ? 'label-success' : ''}}">{{item.Estado}}</span></td>
+                                <td>$ {{item.total | number | puntos}}</td>
+                                <td><span>{{item.state}}</span>
+                                </td>
                                 <td>
                                     <div ngbDropdown class="dropdown-primary">
-                                        <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                        <button ngbDropdownToggle
+                                            class="btn btn-secondary btn-mini waves-effect waves-light "
+                                            type="button">Acciones</button>
                                         <div ngbDropdownMenu>
                                             <!--   <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank">
                                                 <i class="fa fa-print"></i> Imprimir Entrega
@@ -165,7 +176,9 @@
                                             <!--   <a *ngIf="item.Estado=='Devuelta'" class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/dotaciones/descarga_devolucion.php?id={{item.Id_Dotacion}}" target="_blank">
                                                 <i class="fa fa-print"></i> Imprimir Devolucion
                                             </a> -->
-                                            <a *ngIf="item.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (confirm)="anularDotacion(item.Id_Dotacion)">
+                                            <a *ngIf="item.state!='Anulada'"
+                                                class="dropdown-item waves-light waves-effect caja-botones"
+                                                (confirm)="anularDotacion(item.Id_Dotacion)">
                                                 <i class="fa fa-times"></i> Anular
                                             </a>
                                         </div>
@@ -177,7 +190,9 @@
                 </div>
                 <div class="card-footer">
                     {{(page*maxSize)-maxSize+1}} al {{(page*maxSize)}} de {{ TotalItems }}
-                    <ngb-pagination class="pull-right" [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="10" [pageSize]="maxSize" size="sm" (pageChange)="paginacion()" [rotate]="true" [boundaryLinks]="true">
+                    <ngb-pagination class="pull-right" [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="10"
+                        [pageSize]="maxSize" size="sm" (pageChange)="paginacion()" [rotate]="true"
+                        [boundaryLinks]="true">
                     </ngb-pagination>
                 </div>
             </div>
@@ -189,15 +204,16 @@
     <div class="app-modal-header">
         <h4 class="modal-title">Devolución de Dotación</h4>
         <button type="button" class="close basic-close" (click)="modalDevolver.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <div class="row invoice-contact" style="align-items:flex-start !important;margin:0;padding:0;">
             <div class="col-md-8">
                 <div class="invoice-box row">
                     <div class="col-sm-12">
-                        <table class="table table-responsive invoice-table table-borderless" style="padding-left:0 !important;">
+                        <table class="table table-responsive invoice-table table-borderless"
+                            style="padding-left:0 !important;">
                             <tbody>
                                 <tr>
                                     <td style="width:100px;padding:0 !important;">
@@ -236,7 +252,7 @@
             </div>
             <div class="col-md-4">
                 <label>Fecha Entrega Dotación</label><br>
-                <strong>{{Devolucion.Fecha_Entrega}}</strong>
+                <strong>{{Devolucion.dispatched_at}}</strong>
             </div>
         </div>
         <div class="row" style="margin-top:25px;">
@@ -246,12 +262,13 @@
                     <div *ngFor="let prod of Productos_Devolver" class="col-md-6" style="margin-top:15px;">
                         <div class="row">
                             <div class="col-md-3">
-                                <input type="number" class="form-control form-control-sm contador_min" min="0" max="{{prod.Cantidad}}" [(ngModel)]="prod.Cantidad" placeholder="0">
+                                <input type="number" class="form-control form-control-sm contador_min" min="0"
+                                    max="{{prod.Cantidad}}" [(ngModel)]="prod.Cantidad" placeholder="0">
                             </div>
                             <div class="col-md-5">
                                 <span class="f-9">
-                    {{ prod.Nombre }}
-                  </span>
+                                    {{ prod.Nombre }}
+                                </span>
                             </div>
                             <div class="col-md-4">
                                 <input type="checkbox" [(ngModel)]="prod.Baja" placeholder="0">
@@ -267,14 +284,16 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label>Detalles de la Devolución</label>
-                    <textarea placeholder="Ingrese Detalles Importantes" class="form-control f-9" rows="7" [(ngModel)]="Devolucion.Detalles"></textarea>
+                    <textarea placeholder="Ingrese Detalles Importantes" class="form-control f-9" rows="7"
+                        [(ngModel)]="Devolucion.Detalles"></textarea>
                 </div>
             </div>
         </div>
     </div>
     <div class="app-modal-footer" style="width:100%;">
         <div class="text-right">
-            <button type="button" class="btn btn-primary btn-sm" (click)="showAlert5($event)">Reportar Devolución de Dotación</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="showAlert5($event)">Reportar Devolución de
+                Dotación</button>
         </div>
     </div>
 </app-modal-basic>
@@ -286,8 +305,8 @@
     <div class="app-modal-header">
         <h4 class="modal-title">Nueva Entrega de Dotación</h4>
         <button type="button" class="close basic-close" (click)="modalEntrega.hide();">
-    <span aria-hidden="true">&times;</span>
-  </button>
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
 
@@ -296,51 +315,44 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Empleado Recibe</label>
-                        <!-- <input type="text" name="Empleado_Recibe"
-                         id="Empleado_Recibe" 
-                         class="form-control form-control-sm f-9"
-                          [ngbTypeahead]="search4" [resultTemplate]="rt3" 
-                          [inputFormatter]="formatter4"
-                           [(ngModel)]="Empleado_Entrega" required /> -->
 
-                        <ng-select [(ngModel)]="Empleado_Entrega" formControlName="disability_leave_id" [items]="Empleados" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                        <ng-select [(ngModel)]="Entrega.person_id" name="Empleado_Entrega" [items]="Empleados"
+                            bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
                         </ng-select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Fecha Entrega</label>
-                        <input type="date" name="Fecha_Entrega" placeholder="Ingrese Fecha" class="form-control form-control-sm f-9" [(ngModel)]="Entrega.Fecha_Entrega" required>
+                        <input type="date" name="dispatched_at" placeholder="Ingrese Fecha"
+                            class="form-control form-control-sm f-9" [(ngModel)]="Entrega.dispatched_at" required>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Seleccione Grupo</label>
-                        <select class="form-control" (change)="onChange1($event.target.value)">
-                            <option value="" disabled selected>Seleccionar</option>
-                            <option *ngFor="let Grupo of Lista_Grupos" [value]="Grupo.id">{{Grupo.name}}</option>
-                    </select>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mt-4">
-                            <h4>Elementos por Entregar</h4>
+                <div class="col-md-12 ">
+                    <h4 class="mb-2">Elementos disponibles</h4>
+                    <div class="row mb-2" *ngFor="let category of Lista_Grupos_Inventario1; 
+                                         i as index">
+                        <div class="col-12">
+                            <h5>{{category.name}}</h5>
+                        </div>
+                        <div class="col-md-4 mb-2" *ngFor="let prod of category.inventary">
                             <div class="row">
-                                <div *ngFor="let prod of Lista_Grupos_Inventario1; i as index" class="col-md-4" style="margin-top:6px;">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <input oninput="maxLengthCheck(this)" type="number" name="producto{{i}}" class="form-control form-control-sm" min="0" (blur)="cambio(prod)" max="{{prod.Cantidad}}" [(ngModel)]="prod.Cantidad_Seleccionada" placeholder="0" required>
-                                        </div>
-                                        <div [ngClass]="{'bg-danger': prod.Cantidad_Seleccionada > prod.amount}" class="col-md-8">
-                                            <span class="f-9">{{ prod.name }} - ({{prod.amount}})</span>
-                                            <md-tooltip ngbTooltip="Error en la Cantidad" *ngIf="prod.Cantidad_Seleccionada > prod.amount">****Error****</md-tooltip>
-                                        </div>
-                                    </div>
+                                <div class="col-md-4">
+                                    <input (onChange)="maxLengthCheck(prod)" type="number" name="producto{{i}}"
+                                        class="form-control form-control-sm" min="0" (blur)="cambio(prod)"
+                                        max="{{prod.Cantidad}}" [(ngModel)]="prod.quantity" placeholder="0" required>
+                                </div>
+                                <div [ngClass]="{'bg-danger text-white': prod.quantity > prod.stock}" class="col-md-8">
+                                    <span class="f-9"> <strong>({{prod.stock}})</strong> - {{ prod.name }}
+                                    </span>
+                                    <md-tooltip ngbTooltip="Error en la Cantidad" *ngIf="prod.quantity > prod.stock">
+                                        Cantidad Incorrecta
+                                    </md-tooltip>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -349,7 +361,8 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles de al Entrega</label>
-                        <textarea placeholder="Ingrese Detalles Importantes" class="form-control f-9" name="Detalles_entrega" rows="7" [(ngModel)]="Entrega.Detalles_Entrega" required></textarea>
+                        <textarea placeholder="Ingrese Detalles Importantes" class="form-control f-9" name="description"
+                            rows="7" [(ngModel)]="Entrega.description" required></textarea>
                     </div>
                 </div>
             </div>
@@ -357,9 +370,10 @@
     </div>
     <div class="app-modal-footer" style="width:100%;">
         <div class="text-right">
-            <button *ngIf="!cam" type="button" class="btn btn-primary btn-sm" (confirm)="GuardarEntrega()" [disabled]="!FormDotacion.valid">
-            Reportar Entrega de Dotación
-    </button>
+            <button *ngIf="!cam" type="button" class="btn btn-primary btn-sm" (click)="GuardarEntrega()"
+                [disabled]="!FormDotacion.valid">
+                Reportar Entrega de Dotación
+            </button>
         </div>
     </div>
 </app-modal-basic>
@@ -385,3 +399,8 @@
         } //CANTIDAD
     }
 </script>
+
+
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

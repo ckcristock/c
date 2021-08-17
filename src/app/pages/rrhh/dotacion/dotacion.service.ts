@@ -12,24 +12,31 @@ export class DotacionService {
     getInventary( params = {} ) {
         return this.http.get(`${environment.base_url}/inventary-dotation`, {params})
     }
-    getInventaryBYGrops( params = {} ) {
-        return this.http.get(`${environment.base_url}/inventary-dotation-by-group`, {params})
+    getInventaryGroupByCategory( params = {} ) {
+        return this.http.get(`${environment.base_url}/inventary-dotation-by-category`, {params})
     }
 
-    getInventaryGrops( params = {} ){
-        return this.http.get(`${environment.base_url}/inventary-dotation-group`, {params})
+    getProductDotationTypes( params = {} ){
+        return this.http.get(`${environment.base_url}/product-dotation-types`, {params})
     }
-    saveGroup( data ){
-        return this.http.post(`${environment.base_url}/inventary-dotation-group`, data)
+    saveProductDotationTypes( data ){
+        return this.http.post(`${environment.base_url}/product-dotation-types`, data)
     }
     
     getCuantityDispatched( params )
     {
         return this.http.get(`${environment.base_url}/inventary-dotation-statistics`, {params})
     }
-    getStok( params )
+    getStok( params = {} )
     {
         return this.http.get(`${environment.base_url}/inventary-dotation-stock`, {params})
     }
 
-}
+    saveDotation(data){
+        return this.http.post(`${environment.base_url}/dotations`, data)
+    }
+
+    getDotations( params = { } ){
+        return this.http.get(`${environment.base_url}/dotations`, {params})
+    }
+}   

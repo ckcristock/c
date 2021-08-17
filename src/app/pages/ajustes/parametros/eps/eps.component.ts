@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { EpsService } from './eps.service';
 
 @Component({
   selector: 'app-eps',
@@ -7,22 +9,128 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./eps.component.scss']
 })
 export class EpsComponent implements OnInit {
+  @ViewChild('modal') modal:any;
+  epss: any = [];
+  eps: any = {};
+  filtros:any = {
+    name: '',
+    code: ''
+  }
   form = new FormGroup({
-    name: new FormControl('', [Validators.required])
+    name: new FormControl('', [Validators.required]),
+    code: new FormControl('', [Validators.required]),
+    nit: new FormControl('', [Validators.required])
   });
   pagination = {
     pageSize: 5,
     page: 1,
     collectionSize: 0
   }
+  status:any = 'Inactivo';
 
-  constructor() { }
+  constructor( private epsService: EpsService ) { }
 
   ngOnInit(): void {
+    this.getAllEps();
   }
 
-  createEps(){
+  getAllEps( page = 1 ){
+    
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtros
+    }
+    this.epsService.getAllEps(params)
+    .subscribe( (res:any) => {
+      this.epss = res.data.data;
+      this.pagination.collectionSize = res.data.total;
+    });
+  }
+
+  anularOActivar(zone, status){
+
+    let data:any = {
+      id:zone.id,
+      status
+    }
+
+      
+      Swal.fire({
+        title: '¿Estas seguro?',
+        text: (status === 'Inactivo'? 'La EPS se Inactivará!' : 'La EPS se activará'),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: ( status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar' )
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.epsService.createNewEps(data)
+          .subscribe( res =>{
+            this.getAllEps();
+            Swal.fire({
+              title: (status === 'Inactivo' ? 'EPS Inhabilitada!' : 'EPS activada' ) ,
+              text: (status === 'Inactivo' ? 'La EPS ha sido Inhabilitada con éxito' : 'La EPS ha sido activada con éxito'),
+              icon: 'success'
+            })
+          } )
+        }
+      })
+  }
+
+
+  registerNull(eps){
+    this.eps = eps;
 
   }
+
+  openModal(){
+    this.eps.id = '';
+    this.eps.name = '';
+    this.eps.code = '';
+    this.eps.nit = '';
+    this.modal.show();
+  }
+
+  getEps(eps){
+    /* this.eps = Object.assign({},eps) ; */
+    this.eps = {...eps} ;
+  }
+
+  createNewEps(){
+
+    if (this.form.valid) {
+
+      this.epsService.createNewEps(this.eps)
+      .subscribe( (res:any) => {
+
+        if (res.code === 200) {
+
+          this.getAllEps();
+          this.modal.hide();
+          Swal.fire({
+            title: 'Operación exitosa',
+            text: 'Felicidades, se han actualizado las EPS',
+            icon: 'success',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+          })
+
+        } else {
+
+          Swal.fire({
+            title: 'UPS',
+            text: 'Algunos datos ya existen en la base de datos',
+            icon: 'error',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+          })
+
+        }
+      });      
+    }
+  }
+  
 
 }

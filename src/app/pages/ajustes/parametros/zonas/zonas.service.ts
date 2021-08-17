@@ -12,10 +12,6 @@ export class ZonasService {
   getAllZones( params = {} ){
     return this.http.get(`${environment.base_url}/zones`, {params});
   }
-  getZoneById(id:number){
-    return this.http.get(`${environment.base_url}/zone/${id}`);
-  }
-
   createZone( data:any ){
     return this.http.post(`${environment.base_url}/zones`, data);
   }

@@ -22,6 +22,7 @@ export class ZonasComponent implements OnInit {
     page: 1,
     collectionSize: 0
   }
+  status:any = 'Inactivo';
   constructor( private zonesService:ZonasService ) { }
 
   ngOnInit(): void {    
@@ -33,18 +34,51 @@ export class ZonasComponent implements OnInit {
     this.pagination.page = page;
     this.zonesService.getAllZones( this.pagination)
     .subscribe( (res:any) => {
+      
       this.zones = res.data.data;
       this.pagination.collectionSize = res.data.total
-      console.log(this.zones);
     })
   }
+
   open(){
     this.modal.show();
     this.zone.id = '';
     this.zone.name = '';
   }
+  
   getZone(zone){
     this.zone = zone;
+  }
+  anularOActivar(zone, status){
+
+    let data:any = {
+      id:zone.id,
+      status
+    }
+
+      
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: (status === 'Inactivo'? 'La zona se inactivará!' : 'La zona se activará'),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: ( status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar' )
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.zonesService.createZone(data)
+        .subscribe( res =>{
+          this.getAllZones();
+          Swal.fire({
+            title: (status === 'Inactivo' ? 'Zona Inhabilitada!' : 'Zona activada' ) ,
+            text: (status === 'Inactivo' ? 'La zona ha sido Inhabilitada con éxito' : 'La zona ha sido activada con éxito'),
+            icon: 'success'
+          })
+        } )
+      }
+    })
   }
 
   createZone() {

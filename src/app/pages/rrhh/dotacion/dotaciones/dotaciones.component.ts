@@ -5,13 +5,16 @@ import { HttpClient } from '@angular/common/http';
 import { IMyDrpOptions } from 'mydaterangepicker';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from "@angular/common";
-/* import swal,{ SweetAlertOptions } from 'sweetalert2';
-import { SwalComponent } from '@toverux/ngx-sweetalert2'; */
 import { debounceTime, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { DotacionService } from '../dotacion.service';
 import { PersonService } from '../../../ajustes/informacion-base/persons/person.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
+import { consts } from 'src/app/core/utils/consts';
+import Swal from 'sweetalert2';
+import * as moment from 'moment';
+import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
+import { Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-dotaciones',
@@ -19,10 +22,19 @@ import { functionsUtils } from 'src/app/core/utils/functionsUtils';
   styleUrls: ['./dotaciones.component.scss']
 })
 export class DotacionesComponent implements OnInit {
+
+  @ViewChild('confirmacionEntrega') private confirmacionEntrega;
+  @ViewChild('confirmacionDevolucion') private confirmacionDevolucion;
+  @ViewChild('modalEntrega') modalEntrega: any;
+  @ViewChild('modalDevolver') modalDevolver: any;
+
+  pagination = {
+    pageSize: 15,
+    page: 1,
+    collectionSize: 0,
+  }
   loading = false;
-  public maxSize = 15;
-  public TotalItems: number;
-  public page = 1;
+
   public fecha: Date = new Date();
   public filtro_fecha: any = '';
   public filtro_cod: string = '';
@@ -30,40 +42,12 @@ export class DotacionesComponent implements OnInit {
   public filtro_recibe: string = '';
   public filtro_detalles: string = '';
   public filtro_valor: string = '';
-  public Totales: any = {
-    Cantidad: 0,
-    Valor: 0
-  }
-  public TotalesMes: any = {}
-  public SumaMes: any = {}
-  public Cantidades: any = {
-    Camisas: 0,
-    Pantalones: 0,
-    Delantales: 0,
-    Chaquetas: 0,
-    Overoles: 0,
-    Gorras: 0,
-    Guantes: 0,
-    Petos: 0,
-    Botas: 0,
-    Unas: 0
-  };
-  selectedMes: number;
-  public Meses: any = [
-    { id: 1, name: "Enero" },
-    { id: 2, name: "Febrero" },
-    { id: 3, name: "Marzo" },
-    { id: 4, name: "Abril" },
-    { id: 5, name: "Mayo" },
-    { id: 6, name: "Junio" },
-    { id: 7, name: "Julio" },
-    { id: 8, name: "Agosto" },
-    { id: 9, name: "Septiembre" },
-    { id: 10, name: "Octubre" },
-    { id: 11, name: "Noviembre" },
-    { id: 12, name: "Diciembre" }
-  ];
+  public Totales = 0
+  public TotalesMes = 0
+  public SumaMes = 0
 
+  selectedMes: string;
+  public Meses = consts.meses;
   public Lista_Dotaciones: any = [];
   public Lista_Grupos: any[] = [];
   public Lista_Grupos_Inventario: any = [];
@@ -88,8 +72,7 @@ export class DotacionesComponent implements OnInit {
   /*  public func : any  = JSON.parse(localStorage.getItem('User')); */
   public Empleado_Entrega: any = [];
   public Entrega: any = {
-
-    person_id: '' ,
+    person_id: '',
     cost: 0,
     description: '',
     type: 'Dotacion'
@@ -102,17 +85,13 @@ export class DotacionesComponent implements OnInit {
   }
   public alertOptionEntrega: any
   public alertOptionDevolucion: any
-  @ViewChild('confirmacionEntrega') private confirmacionEntrega;
-  @ViewChild('confirmacionDevolucion') private confirmacionDevolucion;
-  @ViewChild('modalEntrega') modalEntrega: any;
-  @ViewChild('modalDevolver') modalDevolver: any;
-  @ViewChild('Swal') Swal: any;
+
   public Empleados: any[] = [];
   public Productos: any[] = [];
   public Productos_Devolver: any[] = [];
   public personas: any = [];
   public valores: any = [];
-  public CantidadTotal: '';
+  public CantidadTotal: 0;
 
 
   public studentChartData: any;
@@ -136,6 +115,9 @@ export class DotacionesComponent implements OnInit {
         : this.Empleados.filter(v => v.Nombres.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
     );
   ngOnInit() {
+    this.selectedMes = moment().format('Y-MM');
+
+    this.listarTotales(this.selectedMes)
     this.ListarDotaciones();
     this.listarGrupos();
     this.Lista_Empleados();
@@ -166,7 +148,40 @@ export class DotacionesComponent implements OnInit {
   TraerProductos(Id_producto) {
     //this.http.get(this.globales.ruta + 'php/dotaciones/lista_productos')
   }
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+    // We use these empty structures as placeholders for dynamic theming.
+    scales: { xAxes: [{}], yAxes: [{}] },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+  public barChartLabels: Label[] = ['Categorías'];
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = true;
+/*   public barChartPlugins = [pluginDataLabels]; */
+
+  public barChartData : ChartDataSets[] = [];
+
+  graphicData:any = {}
   Graficar() {
+
+    this._dotation.getDotationTotalByCategory({ cantMes: this.selectedMes }).subscribe((d: any) => {
+
+      let totals: any[] = d.data;
+
+      if (totals) {
+        this.barChartData = totals.reduce((acc, el) => {
+          let daSet = {data: [ el.value], label: [el.name]}
+          return [ ...acc,daSet]
+        }, [])
+      }
+
+
+    })
     /*   this.http.get(this.globales.ruta + 'php/dotaciones/grafica.php').subscribe((db:any)=>{
        db.forEach(element => {
          this.personas.push(element.Persona);
@@ -196,7 +211,7 @@ export class DotacionesComponent implements OnInit {
              data: this.valores
            }]
          };
- 
+
        }, 75);
      }); */
   }
@@ -225,10 +240,8 @@ export class DotacionesComponent implements OnInit {
     Object.keys(prod).forEach(x => {
       if (prod["quantity"] > prod["Cantidad"]) {
         this.cam = true;
-        console.log("aqui");
       } else {
         this.cam = false;
-        console.log("aca");
       }
     });
   }
@@ -237,22 +250,22 @@ export class DotacionesComponent implements OnInit {
       object.value = object.value.slice(0, object.max)
   }
   listarTotales(cantMes) {
-    /*   this.http.get(this.globales.ruta + 'php/dotaciones/lista_dotaciones.php', { params: { cantMes: cantMes } }).subscribe((data: any) => {
-      this.TotalesMes = data.CantidadMes.CantidadMes;
-      this.SumaMes = data.CantidadMes.SumaMes;
-      }); */
     this._dotation.getCuantityDispatched({ cantMes }).subscribe((r: any) => {
-      this.TotalesMes = r.data.CantidadMes;
-      this.SumaMes = r.data.SumaMes;
+      this.TotalesMes = r.data.month.totalMes;
+      this.SumaMes = r.data.month.totalCostoMes;
+
+      this.CantidadTotal = r.data.year.totalAnual
+      this.Totales = r.data.year.totalCostoAnual
     });
 
   }
-  ListarDotaciones() {
+  ListarDotaciones(page = 1) {
+    this.pagination.page = page;
     let params = this.route.snapshot.queryParams;
     let queryString = '';
     if (Object.keys(params).length > 0) { // Si existe parametros o filtros
       // actualizando la variables con los valores de los paremetros.
-      this.page = params.pag ? params.pag : 1;
+      this.pagination.page = params.pag ? params.pag : 1;
       this.filtro_fecha = params.fecha ? params.fecha : '';
       this.filtro_cod = params.cod ? params.cod : '';
       this.filtro_entrega = params.entrega ? params.entrega : '';
@@ -270,17 +283,18 @@ export class DotacionesComponent implements OnInit {
      this.Cantidades = data.Cantidades;
      this.CantidadTotal = data.costs.SumaAno;
    }); */
-
-   this.loading = true;
-   this._dotation.getDotations().subscribe( (r:any)=>{
-    this.Lista_Dotaciones = r.data.data;
-    this.loading = false
-   })
+    params = this.pagination
+    this.loading = true;
+    this._dotation.getDotations(params).subscribe((r: any) => {
+      this.Lista_Dotaciones = r.data.data;
+      this.pagination.collectionSize = r.data.total;
+      this.loading = false
+    })
   }
   filtros() {
     let params: any = {};
-    this.page = 1;
-    params.pag = this.page;
+    this.pagination.page = 1;
+    params.pag = this.pagination.page;
 
     if (this.filtro_fecha != "" && this.filtro_fecha != null) {
       params.fecha = this.filtro_fecha;
@@ -312,7 +326,7 @@ export class DotacionesComponent implements OnInit {
        this.TotalItems = data.Totales.Cantidad;
        this.Totales = data.Totales;
        this.CantidadTotal = data.costs.Totalescosts;
- 
+
      }); */
   }
   showAlert4(evt: any) {
@@ -335,7 +349,7 @@ export class DotacionesComponent implements OnInit {
 
     let datos = new FormData();
     /*  let devolucion          =  this.globales.normalize(JSON.stringify(this.Devolucion));
-     let prods               =  this.globales.normalize(JSON.stringify(this.Productos_Devolver)); 
+     let prods               =  this.globales.normalize(JSON.stringify(this.Productos_Devolver));
      datos.append("Devolucion", devolucion);
      datos.append("Productos", prods);*/
     /* this.http.post(this.globales.ruta + 'php/dotaciones/guardar_devolucion.php', datos).subscribe((data: any) => {
@@ -356,49 +370,102 @@ export class DotacionesComponent implements OnInit {
   }
   GuardarEntrega() {
     // this.modalEntrega.hide();
-   
+
     let datos = new FormData();
     let entrega = this.Entrega;
-    let prods:Array<any> = this.Lista_Grupos_Inventario1;
-    prods = prods.reduce( (acc,el) =>{
-      console.log( el );
-      
-        let prod:Array<any> = el.inventary.filter(r=>( r.quantity && r.quantity != "0"))
-        console.log(prod);
-        
-        return  ( prod.length==0 ? acc  : [...acc, ...prod] )
-    } , []) 
-    this._dotation.saveDotation({ entrega, prods }).subscribe(r => {
+    let prods: Array<any> = this.Lista_Grupos_Inventario1;
+
+    prods = prods.reduce((acc, el) => {
+      let prod: Array<any> = el.inventary.filter(r => (r.quantity && r.quantity != "0"))
+      return (prod.length == 0 ? acc : [...acc, ...prod])
+    }, [])
+    this._dotation.saveDotation({ entrega, prods }).subscribe((r: any) => {
+
+      if (r.code == 200) {
+        Swal.fire({
+          title: 'Opersación exitosa',
+          text: 'Felicidades, se ha guardado la dotación',
+          icon: 'success',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        })
+        this.onChange1();
+        this.modalEntrega.hide()
+        this.Entrega = {
+          person_id: '',
+          cost: 0,
+          description: '',
+          type: 'Dotacion'
+        }
+      } else {
+        Swal.fire({
+          title: 'Operación denegada',
+          text: r.err,
+          icon: 'error',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        })
+      }
 
     })
-    /*  this.http.post(this.globales.ruta + 'php/dotaciones/guardar_entrega.php', datos).subscribe((data: any) => { 
-      this.Empleado_Entrega = {};
-      this.Entrega = {
-      
-        Funcionario_Recibe : this.Empleado_Entrega.id,
-        cost : 0,
-        description : '',
-        Tipo: 'Dotacion'
-      } */
-    /*       this.Lista_Productos();
-          this.Swal.title ='Entrega de Dotación Guardada Correctamente';
-          this.Swal.text="Se ha reportado correctamente la entrega de Dotación";
-          this.Swal.type="success";
-          this.Swal.show();
-          this.ListarDotaciones(); 
-    
-        });*/
+
   }
+
+  save() {
+
+    Swal.fire({
+      title: '¿Seguro?',
+      text: 'Va a generar una nueva dotación',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#34c38f',
+      cancelButtonColor: '#f46a6a',
+      confirmButtonText: 'Si, Hazlo!'
+    }).then(result => {
+      if (result.value) {
+        this.GuardarEntrega()
+      }
+    });
+
+  }
+
   paginacion() {
   }
   anularDotacion(id) {
-    /* this.http.get(this.globales.ruta+'php/dotaciones/anular_dotacion.php',{params: {id:id}}).subscribe((data:any) => {
-      this.Swal.title ='Entrega de Dotación Guardada Correctamente';
-      this.Swal.text="Se ha reportado correctamente la entrega de Dotación";
-      this.Swal.type="success";
-      this.Swal.show();
-      this.ListarDotaciones();
-    }) */
+
+    Swal.fire({
+      title: '¿Seguro?',
+      text: 'Va a cambiar el estado de la dotación',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#34c38f',
+      cancelButtonColor: '#f46a6a',
+      confirmButtonText: 'Si, Hazlo!'
+    }).then(result => {
+      if (result.value) {
+        this._dotation.setDotation({ id, data: { state: 'Anulada' } }).subscribe((r: any) => {
+          if (r.code == 200) {
+            Swal.fire({
+              title: 'Opersación exitosa',
+              text: 'Felicidades, se han actualizado la dotación',
+              icon: 'success',
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+            })
+            this.ListarDotaciones()
+          } else {
+            Swal.fire({
+              title: 'Operación denegada',
+              text: r.err,
+              icon: 'error',
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+            })
+          }
+        })
+      }
+    });
+
   }
 
 }

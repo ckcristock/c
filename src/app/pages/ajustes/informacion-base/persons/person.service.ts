@@ -19,4 +19,8 @@ export class PersonService {
     return this.httpClient.get(`${environment.base_url}/people`, { params })
   }
 
+  getAll( params ){
+    return this.httpClient.get(`${environment.base_url}/people-all`, { params })
+  }
+
 }

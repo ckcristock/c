@@ -63,8 +63,8 @@ export const consts = {
     },
   ],
   turnTypes: [
-    { text: 'Fijo', value: 'Fijo' , isRotative:0 },
-    { text: 'Rotativo', value: 'Rotativo' , isRotative:1 },
+    { text: 'Fijo', value: 'Fijo', isRotative: 0 },
+    { text: 'Rotativo', value: 'Rotativo', isRotative: 1 },
   ],
   shueSizes: [
     { text: '35', value: '35' },
@@ -97,4 +97,20 @@ export const consts = {
     { text: 'XL', value: 'XL' },
     { text: 'XXL', value: 'XXL' },
   ],
+
+  meses: [
+    { id: 1, name: "Enero" },
+    { id: 2, name: "Febrero" },
+    { id: 3, name: "Marzo" },
+    { id: 4, name: "Abril" },
+    { id: 5, name: "Mayo" },
+    { id: 6, name: "Junio" },
+    { id: 7, name: "Julio" },
+    { id: 8, name: "Agosto" },
+    { id: 9, name: "Septiembre" },
+    { id: 10, name: "Octubre" },
+    { id: 11, name: "Noviembre" },
+    { id: 12, name: "Diciembre" }
+  ]
+
 };

@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RrhhRouterModule } from "./rrhh-routing.module";
 import { VacantesComponent } from './vacantes/vacantes.component';
-import { PostulantesComponent } from './postulantes/postulantes.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 /* import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2'; */
 
@@ -20,11 +19,13 @@ import { VacantesVerComponent } from './vacantes/vacantes-ver/vacantes-ver.compo
 import { CrearNovedadComponent } from './novedades/crear-novedad/crear-novedad.component';
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
+import { ActividadesComponent } from "./actividades/actividades.component";
 
 
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
-    declarations:[VacantesComponent, PostulantesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent, InventarioDotacionComponent, DotacionesComponent],
+    declarations:[VacantesComponent, ActividadesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent, InventarioDotacionComponent, DotacionesComponent],
     imports:[RrhhRouterModule,
         CommonModule,
         ChartsModule,
@@ -37,7 +38,8 @@ import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component'
         PipesModule,
         ComponentsModule,
         NgSelectModule,
-        NgbTypeaheadModule
+        NgbTypeaheadModule,
+        FullCalendarModule
     ],
     exports:[],
 })

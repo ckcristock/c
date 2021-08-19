@@ -1,7 +1,7 @@
-<div class="card card-hover">
+<div class="card">
     <div class="card-body">
         <div class="card-title">
-            <button class="btn btn-primary zoneBtn" style="float: right;" (click)="open()">Agregar Zona</button>
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="open()">Agregar Zona</button>
             <h5>Zonas</h5>
             <p>Listados de las zonas de nuestra base de datos</p>
         </div>
@@ -35,7 +35,8 @@
                 </tr>
             </tbody>
         </table>
-        <ngb-pagination class="d-flex justify-content-center" [collectionSize]="pagination.collectionSize" (pageChange)="getAllZones($event)" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination">
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getAllZones($event)" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
         </ngb-pagination>
     </div>
 </div>

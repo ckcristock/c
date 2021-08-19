@@ -7,11 +7,9 @@
         </div>
         <div class="row">
             <div class="col d-flex">
-                <input type="text" placeholder="Buscar por EPS" class="form-control form-control-sm col-sm-2 mr-4" (change)="getAllEps()" [(ngModel)]="filtros.name">
-                <input type="text" placeholder="Buscar código EPS" class="form-control form-control-sm col-sm-2" (change)="getAllEps()" [(ngModel)]="filtros.code">
+                <input type="text" placeholder="Buscar por EPS" class="form-control form-control-sm col-sm-2 mr-4" (change)="getAllEps()" [(ngModel)]="filtros.name" name="name" autocomplete="off">
+                <input type="text" placeholder="Buscar código EPS" class="form-control form-control-sm col-sm-2" (change)="getAllEps()" [(ngModel)]="filtros.code" name="code" autocomplete="off">
             </div>
-
-
         </div>
         <table class="table table-striped">
             <thead>
@@ -47,7 +45,8 @@
                 </tr>
             </tbody>
         </table>
-        <ngb-pagination class="d-flex justify-content-center" [collectionSize]="pagination.collectionSize" (pageChange)="getAllEps($event)" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination">
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getAllEps($event)" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true">
         </ngb-pagination>
     </div>
 </div>

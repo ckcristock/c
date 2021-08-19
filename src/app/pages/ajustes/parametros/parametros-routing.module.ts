@@ -5,6 +5,7 @@ import { RgpComponent } from './rgp/rgp.component';
 import { NotasTecnicasComponent } from './notas-tecnicas/notas-tecnicas.component';
 import { ZonasComponent } from "./zonas/zonas.component";
 import { EpsComponent } from "./eps/eps.component";
+import { DepartamentosComponent } from "./departamentos/departamentos.component";
 
 
 const routes : Routes = [
@@ -13,6 +14,7 @@ const routes : Routes = [
     { path: 'zonas', component : ZonasComponent },
     { path: 'eps', component:  EpsComponent},
     { path: 'notas-tecnicas', component : NotasTecnicasComponent },
+    { path: 'departamentos', component : DepartamentosComponent }
 ]
 
 

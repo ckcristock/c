@@ -1,0 +1,136 @@
+<div class="row">
+
+
+    <!-- Start department -->
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModalD()">Agregar nuevo Departamento</button>
+                    <h5>Departamentos</h5>
+                    <p>Departamentos del País</p>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="text" placeholder="Nombre" class="form-control form-control-sm" (change)="getAllDepartment()" [(ngModel)]="filtroDeparmento.name" name="name">
+                    </div>
+                </div>
+                <table class="table table-striped mt-2">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let departamento of departamentos">
+                            <td scope="row"> {{ departamento.name }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="paginationD.collectionSize" (pageChange)="getAllDepartment($event)" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" [pageSize]="paginationD.pageSize"
+                [(page)]="paginationD.page" aria-label="Default pagination">
+            </ngb-pagination>
+        </div>
+    </div>
+    <app-modal-basic #modalD [dialogClass]="'modal-lg'">
+        <div class="app-modal-header">
+            <div class="row">
+                <h5 class=" text text-center justify-content-center modal-title p-1">Nuevo Departamento</h5>
+            </div>
+        </div>
+        <div class="app-modal-body">
+            <form [formGroup]="formD" (ngSubmit)="createNewDepartment()">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="custom-label" for="department_name">Nombre</label>
+                        <input type="text" class="form-control form-control-sm" id="department_name" [(ngModel)]="department.name" formControlName="name" required>
+                    </div>
+                    <div class="form-group text-right">
+                        <button (click)="modalD.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+                        <button type="submit" class="btn btn-primary btn-sm raised">Guardar Departamento</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </app-modal-basic>
+    <!-- End department -->
+
+    <!-- Start Municipalities -->
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModalM()">Agregar nuevo Municipio</button>
+                    <h5>Municipios</h5>
+                    <p>Municipios del País</p>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="number" placeholder="Código del Municipio" class="form-control form-control-sm" (change)="getAllMunicipalities()" [(ngModel)]="filtroMunicipio.code">
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" placeholder="Nombre del Municipio" class="form-control form-control-sm" (change)="getAllMunicipalities()" [(ngModel)]="filtroMunicipio.name">
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" placeholder="Nombre del Departamento" class="form-control form-control-sm" (change)="getAllMunicipalities()" [(ngModel)]="filtroMunicipio.codigo_dane">
+                    </div>
+                </div>
+                <table class="table table-striped mt-2">
+                    <thead>
+                        <tr>
+                            <th scope="col">Código</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Departamento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let municipio of municipios">
+                            <th scope="row"> {{ municipio.code }} </th>
+                            <th> {{ municipio.name }} </th>
+                            <th> {{ municipio.department.name }} </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="paginationM.collectionSize" (pageChange)="getAllMunicipalities($event)" [pageSize]="paginationM.pageSize" maxSize="5" rotate="true" ellipses="false"
+                boundaryLinks="true" [(page)]="paginationM.page" aria-label="Default pagination">
+            </ngb-pagination>
+        </div>
+    </div>
+    <app-modal-basic #modalM [dialogClass]="'modal-lg'">
+        <div class="app-modal-header">
+            <div class="row">
+                <h5 class=" text text-center justify-content-center modal-title p-1">Nuevo Municipio</h5>
+            </div>
+        </div>
+        <div class="app-modal-body">
+            <form [formGroup]="formM" (ngSubmit)="createNewMunicipality()">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="custom-label" for="municipality_name">Nombre</label>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="municipality.name" formControlName="name" id="municipality_name" required>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="custom-label" for="municipality_code">Código</label>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="municipality.code" formControlName="code" id="municipality_code" required>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="custom-label" for="municipality_department">Departamento</label>
+                        <ng-select [items]="munic" id="municipality_department" [(ngModel)]="municipality.department_id" formControlName="department_id" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                        </ng-select>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="custom-label" for="municipality_code_dane">Código Dane</label>
+                        <input type="number" class="form-control form-control-sm" [(ngModel)]="municipality.codigo_dane" formControlName="codigo_dane" id="municipality_code_dane" required>
+                    </div>
+                    <div class="form-group text-right">
+                        <button (click)="modalM.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+                        <button type="submit" class="btn btn-primary btn-sm raised">Guardar Municipio</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </app-modal-basic>
+    <!-- End municipalities -->
+</div>

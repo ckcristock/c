@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { CommonModule } from "@angular/common";
 import { EpsComponent } from './eps/eps.component';
+import { DepartamentosComponent } from './departamentos/departamentos.component';
 
 
 
@@ -19,7 +20,7 @@ import { EpsComponent } from './eps/eps.component';
         NotasTecnicasComponent, 
         PerfilesComponent, 
         ZonasComponent, 
-        RgpComponent, EpsComponent
+        RgpComponent, EpsComponent, DepartamentosComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

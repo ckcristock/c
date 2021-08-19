@@ -33,6 +33,9 @@ import { DependenciesService } from '../../ajustes/informacion-base/services/dep
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { CompanyService } from '../../ajustes/informacion-base/services/company.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
+import Swal from 'sweetalert2';
+import * as moment from 'moment';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-actividades',
@@ -52,18 +55,16 @@ export class ActividadesComponent {
   public userDepen: string;
 
   public Ver: boolean = false;
-  public ver: number;
+  public ver: number = 0;
   public FuncionariosSele: any[] = [];
 
   public DataActivities: Array<any> = [];
   public TiposActividad: Array<any> = [];
-  public ActividadModel: Actividad = new Actividad();
-  public Funcionario: any = JSON.parse(localStorage.getItem('User'));
+  public ActividadModel = new Actividad();
+
+
   public cliente_seleccionado: any = '';
   public funcionario_seleccionado: any = '';
-  public Archivos: any[] = [];
-  public Grupos: any[] = [];
-  public Dependencias: any[] = [];
   public Funcionarios: any[] = [];
 
   public alertOption: any = {};
@@ -116,7 +117,8 @@ export class ActividadesComponent {
     private _dependecies: DependenciesService,
     private _group: GroupService,
     private _company: CompanyService,
-    private _person: PersonService
+    private _person: PersonService,
+    private _swal: SwalService
   ) {
     this.GetTiposActividad();
 
@@ -131,42 +133,18 @@ export class ActividadesComponent {
     //alert(`i'm here`);
   }
   GetActividadesMes() {
-    /*  this._actividad.getActividadesAnual().subscribe((data:any) => {
-       if (data.codigo == 'success') {
-         this.Actividades = [];
-         this.Actividades = data.query_result;
-         this.SetCalendarData();
-       }else{
-       } */
+    this._actividad.getActivities().subscribe((r: any) => {
+      this.calendarEvents = r.data
+    })
     this.DataActivities = [];
     this.Actividades = [];
-    /*    this.calendarOptions = {
-         editable: true,
-         eventLimit: false,
-         header: {
-           left: 'prev, next, today',
-           center: 'title',
-           right: 'month,agendaWeek,agendaDay,listMonth'
-         },
-         buttonText:{
-           today:    'Hoy',
-           month:    'Mes',
-           week:     'Semana',
-           day:      'Día',
-           list:     'Lista'
-         },
-         locale: 'es',
-         events:  this.DataActivities
-       }; */
-
     setTimeout(() => {
       this.eventsModel = this.DataActivities;
     }, 1000);
-    /*  }); */
+
   }
 
   eventrender(event, element) {
-
     // event.element[0].querySelectorAll(".fc-content")[0].setAttribute("data-tooltip", event.event.title);
   }
 
@@ -210,7 +188,7 @@ export class ActividadesComponent {
   getGroups() {
     this._group.getGroup().subscribe((r: any) => {
       this.groups = r.data
-      this.groups.unshift({ text: 'Seleccione uno', value: '' });
+      this.groups.unshift({ text: 'Todas', value: 0 });
     })
   }
   getCompanies() {
@@ -221,10 +199,17 @@ export class ActividadesComponent {
          : ''; */
     });
   }
-  getDependencies(company_id) {
-    this._dependecies.getDependencies({ company_id }).subscribe((d: any) => {
+  getDependencies(group_id) {
+    if (group_id == '0') {
+      this.dependencies = []
+      this.dependencies.unshift({ text: 'Todas', value: 0 });
+      return false
+
+    }
+    this._dependecies.getDependencies({ group_id }).subscribe((d: any) => {
       this.dependencies = d.data;
-      this.dependencies.unshift({ text: 'Seleccione una', value: '' });
+      this.dependencies.unshift({ text: 'Todas', value: 0 });
+
     });
   }
 
@@ -236,42 +221,31 @@ export class ActividadesComponent {
     });
   }
   GuardarTipoActividad(form: NgForm) {
-
-    this._actividad.saveActivityType(form.value).subscribe(r => {
-      form.reset();
-      this.GetTiposActividad();
+    this._actividad.saveActivityType(form.value).subscribe((r: any) => {
+      if (r.code == 200) {
+        form.reset();
+        this.GetTiposActividad();
+        this._swal.show({ title: 'Operación exitosa', text: 'Se ha guardado correctamente', icon: 'success' })
+      }
     })
   }
-  CambiarEstadoTipo(Data) {
-    let Estado = Data.Estado;
-    let Id_Tip = Data.Id_Tipo_Actividad_Recursos_Humanos;
-    /*   this.http.get(this.globales.ruta + 'php/recursos_humanos/actividades/guardar_tipo_actividad_rh.php',
-          {params: { Id_Tipo : Id_Tip,
-                    Estado    : Estado }}).subscribe((data: any) =>{
-      this.GetTiposActividad();
-      this.limpiarCampos();
-      this.deleteSwal.type  = data['type']; //data.type
-      this.deleteSwal.title = data['title']; //data.title;
-      this.deleteSwal.text  = data['mensaje']; //data.mensaje;
-    });
-    */
+  CambiarEstadoTipo(id, state) {
+
+    this._actividad.setActivityType({ id, state }).subscribe((r: any) => {
+      if (r.code == 200) {
+        this._swal.show({ title: 'Operación exitosa', text: 'Se ha cambiado el estado', icon: 'success' })
+        this.GetTiposActividad()
+      }
+    })
   }
   ////////////////FIN FUNCIONES TIPO////////////////////////
 
-  GuardarActividad() {
-    this.ActividadModel.Identificacion_Funcionario = this.Funcionario.Identificacion_Funcionario;
-    let data = new FormData();
-    let modelo = JSON.stringify(this.ActividadModel);
-    data.append("modelo", modelo);
-    /* this._actividad.saveActividad(data).subscribe((data:any) => {
-      if (data.codigo == 'success') {
-        this.ShowSwal(data.codigo, data.titulo, data.mensaje);
-        this.CerrarModal();
-        this.GetActividadesMes();
-      }else{
-        this.ShowSwal(data.codigo, data.titulo, data.mensaje);
-      }
-    }); */
+  GuardarActividad(form: NgForm) {
+
+    this._actividad.saveActivity(form.value).subscribe((data: any) => {
+      this.CerrarModal();
+      this.GetActividadesMes();
+    })
   }
   CerrarModal() {
     this.LimpiarModelo();
@@ -295,30 +269,40 @@ export class ActividadesComponent {
     this.alertSwal.show();
   }
   LimpiarModelo() {
+    this.FuncionariosSele = []
     this.ActividadModel = new Actividad();
   }
   editarEvento() {
-    let id = this.eventoActividad.detail.event.id;
-    /*  this._actividad.getActividadById(id).subscribe((data:any) => {
-     this.ActividadModel.Id_Actividad_Recursos_Humanos      = data.Id_Actividad_Recursos_Humanos;
-     this.ActividadModel.Fecha_Inicio                       = data.Fecha_Inicio;
-     this.ActividadModel.Fecha_Fin                          = data.Fecha_Fin;
-     this.ActividadModel.Id_Tipo_Actividad_Recursos_Humanos = data.Id_Tipo_Actividad_Recursos_Humanos;
-     this.ActividadModel.Detalles                           = data.Detalles;
-     this.ActividadModel.Actividad_Recursos_Humanos         = data.Actividad_Recursos_Humanos;
-     this.ActividadModel.Funcionario_Asignado               = data.Funcionario_Asignado;
-     this.Grupo_Dependencia(data.Id_Grupo);
-     this.ActividadModel.Id_Grupo                           = data.Id_Grupo;
-     this.Dependencia_Cargo(data.Id_Dependencia);
-     this.ActividadModel.Id_Dependencia                     = data.Id_Dependencia;
-     this.verificarUser();
-     this.FuncionariosSelec(data.Id_Actividad_Recursos_Humanos);
-     this.ModalActividad.show();
-   }) */
+
+    let data = this.actividadObj;
+
+
+    this.ActividadModel.Id_Actividad_Recursos_Humanos = data.id;
+    this.ActividadModel.Fecha_Inicio = moment.utc(data.date_start).format('YYYY-MM-DDTHH:mm:ss.SSS');
+    this.ActividadModel.Fecha_Fin = moment.utc(data.date_end).format('YYYY-MM-DDTHH:mm:ss.SSS');
+    this.ActividadModel.Id_Tipo_Actividad_Recursos_Humanos = data.rrhh_activity_type_id;
+    this.ActividadModel.Detalles = data.description;
+    this.ActividadModel.Actividad_Recursos_Humanos = data.name;
+    /*  this.ActividadModel.Funcionario_Asignado        =*/
+    this.ActividadModel.Id_Grupo = data.group_id;
+    this.ActividadModel.Id_Dependencia = data.dependency_id;
+
+    /*  this.FuncionariosSelec(data.Id_Actividad_Recursos_Humanos); */
+    this.getDependencies(data.group_id)
+    this.Dependencia_Cargo(data.dependency_id);
+
+    this.verificarUser();
+    this.ModalActividad.show();
+    this.ModalActividad.show();
+    this.verificarUser();
+    this.FuncionariosSelec(this.ActividadModel.Id_Actividad_Recursos_Humanos);
+    this.Grupo_Dependencia(this.ActividadModel.Id_Grupo);
+    this.Dependencia_Cargo(this.ActividadModel.Id_Dependencia);
+
   }
   verificarUser() {
-    let id = this.eventoActividad.detail.event.id;
-    this.userLogin = (JSON.parse(localStorage.getItem("User"))).Id_Dependencia
+    /*     let id = this.eventoActividad.detail.event.id;
+        this.userLogin = (JSON.parse(localStorage.getItem("User"))).Id_Dependencia */
     /*  this._actividad.getActividadById(id).subscribe((data:any) => {
        if(this.userLogin != data.Id_Dependencia){
          this.Ver = false;
@@ -327,29 +311,39 @@ export class ActividadesComponent {
       }
      }) */
   }
-  FuncionariosSelec(fun) {
-    /*  this.http.get(this.globales.ruta + 'php/recursos_humanos/actividades/get_funcionarios_seleccionados.php', { params: { id: fun } }).subscribe((data: any) => {
-     this.FuncionariosSele = data;
-   });
-   */
+  FuncionariosSelec(id) {
+    this._actividad.getPeopleActivity(id).subscribe((r: any) => {
+      this.FuncionariosSele = r.data;
+      if (r.data) {
+       /*  this.ActividadModel.Funcionario_Asignado =
+          this.FuncionariosSele.reduce((acc, el) => {
+            return [...acc, el.person.id]
+          }, []) */
+      } else {
+      /*   this.ActividadModel.Funcionario_Asignado = ['0']; */
+      }
+    });
+
   }
   anularEvento() {
-    let id = this.eventoActividad.detail.event.id;
-    /*  this._actividad.anularActividad(id).subscribe((data:any) => {
-       this.ShowSwal(data.codigo, data.titulo, data.mensaje);
-       this.GetActividadesMes();
-     }) */
+    let id = this.actividadObj.id;
+    this._actividad.cancelActivity(id).subscribe((r: any) => {
+      if (r.code == 200) {
+        this._swal.show({ text: 'Actualizado', title: 'Operación exitosa', icon: 'success' })
+      }
+      this.GetActividadesMes();
+    })
   }
 
   // funcion que no desabilita los input
   agregarEvento() {
-    this.userLogin = (JSON.parse(localStorage.getItem("User"))).Id_Grupo
-    this.userDepen = (JSON.parse(localStorage.getItem("User"))).Id_Dependencia
+    /* this.userLogin = (JSON.parse(localStorage.getItem("User"))).Id_Grupo
+    this.userDepen = (JSON.parse(localStorage.getItem("User"))).Id_Dependencia */
     this.Grupo_Dependencia(this.userLogin);
     this.ActividadModel.Id_Grupo = this.userLogin;
     this.ActividadModel.Id_Dependencia = this.userDepen;
     this.Dependencia_Cargo(this.userDepen);
-    this.ver = 1;
+    /* this.ver = 1; */
     // this.cambiarReadonli();
   }
   accionEvento(accion) {
@@ -359,39 +353,64 @@ export class ActividadesComponent {
         this.editarEvento();
         this.ver = 0;
         break;
-      case 'Editar':
+      /* case 'Editar':
         this.editarEvento();
         this.ver = 1;
-        break;
+        break; */
       case 'Anular':
         this.anularEvento();
         break;
     }
   }
+  actividadObj: any = {}
   accionarEvento(event) {
-    let id = event.detail.event.id;
-    let actividadObj = this.Actividades.find(x => x.Id_Actividad_Recursos_Humanos == id);
-    if (actividadObj.Estado != 'Anulada') {
+    console.log(event)
+    let id = event.event.id;
+    this.actividadObj = this.calendarEvents.find(x => x.id == id);
+
+    if (this.actividadObj.state != 'Anulada') {
       this.eventoActividad = event;
-      /*  this.confirmacionAccion.show(); */
+      Swal.fire(
+        {
+          title: "Escoja una acción",
+          text: "¿Qué acción desea elegir?",
+          icon: 'warning',
+          showCancelButton: true,
+          input: 'select',
+          confirmButtonColor: '#34c38f',
+          cancelButtonColor: '#f46a6a',
+          confirmButtonText: 'Continuar',
+          inputOptions: {
+            Ver: 'Ver',
+            /* Editar: 'Editar', */
+            Anular: 'Anular'
+          },
+          inputPlaceholder: 'Operaciones...',
+        }).then(result => {
+          if (result.value) {
+            this.accionEvento(result.value)
+          }
+        });
+
+      /*  accionEvento */
     }
   }
   Grupo_Dependencia(Grupo) {
-    if (Grupo == "Todas") {
+    /* if (Grupo == "Todas") {
       this.ActividadModel.Id_Dependencia = "Todas";
       this.ActividadModel.Funcionario_Asignado = "Todas";
     } else {
-      /*  this.http.get(this.globales.ruta + 'php/alertas/alerta_grupo_dependencia.php', { params: { id: Grupo } }).subscribe((data: any) => {
+       this.http.get(this.globales.ruta + 'php/alertas/alerta_grupo_dependencia.php', { params: { id: Grupo } }).subscribe((data: any) => {
        this.Dependencias = data;
-       }); */
-    }
+       });
+    } */
   }
   Dependencia_Cargo(dependencies) {
 
     this._person.getAll({ dependencies: [dependencies] }).subscribe((r: any) => {
       this.Funcionarios = r.data;
       // console.log(this.Funcionarios);
-      this.Funcionarios.unshift({ value: 'Todos', label: 'Todos' });
+      this.Funcionarios.unshift({ value: '0', text: 'Todos' });
     });
   }
 

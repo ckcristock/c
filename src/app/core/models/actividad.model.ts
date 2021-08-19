@@ -7,9 +7,9 @@ export class Actividad{
   public Detalles:string = '';
   public Id_Tipo_Actividad_Recursos_Humanos:string = '';
   public Estado:string = '';
-  public Id_Grupo:string = 'Todas';
-  public Id_Dependencia:string = 'Todas';
-  public Funcionario_Asignado : string = 'Todas';
+  public Id_Grupo:string = '0';
+  public Id_Dependencia:string = '0';
+  public Funcionario_Asignado : string[] = [];
 
   // public Id_Funcionario_Cambio_Estado:string = '';
   // public Id_Cliente:string = '';

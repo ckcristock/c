@@ -1,0 +1,187 @@
+<div class="row">
+    <div class="col-12">
+        <h3 class="font-weight-bold">Informe de Llegadas Tarde</h3>
+    </div>
+</div>
+
+<!-- <grafica ref="grafica" :fechaInicio="fecha_inicio" :fechaFin="fecha_fin"></grafica>
+-->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 pl-4 text-center">
+                        <i class="fa text-info fa-user-clock"></i>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-center  font-weight-bold">Cantidad de llegadas tarde :</p>
+                        <p class="text-center font-weight-bold calculo">{{ totalLlegadasTarde }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-5 text-center">
+                        <i class="fa text-info fa-stopwatch"></i>
+                    </div>
+                    <div class="col-md-7">
+                        <p class="text-center font-weight-bold">Tiempo acumulado llegadas tarde:</p>
+                        <p class="text-center font-weight-bold calculo">{{ tiempoAcumuladoLlegadas }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-title m-0 p-0">
+                <h4 class="pt-3 pl-4 font-weight-bold">Filtros de búsqueda</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="fecha_inicio" class="custom-label">Fecha de Inicio</label>
+                            <input type="date" name="fecha_inicio" ngModel #fecha_inicio="ngModel" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="fecha_fin" class="custom-label">Fecha de Fin</label>
+                            <input type="date" name="fecha_fin" ngModel #fecha_fin="ngModel" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 pt-4">
+                        <button class="btn btn-secondary btn-xs default mt-1" (click)="filtrarPorFecha(fecha_inicio.value, fecha_fin.value)">Filtrar</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="filtroCentroCosto" class="custom-label">Grupo</label>
+                            <ng-select ngModel #group_id="ngModel" name="group_id" (change)="getDependencies($event.value)" [items]="groups" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="filtroDependencia" class="custom-label">Dependencia</label>
+                            <ng-select [disabled]="group_id == ''" ngModel #dependency_id="ngModel" name="dependency_id" [items]="dependencies" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pt-4">
+                        <button class="btn btn-secondary default btn-xs mt-1" (click)="filtrar(group_id.value,dependency_id.value)">Filtrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-title mb-0">
+                <h4 class="font-weight-bold mt-3 ml-3">Reportes</h4>
+            </div>
+            <div class="card-body text-center reportes">
+                <div class="d-flex justify-content-around">
+                    <div>
+                        <i class="fas fa-file-excel "></i>
+                        <p class="font-weight-bold mb-0">Reporte en Excel</p>
+                        <button class="btn btn-link default" (click)="descargarReporteExcel()">Descargar</button>
+                    </div>
+
+                    <div>
+                        <i class="fas fa-file-pdf " style="font-size: 50px;"></i>
+                        <p class="font-weight-bold mb-0">Reporte en PDF</p>
+                        <a [href]="pdfUrl" class="btn btn-link default" download>Descargar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <template v-if="llegadasTardeDatos.length > 0">
+              <div
+                class="row centro ml-1 mr-1"
+                v-for="(centro, index) in llegadasTardeDatos"
+                :key="index"
+              >
+                <div class="col-12" :class="{ 'mt-3': index > 0 }">
+                  <p class="ml-4 pl-2 mt-1 nombre-centro">{{ centro.nombre }}</p>
+                </div>
+                <div
+                  class="col-12"
+                  v-for="(dependencia, indexD) in centro.dependencias"
+                  :key="indexD"
+                >
+                  <div class="row pl-5 mt-2">
+                    <p class="mt-1 font-weight-bold">{{ dependencia.nombre }}</p>
+                  </div>
+
+                  <div
+                    class="row pl-4"
+                    v-for="(funcionario, indexF) in dependencia.funcionarios"
+                    :key="indexF"
+                  >
+                    <div
+                      class="col-12 align-self-center d-flex flex-column flex-md-row justify-content-between min-width-zero align-items-md-center"
+                    >
+                      <p class="w-40 w-xs-100 mb-0">
+                        <img :src="funcionario.image" alt="Imagen funcionario" />
+                        <span class="custom-label">
+                          {{ funcionario.nombres }}
+                          {{ funcionario.apellidos }}
+                        </span>
+                      </p>
+
+                      <p class="mb-1 font-weight-bold w-15 w-xs-100">
+                        <i class="simple-icon-clock font-weight-bold"></i>
+                        {{ numeroLlegadasTarde(funcionario.llegadas_tarde) }}
+                      </p>
+
+                      <p class="mb-1 custom-label w-15 w-xs-100">
+                        Promedio:
+                        {{ tiempoPromedio(funcionario.llegadas_tarde) || "0" }}
+                      </p>
+
+                      <div class="w-xs-100">
+                        <button
+                          class="btn btn-link"
+                          @click="mostrarDetalles(funcionario.id)"
+                        >Detalles</button>
+                      </div>
+                    </div>
+
+                    <detalles-llegadas
+                      :ref="`detalles-funcionario-${funcionario.id}`"
+                      :llegadas_tarde="funcionario.llegadas_tarde"
+                    ></detalles-llegadas>
+                  </div>
+                  <div class="separator ml-3 mt-2"></div>
+                </div>
+              </div>
+            </template>
+            <template class="row mt-4 pl-5" v-else>
+              <div class="col-12">
+                <p class="font-weight-bold text-muted">No existen llegadas tarde para esta fecha.</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div> -->

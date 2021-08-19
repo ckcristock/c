@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute, NavigationStart } from '@angular/router';
 
 
 import { environment } from '../../../../environments/environment';
@@ -36,7 +36,8 @@ export class HorizontaltopbarComponent implements OnInit {
   constructor(@Inject(DOCUMENT) private document: any,
     private router: Router,
     private _user: UserService,
-    public cookiesService: CookieService) { }
+    public cookiesService: CookieService,
+    ) { }
 
   ngOnInit(): void {
     this.element = document.documentElement;
@@ -55,6 +56,13 @@ export class HorizontaltopbarComponent implements OnInit {
     } else {
       this.flagvalue = val.map(element => element.flag);
     }
+
+    this.router.events.subscribe((val) => {
+      if(val instanceof NavigationStart) {
+        //notificaciones
+        
+      }
+    })
   }
 
   /**

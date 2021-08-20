@@ -179,47 +179,12 @@ export class DotacionesComponent implements OnInit {
           return [ ...acc,daSet]
         }, [])
       }
-
-
     })
-    /*   this.http.get(this.globales.ruta + 'php/dotaciones/grafica.php').subscribe((db:any)=>{
-       db.forEach(element => {
-         this.personas.push(element.Persona);
-         this.valores.push(element.Valor);
-       });
-       setTimeout(() => {
-         const facturacion_tag = (((<HTMLCanvasElement>this.dotacion_chart.nativeElement).children));
-         this.facturacionChartTag = ((facturacion_tag['dotacion_chart']).lastChild).getContext('2d');
-         const def = (this.facturacionChartTag).createLinearGradient(500, 0, 100, 0);
-         def.addColorStop(1, '#7cffe5');
-         def.addColorStop(1, '#7cffe5');
-         this.studentChartData = {
-           labels: this.personas,
-           datasets: [ {
-             label: 'Cantidad en Stock',
-             borderColor: def,
-             pointBorderColor: '#fff',
-             pointBackgroundColor: def,
-             pointHoverBackgroundColor: def,
-             pointHoverBorderColor: def,
-             pointBorderWidth: 2,
-             pointHoverRadius: 10,
-             pointHoverBorderWidth: 1,
-             pointRadius: 8,
-             fill: false,
-             borderWidth: 2,
-             data: this.valores
-           }]
-         };
 
-       }, 75);
-     }); */
   }
   listarGrupos() {
     this._dotation.getProductDotationTypes().subscribe((data: any) => {
       this.Lista_Grupos = data.data;
-      /*   this.Lista_Grupos.unshift({'text':'Todos',value:''}) */
-
     });
   }
   // metodo para listar en pantalla principal
@@ -275,14 +240,7 @@ export class DotacionesComponent implements OnInit {
 
       queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     }
-    /*  this.http.get(this.globales.ruta + 'php/dotaciones/lista_dotaciones.php'+queryString).subscribe((data: any) => {
-     this.Cargando = false;
-     this.Lista_Dotaciones = data.Listado;
-     this.TotalItems = data.Totales.Cantidad;
-     this.Totales = data.Totales;
-     this.Cantidades = data.Cantidades;
-     this.CantidadTotal = data.costs.SumaAno;
-   }); */
+
     params = this.pagination
     this.loading = true;
     this._dotation.getDotations(params).subscribe((r: any) => {

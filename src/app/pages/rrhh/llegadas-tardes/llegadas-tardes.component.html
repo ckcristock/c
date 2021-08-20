@@ -3,16 +3,30 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="">Empresa</label>
+                            <select name="company" [(ngModel)]="company_id" class="form-control form-control-sm">
+                                <option [value]="company.value" *ngFor="let company of companyList">{{company.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Fecha Inicio</label>
                             <input type="date" [(ngModel)]="firstDay" id="Fecha_Inicio" class="form-control form-control-sm">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Fecha Fin</label>
                             <input type="date" [(ngModel)]="lastDay" id="Fecha_Fin" class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <div class="col-2">
+                        <div class="form-group">
+                            <button class="btn btn-success btn-sm" (click)="getLateArrivals();getStatisticsByDays();getLinearDataset();">Buscar</button>
                         </div>
                     </div>
                 </div>
@@ -37,7 +51,7 @@
             <div class="card-body  ">
                 <h4 class="d-block  weight-bold mb-4 text-center">Estadisticas</h4>
                 <div #studentChart>
-                    <canvas baseChart [datasets]="donutChart.datasets" chartType="doughnut" [options]="donutChart.options" height="300"> 
+                    <canvas baseChart [labels]="donutChart.labels" [datasets]="donutChart.datasets" chartType="doughnut" [options]="donutChart.options" height="300"> 
                         </canvas>
                 </div>
             </div>
@@ -55,26 +69,26 @@
                             <i class="fa text-info fa-user-clock"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">5</h4>
+                            <h4 class="text-white">{{dataDiary.total}}</h4>
                             <p> Total llegadas Tarde </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-12 col-xl-12">
+            <!--  <div class="col-md-12 col-xl-12">
                 <div class="card  text-white bg-info ">
                     <div class="card-body stats   align-items-center d-flex">
                         <div style="width: 30%;">
                             <i class="fa fa-percent"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">15</h4>
+                            <h4 class="text-white">{{dataDiary.percentage}}</h4>
                             <p> LLegadas Tarde </p>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="col-md-12 col-xl-12">
                 <div class="card text-white bg-warning ">
                     <div class="card-body stats align-items-center d-flex">
@@ -82,7 +96,8 @@
                             <i class="fa text-info fa-stopwatch"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">15 <span style="font-size :20px"> Min.</span></h4>
+                            <h4 class="text-white">{{dataDiary.time_diff_total}}
+                                <!-- <span style="font-size :20px"> Min.</span> --></h4>
                             <p>Tiempo Acumulado </p>
                         </div>
                     </div>

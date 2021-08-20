@@ -1,32 +1,27 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
-import { HttpClient } from '@angular/common/http';
-import { Location } from '@angular/common';
-import { environment } from 'src/environments/environment';
 import { donutChart } from './data'
-/* import { ChartType } from '../../../core/interfaces/chart.interface'; */
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Color, BaseChartDirective, Label } from 'ng2-charts';
+import { ChartDataSets  } from 'chart.js';
+import { Color,  Label } from 'ng2-charts';
 import * as moment from 'moment';
 import { LateArrivalsService } from './late-arrivals.service';
+import { CompanyService } from '../../ajustes/informacion-base/services/company.service';
 @Component({
   selector: 'app-llegadas-tardes',
   templateUrl: './llegadas-tardes.component.html',
   styleUrls: ['./llegadas-tardes.component.scss']
 })
+
 export class LlegadasTardesComponent implements OnInit {
   donutChart = donutChart;
 
-
   public lineChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 60, 85, 90], label: 'Series A' },
-
+    { data: [], label: 'Llegadas tardes' },
   ];
   public lineChartLabels: Label[] = [];
 
   public lineChartColors: Color[] = [
-
-    { // red
+    {
       backgroundColor: 'rgba(255,0,0,0.3)',
       borderColor: 'red',
       pointBackgroundColor: 'rgba(148,159,177,1)',
@@ -35,61 +30,120 @@ export class LlegadasTardesComponent implements OnInit {
       pointHoverBorderColor: 'rgba(148,159,177,0.8)'
     }
   ];
-  /* public lineChartPlugins = [pluginAnnotations]; */
+  company_id: any
+  cargando = true;
+  companies: any = [];
+  companyList: any = [];
 
-  /**
- * 
- * 
- * 
- */
-
-  public Cargando = true;
-  public companies: any = [];
-
+  dataDiary = { percentage: 0, allByDependency: [], total: 0, time_diff_total: '0' }
   firstDay: any;
   lastDay: any
 
-  mes: any = [];
-
-
   constructor(
-    private _lateArrivals:LateArrivalsService
-   ) {
-    this.getLast15Days()
+    private _lateArrivals: LateArrivalsService,
+    private _companies: CompanyService,
+  ) {
+    this.getCompanies();
   }
 
-  
   ngOnInit() {
-    
     let fecha = new Date();
     let hoy = (fecha.toISOString()).split('T')[0];
     this.lastDay = hoy;
     this.firstDay = (new Date(fecha.setDate(fecha.getDate() - 2))).toISOString().split("T")[0];
     this.getLateArrivals();
-    
+    this.getLinearDataset();
+    this.getStatisticsByDays();
   }
-  getLateArrivals(){
-    this._lateArrivals.getLateArrivals(this.firstDay,this.lastDay)
-      .subscribe( (r:any)=>{
+  getData() {
+
+  }
+  getLateArrivals() {
+    let params = this.getParams();
+
+    this._lateArrivals.getLateArrivals(this.firstDay, this.lastDay, params)
+      .subscribe((r: any) => {
         this.companies = r.data
         this.transformData()
       })
   }
 
-  transformData(){
-    let totalPeople = 0;
+  getCompanies() {
+    this._companies.getCompanies().subscribe((r: any) => {
+      this.companyList = r.data
+      if (this.companyList.length > 1) {
+        this.companyList.unshift({ text: 'Todas', value: '0' })
+        this.company_id = 0
+      } else {
+        this.company_id = this.companyList[0].value
+      }
+    })
+  }
+
+  getLinearDataset() {
+    let params = this.getParams();
+
+    let fecha_inicio = moment().subtract(15, 'days').format('YYYY-MM-DD');
+    let fecha_final = moment().format('YYYY-MM-DD');
+    this._lateArrivals.getStatistcs(fecha_inicio, fecha_final, params).subscribe((r: any) => {
+      this.getLast15Days(r.data.lates)
+    })
+  }
+
+  getParams() {
+    let params: any = {}
+    let company_id = this.company_id != '0' && this.company_id ? this.company_id : '';
+    if (company_id) {
+      params.company_id = company_id
+    }
+    return params
+  }
+
+  getLast15Days(lates: any[]) {
+    this.lineChartData = [
+      { data: [], label: 'Llegadas tardes' },
+    ]
+    this.lineChartLabels = []
+    for (let i = 0; i < 15; i++) {
+      let day = moment().subtract(i, 'days').format('DD');
+      let dayFinded = lates.find(l => l.day == day)
+      let data = dayFinded ? dayFinded.total : 0;
+      this.lineChartData[0].data.unshift(data)
+      this.lineChartLabels.unshift(day);
+    }
+  }
+  getStatisticsByDays() {
+
+    let params: any = this.getParams();
+    params.type = 'diary'
+
+    this._lateArrivals.getStatistcs(this.firstDay, this.lastDay, params).subscribe((r: any) => {
+
+      this.dataDiary.total = r.data.lates.total
+      this.dataDiary.time_diff_total = r.data.lates.time_diff_total
+      this.dataDiary.percentage = r.data.percentage
+
+      let d = r.data.allByDependency.reduce((acc, el) => {
+        return { labels: [...acc.labels, el.name], datasets: [...acc.datasets, el.total] }
+      }, { labels: [], datasets: [] })
+
+      this.donutChart.datasets[0].data = d.datasets
+      this.donutChart.labels = d.labels
+    })
+  }
+
+  transformData() {
     this.companies.forEach(c => {
       c.groups.forEach(g => {
         g.dependencies.forEach(d => {
-            d.people.forEach(pr=>{
-              pr.averageTime = this.tiempoPromedio( pr.late_arrivals)
-            })
-          });
+          d.people.forEach(pr => {
+            pr.averageTime = this.tiempoPromedio(pr.late_arrivals)
+          })
+        });
       });
     });
-    
   }
-  
+
   tiempoEnMilisegundos(horaUno, horaDos) {
     let horaInicial = moment.utc(horaUno, "HH:mm:ss");
     let horaFinal = moment.utc(horaDos, "HH:mm:ss");
@@ -116,51 +170,5 @@ export class LlegadasTardesComponent implements OnInit {
     return moment.utc(promedio).format("HH:mm:ss");
   }
 
-  
-  getLast15Days() {
-    for (let i = 0; i < 6; i++) {
-      let today = moment();
-      let day = today.subtract(i, 'days');
-      this.lineChartLabels.unshift(day.format('DD'));
-    }
-  }
-
-  getFecha(tipo) {
-
-    let date = new Date(), y = date.getFullYear(), m = date.getMonth();
-    let Fecha: any;
-
-    if (tipo == 'inicial') {
-      Fecha = new Date(y, m, 1);
-      //Fecha=new Date();
-    } else if (tipo == 'final') {
-      Fecha = new Date(y, m + 1, 0);
-    }
-
-    let mes = Fecha.getMonth() < 10 ? '0' + parseInt(Fecha.getMonth() + 1) : Fecha.getMonth() + 1;
-    let dia = Fecha.getDate() < 10 ? '0' + Fecha.getDate() : Fecha.getDate();
-
-    return Fecha.getFullYear() + '-' + mes + '-' + dia;
-  }
-
-
-
-  getQueryString() {
-
-    let params: any = {};
-    let queryString = '';
-
- 
-    if (this.lastDay != '') {
-      params.fecha_fin = this.lastDay;
-    }
-    if (this.firstDay != '') {
-      params.fecha_inicio = this.firstDay;
-    }
-
-    queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
-    return queryString;
-
-  }
 
 }

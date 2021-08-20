@@ -22,12 +22,19 @@ import { InformacionEmpresaComponent } from './funcionarios/create/informacion-e
 import { PrestacionesSocialesComponent } from './funcionarios/create/prestaciones-sociales/prestaciones-sociales.component';
 import { DotacionTallasComponent } from './funcionarios/create/dotacion-tallas/dotacion-tallas.component';
 import { EstructuraEmpresaComponent } from './estructura-empresa/estructura-empresa.component';
+import { VerFuncionarioComponent } from './funcionarios/detalle-funcionario/ver-funcionario/ver-funcionario.component';
+import { DatosBasicosComponent } from './funcionarios/detalle-funcionario/ver-funcionario/datos-basicos/datos-basicos.component';
+import { SalarioComponent } from './funcionarios/detalle-funcionario/ver-funcionario/salario/salario.component';
+import { DatosEmpresaComponent } from './funcionarios/detalle-funcionario/ver-funcionario/datos-empresa/datos-empresa.component';
+import { AfiliacionesComponent } from './funcionarios/detalle-funcionario/ver-funcionario/afiliaciones/afiliaciones.component';
 
 
 @NgModule({
     declarations: [
-        EmpresasComponent,  FuncionariosComponent,
-        RegimenesNivelesComponent, AseguradorasComponent, 
+        EmpresasComponent,  
+        FuncionariosComponent,
+        RegimenesNivelesComponent, 
+        AseguradorasComponent, 
         DetalleFuncionarioComponent,
         PermissionsComponent,
         MenuChildComponent,
@@ -37,10 +44,20 @@ import { EstructuraEmpresaComponent } from './estructura-empresa/estructura-empr
         InformacionEmpresaComponent,
         PrestacionesSocialesComponent,
         DotacionTallasComponent,
-        EstructuraEmpresaComponent],
-
-    imports: [CommonModule, InformacionBaseRoutingModule,
-        NgbPaginationModule, NgbDropdownModule, ChartsModule,
+        EstructuraEmpresaComponent,
+        VerFuncionarioComponent,
+        DatosBasicosComponent,
+        SalarioComponent,
+        DatosEmpresaComponent,
+        AfiliacionesComponent,
+    ],
+    
+    imports: [
+        CommonModule,
+        InformacionBaseRoutingModule,
+        NgbPaginationModule, 
+        NgbDropdownModule, 
+        ChartsModule,
         ComponentsModule,
         FormsModule,
         NgSelectModule,
@@ -48,9 +65,8 @@ import { EstructuraEmpresaComponent } from './estructura-empresa/estructura-empr
         NgbCollapseModule,
         PipesModule,
         NgbNavModule,
-        ReactiveFormsModule
-,
-	ArchwizardModule
+        ReactiveFormsModule,
+	    ArchwizardModule
     ]
 })
 

@@ -27,7 +27,7 @@ export class DepartamentosComponent implements OnInit {
     name: new FormControl('', [Validators.required]),
     code: new FormControl('', [Validators.required]),
     department_id: new FormControl('', [Validators.required]),
-    codigo_dane: new FormControl('', [Validators.required])
+    code_dane: new FormControl('', [Validators.required])
   });
 
   paginationD = {
@@ -48,7 +48,7 @@ export class DepartamentosComponent implements OnInit {
   filtroMunicipio:any = {
     code: '',
     name: '',
-    codigo_dane: ''
+    department: ''
   }
   constructor( private depService:DepartamentosService ) { }
 
@@ -68,6 +68,8 @@ export class DepartamentosComponent implements OnInit {
     this.depService.getMunicipalityPaginate(params)
     .subscribe( (res:any) => {
       this.municipios = res.data.data;
+      console.log(this.municipios);
+      
       this.paginationM.collectionSize = res.data.total;
     });
   }
@@ -136,7 +138,6 @@ export class DepartamentosComponent implements OnInit {
     .subscribe( (res:any) =>{
       this.paginationD.collectionSize = res.data.total;
       this.departamentos = res.data.data;
-      console.log(this.paginationD.collectionSize);
     });
   }
   
@@ -164,6 +165,36 @@ export class DepartamentosComponent implements OnInit {
         this.modalD.hide();
       });
     } 
+  }
+
+  get name_department(){
+    return (
+      this.formD.get('name') && this.formD.get('name').touched
+    )
+  }
+
+  get name_municipality(){
+    return (
+      this.formM.get('name') && this.formM.get('name').touched
+    )
+  }
+
+  get code_municipality(){
+    return (
+      this.formM.get('code') && this.formM.get('code').touched
+    )
+  }
+
+  get department_municipality(){
+    return (
+      this.formM.get('department_id') && this.formM.get('department_id').touched
+    )
+  }
+
+  get code_dane_municipality(){
+    return (
+      this.formM.get('code_dane') && this.formM.get('code_dane').touched
+    )
   }
 
 }

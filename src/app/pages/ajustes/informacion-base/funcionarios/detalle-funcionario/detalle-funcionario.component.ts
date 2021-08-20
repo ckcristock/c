@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, Routes } from '@angular/router';
 
 @Component({
   selector: 'app-detalle-funcionario',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DetalleFuncionarioComponent implements OnInit {
   habilitado = true;
-  constructor() { }
+  components = 'informacion';
+  constructor( private router: Router ) { }
 
   ngOnInit(): void {
   }
 
+  regresar(){
+    this.router.navigate(['/ajustes/informacion-base/funcionarios']);
+  }
+
+  verComponent( componente:string ){
+    this.components = componente;
+  }
+  
 }

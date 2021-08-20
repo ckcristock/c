@@ -100,4 +100,10 @@ export class ZonasComponent implements OnInit {
 
   }
 
+  get name_valid(){
+    return (
+      this.form.get('name') && this.form.get('name').touched
+    )
+  }
+
 }

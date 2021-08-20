@@ -131,6 +131,24 @@ export class EpsComponent implements OnInit {
       });      
     }
   }
+
+  get name_eps_valid(){
+    return (
+      this.form.get('name') && this.form.get('name').touched
+    )
+  }
+
+  get code_eps_valid(){
+    return (
+      this.form.get('code') && this.form.get('code').touched
+    )
+  }
+
+  get nit_eps_valid(){
+    return (
+      this.form.get('nit') && this.form.get('nit').touched
+    )
+  }
   
 
 }

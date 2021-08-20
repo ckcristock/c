@@ -51,8 +51,11 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre de zona</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="zone.name" formControlName="name" required>
-                    <!-- <small class="invalid text-danger" *ngIf="person_id_invalid">  -->
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="zone.name" [class.is-invalid]="name_valid" formControlName="name" required>
+                    <div class="col-md-7 offset-4">
+                        <small class="invalid text-danger" *ngIf="name_valid"> Es necesario el nombre 
+                        </small>
+                    </div>
                 </div>
                 <div class="form-group text-right">
                     <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>

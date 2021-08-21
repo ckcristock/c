@@ -8,11 +8,13 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UiModule } from '../shared/ui/ui.module';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { AsistenciaComponent } from './asistencia/asistencia.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
     RegisterComponent,
+    AsistenciaComponent,
   ],
   exports: [
     LoginComponent,

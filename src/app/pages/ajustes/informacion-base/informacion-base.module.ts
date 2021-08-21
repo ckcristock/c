@@ -27,6 +27,7 @@ import { DatosBasicosComponent } from './funcionarios/detalle-funcionario/ver-fu
 import { SalarioComponent } from './funcionarios/detalle-funcionario/ver-funcionario/salario/salario.component';
 import { DatosEmpresaComponent } from './funcionarios/detalle-funcionario/ver-funcionario/datos-empresa/datos-empresa.component';
 import { AfiliacionesComponent } from './funcionarios/detalle-funcionario/ver-funcionario/afiliaciones/afiliaciones.component';
+import { HttpClientModule } from "@angular/common/http";
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { AfiliacionesComponent } from './funcionarios/detalle-funcionario/ver-fu
         ComponentsModule,
         FormsModule,
         NgSelectModule,
+        HttpClientModule,
         NgbDropdownModule,
         NgbCollapseModule,
         PipesModule,

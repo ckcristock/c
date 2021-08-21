@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { DatosEmpresaService } from './datos-empresa.service';
 
 @Component({
   selector: 'app-datos-empresa',
@@ -9,14 +11,39 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class DatosEmpresaComponent implements OnInit {
   @ViewChild('modal') modal:any;
   form: FormGroup;
-  constructor( private fb:FormBuilder ) { }
+  id:any;
+  data:any;
+  empresa: any = {
+    turn_type: '',
+    position_name: '',
+    dependency_name: '',
+    group_name: '',
+    fixed_turn_name: '',
+    company_name: ''
+  };
+  constructor( private fb:FormBuilder, 
+                private enterpriseData: DatosEmpresaService,
+                private activatedRoute: ActivatedRoute
+            ) { }
 
   ngOnInit(): void {
+    this.id = this.activatedRoute.snapshot.params.id;
+    this.getEnterpriseData();
     this.createForm();
   }
 
   openModal(){
     this.modal.show();
+  }
+
+  getEnterpriseData(){
+    this.enterpriseData.getEnterpriseData(this.id)
+    .subscribe( (res:any) =>{
+      this.data = res.data
+      for (const dm of this.data) {
+        this.empresa = dm;
+      }
+    })
   }
 
   createForm(){

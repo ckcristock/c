@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import Swal from 'sweetalert2';
+import { AsistenciaService } from './asistenca.service';
 
 @Component({
   selector: 'app-asistencia',
@@ -14,7 +16,10 @@ export class AsistenciaComponent implements OnInit {
   time = moment().format('LTS');
   vista = true;
   temp = 0.0;
-  constructor() {}
+  constructor(
+    private _asistencia: AsistenciaService,
+    private _swal: SwalService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -28,38 +33,32 @@ export class AsistenciaComponent implements OnInit {
   }
 
   capture() {
-    console.log(this.canvas.nativeElement.getContext('2d'));
-
     var context = this.canvas.nativeElement
       .getContext('2d')
       .drawImage(this.video.nativeElement, 0, 0, 640, 480);
-    var img = this.canvas.nativeElement.toDataURL('image/png');
-    console.log(img);
+    var imagen = this.canvas.nativeElement.toDataURL('image/png');
 
     const video: HTMLVideoElement = this.video.nativeElement;
     video.pause();
     this.CambiaVista();
-    /*   axios
-      .post(`/api/${localStorage.getItem("tenant")}/asistencia/validar`, {
-        imagen: img,
-        temperatura: this.temp
-      })
-      .then(respuesta => {
-        this.CambiaVista();
-        respuesta.data.timer=4000;
-        respuesta.data.showConfirmButton= false;
-        this.$swal.fire(respuesta.data);
-      })
-      .catch(error => {
-        this.CambiaVista();
-        this.$swal.fire(
-          "Oops!",
-          "Han ocurrido errores, por favor intentar más tarde",
-          "error",
-          "3000",
-          false
-        );
-      }); */
+    this._asistencia.validate({ imagen }).subscribe((r: any) => {
+      this.CambiaVista();
+     /*  r.data.timer = 4000; */
+     /*  r.data.showConfirmButton = false; */
+      r.timer = 2500
+      Swal.fire(r);
+    }, err => {
+      this.CambiaVista();
+
+      this._swal.show(
+        {
+          title: 'Oops!',
+          text: "Han ocurrido errores, por favor intentar más tarde",
+          icon: "error",
+          timer:2000
+        })
+    })
+
   }
 
   CambiaVista() {
@@ -83,9 +82,9 @@ export class AsistenciaComponent implements OnInit {
         .catch(function (error) {
           alert(
             'No se puede acceder a la Cámara : ' +
-              error.name +
-              ' ' +
-              error.message
+            error.name +
+            ' ' +
+            error.message
           );
         });
     }
@@ -101,10 +100,11 @@ export class AsistenciaComponent implements OnInit {
   }
 
   beforeCreate() {
+    //validar empresa
     if (localStorage.getItem('tenant')) {
       //git console.log(localStorage.getItem("tenant"));
     } else {
-      Swal.fire({
+     /*  Swal.fire({
         title: 'Ingresa el nit de vuestra compañia',
         input: 'text',
         inputAttributes: {
@@ -114,7 +114,7 @@ export class AsistenciaComponent implements OnInit {
         confirmButtonText: 'Aceptar',
         showLoaderOnConfirm: true,
         preConfirm: (nit) => {
-          /* return axios
+          return axios
               .post(`/getTenant`, { nit: nit })
               .then(datos => {
                 if (datos.data == "") {
@@ -126,17 +126,17 @@ export class AsistenciaComponent implements OnInit {
                 this.$swal.showValidationMessage(
                   `Esta compañia no se encuentra registrada`
                 );
-              }); */
+              }); 
         },
         allowOutsideClick: () => !Swal.isLoading(),
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire({
-            /*  title: `${result.value.login}'s avatar`,
-              imageUrl: result.value.avatar_url */
+             title: `${result.value.login}'s avatar`,
+              imageUrl: result.value.avatar_url
           });
         }
-      });
+      });*/
     }
   }
 }

@@ -1,6 +1,6 @@
   <div class="strok" >
     <div
-      *ngIf="vista"
+      [ngClass]="{'not-visible':!vista}"
       id="asistencia"
       class="container-fluid smer"
       style="height:100%;"
@@ -35,7 +35,7 @@
     <div  *ngIf="!vista" class="reconocimiento">
       <img
         class="img-reconocimiento"
-        [src]="'assets/images/logo.png'"
+        [src]="'assets/images/cargando-reconocimiento-geneticapp.gif'"
       />
     </div>
   </div>

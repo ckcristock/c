@@ -8,11 +8,12 @@ export class SwalService {
 
   constructor() { }
   
-  show( { title, text, icon } ){
+  show( { title, text, icon , timer =0} ){
     return Swal.fire({
         title,
         text,
         icon,
+        timer,
         allowOutsideClick: false,
         allowEscapeKey: false,
       })

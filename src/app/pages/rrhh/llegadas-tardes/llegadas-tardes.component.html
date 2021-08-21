@@ -1,0 +1,216 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row  d-flex align-items-end">
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="">Empresa</label>
+                            <select name="company" [(ngModel)]="company_id" class="form-control form-control-sm">
+                                <option [value]="company.value" *ngFor="let company of companyList">{{company.text}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Fecha Inicio</label>
+                            <input type="date" [(ngModel)]="firstDay" id="Fecha_Inicio"
+                                class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Fecha Fin</label>
+                            <input type="date" [(ngModel)]="lastDay" id="Fecha_Fin"
+                                class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for=""></label>
+                            <button class="btn btn-success btn-sm btn-block" style="display: block;"
+                                (click)="getLateArrivals();getStatisticsByDays();getLinearDataset();">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row ">
+    <div class="col-md-5 col-sm-12">
+        <div class="card">
+
+            <div class="card-body ">
+
+                <h4 class=" weight-bold text-center">Llegadas tarde de los últimos 15 días </h4>
+                <canvas baseChart height="200" [datasets]="lineChartData" [labels]="lineChartLabels"
+                    [colors]="lineChartColors" [legend]="true" [chartType]="'line'"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4   ">
+        <div class="card  ">
+            <div class="card-body  ">
+                <h4 class="d-block  weight-bold mb-2 text-center">Estadisticas</h4>
+                <div #studentChart>
+                    <canvas baseChart [labels]="donutChart.labels" [datasets]="donutChart.datasets" chartType="doughnut"
+                        [options]="donutChart.options" height="260">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-3">
+        <div class="row">
+
+            <div class="col-md-12 col-xl-12">
+                <div class="card text-white bg-danger 
+                     ">
+                    <div class="card-body stats align-items-center d-flex">
+                        <div style="width: 30%;">
+                            <i class="fa text-info fa-user-clock"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white">{{dataDiary.total}}</h4>
+                            <p> Total llegadas Tarde </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  <div class="col-md-12 col-xl-12">
+                <div class="card  text-white bg-info ">
+                    <div class="card-body stats   align-items-center d-flex">
+                        <div style="width: 30%;">
+                            <i class="fa fa-percent"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white">{{dataDiary.percentage}}</h4>
+                            <p> LLegadas Tarde </p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="col-md-12 col-xl-12">
+                <div class="card text-white bg-warning ">
+                    <div class="card-body stats align-items-center d-flex">
+                        <div style="width: 30%;">
+                            <i class="fa text-info fa-stopwatch"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white">{{dataDiary.time_diff_total}}
+                                <!-- <span style="font-size :20px"> Min.</span> -->
+                            </h4>
+                            <p>Tiempo Acumulado </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header text-right">
+                <h4><i class="fa fa-users text-primary"></i> Funcionarios que llegaron tarde </h4>
+            </div>
+
+            <div class="card-body">
+                <div *ngFor="let company of companies">
+                    <h4>{{company.name}}</h4>
+                    <hr>
+                    <div class="ml-2" *ngFor="let group of company.groups">
+                        <h5>{{group.name}}</h5>
+                        <div>
+                            <div *ngFor="let dependency of group.dependencies">
+                                <div class="mb-4"> {{ dependency.name }} </div>
+                                <div class="col-12 mb-3" *ngFor="let person of dependency.people">
+                                    <div class="row">
+                                        <!--  <div class="align-self-center d-flex flex-column flex-md-row justify-content-between min-width-zero align-items-md-center"> -->
+                                        <div class="col-5">
+                                            <img src="{{person?.image| image:'users' }}" alt=""
+                                                class="img-thumbnail rounded-circle header-profile-user">
+                                            <span class="font-weight-bold ml-2">
+                                                {{ person.first_name }}
+                                                {{ person.first_surname }}
+                                            </span>
+                                        </div>
+                                        <div class="col-5">
+                                            <p class="mb-1 font-weight-bold w-20 w-xs-100">
+                                                <i class="fas fa-clock"></i> {{person?.late_arrivals?.length}} -
+                                                <strong> PROMEDIO: {{person.averageTime}} </strong>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-2 text-right">
+                                            <button class="btn btn-primary btn-sm"
+                                                (click)="person.selected = !person.selected">
+                                                <i class="fas fa-sort-down"></i>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-12">
+                                        <app-detalle-llegada [person]="person"></app-detalle-llegada>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 
+<app-modal-basic #modalDetalleLlegada [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">Detalle</h4>
+        <button type="button" class="close basic-close" (click)="modalDetalleLlegada.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="card">
+            <div class="card-block table-border-style">
+                <div class="table-responsive">
+                    <table class="table detalles-table table-styling table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Entrada Turno</th>
+                                <th>Entrada Real</th>
+                                <th>Tiempo Retraso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let detalle of Detalles_LLegadas">
+                                <td>{{detalle.Fecha}}</td>
+                                <td>{{detalle.Entrada_Turno}}</td>
+                                <td>{{detalle.Entrada_Real}}</td>
+                                <td>{{detalle.Tiempo_Retraso}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-default btn-sm" (click)="modalDetalleLlegada.hide()">Cancelar</button>
+        </div>
+    </div>
+
+</app-modal-basic> -->
+
+    <!-- <swal #deleteSwal title="Llegada Tarde Eliminada" text="Se ha Eliminado Correctamente la llegada tarde" type="success">
+  </swal>
+  <swal #confirmacionSwal title="" text="" type=""></swal> -->

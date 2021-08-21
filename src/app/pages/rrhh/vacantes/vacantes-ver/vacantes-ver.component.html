@@ -1,0 +1,65 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-lg-5 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6>Postulados</h6>
+                    <div *ngIf="!loading && postulados.length > 0; else notData">
+
+                    </div>
+                </div>
+                <div class="card-block">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="content-vacante">
+                        <h4 class="mb-2">{{ job.title }}</h4>
+                        <small class="mb-2" >  {{job.municipality.name}} - {{job.municipality.department.name}} | {{ job.date_start | date: 'dd/M/yyyy'}}  - {{ job.date_end | date: 'dd/M/yyyy'}} </small>
+                        <div class="row mb-4"  >
+                            <div class="col-md-12">
+                                <span style="margin-right: 7px;"><i class="ti-briefcase label label-primary"></i> Dependencia: {{job.position.dependency.name}} </span>
+                            </div>
+                            <div class="col-md-12">
+                                <span style="margin-right: 7px;"><i class="ti-briefcase label label-primary"></i> Cargo: {{job.position.name}} </span>
+                            </div>
+                            <div class="col-md-12">
+                                <span style="margin-right: 7px;"><i class="ti-money label label-primary"></i> Salario: {{ job.min_salary | currency }} - {{ job.max_salary | currency }}</span>
+                            </div>
+                            <div class="col-md-12">
+                                <span style="margin-right: 7px;"><i class="ti-time label label-primary"></i> Turno: {{ job.turn_type }}</span>
+                            </div>
+                           
+                        </div>
+
+                        <div class="descripcion-vacante">
+                            <h6 class="mb-2">Descripción:</h6>
+
+                            <p>{{ job.description }}</p>
+                        </div>
+
+                        <div class="descripcion-vacante">
+                            <h6 class="mb-2" >Requisitos:</h6>
+                            <br/>
+                            <ul class="requisitos-list">
+                                <li><b>Educación mínima:</b> {{ job.education }}</li>
+                                <li><b>Edad:</b> entre ({{ job.min_age }} - {{ job.max_age }}) </li>
+                                <li><b>Disponibilidad de viajar:</b> {{ job.can_trip == 1 ? 'Si' : 'No' }}</li>
+                                <li><b>Disponibilidad de cambio de residencia:</b> {{ job.change_residence == 1 ? 'Si' : 'No' }}</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

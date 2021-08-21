@@ -1,0 +1,363 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <div class="card-header"> -->
+                    <h4 class="text-center">Montos Totales</h4>
+                    <!-- </div> -->
+                    <div class="form-group">
+                        <input type="month" (change)="listarTotales($event.target.value);Graficar()" [(ngModel)]="selectedMes" class="form-control form-control-sm" name="mouth" id="">
+                    </div>
+                    <div class="row" style="margin-top:2px;">
+                        <div class="col-md-6 text-center">
+                            <p>Costos Año</p>
+                            <h5 class="mb-1">$ {{ Totales | number | puntos }} </h5>
+                            <p>distribuidos en</p>
+                            <h5> {{ CantidadTotal| number | puntos}}</h5>
+                            <p>entregas realizadas</p>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <p>Costos Mes</p>
+                            <div class="form-group">
+                                <h5> ${{ SumaMes | number | puntos }} </h5>
+                                <p>distribuidos en</p>
+                                <h5> {{ TotalesMes| number }}</h5>
+                                <p>entregas realizadas</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="hr">
+                </div>
+                <div class="col-md-12">
+                    <div class="card-block">
+                        <div class="row" style="margin-top:5px;">
+                            <div class="col-12 text-center">
+                                <h4>Stock por categorías</h4>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <table class="table table-hover table-bordered">
+                                    <tr *ngFor="let lgi of Lista_Grupos_Inventario">
+                                        <td class="text-left">{{lgi.name}}</td>
+                                        <td style="width:50px;">{{lgi.stock}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Dotación y Epp's x Categorías Anualmente</h5>
+                </div>
+                <div class="card-block" #dotacion_chart>
+                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
+          </canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h5>Listado de Entregas de Dotación y EPP</h5>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="modalEntrega.show()"><i class="fa fa-plus"></i> Entrega Dotación</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-block">
+                    <table class="table table-striped" style="font-size: 10px;" *ngIf="!loading && Lista_Dotaciones.length > 0; else notData">
+                        <thead>
+                            <tr>
+                                <th style="width:80px;">Código</th>
+                                <th style="width:120px;">Fecha</th>
+                                <th style="width:135px;">Funcionario Entrega</th>
+                                <th style="width:135px;">Funcionario Recibe</th>
+                                <th style="width:135px;">Detalles</th>
+                                <th>Artículos</th>
+                                <th style="width:90px;">Valor</th>
+                                <th style="width:80px;">Estado</th>
+                                <th style="width:30px;"> - </th>
+                            </tr>
+                            <tr>
+                                <th class="tabla-filtro">
+                                    <input type="text" [(ngModel)]="filtro_cod" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro Cod.">
+                                </th>
+                                <th class="tabla-filtro" style="max-width: 100px; width: 100px !important;">
+                                    <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
+                                </th>
+                                <th>
+                                    <input type="text" [(ngModel)]="filtro_entrega" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro Entrega">
+                                </th>
+                                <th>
+                                    <input type="text" [(ngModel)]="filtro_recibe" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro Recibe">
+                                </th>
+                                <th>
+                                    <input type="text" [(ngModel)]="filtro_detalles" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro Detalles">
+                                </th>
+
+                                <th>
+                                    <input type="text" [(ngModel)]="filtro_valor" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro Valor">
+                                </th>
+                                <th></th>
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            <tr *ngFor="let item of Lista_Dotaciones" [ngClass]="{'bg-danger text-white': item.state == 'Anulada'}">
+                                <td>ED00{{item.id}}</td>
+                                <td>{{item.created_at | date:'dd/MM/yyyy'}}</td>
+                                <td>{{item.entrega}}</td>
+                                <td>{{item.recibe}}</td>
+                                <td>{{item.description}}</td>
+                                <td>
+                                    <div class="articulos-table">
+                                        {{item.product_name}}
+                                    </div>
+                                </td>
+                                <td>$ {{item.total | number | puntos}}</td>
+                                <td><span>{{item.state}}</span>
+                                </td>
+                                <td>
+                                    <div ngbDropdown class="dropdown-primary">
+                                        <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
+                                        <div ngbDropdownMenu>
+                                            <!--   <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank">
+                                                <i class="fa fa-print"></i> Imprimir Entrega
+                                            </a> -->
+                                            <!-- <a *ngIf="item.Estado!='Anulada'&&item.Estado!='Devuelta'" class="dropdown-item waves-light waves-effect caja-botones" (click)="devolverDotacion(item.Id_Dotacion)" >
+                      <i class="fa fa-undo"></i> Devolver
+                    </a> -->
+                                            <!--   <a *ngIf="item.Estado=='Devuelta'" class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/dotaciones/descarga_devolucion.php?id={{item.Id_Dotacion}}" target="_blank">
+                                                <i class="fa fa-print"></i> Imprimir Devolucion
+                                            </a> -->
+                                            <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
+                                                <i class="fa fa-times"></i> Anular
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <ngb-pagination maxSize="5" [collectionSize]="pagination.collectionSize" (pageChange)="ListarDotaciones($event) " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination ">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal-basic #modalDevolver [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">Devolución de Dotación</h4>
+        <button type="button" class="close basic-close" (click)="modalDevolver.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="row invoice-contact" style="align-items:flex-start !important;margin:0;padding:0;">
+            <div class="col-md-8">
+                <div class="invoice-box row">
+                    <div class="col-sm-12">
+                        <table class="table table-responsive invoice-table table-borderless" style="padding-left:0 !important;">
+                            <tbody>
+                                <tr>
+                                    <td style="width:100px;padding:0 !important;">
+                                        <!--  <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="{{globales.Nombre}}"> -->
+                                    </td>
+                                    <!-- <td>
+                                        {{globales.Nombre}}
+                                        <br> {{globales.Nit}}
+                                        <br> {{globales.Direccion}}
+                                        <br> {{globales.Telefono}}
+                                    </td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row text-right" style="margin-right: 5px;">
+                    <div class="col-sm-12">
+                        <h4>Devolución de Dotación</h4>
+                        <h6>{{fecha |date: 'dd/MM/yyyy'}}</h6>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label>Funcionario Recibe</label><br>
+                <strong>{{Devolucion.Recibe}}</strong>
+            </div>
+            <div class="col-md-4">
+                <label>Funcionario Entrega</label><br>
+                <strong>{{Devolucion.Entrega}}</strong>
+            </div>
+            <div class="col-md-4">
+                <label>Fecha Entrega Dotación</label><br>
+                <strong>{{Devolucion.dispatched_at}}</strong>
+            </div>
+        </div>
+        <div class="row" style="margin-top:25px;">
+            <div class="col-md-12">
+                <h4>Elementos por Devolver</h4>
+                <div class="row">
+                    <div *ngFor="let prod of Productos_Devolver" class="col-md-6" style="margin-top:15px;">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="number" class="form-control form-control-sm contador_min" min="0" max="{{prod.Cantidad}}" [(ngModel)]="prod.Cantidad" placeholder="0">
+                            </div>
+                            <div class="col-md-5">
+                                <span class="f-9">
+                  {{ prod.Nombre }}
+                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="checkbox" [(ngModel)]="prod.Baja" placeholder="0">
+                                <span class="f-9">Dar de Baja</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Detalles de la Devolución</label>
+                    <textarea placeholder="Ingrese Detalles Importantes" class="form-control f-9" rows="7" [(ngModel)]="Devolucion.Detalles"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer" style="width:100%;">
+        <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" (click)="showAlert5($event)">Reportar Devolución de
+        Dotación</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+
+
+<!-- modal entrega dotacion -->
+<app-modal-basic #modalEntrega [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">Nueva Entrega de Dotación</h4>
+        <button type="button" class="close basic-close" (click)="modalEntrega.hide();">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="app-modal-body">
+
+        <form #FormDotacion="ngForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Empleado Recibe</label>
+
+                        <ng-select [(ngModel)]="Entrega.person_id" name="Empleado_Entrega" [items]="Empleados" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Fecha Entrega</label>
+                        <input type="date" name="dispatched_at" placeholder="Ingrese Fecha" class="form-control form-control-sm f-9" [(ngModel)]="Entrega.dispatched_at" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 ">
+                    <h4 class="mb-2">Elementos disponibles</h4>
+                    <div class="row mb-2" *ngFor="let category of Lista_Grupos_Inventario1;
+                                         i as index">
+                        <div class="col-12">
+                            <h5>{{category.name}}</h5>
+                        </div>
+                        <div class="col-md-4 mb-2" *ngFor="let prod of category.inventary">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input (onChange)="maxLengthCheck(prod)" type="number" name="producto{{i}}" class="form-control form-control-sm" min="0" (blur)="cambio(prod)" max="{{prod.Cantidad}}" [(ngModel)]="prod.quantity" placeholder="0" required>
+                                </div>
+                                <div [ngClass]="{'bg-danger text-white': prod.quantity > prod.stock}" class="col-md-8">
+                                    <span class="f-9"> <strong>({{prod.stock}})</strong> - {{ prod.name }}
+                  </span>
+                                    <md-tooltip ngbTooltip="Error en la Cantidad" *ngIf="prod.quantity > prod.stock">
+                                        Cantidad Incorrecta
+                                    </md-tooltip>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles de al Entrega</label>
+                        <textarea placeholder="Ingrese Detalles Importantes" class="form-control f-9" name="description" rows="7" [(ngModel)]="Entrega.description" required></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer" style="width:100%;">
+        <div class="text-right">
+            <button *ngIf="!cam" type="button" class="btn btn-primary btn-sm" (click)="save()" [disabled]="!FormDotacion.valid">
+        Reportar Entrega de Dotación
+      </button>
+        </div>
+    </div>
+</app-modal-basic>
+<!-- fin modal entrega dotacion -->
+
+
+<ng-template #rt3 let-r="result" let-t="term">
+    <span class="f-9">{{ r.Nombres }} {{ r.Apellidos }}</span>
+</ng-template>
+<!--
+<swal #confirmacionDevolucion [options]="alertOptionDevolucion"></swal>
+<swal #confirmacionEntrega [options]="alertOptionEntrega"></swal>
+<swal #Swal title="" text="" type=""></swal>
+ -->
+<script>
+    function Seta(cantidad, Totales) {
+        alert('prohibido');
+        cantidad = parseInt(cantidad);
+        Totales = parseInt(Totales);
+        if (cantidad > 0 || cantidad < Totales) {
+            alert('prohibido 2');
+            return false;
+        } //CANTIDAD
+    }
+</script>
+
+
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

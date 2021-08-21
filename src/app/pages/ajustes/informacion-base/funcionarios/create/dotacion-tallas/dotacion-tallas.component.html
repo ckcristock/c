@@ -1,0 +1,54 @@
+<form [formGroup]="formDotation" (ngSubmit)="save()">
+    <div class="form-row">
+        <div class="col-md-5 offset-1">
+            <div class="form-group row mt-3">
+                <label for="talla_camisa" class="col-md-4 col-form-label custom-label text-right">Talla de camisa</label>
+                <select class="form-control custom-control col-md-7" formControlName="shirt_size">
+          <option *ngFor="let shirt of shirtSize" [value]="shirt.value">{{shirt.text}}</option>
+        </select>
+                <div class="col-md-12 offset-4" *ngIf="shirt_size_invalid">
+                    <small class="invalid text-danger"> Es nesaria la talla
+          </small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="form-group row mt-3">
+                <label for="talla_pantalon" class="col-md-4 col-form-label custom-label text-right">Talla de pantalón</label>
+                <select class="form-control custom-control col-md-7" formControlName="pants_size">
+          <option *ngFor="let pant of pantSizes" [value]="pant.value">{{pant.text}}</option>
+        </select>
+                <div class="col-md-7 offset-4" *ngIf="pants_size_invalid">
+                    <small class="invalid text-danger"> Es nesaria la talla
+          </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row ">
+        <div class="col-md-5 offset-1">
+            <div class="form-group row mt-3">
+                <label for="talla_botas" class="col-md-4 col-form-label custom-label text-right">Tall de calzado</label>
+                <select class="form-control custom-control col-md-7" v-model="dotacion.talla_botas" formControlName="shue_size">
+          <option *ngFor="let shue of shueSizes" [value]="shue.value">{{shue.text}}</option>
+        </select>
+                <div class="col-md-7 offset-4" *ngIf="shue_size_invalid">
+                    <small class="invalid text-danger"> Es nesaria la dependencia
+          </small>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-sm btn-primary" [disabled]="(saving)" (click)="previus()">Anterior</button>
+            <!--  <button type="submit" class="btn btn-sm btn-primary"> Siguiente</button> -->
+
+            <button type="submit" [disabled]="(saving)" class="btn btn-primary btn-sm">
+                <span *ngIf="saving"  Class="spinner-border spinner-border-sm" >  </span>
+                {{ saving ? ' Creando funcionario...' : 'Crear Funcionario' }}
+            </button>
+
+
+        </div>
+    </div>
+</form>

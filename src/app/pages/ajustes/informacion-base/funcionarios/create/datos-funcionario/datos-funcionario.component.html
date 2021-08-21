@@ -1,0 +1,363 @@
+<form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-row mt-3">
+        <div class="form-group col-md-2 text-center">
+            <img id="imageOutput" [src]="fileString" alt="Imagen del funcionario" class="d-block m-auto" />
+            <label for="image" class="subir-archivo mt-2">
+            Cargar imagen
+            <i class="simple-icon-doc"></i>
+      </label>
+
+            <input type="file" name="image" class="form-control-file" id="image" formControlName="image" (change)="onFileChanged($event)" [class.is-invalid]="image_valid" placeholder="Imagen" />
+
+            <div class="col-md-12 text-center text-danger" *ngIf="image_valid">
+                <small class="invalid">La imagen es necesaria</small>
+            </div>
+        </div>
+
+        <div class="col-md-6 text-left">
+            <div class="form-group row mt-3">
+                <label for="identidad" class="col-md-4 col-form-label custom-label text-right">Doc. de identidad</label
+        >
+        <input
+          type="text"
+          formControlName="identifier"
+          class="form-control custom-control col-md-7"
+          [class.is-invalid]="identifier_valid"
+          placeholder="Documento de identidad"
+        />
+
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger"
+          *ngIf="identifier_valid"> Es nesario el documento
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="nombres"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Primer Nombre</label
+        >
+        <input
+          type="text"
+          formControlName="first_name"
+          [class.is-invalid]="first_name_valid"
+          class="form-control custom-control col-md-7"
+          placeholder="Primer Nombre"
+        />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger"
+            *ngIf="first_name_valid"> Es nesario el primer nombre
+          </small>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label
+          for="nombres"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Segundo Nombre</label
+        >
+        <input
+          type="text"
+          formControlName="second_name"
+          [class.is-invalid]="second_name_valid"
+          class="form-control custom-control col-md-7"
+          placeholder="Segundo nombre"
+        />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger"
+            *ngIf="second_name_valid"> Es nesario el segundo nombre
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="apellidos"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Primer Apellido</label
+        >
+        <input
+          type="text"
+          formControlName="first_surname"
+          [class.is-invalid]="first_surname_valid"
+          class="form-control custom-control col-md-7"
+          placeholder="Primer Apellido"
+        />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger"
+          *ngIf="first_surname_valid"> Es nesario el primer apellido
+        </small>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label
+          for="apellidos"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Segundo Apellidos</label
+        >
+        <input
+          type="text"
+          formControlName="second_surname"
+          [class.is-invalid]="second_surname_valid"
+          class="form-control custom-control col-md-7"
+          placeholder="Segundo Apellido"
+        />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger"
+          *ngIf="second_surname_valid"> Es nesario el segundo apellido
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="email"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Correo electrónico</label
+        >
+        <input
+          type="email"
+          class="form-control custom-control col-md-7"
+          formControlName="email"
+          [class.is-invalid]="email_valid"
+          placeholder="Ej: genetic@example.com"
+        />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger"
+          *ngIf="email_valid"> Es nesario el correo electrónico
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="fecha_nacimiento"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Fecha de nacimiento</label
+        >
+        <input
+          type="date"
+          formControlName="date_of_birth"
+          [class.is-invalid]="date_of_birth_valid"
+          class="form-control col-md-7"
+          id=""
+        />
+        <div class="col-md-7 offset-4">
+          <small class="invalid  text-danger"
+          *ngIf="date_of_birth_valid"> Es nesaria la fecha de nacimiento
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="lugar_nacimiento"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Lugar de nacimiento</label
+        >
+        <input
+          type="text"
+          [class.is-invalid]="place_of_birth_valid"
+          class="form-control custom-control col-md-7"
+          formControlName="place_of_birth"
+        />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger"
+          *ngIf="place_of_birth_valid"> Es el lugar de nacimiento
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="direccion_residencia"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Dirección residencia</label
+        >
+        <input
+          type="text"
+          class="form-control custom-control col-md-7"
+          [class.is-invalid]="direction_valid"
+          formControlName="direction"
+        />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger"
+          *ngIf="direction_valid"> Es nesaria la dirección
+        </small>
+        </div>
+      </div>
+
+   
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group row mt-3">
+        <label
+          for="telefono"
+          class="col-md-3 col-form-label custom-label text-right"
+          >Teléfono</label
+        >
+        <input
+          type="text"
+          [class.is-invalid]="phone_valid"
+          formControlName="phone"
+          class="form-control custom-control col-md-7"
+        />
+        <div class="col-md-7 offset-4">
+          <small class=" invalid text-danger"
+          *ngIf="phone_valid"> Es nesario el teléfono
+        </small>
+
+        </div>
+      </div>
+      <div class="form-group row ">
+        <label
+          for="sexo"
+          class="col-md-3 col-form-label custom-label text-right"
+          >Género</label
+        >
+        <select
+          class="form-control custom-control col-md-7"
+          [class.is-invalid]="gener_valid"
+          formControlName="gener"
+        >
+          <option selected value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+        </select>
+        <div class="col-md-7 offset-3">
+          <small class="invalid text-danger"
+          *ngIf="gener_valid"> Es nesario el género
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="tipo_sangre"
+          class="col-md-3 col-form-label custom-label text-right"
+          >T. Sangre</label
+        >
+        <select
+          class="form-control custom-control col-md-7"
+          [class.is-invalid]="blood_type_valid"
+          formControlName="blood_type"
+        >
+          <option *ngFor="let tipo of tipoSangre" [value]="tipo.valor">
+            {{ tipo.clave }}
+          </option>
+        </select>
+        <div class="col-md-7 offset-3">
+          <small class="invalid text-danger"
+          *ngIf="blood_type_valid"> Es nesario el tipo de sangre
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="celular"
+          class="col-md-3 col-form-label custom-label text-right"
+          >Celular</label
+        >
+        <input
+          type="text"
+          [class.is-invalid]="cell_phone_valid"
+          formControlName="cell_phone"
+          class="form-control custom-control col-md-7"
+        />
+        <small class="invalid col-md-7 offset-3
+	       text-danger"
+	  *ngIf="cell_phone_valid">
+	    Es necesario el celular
+	</small>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="estado_civil"
+          class="col-md-3 col-form-label custom-label text-right"
+          >Est. Civil</label
+        >
+        <select
+          formControlName="marital_status"
+          [class.is-invalid]="marital_status_valid"
+          class="form-control custom-control col-md-7"
+        >
+          <option *ngFor="let estado of estados" [value]="estado.valor">
+            {{ estado.clave }}
+          </option>
+        </select>
+        <div class="col-md-7 offset-3">
+          <small class="invalid text-danger"
+          *ngIf="marital_status_valid"> Es nesario el est. civil
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="numero_hijos"
+          class="col-md-3 col-form-label custom-label text-right"
+          ># Hijos</label
+        >
+        <input
+          type="number"
+          formControlName="number_of_children"
+          [class.is-invalid]="number_of_children_valid"
+          class="form-control custom-control col-md-7"
+        />
+        <div class="col-md-7 offset-3">
+          <small class="invalid text-danger"
+          *ngIf="number_of_children_valid"> Es nesario el # Hijos
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="grado_instruccion"
+          class="col-md-3 col-form-label custom-label text-right"
+          >Grado</label
+        >
+        <select
+          formControlName="degree"
+          [class.is-invalid]="degree_valid"
+          class="form-control custom-control col-md-7"
+        >
+          <option *ngFor="let grado of instruccion" [value]="grado.valor">
+            {{ grado.clave }}
+          </option>
+        </select>
+        <div class="col-md-7 offset-3" >
+          <small class="invalid text-danger"
+          *ngIf="degree_valid"> Es nesario el grado
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label
+          for="titulo_estudio"
+          class="col-md-3 col-form-label custom-label text-right"
+          >Título</label
+        >
+        <input
+          type="text"
+          formControlName="title"
+          [class.is-invalid]="title_valid"
+          class="form-control custom-control col-md-7"
+        />
+        <div class="col-md-7 offset-3">
+          <small class="invalid text-danger"
+          *ngIf="title_valid"> Es nesario el título
+        </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 text-right mt-4">
+      <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
+    </div>
+  </div>
+</form>

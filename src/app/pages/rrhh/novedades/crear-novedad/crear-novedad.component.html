@@ -1,0 +1,70 @@
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <div class="row">
+            <h5 class=" text text-center justify-content-center modal-title   p-1">Crear/Editar Novedad
+            </h5>
+        </div>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form" (ngSubmit)="save()">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="funcionario_id">Funcionario</label>
+                    <ng-select formControlName="person_id" [items]="people" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                    </ng-select>
+                    <small class="invalid text-danger" *ngIf="person_id_invalid"> 
+                Es nesario el funcionario
+            </small>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="contable_licencia_incapacidad_id">Novedad</label>
+                    <ng-select formControlName="disability_leave_id" [items]="disabilityLeaves" bindLabel="text" (change)="obtenerTipoNovedad($event.value)" bindValue="value" loadingText="loading" ngDefaultControl>
+                    </ng-select>
+                    <div class="col-md-7 offset-4">
+                        <small class="invalid text-danger" *ngIf="disability_leave_id_invalid"> Es nesaria la novedad
+                </small>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="tipo">Tipo de Novedad </label>
+                    <input type="text" name="tipo" formControlName="disability_type" class="form-control custom-control" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="fecha_inicio">Fecha de Inicio</label>
+                    <input type="date" formControlName="date_start" class="form-control custom-control" />
+                    <small class="invalid text-danger" *ngIf="date_start_invalid"> Es nesaria la fecha de inicio
+                </small>
+
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="fecha_fin">Fecha de Fin</label>
+                    <input type="date" formControlName="date_end" class="form-control custom-control" />
+                    <small class="invalid text-danger" *ngIf="date_end_invalid"> Es nesaria la fecha de fin
+                </small>
+
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label class="custom-label" for="observacion">Observación</label>
+                    <textarea name="observación" formControlName="observation" rows="5" class="form-control custom-control"></textarea>
+                    <small class="invalid text-danger" *ngIf="observation_invalid"> Es nesaria la observación
+                </small>
+                </div>
+            </div>
+            <div class="form-group text-right">
+                <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2">Cerrar</button>
+                <button type="submit" class="btn btn-primary raised">Guardar Novedad</button>
+            </div>
+        </form>
+    </div>
+
+</app-modal-basic>

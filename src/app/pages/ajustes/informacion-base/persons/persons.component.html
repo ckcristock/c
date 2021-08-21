@@ -1,0 +1,260 @@
+<div class="row">
+    <div class="col12">
+
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row ">
+                    <div class="col-12 ">
+                        <h4 class="">Datos de persons</h4>
+                    </div>
+
+                </div>
+                <div class="row  d-flex align-items-baseline mb-4">
+                    <div class="col-6">
+                        <button (click)="getData();newModal.show()" class="btn btn-primary btn-sm">
+                            <i class="fa fa-user-md"></i>
+                            Nuevo Profesional</button>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="inputPassword6">Buscar:</label>
+                                <input type="password" id="inputPassword6" placeholder="Buscador de persons" class="form-control mx-sm-3" aria-describedby="passwordHelpInline">
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div class="">
+                    <table class="table table-hover mb-0 table-centered table-nowrap ">
+                        <thead class="thead-dark ">
+                            <tr>
+                                <th>Identificación</th>
+                                <th>Nombres</th>
+                                <th>Ciudad</th>
+                                <th>Empresa</th>
+                                <th>Estado</th>
+                                <th class="text-right "> </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of persons ">
+                                <td>
+                                    <p class="font-size-14 mb-0 ">{{item.identification}}</p>
+                                </td>
+                                <td>
+                                    <p class="font-size-14 mb-0 ">{{item.city}}</p>
+                                </td>
+                                <td>
+                                    <p class="font-size-14 mb-0 ">{{item.names}}</p>
+                                </td>
+                                <td>
+                                    <p class="font-size-14 mb-0 ">{{item.company}}</p>
+                                </td>
+                                <td>
+                                    <p class="font-size-14 mb-0 ">{{item.state}}</p>
+                                </td>
+
+                                <td class="text-right ">
+
+                                    <div class="btn-group " role="group " ngbDropdown>
+                                        <button id="btnGroupVerticalDrop1 " type="button " class="btn btn-primary btn-sm dropdown-toggle " ngbDropdownToggle>
+                                            Acciones <i class="mdi mdi-chevron-down "></i>
+                                        </button>
+                                        <div style="cursor: pointer; " class="dropdown-menu font-weight-bolder " aria-labelledby="btnGroupVerticalDrop1 " ngbDropdownMenu>
+                                            <a class="dropdown-item "> <i class="fa fa-search mr-2 "></i>Ver más</a>
+                                            <a class="dropdown-item "> <i class="fa fa-edit mr-2 "></i>Editar </a>
+                                            <a class="dropdown-item "> <i class="fa fa-ban mr-2 "></i>Suspender </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row align-items-right mt-2 ">
+                    <!--      <div class="col-sm-12 col-md-5 ">
+                        <div class="dataTables_info mb-2 " id="tickets-table_info " role="status " aria-live="polite ">Showing entries
+                        </div>
+                    </div> -->
+                    <div class="col-sm-12 ">
+                        <div class="text-md-right float-md-right pagination-rounded ">
+                            <ngb-pagination [collectionSize]="pagination.collectionSize " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination "></ngb-pagination>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<app-modal-basic #newModal [dialogClass]="'modal-lg modal-full'">
+    <div class="app-modal-header">
+        <div class="row">
+            <h4 class=" text text-center justify-content-center modal-title   px-3">
+                Nuevo Profesional
+            </h4>
+            <button type="button" class="close basic-close" (click)="newModal.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <div class="app-modal-body">
+        <form #formP="ngForm">
+            <div class="row">
+                <div class="col-3 mb-2">
+                    <label for="validationServerUsername">Tipo Ident.</label>
+                    <div class="input-group">
+                        <ng-select class="col-12 m-0 p-0" [items]="typesDocuments" bindLabel="text" bindValue="value" ngModel name="type_document_id" loadingText="loading" ngDefaultControl>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-3 mb-2">
+                    <label for="identifier">Identificación</label>
+                    <div class="input-group">
+                        <input ngModel type="text" name="identifier" class="form-control" id="identifier" required>
+                    </div>
+                </div>
+                <div class="col-3 mb-2">
+                    <label for="first_name">Primer Nombre</label>
+                    <div class="input-group">
+                        <input ngModel name="first_name" type="text" class="form-control" id="first_name" required>
+                    </div>
+                </div>
+                <div class="col-3 mb-2">
+                    <label for="second_name">Segundo Nombre</label>
+                    <div class="input-group">
+                        <input type="text" ngModel name="second_name" class="form-control" id="second_name" required>
+                    </div>
+                </div>
+                <div class="col-3 mb-2">
+                    <label for="first_surname">Primer Apellido</label>
+                    <div class="input-group">
+                        <input type="text" ngModel name="first_surname" class="form-control" id="first_surname" required>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="second_surname">Segundo Apellido</label>
+                    <div class="input-group">
+                        <input type="text" ngModel name="second_surname" class="form-control" id="second_surname" required>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="date_of_birth">Fecha Nac.</label>
+                    <div class="input-group">
+                        <input type="date" ngModel name="date_of_birth" class="form-control" id="date_of_birth" required>
+                    </div>
+                </div>
+                <div class="col-3 mb-2">
+                    <label for="validationServerUsername">Est. Civil</label>
+                    <div class="input-group">
+                        <select class="custom-select " ngModel name="marital_status" required>
+                        <option [value]="type.value" *ngFor="let type of civilStates">{{type.name}}</option>
+                    </select>
+
+                    </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label for="validationServerUsername">IPS Principal</label>
+                    <div class="input-group">
+
+                        <ng-select class="col-12 m-0 p-0" [items]="companies" bindLabel="text" bindValue="value" ngModel name="company_id" loadingText="loading" ngDefaultControl>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-8 mb-2">
+                    <label for="validationServerUsername">Instuciones Hab.</label>
+                    <div class="input-group">
+                        <ng-select class="col-12 m-0 p-0" multiple="true" [items]="companies" bindLabel="text" bindValue="value" ngModel name="companies" loadingText="loading" ngDefaultControl>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label for="validationServerUsername">Departamento</label>
+                    <div class="input-group">
+                        <ng-select class="col-12 m-0 p-0" [items]="departments" (change)="getCities($event)" bindLabel="text" bindValue="value" ngModel name="department_id" loadingText="loading" ngDefaultControl>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="municipality_id">Municipio</label>
+                    <div class="input-group">
+                        <ng-select class="col-12 m-0 p-0" id="municipality_id" [items]="cities" bindLabel="text" bindValue="value" ngModel name="municipality_id" loadingText="loading" ngDefaultControl>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-5 mb-2">
+                    <label for="specialities">Especialidades</label>
+                    <div class="input-group">
+                        <ng-select class="col-12 m-0 p-0" id="specialties" [items]="specialities" bindLabel="text" bindValue="value" multiple="true" ngModel name="specialities" loadingText="loading" ngDefaultControl>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="email">Correo</label>
+                    <div class="input-group">
+                        <input type="text" ngModel name="email" class="form-control" id="email" required>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-2">
+                    <label for="cell_phone">Celular</label>
+                    <div class="input-group">
+                        <input type="text" ngModel name="cell_phone" class="form-control" id="cell_phone" required>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="phone">Telefono</label>
+                    <div class="input-group">
+                        <input type="text" ngModel name="phone" class="form-control" id="phone" required>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="validationServerUsername">Tipo Profesional</label>
+                    <div class="input-group">
+
+                        <ng-select class="col-12 m-0 p-0" [items]="peopleTypes" bindLabel="text" bindValue="value" ngModel name="people_type_id" loadingText="loading" ngDefaultControl>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="medical_record">Reg. Médico</label>
+                    <div class="input-group">
+                        <input type="text" ngModel class="form-control" name="medical_record" id="medical_record" required>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="image_blob">Foto</label>
+                    <div class="input-group">
+                        <input type="file" (change)="onFileSelected($event,image_blob)" class="form-control" id="image_blob" required>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="signature_blob">Firma</label>
+                    <div class="input-group">
+                        <input type="file" (change)="onFileSelected($event,signature_blob)" class="form-control" id="signature_blob" required>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-2">
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <div class="app-modal-footer ">
+        <div class="text-right  px-3">
+            <button (click)="guardar(formP)" class="btn btn-primary btn-block btn-sm">Guardar Profesional</button>
+        </div>
+    </div>
+</app-modal-basic>

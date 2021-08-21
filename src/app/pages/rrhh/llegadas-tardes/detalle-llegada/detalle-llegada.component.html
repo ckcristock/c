@@ -1,0 +1,22 @@
+<div [ngClass]="{  'display-none': (!person.selected ) } " colspan="6" class="text-center mt-2">
+    <table class="table table-hover table-bordered detalles">
+        <tr>
+            <td class="text-center"><strong>Fecha</strong></td>
+            <td class="text-center"><strong>Entrada Turno</strong></td>
+            <td class="text-center"><strong>Entrada real</strong></td>
+            <td class="text-center"><strong>Tiempo retraso</strong></td>
+
+        </tr>
+        <tr *ngFor="let late of person.late_arrivals">
+            <td class="text-center"><strong>{{late.created_at | date }}</strong>
+            </td>
+            <!--        <td class="text-center">
+                <strong>{{late.disability_leave.concept}}</strong>
+            </td> -->
+            <!-- <td class="text-center"><strong>{{late.observation}}</strong></td> -->
+            <td class="text-center"><strong>{{late.entry}}</strong></td>
+            <td class="text-center"><strong>{{late.real_entry}}</strong></td>
+            <td class="text-center"><strong>{{late.entry_diff}}</strong></td>
+        </tr>
+    </table>
+</div>

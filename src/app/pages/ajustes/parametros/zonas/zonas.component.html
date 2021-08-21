@@ -1,0 +1,67 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="open()">Agregar Zona</button>
+            <h5>Zonas</h5>
+            <p>Listados de las zonas de nuestra base de datos</p>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col" style="width: 50px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let zone of zones" [ngClass]="{'bg-danger text-white': (zone.status === 'Inactivo' )}">
+                    <td scope="row"> {{ zone.name }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getZone(zone); modal.show()"><i
+                                            class="fa fa-file-pdf-o"></i>Editar</a>
+                                    <a *ngIf="zone.status === 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularOActivar(zone, 'Inactivo')">
+                                        <i class="fa fa-pencil"></i>Inactivar</a>
+                                    <a *ngIf="zone.status === 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularOActivar(zone, 'Activo')">
+                                        <i class="fa fa-pencil"></i>Activar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getAllZones($event)" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <div class="row">
+            <h5 class=" text text-center justify-content-center modal-title p-1">Nueva Zona</h5>
+        </div>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form" (ngSubmit)="createZone()">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label class="custom-label" for="funcionario_id">Nombre de zona</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="zone.name" [class.is-invalid]="name_valid" formControlName="name" required>
+                    <div class="col-md-7 offset-4">
+                        <small class="invalid text-danger" *ngIf="name_valid"> Es necesario el nombre 
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group text-right">
+                    <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+                    <button type="submit" class="btn btn-primary btn-sm raised">Guardar Zona</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>

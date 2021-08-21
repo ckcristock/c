@@ -1,0 +1,63 @@
+<form [formGroup]="formPrestation" (ngSubmit)="save()">
+
+    <div class="form-row">
+        <div class="col-md-5 offset-1">
+            <div class="form-group row mt-4">
+                <label for="eps_id" class="col-md-4 col-form-label custom-label text-right">EPS</label>
+
+                <ng-select class="col-md-7 p-0" formControlName="eps_id" [items]="epss" bindLabel="text"
+                    bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+
+                <div class="col-md-7 offset-4" *ngIf="eps_id_invalid">
+                    <small class="invalid text-danger"> Es nesaria la EPS
+                    </small>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="compensation_id" class="col-md-4 col-form-label custom-label text-right">C
+                    Compensación</label>
+                <ng-select class="col-md-7 p-0" formControlName="compensation_fund_id" [items]="compensationFunds" bindLabel="text"
+                    bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+
+                <div class="col-md-7 offset-4" *ngIf="compensation_fund_id_invalid">
+                    <small class="invalid text-danger"> Es nesaria la Caja de compensación
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="form-group row mt-4">
+                <label for="cesantias_id" class="col-md-4 col-form-label custom-label text-right">Fondo
+                    Cesantías</label>
+                <ng-select class="col-md-7 p-0" formControlName="severance_fund_id" [items]="severanceFunds" bindLabel="text"
+                    bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+
+                <div class="col-md-7 offset-4" *ngIf="severance_fund_id_invalid">
+                    <small class="invalid text-danger"> Es nesaria el fondo de cesantías
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="pensiones_id" class="col-md-4 col-form-label custom-label text-right">Fondo
+                    Pensiones</label>
+                    <ng-select class="col-md-7 p-0" formControlName="pension_fund_id" [items]="pensionFunds" bindLabel="text"
+                    bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+
+                <div class="col-md-7 offset-4" *ngIf="pension_fund_id_invalid">
+                    <small class="invalid text-danger"> Es nesario el fondo de pensión
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-between">
+            <button type="button" class="btn btn-sm btn-primary" (click)="previus()">Anterior</button>
+            <button type="submit" class="btn btn-sm btn-primary"> Siguiente</button>
+        </div>
+    </div>
+</form>

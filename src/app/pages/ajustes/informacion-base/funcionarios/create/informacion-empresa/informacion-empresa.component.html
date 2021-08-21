@@ -1,0 +1,150 @@
+<form [formGroup]="formCompany" (ngSubmit)="save()">
+  <div class="form-row mt-4">
+    <div class="col-md-5 offset-1">
+      <div class="form-group row">
+        <label for="dependency_id" class="col-md-4 col-form-label text-right">Empresa</label>
+
+        <ng-select class="col-md-7 p-0" formControlName="company_id" [items]="companies" bindLabel="text"
+          bindValue="value" loadingText="loading " ngDefaultControl>
+        </ng-select>
+
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger" *ngIf="company_id_invalid"> Es nesaria la empresa
+          </small>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="dependency_id" class="col-md-4 col-form-label text-right">Grupo</label>
+        <ng-select class="col-md-7 p-0" formControlName="group_id" (change)="getDependencies($event.value)"
+          [items]="groups" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+        </ng-select>
+
+        <div class="col-md-7 offset-4" *ngIf="group_id_invalid">
+          <small class="invalid text-danger"> Es nesario el grupo
+          </small>
+        </div>
+
+      </div>
+      <div class="form-group row">
+        <label for="dependency_id " class="col-md-4 col-form-label custom-label text-right">Dependencia</label>
+
+        <ng-select class="col-md-7 p-0" formControlName="dependency_id" (change)="getPositions($event.value)"
+          [items]="dependencies" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+        </ng-select>
+
+        <div class="col-md-7 offset-4" *ngIf="dependency_id_invalid">
+          <small class="invalid text-danger"> Es nesaria la dependencia
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="cargo_id" class="col-md-4 col-form-label custom-label text-right">Cargo</label>
+        <ng-select class="col-md-7 p-0" formControlName="position_id" [items]="positions" bindLabel="text"
+          bindValue="value" loadingText="loading" ngDefaultControl>
+        </ng-select>
+
+        <div class="col-md-7 offset-4" *ngIf="position_id_invalid">
+          <small class="invalid text-danger"> Es nesario el cargo
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="salario" class="col-md-4 col-form-label custom-label text-right">Salario</label>
+        <input type="number" name="salario" formControlName="salary" class="form-control custom-control col-md-7" />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger" *ngIf="salary_invalid"> Es nesario el salario
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <div class="form-group row">
+        <label for="fecha_ingreso" class="col-md-4 col-form-label custom-label text-right">Fecha de Ingreso</label>
+        <input type="date" formControlName="date_of_admission" class="form-control custom-control col-md-7" />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger" *ngIf="date_of_admission_invalid"> Es nesaria la fecha de ingreso
+          </small>
+        </div>
+
+      </div>
+
+      <div class="form-group row">
+        <label for="work_contract_type_id" class="col-md-4 col-form-label text-right">Tipo de Contrato</label>
+        <ng-select class="col-md-7 p-0" formControlName="work_contract_type_id" [items]="workContractTypes"
+          bindLabel="text" bindValue="value" loadingText="loading" (change)="workContractTypesChanged($event.conclude)"
+          ngDefaultControl>
+        </ng-select>
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger" *ngIf="work_contract_type_id_invalid"> Es nesario el tipo de contrato
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group row" *ngIf="conludeContract">
+        <label for="fecha_retiro" class="col-md-4 col-form-label custom-label text-right">Fecha de retiro</label>
+        <input type="date" formControlName="date_end" class="form-control custom-control col-md-7" id="" />
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger" *ngIf="date_end_invalid"> Es nesaria la fecha de retiro
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="tipo_turno" class="col-md-4 col-form-label custom-label text-right">Tipo de Turno</label>
+        <select formControlName="turn_type" class="form-control custom-control col-md-7"
+          (change)="turnChanged($event.target.value)">
+          <option [value]="turn.value" *ngFor="let turn of turnos">
+            {{ turn.text }}
+          </option>
+        </select>
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger" *ngIf="turn_type_invalid"> Es nesario el tipo de turno
+          </small>
+        </div>
+
+      </div>
+      <div class="form-group row" *ngIf="turnSelected == 'Rotativo'">
+        <label for="turno_fijo_id " class="col-md-4 col-form-label custom-label text-right">Turno Asignado</label>
+        <ng-select class="col-md-7 p-0" formControlName="rotating_turn_id" [items]="rotatingTurns" bindLabel="text"
+          bindValue="value" loadingText="loading" ngDefaultControl>
+        </ng-select>
+
+
+        <div class="col-md-7 offset-4">
+          <small class="invalid text-danger" *ngIf="rotating_turn_id_invalid"> Es nesario el turno
+          </small>
+        </div>
+      </div>
+      <!--
+      <div class="form-group row">
+        <label
+          for="jefe "
+          class="col-md-4 col-form-label custom-label text-right"
+          >Jefe Directo</label
+        >
+        <select
+          name="turno_fijo_id "
+          class="form-control custom-control col-md-7"
+        >
+          <option
+            [value]="dependency.id"
+            *ngFor="let dependency of dependencies"
+          >
+            {{ dependency.name }}
+          </option>
+        </select>
+
+        <div class="col-md-12 text-center">
+          <small class="invalid"></small>
+        </div>
+      </div>-->
+    </div>
+    <div class="col-12 d-flex justify-content-between">
+      <button type="button" class="btn btn-sm btn-primary" (click)="previus()">Anterior</button>
+      <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
+    </div>
+  </div>
+</form>

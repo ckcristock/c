@@ -1,0 +1,145 @@
+<!-- <div class="page-body">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 *ngIf="!Editar">Creacion de Formularios</h4>
+                <h4 *ngIf="Editar">Editar Formulario</h4>
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Nombre Formulario</label>
+                            <input [(ngModel)]="Formulario.Nombre" type="text" id="Funcionario"
+                                class="form-control form-control-sm" placeholder="Nombre">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Descripción</label>
+                        <textarea [(ngModel)]="Formulario.Descripcion" class="form-control" name="Descripcion_Proceso"
+                            placeholder="Descripcion Formulario" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mt-3 mb-2">
+                        <h5>Preguntas del Formularios</h5>
+                    </div>
+                </div>
+
+                <ng-container *ngFor="let item of Preguntas; let i=index; let isLasted = last">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Pregunta #{{i+1}}</label>
+                                <input [disabled]="item.Estado == 'Inactivo'" type="text" id="pregunta"
+                                    class="form-control form-control-sm" placeholder="Nombre"
+                                    [(ngModel)]="item.Pregunta">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>Valor</label>
+                                <input [disabled]="item.Estado == 'Inactivo'" type="number" id="Valor"
+                                    class="form-control form-control-sm" placeholder="Valor" [(ngModel)]="item.Valor">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Tipo Pregunta</label>
+                                        <select (change)="TipoPregunta($event.target.value,Preguntas, item, i)"
+                                            [disabled]="item.Estado == 'Inactivo'" id="Tipos"
+                                            class="form-control form-control-sm" [(ngModel)]="item.Tipo">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                            <option *ngFor="let Tipo of Tipos" [value]="Tipo.id">{{Tipo.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12" *ngIf="item.Tipo == '2' || item.Tipo == '3'">
+                                    <ng-container *ngFor="let it of item.Respuestas; let j=index; let isLast = last">
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <input [disabled]="it.Estado == 'Inactivo'" type="text" id="opcion"
+                                                    class="form-control form-control-sm" [(ngModel)]="it.Respuesta"
+                                                    placeholder="Opcion">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input [disabled]="it.Estado == 'Inactivo'" type="text" id="valor"
+                                                    class="form-control form-control-sm" [(ngModel)]="it.Valor"
+                                                    placeholder="Valor">
+                                            </div>
+                                            <div *ngIf="it.Estado == 'Activo'" class="col-md-1">
+                                                <a (click)="EstadoRespuesta(it,item,j)"><i class="fa fa-minus-square"
+                                                        aria-hidden="true"></i></a>
+                                            </div>
+                                            <div *ngIf="it.Estado == 'Inactivo'" class="col-md-1">
+                                                <a (click)="EstadoRespuesta(it,item,j)"><i class="fa fa-check"
+                                                        aria-hidden="true"></i></a>
+                                            </div>
+                                            <div class="col-md-1" *ngIf="isLast">
+                                                <a (click)="AgregarRespuesta(item)"><i class="fa fa-plus-square-o"
+                                                        aria-hidden="true"></i></a>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="item.Estado == 'Inactivo'" class="col-md-1">
+                            <a [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Activar esta pregunta' , type:'warning', showCancelButton: true,        confirmButtonText: 'Si, Activar', cancelButtonText:'Dejame verificar'}"
+                                (confirm)="EstadoPregunta(item)">
+                                <i class="fa fa-check fa-2x mt-4" style="color: rgba(0, 110, 255, 0.767);"
+                                    aria-hidden="true"></i></a>
+                        </div>
+                        <div *ngIf="item.Estado == 'Activo'" class="col-md-1">
+                            <a [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Desactivar esta pregunta' , type:'warning', showCancelButton: true,        confirmButtonText: 'Si, Desactivar', cancelButtonText:'Dejame verificar'}"
+                                (confirm)="EstadoPregunta(item)">
+                                <i class="fa fa-minus-square fa-2x mt-4" style="color: red;" aria-hidden="true"></i></a>
+                        </div>
+                        <div *ngIf="!Editar">
+                            <a (click)="QuitarPregunta(item,i)"><i class="fa fa-minus-square fa-2x mt-4"
+                                    style="color: red;" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+
+                </ng-container>
+                <div>
+                    <a (click)="AgregarPregunta(item)"><i class="fa fa-plus-square fa-2x"
+                            style="color: rgba(0, 110, 255, 0.767);" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div *ngIf="!Editar" class="text-right">
+                <button type="button" class="btn btn-primary btn-sm mr-2" [swal]="{ title: '¿Está Seguro?',
+                        text              : 'Se dispone a Guardar un Formulario?',
+                        type              : 'warning',
+                        showCancelButton  : true ,
+                        confirmButtonText : 'Si, Generar',
+                        cancelButtonText  : 'No, Dejame Comprobar!' }" (confirm)="GuardarFormulario()">
+                    Guardar
+                </button>
+            </div>
+            <div *ngIf="Editar" class="text-right">
+                <button type="button" class="btn btn-primary btn-sm mr-2" [swal]="{ title: '¿Está Seguro?',
+                      text              : 'Se dispone a Editar un Formulario?',
+                      type              : 'warning',
+                      showCancelButton  : true ,
+                      confirmButtonText : 'Si, Editar',
+                      cancelButtonText  : 'No, Dejame Comprobar!' }" (confirm)="GuardarFormulario()">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+    <swal #confirmacionSwal title="" text="" type=""></swal>
+
+    <swal #Swal title="" text="" type=""></swal> -->

@@ -1,0 +1,164 @@
+<div class="card-body">
+    <div class="card-title">
+        <div class="row">
+            <div class="col-6">
+                <h5>Datos de empresa</h5>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModal()">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p class="font-weight-bold text-mute item-subtitle">
+                    Empresa
+                </p>
+                <p class="font-weight-bold text-mute item-subtitle">
+                    Grupo
+                </p>
+                <p class="font-weight-bold text-mute item-subtitle">
+                    Dependencia
+                </p>
+                <p class="font-weight-bold text-mute item-subtitle">
+                    Cargo
+                </p>
+
+                <p class="font-weight-bold text-mute item-subtitle">
+                    Riesgo
+                </p>
+
+                <p class="font-weight-bold text-mute item-subtitle">
+                    Tipo de turno
+                </p>
+                <p class="font-weight-bold text-mute item-subtitle">
+                    Turno asignado
+                </p>
+            </div>
+            <div class="col-md-7 offset-1 item-data">
+                <p class="font-weight-bold">
+                    {{ empresa.company_name }}
+                </p>
+                <p class="font-weight-bold">
+                    {{ empresa.group_name }}
+                </p>
+                <p class="font-weight-bold">
+                    {{ empresa.dependency_name }}
+                </p>
+                <p class="font-weight-bold">
+                    {{ empresa.position_name }}
+                </p>
+
+                <p class="font-weight-bold">
+                    asdasdasd
+                </p>
+
+                <p class="font-weight-bold">
+                    {{ empresa.turn_type }}
+                </p>
+                <p class="font-weight-bold">
+                    {{ empresa.fixed_turn_name }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <div class="row">
+            <div class="col">
+                <h5>Edición datos de empresa</h5>
+            </div>
+            <div class="col" style="float: right;">
+                <i class="fas fa-times" (click)="modal.hide()"></i>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-body">
+        <div class="row mt-3">
+            <div class="col-12">
+                <form [formGroup]="form">
+                    <div class="form-row mt-3">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-4 custom-label col-form-label text-right" for="dependencia">Dependencia</label>
+                                <select name="" [class.is-invalid]="dependency_valid" formControlName="dependency" class="form-select form-control custom-control col-md-7" id="dependencia">
+                                    <option selected>Seleccionar</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                <div class="col-md-7 offset-4">
+                                    <small class="invalid text-danger" *ngIf="dependency_valid"> Es necesario el tipo de dependencia
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 custom-label col-form-label text-right" for="riesgo">Riesgo</label>
+                                <select name="" [class.is-invalid]="risks_valid" formControlName="risks" class="form-select form-control custom-control col-md-7" id="riesgo">
+                                    <option selected>Seleccionar</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                <div class="col-md-7 offset-4">
+                                    <small class="invalid text-danger" *ngIf="risks_valid"> Es necesario el tipo de riesgo 
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 custom-label col-form-label text-right" for="turno_asignado">Turno asignado</label>
+                                <select name="" [class.is-invalid]="assigned_turn_valid" formControlName="assigned_turn" class="form-select form-control custom-control col-md-7" id="turno_asignado">
+                                    <option selected>Seleccionar</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                <div class="col-md-7 offset-4">
+                                    <small class="invalid text-danger" *ngIf="assigned_turn_valid"> Es necesario el tipo turno asignado 
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-4 custom-label col-form-label text-right" for="cargo">Cargo</label>
+                                <select name="" [class.is-invalid]="position_valid" formControlName="position" class="form-select form-control custom-control col-md-7" id="cargo">
+                                    <option selected>Seleccionar</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                <div class="col-md-7 offset-4">
+                                    <small class="invalid text-danger" *ngIf="position_valid"> Es necesario el tipo cargo 
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 custom-label col-form-label text-right" for="turno">Turno</label>
+                                <select name="" [class.is-invalid]="turn_valid" formControlName="turn" class="form-select form-control custom-control col-md-7" id="turno">
+                                    <option selected>Seleccionar</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                <div class="col-md-7 offset-4">
+                                    <small class="invalid text-danger" *ngIf="turn_valid"> Es necesario el tipo cargo 
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised">Actualizar</button>
+        </div>
+    </div>
+</app-modal-basic>

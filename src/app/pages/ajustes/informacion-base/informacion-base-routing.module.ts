@@ -16,7 +16,7 @@ const routes : Routes = [
     {path:'funcionario-crear',component:CreateComponent},
     {path:'regimenes-niveles',component:RegimenesNivelesComponent},
     {path:'aseguradoras',component:AseguradorasComponent},
-    {path:'estructura-empresa',component:EstructuraEmpresaComponent},
+    {path:'estructura-empresa',component:EstructuraEmpresaComponent}
 ]
 
 @NgModule({

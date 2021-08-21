@@ -1,23 +1,93 @@
-<div class="card">
-    <div class="card-body">
-        <ul ngbNav #customNav="ngbNav" [activeId]="1" class="nav-tabs nav-tabs-custom nav-justified">
-            <li [ngbNavItem]="1">
-                <a ngbNavLink> Información</a>
-                <ng-template ngbNavContent>
-                    <div class="mt-4">
-                        <app-building></app-building>
-
-                    </div>
-                </ng-template>
-            </li>
-            <li [ngbNavItem]="2">
-                <a ngbNavLink>Privilegios</a>
-                <ng-template ngbNavContent>
-                    <div class="mt-4">
-                        <app-permissions></app-permissions>
-                    </div>
-                </ng-template>
-            </li>
-        </ul>
-        <div [ngbNavOutlet]="customNav"></div>
+<div class="row ml-0 mb-4">
+    <div class="col text-left">
+        <button type="button" class="btn btn-primary btn-sm btnRegresar" (click)="regresar()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
     </div>
+</div>
+<div class="col-12 mb-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="row pt-3 pb-3">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12 text-center">
+                            <img [src]="funcionario.image | image" class="img-rounded" alt="">
+                        </div>
+                        <div class="row">
+                            <div class="col col-xs-12 text-xs-center ml-2">
+                                <h5 class="font-weight-bold mt-2">
+                                    {{ funcionario.first_name }} {{ funcionario.second_name }}
+                                    <br> {{ funcionario.first_surname }} {{ funcionario.second_surname }}
+                                </h5>
+                                <p class="mt-2">
+                                    <span>
+                                      {{ funcionario.title }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <strong>
+                                      {{ funcionario.signature }}
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center">
+                        <p class="font-weight-bold text-mute">
+                            Salario base
+                        </p>
+                        <img src="../../../../../../../assets/images/coin-icon.svg" class="iconV" alt="">
+                        <span class="salary-vacations-item"> 
+                            <strong>
+                               $ {{ funcionario.salary }}
+                            </strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center" style="margin-left: 50px;">
+                        <p class="font-weight-bold text-mute">
+                            Vaciones acumuladas
+                        </p>
+                        <img height="80" src="../../../../../../../assets/images/vacations-icon.svg" alt="">
+                        <div class="col">
+                            <span class="vacations-item"> 
+                                <strong>
+                                    22
+                                </strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 botones">
+                    <div class="col text-right">
+                        <div ngbDropdown class="dropdown-primary">
+                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                Más opciones
+                                <i class="mdi mdi-chevron-down"></i>
+                            </button>
+                            <div ngbDropdownMenu>
+                                <a class="dropdown-item waves-light waves-effect caja-botones" (click)="verComponent('informacion')">
+                                    <i class="fa fa-file-pdf-o"></i>Información Personal</a>
+                                <a class="dropdown-item waves-light waves-effect caja-botones" (click)="verComponent('documentos')">
+                                    <i class="fa fa-pencil"></i>Documentos</a>
+                                <a class="dropdown-item waves-light waves-effect caja-botones" (click)="verComponent('privilegios')">
+                                    <i class="fa fa-pencil"></i>Privilegios</a>
+                            </div>
+                            <button type="button" class="btn btn-danger btn-sm ml-3">Liquidar empleado</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-ver-funcionario *ngIf="components === 'informacion'"></app-ver-funcionario>
+<div class="card" *ngIf="components === 'privilegios'">
+    <div class="card-body">
+        <app-permissions></app-permissions>
+    </div>
+</div>

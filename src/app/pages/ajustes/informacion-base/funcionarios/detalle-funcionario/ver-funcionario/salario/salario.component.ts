@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { SalarioService } from './salario.service';
+import { consts } from 'src/app/core/utils/consts';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-salario',
@@ -10,10 +14,23 @@ export class SalarioComponent implements OnInit {
   @ViewChild('modal') modal:any;
   @ViewChild('modalBonus') modalBonus:any;
   form: FormGroup;
-  constructor( private fb:FormBuilder ) { }
+  formB: FormGroup;
+  data:any;
+  contract_types = consts.contract_type;
+  salary_info:any = {
+    salary: '',
+    contract_type: '',
+    date_of_admission: '',
+    date_end: ''
+  };
+  id:any;
+  constructor( private fb:FormBuilder, private salaryService: SalarioService, private activateRoute: ActivatedRoute ) { }
 
   ngOnInit(): void {
+    this.id = this.activateRoute.snapshot.params.id;
+    this.getSalaryInfo();
     this.createForm();
+    this.createFormBonus();
   }
 
   openModal(){
@@ -21,6 +38,7 @@ export class SalarioComponent implements OnInit {
   }
   openModalBonus(){
     this.modalBonus.show();
+    this.formB.reset();
   }
 
   createForm(){
@@ -28,55 +46,78 @@ export class SalarioComponent implements OnInit {
       type_contract: ['', Validators.required],
       salary: ['', Validators.required],
       date_of_admission: ['', Validators.required],
-      retirement_date: ['', Validators.required],
-      type_of_bonus: ['', Validators.required],
-      bonus: ['', Validators.required],
-      value: ['', Validators.required],
+      retirement_date: ['', Validators.required]
     }); 
   }
-
+  
   get type_contract_valid(){
     return (
-      this.form.get('type_contract') && this.form.get('type_contract').touched
-    );
-  }
+      this.form.get('type_contract').invalid && this.form.get('type_contract').touched
+      );
+    }
+    
+    get salary_valid(){
+      return (
+        this.form.get('salary').invalid && this.form.get('salary').touched
+        );
+      }
+      get date_of_admission_valid(){
+        return (
+      this.form.get('date_of_admission').invalid && this.form.get('date_of_admission').touched
+      );
+    }
 
-  get salary_valid(){
-    return (
-      this.form.get('salary') && this.form.get('salary').touched
-    );
-  }
-  get date_of_admission_valid(){
-    return (
-      this.form.get('date_of_admission') && this.form.get('date_of_admission').touched
-    );
-  }
-
-  get retirement_date_valid(){
-    return (
-      this.form.get('retirement_date') && this.form.get('retirement_date').touched
-    );
-  }
-/***************************** FORM SALARY ***********************/
-
-/***************************** FORM BONUS ***********************/
-
-  get type_of_bonus_valid(){
-    return (
-      this.form.get('type_of_bonus') && this.form.get('type_of_bonus').touched
-    );
-  }
-
-  get bonus_valid(){
-    return (
-      this.form.get('bonus') && this.form.get('bonus').touched
+    get retirement_date_valid(){
+      return (
+        this.form.get('retirement_date').invalid && this.form.get('retirement_date').touched
+        );
+      }
+      getSalaryInfo(){
+        this.salaryService.getSalaryInfo(this.id)
+        .subscribe( (res:any) => {
+          this.salary_info = res.data;
+        });
+      }
+      updateSalaryInfo(){
+        this.salaryService.updateSalaryInfo(this.salary_info)
+        .subscribe( res => {
+          this.modal.hide();
+          this.getSalaryInfo();
+          Swal.fire({
+            icon: 'success',
+            title: 'Editado con éxito',
+            text: 'Se han actualizado los cambios correctamente'
+          })
+        });
+      }
+      /***************************** FORM SALARY ***********************/
+      
+      /***************************** FORM BONUS ***********************/
+      
+      createFormBonus(){
+        this.formB = this.fb.group({
+          type_of_bonus: ['', Validators.required],
+          bonus: ['', Validators.required],
+          value: ['', Validators.required]
+        });
+      }
+      get type_of_bonus_valid(){
+        return (
+          this.formB.get('type_of_bonus').invalid && this.formB.get('type_of_bonus').touched
+          );
+        }
+        
+        get bonus_valid(){
+          return (
+      this.formB.get('bonus').invalid && this.formB.get('bonus').touched
     );
   }
 
   get value_valid(){
     return (
-      this.form.get('value') && this.form.get('value').touched
+      this.formB.get('value').invalid && this.formB.get('value').touched
     );
   }
+
 
 }

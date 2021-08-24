@@ -11,7 +11,7 @@
                 <input type="text" placeholder="Buscar código EPS" class="form-control form-control-sm col-sm-2" (change)="getAllEps()" [(ngModel)]="filtros.code" name="code" autocomplete="off">
             </div>
         </div>
-        <table class="table table-striped">
+        <table class="table table-striped" *ngIf="!loading && epss.length > 0; else notData">
             <thead>
                 <tr>
                     <th scope="col">Nombre</th>
@@ -91,3 +91,6 @@
         </form>
     </div>
 </app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

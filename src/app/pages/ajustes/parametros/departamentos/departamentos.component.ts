@@ -11,6 +11,7 @@ import { DepartamentosService } from './departamentos.service';
 export class DepartamentosComponent implements OnInit {
   @ViewChild('modalM') modalM:any;
   @ViewChild('modalD') modalD:any;
+  loading:boolean = false;
 
   municipios:any = [];
   munic:any = [];
@@ -87,6 +88,7 @@ export class DepartamentosComponent implements OnInit {
     this.municipality.department_id = '';
     this.municipality.codigo_dane = '';
     this.modalM.show();
+    this.formM.reset();
   }
   
   createNewMunicipality(){
@@ -144,6 +146,7 @@ export class DepartamentosComponent implements OnInit {
   openModalD(){
     this.department.name = '';
     this.modalD.show();
+    this.formD.reset();
   }
 
   getDepartment(department){
@@ -169,31 +172,31 @@ export class DepartamentosComponent implements OnInit {
 
   get name_department(){
     return (
-      this.formD.get('name') && this.formD.get('name').touched
+      this.formD.get('name').invalid && this.formD.get('name').touched
     )
   }
 
   get name_municipality(){
     return (
-      this.formM.get('name') && this.formM.get('name').touched
+      this.formM.get('name').invalid && this.formM.get('name').touched
     )
   }
 
   get code_municipality(){
     return (
-      this.formM.get('code') && this.formM.get('code').touched
+      this.formM.get('code').invalid && this.formM.get('code').touched
     )
   }
 
   get department_municipality(){
     return (
-      this.formM.get('department_id') && this.formM.get('department_id').touched
+      this.formM.get('department_id').invalid && this.formM.get('department_id').touched
     )
   }
 
   get code_dane_municipality(){
     return (
-      this.formM.get('code_dane') && this.formM.get('code_dane').touched
+      this.formM.get('code_dane').invalid && this.formM.get('code_dane').touched
     )
   }
 

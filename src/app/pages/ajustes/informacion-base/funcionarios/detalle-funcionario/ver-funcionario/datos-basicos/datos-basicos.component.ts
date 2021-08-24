@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { consts } from 'src/app/core/utils/consts';
@@ -7,6 +7,7 @@ import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { Subscription } from 'rxjs';
 import { PersonDataService } from '../../../create/personData.service';
 import { Person } from 'src/app/core/models/person.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-datos-basicos',
@@ -27,8 +28,8 @@ export class DatosBasicosComponent implements OnInit {
     direction: '',
     email: '',
     first_name: '',
-    second_name: '',
     first_surname: '',
+    second_name: '',
     second_surname: '',
     gener: '',
     identifier: '',
@@ -59,19 +60,13 @@ export class DatosBasicosComponent implements OnInit {
   getBasicsData(){
     this.basicDataService.getBasicsData(this.id)
     .subscribe( (res:any) => {
-      this.data = res.data;
-      for (const bd of this.data) {
-        this.funcionario = bd;
-        console.log(this.funcionario);
-        
-      }
+      this.funcionario = res.data;
+      console.log(this.funcionario);
+      
     })
   }
 
   createForm(){
-    /* this.form.patchValue({
-      email: this.funcionario
-    }) */
     this.form = this.fb.group({
       image: ['', Validators.required],
       first_name: ['', Validators.required],
@@ -91,7 +86,7 @@ export class DatosBasicosComponent implements OnInit {
       ],
       gener: ['', Validators.required],
       marital_status: ['', Validators.required],
-      cell_phone: ['', Validators.required, Validators.minLength(5), Validators.maxLength(8)]
+      cell_phone: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(9)]]
     }); 
   }
 
@@ -185,7 +180,17 @@ export class DatosBasicosComponent implements OnInit {
     }
   }
 
-  save() {
+  guardar() {
+    this.basicDataService.updateBasicData(this.funcionario, this.id)
+    .subscribe( res => {
+      this.modal.hide();
+      this.getBasicsData();
+      Swal.fire({
+        icon: 'success',
+        title: 'Editado con éxito',
+        text: 'Se han actualizado los cambios correctamente'
+      })
+    });
     this.form.markAllAsTouched();
     if (this.form.invalid) { return false;}
     this.person = { ...this.person,...this.form.value };

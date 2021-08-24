@@ -23,6 +23,7 @@ export class ZonasComponent implements OnInit {
     collectionSize: 0
   }
   status:any = 'Inactivo';
+  loading:boolean = false;
   constructor( private zonesService:ZonasService ) { }
 
   ngOnInit(): void {    
@@ -44,6 +45,7 @@ export class ZonasComponent implements OnInit {
     this.modal.show();
     this.zone.id = '';
     this.zone.name = '';
+    this.form.reset();
   }
   
   getZone(zone){
@@ -102,7 +104,7 @@ export class ZonasComponent implements OnInit {
 
   get name_valid(){
     return (
-      this.form.get('name') && this.form.get('name').touched
+      this.form.get('name').invalid && this.form.get('name').touched
     )
   }
 

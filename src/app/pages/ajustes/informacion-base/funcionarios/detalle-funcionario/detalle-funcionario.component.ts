@@ -43,10 +43,7 @@ export class DetalleFuncionarioComponent implements OnInit {
   getBasicData(){
     this.detalleService.getBasicData(this.id)
     .subscribe( (res:any) => {
-      this.fun = res.data;
-      for (const func of this.fun) {
-        this.funcionario = func;
-      }
+        this.funcionario = res.data;
     });
   }
   

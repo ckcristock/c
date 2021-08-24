@@ -27,6 +27,7 @@ export class EpsComponent implements OnInit {
     collectionSize: 0
   }
   status:any = 'Inactivo';
+  loading:boolean = false;
 
   constructor( private epsService: EpsService ) { }
 
@@ -91,6 +92,7 @@ export class EpsComponent implements OnInit {
     this.eps.code = '';
     this.eps.nit = '';
     this.modal.show();
+    this.form.reset();
   }
 
   getEps(eps){
@@ -116,7 +118,6 @@ export class EpsComponent implements OnInit {
             allowOutsideClick: false,
             allowEscapeKey: false
           })
-
         } else {
 
           Swal.fire({
@@ -134,19 +135,19 @@ export class EpsComponent implements OnInit {
 
   get name_eps_valid(){
     return (
-      this.form.get('name') && this.form.get('name').touched
+      this.form.get('name').invalid && this.form.get('name').touched
     )
   }
 
   get code_eps_valid(){
     return (
-      this.form.get('code') && this.form.get('code').touched
+      this.form.get('code').invalid && this.form.get('code').touched
     )
   }
 
   get nit_eps_valid(){
     return (
-      this.form.get('nit') && this.form.get('nit').touched
+      this.form.get('nit').invalid && this.form.get('nit').touched
     )
   }
   

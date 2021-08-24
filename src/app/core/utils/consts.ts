@@ -15,6 +15,10 @@ export const consts = {
     { clave: 'Viudo(a)', valor: 'Viudo(a)' },
     { clave: 'Unión Libre(a)', valor: 'Unión Libre(a)' },
   ],
+  contract_type: [
+    { clave: 'Indefinido', valor: 1 },
+    { clave: 'Fijo', valor: 2 }
+  ],
   bloodType: [
     { clave: 'A+', valor: 'A+' },
     { clave: 'A-', valor: 'A-' },

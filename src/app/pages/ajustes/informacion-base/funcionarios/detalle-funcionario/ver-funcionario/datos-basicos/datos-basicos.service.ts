@@ -13,4 +13,8 @@ export class DatosBasicosService {
     return this.http.get(`${environment.base_url}/basicData/${id}`);
   }
 
+  updateBasicData(data, id){
+    return this.http.post(`${environment.base_url}/updatebasicData/${id}`, data);
+  }  
+
 }

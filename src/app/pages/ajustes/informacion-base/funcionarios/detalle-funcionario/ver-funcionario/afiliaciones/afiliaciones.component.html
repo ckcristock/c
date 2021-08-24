@@ -17,7 +17,7 @@
         </p>
 
         <p class="font-weight-bold">
-            No registrado
+            {{ afiliations.eps_name }}
         </p>
 
         <p class="text-mute font-weight-bold item-subtitle2">
@@ -56,21 +56,17 @@
         <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">EPS</label>
-                    <select name="" [class.is-invalid]="eps_valid" formControlName="eps" class="form-select form-control custom-control col-md-12" id="">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                    <label class="custom-label" for="esps">EPS</label>
+                    <ng-select [items]="eps" id="esps" [class.is-invalid]="eps_valid" formControlName="eps_id" bindLabel="name" bindValue="id" loadingText="loading " ngDefaultControl>
+                    </ng-select>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="eps_valid"> Es necesario la eps
                         </small>
                     </div>
                 </div>
                 <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">Fondo de pensiones</label>
-                    <select name="" [class.is-invalid]="pension_found_valid" formControlName="pension_found" class="form-select form-control custom-control col-md-12" id="">
+                    <label class="custom-label" for="pension_fund">Fondo de pensiones</label>
+                    <select [class.is-invalid]="pension_found_valid" formControlName="pension_found" class="form-select form-control custom-control col-md-12" id="pension_fund">
                         <option selected>Seleccionar</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -82,8 +78,8 @@
                     </div>
                 </div>
                 <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">Fondo de cesantias</label>
-                    <select name="" [class.is-invalid]="severance_found_valid" formControlName="severance_found" class="form-select form-control custom-control col-md-12" id="">
+                    <label class="custom-label" for="cesantias_fund">Fondo de cesantias</label>
+                    <select [class.is-invalid]="severance_found_valid" formControlName="severance_found" class="form-select form-control custom-control col-md-12" id="cesantias_fund">
                         <option selected>Seleccionar</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -95,8 +91,8 @@
                     </div>
                 </div>
                 <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">C. Compensación</label>
-                    <select name="" [class.is-invalid]="compensation_valid" formControlName="compensation" class="form-select form-control custom-control col-md-12" id="">
+                    <label class="custom-label" for="compesation">C. Compensación</label>
+                    <select [class.is-invalid]="compensation_valid" formControlName="compensation" class="form-select form-control custom-control col-md-12" id="compensation">
                         <option selected>Seleccionar</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -113,7 +109,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Actualizar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="updateAfiliation()">Actualizar</button>
         </div>
     </div>
 </app-modal-basic>

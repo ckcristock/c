@@ -15,7 +15,7 @@
                         <input type="text" placeholder="Nombre" class="form-control form-control-sm" (change)="getAllDepartment()" [(ngModel)]="filtroDeparmento.name" name="name">
                     </div>
                 </div>
-                <table class="table table-striped mt-2">
+                <table class="table table-striped mt-2" *ngIf="!loading && departamentos.length > 0; else notData">
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -80,7 +80,7 @@
                         <input type="text" placeholder="Nombre del Departamento" class="form-control form-control-sm" (change)="getAllMunicipalities()" [(ngModel)]="filtroMunicipio.department">
                     </div>
                 </div>
-                <table class="table table-striped mt-2">
+                <table class="table table-striped mt-2" *ngIf="!loading && municipios.length > 0; else notData">
                     <thead>
                         <tr>
                             <th scope="col">Código</th>
@@ -154,3 +154,6 @@
     </app-modal-basic>
     <!-- End municipalities -->
 </div>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

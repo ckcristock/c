@@ -40,14 +40,17 @@
         </ngb-pagination>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-lg'">
+<app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
         <div class="row">
             <h5 class=" text text-center justify-content-center modal-title p-1">Nueva Zona</h5>
+            <div class="col" style="float: right;">
+                <i class="fas fa-times iconoXModalSalario" (click)="modal.hide()"></i>
+            </div>
         </div>
     </div>
     <div class="app-modal-body">
-        <form [formGroup]="form" (ngSubmit)="createZone()">
+        <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre de zona</label>
@@ -57,12 +60,14 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group text-right">
-                    <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-                    <button type="submit" class="btn btn-primary btn-sm raised">Guardar Zona</button>
-                </div>
             </div>
         </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createZone()">Guardar Zona</button>
+        </div>
     </div>
 </app-modal-basic>
 <ng-template #notData>

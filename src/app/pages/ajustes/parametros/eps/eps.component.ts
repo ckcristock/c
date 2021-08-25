@@ -72,7 +72,7 @@ export class EpsComponent implements OnInit {
             this.getAllEps();
             Swal.fire({
               title: (status === 'Inactivo' ? 'EPS Inhabilitada!' : 'EPS activada' ) ,
-              text: (status === 'Inactivo' ? 'La EPS ha sido Inhabilitada con éxito' : 'La EPS ha sido activada con éxito'),
+              text: (status === 'Inactivo' ? 'La EPS ha sido Inhabilitada con éxito.' : 'La EPS ha sido activada con éxito.'),
               icon: 'success'
             })
           } )
@@ -113,7 +113,7 @@ export class EpsComponent implements OnInit {
           this.modal.hide();
           Swal.fire({
             title: 'Operación exitosa',
-            text: 'Felicidades, se han actualizado las EPS',
+            text: 'Felicidades, se han actualizado las EPS.',
             icon: 'success',
             allowOutsideClick: false,
             allowEscapeKey: false
@@ -121,8 +121,8 @@ export class EpsComponent implements OnInit {
         } else {
 
           Swal.fire({
-            title: 'UPS',
-            text: 'Algunos datos ya existen en la base de datos',
+            title: 'Ooops!',
+            text: 'Algunos datos ya existen en la base de datos.',
             icon: 'error',
             allowOutsideClick: false,
             allowEscapeKey: false

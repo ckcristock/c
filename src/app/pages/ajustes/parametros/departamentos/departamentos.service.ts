@@ -9,18 +9,6 @@ export class DepartamentosService {
 
   constructor( private http:HttpClient ) { }
 
-  getAllMunicipalities(){
-    return this.http.get(`${environment.base_url}/municipalities`);
-  }
-
-  getMunicipalityPaginate( params = {} ){
-    return this.http.get(`${environment.base_url}/paginateMunicipality`, {params});
-  }
-  
-  createNewMunicipality(data:any){
-    return this.http.post(`${environment.base_url}/municipalities`, data);
-  }
-
   getDepartmentPaginate( params = {} ){
     return this.http.get(`${environment.base_url}/paginateDepartment`, {params} );
   }

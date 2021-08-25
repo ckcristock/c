@@ -12,6 +12,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { CommonModule } from "@angular/common";
 import { EpsComponent } from './eps/eps.component';
 import { DepartamentosComponent } from './departamentos/departamentos.component';
+import { MunicipiosComponent } from './municipios/municipios.component';
 
 
 
@@ -20,7 +21,7 @@ import { DepartamentosComponent } from './departamentos/departamentos.component'
         NotasTecnicasComponent, 
         PerfilesComponent, 
         ZonasComponent, 
-        RgpComponent, EpsComponent, DepartamentosComponent
+        RgpComponent, EpsComponent, DepartamentosComponent, MunicipiosComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

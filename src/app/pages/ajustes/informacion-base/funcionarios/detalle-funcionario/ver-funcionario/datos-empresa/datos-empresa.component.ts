@@ -108,6 +108,8 @@ export class DatosEmpresaComponent implements OnInit {
   }
 
   updateEnterpriseData(){
+    this.form.markAllAsTouched();
+    if (this.form.invalid) { return false;}
     this.enterpriseDataService.updateEnterpriseData(this.form.value)
     .subscribe( res => {
       this.getEnterpriseData();

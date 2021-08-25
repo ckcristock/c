@@ -42,7 +42,8 @@ export class DatosBasicosComponent implements OnInit {
   constructor( private fb:FormBuilder, 
                 private basicDataService: DatosBasicosService,
                 private activatedRoute: ActivatedRoute,
-                private _person: PersonDataService ) { }
+                private _person: PersonDataService,
+                ) { }
   person: Person
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
@@ -52,17 +53,16 @@ export class DatosBasicosComponent implements OnInit {
       this.person = r
     });
   }
-
+  
   openModal(){
     this.modal.show();
   }
-
+  
   getBasicsData(){
     this.basicDataService.getBasicsData(this.id)
     .subscribe( (res:any) => {
-      this.funcionario = res.data;
-      console.log(this.funcionario);
-      
+      this.funcionario = res.data; 
+ 
     })
   }
 
@@ -181,6 +181,9 @@ export class DatosBasicosComponent implements OnInit {
   }
 
   guardar() {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) { return false;}
+
     this.basicDataService.updateBasicData(this.funcionario, this.id)
     .subscribe( res => {
       this.modal.hide();
@@ -190,12 +193,9 @@ export class DatosBasicosComponent implements OnInit {
         title: 'Editado con éxito',
         text: 'Se han actualizado los cambios correctamente'
       })
+      this.basicDataService.datos$.emit()
     });
-    this.form.markAllAsTouched();
-    if (this.form.invalid) { return false;}
-    this.person = { ...this.person,...this.form.value };
     this.person.image = this.file;
-    this._person.person.next(this.person);
   }
 
 }

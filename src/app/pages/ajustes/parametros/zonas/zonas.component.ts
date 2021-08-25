@@ -75,7 +75,7 @@ export class ZonasComponent implements OnInit {
           this.getAllZones();
           Swal.fire({
             title: (status === 'Inactivo' ? 'Zona Inhabilitada!' : 'Zona activada' ) ,
-            text: (status === 'Inactivo' ? 'La zona ha sido Inhabilitada con éxito' : 'La zona ha sido activada con éxito'),
+            text: (status === 'Inactivo' ? 'La zona ha sido Inhabilitada con éxito.' : 'La zona ha sido activada con éxito.'),
             icon: 'success'
           })
         } )
@@ -91,7 +91,7 @@ export class ZonasComponent implements OnInit {
         this.modal.hide();
         Swal.fire({
           title: 'Operación exitosa',
-          text: 'Felicidades, se han actualizado las zonas',
+          text: 'Felicidades, se ha agregado a las zonas.',
           icon: 'success',
           allowOutsideClick: false,
           allowEscapeKey: false,

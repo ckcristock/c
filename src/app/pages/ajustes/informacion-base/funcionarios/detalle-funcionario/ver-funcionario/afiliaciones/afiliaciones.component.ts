@@ -47,7 +47,6 @@ export class AfiliacionesComponent implements OnInit {
     this.afiliationService.getAfiliationInfo(this.id)
     .subscribe( (res:any) => {
       this.afiliations = res.data;
-      console.log(this.afiliations);
       this.form.patchValue({
         eps_id: this.afiliations.eps_id
       })
@@ -55,6 +54,8 @@ export class AfiliacionesComponent implements OnInit {
   }
 
   updateAfiliation(){
+    /* this.form.markAllAsTouched();
+    if (this.form.invalid) { return false;} */
     this.afiliationService.updateAfiliation(this.form.value, this.id)
     .subscribe( res => {
       this.getAfiliationInfo();

@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-12">
+    <h4>Turnos de la compañía</h4>
+  </div>
+
+  <div class="col-12">
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+      <li [ngbNavItem]="1">
+        <a ngbNavLink>Fijo</a>
+        <ng-template ngbNavContent>
+          <div class="row">
+            <div class="col-12 mt-4">
+              <app-turno-fijo></app-turno-fijo>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2">
+        <a ngbNavLink>Rotativo</a>
+        <ng-template ngbNavContent>
+          <div class="row">
+            <div class="col-12 mt-4">
+              <app-turno-rotativo></app-turno-rotativo>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+    </ul>
+
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+  </div>
+</div>

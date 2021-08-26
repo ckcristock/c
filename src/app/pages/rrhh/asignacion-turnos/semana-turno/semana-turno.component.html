@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="form-group col-12 pl-0 d-flex">
+    <!--  <turnos :turnos="turnos" ref="horarioAsignacion"></turnos> -->
+    <button
+      class="btn btn-link"
+      (click)="asignarHorariosMasivo()"
+      style="padding: 0 10px !important"
+    >
+      Asignar
+    </button>
+  </div>
+  <div class="col-12">
+    <table class="table table-bordered table-sm">
+      <thead>
+        <tr>
+          <th class="text-center">Funcionario</th>
+          <th class="text-center" *ngFor="let dia of diasSemana">
+            {{ dia.dia }}<br />{{ formatFecha(dia.fecha) }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let person of people">
+          <td class="funcionario-td">
+            <img
+              [src]="person?.image | image"
+              height="45"
+              class="mr-3 rounded-circle avatar-xs"
+            />
+
+            <span>{{ person.first_name }} {{ person.second_name }}</span>
+          </td>
+          <td
+            class="text-center custom-label fecha-td"
+            *ngFor="let dia of diasSemana"
+          >
+            {{ dia.dia }}
+            <!-- <turnos :turnos="turnos" :ref="'turnos' + funcionario.id"></turnos> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row">
+    <!--  <div class="form-group col-12 mt-3">
+      <button
+        class="btn btn-secondary default btn-xs btn-block"
+        @click="makeHorario"
+      >
+        Guardar
+      </button> 
+    </div>-->
+  </div>
+</div>

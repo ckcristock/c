@@ -92,14 +92,13 @@ export class BonoComponent implements OnInit {
   }
 
   addBonus(){
-    
     this.bonusService.addBonus(this.form.value)
     .subscribe( res => {
       this.modal.hide();
       this.getBonusData();
       Swal.fire({
         icon: 'success',
-        title: 'Editado con éxito',
+        title: 'Creado con éxito',
         text: 'Se han actualizado los cambios correctamente'
       })
     })

@@ -8,6 +8,7 @@ import { NovedadesComponent } from './novedades/novedades.component';
 import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 import { ActividadesComponent } from "./actividades/actividades.component";
+import { ContratosComponent } from "./contratos/contratos.component";
 
 
 
@@ -18,6 +19,7 @@ const routes: Routes = [
     { path: 'actividades', component: ActividadesComponent },
     { path: 'novedades', component: NovedadesComponent },
     { path: 'llegadas-tarde', component: LlegadasTardesComponent },
+    { path: 'contratos', component: ContratosComponent },
     { path: 'dotacion/dotaciones', component: DotacionesComponent },
     { path: 'dotacion/inventario', component: InventarioDotacionComponent },
 ]

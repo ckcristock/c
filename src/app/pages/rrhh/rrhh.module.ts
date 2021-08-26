@@ -24,9 +24,10 @@ import { ActividadesComponent } from "./actividades/actividades.component";
 
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { DetalleLlegadaComponent } from './llegadas-tardes/detalle-llegada/detalle-llegada.component';
+import { ContratosComponent } from './contratos/contratos.component';
 
 @NgModule({
-    declarations:[VacantesComponent, ActividadesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent, InventarioDotacionComponent, DotacionesComponent, DetalleLlegadaComponent],
+    declarations:[VacantesComponent, ActividadesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent, InventarioDotacionComponent, DotacionesComponent, DetalleLlegadaComponent, ContratosComponent],
     imports:[RrhhRouterModule,
         CommonModule,
         ChartsModule,

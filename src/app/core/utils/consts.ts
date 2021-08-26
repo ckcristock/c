@@ -19,6 +19,10 @@ export const consts = {
     { clave: 'Indefinido', valor: 1 },
     { clave: 'Fijo', valor: 2 }
   ],
+  bonusType: [
+    { clave: 'Constitutivo', valor: 'Constitutivo' },
+    { clave: 'No Constitutivo', valor: 'No Constitutivo' }
+  ],
   bloodType: [
     { clave: 'A+', valor: 'A+' },
     { clave: 'A-', valor: 'A-' },

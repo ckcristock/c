@@ -14,8 +14,15 @@ export class AfiliacionesComponent implements OnInit {
   form: FormGroup;
   data:any;
   eps:any;
+  compensations:any;
+  pensions:any;
+  severances:any;
+  arls:any;
   afiliations:any = {
-    eps_name: ''
+    eps_name: '',
+    pension_fund_name: '',
+    severance_fund_name: '',
+    compensation_fund_name: ''
   };
   id:any;
   constructor( 
@@ -26,8 +33,12 @@ export class AfiliacionesComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
     this.getAfiliationInfo();
-    this.getEpss();
     this.createForm();
+    this.getEpss();
+    this.getCompensations_funds();
+    this.getPension_funds();
+    this.getSeverance_funds();
+    this.getArls();
   }
 
   openModal(){
@@ -37,9 +48,10 @@ export class AfiliacionesComponent implements OnInit {
   createForm(){
     this.form = this.fb.group({
       eps_id: ['', Validators.required],
-      pension_found: ['', Validators.required],
-      severance_found: ['', Validators.required],
-      compensation: ['', Validators.required]
+      pension_fund_id: ['', Validators.required],
+      severance_fund_id: ['', Validators.required],
+      compensation_fund_id: ['', Validators.required],
+      arl_id: ['', Validators.required]
     }); 
   }
 
@@ -48,7 +60,11 @@ export class AfiliacionesComponent implements OnInit {
     .subscribe( (res:any) => {
       this.afiliations = res.data;
       this.form.patchValue({
-        eps_id: this.afiliations.eps_id
+        eps_id: this.afiliations.eps_id,
+        pension_fund_id: this.afiliations.pension_fund_id,
+        severance_fund_id: this.afiliations.severance_fund_id,
+        compensation_fund_id: this.afiliations.compensation_fund_id,
+        arl_id: this.afiliations.arl_id
       })
     });
   }
@@ -75,27 +91,61 @@ export class AfiliacionesComponent implements OnInit {
     });
   }
 
+  getCompensations_funds(){
+    this.afiliationService.getCompensationFund()
+    .subscribe( (res:any) => {
+      this.compensations = res.data;
+    });
+  }
+
+  getPension_funds(){
+    this.afiliationService.getPension_funds()
+    .subscribe( (res:any) =>{
+      this.pensions = res.data;
+    });
+  }
+
+  getSeverance_funds(){
+    this.afiliationService.getSeverance_funds()
+    .subscribe( (res:any) =>{
+      this.severances = res.data;
+    });
+  }
+
+  getArls(){
+    this.afiliationService.getArls()
+    .subscribe( (res:any) => {
+      this.arls = res.data;
+    });
+  }
+
   get eps_valid(){
     return (
       this.form.get('eps_id').invalid && this.form.get('eps_id').touched
     );
   }
 
+  get arl_valid(){
+    return (
+      this.form.get('arl_id').invalid && this.form.get('arl_id').touched
+    );
+  }
+
   get pension_found_valid(){
     return (
-      this.form.get('pension_found').invalid && this.form.get('pension_found').touched
+      this.form.get('pension_fund_id').invalid && this.form.get('pension_fund_id').touched
     );
   }
 
   get severance_found_valid(){
     return (
-      this.form.get('severance_found').invalid && this.form.get('severance_found').touched
+      this.form.get('severance_fund_id').invalid && this.form.get('severance_fund_id').touched
     );
   }
 
   get compensation_valid(){
     return (
-      this.form.get('compensation').invalid && this.form.get('compensation').touched
+      this.form.get('compensation_fund_id').invalid && this.form.get('compensation_fund_id').touched
     );
   }
 

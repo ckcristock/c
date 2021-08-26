@@ -57,8 +57,6 @@ export class ZonasComponent implements OnInit {
       id:zone.id,
       status
     }
-
-      
     Swal.fire({
       title: '¿Estas seguro?',
       text: (status === 'Inactivo'? 'La zona se inactivará!' : 'La zona se activará'),

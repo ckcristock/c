@@ -13,10 +13,9 @@ import { DatosBasicosService } from '../datos-basicos/datos-basicos.service';
 })
 export class SalarioComponent implements OnInit {
   @ViewChild('modal') modal:any;
-  @ViewChild('modalBonus') modalBonus:any;
   form: FormGroup;
-  formB: FormGroup;
   data:any;
+  id:any;
   contract_types = consts.contract_type;
   salary_info:any = {
     salary: '',
@@ -24,7 +23,6 @@ export class SalarioComponent implements OnInit {
     date_of_admission: '',
     date_end: ''
   };
-  id:any;
   constructor( 
                 private fb:FormBuilder, 
                 private salaryService: SalarioService, 
@@ -35,15 +33,10 @@ export class SalarioComponent implements OnInit {
     this.id = this.activateRoute.snapshot.params.id;
     this.getSalaryInfo();
     this.createForm();
-    this.createFormBonus();
   }
 
   openModal(){
     this.modal.show();
-  }
-  openModalBonus(){
-    this.modalBonus.show();
-    this.formB.reset();
   }
 
   createForm(){
@@ -88,8 +81,8 @@ export class SalarioComponent implements OnInit {
   }
 
   updateSalaryInfo(){
-      this.form.markAllAsTouched();
-      if (this.form.invalid) { return false;}
+     /*  this.form.markAllAsTouched();
+      if (this.form.invalid) { return false;} */
 
       this.salaryService.updateSalaryInfo(this.salary_info)
       .subscribe( res => {
@@ -103,34 +96,5 @@ export class SalarioComponent implements OnInit {
       this.basicDataService.datos$.emit()
       });
     }
-      /***************************** FORM SALARY ***********************/
-      
-      /***************************** FORM BONUS ***********************/
-      
-    createFormBonus(){
-      this.formB = this.fb.group({
-        type_of_bonus: ['', Validators.required],
-        bonus: ['', Validators.required],
-        value: ['', Validators.required]
-      });
-    }
-  
-  get type_of_bonus_valid(){
-    return (
-      this.formB.get('type_of_bonus').invalid && this.formB.get('type_of_bonus').touched
-    );
-  }
-        
-  get bonus_valid(){
-    return (
-    this.formB.get('bonus').invalid && this.formB.get('bonus').touched
-    );
-  }
-
-  get value_valid(){
-    return (
-      this.formB.get('value').invalid && this.formB.get('value').touched
-    );
-  }
 
 }

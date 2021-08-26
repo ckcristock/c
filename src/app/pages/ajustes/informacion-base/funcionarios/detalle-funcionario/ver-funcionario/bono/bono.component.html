@@ -1,0 +1,90 @@
+<div class="row">
+    <div class="col-6">
+        <h5>Bonificación recurrente</h5>
+    </div>
+    <div class="col-6">
+        <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModal()">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Tipo de bono</th>
+                            <th scope="col">Valor</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bon of bonu" [ngClass]="{'bg-danger text-white': (bon.status === 0 )}">
+                            <th scope="row">{{ bon.concept }}</th>
+                            <td> {{ bon.value }} </td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" *ngIf="bon.status === 1" (click)="anular(bon, 0)">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <app-modal-basic #modal [dialogClass]="'modal-md'">
+        <div class="app-modal-header">
+            <div class="row">
+                <div class="col">
+                    <h5>Nueva Bonificación</h5>
+                </div>
+                <div class="col" style="float: right;">
+                    <i class="fas fa-times iconoXModalSalario" (click)="modal.hide()"></i>
+                </div>
+            </div>
+        </div>
+        <div class="app-modal-body">
+            <form [formGroup]="form">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="custom-label" for="type_of_bonus">Tipo de bono</label>
+                        <select [class.is-invalid]="bonus_valid" (change)="getBonusList($event.target.value)" class="form-select form-control custom-control col-md-12" id="type_of_bonus">
+                        <option selected>Seleccionar para obtener lista de bono</option>
+                        <option *ngFor="let bonusType of bonusTypes" [value]="bonusType.valor">
+                            {{ bonusType.clave }}
+                        </option>
+                    </select>
+                        <div class="col-md-7 offset-4">
+                            <small class="invalid text-danger" *ngIf="bonus_valid"> Es necesario el tipo de bono
+                        </small>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="custom-label" for="bonus">Bono</label>
+                        <ng-select class="col-md-12 p-0" [items]="bonus" formControlName="countable_income_id" placeholder="Seleccionar" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                        </ng-select>
+                        <div class="col-md-7 offset-4">
+                            <small class="invalid text-danger" *ngIf="bonus_type_valid"> Es necesario el bono
+                        </small>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="custom-label" for="valor">Valor</label>
+                        <input type="number" [class.is-invalid]="value_valid" placeholder="0.00" formControlName="value" class="form-control form-control-sm" id="valor" required>
+                        <div class="col-md-7 offset-4">
+                            <small class="invalid text-danger" *ngIf="value_valid"> Es necesario el valor
+                        </small>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="app-modal-footer">
+            <div class="form-group text-right">
+                <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+                <button type="submit" class="btn btn-primary btn-sm raised" (click)="addBonus()">Guardar</button>
+            </div>
+        </div>
+    </app-modal-basic>

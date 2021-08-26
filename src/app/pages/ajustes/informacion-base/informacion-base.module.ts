@@ -28,6 +28,7 @@ import { SalarioComponent } from './funcionarios/detalle-funcionario/ver-funcion
 import { DatosEmpresaComponent } from './funcionarios/detalle-funcionario/ver-funcionario/datos-empresa/datos-empresa.component';
 import { AfiliacionesComponent } from './funcionarios/detalle-funcionario/ver-funcionario/afiliaciones/afiliaciones.component';
 import { HttpClientModule } from "@angular/common/http";
+import { BonoComponent } from './funcionarios/detalle-funcionario/ver-funcionario/bono/bono.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { HttpClientModule } from "@angular/common/http";
         SalarioComponent,
         DatosEmpresaComponent,
         AfiliacionesComponent,
+        BonoComponent,
     ],
     
     imports: [

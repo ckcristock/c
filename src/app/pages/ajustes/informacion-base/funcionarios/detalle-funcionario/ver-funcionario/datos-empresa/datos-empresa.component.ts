@@ -70,6 +70,8 @@ export class DatosEmpresaComponent implements OnInit {
 
   getPositions(dependency_id) {
     if (dependency_id) {
+      console.log(dependency_id);
+      
       this._positions.getPositions({ dependency_id }).subscribe((d: any) => {
         this.positions = d.data;
         this.positions.unshift({ text: 'Seleccione una', value: '' });
@@ -87,7 +89,6 @@ export class DatosEmpresaComponent implements OnInit {
   getGroups() {
     this._group.getGroup().subscribe((r: any) => {
       this.groups = r.data
-      console.log(this.groups);
       this.groups.unshift({ text: 'Seleccione uno', value: '' });
     })
   }

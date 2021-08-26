@@ -38,21 +38,8 @@
             {{ salary_info.date_end }}
         </p>
     </span>
-    <p class="ml-1 text-mute font-weight-bold item-subtitle2">
-        Periodo de pago
-    </p>
-    <p class="ml-1 font-weight-bold titulo">Mensual</p>
     <hr>
-    <div class="row">
-        <div class="col-6">
-            <h5>Bonificación reciente</h5>
-        </div>
-        <div class="col-6">
-            <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModalBonus()">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-    </div>
+    <app-bono *ngIf="salary_info.id" [id]="salary_info.id"></app-bono>
 </div>
 
 <app-modal-basic #modal [dialogClass]="'modal-md'">
@@ -126,67 +113,6 @@
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
             <button type="submit" class="btn btn-primary btn-sm raised" (click)="updateSalaryInfo()">Actualizar</button>
-        </div>
-    </div>
-</app-modal-basic>
-
-
-<!-------------------------- Modal Bonus ---------------------------------->
-<app-modal-basic #modalBonus [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <div class="row">
-            <div class="col">
-                <h5>Nueva Bonificación</h5>
-            </div>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times iconoXModalSalario" (click)="modalBonus.hide()"></i>
-            </div>
-        </div>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="type_of_bonus">Tipo de bono</label>
-                    <select [class.is-invalid]="type_of_bonus_valid" class="form-select form-control custom-control col-md-12" id="type_of_bonus">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="type_of_bonus_valid"> Es necesario el tipo de bono
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="bonus">Bono</label>
-                    <select [class.is-invalid]="bonus_valid" class="form-select form-control custom-control col-md-12" id="bonus">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="bonus_valid"> Es necesario el bono
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="valor">Valor</label>
-                    <input type="number" [class.is-invalid]="value_valid" class="form-control form-control-sm" id="valor" required>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="value_valid"> Es necesario el valor
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modalBonus.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

@@ -15,6 +15,7 @@ import { LlegadasTardesComponent } from './llegadas-tardes/llegadas-tardes.compo
 import { ChartsModule } from 'ng2-charts';
 import { NovedadesComponent } from './novedades/novedades.component';
 import { NgSelectModule } from "@ng-select/ng-select";
+import { NgbTooltipModule } from "@ng-bootstrap/ng-bootstrap";
 import { VacantesVerComponent } from './vacantes/vacantes-ver/vacantes-ver.component';
 import { CrearNovedadComponent } from './novedades/crear-novedad/crear-novedad.component';
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
@@ -25,9 +26,11 @@ import { ActividadesComponent } from "./actividades/actividades.component";
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { DetalleLlegadaComponent } from './llegadas-tardes/detalle-llegada/detalle-llegada.component';
 import { ContratosComponent } from './contratos/contratos.component';
+import { DisciplinariosComponent } from './procesos/disciplinarios/disciplinarios.component';
+import { MemorandosComponent } from './procesos/memorandos/memorandos.component';
 
 @NgModule({
-    declarations:[VacantesComponent, ActividadesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent, InventarioDotacionComponent, DotacionesComponent, DetalleLlegadaComponent, ContratosComponent],
+    declarations:[VacantesComponent, ActividadesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent, InventarioDotacionComponent, DotacionesComponent, DetalleLlegadaComponent, ContratosComponent, DisciplinariosComponent, MemorandosComponent],
     imports:[RrhhRouterModule,
         CommonModule,
         ChartsModule,
@@ -36,6 +39,7 @@ import { ContratosComponent } from './contratos/contratos.component';
 /*         SweetAlert2Module, */
         NgbPaginationModule,
         NgbDropdownModule,
+        NgbTooltipModule,
         MyDateRangePickerModule,
         PipesModule,
         ComponentsModule,

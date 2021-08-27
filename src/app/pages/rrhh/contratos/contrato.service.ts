@@ -13,4 +13,5 @@ export class ContratoService {
     return this.http.get(`${environment.base_url}/`);
   }
 
+
 }

@@ -12,7 +12,9 @@ export class TurnoComponent implements OnInit {
   withColor = '#9da4ad';
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.turnos, 'turns');
+  }
 
   changeColor() {
     if (this.turno === 'seleccione') {

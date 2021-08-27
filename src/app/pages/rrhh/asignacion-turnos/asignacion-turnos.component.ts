@@ -9,16 +9,30 @@ import * as moment from 'moment';
 export class AsignacionTurnosComponent implements OnInit {
   datosGenerales: any = [
     {
-      name: 'First',
+      name: 'Admistrativo',
       dependencies: [
         {
-          name: 'first',
-          people: [{ first_name: 'sdsd', second_name: 'sdsd' }],
+          name: 'Desarrollo',
+          people: [{ first_name: 'Carlos', second_name: 'Cardoba' }],
         },
       ],
     },
   ];
-  turns: any[];
+  turns: any[] = [
+    {
+      id: 1,
+      nombre: 'Prueba 01',
+      extras: 1,
+      tolerancia_entrada: 0,
+      tolerancia_salida: 0,
+      hora_inicio_uno: '13:49',
+      hora_fin_uno: '19:49',
+      hora_inicio_dos: null,
+      hora_fin_dos: null,
+      jornada_turno: 'Diurno',
+      color: '#D98880',
+    },
+  ];
   groupList: any[];
   dependencyList: any[];
   diaInicialSemana = moment().startOf('week');

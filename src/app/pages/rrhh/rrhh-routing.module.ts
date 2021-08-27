@@ -9,6 +9,7 @@ import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component'
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 import { ActividadesComponent } from './actividades/actividades.component';
 import { AsignacionTurnosComponent } from './asignacion-turnos/asignacion-turnos.component';
+import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
 
 const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'dotacion/inventario', component: InventarioDotacionComponent },
 
   { path: 'turnos/asignacion', component: AsignacionTurnosComponent },
+  { path: 'turnos/horas-extras', component: HorasExtrasComponent },
 ];
 
 @NgModule({

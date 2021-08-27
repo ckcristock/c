@@ -1,0 +1,172 @@
+<div class="row">
+  <div class="col-12">
+    <h1 class="font-weight-bold">Validación de horas extras reportadas</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    <div class="form-group">
+      <label class="custom-label">Tipo de turno actual</label>
+      <select
+        class="form-control form-control-sm"
+        (change)="changeTipoTurno($event.target.value)"
+      >
+        <option value="rotativo">Rotativo</option>
+        <option value="fijo">Fijo</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label class="custom-label"
+        >Del {{ primerDiaSemanaFormato }} al {{ ultimoDiaSemanaFormato }}</label
+      >
+
+      <input
+        type="week"
+        name="semana"
+        class="form-control form-control-sm"
+        (change)="cambiarSemana()"
+        required
+      />
+      <!--   <input
+        type="week"
+        name="semana"
+        class="form-control custom-control"
+        v-model="semana"
+        @change="cambiarSemana"
+        required
+      /> -->
+    </div>
+  </div>
+</div>
+<!-- 
+<ng-container v-if="renderizarContenido">
+  <div class="row mt-3" v-if="horasExtras.length">
+    <div class="col-12">
+      <h2 class="font-weight-bold">Lista de funcionarios</h2>
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12" v-for="centro in horasExtras" :key="centro.id">
+              <p class="font-weight-bold mt-4">{{ centro.nombre }}</p>
+              <div class="row">
+                <div
+                  class="col-12"
+                  v-for="dependencia in centro.dependencias"
+                  :key="dependencia.id"
+                >
+                  <p class="font-weight-bold mt-3">
+                    {{ dependencia.nombre }}
+                  </p>
+                  <div
+                    v-for="funcionario in dependencia.funcionarios"
+                    :key="funcionario.id"
+                  >
+                    <div class="row pl-2 pr-3">
+                      <div class="col-md-3">
+                        <div>
+                          <img
+                            :src="`${funcionario.image}`"
+                            alt="foto_funcionario"
+                          />
+                          <span class="custom-label">
+                            {{ funcionario.nombres }}
+                            {{ funcionario.apellidos }}
+                          </span>
+                          <span class="turno text-center font-weight-bold">{{
+                            funcionario.tipo_turno.slice(0, 1)
+                          }}</span>
+                        </div>
+                      </div>
+
+                      <div class="col-md-1">
+                        <button
+                          class="btn btn-link btn-sm"
+                          @click="showExtrasFuncionario(funcionario)"
+                        >
+                          <i class="simple-icon-magnifier font-weight-bold"></i>
+                        </button>
+                      </div>
+
+                      <div class="col-md-1">
+                        <p
+                          class="text-center item-hora"
+                          title="Horas Trabajadas"
+                        >
+                          HT
+                        </p>
+                      </div>
+
+                      <div class="col-md-1">
+                        <p
+                          class="text-center item-hora"
+                          title="Horas Extras Diurnas"
+                        >
+                          HED
+                        </p>
+                      </div>
+                      <div class="col-md-1">
+                        <p
+                          class="text-center item-hora"
+                          title="Horas Extras Nocturnas"
+                        >
+                          HEN
+                        </p>
+                      </div>
+                      <div class="col-md-1">
+                        <p
+                          class="text-center item-hora"
+                          title="Horas Extras Diurnas Festivas/Dominicales"
+                        >
+                          HEDFD
+                        </p>
+                      </div>
+                      <div class="col-md-1">
+                        <p
+                          class="text-center item-hora"
+                          title="Horas Extras Nocturnas Festivas/Dominicales"
+                        >
+                          HEDFN
+                        </p>
+                      </div>
+                      <div class="col-md-1">
+                        <p
+                          class="text-center item-hora"
+                          title="Recargos Nocturnos"
+                        >
+                          RN
+                        </p>
+                      </div>
+                      <div class="col-md-1">
+                        <p
+                          class="text-center item-hora"
+                          title="Recargos Festivos"
+                        >
+                          RF
+                        </p>
+                      </div>
+                    </div>
+
+                    <lista-fijos
+                      v-if="funcionario.id == funcionarioRender.id"
+                      :funcionario="funcionarioRender"
+                      :primerDia="primerDiaSemana"
+                      :ultimodiaDia="ultimoDiaSemana"
+                    ></lista-fijos>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-secondary mt-3" v-else>
+    <p class="font-weight-bold text-center">
+      No existen horas extras reportadas en este periodo
+    </p>
+  </div>
+</ng-container>
+ -->

@@ -14,10 +14,14 @@ export class SemanaTurnoComponent implements OnInit {
 
   diaInicialSemana: any;
   diasSemana: any[] = [];
+  turnos: any[] = [];
   constructor() {}
 
   ngOnInit(): void {
     this.diaInicialSemana = this.diaInicial;
+    this.turnos = this.turnosRotativos;
+    console.log(this.turnos);
+
     this.fillDiasSemana();
   }
   asignarHorariosMasivo() {}

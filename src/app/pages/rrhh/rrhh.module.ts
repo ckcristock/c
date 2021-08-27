@@ -30,6 +30,7 @@ import { DetalleLlegadaComponent } from './llegadas-tardes/detalle-llegada/detal
 import { AsignacionTurnosComponent } from './asignacion-turnos/asignacion-turnos.component';
 import { SemanaTurnoComponent } from './asignacion-turnos/semana-turno/semana-turno.component';
 import { TurnoComponent } from './asignacion-turnos/semana-turno/turno/turno.component';
+import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { TurnoComponent } from './asignacion-turnos/semana-turno/turno/turno.com
     AsignacionTurnosComponent,
     SemanaTurnoComponent,
     TurnoComponent,
+    HorasExtrasComponent,
   ],
   imports: [
     RrhhRouterModule,

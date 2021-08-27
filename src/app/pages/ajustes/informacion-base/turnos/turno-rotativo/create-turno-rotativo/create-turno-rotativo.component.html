@@ -1,6 +1,6 @@
 <div class="row mb-3">
   <div class="col-md-6">
-    <h5 class="text-secondary">Lista de turnos fijos</h5>
+    <h5 class="text-secondary">Lista de turnos rotativos</h5>
   </div>
   <div class="col-md-6 text-right">
     <a class="btn btn-link btn-sm mr-1" (click)="modal.show()">
@@ -123,9 +123,7 @@
             </small>
           </ng-container>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
           <label class="custom-label">Tolerancia de Entrada</label>
           <input
             type="number"
@@ -144,7 +142,7 @@
             </small>
           </ng-container>
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
           <label class="custom-label">Tolerancia de Salida</label>
           <input
             type="number"
@@ -163,7 +161,7 @@
             </small>
           </ng-container>
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-2">
           <label class="custom-label" for="extras">Horas Extras</label>
           <select name="extras" class="form-control form-control-sm">
             <option value="0">No</option>
@@ -171,6 +169,7 @@
           </select>
         </div>
       </div>
+
       <div class="form-row">
         <div class="form-group col-md-6">
           <label class="custom-label" for="dia">HORA DE ENTRADA </label>
@@ -203,6 +202,78 @@
             <small
               *ngFor="
                 let item of forma.get('leave_time').errors | ObjToArrayPipe
+              "
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6 form-check">
+          <div class="form-group form-check">
+            <input
+              type="checkbox"
+              formControlName="launch"
+              id="acceptTerms"
+              class="form-check-input"
+            />
+            <label class="custom-label">Aplica launch </label>
+          </div>
+        </div>
+        <div class="form-group col-md-6 form-check">
+          <div class="form-group form-check">
+            <input
+              type="checkbox"
+              formControlName="breack"
+              id="acceptTerms"
+              class="form-check-input"
+            />
+            <label class="custom-label">Aplica breack </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label class="custom-label" for="dia">HORA DE LAUNCH </label>
+          <input
+            type="time"
+            class="form-control"
+            formControlName="launch_time"
+          />
+          <ng-container
+            *ngIf="
+              forma.get('launch_time').invalid &&
+              forma.get('launch_time').touched
+            "
+          >
+            <small
+              *ngFor="
+                let item of forma.get('launch_time').errors | ObjToArrayPipe
+              "
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
+        </div>
+        <div class="form-group col-md-6">
+          <label class="custom-label" for="dia">HORA DE BREACK </label>
+          <input
+            type="time"
+            class="form-control"
+            formControlName="breack_time"
+          />
+          <ng-container
+            *ngIf="
+              forma.get('breack_time').invalid &&
+              forma.get('breack_time').touched
+            "
+          >
+            <small
+              *ngFor="
+                let item of forma.get('breack_time').errors | ObjToArrayPipe
               "
               class="text-danger"
             >

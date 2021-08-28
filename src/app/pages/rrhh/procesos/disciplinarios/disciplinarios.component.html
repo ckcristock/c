@@ -60,19 +60,19 @@
         </ngb-pagination>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
-        <div class="row">
-            <h5 class=" text text-center justify-content-center modal-title p-1">Proceso Disciplinario</h5>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times iconoXModalSalario" (click)="modal.hide()"></i>
-            </div>
-        </div>
+        <h5 class="modal-title"> Proceso Disciplinario </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form [formGroup]="form">
             <div class="form-row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label class="custom-label" for="funcionario_id">
                         <h6>Funcionario</h6>
                     </label>
@@ -96,6 +96,16 @@
                               {{ item?.msj }}
                             </small>
                         </ng-container>
+                    </div>
+                </div>
+                <div class="col-md-6 panel">
+                    <div class="panel-body">
+                        <div styles=" overflow: auto; heigth: 400px;">
+                            <div class="mt-5 text-center">
+                                <i class="fa fa-exclamation-circle fa-3x"></i>
+                                <h4>Seleccione Un Usuario</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

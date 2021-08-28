@@ -58,14 +58,12 @@
 
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
-        <div class="row">
-            <div class="col">
-                <h5>Edición datos de empresa</h5>
-            </div>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times" (click)="modal.hide()"></i>
-            </div>
-        </div>
+        <h5 class="modal-title"> Edición datos empresa </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
     </div>
     <div class="app-modal-body">
         <div class="row mt-3">

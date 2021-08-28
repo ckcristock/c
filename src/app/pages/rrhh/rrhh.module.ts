@@ -22,21 +22,23 @@ import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inve
 import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
 import { ActividadesComponent } from "./actividades/actividades.component";
 
-
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { DetalleLlegadaComponent } from './llegadas-tardes/detalle-llegada/detalle-llegada.component';
 import { ContratosComponent } from './contratos/contratos.component';
 import { DisciplinariosComponent } from './procesos/disciplinarios/disciplinarios.component';
 import { MemorandosComponent } from './procesos/memorandos/memorandos.component';
+import { PreliquidadosComponent } from './preliquidados/preliquidados.component';
+import { LiquidadosComponent } from './preliquidados/liquidados/liquidados.component';
+import { AlertasComunComponent } from './alertas-comun/alertas-comun.component';
 
 @NgModule({
-    declarations:[VacantesComponent, ActividadesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent, InventarioDotacionComponent, DotacionesComponent, DetalleLlegadaComponent, ContratosComponent, DisciplinariosComponent, MemorandosComponent],
+    declarations:[VacantesComponent, ActividadesComponent, VacantesCrearComponent, LlegadasTardesComponent, NovedadesComponent, VacantesVerComponent, CrearNovedadComponent, InventarioDotacionComponent, DotacionesComponent, DetalleLlegadaComponent, ContratosComponent, DisciplinariosComponent, MemorandosComponent, PreliquidadosComponent, LiquidadosComponent, AlertasComunComponent],
     imports:[RrhhRouterModule,
         CommonModule,
         ChartsModule,
         FormsModule,
         ReactiveFormsModule,
-/*         SweetAlert2Module, */
+        /* SweetAlert2Module, */
         NgbPaginationModule,
         NgbDropdownModule,
         NgbTooltipModule,

@@ -135,7 +135,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Tipo de turno</label>
-                                    <select formControlName="turn_type" class="form-control custom-control ">
+                                    <select formControlName="turn_type" class="form-control custom-control">
                                         <option [value]="turn.value" *ngFor="let turn of turns">
                                             {{ turn.text }}
                                         </option>
@@ -144,6 +144,73 @@
                                         <small class="invalid text-danger" *ngIf="turn_type_invalid"> Es nesario el tipo
                                             de turno
                                         </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Género</label>
+                                    <select class="form-control custom-control" formControlName="gener">
+                                        <option selected>Seleccione</option>
+                                        <option>Masculino</option>
+                                        <option>Femenino</option>
+                                    </select>
+                                    <div *ngIf="gener_invalid">
+                                        <small class="invalid text-danger"> Es nesario el género
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Idiomas</label>
+                                    <select class="form-control custom-control" formControlName="languages">
+                                        <option selected>Seleccione</option>
+                                        <option>Español</option>
+                                        <option>Inglés</option>
+                                    </select>
+                                    <div *ngIf="languages_invalid">
+                                        <small class="invalid text-danger"> Es nesario el idioma
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Medio de transporte</label>
+                                    <select class="form-control custom-control" formControlName="conveyance">
+                                        <option selected>Seleccione</option>
+                                        <option>Moto</option>
+                                        <option>Carro</option>
+                                        <option>Ninguno</option>
+                                    </select>
+                                    <div *ngIf="conveyance_invalid">
+                                        <small class="invalid text-danger"> Es nesario el medio de transporte
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Tipo de contrato</label>
+                                    <select class="form-control custom-control" formControlName="type_of_contract">
+                                        <option selected>Seleccione</option>
+                                        <option>Fijo</option>
+                                        <option>Indefinido</option>
+                                    </select>
+                                    <div *ngIf="type_of_contract_invalid">
+                                        <small class="invalid text-danger"> Es nesario el tipo de contrato
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="salary">
+                                        <label class="form-check-label" for="salary">
+                                          Salario a convenir
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -223,7 +290,7 @@
                                                     <option value="0">No</option>
                                                 </select>
                                             <div *ngIf="can_trip_invalid">
-                                                <small class="invalid text-danger">Es el campo de disponibilidad
+                                                <small class="invalid text-danger">Es necesario el campo de disponibilidad
                                                     </small>
                                             </div>
                                         </div>
@@ -237,7 +304,44 @@
                                                     <option value="0">No</option>
                                                 </select>
                                             <div *ngIf="change_residence_invalid">
-                                                <small class="invalid text-danger">Es el campo de disponibilidad
+                                                <small class="invalid text-danger">Es necesario el campo de disponibilidad                                                    </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Requisitos de licencia conducción</label>
+                                            <ng-select multiple="true" [items]="driving_requirement" formControlName="driving_license" placeholder="Seleccione" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
+                                            <div *ngIf="driving_invalid">
+                                                <small class="invalid text-danger">Es necesario el campo de licencia de conducción
+                                                    </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Documentos legales necesarios</label>
+                                            <select class="form-control custom-control" formControlName="legal_documents">
+                                                <option selected>Seleccione</option>
+                                                <option>Cédula de ciudadania</option>
+                                                <option>Cédula de extranjeria</option>
+                                            </select>
+                                            <div *ngIf="legal_documents_invalid">
+                                                <small class="invalid text-danger">Es necesario el campo de documentos legales
+                                                    </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Pasaporte/Visa</label>
+                                            <select class="form-control custom-control" formControlName="passport_visa">
+                                                <option selected>Seleccione</option>
+                                                <option>Si</option>
+                                                <option>No</option>
+                                            </select>
+                                            <div *ngIf="passport_visa_invalid">
+                                                <small class="invalid text-danger">Es necesario el campo de Pasaporte/Visa
                                                     </small>
                                             </div>
                                         </div>

@@ -39,12 +39,12 @@
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <div class="row">
-            <h5 class=" text text-center justify-content-center modal-title p-1">Nuevo Municipio</h5>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times iconoXModalSalario" (click)="modal.hide()"></i>
-            </div>
-        </div>
+        <h5 class="modal-title"> Nuevo Municipio </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form [formGroup]="form">

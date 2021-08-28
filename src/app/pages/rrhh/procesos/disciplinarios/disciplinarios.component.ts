@@ -15,7 +15,7 @@ export class DisciplinariosComponent implements OnInit {
   pagination = {
     pageSize: 5,
     page: 1,
-    collectionSize: 0
+    collectionSize: 5
   }
   constructor( private fb:FormBuilder, private _reactiveValid: ValidatorsService ) { }
 

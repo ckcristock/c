@@ -23,6 +23,13 @@ export const consts = {
     { clave: 'Constitutivo', valor: 'Constitutivo' },
     { clave: 'No Constitutivo', valor: 'No Constitutivo' }
   ],
+  driving_requirements: [
+    { text: 'A1', value:'A1' },
+    { text: 'A2', value:'A2' },
+    { text: 'B1', value:'B1' },
+    { text: 'B2', value:'B2' },
+    { text: 'B3', value:'B3' }
+  ],
   bloodType: [
     { clave: 'A+', valor: 'A+' },
     { clave: 'A-', valor: 'A-' },

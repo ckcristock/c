@@ -41,8 +41,10 @@ export class EpsComponent implements OnInit {
     let params = {
       ...this.pagination, ...this.filtros
     }
+    this.loading = true;
     this.epsService.getAllEps(params)
     .subscribe( (res:any) => {
+      this.loading = false;
       this.epss = res.data.data;
       this.pagination.collectionSize = res.data.total;
     });

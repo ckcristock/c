@@ -37,8 +37,10 @@ export class DepartamentosComponent implements OnInit {
     let params = {
       ...this.pagination, ...this.filtro
     } 
+    this.loading = true;
     this.depService.getDepartmentPaginate(params)
     .subscribe( (res:any) =>{
+      this.loading = false;
       this.pagination.collectionSize = res.data.total;
       this.departamentos = res.data.data;
     });

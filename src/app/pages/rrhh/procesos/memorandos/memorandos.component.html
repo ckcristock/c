@@ -1,11 +1,11 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <h5>Memorando</h5>
             <div style="float: right;">
                 <button class="btn btn-success btn-sm" (click)="openMotivo()">Nuevo Motivo</button>
                 <button class="btn btn-info btn-sm ml-4" (click)="openMemorando()">Nuevo Memorando</button>
             </div>
+            <h5>Memorando</h5>
         </div>
     </div>
 </div>
@@ -41,12 +41,12 @@
 <!-- Agregando nueva categoria  -->
 <app-modal-basic #modalMotivo [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
-        <div class="row">
-            <h5 class=" text text-center justify-content-center modal-title p-1">Nuevo Motivo</h5>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times iconoXModal" (click)="modalMotivo.hide()"></i>
-            </div>
-        </div>
+        <h5 class="modal-title"> Nuevo Motivo </h5>
+        <button type="button" class="close basic-close" (click)="modalMotivo.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modalMotivo.hide()"></i>
+          </span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form [formGroup]="formMotivo">
@@ -92,12 +92,12 @@
 
 <app-modal-basic #modalMemorando [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <div class="row">
-            <h5 class=" text text-center justify-content-center modal-title p-1">Nuevo Memorando</h5>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times iconoXModalSalario" (click)="modalMemorando.hide()"></i>
-            </div>
-        </div>
+        <h5 class="modal-title"> Nuevo Memorando </h5>
+        <button type="button" class="close basic-close" (click)="modalMemorando.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modalMemorando.hide()"></i>
+          </span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form [formGroup]="formMemorando">
@@ -113,7 +113,7 @@
                         <option value="3">Three</option>
                     </select>
                     <label for="" class="form-label mt-3">Detalles</label>
-                    <textarea name="detalles" cols="20" rows="3" class="form-control form-control-sm col-sm-12 mr-4 mt-1"></textarea>
+                    <textarea name="detalles" cols="20" rows="3" class="form-control form-control-sm col-sm-12 mr-4 mt-1" placeholder="Detalles del nuevo memorando..."></textarea>
                 </div>
             </div>
         </form>

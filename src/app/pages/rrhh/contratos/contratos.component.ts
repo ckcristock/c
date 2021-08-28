@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { PositionService } from '../../ajustes/informacion-base/services/positions.service';
@@ -18,6 +19,19 @@ export class ContratosComponent implements OnInit {
     company: '',
     person: ''
   }
+
+  contratos:any = [
+    {
+      name: 'Néstor Eduardo Lima Rojas',
+      position: 'Full Stack',
+      time: 'Hace 12 Dias'
+    },
+    {
+      name: 'Julio Andres Perez Medina',
+      position: 'Frontend',
+      time: 'Hace 10 Dias'
+    }
+  ]
   constructor( 
               private contactService: ContratoService,
               private _group: GroupService,

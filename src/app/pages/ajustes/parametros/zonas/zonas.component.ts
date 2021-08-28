@@ -33,9 +33,10 @@ export class ZonasComponent implements OnInit {
 
   getAllZones( page = 1 ) {
     this.pagination.page = page;
+    this.loading = true;
     this.zonesService.getAllZones( this.pagination)
     .subscribe( (res:any) => {
-      
+      this.loading = false;
       this.zones = res.data.data;
       this.pagination.collectionSize = res.data.total
     })

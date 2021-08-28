@@ -11,6 +11,9 @@ import { ActividadesComponent } from "./actividades/actividades.component";
 import { ContratosComponent } from "./contratos/contratos.component";
 import { DisciplinariosComponent } from "./procesos/disciplinarios/disciplinarios.component";
 import { MemorandosComponent } from "./procesos/memorandos/memorandos.component";
+import { PreliquidadosComponent } from "./preliquidados/preliquidados.component";
+import { LiquidadosComponent } from "./preliquidados/liquidados/liquidados.component";
+import { AlertasComunComponent } from "./alertas-comun/alertas-comun.component";
 
 
 
@@ -22,6 +25,9 @@ const routes: Routes = [
     { path: 'novedades', component: NovedadesComponent },
     { path: 'llegadas-tarde', component: LlegadasTardesComponent },
     { path: 'contratos', component: ContratosComponent },
+    { path: 'preliquidados', component: PreliquidadosComponent },
+    { path: 'liquidado/:id', component: LiquidadosComponent },
+    { path: 'alertas-comun', component: AlertasComunComponent },
     { path: 'dotacion/dotaciones', component: DotacionesComponent },
     { path: 'dotacion/inventario', component: InventarioDotacionComponent },
     { path: 'procesos/disciplinarios', component: DisciplinariosComponent },

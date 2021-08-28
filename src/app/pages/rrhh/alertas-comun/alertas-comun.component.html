@@ -1,0 +1,79 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-outline-primary btn-sm" (click)="openModal()" style="float: right;" ngbTooltip="Enviar">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+            <h5>Alertas y Comunicaciones</h5>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Persona Recibe</th>
+                    <th scope="col">Detalles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of datas">
+                    <td scope="row"> {{ data.date }} </td>
+                    <td> {{ data.type }} </td>
+                    <td> {{ data.name }} </td>
+                    <td> {{ data.detail }} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Alertas y Comunicaciones </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <div class="row mt-4">
+                        <div class="col d-flex">
+                            <select class="form-select form-control form-control-sm mr-2" aria-label="Default select example">
+                                <option selected>Seleccione</option>
+                                <option value="1">Enviar a todos</option>
+                                <option value="2">Administración</option>
+                                <option value="3">Dispensación</option>
+                            </select>
+                            <select class="form-select form-control form-control-sm mr-2" aria-label="Default select example">
+                                <option selected>Seleccione</option>
+                                <option value="1">Enviar a todas</option>
+                            </select>
+                            <select class="form-select form-control form-control-sm" aria-label="Default select example">
+                                <option selected>Seleccione</option>
+                                <option value="1">Enviar a todos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <textarea class="form-control form-control-sm" id="descripcion" name="notas" rows="3" placeholder="Escriba la descripción del mensaje">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cancelar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised">Enviar notificación</button>
+        </div>
+    </div>
+</app-modal-basic>

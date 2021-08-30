@@ -12,7 +12,7 @@
         </div>
     </div>
     <p id="employee-salary">
-        $ 1.300.000
+        $ {{ salary_info.salary }}
     </p>
 
     <p class="text-mute font-weight-bold item-subtitle2">
@@ -20,7 +20,7 @@
     </p>
 
     <p class="font-weight-bold">
-        No registrado
+        {{ salary_info.contract_type }}
     </p>
 
     <p class="text-mute font-weight-bold item-subtitle2">
@@ -28,53 +28,38 @@
     </p>
 
     <p class="font-weight-bold">
-        2021-03-03
+        {{ salary_info.date_of_admission }}
     </p>
-
-    <p class="text-mute font-weight-bold item-subtitle2">
-        Fecha de retiro
-    </p>
-    <p class="font-weight-bold">
-        2021-09-02
-    </p>
-    <p class="ml-1 text-mute font-weight-bold item-subtitle2">
-        Periodo de pago
-    </p>
-    <p class="ml-1 font-weight-bold titulo">Mensual</p>
+    <span *ngIf="salary_info.work_contract_type_id == 2">
+        <p class="text-mute font-weight-bold item-subtitle2">
+            Fecha de retiro
+        </p>
+        <p class="font-weight-bold" >
+            {{ salary_info.date_end }}
+        </p>
+    </span>
     <hr>
-    <div class="row">
-        <div class="col-6">
-            <h5>Bonificación reciente</h5>
-        </div>
-        <div class="col-6">
-            <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModalBonus()">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-    </div>
+    <app-bono *ngIf="salary_info.id" [id]="salary_info.id"></app-bono>
 </div>
 
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <div class="row">
-            <div class="col">
-                <h5>Edición salario</h5>
-            </div>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times iconoXModalSalario" (click)="modal.hide()"></i>
-            </div>
-        </div>
+        <h5 class="modal-title"> Edición Salario </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">Tipo de contrato</label>
-                    <select name="" [class.is-invalid]="type_contract_valid" formControlName="type_contract" class="form-select form-control custom-control col-md-12" id="">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <label class="custom-label" for="type_contract">Tipo de contrato</label>
+                    <select [class.is-invalid]="type_contract_valid" [(ngModel)]="salary_info.work_contract_type_id" formControlName="type_contract" class="form-select form-control custom-control col-md-12" id="type_contract">
+                        <option *ngFor="let contract_type of contract_types" [value]="contract_type.valor">
+                            {{ contract_type.clave }}
+                        </option>
                     </select>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="type_contract_valid"> Es necesario el Tipo de contrato
@@ -85,7 +70,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Salario</label>
-                    <input type="number" [class.is-invalid]="salary_valid" formControlName="salary" class="form-control form-control-sm" required>
+                    <input type="number" [class.is-invalid]="salary_valid" [(ngModel)]="salary_info.salary" formControlName="salary" class="form-control form-control-sm" id="funcionario_id" required>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="salary_valid"> Es necesario el salario
                         </small>
@@ -95,17 +80,17 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="fecha_ingreso">Fecha de ingreso</label>
-                    <input type="date" [class.is-invalid]="date_of_admission_valid" formControlName="date_of_admission" class="form-control form-control-sm" required>
+                    <input type="date" [class.is-invalid]="date_of_admission_valid" [(ngModel)]="salary_info.date_of_admission" formControlName="date_of_admission" class="form-control form-control-sm" id="fecha_ingreso" required>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="date_of_admission_valid"> Es necesario la fecha de ingreso
                         </small>
                     </div>
                 </div>
             </div>
-            <div class="form-row">
+            <div class="form-row" *ngIf="salary_info.work_contract_type_id == 2">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="fecha_retiro">Fecha de retiro</label>
-                    <input type="date" [class.is-invalid]="retirement_date_valid" formControlName="retirement_date" class="form-control form-control-sm" id="feccha_retiro" required>
+                    <input type="date" [class.is-invalid]="retirement_date_valid" [(ngModel)]="salary_info.date_end" formControlName="retirement_date" class="form-control form-control-sm" id="fecha_retiro" required>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="retirement_date_valid"> Es necesario la fecha de retiro
                         </small>
@@ -125,68 +110,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Actualizar</button>
-        </div>
-    </div>
-</app-modal-basic>
-
-
-<!-------------------------- Modal Bonus ---------------------------------->
-<app-modal-basic #modalBonus [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <div class="row">
-            <div class="col">
-                <h5>Nueva Bonificación</h5>
-            </div>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times iconoXModalSalario" (click)="modalBonus.hide()"></i>
-            </div>
-        </div>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">Tipo de bono</label>
-                    <select name="" [class.is-invalid]="type_of_bonus_valid" formControlName="type_of_bonus" class="form-select form-control custom-control col-md-12" id="">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="type_of_bonus_valid"> Es necesario el tipo de bono
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">Bono</label>
-                    <select name="" [class.is-invalid]="bonus_valid" formControlName="bonus" class="form-select form-control custom-control col-md-12" id="">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="bonus_valid"> Es necesario el bono
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="valor">Valor</label>
-                    <input type="number" [class.is-invalid]="value_valid" formControlName="value" class="form-control form-control-sm" id="valor" required>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="value_valid"> Es necesario el valor
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modalBonus.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="updateSalaryInfo()">Actualizar</button>
         </div>
     </div>
 </app-modal-basic>

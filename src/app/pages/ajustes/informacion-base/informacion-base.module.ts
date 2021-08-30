@@ -38,6 +38,7 @@ import { TurnoFijoComponent } from './turnos/turno-fijo/turno-fijo.component';
 import { CreateTurnoFijoComponent } from './turnos/turno-fijo/create-turno-fijo/create-turno-fijo.component';
 import { TurnoRotativoComponent } from './turnos/turno-rotativo/turno-rotativo.component';
 import { CreateTurnoRotativoComponent } from './turnos/turno-rotativo/create-turno-rotativo/create-turno-rotativo.component';
+import { BonoComponent } from './funcionarios/detalle-funcionario/ver-funcionario/bono/bono.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { CreateTurnoRotativoComponent } from './turnos/turno-rotativo/create-tur
     CreateTurnoFijoComponent,
     TurnoRotativoComponent,
     CreateTurnoRotativoComponent,
+    BonoComponent
   ],
 
   imports: [

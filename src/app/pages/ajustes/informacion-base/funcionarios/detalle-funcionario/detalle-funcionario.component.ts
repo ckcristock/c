@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { DetalleService } from './detalle.service';
+import { DatosBasicosService } from './ver-funcionario/datos-basicos/datos-basicos.service';
+import { DatosEmpresaComponent } from './ver-funcionario/datos-empresa/datos-empresa.component';
 
 @Component({
   selector: 'app-detalle-funcionario',
@@ -11,7 +13,7 @@ export class DetalleFuncionarioComponent implements OnInit {
   habilitado = true;
   components = 'informacion';
   id: any;
-  fun:any;
+  data$:any;
   funcionario: any = {
     salary: '',
     work_contract: '',
@@ -23,13 +25,21 @@ export class DetalleFuncionarioComponent implements OnInit {
     signature: '',
     title: ''
   };
-  constructor( private router: Router, private detalleService: DetalleService, private activateRoute: ActivatedRoute ) { }
+  constructor( 
+              private router: Router, 
+              private detalleService: DetalleService, 
+              private activateRoute: ActivatedRoute,
+              private basicDataService: DatosBasicosService ) { }
 
 
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params.id;
     this.getBasicData();
+    this.basicDataService.datos$.subscribe( data => {
+      this.getBasicData();
+    });
+
   }
 
   regresar(){
@@ -43,11 +53,12 @@ export class DetalleFuncionarioComponent implements OnInit {
   getBasicData(){
     this.detalleService.getBasicData(this.id)
     .subscribe( (res:any) => {
-      this.fun = res.data;
-      for (const func of this.fun) {
-        this.funcionario = func;
-      }
+        this.funcionario = res.data; 
     });
+  }
+
+  ngOnDestroy(): void {
+    this.basicDataService.datos$.unsubscribe();
   }
   
 }

@@ -1,0 +1,32 @@
+<div class="card animate__animated animate__fadeIn">
+    <div class="card-body">
+        <div class="card-title">
+            <h5>Pre Liquidados</h5>
+            <p>Todos los funcionarios preliquidados registrados en nuestra base de datos.</p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2" *ngFor="let preliquidado of preliquidados">
+        <div class="card ">
+            <div class="card-body text-center">
+                <img src="../../../../assets/images/users/no-image.png" class="card-img-top" alt="">
+                <div class="card-title">
+                    <p class="mt-3">
+                        <strong>
+                            {{ preliquidado.name }}
+                        </strong>
+                        <br>
+                        <small>{{ preliquidado.position }}</small><br>
+                        <small>{{ preliquidado.time }}</small>
+                    </p>
+                </div>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-outline-primary btn-sm" placement="bottom" ngbTooltip="Liquidar" (click)="alert(preliquidado.id)">
+                        <i class="fas fa-id-card"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

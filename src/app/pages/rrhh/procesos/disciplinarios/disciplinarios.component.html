@@ -1,0 +1,123 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="open()">Nuevo Proceso Disciplinario</button>
+            <h5>Procesos Disciplinarios</h5>
+            <p>Todos los procesos disciplinarios adelantados en la empresa y registrados en el sistema.</p>
+        </div>
+        <div class="row">
+            <div class="col d-flex">
+                <input type="text" class="form-control form-control-sm col-sm-2 mr-4 mt-1" name="codigo" autocomplete="off" placeholder="Filtro Código">
+                <input type="text" class="form-control form-control-sm col-sm-2 mr-4 mt-1" name="funcionario" autocomplete="off" placeholder="Filtro Funcionario">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Funcionario</th>
+                    <th scope="col">Descripción Proceso</th>
+                    <th scope="col">Fecha Inicial</th>
+                    <th scope="col">Fecha Final</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" style="width: 50px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row">PD23</td>
+                    <td>Néstor Eduardo Lima Rojas</td>
+                    <td>Proceso disciplinario test</td>
+                    <td>12/05/2021</td>
+                    <td>12/05/2021</td>
+                    <td>Activo</td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i> Ver
+                                    </a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i> Imprimir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Proceso Disciplinario </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="funcionario_id">
+                        <h6>Funcionario</h6>
+                    </label>
+                    <input type="text" class="form-control form-control-sm" [class.is-invalid]="person_valid" formControlName="person" placeholder="Funcionario">
+                    <ng-container *ngIf="person_valid">
+                        <small *ngFor="let item of form.get('person').errors | ObjToArrayPipe" class="text-danger">
+                          {{ item?.msj }}
+                        </small>
+                    </ng-container>
+                    <div class="row mt-4">
+                        <div class="col d-flex">
+                            <input type="date" class="form-control form-control-sm mr-2" name="fecha_inicial">
+                            <input type="date" class="form-control form-control-sm" name="fecha_final">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <textarea class="form-control form-control-sm" [class.is-invalid]="description_valid" formControlName="description" id="descripcion" name="notas" rows="3" placeholder="Descripción Proceso Disciplinario">
+                        </textarea>
+                        <ng-container *ngIf="description_valid">
+                            <small *ngFor="let item of form.get('description').errors | ObjToArrayPipe" class="text-danger">
+                              {{ item?.msj }}
+                            </small>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-md-6 panel">
+                    <div class="panel-body">
+                        <div styles=" overflow: auto; heigth: 400px;">
+                            <div class="mt-5 text-center">
+                                <i class="fa fa-exclamation-circle fa-3x"></i>
+                                <h4>Seleccione Un Usuario</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised">Guardar Zona</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

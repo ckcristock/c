@@ -17,93 +17,93 @@
         </p>
 
         <p class="font-weight-bold">
-            No registrado
+            {{ afiliations.eps_name }}
         </p>
-
         <p class="text-mute font-weight-bold item-subtitle2">
-            Fecha de ingreso
+            Fondo de pensiones
         </p>
 
         <p class="font-weight-bold">
-            2021-03-03
+            {{ afiliations.pension_fund_name }}
+        </p>
+        <p class="text-mute font-weight-bold item-subtitle2">
+            Fondo de cesantias
         </p>
 
-        <p class="text-mute font-weight-bold item-subtitle2">
-            Fecha de retiro
-        </p>
         <p class="font-weight-bold">
-            2021-09-02
+            {{ afiliations.severance_fund_name }}
         </p>
-        <p class="ml-1 text-mute font-weight-bold item-subtitle2">
-            Periodo de pago
+        <p class="text-mute font-weight-bold item-subtitle2">
+            Caja de compensación
         </p>
-        <p class="ml-1 font-weight-bold titulo">Mensual</p>
+
+        <p class="font-weight-bold">
+            {{ afiliations.compensation_fund_name }}
+        </p>
+        <p class="text-mute font-weight-bold item-subtitle2">
+            ARL
+        </p>
+
+        <p class="font-weight-bold">
+            {{ afiliations.arl_name }}
+        </p>
     </div>
 </div>
 
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <div class="row">
-            <div class="col">
-                <h5>Edición datos afiliaciones</h5>
-            </div>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times iconoXModalSalario" (click)="modal.hide()"></i>
-            </div>
-        </div>
+        <h5 class="modal-title"> Edición datos Afiliaciones </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">EPS</label>
-                    <select name="" [class.is-invalid]="eps_valid" formControlName="eps" class="form-select form-control custom-control col-md-12" id="">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                    <label class="custom-label" for="esps">EPS</label>
+                    <ng-select [items]="eps" id="esps" [class.is-invalid]="eps_valid" formControlName="eps_id" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="eps_valid"> Es necesario la eps
                         </small>
                     </div>
                 </div>
                 <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">Fondo de pensiones</label>
-                    <select name="" [class.is-invalid]="pension_found_valid" formControlName="pension_found" class="form-select form-control custom-control col-md-12" id="">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                    <label class="custom-label" for="pension_fund">Fondo de pensiones</label>
+                    <ng-select [items]="pensions" id="pension_fund" [class.is-invalid]="pension_found_valid" formControlName="pension_fund_id" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="pension_found_valid"> Es necesario el fondo de pensión 
                         </small>
                     </div>
                 </div>
                 <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">Fondo de cesantias</label>
-                    <select name="" [class.is-invalid]="severance_found_valid" formControlName="severance_found" class="form-select form-control custom-control col-md-12" id="">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                    <label class="custom-label" for="cesantias_fund">Fondo de cesantias</label>
+                    <ng-select [items]="severances" id="pension_fund" [class.is-invalid]="severance_found_valid" formControlName="severance_fund_id" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="severance_found_valid"> Es necesario el fondo de cesantias 
                         </small>
                     </div>
                 </div>
                 <div class="form-group col-md-12">
-                    <label class="custom-label" for="genero">C. Compensación</label>
-                    <select name="" [class.is-invalid]="compensation_valid" formControlName="compensation" class="form-select form-control custom-control col-md-12" id="">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                    <label class="custom-label" for="compesation">C. Compensación</label>
+                    <ng-select [items]="compensations" id="compensation" [class.is-invalid]="compensation_valid" formControlName="compensation_fund_id" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="compensation_valid"> Es necesario la compensación 
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="custom-label" for="arl">Arl</label>
+                    <ng-select [items]="arls" id="arl" [class.is-invalid]="arl_valid" formControlName="arl_id" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
+                    <div class="col-md-7 offset-4">
+                        <small class="invalid text-danger" *ngIf="arl_valid"> Es necesario la Arl 
                         </small>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Actualizar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="updateAfiliation()">Actualizar</button>
         </div>
     </div>
 </app-modal-basic>

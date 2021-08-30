@@ -24,11 +24,6 @@
                 <p class="font-weight-bold text-mute item-subtitle">
                     Cargo
                 </p>
-
-                <p class="font-weight-bold text-mute item-subtitle">
-                    Riesgo
-                </p>
-
                 <p class="font-weight-bold text-mute item-subtitle">
                     Tipo de turno
                 </p>
@@ -51,10 +46,6 @@
                 </p>
 
                 <p class="font-weight-bold">
-                    asdasdasd
-                </p>
-
-                <p class="font-weight-bold">
                     {{ empresa.turn_type }}
                 </p>
                 <p class="font-weight-bold">
@@ -67,14 +58,12 @@
 
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
-        <div class="row">
-            <div class="col">
-                <h5>Edición datos de empresa</h5>
-            </div>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times" (click)="modal.hide()"></i>
-            </div>
-        </div>
+        <h5 class="modal-title"> Edición datos empresa </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
     </div>
     <div class="app-modal-body">
         <div class="row mt-3">
@@ -83,66 +72,52 @@
                     <div class="form-row mt-3">
                         <div class="col-md-6">
                             <div class="form-group row">
-                                <label class="col-md-4 custom-label col-form-label text-right" for="dependencia">Dependencia</label>
-                                <select name="" [class.is-invalid]="dependency_valid" formControlName="dependency" class="form-select form-control custom-control col-md-7" id="dependencia">
-                                    <option selected>Seleccionar</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
+                                <label class="col-md-4 custom-label col-form-label text-right" for="dependencia">Grupo</label>
+                                <ng-select class="col-md-7 p-0" formControlName="group_id" (change)="getDependencies($event.value)" [items]="groups" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                                </ng-select>
                                 <div class="col-md-7 offset-4">
-                                    <small class="invalid text-danger" *ngIf="dependency_valid"> Es necesario el tipo de dependencia
+                                    <small class="invalid text-danger" *ngIf="dependency_valid"> Es necesario el tipo de grupo
                                     </small>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-4 custom-label col-form-label text-right" for="riesgo">Riesgo</label>
-                                <select name="" [class.is-invalid]="risks_valid" formControlName="risks" class="form-select form-control custom-control col-md-7" id="riesgo">
-                                    <option selected>Seleccionar</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
+                                <label class="col-md-4 custom-label col-form-label text-right" for="cargo">Cargo</label>
+                                <ng-select class="col-md-7 p-0" formControlName="position_id" [items]="positions" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                                </ng-select>
                                 <div class="col-md-7 offset-4">
-                                    <small class="invalid text-danger" *ngIf="risks_valid"> Es necesario el tipo de riesgo 
+                                    <small class="invalid text-danger" *ngIf="position_valid"> Es necesario el tipo cargo 
                                     </small>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-md-4 custom-label col-form-label text-right" for="turno_asignado">Turno asignado</label>
-                                <select name="" [class.is-invalid]="assigned_turn_valid" formControlName="assigned_turn" class="form-select form-control custom-control col-md-7" id="turno_asignado">
-                                    <option selected>Seleccionar</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
+                            <div class="form-group row" *ngIf="turnSelected == 'Fijo'">
+                                <label class="col-md-4 col-form-label text-right" for="turno_asignado">
+                                Turno 
+                                asignado
+                                </label>
+                                <ng-select class="col-md-7 p-0" formControlName="fixed_turn_id" [items]="fixed_turns" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                                </ng-select>
                                 <div class="col-md-7 offset-4">
-                                    <small class="invalid text-danger" *ngIf="assigned_turn_valid"> Es necesario el tipo turno asignado 
+                                    <small class="invalid text-danger" *ngIf="fixed_turn_valid"> Es necesario el tipo turno asignado 
                                     </small>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group row">
-                                <label class="col-md-4 custom-label col-form-label text-right" for="cargo">Cargo</label>
-                                <select name="" [class.is-invalid]="position_valid" formControlName="position" class="form-select form-control custom-control col-md-7" id="cargo">
-                                    <option selected>Seleccionar</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
+                                <label class="col-md-4 custom-label col-form-label text-right" for="dependencia">Dependencia</label>
+                                <ng-select class="col-md-7 p-0" formControlName="dependency_id" (change)="getPositions($event.value)" [items]="dependencies" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                                </ng-select>
                                 <div class="col-md-7 offset-4">
-                                    <small class="invalid text-danger" *ngIf="position_valid"> Es necesario el tipo cargo 
+                                    <small class="invalid text-danger" *ngIf="dependency_valid"> Es necesario el tipo de dependencia
                                     </small>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 custom-label col-form-label text-right" for="turno">Turno</label>
-                                <select name="" [class.is-invalid]="turn_valid" formControlName="turn" class="form-select form-control custom-control col-md-7" id="turno">
-                                    <option selected>Seleccionar</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select formControlName="turn_type" class="form-control custom-control col-md-7" (change)="turnChanged($event.target.value)">
+                                <option [value]="turn.value" *ngFor="let turn of turnos">
+                                {{ turn.text }}
+                                </option>
                                 </select>
                                 <div class="col-md-7 offset-4">
                                     <small class="invalid text-danger" *ngIf="turn_valid"> Es necesario el tipo cargo 
@@ -158,7 +133,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Actualizar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="updateEnterpriseData()">Actualizar</button>
         </div>
     </div>
 </app-modal-basic>

@@ -32,8 +32,9 @@ export class VacantesCrearComponent implements OnInit {
     dependencies: any[] = [];
     positions: any[] = [];
 
-    turns = consts.turnTypes
+    turns = consts.turnTypes;
 
+    driving_requirement = consts.driving_requirements;
 
     constructor(
         private router: Router,
@@ -188,6 +189,13 @@ export class VacantesCrearComponent implements OnInit {
             max_age: ['', Validators.required],
             can_trip: ['', Validators.required],
             change_residence: ['', Validators.required],
+            gener: ['', Validators.required],
+            languages: ['', Validators.required],
+            conveyance: ['', Validators.required],
+            type_of_contract: ['', Validators.required],
+            driving_license: ['', Validators.required],
+            legal_documents: ['', Validators.required],
+            passport_visa: ['', Validators.required]            
         })
     }
 
@@ -247,5 +255,33 @@ export class VacantesCrearComponent implements OnInit {
     }
     get can_trip_invalid() {
         return this.form.get('can_trip').invalid && this.form.get('can_trip').touched;
+    }
+
+    get gener_invalid() {
+        return this.form.get('gener').invalid && this.form.get('gener').touched;
+    }
+
+    get languages_invalid() {
+        return this.form.get('languages').invalid && this.form.get('languages').touched;
+    }
+
+    get conveyance_invalid() {
+        return this.form.get('conveyance').invalid && this.form.get('conveyance').touched;
+    }
+
+    get type_of_contract_invalid() {
+        return this.form.get('type_of_contract').invalid && this.form.get('type_of_contract').touched;
+    }
+
+    get driving_invalid() {
+        return this.form.get('driving_license').invalid && this.form.get('driving_license').touched;
+    }
+
+    get legal_documents_invalid() {
+        return this.form.get('legal_documents').invalid && this.form.get('legal_documents').touched;
+    }
+
+    get passport_visa_invalid() {
+        return this.form.get('passport_visa').invalid && this.form.get('passport_visa').touched;
     }
 }

@@ -10,7 +10,22 @@ export class DatosEmpresaService {
   constructor( private http: HttpClient ) { }
 
   getEnterpriseData(id){
-    return this.http.get(`${environment.base_url}/enterpriseData/${id}`);
+    return this.http.get(`${environment.base_url}/company/${id}`);
+  }
+  getDependecies(){
+    return this.http.get(`${environment.base_url}/dependency`);
+  }
+  
+  getPositions(){
+    return this.http.get(`${environment.base_url}/position`)
+  }
+
+  getFixed_turn(params = {}){
+    return this.http.get(`${environment.base_url}/fixed_turn`, { params });
+  }
+
+  updateEnterpriseData(data){
+    return this.http.post(`${environment.base_url}/company`, data);
   }
 
 }

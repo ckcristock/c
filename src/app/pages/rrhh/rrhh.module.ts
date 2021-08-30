@@ -27,6 +27,13 @@ import { ActividadesComponent } from './actividades/actividades.component';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { DetalleLlegadaComponent } from './llegadas-tardes/detalle-llegada/detalle-llegada.component';
+import { ContratosComponent } from './contratos/contratos.component';
+import { DisciplinariosComponent } from './procesos/disciplinarios/disciplinarios.component';
+import { MemorandosComponent } from './procesos/memorandos/memorandos.component';
+import { PreliquidadosComponent } from './preliquidados/preliquidados.component';
+import { LiquidadosComponent } from './preliquidados/liquidados/liquidados.component';
+import { AlertasComunComponent } from './alertas-comun/alertas-comun.component';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { AsignacionTurnosComponent } from './asignacion-turnos/asignacion-turnos.component';
 import { SemanaTurnoComponent } from './asignacion-turnos/semana-turno/semana-turno.component';
 import { TurnoComponent } from './asignacion-turnos/semana-turno/turno/turno.component';
@@ -43,11 +50,17 @@ import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
     CrearNovedadComponent,
     InventarioDotacionComponent,
     DotacionesComponent,
-    DetalleLlegadaComponent,
     AsignacionTurnosComponent,
     SemanaTurnoComponent,
     TurnoComponent,
     HorasExtrasComponent,
+    DetalleLlegadaComponent,
+    ContratosComponent,
+    DisciplinariosComponent,
+    MemorandosComponent,
+    PreliquidadosComponent,
+    LiquidadosComponent,
+    AlertasComunComponent,
   ],
   imports: [
     RrhhRouterModule,
@@ -55,9 +68,10 @@ import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
     ChartsModule,
     FormsModule,
     ReactiveFormsModule,
-    /*         SweetAlert2Module, */
+    /* SweetAlert2Module, */
     NgbPaginationModule,
     NgbDropdownModule,
+    NgbTooltipModule,
     MyDateRangePickerModule,
     PipesModule,
     ComponentsModule,

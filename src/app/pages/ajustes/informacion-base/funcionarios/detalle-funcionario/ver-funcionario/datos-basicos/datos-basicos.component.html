@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col">
+        <div class="col-md-4">
             <p class="font-weight-bold text-mute item-subtitle">
                 Nombre completo
             </p>
@@ -78,19 +78,17 @@
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-xl'">
     <div class="app-modal-header">
-        <div class="row">
-            <div class="col">
-                <h5>Actualizar funcionario</h5>
-            </div>
-            <div class="col" style="float: right;">
-                <i class="fas fa-times" (click)="modal.hide()"></i>
-            </div>
-        </div>
+        <h5 class="modal-title"> Actualizar funcionario </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
     </div>
     <div class="app-modal-body">
         <div class="row mt-3">
             <div class="col-12">
-                <form [formGroup]="form" (ngSubmit)="save()">
+                <form [formGroup]="form">
                     <div class="form-row mt-3">
                         <div class="form-group col-md-2 text-center">
                             <img [src]="fileString" class="img-rounded d-block m-auto" alt="">
@@ -103,48 +101,48 @@
                         </div>
                         <div class="col-md-6 text-left">
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label custom-label text-right">Primer nombre</label>
-                                <input type="text" placeholder="" [class.is-invalid]="first_name_valid" [(ngModel)]="funcionario.first_name" formControlName="first_name" class="form-control custom-control col-md-7">
+                                <label for="first_name" class="col-md-4 col-form-label custom-label text-right">Primer nombre</label>
+                                <input type="text" placeholder="" id="first_name" [class.is-invalid]="first_name_valid" [(ngModel)]="funcionario.first_name" formControlName="first_name" class="form-control custom-control col-md-7">
                                 <div class="col-md-7 offset-4">
                                     <small class="invalid text-danger" *ngIf="first_name_valid"> Los nombres son necesarios
                                     </small>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label custom-label text-right">Segundo nombre</label>
-                                <input type="text" placeholder="" [class.is-invalid]="second_name_valid" [(ngModel)]="funcionario.second_name" formControlName="second_name" class="form-control custom-control col-md-7">
+                                <label for="second_name" class="col-md-4 col-form-label custom-label text-right">Segundo nombre</label>
+                                <input type="text" placeholder="" id="second_name" [class.is-invalid]="second_name_valid" [(ngModel)]="funcionario.second_name" formControlName="second_name" class="form-control custom-control col-md-7">
                                 <div class="col-md-7 offset-4">
                                     <small class="invalid text-danger" *ngIf="second_name_valid"> Los nombres son necesarios
                                     </small>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label custom-label text-right">Primer apellido</label>
-                                <input type="text" placeholder="" [class.is-invalid]="first_surname_valid" [(ngModel)]="funcionario.first_surname" formControlName="first_surname" class="form-control custom-control col-md-7">
+                                <label for="first_surname" class="col-md-4 col-form-label custom-label text-right">Primer apellido</label>
+                                <input type="text" placeholder="" id="first_surname" [class.is-invalid]="first_surname_valid" [(ngModel)]="funcionario.first_surname" formControlName="first_surname" class="form-control custom-control col-md-7">
                                 <div class="col-md-7 offset-4">
                                     <small class="invalid text-danger" *ngIf="first_surname_valid"> Los nombres son necesarios
                                     </small>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label custom-label text-right">Segundo apellido</label>
-                                <input type="text" placeholder="" [class.is-invalid]="second_surname_valid" [(ngModel)]="funcionario.second_surname" formControlName="second_surname" class="form-control custom-control col-md-7">
+                                <label for="second_surname" class="col-md-4 col-form-label custom-label text-right">Segundo apellido</label>
+                                <input type="text" placeholder="" id="second_surname" [class.is-invalid]="second_surname_valid" [(ngModel)]="funcionario.second_surname" formControlName="second_surname" class="form-control custom-control col-md-7">
                                 <div class="col-md-7 offset-4">
                                     <small class="invalid text-danger" *ngIf="second_surname_valid"> Los apellidos son necesarios
                                     </small>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label custom-label text-right">Documento de identidad</label>
-                                <input type="number" placeholder="" [class.is-invalid]="identifier_valid" [(ngModel)]="funcionario.identifier" formControlName="identifier" name="identifier" class="form-control custom-control col-md-7">
+                                <label for="identifier" class="col-md-4 col-form-label custom-label text-right">Documento de identidad</label>
+                                <input type="number" placeholder="" [class.is-invalid]="identifier_valid" [(ngModel)]="funcionario.identifier" formControlName="identifier" name="identifier" id="identifier" class="form-control custom-control col-md-7">
                                 <div class="col-md-7 offset-4">
                                     <small class="invalid text-danger" *ngIf="identifier_valid"> Es necesario el documento
                                     </small>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label custom-label text-right">Dirección de residencia</label>
-                                <input type="text" placeholder="" [class.is-invalid]="direction_valid" [(ngModel)]="funcionario.direction" formControlName="direction" class="form-control custom-control col-md-7">
+                                <label for="direction" class="col-md-4 col-form-label custom-label text-right">Dirección de residencia</label>
+                                <input type="text" [class.is-invalid]="direction_valid" [(ngModel)]="funcionario.direction" id="direction" formControlName="direction" class="form-control custom-control col-md-7">
                                 <div class="col-md-7 offset-4">
                                     <small class="invalid text-danger" *ngIf="direction_valid"> Es necesario la dirección
                                     </small>
@@ -153,16 +151,16 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label custom-label text-right">Fecha de nacimiento</label>
-                                <input type="date" placeholder="" [class.is-invalid]="date_of_birth_valid" [(ngModel)]="funcionario.date_of_birth" formControlName="date_of_birth" class="form-control custom-control col-md-7">
+                                <label for="date_of_birth" class="col-md-4 col-form-label custom-label text-right">Fecha de nacimiento</label>
+                                <input type="date" [class.is-invalid]="date_of_birth_valid" [(ngModel)]="funcionario.date_of_birth" id="date_of_birth" formControlName="date_of_birth" class="form-control custom-control col-md-7">
                                 <div class="col-md-7 offset-4">
                                     <small class="invalid text-danger" *ngIf="date_of_birth_valid"> Es necesario la fecha de nacimiento
                                     </small>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label custom-label text-right">Titulo de estudio</label>
-                                <select name="" [class.is-invalid]="degree_valid" [(ngModel)]="funcionario.degree" formControlName="degree" class="form-select form-control custom-control col-md-7" id="">
+                                <label for="degree" class="col-md-4 col-form-label custom-label text-right">Titulo de estudio</label>
+                                <select [class.is-invalid]="degree_valid" id="degree" [(ngModel)]="funcionario.degree" formControlName="degree" class="form-select form-control custom-control col-md-7">
                                     <option *ngFor="let degree of degrees" [value]="degree.valor">
                                         {{ degree.clave }}
                                     </option>
@@ -173,16 +171,16 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label custom-label text-right">Email</label>
-                                <input type="email" placeholder="" [class.is-invalid]="email_valid" [(ngModel)]="funcionario.email" formControlName="email" class="form-control custom-control col-md-7">
+                                <label for="email" class="col-md-4 col-form-label custom-label text-right">Email</label>
+                                <input type="email" placeholder="" id="email" [class.is-invalid]="email_valid" [(ngModel)]="funcionario.email" formControlName="email" class="form-control custom-control col-md-7">
                                 <div class="col-md-7 offset-4">
                                     <small class="invalid text-danger" *ngIf="email_valid"> Es necesario el email
                                     </small>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-4 custom-label col-form-label text-right" for="genero">Género</label>
-                                <select name="" [class.is-invalid]="gener_valid" [(ngModel)]="funcionario.gener" formControlName="gener" class="form-select form-control custom-control col-md-7" id="">
+                                <label class="col-md-4 custom-label col-form-label text-right" for="gener">Género</label>
+                                <select [class.is-invalid]="gener_valid" id="gener" [(ngModel)]="funcionario.gener" formControlName="gener" class="form-select form-control custom-control col-md-7">
                                     <option selected value="Masculino">Masculino</option>
                                     <option value="Femenino">Femenino</option>
                                 </select>
@@ -192,8 +190,8 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-4 custom-label col-form-label text-right" for="genero">Estado civil</label>
-                                <select name="" [class.is-invalid]="marital_status_valid" [(ngModel)]="funcionario.marital_status" formControlName="marital_status" class="form-select form-control custom-control col-md-7" id="">
+                                <label class="col-md-4 custom-label col-form-label text-right" for="marital_status">Estado civil</label>
+                                <select [class.is-invalid]="marital_status_valid" id="marital_status" [(ngModel)]="funcionario.marital_status" formControlName="marital_status" class="form-select form-control custom-control col-md-7">
                                     <option *ngFor="let estado of estados" [value]="estado.valor">
                                         {{ estado.clave }}
                                     </option>
@@ -204,8 +202,8 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-md-4 col-form-label custom-label text-right">Celular</label>
-                                <input type="number" placeholder="" [class.is-invalid]="cell_phone_valid" [(ngModel)]="funcionario.cell_phone" formControlName="cell_phone" class="form-control custom-control col-md-7">
+                                <label for="cell_phone" class="col-md-4 col-form-label custom-label text-right">Celular</label>
+                                <input type="number" id="cell_phone" [class.is-invalid]="cell_phone_valid" [(ngModel)]="funcionario.cell_phone" formControlName="cell_phone" class="form-control custom-control col-md-7">
                                 <div class="col-md-7 offset-4">
                                     <small class="invalid text-danger" *ngIf="cell_phone_valid"> Es necesario el número de celular
                                     </small>
@@ -220,7 +218,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Actualizar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="guardar()">Actualizar</button>
         </div>
     </div>
 </app-modal-basic>

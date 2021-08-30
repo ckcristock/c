@@ -10,6 +10,12 @@ import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inve
 import { ActividadesComponent } from './actividades/actividades.component';
 import { AsignacionTurnosComponent } from './asignacion-turnos/asignacion-turnos.component';
 import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
+import { ContratosComponent } from './contratos/contratos.component';
+import { PreliquidadosComponent } from './preliquidados/preliquidados.component';
+import { LiquidadosComponent } from './preliquidados/liquidados/liquidados.component';
+import { AlertasComunComponent } from './alertas-comun/alertas-comun.component';
+import { DisciplinariosComponent } from './procesos/disciplinarios/disciplinarios.component';
+import { MemorandosComponent } from './procesos/memorandos/memorandos.component';
 
 const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
@@ -20,9 +26,14 @@ const routes: Routes = [
   { path: 'llegadas-tarde', component: LlegadasTardesComponent },
   { path: 'dotacion/dotaciones', component: DotacionesComponent },
   { path: 'dotacion/inventario', component: InventarioDotacionComponent },
-
   { path: 'turnos/asignacion', component: AsignacionTurnosComponent },
   { path: 'turnos/horas-extras', component: HorasExtrasComponent },
+  { path: 'contratos', component: ContratosComponent },
+  { path: 'preliquidados', component: PreliquidadosComponent },
+  { path: 'liquidado/:id', component: LiquidadosComponent },
+  { path: 'alertas-comun', component: AlertasComunComponent },
+  { path: 'procesos/disciplinarios', component: DisciplinariosComponent },
+  { path: 'procesos/memorandos', component: MemorandosComponent },
 ];
 
 @NgModule({

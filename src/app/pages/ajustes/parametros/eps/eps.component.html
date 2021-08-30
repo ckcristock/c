@@ -11,7 +11,7 @@
                 <input type="text" placeholder="Buscar código EPS" class="form-control form-control-sm col-sm-2" (change)="getAllEps()" [(ngModel)]="filtros.code" name="code" autocomplete="off">
             </div>
         </div>
-        <table class="table table-striped">
+        <table class="table table-striped" *ngIf="!loading && epss.length > 0; else notData">
             <thead>
                 <tr>
                     <th scope="col">Nombre</th>
@@ -50,14 +50,17 @@
         </ngb-pagination>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-lg'">
+<app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <div class="row">
-            <h5 class=" text text-center justify-content-center modal-title p-1">Nueva EPS</h5>
-        </div>
+        <h5 class="modal-title"> Nueva EPS </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
     </div>
     <div class="app-modal-body">
-        <form [formGroup]="form" (ngSubmit)="createNewEps()">
+        <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre de EPS</label>
@@ -83,11 +86,16 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group text-right">
-                    <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-                    <button type="submit" class="btn btn-primary btn-sm raised">Guardar EPS</button>
-                </div>
             </div>
         </form>
     </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createNewEps()">Guardar EPS</button>
+        </div>
+    </div>
 </app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

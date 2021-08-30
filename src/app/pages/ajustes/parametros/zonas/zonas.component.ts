@@ -23,6 +23,7 @@ export class ZonasComponent implements OnInit {
     collectionSize: 0
   }
   status:any = 'Inactivo';
+  loading:boolean = false;
   constructor( private zonesService:ZonasService ) { }
 
   ngOnInit(): void {    
@@ -32,9 +33,10 @@ export class ZonasComponent implements OnInit {
 
   getAllZones( page = 1 ) {
     this.pagination.page = page;
+    this.loading = true;
     this.zonesService.getAllZones( this.pagination)
     .subscribe( (res:any) => {
-      
+      this.loading = false;
       this.zones = res.data.data;
       this.pagination.collectionSize = res.data.total
     })
@@ -44,6 +46,7 @@ export class ZonasComponent implements OnInit {
     this.modal.show();
     this.zone.id = '';
     this.zone.name = '';
+    this.form.reset();
   }
   
   getZone(zone){
@@ -55,8 +58,6 @@ export class ZonasComponent implements OnInit {
       id:zone.id,
       status
     }
-
-      
     Swal.fire({
       title: '¿Estas seguro?',
       text: (status === 'Inactivo'? 'La zona se inactivará!' : 'La zona se activará'),
@@ -73,7 +74,7 @@ export class ZonasComponent implements OnInit {
           this.getAllZones();
           Swal.fire({
             title: (status === 'Inactivo' ? 'Zona Inhabilitada!' : 'Zona activada' ) ,
-            text: (status === 'Inactivo' ? 'La zona ha sido Inhabilitada con éxito' : 'La zona ha sido activada con éxito'),
+            text: (status === 'Inactivo' ? 'La zona ha sido Inhabilitada con éxito.' : 'La zona ha sido activada con éxito.'),
             icon: 'success'
           })
         } )
@@ -89,7 +90,7 @@ export class ZonasComponent implements OnInit {
         this.modal.hide();
         Swal.fire({
           title: 'Operación exitosa',
-          text: 'Felicidades, se han actualizado las zonas',
+          text: 'Felicidades, se ha agregado a las zonas.',
           icon: 'success',
           allowOutsideClick: false,
           allowEscapeKey: false,
@@ -102,7 +103,7 @@ export class ZonasComponent implements OnInit {
 
   get name_valid(){
     return (
-      this.form.get('name') && this.form.get('name').touched
+      this.form.get('name').invalid && this.form.get('name').touched
     )
   }
 

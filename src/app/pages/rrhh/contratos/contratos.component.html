@@ -1,0 +1,85 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h5>Contratos</h5>
+            <p>Todos los contratos registrados en nuestra base de datos.</p>
+        </div>
+        <div class="row">
+            <div class="col d-flex">
+                <label for=""></label>
+                <input type="text" class="form-control form-control-sm col-sm-2 mr-4 mt-1" name="empresa" autocomplete="off" placeholder="Filtro Empresa">
+                <input type="text" class="form-control form-control-sm col-sm-2 mr-4 mt-1" name="funcionario" autocomplete="off" placeholder="Filtro Funcionario">
+                <ng-select class="col-sm-2 mr-4" [items]="groups" (change)="getDependencies($event.value)" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+                <ng-select class="col-sm-2 mr-4 mb-3" [items]="dependencies" (change)="getPositions($event.value)" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+                <ng-select class="col-sm-2 mr-4 mb-3" [items]="positions" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-10">
+        <div class="row">
+            <div class="col-md-2" *ngFor="let contrato of contratos">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <img src="../../../../assets/images/users/no-image.png" class="card-img-top" alt="">
+                        <div class="card-title">
+                            <p class="mt-3">
+                                <strong>
+                                    {{ contrato.name }}
+                                </strong>
+                                <br>
+                                <small>{{ contrato.position }}</small>
+                            </p>
+                        </div>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-outline-primary btn-sm" placement="bottom" ngbTooltip="Descargar">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" placement="bottom" ngbTooltip="Ver Perfil">
+                                <i class="fas fa-address-card"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" placement="bottom" ngbTooltip="Bonos">
+                                <i class="fas fa-money-bill"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-center">Contratos por vencer</h6>
+                <p>Contratos por mostrar...</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-center">Periodo de prueba</h6>
+                <table>
+                    <div class="row">
+                        <td>
+                            <div class="text-left ml-4">
+                                <p>
+                                    Néstor Eduardo <br> Lima Rojas <br> fecha
+                                </p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-left ml-4">
+                                <p>
+                                    Néstor Eduardo <br> Lima Rojas <br> Fecha
+                                </p>
+                            </div>
+                        </td>
+                    </div>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

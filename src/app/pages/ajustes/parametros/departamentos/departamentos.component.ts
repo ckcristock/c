@@ -9,141 +9,47 @@ import { DepartamentosService } from './departamentos.service';
   styleUrls: ['./departamentos.component.scss']
 })
 export class DepartamentosComponent implements OnInit {
-  @ViewChild('modalM') modalM:any;
-  @ViewChild('modalD') modalD:any;
-
-  municipios:any = [];
-  munic:any = [];
-  municipality:any = {};
-
+  @ViewChild('modal') modal:any;
+  loading:boolean = false;
   departamentos:any = [];
   department:any = {};
-
-  formD = new FormGroup({
+  form = new FormGroup({
     name: new FormControl('', [Validators.required])
   });
 
-  formM = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    code: new FormControl('', [Validators.required]),
-    department_id: new FormControl('', [Validators.required]),
-    code_dane: new FormControl('', [Validators.required])
-  });
-
-  paginationD = {
+  pagination = {
     pageSize: 5,
     page: 1,
     collectionSize: 0
   }
 
-  paginationM = {
-    pageSize: 5,
-    page: 1,
-    collectionSize: 0
-  }
-
-  filtroDeparmento:any = {
+  filtro:any = {
     name: ''
-  }
-  filtroMunicipio:any = {
-    code: '',
-    name: '',
-    department: ''
   }
   constructor( private depService:DepartamentosService ) { }
 
   ngOnInit(): void {
-    this.getAllMunicipalities();
     this.getAllDepartment();
-    this.getMunicipalities();
   }
-
-  /********************* Municipalities ******************/
-
-  getAllMunicipalities(page = 1){
-    this.paginationM.page = page;
-    let params = {
-      ...this.paginationM, ...this.filtroMunicipio
-    } 
-    this.depService.getMunicipalityPaginate(params)
-    .subscribe( (res:any) => {
-      this.municipios = res.data.data;
-      console.log(this.municipios);
-      
-      this.paginationM.collectionSize = res.data.total;
-    });
-  }
-  /* Función para llevar los departamentos al select del formulario */
-  getMunicipalities(){
-    this.depService.getAllMunicipalities()
-    .subscribe( (res:any) =>{
-      this.munic = res.data;    
-    });
-  }
-  /*********/
-  openModalM(){
-    this.municipality.name = '';
-    this.municipality.code = '';
-    this.municipality.department_id = '';
-    this.municipality.codigo_dane = '';
-    this.modalM.show();
-  }
-  
-  createNewMunicipality(){
-    if (this.formM.valid) {
-      this.depService.createNewMunicipality(this.municipality)
-      .subscribe( (res:any) => {
-        
-        if (res.code === 200) {
-          
-          this.getAllMunicipalities();
-          this.modalM.hide();
-          Swal.fire({
-            title: 'Operación exitosa',
-            text: 'Felicidades, se ha registrado el nuevo Municipio',
-            icon: 'success',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-          })
-          
-        } else {
-          
-          Swal.fire({
-            title: 'UPS',
-            text: 'Algunos datos ya existen en la base de datos',
-            icon: 'error',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-          })
-          
-        }
-        
-      });
-    }
-  }
-  
-  
-  /* getMunicipality(municipality){
-    this.municipio = {...municipality};
-  } */
-  
-  /********************* Departments ******************/
   
   getAllDepartment( page = 1 ){
-    this.paginationD.page = page;
+    this.pagination.page = page;
     let params = {
-      ...this.paginationD, ...this.filtroDeparmento
+      ...this.pagination, ...this.filtro
     } 
+    this.loading = true;
     this.depService.getDepartmentPaginate(params)
     .subscribe( (res:any) =>{
-      this.paginationD.collectionSize = res.data.total;
+      this.loading = false;
+      this.pagination.collectionSize = res.data.total;
       this.departamentos = res.data.data;
     });
   }
   
-  openModalD(){
+  openModal(){
     this.department.name = '';
-    this.modalD.show();
+    this.modal.show();
+    this.form.reset();
   }
 
   getDepartment(department){
@@ -151,7 +57,7 @@ export class DepartamentosComponent implements OnInit {
   }
 
   createNewDepartment(){
-    if (this.formD.valid) {
+    if (this.form.valid) {
       this.depService.createNewDepartment(this.department)
       .subscribe( (res:any) => {
         Swal.fire({
@@ -162,39 +68,17 @@ export class DepartamentosComponent implements OnInit {
           allowEscapeKey: false
         })
         this.getAllDepartment();
-        this.modalD.hide();
+        this.modal.hide();
       });
     } 
   }
 
   get name_department(){
     return (
-      this.formD.get('name') && this.formD.get('name').touched
+      this.form.get('name').invalid && this.form.get('name').touched
     )
   }
 
-  get name_municipality(){
-    return (
-      this.formM.get('name') && this.formM.get('name').touched
-    )
-  }
-
-  get code_municipality(){
-    return (
-      this.formM.get('code') && this.formM.get('code').touched
-    )
-  }
-
-  get department_municipality(){
-    return (
-      this.formM.get('department_id') && this.formM.get('department_id').touched
-    )
-  }
-
-  get code_dane_municipality(){
-    return (
-      this.formM.get('code_dane') && this.formM.get('code_dane').touched
-    )
-  }
+  
 
 }

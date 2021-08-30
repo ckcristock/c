@@ -27,6 +27,7 @@ export class EpsComponent implements OnInit {
     collectionSize: 0
   }
   status:any = 'Inactivo';
+  loading:boolean = false;
 
   constructor( private epsService: EpsService ) { }
 
@@ -40,8 +41,10 @@ export class EpsComponent implements OnInit {
     let params = {
       ...this.pagination, ...this.filtros
     }
+    this.loading = true;
     this.epsService.getAllEps(params)
     .subscribe( (res:any) => {
+      this.loading = false;
       this.epss = res.data.data;
       this.pagination.collectionSize = res.data.total;
     });
@@ -71,7 +74,7 @@ export class EpsComponent implements OnInit {
             this.getAllEps();
             Swal.fire({
               title: (status === 'Inactivo' ? 'EPS Inhabilitada!' : 'EPS activada' ) ,
-              text: (status === 'Inactivo' ? 'La EPS ha sido Inhabilitada con éxito' : 'La EPS ha sido activada con éxito'),
+              text: (status === 'Inactivo' ? 'La EPS ha sido Inhabilitada con éxito.' : 'La EPS ha sido activada con éxito.'),
               icon: 'success'
             })
           } )
@@ -91,6 +94,7 @@ export class EpsComponent implements OnInit {
     this.eps.code = '';
     this.eps.nit = '';
     this.modal.show();
+    this.form.reset();
   }
 
   getEps(eps){
@@ -111,17 +115,16 @@ export class EpsComponent implements OnInit {
           this.modal.hide();
           Swal.fire({
             title: 'Operación exitosa',
-            text: 'Felicidades, se han actualizado las EPS',
+            text: 'Felicidades, se han actualizado las EPS.',
             icon: 'success',
             allowOutsideClick: false,
             allowEscapeKey: false
           })
-
         } else {
 
           Swal.fire({
-            title: 'UPS',
-            text: 'Algunos datos ya existen en la base de datos',
+            title: 'Ooops!',
+            text: 'Algunos datos ya existen en la base de datos.',
             icon: 'error',
             allowOutsideClick: false,
             allowEscapeKey: false
@@ -134,19 +137,19 @@ export class EpsComponent implements OnInit {
 
   get name_eps_valid(){
     return (
-      this.form.get('name') && this.form.get('name').touched
+      this.form.get('name').invalid && this.form.get('name').touched
     )
   }
 
   get code_eps_valid(){
     return (
-      this.form.get('code') && this.form.get('code').touched
+      this.form.get('code').invalid && this.form.get('code').touched
     )
   }
 
   get nit_eps_valid(){
     return (
-      this.form.get('nit') && this.form.get('nit').touched
+      this.form.get('nit').invalid && this.form.get('nit').touched
     )
   }
   

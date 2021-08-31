@@ -38,7 +38,10 @@ import { AsignacionTurnosComponent } from './asignacion-turnos/asignacion-turnos
 import { SemanaTurnoComponent } from './asignacion-turnos/semana-turno/semana-turno.component';
 import { TurnoComponent } from './asignacion-turnos/semana-turno/turno/turno.component';
 import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
-
+import { CertificadosComponent } from './certificados/certificados.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { CesantiasComponent } from './certificados/cesantias/cesantias.component';
+import { CertificadosListComponent } from './certificados/certificados-list/certificados-list.component';
 @NgModule({
   declarations: [
     VacantesComponent,
@@ -61,6 +64,9 @@ import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
     PreliquidadosComponent,
     LiquidadosComponent,
     AlertasComunComponent,
+    CertificadosComponent,
+    CesantiasComponent,
+    CertificadosListComponent,
   ],
   imports: [
     RrhhRouterModule,
@@ -78,6 +84,7 @@ import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
     NgSelectModule,
     NgbTypeaheadModule,
     FullCalendarModule,
+    PerfectScrollbarModule,
   ],
   exports: [],
 })

@@ -16,6 +16,7 @@ import { LiquidadosComponent } from './preliquidados/liquidados/liquidados.compo
 import { AlertasComunComponent } from './alertas-comun/alertas-comun.component';
 import { DisciplinariosComponent } from './procesos/disciplinarios/disciplinarios.component';
 import { MemorandosComponent } from './procesos/memorandos/memorandos.component';
+import {CertificadosComponent} from './certificados/certificados.component';
 
 const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'contratos', component: ContratosComponent },
   { path: 'procesos/disciplinarios', component: DisciplinariosComponent },
   { path: 'procesos/memorandos', component: MemorandosComponent },
+  { path: 'certificados', component: CertificadosComponent },
 ];
 
 @NgModule({

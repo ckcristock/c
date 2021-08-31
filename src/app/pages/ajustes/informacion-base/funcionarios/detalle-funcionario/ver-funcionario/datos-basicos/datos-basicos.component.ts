@@ -25,7 +25,7 @@ export class DatosBasicosComponent implements OnInit {
   funcionario:any = {
     cell_phone: '',
     date_of_birth: '',
-    direction: '',
+    address: '',
     email: '',
     first_name: '',
     first_surname: '',
@@ -50,7 +50,7 @@ export class DatosBasicosComponent implements OnInit {
     this.getBasicsData();
     this.createForm();
     this.$person = this._person.person.subscribe((r) => {
-      this.person = r
+      this.person = r;
     });
   }
   
@@ -62,7 +62,6 @@ export class DatosBasicosComponent implements OnInit {
     this.basicDataService.getBasicsData(this.id)
     .subscribe( (res:any) => {
       this.funcionario = res.data; 
- 
     })
   }
 
@@ -75,7 +74,7 @@ export class DatosBasicosComponent implements OnInit {
       second_surname: ['', Validators.required],
       identifier: ['', Validators.required],
       date_of_birth: ['', Validators.required],
-      direction: ['', Validators.required],
+      address: ['', Validators.required],
       degree: ['', Validators.required],
       email: [
         '',
@@ -143,9 +142,9 @@ export class DatosBasicosComponent implements OnInit {
       this.form.get('date_of_birth').touched
     );
   }
-  get direction_valid() {
+  get address_valid() {
     return (
-      this.form.get('direction').invalid && this.form.get('direction').touched
+      this.form.get('address').invalid && this.form.get('address').touched
     );
   }
   get gener_valid() {
@@ -175,7 +174,7 @@ export class DatosBasicosComponent implements OnInit {
         this.fileString = (<FileReader>event.target).result;
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.file = base64
+        this.file = base64;
       });
     }
   }
@@ -183,10 +182,10 @@ export class DatosBasicosComponent implements OnInit {
   guardar() {
     this.form.markAllAsTouched();
     if (this.form.invalid) { return false;}
-
     this.basicDataService.updateBasicData(this.funcionario, this.id)
     .subscribe( res => {
       this.modal.hide();
+      console.log(this.funcionario);
       this.getBasicsData();
       Swal.fire({
         icon: 'success',

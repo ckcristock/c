@@ -12,70 +12,66 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
-            <p class="font-weight-bold text-mute item-subtitle">
-                Nombre completo
-            </p>
-            <p class="font-weight-bold text-mute item-subtitle">
-                Documento de identidad
-            </p>
-            <p class="font-weight-bold text-mute item-subtitle">
-                Correo electrónico
-            </p>
+        <p class="col-6 text-right font-weight-bold text-mute item-subtitle">
+            Nombre completo
+        </p>
+        <p class="col-6 text font-weight-bold">
+            {{ funcionario.first_name }} {{ funcionario.second_name }} {{ funcionario.first_surname }} {{ funcionario.second_surname }}
+        </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Documento de identidad
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.identifier }}
+        </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Correo electrónico
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.email }}
+        </p>
 
-            <p class="font-weight-bold text-mute item-subtitle">
-                Título de estudio
-            </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Título de estudio
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.degree }}
+        </p>
 
-            <p class="font-weight-bold text-mute item-subtitle">
-                Fecha de nacimiento
-            </p>
-            <p class="font-weight-bold text-mute item-subtitle">
-                Género
-            </p>
-            <p class="font-weight-bold text-mute item-subtitle">
-                Estado civil
-            </p>
-            <p class="font-weight-bold text-mute item-subtitle">
-                Dirección de residencia
-            </p>
-            <p class="font-weight-bold text-mute item-subtitle">
-                Celular
-            </p>
-        </div>
-        <div class="col-md-7 offset-1 item-data">
-            <p class="font-weight-bold">
-                {{ funcionario.first_name }} {{ funcionario.second_name }} {{ funcionario.first_surname }} {{ funcionario.second_surname }}
-            </p>
-            <p class="font-weight-bold">
-                {{ funcionario.identifier }}
-            </p>
-            <p class="font-weight-bold">
-                {{ funcionario.email }}
-            </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Fecha de nacimiento
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.date_of_birth }}
+        </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Género
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.gener }}
+        </p>
 
-            <p class="font-weight-bold">
-                {{ funcionario.degree }}
-            </p>
-
-            <p class="font-weight-bold">
-                {{ funcionario.date_of_birth }}
-            </p>
-            <p class="font-weight-bold">
-                {{ funcionario.gener }}
-            </p>
-            <p class="font-weight-bold">
-                {{ funcionario.marital_status }}
-            </p>
-            <p class="font-weight-bold">
-                {{ funcionario.direction }}
-            </p>
-            <p class="font-weight-bold">
-                {{ funcionario.cell_phone }}
-            </p>
-        </div>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Estado civil
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.marital_status }}
+        </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Dirección de residencia
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.address }}
+        </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Celular
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.cell_phone }}
+        </p>
     </div>
 </div>
+
 <app-modal-basic #modal [dialogClass]="'modal-xl'">
     <div class="app-modal-header">
         <h5 class="modal-title"> Actualizar funcionario </h5>
@@ -91,7 +87,7 @@
                 <form [formGroup]="form">
                     <div class="form-row mt-3">
                         <div class="form-group col-md-2 text-center">
-                            <img [src]="fileString" class="img-rounded d-block m-auto" alt="">
+                            <img [src]=" funcionario.name | image" class="img-rounded d-block m-auto" alt="">
                             <label for="image" class="subir-archivo mt-3">Cargar imagen</label>
                             <input type="file" name="image" class="form-control-file" id="image" formControlName="image" (change)="onFileChanged($event)" [class.is-invalid]="image_valid" placeholder="Imagen" />
 
@@ -141,10 +137,10 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="direction" class="col-md-4 col-form-label custom-label text-right">Dirección de residencia</label>
-                                <input type="text" [class.is-invalid]="direction_valid" [(ngModel)]="funcionario.direction" id="direction" formControlName="direction" class="form-control custom-control col-md-7">
+                                <label for="address" class="col-md-4 col-form-label custom-label text-right">Dirección de residencia</label>
+                                <input type="text" [class.is-invalid]="address_valid" [(ngModel)]="funcionario.address" id="address" formControlName="address" class="form-control custom-control col-md-7">
                                 <div class="col-md-7 offset-4">
-                                    <small class="invalid text-danger" *ngIf="direction_valid"> Es necesario la dirección
+                                    <small class="invalid text-danger" *ngIf="address_valid"> Es necesario la dirección
                                     </small>
                                 </div>
                             </div>

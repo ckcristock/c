@@ -16,8 +16,8 @@
                 <input type="text" placeholder="Nombre del Departamento" class="form-control form-control-sm" (change)="getAllMunicipalities()" [(ngModel)]="filtro.department">
             </div>
         </div>
-        <table class="table table-striped mt-2" *ngIf="!loading && municipios.length > 0; else notData">
-            <thead>
+        <table class="table table-bordered table-striped table-sm mt-4" *ngIf="!loading && municipios.length > 0; else notData">
+            <thead class="bg-light">
                 <tr>
                     <th scope="col">Código</th>
                     <th scope="col">Nombre</th>

@@ -83,7 +83,8 @@ export class ZonasComponent implements OnInit {
   }
 
   createZone() {
-    if(this.form.valid){
+    this.form.markAllAsTouched();
+    if (this.form.invalid) { return false;}
       this.zonesService.createZone(this.zone)
       .subscribe( res => {
         this.getAllZones();
@@ -96,9 +97,6 @@ export class ZonasComponent implements OnInit {
           allowEscapeKey: false,
         })
       } )
-
-    }
-
   }
 
   get name_valid(){

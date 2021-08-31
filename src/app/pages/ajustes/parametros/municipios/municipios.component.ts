@@ -18,7 +18,7 @@ export class MunicipiosComponent implements OnInit {
   municipality:any = {};
 
   pagination = {
-    pageSize: 5,
+    pageSize: 10,
     page: 1,
     collectionSize: 0
   }
@@ -45,12 +45,11 @@ export class MunicipiosComponent implements OnInit {
   });
 
   createNewMunicipality(){
-    if (this.form.valid) {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) { return false;}
       this.municipioService.createNewMunicipality(this.municipality)
       .subscribe( (res:any) => {
-        
         if (res.code === 200) {
-          
           this.getAllMunicipalities();
           this.modal.hide();
           Swal.fire({
@@ -59,10 +58,8 @@ export class MunicipiosComponent implements OnInit {
             icon: 'success',
             allowOutsideClick: false,
             allowEscapeKey: false
-          })
-          
+          })  
         } else {
-          
           Swal.fire({
             title: 'UPS',
             text: 'Algunos datos ya existen en la base de datos',
@@ -70,11 +67,8 @@ export class MunicipiosComponent implements OnInit {
             allowOutsideClick: false,
             allowEscapeKey: false
           })
-          
         }
-        
       });
-    }
   }
   /* Función para llevar los departamentos al select del formulario */
   getMunicipalities(){

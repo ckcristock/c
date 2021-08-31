@@ -103,9 +103,8 @@ export class EpsComponent implements OnInit {
   }
 
   createNewEps(){
-
-    if (this.form.valid) {
-
+      this.form.markAllAsTouched();
+      if (this.form.invalid) { return false;}
       this.epsService.createNewEps(this.eps)
       .subscribe( (res:any) => {
 
@@ -132,7 +131,6 @@ export class EpsComponent implements OnInit {
 
         }
       });      
-    }
   }
 
   get name_eps_valid(){

@@ -5,16 +5,16 @@
             <h5>Zonas</h5>
             <p>Listados de las zonas de nuestra base de datos</p>
         </div>
-        <table class="table table-striped" *ngIf="!loading && zones.length > 0; else notData">
-            <thead>
+        <table class="table table-bordered table-striped" *ngIf="!loading && zones.length > 0; else notData">
+            <thead class="bg-light">
                 <tr>
                     <th scope="col">Nombre</th>
                     <th scope="col" style="width: 50px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let zone of zones" [ngClass]="{'bg-danger text-white': (zone.status === 'Inactivo' )}">
-                    <td scope="row"> {{ zone.name }} </td>
+                <tr *ngFor="let zone of zones">
+                    <td scope="row" [ngClass]="{'bg-danger text-white': (zone.status === 'Inactivo' )}"> {{ zone.name }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">

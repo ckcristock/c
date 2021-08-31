@@ -15,7 +15,7 @@ const routes: Routes = [
 
   { path: 'funcionarios', component: FuncionariosComponent },
   { path: 'funcionario/:id', component: DetalleFuncionarioComponent },
-  { path: 'funcionario/crear', component: CreateComponent },
+  { path: 'funcionarios/crear', component: CreateComponent },
 
   { path: 'regimenes-niveles', component: RegimenesNivelesComponent },
   { path: 'aseguradoras', component: AseguradorasComponent },

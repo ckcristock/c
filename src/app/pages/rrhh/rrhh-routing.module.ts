@@ -28,10 +28,10 @@ const routes: Routes = [
   { path: 'dotacion/inventario', component: InventarioDotacionComponent },
   { path: 'turnos/asignacion', component: AsignacionTurnosComponent },
   { path: 'turnos/horas-extras', component: HorasExtrasComponent },
-  { path: 'contratos', component: ContratosComponent },
+  { path: 'alertas-comun', component: AlertasComunComponent },
   { path: 'preliquidados', component: PreliquidadosComponent },
   { path: 'liquidado/:id', component: LiquidadosComponent },
-  { path: 'alertas-comun', component: AlertasComunComponent },
+  { path: 'contratos', component: ContratosComponent },
   { path: 'procesos/disciplinarios', component: DisciplinariosComponent },
   { path: 'procesos/memorandos', component: MemorandosComponent },
 ];

@@ -12,8 +12,8 @@
                         <input type="text" placeholder="Nombre" class="form-control form-control-sm" (change)="getAllDepartment()" [(ngModel)]="filtro.name" name="name">
                     </div>
                 </div>
-                <table class="table table-striped mt-2" *ngIf="!loading && departamentos.length > 0; else notData">
-                    <thead>
+                <table class="table table-bordered table-striped table-sm mt-4" *ngIf="!loading && departamentos.length > 0; else notData">
+                    <thead class="bg-light">
                         <tr>
                             <th>Nombre</th>
                         </tr>

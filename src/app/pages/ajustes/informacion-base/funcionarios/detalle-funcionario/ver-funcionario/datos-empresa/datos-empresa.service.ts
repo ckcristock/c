@@ -10,7 +10,7 @@ export class DatosEmpresaService {
   constructor( private http: HttpClient ) { }
 
   getEnterpriseData(id){
-    return this.http.get(`${environment.base_url}/company/${id}`);
+    return this.http.get(`${environment.base_url}/enterpriseData/${id}`);
   }
   getDependecies(){
     return this.http.get(`${environment.base_url}/dependency`);

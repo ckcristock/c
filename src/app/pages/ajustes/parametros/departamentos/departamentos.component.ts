@@ -18,7 +18,7 @@ export class DepartamentosComponent implements OnInit {
   });
 
   pagination = {
-    pageSize: 5,
+    pageSize: 10,
     page: 1,
     collectionSize: 0
   }
@@ -57,7 +57,8 @@ export class DepartamentosComponent implements OnInit {
   }
 
   createNewDepartment(){
-    if (this.form.valid) {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) { return false;}
       this.depService.createNewDepartment(this.department)
       .subscribe( (res:any) => {
         Swal.fire({
@@ -70,7 +71,6 @@ export class DepartamentosComponent implements OnInit {
         this.getAllDepartment();
         this.modal.hide();
       });
-    } 
   }
 
   get name_department(){

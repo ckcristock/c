@@ -15,10 +15,12 @@ export class BonoComponent implements OnInit {
   @Input('id') id:any;
   bonusTypes:any = consts.bonusType;
   bonus: any;
-  bonu:any = {
+  bonu:any = [
+    {
     concept: '',
     value: ''
-  };
+  }
+];
   constructor( 
               private fb: FormBuilder,
               private bonusService: BonoService,
@@ -32,16 +34,14 @@ export class BonoComponent implements OnInit {
   openModal(){
     this.modal.show();
     this.form.patchValue({
-      bonus: '',
       countable_income_id: '',
-      value: ''
+      value: '',
+      work_contract_id: ''
     });
-    
   }
 
   createFormBonus(){
     this.form = this.fb.group({
-      bonus: ['', Validators.required],
       countable_income_id: ['', Validators.required],
       value: ['', Validators.required],
       work_contract_id:[this.id]
@@ -92,6 +92,8 @@ export class BonoComponent implements OnInit {
   }
 
   addBonus(){
+    this.form.markAllAsTouched();
+    if (this.form.invalid) { return false;}
     this.bonusService.addBonus(this.form.value)
     .subscribe( res => {
       this.modal.hide();
@@ -104,11 +106,11 @@ export class BonoComponent implements OnInit {
     })
   }
   
-get bonus_valid(){
+/* get bonus_valid(){
   return (
-    this.form.get('bonus').invalid && this.form.get('bonus').touched
+    this.form.get('bonusType').invalid && this.form.get('bonusType').touched
   );
-}
+} */
       
 get bonus_type_valid(){
   return (

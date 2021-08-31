@@ -1,8 +1,9 @@
 <div class="row ml-0 mb-4">
     <div class="col text-left">
-        <button type="button" class="btn btn-primary btn-sm btnRegresar" (click)="regresar()">
+        <a class="text-primary back" (click)="regresar()">Regresar</a>
+        <!-- <button type="button" class="btn btn-primary btn-sm btnRegresar" (click)="regresar()">
             <i class="fas fa-arrow-left"></i>
-        </button>
+        </button> -->
     </div>
 </div>
 <div class="col-12 mb-5">
@@ -11,43 +12,45 @@
             <div class="row pt-3 pb-3">
                 <div class="col-md-4">
                     <div class="row">
-                        <div class="col-md-4 col-xs-12 text-center">
+                        <div class="col-md-6 col-xs-12 text-center">
                             <img [src]="funcionario.image | image" class="img-rounded" alt="">
                         </div>
-                        <div class="row">
-                            <div class="col col-xs-12 text-xs-center ml-2">
-                                <h5 class="font-weight-bold mt-2">
-                                    {{ funcionario.first_name }} {{ funcionario.second_name }}
-                                    <br> {{ funcionario.first_surname }} {{ funcionario.second_surname }}
-                                </h5>
-                                <p class="mt-2">
-                                    <span>
+
+                        <div class="col-6 col-xs-12 text-xs-center">
+                            <h5 class="font-weight-bold mt-2">
+                                {{ funcionario.first_name }} {{ funcionario.second_name }}
+                                <br> {{ funcionario.first_surname }} {{ funcionario.second_surname }}
+                            </h5>
+                            <p class="mt-2">
+                                <span>
                                       {{ funcionario.title }}
                                     </span>
-                                </p>
-                                <p>
-                                    <strong>
+                            </p>
+                            <p>
+                                <strong>
                                       {{ funcionario.signature }}
                                     </strong>
-                                </p>
-                            </div>
+                            </p>
                         </div>
+
                     </div>
                 </div>
-                <div class="row">
+                <div class="col-md-2">
                     <div class="col text-center">
                         <p class="font-weight-bold text-mute">
                             Salario base
                         </p>
-                        <img src="../../../../../../../assets/images/coin-icon.svg" class="iconV" alt="">
-                        <span class="salary-vacations-item"> 
-                            <strong>
-                               $ {{ funcionario.salary }}
-                            </strong>
-                        </span>
+                        <img src="../../../../../../../assets/images/coin-icon.svg" height="80" alt="">
+                        <div class="col">
+                            <div class="salary-vacations-item">
+                                <strong>
+                                   $ {{ funcionario.salary }}
+                                </strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="col-md-2">
                     <div class="col text-center" style="margin-left: 50px;">
                         <p class="font-weight-bold text-mute">
                             Vaciones acumuladas
@@ -62,7 +65,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-2 botones">
+                <div class="col-md-4 botones">
                     <div class="col text-right">
                         <div ngbDropdown class="dropdown-primary">
                             <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">

@@ -19,6 +19,10 @@ export const consts = {
     { clave: 'Indefinido', valor: 1 },
     { clave: 'Fijo', valor: 2 }
   ],
+  work_contract_type: [
+    { clave: 'Indefinido', conclude: 0 },
+    { clave: 'Fijo', conclude: 1 }
+  ],
   bonusType: [
     { clave: 'Constitutivo', valor: 'Constitutivo' },
     { clave: 'No Constitutivo', valor: 'No Constitutivo' }

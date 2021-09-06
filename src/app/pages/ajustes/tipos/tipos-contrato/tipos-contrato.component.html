@@ -23,15 +23,15 @@
         <table class="table table-bordered table-striped">
             <thead class="bg-light">
                 <tr>
-                    <th>Tipos de Contrato</th>
-                    <th>Descripción</th>
+                    <th>Nombre</th>
+                    <th>Tipo de contrato</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let contract of contracts" [ngClass]="{'bg-danger text-white': (contract.status === 'Inactivo' )}">
-                    <td scope="row"> {{ contract.name }} </td>
                     <td> {{ contract.description }} </td>
+                    <td scope="row"> {{ contract.name }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -70,8 +70,17 @@
         <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <label class="custom-label" for="funcionario_id">Nombre Tipo Contrato</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="name" required>
+                    <label class="custom-label" for="tipo_contrati">Tipo de contrato</label>
+                    <select class="form-control form-control-sm" formControlName="name" name="name" autocomplete="off">
+                        <option selected>Seleccione</option>
+                        <option *ngFor="let type of work_contract_type" [value]="type.conclude">
+                            {{ type.clave }}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="custom-label" for="funcionario_id">Descripción</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="description" required>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
                         </small>

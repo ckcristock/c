@@ -18,6 +18,7 @@ export class TiposContratoComponent implements OnInit {
     collectionSize: 0
   }
   types = consts.contract_type;
+  work_contract_type = consts.work_contract_type;
   contracts:any[] = [];
   type:any = {};
   filtro:any = {
@@ -41,7 +42,7 @@ export class TiposContratoComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      id: [''],
+      description: ['', this._reactiveValid.required],
       name: ['', this._reactiveValid.required]
     })
   }

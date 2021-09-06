@@ -20,6 +20,7 @@ import { TiposEstadoFinancieroComponent } from './tipos-estado-financiero/tipos-
 import { TiposAnulacionComponent } from './tipos-anulacion/tipos-anulacion.component';
 import { TiposRechazoComponent } from './tipos-rechazo/tipos-rechazo.component';
 import { TiposActivoFijoComponent } from './tipos-activo-fijo/tipos-activo-fijo.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { TiposActivoFijoComponent } from './tipos-activo-fijo/tipos-activo-fijo.
         FormsModule,
         ReactiveFormsModule,
         PipesModule,
-        NgbPaginationModule
+        NgbPaginationModule,
+        NgSelectModule
     ]
 })
 

@@ -56,7 +56,7 @@
         <div class="app-modal-footer">
             <div class="form-group text-right">
                 <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-                <button type="submit" class="btn btn-primary btn-sm raised" (click)="createNewDepartment()">Guardar Departamento</button>
+                <button type="submit" class="btn btn-primary btn-sm raised" (click)="createNewDepartment()" [disabled]="!form.valid">Guardar Departamento</button>
             </div>
         </div>
     </app-modal-basic>

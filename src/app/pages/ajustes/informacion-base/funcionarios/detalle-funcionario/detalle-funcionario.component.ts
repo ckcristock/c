@@ -1,5 +1,6 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, Routes } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DetalleService } from './detalle.service';
 import { DatosBasicosService } from './ver-funcionario/datos-basicos/datos-basicos.service';
 
@@ -25,24 +26,25 @@ export class DetalleFuncionarioComponent implements OnInit {
     title: ''
   };
   constructor( 
-              private router: Router, 
               private detalleService: DetalleService, 
               private activateRoute: ActivatedRoute,
-              private basicDataService: DatosBasicosService ) { }
+              private basicDataService: DatosBasicosService,
+              private location: Location
+              ) { }
 
 
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params.id;
     this.getBasicData();
-    this.basicDataService.datos$.subscribe( data => {
+    this.data$ = this.basicDataService.datos$.subscribe( data => {
       this.getBasicData();
     });
 
   }
 
-  regresar(){
-    this.router.navigate(['/ajustes/informacion-base/funcionarios']);
+  regresar() :void {
+    this.location.back();
   }
 
   verComponent( componente:string ){
@@ -57,7 +59,7 @@ export class DetalleFuncionarioComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.basicDataService.datos$.unsubscribe();
+    this.data$.unsubscribe();
   }
   
 }

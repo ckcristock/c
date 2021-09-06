@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { PositionService } from '../../ajustes/informacion-base/services/positions.service';
-import { ContratoService } from './contrato.service';
+import { ContratosService } from './contratos.service';
 
 @Component({
   selector: 'app-contratos',
@@ -11,29 +10,34 @@ import { ContratoService } from './contrato.service';
   styleUrls: ['./contratos.component.scss']
 })
 export class ContratosComponent implements OnInit {
-  contracts:any;
+  contractData:boolean = false;
+  contracts:any[] = [];
   groups: any[];
+  loading = false;
+  contractsTrialPeriod:any = [];
+  contractsToExpire: any = [];
   dependencies:any[];
   positions:any[];
+  companies:any[];
+  pagination:any = {
+    pageSize: 12,
+    page: 1,
+    collectionSize: 0
+  }
+  paginationCV:any = {
+    pageSize: 2,
+    page: 1,
+    collectionSize: 0
+  }
   filtros:any = {
     company: '',
-    person: ''
+    person: '',
+    dependency: '',
+    position: '',
+    group: ''
   }
-
-  contratos:any = [
-    {
-      name: 'Néstor Eduardo Lima Rojas',
-      position: 'Full Stack',
-      time: 'Hace 12 Dias'
-    },
-    {
-      name: 'Julio Andres Perez Medina',
-      position: 'Frontend',
-      time: 'Hace 10 Dias'
-    }
-  ]
   constructor( 
-              private contactService: ContratoService,
+              private contractService: ContratosService,
               private _group: GroupService,
               private _positions: PositionService,
               private _dependecies: DependenciesService
@@ -41,16 +45,33 @@ export class ContratosComponent implements OnInit {
 
   ngOnInit(): void {
     this.getGroups();
+    this.getCompanies();
+    this.getContractsToExpire();
+    this.getContractByTrialPeriod();
+    this.getAllContracts();
   }
 
-  getAllContracts(){
-    this.contactService.getAllContracts()
+  getAllContracts( page = 1 ){
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtros
+    }
+    this.loading = true;
+    this.contractService.getAllContracts(params)
     .subscribe( (res:any) => {
-      this.contracts = res.data;
+      this.contracts = res.data.data;
+      this.pagination.collectionSize = res.data.total;
+      this.loading = false;
     });
   }
 
-  
+  getCompanies() {
+    this.contractService.getCompanies()
+    .subscribe( (res:any) => {
+      this.companies = res.data;
+    });
+  }
+
   getGroups() {
     this._group.getGroup().subscribe((r: any) => {
       this.groups = r.data
@@ -72,6 +93,22 @@ export class ContratosComponent implements OnInit {
         this.positions.unshift({ text: 'Seleccione una', value: '' });
       });
     }
+  }
+
+  getContractsToExpire( page = 1 ) {
+    this.paginationCV.page = page;
+    this.contractService.getContractsToExpire(this.paginationCV)
+    .subscribe( (res:any) => {
+      this.contractsToExpire = res.data.data;
+      this.paginationCV.collectionSize = res.data.total;
+    });
+  }
+
+  getContractByTrialPeriod() {
+    this.contractService.getContractByTrialPeriod()
+    .subscribe( (res:any) => {
+        this.contractsTrialPeriod = res.data;
+    })
   }
 
 }

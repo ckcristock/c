@@ -9,6 +9,9 @@ import { CreateComponent } from './funcionarios/create/create.component';
 import { EstructuraEmpresaComponent } from './estructura-empresa/estructura-empresa.component';
 import { TurnosComponent } from './turnos/turnos.component';
 import { CreateTurnoFijoComponent } from './turnos/turno-fijo/create-turno-fijo/create-turno-fijo.component';
+import { FondoPensionComponent } from './fondo-pension/fondo-pension.component';
+import { ArlComponent } from './arl/arl.component';
+import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
@@ -24,6 +27,10 @@ const routes: Routes = [
   { path: 'turnos', component: TurnosComponent },
   { path: 'turnos/crear', component: CreateTurnoFijoComponent },
   { path: 'turnos/crear/:id', component: CreateTurnoFijoComponent },
+
+  { path: 'fondo-pension', component: FondoPensionComponent },
+  { path: 'arl', component: ArlComponent },
+  { path: 'caja-compensacion', component: CajaCompensacionComponent }
 ];
 
 @NgModule({

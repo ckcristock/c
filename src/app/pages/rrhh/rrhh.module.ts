@@ -38,6 +38,8 @@ import { AsignacionTurnosComponent } from './asignacion-turnos/asignacion-turnos
 import { SemanaTurnoComponent } from './asignacion-turnos/semana-turno/semana-turno.component';
 import { TurnoComponent } from './asignacion-turnos/semana-turno/turno/turno.component';
 import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
+import { ReporteHorarioComponent } from './registro-llegadas/reporte-horario/reporte-horario.component';
+import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
@@ -61,6 +63,7 @@ import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
     PreliquidadosComponent,
     LiquidadosComponent,
     AlertasComunComponent,
+    ReporteHorarioComponent,
   ],
   imports: [
     RrhhRouterModule,
@@ -70,7 +73,9 @@ import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
     ReactiveFormsModule,
     /* SweetAlert2Module, */
     NgbPaginationModule,
+    NgbCollapseModule,
     NgbDropdownModule,
+    NgbTypeaheadModule,
     NgbTooltipModule,
     MyDateRangePickerModule,
     PipesModule,
@@ -79,6 +84,7 @@ import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
     NgbTypeaheadModule,
     FullCalendarModule,
   ],
+  providers:[],
   exports: [],
 })
 export class RrhhModule {}

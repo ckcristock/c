@@ -39,6 +39,9 @@ import { CreateTurnoFijoComponent } from './turnos/turno-fijo/create-turno-fijo/
 import { TurnoRotativoComponent } from './turnos/turno-rotativo/turno-rotativo.component';
 import { CreateTurnoRotativoComponent } from './turnos/turno-rotativo/create-turno-rotativo/create-turno-rotativo.component';
 import { BonoComponent } from './funcionarios/detalle-funcionario/ver-funcionario/bono/bono.component';
+import { FondoPensionComponent } from './fondo-pension/fondo-pension.component';
+import { ArlComponent } from './arl/arl.component';
+import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +69,10 @@ import { BonoComponent } from './funcionarios/detalle-funcionario/ver-funcionari
     CreateTurnoFijoComponent,
     TurnoRotativoComponent,
     CreateTurnoRotativoComponent,
-    BonoComponent
+    BonoComponent,
+    FondoPensionComponent,
+    ArlComponent,
+    CajaCompensacionComponent
   ],
 
   imports: [

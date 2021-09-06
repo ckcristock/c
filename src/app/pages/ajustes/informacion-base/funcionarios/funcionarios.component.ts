@@ -20,7 +20,7 @@ export class FuncionariosComponent implements OnInit {
   }
   loading = false;
   breadCrumbItems: Array<{}>;
-  people: Person[];
+  people: Person[] = [];
 
   status: any[] = [
     { id: 1, name: 'Activo', selected: true },

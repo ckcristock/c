@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="card-title">
             <div style="float: right;">
-                <button class="btn btn-success btn-sm" (click)="openMotivo()">Nuevo Motivo</button>
+                <button class="btn btn-success btn-sm" (click)="openMotivo()">Motivos</button>
                 <button class="btn btn-info btn-sm ml-4" (click)="openMemorando()">Nuevo Memorando</button>
             </div>
             <h5>Memorando</h5>
@@ -11,7 +11,7 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <table class="table table-striped">
+        <table class="table table-striped" *ngIf="!loading && memorandums.length > 0; else notData">
             <thead>
                 <tr>
                     <th scope="col"></th>
@@ -22,24 +22,24 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr *ngFor="let memorandum of memorandums">
                     <td scope="row">
-                        <img src="../../../../assets/images/users/no-image.png" class="p-0 m-0" alt="">
+                        <img [src]="memorandum.image | image" class="p-0 m-0" alt="">
                     </td>
-                    <td>Néstor Eduardo Lima Rojas</td>
-                    <td>Probando memorado testssss</td>
-                    <td>Probando memorando</td>
-                    <td>12/05/2021</td>
+                    <td style="vertical-align: middle;">{{ memorandum.first_name }} {{ memorandum.second_name }} {{ memorandum.first_surname }} {{ memorandum.second_surname }} </td>
+                    <td style="vertical-align: middle;"> {{ memorandum.memorandumType }} </td>
+                    <td style="vertical-align: middle;"> {{ memorandum.details }} </td>
+                    <td style="vertical-align: middle;"> {{ memorandum.created_at | date:'dd-MM-yyyy' }} </td>
                 </tr>
             </tbody>
         </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="paginationMemorando.collectionSize" [pageSize]="paginationMemorando.pageSize" [(page)]="paginationMemorando.page" (pageChange)="getMemorandumList($event)"
+            aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
         </ngb-pagination>
     </div>
 </div>
 <!-- Agregando nueva categoria  -->
-<app-modal-basic #modalMotivo [dialogClass]="'modal-lg'">
+<app-modal-basic #modalMotivo [dialogClass]="'modal-md'">
     <div class="app-modal-header">
         <h5 class="modal-title"> Nuevo Motivo </h5>
         <button type="button" class="close basic-close" (click)="modalMotivo.hide()">
@@ -55,8 +55,8 @@
                     <label for="">Nombre del motivo</label>
                     <div class="row">
                         <div class="col d-flex">
-                            <input type="text" class="form-control form-control-sm col-sm-6 mr-4 mt-1" name="codigo" autocomplete="off" placeholder="Nombre de la categoria disciplinaria">
-                            <button class="btn btn-primary btn-sm">Guardar Motivo</button>
+                            <input type="text" class="form-control form-control-sm col-sm-8 mr-4 mt-1" formControlName="name" name="codigo" autocomplete="off" placeholder="Nombre de la categoria disciplinaria">
+                            <button class="btn btn-primary btn-sm" (click)="saveReason()" [disabled]="!formMotivo.valid">Guardar Motivo</button>
                         </div>
                     </div>
                 </div>
@@ -67,18 +67,22 @@
             <thead>
                 <tr>
                     <th scope="col">Nombre del motivo</th>
-                    <th scope="col">Acción</th>
+                    <th scope="col" class="text-center">Acción</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td scope="row">Motivo de prueba</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-success">Activar</button>
+                <tr *ngFor="let type of types" [ngClass]="{'bg-danger text-white': (type.status === 'Inactivo' )}">
+                    <td scope="row"> {{ type.text }} </td>
+                    <td class="text-center">
+                        <button *ngIf="type.status === 'Inactivo'" class="btn btn-sm btn-success" (click)="activateOrCancel(type, 'Activo')">Activar</button>
+                        <button *ngIf="type.status === 'Activo'" class="btn btn-sm btn-danger" (click)="activateOrCancel(type, 'Inactivo')">Inactivar</button>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="paginationMotivo.collectionSize" [pageSize]="paginationMotivo.pageSize" [(page)]="paginationMotivo.page" (pageChange)="getTypeMemorandum($event)"
+            aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
     </div>
     <div class="app-modal-footer">
         <div class="form-group text-right">
@@ -102,18 +106,22 @@
     <div class="app-modal-body">
         <form [formGroup]="formMemorando">
             <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="" class="form-label">Funcionario</label>
-                    <input type="text" class="form-control form-control-sm col-sm-12 mr-4 mt-1" name="funcionario" autocomplete="off" placeholder="Funcionario">
-                    <label for="" class="mt-3">Motivo</label>
-                    <select class="form-select form-control" aria-label="Default select example">
-                        <option selected>Seleccionar</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                    <label for="" class="form-label mt-3">Detalles</label>
-                    <textarea name="detalles" cols="20" rows="3" class="form-control form-control-sm col-sm-12 mr-4 mt-1" placeholder="Detalles del nuevo memorando..."></textarea>
+                <div class="form-group col">
+                    <div class="col-12">
+                        <label for="" class="form-label">Funcionario</label>
+                        <input id="typeahead-format" type="text" [ngModelOptions]="{standalone: true}" class="form-control form-control-sm" [(ngModel)]="person_selected" (change)="tipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'
+                        />
+
+                    </div>
+                    <div class="col-12">
+                        <label for="" class="mt-3">Motivo</label>
+                        <ng-select class="mr-1" [items]="typesLimitated" formControlName="type_of_memorandum_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                        </ng-select>
+                    </div>
+                    <div class="col-12">
+                        <label for="" class="form-label mt-3">Detalles</label>
+                        <textarea name="detalles" cols="20" rows="3" formControlName="details" class="form-control form-control-sm col-sm-12 mr-4 mt-1" placeholder="Detalles del nuevo memorando..."></textarea>
+                    </div>
                 </div>
             </div>
         </form>
@@ -121,7 +129,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modalMemorando.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="saveMemorandum()" [disabled]="!formMemorando.valid">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

@@ -1,0 +1,80 @@
+<div class="mt-2">
+  <div class="col-12 pl-4">
+    <table class="table table-sm table-bordered">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th style="width: 20%">Entrada 1</th>
+          <th style="width: 20%">Salida 1</th>
+          <th style="width: 20%">Entrada 2</th>
+          <th style="width: 20%">Salida 2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let horario of horarios">
+          <td>
+            <span class="custom-label text-center">{{ horario.date }}</span>
+          </td>
+          <td>
+            <span class="custom-label">{{ horario.entry_time_one }}  </span>
+            <a class="btn btn-link p-0" *ngIf="horario.temp_one && horario.temp_one!= '0.0'">
+              <i class="iconsmind-Celsius font-weight-bold"></i>
+              - {{ horario.temp_one }}
+            </a>
+          </td>
+          <td>
+            <div
+              *ngIf="
+                horario.leave_time_one &&
+                  horario.leave_time_one != '00:00:00';
+                else notHour2
+              "
+            >
+              <span class="custom-label">{{ horario.leave_time_one }}  </span>
+              <a class="btn btn-link p-0" *ngIf="horario.temp_two && horario.temp_two!= '0.0'">
+                <i class="iconsmind-Celsius font-weight-bold"></i>
+                - {{ horario.temp_two }}
+              </a>
+            </div>
+          </td>
+          <td>
+            <section
+              *ngIf="
+                horario.entry_time_two &&
+                  horario.entry_time_two != '00:00:00';
+                else notHour2
+              "
+            >
+              <span class="custom-label"
+                >{{ horario.entry_time_two }} 
+              </span>
+              <a class="btn btn-link p-0" *ngIf="horario.temp_three && horario.temp_three!= '0.0'">
+                <i class="iconsmind-Celsius font-weight-bold"></i>
+                - {{ horario.temp_three }}
+              </a>
+            </section>
+          </td>
+          <td>
+            <section
+              *ngIf="
+                horario.leave_time_two &&
+                  horario.leave_time_two != '00:00:00';
+                else notHour2
+              "
+            >
+              <span class="custom-label">{{ horario.leave_time_two }} </span>
+              <a class="btn btn-link p-0" *ngIf="horario.temp_four && horario.temp_four!= '0.0'">
+                <i class="iconsmind-Celsius font-weight-bold"></i>
+                - {{ horario.temp_four }}
+              </a>
+            </section>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #notHour2>
+  <span>Sin Reportar</span>
+</ng-template>

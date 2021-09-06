@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-   base_url: 'http://core-back.test/api'
+   base_url: 'http://core-back.me:8080/api'
 };
 
 /*

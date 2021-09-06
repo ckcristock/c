@@ -38,7 +38,13 @@ import { AsignacionTurnosComponent } from './asignacion-turnos/asignacion-turnos
 import { SemanaTurnoComponent } from './asignacion-turnos/semana-turno/semana-turno.component';
 import { TurnoComponent } from './asignacion-turnos/semana-turno/turno/turno.component';
 import { HorasExtrasComponent } from './horas-extras/horas-extras.component';
-import { ReporteHorarioComponent } from './registro-llegadas/reporte-horario/reporte-horario.component';
+import { CertificadosComponent } from './certificados/certificados.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { CesantiasComponent } from './certificados/cesantias/cesantias.component';
+import { CertificadosListComponent } from './certificados/certificados-list/certificados-list.component';
+import { ReporteHorarioComponent } from './reporte-horario/reporte-horario.component';
+import { DetalleReporteComponent } from './reporte-horario/detalle-reporte/detalle-reporte.component';
+import { DetalleHorarioComponent } from './reporte-horario/detalle-horario/detalle-horario.component';
 import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
@@ -63,7 +69,12 @@ import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
     PreliquidadosComponent,
     LiquidadosComponent,
     AlertasComunComponent,
+    CertificadosComponent,
+    CesantiasComponent,
+    CertificadosListComponent,
     ReporteHorarioComponent,
+    DetalleReporteComponent,
+    DetalleHorarioComponent,
   ],
   imports: [
     RrhhRouterModule,
@@ -83,6 +94,7 @@ import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
     NgSelectModule,
     NgbTypeaheadModule,
     FullCalendarModule,
+    PerfectScrollbarModule,
   ],
   providers:[],
   exports: [],

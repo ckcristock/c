@@ -38,7 +38,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let turnoFijo of turnosFijos">
+                <tr
+                  *ngFor="let turnoFijo of turnosFijos"
+                  [ngClass]="{
+                    'bg-danger text-white': turnoFijo.state == 'Inactivo'
+                  }"
+                >
                   <td class="custom-label">{{ turnoFijo.text }}</td>
                   <td class="text-center">
                     <button
@@ -63,7 +68,7 @@
                       </button>
                       <div ngbDropdownMenu>
                         <a
-			  [routerLink]="['crear',turnoFijo.value]"
+                          [routerLink]="['crear', turnoFijo.value]"
                           class="
                             dropdown-item
                             waves-light waves-effect
@@ -78,8 +83,12 @@
                             waves-light waves-effect
                             caja-botones
                           "
+                          (click)="changeState(turnoFijo.value)"
                         >
-                          <i class="fa fa-times"></i> Anular
+                          <i class="fa fa-times"></i>
+			  {{turnoFijo.state == 'Inactivo' ? 'Activar':
+			  'Inactivar' }}
+
                         </a>
                       </div>
                     </div>
@@ -101,6 +110,10 @@
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
+<ng-template #notDataHours>
+  <app-not-data [loading]="loadingHours"></app-not-data>
+</ng-template>
+
 <app-modal-basic #hourModal [dialogClass]="'modal-lg'" class="">
   <div class="app-modal-header">
     <div class="row">
@@ -111,7 +124,7 @@
   </div>
   <div class="app-modal-body">
     <table class="table table-striped">
-      <thead>
+      <thead *ngIf="hours.length && !loadingHours; else notDataHours">
         <tr>
           <th>Día</th>
           <th>Entrada 1</th>
@@ -122,7 +135,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let horaTurno of hours">
-          <td>{{ horaTurno.dia }}</td>
+          <td>{{ horaTurno.day }}</td>
           <td>{{ horaTurno.entry_time_one }}</td>
           <td>{{ horaTurno.leave_time_one }}</td>
           <td>{{ horaTurno.entry_time_two }}</td>

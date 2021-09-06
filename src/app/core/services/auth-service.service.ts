@@ -25,7 +25,6 @@ export class AuthService {
         localStorage.setItem('loggedInUser', JSON.stringify(response));
         this.loggedUserSubject.next(response);
         this.currentUserValue = response
-        console.log(response);
         return response;
       }));
   }

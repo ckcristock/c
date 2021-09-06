@@ -110,7 +110,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="updateSalaryInfo()">Actualizar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="updateSalaryInfo()" [disabled]="form.untouched">Actualizar</button>
         </div>
     </div>
 </app-modal-basic>

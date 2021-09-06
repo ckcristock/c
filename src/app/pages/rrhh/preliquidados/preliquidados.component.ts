@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { PreliquidadosService } from './preliquidados.service';
 
 @Component({
   selector: 'app-preliquidados',
@@ -9,28 +10,23 @@ import Swal from 'sweetalert2';
 })
 export class PreliquidadosComponent implements OnInit {
   @ViewChild('modal') modal:any;
-  preliquidados:any = [
-    {
-      name: 'Néstor Eduardo Lima Rojas',
-      position: 'Full Stack',
-      time: 'Hace 12 Dias',
-      id: 1
-    },
-    {
-      name: 'Julio Andres Perez Medina',
-      position: 'Frontend',
-      time: 'Hace 10 Dias',
-      id: 2
-    }
-  ]
+  preliquidados:any = []
   
-  constructor( private router: Router ) { }
+  constructor( private router: Router, private _preliquidadosService:PreliquidadosService ) { }
 
   ngOnInit(): void {
+    this.getPreliquidados();
   }
 
   openModal() {
     this.modal.show();
+  }
+
+  getPreliquidados() {
+    this._preliquidadosService.getPreliquidados()
+    .subscribe( (res:any) => {
+      this.preliquidados = res.data;
+    })
   }
 
   alert(id){

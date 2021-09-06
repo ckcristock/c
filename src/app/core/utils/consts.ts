@@ -126,6 +126,11 @@ export const consts = {
     { id: 10, name: "Octubre" },
     { id: 11, name: "Noviembre" },
     { id: 12, name: "Diciembre" }
+  ],
+
+  status: [
+    { clave: 'Abierto', valor: 'Abierto' },
+    { clave: 'Cerrado', valor: 'Cerrado' }
   ]
 
 };

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { LiquidadosService } from './liquidados.service';
 
 @Component({
   selector: 'app-liquidados',
@@ -8,10 +9,29 @@ import Swal from 'sweetalert2';
   styleUrls: ['./liquidados.component.scss']
 })
 export class LiquidadosComponent implements OnInit {
-
-  constructor( private router: Router ) { }
+  id:any;
+  liquidado:any = {
+    first_name: '',
+    second_name: '',
+    first_surname: '',
+    second_surname: ''
+  };
+  constructor( 
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private liquidadosService:LiquidadosService
+              ) { }
 
   ngOnInit(): void {
+    this.id = this.activatedRoute.snapshot.params.id;
+    this.getLiquidado();
+  }
+
+  getLiquidado() {
+    this.liquidadosService.getLiquidado(this.id)
+    .subscribe( (res:any) => {
+      this.liquidado = res.data
+    })
   }
 
   cancelButton() {

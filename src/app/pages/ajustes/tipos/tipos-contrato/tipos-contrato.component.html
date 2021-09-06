@@ -1,0 +1,79 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Nuevo tipo</button>
+            <h5>Tipos de Contrato</h5>
+            <div class="form-row mt-4 ml-1">
+                <div class="form-group">
+                    <label for="">Filtro nombre</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" name="name" autocomplete="off">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead class="bg-light">
+                <th>Tipos de Contrato</th>
+                <th class="text-center">Acciones</th>
+            </thead>
+            <tbody>
+                <td>Aprendiz Sena Etapa Lectiva</td>
+                <td>
+                    <div class="text-center">
+                        <div ngbDropdown class="dropdown-primary">
+                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                <i class="mdi mdi-chevron-down"></i>
+                            </button>
+                            <div ngbDropdownMenu>
+                                <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="modal.show()"><i
+                                        class="fa fa-file-pdf-o"></i>Editar</a>
+                                <a class="dropdown-item waves-light waves-effect caja-botones">
+                                    <i class="fa fa-pencil"></i>Inactivar</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tbody>
+        </table>
+    </div>
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+        boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    </ngb-pagination>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-sm'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Nuevo Tipo de contrato</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label class="custom-label" for="funcionario_id">Nombre Tipo Contrato</label>
+                    <input type="text" class="form-control form-control-sm" required>
+                    <div class="col-md-7 offset-4">
+                        <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

@@ -66,7 +66,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createZone()">Guardar Zona</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createZone()" [disabled]="!form.valid">Guardar Zona</button>
         </div>
     </div>
 </app-modal-basic>

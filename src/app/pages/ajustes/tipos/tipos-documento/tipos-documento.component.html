@@ -1,0 +1,88 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Nuevo tipo</button>
+            <h5>Tipos de Documento</h5>
+            <div class="form-row mt-4 ml-1">
+                <div class="form-group">
+                    <label for="">Filtro nombre</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" name="name" autocomplete="off">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead class="bg-light">
+                <th>Tipos de Documento</th>
+                <th>Código</th>
+                <th class="text-center">Acciones</th>
+            </thead>
+            <tbody>
+                <td>Aprendiz Sena Etapa Lectiva</td>
+                <td>CC</td>
+                <td>
+                    <div class="text-center">
+                        <div ngbDropdown class="dropdown-primary">
+                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                <i class="mdi mdi-chevron-down"></i>
+                            </button>
+                            <div ngbDropdownMenu>
+                                <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="modal.show()"><i
+                                        class="fa fa-file-pdf-o"></i>Editar</a>
+                                <a class="dropdown-item waves-light waves-effect caja-botones">
+                                    <i class="fa fa-pencil"></i>Inactivar</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tbody>
+        </table>
+    </div>
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+        boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    </ngb-pagination>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Nuevo Tipo de Documento</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="funcionario_id">Nombre Tipo Documento</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="name" name="name" autocomplete="off" required>
+                    <ng-container *ngIf="name_invalid">
+                        <small *ngFor="let item of form.get('name').errors | ObjToArrayPipe" class="text-danger">
+                              {{ item?.msj }}
+                            </small>
+                    </ng-container>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="funcionario_id">Código</label>
+                    <input type="number" class="form-control form-control-sm" formControlName="code" required>
+                    <ng-container *ngIf="code_invalid">
+                        <small *ngFor="let item of form.get('code').errors | ObjToArrayPipe" class="text-danger">
+                              {{ item?.msj }}
+                            </small>
+                    </ng-container>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>

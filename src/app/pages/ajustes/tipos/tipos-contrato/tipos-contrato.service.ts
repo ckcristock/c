@@ -5,13 +5,12 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class ContratoService {
+export class TiposContratoService {
 
-  constructor( private http: HttpClient ) { }
-
-  getAllContracts(){
-    return this.http.get(`${environment.base_url}/`);
+  constructor( private http:HttpClient ) { }
+  
+  getContractsType( params = {} ) {
+    return this.http.get(`${environment.base_url}/`, {params});
   }
-
 
 }

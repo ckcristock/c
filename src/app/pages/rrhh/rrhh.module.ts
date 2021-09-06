@@ -45,6 +45,8 @@ import { CertificadosListComponent } from './certificados/certificados-list/cert
 import { ReporteHorarioComponent } from './reporte-horario/reporte-horario.component';
 import { DetalleReporteComponent } from './reporte-horario/detalle-reporte/detalle-reporte.component';
 import { DetalleHorarioComponent } from './reporte-horario/detalle-horario/detalle-horario.component';
+import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
+
 @NgModule({
   declarations: [
     VacantesComponent,
@@ -82,7 +84,9 @@ import { DetalleHorarioComponent } from './reporte-horario/detalle-horario/detal
     ReactiveFormsModule,
     /* SweetAlert2Module, */
     NgbPaginationModule,
+    NgbCollapseModule,
     NgbDropdownModule,
+    NgbTypeaheadModule,
     NgbTooltipModule,
     MyDateRangePickerModule,
     PipesModule,
@@ -92,6 +96,7 @@ import { DetalleHorarioComponent } from './reporte-horario/detalle-horario/detal
     FullCalendarModule,
     PerfectScrollbarModule,
   ],
+  providers:[],
   exports: [],
 })
 export class RrhhModule {}

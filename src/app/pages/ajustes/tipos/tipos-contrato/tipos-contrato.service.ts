@@ -10,7 +10,11 @@ export class TiposContratoService {
   constructor( private http:HttpClient ) { }
   
   getContractsType( params = {} ) {
-    return this.http.get(`${environment.base_url}/`, {params});
+    return this.http.get(`${environment.base_url}/paginateContractType`, {params});
+  }
+
+  createNewContract_type( data:any ) {
+    return this.http.post(`${environment.base_url}/work-contract-type`, data);
   }
 
 }

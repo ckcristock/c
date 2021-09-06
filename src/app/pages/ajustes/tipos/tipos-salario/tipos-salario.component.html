@@ -4,8 +4,10 @@
             <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Nuevo tipo</button>
             <h5>Tipos de Salario</h5>
             <div class="form-row mt-4 ml-1">
-                <div class="form-group">
+                <div class="form-group col-2">
                     <label for="">Filtro nombre</label>
+                    <!--  <ng-select class="mr-1" [items]="lists" [(ngModel)]="filtro.name" (change)="getSalaryTypes()" name="name" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                    </ng-select> -->
                     <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" name="name" autocomplete="off">
                 </div>
             </div>
@@ -17,26 +19,32 @@
     <div class="card-body">
         <table class="table table-bordered table-striped">
             <thead class="bg-light">
-                <th>Tipos de Salario</th>
-                <th class="text-center">Acciones</th>
+                <tr>
+                    <th>Tipos de Salario</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
             </thead>
             <tbody>
-                <td>Aprendiz Sena Etapa Lectiva</td>
-                <td>
-                    <div class="text-center">
-                        <div ngbDropdown class="dropdown-primary">
-                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                <i class="mdi mdi-chevron-down"></i>
-                            </button>
-                            <div ngbDropdownMenu>
-                                <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="modal.show()"><i
-                                        class="fa fa-file-pdf-o"></i>Editar</a>
-                                <a class="dropdown-item waves-light waves-effect caja-botones">
-                                    <i class="fa fa-pencil"></i>Inactivar</a>
+                <tr *ngFor="let salary of salaries" [ngClass]="{'bg-danger text-white': (salary.status === 'Inactivo' )}">
+                    <td> {{ salary.name }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="modal.show()"><i
+                                            class="fa fa-file-pdf-o"></i>Editar</a>
+                                    <a *ngIf="salary.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(salary, 'Inactivo')">
+                                        <i class="fa fa-pencil"></i>Inactivar</a>
+                                    <a *ngIf="salary.status == 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(salary, 'Activo')">
+                                        <i class="fa fa-pencil"></i>Activar</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </td>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -54,11 +62,11 @@
         </button>
     </div>
     <div class="app-modal-body">
-        <form>
+        <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre Tipo Salario</label>
-                    <input type="text" class="form-control form-control-sm" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="name" required>
                     <!-- <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
                         </small>
@@ -70,7 +78,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="createSalaryType()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

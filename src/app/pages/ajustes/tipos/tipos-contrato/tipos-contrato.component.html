@@ -5,8 +5,13 @@
             <h5>Tipos de Contrato</h5>
             <div class="form-row mt-4 ml-1">
                 <div class="form-group">
-                    <label for="">Filtro nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" name="name" autocomplete="off">
+                    <label for="">Filtro Tipo de contrato</label>
+                    <select class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getContractsType()" name="name" autocomplete="off">
+                        <option selected>Seleccione</option>
+                        <option *ngFor="let type of types" [value]="type.valor">
+                            {{ type.clave }}
+                        </option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -17,31 +22,39 @@
     <div class="card-body">
         <table class="table table-bordered table-striped">
             <thead class="bg-light">
-                <th>Tipos de Contrato</th>
-                <th class="text-center">Acciones</th>
+                <tr>
+                    <th>Tipos de Contrato</th>
+                    <th>Descripción</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
             </thead>
             <tbody>
-                <td>Aprendiz Sena Etapa Lectiva</td>
-                <td>
-                    <div class="text-center">
-                        <div ngbDropdown class="dropdown-primary">
-                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                <i class="mdi mdi-chevron-down"></i>
-                            </button>
-                            <div ngbDropdownMenu>
-                                <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="modal.show()"><i
-                                        class="fa fa-file-pdf-o"></i>Editar</a>
-                                <a class="dropdown-item waves-light waves-effect caja-botones">
-                                    <i class="fa fa-pencil"></i>Inactivar</a>
+                <tr *ngFor="let contract of contracts" [ngClass]="{'bg-danger text-white': (contract.status === 'Inactivo' )}">
+                    <td scope="row"> {{ contract.name }} </td>
+                    <td> {{ contract.description }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getTypeContract(contract); modal.show()"><i
+                                            class="fa fa-file-pdf-o"></i>Editar</a>
+                                    <a *ngIf="contract.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(contract, 'Inactivo')">
+                                        <i class="fa fa-pencil"></i>Inactivar</a>
+                                    <a *ngIf="contract.status == 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(contract, 'Activo')">
+                                        <i class="fa fa-pencil"></i>Activar</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </td>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-        boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getContractsType($event)" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination"
+        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
     </ngb-pagination>
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-sm'">
@@ -54,11 +67,11 @@
         </button>
     </div>
     <div class="app-modal-body">
-        <form>
+        <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre Tipo Contrato</label>
-                    <input type="text" class="form-control form-control-sm" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="name" required>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
                         </small>
@@ -70,7 +83,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="createContractType()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

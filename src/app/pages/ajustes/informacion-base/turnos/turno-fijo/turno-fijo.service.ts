@@ -11,8 +11,8 @@ export class FixedTurnService {
   getFixedTurns(params = {}) {
     return this.http.get(`${environment.base_url}/fixed-turns`, { params });
   }
-  getFixedTurn( id ){
-    return this.http.get(`${environment.base_url}/fixed-turns/${id}`  );
+  getFixedTurn(id) {
+    return this.http.get(`${environment.base_url}/fixed-turns/${id}`);
   }
   getFixedTurnHours(params = {}) {
     return this.http.get(`${environment.base_url}/fixed-turn-hours`, {
@@ -21,5 +21,10 @@ export class FixedTurnService {
   }
   saveTurnFixed(data) {
     return this.http.post(`${environment.base_url}/fixed-turns`, data);
+  }
+  changeState(id) {
+    return this.http.post(
+      `${environment.base_url}/fixed-turns/change-state/${id}`,{}
+    );
   }
 }

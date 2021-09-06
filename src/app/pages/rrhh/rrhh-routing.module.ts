@@ -17,6 +17,7 @@ import { AlertasComunComponent } from './alertas-comun/alertas-comun.component';
 import { DisciplinariosComponent } from './procesos/disciplinarios/disciplinarios.component';
 import { MemorandosComponent } from './procesos/memorandos/memorandos.component';
 import {CertificadosComponent} from './certificados/certificados.component';
+import {ReporteHorarioComponent} from './reporte-horario/reporte-horario.component';
 
 const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'dotacion/inventario', component: InventarioDotacionComponent },
   { path: 'turnos/asignacion', component: AsignacionTurnosComponent },
   { path: 'turnos/horas-extras', component: HorasExtrasComponent },
+  { path: 'turnos/reporte', component: ReporteHorarioComponent },
   { path: 'alertas-comun', component: AlertasComunComponent },
   { path: 'preliquidados', component: PreliquidadosComponent },
   { path: 'liquidado/:id', component: LiquidadosComponent },

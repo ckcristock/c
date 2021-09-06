@@ -34,7 +34,6 @@ export class CesantiasComponent implements OnInit {
   ngOnInit(): void {}
 
   setState( { id }, state) {
-    console.log(id);
     this._swal.show({
       text: 'Se dispone a cambiar el estado',
       title: '¿Está seguro?',

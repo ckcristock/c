@@ -1,103 +1,3 @@
-<div class="row mb-3">
-  <div class="col-md-6">
-    <h5 class="text-secondary">Lista de turnos rotativos</h5>
-  </div>
-  <div class="col-md-6 text-right">
-    <a class="btn btn-link btn-sm mr-1" (click)="modal.show()">
-      <i class="fa fa-plus"></i> Crear Nuevo turno rotativo
-    </a>
-  </div>
-</div>
-
-<div class="card" *ngIf="turnosRotativo.length && !loading; else notData">
-  <div class="card-body">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="mb-2">
-          <div class="collapse d-md-block" id="displayOptions ">
-            <div
-              class="search-sm d-inline-block float-md-left mr-1 mb-1 align-top"
-            >
-              <input
-                placeholder="Buscar... "
-                class="form-control form-control-sm"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="separator mb-5"></div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr>
-                  <th>Nombre</th>
-                  <th class="text-center">Horario Semana</th>
-                  <th class="text-center" style="width: 30px">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let turnoFijo of turnosFijos">
-                  <td class="custom-label">{{ turnoFijo.text }}</td>
-                  <td class="text-center">
-                    <button
-                      type="button "
-                      class="btn btn-link btn-xs"
-                      (click)="findHours(turnoFijo.value); hourModal.show()"
-                    >
-                      <i class="fa fa-eye"></i>
-                    </button>
-                  </td>
-                  <td class="">
-                    <div ngbDropdown class="dropdown-primary">
-                      <button
-                        ngbDropdownToggle
-                        class="
-                          btn btn-secondary btn-sm
-                          waves-effect waves-light
-                        "
-                        type="button"
-                      >
-                        <i class="mdi mdi-chevron-down"></i>
-                      </button>
-                      <div ngbDropdownMenu>
-                        <a
-                          [routerLink]="['crear', turnoFijo.value]"
-                          class="
-                            dropdown-item
-                            waves-light waves-effect
-                            caja-botones
-                          "
-                        >
-                          <i class="fa fa-pencil-alt"></i> Editar
-                        </a>
-                        <a
-                          class="
-                            dropdown-item
-                            waves-light waves-effect
-                            caja-botones
-                          "
-                        >
-                          <i class="fa fa-times"></i> Anular
-                        </a>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<ng-template #notData>
-  <app-not-data [loading]="loading"></app-not-data>
-</ng-template>
-
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
   <div class="app-modal-header">
     <h4>Asignar horas masivamente</h4>
@@ -124,9 +24,10 @@
           </ng-container>
         </div>
         <div class="form-group col-md-3">
-          <label class="custom-label">Tolerancia de Entrada</label>
+          <label for="entry_" class="custom-label">Tolerancia de Entrada</label>
           <input
             type="number"
+	    id="entry_"
             formControlName="entry_tolerance"
             [class.is-invalid]="invalid_entry_tolerance"
             class="form-control form-control-sm"
@@ -143,9 +44,10 @@
           </ng-container>
         </div>
         <div class="form-group col-md-3">
-          <label class="custom-label">Tolerancia de Salida</label>
+          <label for="leave_" class="custom-label">Tolerancia de Salida</label>
           <input
             type="number"
+	    id="leave_"
             formControlName="leave_tolerance"
             [class.is-invalid]="invalid_leave_tolerance"
             class="form-control form-control-sm"
@@ -294,7 +196,7 @@
       >
         Cerrar
       </button>
-      <button type="submit" (click)="save()" class="btn btn-success btn-sm">
+      <button type="submit" [disabled]="forma.pristine" (click)="save()" class="btn btn-success btn-sm">
         Generar Horario
       </button>
     </div>

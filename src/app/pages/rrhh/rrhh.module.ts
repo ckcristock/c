@@ -42,6 +42,9 @@ import { CertificadosComponent } from './certificados/certificados.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { CesantiasComponent } from './certificados/cesantias/cesantias.component';
 import { CertificadosListComponent } from './certificados/certificados-list/certificados-list.component';
+import { ReporteHorarioComponent } from './reporte-horario/reporte-horario.component';
+import { DetalleReporteComponent } from './reporte-horario/detalle-reporte/detalle-reporte.component';
+import { DetalleHorarioComponent } from './reporte-horario/detalle-horario/detalle-horario.component';
 @NgModule({
   declarations: [
     VacantesComponent,
@@ -67,6 +70,9 @@ import { CertificadosListComponent } from './certificados/certificados-list/cert
     CertificadosComponent,
     CesantiasComponent,
     CertificadosListComponent,
+    ReporteHorarioComponent,
+    DetalleReporteComponent,
+    DetalleHorarioComponent,
   ],
   imports: [
     RrhhRouterModule,

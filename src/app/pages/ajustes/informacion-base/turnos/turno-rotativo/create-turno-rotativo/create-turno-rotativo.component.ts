@@ -1,6 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ValidatorsService } from '../../../services/reactive-validation/validators.service';
+import { SwalService } from '../../../services/swal.service';
+import { RotatingTurnService } from '../rotating-turn.service';
 
 @Component({
   selector: 'app-create-turno-rotativo',
@@ -8,30 +17,59 @@ import { ValidatorsService } from '../../../services/reactive-validation/validat
   styleUrls: ['./create-turno-rotativo.component.scss'],
 })
 export class CreateTurnoRotativoComponent implements OnInit {
-  turnosRotativo: any = [];
-  loading = false;
+  @ViewChild('modal') modal: any;
+  @Input('openModal') openModal: EventEmitter<any>;
+  @Output('saved') saved = new EventEmitter<any>();
   forma: FormGroup;
   constructor(
     private fb: FormBuilder,
-    private _valReactive: ValidatorsService
+    private _valReactive: ValidatorsService,
+    private _rotatingT: RotatingTurnService,
+    private _swal: SwalService
   ) {}
 
   ngOnInit(): void {
     this.createForm();
     this.crearListeners();
+    this.openModal.subscribe((id) => {
+      this.forma.reset();
+      if (id) {
+        this.getTur(id);
+      }
+      this.modal.show();
+    });
+  }
+  getTur(id) {
+    this._rotatingT.getTurn(id).subscribe((r: any) => {
+      let turn = r.data;
+      this.forma.patchValue({
+        name: turn.name,
+        entry_tolerance: turn.entry_tolerance,
+        leave_tolerance: turn.leave_tolerance,
+        extra_hours: turn.extra_hours,
+        entry_time: turn.entry_time,
+        leave_time: turn.leave_time,
+        launch: turn.launch,
+        launch_time: turn.launch_time,
+        breack: turn.breack,
+        breack_time: turn.breack_time,
+        id: turn.id,
+      });
+    });
   }
   createForm() {
     this.forma = this.fb.group({
       name: ['', [this._valReactive.required, this._valReactive.minLength(5)]],
-      entry_tolerance: ['', this._valReactive.required],
-      leave_tolerance: ['', this._valReactive.required],
-      extra_hours: ['', this._valReactive.required],
+      entry_tolerance: [0, this._valReactive.required],
+      leave_tolerance: [0, this._valReactive.required],
+      extra_hours: [0],
       entry_time: ['', this._valReactive.required],
       leave_time: ['', this._valReactive.required],
-      launch: ['', this._valReactive.required],
-      launch_time: ['', this._valReactive.required],
-      breack: ['', this._valReactive.required],
+      launch: [0],
+      launch_time: [0, this._valReactive.required],
+      breack: [0],
       breack_time: ['', this._valReactive.required],
+      id: [0],
     });
     this.forma.get('launch_time').disable();
     this.forma.get('breack_time').disable();
@@ -48,6 +86,50 @@ export class CreateTurnoRotativoComponent implements OnInit {
   }
   save() {
     this.forma.markAllAsTouched();
+    if (this.forma.invalid) {
+      return false;
+    }
+
+    this._swal
+      .show({
+        title: '¿Está seguro?',
+        text: 'Se va a crear/actualizar el turno rotativo',
+        icon: 'warning',
+      })
+      .then((r) => {
+        if (r.isConfirmed) {
+	  let id = this.forma.get('id').value;
+          if (id) {
+            this._rotatingT.update(id, this.forma.value).subscribe((r: any) => {
+              this.response(r);
+            });
+          } else {
+            this._rotatingT.save(this.forma.value).subscribe((r: any) => {
+              this.response(r);
+            });
+          }
+        }
+      });
+  }
+
+  response(r: any) {
+    if (r.code == 200) {
+      this._swal.show({
+        title: 'Operación exitosa',
+        text: 'Se ha guardado correctamente el turno',
+        icon: 'success',
+        showCancel: false,
+      });
+      this.modal.hide();
+      this.saved.emit();
+    } else {
+      this._swal.show({
+        title: 'Ha ocurrido un error',
+        text: 'Comuníquese con el departamento de sistema',
+        icon: 'error',
+        showCancel: false,
+      });
+    }
   }
 
   get invalid_name() {

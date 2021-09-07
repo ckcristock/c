@@ -17,7 +17,7 @@
 
 <div class="card">
     <div class="card-body">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" *ngIf="!loading && salaries.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th>Tipos de Salario</th>
@@ -34,7 +34,7 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="modal.show()"><i
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getData(salary); modal.show()"><i
                                             class="fa fa-file-pdf-o"></i>Editar</a>
                                     <a *ngIf="salary.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(salary, 'Inactivo')">
                                         <i class="fa fa-pencil"></i>Inactivar</a>
@@ -48,8 +48,8 @@
             </tbody>
         </table>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-        boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getSalaryTypes()" aria-label="Default pagination"
+        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
     </ngb-pagination>
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
@@ -66,7 +66,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre Tipo Salario</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="name" required>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="salary.name" formControlName="name" required>
                     <!-- <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
                         </small>
@@ -82,3 +82,6 @@
         </div>
     </div>
 </app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

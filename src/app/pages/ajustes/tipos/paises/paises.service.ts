@@ -5,16 +5,16 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class ArlService {
+export class PaisesService {
 
   constructor( private http: HttpClient ) { }
 
-  getArls( params = {} ) {
-    return this.http.get(`${environment.base_url}/paginateArl`, {params});
+  getCountries(params = {}) {
+    return this.http.get(`${environment.base_url}/paginateCountries`, {params});
   }
 
-  createArl( data:any ) {
-    return this.http.post(`${environment.base_url}/arl`, data);
+  createCountry( data: any ) {
+    return this.http.post(`${environment.base_url}/countries`, data);
   }
 
 }

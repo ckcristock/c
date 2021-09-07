@@ -5,6 +5,7 @@ import { TiposConsultaComponent } from './tipos-consulta/tipos-consulta.componen
 import { TiposContratoComponent } from './tipos-contrato/tipos-contrato.component';
 import { TiposSalarioComponent } from './tipos-salario/tipos-salario.component';
 import { TiposDocumentoComponent } from './tipos-documento/tipos-documento.component';
+import { PaisesComponent } from "./paises/paises.component";
 
 
 const routes : Routes = [
@@ -13,6 +14,7 @@ const routes : Routes = [
     { path: 'tipos-contrato' , component: TiposContratoComponent },
     { path: 'tipos-salario' , component: TiposSalarioComponent },
     { path: 'tipos-documento' , component: TiposDocumentoComponent },
+    { path: 'paises' , component: PaisesComponent },
 ]
 
 @NgModule({

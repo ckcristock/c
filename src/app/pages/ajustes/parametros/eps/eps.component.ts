@@ -83,10 +83,10 @@ export class EpsComponent implements OnInit {
   }
 
 
-  registerNull(eps){
+  r/* egisterNull(eps){
     this.eps = eps;
 
-  }
+  } */
 
   openModal(){
     this.eps.id = '';
@@ -94,12 +94,10 @@ export class EpsComponent implements OnInit {
     this.eps.code = '';
     this.eps.nit = '';
     this.modal.show();
-    this.form.reset();
   }
 
   getEps(eps){
-    /* this.eps = Object.assign({},eps) ; */
-    this.eps = {...eps} ;
+    this.eps = {...eps};
   }
 
   createNewEps(){
@@ -113,8 +111,8 @@ export class EpsComponent implements OnInit {
           this.getAllEps();
           this.modal.hide();
           Swal.fire({
-            title: 'Operación exitosa',
-            text: 'Felicidades, se han actualizado las EPS.',
+            title: res.data,
+            text: 'Felicidades, se han agregado a las EPS.',
             icon: 'success',
             allowOutsideClick: false,
             allowEscapeKey: false
@@ -123,7 +121,7 @@ export class EpsComponent implements OnInit {
 
           Swal.fire({
             title: 'Ooops!',
-            text: 'Algunos datos ya existen en la base de datos.',
+            text: res.err,
             icon: 'error',
             allowOutsideClick: false,
             allowEscapeKey: false

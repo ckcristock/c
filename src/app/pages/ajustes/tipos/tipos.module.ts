@@ -21,6 +21,7 @@ import { TiposAnulacionComponent } from './tipos-anulacion/tipos-anulacion.compo
 import { TiposRechazoComponent } from './tipos-rechazo/tipos-rechazo.component';
 import { TiposActivoFijoComponent } from './tipos-activo-fijo/tipos-activo-fijo.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { PaisesComponent } from './paises/paises.component';
 
 
 @NgModule({
@@ -38,7 +39,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
         TiposEstadoFinancieroComponent,
         TiposAnulacionComponent, 
         TiposRechazoComponent, 
-        TiposActivoFijoComponent
+        TiposActivoFijoComponent, PaisesComponent
     ],
     imports : [
         TiposRoutingModule,

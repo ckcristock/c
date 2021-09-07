@@ -46,11 +46,10 @@ export class ZonasComponent implements OnInit {
     this.modal.show();
     this.zone.id = '';
     this.zone.name = '';
-    this.form.reset();
   }
   
   getZone(zone){
-    this.zone = zone;
+    this.zone = {...zone};
   }
   anularOActivar(zone, status){
 
@@ -86,11 +85,11 @@ export class ZonasComponent implements OnInit {
     this.form.markAllAsTouched();
     if (this.form.invalid) { return false;}
       this.zonesService.createZone(this.zone)
-      .subscribe( res => {
+      .subscribe( (res:any) => {
         this.getAllZones();
         this.modal.hide();
         Swal.fire({
-          title: 'Operación exitosa',
+          title: res.data,
           text: 'Felicidades, se ha agregado a las zonas.',
           icon: 'success',
           allowOutsideClick: false,

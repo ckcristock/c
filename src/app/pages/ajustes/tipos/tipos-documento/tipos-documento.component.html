@@ -17,28 +17,34 @@
     <div class="card-body">
         <table class="table table-bordered table-striped">
             <thead class="bg-light">
-                <th>Tipos de Documento</th>
-                <th>Código</th>
-                <th class="text-center">Acciones</th>
+                <tr>
+                    <th>Tipos de Documento</th>
+                    <th>Código</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
             </thead>
             <tbody>
-                <td>Aprendiz Sena Etapa Lectiva</td>
-                <td>CC</td>
-                <td>
-                    <div class="text-center">
-                        <div ngbDropdown class="dropdown-primary">
-                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                <i class="mdi mdi-chevron-down"></i>
-                            </button>
-                            <div ngbDropdownMenu>
-                                <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="modal.show()"><i
-                                        class="fa fa-file-pdf-o"></i>Editar</a>
-                                <a class="dropdown-item waves-light waves-effect caja-botones">
-                                    <i class="fa fa-pencil"></i>Inactivar</a>
+                <tr *ngFor="let document of documents" [ngClass]="{'bg-danger text-white': (document.status === 'Inactivo' )}">
+                    <td> {{ document.name }} </td>
+                    <td> {{ document.code }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getData(document); modal.show()"><i
+                                            class="fa fa-file-pdf-o"></i>Editar</a>
+                                    <a *ngIf="document.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(document, 'Inactivo')">
+                                        <i class="fa fa-pencil"></i>Inactivar</a>
+                                    <a *ngIf="document.status == 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(document, 'Activo')">
+                                        <i class="fa fa-pencil"></i>Activar</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </td>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -60,7 +66,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="custom-label" for="funcionario_id">Nombre Tipo Documento</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="name" name="name" autocomplete="off" required>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="document.name" formControlName="name" name="name" autocomplete="off" required>
                     <ng-container *ngIf="name_invalid">
                         <small *ngFor="let item of form.get('name').errors | ObjToArrayPipe" class="text-danger">
                               {{ item?.msj }}
@@ -69,7 +75,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label class="custom-label" for="funcionario_id">Código</label>
-                    <input type="number" class="form-control form-control-sm" formControlName="code" required>
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="document.code" formControlName="code" required>
                     <ng-container *ngIf="code_invalid">
                         <small *ngFor="let item of form.get('code').errors | ObjToArrayPipe" class="text-danger">
                               {{ item?.msj }}
@@ -82,7 +88,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="createNewDocument()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

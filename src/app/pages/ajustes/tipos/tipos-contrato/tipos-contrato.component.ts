@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TiposContratoService } from './tipos-contrato.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
 import swal from 'sweetalert2';
 import { consts } from 'src/app/core/utils/consts';
+import { ThemeService } from 'ng2-charts';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tipos-contrato',
@@ -12,54 +14,66 @@ import { consts } from 'src/app/core/utils/consts';
 })
 export class TiposContratoComponent implements OnInit {
   @ViewChild('modal') modal:any;
+  loading:boolean = false;
   pagination:any = {
     page: 1,
     pageSize: 10,
     collectionSize: 0
   }
   types = consts.contract_type;
-  work_contract_type = consts.work_contract_type;
   contracts:any[] = [];
-  type:any = {};
+  contrato:any = {};
   filtro:any = {
     name: '',
     description: ''
   }
-  form: FormGroup;
+  /* form:FormGroup; */
+  form = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.required]),
+  });
   constructor( 
                 private _tiposContratoService:TiposContratoService,
                 private fb: FormBuilder,
                 private _reactiveValid: ValidatorsService,  ) { }
 
   ngOnInit(): void {
-    this.createForm();
+    /* this.createForm(); */
     this.getContractsType();
   }
 
   openModal() {
     this.modal.show();
+    this.contrato.id = '';
+    this.contrato.name = '';
+    this.contrato.description = '';
   }
 
-  createForm() {
+  /* createForm() {
     this.form = this.fb.group({
       description: ['', this._reactiveValid.required],
       name: ['', this._reactiveValid.required]
     })
-  }
+  } */
+
+  
 
   getContractsType( page = 1 ) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtro
     }
+    this.loading = true;
     this._tiposContratoService.getContractsType(params)
     .subscribe( (res:any) => {
+      this.loading = false;
         this.contracts = res.data.data;
-        this.pagination.collectionSize = res.data.total
-        this.form.patchValue({
-          id: this.type.id
-        })
+        this.pagination.collectionSize = res.data.total;
     });
+  }
+
+  getData(data) {
+    this.contrato = {...data};
   }
 
   activateOrInactivate(contract, status) {
@@ -67,25 +81,37 @@ export class TiposContratoComponent implements OnInit {
       id: contract.id,
       status
     }
-    this._tiposContratoService.createNewContract_type( data )
-    .subscribe( res => {
-      this.getContractsType();
-    });
-  }
-
-  getTypeContract(type) {
-  this.type = type;
-  console.log(this.type.id);
-  
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: (status === 'Inactivo'? 'El Contrato se inactivará!' : 'El Contrato se activará'),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: ( status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar' )
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._tiposContratoService.createNewContract_type( data )
+        .subscribe( res => {
+        this.getContractsType();
+          Swal.fire({
+            title: (status === 'Inactivo' ? 'Contrato Inhabilitado!' : 'Contrato activado' ),
+            text: (status === 'Inactivo' ? 'El Contrato ha sido Inhabilitada con éxito.' : 'El Contrato ha sido activada con éxito.'),
+            icon: 'success'
+          })
+        } )
+      }
+    })
   }
 
   createContractType() {
-    this._tiposContratoService.createNewContract_type( this.form.value )
-    .subscribe( res => {
+    this._tiposContratoService.createNewContract_type( this.contrato )
+    .subscribe( (res:any) => {
       swal.fire({
         icon: 'success',
-        title: 'Tipo de contrato creado',
-        text: 'Tipo de contrato ha sido creado con éxito'
+        title: res.data,
+        text: 'Se ha agregado a los Documentos con éxito.'
       });
       this.getContractsType();
       this.modal.hide();

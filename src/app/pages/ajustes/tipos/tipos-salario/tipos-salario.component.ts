@@ -42,11 +42,11 @@ export class TiposSalarioComponent implements OnInit {
   }
 
   getSalaryTypes() {
-    this._typesSalaryService.getSalaryTypes()
+   /*  this._typesSalaryService.getSalaryTypes()
     .subscribe( (res:any) => {
       this.salaries = res.data.data;
       console.log(this.salaries);
-    });
+    }); */
   }
 
   /* getSalaryTypesList() {
@@ -61,10 +61,10 @@ export class TiposSalarioComponent implements OnInit {
       id: contract.id,
       status
     }
-    this._typesSalaryService.createSalaryType( data )
+   /*  this._typesSalaryService.createSalaryType( data )
     .subscribe( res => {
       this.getSalaryTypes();
-    });
+    }); */
   }
 
   /* getTypeContract(type) {
@@ -74,12 +74,12 @@ export class TiposSalarioComponent implements OnInit {
   } */
 
   createSalaryType() {
-    this._typesSalaryService.createSalaryType( this.form.value )
+   /*  this._typesSalaryService.createSalaryType( this.form.value )
     .subscribe( res => {
       console.log(res);
       this.getSalaryTypes();
       this.modal.hide();
-    } )
+    } ) */
   }
 
 }

@@ -3,7 +3,7 @@
     class="form-control form-control-sm select-turno"
     [(ngModel)]="turno"
     [ngStyle]="{'background-color': withColor, 'color': '#FFF'}"
-    (change)="changeColor()"
+    (change)="changeColor($event.target.value)"
     
   >
     <option value="seleccione">Seleccione</option>
@@ -15,7 +15,7 @@
       [value]="turn.id"
       [ngStyle]="{ 'background-color': turn.color, 'color': '#FFF' }"
     >
-      {{ turn.nombre }} ({{ turn.hora_inicio_uno }} {{ turn.hora_fin_uno }})
+      {{ turn.name }} ({{ turn.entry_time }} {{ turn.leave_time }})
     </option>
   </select>
 </div>

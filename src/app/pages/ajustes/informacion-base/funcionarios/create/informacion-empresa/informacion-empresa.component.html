@@ -106,15 +106,15 @@
         </div>
 
       </div>
-      <div class="form-group row" *ngIf="turnSelected == 'Rotativo'">
+      <div class="form-group row" *ngIf="turnSelected == 'Fijo'">
         <label for="turno_fijo_id " class="col-md-4 col-form-label custom-label text-right">Turno Asignado</label>
-        <ng-select class="col-md-7 p-0" formControlName="rotating_turn_id" [items]="rotatingTurns" bindLabel="text"
+        <ng-select class="col-md-7 p-0" formControlName="fixed_turn_id" [items]="fixedTurns" bindLabel="text"
           bindValue="value" loadingText="loading" ngDefaultControl>
         </ng-select>
 
 
         <div class="col-md-7 offset-4">
-          <small class="invalid text-danger" *ngIf="rotating_turn_id_invalid"> Es nesario el turno
+          <small class="invalid text-danger" *ngIf="fixed_turn_id_invalid"> Es nesario el turno
           </small>
         </div>
       </div>

@@ -37,8 +37,7 @@ export class DatosBasicosComponent implements OnInit {
     degree: ''
   }
   data:any;
-  fileString: any =
-  'https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=100';
+  fileString: any ='';
   constructor( private fb:FormBuilder, 
                 private basicDataService: DatosBasicosService,
                 private activatedRoute: ActivatedRoute,
@@ -62,12 +61,14 @@ export class DatosBasicosComponent implements OnInit {
     this.basicDataService.getBasicsData(this.id)
     .subscribe( (res:any) => {
       this.funcionario = res.data; 
+     // this.form.patchValue({image:this.funcionario.image})
+      this.fileString = this.funcionario.image
     })
   }
 
   createForm(){
     this.form = this.fb.group({
-      image: ['', Validators.required],
+      image: ['', ],
       first_name: ['', Validators.required],
       second_name: ['', Validators.required],
       first_surname: ['', Validators.required],
@@ -115,7 +116,7 @@ export class DatosBasicosComponent implements OnInit {
 
   get image_valid() {
     return (
-      this.form.get('image').invalid && this.form.get('image').touched
+      this.form.get('image').touched && !this.fileString
     );
   }
   get identifier_valid() {
@@ -181,11 +182,15 @@ export class DatosBasicosComponent implements OnInit {
 
   guardar() {
     this.form.markAllAsTouched();
-    if (this.form.invalid) { return false;}
+    if (this.form.invalid || this.image_valid ) { return false;}
+    if(this.form.get('image').dirty){
+      this.funcionario.image = this.fileString
+    }else{
+      delete this.funcionario.image;
+    }
     this.basicDataService.updateBasicData(this.funcionario, this.id)
     .subscribe( res => {
       this.modal.hide();
-      console.log(this.funcionario);
       this.getBasicsData();
       Swal.fire({
         icon: 'success',

@@ -7,8 +7,8 @@ import { CompanyService } from '../../../services/company.service';
 import { PositionService } from '../../../services/positions.service';
 import { WorkContractTypesService } from '../../../services/workContractTypes.service';
 import { consts } from '../../../../../../core/utils/consts';
-import { RotatingTurnsService } from '../../../services/rotating-turns.service';
 import { GroupService } from '../../../services/group.service';
+import { FixedTurnService } from '../../../turnos/turno-fijo/turno-fijo.service';
 
 @Component({
   selector: 'app-informacion-empresa',
@@ -22,7 +22,7 @@ export class InformacionEmpresaComponent implements OnInit {
   companies: any[];
   positions: any[];
   workContractTypes: any[];
-  rotatingTurns: any[];
+  fixedTurns: any[];
   groups: any[];
 
   $person: Subscription;
@@ -37,7 +37,7 @@ export class InformacionEmpresaComponent implements OnInit {
     private _company: CompanyService,
     private _positions: PositionService,
     private _workContractTypes: WorkContractTypesService,
-    private _rotatingTurns: RotatingTurnsService,
+    private _fixedTurns: FixedTurnService,
     private _group: GroupService,
 
   ) { }
@@ -91,9 +91,9 @@ export class InformacionEmpresaComponent implements OnInit {
     });
   }
   getRotatingTurns() {
-    this._rotatingTurns.getRotatingTurns().subscribe((r: any) => {
-      this.rotatingTurns = r.data;
-      this.rotatingTurns.unshift({ text: 'Seleccione una', value: '' });
+    this._fixedTurns.getFixedTurns().subscribe((r: any) => {
+      this.fixedTurns = r.data;
+      this.fixedTurns.unshift({ text: 'Seleccione una', value: '' });
     });
   }
   crearForm() {
@@ -106,18 +106,18 @@ export class InformacionEmpresaComponent implements OnInit {
       date_of_admission: ['', Validators.required],
       work_contract_type_id: ['', Validators.required],
       turn_type: ['Fijo', Validators.required],
-      rotating_turn_id: ['', Validators.required],
+      fixed_turn_id: ['', Validators.required],
       date_end: ['', Validators.required],
     });
-    this.formCompany.get('rotating_turn_id').disable();
+    /* this.formCompany.get('fixed_turn_id').disable(); */
     this.formCompany.get('date_end').disable();
   }
 
   turnChanged(turno) {
-    if (turno == 'Rotativo') {
-      this.formCompany.get('rotating_turn_id').enable();
+    if (turno == 'Fijo') {
+      this.formCompany.get('fixed_turn_id').enable();
     } else {
-      this.formCompany.get('rotating_turn_id').disable();
+      this.formCompany.get('fixed_turn_id').disable();
     }
   }
   conludeContract = false;
@@ -179,9 +179,9 @@ export class InformacionEmpresaComponent implements OnInit {
       this.formCompany.get('turn_type').invalid && this.formCompany.get('turn_type').touched
     );
   }
-  get rotating_turn_id_invalid() {
+  get fixed_turn_id_invalid() {
     return (
-      this.formCompany.get('rotating_turn_id').invalid && this.formCompany.get('rotating_turn_id').touched
+      this.formCompany.get('fixed_turn_id').invalid && this.formCompany.get('fixed_turn_id').touched
     );
   }
   get date_end_invalid() {

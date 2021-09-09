@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { consts } from '../../../../../../core/utils/consts';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { Person } from '../../../../../../core/models/person.model';
+import {ValidatorsService} from '../../../services/reactive-validation/validators.service';
 @Component({
   selector: 'app-datos-funcionario',
   templateUrl: './datos-funcionario.component.html',
@@ -23,7 +24,9 @@ export class DatosFuncionarioComponent implements OnInit {
   fileString: any =
     'https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=100';
 
-  constructor(private _person: PersonDataService, private fb: FormBuilder) { }
+  constructor(private _person: PersonDataService, private fb: FormBuilder,
+	      private _valid: ValidatorsService
+	     ) { }
   person: Person
   ngOnInit(): void {
     this.crearForm();
@@ -34,30 +37,30 @@ export class DatosFuncionarioComponent implements OnInit {
 
   crearForm() {
     this.form = this.fb.group({
-      image: ['', Validators.required],
-      identifier: ['', Validators.required],
-      first_name: ['', Validators.required],
+      image: ['', this._valid.required],
+      identifier: ['',this._valid.required ],
+      first_name: ['', this._valid.required],
       second_name: ['', ],
-      first_surname: ['', Validators.required],
+      first_surname: ['', this._valid.required],
       second_surname: ['', ],
       email: [
         '',
         [
-          Validators.required,
+          this._valid.required,
           Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
         ],
       ],
-      date_of_birth: ['', Validators.required],
-      place_of_birth: ['', Validators.required],
-      direction: ['', Validators.required],
-      phone: ['', Validators.required],
-      gener: ['', Validators.required],
-      blood_type: ['', Validators.required],
-      cell_phone: ['', Validators.required, Validators.minLength(5), Validators.maxLength(8)],
-      marital_status: ['', Validators.required],
-      number_of_children: ['', Validators.required],
-      degree: ['', Validators.required],
-      title: ['', Validators.required],
+      date_of_birth: ['', this._valid.required],
+      place_of_birth: ['', this._valid.required],
+      direction: ['', this._valid.required],
+      phone: ['', [this._valid.required, this._valid.minLength(10), this._valid.maxLength(10)]],
+      gener: ['', this._valid.required],
+      blood_type: ['', this._valid.required],
+      cell_phone: ['', [this._valid.required, this._valid.minLength(7), this._valid.maxLength(7)]],
+      marital_status: ['', this._valid.required],
+      number_of_children: ['', this._valid.required],
+      degree: ['', this._valid.required],
+      title: ['', this._valid.required],
     });
   }
 
@@ -163,6 +166,7 @@ export class DatosFuncionarioComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event) => {
         this.fileString = (<FileReader>event.target).result;
+	console.log(this.fileString)
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.file = base64

@@ -41,7 +41,8 @@ export class ValidatorsService {
   }
   minLength(min: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value?.length;
+      const value = String(control.value)?.length;
+      
       return !isNaN(value) && value < min
         ? {
             minLength: {
@@ -54,6 +55,20 @@ export class ValidatorsService {
     };
   }
 
+  maxLength(min: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = String(control.value)?.length;
+      return !isNaN(value) && value > min
+        ? {
+            minLength: {
+              min: min,
+              actual: control.value,
+              msj: ` -El campo debe tenener máximo ${min} caracteres`,
+            },
+          }
+        : null;
+    };
+  }
   required(control: AbstractControl): ValidationErrors | null {
     return ValidatorsService.isEmptyInputValue(control.value)
       ? { required: { msj: ' -El campo es obligatorio' } }

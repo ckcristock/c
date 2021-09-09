@@ -1,35 +1,64 @@
 <form [formGroup]="form" (ngSubmit)="save()">
-    <div class="form-row mt-3">
-        <div class="form-group col-md-2 text-center">
-            <img id="imageOutput" [src]="fileString" alt="Imagen del funcionario" class="d-block m-auto" />
-            <label for="image" class="subir-archivo mt-2">
-            Cargar imagen
-            <i class="simple-icon-doc"></i>
+  <div class="form-row mt-3">
+    <div class="form-group col-md-2 text-center">
+      <img
+        id="imageOutput"
+        [src]="fileString"
+        alt="Imagen del funcionario"
+        class="d-block m-auto"
+      />
+      <label for="image" class="subir-archivo mt-2">
+        Cargar imagen
+        <i class="simple-icon-doc"></i>
       </label>
 
-            <input type="file" name="image" class="form-control-file" id="image" formControlName="image" (change)="onFileChanged($event)" [class.is-invalid]="image_valid" placeholder="Imagen" />
+      <input
+        type="file"
+        name="image"
+        class="form-control-file"
+        id="image"
+        formControlName="image"
+        (change)="onFileChanged($event)"
+        [class.is-invalid]="image_valid"
+        placeholder="Imagen"
+      />
+      <div class="col-md-7 offset-4">
+        <ng-container *ngIf="image_valid">
+          <small
+            *ngFor="let item of form.get('image').errors | ObjToArrayPipe"
+            class="text-danger"
+          >
+            {{ item?.msj }}
+          </small>
+        </ng-container>
+      </div>
+    </div>
 
-            <div class="col-md-12 text-center text-danger" *ngIf="image_valid">
-                <small class="invalid">La imagen es necesaria</small>
-            </div>
-        </div>
-
-        <div class="col-md-6 text-left">
-            <div class="form-group row mt-3">
-                <label for="identidad" class="col-md-4 col-form-label custom-label text-right">Doc. de identidad</label
+    <div class="col-md-6 text-left">
+      <div class="form-group row mt-3">
+        <label
+          for="identidad"
+          class="col-md-4 col-form-label custom-label text-right"
+          >Doc. de identidad</label
         >
         <input
-          type="text"
+          type="number"
           formControlName="identifier"
           class="form-control custom-control col-md-7"
           [class.is-invalid]="identifier_valid"
           placeholder="Documento de identidad"
         />
-
         <div class="col-md-7 offset-4">
-          <small class="invalid text-danger"
-          *ngIf="identifier_valid"> Es nesario el documento
-        </small>
+          <ng-container *ngIf="identifier_valid">
+            <small
+              *ngFor="
+                let item of form.get('identifier').errors | ObjToArrayPipe
+              "
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
 
@@ -46,10 +75,18 @@
           class="form-control custom-control col-md-7"
           placeholder="Primer Nombre"
         />
+
         <div class="col-md-7 offset-4">
-          <small class="invalid text-danger"
-            *ngIf="first_name_valid"> Es nesario el primer nombre
-          </small>
+          <ng-container *ngIf="first_name_valid">
+            <small
+              *ngFor="
+                let item of form.get('first_name').errors | ObjToArrayPipe
+              "
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
       <div class="form-group row">
@@ -66,8 +103,8 @@
           placeholder="Segundo nombre"
         />
         <div class="col-md-7 offset-4">
-          <small class="invalid text-danger"
-            *ngIf="second_name_valid"> Es nesario el segundo nombre
+          <small class="invalid text-danger" *ngIf="second_name_valid">
+            Es nesario el segundo nombre
           </small>
         </div>
       </div>
@@ -86,9 +123,16 @@
           placeholder="Primer Apellido"
         />
         <div class="col-md-7 offset-4">
-          <small class="invalid text-danger"
-          *ngIf="first_surname_valid"> Es nesario el primer apellido
-        </small>
+          <ng-container *ngIf="first_surname_valid">
+            <small
+              *ngFor="
+                let item of form.get('first_surname').errors | ObjToArrayPipe
+              "
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
       <div class="form-group row">
@@ -104,11 +148,6 @@
           class="form-control custom-control col-md-7"
           placeholder="Segundo Apellido"
         />
-        <div class="col-md-7 offset-4">
-          <small class="invalid text-danger"
-          *ngIf="second_surname_valid"> Es nesario el segundo apellido
-        </small>
-        </div>
       </div>
 
       <div class="form-group row">
@@ -124,10 +163,16 @@
           [class.is-invalid]="email_valid"
           placeholder="Ej: genetic@example.com"
         />
+
         <div class="col-md-7 offset-4">
-          <small class="invalid text-danger"
-          *ngIf="email_valid"> Es nesario el correo electrónico
-        </small>
+          <ng-container *ngIf="email_valid">
+            <small
+              *ngFor="let item of form.get('email').errors | ObjToArrayPipe"
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
 
@@ -145,9 +190,16 @@
           id=""
         />
         <div class="col-md-7 offset-4">
-          <small class="invalid  text-danger"
-          *ngIf="date_of_birth_valid"> Es nesaria la fecha de nacimiento
-        </small>
+          <ng-container *ngIf="date_of_birth_valid">
+            <small
+              *ngFor="
+                let item of form.get('date_of_birth').errors | ObjToArrayPipe
+              "
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
 
@@ -164,9 +216,16 @@
           formControlName="place_of_birth"
         />
         <div class="col-md-7 offset-4">
-          <small class="invalid text-danger"
-          *ngIf="place_of_birth_valid"> Es el lugar de nacimiento
-        </small>
+          <ng-container *ngIf="place_of_birth_valid">
+            <small
+              *ngFor="
+                let item of form.get('place_of_birth').errors | ObjToArrayPipe
+              "
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
 
@@ -183,13 +242,16 @@
           formControlName="direction"
         />
         <div class="col-md-7 offset-4">
-          <small class="invalid text-danger"
-          *ngIf="direction_valid"> Es nesaria la dirección
-        </small>
+          <ng-container *ngIf="direction_valid">
+            <small
+              *ngFor="let item of form.get('direction').errors | ObjToArrayPipe"
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
-
-   
     </div>
 
     <div class="col-md-4">
@@ -200,19 +262,27 @@
           >Teléfono</label
         >
         <input
-          type="text"
+          type="number"
           [class.is-invalid]="phone_valid"
           formControlName="phone"
           class="form-control custom-control col-md-7"
         />
-        <div class="col-md-7 offset-4">
-          <small class=" invalid text-danger"
-          *ngIf="phone_valid"> Es nesario el teléfono
-        </small>
 
+        <div class="col-md-7 offset-4 ">
+          <ng-container *ngIf="phone_valid">
+  
+            <small
+              *ngFor="
+                let item of form.get('phone').errors | ObjToArrayPipe
+              "
+              class="text-danger "
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
-      <div class="form-group row ">
+      <div class="form-group row">
         <label
           for="sexo"
           class="col-md-3 col-form-label custom-label text-right"
@@ -227,9 +297,14 @@
           <option value="Femenino">Femenino</option>
         </select>
         <div class="col-md-7 offset-3">
-          <small class="invalid text-danger"
-          *ngIf="gener_valid"> Es nesario el género
-        </small>
+          <ng-container *ngIf="gener_valid">
+            <small
+              *ngFor="let item of form.get('gener').errors | ObjToArrayPipe"
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
 
@@ -249,9 +324,16 @@
           </option>
         </select>
         <div class="col-md-7 offset-3">
-          <small class="invalid text-danger"
-          *ngIf="blood_type_valid"> Es nesario el tipo de sangre
-        </small>
+          <ng-container *ngIf="blood_type_valid">
+            <small
+              *ngFor="
+                let item of form.get('blood_type').errors | ObjToArrayPipe
+              "
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
 
@@ -262,16 +344,19 @@
           >Celular</label
         >
         <input
-          type="text"
+          type="number"
           [class.is-invalid]="cell_phone_valid"
           formControlName="cell_phone"
           class="form-control custom-control col-md-7"
         />
-        <small class="invalid col-md-7 offset-3
-	       text-danger"
-	  *ngIf="cell_phone_valid">
-	    Es necesario el celular
-	</small>
+        <ng-container *ngIf="cell_phone_valid">
+          <small
+            *ngFor="let item of form.get('cell_phone').errors | ObjToArrayPipe"
+            class="text-danger"
+          >
+            {{ item?.msj }}
+          </small>
+        </ng-container>
       </div>
 
       <div class="form-group row">
@@ -290,9 +375,16 @@
           </option>
         </select>
         <div class="col-md-7 offset-3">
-          <small class="invalid text-danger"
-          *ngIf="marital_status_valid"> Es nesario el est. civil
-        </small>
+          <ng-container *ngIf="marital_status_valid">
+            <small
+              *ngFor="
+                let item of form.get('marital_status').errors | ObjToArrayPipe
+              "
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
 
@@ -309,9 +401,17 @@
           class="form-control custom-control col-md-7"
         />
         <div class="col-md-7 offset-3">
-          <small class="invalid text-danger"
-          *ngIf="number_of_children_valid"> Es nesario el # Hijos
-        </small>
+          <ng-container *ngIf="number_of_children_valid">
+            <small
+              *ngFor="
+                let item of form.get('number_of_children').errors
+                  | ObjToArrayPipe
+              "
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
 
@@ -330,10 +430,15 @@
             {{ grado.clave }}
           </option>
         </select>
-        <div class="col-md-7 offset-3" >
-          <small class="invalid text-danger"
-          *ngIf="degree_valid"> Es nesario el grado
-        </small>
+        <div class="col-md-7 offset-3">
+          <ng-container *ngIf="degree_valid">
+            <small
+              *ngFor="let item of form.get('degree').errors | ObjToArrayPipe"
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
 
@@ -350,9 +455,14 @@
           class="form-control custom-control col-md-7"
         />
         <div class="col-md-7 offset-3">
-          <small class="invalid text-danger"
-          *ngIf="title_valid"> Es nesario el título
-        </small>
+          <ng-container *ngIf="title_valid">
+            <small
+              *ngFor="let item of form.get('title').errors | ObjToArrayPipe"
+              class="text-danger"
+            >
+              {{ item?.msj }}
+            </small>
+          </ng-container>
         </div>
       </div>
     </div>

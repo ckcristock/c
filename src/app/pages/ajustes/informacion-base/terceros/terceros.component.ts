@@ -9,6 +9,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class TercerosComponent implements OnInit {
   form:FormGroup;
+  loading:boolean = false;
   pagination:any = {
     page: 1,
     pageSize: 5,

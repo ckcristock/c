@@ -5,9 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { ComponentsModule } from '../components/components.module';
+import { PlanCuentasComponent } from './contabilidad/plan-cuentas/plan-cuentas.component';
 
 @NgModule({
-    declarations:[DashboardComponent,  ],
+    declarations:[DashboardComponent, PlanCuentasComponent,  ],
     imports:[ 
         CommonModule,
         FormsModule,

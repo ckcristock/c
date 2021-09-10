@@ -2,15 +2,15 @@
     <div class="card-body">
         <div class="card-title">
             <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Agregar Nuevo Tipo de Egreso</button>
-            <h5>Tipo Egreso</h5>
-            <p>Todos los Tipos de Egreso Registrados</p>
+            <h5>Tipo Ingreso</h5>
+            <p>Todos los Tipos de Ingreso Registrados</p>
         </div>
     </div>
 </div>
 
 <div class="card">
     <div class="card-body">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" *ngIf="!loading && ingresss.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th>Nombre</th>

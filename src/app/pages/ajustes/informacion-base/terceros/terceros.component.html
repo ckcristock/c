@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <h5>Fondo de Pensión</h5>
+            <h5>Terceros</h5>
             <div class="form-row mt-4 ml-1">
                 <div class="form-group">
                     <label for="">Filtro NIT</label>
@@ -26,13 +26,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td> 5656 </td>
-                    <td> Jorge Peraza </td>
-                    <td> Calle 12 #20-22 </td>
-                    <th> Bucaramanga </th>
-                    <th> 32051515 </th>
-                    <th> Proveedor </th>
+                <tr *ngFor="let d of data">
+                    <td> {{ d.nit }} </td>
+                    <td> {{ d.name }} </td>
+                    <td> {{ d.adress }} </td>
+                    <th> {{ d.city }} </th>
+                    <th> {{ d.cell }} </th>
+                    <th> {{ d.tercerType }} </th>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">

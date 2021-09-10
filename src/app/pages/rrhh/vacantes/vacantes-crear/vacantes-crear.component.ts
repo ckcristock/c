@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { Component, OnInit} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import 'rxjs/add/operator/takeWhile';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
 import { DependenciesService } from 'src/app/pages/ajustes/informacion-base/services/dependencies.service';
 import { GroupService } from 'src/app/pages/ajustes/informacion-base/services/group.service';
 import { PositionService } from 'src/app/pages/ajustes/informacion-base/services/positions.service';
@@ -26,14 +24,15 @@ export class VacantesCrearComponent implements OnInit {
     fecha = new Date();
     departments: any[] = [];
     municipalities: any[] = [];
-
+    visaSelected:boolean;
     companies: any[] = [];
     groups: any[] = [];
     dependencies: any[] = [];
     positions: any[] = [];
 
     turns = consts.turnTypes;
-
+    options = consts.options;
+    visaTypes = consts.visaTypes;
     driving_requirement = consts.driving_requirements;
 
     constructor(
@@ -195,8 +194,17 @@ export class VacantesCrearComponent implements OnInit {
             type_of_contract: ['', Validators.required],
             driving_license: ['', Validators.required],
             legal_documents: ['', Validators.required],
-            passport_visa: ['', Validators.required]            
-        })
+            passport: ['', Validators.required],            
+            visa: ['', Validators.required],            
+        })  
+    }
+
+    visa() {
+        if (this.form.controls.visa.value == 0) {
+            this.visaSelected = true;
+        } else {
+            this.visaSelected = false;
+        }
     }
 
     get company_id_invalid() {
@@ -281,7 +289,11 @@ export class VacantesCrearComponent implements OnInit {
         return this.form.get('legal_documents').invalid && this.form.get('legal_documents').touched;
     }
 
-    get passport_visa_invalid() {
-        return this.form.get('passport_visa').invalid && this.form.get('passport_visa').touched;
+    get passport_invalid() {
+        return this.form.get('passport').invalid && this.form.get('passport').touched;
+    }
+
+    get visa_invalid() {
+        return this.form.get('visa').invalid && this.form.get('visa').touched;
     }
 }

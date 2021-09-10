@@ -334,14 +334,45 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Pasaporte/Visa</label>
-                                            <select class="form-control custom-control" formControlName="passport_visa">
+                                            <label>Pasaporte</label>
+                                            <select class="form-control custom-control" formControlName="passport">
                                                 <option selected>Seleccione</option>
-                                                <option>Si</option>
-                                                <option>No</option>
+                                                <option *ngFor="let option of options" [value]="option.valor">
+                                                    {{ option.clave }}
+                                                </option>
                                             </select>
-                                            <div *ngIf="passport_visa_invalid">
-                                                <small class="invalid text-danger">Es necesario el campo de Pasaporte/Visa
+                                            <div *ngIf="passport_invalid">
+                                                <small class="invalid text-danger">Es necesario el campo de Pasaporte
+                                                    </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Visa</label>
+                                            <select class="form-control custom-control" formControlName="visa" (change)="visa()">
+                                                <option selected>Seleccione</option>
+                                                <option *ngFor="let option of options" [value]="option.valor">
+                                                    {{ option.clave }}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="visa_invalid">
+                                                <small class="invalid text-danger">Es necesario el campo de Visa
+                                                    </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" *ngIf="visaSelected == true">
+                                        <div class="form-group">
+                                            <label>Tipo de Visa</label>
+                                            <select class="form-control custom-control" formControlName="visa">
+                                                <option selected>Seleccione</option>
+                                                <option *ngFor="let visaType of visaTypes" [value]="visaType.valor">
+                                                    {{ visaType.clave }}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="visa_invalid">
+                                                <small class="invalid text-danger">Es necesario el campo de Visa
                                                     </small>
                                             </div>
                                         </div>

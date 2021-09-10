@@ -149,8 +149,19 @@ export const consts = {
   ],
 
   bankType: [
-    { clave: 'Tarjeta de Crédito', valor: '0' },
+    { clave: 'Tarjeta de Crédito', valor: 0 },
     { clave: 'Efectivo', valor: 1 }
+  ],
+
+  options: [
+    { clave: 'Si', valor: 0 },
+    { clave: 'No', valor: 1 }
+  ],
+
+  visaTypes: [
+    { clave: 'Visa de Trabajo', valor: 'visa de trabajo' },
+    { clave: 'Visa de Migrante', valor: 'visa de migrantes' },
+    { clave: 'Visa de Turista', valor: 'visa de turista' }
   ]
 
 };

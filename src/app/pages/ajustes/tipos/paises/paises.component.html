@@ -16,7 +16,7 @@
 
 <div class="card">
     <div class="card-body">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" *ngIf="!loading && paises.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th>Paises</th>
@@ -25,7 +25,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let pais of paises">
-                    <td> {{ pais.name }} </td>
+                    <td> {{ pais.name | titlecase }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -49,7 +49,7 @@
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <h5 class="modal-title">Nuevo País</h5>
+        <h5 class="modal-title"> {{ selected }} </h5>
         <button type="button" class="close basic-close" (click)="modal.hide()">
             <span aria-hidden="true">
               <i class="fas fa-times" (click)="modal.hide()"></i>
@@ -61,7 +61,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre País</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="pais.name" formControlName="name" name="name" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="name" name="name" required>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre del País 
                         </small>

@@ -42,7 +42,7 @@
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <h5 class="modal-title"> Nueva Zona </h5>
+        <h5 class="modal-title"> {{ selected }} </h5>
         <button type="button" class="close basic-close" (click)="modal.hide()">
           <span aria-hidden="true">
             <i class="fas fa-times" (click)="modal.hide()"></i>
@@ -54,7 +54,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre de zona</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="zone.name" [class.is-invalid]="name_valid" formControlName="name" required>
+                    <input type="text" class="form-control form-control-sm" [class.is-invalid]="name_valid" formControlName="name" required>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_valid"> Es necesario el nombre 
                         </small>
@@ -66,7 +66,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createZone()" [disabled]="!form.valid">Guardar Zona</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createZone()" [disabled]="!form.valid">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

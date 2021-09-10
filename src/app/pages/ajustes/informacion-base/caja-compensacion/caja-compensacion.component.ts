@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CompensationFundsService } from '../services/compensationFunds.service';
 import { CajaCompensacionService } from './caja-compensacion.service';
+import { ValidatorsService } from '../services/reactive-validation/validators.service';
 
 @Component({
   selector: 'app-caja-compensacion',
@@ -12,6 +13,7 @@ import { CajaCompensacionService } from './caja-compensacion.service';
 export class CajaCompensacionComponent implements OnInit {
   @ViewChild('modal') modal:any;
   loading:boolean = false;
+  selected:any;
   compensations:any[] = [];
   compensation:any = {};
   pagination:any = {
@@ -22,27 +24,41 @@ export class CajaCompensacionComponent implements OnInit {
   filtro:any = {
     name: ''
   }
-  form = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    code: new FormControl('', [Validators.required]),
-    nit: new FormControl('', [Validators.required])
-  })
-  constructor( private _compensationService: CajaCompensacionService ) { }
+  form:FormGroup;
+  constructor( 
+                private _compensationService: CajaCompensacionService, 
+                private fb:FormBuilder,
+                private _validators: ValidatorsService ) { }
 
   ngOnInit(): void {
     this.getCompensationFunds();
+    this.createForm();
   }
 
   openModal() {
     this.modal.show();
-    this.compensation.id = '';
-    this.compensation.name = '';
-    this.compensation.code = '';
-    this.compensation.nit = '';
+    this.form.reset();
+    this.selected = 'Nueva Caja de Compensación';
   }
 
   getData(data) {
     this.compensation = {...data};
+    this.selected = 'Actualizar Caja de Compensación';
+    this.form.patchValue({
+      id: this.compensation.id,
+      name: this.compensation.name,
+      code: this.compensation.code,
+      nit: this.compensation.nit
+    });
+  }
+
+  createForm() {
+    this.form = this.fb.group({
+      id: [this.compensation.id],
+      name: ['', this._validators.required],
+      code: ['', this._validators.required],
+      nit: ['', this._validators.required]
+    });
   }
 
   getCompensationFunds( page = 1 ) {
@@ -90,10 +106,8 @@ export class CajaCompensacionComponent implements OnInit {
   }
 
   createCompensationFund() {
-    this._compensationService.createCompensationFund(this.compensation)
+    this._compensationService.createCompensationFund(this.form.value)
     .subscribe( (res:any) => {
-      console.log(res);
-      if (res.code == 200) {
         this.modal.hide();
         this.getCompensationFunds();
         Swal.fire({ 
@@ -101,16 +115,16 @@ export class CajaCompensacionComponent implements OnInit {
           title: res.data,
           text: 'Se ha agregado con éxito.'
         })
-      } else {
+      },
+      err => {
         Swal.fire({
           title: 'Ooops!',
-          text: res.err,
+          html: err.error.errors.code + '<br>' + err.error.errors.nit,
           icon: 'error',
           allowOutsideClick: false,
           allowEscapeKey: false
-        })
-      }
-    })
+      })
+      })
   }
 
 }

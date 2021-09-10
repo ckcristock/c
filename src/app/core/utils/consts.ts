@@ -131,6 +131,26 @@ export const consts = {
   status: [
     { clave: 'Abierto', valor: 'Abierto' },
     { clave: 'Cerrado', valor: 'Cerrado' }
+  ],
+
+  modalities: [
+    { clave: 'Por Dia', valor: 'Por Dia' },
+    { clave: 'Por Hora', valor: 'Por Hora' }
+  ],
+
+  Egresstypes: [
+    { clave: 'Prestamo', valor: 'Prestamo' },
+    { clave: 'Deducción', valor: 'Deducción' }
+  ],
+
+  Ingresstypes: [
+    { clave: 'Prestacional', valor: 'Prestacional' },
+    { clave: 'No Prestacional', valor: 'No Prestacional' }
+  ],
+
+  bankType: [
+    { clave: 'Tarjeta de Crédito', valor: '0' },
+    { clave: 'Efectivo', valor: 1 }
   ]
 
 };

@@ -11,6 +11,8 @@ import { TiposDocumentoService } from './tipos-documento.service';
 })
 export class TiposDocumentoComponent implements OnInit {
   @ViewChild('modal') modal:any;
+  loading:boolean = false;
+  selected:any;
   pagination:any = {
     page: 1,
     pageSize: 5,
@@ -22,10 +24,7 @@ export class TiposDocumentoComponent implements OnInit {
   }
   documents:any[] = [];
   document:any = {}
-  form = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    code: new FormControl('', [Validators.required]),
-  });
+  form:FormGroup;
   constructor( 
               private fb:FormBuilder, 
               private _reactiveValid: ValidatorsService,
@@ -34,22 +33,32 @@ export class TiposDocumentoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDocumentTypes();
-    /* this.createForm(); */
+    this.createForm();
   }
 
   openModal() {
     this.modal.show();
-    this.document.id = '';
-    this.document.name = '';
-    this.document.code = '';
+    this.form.reset();
+    this.selected = 'Nuevo Tipo de Documento';
   }
 
-  /* createForm() {
+  getData(data) {
+    this.document = {...data};
+    this.selected = 'Actualizar Tipo de Documento';
+    this.form.patchValue({
+      id: this.document.id,
+      name: this.document.name,
+      code: this.document.code
+    });
+  }
+
+  createForm() {
     this.form = this.fb.group({
+      id: [this.document.id],
       name: ['', this._reactiveValid.required],
       code: ['', this._reactiveValid.required]
     })
-  } */
+  }
 
   activateOrInactivate(contract, status) {
     let data = {
@@ -80,27 +89,24 @@ export class TiposDocumentoComponent implements OnInit {
     })
   }
 
-  getData(data) {
-    this.document = {...data};
-  }
 
   getDocumentTypes(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtro
     }
+    this.loading = true;
     this._typesDocumentService.getDocuments(params)
     .subscribe( (res:any) => {
       this.documents = res.data.data;
-      console.log(this.documents);
       this.pagination.collectionSize = res.data.total;
+      this.loading = false;
     })
   }
 
   createNewDocument() {
-    this._typesDocumentService.createNewDocument(this.document)
+    this._typesDocumentService.createNewDocument( this.form.value )
     .subscribe( (res:any) => {
-      console.log(res);
       this.getDocumentTypes();
       this.modal.hide();
       Swal.fire({

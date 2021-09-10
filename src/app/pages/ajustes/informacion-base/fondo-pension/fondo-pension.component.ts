@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { FondoPensionService } from './fondo-pension.service';
+import { ValidatorsService } from '../services/reactive-validation/validators.service';
 
 @Component({
   selector: 'app-fondo-pension',
@@ -11,6 +12,7 @@ import { FondoPensionService } from './fondo-pension.service';
 export class FondoPensionComponent implements OnInit {
   @ViewChild('modal') modal:any;
   loading:boolean = false;
+  selected:any;
   pensions:any[] = [];
   pension:any = {};
   pagination:any = {
@@ -21,27 +23,42 @@ export class FondoPensionComponent implements OnInit {
   filtro:any = {
     name: ''
   }
-  form = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    code: new FormControl('', [Validators.required]),
-    nit: new FormControl('', [Validators.required])
-  })
-  constructor( private _fondoPensionService: FondoPensionService ) { }
+  form:FormGroup;
+  constructor( 
+              private _fondoPensionService: FondoPensionService,
+              private _validators: ValidatorsService,
+              private fb: FormBuilder
+              ) { }
 
   ngOnInit(): void {
     this.getPensionFunds();
+    this.createForm();
   }
 
   openModal() {
     this.modal.show();
-    this.pension.id = '';
-    this.pension.name = '';
-    this.pension.code = '';
-    this.pension.nit = '';
+    this.form.reset();
+    this.selected = 'Nuevo Fondo de Pensión';
   }
 
   getData(data) {
     this.pension = {...data}
+    this.selected = 'Actualizar Fondo de Pensión';
+    this.form.patchValue({
+      id: this.pension.id,
+      name: this.pension.name,
+      code: this.pension.code,
+      nit: this.pension.nit
+    });
+  }
+
+  createForm() {
+    this.form = this.fb.group({
+      id: [this.pension.id],
+      name: ['', this._validators.required],
+      code: ['', this._validators.required],
+      nit: ['', this._validators.required]
+    });
   }
 
   getPensionFunds( page = 1 ) {
@@ -89,9 +106,8 @@ export class FondoPensionComponent implements OnInit {
   }
 
   createPensionFund() {
-    this._fondoPensionService.createPensionFund(this.pension)
+    this._fondoPensionService.createPensionFund(this.form.value)
     .subscribe( (res:any) => {
-      if (res.code == 200) {
         this.getPensionFunds();
         this.modal.hide();
         Swal.fire({ 
@@ -99,17 +115,17 @@ export class FondoPensionComponent implements OnInit {
           title: res.data,
           text: 'Se ha agregado a los paises con éxito.'
         })
-
-      } else {
+      },
+      err => {
         Swal.fire({
           title: 'Ooops!',
-          text: 'Algunos datos ya existen en la base de datos.',
+          html: err.error.errors.code + '<br>' + err.error.errors.nit,
           icon: 'error',
           allowOutsideClick: false,
           allowEscapeKey: false
         })
-      }
-    })
+      })
+      
   }
 
 }

@@ -13,6 +13,8 @@ import { CommonModule } from "@angular/common";
 import { EpsComponent } from './eps/eps.component';
 import { DepartamentosComponent } from './departamentos/departamentos.component';
 import { MunicipiosComponent } from './municipios/municipios.component';
+import { BancosComponent } from './bancos/bancos.component';
+import { CuentasBancariasComponent } from './cuentas-bancarias/cuentas-bancarias.component';
 
 
 
@@ -21,7 +23,7 @@ import { MunicipiosComponent } from './municipios/municipios.component';
         NotasTecnicasComponent, 
         PerfilesComponent, 
         ZonasComponent, 
-        RgpComponent, EpsComponent, DepartamentosComponent, MunicipiosComponent
+        RgpComponent, EpsComponent, DepartamentosComponent, MunicipiosComponent, BancosComponent, CuentasBancariasComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

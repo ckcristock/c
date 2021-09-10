@@ -8,7 +8,7 @@
                     <label for="">Filtro nombre</label>
                     <!--  <ng-select class="mr-1" [items]="lists" [(ngModel)]="filtro.name" (change)="getSalaryTypes()" name="name" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
                     </ng-select> -->
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" name="name" autocomplete="off">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getSalaryTypes()" name="name" autocomplete="off">
                 </div>
             </div>
         </div>
@@ -48,13 +48,13 @@
             </tbody>
         </table>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getSalaryTypes()" aria-label="Default pagination"
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getSalaryTypes($event)" aria-label="Default pagination"
         maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
     </ngb-pagination>
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <h5 class="modal-title">Nuevo Tipo de Salario</h5>
+        <h5 class="modal-title"> {{ selected }} </h5>
         <button type="button" class="close basic-close" (click)="modal.hide()">
             <span aria-hidden="true">
               <i class="fas fa-times" (click)="modal.hide()"></i>
@@ -66,7 +66,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre Tipo Salario</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="salary.name" formControlName="name" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="name" required>
                     <!-- <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
                         </small>

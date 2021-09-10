@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ArlService } from './arl.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { ValidatorsService } from '../services/reactive-validation/validators.service';
 
 @Component({
   selector: 'app-arl',
@@ -11,8 +12,9 @@ import Swal from 'sweetalert2';
 export class ArlComponent implements OnInit {
   @ViewChild('modal') modal:any;
   loading:boolean = false;
+  selected:any;
   arls:any[] = [];
-  arl:any = {};
+  private arl:any = {};
   pagination:any = {
     page: 1,
     pageSize: 5,
@@ -21,27 +23,41 @@ export class ArlComponent implements OnInit {
   filtro:any = {
     name: ''
   }
-  form = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    accounting_account: new FormControl('', [Validators.required]),
-    nit: new FormControl('', [Validators.required])
-  })
-  constructor( private _arlService:ArlService ) { }
+  form: FormGroup;
+  constructor( 
+                private _arlService:ArlService, 
+                private fb: FormBuilder,
+                private _validators: ValidatorsService ) { }
 
   ngOnInit(): void {
     this.getArls();
+    this.createForm();
   }
 
   openModal() {
     this.modal.show();
-    this.arl.id = '';
-    this.arl.name = '';
-    this.arl.accounting_account = '';
-    this.arl.nit = '';
+    this.form.reset();
+    this.selected = 'Nueva ARL';
   }
 
   getData( data ) {
     this.arl = {...data}
+    this.selected = 'Actualizar ARL'
+    this.form.patchValue({
+      id: this.arl.id,
+      name: this.arl.name,
+      accounting_account: this.arl.accounting_account,
+      nit: this.arl.nit
+    });
+  }
+
+  createForm() {
+    this.form = this.fb.group({
+      id: [this.arl.id],
+      name: ['', this._validators.required],
+      accounting_account: ['', this._validators.required],
+      nit: ['', this._validators.required],
+    });
   }
 
   getArls(page = 1) {
@@ -89,28 +105,38 @@ export class ArlComponent implements OnInit {
   }
 
   createArl() {
-    this._arlService.createArl(this.arl)
+    this._arlService.createArl(this.form.value)
     .subscribe( (res:any) => {
-      if (res.code == 200) {
-
         this.getArls();
         this.modal.hide();
         Swal.fire({ 
           icon: 'success',
           title: res.data,
-          text: 'Se ha agregado a los paises con éxito.'
-        })
-        
-      } else {
-        Swal.fire({
-          title: 'Ooops!',
-          text: 'Algunos datos ya existen en la base de datos.',
-          icon: 'error',
-          allowOutsideClick: false,
-          allowEscapeKey: false
-        })
-      }
-    })
+          text: 'Se ha agregado a las ARL con éxito.'
+        });
+    },
+    err => {
+      Swal.fire({
+        title: 'Ooops!',
+        html: err.error.errors.nit,
+        icon: 'error',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      })
+    }
+    );
+  }
+
+  get name_invalid() {
+    return this.form.get('name').invalid && this.form.get('name').touched;
+  }
+
+  get accounting_account_invalid() {
+    return this.form.get('accounting_account').invalid && this.form.get('accounting_account').touched;
+  }
+
+  get nit_invalid() {
+    return this.form.get('nit').invalid && this.form.get('nit').touched;
   }
 
 }

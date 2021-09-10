@@ -57,7 +57,7 @@
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <h5 class="modal-title">Nueva Caja de Compensación</h5>
+        <h5 class="modal-title"> {{ selected }} </h5>
         <button type="button" class="close basic-close" (click)="modal.hide()">
             <span aria-hidden="true">
               <i class="fas fa-times" (click)="modal.hide()"></i>
@@ -69,19 +69,19 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="compensation.name" formControlName="name" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="name" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Código</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="compensation.code" formControlName="code" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="code" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">NIT</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="compensation.nit" formControlName="nit" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="nit" required>
                 </div>
             </div>
         </form>

@@ -5,7 +5,11 @@ import { TiposConsultaComponent } from './tipos-consulta/tipos-consulta.componen
 import { TiposContratoComponent } from './tipos-contrato/tipos-contrato.component';
 import { TiposSalarioComponent } from './tipos-salario/tipos-salario.component';
 import { TiposDocumentoComponent } from './tipos-documento/tipos-documento.component';
-import { PaisesComponent } from "./paises/paises.component";
+import { PaisesComponent } from './paises/paises.component';
+import { TiposRiesgoComponent } from './tipos-riesgo/tipos-riesgo.component';
+import { TiposNovedadesComponent } from "./tipos-novedades/tipos-novedades.component";
+import { TiposEgresoComponent } from './tipos-egreso/tipos-egreso.component';
+import { TiposIngresoComponent } from './tipos-ingreso/tipos-ingreso.component';
 
 
 const routes : Routes = [
@@ -15,6 +19,10 @@ const routes : Routes = [
     { path: 'tipos-salario' , component: TiposSalarioComponent },
     { path: 'tipos-documento' , component: TiposDocumentoComponent },
     { path: 'paises' , component: PaisesComponent },
+    { path: 'tipos-riesgo' , component: TiposRiesgoComponent },
+    { path: 'tipos-novedad' , component: TiposNovedadesComponent },
+    { path: 'tipos-egreso' , component: TiposEgresoComponent },
+    { path: 'tipos-ingreso' , component: TiposIngresoComponent }
 ]
 
 @NgModule({

@@ -7,7 +7,7 @@
             <div class="form-row mt-4 ml-1">
                 <div class="form-group">
                     <label for="">Filtro nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getArls()" name="name">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getArls()" name="name" autocomplete="off">
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <h5 class="modal-title">Nuevo ARL</h5>
+        <h5 class="modal-title"> {{ selected }} </h5>
         <button type="button" class="close basic-close" (click)="modal.hide()">
             <span aria-hidden="true">
               <i class="fas fa-times" (click)="modal.hide()"></i>
@@ -69,19 +69,34 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="arl.name" formControlName="name" name="name" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="name" required autocomplete="off">
+                    <ng-container *ngIf="name_invalid">
+                        <small *ngFor="let item of form.get('name').errors | ObjToArrayPipe" class="text-danger">
+                              {{ item?.msj }}
+                            </small>
+                    </ng-container>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Código</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="arl.accounting_account" formControlName="accounting_account" name="code" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="accounting_account" required autocomplete="off">
+                    <ng-container *ngIf="accounting_account_invalid">
+                        <small *ngFor="let item of form.get('name').errors | ObjToArrayPipe" class="text-danger">
+                              {{ item?.msj }}
+                            </small>
+                    </ng-container>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">NIT</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="arl.nit" formControlName="nit" name="nit" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="nit" required autocomplete="off">
+                    <ng-container *ngIf="nit_invalid">
+                        <small *ngFor="let item of form.get('name').errors | ObjToArrayPipe" class="text-danger">
+                              {{ item?.msj }}
+                            </small>
+                    </ng-container>
                 </div>
             </div>
         </form>

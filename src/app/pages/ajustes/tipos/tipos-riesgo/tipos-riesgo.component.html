@@ -1,0 +1,99 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Nuevo Riesgo</button>
+            <h5>Tipos Riesgo</h5>
+            <div class="form-row mt-4 ml-1">
+                <div class="form-group col-2">
+                    <label for="">Filtro nombre</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.risk_type" (change)="getRiskType()" name="name" autocomplete="off">
+                </div>
+                <div class="form-group col-2">
+                    <label for="">Filtro nombre cuenta</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.accounting_account" (change)="getRiskType()" name="name" autocomplete="off">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-bordered table-striped" *ngIf="!loading && risks.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Tipo Riesgo</th>
+                    <th>Cuenta Contable</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let risk of risks" [ngClass]="{'bg-danger text-white': (risk.status === 'Inactivo' )}">
+                    <td> {{ risk.risk_type }} </td>
+                    <td> {{ risk.accounting_account }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getData(risk); modal.show()"><i
+                                            class="fa fa-file-pdf-o"></i>Editar</a>
+                                    <a *ngIf="risk.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(risk, 'Inactivo')">
+                                        <i class="fa fa-pencil"></i>Inactivar</a>
+                                    <a *ngIf="risk.status == 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(risk, 'Activo')">
+                                        <i class="fa fa-pencil"></i>Activar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getRiskType($event)" aria-label="Default pagination"
+        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    </ngb-pagination>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> {{ selected }} </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="nombre_riesgo">Nombre Tipo Riesgo</label>
+                    <input type="text" class="form-control form-control-sm" id="nombre_riesgo" formControlName="risk_type" required>
+                    <!-- <div class="col-md-7 offset-4">
+                        <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
+                        </small>
+                    </div> -->
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="cuenta_contable">Cuenta Contable</label>
+                    <input type="text" class="form-control form-control-sm" id="cuenta_contable" formControlName="accounting_account" required>
+                    <!-- <div class="col-md-7 offset-4">
+                        <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
+                        </small>
+                    </div> -->
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createRisk()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

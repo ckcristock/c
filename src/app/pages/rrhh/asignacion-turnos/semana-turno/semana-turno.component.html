@@ -1,13 +1,13 @@
 <div class="row">
   <div class="form-group col-12 pl-0 d-flex justify-content-end">
-    <app-turno [turnos]="turnos"></app-turno>
+   <!--  <app-turno [turnos]="turnos"></app-turno>
     <button
       class="btn btn-link"
       (click)="asignarHorariosMasivo()"
       style="padding: 0 10px !important"
     >
       Asignar
-    </button>
+    </button> -->
   </div>
   <div class="col-12">
     <table class="table table-bordered table-sm">
@@ -16,14 +16,14 @@
           <th class="text-center">Funcionario</th>
           <th class="text-center" *ngFor="let dia of diasSemana">
             {{ dia.dia }}
-            <br/>
+            <br />
             {{ formatFecha(dia.fecha) }}
           </th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let person of people">
-          <td class="funcionario-td" style="width: 70px;">
+          <td class="funcionario-td" style="width: 70px">
             <img
               [src]="person?.image | image"
               height="45"
@@ -35,22 +35,20 @@
             class="text-center custom-label fecha-td"
             *ngFor="let dia of diasSemana"
           >
-            <!--  {{ dia.dia }} -->
-            <app-turno [turnos]="turnos"></app-turno>
+            <!-- {{ turnos }} -->
+            <app-turno
+              (changed)="turnChanged($event, person, dia)"
+              [turnos]="turnos"
+            ></app-turno>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="row">
-    <!--  <div class="form-group col-12 mt-3">
-      <button
-        class="btn btn-secondary default btn-xs btn-block"
-        @click="makeHorario"
-      >
-        Guardar
-      </button> 
-    </div>-->
+  <div class="form-group col-12 mt-3">
+    <button class="btn btn-info btn-sm btn-block" (click)="makeHorario()">
+      Guardar
+    </button>
   </div>
 </div>

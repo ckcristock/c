@@ -12,9 +12,10 @@ import Swal from 'sweetalert2';
 export class TiposSalarioComponent implements OnInit {
   @ViewChild('modal') modal:any;
   loading:boolean = false;
+  selected:any;
   lists:any;
   salaries:any[] = [];
-  /* form:FormGroup; */
+  form:FormGroup;
   pagination:any = {
     page: 1,
     pageSize: 5,
@@ -23,9 +24,6 @@ export class TiposSalarioComponent implements OnInit {
   filtro:any = {
     name: ''
   }
-  form = new FormGroup({
-    name: new FormControl('', [Validators.required])
-  });
   salary:any = {};
   constructor( 
                 private _typesSalaryService:TiposSalarioService, 
@@ -34,20 +32,30 @@ export class TiposSalarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSalaryTypes();
-    /* this.createForm(); */
+    this.createForm();
   }
 
   openModal() {
     this.modal.show();
-    this.salary.id = '';
-    this.salary.name = '';
+    this.form.reset();
+    this.selected = 'Nuevo Tipo de Salario';
   }
 
-  /* createForm() {
+  getData(data){
+      this.salary = {...data};
+      this.selected = 'Actualizar Tipo de Salario';
+      this.form.patchValue({
+        id: this.salary.id,
+        name: this.salary.name
+      });
+  }
+
+  createForm() {
     this.form = this.fb.group({
+      id: [this.salary.id],
       name: ['', this._reactiveValid.required]
     })
-  } */
+  }
 
   getSalaryTypes( page = 1 ) {
     this.pagination.page = page;
@@ -64,23 +72,12 @@ export class TiposSalarioComponent implements OnInit {
     });
   }
 
-  /* getSalaryTypesList() {
-    this._typesSalaryService.getSalaryTypesList()
-    .subscribe( (res:any) => {
-      this.lists = res.data;
-    })
-  } */
-
-  getData(data){
-      this.salary = {...data};
-  }
 
   activateOrInactivate(contract, status) {
     let data = {
       id: contract.id,
       status
     }
-
     Swal.fire({
       title: '¿Estas seguro?',
       text: (status === 'Inactivo'? 'El Salario se inactivará!' : 'El Salario se activará'),
@@ -105,14 +102,8 @@ export class TiposSalarioComponent implements OnInit {
     })
   }
 
-  /* getTypeContract(type) {
-  this.type = type;
-  console.log(this.type.id);
-  
-  } */
-
   createSalaryType() {
-    this._typesSalaryService.createSalaryType( this.salary )
+    this._typesSalaryService.createSalaryType( this.form.value )
     .subscribe( (res:any) => {
       this.getSalaryTypes();
       this.modal.hide();

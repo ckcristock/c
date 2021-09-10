@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { EpsService } from './eps.service';
+import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
 
 @Component({
   selector: 'app-eps',
@@ -16,11 +17,8 @@ export class EpsComponent implements OnInit {
     name: '',
     code: ''
   }
-  form = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    code: new FormControl('', [Validators.required]),
-    nit: new FormControl('', [Validators.required])
-  });
+  selected:any;
+  form:FormGroup;
   pagination = {
     pageSize: 5,
     page: 1,
@@ -29,10 +27,36 @@ export class EpsComponent implements OnInit {
   status:any = 'Inactivo';
   loading:boolean = false;
 
-  constructor( private epsService: EpsService ) { }
+  constructor( private epsService: EpsService, private fb: FormBuilder, private _validators:ValidatorsService ) { }
 
   ngOnInit(): void {
     this.getAllEps();
+    this.createForm();
+  }
+  openModal(){
+    this.modal.show();
+    this.form.reset();
+    this.selected = 'Nueva EPS'
+  }
+
+  getEps(eps){
+    this.eps = {...eps};
+    this.selected = 'Actualizar EPS'
+    this.form.patchValue({
+      id: this.eps.id,
+      name: this.eps.name,
+      code: this.eps.code,
+      nit: this.eps.nit
+    });
+  }
+
+  createForm() {
+    this.form = this.fb.group({
+      id: [this.eps.id],
+      name: ['', this._validators.required],
+      code: ['', this._validators.required],
+      nit: ['', this._validators.required]
+    });
   }
 
   getAllEps( page = 1 ){
@@ -51,13 +75,10 @@ export class EpsComponent implements OnInit {
   }
 
   anularOActivar(zone, status){
-
     let data:any = {
       id:zone.id,
       status
     }
-
-      
       Swal.fire({
         title: '¿Estas seguro?',
         text: (status === 'Inactivo'? 'La EPS se Inactivará!' : 'La EPS se activará'),
@@ -83,52 +104,31 @@ export class EpsComponent implements OnInit {
   }
 
 
-  r/* egisterNull(eps){
-    this.eps = eps;
-
-  } */
-
-  openModal(){
-    this.eps.id = '';
-    this.eps.name = '';
-    this.eps.code = '';
-    this.eps.nit = '';
-    this.modal.show();
-  }
-
-  getEps(eps){
-    this.eps = {...eps};
-  }
-
   createNewEps(){
       this.form.markAllAsTouched();
       if (this.form.invalid) { return false;}
-      this.epsService.createNewEps(this.eps)
+      this.epsService.createNewEps(this.form.value)
       .subscribe( (res:any) => {
-
-        if (res.code === 200) {
-
+        console.log(res);
           this.getAllEps();
           this.modal.hide();
           Swal.fire({
             title: res.data,
-            text: 'Felicidades, se han agregado a las EPS.',
             icon: 'success',
             allowOutsideClick: false,
             allowEscapeKey: false
-          })
-        } else {
-
-          Swal.fire({
-            title: 'Ooops!',
-            text: res.err,
-            icon: 'error',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-          })
-
-        }
-      });      
+          }) 
+      },
+      err => {
+        Swal.fire({
+          title: 'Ooops!',
+          html: err.error.errors.code + '<br>' + err.error.errors.nit,
+          icon: 'error',
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        })
+      }
+      );      
   }
 
   get name_eps_valid(){

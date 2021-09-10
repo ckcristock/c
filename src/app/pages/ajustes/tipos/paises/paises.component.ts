@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PaisesService } from './paises.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ThemeService } from 'ng2-charts';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -11,8 +10,10 @@ import Swal from 'sweetalert2';
 })
 export class PaisesComponent implements OnInit {
   @ViewChild('modal') modal:any;
+  loading:boolean = false;
   paises:any[] = [];
   pais:any = {};
+  selected:any;
   filtro:any = {
     name: ''
   }
@@ -21,23 +22,34 @@ export class PaisesComponent implements OnInit {
     pageSize: 5,
     collectionSize: 0
   }
-  form = new FormGroup({
-    name : new FormControl('', [Validators.required])
-  })
-  constructor( private _paisesService: PaisesService  ) { }
+  form:FormGroup;
+  constructor( private _paisesService: PaisesService, private fb:FormBuilder  ) { }
 
   ngOnInit(): void {
     this.getCountries();
+    this.createForm();
   }
 
   openModal() {
   this.modal.show();
-  this.pais.id = '';
-  this.pais.name = '';
+  this.form.reset();
+  this.selected = 'Nuevo País';
   }
   
   getData( data ) {
     this.pais = {...data};
+    this.selected = 'Actualizar País';
+    this.form.patchValue({
+      id: this.pais.id,
+      name: this.pais.name
+    });
+  }
+
+  createForm() {
+    this.form = this.fb.group({
+      id: [this.pais.id],
+      name: ['', this.pais.name]
+    });
   }
 
   getCountries( page = 1 ) {
@@ -45,14 +57,17 @@ export class PaisesComponent implements OnInit {
     let params = {
       ...this.pagination, ...this.filtro
     }
+    this.loading = true;
     this._paisesService.getCountries(params)
     .subscribe( (res:any) => {
       this.paises = res.data.data;
+      this.pagination.collectionSize = res.data.total;
+      this.loading = false;
     })
   }
 
   createCountry() {
-    this._paisesService.createCountry(this.pais)
+    this._paisesService.createCountry(this.form.value)
     .subscribe( (res:any) => {
        console.log(res);
        this.getCountries();

@@ -6,7 +6,7 @@
             <div class="form-row mt-4 ml-1">
                 <div class="form-group">
                     <label for="">Filtro nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" name="name" autocomplete="off">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getDocumentTypes()" name="name" autocomplete="off">
                 </div>
             </div>
         </div>
@@ -15,7 +15,7 @@
 
 <div class="card">
     <div class="card-body">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" *ngIf="!loading && documents.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th>Tipos de Documento</th>
@@ -48,13 +48,13 @@
             </tbody>
         </table>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-        boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getDocumentTypes($event)" aria-label="Default pagination"
+        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
     </ngb-pagination>
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <h5 class="modal-title">Nuevo Tipo de Documento</h5>
+        <h5 class="modal-title"> {{ selected }} </h5>
         <button type="button" class="close basic-close" (click)="modal.hide()">
             <span aria-hidden="true">
               <i class="fas fa-times" (click)="modal.hide()"></i>
@@ -66,7 +66,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="custom-label" for="funcionario_id">Nombre Tipo Documento</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="document.name" formControlName="name" name="name" autocomplete="off" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="name" name="name" autocomplete="off" required>
                     <ng-container *ngIf="name_invalid">
                         <small *ngFor="let item of form.get('name').errors | ObjToArrayPipe" class="text-danger">
                               {{ item?.msj }}
@@ -75,7 +75,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label class="custom-label" for="funcionario_id">Código</label>
-                    <input type="number" class="form-control form-control-sm" [(ngModel)]="document.code" formControlName="code" required>
+                    <input type="number" class="form-control form-control-sm" formControlName="code" required>
                     <ng-container *ngIf="code_invalid">
                         <small *ngFor="let item of form.get('code').errors | ObjToArrayPipe" class="text-danger">
                               {{ item?.msj }}
@@ -92,3 +92,6 @@
         </div>
     </div>
 </app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

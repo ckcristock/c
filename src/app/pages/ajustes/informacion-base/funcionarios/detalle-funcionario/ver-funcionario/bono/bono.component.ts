@@ -36,7 +36,7 @@ export class BonoComponent implements OnInit {
     this.form.patchValue({
       countable_income_id: '',
       value: '',
-      work_contract_id: ''
+      work_contract_id: this.id
     });
   }
 

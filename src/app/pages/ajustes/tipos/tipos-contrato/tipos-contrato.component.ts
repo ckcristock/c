@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 export class TiposContratoComponent implements OnInit {
   @ViewChild('modal') modal:any;
   loading:boolean = false;
+  selected:any;
   pagination:any = {
     page: 1,
     pageSize: 10,
@@ -27,36 +28,40 @@ export class TiposContratoComponent implements OnInit {
     name: '',
     description: ''
   }
-  /* form:FormGroup; */
-  form = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
-  });
+  form:FormGroup;
   constructor( 
                 private _tiposContratoService:TiposContratoService,
                 private fb: FormBuilder,
                 private _reactiveValid: ValidatorsService,  ) { }
 
   ngOnInit(): void {
-    /* this.createForm(); */
+    this.createForm();
     this.getContractsType();
   }
 
   openModal() {
     this.modal.show();
-    this.contrato.id = '';
-    this.contrato.name = '';
-    this.contrato.description = '';
+    this.form.reset();
+    this.selected = 'Nuevo Tipo de Contrato';
   }
 
-  /* createForm() {
+  getData(data) {
+    this.contrato = {...data};
+    this.selected = 'Actualizar Tipo de Contrato'
+    this.form.patchValue({
+      id: this.contrato.id,
+      description: this.contrato.description,
+      name: this.contrato.name
+    });
+  }
+
+  createForm() {
     this.form = this.fb.group({
+      id: [this.contrato.id],
       description: ['', this._reactiveValid.required],
       name: ['', this._reactiveValid.required]
     })
-  } */
-
-  
+  }
 
   getContractsType( page = 1 ) {
     this.pagination.page = page;
@@ -72,9 +77,6 @@ export class TiposContratoComponent implements OnInit {
     });
   }
 
-  getData(data) {
-    this.contrato = {...data};
-  }
 
   activateOrInactivate(contract, status) {
     let data = {
@@ -106,7 +108,7 @@ export class TiposContratoComponent implements OnInit {
   }
 
   createContractType() {
-    this._tiposContratoService.createNewContract_type( this.contrato )
+    this._tiposContratoService.createNewContract_type( this.form.value )
     .subscribe( (res:any) => {
       swal.fire({
         icon: 'success',

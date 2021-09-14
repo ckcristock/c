@@ -1,0 +1,240 @@
+<app-modal-basic #modalPrestamoylibranza [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">Nuevo Prestamo o Libranza</h4>
+    <button
+      type="button"
+      class="close basic-close"
+      (click)="modalPrestamoylibranza.hide(); limpiarCampos()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div
+    style="overflow-x: unset !important; overflow-y: unset !important"
+    class="app-modal-body"
+  >
+    <form #FormPrestamo="ngForm" (ngSubmit)="save()">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="Funcionario">Empleado</label>
+            <input
+              type="text"
+              id="Funcionario"
+              name="Funcionario"
+              class="form-control form-control-sm"
+              [ngbTypeahead]="search4"
+              [resultTemplate]="rt3"
+              [inputFormatter]="formatter4"
+              [(ngModel)]="modelo.person"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="Tipo">Tipo</label>
+            <select
+              name="Tipo"
+              id="tipo"
+              class="form-control form-control-sm"
+              (change)="
+                changeTipo($event.target.value);
+                ComprobarPrestamo($event.target.value)
+              "
+              [(ngModel)]="modelo.type"
+              required
+            >
+              <option value="" disabled selected>Seleccionar</option>
+              <option value="Prestamo">Prestamo</option>
+              <option value="Libranza">Libranza</option>
+              <!-- <option value="Sancion">Sancion</option> -->
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="Interes">Intereses a:</label>
+            <select
+              [disabled]="modelo.type != 'Prestamo'"
+              (change)="SinInteres($event.target.value)"
+              name="Interes"
+              id="interes"
+              class="form-control form-control-sm"
+              [(ngModel)]="modelo.interest_type"
+              required
+            >
+              <option value="" disabled selected>Seleccionar</option>
+              <option value="Capital">Sobre Capital</option>
+              <option value="Prestamo">Valor Prestamo</option>
+              <option value="Sin">Sin Intereses</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="Porcentaje_Interes">% Interes</label>
+            <input
+              type="number"
+              id="Porcentaje_Interes"
+              [disabled]="modelo.interest_type == 'Sin'"
+              name="Porcentaje_Interes"
+              class="form-control form-control-sm"
+              [(ngModel)]="modelo.interest"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-md-12" *ngIf="modelo.type == 'Prestamo'">
+          <div class="form-group">
+            <label for="Funcionario">Plan de Cuenta</label>
+            <input
+              type="text "
+              name="PlanCuenta"
+              requied
+              class="form-control form-control-sm f-9"
+              [(ngModel)]="modelo.account_plain_id"
+              [ngbTypeahead]="search1"
+              [resultTemplate]="rt1"
+              [inputFormatter]="formatter1"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="Prestamo">Valor Prestamo</label>
+            <input
+              appMycurrency
+              type="text"
+              id="Prestamo"
+              name="Prestamo"
+              class="form-control form-control-sm"
+              [(ngModel)]="modelo.value"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="Pago_Cuotas">Pago a Cuotas</label>
+            <select
+              name="pay_fees"
+              id="pay_fees"
+              class="form-control form-control-sm"
+              [(ngModel)]="modelo.pay_fees"
+              (change)="changePagoCuota($event.target.value)"
+              required
+            >
+              <!-- <option value="">Seleccione</option> -->
+              <option value="" disabled selected>Seleccionar</option>
+
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label for="Numero_Cuotas">#Cuotas</label>
+            <input
+              appMycurrency
+              type="number"
+              id="number_fees"
+              name="number_fees"
+              class="form-control form-control-sm"
+              (change)="CalduloCuota()"
+              [(ngModel)]="modelo.number_fees"
+              [disabled]="cuotaDisabled"
+            />
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="Cuota">Cuota Mensual</label>
+            <input
+              appMycurrency
+              type="text"
+              id="Cuota"
+              name="Cuota"
+              class="form-control form-control-sm"
+              [(ngModel)]="modelo.monthly_fee"
+              [disabled]="cuotaDisabled"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Tipo Descuento</label>
+              <select
+                name="Tipo_Descuento"
+                id="Tipo_Descuento"
+                [(ngModel)]="modelo.payment_type"
+                class="form-control form-control-sm"
+                required
+              >
+                <option value="Quincenal">Quincenal</option>
+                <option value="Mensual">Mensual</option>
+              </select>
+            </div>
+          </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="">Quincena Primer Descuento</label>
+            <select
+              name="payment_date"
+              id="payment_date"
+              [(ngModel)]="modelo.payment_date"
+              class="form-control form-control-sm"
+              required
+            >
+              <option value="">Seleccione</option>
+              <option *ngFor="let fecha of Quincenas" [value]="fecha.Fecha">
+                {{ fecha.Nombre }}
+              </option>
+            </select>
+          </div>
+        </div>
+      
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="Observaciones">Observaciones Prestamo</label>
+            <textarea
+              name="observation"
+              id="observation"
+              rows="10"
+              class="form-control"
+              [(ngModel)]="modelo.observation"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <button
+              class="btn btn-primary btn-sm btn-block"
+              [disabled]="!FormPrestamo.valid"
+            >
+              <i class="fa fa-save"></i>
+              GUARDAR PRESTAMO
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+</app-modal-basic>
+<ng-template #rt3 let-r="result" let-t="term">
+  <span class="f-9">{{ r.identifier }} - {{ r.text }}</span>
+</ng-template>
+<ng-template #rt1 let-r="result " let-t="term ">
+  <span class="f-9">{{ r.Codigo }} </span>
+</ng-template>

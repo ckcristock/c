@@ -18,7 +18,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     const headersConfig = {
       'Content-Type': 'application/json',
-      'Accept': 'application/json' 
+      'Accept': '*/*' 
     };
 
     let token = this._user.token;

@@ -1,0 +1,116 @@
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <button class="btn btn-info btn-sm" style="float: right;" [routerLink]="['/contabilidad/crear']">Agregar Nuevo Activo Fijo</button>
+                    <h5>Activos Fijos</h5>
+                    <p>Todos los Activos Fijo de la Compañia</p>
+                    <div class="row mt-4">
+                        <div class="form-group col-md-2">
+                            <label class="custom-label col-form-label-sm" for="code">Filtro Código</label>
+                            <input type="text" class="form-control form-control-sm" id="code">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="custom-label col-form-label-sm " for="name">Filtro name</label>
+                            <input type="text" class="form-control form-control-sm" id="name">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="custom-label col-form-label-sm" for="assets_types">Tipo de Activo</label>
+                            <select class="form-control form-control-sm" id="assets_types">
+                                <option selected>Seleccione</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="custom-label col-form-label-sm" for="cost_pcga">Filtro Costo PCGA</label>
+                            <input type="number" class="form-control form-control-sm" id="cost_pcga">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="custom-label col-form-label-sm" for="niif_cost">Filtro costo niif</label>
+                            <input type="number" class="form-control form-control-sm" id="niif_cost">
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-borderless table-striped">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Tipo de Activo</th>
+                            <th>Centro Costo</th>
+                            <th>Costo PCGA(local)</th>
+                            <th>Costo NIIF</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let d of datos">
+                            <td> {{ d.document }} </td>
+                            <td> {{ d.name }} </td>
+                            <td> {{ d.assetsType }} </td>
+                            <td> {{ d.cost_center }} </td>
+                            <td> $ {{ d.cost_pgca }} </td>
+                            <td> $ {{ d.niif_cost }} </td>
+                            <td>
+                                <div class="text-center">
+                                    <div ngbDropdown class="dropdown-primary">
+                                        <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                            <i class="mdi mdi-chevron-down"></i>
+                                        </button>
+                                        <div ngbDropdownMenu>
+                                            <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank"><i
+                                                    class="fa fa-file-pdf-o"></i>Ver Contabilización PCGA</a>
+                                            <a class="dropdown-item waves-light waves-effect caja-botones">
+                                                <i class="fa fa-pencil"></i>Ver Contabilización NIIF</a>
+                                            <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/contabilidad/crear']">
+                                                <i class="fa fa-pencil"></i>Adición</a>
+                                            <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/contabilidad/ver']">
+                                                <i class="fa fa-pencil"></i>Ver</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+                boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+            </ngb-pagination>
+        </div>
+    </div>
+    <!-- REPORTES -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <h5>Reportes</h5>
+                </div>
+                <div class="row mt-4">
+                    <div class="form-group col-md-6">
+                        <label class="custom-label" for="report_type">Tipo Reporte</label>
+                        <select class="form-control form-control-sm" id="report_type">
+                            <option selected>Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="custom-label" for="dates">Fechas</label>
+                        <input type="date" class="form-control form-control-sm" id="dates">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="custom-label" for="assets_types">Tipo Activo</label>
+                        <select class="form-control form-control-sm" id="assets_types">
+                            <option selected>Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="custom-label" for="center_cost">Centro Costo</label>
+                        <select class="form-control form-control-sm" id="center_cost">
+                            <option selected>Seleccione</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

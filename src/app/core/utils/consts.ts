@@ -157,7 +157,7 @@ export const consts = {
     { clave: 'Si', valor: 0 },
     { clave: 'No', valor: 1 }
   ],
-
+  
   visaTypes: [
     { clave: 'Visa de Trabajo', valor: 'visa de trabajo' },
     { clave: 'Visa de Migrante', valor: 'visa de migrantes' },

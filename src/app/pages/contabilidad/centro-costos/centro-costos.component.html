@@ -1,0 +1,138 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <div class="row">
+                <div class="col">
+                    <div style="float: right;">
+                        <button class="btn btn-info btn-sm" (click)="openModal()">Agregar Nuevo centro de costo</button><br>
+                        <button class="btn btn-success btn-sm mt-3" style="float: right;" placement="bottom" ngbTooltip="Exportar"><i class="fas fa-download"></i></button>
+                    </div>
+                    <h5>Centro de Costos</h5>
+                    <p>Centros de Costos de la Empresa</p>
+                </div>
+            </div>
+            <div class="form-row mt-4 ml-1">
+                <div class="form-group col-2">
+                    <label for="">Filtro Código</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.code" name="code" autocomplete="off">
+                </div>
+                <div class="form-group col-2">
+                    <label for="">Filtro nombre</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.name" name="name" autocomplete="off">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-borderless table-striped">
+            <thead class="bg-light">
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Centro Padre</th>
+                    <th>Tipo Centro</th>
+                    <th>Asignado a</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> adasdsa </td>
+                    <td> asdasd </td>
+                    <td> dasdsad </td>
+                    <td> asdsad </td>
+                    <td> asdasda </td>
+                    <td> asdasda </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="modal.show()"><i
+                                            class="fa fa-file-pdf-o"></i>Editar</a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i>Inactivar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>
+
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> {{ title }} </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-4">
+                            <label for="">Nombre</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="name">
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="">Código</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="code">
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="">Padre</label>
+                            <select class="form-control form-control-sm" formControlName="parent_center_id">
+                                <option value="">asd</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-4">
+                            <label for="">Tipo</label>
+                            <select class="form-control form-control-sm" formControlName="center_type_id">
+                                <option value="">asd</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="">Escoja Tipo</label>
+                            <select class="form-control form-control-sm" formControlName="center_type_value">
+                                <option value="">asd</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="">Movimiento</label>
+                            <select class="form-control form-control-sm" formControlName="movement">
+                                <option *ngFor="let option of options" [value]="option.valor">
+                                    {{ option.clave }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

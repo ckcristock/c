@@ -1,0 +1,60 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-info btn-sm" style="float: right;" [routerLink]="['/contabilidad/depreciacion']">Nueva depreciación</button>
+            <h5>Depreciaciones</h5>
+            <p>Todas las Depreciaciones realizadas.</p>
+        </div>
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-borderless table-striped">
+            <thead class="bg-light">
+                <tr>
+                    <th>Fecha Creación</th>
+                    <th>Código</th>
+                    <th>Funcionario</th>
+                    <th>Año</th>
+                    <th>Mes</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>13/06/2021</td>
+                    <td>DAS20218546</td>
+                    <td>Néstor Eduardo Lima Rojas</td>
+                    <td>2021</td>
+                    <td>Abril</td>
+                    <td>
+                        <span class="badge rounded-pill bg-info text-dark">
+                            Activo
+                        </span>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank"><i
+                                            class="fa fa-file-pdf-o"></i>Ver PCGA</a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i>Ver NIIF</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>

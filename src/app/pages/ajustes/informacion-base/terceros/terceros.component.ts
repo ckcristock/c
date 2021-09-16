@@ -17,7 +17,7 @@ export class TercerosComponent implements OnInit {
   }
   data = [
     {
-      nit: '0001',
+      nit: '10012',
       name: 'Jorge Peraza',
       adress: 'Calle 12 #20-22',
       city: 'Bucaramanga',

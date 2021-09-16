@@ -8,6 +8,7 @@ const routes: Routes = [
     { path: 'ajustes',          loadChildren : () => import('./ajustes/ajustes.module').then(m => m.AjustesModule )},
     { path: 'rrhh',   loadChildren : () => import('./rrhh/rrhh.module').then(m => m.RrhhModule )},
     { path: 'contabilidad',   loadChildren : () => import('./contabilidad/contabilidad.module').then(m => m.ContabilidadModule )},
+    { path: 'nomina',   loadChildren : () => import('./nomina/nomina.module').then(m => m.NominaModule )},
 
 ];
 

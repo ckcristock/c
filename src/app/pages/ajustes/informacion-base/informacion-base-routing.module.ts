@@ -14,6 +14,7 @@ import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
 import { TercerosComponent } from './terceros/terceros.component';
+import { ConfiguracionEmpresaComponent } from '../configuracion/configuracion-empresa.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
@@ -34,7 +35,8 @@ const routes: Routes = [
   { path: 'arl', component: ArlComponent },
   { path: 'caja-compensacion', component: CajaCompensacionComponent },
   { path: 'fondo-cesantias', component: FondoCesantiasComponent },
-  { path: 'terceros', component: TercerosComponent }
+  { path: 'terceros', component: TercerosComponent },
+  { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent }
 ];
 
 @NgModule({

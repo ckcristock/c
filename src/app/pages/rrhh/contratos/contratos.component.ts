@@ -18,7 +18,7 @@ export class ContratosComponent implements OnInit {
   contractsToExpire: any = [];
   dependencies:any[];
   positions:any[];
-  companies:any[];
+  companies:any[] = [];
   pagination:any = {
     pageSize: 12,
     page: 1,

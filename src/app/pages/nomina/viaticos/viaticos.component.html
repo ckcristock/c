@@ -17,7 +17,7 @@
                         <div class="ml-4">
                             <label for="ot">Orden de Trabajo</label>
                             <select id="ot" class="form-control form-control-sm">
-                                <option></option>
+                                <option>Pendiente</option>
                             </select>
                         </div>
                     </div>
@@ -177,13 +177,13 @@
                                 <tr>
                                     <td [formGroupName]="i">
                                         <select name="" class="form-control form-control-sm" (change)="changeTipo($event.target.value, item)" formControlName="tipo" id="tipo_hospedaje">
-                                            <option *ngFor="let t of tipo_hoteles" [value]="t">
+                                            <option *ngFor="let t of tipo" [value]="t">
                                                 {{ t }}
                                             </option>
                                         </select>
                                     </td>
-                                    <td>
-                                        <select name="" class="form-control form-control-sm" id="hotel_hospedaje" (change)="changeHotel($event.target.value, item)">
+                                    <td [formGroupName]="i">
+                                        <select name="" class="form-control form-control-sm" id="hotel_hospedaje" formControlName="hotel_id">
                                             <option *ngFor="let d of item['controls']['hoteles']['value']" [value]="d.id">
                                                 {{ d.name }}
                                             </option>
@@ -202,10 +202,10 @@
                                         </select>
                                     </td>
                                     <td [formGroupName]="i">
-                                        <input type="text" formControlName="rate" class="form-control form-control-sm" id="tarifa_hospedaje">
+                                        <input type="number" formControlName="rate" class="form-control form-control-sm" id="tarifa_hospedaje">
                                     </td>
                                     <td [formGroupName]="i">
-                                        <input type="text" formControlName="n_night" class="form-control form-control-sm" id="n_noches_hospedajes">
+                                        <input type="number" formControlName="n_night" class="form-control form-control-sm" id="n_noches_hospedajes">
                                     </td>
                                     <td>
                                         <select class="form-control form-control-sm" id="desayuno_hospedaje">
@@ -219,8 +219,8 @@
                                             <option value="viajero">Viajero</option>
                                         </select>
                                     </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" id="total_hospedaje" value="test">
+                                    <td [formGroupName]="i">
+                                        <input type="number" formControlName="total" class="form-control form-control-sm" id="total_hospedaje">
                                     </td>
                                 </tr>
                             </ng-container>
@@ -272,36 +272,48 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <select name="" class="form-control form-control-sm" id="tipo_transporte">
-                                <option value="">Ida</option>
-                                <option value="">Vuelta</option>
-                            </select>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="trayecto_transporte" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="empresa_transporte" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="pago_tiquete_transporte" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="hora_salida_transporte" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="valor_tiquete_transporte" value="test">
-                                </td>
-                            </tr>
+                            <ng-container formArrayName="transporte" *ngFor="let item of transporteList.controls; let i = index">
+                                <tr>
+                                    <td [formGroupName]="i">
+                                        <select name="" formControlName="tipo" class="form-control form-control-sm" id="tipo_transporte">
+                                            <option *ngFor="let tipo of tipo_transporte" [value]="tipo">
+                                                {{ tipo }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="text" formControlName="journey" class="form-control form-control-sm" id="trayecto_transporte">
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="text" formControlName="transport_company" class="form-control form-control-sm" id="empresa_transporte">
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-sm" id="pago_tiquete_transporte">
+                                            <option value="agencia">Agencia</option>
+                                            <option value="viajero">Viajero</option>
+                                        </select>
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="datetime" formControlName="expected_departure_time" class="form-control form-control-sm" id="hora_salida_transporte">
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="number" formControlName="ticket_value" class="form-control form-control-sm" id="valor_tiquete_transporte">
+                                    </td>
+                                </tr>
+                            </ng-container>
+
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="6">
-                                    <button class="btn btn-info btn-sm" style="float: right;" placement="bottom" ngbTooltip="Agregar">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                    <div class="btn-group" style="float: right;">
+                                        <button class="btn btn-danger btn-sm" placement="bottom" ngbTooltip="Borrar" (click)="deleteTransporte($event.target.value)">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        <button class="btn btn-info btn-sm" placement="bottom" ngbTooltip="Agregar" (click)="newTransporte()">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tfoot>
@@ -338,36 +350,52 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <select name="" class="form-control form-control-sm" id="tipo_taxi">
-                                    <option value="">Internacional</option>
-                                    <option value="">Nacional</option>
-                                </select>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="trayecto_taxi" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="ciudad_taxi" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="tarifa_taxi" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="trayectos_taxi" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="total_taxi" value="test">
-                                </td>
-                            </tr>
+                            <ng-container formArrayName="taxi" *ngFor="let item of taxiList.controls; let i = index">
+                                <tr>
+                                    <td [formGroupName]="i">
+                                        <select name="" formControlName="tipo" class="form-control form-control-sm" id="tipo_taxi">
+                                            <option *ngFor="let t of tipo" [value]="t">
+                                                {{ t }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <select formControlName="journey" class="form-control form-control-sm" id="trayecto_taxi">
+                                            <option *ngFor="let item of trayecto" [value]="item">
+                                                {{ item }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <select formControlName="city" class="form-control form-control-sm" id="ciudad_taxi">
+                                            <option *ngFor="let item of city" [value]="item">
+                                                {{ item }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="number" formControlName="rate" class="form-control form-control-sm" id="tarifa_taxi">
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="number" formControlName="journeys" class="form-control form-control-sm" id="trayectos_taxi">
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="number" formControlName="total" class="form-control form-control-sm" id="total_taxi">
+                                    </td>
+                                </tr>
+                            </ng-container>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="6">
-                                    <button class="btn btn-info btn-sm" style="float: right;" placement="bottom" ngbTooltip="Agregar">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                    <div class="btn-group" style="float: right;">
+                                        <button class="btn btn-danger btn-sm" placement="bottom" ngbTooltip="Borrar" (click)="deleteTaxi($event.target.value)">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        <button class="btn btn-info btn-sm" placement="bottom" ngbTooltip="Agregar" (click)="newTaxi()">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tfoot>
@@ -376,25 +404,25 @@
                 <div class="col-12">
                     <hr style="background-color: rgb(180, 248, 79);">
                     <div class="title">
-                        <h5>ESTADIA</h5>
+                        <h5>ALIMENTACIÓN</h5>
                     </div>
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>
-                                    <label for="alimentacion">Alimentación</label>
+                                    <label for="alimentacion">Estadia</label>
                                 </th>
                                 <th>
                                     <label for="tipo_estadia">Tipo</label>
                                 </th>
                                 <th>
-                                    <label for="n_estadia">N° dias Estadia</label>
-                                </th>
-                                <th>
-                                    <label for="alojamiento_desayuno">¿Alojamiento incluye desayuno?</label>
+                                    <label for="alojamiento_desayuno">¿incluye desayuno?</label>
                                 </th>
                                 <th>
                                     <label for="tarifa_estadia">Tarifa</label>
+                                </th>
+                                <th>
+                                    <label for="n_estadia">N° dias Estadia</label>
                                 </th>
                                 <th>
                                     <label for="total_estadia">Total</label>
@@ -402,36 +430,44 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <select name="" class="form-control form-control-sm" id="alimentacion">
-                                    <option value="">Internacional</option>
-                                    <option value="">Nacional</option>
-                                </select>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="tipo_estadia" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="n_estadia" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="alojamiento_desayuno" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="tarifa_estadia" value="test">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm" id="total_estadia" value="test">
-                                </td>
-                            </tr>
+                            <ng-container formArrayName="feeding" *ngFor="let item of FeedingList.controls; let i = index">
+                                <tr>
+                                    <td [formGroupName]="i">
+                                        <select name="" formControlName="tipo" class="form-control form-control-sm" id="alimentacion">
+                                            <option *ngFor="let item of tipo" [value]="item">
+                                                {{ item }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="text" formControlName="type" class="form-control form-control-sm" id="tipo_estadia" value="test">
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="text" formControlName="breckfast" class="form-control form-control-sm" id="alojamiento_desayuno" value="test">
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="number" formControlName="rate" class="form-control form-control-sm" id="tarifa_estadia" value="test">
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="number" formControlName="stay" class="form-control form-control-sm" id="n_estadia" value="test">
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <input type="number" formControlName="total" class="form-control form-control-sm" id="total_estadia" value="test">
+                                    </td>
+                                </tr>
+                            </ng-container>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="6">
-                                    <button class="btn btn-info btn-sm" style="float: right;" placement="bottom" ngbTooltip="Agregar">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                    <div class="btn-group" style="float: right;">
+                                        <button class="btn btn-danger btn-sm" placement="bottom" ngbTooltip="Borrar" (click)="deleteFeeding($event.target.value)">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        <button class="btn btn-info btn-sm" placement="bottom" ngbTooltip="Agregar" (click)="newFeeding()">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tfoot>
@@ -454,13 +490,6 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <!-- <tfoot>
-                            <tr>
-                                <td colspan="5">
-                                    <button class="btn btn-info btn-sm" style="float: right;">Enviar</button>
-                                </td>
-                            </tr>
-                        </tfoot> -->
                     </table>
                 </div>
                 <div class="col-6">
@@ -479,64 +508,62 @@
                             <tr>
                                 <td>Hospedaje</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" formControlName="totalHospedajeDolares" readonly class="form-control form-control-sm">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" formControlName="totalHospedajePesos" readonly class="form-control form-control-sm">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Transporte Terrestre</td>
+                                <td></td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" formControlName="totalTransportePesos" readonly class="form-control form-control-sm">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Taxis</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" formControlName="totalTaxiDolares" readonly class="form-control form-control-sm">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" formControlName="totalTaxiPesos" readonly class="form-control form-control-sm">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Alimentación</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" formControlName="totalFeedingDolares" readonly class="form-control form-control-sm">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" formControlName="totalFeedingPesos" readonly class="form-control form-control-sm">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Lavanderia</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" formControlName="lavanderiaPesos" class="form-control form-control-sm">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" class="form-control form-control-sm">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Sobre Equipaje</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" class="form-control form-control-sm">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" class="form-control form-control-sm">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Total</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" formControlName="totalDolares" readonly class="form-control form-control-sm">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm" value="454">
+                                    <input type="number" formControlName="totalPesos" readonly class="form-control form-control-sm">
                                 </td>
                             </tr>
                         </tbody>

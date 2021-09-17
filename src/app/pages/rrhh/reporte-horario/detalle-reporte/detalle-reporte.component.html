@@ -55,13 +55,13 @@
                   </div>
                 </div>
                 <ng-container *ngIf="person.show">
-                  <ng-template
-                    *ngIf="person.turn_type == 'Rotativo'; else detalleFijo"
+		  <ng-container 
+		       *ngIf="type == 'Rotativo'; else detalleFijo"
                   >
-                    <detalle-horario
+                    <app-detalle-horario-rotativo
                       [horarios]="person.diaries"
-                    ></detalle-horario>
-                  </ng-template>
+                    ></app-detalle-horario-rotativo>
+                  </ng-container>
 
                   <ng-template #detalleFijo>
                     <app-detalle-horario

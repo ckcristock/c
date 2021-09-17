@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { log } from 'util';
 import { ValidatorsService } from '../../../services/reactive-validation/validators.service';
 import { SwalService } from '../../../services/swal.service';
 import { RotatingTurnService } from '../rotating-turn.service';
@@ -51,8 +52,10 @@ export class CreateTurnoRotativoComponent implements OnInit {
         leave_time: turn.leave_time,
         launch: turn.launch,
         launch_time: turn.launch_time,
+        launch_time_two: turn.launch_time_two,
         breack: turn.breack,
         breack_time: turn.breack_time,
+        breack_time_two: turn.breack_time_two,
         id: turn.id,
       });
     });
@@ -67,8 +70,10 @@ export class CreateTurnoRotativoComponent implements OnInit {
       leave_time: ['', this._valReactive.required],
       launch: [0],
       launch_time: [0, this._valReactive.required],
+      launch_time_two: [0, this._valReactive.required],
       breack: [0],
       breack_time: ['', this._valReactive.required],
+      breack_time_two: ['', this._valReactive.required],
       id: [0],
     });
     this.forma.get('launch_time').disable();
@@ -76,12 +81,25 @@ export class CreateTurnoRotativoComponent implements OnInit {
   }
   crearListeners() {
     this.forma.get('launch').valueChanges.subscribe((valor) => {
-      let control = this.forma.get('launch_time');
-      valor == false ? control.disable() : control.enable();
+      if (!valor) {
+        this.forma.get('launch_time').disable();
+        this.forma.get('launch_time_two').disable();
+      } else {
+        this.forma.get('launch_time').enable();
+        this.forma.get('launch_time_two').enable();
+      }
     });
+
     this.forma.get('breack').valueChanges.subscribe((valor) => {
       let control = this.forma.get('breack_time');
-      valor == false ? control.disable() : control.enable();
+      !valor ? control.disable() : control.enable();
+      if (!valor) {
+        this.forma.get('breack_time').disable();
+        this.forma.get('breack_time_two').disable();
+      } else {
+        this.forma.get('breack_time').enable();
+        this.forma.get('breack_time_two').enable();
+      }
     });
   }
   save() {
@@ -98,7 +116,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
       })
       .then((r) => {
         if (r.isConfirmed) {
-	  let id = this.forma.get('id').value;
+          let id = this.forma.get('id').value;
           if (id) {
             this._rotatingT.update(id, this.forma.value).subscribe((r: any) => {
               this.response(r);

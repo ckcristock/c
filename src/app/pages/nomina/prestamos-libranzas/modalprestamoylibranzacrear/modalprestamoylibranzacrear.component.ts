@@ -8,16 +8,12 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-/* import { GeneralService } from '../../../shared/services/general/general.service'; */
 import { debounceTime, map } from 'rxjs/operators';
-/* import { Globales } from '../../../shared/globales/globales'; */
-import { HttpClient } from '@angular/common/http';
 import { PrestamoModel } from './PrestamoModel';
-import swal, { SweetAlertOptions } from 'sweetalert2';
-/* import { SwalService } from '../../../shared/services/swal/swal.service'; */
 import { PersonService } from '../../../ajustes/informacion-base/persons/person.service';
 import { LoanService } from '../loan.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
+import {error} from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-modalprestamoylibranzacrear',
@@ -28,13 +24,13 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
   @ViewChild('modalPrestamoylibranza') modalPrestamoylibranza: any;
   @Input() abrirModal: Observable<any> = new Observable();
   @Output() recargarLista: EventEmitter<any> = new EventEmitter();
+
   private _suscription: any;
   public Meses: any = [];
   public Empleados: any = [];
   public modelo: PrestamoModel = new PrestamoModel();
   public cuotaDisabled: boolean = true;
   public inter: boolean = true;
-  public alertOption: SweetAlertOptions = {};
   public Quincenas: any = [];
   public Procesos: any = [];
   public Bancos: any = [];
@@ -42,39 +38,54 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
   public PlanesCuenta: any = [];
 
   constructor(
-    private _person: PersonService, 
+    private _person: PersonService,
     private _loan: LoanService,
     private _swal: SwalService
-    ) {}
+  ) {}
 
   ngOnInit() {
-    this._suscription = this.abrirModal.subscribe((data: any) => {
-      this.modalPrestamoylibranza.show();
-    });
-    /* this.http
-      .get(this.globales.ruta + "php/comprobantes/lista_cuentas.php").subscribe((data: any) => {
-        this.PlanesCuenta = data.Activo;
-      }); */
+    this._suscription = this.abrirModal.subscribe((data: any) =>
+      this.modalPrestamoylibranza.show()
+    );
+    this.getPlains();
     this.getEmpleados();
     this.getProximasQuincenas();
   }
 
-  changePerson(){
-
+  getPlains() {
+    this._loan.accountPlains().subscribe((r: any) => {
+      this.PlanesCuenta = r.data;
+    });
   }
+
+  changePerson() {}
 
   formatter4 = (x: { text: string }) => x.text;
   search4 = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       map((term) =>
-        term.length < 1
+        term.length < 3
           ? []
           : this.Empleados.filter(
               (v) => v.text.toLowerCase().indexOf(term.toLowerCase()) > -1
             ).slice(0, 100)
       )
     );
+
+  search1 = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      map((term) =>
+        term.length < 3
+          ? []
+          : this.PlanesCuenta.filter(
+              (v) => v.code.toLowerCase().indexOf(term.toLowerCase()) > -1
+            ).slice(0, 100)
+      )
+    );
+
+  formatter1 = (x: { code: string }) => x.code;
 
   ngOnDestroy() {
     if (this._suscription != null && this._suscription != undefined) {
@@ -85,9 +96,6 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
     this._person.getAll({}).subscribe((r: any) => {
       this.Empleados = r.data;
     });
-    /* this.http.get(this.globales.ruta + 'php/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
-      this.Empleados = data;
-    }); */
   }
   ComprobarPrestamo(tipo) {
     let empleado = this.modelo.person.id;
@@ -116,101 +124,59 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
     if (this.modelo.person.id) {
       /* this.modelo.type = tipo; */
       if (tipo == 'Libranza') {
-        /*  this.http
-          .get(this.globales.ruta + 'php/prestamoylibranza/listar_bancos.php')
-          .subscribe((data: any) => {
-            this.Bancos = data;
-          }); */
+      /*   this._loan.getBankList().subscribe((r: any) => (this.Bancos = r.data)); */
       }
     } else {
-      /* this.modelo.type = 'Prestamo' */
-      this._swal.show({title:'Falta Seleccionar el funcionario',icon:'error',text:'Debe seleccionar un funcionario',showCancel:false});
+      this._swal.show({
+        title: 'Falta Seleccionar el funcionario',
+        icon: 'error',
+        text: 'Debe seleccionar un funcionario',
+        showCancel: false,
+      });
     }
   }
   interesA(interes) {
     if (this.modelo.person.id) {
       this.modelo.interest_type = interes;
       if (interes == 'Capital') {
-        // this.getProcesos(this.modelo.Empleado.Identificacion_Funcionario);
-        /*  this.http
-          .get(this.globales.ruta + 'php/prestamoylibranza/listar_bancos.php')
-          .subscribe((data: any) => {
-            this.Bancos = data;
-          }); */
+       /*   this._loan.getBankList().subscribe((r: any) => (this.Bancos = r.data)); */
       }
     } else {
-      let swal = {
-        codigo: 'error',
-        mensaje: 'Debe seleccionar un Empleado',
-        titulo: 'Falta Seleccionar Empleado',
-      };
-      /* this.swalService.ShowMessage(swal); */
+      this._swal.show({
+        title: 'Falta Seleccionar el funcionario',
+        icon: 'error',
+        text: 'Debe seleccionar un funcionario',
+        showCancel: false,
+      });
     }
   }
-  getProcesos(id) {
-    /*  this.http
-      .get(this.globales.ruta + 'php/funcionarios/procesos.php', {
-        params: { Funcionario: id },
-      })
-      .subscribe((data: any) => {
-        this.Procesos = data;
-      }); */
-  }
-  // validarCampo(campo, evento, tipo, pos?) {
-  //   // Funcion que validará los campos de typeahead
-  //   if (typeof campo != "object" && campo != "") {
-  //     /* evento.focus(); */
-  //     this.confirmacionSwal.title = "Incorrecto!";
-  //     this.confirmacionSwal.type = "error";
-  //     this.confirmacionSwal.text = `El valor ${tipo} no es valido.`;
-  //     this.confirmacionSwal.show();
-  //     if (tipo == "Centro de Costo") {
-  //       evento.value = "";
-  //       this.Centro_Costo_Selected = "";
-  //     } else if (tipo == "Cuenta") {
-  //       this.Lista_Factura[pos]["PlanCuenta"] = "";
-  //     }
-  //   }
-  // }
-  search1 = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      map((term) =>
-        term.length < 4
-          ? []
-          : this.PlanesCuenta.filter(
-              (v) => v.Codigo.toLowerCase().indexOf(term.toLowerCase()) > -1
-            ).slice(0, 100)
-      )
-    );
-  formatter1 = (x: { Codigo: string }) => x.Codigo;
 
   getProximasQuincenas() {
-   
     this._loan.getNextPayrolls().subscribe((r: any) => {
       this.Quincenas = r.data;
     });
   }
   save() {
     this.modelo.person_id = this.modelo.person.id;
-    let info = JSON.stringify(this.modelo);
+    this.modelo.account_plain_id = this.modelo.account_plain_id.id;
+   // let info = JSON.stringify(this.modelo);
 
-    this._loan.save().subscribe((r:any)=>{
-        
-    })
+    this._loan.save(this.modelo).subscribe((r: any) => {
+      
+      this._swal.show(
+	  {title:'Operación exitosa',
+	    text:'Prestamo/Libranza Creado con éxito',
+	    icon:'success',showCancel:false})  
+	    this.modalPrestamoylibranza.hide();
+    },err=>{
+	this._swal.show(
+	  {title:'Ha ocurrido un error',
+	    text:'Comuniquese con el Dpt. de Sistemas',
+	    icon:'error',showCancel:false})  
+    });
 
   }
-  limpiarCampos() {
-    this.modelo.person = '';
-    this.modelo.type = '';
-    this.modelo.interest_type = '';
-    this.modelo.value = 0;
-    this.modelo.monthly_fee = 0;
-    this.modelo.interest = 0;
-    this.modelo.Quincena = '';
-    this.modelo.observation = '';
-    this.modelo.payment_date = '';
-  }
+
   changePagoCuota(cuota) {
     if (cuota == 'Si') {
       this.cuotaDisabled = false;
@@ -239,4 +205,15 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
     }
   }
 
+  limpiarCampos() {
+    this.modelo.person = '';
+    this.modelo.type = '';
+    this.modelo.interest_type = '';
+    this.modelo.value = 0;
+    this.modelo.monthly_fee = 0;
+    this.modelo.interest = 0;
+    this.modelo.Quincena = '';
+    this.modelo.observation = '';
+    this.modelo.first_payment_date = '';
+  }
 }

@@ -5,7 +5,8 @@ import { NominaRoutingModule } from "./nomina-routing.module";
 import { PrestamosLibranzasComponent } from './prestamos-libranzas/prestamos-libranzas.component';
 import {ModalprestamoylibranzacrearComponent} from "./prestamos-libranzas/modalprestamoylibranzacrear/modalprestamoylibranzacrear.component";
 import { ComponentsModule } from '../../components/components.module';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import {PipesModule} from "src/app/core/pipes/pipes.module";
 
 
 
@@ -16,7 +17,9 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
         ComponentsModule,
         CommonModule,
         FormsModule,
-        NgbTypeaheadModule
+        NgbTypeaheadModule,
+	PipesModule,
+	NgbDropdownModule
     ],
     declarations: [PrestamosLibranzasComponent,ModalprestamoylibranzacrearComponent ]    
 })

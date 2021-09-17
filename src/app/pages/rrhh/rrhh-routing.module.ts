@@ -18,6 +18,7 @@ import { DisciplinariosComponent } from './procesos/disciplinarios/disciplinario
 import { MemorandosComponent } from './procesos/memorandos/memorandos.component';
 import {CertificadosComponent} from './certificados/certificados.component';
 import {ReporteHorarioComponent} from './reporte-horario/reporte-horario.component';
+import {FondoEmpleadoComponent} from './fondo-empleado/fondo-empleado.component';
 
 const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: 'procesos/disciplinarios', component: DisciplinariosComponent },
   { path: 'procesos/memorandos', component: MemorandosComponent },
   { path: 'certificados', component: CertificadosComponent },
+  { path: 'fondo-empleado', component: FondoEmpleadoComponent },
 ];
 
 @NgModule({

@@ -6,9 +6,11 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./detalle-reporte.component.scss'],
 })
 export class DetalleReporteComponent implements OnInit {
+ @Input('type') type :any[]
  @Input('reporteHorarios') reporteHorarios :any[]
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
   showDetail() {}
 }

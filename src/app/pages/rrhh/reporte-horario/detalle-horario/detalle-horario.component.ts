@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class DetalleHorarioComponent implements OnInit {
   @Input('horarios') horarios:any
+  @Input('type_report') type_report:any
   constructor() { }
 
   ngOnInit(): void {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoanService } from './loan.service';
 import { Subject } from 'rxjs';
+import {PrestamoModel} from './modalprestamoylibranzacrear/PrestamoModel';
 
 @Component({
   selector: 'app-prestamos-libranzas',
@@ -11,7 +12,7 @@ export class PrestamosLibranzasComponent implements OnInit {
 
  
   public abrirModalPrestamoCrear: Subject<any> = new Subject;
-  public Prestamos:any = [];
+  public Prestamos:PrestamoModel[] = [];
   public loadig:boolean = false;
 
   constructor( private _loan:LoanService ) { }
@@ -24,10 +25,10 @@ export class PrestamosLibranzasComponent implements OnInit {
   }
   listaPrestamo() {
     this.loadig=true;
-    /* this._loan.getAll().subscribe((data:any) => {
-      this.Prestamos = data;
+     this._loan.getAll().subscribe((r:any) => {
+      this.Prestamos = r.data;
       this.loadig=false;
-    }) */
+    })
     
     //prestamoylibranza/lista_prestamos.php
   }

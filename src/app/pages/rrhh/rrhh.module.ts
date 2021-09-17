@@ -46,6 +46,8 @@ import { ReporteHorarioComponent } from './reporte-horario/reporte-horario.compo
 import { DetalleReporteComponent } from './reporte-horario/detalle-reporte/detalle-reporte.component';
 import { DetalleHorarioComponent } from './reporte-horario/detalle-horario/detalle-horario.component';
 import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
+import { FondoEmpleadoComponent } from './fondo-empleado/fondo-empleado.component';
+import { DetalleHorarioRotativoComponent } from './reporte-horario/detalle-horario-rotativo/detalle-horario-rotativo.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +77,8 @@ import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
     ReporteHorarioComponent,
     DetalleReporteComponent,
     DetalleHorarioComponent,
+    FondoEmpleadoComponent,
+    DetalleHorarioRotativoComponent,
   ],
   imports: [
     RrhhRouterModule,
@@ -92,7 +96,6 @@ import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
     PipesModule,
     ComponentsModule,
     NgSelectModule,
-    NgbTypeaheadModule,
     FullCalendarModule,
     PerfectScrollbarModule,
   ],

@@ -88,4 +88,9 @@ export class ReporteHorarioComponent implements OnInit {
   addElement() {
     this.dependencyList.unshift({ value: 0, text: 'Todas' });
   }
+  
+  get turn_type_value(){
+    return this.forma.get('turn_type').value
+  }
+  
 }

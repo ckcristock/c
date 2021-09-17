@@ -10,13 +10,23 @@ export class LoanService {
   constructor( private http : HttpClient) { }
 
   getAll(){
-    return this.http.get( `${environment.base_url}/`  )
+    return this.http.get( `${environment.base_url}/loan`  )
+  }
+  
+  save( body ){
+    return this.http.post( `${environment.base_url}/loan` ,  body )
   }
   
   getNextPayrolls(){
     return this.http.get( `${environment.base_url}/payroll-nex-mouths`  )
   }
-  save(){
-    return this.http.get( `${environment.base_url}/payroll-nex-mouths`  )
+  accountPlains(){
+    return this.http.get( `${environment.base_url}/account-plan-list`  )
   }
+  
+  getBankList(){
+    return this.http.get( `${environment.base_url}/banks`  )
+    
+  }
+
 }

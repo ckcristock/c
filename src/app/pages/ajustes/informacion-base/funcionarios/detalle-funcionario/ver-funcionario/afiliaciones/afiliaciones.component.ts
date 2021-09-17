@@ -79,8 +79,7 @@ export class AfiliacionesComponent implements OnInit {
       this.modal.hide();
       Swal.fire({
         icon: 'success',
-        title: 'Editado con éxito',
-        text: 'Se han actualizado los cambios correctamente'
+        title: 'Actualizado correctamente'
       })
     });
   }

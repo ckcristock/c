@@ -8,7 +8,7 @@
                     <label for="">Filtro nombre</label>
                     <!--  <ng-select class="mr-1" [items]="lists" [(ngModel)]="filtro.name" (change)="getSalaryTypes()" name="name" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
                     </ng-select> -->
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" name="name" autocomplete="off">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getSalaryTypes()" name="name" autocomplete="off">
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@
 
 <div class="card">
     <div class="card-body">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" *ngIf="!loading && salaries.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th>Tipos de Salario</th>
@@ -34,7 +34,7 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="modal.show()"><i
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getData(salary); modal.show()"><i
                                             class="fa fa-file-pdf-o"></i>Editar</a>
                                     <a *ngIf="salary.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(salary, 'Inactivo')">
                                         <i class="fa fa-pencil"></i>Inactivar</a>
@@ -48,13 +48,13 @@
             </tbody>
         </table>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-        boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getSalaryTypes($event)" aria-label="Default pagination"
+        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
     </ngb-pagination>
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <h5 class="modal-title">Nuevo Tipo de Salario</h5>
+        <h5 class="modal-title"> {{ selected }} </h5>
         <button type="button" class="close basic-close" (click)="modal.hide()">
             <span aria-hidden="true">
               <i class="fas fa-times" (click)="modal.hide()"></i>
@@ -82,3 +82,6 @@
         </div>
     </div>
 </app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

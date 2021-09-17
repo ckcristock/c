@@ -1,3 +1,18 @@
+<!-- <div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Nuevo tipo</button>
+            <h5>Tipos de Contrato</h5>
+            <div class="form-row mt-4 ml-1">
+                <div class="form-group">
+                    <label for="">Filtro Nombre</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getContractsType()" name="name" autocomplete="off">
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
 <div class="card">
     <div class="card-body">
         <div class="card-title">
@@ -5,33 +20,23 @@
             <h5>Tipos de Contrato</h5>
             <div class="form-row mt-4 ml-1">
                 <div class="form-group">
-                    <label for="">Filtro Tipo de contrato</label>
-                    <select class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getContractsType()" name="name" autocomplete="off">
-                        <option selected>Seleccione</option>
-                        <option *ngFor="let type of types" [value]="type.valor">
-                            {{ type.clave }}
-                        </option>
-                    </select>
+                    <label for="">Filtro Nombre</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getContractsType()" name="name" autocomplete="off">
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" *ngIf="!loading && contracts.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th>Nombre</th>
-                    <th>Tipo de contrato</th>
+                    <th>Descripción</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let contract of contracts" [ngClass]="{'bg-danger text-white': (contract.status === 'Inactivo' )}">
-                    <td> {{ contract.description }} </td>
                     <td scope="row"> {{ contract.name }} </td>
+                    <td> {{ contract.description }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -39,7 +44,7 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getTypeContract(contract); modal.show()"><i
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getData(contract); modal.show()"><i
                                             class="fa fa-file-pdf-o"></i>Editar</a>
                                     <a *ngIf="contract.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(contract, 'Inactivo')">
                                         <i class="fa fa-pencil"></i>Inactivar</a>
@@ -59,7 +64,7 @@
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <h5 class="modal-title">Nuevo Tipo de contrato</h5>
+        <h5 class="modal-title"> {{ selected }} </h5>
         <button type="button" class="close basic-close" (click)="modal.hide()">
             <span aria-hidden="true">
               <i class="fas fa-times" (click)="modal.hide()"></i>
@@ -69,18 +74,13 @@
     <div class="app-modal-body">
         <form [formGroup]="form">
             <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="tipo_contrati">Tipo de contrato</label>
-                    <select class="form-control form-control-sm" formControlName="name" name="name" autocomplete="off">
-                        <option selected>Seleccione</option>
-                        <option *ngFor="let type of work_contract_type" [value]="type.conclude">
-                            {{ type.clave }}
-                        </option>
-                    </select>
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="tipo_contrati">Nombre</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="name" name="name" autocomplete="off">
                 </div>
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label class="custom-label" for="funcionario_id">Descripción</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="description" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="description" name="description" required>
                     <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
                         </small>

@@ -42,6 +42,8 @@ import { BonoComponent } from './funcionarios/detalle-funcionario/ver-funcionari
 import { FondoPensionComponent } from './fondo-pension/fondo-pension.component';
 import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
+import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
+import { TercerosComponent } from './terceros/terceros.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,9 @@ import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion
     BonoComponent,
     FondoPensionComponent,
     ArlComponent,
-    CajaCompensacionComponent
+    CajaCompensacionComponent,
+    FondoCesantiasComponent,
+    TercerosComponent
   ],
 
   imports: [

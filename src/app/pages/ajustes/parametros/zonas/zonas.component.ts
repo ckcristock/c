@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Zones } from './zonas';
 import { ZonasService } from './zonas.service';
@@ -13,10 +13,8 @@ export class ZonasComponent implements OnInit {
   @ViewChild('modal') modal: any;
   zones:any = [];
   zone: any ={};
-  fb = new Zones();
-  form = new FormGroup({
-    name: new FormControl('', [Validators.required])
-  });
+  selected:any;
+  form:FormGroup;
   pagination = {
     pageSize: 5,
     page: 1,
@@ -24,10 +22,11 @@ export class ZonasComponent implements OnInit {
   }
   status:any = 'Inactivo';
   loading:boolean = false;
-  constructor( private zonesService:ZonasService ) { }
+  constructor( private zonesService:ZonasService, private fb:FormBuilder ) { }
 
   ngOnInit(): void {    
     this.getAllZones();
+    this.createForm();
   }
 
 
@@ -44,14 +43,26 @@ export class ZonasComponent implements OnInit {
 
   open(){
     this.modal.show();
-    this.zone.id = '';
-    this.zone.name = '';
     this.form.reset();
+    this.selected = 'Nueva Zona';
   }
   
   getZone(zone){
-    this.zone = zone;
+    this.zone = {...zone};
+    this.selected = 'Actualizar Zona'
+    this.form.patchValue({
+      id: this.zone.id,
+      name: this.zone.name
+    });
   }
+  
+  createForm() {
+    this.form = this.fb.group({
+      id: this.zone.id,
+      name: ['', Validators.required]
+    })
+  }
+
   anularOActivar(zone, status){
 
     let data:any = {
@@ -85,13 +96,12 @@ export class ZonasComponent implements OnInit {
   createZone() {
     this.form.markAllAsTouched();
     if (this.form.invalid) { return false;}
-      this.zonesService.createZone(this.zone)
-      .subscribe( res => {
+      this.zonesService.createZone(this.form.value)
+      .subscribe( (res:any) => {
         this.getAllZones();
         this.modal.hide();
         Swal.fire({
-          title: 'Operación exitosa',
-          text: 'Felicidades, se ha agregado a las zonas.',
+          title: res.data,
           icon: 'success',
           allowOutsideClick: false,
           allowEscapeKey: false,

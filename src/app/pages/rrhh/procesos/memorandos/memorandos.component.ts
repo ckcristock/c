@@ -111,7 +111,7 @@ export class MemorandosComponent implements OnInit {
   createFormMemorando(){
     this.formMemorando = this.fb.group({
       person_id: ['', this._reactiveValid.required],
-      type_of_memorandum_id: ['', this._reactiveValid.required],
+      memorandum_type_id: ['', this._reactiveValid.required],
       details: ['', this._reactiveValid.required]
     }); 
   }
@@ -130,13 +130,10 @@ export class MemorandosComponent implements OnInit {
 
   tipo(){
     let value = this.person_selected;
-    
     if (typeof value == 'object') {
       this.formMemorando.patchValue({
         person_id:value.value
-      });
-      console.log(value.value);
-      
+      }); 
     }
   }
 
@@ -185,7 +182,7 @@ export class MemorandosComponent implements OnInit {
   }
 
   get motivo_invalid() {
-    return this.formMemorando.get('type_of_memorandum_id').invalid && this.formMemorando.get('type_of_memorandum_id').touched;
+    return this.formMemorando.get('memorandum_type_id').invalid && this.formMemorando.get('memorandum_type_id').touched;
   }
 
   get detalles_invalid() {

@@ -6,7 +6,7 @@
             <div class="form-row mt-4 ml-1">
                 <div class="form-group">
                     <label for="">Filtro nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" name="name" autocomplete="off">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getDocumentTypes()" name="name" autocomplete="off">
                 </div>
             </div>
         </div>
@@ -15,40 +15,46 @@
 
 <div class="card">
     <div class="card-body">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" *ngIf="!loading && documents.length > 0; else notData">
             <thead class="bg-light">
-                <th>Tipos de Documento</th>
-                <th>Código</th>
-                <th class="text-center">Acciones</th>
+                <tr>
+                    <th>Tipos de Documento</th>
+                    <th>Código</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
             </thead>
             <tbody>
-                <td>Aprendiz Sena Etapa Lectiva</td>
-                <td>CC</td>
-                <td>
-                    <div class="text-center">
-                        <div ngbDropdown class="dropdown-primary">
-                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                <i class="mdi mdi-chevron-down"></i>
-                            </button>
-                            <div ngbDropdownMenu>
-                                <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="modal.show()"><i
-                                        class="fa fa-file-pdf-o"></i>Editar</a>
-                                <a class="dropdown-item waves-light waves-effect caja-botones">
-                                    <i class="fa fa-pencil"></i>Inactivar</a>
+                <tr *ngFor="let document of documents" [ngClass]="{'bg-danger text-white': (document.status === 'Inactivo' )}">
+                    <td> {{ document.name }} </td>
+                    <td> {{ document.code }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getData(document); modal.show()"><i
+                                            class="fa fa-file-pdf-o"></i>Editar</a>
+                                    <a *ngIf="document.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(document, 'Inactivo')">
+                                        <i class="fa fa-pencil"></i>Inactivar</a>
+                                    <a *ngIf="document.status == 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(document, 'Activo')">
+                                        <i class="fa fa-pencil"></i>Activar</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </td>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-        boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getDocumentTypes($event)" aria-label="Default pagination"
+        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
     </ngb-pagination>
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
-        <h5 class="modal-title">Nuevo Tipo de Documento</h5>
+        <h5 class="modal-title"> {{ selected }} </h5>
         <button type="button" class="close basic-close" (click)="modal.hide()">
             <span aria-hidden="true">
               <i class="fas fa-times" (click)="modal.hide()"></i>
@@ -82,7 +88,10 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="createNewDocument()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

@@ -1,0 +1,114 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <div class="row">
+                <div class="col-6">
+                    <h5>Datos Nómina</h5>
+                </div>
+                <div class="col-6">
+                    <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModal()">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Máximas horas extras
+            </p>
+            <p class="col-6 font-weight-bold">
+                0
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Máximos festivos legales
+            </p>
+            <p class="col-6 font-weight-bold">
+                0
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Máximas llegadas tardes
+            </p>
+            <p class="col-6 font-weight-bold">
+                0
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Salario Base Mensual
+            </p>
+            <p class="col-6 font-weight-bold">
+                $ 906.526
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Auxilio de Transporte
+            </p>
+            <p class="col-6 font-weight-bold">
+                $ 106.454
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Hora Inicio Noche
+            </p>
+            <p class="col-6 font-weight-bold">
+                21:00:00
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Hora Fin Noche
+            </p>
+            <p class="col-6 font-weight-bold">
+                06:00:00
+            </p>
+        </div>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Datos Nómina</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+          </button>
+    </div>
+    <div class="app-modal-body">
+        <form>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="">Máx. Núm. Horas Extras</label>
+                            <input type="number" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Máx. Núm. Fest. Legales</label>
+                            <input type="text" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Máx. Núm. Llegadas Tarde</label>
+                            <input type="number" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Salario Base</label>
+                            <input type="number" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Aux. Transporte</label>
+                            <input type="number" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Hora Inicio Noche</label>
+                            <input type="date" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Hora Fin Noche</label>
+                            <input type="date" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>

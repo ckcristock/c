@@ -1,0 +1,115 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <div class="row">
+                <div class="col-6">
+                    <h5>Datos Básicos</h5>
+                </div>
+                <div class="col-6">
+                    <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModal()">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Logo Empresa
+            </p>
+            <p class="col-6 font-weight-bold">
+                <img src="../../../../../../assets/images/logo.png" alt="">
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Razón Social
+            </p>
+            <p class="col-6 font-weight-bold">
+                Misión Asesorias Corporativas
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                NIT
+            </p>
+            <p class="col-6 font-weight-bold">
+                9250215
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Fecha de Constitución
+            </p>
+            <p class="col-6 font-weight-bold">
+                2021-05-21
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Email de Contacto
+            </p>
+            <p class="col-6 font-weight-bold">
+                tesst@gmail.com
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Teléfono
+            </p>
+            <p class="col-6 font-weight-bold">
+                3226541525
+            </p>
+        </div>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Datos Básicos</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+          </button>
+    </div>
+    <div class="app-modal-body">
+        <form>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <img src="../../../../../../assets/images/logo.png" class="img-form d-block m-auto" alt="">
+                            <label for="image" class="subir-archivo mt-3">Cargar imagen</label>
+                            <input type="file" name="image" class="form-control-file text-center" id="image" placeholder="Imagen" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="">Razón Social</label>
+                            <input type="text" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Tipo de Documento</label>
+                            <input type="text" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Número de Documento</label>
+                            <input type="number" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Digito de Verificación</label>
+                            <input type="number" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Fecha de Constitución</label>
+                            <input type="date" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Email de Contacto</label>
+                            <input type="email" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Teléfono de Contacto</label>
+                            <input type="number" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>

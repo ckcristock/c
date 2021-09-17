@@ -90,8 +90,7 @@ export class SalarioComponent implements OnInit {
       this.getSalaryInfo();
       Swal.fire({
         icon: 'success',
-        title: 'Editado con éxito',
-        text: 'Se han actualizado los cambios correctamente'
+        title: 'Actualizado correctamente'
         })
       this.basicDataService.datos$.emit()
       });

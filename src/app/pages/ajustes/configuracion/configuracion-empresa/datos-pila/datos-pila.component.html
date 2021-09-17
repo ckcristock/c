@@ -1,0 +1,106 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <div class="row">
+                <div class="col-6">
+                    <h5>Datos de Pila</h5>
+                </div>
+                <div class="col-6">
+                    <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModal()">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Operador de Pago
+            </p>
+            <p class="col-6 font-weight-bold">
+                Aportes en Línea
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Companía de ARL
+            </p>
+            <p class="col-6 font-weight-bold">
+                ARP Sura
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Aplica Ley 1429 de 2010
+            </p>
+            <p class="col-6 font-weight-bold">
+                No
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Aplica Ley 590 de 2010
+            </p>
+            <p class="col-6 font-weight-bold">
+                No
+            </p>
+            <p class="col-6 font-weight-bold text-mute item-subtitle">
+                Aplica Ley de 1607 de 2012
+            </p>
+            <p class="col-6 font-weight-bold">
+                Si
+            </p>
+        </div>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Datos De Pila</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+          </button>
+    </div>
+    <div class="app-modal-body">
+        <form>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="">Operador de Pago Utilizado</label>
+                            <select class="form-control form-control-sm">
+                                <option>Aportes en Línea</option>
+                                <option>AsoPagos</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-12">
+                            <label for="">Compañia ARL Utilizada</label>
+                            <select class="form-control form-control-sm">
+                                <option>Colpatria ARP</option>
+                                <option>ARP Sura</option>
+                            </select>
+                        </div>
+                        <strong class="ml-2">¿Aplica Para La Ley 1429 de 2010?</strong>
+                        <div class="form-group ml-4">
+                            <!-- ¿Aplica Para La Ley 1429 de 2010? -->
+                            <input class="form-check-input" type="checkbox" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">No</label>
+                        </div>
+                        <strong class="ml-2">¿Aplica Para La Ley 590 de 2010?</strong>
+                        <div class="form-group ml-4">
+                            <!-- ¿Aplica Para La Ley 1429 de 2010? -->
+                            <input class="form-check-input" type="checkbox" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">No</label>
+                        </div>
+                        <strong class="ml-2">¿Aplica Para La Ley 1607 de 2012?</strong>
+                        <div class="form-group ml-4">
+                            <!-- ¿Aplica Para La Ley 1429 de 2010? -->
+                            <input class="form-check-input" type="checkbox" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">Si</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>

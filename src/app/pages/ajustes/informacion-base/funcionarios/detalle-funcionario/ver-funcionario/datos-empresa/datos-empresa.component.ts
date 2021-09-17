@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { consts } from 'src/app/core/utils/consts';
+import Swal from 'sweetalert2';
 import { DependenciesService } from '../../../../services/dependencies.service';
 import { GroupService } from '../../../../services/group.service';
 import { PositionService } from '../../../../services/positions.service';
@@ -98,13 +99,13 @@ export class DatosEmpresaComponent implements OnInit {
     });
   }
 
-  turnChanged(turno) {
+  /* turnChanged(turno) {
     if (turno == 'Rotativo') {
       this.form.get('fixed_turn_id').enable();
-    } else {
+    } else if(turno == 'Fijo') {
       this.form.get('fixed_turn_id').disable();
     }
-  }
+  } */
 
   updateEnterpriseData(){
     this.form.markAllAsTouched();
@@ -113,6 +114,10 @@ export class DatosEmpresaComponent implements OnInit {
     .subscribe( res => {
       this.getEnterpriseData();
       this.modal.hide();
+      Swal.fire({
+        icon: 'success',
+        title: 'Actualizado correctamente',
+      });
     });
   }
   createForm(){

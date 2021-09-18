@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
-import { AsignacionTurnosService } from '../asignacion-turnos.service';
+import { AsignacionTurnosService } from '../../asignacion-turnos/asignacion-turnos.service';
 
 @Component({
-  selector: 'app-semana-turno',
-  templateUrl: './semana-turno.component.html',
-  styleUrls: ['./semana-turno.component.scss'],
+  selector: 'app-semanas-extras',
+  templateUrl: './semanas-extras.component.html',
+  styleUrls: ['./semanas-extras.component.scss']
 })
-export class SemanaTurnoComponent implements OnInit {
+export class SemanasExtrasComponent implements OnInit {
   @Input('turnosRotativos') turnosRotativos;
   @Input('diaInicial') diaInicial;
   @Input('diaFinal') diaFinal;

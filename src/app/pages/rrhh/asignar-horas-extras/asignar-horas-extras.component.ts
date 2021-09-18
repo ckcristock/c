@@ -1,17 +1,17 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
-import { AsignacionTurnosService } from './asignacion-turnos.service';
-import { RotatingTurnService } from '../../ajustes/informacion-base/turnos/turno-rotativo/rotating-turn.service';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
+import { RotatingTurnService } from '../../ajustes/informacion-base/turnos/turno-rotativo/rotating-turn.service';
+import { AsignacionTurnosService } from '../asignacion-turnos/asignacion-turnos.service';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-asignacion-turnos',
-  templateUrl: './asignacion-turnos.component.html',
-  styleUrls: ['./asignacion-turnos.component.scss'],
+  selector: 'app-asignar-horas-extras',
+  templateUrl: './asignar-horas-extras.component.html',
+  styleUrls: ['./asignar-horas-extras.component.scss']
 })
-export class AsignacionTurnosComponent implements OnInit {
+export class AsignarHorasExtrasComponent implements OnInit {
   datosGenerales: any[] = [];
   loading = false;
   turns: any[] = [];

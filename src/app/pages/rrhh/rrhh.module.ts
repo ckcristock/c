@@ -48,6 +48,8 @@ import { DetalleHorarioComponent } from './reporte-horario/detalle-horario/detal
 import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
 import { FondoEmpleadoComponent } from './fondo-empleado/fondo-empleado.component';
 import { DetalleHorarioRotativoComponent } from './reporte-horario/detalle-horario-rotativo/detalle-horario-rotativo.component';
+import { AsignarHorasExtrasComponent } from './asignar-horas-extras/asignar-horas-extras.component';
+import { SemanasExtrasComponent } from './asignar-horas-extras/semanas-extras/semanas-extras.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +81,8 @@ import { DetalleHorarioRotativoComponent } from './reporte-horario/detalle-horar
     DetalleHorarioComponent,
     FondoEmpleadoComponent,
     DetalleHorarioRotativoComponent,
+    AsignarHorasExtrasComponent,
+    SemanasExtrasComponent,
   ],
   imports: [
     RrhhRouterModule,

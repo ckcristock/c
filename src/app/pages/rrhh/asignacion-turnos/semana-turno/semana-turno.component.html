@@ -1,4 +1,5 @@
 <div class="row">
+ 
   <div class="form-group col-12 pl-0 d-flex justify-content-end">
    <!--  <app-turno [turnos]="turnos"></app-turno>
     <button
@@ -33,13 +34,35 @@
           </td>
           <td
             class="text-center custom-label fecha-td"
-            *ngFor="let dia of diasSemana"
+            *ngFor="let dia of person.diasSemana"
           >
             <!-- {{ turnos }} -->
-            <app-turno
+          <!--   <app-turno
               (changed)="turnChanged($event, person, dia)"
               [turnos]="turnos"
-            ></app-turno>
+            ></app-turno> -->
+            <div>
+              <select
+                class="form-control form-control-sm select-turno"
+                [(ngModel)]="dia.turno"
+                [ngStyle]="{'background-color': dia.color,'color': '#FFF'}"
+                (change)="getColorByDay(dia)"
+                
+              >
+                <option value="seleccione">Seleccione</option>
+                <option value="0" [ngStyle]="{'background-color': '#000', 'color': '#FFF' }">
+                  Descanso
+                </option>
+                <option
+                  *ngFor="let turn of turnos"
+                  [value]="turn.id"
+                  [ngStyle]="{ 'background-color': turn.color, 'color': '#FFF' }"
+                >
+                  {{ turn.name }} ({{ turn.entry_time }} {{ turn.leave_time }})
+                </option>
+              </select>
+            </div>
+            
           </td>
         </tr>
       </tbody>

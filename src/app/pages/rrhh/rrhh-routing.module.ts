@@ -19,6 +19,7 @@ import { MemorandosComponent } from './procesos/memorandos/memorandos.component'
 import {CertificadosComponent} from './certificados/certificados.component';
 import {ReporteHorarioComponent} from './reporte-horario/reporte-horario.component';
 import {FondoEmpleadoComponent} from './fondo-empleado/fondo-empleado.component';
+import { AsignarHorasExtrasComponent } from './asignar-horas-extras/asignar-horas-extras.component';
 
 const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
@@ -40,6 +41,7 @@ const routes: Routes = [
   { path: 'procesos/memorandos', component: MemorandosComponent },
   { path: 'certificados', component: CertificadosComponent },
   { path: 'fondo-empleado', component: FondoEmpleadoComponent },
+  { path: 'asignar-horas-extras', component: AsignarHorasExtrasComponent },
 ];
 
 @NgModule({

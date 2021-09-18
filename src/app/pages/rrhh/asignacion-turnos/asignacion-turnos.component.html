@@ -57,14 +57,13 @@
                 type="week"
                 formControlName="week"
                 class="form-control form-control-sm text-center"
-                (change)="makeRequestBySemana($event.target.value)"
                 required
               />
             </div>
             <div class="col-md-2 text-right">
               <button
                 class="btn btn-secondary default btn-sm"
-                (clicl)="filtrar()"
+                (clicl)="makeRequestBySemana();filtrar()"
               >
                 <i class="fas fa-search"></i> Filtrar
               </button>

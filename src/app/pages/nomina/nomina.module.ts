@@ -12,6 +12,10 @@ import {
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 
 import { ViaticosComponent } from './viaticos/viaticos.component';
+import { CrearViaticosComponent } from './viaticos/crear-viaticos/crear-viaticos.component';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule } from '@angular/common/http';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   imports: [
@@ -22,14 +26,16 @@ import { ViaticosComponent } from './viaticos/viaticos.component';
     NgbTypeaheadModule,
     PipesModule,
     NgbDropdownModule,
-    ReactiveFormsModule
-
+    ReactiveFormsModule,
+    NgbPaginationModule,
+    HttpClientModule,
+    NgSelectModule
   ],
   declarations: [
-    
     PrestamosLibranzasComponent,
     ModalprestamoylibranzacrearComponent,
-    ViaticosComponent
+    ViaticosComponent,
+    CrearViaticosComponent
   ],
 })
 export class NominaModule {}

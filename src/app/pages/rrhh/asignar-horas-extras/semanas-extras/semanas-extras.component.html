@@ -36,33 +36,15 @@
               class="text-center custom-label fecha-td"
               *ngFor="let dia of person.diasSemana"
             >
-              <!-- {{ turnos }} -->
-            <!--   <app-turno
-                (changed)="turnChanged($event, person, dia)"
-                [turnos]="turnos"
-              ></app-turno> -->
-              <div>
-                <select
-                  class="form-control form-control-sm select-turno"
-                  [(ngModel)]="dia.turno"
-                  [ngStyle]="{'background-color': dia.color,'color': '#FFF'}"
-                  (change)="getColorByDay(dia)"
-                  
-                >
-                  <option value="seleccione">Seleccione</option>
-                  <option value="0" [ngStyle]="{'background-color': '#000', 'color': '#FFF' }">
-                    Descanso
-                  </option>
-                  <option
-                    *ngFor="let turn of turnos"
-                    [value]="turn.id"
-                    [ngStyle]="{ 'background-color': turn.color, 'color': '#FFF' }"
-                  >
-                    {{ turn.name }} ({{ turn.entry_time }} {{ turn.leave_time }})
-                  </option>
-                </select>
-              </div>
-              
+	    <select  class="form-control" [(ngModel)]="dia.horaExtra" name="">
+	      <option value="">0 Hrs.</option>
+	      <option value="1">1 Hr.</option>
+	      <option value="2">2 Hrs.</option>
+	      <option value="3">3 Hrs.</option>
+	      <option value="4">4 Hrs.</option>
+	      <option value="5">5 Hrs.</option>
+	      <option value="6">5 Hrs.</option>
+	    </select>              
             </td>
           </tr>
         </tbody>

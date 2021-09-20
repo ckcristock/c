@@ -30,7 +30,6 @@ export class AsignarHorasExtrasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.diaInicialSemana);
     this.createForm();
     this.getData();
     this.getTurns();
@@ -87,7 +86,6 @@ export class AsignarHorasExtrasComponent implements OnInit {
     this.changeWeek.emit();
   }
 
-  descargarInformeTurnos(turno) {}
 
   getData() {
     this.loading = true;

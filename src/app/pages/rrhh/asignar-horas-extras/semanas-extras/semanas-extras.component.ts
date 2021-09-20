@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
-import { AsignacionTurnosService } from '../../asignacion-turnos/asignacion-turnos.service';
+import {ExtraHoursService} from '../extra-hours.service';
 
 @Component({
   selector: 'app-semanas-extras',
@@ -8,7 +8,6 @@ import { AsignacionTurnosService } from '../../asignacion-turnos/asignacion-turn
   styleUrls: ['./semanas-extras.component.scss']
 })
 export class SemanasExtrasComponent implements OnInit {
-  @Input('turnosRotativos') turnosRotativos;
   @Input('diaInicial') diaInicial;
   @Input('diaFinal') diaFinal;
   @Input('people') people;
@@ -26,14 +25,13 @@ export class SemanasExtrasComponent implements OnInit {
   active = false;
   withColor = '#9da4ad';
   /**End */
-  constructor(private _asignacion: AsignacionTurnosService) {}
+  constructor(private _asignacion: ExtraHoursService) {}
 
   ngOnInit(): void {
     this.changeWeek.subscribe((d) => {
       setTimeout(() => {
         this.diasSemana = [];
         this.diaInicialSemana = this.diaInicial;
-        this.turnos = this.turnosRotativos;
         this.fillDiasSemana();
         this.asignarHorariosExistentes();
       }, 200);
@@ -46,8 +44,7 @@ export class SemanasExtrasComponent implements OnInit {
       this.diasSemana.push({
         dia: this.diaInicialSemana.format('dddd'),
         fecha: this.diaInicialSemana.format('YYYY-MM-DD'),
-        color: '#9da4ad',
-        turno: 'seleccione',
+        horaExtra: '',
       });
       this.diaInicialSemana = moment(this.diaInicialSemana).add(1, 'd');
     }
@@ -55,15 +52,15 @@ export class SemanasExtrasComponent implements OnInit {
     this.people.forEach((p) => {
       let sem = this.diasSemana;
 
-      p.fixed_turn_hours.forEach((turn) => {
+      /*p.fixed_turn_hours.forEach((turn) => {
         turn = this.getColors(turn);
         sem.map((dia) => {
-          if (turn.date == dia.fecha) {
+          /*if (turn.date == dia.fecha) {
             dia.turno = turn.rotating_turn_id;
             dia.color = turn.color;
           }
         });
-      });
+      });*/
       p.diasSemana = sem;
     });
 
@@ -81,13 +78,13 @@ export class SemanasExtrasComponent implements OnInit {
   }
 
   getColorByDay( dia ) {
-    if (dia.turno == 0) {
+   /* if (dia.turno == 0) {
       dia.color = '#000';
     } else {
       dia.color = this.turnos.find(
         (turno) => turno.id == dia.turno
       ).color;
-    }
+    }*/
   }
 
   formatFecha(fecha) {
@@ -99,10 +96,10 @@ export class SemanasExtrasComponent implements OnInit {
     let horarios = [];
     this.people.forEach((funcionario) => {
       funcionario.diasSemana.forEach((dia) => {
-        if (dia.turno && dia.turno != 'seleccione') {
+        if (dia.horaExtra) {
           horarios.push({
             person_id: funcionario.id,
-            rotating_turn_id: dia.turno,
+            overtimes: dia.horaExtra,
             date: dia.fecha,
             weeks_number: moment().format('ww'),
           });
@@ -127,30 +124,18 @@ export class SemanasExtrasComponent implements OnInit {
           let index = null;
           if (dia !== undefined) {
             index = this.horariosExistentes.indexOf(dia);
-            /*    let id = 'turnos' + funcionario.id;
-            this.$refs[id][index].turno = dia.turno_rotativo_id; */
             let turno_select = this.turnos.find((turno) => {
               if (dia.turno_rotativo_id != 0) {
                 return turno.id === dia.turno_rotativo_id;
               }
             });
             let color = turno_select ? turno_select.color : '#000';
-            /*  this.$refs[id][index].withColor = color; */
           }
         });
       }
     });
   }
-  turnChanged(turno, person, day) {
-    let index = this.diasSemana.indexOf(day);
-    if (person.dias) {
-    } else {
-      person.dias = {};
-    }
-    person.dias[index] = turno;
-  }
-
-  saveHours(horarios) {
-    this._asignacion.saveHours(horarios).subscribe((r: any) => {});
+    saveHours(horarios) {
+    this._asignacion.save(horarios).subscribe((r: any) => {});
   }
 }

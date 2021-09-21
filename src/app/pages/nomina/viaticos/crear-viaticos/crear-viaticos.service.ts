@@ -25,8 +25,12 @@ export class CrearViaticosService {
     return this.http.get(`${environment.base_url}/city`);
   }
 
+getCities() {
+    return this.http.get(`${environment.base_url}/city`);
+  }
+
   getRouteTaxi() {
-    return this.http.get(`${environment.base_url}/route-taxi`);
+    return this.http.get(`${environment.base_url}/taxis`);
   }
 
   crearViatico( data:any ) {

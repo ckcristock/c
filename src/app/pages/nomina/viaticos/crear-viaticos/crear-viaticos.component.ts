@@ -7,37 +7,35 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-crear-viaticos',
   templateUrl: './crear-viaticos.component.html',
-  styleUrls: ['./crear-viaticos.component.scss']
+  styleUrls: ['./crear-viaticos.component.scss'],
 })
 export class CrearViaticosComponent implements OnInit {
-  func:any = {
+  func: any = {
     id: '',
     identifier: '',
     position: '',
     passport_number: '',
     visa: '',
-    type: ''
-  }
-  hospedaje_nacional:any;
-  hospedaje_internacional:any;
+    type: '',
+  };
+  hospedaje_nacional: any;
+  hospedaje_internacional: any;
   origen = viaticos.origen;
-  trayecto_nacional:any;
-  trayecto_internacional:any;
+  taxis: any;
   // trayecto:any = ['Seleccione', 'Aeropuerto-Casa', 'Aeropuerto-Embajada', 'Aeropuerto-Maquinados', 'Aeropuerto-Terminal'];
-  city:any = ['Seleccione', 'BQA', 'BOG', 'MED', 'MAR', 'Otra ciudad'];
-  tipo:any = ['Seleccione', 'Nacional','Internacional'];
-  tipo_transporte:any = ['Ida', 'Vuelta'];
-  hotels:any = [];
-  hotels_inter:any = [];
-  taxis:any = [];
-  people:any[] = [];
-  person_selected:any;
-  form: FormGroup
-  constructor( 
-                private fb: FormBuilder, 
-                private location: Location,
-                private crearViaticoService: CrearViaticosService
-                ) { }
+  city: any = [];
+  tipo: any = ['Seleccione', 'Nacional', 'Internacional'];
+  tipo_transporte: any = ['Ida', 'Vuelta'];
+  hotels: any = [];
+  hotels_inter: any = [];
+  people: any[] = [];
+  person_selected: any;
+  form: FormGroup;
+  constructor(
+    private fb: FormBuilder,
+    private location: Location,
+    private crearViaticoService: CrearViaticosService
+  ) {}
 
   ngOnInit(): void {
     this.createForm();
@@ -45,60 +43,70 @@ export class CrearViaticosComponent implements OnInit {
     this.getPeople();
     this.getHotels();
     this.getRouteTaxi();
+    this.getCity();
     /* this.hoteles = this.hospedaje_nacional; */
   }
-  
+
+  getCity(){
+    this.crearViaticoService.getCity().subscribe( (r:any)=>{
+    this.city = r.data
+    })
+  }
   regresar() {
     this.location.back();
   }
 
   getPeople() {
-    this.crearViaticoService.getPeople()
-    .subscribe( (res:any) => {
+    this.crearViaticoService.getPeople().subscribe((res: any) => {
       this.people = res.data;
-    })
+    });
   }
 
   crearListener() {
-    this.form.get('travel').get('person_id').valueChanges.subscribe( res => {
-      this.func = this.people.find(r => r.id == res)
-    })
+    this.form
+      .get('travel')
+      .get('person_id')
+      .valueChanges.subscribe((res) => {
+        this.func = this.people.find((r) => r.id == res);
+      });
   }
 
   createForm() {
     this.form = this.fb.group({
-      totalHospedajeDolares: [0],
-      totalTransporteDolares: [0],
-      totalFeedingDolares: [0],
-      totalTaxiDolares: [0],
-      totalHospedajePesos: [0],
-      totalTransportePesos: [0],
-      totalFeedingPesos: [0],
-      totalTaxiPesos: [0],
-      lavanderiaPesos: [0],
-      totalDolares: [0],
-      totalPesos: [0],
+
+      baggage_usd:[0],
+      baggage_cop:[0],
+      total_hotels_usd: [0],
+      total_hotels_cop: [0],
+      total_transports_cop: [0],
+      total_taxis_usd: [0],
+      total_taxis_cop: [0],
+      total_feedings_usd: [0],
+      total_feedings_cop: [0],
+      total_laundry_cop: [0],
+      total_laundry_usd: [0],
+      total_usd: [0],
+      total_cop: [0],
+      opservation: [0],
       travel: this.fb.group({
         person_id: [''],
-        origin: [''],
-        destiny: [''],
+        origin_id: [''],
+        destinity_id: [''],
         travel_type: [''],
         departure_date: [''],
         arrival_date: [''],
-        n_nights: ['']
+        n_nights: [''],
       }),
       hospedaje: this.fb.array([]),
       transporte: this.fb.array([]),
       taxi: this.fb.array([]),
-      feeding: this.fb.array([])
+      feeding: this.fb.array([]),
     });
-    this.newHospedaje();
-    this.newTransporte();
-    this.newTaxi();
-    this.newFeeding();
+    //this.newHospedaje();
+    //this.newTransporte();
+    // this.newTaxi();
+    //this.newFeeding();
     this.subscribesTotal();
-    console.log(this.form.value);
-    
   }
 
   /***************** HOSPEDAJE ****************/
@@ -111,99 +119,102 @@ export class CrearViaticosComponent implements OnInit {
       hoteles: [],
       address: [],
       n_night: [0],
-      total:  [0],
+      total: [0],
       breakfast: [],
-      who_cancels:[],
-      accommodation: ['Sencilla']
+      who_cancels: [],
+      accommodation: ['Sencilla'],
     });
-    group.get('hotel_id').valueChanges.subscribe( value => {
-      let hotel = group.get('hoteles').value.find(res => res.id == value);
+    group.get('hotel_id').valueChanges.subscribe((value) => {
+      let hotel = group.get('hoteles').value.find((res) => res.id == value);
       group.patchValue({
         address: hotel.address,
         phone: hotel.phone,
         rate: hotel.simple_rate,
-        breakfast: hotel.breakfast
-      })
-    })
-    group.get('accommodation').valueChanges.subscribe( value => {
-      let hotel = group.get('hoteles').value.find(res => res.accommodation == value);
+        breakfast: hotel.breakfast,
+      });
+    });
+    group.get('accommodation').valueChanges.subscribe((value) => {
+      let hotel = group
+        .get('hoteles')
+        .value.find((res) => res.accommodation == value);
       group.patchValue({
-        rate: value == 'Sencilla' ? hotel.simple_rate : hotel.double_rate
-      })
-    })
-    group.get('rate').valueChanges.subscribe( value => {
-      let hotel =  group.value;
-      let totalHospedaje = value * hotel.n_night;
-      group.patchValue({
-        total: totalHospedaje
-      })
-    })
-    group.get('n_night').valueChanges.subscribe( value => {
-      let hotel =  group.value;
-      let totalHospedaje = value * hotel.rate;
-      group.patchValue({
-        total: totalHospedaje
-      })
-      this.getTotalHospedaje();
-    })
+        rate: value == 'Sencilla' ? hotel.simple_rate : hotel.double_rate,
+      });
+    });
+    group.get('rate').valueChanges.subscribe((value) => {
+      this.subtotalHotel(group,value ,group.value.n_night)
+    });
+    group.get('n_night').valueChanges.subscribe((value) => {
+      this.subtotalHotel(group,value , group.value.rate)
+    });
     return group;
   }
-  
-  getHotels() {
-    this.crearViaticoService.getHotels()
-    .subscribe( (res:any) =>{
-      this.hospedaje_nacional = res.data;
-      this.hospedaje_internacional = res.code;
-    })
+
+  subtotalHotel(group,val1,val2){
+      group.patchValue({total: val1*val2});
+      this.getTotalHospedaje();
   }
-  
+
+  getHotels() {
+    this.crearViaticoService.getHotels().subscribe((res: any) => {
+      this.hospedaje_nacional = res.data.nacional;
+      this.hospedaje_internacional = res.data.internacional;
+    });
+  }
+
   newHospedaje() {
-    let hospedaje = this.hospedajeList
-    hospedaje.push(this.getBasicControl())
+    let hospedaje = this.hospedajeList;
+    hospedaje.push(this.getBasicControl());
   }
 
   get hospedajeList() {
     return this.form.get('hospedaje') as FormArray;
   }
-  
+
   deleteHospedaje(i) {
-    this.hospedajeList.removeAt(i);
+    this.hospedajeList.removeAt(this.hospedajeList.length - 1);
     this.getTotalHospedaje();
   }
 
-  getTotalHospedaje(){
-    let total = this.hospedajeList.value.reduce((a, b) =>{ 
-      if ( b.tipo == 'Nacional' )  return  { inter: a.inter ,  nac: a.nac + b.total }
-      return  { nac: a.nac ,  inter: a.inter + b.total}
-    }, { nac:0,inter:0 } )
+  getTotalHospedaje() {
+    let total = this.hospedajeList.value.reduce(
+      (a, b) => {
+        if (b.tipo == 'Nacional')
+          return { inter: a.inter, nac: a.nac + b.total };
+        return { nac: a.nac, inter: a.inter + b.total };
+      },
+      { nac: 0, inter: 0 }
+    );
 
     this.form.patchValue({
-      totalHospedajePesos: total.nac,
-      totalHospedajeDolares: total.inter
-    })
+      total_hotels_cop: total.nac,
+      total_hotels_usd: total.inter,
+    });
   }
 
-  changeTipo(res, control:FormControl ) {
+  changeTipo(res, control: FormControl) {
     control.patchValue({
-      hoteles:  res == 'Nacional' ? this.hospedaje_nacional : this.hospedaje_internacional
-    })
+      hoteles:
+        res == 'Nacional'
+          ? this.hospedaje_nacional
+          : this.hospedaje_internacional,
+    });
   }
 
-  /***************** TRANSPORTE TERRESTRE ****************/  
+  /***************** TRANSPORTE TERRESTRE ****************/
 
-  getTransporteControl(): FormGroup{
+  getTransporteControl(): FormGroup {
     let group = this.fb.group({
       type: ['Ida'],
       journey: [],
       company: [],
       ticket_payment: [],
       departure_date: [],
-      ticket_value: [0]
-    })
-    group.get('ticket_value').valueChanges.subscribe( value => {   
-  
+      ticket_value: [0],
+    });
+    group.get('ticket_value').valueChanges.subscribe((value) => {
       this.getTotalTransporte();
-    })
+    });
     return group;
   }
 
@@ -212,65 +223,76 @@ export class CrearViaticosComponent implements OnInit {
   }
 
   newTransporte() {
-    let transporte = this.transporteList
-    transporte.push(this.getTransporteControl())
+    let transporte = this.transporteList;
+    transporte.push(this.getTransporteControl());
   }
 
   deleteTransporte(i) {
-    this.transporteList.removeAt(i)
+    this.transporteList.removeAt( this.transporteList.length -1 );
     this.getTotalTransporte();
   }
 
   getTotalTransporte() {
-   setTimeout(() => {
-      let total = this.transporteList.controls.reduce( (a, b) => {  
-      return  a + b.value.ticket_value
-      },0)
+    setTimeout(() => {
+      let total = this.transporteList.controls.reduce((a, b) => {
+        return a + b.value.ticket_value;
+      }, 0);
       this.form.patchValue({
-        totalTransportePesos: total,
-      })
+        total_transports_cop: total,
+      });
     }, 50);
   }
 
-  /***************** TAXIS ****************/ 
+  /***************** TAXIS ****************/
 
   getTaxisControl(): FormGroup {
     let group = this.fb.group({
-      type: ['Seleccione'],
-      journey: ['Seleccione'],
-      city: ['Seleccione'],
+      journey: [this.taxis],
+      journey_id: [this.taxis],
+      city_id: ['Seleccione'],
+      city_selected: [],
+      taxi_cities: [],
       rate: [0],
       journeys: [0],
-      total: [0]
-    })
-    group.get('type').valueChanges.subscribe( value => {
+      total: [0],
+    });
+
+    group.get('journey_id').valueChanges.subscribe((value) => {
+      let taxi_cities = this.taxis.find((r) => r.id == value).taxi_cities;
+
       group.patchValue({
-        journey: value == 'Nacional' ? this.trayecto_nacional : this.trayecto_internacional
-      })
-      console.log(this.taxiList);
-    
-    }) 
-    /* group.get('journey').valueChanges.subscribe( value => {
-      let city =  group.value;
+        taxi_cities,
+        city_id: taxi_cities[0].id,
+      });
+    });
+    group.get('city_id').valueChanges.subscribe((value) => {
+      console.log(value)
+      let city_selected = group.get('taxi_cities').value.find((r) => r.id ==  value);
+      console.log(city_selected)
+
       group.patchValue({
-        total: totalTaxi
-      })
-    }) */
-    group.get('rate').valueChanges.subscribe( value => {
-      let taxi =  group.value;
-      let totalTaxi = value * taxi.journeys; 
+        city_selected,
+	rate:city_selected.value
+      });
+    });
+    group.get('rate').valueChanges.subscribe((value) => {
+      let taxi = group.value;
+      let totalTaxi = value * taxi.journeys;
       group.patchValue({
-        total: totalTaxi
-      })
-    })
-    group.get('journeys').valueChanges.subscribe( value => {
-      let taxi =  group.value;
+        total: totalTaxi,
+      });
+            this.getTotalTaxi();
+
+    });
+    group.get('journeys').valueChanges.subscribe((value) => {
+	    
+      let taxi = group.value;
       let totalTaxi = value * taxi.rate;
       group.patchValue({
-        total: totalTaxi
-      })
-      this.getTotalTaxi();
-    })
+        total: totalTaxi,
+      });
+          this.getTotalTaxi();
+    });
     return group;
   }
 
@@ -278,7 +300,7 @@ export class CrearViaticosComponent implements OnInit {
     return this.form.get('taxi') as FormArray;
   }
 
- /*  getTaxis() {
+  /*  getTaxis() {
     this.crearViaticoService.getTaxis()
     .subscribe( (res:any) =>{
       this.taxis = res.data;
@@ -286,15 +308,13 @@ export class CrearViaticosComponent implements OnInit {
   } */
 
   getCities() {
-    this.crearViaticoService.getCity()
+    this.crearViaticoService.getCity();
   }
 
   getRouteTaxi() {
-    this.crearViaticoService.getRouteTaxi()
-    .subscribe( (res:any) =>{
-        this.trayecto_internacional = res.code;
-        this.trayecto_nacional = res.data;
-    })
+    this.crearViaticoService.getRouteTaxi().subscribe((res: any) => {
+      this.taxis = res.data;
+    });
   }
 
   newTaxi() {
@@ -303,24 +323,32 @@ export class CrearViaticosComponent implements OnInit {
   }
 
   deleteTaxi(i) {
-    this.taxiList.removeAt(i);
+    this.taxiList.removeAt( this.taxiList.length -1 );
     this.getTotalTaxi();
   }
 
   getTotalTaxi() {
-    let total = this.taxiList.value.reduce((a, b) =>{ 
-      if ( b.tipo == 'Nacional' )  return  { inter: a.inter ,  nac: a.nac + b.total }
-      return  { nac: a.nac ,  inter: a.inter + b.total}
-    }, { nac:0,inter:0 } )
-  
+    console.log('herer')
+    let total = this.taxiList.value.reduce(
+      (a, b) => {
+	console.log(b)
+	if (b.city_selected.type == 'Nacional'){
+
+          return { inter: a.inter, nac: a.nac + b.total };
+	}
+        return { nac: a.nac, inter: a.inter + b.total };
+      },
+      { nac: 0, inter: 0 }
+    );
+
     this.form.patchValue({
-      totalTaxiDolares: total.inter,
-      totalTaxiPesos: total.nac
-    })
+      total_taxis_usd: total.inter,
+      total_taxis_cop: total.nac,
+    });
   }
 
-  /***************** FEEDING ****************/ 
-  
+  /***************** FEEDING ****************/
+
   getFeedindControl(): FormGroup {
     let group = this.fb.group({
       type: ['Seleccione'],
@@ -328,23 +356,23 @@ export class CrearViaticosComponent implements OnInit {
       breakfast: [],
       stay: [0],
       rate: [0],
-      total: [0]
-    })
-    group.get('rate').valueChanges.subscribe( value => {
-      let feeding =  group.value;
+      total: [0],
+    });
+    group.get('rate').valueChanges.subscribe((value) => {
+      let feeding = group.value;
       let totalFeeding = value * feeding.stay;
       group.patchValue({
-        total: totalFeeding
-      })
-    })
-    group.get('stay').valueChanges.subscribe( value => {
-      let feeding =  group.value;
+        total: totalFeeding,
+      });
+    });
+    group.get('stay').valueChanges.subscribe((value) => {
+      let feeding = group.value;
       let totalFeeding = value * feeding.rate;
       group.patchValue({
-        total: totalFeeding
-      })
+        total: totalFeeding,
+      });
       this.getTotalFeeding();
-    })
+    });
     return group;
   }
 
@@ -358,83 +386,101 @@ export class CrearViaticosComponent implements OnInit {
   }
 
   deleteFeeding(i) {
-    this.FeedingList.removeAt(i);
+    this.FeedingList.removeAt(this.FeedingList.length -1 );
     this.getTotalFeeding();
   }
-  
+
   getTotalFeeding() {
-    let total = this.FeedingList.value.reduce((a, b) =>{ 
-      if ( b.tipo == 'Nacional' )  return  { inter: a.inter ,  nac: a.nac + b.total }
-      return  { nac: a.nac ,  inter: a.inter + b.total}
-    }, { nac:0,inter:0 } )
+    let total = this.FeedingList.value.reduce(
+      (a, b) => {
+        if (b.tipo == 'Nacional')
+          return { inter: a.inter, nac: a.nac + b.total };
+        return { nac: a.nac, inter: a.inter + b.total };
+      },
+      { nac: 0, inter: 0 }
+    );
 
     this.form.patchValue({
-      totalFeedingPesos: total.nac,
-      totalFeedingDolares: total.inter
-    })
+      total_feedings_cop: total.nac,
+      total_feedings_usd: total.inter,
+    });
   }
 
   subscribesTotal() {
-    this.form.get('totalHospedajePesos').valueChanges.subscribe( r => {
+    this.form.get('total_hotels_cop').valueChanges.subscribe((r) => {
       this.sumarTotal();
-    })
-    this.form.get('totalTransportePesos').valueChanges.subscribe( r => {
+    });
+    this.form.get('total_transports_cop').valueChanges.subscribe((r) => {
       this.sumarTotal();
-    })
-    this.form.get('totalFeedingPesos').valueChanges.subscribe( r => {
+    });
+    this.form.get('total_feedings_cop').valueChanges.subscribe((r) => {
       this.sumarTotal();
-    })
-    this.form.get('totalTaxiPesos').valueChanges.subscribe( r => {
+    });
+    this.form.get('total_taxis_cop').valueChanges.subscribe((r) => {
       this.sumarTotal();
-    })
-    this.form.get('totalHospedajeDolares').valueChanges.subscribe( r => {
+    });
+    this.form.get('total_hotels_usd').valueChanges.subscribe((r) => {
       this.sumarTotal();
-    })
-    this.form.get('totalTransporteDolares').valueChanges.subscribe( r => {
+    });
+  
+    this.form.get('total_feedings_usd').valueChanges.subscribe((r) => {
       this.sumarTotal();
-    })
-    this.form.get('totalFeedingDolares').valueChanges.subscribe( r => {
+    });
+    this.form.get('total_taxis_usd').valueChanges.subscribe((r) => {
       this.sumarTotal();
-    })
-    this.form.get('totalTaxiDolares').valueChanges.subscribe( r => {
+    });
+    this.form.get('total_laundry_usd').valueChanges.subscribe((r) => {
       this.sumarTotal();
-    })
+    });
+    this.form.get('total_laundry_cop').valueChanges.subscribe((r) => {
+      this.sumarTotal();
+    });
+    this.form.get('baggage_cop').valueChanges.subscribe((r) => {
+      this.sumarTotal();
+    });
+    this.form.get('baggage_usd').valueChanges.subscribe((r) => {
+      this.sumarTotal();
+    });
   }
 
   sumarTotal() {
     setTimeout(() => {
-      let forma = this.form.value
-      let totalPesos = 
-      parseFloat( forma.totalHospedajePesos ) + parseFloat(forma.totalTransportePesos) +
-      parseFloat(forma.totalFeedingPesos) + parseFloat(forma.totalTaxiPesos);
-      console.log(totalPesos);
-      
-      let totalDolares = 
-      parseFloat( forma.totalHospedajeDolares ) + parseFloat(forma.totalTransporteDolares) +
-      parseFloat(forma.totalFeedingDolares) + parseFloat(forma.totalTaxiDolares);
+      let forma = this.form.value;
+      let total_cop =
+        parseFloat(forma.total_hotels_cop) +
+        parseFloat(forma.total_transports_cop) +
+        parseFloat(forma.total_feedings_cop) +
+        parseFloat(forma.total_taxis_cop)+
+        parseFloat(forma.baggage_cop)+
+        parseFloat(forma.total_laundry_cop);
+      let total_usd =
+        parseFloat(forma.total_hotels_usd) +
+        parseFloat(forma.total_feedings_usd) +
+        parseFloat(forma.total_laundry_usd) +
+        parseFloat(forma.baggage_usd) +
+        parseFloat(forma.total_taxis_usd);
       this.form.patchValue({
-        totalPesos,
-        totalDolares
-      })
-    }, 500);
+        total_cop,
+        total_usd,
+      });
+    }, 300);
   }
 
   crearViatico() {
-    this.crearViaticoService.crearViatico(this.form.value)
-    .subscribe( (res:any) =>{
-      Swal.fire({
-        icon: 'success',
-        title: 'Viatico creado con éxito'
-      })
-    },
-    err => {
-      Swal.fire({
-        icon: 'error',
-        title: '¡Ooops!',
-        text: err.code
-      })
-    }
-    )
+    this.crearViaticoService.crearViatico(this.form.value).subscribe(
+      (res: any) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Viatico creado con éxito',
+        });
+      },
+      (err) => {
+        Swal.fire({
+          icon: 'error',
+          title: '¡Ooops!',
+          text: err.code,
+        });
+      }
+    );
   }
-
 }

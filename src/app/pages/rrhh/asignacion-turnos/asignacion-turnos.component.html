@@ -7,7 +7,7 @@
             <h4 class="font-weight-bold">Asignación de Horarios</h4>
           </div>
         </div>
-        <form [formGroup]="forma" (ngSubmit)="getData()">
+        <form [formGroup]="forma" (ngSubmit)="makeRequestBySemana();getData()">
           <div class="row d-flex align-items-end">
             <div class="col-md-2">
               <label for="group" class="custom-label">Filtrar por grupos</label>
@@ -63,7 +63,6 @@
             <div class="col-md-2 text-right">
               <button
                 class="btn btn-secondary default btn-sm"
-                (clicl)="makeRequestBySemana();filtrar()"
               >
                 <i class="fas fa-search"></i> Filtrar
               </button>

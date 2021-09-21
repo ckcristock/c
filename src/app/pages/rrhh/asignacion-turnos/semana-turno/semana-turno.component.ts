@@ -29,14 +29,16 @@ export class SemanaTurnoComponent implements OnInit {
   constructor(private _asignacion: AsignacionTurnosService) {}
 
   ngOnInit(): void {
-    this.changeWeek.subscribe((d) => {
-      setTimeout(() => {
+    this.changeWeek.subscribe((d:any) => {
+      console.log(d)
+
         this.diasSemana = [];
+        this.diaFinal = d.diaFinalSemana;
+        this.diaInicial = d.diaInicialSemana;
         this.diaInicialSemana = this.diaInicial;
         this.turnos = this.turnosRotativos;
         this.fillDiasSemana();
         this.asignarHorariosExistentes();
-      }, 200);
     });
   }
 
@@ -70,7 +72,12 @@ export class SemanaTurnoComponent implements OnInit {
   }
 
   getColors(turn: any) {
-    if (turn.rotating_turn_id == 0) {
+    if(turn.rotating_turn_id === 0 ){
+      turn.color = 'black';
+      return turn;
+    }
+    
+    if ( !turn.rotating_turn_id) {
       turn.color = '#000';
     } else {
       turn.color = this.turnos.find(

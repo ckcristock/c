@@ -31,9 +31,9 @@ export class AsignacionTurnosComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.diaInicialSemana);
+    this.getTurns();
     this.createForm();
     this.getData();
-    this.getTurns();
     this.getGrpups();
     this.addElement();
   }
@@ -84,7 +84,8 @@ export class AsignacionTurnosComponent implements OnInit {
     /* this.numeroSemana = moment(semana).week(); */
     this.diaInicialSemana = moment(semana).startOf('week');
     this.diaFinalSemana = moment(semana).endOf('week');
-    this.changeWeek.emit();
+  //  this.changeWeek.emit({diaInicialSemana:this.diaInicialSemana,
+//	diaFinalSemana:this.diaFinalSemana});
   }
 
   descargarInformeTurnos(turno) {}
@@ -95,7 +96,9 @@ export class AsignacionTurnosComponent implements OnInit {
       this.datosGenerales = r.data;
       this.loading = false;
       setTimeout(() => {
-        this.changeWeek.emit();
+    this.changeWeek.emit({diaInicialSemana:this.diaInicialSemana,
+	diaFinalSemana:this.diaFinalSemana});
+       // this.changeWeek.emit();
       }, 200);
     });
   }

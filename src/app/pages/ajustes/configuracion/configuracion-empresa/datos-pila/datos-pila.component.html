@@ -17,31 +17,31 @@
                 Operador de Pago
             </p>
             <p class="col-6 font-weight-bold">
-                Aportes en Línea
+                {{ pilas.paid_operator }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Companía de ARL
             </p>
             <p class="col-6 font-weight-bold">
-                ARP Sura
+                {{ pilas.arl_id }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Aplica Ley 1429 de 2010
             </p>
             <p class="col-6 font-weight-bold">
-                No
+                {{ pilas.law_1429 }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Aplica Ley 590 de 2010
             </p>
             <p class="col-6 font-weight-bold">
-                No
+                {{ pilas.law_590 }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Aplica Ley de 1607 de 2012
             </p>
             <p class="col-6 font-weight-bold">
-                Si
+                {{ pilas.law_1607 }}
             </p>
         </div>
     </div>
@@ -56,41 +56,43 @@
           </button>
     </div>
     <div class="app-modal-body">
-        <form>
+        <form [formGroup]="form">
             <div class="row">
                 <div class="col-12">
                     <div class="form-row">
                         <div class="form-group col-12">
                             <label for="">Operador de Pago Utilizado</label>
-                            <select class="form-control form-control-sm">
+                            <select class="form-control form-control-sm" formControlName="paid_operator">
                                 <option>Aportes en Línea</option>
                                 <option>AsoPagos</option>
                             </select>
                         </div>
                         <div class="form-group col-12">
                             <label for="">Compañia ARL Utilizada</label>
-                            <select class="form-control form-control-sm">
-                                <option>Colpatria ARP</option>
-                                <option>ARP Sura</option>
+                            <select class="form-control form-control-sm" formControlName="arl_id">
+                                <option *ngFor="let arl of arls" [value]="arl.value">
+                                    {{ arl.text }}
+                                </option>
+
                             </select>
                         </div>
-                        <strong class="ml-2">¿Aplica Para La Ley 1429 de 2010?</strong>
-                        <div class="form-group ml-4">
-                            <!-- ¿Aplica Para La Ley 1429 de 2010? -->
-                            <input class="form-check-input" type="checkbox" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">No</label>
+                        <div class="form-check ml-2 mb-2">
+                            <input class="form-check-input" type="checkbox" value="" formControlName="law_1429" id="ley_1429" checked>
+                            <label class="form-check-label" for="ley_1429">
+                                ¿Aplica Para La Ley 1429 de 2010?
+                            </label>
                         </div>
-                        <strong class="ml-2">¿Aplica Para La Ley 590 de 2010?</strong>
-                        <div class="form-group ml-4">
-                            <!-- ¿Aplica Para La Ley 1429 de 2010? -->
-                            <input class="form-check-input" type="checkbox" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">No</label>
+                        <div class="form-check ml-2 mb-2">
+                            <input class="form-check-input" type="checkbox" value="" formControlName="law_590" id="ley_590" checked>
+                            <label class="form-check-label" for="ley_590">
+                                ¿Aplica Para La Ley 590 de 2010?
+                            </label>
                         </div>
-                        <strong class="ml-2">¿Aplica Para La Ley 1607 de 2012?</strong>
-                        <div class="form-group ml-4">
-                            <!-- ¿Aplica Para La Ley 1429 de 2010? -->
-                            <input class="form-check-input" type="checkbox" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">Si</label>
+                        <div class="form-check ml-2 mb-2">
+                            <input class="form-check-input" type="checkbox" value="" formControlName="law_1607" id="ley_1607" checked>
+                            <label class="form-check-label" for="ley_1607">
+                                ¿Aplica Para La Ley 1607 de 2012?
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -100,7 +102,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="savePilaData()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

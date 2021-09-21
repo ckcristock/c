@@ -1,4 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { ConfiguracionEmpresaService } from './configuracion-empresa/configuracion-empresa.service';
 
 @Component({
   selector: 'app-configuracion-empresa',
@@ -7,13 +10,43 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 export class ConfiguracionEmpresaComponent implements OnInit {
   @ViewChild('modal') modal:any;
-  constructor() { }
+  form: FormGroup;
+  constructor( 
+                private _configuracionEmpresaService: ConfiguracionEmpresaService,
+                private fb: FormBuilder
+              ) { }
 
   ngOnInit(): void {
+    this.createForm();
   }
 
   openModal() {
     this.modal.show();
+  }
+
+  createForm() {
+    this.form = this.fb.group({
+      calculate_work_disability: [''],
+      pay_dedutions: [''],
+      recurring_payment: [''],
+      payment_transport_subsidy: [''],
+      affects_transportation_subsidy: [''],
+      pay_vacations: [''],
+      company_id: ['']
+    });
+  }
+
+  changePaymentConfiguration() {
+    this._configuracionEmpresaService.changePaymentConfiguration(this.form.value)
+    .subscribe( (res:any) =>{
+      this.modal.hide();
+      this.form.reset();
+      Swal.fire({
+        icon: 'success',
+        title: 'Configuración cambiada',
+        text: 'La Configuración de pago ha sido cambiada con éxito'
+      });
+    })
   }
 
 }

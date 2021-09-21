@@ -113,6 +113,16 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
+                                    <Label>Tipo de Salario</Label>
+                                    <select class="form-control" formControlName="salary_type" (change)="salaryChange()">
+                                        <option>A Convenir</option>
+                                        <option>SMLV</option>
+                                        <option>Rango</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3" *ngIf="rangeSalary == true">
+                                <div class="form-group">
                                     <label>Salario</label>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -151,7 +161,7 @@
                                 <div class="form-group">
                                     <label>Género</label>
                                     <select class="form-control custom-control" formControlName="gener">
-                                        <option selected>Seleccione</option>
+                                        <option>No Aplica</option>
                                         <option>Masculino</option>
                                         <option>Femenino</option>
                                     </select>
@@ -179,10 +189,9 @@
                                 <div class="form-group">
                                     <label>Medio de transporte</label>
                                     <select class="form-control custom-control" formControlName="conveyance">
-                                        <option selected>Seleccione</option>
+                                        <option>Ninguno</option>
                                         <option>Moto</option>
                                         <option>Carro</option>
-                                        <option>Ninguno</option>
                                     </select>
                                     <div *ngIf="conveyance_invalid">
                                         <small class="invalid text-danger"> Es nesario el medio de transporte
@@ -204,17 +213,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="salary">
-                                        <label class="form-check-label" for="salary">
-                                          Salario a convenir
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                         <div class="row invoive-info" style="margin-bottom: 0;">
                             <div class="col-md-12">
@@ -262,20 +260,12 @@
                                                 <div class="form-group">
                                                     <label>Desde (Edad) </label>
                                                     <input type="number" formControlName="min_age" min="18" placeholder="Rango Desde" class="form-control  f-9" />
-                                                    <div *ngIf="min_age_invalid">
-                                                        <small class="invalid text-danger">Es el rango 1
-                                                            </small>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Hasta (Edad)</label>
                                                     <input type="number" formControlName="max_age" min="18" placeholder="Rango Hasta" class="form-control  f-9" />
-                                                    <div *ngIf="max_age_invalid">
-                                                        <small class="invalid text-danger">Es el rango 2
-                                                            </small>
-                                                    </div>
                                                 </div>
                                             </div>
 
@@ -304,18 +294,14 @@
                                                     <option value="0">No</option>
                                                 </select>
                                             <div *ngIf="change_residence_invalid">
-                                                <small class="invalid text-danger">Es necesario el campo de disponibilidad                                                    </small>
+                                                <small class="invalid text-danger">Es necesario el campo de disponibilidad</small>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Requisitos de licencia conducción</label>
-                                            <ng-select multiple="true" [items]="driving_requirement" formControlName="driving_license" placeholder="Seleccione" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
-                                            <div *ngIf="driving_invalid">
-                                                <small class="invalid text-danger">Es necesario el campo de licencia de conducción
-                                                    </small>
-                                            </div>
+                                            <ng-select multiple="true" [items]="driving_requirement" placeholder="Seleccione" formControlName="driving_license" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
                                         </div>
                                     </div>
                                     <div class="col-md-3">

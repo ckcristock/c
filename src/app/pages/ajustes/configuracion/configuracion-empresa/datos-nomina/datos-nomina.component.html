@@ -17,43 +17,43 @@
                 Máximas horas extras
             </p>
             <p class="col-6 font-weight-bold">
-                0
+                {{ nomina.max_extras_hours }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Máximos festivos legales
             </p>
             <p class="col-6 font-weight-bold">
-                0
+                {{ nomina.max_holidays_legal }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Máximas llegadas tardes
             </p>
             <p class="col-6 font-weight-bold">
-                0
+                {{ nomina.max_late_arrival }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Salario Base Mensual
             </p>
             <p class="col-6 font-weight-bold">
-                $ 906.526
+                $ {{ nomina.base_salary }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Auxilio de Transporte
             </p>
             <p class="col-6 font-weight-bold">
-                $ 106.454
+                $ {{ nomina.transportation_assistance }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Hora Inicio Noche
             </p>
             <p class="col-6 font-weight-bold">
-                21:00:00
+                {{ nomina.night_start_time }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Hora Fin Noche
             </p>
             <p class="col-6 font-weight-bold">
-                06:00:00
+                {{ nomina.night_end_time }}
             </p>
         </div>
     </div>
@@ -68,37 +68,37 @@
           </button>
     </div>
     <div class="app-modal-body">
-        <form>
+        <form [formGroup]="form">
             <div class="row">
                 <div class="col-12">
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="">Máx. Núm. Horas Extras</label>
-                            <input type="number" class="form-control form-control-sm">
+                            <input type="number" formControlName="max_extras_hours" class="form-control form-control-sm">
                         </div>
                         <div class="form-group col-6">
                             <label for="">Máx. Núm. Fest. Legales</label>
-                            <input type="text" class="form-control form-control-sm">
+                            <input type="text" formControlName="max_holidays_legal" class="form-control form-control-sm">
                         </div>
                         <div class="form-group col-6">
                             <label for="">Máx. Núm. Llegadas Tarde</label>
-                            <input type="number" class="form-control form-control-sm">
+                            <input type="number" formControlName="max_late_arrival" class="form-control form-control-sm">
                         </div>
                         <div class="form-group col-6">
                             <label for="">Salario Base</label>
-                            <input type="number" class="form-control form-control-sm">
+                            <input type="number" formControlName="base_salary" class="form-control form-control-sm">
                         </div>
                         <div class="form-group col-6">
                             <label for="">Aux. Transporte</label>
-                            <input type="number" class="form-control form-control-sm">
+                            <input type="number" formControlName="transportation_assistance" class="form-control form-control-sm">
                         </div>
                         <div class="form-group col-6">
                             <label for="">Hora Inicio Noche</label>
-                            <input type="date" class="form-control form-control-sm">
+                            <input type="time" formControlName="night_start_time" class="form-control form-control-sm">
                         </div>
                         <div class="form-group col-6">
                             <label for="">Hora Fin Noche</label>
-                            <input type="date" class="form-control form-control-sm">
+                            <input type="time" formControlName="night_end_time" class="form-control form-control-sm">
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="saveNominaData()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

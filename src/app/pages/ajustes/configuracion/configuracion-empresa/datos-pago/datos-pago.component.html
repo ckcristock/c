@@ -17,19 +17,19 @@
                 Frecuencia de Pago
             </p>
             <p class="col-6 font-weight-bold">
-                Mensual
+                {{ payments.payment_frequency }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Medio de Pago
             </p>
             <p class="col-6 font-weight-bold">
-                Transferencia Bancaria
+                {{ payments.payment_method }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Banco
             </p>
             <p class="col-6 font-weight-bold">
-                Bancolombia
+                {{ payments.banks }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Tipo de Cuenta
@@ -56,41 +56,45 @@
           </button>
     </div>
     <div class="app-modal-body">
-        <form>
+        <form [formGroup]="form">
             <div class="row">
                 <div class="col-12">
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="">Frecuencia De Pago</label>
-                            <select class="form-control form-control-sm">
-                                <option>Mensual</option>
-                                <option>Quincenal</option>
+                            <select class="form-control form-control-sm" formControlName="payment_frequency">
+                                <option *ngFor="let payment_frequency of payment_frequencys" [value]="payment_frequency.valor">
+                                    {{ payment_frequency.clave }}
+                                </option>
                             </select>
                         </div>
                         <div class="form-group col-6">
                             <label for="">Medio de Pago</label>
-                            <select class="form-control form-control-sm">
-                                <option>Transferencia Bancaria</option>
-                                <option>Efectivo</option>
+                            <select class="form-control form-control-sm" formControlName="payment_method">
+                                <option *ngFor="let payment of payment_method" [value]="payment.valor">
+                                    {{ payment.clave }}
+                                </option>
                             </select>
                         </div>
                         <div class="form-group col-12">
                             <label for="">Banco del cual realizaran los pagos</label>
-                            <select class="form-control form-control-sm">
-                                <option>Bancolombia</option>
-                                <option>Banco de Bógota</option>
+                            <select class="form-control form-control-sm" formControlName="bank_id">
+                                <option *ngFor="let bank of banks" [value]="bank.value">
+                                    {{ bank.text }}
+                                </option>
                             </select>
                         </div>
                         <div class="form-group col-6">
                             <label for="">Tipo de Cuenta</label>
-                            <select class="form-control form-control-sm">
-                                <option>Cuenta de Ahorros</option>
-                                <option>Cuenta Corriente</option>
+                            <select class="form-control form-control-sm" formControlName="account_type">
+                                <option *ngFor="let account_type of account_types" [value]="account_type.valor">
+                                    {{ account_type.clave }}
+                                </option>
                             </select>
                         </div>
                         <div class="form-group col-6">
                             <label for="">Número de Cuenta</label>
-                            <input type="number" class="form-control form-control-sm">
+                            <input type="number" class="form-control form-control-sm" formControlName="account_number">
                         </div>
                     </div>
                 </div>
@@ -100,7 +104,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="savePaymentData()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

@@ -24,6 +24,7 @@ export const consts = {
     { clave: 'No Constitutivo', valor: 'No Constitutivo' }
   ],
   driving_requirements: [
+    { text: 'Sin Licencia', value: 'Sin Licencia' },
     { text: 'A1', value:'A1' },
     { text: 'A2', value:'A2' },
     { text: 'B1', value:'B1' },

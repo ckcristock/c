@@ -34,6 +34,7 @@ export class VacantesCrearComponent implements OnInit {
     options = consts.options;
     visaTypes = consts.visaTypes;
     driving_requirement = consts.driving_requirements;
+    rangeSalary:boolean;
 
     constructor(
         private router: Router,
@@ -188,14 +189,15 @@ export class VacantesCrearComponent implements OnInit {
             max_age: ['', Validators.required],
             can_trip: ['', Validators.required],
             change_residence: ['', Validators.required],
-            gener: ['', Validators.required],
+            gener: ['No Aplica', Validators.required],
             languages: ['', Validators.required],
-            conveyance: ['', Validators.required],
+            conveyance: ['Ninguno', Validators.required],
             type_of_contract: ['', Validators.required],
             driving_license: ['', Validators.required],
             legal_documents: ['', Validators.required],
             passport: ['', Validators.required],            
             visa: ['', Validators.required],            
+            salary_type: ['A Convenir', Validators.required]
         })  
     }
 
@@ -204,6 +206,15 @@ export class VacantesCrearComponent implements OnInit {
             this.visaSelected = true;
         } else {
             this.visaSelected = false;
+        }
+    }
+
+    salaryChange() {
+        if (this.form.controls.salary_type.value == 'Rango') {
+            this.rangeSalary = true;
+        }
+        else {
+            this.rangeSalary = false;
         }
     }
 
@@ -252,12 +263,6 @@ export class VacantesCrearComponent implements OnInit {
     get experience_year_invalid() {
         return this.form.get('experience_year').invalid && this.form.get('experience_year').touched;
     }
-    get min_age_invalid() {
-        return this.form.get('min_age').invalid && this.form.get('min_age').touched;
-    }
-    get max_age_invalid() {
-        return this.form.get('max_age').invalid && this.form.get('max_age').touched;
-    }
     get change_residence_invalid() {
         return this.form.get('change_residence').invalid && this.form.get('change_residence').touched;
     }
@@ -279,10 +284,6 @@ export class VacantesCrearComponent implements OnInit {
 
     get type_of_contract_invalid() {
         return this.form.get('type_of_contract').invalid && this.form.get('type_of_contract').touched;
-    }
-
-    get driving_invalid() {
-        return this.form.get('driving_license').invalid && this.form.get('driving_license').touched;
     }
 
     get legal_documents_invalid() {

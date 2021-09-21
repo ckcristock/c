@@ -1,0 +1,98 @@
+<div class="row mt-2">
+  <div class="col-6">
+    <table>
+      <thead>
+        <tr>
+          <div class="title">
+            <h5>Observaciones</h5>
+          </div>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {{
+            data.observation
+          }}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-6">
+    <div class="title">
+      <h5>TOTAL VIATICOS</h5>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Dolares</th>
+          <th>Pesos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Hospedaje</td>
+          <td>
+            {{ data.total_hotels_usd }}
+          </td>
+          <td>
+            {{ data.total_hotels_cop }}
+          </td>
+        </tr>
+        <tr>
+          <td>Transporte Terrestre</td>
+          <td></td>
+          <td>
+            {{ data.total_transports_cop }}
+          </td>
+        </tr>
+        <tr>
+          <td>Taxis</td>
+          <td>
+            {{ data.total_taxis_usd }}
+          </td>
+          <td>
+            {{ data.total_taxis_cop }}
+          </td>
+        </tr>
+        <tr>
+          <td>Alimentación</td>
+          <td>
+            {{ data.total_feedings_usd }}
+          </td>
+          <td>
+            {{ data.total_feedings_cop }}
+          </td>
+        </tr>
+        <tr>
+          <td>Lavanderia</td>
+          <td>
+            {{ data.total_laundry_usd }}
+          </td>
+          <td>
+            {{ data.total_laundry_cop }}
+          </td>
+        </tr>
+        <tr>
+          <td>Sobre Equipaje</td>
+          <td>
+            {{ data.baggage_usd }}
+          </td>
+          <td>
+            {{ data.baggage_cop }}
+          </td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td>
+            {{ data.total_usd }}
+          </td>
+
+          <td>
+            {{ data.total_cop }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

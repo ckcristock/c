@@ -16,6 +16,12 @@ import { CrearViaticosComponent } from './viaticos/crear-viaticos/crear-viaticos
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { VerViaticosComponent } from './viaticos/ver-viaticos/ver-viaticos.component';
+import { TransporteTerrestreComponent } from './viaticos/ver-viaticos/transporte-terrestre/transporte-terrestre.component';
+import { HospedajeComponent } from './viaticos/ver-viaticos/hospedaje/hospedaje.component';
+import { ViaticosTotalesComponent } from './viaticos/ver-viaticos/viaticos-totales/viaticos-totales.component';
+import { ViaticosAlimentacionComponent } from './viaticos/ver-viaticos/viaticos-alimentacion/viaticos-alimentacion.component';
+import { ViaticosViajeComponent } from './viaticos/ver-viaticos/viaticos-viaje/viaticos-viaje.component';
 
 @NgModule({
   imports: [
@@ -35,7 +41,13 @@ import { NgSelectModule } from '@ng-select/ng-select';
     PrestamosLibranzasComponent,
     ModalprestamoylibranzacrearComponent,
     ViaticosComponent,
-    CrearViaticosComponent
+    CrearViaticosComponent,
+    VerViaticosComponent,
+    TransporteTerrestreComponent,
+    HospedajeComponent,
+    ViaticosTotalesComponent,
+    ViaticosAlimentacionComponent,
+    ViaticosViajeComponent
   ],
 })
 export class NominaModule {}

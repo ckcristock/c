@@ -1,0 +1,152 @@
+<div class="title">
+    <h5>INFORMACIÓN DEL VIAJE</h5>
+  </div>
+  <div class="row mt-4">
+    <div class="col-6">
+      <div class="mb-3 row">
+        <label
+          for="funcionario"
+          class="col-sm-3 col-form-label col-form-label-sm"
+          >Funcionario</label
+        >
+        <div class="col-sm-9"> {{data.person.first_name}} {{data.person.first_surname}} </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="cc" class="col-sm-3 col-form-label col-form-label-sm"
+          >CC</label
+        >
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            [value]="data.person.identifier"
+            class="form-control-plaintext form-control-sm"
+            id="cc"
+            value="test"
+          />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="cargo" class="col-sm-3 col-form-label col-form-label-sm"
+          >Cargo</label
+        >
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            [value]="''"
+            class="form-control-plaintext form-control-sm"
+            id="cargo"
+          />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label
+          for="passport"
+          class="col-sm-3 col-form-label col-form-label-sm"
+          >N° Pasaporte</label
+        >
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            [value]="data.person.passport_number"
+            class="form-control-plaintext form-control-sm"
+            id="passport"
+            value="test"
+          />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="visa" class="col-sm-3 col-form-label col-form-label-sm"
+          >Visa Americana?</label
+        >
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            [value]="data.person.visa"
+            class="form-control-plaintext form-control-sm"
+            id="visa"
+          />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="tipo" class="col-sm-3 col-form-label col-form-label-sm"
+          >Tipo</label
+        >
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            [value]="'Funcionario'"
+            class="form-control-plaintext form-control-sm"
+            id="tipo"
+            value="test"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="mb-3 row">
+        <label
+          for="origen"
+          class="col-sm-2 col-form-label col-form-label-sm"
+          >Origen</label
+        >
+        <div class="col-sm-10">
+          {{ data.origin.name }}
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label
+          for="destino"
+          class="col-sm-2 col-form-label col-form-label-sm"
+          >Destino</label
+        >
+        <div class="col-sm-10">
+          {{ data.destiny.name }}
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label
+          for="tipo_viaje"
+          class="col-sm-2 col-form-label col-form-label-sm"
+          >Tipo de Viaje</label
+        >
+        <div class="col-sm-10">
+          {{ data.travel_type }}
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label
+          for="fecha_salida"
+          class="col-sm-2 col-form-label col-form-label-sm"
+          >Fecha Salida</label
+        >
+        <div class="col-sm-10">
+          {{ data.departure_date }}
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label
+          for="fecha_llegada"
+          class="col-sm-2 col-form-label col-form-label-sm"
+          >Fecha de Llegada</label
+        >
+        <div class="col-sm-10">
+          {{ data.arrival_date }}
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label
+          for="n_dias"
+          class="col-sm-2 col-form-label col-form-label-sm"
+          >N° Dias</label
+        >
+        <div class="col-sm-10">
+          {{ data.n_nights }}
+        </div>
+      </div>
+    </div>
+  </div>

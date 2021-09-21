@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col-12">
+        <hr style="background-color: rgb(180, 248, 79)" />
+        <div class="title">
+          <h5>ALIMENTACIÓN</h5>
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>
+                <label for="alimentacion">Estadia</label>
+              </th>
+              <th>
+                <label for="tipo_estadia">Tipo</label>
+              </th>
+              <th>
+                <label for="alojamiento_desayuno">¿incluye desayuno?</label>
+              </th>
+              <th>
+                <label for="tarifa_estadia">Tarifa</label>
+              </th>
+              <th>
+                <label for="n_estadia">N° dias Estadia</label>
+              </th>
+              <th>
+                <label for="total_estadia">Total</label>
+              </th>
+            </tr>
+          </thead>
+          <tbody >
+            <ng-container *ngIf="feedings.length">
+              <tr *ngFor="let item of feedings; let i = index">
+                <td>
+                    {{item.type }}
+                 
+                </td>
+                <td>
+                    {{item.personType }}
+                 
+                </td>
+                <td>
+                    {{item.breakfast }}
+                
+                </td>
+                <td>
+                    {{item.rate }}
+                 
+                </td>
+                <td>
+                    {{item.stay }}
+                
+                </td>
+                <td>
+                    {{item.total }}
+                 
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+         
+        </table>
+        <hr style="background-color: rgb(167, 226, 78)" />
+      </div>
+</div>

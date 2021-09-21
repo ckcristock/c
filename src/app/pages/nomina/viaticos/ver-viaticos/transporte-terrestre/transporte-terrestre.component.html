@@ -1,0 +1,80 @@
+<hr style="background-color: rgb(180, 248, 79)" />
+<div class="title">
+  <h5>TRANSPORTE TERRESTRE</h5>
+</div>
+<div class="row">
+  <div class="col-12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>
+            <label
+              for="tipo_transporte"
+              class="col-form-label col-form-label-sm"
+              >Tipo</label
+            >
+          </th>
+          <th>
+            <label
+              for="trayecto_transporte"
+              class="col-form-label col-form-label-sm"
+              >Trayecto</label
+            >
+          </th>
+          <th>
+            <label
+              for="empresa_transporte"
+              class="col-form-label col-form-label-sm"
+              >Empresa</label
+            >
+          </th>
+          <th>
+            <label
+              for="pago_tiquete_transporte"
+              class="col-form-label col-form-label-sm"
+              >Pago Tiquete</label
+            >
+          </th>
+          <th>
+            <label
+              for="hora_salida_transporte"
+              class="col-form-label col-form-label-sm"
+              >Hora Salida</label
+            >
+          </th>
+          <th>
+            <label
+              for="valor_tiquete_transporte"
+              class="col-form-label col-form-label-sm"
+              >Valor Tiquete</label
+            >
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of transports; let i = index">
+          <td>
+            {{ item.type }}
+          </td>
+          <td>
+            {{ item.journey }}
+          </td>
+
+          <td>
+            {{ item.company }}
+          </td>
+
+          <td>
+            {{ item.ticket_payment }}
+          </td>
+          <td>
+            {{ item.departure_date }}
+          </td>
+          <td>
+            {{ item.ticket_value }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

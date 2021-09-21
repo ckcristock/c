@@ -1,0 +1,121 @@
+<hr style="background-color: rgb(173, 233, 83)" />
+      <div class="title">
+        <h5>HOSPEDAJE</h5>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>
+                  <label
+                    for="tipo_hospedaje"
+                    class="col-form-label col-form-label-sm"
+                    >Tipo</label
+                  >
+                </th>
+                <th>
+                  <label
+                    for="hotel_hospedaje"
+                    class="col-form-label col-form-label-sm"
+                    >Hotel</label
+                  >
+                </th>
+                <th>
+                  <label
+                    for="direccion_hospedaje"
+                    class="col-form-label col-form-label-sm"
+                    >Dirección</label
+                  >
+                </th>
+                <th>
+                  <label
+                    for="tel_contacto_hospedaje"
+                    class="col-form-label col-form-label-sm"
+                    >Tel. contacto</label
+                  >
+                </th>
+                <th>
+                  <label
+                    for="tipo_acomodacion_hospedaje"
+                    class="col-form-label col-form-label-sm"
+                    >T. Acom.</label
+                  >
+                </th>
+                <th>
+                  <label
+                    for="tarifa_hospedaje"
+                    class="col-form-label col-form-label-sm"
+                    >Tarifa</label
+                  >
+                </th>
+                <th>
+                  <label
+                    for="n_noches_hospedajes"
+                    class="col-form-label col-form-label-sm"
+                    ># Noches</label
+                  >
+                </th>
+                <th>
+                  <label
+                    for="desayuno_hospedaje"
+                    class="col-form-label col-form-label-sm"
+                    >Desayuno</label
+                  >
+                </th>
+                <th>
+                  <label
+                    for="cancela_hotel_hospedaje"
+                    class="col-form-label col-form-label-sm"
+                    >Resp. Pago
+                  </label>
+                </th>
+                <th>
+                  <label
+                    for="total_hospedaje"
+                    class="col-form-label col-form-label-sm"
+                    >total</label
+                  >
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="hotels.length">
+                <tr *ngFor="let item of hotels; let i = index">
+                  <td>
+                    {{ item.type }}
+                  </td>
+                  <td>
+                    {{ item.name }}
+                  </td>
+                  <td>
+                    {{ item.address }}
+                  </td>
+                  <td>
+                    {{ item.phone }}
+                  </td>
+                  <td>
+                    {{ item.pivot.accommodation }}
+                  </td>
+                  <td>
+                    {{ item.pivot.rate }}
+                  </td>
+                  <td>
+                    {{ item.pivot.n_night }}
+                  </td>
+                  <td>
+                    {{ item.pivot.breakfast }}
+                  </td>
+                  <td>
+                    {{ item.pivot.who_cancels }}
+                  </td>
+
+                  <td>
+                    {{ item.pivot.total }}
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>

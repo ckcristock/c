@@ -1,0 +1,44 @@
+<div *ngIf="data">
+  <div class="row ml-0 mb-4">
+    <div class="col text-left">
+      <a style="cursor: pointer;" class="text-primary back" (click)="regresar()">Regresar</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title">
+        <div class="row">
+          <div class="col-6 mt-3">
+            <h5 class="t">
+              Formato de Estimación de Viaticos <br />
+              Maquinados y Montajes SAS
+            </h5>
+          </div>
+          <div class="col-6">
+            <div class="row mt-3 mb-3 mr-4" style="float: right">
+              <div class="ml-4">
+                <label for="ot">Orden de Trabajo</label>
+                <select id="ot" class="form-control form-control-sm">
+                  <option>Pendiente</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <app-viaticos-viaje [data]="data"></app-viaticos-viaje>
+      <app-hospedaje [hotels]="data.hotels"></app-hospedaje>
+      <app-transporte-terrestre
+        [transports]="data.transports"
+      ></app-transporte-terrestre>
+      <app-viaticos-alimentacion
+        [feedings]="data.feedings"
+      ></app-viaticos-alimentacion>
+      <app-viaticos-totales [data]="data"></app-viaticos-totales>
+    </div>
+  </div>
+</div>

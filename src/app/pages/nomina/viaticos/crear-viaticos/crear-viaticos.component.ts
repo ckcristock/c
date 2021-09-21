@@ -87,7 +87,7 @@ export class CrearViaticosComponent implements OnInit {
       total_laundry_usd: [0],
       total_usd: [0],
       total_cop: [0],
-      opservation: [0],
+      observation: [0],
       travel: this.fb.group({
         person_id: [''],
         origin_id: [''],
@@ -249,7 +249,7 @@ export class CrearViaticosComponent implements OnInit {
     let group = this.fb.group({
       journey: [this.taxis],
       journey_id: [this.taxis],
-      city_id: ['Seleccione'],
+      taxi_city_id: ['Seleccione'],
       city_selected: [],
       taxi_cities: [],
       rate: [0],
@@ -262,10 +262,10 @@ export class CrearViaticosComponent implements OnInit {
 
       group.patchValue({
         taxi_cities,
-        city_id: taxi_cities[0].id,
+        taxi_city_id: taxi_cities[0].id,
       });
     });
-    group.get('city_id').valueChanges.subscribe((value) => {
+    group.get('taxi_city_id').valueChanges.subscribe((value) => {
       console.log(value)
       let city_selected = group.get('taxi_cities').value.find((r) => r.id ==  value);
       console.log(city_selected)
@@ -393,8 +393,9 @@ export class CrearViaticosComponent implements OnInit {
   getTotalFeeding() {
     let total = this.FeedingList.value.reduce(
       (a, b) => {
-        if (b.tipo == 'Nacional')
+        if (b.type == 'Nacional'){
           return { inter: a.inter, nac: a.nac + b.total };
+	}
         return { nac: a.nac, inter: a.inter + b.total };
       },
       { nac: 0, inter: 0 }

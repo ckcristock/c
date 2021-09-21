@@ -1,6 +1,6 @@
 <div class="row ml-0 mb-4">
   <div class="col text-left">
-    <a class="text-primary back" (click)="regresar()">Regresar</a>
+    <a class="text-primary back" style="cursor: pointer;" (click)="regresar()">Regresar</a>
   </div>
 </div>
 <div class="card">
@@ -540,8 +540,11 @@
                       id="empresa_transporte"
                     />
                   </td>
-                  <td>
+                 
+                  <td [formGroupName]="i">
+
                     <select
+                      formControlName="ticket_payment"
                       class="form-control form-control-sm"
                       id="pago_tiquete_transporte"
                     >
@@ -854,6 +857,7 @@
                   <textarea
                     class="form-control form-control-sm"
                     cols="100%"
+		    formControlName="observation"
                     rows="10"
                   ></textarea>
                 </td>

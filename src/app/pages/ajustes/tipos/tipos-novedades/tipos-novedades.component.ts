@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+  import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { TiposNovedadesService } from './tipos-novedades.service';
 import { consts } from '../../../../core/utils/consts';
@@ -43,7 +43,7 @@ export class TiposNovedadesComponent implements OnInit {
     this.selected = 'Actualizar Tipo de Novedad';
     this.form.patchValue({
       id: this.novelty.id,
-      novelty_type: this.novelty.novelty_type,
+      concept: this.novelty.concept,
       novelty: this.novelty.novelty,
       modality: this.novelty.modality
     })
@@ -52,7 +52,7 @@ export class TiposNovedadesComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [this.novelty.id],
-      novelty_type: [''],
+      concept: [''],
       novelty: [''],
       modality: ['']
     });

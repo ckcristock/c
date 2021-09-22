@@ -1,17 +1,13 @@
 <div class="card">
-  <div class="card-body">
-    <div class="card-title">
-      <button
-        class="btn btn-info btn-sm"
-        style="float: right"
-        [routerLink]="['/nomina/crear-viatico']"
-      >
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-info btn-sm" style="float: right" [routerLink]="['/nomina/crear-viatico']">
         Crear Viatico
       </button>
-      <h5>Viatios</h5>
-      <p>Listado de todos los viaticos creados</p>
+            <h5>Viaticos</h5>
+            <p>Listado de todos los viaticos creados</p>
+        </div>
     </div>
-  </div>
 </div>
 <div class="card">
   <div class="card-body">
@@ -58,41 +54,20 @@
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
-                <div ngbDropdownMenu>
-<a
-			  [routerLink]="['/nomina/ver-viatico',item.id]"
-
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                  >
-                    <i class="fa fa-pencil"></i>Ver</a
-                  >
-                  <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                  >
-                    <i class="fa fa-pencil"></i>Anular</a
-                  >
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      aria-label="Default pagination"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-    >
-    </ngb-pagination>
-  </div>
+                                <div ngbDropdownMenu>
+                                    <a [routerLink]="['/nomina/ver-viatico',item.id]" class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i>Ver</a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i>Anular</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
 </div>
-

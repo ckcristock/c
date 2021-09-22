@@ -27,7 +27,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let novelty of novelties" [ngClass]="{'bg-danger text-white': (novelty.status === 'Inactivo' )}">
-                    <td> {{ novelty.novelty_type }} </td>
+                    <td> {{ novelty.concept }} </td>
                     <td> {{ novelty.modality }} </td>
                     <td> {{ novelty.novelty }} </td>
                     <td>
@@ -69,7 +69,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="custom-label" for="tipo_novedad">Tipo de Novedad</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="novelty_type" id="tipo_novedad" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="concept" id="tipo_novedad" required>
                     <!-- <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
                         </small>

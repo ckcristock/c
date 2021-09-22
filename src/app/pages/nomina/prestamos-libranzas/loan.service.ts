@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -26,7 +26,11 @@ export class LoanService {
   
   getBankList(){
     return this.http.get( `${environment.base_url}/banks`  )
-    
+  }
+  
+  download(id, params = {}) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/proyeccion_pdf/${id}`, {params, headers, responseType: 'blob' as 'json' });
   }
 
 }

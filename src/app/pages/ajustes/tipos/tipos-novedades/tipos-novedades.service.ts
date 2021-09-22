@@ -14,7 +14,7 @@ export class TiposNovedadesService {
   }
 
   createNovelty( data:any ) {
-    return this.http.post(`${environment.base_url}/novelty`, data);
+    return this.http.post(`${environment.base_url}/disability-leaves`, data);
   }
 
 }

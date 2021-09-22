@@ -19,7 +19,7 @@ export class PlanCuentasComponent implements OnInit {
   account:any = {};
   title:any;
   banks:any[] = [];
-  bankSelect:boolean = false;
+  bankSelected:boolean;
   options = consts.options;
   type_p = contabilidad.type_pn;
   accountTypes = contabilidad.accountType;
@@ -231,12 +231,13 @@ export class PlanCuentasComponent implements OnInit {
   getBanks(r) {
     if (r == 0) {
       this.form.get('bank_id').enable();
+      this.bankSelected = true;
       this._planAccountService.getBanks()
       .subscribe( (res:any) => {
         this.banks = res.data;
       })
     } else {
-      this.form.get('bank_id').disable();
+      this.bankSelected = false;
     }
   }
 

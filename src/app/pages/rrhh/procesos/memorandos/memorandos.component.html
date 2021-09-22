@@ -17,10 +17,10 @@
                 <tr>
                     <th scope="col"></th>
                     <th scope="col">Funcionario</th>
+                    <th scope="col">Nivel</th>
                     <th scope="col">Motivo</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">Detalles</th>
-                    <th scope="col">Nivel</th>
                     <th scope="col">Fecha</th>
                 </tr>
             </thead>
@@ -30,10 +30,10 @@
                         <img [src]="memorandum.image | image" class="p-0 m-0" alt="">
                     </td>
                     <td style="vertical-align: middle;">{{ memorandum.first_name }} {{ memorandum.second_name }} {{ memorandum.first_surname }} {{ memorandum.second_surname }} </td>
+                    <td style="vertical-align: middle;"> {{ memorandum.level }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.memorandumType }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.type }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.details }} </td>
-                    <td style="vertical-align: middle;"> {{ memorandum.level }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.created_at | date:'dd-MM-yyyy' }} </td>
                 </tr>
             </tbody>

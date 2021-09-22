@@ -1,93 +1,60 @@
 <div class="card">
-  <div class="card-body">
-    <div class="card-title">
-      <button
-        class="btn btn-info btn-sm"
-        style="float: right"
-        [routerLink]="['/nomina/crear-viatico']"
-      >
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-info btn-sm" style="float: right" [routerLink]="['/nomina/crear-viatico']">
         Crear Viatico
       </button>
-      <h5>Viatios</h5>
-      <p>Listado de todos los viaticos creados</p>
+            <h5>Viaticos</h5>
+            <p>Listado de todos los viaticos creados</p>
+        </div>
     </div>
-  </div>
 </div>
 <div class="card">
-  <div class="card-body">
-    <table class="table table-borderless table-striped">
-      <thead>
-        <tr>
-          <th> - </th>
-          <th>Funcionario</th>
-          <th>F. Creación</th>
-          <th>F. Salida</th>
-          <th># Noches</th>
-          <th>Total COP</th>
-          <th>Total USD</th>
-          <th class="text-center">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of data">
-	  <td class="text-center">
-                  <img
-                    class="rounded-circle avatar-sm"
-                    src="{{ item.person.image | image: 'users' }}"
-                  />
-                </td>
-		<td>{{ item.person.first_name }}
-		  {{item.person.first_surname }} </td>
-          <td>{{ item.created_at | date: "dd/MM/yyyy"  }}</td>
-          <td>{{ item.departure_date | date: "dd/MM/yyyy"  }}</td>
-          <td>{{ item.n_nights }}</td>
-          <td>{{ item.total_cop | currency }}</td>
-          <td>{{ item.total_usd | currency }}</td>
-          <td>
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
-                >
+    <div class="card-body">
+        <table class="table table-borderless table-striped">
+            <thead>
+                <tr>
+                    <th> - </th>
+                    <th>Funcionario</th>
+                    <th>F. Creación</th>
+                    <th>F. Salida</th>
+                    <th># Noches</th>
+                    <th>Total COP</th>
+                    <th>Total USD</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of data">
+                    <td class="text-center">
+                        <img class="rounded-circle avatar-sm" src="{{ item.person.image | image: 'users' }}" />
+                    </td>
+                    <td>{{ item.person.first_name }} {{item.person.first_surname }} </td>
+                    <td>{{ item.created_at | date: "dd/MM/yyyy" }}</td>
+                    <td>{{ item.departure_date | date: "dd/MM/yyyy" }}</td>
+                    <td>{{ item.n_nights }}</td>
+                    <td>{{ item.total_cop | currency }}</td>
+                    <td>{{ item.total_usd | currency }}</td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light" type="button">
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
-                <div ngbDropdownMenu>
-<a
-			  [routerLink]="['/nomina/ver-viatico',item.id]"
-
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                  >
-                    <i class="fa fa-pencil"></i>Ver</a
-                  >
-                  <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                  >
-                    <i class="fa fa-pencil"></i>Anular</a
-                  >
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      aria-label="Default pagination"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-    >
-    </ngb-pagination>
-  </div>
+                                <div ngbDropdownMenu>
+                                    <a [routerLink]="['/nomina/ver-viatico',item.id]" class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i>Ver</a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i>Anular</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
 </div>
-

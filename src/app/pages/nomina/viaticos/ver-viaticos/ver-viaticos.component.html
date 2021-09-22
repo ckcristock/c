@@ -31,11 +31,17 @@
   <div class="card">
     <div class="card-body">
       <app-viaticos-viaje [data]="data"></app-viaticos-viaje>
-      <app-hospedaje [hotels]="data.hotels"></app-hospedaje>
+      <app-hospedaje *ngIf="data.hotels.length" [hotels]="data.hotels"></app-hospedaje>
       <app-transporte-terrestre
+	*ngIf="data.transports.length"
         [transports]="data.transports"
       ></app-transporte-terrestre>
+      
+      <app-viaticos-taxis 
+	*ngIf="data.expense_taxi_cities.length"
+	[data]="data.expense_taxi_cities"></app-viaticos-taxis>
       <app-viaticos-alimentacion
+	*ngIf="data.feedings.length"
         [feedings]="data.feedings"
       ></app-viaticos-alimentacion>
       <app-viaticos-totales [data]="data"></app-viaticos-totales>

@@ -1,0 +1,60 @@
+<ng-container *ngIf="data.length">
+ <hr style="background-color: rgb(180, 248, 79)" />
+      <div class="title">
+        <h5>TAXIS</h5>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>
+                  <label for="trayecto_taxi">Trayecto</label>
+                </th>
+                <th>
+                  <label for="ciudad_taxi">Ciudad</label>
+                </th>
+                <th>
+                  <label for="tipo_taxi">Tipo</label>
+                </th>
+                <th>
+                  <label for="tarifa_taxi">Tarifa</label>
+                </th>
+                <th>
+                  <label for="trayectos_taxi">Trayectos</label>
+                </th>
+                <th>
+                  <label for="total_taxi">Total</label>
+                </th>
+              </tr>
+            </thead>
+            <tbody >
+                <tr *ngFor="let item of data; let i = index">
+                  <td >
+		    {{item.taxi_city.taxi.route}}  
+		  </td>
+
+                  <td >
+		    {{item.taxi_city.city.name}}  
+                    </td>
+                  <td >
+		    {{item.taxi_city.type}}  
+                                      </td>
+                  <td >
+		    {{item.rate}}  
+                  </td>
+                  <td >
+
+		    {{item.journeys}}  
+                  </td>
+                  <td class="text-right" >
+		    {{item.total}}
+                                     </td>
+                </tr>
+           </tbody>
+
+	  </table>
+
+	</div>
+	</div>
+  </ng-container>

@@ -22,6 +22,7 @@ import { HospedajeComponent } from './viaticos/ver-viaticos/hospedaje/hospedaje.
 import { ViaticosTotalesComponent } from './viaticos/ver-viaticos/viaticos-totales/viaticos-totales.component';
 import { ViaticosAlimentacionComponent } from './viaticos/ver-viaticos/viaticos-alimentacion/viaticos-alimentacion.component';
 import { ViaticosViajeComponent } from './viaticos/ver-viaticos/viaticos-viaje/viaticos-viaje.component';
+import { ViaticosTaxisComponent } from './viaticos/ver-viaticos/viaticos-taxis/viaticos-taxis.component';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { ViaticosViajeComponent } from './viaticos/ver-viaticos/viaticos-viaje/v
     HospedajeComponent,
     ViaticosTotalesComponent,
     ViaticosAlimentacionComponent,
-    ViaticosViajeComponent
+    ViaticosViajeComponent,
+    ViaticosTaxisComponent
   ],
 })
 export class NominaModule {}

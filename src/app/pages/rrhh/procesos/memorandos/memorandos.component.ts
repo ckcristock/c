@@ -14,8 +14,10 @@ type Person = {value: number, text: string};
 export class MemorandosComponent implements OnInit {
   @ViewChild('modalMotivo') modalMotivo:any;
   @ViewChild('modalMemorando') modalMemorando:any;
+  @ViewChild('modalLlamada') modalLlamada:any;
   formMotivo:FormGroup;
   formMemorando:FormGroup;
+  formLlamada:FormGroup;
   memorandums:any[] = [];
   person_selected:any;
   loading = false;
@@ -42,6 +44,7 @@ export class MemorandosComponent implements OnInit {
   ngOnInit(): void {
     this.createFormMotivo();
     this.createFormMemorando();
+    this.createFormLLamada();
     this.getPeople();
     this.getTypeMemorandum();
     this.getMemorandumList();
@@ -112,7 +115,8 @@ export class MemorandosComponent implements OnInit {
     this.formMemorando = this.fb.group({
       person_id: ['', this._reactiveValid.required],
       memorandum_type_id: ['', this._reactiveValid.required],
-      details: ['', this._reactiveValid.required]
+      details: ['', this._reactiveValid.required],
+      level: ['Seleccione', this._reactiveValid.required]
     }); 
   }
 
@@ -134,6 +138,9 @@ export class MemorandosComponent implements OnInit {
       this.formMemorando.patchValue({
         person_id:value.value
       }); 
+      this.formLlamada.patchValue({
+        person_id: value.value
+      });
     }
   }
 
@@ -191,6 +198,35 @@ export class MemorandosComponent implements OnInit {
 
   get reason_invalid() {
     return this.formMotivo.get('name').invalid && this.formMotivo.get('name').touched;
+  }
+
+  /******************** LLamada de Atención **********************/
+
+  openModalLlamada() {
+    this.modalLlamada.show();
+  }
+
+  createFormLLamada() {
+    this.formLlamada = this.fb.group({
+      reason: ['', this._reactiveValid.required],
+      number_call: ['', this._reactiveValid.required],
+      person_id: ['', this._reactiveValid.required],
+      user_id: ['']
+    })
+  }
+
+  createNewAttentionCall() {
+    this.memorandosService.createNewAttentionCall(this.formLlamada.value)
+    .subscribe( (res:any) =>{
+      this.modalLlamada.hide();
+      this.getMemorandumList();
+      this.formLlamada.reset();
+      Swal.fire({
+        icon: 'success',
+        title: res.data,
+        text: '¡Llamada de Atención creada con éxito!'
+      });
+    })
   }
 
 }

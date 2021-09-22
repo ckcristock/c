@@ -4,6 +4,7 @@
             <div style="float: right;">
                 <button class="btn btn-success btn-sm" (click)="openMotivo()">Motivos</button>
                 <button class="btn btn-info btn-sm ml-4" (click)="openMemorando()">Nuevo Memorando</button>
+                <button class="btn btn-secondary btn-sm ml-4" (click)="openModalLlamada()">Nuevo Llamado de atención</button>
             </div>
             <h5>Memorando</h5>
         </div>
@@ -17,7 +18,9 @@
                     <th scope="col"></th>
                     <th scope="col">Funcionario</th>
                     <th scope="col">Motivo</th>
+                    <th scope="col">Tipo</th>
                     <th scope="col">Detalles</th>
+                    <th scope="col">Nivel</th>
                     <th scope="col">Fecha</th>
                 </tr>
             </thead>
@@ -28,7 +31,9 @@
                     </td>
                     <td style="vertical-align: middle;">{{ memorandum.first_name }} {{ memorandum.second_name }} {{ memorandum.first_surname }} {{ memorandum.second_surname }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.memorandumType }} </td>
+                    <td style="vertical-align: middle;"> {{ memorandum.type }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.details }} </td>
+                    <td style="vertical-align: middle;"> {{ memorandum.level }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.created_at | date:'dd-MM-yyyy' }} </td>
                 </tr>
             </tbody>
@@ -39,6 +44,61 @@
     </div>
 </div>
 <!-- Agregando nueva categoria  -->
+<app-modal-basic #modalMotivo [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Nuevo Motivo </h5>
+        <button type="button" class="close basic-close" (click)="modalMotivo.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modalMotivo.hide()"></i>
+          </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="formMotivo">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="">Nombre del motivo</label>
+                    <div class="row">
+                        <div class="col d-flex">
+                            <input type="text" class="form-control form-control-sm col-sm-8 mr-4 mt-1" formControlName="name" name="codigo" autocomplete="off" placeholder="Nombre de la categoria disciplinaria">
+                            <button class="btn btn-primary btn-sm" (click)="saveReason()" [disabled]="!formMotivo.valid">Guardar Motivo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <h6 class="mt-3 mb-2">Motivos</h6>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre del motivo</th>
+                    <th scope="col" class="text-center">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let type of types" [ngClass]="{'bg-danger text-white': (type.status === 'Inactivo' )}">
+                    <td scope="row"> {{ type.text }} </td>
+                    <td class="text-center">
+                        <button *ngIf="type.status === 'Inactivo'" class="btn btn-sm btn-success" (click)="activateOrCancel(type, 'Activo')">Activar</button>
+                        <button *ngIf="type.status === 'Activo'" class="btn btn-sm btn-danger" (click)="activateOrCancel(type, 'Inactivo')">Inactivar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="paginationMotivo.collectionSize" [pageSize]="paginationMotivo.pageSize" [(page)]="paginationMotivo.page" (pageChange)="getTypeMemorandum($event)"
+            aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modalMotivo.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<!--  -->
+
+<!-- Nuevo memorando -->
+
 <app-modal-basic #modalMotivo [dialogClass]="'modal-md'">
     <div class="app-modal-header">
         <h5 class="modal-title"> Nuevo Motivo </h5>
@@ -111,12 +171,19 @@
                         <label for="" class="form-label">Funcionario</label>
                         <input id="typeahead-format" type="text" [ngModelOptions]="{standalone: true}" class="form-control form-control-sm" [(ngModel)]="person_selected" (change)="tipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'
                         />
-
                     </div>
                     <div class="col-12">
                         <label for="" class="mt-3">Motivo</label>
                         <ng-select class="mr-1" [items]="typesLimitated" formControlName="memorandum_type_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
                         </ng-select>
+                    </div>
+                    <div class="col-12">
+                        <label for="" class="mt-3">Nivel</label>
+                        <select class="form-control" formControlName="level">
+                            <option selected>Seleccione</option>
+                            <option value="Leve">Leve</option>
+                            <option value="Grave">Grave</option>
+                        </select>
                     </div>
                     <div class="col-12">
                         <label for="" class="form-label mt-3">Detalles</label>
@@ -130,6 +197,45 @@
         <div class="form-group text-right">
             <button (click)="modalMemorando.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
             <button type="submit" class="btn btn-primary btn-sm raised" (click)="saveMemorandum()" [disabled]="!formMemorando.valid">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<!------------- LLamada de Atención --------------->
+<app-modal-basic #modalLlamada [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Llamada de Atención </h5>
+        <button type="button" class="close basic-close" (click)="modalLlamada.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modalLlamada.hide()"></i>
+          </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="formLlamada">
+            <div class="form-row">
+                <div class="form-group col">
+                    <div class="col-12">
+                        <label for="" class="form-label">Funcionario</label>
+                        <input id="typeahead" type="text" [ngModelOptions]="{standalone: true}" class="form-control form-control-sm" [(ngModel)]="person_selected" (change)="tipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'
+                        />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <label for="">Número de Llamados</label>
+                        <input type="number" formControlName="number_call" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-12">
+                        <label for="" class="form-label mt-3">Razón</label>
+                        <textarea name="detalles" cols="20" rows="3" formControlName="reason" class="form-control form-control-sm col-sm-12 mr-4 mt-1" placeholder="Detalles del nuevo memorando..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modalLlamada.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createNewAttentionCall()" [disabled]="!formLlamada.valid">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

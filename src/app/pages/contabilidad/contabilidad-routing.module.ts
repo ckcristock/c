@@ -7,6 +7,7 @@ import { ActivosFijosCrearComponent } from './activos-fijos/activos-fijos-crear/
 import { ActivosFijosVerComponent } from './activos-fijos/activos-fijos-ver/activos-fijos-ver.component';
 import { DepreciacionesComponent } from './depreciaciones/depreciaciones.component';
 import { DepreciacionComponent } from './depreciaciones/depreciacion/depreciacion.component';
+import {CajasComponent} from './cajas/cajas.component';
 
 const routes: Routes = [
     { path: 'plan-cuentas', component: PlanCuentasComponent },
@@ -15,7 +16,7 @@ const routes: Routes = [
     { path: 'crear', component: ActivosFijosCrearComponent },
     { path: 'ver', component: ActivosFijosVerComponent },
     { path: 'depreciaciones', component: DepreciacionesComponent },
-    { path: 'depreciacion', component: DepreciacionComponent }
+    { path: 'cajas', component: CajasComponent }
 ];
 
 @NgModule({

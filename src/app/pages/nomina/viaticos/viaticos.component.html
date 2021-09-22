@@ -18,8 +18,8 @@
     <table class="table table-borderless table-striped">
       <thead>
         <tr>
-          <th> - </th>
-          <th>Funcionario</th>
+          <th>Funcionario </th>
+          <th>Func. Creó</th>
           <th>F. Creación</th>
           <th>F. Salida</th>
           <th># Noches</th>
@@ -30,14 +30,19 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of data">
-	  <td class="text-center">
+	  <td class="d-flex ">
                   <img
                     class="rounded-circle avatar-sm"
                     src="{{ item.person.image | image: 'users' }}"
                   />
+		  <span class="ml-2">
+
+{{ item.person.first_name }}
+		  {{item.person.first_surname }} 
+		  </span>
                 </td>
-		<td>{{ item.person.first_name }}
-		  {{item.person.first_surname }} </td>
+		<td>{{ item.user.person.first_name }}
+		  {{item.user.person.first_surname }} </td>
           <td>{{ item.created_at | date: "dd/MM/yyyy"  }}</td>
           <td>{{ item.departure_date | date: "dd/MM/yyyy"  }}</td>
           <td>{{ item.n_nights }}</td>

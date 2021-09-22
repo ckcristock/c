@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContabilidadRoutingModule } from './contabilidad-routing.module';
 import { PlanCuentasComponent } from './plan-cuentas/plan-cuentas.component';
-import { NgbTooltipModule, NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTooltipModule, NgbDropdownModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsModule } from '../../components/components.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -15,6 +15,8 @@ import { TablaActivoFijoComponent } from './activos-fijos/activos-fijos-ver/tabl
 import { AdicionesActivoFijoComponent } from './activos-fijos/activos-fijos-ver/adiciones-activo-fijo/adiciones-activo-fijo.component';
 import { DepreciacionesComponent } from './depreciaciones/depreciaciones.component';
 import { DepreciacionComponent } from './depreciaciones/depreciacion/depreciacion.component';
+import { CajasComponent } from './cajas/cajas.component';
+import { CrearCajaComponent } from './cajas/crear-caja/crear-caja.component';
 
 
 
@@ -29,6 +31,8 @@ import { DepreciacionComponent } from './depreciaciones/depreciacion/depreciacio
     AdicionesActivoFijoComponent,
     DepreciacionesComponent,
     DepreciacionComponent,
+    CajasComponent,
+    CrearCajaComponent,
   ],
   imports: [
     CommonModule,
@@ -40,7 +44,8 @@ import { DepreciacionComponent } from './depreciaciones/depreciacion/depreciacio
     NgbDropdownModule,
     ComponentsModule,
     NgbPaginationModule,
-    PipesModule
+    PipesModule,
+    NgbTypeaheadModule
   ]
 })
 export class ContabilidadModule { }

@@ -4,6 +4,8 @@ import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { viaticos } from '../viaticos';
 import { CrearViaticosService } from './crear-viaticos.service';
 import Swal from 'sweetalert2';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import {Router} from '@angular/router';
 @Component({
   selector: 'app-crear-viaticos',
   templateUrl: './crear-viaticos.component.html',
@@ -32,6 +34,8 @@ export class CrearViaticosComponent implements OnInit {
   person_selected: any;
   form: FormGroup;
   constructor(
+    private roter: Router,
+    private _swal: SwalService,
     private fb: FormBuilder,
     private location: Location,
     private crearViaticoService: CrearViaticosService
@@ -47,10 +51,10 @@ export class CrearViaticosComponent implements OnInit {
     /* this.hoteles = this.hospedaje_nacional; */
   }
 
-  getCity(){
-    this.crearViaticoService.getCity().subscribe( (r:any)=>{
-    this.city = r.data
-    })
+  getCity() {
+    this.crearViaticoService.getCity().subscribe((r: any) => {
+      this.city = r.data;
+    });
   }
   regresar() {
     this.location.back();
@@ -73,9 +77,8 @@ export class CrearViaticosComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-
-      baggage_usd:[0],
-      baggage_cop:[0],
+      baggage_usd: [0],
+      baggage_cop: [0],
       total_hotels_usd: [0],
       total_hotels_cop: [0],
       total_transports_cop: [0],
@@ -142,17 +145,17 @@ export class CrearViaticosComponent implements OnInit {
       });
     });
     group.get('rate').valueChanges.subscribe((value) => {
-      this.subtotalHotel(group,value ,group.value.n_night)
+      this.subtotalHotel(group, value, group.value.n_night);
     });
     group.get('n_night').valueChanges.subscribe((value) => {
-      this.subtotalHotel(group,value , group.value.rate)
+      this.subtotalHotel(group, value, group.value.rate);
     });
     return group;
   }
 
-  subtotalHotel(group,val1,val2){
-      group.patchValue({total: val1*val2});
-      this.getTotalHospedaje();
+  subtotalHotel(group, val1, val2) {
+    group.patchValue({ total: val1 * val2 });
+    this.getTotalHospedaje();
   }
 
   getHotels() {
@@ -228,7 +231,7 @@ export class CrearViaticosComponent implements OnInit {
   }
 
   deleteTransporte(i) {
-    this.transporteList.removeAt( this.transporteList.length -1 );
+    this.transporteList.removeAt(this.transporteList.length - 1);
     this.getTotalTransporte();
   }
 
@@ -266,13 +269,15 @@ export class CrearViaticosComponent implements OnInit {
       });
     });
     group.get('taxi_city_id').valueChanges.subscribe((value) => {
-      console.log(value)
-      let city_selected = group.get('taxi_cities').value.find((r) => r.id ==  value);
-      console.log(city_selected)
+      console.log(value);
+      let city_selected = group
+        .get('taxi_cities')
+        .value.find((r) => r.id == value);
+      console.log(city_selected);
 
       group.patchValue({
         city_selected,
-	rate:city_selected.value
+        rate: city_selected.value,
       });
     });
     group.get('rate').valueChanges.subscribe((value) => {
@@ -281,17 +286,15 @@ export class CrearViaticosComponent implements OnInit {
       group.patchValue({
         total: totalTaxi,
       });
-            this.getTotalTaxi();
-
+      this.getTotalTaxi();
     });
     group.get('journeys').valueChanges.subscribe((value) => {
-	    
       let taxi = group.value;
       let totalTaxi = value * taxi.rate;
       group.patchValue({
         total: totalTaxi,
       });
-          this.getTotalTaxi();
+      this.getTotalTaxi();
     });
     return group;
   }
@@ -323,19 +326,18 @@ export class CrearViaticosComponent implements OnInit {
   }
 
   deleteTaxi(i) {
-    this.taxiList.removeAt( this.taxiList.length -1 );
+    this.taxiList.removeAt(this.taxiList.length - 1);
     this.getTotalTaxi();
   }
 
   getTotalTaxi() {
-    console.log('herer')
+    console.log('herer');
     let total = this.taxiList.value.reduce(
       (a, b) => {
-	console.log(b)
-	if (b.city_selected.type == 'Nacional'){
-
+        console.log(b);
+        if (b.city_selected.type == 'Nacional') {
           return { inter: a.inter, nac: a.nac + b.total };
-	}
+        }
         return { nac: a.nac, inter: a.inter + b.total };
       },
       { nac: 0, inter: 0 }
@@ -386,16 +388,16 @@ export class CrearViaticosComponent implements OnInit {
   }
 
   deleteFeeding(i) {
-    this.FeedingList.removeAt(this.FeedingList.length -1 );
+    this.FeedingList.removeAt(this.FeedingList.length - 1);
     this.getTotalFeeding();
   }
 
   getTotalFeeding() {
     let total = this.FeedingList.value.reduce(
       (a, b) => {
-        if (b.type == 'Nacional'){
+        if (b.type == 'Nacional') {
           return { inter: a.inter, nac: a.nac + b.total };
-	}
+        }
         return { nac: a.nac, inter: a.inter + b.total };
       },
       { nac: 0, inter: 0 }
@@ -423,7 +425,7 @@ export class CrearViaticosComponent implements OnInit {
     this.form.get('total_hotels_usd').valueChanges.subscribe((r) => {
       this.sumarTotal();
     });
-  
+
     this.form.get('total_feedings_usd').valueChanges.subscribe((r) => {
       this.sumarTotal();
     });
@@ -451,8 +453,8 @@ export class CrearViaticosComponent implements OnInit {
         parseFloat(forma.total_hotels_cop) +
         parseFloat(forma.total_transports_cop) +
         parseFloat(forma.total_feedings_cop) +
-        parseFloat(forma.total_taxis_cop)+
-        parseFloat(forma.baggage_cop)+
+        parseFloat(forma.total_taxis_cop) +
+        parseFloat(forma.baggage_cop) +
         parseFloat(forma.total_laundry_cop);
       let total_usd =
         parseFloat(forma.total_hotels_usd) +
@@ -468,20 +470,34 @@ export class CrearViaticosComponent implements OnInit {
   }
 
   crearViatico() {
-    this.crearViaticoService.crearViatico(this.form.value).subscribe(
-      (res: any) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Viatico creado con éxito',
-        });
-      },
-      (err) => {
-        Swal.fire({
-          icon: 'error',
-          title: '¡Ooops!',
-          text: err.code,
-        });
-      }
-    );
+    this._swal
+      .show({
+        text: 'Se dispone a crear una solicitud de viático',
+        title: '¿Está seguro?',
+        icon: 'warning',
+      })
+      .then((r) => {
+        if (r.isConfirmed) {
+          this.crearViaticoService.crearViatico(this.form.value).subscribe(
+            (res: any) => {
+              this._swal.show({
+                icon: 'success',
+                text: 'Viático creado con éxito',
+                title: 'Operación exitosa',
+                showCancel: false,
+              });
+	      this.roter.navigateByUrl('/nomina/viaticos');
+            },
+            (err) => {
+              this._swal.show({
+                icon: 'error',
+                title: '¡Ooops!',
+                showCancel: false,
+                text: err.code,
+              });
+            }
+          );
+        }
+      });
   }
 }

@@ -1,52 +1,45 @@
 <div class="page-body">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
-          <div class="row">
-            <div class="col-md-8">
-              <h5>Prestamos y Libranzas</h5>
-              <span>Lista de los prestamos que se han realizado</span>
-            </div>
-            <div class="col-md-4 d-flex align-items-end justify-content-end">
-              <button
-                class="btn btn-primary btn-sm pull-right"
-                (click)="abrirModalPrestamo()"
-              >
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>Prestamos y Libranzas</h5>
+                            <span>Lista de los prestamos que se han realizado</span>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end justify-content-end">
+                            <button class="btn btn-primary btn-sm pull-right" (click)="abrirModalPrestamo()">
                 <i class="fa fa-plus"></i> Realizar Prestamo
               </button>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <table class="table table-striped table-bordered" *ngIf="Prestamos.length  && !loadig; else notData">
-            <thead>
-              <tr>
-                <th style="width: 60px"></th>
-                <th class="text-center" style="width: 100px">Funcionario</th>
-                <th class="text-center" style="width: 80px">Fecha</th>
-                <th class="text-center" style="width: 100px">Valor Prestamo</th>
-                <th class="text-center" style="width: 70px">Tipo Pago</th>
-                <th class="text-center" style="width: 70px">No. Cuotas</th>
-                <th class="text-center" style="width: 80px">Cuotas Pagas</th>
-                <th class="text-center" style="width: 90px">Valor Cuota</th>
-                <th class="text-center" style="width: 90px">% Intereses</th>
-                <th class="text-center" style="width: 100px">Saldo</th>
-                <th class="text-center" style="width: 70px"></th>
-              </tr>
-            </thead>
-            <tbody>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered" *ngIf="!loading && Prestamos.length > 0; else notData">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px"></th>
+                                <th class="text-center" style="width: 100px">Funcionario</th>
+                                <th class="text-center" style="width: 80px">Fecha</th>
+                                <th class="text-center" style="width: 100px">Valor Prestamo</th>
+                                <th class="text-center" style="width: 70px">Tipo Pago</th>
+                                <th class="text-center" style="width: 70px">No. Cuotas</th>
+                                <th class="text-center" style="width: 80px">Cuotas Pagas</th>
+                                <th class="text-center" style="width: 90px">Valor Cuota</th>
+                                <th class="text-center" style="width: 90px">% Intereses</th>
+                                <th class="text-center" style="width: 100px">Saldo</th>
+                                <th class="text-center" style="width: 70px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <tr *ngFor="let item of Prestamos">
-                <td class="text-center">
-                  <img
-                    class="rounded-circle avatar-sm"
-                    src="{{ item.person.image | image: 'users' }}"
-                  />
-                </td>
-                <td>
-                  <strong> {{ item.person.identifier }}</strong> <br />
-                  <strong
-                    >{{ item.person.first_name }}
+                                <td class="text-center">
+                                    <img class="rounded-circle avatar-sm" src="{{ item.person.image | image: 'users' }}" />
+                                </td>
+                                <td>
+                                    <strong> {{ item.person.identifier }}</strong> <br />
+                                    <strong>{{ item.person.first_name }}
                     {{ item.person.second_name }}</strong
                   >
                 </td>
@@ -78,7 +71,7 @@
                             waves-light waves-effect
                             caja-botones
                           "
-                          href="#"
+                          (click)="download(item.id)"
                           target="_blank"
                         >
                           <i class="fa fa-file-pdf-o text-danger"></i> Descargar

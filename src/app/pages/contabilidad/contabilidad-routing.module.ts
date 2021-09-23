@@ -16,7 +16,8 @@ const routes: Routes = [
     { path: 'crear', component: ActivosFijosCrearComponent },
     { path: 'ver', component: ActivosFijosVerComponent },
     { path: 'depreciaciones', component: DepreciacionesComponent },
-    { path: 'cajas', component: CajasComponent }
+    { path: 'cajas', component: CajasComponent },
+    { path: 'depreciacion', component: DepreciacionComponent }
 ];
 
 @NgModule({

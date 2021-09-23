@@ -71,7 +71,7 @@
                                 <div ngbDropdownMenu>
                                     <a [routerLink]="['/nomina/ver-viatico',item.id]" class="dropdown-item waves-light waves-effect caja-botones">
                                         <i class="fa fa-pencil"></i>Ver</a>
-                                    <a *ngIf="permission.permissions.approve" (click)="aprobarViatico(item, 'Aprobado')" class="dropdown-item waves-light waves-effect caja-botones">
+                                    <a *ngIf="permission.permissions.approve && item.state != 'Aprobado'" (click)="aprobarViatico(item, 'Aprobado')" class="dropdown-item waves-light waves-effect caja-botones">
                                         <i class="fa fa-pencil"></i>Aprobar</a>
                                     <a class="dropdown-item waves-light waves-effect caja-botones">
                                         <i class="fa fa-pencil"></i>Anular</a>

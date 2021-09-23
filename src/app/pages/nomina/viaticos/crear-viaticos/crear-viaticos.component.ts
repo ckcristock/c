@@ -90,6 +90,8 @@ export class CrearViaticosComponent implements OnInit {
       total_laundry_usd: [0],
       total_usd: [0],
       total_cop: [0],
+      other_expenses_cop: [0],
+      other_expenses_usd: [0],
       observation: [0],
       travel: this.fb.group({
         person_id: [''],
@@ -444,6 +446,12 @@ export class CrearViaticosComponent implements OnInit {
     this.form.get('baggage_usd').valueChanges.subscribe((r) => {
       this.sumarTotal();
     });
+    this.form.get('other_expenses_cop').valueChanges.subscribe((r) => {
+      this.sumarTotal();
+    });
+    this.form.get('other_expenses_usd').valueChanges.subscribe((r) => {
+      this.sumarTotal();
+    });
   }
 
   sumarTotal() {
@@ -455,13 +463,15 @@ export class CrearViaticosComponent implements OnInit {
         parseFloat(forma.total_feedings_cop) +
         parseFloat(forma.total_taxis_cop) +
         parseFloat(forma.baggage_cop) +
-        parseFloat(forma.total_laundry_cop);
+        parseFloat(forma.total_laundry_cop) +
+        parseFloat(forma.other_expenses_cop);
       let total_usd =
         parseFloat(forma.total_hotels_usd) +
         parseFloat(forma.total_feedings_usd) +
         parseFloat(forma.total_laundry_usd) +
         parseFloat(forma.baggage_usd) +
-        parseFloat(forma.total_taxis_usd);
+        parseFloat(forma.total_taxis_usd) +
+        parseFloat(forma.other_expenses_usd);
       this.form.patchValue({
         total_cop,
         total_usd,

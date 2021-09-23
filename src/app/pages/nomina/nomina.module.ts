@@ -36,7 +36,8 @@ import { ViaticosTaxisComponent } from './viaticos/ver-viaticos/viaticos-taxis/v
     ReactiveFormsModule,
     NgbPaginationModule,
     HttpClientModule,
-    NgSelectModule
+    NgSelectModule,
+    NgbTypeaheadModule
   ],
   declarations: [
     PrestamosLibranzasComponent,

@@ -5,6 +5,9 @@ import { ValidatorsService } from 'src/app/pages/ajustes/informacion-base/servic
 import { debounceTime, distinctUntilChanged, map, filter } from 'rxjs/operators';
 import { MemorandosService } from './memorandos.service';
 import Swal from 'sweetalert2';
+import { Permissions } from '../../../../core/interfaces/permissions-interface';
+import { PermissionService } from '../../../../core/services/permission.service';
+import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 type Person = {value: number, text: string};
 @Component({
   selector: 'app-memorandos',
@@ -23,23 +26,44 @@ export class MemorandosComponent implements OnInit {
   loading = false;
   types:any;
   typesLimitated:any;
+  filtros:any = {
+    person: '',
+    date: '',
+    state: ''
+  }
   paginationMemorando = {
-    pageSize: 5,
     page: 1,
+    pageSize: 5,
     collectionSize: 0
   }
   paginationMotivo = {
-    pageSize: 5,
     page: 1,
+    pageSize: 5,
     collectionSize: 0
   }
+  permission: Permissions = {
+    menu: 'Memorandos',
+    permissions: {
+      approve: false
+    }
+  };
+  states:any = [
+    { clave: 'Todos' },
+    { clave: 'Pendiente' },
+    { clave: 'Aprobado' },
+    { clave: 'Legalizado' }
+  ]
   people:any[] = [];
   public model: Person;
   constructor( 
               private fb: FormBuilder,  
               private _reactiveValid: ValidatorsService,
-              private memorandosService: MemorandosService
-              ) { }
+              private memorandosService: MemorandosService,
+              private _permission: PermissionService,
+              private _swal: SwalService
+              ) {
+              this.permission = this._permission.validatePermissions(this.permission)
+              }
 
   ngOnInit(): void {
     this.createFormMotivo();
@@ -160,10 +184,15 @@ export class MemorandosComponent implements OnInit {
 
   getMemorandumList( page = 1 ) {
     this.loading = true;
+    let params = {
+      ...this.paginationMemorando, ...this.filtros
+    }
     this.paginationMemorando.page = page;
-    this.memorandosService.getMemorandumList( this.paginationMemorando )
+    this.memorandosService.getMemorandumList( params )
     .subscribe( (res:any) => {
       this.memorandums = res.data.data;
+      console.log(this.memorandums);
+      
       this.paginationMemorando.collectionSize = res.data.total;
       this.loading = false;
     })
@@ -172,6 +201,8 @@ export class MemorandosComponent implements OnInit {
   saveMemorandum() {
     this.memorandosService.createNewMemorandum( this.formMemorando.value )
     .subscribe( (res:any) => {
+      console.log(res);
+      
       this.modalMemorando.hide();
       this.formMemorando.reset();
       this.person_selected = '';
@@ -182,6 +213,35 @@ export class MemorandosComponent implements OnInit {
           text: 'Felicidades, Creado Satisfactiamente'
         })
     });
+  }
+
+  aprobarMemorando( memorando, state ) {
+    let data = {
+      id: memorando.id,
+      state
+    }
+    this._swal.show({
+      title: '¿Estas Seguro?',
+      text: "¡El Memorando será aprobado",
+      icon: 'question',
+      showCancel: true
+    })
+    .then((result) =>{
+      if (result.isConfirmed) {
+        this.memorandosService.createNewMemorandum(data).subscribe( (r:any) =>{
+          console.log(r);
+          
+          this._swal.show({
+            icon: 'success',
+            title: 'El Memorando Ha sido Aprobado!',
+            text: '¡Aprobado!',
+            timer: 2500,
+            showCancel: false
+          })
+          this.getMemorandumList();
+        })
+      }
+    })
   }
 
   get funcionario_invalid() {

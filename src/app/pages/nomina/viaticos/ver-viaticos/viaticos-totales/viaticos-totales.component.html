@@ -1,98 +1,101 @@
 <div class="row mt-2">
-  <div class="col-6">
-    <table>
-      <thead>
-        <tr>
-          <div class="title">
-            <h5>Observaciones</h5>
-          </div>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          {{
-            data.observation
-          }}
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="col-6">
-    <div class="title">
-      <h5>TOTAL VIÁTICOS</h5>
+    <div class="col-6">
+        <table>
+            <thead>
+                <tr>
+                    <div class="title">
+                        <h5>Observaciones</h5>
+                    </div>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {{ data.observation }}
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Dolares</th>
-          <th class="text-right">Pesos</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td >Hospedaje</td>
-          <td class="text-right">
-            {{ data.total_hotels_usd }}
-          </td>
-          <td class="text-right">
-            {{ data.total_hotels_cop }}
-          </td>
-        </tr>
-        <tr>
-          <td >Transporte Terrestre</td>
-          <td ></td>
-          <td class="text-right">
-            {{ data.total_transports_cop }}
-          </td>
-        </tr>
-        <tr>
-          <td >Taxis</td>
-          <td class="text-right">
-            {{ data.total_taxis_usd }}
-          </td>
-          <td class="text-right">
-            {{ data.total_taxis_cop }}
-          </td>
-        </tr>
-        <tr>
-          <td >Alimentación</td>
-          <td class="text-right">
-            {{ data.total_feedings_usd }}
-          </td>
-          <td class="text-right">
-            {{ data.total_feedings_cop }}
-          </td>
-        </tr>
-        <tr>
-          <td >Lavanderia</td>
-          <td class="text-right">
-            {{ data.total_laundry_usd }}
-          </td>
-          <td class="text-right" >
-            {{ data.total_laundry_cop }}
-          </td>
-        </tr>
-        <tr>
-          <td  >Sobre Equipaje</td>
-          <td class="text-right" >
-            {{ data.baggage_usd }}
-          </td>
-          <td class="text-right" >
-            {{ data.baggage_cop }}
-          </td>
-        </tr>
-        <tr>
-          <td class="text-right">Total</td>
-          <td class="text-right" >
-            {{ data.total_usd }}
-          </td>
+    <div class="col-6">
+        <div class="title">
+            <h5>TOTAL VIÁTICOS</h5>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Dolares</th>
+                    <th class="text-right">Pesos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Hospedaje</td>
+                    <td class="text-right">
+                        {{ data.total_hotels_usd }}
+                    </td>
+                    <td class="text-right">
+                        {{ data.total_hotels_cop }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Transporte Terrestre</td>
+                    <td></td>
+                    <td class="text-right">
+                        {{ data.total_transports_cop }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Taxis</td>
+                    <td class="text-right">
+                        {{ data.total_taxis_usd }}
+                    </td>
+                    <td class="text-right">
+                        {{ data.total_taxis_cop }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Alimentación</td>
+                    <td class="text-right">
+                        {{ data.total_feedings_usd }}
+                    </td>
+                    <td class="text-right">
+                        {{ data.total_feedings_cop }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Lavanderia</td>
+                    <td class="text-right">
+                        {{ data.total_laundry_usd }}
+                    </td>
+                    <td class="text-right">
+                        {{ data.total_laundry_cop }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sobre Equipaje</td>
+                    <td class="text-right">
+                        {{ data.baggage_usd }}
+                    </td>
+                    <td class="text-right">
+                        {{ data.baggage_cop }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Gastos Otros</td>
+                    <td class="text-right"> {{ data.other_expenses_usd }} </td>
+                    <td class="text-right"> {{ data.other_expenses_cop }} </td>
+                </tr>
+                <tr>
+                    <td class="text-left">Total</td>
+                    <td class="text-right">
+                        {{ data.total_usd }}
+                    </td>
 
-          <td class="text-right" >
-            {{ data.total_cop }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+                    <td class="text-right">
+                        {{ data.total_cop }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

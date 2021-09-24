@@ -364,7 +364,6 @@ export class ActividadesComponent {
   }
   actividadObj: any = {}
   accionarEvento(event) {
-    console.log(event)
     let id = event.event.id;
     this.actividadObj = this.calendarEvents.find(x => x.id == id);
 

@@ -166,7 +166,6 @@ export class DatosFuncionarioComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event) => {
         this.fileString = (<FileReader>event.target).result;
-	console.log(this.fileString)
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.file = base64

@@ -107,7 +107,6 @@ export class PlanCuentasComponent implements OnInit {
   
   getAccount(account) {
     this.account = {...account};
-    console.log(this.account);
     
     this.title = 'Actualizar Cuenta'
     this.form.patchValue({
@@ -187,7 +186,6 @@ export class PlanCuentasComponent implements OnInit {
         if (this.form.invalid) { return false } */
     this._planAccountService.createAccount_plan(this.form.value)
     .subscribe( (res:any) => {
-      console.log(res);
         this.modal.hide();
         this.getAccount_plan();
         this.form.reset();

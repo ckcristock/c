@@ -1,14 +1,14 @@
 <div class="row">
  
   <div class="form-group col-12 pl-0 d-flex justify-content-end">
-   <!--  <app-turno [turnos]="turnos"></app-turno>
+    <app-turno (changed)="turnAllChanged($event)"  [turnos]="turnos"></app-turno>
     <button
       class="btn btn-link"
       (click)="asignarHorariosMasivo()"
       style="padding: 0 10px !important"
     >
       Asignar
-    </button> -->
+    </button>
   </div>
   <div class="col-12">
     <table class="table table-bordered table-sm">
@@ -34,7 +34,7 @@
           </td>
           <td
             class="text-center custom-label fecha-td"
-            *ngFor="let dia of person.diasSemana"
+            *ngFor="let dia of person.diasSemana; let i = index"
           >
             <!-- {{ turnos }} -->
           <!--   <app-turno
@@ -42,6 +42,7 @@
               [turnos]="turnos"
             ></app-turno> -->
             <div>
+              
               <select
                 class="form-control form-control-sm select-turno"
                 [(ngModel)]="dia.turno"

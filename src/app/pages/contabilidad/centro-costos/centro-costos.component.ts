@@ -55,14 +55,12 @@ export class CentroCostosComponent implements OnInit {
     this._centroCostosService.getCostCenter()
     .subscribe( (res:any) =>{
       this.costs = res.data.data;
-      console.log(this.costs);
     });
   }
 
   createCostCenter() {
     this._centroCostosService.createCostCenter( this.form.value )
     .subscribe( (res:any) =>{
-      console.log(res);
     });
   }
 

@@ -17,6 +17,7 @@ export class TurnoComponent implements OnInit {
   }
 
   changeColor(event) {
+    console.log(this.turno);
     
     if (this.turno === 'seleccione') {
       this.withColor = '#9da4ad';

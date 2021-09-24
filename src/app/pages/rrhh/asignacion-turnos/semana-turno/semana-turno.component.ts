@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 import { AsignacionTurnosService } from '../asignacion-turnos.service';
+import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-semana-turno',
@@ -13,71 +14,89 @@ export class SemanaTurnoComponent implements OnInit {
   @Input('diaFinal') diaFinal;
   @Input('people') people;
   @Input('changeWeek') changeWeek: EventEmitter<any>;
-
+  masiveTurnId: any = {};
   diaInicialSemana: any;
   diasSemana: any[] = [];
   horariosExistentes: any[] = [];
   turnos: any[] = [];
 
-  /**
-   * test
-   */
-  turno = 'seleccione';
-  active = false;
-  withColor = '#9da4ad';
-  /**End */
-  constructor(private _asignacion: AsignacionTurnosService) {}
+  constructor(
+    private _asignacion: AsignacionTurnosService,
+    private _swal: SwalService
+  ) {}
 
   ngOnInit(): void {
-    this.changeWeek.subscribe((d:any) => {
-      console.log(d)
-
-        this.diasSemana = [];
-        this.diaFinal = d.diaFinalSemana;
-        this.diaInicial = d.diaInicialSemana;
-        this.diaInicialSemana = this.diaInicial;
-        this.turnos = this.turnosRotativos;
-        this.fillDiasSemana();
-        this.asignarHorariosExistentes();
+    this.changeWeek.subscribe((d: any) => {
+      this.diasSemana = [];
+      this.diaFinal = d.diaFinalSemana;
+      this.diaInicial = d.diaInicialSemana;
+      this.diaInicialSemana = this.diaInicial;
+      this.turnos = this.turnosRotativos;
+      this.fillDiasSemana();
     });
   }
-
-  asignarHorariosMasivo() {}
-  fillDiasSemana() {
-    while (this.diaInicialSemana < this.diaFinal) {
-      this.diasSemana.push({
-        dia: this.diaInicialSemana.format('dddd'),
-        fecha: this.diaInicialSemana.format('YYYY-MM-DD'),
-        color: '#9da4ad',
-        turno: 'seleccione',
+  turnAllChanged(turnId) {
+    this.masiveTurnId.rotating_turn_id = turnId;
+    this.masiveTurnId = this.getColors(this.masiveTurnId);
+  }
+  asignarHorariosMasivo() {
+    if (this.masiveTurnId.rotating_turn_id != 'seleccione') {
+      this.people.forEach((r) => {
+        r.diasSemana.forEach((dia) => {
+          dia.turno = this.masiveTurnId.rotating_turn_id;
+          dia.color = this.masiveTurnId.color;
+        });
       });
+    }
+  }
+  fillDiasSemana() {
+    this.diaInicialSemana.locale('es');
+    while (this.diaInicialSemana < this.diaFinal) {
+      let dia = this.diaInicialSemana.format('dddd');
+
+      let pur = {
+        dia,
+        fecha: this.diaInicialSemana.format('YYYY-MM-DD'),
+        color:  dia == 'domingo' ? 'black' : '#9da4ad',
+        turno: dia == 'domingo' ? 0 : 'seleccione',
+      };
+
+      this.diasSemana.push(pur);
+      
       this.diaInicialSemana = moment(this.diaInicialSemana).add(1, 'd');
     }
 
-    this.people.forEach((p) => {
-      let sem = this.diasSemana;
+    this.people.forEach((p, i) => {
+      let sem = [...this.diasSemana];
+      p.diasSemana = [];
+      p.diasSemana = sem.map((acc) => {
+        return Object.assign({}, acc);
+      });
 
       p.fixed_turn_hours.forEach((turn) => {
         turn = this.getColors(turn);
-        sem.map((dia) => {
+        p.diasSemana.forEach((dia, i) => {
           if (turn.date == dia.fecha) {
             dia.turno = turn.rotating_turn_id;
             dia.color = turn.color;
           }
         });
       });
-      p.diasSemana = sem;
     });
-
   }
 
   getColors(turn: any) {
-    if(turn.rotating_turn_id === 0 ){
+    if (turn.rotating_turn_id && turn.rotating_turn_id == 0) {
       turn.color = 'black';
       return turn;
     }
-    
-    if ( !turn.rotating_turn_id) {
+
+    if (turn.rotating_turn_id === 'seleccione') {
+      turn.color = '#9da4ad';
+
+      return turn;
+    }
+    if (!turn.rotating_turn_id) {
       turn.color = '#000';
     } else {
       turn.color = this.turnos.find(
@@ -87,13 +106,11 @@ export class SemanaTurnoComponent implements OnInit {
     return turn;
   }
 
-  getColorByDay( dia ) {
+  getColorByDay(dia) {
     if (dia.turno == 0) {
       dia.color = '#000';
     } else {
-      dia.color = this.turnos.find(
-        (turno) => turno.id == dia.turno
-      ).color;
+      dia.color = this.turnos.find((turno) => turno.id == dia.turno).color;
     }
   }
 
@@ -102,52 +119,35 @@ export class SemanaTurnoComponent implements OnInit {
   }
 
   makeHorario() {
-
-    let horarios = [];
-    this.people.forEach((funcionario) => {
-      funcionario.diasSemana.forEach((dia) => {
-        if (dia.turno && dia.turno != 'seleccione') {
-          horarios.push({
-            person_id: funcionario.id,
-            rotating_turn_id: dia.turno,
-            date: dia.fecha,
-            weeks_number: moment().format('ww'),
-          });
-        }
-      });
-    });
-
-    if (horarios.length) {
-      this.saveHours(horarios);
-    }
-  }
-  asignarHorariosExistentes() {
-    this.people.forEach((funcionario) => {
-      if (funcionario.fixed_turn_hours.length) {
-        this.horariosExistentes = this.diasSemana.map((dia) => {
-          return funcionario.fixed_turn_hours.find((horario) => {
-            return dia.fecha == horario.date;
-          });
-        });
-
-        this.horariosExistentes.forEach((dia) => {
-          let index = null;
-          if (dia !== undefined) {
-            index = this.horariosExistentes.indexOf(dia);
-            /*    let id = 'turnos' + funcionario.id;
-            this.$refs[id][index].turno = dia.turno_rotativo_id; */
-            let turno_select = this.turnos.find((turno) => {
-              if (dia.turno_rotativo_id != 0) {
-                return turno.id === dia.turno_rotativo_id;
+    this._swal
+      .show({
+        title: '¿Está seguro?',
+        text: 'Se dispone a asignar horarios',
+        icon: 'question',
+      })
+      .then((r) => {
+        if (r.isConfirmed) {
+          let horarios = [];
+          this.people.forEach((funcionario) => {
+            funcionario.diasSemana.forEach((dia) => {
+              if (dia.turno != null && dia.turno != undefined && dia.turno != 'seleccione') {
+                horarios.push({
+                  person_id: funcionario.id,
+                  rotating_turn_id: dia.turno,
+                  date: dia.fecha,
+                  weeks_number: moment().format('ww'),
+                });
               }
             });
-            let color = turno_select ? turno_select.color : '#000';
-            /*  this.$refs[id][index].withColor = color; */
+          });
+
+          if (horarios.length) {
+            this.saveHours(horarios);
           }
-        });
-      }
-    });
+        }
+      });
   }
+
   turnChanged(turno, person, day) {
     let index = this.diasSemana.indexOf(day);
     if (person.dias) {
@@ -158,6 +158,23 @@ export class SemanaTurnoComponent implements OnInit {
   }
 
   saveHours(horarios) {
-    this._asignacion.saveHours(horarios).subscribe((r: any) => {});
+    this._asignacion.saveHours(horarios).subscribe(
+      (r: any) => {
+        this._swal.show({
+          icon: 'success',
+          text: 'Guardado con éxito',
+          title: 'Operación realizada',
+          showCancel: false,
+        });
+      },
+      (err) => {
+        this._swal.show({
+          icon: 'erro',
+          text: 'Ha ocurrido un error',
+          title: 'Operación erronea',
+          showCancel: false,
+        });
+      }
+    );
   }
 }

@@ -51,7 +51,6 @@ export class AsignarHorasExtrasComponent implements OnInit {
 
   getTurns() {
     this._rotatingTurn.getAll().subscribe((r: any) => {
-      console.log(r);
       this.turns = r.data;
     });
   }

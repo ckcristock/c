@@ -64,7 +64,6 @@ export class MemorandosComponent implements OnInit {
   saveReason() {
     this.memorandosService.createNewMemorandumType( this.formMotivo.value )
     .subscribe( (res:any) => {
-       console.log(res);
        this.getTypeMemorandum();
        this.formMotivo.reset();
     });

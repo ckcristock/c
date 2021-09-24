@@ -35,7 +35,6 @@ export class CreateTurnoFijoComponent implements OnInit {
   id = '';
   ngOnInit(): void {
     this.id = this.route.snapshot.params.id;
-    console.log(this.id);
     if (this.id) {
       this.getTurn();
     }

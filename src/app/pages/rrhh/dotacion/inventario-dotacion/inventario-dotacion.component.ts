@@ -70,7 +70,6 @@ export class InventarioDotacionComponent implements OnInit {
     this._dotation.getInventary(this.pagination).subscribe((r: any) => {
       this.loading = false;
       this.Inventarios = r.data.data;
-      console.log(this.Inventarios);
 
       this.pagination.collectionSize = r.data.total;
     })

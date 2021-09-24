@@ -39,11 +39,9 @@ export class LlegadasTardesComponent implements OnInit {
   }
 
   filtrar(group_id,dependency_id){
-  console.log(group_id,dependency_id)
   }
 
   filtrarPorFecha(date1, date2) {
-    console.log(date1, date2);
 
   }
   descargarReporteExcel(){

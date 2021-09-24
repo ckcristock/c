@@ -129,7 +129,6 @@ export class PersonsComponent implements OnInit {
     }
     functionsUtils.fileToBase64(file).subscribe(base64 => {
       this.base64Output = base64;
-      console.log(this.base64Output);
     });
     /* reader.onload = this._handleReaderLoaded.bind(this); */
     // reader.readAsDataURL(file);
@@ -143,14 +142,12 @@ export class PersonsComponent implements OnInit {
     let values = form.value
     let sendForm = new FormData();
     /*  for (const key in values) {
-       console.log(key,values[key]);
        sendForm.append(key+'', values[key]+'')
      } */
 
 
     sendForm.append('image', 'SDASD')
     this._person.storePeople(form.value).subscribe(r => {
-      console.log(r);
     })
   }
 

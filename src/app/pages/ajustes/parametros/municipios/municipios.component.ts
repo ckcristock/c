@@ -97,7 +97,6 @@ export class MunicipiosComponent implements OnInit {
     .subscribe( (res:any) => {
       this.loading = false;
       this.municipios = res.data.data;
-      console.log(this.municipios);
       
       this.pagination.collectionSize = res.data.total;
     });

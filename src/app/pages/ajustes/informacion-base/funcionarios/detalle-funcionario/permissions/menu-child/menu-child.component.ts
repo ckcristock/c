@@ -25,7 +25,6 @@ export class MenuChildComponent implements OnInit {
 /*   
   save() {
     let navFilter = [...this.navItems]
-    console.log(this.filtertData(navFilter))
 
   }
  */

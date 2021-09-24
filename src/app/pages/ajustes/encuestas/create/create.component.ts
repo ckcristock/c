@@ -74,7 +74,6 @@ export class CreateComponent implements OnInit {
     this.Preguntas.push(res);
   }
   AgregarRespuesta(Pregunta) {
-    console.log("agregar respuesta");
 
     let c = {
       Res: '',

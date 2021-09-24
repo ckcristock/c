@@ -37,7 +37,6 @@ export class DatosBasicosEmpresaComponent implements OnInit {
       email_contact: [''],
       phone: ['']
     });
-    console.log(this.form.value);
     
   }
 
@@ -45,7 +44,6 @@ export class DatosBasicosEmpresaComponent implements OnInit {
     this._configuracionEmpresaService.getCompanyData()
     .subscribe( (res:any) =>{
         this.company = res.data;
-        console.log(this.company);
         
         this.form.patchValue({
           id: this.company.id,

@@ -30,7 +30,6 @@ export class AsignacionTurnosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.diaInicialSemana);
     this.getTurns();
     this.createForm();
     this.getData();
@@ -52,7 +51,6 @@ export class AsignacionTurnosComponent implements OnInit {
 
   getTurns() {
     this._rotatingTurn.getAll().subscribe((r: any) => {
-      console.log(r);
       this.turns = r.data;
     });
   }

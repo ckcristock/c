@@ -22,7 +22,6 @@ export class TurnoRotativoComponent implements OnInit {
     this.showModal.emit( id );
   }
   getAll() {
-    console.log('getall');
     this.loading = true;
     this._rotatingT.getAll().subscribe((r: any) => {
       this.loading = false;

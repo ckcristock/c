@@ -48,7 +48,6 @@ export class NovedadesComponent implements OnInit {
   }
 
   editarNovedad(fact){
-    console.log(fact)
     this.openModal.next({data:fact})
   }
 

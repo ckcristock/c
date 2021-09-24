@@ -18,7 +18,10 @@
             <span class="custom-label text-center">{{ horario.date }}</span>
           </td>
           <td>
-            <span class="custom-label">{{ horario.entry_time_one }} </span>
+            <span class="dot" [class]="horario.colors.entry"></span>
+            <span class="custom-label"
+              >{{ "2020-01-01 " + horario.entry_time_one | date: "shortTime" }}
+            </span>
             <a
               class="btn btn-link p-0"
               *ngIf="horario.temp_one && horario.temp_one != '0.0'"
@@ -35,7 +38,12 @@
                 else notHour2
               "
             >
-              <span class="custom-label">{{ horario.launch_time_one }} </span>
+              <span class="dot" [class]="horario.colors.launchEntry"></span>
+              <span class="custom-label">
+                {{
+                  "0000-01-01 " + horario.launch_time_one | date: "shortTime"
+                }}</span
+              >
             </div>
           </td>
           <td>
@@ -46,31 +54,46 @@
                 else notHour2
               "
             >
-              <span class="custom-label">{{ horario.launch_time_two }} </span>
+              <span class="dot" [class]="horario.colors.launchLeave"></span>
+              <span class="custom-label"
+                >{{
+                  "0000-01-01 " + horario.launch_time_two | date: "shortTime"
+                }}
+              </span>
             </div>
           </td>
 
-	  <td>
+          <td>
             <div
               *ngIf="
                 horario.breack_time_one &&
-                  horario.breack_time_one  != '00:00:00';
+                  horario.breack_time_one != '00:00:00';
                 else notHour2
               "
             >
-              <span class="custom-label">{{ horario.breack_time_one }} </span>
+              <span class="dot" [class]="horario.colors.breckEntry"></span>
+              <span class="custom-label"
+                >{{
+                  "0000-01-01 " + horario.breack_time_one | date: "shortTime"
+                }}
+              </span>
             </div>
           </td>
 
-	  <td>
+          <td>
             <div
               *ngIf="
                 horario.breack_time_two &&
-                  horario.breack_time_two  != '00:00:00';
+                  horario.breack_time_two != '00:00:00';
                 else notHour2
               "
             >
-              <span class="custom-label">{{ horario.breack_time_two }} </span>
+              <span class="dot" [class]="'red'"></span>
+              <span class="custom-label"
+                >{{
+                  "0000-01-01 " + horario.breack_time_two | date: "shortTime"
+                }}
+              </span>
             </div>
           </td>
           <td>
@@ -80,7 +103,12 @@
                 else notHour2
               "
             >
-              <span class="custom-label">{{ horario.leave_time_one }} </span>
+              <span class="dot" [class]="horario.colors.leave"></span>
+              <span class="custom-label"
+                >{{
+                  "0000-01-01 " + horario.leave_time_one | date: "shortTime"
+                }}
+              </span>
               <a
                 class="btn btn-link p-0"
                 *ngIf="horario.temp_two && horario.temp_two != '0.0'"
@@ -90,7 +118,7 @@
               </a>
             </div>
           </td>
-                  </tr>
+        </tr>
       </tbody>
     </table>
   </div>

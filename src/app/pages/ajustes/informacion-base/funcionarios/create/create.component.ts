@@ -20,7 +20,6 @@ export class CreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.$person = this._personData.person.subscribe( r=>{
-      console.log(r);
       this.person=r
     })
   }

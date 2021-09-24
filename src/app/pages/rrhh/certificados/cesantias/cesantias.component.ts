@@ -40,7 +40,6 @@ export class CesantiasComponent implements OnInit {
       icon: 'warning',
     }).then(r=>{
       if(r.isConfirmed){
-	console.log('confirmed')
       }
     });
   }

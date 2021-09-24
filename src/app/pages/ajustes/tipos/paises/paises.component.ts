@@ -69,7 +69,6 @@ export class PaisesComponent implements OnInit {
   createCountry() {
     this._paisesService.createCountry(this.form.value)
     .subscribe( (res:any) => {
-       console.log(res);
        this.getCountries();
        this.modal.hide();
        Swal.fire({ 

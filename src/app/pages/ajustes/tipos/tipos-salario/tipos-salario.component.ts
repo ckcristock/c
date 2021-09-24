@@ -68,7 +68,6 @@ export class TiposSalarioComponent implements OnInit {
       this.loading = false;
       this.salaries = res.data.data;
       this.pagination.collectionSize = res.data.total;
-      console.log(this.salaries);
     }); 
   }
 

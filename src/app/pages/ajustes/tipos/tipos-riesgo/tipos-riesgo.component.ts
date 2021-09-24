@@ -50,7 +50,6 @@ export class TiposRiesgoComponent implements OnInit {
       risk_type: this.risk.risk_type,
       accounting_account: this.risk.accounting_account
     })
-    console.log(this.risk);
     
   }
 

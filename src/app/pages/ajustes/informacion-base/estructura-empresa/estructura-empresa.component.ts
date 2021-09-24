@@ -64,7 +64,6 @@ export class EstructuraEmpresaComponent implements OnInit {
 
   save() {
     
-    console.log(this.id);
     
     if (this.tipo == 'dependencias') {
       let selected = this.grupos.find(r => r.selected == true);

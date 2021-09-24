@@ -109,7 +109,6 @@ export class EpsComponent implements OnInit {
       if (this.form.invalid) { return false;}
       this.epsService.createNewEps(this.form.value)
       .subscribe( (res:any) => {
-        console.log(res);
           this.getAllEps();
           this.modal.hide();
           Swal.fire({

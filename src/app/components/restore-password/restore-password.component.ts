@@ -29,7 +29,6 @@ export class RestorePasswordComponent implements OnInit {
   }
 
   changePassword(){
-     console.log(this.newPassword);
   
      let parm = {id:this._user.user.id,
                  newPassword:this.newPassword}
@@ -41,7 +40,6 @@ export class RestorePasswordComponent implements OnInit {
        /*  this.router.navigateByUrl('/'); */
 
      },err=>{
-       console.log('error');
         Swal.fire('Ha ocurrido un error','','error')
      });
      

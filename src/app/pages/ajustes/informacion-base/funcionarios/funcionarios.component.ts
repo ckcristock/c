@@ -62,11 +62,9 @@ export class FuncionariosComponent implements OnInit {
 
     this.pagination.page = page;
     let params: any = { ...this.pagination }
-    console.log(params);
     params.status = this.statusFilter();
     params.dependencies = this.dependenciesFilter();
     params.name = name ? name : ''
-  console.log(params);
   
     this.loading = true;
     

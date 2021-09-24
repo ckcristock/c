@@ -81,7 +81,6 @@ export class ReporteHorarioComponent implements OnInit {
         this.addElement();
         this.forma.patchValue({ dependency_id: 0 });
         this.forma.get('dependency_id').disable();
-        console.log('here');
       }
     });
   }

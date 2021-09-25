@@ -1,0 +1,69 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-info" style="float: right;" (click)="openModal()">Agregar</button>
+            <h5 class="text-primary">Almuerzos</h5>
+        </div>
+        <table class="table table-borderless table-striped mt-4" *ngIf="!loading && lunches.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Funcionario</th>
+                    <th>Valor</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let lunch of lunches">
+                    <td> {{ lunch.person.first_name }} {{ lunch.person.first_surname }} </td>
+                    <td> {{ lunch.value | currency }} </td>
+                    <td> {{ lunch.created_at | date: 'dd-MM-yyyy' }} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Nuevo Almuerzo </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="form-group col-12">
+                    <label for="" class="form-label">Funcionario</label>
+                    <ng-select formControlName="person_id" [items]="people" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
+                    <div>
+                        <small class="invalid text-danger" *ngIf="person_valid">
+                          Es necesario el funcionario
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group col-12">
+                    <label for="" class="form-label">Valor del Almuerzo</label>
+                    <input type="number" formControlName="value" class="form-control">
+                    <div>
+                        <small class="invalid text-danger" *ngIf="value_valid">
+                            Es necesario el valor del Almuerzo
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createLunch()" [disabled]="!form.valid">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

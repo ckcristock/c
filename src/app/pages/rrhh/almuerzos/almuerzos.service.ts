@@ -17,6 +17,10 @@ export class AlmuerzosService {
     return this.http.get(`${environment.base_url}/lunch`);
   }
 
+  getLunch(id:any){
+    return this.http.get(`${environment.base_url}/lunch/${id}`);
+  }
+
   createLunch( data:any ) {
     return this.http.post(`${environment.base_url}/lunch`, data);
   }

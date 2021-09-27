@@ -23,6 +23,7 @@ import { TiposActivoFijoComponent } from './tipos-activo-fijo/tipos-activo-fijo.
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PaisesComponent } from './paises/paises.component';
 import { TiposRiesgoComponent } from './tipos-riesgo/tipos-riesgo.component';
+import { ProfesionesComponent } from './profesiones/profesiones.component';
 
 
 @NgModule({
@@ -40,7 +41,7 @@ import { TiposRiesgoComponent } from './tipos-riesgo/tipos-riesgo.component';
         TiposEstadoFinancieroComponent,
         TiposAnulacionComponent, 
         TiposRechazoComponent, 
-        TiposActivoFijoComponent, PaisesComponent, TiposRiesgoComponent
+        TiposActivoFijoComponent, PaisesComponent, TiposRiesgoComponent, ProfesionesComponent
     ],
     imports : [
         TiposRoutingModule,

@@ -1,61 +1,51 @@
 <div class="card">
-  <div class="card-body">
-    <div class="row mb-2">
-      <div class="col-6">
-        <p>Lista de Cajas</p>
-      </div>
-      <div class="col-6 text-right">
-        <button
-          (click)="newPrettyCash.emit(true)"
-          class="btn btn-sm btn-primary"
-        >
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col-6">
+                <p>Lista de Cajas</p>
+            </div>
+            <div class="col-6 text-right">
+                <button (click)="newPrettyCash.emit(true)" class="btn btn-sm btn-primary">
           Crear Caja
         </button>
-      </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-striped" *ngIf="!loading && prettyCashList.length; else notData">
+                    <thead>
+                        <tr>
+                            <th>Caja</th>
+                            <th>Plan Cuenta</th>
+                            <th>Responsable</th>
+                            <th>Fun. Creó</th>
+                            <th>Saldo Inicial</th>
+                            <th>Saldo Actual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of prettyCashList">
+                            <td>{{ item.description }}</td>
+                            <td>
+                                {{ item.account_plan.name }} - {{ item.account_plan.code }}
+                            </td>
+                            <td>
+                                {{ item.person.first_name }} {{ item.person.first_surname }}
+                            </td>
+                            <td>
+                                {{ item.user.person.first_name }} {{ item.user.person.first_surname }}
+                            </td>
+                            <td>{{ item.initial_balance }}</td>
+                            <td>{{ item.account_plan.balance.balance }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="row">
-      <div class="col-12">
-        <table
-          class="table table-striped"
-          *ngIf="prettyCashList.length; else notData"
-        >
-          <thead>
-            <tr>
-              <th>Caja</th>
-              <th>Plan Cuenta</th>
-              <th>Responsable</th>
-              <th>Fun. Creó</th>
-              <th>Saldo Inicial</th>
-              <th>Saldo Actual</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of prettyCashList">
-              <td>{{ item.description }}</td>
-              <td>
-                {{ item.account_plan.name }} - {{ item.account_plan.code }}
-              </td>
-              <td>
-                {{ item.person.first_name }} {{ item.person.first_surname }}
-              </td>
-              <td>
-                {{ item.user.person.first_name }}
-                {{ item.user.person.first_surname }}
-              </td>
-              <td>{{ item.initial_balance }}</td>
-              <td>{{ item.account_plan.balance.balance }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <app-crear-caja
-    (saved)="getPrettyCash()"
-    [openModal]="newPrettyCash"
-  ></app-crear-caja>
+    <app-crear-caja (saved)="getPrettyCash()" [openModal]="newPrettyCash"></app-crear-caja>
 </div>
 
 <ng-template #notData>
-  <app-not-data [loading]="loading"></app-not-data>
+    <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

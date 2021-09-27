@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlmuerzosService } from './almuerzos.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { ValidatorsService } from '../../ajustes/informacion-base/services/reactive-validation/validators.service';
 
@@ -11,10 +11,13 @@ import { ValidatorsService } from '../../ajustes/informacion-base/services/react
 })
 export class AlmuerzosComponent implements OnInit {
   @ViewChild('modal') modal:any;
+  @ViewChild('modalVer') modalVer:any;
   loading:boolean = false;
   form: FormGroup;
   people:any[] = [];
   lunches:any[] = [];
+  lunch:any = {};
+  lunch_id:any;
   constructor( 
                 private _almuerzo: AlmuerzosService,
                 private fb: FormBuilder,
@@ -32,10 +35,14 @@ export class AlmuerzosComponent implements OnInit {
     this.modal.show();
   }
 
+  openModalVer() {
+    this.modalVer.show();
+  }
+
   createForm(){
     this.form = this.fb.group({
-      person_id: ['', this._validator.required],
-      value: ['', this._validator.required]
+      person_id: ['', Validators.required],
+      value: ['', Validators.required]
     });
   }
 
@@ -49,9 +56,19 @@ export class AlmuerzosComponent implements OnInit {
     this.loading = true;
     this._almuerzo.getLunches().subscribe((r:any) =>{
         this.lunches = r.data;
-        console.log(this.lunches);
         this.loading = false;
     })
+  }
+  
+  getLunchId(id){
+    this.lunch_id = id;
+  }
+
+  getLunch(){
+    this._almuerzo.getLunch(this.lunch_id).subscribe((r:any) => {
+      this.lunch = r.data;
+      console.log(this.lunch);
+    });
   }
 
   createLunch(){

@@ -41,7 +41,10 @@ import { ProfesionesComponent } from './profesiones/profesiones.component';
         TiposEstadoFinancieroComponent,
         TiposAnulacionComponent, 
         TiposRechazoComponent, 
-        TiposActivoFijoComponent, PaisesComponent, TiposRiesgoComponent, ProfesionesComponent
+        TiposActivoFijoComponent, 
+        PaisesComponent, 
+        TiposRiesgoComponent, 
+        ProfesionesComponent
     ],
     imports : [
         TiposRoutingModule,

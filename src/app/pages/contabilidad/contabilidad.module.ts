@@ -33,7 +33,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     DepreciacionesComponent,
     DepreciacionComponent,
     CajasComponent,
-    CrearCajaComponent,
+    CrearCajaComponent
   ],
   imports: [
     CommonModule,

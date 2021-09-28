@@ -17,7 +17,8 @@ const routes: Routes = [
     { path: 'ver', component: ActivosFijosVerComponent },
     { path: 'depreciaciones', component: DepreciacionesComponent },
     { path: 'cajas', component: CajasComponent },
-    { path: 'depreciacion', component: DepreciacionComponent }
+    { path: 'depreciacion', component: DepreciacionComponent },
+    { path: 'comprobantes',   loadChildren : () => import('./comprobantes/comprobantes.module').then(m => m.ComprobantesModule )}
 ];
 
 @NgModule({

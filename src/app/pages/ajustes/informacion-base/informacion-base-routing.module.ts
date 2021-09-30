@@ -15,6 +15,7 @@ import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
 import { TercerosComponent } from './terceros/terceros.component';
 import { ConfiguracionEmpresaComponent } from '../configuracion/configuracion-empresa.component';
+import { CrearTercerosComponent } from './terceros/crear-terceros/crear-terceros.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
@@ -36,7 +37,9 @@ const routes: Routes = [
   { path: 'caja-compensacion', component: CajaCompensacionComponent },
   { path: 'fondo-cesantias', component: FondoCesantiasComponent },
   { path: 'terceros', component: TercerosComponent },
-  { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent }
+  { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent },
+  { path: 'crear-tercero/:origin', component: CrearTercerosComponent },
+  { path: 'editar-tercero/:id/:origin', component: CrearTercerosComponent },
 ];
 
 @NgModule({

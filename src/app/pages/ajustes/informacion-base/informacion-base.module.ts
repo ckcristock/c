@@ -44,6 +44,8 @@ import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
 import { TercerosComponent } from './terceros/terceros.component';
+import { CrearTercerosComponent } from './terceros/crear-terceros/crear-terceros.component';
+import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,8 @@ import { TercerosComponent } from './terceros/terceros.component';
     ArlComponent,
     CajaCompensacionComponent,
     FondoCesantiasComponent,
-    TercerosComponent
+    TercerosComponent,
+    CrearTercerosComponent
   ],
 
   imports: [
@@ -96,6 +99,8 @@ import { TercerosComponent } from './terceros/terceros.component';
     ReactiveFormsModule,
     ArchwizardModule,
     NgbNavModule,
+    NgbTooltipModule,
+    NgbTypeaheadModule
   ],
 })
 export class InformacionBaseModule {}

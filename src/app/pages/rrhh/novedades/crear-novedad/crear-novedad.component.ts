@@ -19,7 +19,7 @@ export class CrearNovedadComponent implements OnInit {
   form: FormGroup;
   people: any[]
   disabilityLeaves: any[]
-
+  vacationSelected:boolean;
   constructor(
     private fb: FormBuilder,
     private _disabilityLeaves: DisabilityLeavesService,
@@ -32,7 +32,6 @@ export class CrearNovedadComponent implements OnInit {
     this.createForm()
     this.getDisabilityLeaves()
     this.getPeople()
-
     this.open.subscribe(r => {
       if (r?.data) {
 
@@ -44,7 +43,8 @@ export class CrearNovedadComponent implements OnInit {
           date_start: moment.utc(r.data.date_start).format('YYYY-MM-DD'),
           date_end: moment.utc(r.data.date_end).format('YYYY-MM-DD'),
           modality: r.data.modality,
-          observation: r.data.observation
+          observation: r.data.observation,
+          payback_date: r.data.payback_date
         })
       }
       this.modal.show();
@@ -69,6 +69,7 @@ export class CrearNovedadComponent implements OnInit {
     let novedad = this.disabilityLeaves
       .find(novedad => novedad.value === value);
     let tipo = novedad.text.split(" ")[0];
+    (tipo == 'Vacaciones' ? this.vacationSelected = true : this.vacationSelected = false);
     this.form.patchValue({ disability_type: tipo })
   }
 
@@ -118,7 +119,6 @@ export class CrearNovedadComponent implements OnInit {
       })
   }
   createForm() {
-
     this.form = this.fb.group({
       id: [''],
       person_id: ['', Validators.required],
@@ -128,6 +128,7 @@ export class CrearNovedadComponent implements OnInit {
       date_end: ['', Validators.required],
       modality: ['Día', Validators.required],
       observation: ['', Validators.required],
+      payback_date: ['', Validators.required]
     })
   }
   get person_id_invalid() {

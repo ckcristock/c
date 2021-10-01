@@ -10,6 +10,7 @@ import { TiposRiesgoComponent } from './tipos-riesgo/tipos-riesgo.component';
 import { TiposNovedadesComponent } from "./tipos-novedades/tipos-novedades.component";
 import { TiposEgresoComponent } from './tipos-egreso/tipos-egreso.component';
 import { TiposIngresoComponent } from './tipos-ingreso/tipos-ingreso.component';
+import { ProfesionesComponent } from './profesiones/profesiones.component';
 
 
 const routes : Routes = [
@@ -22,7 +23,8 @@ const routes : Routes = [
     { path: 'tipos-riesgo' , component: TiposRiesgoComponent },
     { path: 'tipos-novedad' , component: TiposNovedadesComponent },
     { path: 'tipos-egreso' , component: TiposEgresoComponent },
-    { path: 'tipos-ingreso' , component: TiposIngresoComponent }
+    { path: 'tipos-ingreso' , component: TiposIngresoComponent },
+    { path: 'profesiones' , component: ProfesionesComponent }
 ]
 
 @NgModule({

@@ -8,11 +8,59 @@
       >
         Crear Viatico
       </button>
-      <h5>Viaticos</h5>
+      <h5 class="text-primary">Viaticos</h5>
       <p>Listado de todos los viaticos creados</p>
+      <div class="form-row mt-2">
+        <div class="form-group col-md-2">
+          <label for="">Funcionario</label>
+          <ng-select
+            [items]="people"
+            (change)="getAll()"
+            [(ngModel)]="filtros.person_id"
+            bindLabel="text"
+            bindValue="value"
+            loadingText="loading "
+            ngDefaultControl
+          >
+          </ng-select>
+          <!-- <input class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" [(ngModel)]="filtros.person_id" (change)="tipo(); getAll()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'> -->
+          <!-- <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.person_id" (change)="getAll()"> -->
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">F. Creación</label>
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="filtros.creation_date"
+            (change)="getAll()"
+          />
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">F. Salida</label>
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="filtros.departure_date"
+            (change)="getAll()"
+          />
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Estado</label>
+          <select
+            class="form-control"
+            [(ngModel)]="filtros.state"
+            (change)="getAll()"
+          >
+            <option *ngFor="let state of states" [value]="state.clave">
+              {{ state.clave }}
+            </option>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
 <div class="card">
   <div class="card-body">
     <table class="table table-borderless table-striped">
@@ -64,18 +112,28 @@
                     [routerLink]="['/nomina/ver-viatico', item.id]"
                     class="dropdown-item waves-light waves-effect caja-botones"
                   >
-                  <i class="far fa-eye"></i> Ver</a
+                    <i class="far fa-eye"></i> Ver</a
                   >
                   <a
-                    [routerLink]="['/nomina/editar-viatico', item.id]" 
+                    [routerLink]="['/nomina/editar-viatico', item.id]"
                     class="dropdown-item waves-light waves-effect caja-botones"
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
+
                   <a
-                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                    *ngIf="
+                      permission.permissions.approve && item.state != 'Aprobado'
+                    "
+                    (click)="aprobarViatico(item, 'Aprobado')"
+                    class="dropdown-item waves-light waves-effect caja-botones"
                   >
-                  <i class="far fa-trash-alt"></i> Anular</a
+                    <i class="fa fa-pencil"></i>Aprobar</a
+                  >
+                  <a
+                    class="dropdown-item waves-light waves-effect caja-botones"
+                  >
+                    <i class="fa fa-pencil"></i>Anular</a
                   >
                 </div>
               </div>

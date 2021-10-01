@@ -1,0 +1,185 @@
+<div class="row mb-4">
+    <div class="col text-left">
+        <a class="text-primary back" (click)="regresar()">Regresar</a>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <div style="float: right;" class="text-right">
+                <h5>Nueva Nota Contable</h5>
+                <h6></h6>
+                <strong> {{ date | date:'dd/MM/yyyy' }} </strong>
+            </div>
+            <div class="row">
+                <div>
+                    <img src="../../../../assets/images/users/no-image.png" class="p-0 m-0">
+                </div>
+                <div class="ml-3">
+                    <small>
+                        <strong>
+                            Productos Pruebas S.A <br>
+                            NIT 804.016.084-5 <br>
+                            Calle 15 No. 17 - 55 Barrio San Francisco <br>
+                            Tel 61547855
+                        </strong>
+                    </small>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="page-body" style="margin-top: 40px;">
+            <form [formGroup]="form">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="form-group col-md-2">
+                                <label class="custom-label" for="fecha">Fecha</label>
+                                <input type="date" formControlName="date" class="form-control form-control-sm">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="custom-label" for="beneficiario_documento">Beneficiario Documento</label>
+                                <input type="text" [ngbTypeahead]="searchthird" [inputFormatter]="formatterthird" [resultFormatter]="formatterthird" [editable]="false" formControlName="beneficiary" class="form-control form-control-sm">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="custom-label" for="centro_costo">Centro Costo</label>
+                                <input type="text" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]="false" formControlName="cost_center" class="form-control form-control-sm">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="custom-label" for="documento_">Documento</label>
+                                <input type="text" formControlName="document" class="form-control form-control-sm">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="custom-label" for="concepto_">Concepto</label>
+                                <input type="text" formControlName="concept" class="form-control form-control-sm">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="custom-label" for="borradores_">Borradores</label>
+                                <select formControlName="drafts" class="form-control form-control-sm">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr class="mt-4">
+                        <div class="row">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label for="cuenta">Cuenta</label>
+                                        </th>
+                                        <th>
+                                            <label for="nit">NIT</label>
+                                        </th>
+                                        <th>
+                                            <label for="centro_costo">Centro Costo</label>
+                                        </th>
+                                        <th>
+                                            <label for="documento">Documento</label>
+                                        </th>
+                                        <th>
+                                            <label for="concepto">Concepto</label>
+                                        </th>
+                                        <th>
+                                            <label for="base">Base</label>
+                                        </th>
+                                        <th>
+                                            <label for="debito">Debito</label>
+                                        </th>
+                                        <th>
+                                            <label for="credito">Crédito</label>
+                                        </th>
+                                        <th>
+                                            <label for="deb_NIIF">Deb. NIIF</label>
+                                        </th>
+                                        <th>
+                                            <label for="cred_niif">Créd. NIIF</label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr formArrayName="datos" *ngFor="let item of datosList.controls; let i = index">
+                                        <td [formGroupName]="i">
+                                            <input type="text" formControlName="account" (change)="createData()" class="form-control form-control-sm" id="cuenta">
+                                        </td>
+                                        <td [formGroupName]="i">
+                                            <input type="text" formControlName="nit" class="form-control form-control-sm" id="nit">
+                                        </td>
+                                        <td [formGroupName]="i">
+                                            <input type="text" formControlName="cost_center" class="form-control form-control-sm" id="centro_costo">
+                                        </td>
+                                        <td [formGroupName]="i">
+                                            <input type="text" formControlName="document" class="form-control form-control-sm" id="documento">
+                                        </td>
+                                        <td [formGroupName]="i">
+                                            <input type="text" formControlName="concept" class="form-control form-control-sm" id="concepto">
+                                        </td>
+                                        <td [formGroupName]="i">
+                                            <input type="text" formControlName="base" class="form-control form-control-sm" readonly id="base">
+                                        </td>
+                                        <td [formGroupName]="i">
+                                            <input type="number" formControlName="debit" class="form-control form-control-sm" id="debito">
+                                        </td>
+                                        <td [formGroupName]="i">
+                                            <input type="number" formControlName="credit" class="form-control form-control-sm" id="credito">
+                                        </td>
+                                        <td [formGroupName]="i">
+                                            <input type="text" formControlName="deb_niif" class="form-control form-control-sm" id="deb_NIIF">
+                                        </td>
+                                        <td [formGroupName]="i">
+                                            <input type="text" formControlName="cred_niif" class="form-control form-control-sm" id="cred_niif">
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-danger" (click)="deleteData(i)">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 m-t-20">
+                                <table class="table table-borderless table-striped">
+                                    <tbody class="bg-light">
+                                        <tr>
+                                            <th>Total Debito:</th>
+                                            <td>
+                                                <!-- <input type="number" formControlName="total_debit" class="form-control form-control-sm"> -->
+                                                {{ total_debit | currency }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total Credito:</th>
+                                            <td>
+                                                <!-- <input type="number" formControlName="total_credit" class="form-control form-control-sm"> -->
+                                                {{ total_credit | currency }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total Debito NIFF:</th>
+                                            <td>{{ total_debit_niif | currency }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total Crédito NIFF:</th>
+                                            <td>{{ total_credit_niif | currency }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diferencia:</th>
+                                            <td>{{ diference | currency }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diferencia NIIF:</th>
+                                            <td>{{ diference_niff | currency }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-info col-12">Guardar Nota Contable</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

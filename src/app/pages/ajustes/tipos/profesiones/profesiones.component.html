@@ -1,0 +1,71 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                <i class="fa fa-plus"></i>
+                Agregar
+            </button>
+            <h5>Profesiones</h5>
+        </div>
+        <table class="table table-borderless table-striped mt-5" *ngIf="!loading && professions.length > 0; else notData">
+            <thead>
+                <tr>
+                    <th>Profesión</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let profession of professions" [ngClass]="{'bg-danger text-white': (profession.state === 'Inactivo' )}">
+                    <td> {{ profession.name }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a *ngIf="profession.state == 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="activateOrInactivate(profession, 'Activo')"><i
+                                        class="fa fa-file-pdf-o"></i>Activar</a>
+                                    <a *ngIf="profession.state == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="activateOrInactivate(profession, 'Inactivo')"><i
+                                            class="fa fa-file-pdf-o"></i>Desactivar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getProfessions($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Nueva Profesión </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="form-group col-12">
+                    <label for="" class="form-label">Nom. Profesión</label>
+                    <input type="text" formControlName="name" class="form-control form-control-sm">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createProfession()" [disabled]="!form.valid">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>

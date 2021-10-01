@@ -1,0 +1,120 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-info" style="float: right;" (click)="openModal()">Agregar</button>
+            <h5 class="text-primary">Almuerzos</h5>
+        </div>
+        <table class="table table-borderless table-striped mt-4" *ngIf="!loading && lunches.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th scope="col">Funcionario</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col" class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let lunch of lunches">
+                    <td> {{ lunch.person.first_name }} {{ lunch.person.first_surname }} </td>
+                    <td> {{ lunch.value | currency }} </td>
+                    <td> {{ lunch.created_at | date: 'dd-MM-yyyy' }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a (click)="openModalVer(); getLunchId(lunch.id); getLunch()" class="dropdown-item waves-light waves-effect caja-botones" target="_blank"><i
+                                            class="fa fa-file-pdf-o"></i>Ver</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Nuevo Almuerzo </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide(); form.reset"></i>
+          </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="form-group col-12">
+                    <label for="" class="form-label">Funcionario</label>
+                    <ng-select formControlName="person_id" [items]="people" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
+                </div>
+                <div class="form-group col-12">
+                    <label for="" class="form-label">Valor del Almuerzo</label>
+                    <input type="number" formControlName="value" class="form-control">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide(); form.reset" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createLunch()" [disabled]="!form.valid">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<!--------------- Ver ------------------->
+<!-- <app-modal-basic #modalVer [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Ver </h5>
+        <button type="button" class="close basic-close" (click)="modalVer.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modalVer.hide()"></i>
+          </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Funcionario</th>
+                    <td> {{ lunch.person.first_name }} {{ lunch.person.first_surname }} </td>
+                </tr>
+                <tr>
+                    <th>Func. Responsable</th>
+                    <td>Jose</td>
+                </tr>
+                <tr>
+                    <th>Valor Almuerzo</th>
+                    <td> {{ lunch.value }} </td>
+                </tr>
+                <tr>
+                    <th>Fecha de Creación</th>
+                    <td> {{ lunch.created_at }} </td>
+                </tr>
+            </thead>
+        </table>
+        <div class="form-row">
+            <div class="form-group col-12">
+                <label for="" class="form-label">Funcionario</label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="form-group col-12">
+                <label for="" class="form-label">Valor del Almuerzo</label>
+                <input type="number" class="form-control">
+            </div>
+        </div>
+        <div class="row ml-0 mr-0">
+            <button (click)="modalVer.hide()" type="button" class="col-12 btn btn-danger mr-2 btn-sm">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic> -->
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

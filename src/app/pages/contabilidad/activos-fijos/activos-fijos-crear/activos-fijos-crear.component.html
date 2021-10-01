@@ -6,10 +6,10 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <div style="float: right;">
+            <div style="float: right;" class="text-right">
                 <h5>Nuevo Activo Fijo</h5>
                 <h6>AAFF2012213</h6>
-                <small>13/09/2021</small>
+                <strong> {{ date | date:'dd/MM/yyyy' }} </strong>
             </div>
             <div class="row">
                 <div>
@@ -28,119 +28,128 @@
             </div>
         </div>
         <div class="page-body" style="margin-top: 60px;">
-            <form>
+            <form [formGroup]="form">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="form-group col-md-2">
                                 <label class="custom-label" for="fecha">Fecha</label>
-                                <input type="date" class="form-control form-control-sm" id="fecha">
+                                <input type="date" formControlName="date" class="form-control form-control-sm" id="fecha">
                             </div>
                             <div class="form-group col-md-2">
-                                <label class="custom-label" for="nit">NIT</label>
-                                <input type="date" class="form-control form-control-sm" id="nit">
+                                <label class="custom-label" for="nit_">NIT</label>
+                                <input type="number" formControlName="nit" class="form-control form-control-sm" id="nit_">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="custom-label" for="person">Func. Responsable</label>
+                                <input type="text" [ngModelOptions]="{standalone: true}" (change)="getPersonId()" class="form-control form-control-sm" [(ngModel)]="person_selected" [ngbTypeahead]="searchPeople" [inputFormatter]="formatterPeople" [resultFormatter]="formatterPeople" [editable]='false'
+                                    id="person">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="custom-label" for="nombre_activo">Nombre Activo</label>
-                                <input type="text" class="form-control form-control-sm" id="nombre_activo">
+                                <input type="text" formControlName="name" class="form-control form-control-sm" id="nombre_activo">
                             </div>
                             <div class="form-group col-md-2">
-                                <label class="custom-label" for="document">Documento</label>
-                                <input type="text" class="form-control form-control-sm" id="document">
+                                <label class="custom-label" for="document_">Documento</label>
+                                <input type="text" formControlName="document" class="form-control form-control-sm" id="document_">
                             </div>
-                            <div class="form-group col-md-3">
-                                <label class="custom-label" for="concepto">Concepto</label>
-                                <input type="text" class="form-control form-control-sm" id="concepto">
+                            <div class="form-group col-md-2">
+                                <label class="custom-label" for="conceptoo">Concepto</label>
+                                <input type="text" formControlName="concept" readonly class="form-control form-control-sm" id="conceptoo">
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-2">
                                 <label class="custom-label" for="tipo-activo">Tipo Activo</label>
-                                <input type="text" class="form-control form-control-sm" id="tipo-activo">
+                                <select formControlName="type" class="form-control form-control-sm" id="tipo-activo">
+                                    <option *ngFor="let item of tipoActivos" [value]="item.value">
+                                        {{ item.text }}
+                                    </option>
+                                </select>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-2">
                                 <label class="custom-label" for="c_costo">C. Costo</label>
-                                <input type="text" class="form-control form-control-sm" id="c_costo">
+                                <input type="text" formControlName="center_cost_id" class="form-control form-control-sm" id="c_costo">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="custom-label" for="referencia">Referencia</label>
-                                <input type="text" class="form-control form-control-sm" id="referencia">
+                                <input type="text" formControlName="reference" class="form-control form-control-sm" id="referencia">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="custom-label" for="cantidad">Cantidad</label>
-                                <input type="text" class="form-control form-control-sm" id="cantidad">
+                                <input type="text" formControlName="source" class="form-control form-control-sm" id="cantidad">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="custom-label" for="base">Base</label>
-                                <input type="text" class="form-control form-control-sm" id="base">
+                                <input type="number" formControlName="base" class="form-control form-control-sm" id="base">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="custom-label" for="iva">IVA</label>
-                                <input type="text" class="form-control form-control-sm" id="iva">
+                                <input type="number" formControlName="iva" class="form-control form-control-sm" id="iva">
                             </div>
                             <div class="form-group col-md-3">
-                                <label class="custom-label" for="base_niif">Base NIIF</label>
-                                <input type="text" class="form-control form-control-sm" id="base_niif">
+                                <label class="custom-label" for="niif_base">Base NIIF</label>
+                                <input type="number" formControlName="niif_base" class="form-control form-control-sm" id="base_niif">
                             </div>
                             <div class="form-group col-md-3">
-                                <label class="custom-label" for="iva_niif">IVA NIIF</label>
-                                <input type="text" class="form-control form-control-sm" id="iva_niif">
+                                <label class="custom-label" for="niif_iva">IVA NIIF</label>
+                                <input type="number" formControlName="niif_iva" class="form-control form-control-sm" id="iva_niif">
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="custom-label" for="costo_pcga">Costo PCGA(Local)</label>
-                                <input type="text" class="form-control form-control-sm" id="costo_pcga">
+                                <input type="text" formControlName="pcga_cost" readonly class="form-control form-control-sm" id="costo_pcga">
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="custom-label" for="costo_niif">Costo NIIF</label>
-                                <input type="text" class="form-control form-control-sm" id="costo_niif">
+                                <input type="text" formControlName="niif_cost" readonly class="form-control form-control-sm" id="costo_niif">
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="custom-label" for="cuenta_rte_fte">Cuenta Rte Fte</label>
-                                <input type="text" class="form-control form-control-sm" id="cuenta_rte_fte">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="valor">Valor</label>
-                                <input type="text" class="form-control form-control-sm" id="valor">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="valor_niif">Valor NIIF</label>
-                                <input type="text" class="form-control form-control-sm" id="valor_niif">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="cuenta_rte_Ica">Cuenta Rte Ica</label>
-                                <input type="text" class="form-control form-control-sm" id="cuenta_rte_Ica">
+                                <input type="text" formControlName="source_rete_account" class="form-control form-control-sm" id="cuenta_rte_fte">
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="custom-label" for="valor_">Valor</label>
-                                <input type="text" class="form-control form-control-sm" id="valor_">
+                                <input type="number" formControlName="source_rete_cost" class="form-control form-control-sm" id="valor_">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="custom-label" for="valor_niif_">Valor NIIF</label>
+                                <input type="text" formControlName="niif_source_rete_cost" class="form-control form-control-sm" id="valor_niif_">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="custom-label" for="cuenta_rte_Ica">Cuenta Rte Ica</label>
+                                <input type="text" formControlName="source_ica_account" class="form-control form-control-sm" id="cuenta_rte_Ica">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="custom-label" for="rte_valor_">Valor</label>
+                                <input type="number" formControlName="source_ica_cost" class="form-control form-control-sm" id="rte_valor_">
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="custom-label" for="valor_niif">Valor NIIF</label>
-                                <input type="text" class="form-control form-control-sm" id="valor_niif">
+                                <input type="text" formControlName="niif_ica_rete_cost" class="form-control form-control-sm" id="valor_niif">
                             </div>
                         </div>
                         <div class="row mt-4">
                             <div class="col-md-6">
                                 <h5>Anticipo</h5>
                                 <hr>
-                                <div class="row">
-                                    <div class="form-group col-md-2">
+                                <div class="row" formArrayName="anticipo" *ngFor="let item of anticipoList.controls; let i = index">
+                                    <div class="form-group col-md-2" [formGroupName]="i">
                                         <label class="custom-label col-form-label-sm" for="cuenta_anticipo">Cuenta Anticipo</label>
-                                        <input type="text" class="form-control form-control-sm" id="cuenta_anticipo">
+                                        <input type="text" formControlName="advance_account" (change)="createNewAdvance()" class="form-control form-control-sm" id="cuenta_anticipo">
                                     </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="custom-label col-form-label-sm" for="nit">NIT</label>
-                                        <input type="text" class="form-control form-control-sm" id="nit">
+                                    <div class="form-group col-md-2" [formGroupName]="i">
+                                        <label class="custom-label col-form-label-sm" for="ant_nit">NIT</label>
+                                        <input type="text" formControlName="nit" class="form-control form-control-sm" id="ant_nit">
                                     </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="custom-label col-form-label-sm" for="documento">Documento</label>
-                                        <input type="text" class="form-control form-control-sm" id="documento">
+                                    <div class="form-group col-md-3" [formGroupName]="i">
+                                        <label class="custom-label col-form-label-sm" for="ant_documento">Documento</label>
+                                        <input type="text" formControlName="document" class="form-control form-control-sm" id="ant_documento">
                                     </div>
-                                    <div class="form-group col-md-3">
+                                    <div class="form-group col-md-3" [formGroupName]="i">
                                         <label class="custom-label col-form-label-sm" for="concepto">Concepto</label>
-                                        <input type="text" class="form-control form-control-sm" id="concepto">
+                                        <input type="text" formControlName="concept" class="form-control form-control-sm" id="concepto">
                                     </div>
-                                    <div class="form-group col-md-2">
+                                    <div class="form-group col-md-2" [formGroupName]="i">
                                         <label class="custom-label col-form-label-sm" for="value">Valor</label>
-                                        <input type="number" class="form-control form-control-sm" id="value">
+                                        <input type="number" formControlName="value" class="form-control form-control-sm" id="value">
                                     </div>
                                 </div>
                             </div>
@@ -153,20 +162,20 @@
                                         <input type="number" class="form-control form-control-sm" id="cta_pagar">
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label class="custom-label col-form-label-sm" for="nit">NIT</label>
-                                        <input type="number" class="form-control form-control-sm" id="nit">
+                                        <label class="custom-label col-form-label-sm" for="p_nit">NIT</label>
+                                        <input type="number" class="form-control form-control-sm" id="p_nit">
                                     </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="custom-label col-form-label-sm" for="document">Documento</label>
-                                        <input type="number" class="form-control form-control-sm" id="document">
+                                    <div class="form-group col-md-3">
+                                        <label class="custom-label col-form-label-sm" for="p_document">Documento</label>
+                                        <input type="number" class="form-control form-control-sm" id="p_document">
                                     </div>
-                                    <div class="form-group col-md-2">
+                                    <div class="form-group col-md-3">
                                         <label class="custom-label col-form-label-sm" for="concept">Concepto</label>
-                                        <input type="number" class="form-control form-control-sm" id="concept">
+                                        <input type="number" class="form-control form-control-sm" id="p_concept">
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label class="custom-label col-form-label-sm" for="values">Valor</label>
-                                        <input type="number" class="form-control form-control-sm" id="values">
+                                        <input type="number" formControlName="valueCtaxPay" class="form-control form-control-sm" id="values">
                                     </div>
                                 </div>
                             </div>
@@ -179,22 +188,28 @@
                             <tbody class="bg-light">
                                 <tr>
                                     <th>Total Debito:</th>
-                                    <td>25252</td>
+                                    <td class="text-left">
+                                        {{ total_debit | currency }}
+                                    </td>
                                 </tr>
 
                                 <tr>
                                     <th>Total Credito:</th>
-                                    <td>2251</td>
+                                    <td class="text-left">
+                                        {{ total_credits | currency }}
+                                    </td>
                                 </tr>
 
                                 <tr>
                                     <th>Diferencia:</th>
-                                    <td>2525259</td>
+                                    <td class="text-left">
+                                        {{ diference | currency }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </form>
-            <button class="btn btn-info btn-sm mt-3" style="float: right;">Guardar</button>
+            <button class="btn btn-info btn-sm mt-3 col-12" style="float: right;">Guardar Activo Fijo</button>
         </div>

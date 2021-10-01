@@ -6,14 +6,33 @@
                 <button class="btn btn-info btn-sm ml-4" (click)="openMemorando()">Nuevo Memorando</button>
                 <button class="btn btn-secondary btn-sm ml-4" (click)="openModalLlamada()">Nuevo Llamado de atención</button>
             </div>
-            <h5>Memorando</h5>
+            <h5 class="text-primary">Memorando</h5>
+            <div class="form-row mt-4">
+                <div class="form-group col-md-2">
+                    <label for="">Funcionario</label>
+                    <ng-select [items]="people" [(ngModel)]="filtros.person" (change)="getMemorandumList()" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="">Fecha</label>
+                    <input type="date" [(ngModel)]="filtros.date" (change)="getMemorandumList()" class="form-control">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="">Estado</label>
+                    <select class="form-control" [(ngModel)]="filtros.state" (change)="getMemorandumList()">
+                      <option *ngFor="let state of states" [value]="state.clave">
+                        {{ state.clave }}
+                      </option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <div class="card">
     <div class="card-body">
-        <table class="table table-striped" *ngIf="!loading && memorandums.length > 0; else notData">
-            <thead>
+        <table class="table table-borderless table-striped" *ngIf="!loading && memorandums.length > 0; else notData">
+            <thead class="bg-light">
                 <tr>
                     <th scope="col"></th>
                     <th scope="col">Funcionario</th>
@@ -22,6 +41,8 @@
                     <th scope="col">Tipo</th>
                     <th scope="col">Detalles</th>
                     <th scope="col">Fecha</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" *ngIf="permission.permissions.approve">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,12 +50,26 @@
                     <td scope="row">
                         <img [src]="memorandum.image | image" class="p-0 m-0" alt="">
                     </td>
-                    <td style="vertical-align: middle;">{{ memorandum.first_name }} {{ memorandum.second_name }} {{ memorandum.first_surname }} {{ memorandum.second_surname }} </td>
+                    <td style="vertical-align: middle;">{{ memorandum.first_name }} {{ memorandum.first_surname }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.level }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.memorandumType }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.type }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.details }} </td>
                     <td style="vertical-align: middle;"> {{ memorandum.created_at | date:'dd-MM-yyyy' }} </td>
+                    <td style="vertical-align: middle;"> {{ memorandum.state }} </td>
+                    <td *ngIf="permission.permissions.approve">
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light" type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a (click)="aprobarMemorando(memorandum, 'Aprobado')" class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i>Aprobar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -1,0 +1,85 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" style="float: right;" [routerLink]="['/contabilidad/comprobantes/crear-nota-contable']">
+            <i class="fa fa-plus"></i>
+            Agregar Nueva Nota Contable
+            </button>
+            <h5>Notas Contables</h5>
+            <p>Notas de Contabilidad realizadas en el sistema.</p>
+        </div>
+        <hr style="background-color: #95c11f;">
+        <div class="form-row mt-4">
+            <div class="form-group col-md-2">
+                <label for="">Filto Fecha</label>
+                <input type="date" class="form-control form-control-sm">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="">Filtro Código</label>
+                <input type="number" class="form-control form-control-sm">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="">Filtro Cliente</label>
+                <input type="text" class="form-control form-control-sm">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="">Filtro Estado</label>
+                <select class="form-control form-control-sm">
+                    <option value="">Todos</option>
+                    <option value="">Activos</option>
+                    <option value="">Anulados</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-borderless table-striped">
+            <thead class="bg-light">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Documento</th>
+                    <th>Beneficiario</th>
+                    <th>Concepto</th>
+                    <th>Total Debito</th>
+                    <th>Total Crédito</th>
+                    <th>Total Debito NIIF</th>
+                    <th>Total Crédito NIIF</th>
+                    <th>Funcionario</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i>Ver PCGA</a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-pencil"></i>Ver NIIF</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

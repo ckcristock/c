@@ -69,10 +69,11 @@ export class CreateTurnoFijoComponent implements OnInit {
   save() {
     this.forma.markAllAsTouched();
     if (this.forma.invalid) return false;
+    console.log(this.id);
     this._swal
       .show({
-        title: '¿Desea Guardar?',
-        text: 'Se Dispone a guardar el nuevo turno',
+        title: (this.id == undefined ? '¿Desea Guardar?' : '¿Desea Actulizar?'),
+        text: (this.id == undefined ? 'Se Dispone a guardar el nuevo turno' : 'Se Dispone a actualizar el turno'),
         icon: 'warning',
       })
       .then((r) => {
@@ -91,7 +92,7 @@ export class CreateTurnoFijoComponent implements OnInit {
     });
   }
   toEdit() {
-    this._fixedTurn.saveTurnFixed(this.forma.value).subscribe((r: any) => {
+    this._fixedTurn.updateTurnFixed(this.forma.value, this.id).subscribe((r: any) => {
       this.successfull(r.code);
     });
   }

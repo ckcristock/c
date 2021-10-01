@@ -20,6 +20,7 @@ import {CertificadosComponent} from './certificados/certificados.component';
 import {ReporteHorarioComponent} from './reporte-horario/reporte-horario.component';
 import {FondoEmpleadoComponent} from './fondo-empleado/fondo-empleado.component';
 import { AsignarHorasExtrasComponent } from './asignar-horas-extras/asignar-horas-extras.component';
+import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
 
 const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: 'certificados', component: CertificadosComponent },
   { path: 'fondo-empleado', component: FondoEmpleadoComponent },
   { path: 'asignar-horas-extras', component: AsignarHorasExtrasComponent },
+  { path: 'almuerzos', component: AlmuerzosComponent }
 ];
 
 @NgModule({

@@ -1,0 +1,354 @@
+<div class="row mb-4">
+    <div class="col text-left">
+        <a class="text-primary back" (click)="regresar()">Regresar</a>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <div style="float: right;" class="text-right">
+                <h5> {{ title }} </h5>
+                <strong> {{ date | date:'dd/MM/yyyy' }} </strong>
+            </div>
+            <div class="row">
+                <div>
+                    <img src="../../../../assets/images/users/no-image.png" class="p-0 m-0">
+                </div>
+                <div class="ml-3">
+                    <small>
+                        <strong>
+                            Productos Pruebas S.A <br>
+                            NIT 804.016.084-5 <br>
+                            Calle 15 No. 17 - 55 Barrio San Francisco <br>
+                            Tel 61547855
+                        </strong>
+                    </small>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-primary">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-12 text-center mt-2 mb-4">
+                            <h4>Datos Básicos</h4>
+                        </div>
+                        <div class="form-goup col-md-1">
+                            <label for="">NIT</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="nit">
+                        </div>
+                        <div class="form-group col-md-1" style="margin-top: 29px;">
+                            <input type="text" readonly class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Tipo de Persona</label>
+                            <select class="form-control form-control-sm" formControlName="person_type" (change)="personType()">
+                                <option selected>Seleccione</option>
+                                <option value="natural">Natural</option>
+                                <option value="juridico">Jurídico</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Primer Nombre</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="first_name">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Segundo Nombre</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="second_name">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Primer Apellido</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="first_surname">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Segundo Apellido</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="second_surname">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Razón Social</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="social_reason">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Nombre Comercial</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="tradename">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Dirección</label>
+                            <select class="form-control form-control-sm" formControlName="dian_address">
+                                <option *ngFor="let addre of address" [value]="addre.code">
+                                    {{ addre.description }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1" style="margin-top: 29px;">
+                            <input type="text" class="form-control form-control-sm" formControlName="address_one">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="">#</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="address_two">
+                        </div>
+                        <div class="form-group col-md-1" style="margin-top: 29px;">
+                            <select class="form-control form-control-sm" readonly formControlName="address_three">
+                                <option *ngFor="let item of address" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1" style="margin-top: 29px;">
+                            <input type="text" class="form-control form-control-sm" formControlName="address_four">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Dirección Cod. Dian</label>
+                            <input type="text" class="form-control form-control-sm" readonly formControlName="cod_dian_address">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">Tel. Fijo</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="landline">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">Tel. Celular</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="cell_phone">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">Email</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="email">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">Zona</label>
+                            <select class="form-control form-control-sm" formControlName="zone_id">
+                                <option selected>Seleccione</option>
+                                <option *ngFor="let zone of zones" [value]="zone.value">
+                                    {{ zone.text | uppercase }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">Departamento</label>
+                            <select class="form-control form-control-sm" formControlName="department_id">
+                                <option selected>Seleccione</option>
+                                <option *ngFor="let department of departments" [value]="department.value">
+                                    {{ department.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">Municipio</label>
+                            <select class="form-control form-control-sm" formControlName="municipality_id">
+                                <option selected>Seleccione</option>
+                                <option *ngFor="let municipality of municipalities" [value]="municipality.value">
+                                    {{ municipality.text }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="parametro == 'contabilidad'">
+                        <hr class="bg-primary">
+                        <div class="row">
+                            <div class="col-12 text-primary text-center mt-2 mb-4">
+                                <h4>Datos Comerciales</h4>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Lista Ganancia</label>
+                                <select class="form-control form-control-sm" formControlName="winning_list_id">
+                                    <option *ngFor="let item of winnigLists" [value]="item.id">
+                                        {{ item.name }} - {{ item.percentage }}%
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">¿Aplica IVA?</label>
+                                <select class="form-control form-control-sm" formControlName="apply_iva">
+                                    <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Contacto Pagos</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="contact_payments">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Telefono Pagos</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="phone_payments">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Email Pagos</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="email_payments">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Tipo Regimen</label>
+                                <select class="form-control form-control-sm" formControlName="regime">
+                                    <option value="comun">Común</option>
+                                    <option value="simplificado">Simplificado</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Animo Lucro</label>
+                                <select class="form-control form-control-sm" formControlName="encourage_profit">
+                                    <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="">Actividad Economica</label>
+                                <select class="form-control form-control-sm" formControlName="ciiu_code_id">
+                                    <option *ngFor="let item of ciiuCodes" [value]="item.id">
+                                       {{ item.code }} - {{ item.description }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Agente de Retención</label>
+                                <select class="form-control form-control-sm" formControlName="withholding_agent">
+                                    <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">¿Retención en Factura?</label>
+                                <select class="form-control form-control-sm" formControlName="withholding_oninvoice">
+                                    <option value="Si">Si</option>
+                                    <option value="Si">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Tipo Reteica</label>
+                                <select class="form-control form-control-sm" formControlName="reteica_type">
+                                    <option value="No">No</option>
+                                    <option value="Supera Base">Supera Base</option>
+                                    <option value="Permanente">Permanente</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Cuenta Reteica</label>
+                                <input type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" (change)="searchAccount('Reteica'); tipo()" formControlName="reteica_account">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="">%</label>
+                                <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="reteica" [(ngModel)]="retePercentage.reteica" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Cuenta Retefuente</label>
+                                <input type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" (change)="searchAccount('Retefuente')" formControlName="retefuente_account">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="">%</label>
+                                <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="retefuente" [(ngModel)]="retePercentage.retefuente" readonly>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="">G. Contrib.</label>
+                                <select class="form-control form-control-sm" formControlName="g_contribut">
+                                    <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Cuenta Reteiva</label>
+                                <input type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" (change)="searchAccount('Reteiva')" formControlName="reteiva_account">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="">%</label>
+                                <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="reteiva" [(ngModel)]="retePercentage.reteiva" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Condición de Pago</label>
+                                <select class="form-control form-control-sm" formControlName="condition_payment">
+                                    <option *ngFor="let item of pagos" [value]="item.valor">  
+                                        {{ item.clave }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Cupo Asignado</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="assigned_space">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Descuento Pronto Pago</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="discount_prompt_payment">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Descuento en días</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="discount_days">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="">Estado</label>
+                                <select class="form-control form-control-sm" formControlName="state">
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3 mb-3">
+                                <label for="formFile" class="form-label">RUT</label>
+                                <input class="form-control form-control-sm" type="file" id="formFile" formControlName="rut">
+                            </div>
+                        </div>
+                    </ng-container>
+                    <hr class="bg-primary">
+                    <div class="row">
+                        <div class="col-12 text-primary text-center mt-2 mb-4">
+                            <h4>Personas</h4>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="personList.controls.length; else notData">
+                        <div class="row" formArrayName="person" *ngFor="let item of personList.controls; let i = index">
+                            <div class="form-group col-md-3" [formGroupName]="i">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="name">
+                            </div>
+                            <div class="form-group col-md-3" [formGroupName]="i">
+                                <label for=""># Documento</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="n_document">
+                            </div>
+                            <div class="form-group col-md-2" [formGroupName]="i">
+                                <label for="">Tel. Fijo</label>
+                                <input type="number" class="form-control form-control-sm" formControlName="landline">
+                            </div>
+                            <div class="form-group col-md-2" [formGroupName]="i">
+                                <label for="">Tel. Celular</label>
+                                <input type="number" class="form-control form-control-sm" formControlName="cell_phone">
+                            </div>
+                            <div class="form-group col-md-2" [formGroupName]="i">
+                                <label for="">Email</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="email">
+                            </div>
+                            <div class="form-group col-md-5" [formGroupName]="i">
+                                <label for="">Cargo</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="position">
+                            </div>
+                            <div class="form-group col-md-6" [formGroupName]="i">
+                                <label for="">Observación</label>
+                                <input type="text" class="form-control form-control-sm" cols="5" rows="5" formControlName="observation" />
+                            </div>
+                            <div class="form-group col-md-1 text-right" [formGroupName]="i" style="margin-top: 29px;">
+                                <button class="btn btn-sm btn-outline-danger" placement="top" ngbTooltip="Borrar Persona" style="width: 100%;" (click)="deletePerson(i)">
+                                        <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <div class class="row">
+                        <div class="col-12">
+                            <div class="text-right">
+                                <button class="col-md-1 btn btn-sm btn-outline-success" style="width: 95px;" placement="left" ngbTooltip="Añadir persona" (click)="createPerson()"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 mb-3">
+                        <button class="btn btn-sm btn-info col-12" (click)="saveInformation()">
+                            Guardar Información
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<ng-template #notData>
+    <table class="table table-striped">
+        <tr class="bg-light">
+            <td colspan="100%" class="text-center">
+                <p class="mt-3" style="font-size: 20px; font-family: 'Noto Sans Display', sans-serif;">Sin datos agregados</p>
+            </td>
+        </tr>
+    </table>
+</ng-template>

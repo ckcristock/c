@@ -36,11 +36,21 @@ export class CrearViaticosService {
     return this.http.post(`${environment.base_url}/travel-expense`, data);
   }
 
-  actualizarViatico(id:string, data: any) {
-    return this.http.post(`${environment.base_url}/travel-expense/update/${id}`, data);
+  actualizarViatico(id: string, data: any) {
+    return this.http.post(
+      `${environment.base_url}/travel-expense/update/${id}`,
+      data
+    );
   }
   getAllViaticos(data: any) {
     return this.http.get(`${environment.base_url}/travel-expense`);
   }
 
+  getPeopleXSelect() {
+    return this.http.get(`${environment.base_url}/people`);
+  }
+
+  approve(data, id) {
+    return this.http.post(`${environment.base_url}/approve/${id}`, data);
+  }
 }

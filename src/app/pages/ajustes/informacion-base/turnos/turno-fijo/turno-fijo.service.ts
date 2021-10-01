@@ -22,6 +22,11 @@ export class FixedTurnService {
   saveTurnFixed(data) {
     return this.http.post(`${environment.base_url}/fixed-turns`, data);
   }
+
+  updateTurnFixed(data, id) {
+    return this.http.put(`${environment.base_url}/fixed-turns/${id}`, data);
+  }
+
   changeState(id) {
     return this.http.post(
       `${environment.base_url}/fixed-turns/change-state/${id}`,{}

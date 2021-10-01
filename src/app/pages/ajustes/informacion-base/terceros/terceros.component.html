@@ -1,39 +1,49 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
+            <ng-container>
+                <button class="btn btn-sm btn-primary" style="float: right;" [routerLink]="['/ajustes/informacion-base/crear-tercero', parametro]">
+                    <i class="fa fa-plus"></i>
+                    Agregar Tercero
+                </button>
+            </ng-container>
+
             <h5>Terceros</h5>
             <p>Todos los NITS registrados en nuestras bases de datos.</p>
-            <div class="form-row mt-4 ml-1">
-                <div class="form-group">
-                    <label for="">Filtro NIT</label>
-                    <input type="text" class="form-control form-control-sm" name="name">
-                </div>
-                <div class="form-group ml-3">
-                    <label for="">Filtro Nombre</label>
-                    <input type="text" class="form-control form-control-sm" name="name">
-                </div>
+        </div>
+        <div class="form-row mt-4 ml-1">
+            <div class="form-group">
+                <label for="">Filtro NIT</label>
+                <input type="text" class="form-control form-control-sm" name="name" [(ngModel)]="filtros.nit" (change)="getThirdParties()">
+            </div>
+            <div class="form-group ml-3">
+                <label for="">Filtro Nombre</label>
+                <input type="text" class="form-control form-control-sm" name="name" [(ngModel)]="filtros.name" (change)="getThirdParties()">
             </div>
         </div>
-        <table class="table table-bordered table-striped" *ngIf="!loading && data.length > 0; else notData">
+        <table class="table table-bordered table-striped" *ngIf="!loading && thirdParties.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th>NIT</th>
                     <th>Nombre Terceros</th>
                     <th>Dirección</th>
-                    <th>Ciudad</th>
+                    <th>Municipio</th>
                     <th>Telefono / Celular</th>
                     <th>Tipo Tercero</th>
+                    <th>Estado</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let d of data">
-                    <td> {{ d.nit }} </td>
-                    <td> {{ d.name }} </td>
-                    <td> {{ d.adress }} </td>
-                    <th> {{ d.city }} </th>
-                    <th> {{ d.cell }} </th>
-                    <th> {{ d.tercerType }} </th>
+                <tr *ngFor="let third of thirdParties">
+                    <td> {{ third.nit }} </td>
+                    <td> {{ third.first_name }} {{ third.first_surname }} </td>
+                    <td> {{ third.cod_dian_address }} </td>
+                    <td> {{ third.municipality.name }} </td>
+                    <td> {{ third.landline }} / {{ third.cell_phone }} </td>
+                    <td> </td>
+                    <td>{{ third.state }}
+                        <!-- <span [ngClass]="{'badge bg-info text-white': (third.state == 'Activo'), 'badge bg-danger text-white': (third.state == 'Inactivo')}">{{ third.state }}</span> --></td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -41,8 +51,8 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank"><i
-                                            class="fa fa-file-pdf-o"></i>Ver</a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/ajustes/informacion-base/editar-tercero', third.id, parametro]"><i
+                                                class="fa fa-file-pdf-o"></i>editar</a>
                                 </div>
                             </div>
                         </div>
@@ -51,48 +61,10 @@
             </tbody>
         </table>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-        boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getThirdParties($event)" aria-label="Default pagination"
+        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
     </ngb-pagination>
 </div>
-<!-- <app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> Nuevo  </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="funcionario_id">Nombre</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="name" required>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="funcionario_id">Código</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="code" required>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="funcionario_id">NIT</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="nit" required>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createPensionFund()" [disabled]="!form.valid">Guardar</button>
-        </div>
-    </div>
-</app-modal-basic> -->
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

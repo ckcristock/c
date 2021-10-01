@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./activos-fijos-ver.component.scss']
 })
 export class ActivosFijosVerComponent implements OnInit {
-
+  date: Date = new Date();
   constructor( private location: Location ) { }
 
   ngOnInit(): void {

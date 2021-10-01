@@ -8,6 +8,7 @@ import { ActivosFijosVerComponent } from './activos-fijos/activos-fijos-ver/acti
 import { DepreciacionesComponent } from './depreciaciones/depreciaciones.component';
 import { DepreciacionComponent } from './depreciaciones/depreciacion/depreciacion.component';
 import {CajasComponent} from './cajas/cajas.component';
+import { CrearTercerosComponent } from '../ajustes/informacion-base/terceros/crear-terceros/crear-terceros.component';
 
 const routes: Routes = [
     { path: 'plan-cuentas', component: PlanCuentasComponent },
@@ -16,7 +17,10 @@ const routes: Routes = [
     { path: 'crear', component: ActivosFijosCrearComponent },
     { path: 'ver', component: ActivosFijosVerComponent },
     { path: 'depreciaciones', component: DepreciacionesComponent },
-    { path: 'cajas', component: CajasComponent }
+    { path: 'cajas', component: CajasComponent },
+    { path: 'depreciacion', component: DepreciacionComponent },
+    { path: 'comprobantes',   loadChildren : () => import('./comprobantes/comprobantes.module').then(m => m.ComprobantesModule )},
+    { path: 'crear-cliente', component: CrearTercerosComponent },
 ];
 
 @NgModule({

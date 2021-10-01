@@ -30,6 +30,10 @@
 
 
             <div class="form-row">
+                <div class="form-group col-md-6" *ngIf="vacationSelected == true">
+                    <label for="fecha_reintegro">Fecha Reintegro</label>
+                    <input type="date" name="fecha_reintegro" formControlName="payback_date" class="form-control custom-control" />
+                </div>
                 <div class="form-group col-md-6">
                     <label class="custom-label" for="tipo">Tipo de Novedad </label>
                     <input type="text" name="tipo" formControlName="disability_type" class="form-control custom-control" />

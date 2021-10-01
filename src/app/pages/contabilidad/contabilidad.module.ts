@@ -17,6 +17,7 @@ import { DepreciacionesComponent } from './depreciaciones/depreciaciones.compone
 import { DepreciacionComponent } from './depreciaciones/depreciacion/depreciacion.component';
 import { CajasComponent } from './cajas/cajas.component';
 import { CrearCajaComponent } from './cajas/crear-caja/crear-caja.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
@@ -32,7 +33,7 @@ import { CrearCajaComponent } from './cajas/crear-caja/crear-caja.component';
     DepreciacionesComponent,
     DepreciacionComponent,
     CajasComponent,
-    CrearCajaComponent,
+    CrearCajaComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +46,8 @@ import { CrearCajaComponent } from './cajas/crear-caja/crear-caja.component';
     ComponentsModule,
     NgbPaginationModule,
     PipesModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    NgSelectModule
   ]
 })
 export class ContabilidadModule { }

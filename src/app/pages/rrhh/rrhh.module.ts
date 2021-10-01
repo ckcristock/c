@@ -55,6 +55,7 @@ import { FijoComponent } from './horas-extras/lista-fijos/fijo/fijo.component';
 import { EditDiarioRotatingComponent } from './horas-extras/lista-fijos/edit-diario-rotating/edit-diario-rotating.component';
 import { RotativoComponent } from './horas-extras/lista-fijos/rotativo/rotativo.component';
 import { EditDiarioFixedComponent } from './horas-extras/lista-fijos/edit-diario-fixed/edit-diario-fixed.component';
+import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { EditDiarioFixedComponent } from './horas-extras/lista-fijos/edit-diario
     RotativoComponent,
     EditDiarioRotatingComponent,
     EditDiarioFixedComponent
+    AlmuerzosComponent,
   ],
   imports: [
     RrhhRouterModule,

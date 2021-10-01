@@ -5,6 +5,7 @@ import { NotasContablesService } from '../notas-contables.service';
 import { OperatorFunction, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 type centerCost = { value: number; text: string };
+type third = { name: string };
 
 
 @Component({
@@ -15,6 +16,7 @@ type centerCost = { value: number; text: string };
 export class CrearNotaContableComponent implements OnInit {
   date:Date = new Date();
   form: FormGroup;
+  thirds:any;
   centerCosts:any;
   total_debit:any = 0;
   total_credit:number = 0;
@@ -31,6 +33,8 @@ export class CrearNotaContableComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.datosControl();
+    this.getCenterCost();
+    this.getThirdParties();
   }
 
   regresar(){
@@ -40,6 +44,8 @@ export class CrearNotaContableComponent implements OnInit {
   getCenterCost(){
     this._notasContables.getCenterCost().subscribe((r:any) => {
       this.centerCosts = r.data;
+      console.log(this.centerCosts);
+      
     })
   }
 
@@ -54,6 +60,21 @@ export class CrearNotaContableComponent implements OnInit {
       map((term) =>
         this.centerCosts
           .filter((state) => new RegExp(term, 'mi').test(state.text))
+          .slice(0, 10)
+      )
+    );
+
+    formatterthird = (state: third) => state.name;
+    searchthird: OperatorFunction<string, readonly { name }[]> = (
+    text$: Observable<string>
+    ) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      filter((term) => term.length >= 3),
+      map((term) =>
+        this.thirds
+          .filter((state) => new RegExp(term, 'mi').test(state.name))
           .slice(0, 10)
       )
     );
@@ -107,6 +128,7 @@ export class CrearNotaContableComponent implements OnInit {
     group.get('cred_niif').valueChanges.subscribe((value) => {
       this.getTotalCredit();
       this.diferencia();
+      this.total_credit_niif = value
     })
     return group;
   }
@@ -133,16 +155,28 @@ export class CrearNotaContableComponent implements OnInit {
       let totalDebit = this.datosList.value.reduce((a, b) => {
         return a + parseFloat(b.debit);
       }, 0);
+      let totalDebitNiif = this.datosList.value.reduce( (a, b) => {
+        return a + parseFloat(b.deb_niif)
+      }, 0);
       this.total_debit = totalDebit;
-      this.total_debit_niif = totalDebit;
+      this.total_debit_niif = totalDebitNiif;
   }
 
   getTotalCredit(){
     let totalCredit = this.datosList.value.reduce( (a, b) => {
       return a + parseFloat(b.credit)
     }, 0);
+    let totalCreditNiif = this.datosList.value.reduce( (a, b) => {
+      return a + parseFloat(b.cred_niif)
+    }, 0); 
     this.total_credit = totalCredit;
-    this.total_credit_niif = totalCredit;
+    this.total_credit_niif = totalCreditNiif;
+  }
+
+  getThirdParties(){
+    this._notasContables.getThirdParties().subscribe((r:any) => {
+      this.thirds = r.data;
+    });
   }
 
   diferencia() {

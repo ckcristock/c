@@ -5,16 +5,16 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class NotasContablesService {
+export class VacacionesService {
 
   constructor( private http: HttpClient ) { }
   
-  getCenterCost(){
-    return this.http.get(`${environment.base_url}/center_cost`);
+  getVacations(){
+    return this.http.get(`${environment.base_url}/pay-vacation`);
   }
 
-  getThirdParties(){
-    return this.http.get(`${environment.base_url}/third-parties-list`);
+  saveInformation( data:any ){
+    return this.http.post(`${environment.base_url}/pay-vacation`, data);
   }
 
 }

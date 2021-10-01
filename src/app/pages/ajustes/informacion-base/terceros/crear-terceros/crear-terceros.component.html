@@ -7,7 +7,7 @@
     <div class="card-body">
         <div class="card-title">
             <div style="float: right;" class="text-right">
-                <h5>Nuevo Tercero</h5>
+                <h5> {{ title }} </h5>
                 <strong> {{ date | date:'dd/MM/yyyy' }} </strong>
             </div>
             <div class="row">
@@ -142,7 +142,7 @@
                             </select>
                         </div>
                     </div>
-                    <ng-container *ngIf="router.url == '/ajustes/informacion-base/crear-tercero/contabilidad'">
+                    <ng-container *ngIf="parametro == 'contabilidad'">
                         <hr class="bg-primary">
                         <div class="row">
                             <div class="col-12 text-primary text-center mt-2 mb-4">
@@ -320,16 +320,16 @@
                                 <input type="text" class="form-control form-control-sm" cols="5" rows="5" formControlName="observation" />
                             </div>
                             <div class="form-group col-md-1 text-right" [formGroupName]="i" style="margin-top: 29px;">
-                                <button class="btn btn-sm btn-outline-danger" placement="top" ngbTooltip="Borrar Persona" style="width: 100%;" ngbTooltip="Borrar Persona" (click)="deletePerson(i)">
+                                <button class="btn btn-sm btn-outline-danger" placement="top" ngbTooltip="Borrar Persona" style="width: 100%;" (click)="deletePerson(i)">
                                         <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
                         </div>
                     </ng-container>
                     <div class class="row">
-                        <div class="col">
+                        <div class="col-12">
                             <div class="text-right">
-                                <button class="btn btn-sm btn-success" (click)="createPerson()"><i class="fa fa-plus"></i> Añadir otra persona</button>
+                                <button class="col-md-1 btn btn-sm btn-outline-success" style="width: 95px;" placement="left" ngbTooltip="Añadir persona" (click)="createPerson()"><i class="fa fa-plus"></i></button>
                             </div>
                         </div>
                     </div>

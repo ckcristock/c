@@ -13,7 +13,7 @@ import { PipesModule } from 'src/app/core/pipes/pipes.module';
 
 import { ViaticosComponent } from './viaticos/viaticos.component';
 import { CrearViaticosComponent } from './viaticos/crear-viaticos/crear-viaticos.component';
-import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPaginationModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { VerViaticosComponent } from './viaticos/ver-viaticos/ver-viaticos.component';
@@ -23,6 +23,7 @@ import { ViaticosTotalesComponent } from './viaticos/ver-viaticos/viaticos-total
 import { ViaticosAlimentacionComponent } from './viaticos/ver-viaticos/viaticos-alimentacion/viaticos-alimentacion.component';
 import { ViaticosViajeComponent } from './viaticos/ver-viaticos/viaticos-viaje/viaticos-viaje.component';
 import { ViaticosTaxisComponent } from './viaticos/ver-viaticos/viaticos-taxis/viaticos-taxis.component';
+import { VacacionesComponent } from './vacaciones/vacaciones.component';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { ViaticosTaxisComponent } from './viaticos/ver-viaticos/viaticos-taxis/v
     NgbPaginationModule,
     HttpClientModule,
     NgSelectModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    NgbTooltipModule
   ],
   declarations: [
     PrestamosLibranzasComponent,
@@ -50,7 +52,8 @@ import { ViaticosTaxisComponent } from './viaticos/ver-viaticos/viaticos-taxis/v
     ViaticosTotalesComponent,
     ViaticosAlimentacionComponent,
     ViaticosViajeComponent,
-    ViaticosTaxisComponent
+    ViaticosTaxisComponent,
+    VacacionesComponent
   ],
 })
 export class NominaModule {}

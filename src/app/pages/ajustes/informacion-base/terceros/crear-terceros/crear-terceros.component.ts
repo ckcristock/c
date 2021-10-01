@@ -19,6 +19,7 @@ export class CrearTercerosComponent implements OnInit {
   id: number;
   third:any;
   zones:any[] = [];
+  title:string = '';
   municipalities:any[] = [];
   departments:any[] = [];
   winnigLists:any[] = [];
@@ -27,6 +28,7 @@ export class CrearTercerosComponent implements OnInit {
   address:any[] = [];
   accountPlan:any[] = [];
   selected:any;
+  parametro:any;
   retePercentage:any = {
     reteica: 0,
     reteiva: 0,
@@ -59,6 +61,8 @@ export class CrearTercerosComponent implements OnInit {
     this.getCiiuCodeLists();
     this.getDianAddress();
     this.getAccountPlan();
+    this.getTitle();
+    this.parametro = this.actRoute.snapshot.params.origin;
   }
 
   regresar(){
@@ -143,7 +147,6 @@ export class CrearTercerosComponent implements OnInit {
       position: [''],
       observation: ['']
     });
-    
     return group;
   }
 
@@ -175,6 +178,14 @@ export class CrearTercerosComponent implements OnInit {
       this.form.get('first_surname').disable();
       this.form.get('second_surname').disable();
       this.form.get('social_reason').enable();
+    }
+  }
+
+  getTitle(){
+    if (this.actRoute.snapshot.params.id) {
+      this.title = 'Editar Tercero';
+    } else {
+      this.title = 'Nuevo Tercero';
     }
   }
 
@@ -243,7 +254,10 @@ export class CrearTercerosComponent implements OnInit {
   tipo(){
     this.selected = this.form.get('reteica_account').value;
     if (typeof this.selected == 'object') {
-      console.log(this.selected);
+      let id = this.selected.id;
+      this.form.patchValue({
+        reteica_account: id
+      })
     }
   }
 
@@ -358,24 +372,42 @@ export class CrearTercerosComponent implements OnInit {
 
   saveInformation(){
     if (this.form.value.id == "") {
-      this._terceros.saveInformation(this.form.value).subscribe((r:any) => {
-        this._swal.show({
-          icon: 'success',
-          title: 'Proceso Satisfactorio',
-          text: 'El Cliente ha sido Creado con éxito.',
-          showCancel: false
-        });
-        this.location.back();
+      this._swal.show({
+        icon: 'question',
+        title: '¿Estas seguro?',
+        text: 'Se agregará un nuevo Cliente.',
+        showCancel: true
+      }).then((r) => {
+        if (r.isConfirmed) {
+          this._terceros.saveInformation(this.form.value).subscribe((r:any) => {
+            this._swal.show({
+              icon: 'success',
+              title: 'Proceso Satisfactorio',
+              text: 'El Cliente ha sido Creado con éxito.',
+              showCancel: false
+            })
+            this.location.back();
+          });
+        }
       });
     } else {
-      this._terceros.updateThirdParties(this.form.value, this.third.id).subscribe((r:any) => {
-        this._swal.show({
-          icon: 'success',
-          title: 'Actualizado con éxito',
-          text: 'El Cliente ha sido actualizado con éxito.',
-          showCancel: false
-        });
-        this.location.back();
+      this._swal.show({
+        icon: 'question',
+        title: '¿Estas Seguro?',
+        text: 'El Cliente será acualizado.',
+        showCancel: true
+      }).then((r) => {
+        if (r.isConfirmed) {
+          this._terceros.updateThirdParties(this.form.value, this.third.id).subscribe((r:any) => {
+            this._swal.show({
+              icon: 'success',
+              title: 'Actualizado con éxito',
+              text: 'El Cliente ha sido actualizado con éxito.',
+              showCancel: false
+            })
+            this.location.back();
+          });
+        }
       });
     }
   }

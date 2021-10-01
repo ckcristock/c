@@ -93,7 +93,7 @@ import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
     FijoComponent,
     RotativoComponent,
     EditDiarioRotatingComponent,
-    EditDiarioFixedComponent
+    EditDiarioFixedComponent,
     AlmuerzosComponent,
   ],
   imports: [

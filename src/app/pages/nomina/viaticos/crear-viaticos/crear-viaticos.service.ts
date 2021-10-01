@@ -35,6 +35,10 @@ export class CrearViaticosService {
   crearViatico(data: any) {
     return this.http.post(`${environment.base_url}/travel-expense`, data);
   }
+
+  actualizarViatico(id:string, data: any) {
+    return this.http.post(`${environment.base_url}/travel-expense/update/${id}`, data);
+  }
   getAllViaticos(data: any) {
     return this.http.get(`${environment.base_url}/travel-expense`);
   }

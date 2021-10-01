@@ -4,11 +4,13 @@ import { PrestamosLibranzasComponent } from './prestamos-libranzas/prestamos-lib
 import { ViaticosComponent } from './viaticos/viaticos.component';
 import { CrearViaticosComponent } from './viaticos/crear-viaticos/crear-viaticos.component';
 import {VerViaticosComponent} from './viaticos/ver-viaticos/ver-viaticos.component';
+import { EditarViaticoComponent } from './viaticos/editar-viatico/editar-viatico.component';
 
 const routes: Routes = [
     { path:'prestamos', component: PrestamosLibranzasComponent},
     { path: 'viaticos', component: ViaticosComponent },
     { path: 'ver-viatico/:id', component: VerViaticosComponent },
+    { path: 'editar-viatico/:id', component: EditarViaticoComponent },
     { path: 'crear-viatico', component: CrearViaticosComponent }
 ]
 

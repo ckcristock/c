@@ -1,12 +1,11 @@
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 import { ImagePipe } from './image.pipe';
-import { ObjToArrayPipe } from "./obj-to-array.pipe";
+import { ObjToArrayPipe } from './obj-to-array.pipe';
 import { PuntosPipe } from './puntos';
-
+import { TimePipe } from './time.pipe';
 
 @NgModule({
-    declarations:[ImagePipe , ObjToArrayPipe, PuntosPipe ],
-    exports:[ImagePipe, ObjToArrayPipe, PuntosPipe ],
+  declarations: [ImagePipe, ObjToArrayPipe, PuntosPipe, TimePipe],
+  exports: [ImagePipe, ObjToArrayPipe, PuntosPipe, TimePipe],
 })
-
-export class PipesModule{}
+export class PipesModule {}

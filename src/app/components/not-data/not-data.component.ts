@@ -7,9 +7,12 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class NotDataComponent implements OnInit {
   @Input('loading') loading;
+  @Input('text') text;
+  description = ''
   constructor() { }
 
   ngOnInit(): void {
+    this.description = this.text ? this.text : 'No existen datos para mostrar';
   }
 
 }

@@ -548,8 +548,8 @@
                       class="form-control form-control-sm"
                       id="pago_tiquete_transporte"
                     >
-                      <option value="agencia">Agencia</option>
-                      <option value="viajero">Viajero</option>
+                      <option value="Agencia">Agencia</option>
+                      <option value="Viajero">Viajero</option>
                     </select>
                   </td>
                   <td [formGroupName]="i">
@@ -732,10 +732,7 @@
                 <th>
                   <label for="alimentacion">Estadia</label>
                 </th>
-                <th>
-                  <label for="tipo_estadia">Tipo</label>
-                </th>
-                <th>
+               <th>
                   <label for="alojamiento_desayuno">¿incluye desayuno?</label>
                 </th>
                 <th>
@@ -763,15 +760,6 @@
                         {{ item }}
                       </option>
                     </select>
-                  </td>
-                  <td [formGroupName]="i">
-                    <input
-                      type="text"
-                      formControlName="personType"
-                      class="form-control form-control-sm"
-                      id="tipo_estadia"
-                      value="test"
-                    />
                   </td>
                   <td [formGroupName]="i">
                     <select
@@ -968,7 +956,7 @@
                   />
                 </td>
               </tr>
-              <tr>
+<tr>
                 <td>Sobre Equipaje</td>
                 <td>
                   <input
@@ -981,6 +969,23 @@
                   <input
                     type="number"
                     formControlName="baggage_cop"
+                    class="form-control form-control-sm"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Otros Gastos</td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="other_expenses_usd"
+                    class="form-control form-control-sm"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="other_expenses_cop"
                     class="form-control form-control-sm"
                   />
                 </td>

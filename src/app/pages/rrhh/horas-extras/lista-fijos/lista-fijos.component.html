@@ -1,0 +1,18 @@
+<div *ngIf="personData">
+  <div *ngFor="let diario of personData.daysWork" class="row pl-3">
+    <app-rotativo   *ngIf="turnType == 'rotativo'"
+      [person]="person"
+      (updateDates)="getData()"
+      [diario]="diario[0] != undefined ? diario[0].day : {}"
+      [info]="personData"
+      [day]="diario"
+    ></app-rotativo>
+    <app-fijo *ngIf="turnType == 'fijo'"
+      [person]="person"
+      (updateDates)="getData()"
+      [diario]="diario"
+      [info]="personData"
+      [day]="diario"
+    ></app-fijo>
+  </div>
+</div>

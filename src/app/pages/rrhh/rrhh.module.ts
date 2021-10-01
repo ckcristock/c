@@ -50,6 +50,11 @@ import { FondoEmpleadoComponent } from './fondo-empleado/fondo-empleado.componen
 import { DetalleHorarioRotativoComponent } from './reporte-horario/detalle-horario-rotativo/detalle-horario-rotativo.component';
 import { AsignarHorasExtrasComponent } from './asignar-horas-extras/asignar-horas-extras.component';
 import { SemanasExtrasComponent } from './asignar-horas-extras/semanas-extras/semanas-extras.component';
+import { ListaFijosComponent } from './horas-extras/lista-fijos/lista-fijos.component';
+import { FijoComponent } from './horas-extras/lista-fijos/fijo/fijo.component';
+import { EditDiarioRotatingComponent } from './horas-extras/lista-fijos/edit-diario-rotating/edit-diario-rotating.component';
+import { RotativoComponent } from './horas-extras/lista-fijos/rotativo/rotativo.component';
+import { EditDiarioFixedComponent } from './horas-extras/lista-fijos/edit-diario-fixed/edit-diario-fixed.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +88,11 @@ import { SemanasExtrasComponent } from './asignar-horas-extras/semanas-extras/se
     DetalleHorarioRotativoComponent,
     AsignarHorasExtrasComponent,
     SemanasExtrasComponent,
+    ListaFijosComponent,
+    FijoComponent,
+    RotativoComponent,
+    EditDiarioRotatingComponent,
+    EditDiarioFixedComponent
   ],
   imports: [
     RrhhRouterModule,

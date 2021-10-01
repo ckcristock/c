@@ -23,6 +23,7 @@ import { ViaticosTotalesComponent } from './viaticos/ver-viaticos/viaticos-total
 import { ViaticosAlimentacionComponent } from './viaticos/ver-viaticos/viaticos-alimentacion/viaticos-alimentacion.component';
 import { ViaticosViajeComponent } from './viaticos/ver-viaticos/viaticos-viaje/viaticos-viaje.component';
 import { ViaticosTaxisComponent } from './viaticos/ver-viaticos/viaticos-taxis/viaticos-taxis.component';
+import { EditarViaticoComponent } from './viaticos/editar-viatico/editar-viatico.component';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { ViaticosTaxisComponent } from './viaticos/ver-viaticos/viaticos-taxis/v
     ViaticosTotalesComponent,
     ViaticosAlimentacionComponent,
     ViaticosViajeComponent,
-    ViaticosTaxisComponent
+    ViaticosTaxisComponent,
+    EditarViaticoComponent
   ],
 })
 export class NominaModule {}

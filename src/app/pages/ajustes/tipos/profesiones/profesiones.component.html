@@ -8,7 +8,7 @@
             <h5>Profesiones</h5>
         </div>
         <table class="table table-borderless table-striped mt-5" *ngIf="!loading && professions.length > 0; else notData">
-            <thead>
+            <thead class="bg-light">
                 <tr>
                     <th>Profesión</th>
                     <th class="text-center">Acciones</th>
@@ -24,10 +24,12 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a *ngIf="profession.state == 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="activateOrInactivate(profession, 'Activo')"><i
-                                        class="fa fa-file-pdf-o"></i>Activar</a>
-                                    <a *ngIf="profession.state == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="activateOrInactivate(profession, 'Inactivo')"><i
-                                            class="fa fa-file-pdf-o"></i>Desactivar</a>
+                                    <a *ngIf="profession.state == 'Inactivo'" class="dropdown-item waves-light text-success waves-effect caja-botones" target="_blank" (click)="activateOrInactivate(profession, 'Activo')">
+                                        <i class="fas fa-check"></i> Activar
+                                    </a>
+                                    <a *ngIf="profession.state == 'Activo'" class="dropdown-item waves-light text-danger waves-effect caja-botones" target="_blank" (click)="activateOrInactivate(profession, 'Inactivo')">
+                                        <i class="far fa-trash-alt"></i> Anular
+                                    </a>
                                 </div>
                             </div>
                         </div>

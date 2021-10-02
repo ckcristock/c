@@ -11,8 +11,6 @@
                     <label for="">Funcionario</label>
                     <ng-select [items]="people" (change)="getAll()" [(ngModel)]="filtros.person_id" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
                     </ng-select>
-                    <!-- <input class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" [(ngModel)]="filtros.person_id" (change)="tipo(); getAll()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'> -->
-                    <!-- <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.person_id" (change)="getAll()"> -->
                 </div>
                 <div class="form-group col-md-2">
                     <label for="">F. Creación</label>
@@ -51,16 +49,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of data" [ngClass]="{'bg-success text-white': (item.state == 'Aprobado')}">
+                <tr *ngFor="let item of data" [ngClass]="{
+                    'bg-success text-dark': (item.state == 'Aprobado'),
+                    'bg-danger text-white': (item.state == 'Inactivo')
+                }">
                     <td class="d-flex">
                         <img class="rounded-circle avatar-sm" src="{{ item.person.image | image: 'users' }}" />
                         <span class="ml-2">
-              {{ item.person.first_name }}
-              {{ item.person.first_surname }}
-            </span>
+                            {{ item.person.first_name | titlecase}}
+                            {{ item.person.first_surname | titlecase }}
+                        </span>
                     </td>
                     <td>
-                        {{ item.user.person.first_name }} {{ item.user.person.first_surname }}
+                        {{ item.user.person.first_name | titlecase}} {{ item.user.person.first_surname | titlecase}}
                     </td>
                     <td>{{ item.created_at | date: "dd/MM/yyyy" }}</td>
                     <td>{{ item.departure_date | date: "dd/MM/yyyy" }}</td>
@@ -71,19 +72,17 @@
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
                                 <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light" type="button">
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
                                 <div ngbDropdownMenu>
                                     <a [routerLink]="['/nomina/ver-viatico', item.id]" class="dropdown-item waves-light waves-effect caja-botones">
                                         <i class="far fa-eye"></i> Ver</a>
                                     <a [routerLink]="['/nomina/editar-viatico', item.id]" class="dropdown-item waves-light waves-effect caja-botones">
                                         <i class="far fa-edit"></i> Editar</a>
 
-                                    <a *ngIf="
-                      permission.permissions.approve && item.state != 'Aprobado'
-                    " (click)="aprobarViatico(item, 'Aprobado')" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                    <a *ngIf="permission.permissions.approve && item.state != 'Aprobado'" (click)="changeState(item, 'Aprobado')" class="dropdown-item waves-light text-success waves-effect caja-botones">
                                         <i class="far fa-thumbs-up"></i> Aprobar</a>
-                                    <a class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                    <a *ngIf="!item.state == ''" (click)="changeState(item, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
                                         <i class="far fa-trash-alt"></i> Anular</a>
                                 </div>
                             </div>
@@ -92,8 +91,8 @@
                 </tr>
             </tbody>
         </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getAll($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
         </ngb-pagination>
     </div>
 </div>

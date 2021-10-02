@@ -42,15 +42,15 @@ export class CrearViaticosService {
       data
     );
   }
-  getAllViaticos(data: any) {
-    return this.http.get(`${environment.base_url}/travel-expense`);
+  getAllViaticos( params = {} ) {
+    return this.http.get(`${environment.base_url}/travel-expense`, {params});
   }
 
   getPeopleXSelect() {
     return this.http.get(`${environment.base_url}/people`);
   }
 
-  approve(data, id) {
+  changeState(data, id) {
     return this.http.post(`${environment.base_url}/approve/${id}`, data);
   }
 }

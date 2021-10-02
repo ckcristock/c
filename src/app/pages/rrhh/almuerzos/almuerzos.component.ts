@@ -86,6 +86,30 @@ export class AlmuerzosComponent implements OnInit {
     });
   }
 
+  activateOrInactivate(lunch, state){
+    let data = {
+      id: lunch.id,
+      state
+    }
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estas Seguro?',
+      text: (data.state == 'Inactivo' ? 'El Almuerzo será anulado' : 'El Almuerzo será activado')
+    }).then((r) => {
+      if (r.isConfirmed) {
+        this._almuerzo.activateOrInactivate(data).subscribe( (r:any) => {
+          this.getLunches();
+          this._swal.show({
+            icon: 'success',
+            title: 'Proceso Satisfactorio',
+            text: (data.state == 'Inactivo' ? 'Almuerzo Anulado Correctamente' : 'Almuerzo Activado Correctamente'),
+            showCancel: false
+          })
+        });
+      }
+    })
+  }
+
   get person_valid() {
     return this.form.get('person_id').invalid && this.form.get('person_id').touched;
   }

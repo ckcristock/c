@@ -34,7 +34,9 @@ export class ViaticosComponent implements OnInit {
     { clave: 'Todos' },
     { clave: 'Pendiente' },
     { clave: 'Aprobado' },
-    { clave: 'Legalizado' }
+    { clave: 'Legalizado' },
+    { clave: 'Activo' },
+    { clave: 'Inactivo' }
   ]
   constructor( private _viaticos:CrearViaticosService, private _permission: PermissionService, private _swal: SwalService ) {
     this.permission = this._permission.validatePermissions(this.permission)
@@ -74,28 +76,28 @@ export class ViaticosComponent implements OnInit {
     })
   }
 
-  aprobarViatico( viatico, state ) {
+  changeState( viatico, state ) {
     let data = {
       id: viatico.id,
       state
     }
     this._swal.show({
       title: '¿Estas Seguro?',
-      text: "¡El Viatico será aprobado",
+      text: '¡El Viatico será aprobado',
       icon: 'question',
       showCancel: true
     })
     .then((result) =>{
       if (result.isConfirmed) {
-        this._viaticos.approve(data, data.id).subscribe( (r:any) =>{
+        this._viaticos.changeState(data, data.id).subscribe( (r:any) =>{
           this.getAll();
-        })
-        this._swal.show({
-          icon: 'success',
-          title: 'El Viatico Ha sido Aprobado!',
-          text: '¡Aprobado!',
-          timer: 2500,
-          showCancel: false
+          this._swal.show({
+            icon: 'success',
+            title: 'El Viatico Ha sido Aprobado!',
+            text: '¡Aprobado!',
+            timer: 2500,
+            showCancel: false
+          })
         })
       }
     })

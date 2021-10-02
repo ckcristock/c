@@ -25,4 +25,8 @@ export class AlmuerzosService {
     return this.http.post(`${environment.base_url}/lunch`, data);
   }
 
+  activateOrInactivate( state ){
+    return this.http.put(`${environment.base_url}/state-change`, state);
+  }
+
 }

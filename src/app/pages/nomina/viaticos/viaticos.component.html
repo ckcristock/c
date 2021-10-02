@@ -1,160 +1,102 @@
 <div class="card">
-  <div class="card-body">
-    <div class="card-title">
-      <button
-        class="btn btn-info btn-sm"
-        style="float: right"
-        [routerLink]="['/nomina/crear-viatico']"
-      >
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-info btn-sm" style="float: right" [routerLink]="['/nomina/crear-viatico']">
         Crear Viatico
       </button>
-      <h5 class="text-primary">Viaticos</h5>
-      <p>Listado de todos los viaticos creados</p>
-      <div class="form-row mt-2">
-        <div class="form-group col-md-2">
-          <label for="">Funcionario</label>
-          <ng-select
-            [items]="people"
-            (change)="getAll()"
-            [(ngModel)]="filtros.person_id"
-            bindLabel="text"
-            bindValue="value"
-            loadingText="loading "
-            ngDefaultControl
-          >
-          </ng-select>
-          <!-- <input class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" [(ngModel)]="filtros.person_id" (change)="tipo(); getAll()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'> -->
-          <!-- <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.person_id" (change)="getAll()"> -->
-        </div>
-        <div class="form-group col-md-2">
-          <label for="">F. Creación</label>
-          <input
-            type="date"
-            class="form-control"
-            [(ngModel)]="filtros.creation_date"
-            (change)="getAll()"
-          />
-        </div>
-        <div class="form-group col-md-2">
-          <label for="">F. Salida</label>
-          <input
-            type="date"
-            class="form-control"
-            [(ngModel)]="filtros.departure_date"
-            (change)="getAll()"
-          />
-        </div>
-        <div class="form-group col-md-2">
-          <label for="">Estado</label>
-          <select
-            class="form-control"
-            [(ngModel)]="filtros.state"
-            (change)="getAll()"
-          >
+            <h5 class="text-primary">Viaticos</h5>
+            <p>Listado de todos los viaticos creados</p>
+            <div class="form-row mt-2">
+                <div class="form-group col-md-2">
+                    <label for="">Funcionario</label>
+                    <ng-select [items]="people" (change)="getAll()" [(ngModel)]="filtros.person_id" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
+                    <!-- <input class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" [(ngModel)]="filtros.person_id" (change)="tipo(); getAll()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'> -->
+                    <!-- <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.person_id" (change)="getAll()"> -->
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="">F. Creación</label>
+                    <input type="date" class="form-control" [(ngModel)]="filtros.creation_date" (change)="getAll()" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="">F. Salida</label>
+                    <input type="date" class="form-control" [(ngModel)]="filtros.departure_date" (change)="getAll()" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="">Estado</label>
+                    <select class="form-control" [(ngModel)]="filtros.state" (change)="getAll()">
             <option *ngFor="let state of states" [value]="state.clave">
               {{ state.clave }}
             </option>
           </select>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <div class="card">
-  <div class="card-body">
-    <table class="table table-borderless table-striped">
-      <thead>
-        <tr>
-          <th>Funcionario</th>
-          <th>Func. Creó</th>
-          <th>F. Creación</th>
-          <th>F. Salida</th>
-          <th># Noches</th>
-          <th>Total COP</th>
-          <th>Total USD</th>
-          <th class="text-center">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of data">
-          <td class="d-flex">
-            <img
-              class="rounded-circle avatar-sm"
-              src="{{ item.person.image | image: 'users' }}"
-            />
-            <span class="ml-2">
+    <div class="card-body">
+        <table class="table table-borderless table-striped" *ngIf="!loading && data.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Funcionario</th>
+                    <th>Func. Creó</th>
+                    <th>F. Creación</th>
+                    <th>F. Salida</th>
+                    <th># Noches</th>
+                    <th>Total COP</th>
+                    <th>Total USD</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of data" [ngClass]="{'bg-success text-white': (item.state == 'Aprobado')}">
+                    <td class="d-flex">
+                        <img class="rounded-circle avatar-sm" src="{{ item.person.image | image: 'users' }}" />
+                        <span class="ml-2">
               {{ item.person.first_name }}
               {{ item.person.first_surname }}
             </span>
-          </td>
-          <td>
-            {{ item.user.person.first_name }}
-            {{ item.user.person.first_surname }}
-          </td>
-          <td>{{ item.created_at | date: "dd/MM/yyyy" }}</td>
-          <td>{{ item.departure_date | date: "dd/MM/yyyy" }}</td>
-          <td>{{ item.n_nights }}</td>
-          <td>{{ item.total_cop | currency }}</td>
-          <td>{{ item.total_usd | currency }}</td>
-          <td>
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
-                >
+                    </td>
+                    <td>
+                        {{ item.user.person.first_name }} {{ item.user.person.first_surname }}
+                    </td>
+                    <td>{{ item.created_at | date: "dd/MM/yyyy" }}</td>
+                    <td>{{ item.departure_date | date: "dd/MM/yyyy" }}</td>
+                    <td>{{ item.n_nights }}</td>
+                    <td>{{ item.total_cop | currency }}</td>
+                    <td>{{ item.total_usd | currency }}</td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light" type="button">
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
-                <div ngbDropdownMenu>
-                  <a
-                    [routerLink]="['/nomina/ver-viatico', item.id]"
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                  >
-                    <i class="far fa-eye"></i> Ver</a
-                  >
-                  <a
-                    [routerLink]="['/nomina/editar-viatico', item.id]"
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                  >
-                    <i class="far fa-edit"></i> Editar</a
-                  >
+                                <div ngbDropdownMenu>
+                                    <a [routerLink]="['/nomina/ver-viatico', item.id]" class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="far fa-eye"></i> Ver</a>
+                                    <a [routerLink]="['/nomina/editar-viatico', item.id]" class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="far fa-edit"></i> Editar</a>
 
-                  <a
-                    *ngIf="
+                                    <a *ngIf="
                       permission.permissions.approve && item.state != 'Aprobado'
-                    "
-                    (click)="aprobarViatico(item, 'Aprobado')"
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                  >
-                    <i class="fa fa-pencil"></i>Aprobar</a
-                  >
-                  <a
-                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
-                  >
-                  <i class="far fa-trash-alt"></i> Anular</a>
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      aria-label="Default pagination"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-    >
-    </ngb-pagination>
-  </div>
+                    " (click)="aprobarViatico(item, 'Aprobado')" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                        <i class="far fa-thumbs-up"></i> Aprobar</a>
+                                    <a class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                        <i class="far fa-trash-alt"></i> Anular</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
 </div>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

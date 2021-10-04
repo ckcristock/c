@@ -21,7 +21,7 @@
                 <input type="text" class="form-control form-control-sm" name="name" [(ngModel)]="filtros.name" (change)="getThirdParties()">
             </div>
         </div>
-        <table class="table table-bordered table-striped" *ngIf="!loading && thirdParties.length > 0; else notData">
+        <table class="table table-borderless table-striped" *ngIf="!loading && thirdParties.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th>NIT</th>
@@ -35,7 +35,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let third of thirdParties">
+                <tr *ngFor="let third of thirdParties" [ngClass]="{'bg-danger text-white': (third.state == 'Inactivo')}">
                     <td> {{ third.nit }} </td>
                     <td> {{ third.first_name }} {{ third.first_surname }} </td>
                     <td> {{ third.cod_dian_address }} </td>
@@ -51,8 +51,15 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/ajustes/informacion-base/editar-tercero', third.id, parametro]"><i
-                                                class="fa fa-file-pdf-o"></i>editar</a>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/ajustes/informacion-base/editar-tercero', third.id, parametro]">
+                                        <i class="far fa-edit"></i> editar
+                                    </a>
+                                    <a *ngIf="third.state == 'Activo'" (click)="changeState(third, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                        <i class="far fa-trash-alt"></i> Anular
+                                    </a>
+                                    <a *ngIf="third.state == 'Inactivo'" (click)="changeState(third, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                        <i class="fas fa-check"></i> Activar
+                                    </a>
                                 </div>
                             </div>
                         </div>

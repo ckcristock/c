@@ -1,1 +1,168 @@
-<p>tipos-activo-fijo works!</p>
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                <i class="fa fa-plus"></i> Nuevo Tipo
+            </button>
+            <h5 class="text-primary">Tipos de Activos Fijos en el Sistema</h5>
+        </div>
+        <div class="form-row mt-4">
+            <div class="form-group col-md-2">
+                <label for="">Filtro Nombre</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.name" (change)="getFixedAssetTypes()">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="">Filtro Categoría</label>
+                <select class="form-control form-control-sm" [(ngModel)]="filtros.category" (change)="getFixedAssetTypes()">
+                    <option value="">Seleccione</option>
+                    <option value="Tangible">Tangible</option>
+                    <option value="Intangible">Intangible</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="">Filtro Vida Util</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.useful_life_niif" (change)="getFixedAssetTypes()">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="">Filtro Depreciación</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.depreciation" (change)="getFixedAssetTypes()">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-borderless table-striped" *ngIf="!loading && fixedAssets.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Tipo Activo</th>
+                    <th>Categoría</th>
+                    <th>Vida Util</th>
+                    <th>% Depreciación</th>
+                    <th>Cuenta Depreciación NIIF</th>
+                    <th>Cuenta Depreciación PCGA</th>
+                    <th>Cuenta NIIF</th>
+                    <th>Cuenta PCGA</th>
+                    <th>Cuenta Credito NIIF</th>
+                    <th>Cuenta Credito PCGA</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of fixedAssets" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo')}">
+                    <td> {{ item.name }} </td>
+                    <td> {{ item.category }} </td>
+                    <td> {{ item.useful_life_niif }} mes(es)</td>
+                    <td> {{ item.annual_depreciation_percentage_niif }} %</td>
+                    <td> {{ item.niif_account_plan_debit_depreciation_id }} </td>
+                    <td> {{ item.pcga_account_plan_debit_depreciation_id }} </td>
+                    <td> {{ item.niif_account_plan_id }} </td>
+                    <td> {{ item.pcga_account_plan_id }} </td>
+                    <td> {{ item.niif_account_plan_credit_depreciation_id }} </td>
+                    <td> {{ item.pcga_account_plan_credit_depreciation_id }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light" type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getFixedAsset(item); modal.show()">
+                                        <i class="far fa-edit"></i> Editar</a>
+                                    <a *ngIf="item.state == 'Activo'" class="dropdown-item waves-light text-danger waves-effect caja-botones" (click)="activateOrInactivate(item, 'Inactivo')">
+                                        <i class="far fa-trash-alt"></i> Anular</a>
+                                    <a *ngIf="item.state == 'Inactivo'" class="dropdown-item waves-light text-success waves-effect caja-botones" (click)="activateOrInactivate(item, 'Activo')">
+                                        <i class="fa fa-check"></i> Activar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getFixedAssetTypes($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Nuevo Tipo de Activo</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+          </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="">Nombre Tipo Activo</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="name">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Categoría</label>
+                            <select class="form-control form-control-sm" formControlName="category">
+                                <option value="">Seleccione</option>
+                                <option value="Tangible">Tangible</option>
+                                <option value="Intangible">Intangible</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Vida Util PCGA (Meses)</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="useful_life_pcga" (change)="calculateDepreciationPercentage('pcga')">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Vida Util NIIF (Meses)</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="useful_life_niif" (change)="calculateDepreciationPercentage('niif')">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Porcentaje de Depreciación PCGA Mensual</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="annual_depreciation_percentage_pcga" readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Procentaje de Depreciación NIIF Mensual</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="annual_depreciation_percentage_niif" readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Cuenta Activo PCGA</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="pcga_account_plan_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Cuenta Activo NIIF</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="niif_account_plan_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Cuenta Debito Depreciación PCGA</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="pcga_account_plan_debit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Cuenta Debito Depreciación NIIF</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="niif_account_plan_debit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Cuenta Credito Depreciación PCGA</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="pcga_account_plan_credit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Cuenta Credito Depreciación NIIF</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="niif_account_plan_credit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="save()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

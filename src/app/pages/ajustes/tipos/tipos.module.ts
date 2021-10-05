@@ -6,7 +6,7 @@ import { TiposContratoComponent } from './tipos-contrato/tipos-contrato.componen
 import { TiposSalarioComponent } from './tipos-salario/tipos-salario.component';
 import { TiposDocumentoComponent } from './tipos-documento/tipos-documento.component';
 import { ComponentsModule } from '../../../components/components.module';
-import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from "@angular/common";
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -56,7 +56,8 @@ import { ProfesionesComponent } from './profesiones/profesiones.component';
         ReactiveFormsModule,
         PipesModule,
         NgbPaginationModule,
-        NgSelectModule
+        NgSelectModule,
+        NgbTypeaheadModule
     ]
 })
 

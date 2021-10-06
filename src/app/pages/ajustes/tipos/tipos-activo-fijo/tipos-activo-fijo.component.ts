@@ -4,13 +4,7 @@ import { TiposActivoFijoService } from './tipos-activo-fijo.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { parse } from 'querystring';
-type AccountPlan = { 
-  code: string, 
-  name:string, 
-  niif_code:string, 
-  niif_name: string
-};
+
 @Component({
   selector: 'app-tipos-activo-fijo',
   templateUrl: './tipos-activo-fijo.component.html',
@@ -64,8 +58,8 @@ export class TiposActivoFijoComponent implements OnInit {
       annual_depreciation_percentage_niif: ['', Validators.required],
       useful_life_pcga: ['', Validators.required],
       annual_depreciation_percentage_pcga: ['', Validators.required],
-      niif_depreciation_account_plan_id: ['', Validators.required],
-      pcga_depreciation_account_plan_id: ['', Validators.required],
+/*    niif_depreciation_account_plan_id: ['', Validators.required],
+      pcga_depreciation_account_plan_id: ['', Validators.required], */
       niif_account_plan_id: ['', Validators.required],
       pcga_account_plan_id: ['', Validators.required],
       niif_account_plan_credit_depreciation_id: ['', Validators.required],
@@ -75,20 +69,20 @@ export class TiposActivoFijoComponent implements OnInit {
     });
   }
 
-  inputFormatBandListValue(value: any) {
-    if (value.code)
-    return value.code
-    return value;
-  }
+    inputFormatBandListValue(value: any) {
+      if (value.code)
+        return value.code
+      return value;
+    }
   
-  resultFormatBandListValue(value: any) {
-    return value.code;
-  }
+    resultFormatBandListValue(value: any) {
+      return value.code;
+    }
   
   /* formatter = (x: { code }) => x.code; */
-  search: OperatorFunction<string, readonly { code }[]> = (
+    search: OperatorFunction<string, readonly { code }[]> = (
     text$: Observable<string>
-  ) =>
+    ) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -121,7 +115,7 @@ export class TiposActivoFijoComponent implements OnInit {
       return value;
     }
   
-     resultFormatListValueNiif(value: any) {
+    resultFormatListValueNiif(value: any) {
       return value.niif_code;
     }
   
@@ -132,7 +126,7 @@ export class TiposActivoFijoComponent implements OnInit {
     }
 
     getTipo(){
-      let f = this.form.get('pcga_account_plan_id').value;
+      let value = this.form.get('pcga_account_plan_id').value;
     }
 
     getFixedAsset(fixedAsset){
@@ -152,74 +146,74 @@ export class TiposActivoFijoComponent implements OnInit {
         niif_account_plan_credit_depreciation_id: this.fixedAsset.niif_account_plan_credit_depreciation,
         pcga_account_plan_credit_depreciation_id: this.fixedAsset.pcga_account_plan_credit_depreciation,
         pcga_account_plan_debit_depreciation_id: this.fixedAsset.pcga_account_plan_debit_depreciation,
-        niif_account_plan_debit_depreciation_id: this.fixedAsset.niif_account_plan_debit_depreciation,
+        niif_account_plan_debit_depreciation_id: this.fixedAsset.niif_account_plan_debit_depreciation
       });
     }
   
     getFixedAssetTypes(page = 1){
-      this.pagination.page = page;
-      let params = {
-        ...this.pagination, ...this.filtros
-      }
-      this.loading = true;
-      this._tipoActivoFijo.getFixedAssetType(params).subscribe((r:any) => {
-      this.fixedAssets = r.data.data;
-      this.pagination.collectionSize = r.data.total;
-      this.loading = false;
-    })
-  }
-
-  calculateDepreciationPercentage(tipo) {
-    if (tipo == 'pcga') {
-      let porcentaje = (100 / parseInt(this.form.value.useful_life_pcga)).toFixed(4);
-      this.form.patchValue({
-        annual_depreciation_percentage_pcga: porcentaje
-      })
-    } else {
-      let porcentaje = (100 / parseInt(this.form.value.useful_life_niif)).toFixed(4);
-      this.form.patchValue({
-        annual_depreciation_percentage_niif: porcentaje
+        this.pagination.page = page;
+        let params = {
+          ...this.pagination, ...this.filtros
+        }
+        this.loading = true;
+        this._tipoActivoFijo.getFixedAssetType(params).subscribe((r:any) => {
+        this.fixedAssets = r.data.data;
+        this.pagination.collectionSize = r.data.total;
+        this.loading = false;
       })
     }
-  }
 
-  save(){
-    this._tipoActivoFijo.updateOrCreateFixedAssetType(this.form.value).subscribe((r:any) => {
-      console.log(r);
-      this.modal.hide();
-      this.form.reset();
-      this.getFixedAssetTypes();
-      this._swal.show({
-        icon: 'success',
-        title: 'Proceso Satisfactorio',
-        text: 'El Tipo de Activo se ha creado Satisfactoriamente.',
-        showCancel: false
-      })
-    })
-  }
-
-  activateOrInactivate(tipo_activo, state){
-    let data = {
-      id: tipo_activo.id,
-      state
-    }
-    this._swal.show({
-      icon: 'question',
-      title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? '¡El tipo de Activo Fijo de anulará!' : '¡El tipo de Activo Fijo de activará!')
-    }).then((r) => {
-      if (r.isConfirmed) {
-        this._tipoActivoFijo.updateOrCreateFixedAssetType(data).subscribe((r) => {
-          this.getFixedAssetTypes();
-          this._swal.show({
-            icon: 'success',
-            title: '¿Estas Seguro?',
-            text: (data.state == 'Inactivo' ? 'El tipo de Activo Fijo ha sido anulado con éxito.' : 'El tipo de Activo Fijo ha sido activado con éxito.'),
-            showCancel: false
-          })
+    calculateDepreciationPercentage(tipo) {
+      if (tipo == 'pcga') {
+        let porcentaje = (100 / parseInt(this.form.value.useful_life_pcga)).toFixed(4);
+        this.form.patchValue({
+          annual_depreciation_percentage_pcga: porcentaje
+        })
+      } else {
+        let porcentaje = (100 / parseInt(this.form.value.useful_life_niif)).toFixed(4);
+        this.form.patchValue({
+          annual_depreciation_percentage_niif: porcentaje
         })
       }
-    });
-  }
+    }
+
+    save(){
+      this._tipoActivoFijo.updateOrCreateFixedAssetType(this.form.value).subscribe((r:any) => {
+        console.log(r);
+        this.modal.hide();
+        this.form.reset();
+        this.getFixedAssetTypes();
+        this._swal.show({
+          icon: 'success',
+          title: 'Proceso Satisfactorio',
+          text: 'El Tipo de Activo se ha creado Satisfactoriamente.',
+          showCancel: false
+        })
+      })
+    }
+
+    activateOrInactivate(tipo_activo, state){
+      let data = {
+        id: tipo_activo.id,
+        state
+      }
+      this._swal.show({
+        icon: 'question',
+        title: '¿Estas Seguro?',
+        text: (data.state == 'Inactivo' ? '¡El tipo de Activo Fijo de anulará!' : '¡El tipo de Activo Fijo de activará!')
+      }).then((r) => {
+        if (r.isConfirmed) {
+          this._tipoActivoFijo.updateOrCreateFixedAssetType(data).subscribe((r) => {
+            this.getFixedAssetTypes();
+            this._swal.show({
+              icon: 'success',
+              title: '¿Estas Seguro?',
+              text: (data.state == 'Inactivo' ? 'El tipo de Activo Fijo ha sido anulado con éxito.' : 'El tipo de Activo Fijo ha sido activado con éxito.'),
+              showCancel: false
+            })
+          })
+        }
+      });
+    }
 
 }

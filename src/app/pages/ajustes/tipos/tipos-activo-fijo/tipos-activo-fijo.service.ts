@@ -18,8 +18,7 @@ export class TiposActivoFijoService {
     return this.http.post(`${environment.base_url}/fixed_asset_type`, data);
   }
     
-  getAccountPlan():Observable<any>{
-    /* let params = { coincidencia: coincidencia, tipo: tipo }; */
+  getAccountPlan(){
     return this.http.get(`${environment.base_url}/account-plan`);
   }
 

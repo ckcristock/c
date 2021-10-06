@@ -54,12 +54,12 @@
                     <td> {{ item.category }} </td>
                     <td> {{ item.useful_life_niif }} mes(es)</td>
                     <td> {{ item.annual_depreciation_percentage_niif }} %</td>
-                    <td> {{ item.niif_account_plan_debit_depreciation_id }} </td>
-                    <td> {{ item.pcga_account_plan_debit_depreciation_id }} </td>
-                    <td> {{ item.niif_account_plan_id }} </td>
-                    <td> {{ item.pcga_account_plan_id }} </td>
-                    <td> {{ item.niif_account_plan_credit_depreciation_id }} </td>
-                    <td> {{ item.pcga_account_plan_credit_depreciation_id }} </td>
+                    <td> {{ item.niif_account_plan_debit_depreciation }} </td>
+                    <td> {{ item.pcga_account_plan_debit_depreciation }} </td>
+                    <td> {{ item.niif_account_plan }} </td>
+                    <td> {{ item.pcga_account_plan }} </td>
+                    <td> {{ item.niif_account_plan_credit_depreciation }} </td>
+                    <td> {{ item.pcga_account_plan_credit_depreciation }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -88,9 +88,9 @@
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
         <h5 class="modal-title">Nuevo Tipo de Activo</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
+        <button type="button" class="close basic-close" (click)="closeModal()">
             <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
+              <i class="fas fa-times" (click)="closeModal()"></i>
             </span>
           </button>
     </div>
@@ -124,32 +124,34 @@
                             <input type="text" class="form-control form-control-sm" formControlName="annual_depreciation_percentage_pcga" readonly>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="">Procentaje de Depreciación NIIF Mensual</label>
+                            <label for="">Porcentaje de Depreciación NIIF Mensual</label>
                             <input type="text" class="form-control form-control-sm" formControlName="annual_depreciation_percentage_niif" readonly>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="">Cuenta Activo PCGA</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="pcga_account_plan_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                            <input type="text" class="form-control form-control-sm" formControlName="pcga_account_plan_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue" [editable]='false'>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="">Cuenta Activo NIIF</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="niif_account_plan_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                            <input type="text" class="form-control form-control-sm" formControlName="niif_account_plan_id" (change)="getTipo()" [ngbTypeahead]="searchNiif" [inputFormatter]="inputFormatListValueNiif" [resultFormatter]="resultFormatListValueNiif" [editable]='false'>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="">Cuenta Debito Depreciación PCGA</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="pcga_account_plan_debit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                            <input type="text" class="form-control form-control-sm" formControlName="pcga_account_plan_debit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue" [editable]='false'>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="">Cuenta Debito Depreciación NIIF</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="niif_account_plan_debit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                            <input type="text" class="form-control form-control-sm" formControlName="niif_account_plan_debit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="searchNiif" [inputFormatter]="inputFormatListValueNiif" [resultFormatter]="resultFormatListValueNiif"
+                                [editable]='false'>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="">Cuenta Credito Depreciación PCGA</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="pcga_account_plan_credit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                            <input type="text" class="form-control form-control-sm" formControlName="pcga_account_plan_credit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue" [editable]='false'>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="">Cuenta Credito Depreciación NIIF</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="niif_account_plan_credit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]='false'>
+                            <input type="text" class="form-control form-control-sm" formControlName="niif_account_plan_credit_depreciation_id" (change)="getTipo()" [ngbTypeahead]="searchNiif" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue"
+                                [editable]='false'>
                         </div>
                     </div>
                 </div>
@@ -158,8 +160,8 @@
     </div>
     <div class="app-modal-footer">
         <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="save()">Guardar</button>
+            <button (click)="closeModal()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="save()" [disabled]="!form.valid">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

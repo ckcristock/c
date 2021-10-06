@@ -1,1 +1,97 @@
-<p>tipos-retenciones works!</p>
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                <i class="fa fa-plus"></i> Agregar Nueva Retención
+            </button>
+            <h5 class="text-primary">Tipos de Retenciones</h5>
+            <p>Todas las Retenciones Registradas.</p>
+        </div>
+        <div class="mt-4">
+            <table class="table table-borderless table-striped" *ngIf="!loading && retentionTypes.length > 0; else notData">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Nombre Retención</th>
+                        <th>Porcentaje</th>
+                        <th>Cuenta Asociada</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of retentionTypes" [ngClass]="{'bg-danger text-white': (item.state == 'Inactivo')}">
+                        <td> {{ item.name }} </td>
+                        <td> {{ item.percentage }} </td>
+                        <td> {{ item.account_plan }} </td>
+                        <td> {{ item.state }} </td>
+                        <td>
+                            <div class="text-center">
+                                <div ngbDropdown class="dropdown-primary">
+                                    <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                        <i class="mdi mdi-chevron-down"></i>
+                                    </button>
+                                    <div ngbDropdownMenu>
+                                        <a (click)="getRetention(item); modal.show()" class="dropdown-item waves-light text-info waves-effect caja-botones">
+                                            <i class="far fa-edit"></i> Editar</a>
+                                        <a *ngIf="item.state == 'Inactivo'" (click)="activateOrInactivate(item, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                            <i class="fa fa-check"></i> Activar</a>
+                                        <a *ngIf="item.state == 'Activo'" (click)="activateOrInactivate(item, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                            <i class="far fa-trash-alt"></i> Anular</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getRetentionTypes($event)" aria-label="Default pagination"
+                maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+            </ngb-pagination>
+        </div>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Nuevo Tipo de Retención</h5>
+        <button type="button" class="close basic-close" (click)="closeModal()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="closeModal()"></i>
+            </span>
+          </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="">Nombre Retención</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="name">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">Tipo Retención</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="account_plan_id" (change)="getTipo()" [ngbTypeahead]="search" [resultFormatter]="resultFormatBandListValue" [inputFormatter]="inputFormatBandListValue" [editable]='false'>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">Porcentaje</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="percentage">
+                        </div>
+                        <div class="form-group col-12">
+                            <label for="">Descripción</label>
+                            <textarea class="form-control form-control-sm" cols="30" rows="4" formControlName="description"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="closeModal()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="save()" [disabled]="!form.valid">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

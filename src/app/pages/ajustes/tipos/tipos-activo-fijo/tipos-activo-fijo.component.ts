@@ -1,10 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TiposActivoFijoService } from './tipos-activo-fijo.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-type AccountPlan = { code: string, id:number, name:string }
+import { parse } from 'querystring';
+type AccountPlan = { 
+  code: string, 
+  name:string, 
+  niif_code:string, 
+  niif_name: string
+};
 @Component({
   selector: 'app-tipos-activo-fijo',
   templateUrl: './tipos-activo-fijo.component.html',
@@ -19,7 +25,7 @@ export class TiposActivoFijoComponent implements OnInit {
   accountPlan:any[] = [];
   pagination:any = {
     page: 1,
-    pageSize: 5,
+    pageSize: 6,
     collectionSize: 0
   }
   filtros:any = {
@@ -43,28 +49,43 @@ export class TiposActivoFijoComponent implements OnInit {
   openModal(){
     this.modal.show();
   }
+
+  closeModal(){
+    this.modal.hide();
+    this.form.reset();
+  }
   
   createForm(){
     this.form = this.fb.group({
       id: [this.fixedAsset.id],
-      name: [''],
-      category: [''],
-      useful_life_niif: [''],
-      annual_depreciation_percentage_niif: [''],
-      useful_life_pcga: [''],
-      annual_depreciation_percentage_pcga: [''],
-      niif_depreciation_account_plan_id: [''],
-      pcga_depreciation_account_plan_id: [''],
-      niif_account_plan_id: [''],
-      pcga_account_plan_id: [''],
-      niif_account_plan_credit_depreciation_id: [''],
-      pcga_account_plan_credit_depreciation_id: [''],
-      pcga_account_plan_debit_depreciation_id: [''],
-      niif_account_plan_debit_depreciation_id: ['']
+      name: ['', Validators.required],
+      category: ['Seleccione', Validators.required],
+      useful_life_niif: ['', Validators.required],
+      annual_depreciation_percentage_niif: ['', Validators.required],
+      useful_life_pcga: ['', Validators.required],
+      annual_depreciation_percentage_pcga: ['', Validators.required],
+      niif_depreciation_account_plan_id: ['', Validators.required],
+      pcga_depreciation_account_plan_id: ['', Validators.required],
+      niif_account_plan_id: ['', Validators.required],
+      pcga_account_plan_id: ['', Validators.required],
+      niif_account_plan_credit_depreciation_id: ['', Validators.required],
+      pcga_account_plan_credit_depreciation_id: ['', Validators.required],
+      pcga_account_plan_debit_depreciation_id: ['', Validators.required],
+      niif_account_plan_debit_depreciation_id: ['', Validators.required]
     });
   }
 
-  formatter = (state: AccountPlan) => state.code;
+  inputFormatBandListValue(value: any) {
+    if (value.code)
+    return value.code
+    return value;
+  }
+  
+  resultFormatBandListValue(value: any) {
+    return value.code;
+  }
+  
+  /* formatter = (x: { code }) => x.code; */
   search: OperatorFunction<string, readonly { code }[]> = (
     text$: Observable<string>
   ) =>
@@ -79,8 +100,8 @@ export class TiposActivoFijoComponent implements OnInit {
       )
     );
 
-    /* formatter_niif = (state: AccountPlan) => state.code;
-    search_niif: OperatorFunction<string, readonly { code }[]> = (
+    // formatterNiif = (x: { niif_code }) => x.niif_code;
+    searchNiif: OperatorFunction<string, readonly { niif_code }[]> = (
     text$: Observable<string>
     ) =>
     text$.pipe(
@@ -89,22 +110,29 @@ export class TiposActivoFijoComponent implements OnInit {
       filter((term) => term.length >= 3),
       map((term) =>
         this.accountPlan
-          .filter((state) => new RegExp(term, 'mi').test(state.code))
+          .filter((state) => new RegExp(term, 'mi').test(state.niif_code))
           .slice(0, 10)
       )
-    ); */
+    );
+
+    inputFormatListValueNiif(value: any) {
+      if (value.niif_code)
+        return value.niif_code
+      return value;
+    }
   
-  getAccountPlan(){
-    this._tipoActivoFijo.getAccountPlan().subscribe((r:any) => {
-      this.accountPlan = r.data;
-    })
-  }
+     resultFormatListValueNiif(value: any) {
+      return value.niif_code;
+    }
+  
+    getAccountPlan(){
+      this._tipoActivoFijo.getAccountPlan().subscribe((r:any) => {
+        this.accountPlan = r.data;
+      })
+    }
 
     getTipo(){
       let f = this.form.get('pcga_account_plan_id').value;
-      /* this.form.patchValue({
-        pcga_account_plan_id: f.code
-      }) */
     }
 
     getFixedAsset(fixedAsset){
@@ -117,24 +145,24 @@ export class TiposActivoFijoComponent implements OnInit {
         annual_depreciation_percentage_niif: this.fixedAsset.annual_depreciation_percentage_niif,
         useful_life_pcga: this.fixedAsset.useful_life_pcga,
         annual_depreciation_percentage_pcga: this.fixedAsset.annual_depreciation_percentage_pcga,
-        niif_depreciation_account_plan_id: this.fixedAsset.niif_depreciation_account_plan_id,
-        niif_account_plan_id: this.fixedAsset.niif_account_plan_id,
-        pcga_depreciation_account_plan_id: this.fixedAsset.pcga_depreciation_account_plan_id,
-        pcga_account_plan_id: this.fixedAsset.pcga_account_plan_id,
-        niif_account_plan_credit_depreciation_id: this.fixedAsset.niif_account_plan_credit_depreciation_id,
-        pcga_account_plan_credit_depreciation_id: this.fixedAsset.pcga_account_plan_credit_depreciation_id,
-        pcga_account_plan_debit_depreciation_id: this.fixedAsset.pcga_account_plan_debit_depreciation_id,
-        niif_account_plan_debit_depreciation_id: this.fixedAsset.niif_account_plan_debit_depreciation_id,
+        niif_depreciation_account_plan_id: this.fixedAsset.niif_depreciation_account_plan,
+        niif_account_plan_id: this.fixedAsset.niif_account_plan,
+        pcga_depreciation_account_plan_id: this.fixedAsset.pcga_depreciation_account_pland,
+        pcga_account_plan_id: this.fixedAsset.pcga_account_plan,
+        niif_account_plan_credit_depreciation_id: this.fixedAsset.niif_account_plan_credit_depreciation,
+        pcga_account_plan_credit_depreciation_id: this.fixedAsset.pcga_account_plan_credit_depreciation,
+        pcga_account_plan_debit_depreciation_id: this.fixedAsset.pcga_account_plan_debit_depreciation,
+        niif_account_plan_debit_depreciation_id: this.fixedAsset.niif_account_plan_debit_depreciation,
       });
     }
   
-  getFixedAssetTypes(page = 1){
-    this.pagination.page = page;
-    let params = {
-      ...this.pagination, ...this.filtros
-    }
-    this.loading = true;
-    this._tipoActivoFijo.getFixedAssetType(params).subscribe((r:any) => {
+    getFixedAssetTypes(page = 1){
+      this.pagination.page = page;
+      let params = {
+        ...this.pagination, ...this.filtros
+      }
+      this.loading = true;
+      this._tipoActivoFijo.getFixedAssetType(params).subscribe((r:any) => {
       this.fixedAssets = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
@@ -157,8 +185,9 @@ export class TiposActivoFijoComponent implements OnInit {
 
   save(){
     this._tipoActivoFijo.updateOrCreateFixedAssetType(this.form.value).subscribe((r:any) => {
+      console.log(r);
       this.modal.hide();
-      console.log(this.form.value);
+      this.form.reset();
       this.getFixedAssetTypes();
       this._swal.show({
         icon: 'success',

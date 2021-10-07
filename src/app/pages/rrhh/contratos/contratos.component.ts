@@ -45,6 +45,8 @@ export class ContratosComponent implements OnInit {
 
   ngOnInit(): void {
     this.getGroups();
+    this.getDependencies();
+    this.getPositions();
     this.getCompanies();
     this.getContractsToExpire();
     this.getContractByTrialPeriod();
@@ -79,20 +81,18 @@ export class ContratosComponent implements OnInit {
     })
   }
 
-  getDependencies(group_id) {
-    this._dependecies.getDependencies({ group_id }).subscribe((d: any) => {
+  getDependencies() {
+    this.contractService.getDependencies().subscribe((d: any) => {
       this.dependencies = d.data;
       this.dependencies.unshift({ text: 'Seleccione una', value: '' });
     });
   }
   
-  getPositions(dependency_id) {
-    if (dependency_id) {
-      this._positions.getPositions({ dependency_id }).subscribe((d: any) => {
+  getPositions() {
+      this.contractService.getPositions().subscribe((d: any) => {
         this.positions = d.data;
         this.positions.unshift({ text: 'Seleccione una', value: '' });
       });
-    }
   }
 
   getContractsToExpire( page = 1 ) {

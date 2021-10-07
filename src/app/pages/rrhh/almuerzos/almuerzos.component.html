@@ -1,10 +1,22 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <button class="btn btn-sm btn-info" style="float: right;" (click)="openModal()">Agregar</button>
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                <i class="fa fa-plus"></i> Agregar
+            </button>
             <h5 class="text-primary">Almuerzos</h5>
         </div>
-        <table class="table table-borderless table-striped mt-4" *ngIf="!loading && lunches.length > 0; else notData">
+        <div class="row mt-4">
+            <div class="form-group col-2">
+                <label for="">Filtro Fecha</label>
+                <input type="date" class="form-control form-control-sm" [(ngModel)]="filtro.date" (change)="getLunches()">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-sm table-borderless table-striped mt-4" *ngIf="!loading && lunches.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th scope="col">Funcionario</th>
@@ -15,7 +27,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let lunch of lunches" [ngClass]="{'bg-danger text-white': (lunch.state == 'Inactivo')}">
-                    <td> {{ lunch.person.first_name }} {{ lunch.person.first_surname }} </td>
+                    <td> {{ lunch.first_name | titlecase}} {{ lunch.first_surname | titlecase }} </td>
                     <td> {{ lunch.value | currency }} </td>
                     <td> {{ lunch.created_at | date: 'dd-MM-yyyy' }} </td>
                     <td>
@@ -25,6 +37,9 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
+                                    <a (click)="openModalVer(); getLunch(lunch)" class="dropdown-item waves-light text-dark waves-effect caja-botones">
+                                        <i class="fas fa-eye"></i> Ver
+                                    </a>
                                     <a *ngIf="lunch.state == 'Activo'" (click)="activateOrInactivate(lunch, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
                                         <i class="far fa-trash-alt"></i> Anular
                                     </a>
@@ -38,15 +53,17 @@
                 </tr>
             </tbody>
         </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getLunches($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
     </div>
 </div>
-
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
         <h5 class="modal-title"> Nuevo Almuerzo </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset">
+        <button type="button" class="close basic-close" (click)="modal.hide()">
           <span aria-hidden="true">
-            <i class="fas fa-times" (click)="modal.hide(); form.reset"></i>
+            <i class="fas fa-times" (click)="modal.hide()"></i>
           </span>
         </button>
     </div>
@@ -55,28 +72,50 @@
             <div class="form-row">
                 <div class="form-group col-12">
                     <label for="" class="form-label">Funcionario</label>
-                    <ng-select formControlName="person_id" [items]="people" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
-                    </ng-select>
+                    <input formControlName="fill_person" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue" [editable]='false' (change)="createPerson()" />
                 </div>
                 <div class="form-group col-12">
                     <label for="" class="form-label">Valor del Almuerzo</label>
-                    <input type="number" formControlName="value" class="form-control">
+                    <input type="number" formControlName="value" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col-12" *ngIf="personList.controls.length > 0">
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                        <table class="table table-sm table-borderless table-striped">
+                            <thead class="bg-light stay">
+                                <tr>
+                                    <th colspan="2" class="text-center">Funcionarios Seleccionados</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr formArrayName="persons" *ngFor="let item of personList.controls; let i = index">
+                                    <td [formGroupName]="i">
+                                        <input type="text" formControlName="name" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" readonly>
+                                    </td>
+                                    <td [formGroupName]="i">
+                                        <div class="text-center">
+                                            <button class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
     <div class="app-modal-footer">
         <div class="form-group text-right">
-            <button (click)="modal.hide(); form.reset" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
             <button type="submit" class="btn btn-primary btn-sm raised" (click)="createLunch()" [disabled]="!form.valid">Guardar</button>
         </div>
     </div>
 </app-modal-basic>
-
-<!--------------- Ver ------------------->
-<!-- <app-modal-basic #modalVer [dialogClass]="'modal-md'">
+<app-modal-basic #modalVer [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
-        <h5 class="modal-title"> Ver </h5>
+        <h5 class="modal-title"> Ver Datos del Almuerzo </h5>
         <button type="button" class="close basic-close" (click)="modalVer.hide()">
           <span aria-hidden="true">
             <i class="fas fa-times" (click)="modalVer.hide()"></i>
@@ -84,41 +123,33 @@
         </button>
     </div>
     <div class="app-modal-body">
-        <table class="table table-striped">
-            <thead>
+        <table class="table table-borderless table-striped">
+            <thead class="bg-light">
                 <tr>
                     <th>Funcionario</th>
-                    <td> {{ lunch.person.first_name }} {{ lunch.person.first_surname }} </td>
-                </tr>
-                <tr>
                     <th>Func. Responsable</th>
-                    <td>Jose</td>
-                </tr>
-                <tr>
-                    <th>Valor Almuerzo</th>
-                    <td> {{ lunch.value }} </td>
-                </tr>
-                <tr>
-                    <th>Fecha de Creación</th>
-                    <td> {{ lunch.created_at }} </td>
+                    <th>Valor</th>
+                    <th>Fecha de creación</th>
+                    <th>Estado</th>
                 </tr>
             </thead>
+            <tbody>
+                <tr>
+                    <td> {{ lunch.first_name | titlecase }} {{ lunch.first_surname | titlecase }} </td>
+                    <td> {{ lunch.user | titlecase }} </td>
+                    <td> {{ lunch.value | currency }} </td>
+                    <td> {{ lunch.created_at | date: 'dd-MM-yyyy' }} </td>
+                    <td> {{ lunch.state | uppercase }} </td>
+                </tr>
+            </tbody>
         </table>
-        <div class="form-row">
-            <div class="form-group col-12">
-                <label for="" class="form-label">Funcionario</label>
-                <input type="text" class="form-control">
-            </div>
-            <div class="form-group col-12">
-                <label for="" class="form-label">Valor del Almuerzo</label>
-                <input type="number" class="form-control">
-            </div>
-        </div>
-        <div class="row ml-0 mr-0">
-            <button (click)="modalVer.hide()" type="button" class="col-12 btn btn-danger mr-2 btn-sm">Cerrar</button>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modalVer.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
         </div>
     </div>
-</app-modal-basic> -->
+</app-modal-basic>
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

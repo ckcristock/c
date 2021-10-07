@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlmuerzosService } from './almuerzos.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { ValidatorsService } from '../../ajustes/informacion-base/services/reactive-validation/validators.service';
+import { OperatorFunction, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-almuerzos',
@@ -18,6 +20,14 @@ export class AlmuerzosComponent implements OnInit {
   lunches:any[] = [];
   lunch:any = {};
   lunch_id:any;
+  pagination = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  filtro = {
+    date: ''
+  }
   constructor( 
                 private _almuerzo: AlmuerzosService,
                 private fb: FormBuilder,
@@ -39,11 +49,66 @@ export class AlmuerzosComponent implements OnInit {
     this.modalVer.show();
   }
 
+  inputFormatBandListValue(value: any) {
+    if (value.text)
+      return value.text
+    return value;
+  }
+
+  resultFormatBandListValue(value: any) {
+    return value.text;
+  }
+
+/* formatter = (x: { code }) => x.code; */
+  search: OperatorFunction<string, readonly { text }[]> = (
+  text$: Observable<string>
+  ) =>
+  text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    filter((term) => term.length >= 3),
+    map((term) =>
+      this.people
+        .filter((state) => new RegExp(term, 'mi').test(state.text))
+        .slice(0, 10)
+    )
+  );
+
   createForm(){
     this.form = this.fb.group({
-      person_id: ['', Validators.required],
-      value: ['', Validators.required]
+      fill_person: ['', Validators.required],
+      value: ['', Validators.required],
+      persons: this.fb.array([])
     });
+  }
+
+  personControl(){
+    let group = this.fb.group({
+      name: [''],
+      person_id: ['']
+    })
+    let value = this.form.get('fill_person').value;
+    let name = value.text;
+    let id = value.value
+    group.patchValue({
+      name: name,
+      person_id: id
+    })
+    return group;
+  }
+
+  get personList(){
+    return this.form.get('persons') as FormArray;
+  }
+
+  createPerson(){
+    let person = this.personList;
+    person.push(this.personControl());
+  }
+
+  deletePerson(i){
+    let person = this.personList;
+    person.removeAt(i);
   }
 
   getPeople(){
@@ -52,23 +117,21 @@ export class AlmuerzosComponent implements OnInit {
     })
   }
 
-  getLunches(){
+  getLunches( page = 1 ){
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._almuerzo.getLunches().subscribe((r:any) =>{
-        this.lunches = r.data;
+    this._almuerzo.getLunches(params).subscribe((r:any) =>{
+        this.lunches = r.data.data;
+        this.pagination.collectionSize = r.data.total;
         this.loading = false;
     })
   }
-  
-  getLunchId(id){
-    this.lunch_id = id;
-  }
 
-  getLunch(){
-    this._almuerzo.getLunch(this.lunch_id).subscribe((r:any) => {
-      this.lunch = r.data;
-      console.log(this.lunch);
-    });
+  getLunch(lunch){
+    this.lunch = {...lunch};
   }
 
   createLunch(){

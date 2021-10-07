@@ -13,8 +13,8 @@ export class AlmuerzosService {
     return this.http.get(`${environment.base_url}/people`);
   }
 
-  getLunches(){
-    return this.http.get(`${environment.base_url}/lunch`);
+  getLunches( params = {} ){
+    return this.http.get(`${environment.base_url}/lunch`, {params});
   }
 
   getLunch(id:any){

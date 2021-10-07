@@ -1,8 +1,10 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <button class="btn btn-primary btn-sm" style="float: right;" (click)="open()">Nuevo Proceso Disciplinario</button>
-            <h5>Procesos Disciplinarios</h5>
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="open()">
+                <i class="fa fa-plus"></i> Nuevo Descargo
+            </button>
+            <h5 class="text-primary">Descargos</h5>
         </div>
         <div class="form-row mt-4">
             <div class="form-group col-md-2">
@@ -31,7 +33,7 @@
                 <tr>
                     <th scope="col">Código</th>
                     <th scope="col">Funcionario</th>
-                    <th scope="col">Descripción Proceso</th>
+                    <th scope="col">Descripción</th>
                     <th scope="col">Fecha Inicial</th>
                     <th scope="col">Fecha Final</th>
                     <th scope="col" style="width: 50px;">Acciones</th>
@@ -68,7 +70,7 @@
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
-        <h5 class="modal-title"> Proceso Disciplinario </h5>
+        <h5 class="modal-title"> Descargo </h5>
         <button type="button" class="close basic-close" (click)="modal.hide()">
           <span aria-hidden="true">
             <i class="fas fa-times" (click)="modal.hide()"></i>

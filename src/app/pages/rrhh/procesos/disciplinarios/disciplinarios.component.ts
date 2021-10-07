@@ -51,8 +51,8 @@ export class DisciplinariosComponent implements OnInit {
     this.form = this.fb.group({
       person_id: ['', this._reactiveValid.required],
       date_of_admission: ['', Validators.required],
-      date_end: ['', Validators.required],
-      process_description: ['', this._reactiveValid.required],
+      date_end: [''],
+      process_description: ['', this._reactiveValid.required]
     }); 
   }
 

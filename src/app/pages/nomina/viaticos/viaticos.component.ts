@@ -61,7 +61,6 @@ export class ViaticosComponent implements OnInit {
     }
     this.loading = true;
     this._viaticos.getAllViaticos(params).subscribe( (r:any)=>{
-      console.log(r);
       this.data = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;

@@ -102,7 +102,6 @@ export class AsistenciaComponent implements OnInit {
   beforeCreate() {
     //validar empresa
     if (localStorage.getItem('tenant')) {
-      //git console.log(localStorage.getItem("tenant"));
     } else {
      /*  Swal.fire({
         title: 'Ingresa el nit de vuestra compañia',

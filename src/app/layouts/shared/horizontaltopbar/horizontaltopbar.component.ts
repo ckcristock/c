@@ -42,7 +42,6 @@ export class HorizontaltopbarComponent implements OnInit {
   ngOnInit(): void {
     this.element = document.documentElement;
     this.user = this._user.user;
-    // console.log(this.user , 'user');
     this.configData = {
       suppressScrollX: true,
       wheelSpeed: 0.3

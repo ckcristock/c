@@ -244,7 +244,6 @@ export class CrearTercerosComponent implements OnInit {
       case 'Retefuente':
         let retefuente = this.form.get('retefuente_account').value;
         this.retePercentage.retefuente = (retefuente.percent.replace(',','.') * 100).toFixed(2);
-        console.log(this.retePercentage.retefuente);
         break;
       default:
         break;

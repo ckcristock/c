@@ -408,7 +408,6 @@ export class ActividadesComponent {
 
     this._person.getAll({ dependencies: [dependencies] }).subscribe((r: any) => {
       this.Funcionarios = r.data;
-      // console.log(this.Funcionarios);
       this.Funcionarios.unshift({ value: '0', text: 'Todos' });
     });
   }

@@ -67,7 +67,6 @@ export class AlmuerzosComponent implements OnInit {
   getLunch(){
     this._almuerzo.getLunch(this.lunch_id).subscribe((r:any) => {
       this.lunch = r.data;
-      console.log(this.lunch);
     });
   }
 

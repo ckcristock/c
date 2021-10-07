@@ -64,7 +64,6 @@ export class EditDiarioFixedComponent implements OnInit {
   }
 
   update() {
-    console.log(this.diario.id);
     this._extra
       .updateFixedTurnDiary(this.diario.id, this.forma.value)
       .subscribe((r) => {});
@@ -73,7 +72,6 @@ export class EditDiarioFixedComponent implements OnInit {
   }
 
   show() {
-    console.log(this.diario);
     this.modal.show();
   }
 

@@ -69,7 +69,6 @@ export class CreateTurnoFijoComponent implements OnInit {
   save() {
     this.forma.markAllAsTouched();
     if (this.forma.invalid) return false;
-    console.log(this.id);
     this._swal
       .show({
         title: (this.id == undefined ? '¿Desea Guardar?' : '¿Desea Actulizar?'),

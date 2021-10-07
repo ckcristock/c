@@ -44,8 +44,6 @@ export class CrearNotaContableComponent implements OnInit {
   getCenterCost(){
     this._notasContables.getCenterCost().subscribe((r:any) => {
       this.centerCosts = r.data;
-      console.log(this.centerCosts);
-      
     })
   }
 
@@ -142,7 +140,6 @@ export class CrearNotaContableComponent implements OnInit {
       this.form.patchValue({
         total_credit
       });
-      console.log(total_credit);
     }, 300);
     
   }

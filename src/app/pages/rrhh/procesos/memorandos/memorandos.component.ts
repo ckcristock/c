@@ -190,7 +190,6 @@ export class MemorandosComponent implements OnInit {
     this.memorandosService.getMemorandumList( params )
     .subscribe( (res:any) => {
       this.memorandums = res.data.data;
-      console.log(this.memorandums);
       
       this.paginationMemorando.collectionSize = res.data.total;
       this.loading = false;
@@ -200,7 +199,6 @@ export class MemorandosComponent implements OnInit {
   saveMemorandum() {
     this.memorandosService.createNewMemorandum( this.formMemorando.value )
     .subscribe( (res:any) => {
-      console.log(res);
       
       this.modalMemorando.hide();
       this.formMemorando.reset();
@@ -228,7 +226,6 @@ export class MemorandosComponent implements OnInit {
     .then((result) =>{
       if (result.isConfirmed) {
         this.memorandosService.createNewMemorandum(data).subscribe( (r:any) =>{
-          console.log(r);
           
           this._swal.show({
             icon: 'success',

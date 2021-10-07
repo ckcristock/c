@@ -1,7 +1,7 @@
 <div class="row pt-3" [ngClass]="{ extra: validada }">
   <div class="col-md-3">
-    <p *ngIf="turnoDato != '' && turnoDato != undefined" class="text-primary font-weight-bold m-0 p-0">
-       Dia: {{ diario | json }}
+    <p *ngIf="day.date" class="text-primary font-weight-bold m-0 p-0">
+      {{ day.date | date: "EEEE" |  uppercase  }}
     </p>
     <p class="m-0 p-0" *ngIf="turnoDato != '' && turnoDato != undefined">
       Turno:

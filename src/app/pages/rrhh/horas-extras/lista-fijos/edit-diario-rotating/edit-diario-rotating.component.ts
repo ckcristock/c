@@ -61,7 +61,6 @@ export class EditDiarioRotatingComponent implements OnInit {
   }
 
   update(){
-    console.log(this.diario.id);
     this._extra.updateRotatingTurnDiary(this.diario.id,this.forma.value).subscribe(r=>{})
     this.modal.hide();
     this.saved.emit();
@@ -69,7 +68,6 @@ export class EditDiarioRotatingComponent implements OnInit {
 
   show() {
     this.modal.show();
-    console.log(this.diario);
   }
 
   get hasBreck(){

@@ -104,7 +104,6 @@ export const functions = {
       this.sumarTotal(form);
     });
     form.get('other_expenses_usd').valueChanges.subscribe((r) => {
-      console.log(r)
       this.sumarTotal(form);
     });
     form.get('total_hotels_cop').valueChanges.subscribe((r) => {

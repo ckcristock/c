@@ -28,7 +28,6 @@ export class HorasExtrasComponent implements OnInit {
     return moment(this.ultimoDiaSemana, 'YYYY-MM-DD').format('DD/MM/YYYY');
   }
   changeTipoTurno(turn) {
-    console.log(turn);
   }
 
   cambiarSemana() {

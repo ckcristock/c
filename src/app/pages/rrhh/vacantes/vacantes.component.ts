@@ -67,7 +67,6 @@ export class VacantesComponent implements OnInit {
   onPage(event) {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
-      // console.log('paged!', event);
     }, 100);
   }
 

@@ -104,7 +104,6 @@ export class LlegadasTardesComponent implements OnInit {
     });
   }
   getDependencies(group_id) {
-    console.log(this.group_id);
     this._dependencies.getDependencies({ group_id }).subscribe((r: any) => {
       this.dependencyList = r.data;
       this.addElement();
@@ -132,7 +131,6 @@ export class LlegadasTardesComponent implements OnInit {
     if (this.company_id != '0' && this.company_id) {
       params.company_id = this.company_id;
     }
-console.log(this.group_id)
     if ( this.group_id && this.group_id != '0') {
       params.group_id = this.group_id;
     }

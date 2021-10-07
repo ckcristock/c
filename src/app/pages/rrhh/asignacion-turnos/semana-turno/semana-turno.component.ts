@@ -42,10 +42,14 @@ export class SemanaTurnoComponent implements OnInit {
   asignarHorariosMasivo() {
     if (this.masiveTurnId.rotating_turn_id != 'seleccione') {
       this.people.forEach((r) => {
-        r.diasSemana.forEach((dia) => {
-          dia.turno = this.masiveTurnId.rotating_turn_id;
-          dia.color = this.masiveTurnId.color;
-        });
+        console.log(r);
+        
+        if (r.selected) {
+          r.diasSemana.forEach((dia) => {
+            dia.turno = this.masiveTurnId.rotating_turn_id;
+            dia.color = this.masiveTurnId.color;
+          });
+        }
       });
     }
   }

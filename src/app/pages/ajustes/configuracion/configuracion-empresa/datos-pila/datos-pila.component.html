@@ -23,7 +23,7 @@
                 Companía de ARL
             </p>
             <p class="col-6 font-weight-bold">
-                {{ pilas.arl_id }}
+                {{ arl }}
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Aplica Ley 1429 de 2010
@@ -63,8 +63,9 @@
                         <div class="form-group col-12">
                             <label for="">Operador de Pago Utilizado</label>
                             <select class="form-control form-control-sm" formControlName="paid_operator">
-                                <option>Aportes en Línea</option>
-                                <option>AsoPagos</option>
+                                <option *ngFor="let item of pay_operators" [value]="item.value">
+                                    {{ item.clave }}
+                                </option>
                             </select>
                         </div>
                         <div class="form-group col-12">

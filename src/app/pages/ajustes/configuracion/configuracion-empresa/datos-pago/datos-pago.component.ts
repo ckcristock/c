@@ -15,17 +15,18 @@ export class DatosPagoComponent implements OnInit {
   payment_method = configEmpresa.payment_method;
   account_types = configEmpresa.account_type;
   payment_frequencys = configEmpresa.payment_frequency;
-  banks:any = [];
-  payments:any = [];
+  banks:any[] = [];
+  payments:any = {};
+  bank:any;
   constructor( 
                 private _configuracionEmpresaService: ConfiguracionEmpresaService,
                 private fb: FormBuilder
               ) { }
 
   ngOnInit(): void {
-    this.createForm();
-    this.getBanks();
     this.getPaymentData();
+    this.getBanks();
+    this.createForm();
   }
 
   openModal() {
@@ -43,17 +44,11 @@ export class DatosPagoComponent implements OnInit {
     });
   }
 
-  getBanks() {
-    this._configuracionEmpresaService.getBanks()
-    .subscribe( (res:any) =>{
-      this.banks = res.data;
-    })
-  }
-
   getPaymentData() {
     this._configuracionEmpresaService.getCompanyData()
     .subscribe( (res:any) =>{
       this.payments = res.data;
+      this.bank = res.data.bank.name;
       this.form.patchValue({
         id: this.payments.id,
         payment_frequency: this.payments.payment_frequency,
@@ -63,6 +58,13 @@ export class DatosPagoComponent implements OnInit {
         bank_id: this.payments.bank_id
       });
     });
+  }
+
+  getBanks() {
+    this._configuracionEmpresaService.getBanks()
+    .subscribe( (res:any) =>{
+      this.banks = res.data;
+    })
   }
 
   savePaymentData() {

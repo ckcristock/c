@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ConfiguracionEmpresaService } from '../configuracion-empresa.service';
+import { configEmpresa } from '../configuracion';
 
 @Component({
   selector: 'app-datos-pila',
@@ -13,6 +14,8 @@ export class DatosPilaComponent implements OnInit {
   form: FormGroup;
   arls:any = [];
   pilas:any = [];
+  pay_operators = configEmpresa.pay_operator;
+  arl:any;
   constructor( 
                 private _configuracionEmpresaService: ConfiguracionEmpresaService,
                 private fb: FormBuilder
@@ -50,6 +53,7 @@ export class DatosPilaComponent implements OnInit {
     this._configuracionEmpresaService.getCompanyData()
     .subscribe( (res:any) => {
       this.pilas = res.data;
+      this.arl = res.data.arl.name;
       this.form.patchValue({
         id: this.pilas.id,
         paid_operator: this.pilas.paid_operator,

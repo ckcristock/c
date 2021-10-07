@@ -27,12 +27,11 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       calculate_work_disability: [''],
-      pay_dedutions: [''],
+      pay_deductions: [''],
       recurring_payment: [''],
       payment_transport_subsidy: [''],
       affects_transportation_subsidy: [''],
       pay_vacations: [''],
-      company_id: ['']
     });
   }
 

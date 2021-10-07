@@ -178,8 +178,21 @@ export class TiposActivoFijoComponent implements OnInit {
     }
 
     save(){
+      let niif_account_plan_credit_depreciation_id = this.form.value.niif_account_plan_credit_depreciation_id.id;
+      let niif_account_plan_debit_depreciation_id = this.form.value.niif_account_plan_debit_depreciation_id.id;
+      let niif_account_plan_id = this.form.value.niif_account_plan_id.id;
+      let pcga_account_plan_credit_depreciation_id = this.form.value.pcga_account_plan_credit_depreciation_id.id;
+      let pcga_account_plan_debit_depreciation_id = this.form.value.pcga_account_plan_debit_depreciation_id.id;
+      let pcga_account_plan_id = this.form.value.pcga_account_plan_id.id;
+      this.form.patchValue({
+        niif_account_plan_credit_depreciation_id,
+        niif_account_plan_debit_depreciation_id,
+        niif_account_plan_id,
+        pcga_account_plan_credit_depreciation_id,
+        pcga_account_plan_debit_depreciation_id,
+        pcga_account_plan_id
+      });
       this._tipoActivoFijo.updateOrCreateFixedAssetType(this.form.value).subscribe((r:any) => {
-        console.log(r);
         this.modal.hide();
         this.form.reset();
         this.getFixedAssetTypes();

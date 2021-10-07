@@ -109,6 +109,10 @@ export class TiposRetencionesComponent implements OnInit {
   }
 
   save(){
+    let account_plan_id = this.form.value.account_plan_id.id;
+    this.form.patchValue({
+      account_plan_id
+    })
     this._retentionType.updateOrCreateRetentionType(this.form.value).subscribe((r:any) => {
       this.modal.hide();
       this.form.reset();

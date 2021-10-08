@@ -1,0 +1,113 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                <i class="fas fa-money-bill"></i> Pago Prima
+            </button>
+            <h5 class="text-primary">Primas</h5>
+        </div>
+        <hr class="bg-primary mt-4">
+        <div class="mt-4">
+            <table class="table table-borderless table-striped">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Prima</th>
+                        <th>Fecha</th>
+                        <th>Total Prima</th>
+                        <th>Total Empleados</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of premiums">
+                        <td> {{ item.premium }} </td>
+                        <td> {{ item.created_at }} </td>
+                        <td> {{ item.total_premium }} </td>
+                        <td> {{ item.total_employees }} </td>
+                        <td>
+                            <button class="btn btn-lg" (click)="VerPrimaFuncionarios(item.id);" placement="right" ngbTooltip="Ver">
+                                <span aria-hidden="true">
+                                    <i class="far fa-eye fa-lg"></i>
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Ingrese Datos</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="">Año</label>
+                            <select class="form-control form-control-sm custom-select" formControlName="year">
+                                <option value="" *ngFor="let y of years" [value]="y">{{y}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Perido a Pagar</label>
+                            <select class="form-control form-control-sm custom-select" formControlName="periodo">
+                                <option value="12">Diciembre</option>
+                                <option value="6">Junio</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-success btn-sm raised" (click)="irAPago()" [disabled]="!form.valid">Pagar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<app-modal-basic #modalFuncionario [dialogClass]="'modal-xl'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Todos los funcionarios</h5>
+        <button type="button" class="close basic-close" (click)="modalFuncionario.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modalFuncionario.hide()"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <table class="table table-sm table-borderless table-striped">
+            <thead class="bg-light">
+                <tr>
+                    <th></th>
+                    <th>Persona</th>
+                    <th>Salario</th>
+                    <th>Dias Trabajados</th>
+                    <th>Total Prima</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

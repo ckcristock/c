@@ -22,6 +22,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
   @Input('openModal') openModal: EventEmitter<any>;
   @Output('saved') saved = new EventEmitter<any>();
   forma: FormGroup;
+  color:any;
   constructor(
     private fb: FormBuilder,
     private _valReactive: ValidatorsService,
@@ -32,6 +33,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.crearListeners();
+    this.colorHex();
     this.openModal.subscribe((id) => {
       this.forma.reset();
       if (id) {
@@ -72,6 +74,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
       launch_time: [0, this._valReactive.required],
       launch_time_two: [0, this._valReactive.required],
       breack: [0],
+      color: [0],
       breack_time: ['', this._valReactive.required],
       breack_time_two: ['', this._valReactive.required],
       id: [0],
@@ -102,12 +105,31 @@ export class CreateTurnoRotativoComponent implements OnInit {
       }
     });
   }
+
+  generateLetters(){
+    let letters = ['a','b','c','d','e','f','0','1','2','3','4','5','6','7','8','9'];
+    let number = (Math.random()*15).toFixed(0);
+    return letters[number];
+  }
+    
+  colorHex(){
+    let color = "";
+    for(let i = 0; i< 6; i++){
+      color = color + this.generateLetters();
+    }
+    this.color = "#" + color;
+    return this.color;
+  }
+
   save() {
+    let color = this.color;
+    this.forma.patchValue({
+      color
+    })
     this.forma.markAllAsTouched();
     if (this.forma.invalid) {
       return false;
     }
-
     this._swal
       .show({
         title: '¿Está seguro?',

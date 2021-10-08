@@ -1,255 +1,157 @@
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <h4>Turno Rotativo</h4>
-  </div>
-  <div class="app-modal-body">
-    <form [formGroup]="forma">
-      <div class="form-row">
-        <div class="form-group col-md-4">
-          <label class="custom-label" for="nombre">Nombre</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            formControlName="name"
-            [class.is-invalid]="invalid_name"
-            placeholder="Nombre del Turno"
-          />
-          <ng-container *ngIf="invalid_name">
-            <small
-              *ngFor="let item of forma.get('name').errors | ObjToArrayPipe"
-              class="text-danger"
-            >
+    <div class="app-modal-header">
+        <h4>Turno Rotativo</h4>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="forma">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label class="custom-label" for="nombre">Nombre</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="name" [class.is-invalid]="invalid_name" placeholder="Nombre del Turno" />
+                    <ng-container *ngIf="invalid_name">
+                        <small *ngFor="let item of forma.get('name').errors | ObjToArrayPipe" class="text-danger">
               {{ item?.msj }}
             </small>
-          </ng-container>
-        </div>
-        <div class="form-group col-md-3">
-          <label for="entry_" class="custom-label">Tolerancia de Entrada</label>
-          <input
-            type="number"
-            id="entry_"
-            formControlName="entry_tolerance"
-            [class.is-invalid]="invalid_entry_tolerance"
-            class="form-control form-control-sm"
-          />
-          <ng-container *ngIf="invalid_entry_tolerance">
-            <small
-              *ngFor="
+                    </ng-container>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="entry_" class="custom-label">Tolerancia de Entrada</label>
+                    <input type="number" id="entry_" formControlName="entry_tolerance" [class.is-invalid]="invalid_entry_tolerance" class="form-control form-control-sm" />
+                    <ng-container *ngIf="invalid_entry_tolerance">
+                        <small *ngFor="
                 let item of forma.get('entry_tolerance').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
+              " class="text-danger">
               {{ item?.msj }}
             </small>
-          </ng-container>
-        </div>
-        <div class="form-group col-md-3">
-          <label for="leave_" class="custom-label">Tolerancia de Salida</label>
-          <input
-            type="number"
-            id="leave_"
-            formControlName="leave_tolerance"
-            [class.is-invalid]="invalid_leave_tolerance"
-            class="form-control form-control-sm"
-          />
-          <ng-container *ngIf="invalid_leave_tolerance">
-            <small
-              *ngFor="
+                    </ng-container>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="leave_" class="custom-label">Tolerancia de Salida</label>
+                    <input type="number" id="leave_" formControlName="leave_tolerance" [class.is-invalid]="invalid_leave_tolerance" class="form-control form-control-sm" />
+                    <ng-container *ngIf="invalid_leave_tolerance">
+                        <small *ngFor="
                 let item of forma.get('leave_tolerance').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
+              " class="text-danger">
               {{ item?.msj }}
             </small>
-          </ng-container>
-        </div>
-        <div class="form-group col-md-2">
-          <label class="custom-label" for="extras">Horas Extras</label>
-          <select name="extras" class="form-control form-control-sm">
+                    </ng-container>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="custom-label" for="extras">Horas Extras</label>
+                    <select name="extras" class="form-control form-control-sm">
             <option value="0">No</option>
             <option value="1">Si</option>
           </select>
-        </div>
-      </div>
+                </div>
+            </div>
 
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="dia">Hora de entrada </label>
-          <input
-            type="time"
-            class="form-control"
-            [class.is-invalid]="invalid_entry_time"
-            formControlName="entry_time"
-          />
-          <ng-container *ngIf="invalid_entry_time">
-            <small
-              *ngFor="
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="dia">Hora de entrada </label>
+                    <input type="time" class="form-control" [class.is-invalid]="invalid_entry_time" formControlName="entry_time" />
+                    <ng-container *ngIf="invalid_entry_time">
+                        <small *ngFor="
                 let item of forma.get('entry_time').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
+              " class="text-danger">
               {{ item?.msj }}
             </small>
-          </ng-container>
-        </div>
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="dia">Hora de salida</label>
-          <input
-            type="time"
-            class="form-control"
-            [class.is-invalid]="invalid_leave_time"
-            formControlName="leave_time"
-          />
-          <ng-container *ngIf="invalid_leave_time">
-            <small
-              *ngFor="
+                    </ng-container>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="dia">Hora de salida</label>
+                    <input type="time" class="form-control" [class.is-invalid]="invalid_leave_time" formControlName="leave_time" />
+                    <ng-container *ngIf="invalid_leave_time">
+                        <small *ngFor="
                 let item of forma.get('leave_time').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
+              " class="text-danger">
               {{ item?.msj }}
             </small>
-          </ng-container>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6 form-check">
-          <div class="form-group form-check">
-            <input
-              type="checkbox"
-              formControlName="launch"
-              id="acceptTerms"
-              class="form-check-input"
-            />
-            <label class="custom-label">Aplica lunch </label>
-          </div>
-        </div>
-        <div class="form-group col-md-6 form-check">
-          <div class="form-group form-check">
-            <input
-              type="checkbox"
-              formControlName="breack"
-              id="acceptTerms"
-              class="form-check-input"
-            />
-            <label class="custom-label">Aplica break </label>
-          </div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-3">
-          <label class="custom-label" for="dia">Hora inicio lunch </label>
-          <input
-            type="time"
-            class="form-control"
-            formControlName="launch_time"
-          />
-          <ng-container
-            *ngIf="
+                    </ng-container>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 form-check">
+                    <div class="form-group form-check">
+                        <input type="checkbox" formControlName="launch" id="acceptTerms" class="form-check-input" />
+                        <label class="custom-label">Aplica lunch </label>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 form-check">
+                    <div class="form-group form-check">
+                        <input type="checkbox" formControlName="breack" id="acceptTerms" class="form-check-input" />
+                        <label class="custom-label">Aplica break </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label class="custom-label" for="dia">Hora inicio lunch </label>
+                    <input type="time" class="form-control" formControlName="launch_time" />
+                    <ng-container *ngIf="
               forma.get('launch_time').invalid &&
               forma.get('launch_time').touched
-            "
-          >
-            <small
-              *ngFor="
+            ">
+                        <small *ngFor="
                 let item of forma.get('launch_time').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
+              " class="text-danger">
               {{ item?.msj }}
             </small>
-          </ng-container>
-        </div>
-        <div class="form-group col-md-3">
-          <label class="custom-label" for="dia">Hora fin lunch</label>
-          <input
-            type="time"
-            class="form-control"
-            formControlName="launch_time_two"
-          />
-          <ng-container
-            *ngIf="
+                    </ng-container>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="custom-label" for="dia">Hora fin lunch</label>
+                    <input type="time" class="form-control" formControlName="launch_time_two" />
+                    <ng-container *ngIf="
               forma.get('launch_time_two').invalid &&
               forma.get('launch_time_two').touched
-            "
-          >
-            <small
-              *ngFor="
+            ">
+                        <small *ngFor="
                 let item of forma.get('launch_time_two').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
+              " class="text-danger">
               {{ item?.msj }}
             </small>
-          </ng-container>
-        </div>
-        <div class="form-group col-md-3">
-          <label class="custom-label" for="dia">Hora inicio break </label>
-          <input
-            type="time"
-            class="form-control"
-            formControlName="breack_time"
-          />
-          <ng-container
-            *ngIf="
+                    </ng-container>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="custom-label" for="dia">Hora inicio break </label>
+                    <input type="time" class="form-control" formControlName="breack_time" />
+                    <ng-container *ngIf="
               forma.get('breack_time').invalid &&
               forma.get('breack_time').touched
-            "
-          >
-            <small
-              *ngFor="
+            ">
+                        <small *ngFor="
                 let item of forma.get('breack_time').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
+              " class="text-danger">
               {{ item?.msj }}
             </small>
-          </ng-container>
-        </div>
-        <div class="form-group col-md-3">
-          <label class="custom-label" for="dia">Hora fin break  </label>
-          <input
-            type="time"
-            class="form-control"
-            formControlName="breack_time_two"
-          />
-          <ng-container
-            *ngIf="
+                    </ng-container>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="custom-label" for="dia">Hora fin break  </label>
+                    <input type="time" class="form-control" formControlName="breack_time_two" />
+                    <ng-container *ngIf="
               forma.get('breack_time_two').invalid &&
               forma.get('breack_time_two').touched
-            "
-          >
-            <small
-              *ngFor="
+            ">
+                        <small *ngFor="
                 let item of forma.get('breack_time_two').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
+              " class="text-danger">
               {{ item?.msj }}
             </small>
-          </ng-container>
-        </div>
-      </div>
-    </form>
-  </div>
+                    </ng-container>
+                </div>
+            </div>
+        </form>
+    </div>
 
-  <div class="app-modal-footer">
-    <div class="text-right">
-      <button
-        type="button"
-        (click)="modal.hide()"
-        class="btn btn-danger btn-sm mr-2"
-      >
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" (click)="modal.hide()" class="btn btn-danger btn-sm mr-2">
         Cerrar
       </button>
-      <button
-        type="submit"
-        [disabled]="forma.pristine"
-        (click)="save()"
-        class="btn btn-success btn-sm"
-      >
+            <button type="submit" [disabled]="forma.pristine" (click)="save()" class="btn btn-success btn-sm">
         Generar Horario
       </button>
+        </div>
     </div>
-  </div>
 </app-modal-basic>

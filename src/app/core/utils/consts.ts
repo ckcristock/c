@@ -130,8 +130,9 @@ export const consts = {
   ],
 
   status: [
+    { clave: 'Todos', valor: 'Todos' },
     { clave: 'Abierto', valor: 'Abierto' },
-    { clave: 'Cerrado', valor: 'Cerrado' }
+    { clave: 'Cerrado', valor: 'Cerrado' },
   ],
 
   modalities: [

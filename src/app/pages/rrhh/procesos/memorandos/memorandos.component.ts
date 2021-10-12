@@ -26,6 +26,7 @@ export class MemorandosComponent implements OnInit {
   loading = false;
   types:any;
   typesLimitated:any;
+  calls:any[] = [];
   filtros:any = {
     person: '',
     date: '',
@@ -73,6 +74,7 @@ export class MemorandosComponent implements OnInit {
     this.getTypeMemorandum();
     this.getMemorandumList();
     this.getList();
+    this.attentionCalls();
   }
 
   openMotivo(){
@@ -190,8 +192,6 @@ export class MemorandosComponent implements OnInit {
     this.memorandosService.getMemorandumList( params )
     .subscribe( (res:any) => {
       this.memorandums = res.data.data;
-      console.log(this.memorandums);
-      
       this.paginationMemorando.collectionSize = res.data.total;
       this.loading = false;
     })
@@ -271,6 +271,14 @@ export class MemorandosComponent implements OnInit {
       number_call: ['', this._reactiveValid.required],
       person_id: ['', this._reactiveValid.required],
       user_id: ['']
+    })
+  }
+
+  attentionCalls(){
+    this.memorandosService.attentionCalls().subscribe((r:any) => {
+      this.calls = r.data;
+      console.log(this.calls);
+      
     })
   }
 

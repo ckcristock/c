@@ -26,7 +26,7 @@ export class MemorandosComponent implements OnInit {
   loading = false;
   types:any;
   typesLimitated:any;
-  calls:any[] = [];
+  call:any = {};
   filtros:any = {
     person: '',
     date: '',
@@ -74,7 +74,6 @@ export class MemorandosComponent implements OnInit {
     this.getTypeMemorandum();
     this.getMemorandumList();
     this.getList();
-    this.attentionCalls();
   }
 
   openMotivo(){
@@ -157,18 +156,6 @@ export class MemorandosComponent implements OnInit {
     map(term => this.people.filter(state => new RegExp(term, 'mi').test(state.text)).slice(0, 10))
   )
 
-  tipo(){
-    let value = this.person_selected;
-    if (typeof value == 'object') {
-      this.formMemorando.patchValue({
-        person_id:value.value
-      }); 
-      this.formLlamada.patchValue({
-        person_id: value.value
-      });
-    }
-  }
-
   getPeople() {
     this.memorandosService.getPeople()
     .subscribe( (res:any) => {
@@ -198,10 +185,12 @@ export class MemorandosComponent implements OnInit {
   }
 
   saveMemorandum() {
+    let person_id = this.formMemorando.value.person_id.value;
+    this.formMemorando.patchValue({
+      person_id
+    })
     this.memorandosService.createNewMemorandum( this.formMemorando.value )
     .subscribe( (res:any) => {
-      console.log(res);
-      
       this.modalMemorando.hide();
       this.formMemorando.reset();
       this.person_selected = '';
@@ -273,27 +262,57 @@ export class MemorandosComponent implements OnInit {
       user_id: ['']
     })
   }
-
-  attentionCalls(){
-    this.memorandosService.attentionCalls().subscribe((r:any) => {
-      this.calls = r.data;
-      console.log(this.calls);
-      
-    })
-  }
-
+  
   createNewAttentionCall() {
-    this.memorandosService.createNewAttentionCall(this.formLlamada.value)
-    .subscribe( (res:any) =>{
-      this.modalLlamada.hide();
-      this.getMemorandumList();
-      this.formLlamada.reset();
-      Swal.fire({
-        icon: 'success',
-        title: res.data,
-        text: '¡Llamada de Atención creada con éxito!'
-      });
+    let person_id = this.formLlamada.value.person_id.value;
+    this.memorandosService.attentionCalls(person_id).subscribe((r:any) => {
+      this.call = r;
+      if (this.call?.person_id == person_id && this.call?.cantidad == 2 ) {
+        Swal.fire({
+          icon: 'warning',
+          title: '¡ALERTA!',
+          text: 'Este es el tercer llamado de atención del funcionario, por normatividad de la empresa se procedera a generarlo como un memorando Leve. ¿Está seguro de realizar este cambio?',
+          showCancelButton: true,
+          cancelButtonColor: '#d33',
+          confirmButtonColor: '#3085d6',
+           cancelButtonText: 'No, ¡Dejame comprobar!',
+           confirmButtonText: 'Si. ¡Hazlo!',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.modalLlamada.hide();
+              let details = this.formLlamada.value.reason;
+              let level = 'Leve';
+              let memorandum_type_id = 2;
+              let data = {
+                person_id,
+                details,
+                level,
+                memorandum_type_id
+              }
+             this.memorandosService.createNewMemorandum(data)
+             .subscribe((r:any) => {
+               this.formLlamada.reset();
+               this.getMemorandumList();
+              })
+            }
+         }) 
+      } else {
+        this.memorandosService.createNewAttentionCall(this.formLlamada.value)
+        .subscribe( (res:any) =>{
+          this.formLlamada.patchValue({
+            person_id
+          })
+          this.modalLlamada.hide();
+          this.getMemorandumList();
+          this.formLlamada.reset();
+          Swal.fire({
+            icon: 'success',
+            title: res.data,
+            text: '¡Llamada de Atención creada con éxito!'
+          });
+        })
+      };
     })
-  }
+}
 
 }

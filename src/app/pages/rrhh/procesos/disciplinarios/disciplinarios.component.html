@@ -53,10 +53,10 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones">
+                                    <a (click)="downloadVer(proces.id)" class="dropdown-item waves-light waves-effect caja-botones">
                                         <i class="fa fa-pencil"></i> Ver / imprimir
                                     </a>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" (click)="download(proces.file)">
+                                    <a *ngIf="proces.file != null" class="dropdown-item waves-light waves-effect caja-botones" (click)="download(proces.file)">
                                         <i class="fa fa-pencil"></i> Ver Evidencia
                                     </a>
                                 </div>

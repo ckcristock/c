@@ -37,8 +37,8 @@ export class MemorandosService {
     return this.http.post(`${environment.base_url}/attention-call`, data);
   }
 
-  attentionCalls(){
-    return this.http.get(`${environment.base_url}/attention-call`);
+  attentionCalls(id){
+    return this.http.get(`${environment.base_url}/alert/${id}`);
   }
 
 }

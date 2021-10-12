@@ -132,6 +132,21 @@ export class DisciplinariosComponent implements OnInit {
     }
   }
 
+  downloadVer(id){
+    this.disciplinarioService.downloadPDF(id)
+    .subscribe( (response: BlobPart) => {
+      let blob = new Blob([response], { type: "application/pdf" });
+        let link = document.createElement("a");
+        const filename = 'descargo-ver';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.pdf`;
+        link.click();
+        this.loading = false
+    }), 
+      error => { console.log('Error downloading the file'); this.loading = false },
+        () => { console.info('File downloaded successfully'); this.loading = false };
+  }
+
   download(file){
     this.disciplinarioService.download(file)
     .subscribe( (response: BlobPart) => {

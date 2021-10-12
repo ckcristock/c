@@ -28,6 +28,11 @@ export class DisciplinariosService {
   getProcessByPerson(id:any){
     return this.http.get(`${environment.base_url}/process/${id}`);
   }
+  
+  downloadPDF(id, params = {}) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/descargo/${id}`, {params, headers, responseType: 'blob' as 'json' });
+  }
 
   download(file, params = {}) {
     // const headers = new HttpHeaders().set('Content-Type', 'application/json')

@@ -25,6 +25,12 @@ import { ViaticosViajeComponent } from './viaticos/ver-viaticos/viaticos-viaje/v
 import { ViaticosTaxisComponent } from './viaticos/ver-viaticos/viaticos-taxis/viaticos-taxis.component';
 import { EditarViaticoComponent } from './viaticos/editar-viatico/editar-viatico.component';
 import { VacacionesComponent } from './vacaciones/vacaciones.component';
+import { NominaComponent } from './nomina/nomina.component';
+import { CardConceptoComponent } from './nomina/card-concepto/card-concepto.component';
+import { HorasExtrasComponent } from './nomina/modals/horas-extras/horas-extras.component';
+import { ModalNovedadesComponent } from './nomina/modals/modal-novedades/modal-novedades.component';
+import { ModalIngresosPrestacionalesComponent } from './nomina/modals/modal-ingresos-prestacionales/modal-ingresos-prestacionales.component';
+import { IngresoPrestacionalComponent } from './nomina/forms/ingreso-prestacional/ingreso-prestacional.component';
 
 @NgModule({
   imports: [
@@ -55,7 +61,13 @@ import { VacacionesComponent } from './vacaciones/vacaciones.component';
     ViaticosViajeComponent,
     ViaticosTaxisComponent,
     EditarViaticoComponent,
-    VacacionesComponent
+    VacacionesComponent,
+    NominaComponent,
+    CardConceptoComponent,
+    HorasExtrasComponent,
+    ModalNovedadesComponent,
+    ModalIngresosPrestacionalesComponent,
+    IngresoPrestacionalComponent
   ],
 })
 export class NominaModule {}

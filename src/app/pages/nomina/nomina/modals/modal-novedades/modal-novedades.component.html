@@ -1,0 +1,50 @@
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+      <h5 class="modal-title">Novedades</h5>
+      <button type="button" class="close basic-close" (click)="modal.hide()">
+        <span aria-hidden="true">
+          <i class="fas fa-times" (click)="modal.hide()"></i>
+        </span>
+      </button>
+    </div>
+    <div class="app-modal-body">
+      <table
+        class="table table-bordered table-sm"
+        *ngIf="novedades.length; else notRegister"
+      >
+        <thead>
+          <tr>
+            <th class="custom-label">Concepto</th>
+            <th class="custom-label text-center">Días</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of novedades">
+            <td class="custom-label text-left">{{ item.concepto }}</td>
+            <td class="custom-label text-center">{{ item.dias }} h</td>
+          </tr>
+          <!-- <tr v-for="(extra, index) in horasExtras" :key="index">
+              <td class="custom-label text-left">{{ NombresExtras[index] }}</td>
+              <td class="custom-label text-center">{{ extra }} h</td>
+            </tr> -->
+        </tbody>
+      </table>
+      <ng-template #notRegister>
+        <p class="custom-label">
+          El funcionario no presenta novedades en este periodo
+        </p>
+      </ng-template>
+    </div>
+    <div class="app-modal-footer">
+      <div class="form-group text-right">
+        <button
+          (click)="modal.hide()"
+          type="button"
+          class="btn btn-danger raised mr-2 btn-sm"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </app-modal-basic>
+  

@@ -1,0 +1,44 @@
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+  <div class="app-modal-header">
+    <h5 class="modal-title">Horas extras/recargo</h5>
+    <button type="button" class="close basic-close" (click)="modal.hide()">
+      <span aria-hidden="true">
+        <i class="fas fa-times" (click)="modal.hide()"></i>
+      </span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <table class="table table-bordered table-sm">
+      <thead>
+        <tr>
+          <th class="custom-label text-center">Tipo</th>
+          <th class="custom-label text-center" style="width: 120px">
+            Cantidad
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of horasExtras">
+          <td class="custom-label text-left">{{ item.tipo }}</td>
+          <td class="custom-label text-center">{{ item.value }} h</td>
+        </tr>
+        <!-- <tr v-for="(extra, index) in horasExtras" :key="index">
+          <td class="custom-label text-left">{{ NombresExtras[index] }}</td>
+          <td class="custom-label text-center">{{ extra }} h</td>
+        </tr> -->
+      </tbody>
+    </table>
+  </div>
+  <div class="app-modal-footer">
+    <div class="form-group text-right">
+      <button
+        (click)="modal.hide()"
+        type="button"
+        class="btn btn-danger raised mr-2 btn-sm"
+      >
+        Cerrar
+      </button>
+    
+    </div>
+  </div>
+</app-modal-basic>

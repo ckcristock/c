@@ -1,0 +1,34 @@
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+      <h5 class="modal-title">Ingresos Prestacionales</h5>
+      <button type="button" class="close basic-close" (click)="modal.hide()">
+        <span aria-hidden="true">
+          <i class="fas fa-times" (click)="modal.hide()"></i>
+        </span>
+      </button>
+    </div>
+    <div class="app-modal-body">
+    
+        <app-ingreso-prestacional
+        :funcionarioProp="FuncionarioSeleccionado"
+        :nominaPaga="nomina.nomina_paga"
+        @actualizar="getPagoNomina()"
+        ref="ingresoPrestacional"
+      ></app-ingreso-prestacional>
+
+
+    </div>
+    <div class="app-modal-footer">
+      <div class="form-group text-right">
+        <button
+          (click)="modal.hide()"
+          type="button"
+          class="btn btn-danger raised mr-2 btn-sm"
+        >
+          Cerrar
+        </button>
+      
+      </div>
+    </div>
+  </app-modal-basic>
+  

@@ -1,0 +1,69 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+               <i class="fa fa-plus"></i> Agregar</button>
+            <h5 class="text-primary">Taxis</h5>
+        </div>
+        <table class="table table-borderless table-striped my-5">
+            <thead class="bg-light">
+                <tr>
+                    <th>Trayecto</th>
+                    <th>Ciudad</th>
+                    <th>Tipo</th>
+                    <th>Tarifa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Nuevo Taxi</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+          </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="">Trayecto</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="route">
+                        </div>
+                        <!-- <div class="form-group col-6">
+                            <label for="">Trayecto</label>
+                            <input type="text" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Ciudad</label>
+                            <input type="text" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Tarifa</label>
+                            <input type="text" class="form-control form-control-sm">
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>

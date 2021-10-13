@@ -46,6 +46,8 @@ import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.compo
 import { TercerosComponent } from './terceros/terceros.component';
 import { CrearTercerosComponent } from './terceros/crear-terceros/crear-terceros.component';
 import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { TaxisComponent } from './taxis/taxis.component';
+import { HotelesComponent } from './hoteles/hoteles.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +81,9 @@ import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap
     CajaCompensacionComponent,
     FondoCesantiasComponent,
     TercerosComponent,
-    CrearTercerosComponent
+    CrearTercerosComponent,
+    TaxisComponent,
+    HotelesComponent
   ],
 
   imports: [

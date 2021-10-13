@@ -40,21 +40,28 @@
                 <div class="col-12">
                     <div class="form-row">
                         <div class="form-group col-12">
-                            <label for="">Trayecto</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="route">
+                            <label for="">Tipo</label>
+                            <select class="form-control form-control-sm" formControlName="route">
+                                <option value="Nacional">Nacional</option>
+                                <option value="Internacional">Internacional</option>
+                            </select>
                         </div>
-                        <!-- <div class="form-group col-6">
+                        <div class="form-group col-6">
                             <label for="">Trayecto</label>
                             <input type="text" class="form-control form-control-sm">
                         </div>
                         <div class="form-group col-6">
                             <label for="">Ciudad</label>
-                            <input type="text" class="form-control form-control-sm">
+                            <select class="form-control form-control-sm">
+                                <option *ngFor="let city of cities" [value]="city.value">
+                                    {{ city.text }}
+                                </option>
+                            </select>
                         </div>
                         <div class="form-group col-6">
                             <label for="">Tarifa</label>
                             <input type="text" class="form-control form-control-sm">
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </div>

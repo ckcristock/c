@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { HotelesService } from '../hoteles/hoteles.service';
 
 @Component({
   selector: 'app-taxis',
@@ -9,10 +10,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class TaxisComponent implements OnInit {
   @ViewChild('modal') modal:any;
   form: FormGroup;
-  constructor( private fb: FormBuilder ) { }
+  cities:any[] = [];
+  constructor( 
+                private fb: FormBuilder,
+                private _cities: HotelesService
+              ) { }
 
   ngOnInit(): void {
     this.createForm();
+    this.getCities();
   }
 
   openModal(){
@@ -21,7 +27,16 @@ export class TaxisComponent implements OnInit {
 
   createForm(){
     this.form = this.fb.group({
-      route: ['']
+      route: [''],
+      type: [''],
+      city_id: [''],
+      value: [''] 
+    })
+  }
+
+  getCities(){
+    this._cities.getCities().subscribe((r:any) => {
+      this.cities = r.data;
     })
   }
 

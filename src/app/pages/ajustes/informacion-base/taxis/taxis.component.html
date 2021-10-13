@@ -4,25 +4,53 @@
             <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
                <i class="fa fa-plus"></i> Agregar</button>
             <h5 class="text-primary">Taxis</h5>
+            <div class="form-row mt-4">
+                <div class="form-group col-md-2">
+                    <label for="">Filtro Tipo</label>
+                    <select class="form-control form-control-sm" [(ngModel)]="filtro.tipo" (change)="getTaxis()">
+                        <option value="Nacional">Nacional</option>
+                        <option value="Internacional">Internacional</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <table class="table table-borderless table-striped my-5">
+        <hr class="bg-primary">
+        <table class="table table-borderless table-striped my-5" *ngIf="!loading && taxis.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
+                    <th>Tipo</th>
                     <th>Trayecto</th>
                     <th>Ciudad</th>
-                    <th>Tipo</th>
                     <th>Tarifa</th>
+                    <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr *ngFor="let item of taxis">
+                    <td> {{ item.type }} </td>
+                    <td> {{ item.route }} </td>
+                    <td> {{ item.city }} </td>
+                    <td> {{ item.value | currency }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getTaxi(item); modal.show()">
+                                        <i class="far fa-edit"></i> Editar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getTaxis($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
     </div>
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
@@ -41,26 +69,26 @@
                     <div class="form-row">
                         <div class="form-group col-12">
                             <label for="">Tipo</label>
-                            <select class="form-control form-control-sm" formControlName="route">
+                            <select class="form-control form-control-sm" formControlName="type">
                                 <option value="Nacional">Nacional</option>
                                 <option value="Internacional">Internacional</option>
                             </select>
                         </div>
                         <div class="form-group col-6">
                             <label for="">Trayecto</label>
-                            <input type="text" class="form-control form-control-sm">
+                            <input type="text" class="form-control form-control-sm" formControlName="route">
                         </div>
                         <div class="form-group col-6">
                             <label for="">Ciudad</label>
-                            <select class="form-control form-control-sm">
+                            <select class="form-control form-control-sm" formControlName="city_id">
                                 <option *ngFor="let city of cities" [value]="city.value">
                                     {{ city.text }}
                                 </option>
                             </select>
                         </div>
-                        <div class="form-group col-6">
+                        <div class="form-group col-12">
                             <label for="">Tarifa</label>
-                            <input type="text" class="form-control form-control-sm">
+                            <input type="number" class="form-control form-control-sm" formControlName="value">
                         </div>
                     </div>
                 </div>
@@ -70,7 +98,10 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="save()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

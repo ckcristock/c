@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -11,5 +11,12 @@ export class VerViaticosService {
    getAllViaticos(id: string) {
     return this.http.get(`${environment.base_url}/travel-expense/${id}`);
   }
+
+   download(id: string) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/travel-expense/pdf/${id}`, { headers, responseType: 'blob' as 'json' });
+    
+  }
+
 
 }

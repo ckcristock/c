@@ -50,6 +50,7 @@ import { TaxisComponent } from './taxis/taxis.component';
 import { HotelesComponent } from './hoteles/hoteles.component';
 import { CiudadesComponent } from './ciudades/ciudades.component';
 import { PaisesComponent } from './paises/paises.component';
+import { LicenciaConduccionComponent } from './licencia-conduccion/licencia-conduccion.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { PaisesComponent } from './paises/paises.component';
     TaxisComponent,
     HotelesComponent,
     CiudadesComponent,
-    PaisesComponent
+    PaisesComponent,
+    LicenciaConduccionComponent
   ],
 
   imports: [

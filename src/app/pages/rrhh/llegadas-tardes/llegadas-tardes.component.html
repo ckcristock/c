@@ -49,6 +49,19 @@
               </ng-select>
             </div>
           </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="custom-label" for="filtroDependencia">Funcionario</label>
+              <ng-select
+                [items]="people"
+                [(ngModel)]="people_id"
+                bindLabel="text"
+                bindValue="value"
+                ngDefaultControl
+              >
+              </ng-select>
+            </div>
+          </div>
 
           <div class="col-md-2">
             <div class="form-group">
@@ -93,7 +106,7 @@
 </div>
 
 <div class="row">
-  <div class="| col-sm-6">
+  <div class="col-sm-6">
     <div class="card text-white bg-danger">
       <div class="card-body stats align-items-center d-flex">
         <div style="width: 30%">
@@ -106,7 +119,7 @@
       </div>
     </div>
   </div>
-  <div class="| col-sm-6">
+  <div class=" col-sm-6">
     <div class="card text-white bg-warning">
       <div class="card-body stats align-items-center d-flex">
         <div style="width: 30%">
@@ -137,8 +150,8 @@
               [datasets]="lineChartData"
               [labels]="lineChartLabels"
               [colors]="lineChartColors"
-              [legend]="true"
               [chartType]="'line'"
+              [options]="options"
             ></canvas>
             <p class="text-center font-weight-bolder">- Días del mes -</p>
           </div>
@@ -197,7 +210,7 @@
         </h4>
       </div>
 
-      <div class="card-body">
+      <div class="card-body" *ngIf="companies.length && !loading; else notData">
         <div *ngFor="let company of companies">
           <h4>{{ company.name }}</h4>
           <hr />
@@ -254,49 +267,10 @@
     </div>
   </div>
 
-  <!-- 
-<app-modal-basic #modalDetalleLlegada [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h4 class="modal-title">Detalle</h4>
-        <button type="button" class="close basic-close" (click)="modalDetalleLlegada.hide()">
-              <span aria-hidden="true">&times;</span>
-            </button>
-    </div>
-    <div class="app-modal-body">
-        <div class="card">
-            <div class="card-block table-border-style">
-                <div class="table-responsive">
-                    <table class="table detalles-table table-styling table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Entrada Turno</th>
-                                <th>Entrada Real</th>
-                                <th>Tiempo Retraso</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let detalle of Detalles_LLegadas">
-                                <td>{{detalle.Fecha}}</td>
-                                <td>{{detalle.Entrada_Turno}}</td>
-                                <td>{{detalle.Entrada_Real}}</td>
-                                <td>{{detalle.Tiempo_Retraso}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="button" class="btn btn-default btn-sm" (click)="modalDetalleLlegada.hide()">Cancelar</button>
-        </div>
-    </div>
 
-</app-modal-basic> -->
 
-  <!-- <swal #deleteSwal title="Llegada Tarde Eliminada" text="Se ha Eliminado Correctamente la llegada tarde" type="success">
-  </swal>
-  <swal #confirmacionSwal title="" text="" type=""></swal> -->
 </div>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading" [text]="'No hay registro de llegadas tarde'"></app-not-data>
+</ng-template>

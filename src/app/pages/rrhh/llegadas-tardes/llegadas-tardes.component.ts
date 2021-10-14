@@ -8,6 +8,7 @@ import { LateArrivalsService } from './late-arrivals.service';
 import { CompanyService } from '../../ajustes/informacion-base/services/company.service';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
+import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 @Component({
   selector: 'app-llegadas-tardes',
   templateUrl: './llegadas-tardes.component.html',
@@ -15,14 +16,28 @@ import { DependenciesService } from '../../ajustes/informacion-base/services/dep
 })
 export class LlegadasTardesComponent implements OnInit {
   donutChart = donutChart;
-  group_id:any ;
-  dependency_id :any ;
+  group_id: any;
+  people_id = '';
+  dependency_id: any;
+  loading = false;
 
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'Llegadas tardes' },
   ];
   public lineChartLabels: Label[] = [];
-
+  options: any = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            precision: 0,
+            stepSize: 1,
+          },
+        },
+      ],
+    },
+    legend: { display: true, labels: { fontColor: 'black' } },
+  };
   public lineChartColors: Color[] = [
     {
       backgroundColor: 'rgba(255,0,0,0.3)',
@@ -50,14 +65,17 @@ export class LlegadasTardesComponent implements OnInit {
   firstDay: any;
   lastDay: any;
 
+  people: any[];
+
   constructor(
     private _lateArrivals: LateArrivalsService,
     private _companies: CompanyService,
     private _grups: GroupService,
-    private _dependencies: DependenciesService
+    private _dependencies: DependenciesService,
+    private _people: PersonService
   ) {
     this.getGroup();
-
+    this.getPeople();
     this.getCompanies();
   }
 
@@ -75,15 +93,22 @@ export class LlegadasTardesComponent implements OnInit {
   getData() {}
   getLateArrivals() {
     let params = this.getParams();
-
+    this.loading = true;
     this._lateArrivals
       .getLateArrivals(this.firstDay, this.lastDay, params)
       .subscribe((r: any) => {
         this.companies = r.data;
+        this.loading = false;
         this.transformData();
       });
   }
 
+  getPeople() {
+    this._people.getAll({}).subscribe((res: any) => {
+      this.people = res.data;
+      this.people.unshift({ text: 'Todos', value: '' });
+    });
+  }
   getCompanies() {
     this._companies.getCompanies().subscribe((r: any) => {
       this.companyList = r.data;
@@ -99,7 +124,7 @@ export class LlegadasTardesComponent implements OnInit {
     this._grups.getGroup().subscribe((r: any) => {
       this.groupList = r.data;
       this.groupList.unshift({ value: 0, text: 'Todos' });
-      this.group_id=0
+      this.group_id = 0;
       this.getDependencies(0);
     });
   }
@@ -111,8 +136,7 @@ export class LlegadasTardesComponent implements OnInit {
   }
   addElement() {
     this.dependencyList.unshift({ value: 0, text: 'Todas' });
-    this.dependency_id=0
-
+    this.dependency_id = 0;
   }
   getLinearDataset() {
     let params = this.getParams();
@@ -128,16 +152,21 @@ export class LlegadasTardesComponent implements OnInit {
 
   getParams() {
     let params: any = {};
-    if (this.company_id != '0' && this.company_id) {
-      params.company_id = this.company_id;
-    }
-    if ( this.group_id && this.group_id != '0') {
-      params.group_id = this.group_id;
-    }
+    this.company_id != '0' && this.company_id
+      ? (params.company_id = this.company_id)
+      : '';
 
-    if (this.dependency_id != '0' && this.dependency_id) {
-      params.dependency_id = this.dependency_id;
-    }
+    this.group_id && this.group_id != '0'
+      ? (params.group_id = this.group_id)
+      : '';
+
+    this.dependency_id != '0' && this.dependency_id
+      ? (params.dependency_id = this.dependency_id)
+      : '';
+    this.people_id != '0' && this.people_id
+      ? (params.person_id = this.people_id)
+      : '';
+
     return params;
   }
 

@@ -36,18 +36,41 @@ export class SemanaTurnoComponent implements OnInit {
     });
   }
   turnAllChanged(turnId) {
+    let turn = this.turnos.find((r) => r.id == turnId);
+    if (turn) {
+      this.masiveTurnId = turn;
+      
+    }else{
+      this.masiveTurnId = {};
+
+    }
+    
     this.masiveTurnId.rotating_turn_id = turnId;
     this.masiveTurnId = this.getColors(this.masiveTurnId);
   }
   asignarHorariosMasivo() {
+    
     if (this.masiveTurnId.rotating_turn_id != 'seleccione') {
       this.people.forEach((r) => {
-        console.log(r);
-        
         if (r.selected) {
           r.diasSemana.forEach((dia) => {
-            dia.turno = this.masiveTurnId.rotating_turn_id;
-            dia.color = this.masiveTurnId.color;
+            if(dia.dia == 'domingo'){
+              let turnId = this.masiveTurnId?.sunday?.id  ? this.masiveTurnId?.sunday?.id : 0;
+              dia.turno = turnId;
+              dia.color = turnId ? this.masiveTurnId.sunday.color : 'black' ;
+              return;
+            } 
+            if(dia.dia == 'sábado'){
+              let turnId = this.masiveTurnId?.saturday?.id  ? this.masiveTurnId?.saturday?.id : 0;
+              dia.turno = turnId;
+              dia.color = turnId ? this.masiveTurnId.saturday.color : 'black' ;
+              return;
+
+            }
+            else{
+              dia.turno = this.masiveTurnId.rotating_turn_id;
+              dia.color = this.masiveTurnId.color;
+            }
           });
         }
       });
@@ -61,12 +84,12 @@ export class SemanaTurnoComponent implements OnInit {
       let pur = {
         dia,
         fecha: this.diaInicialSemana.format('YYYY-MM-DD'),
-        color:  dia == 'domingo' ? 'black' : '#9da4ad',
+        color: dia == 'domingo' ? 'black' : '#9da4ad',
         turno: dia == 'domingo' ? 0 : 'seleccione',
       };
 
       this.diasSemana.push(pur);
-      
+
       this.diaInicialSemana = moment(this.diaInicialSemana).add(1, 'd');
     }
 
@@ -78,8 +101,9 @@ export class SemanaTurnoComponent implements OnInit {
       });
 
       p.fixed_turn_hours.forEach((turn) => {
-        turn = this.getColors(turn);
+        turn = this.getColors(turn, true);
         p.diasSemana.forEach((dia, i) => {
+          
           if (turn.date == dia.fecha) {
             dia.turno = turn.rotating_turn_id;
             dia.color = turn.color;
@@ -89,7 +113,8 @@ export class SemanaTurnoComponent implements OnInit {
     });
   }
 
-  getColors(turn: any) {
+  getColors(turn: any, findColor = false) {
+
     if (turn.rotating_turn_id && turn.rotating_turn_id == 0) {
       turn.color = 'black';
       return turn;
@@ -102,7 +127,7 @@ export class SemanaTurnoComponent implements OnInit {
     }
     if (!turn.rotating_turn_id) {
       turn.color = '#000';
-    } else {
+    } else if (findColor){
       turn.color = this.turnos.find(
         (turno) => turno.id == turn.rotating_turn_id
       ).color;
@@ -134,7 +159,11 @@ export class SemanaTurnoComponent implements OnInit {
           let horarios = [];
           this.people.forEach((funcionario) => {
             funcionario.diasSemana.forEach((dia) => {
-              if (dia.turno != null && dia.turno != undefined && dia.turno != 'seleccione') {
+              if (
+                dia.turno != null &&
+                dia.turno != undefined &&
+                dia.turno != 'seleccione'
+              ) {
                 horarios.push({
                   person_id: funcionario.id,
                   rotating_turn_id: dia.turno,

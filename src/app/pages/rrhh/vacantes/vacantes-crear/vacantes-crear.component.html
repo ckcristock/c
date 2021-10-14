@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-body">
 
-                <form [formGroup]="form" (ngSubmit)="save()">
+                <form [formGroup]="form">
 
                     <div class="col-md-12 text-center">
                         <h4>Nueva Vacante</h4>
@@ -202,12 +202,8 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Tipo de contrato</label>
-                                    <select class="form-control custom-control" formControlName="type_of_contract">
-                                        <option selected>Seleccione</option>
-                                        <option>Fijo</option>
-                                        <option>Indefinido</option>
-                                    </select>
-                                    <div *ngIf="type_of_contract_invalid">
+                                    <ng-select [items]="contracts" placeholder="Seleccione" formControlName="contractType_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
+                                    <div *ngIf="contractType_invalid">
                                         <small class="invalid text-danger"> Es nesario el tipo de contrato
                                         </small>
                                     </div>
@@ -301,7 +297,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Requisitos de licencia conducción</label>
-                                            <ng-select multiple="true" [items]="driving_requirement" placeholder="Seleccione" formControlName="driving_license" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
+                                            <ng-select multiple="true" [items]="licenses" placeholder="Seleccione" formControlName="driving_license" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -335,7 +331,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Visa</label>
+                                            <label>Visa Americana</label>
                                             <select class="form-control custom-control" formControlName="visa" (change)="visa()">
                                                 <option selected>Seleccione</option>
                                                 <option *ngFor="let option of options" [value]="option.valor">
@@ -351,13 +347,8 @@
                                     <div class="col-md-3" *ngIf="visaSelected == true">
                                         <div class="form-group">
                                             <label>Tipo de Visa</label>
-                                            <select class="form-control custom-control" formControlName="visa">
-                                                <option selected>Seleccione</option>
-                                                <option *ngFor="let visaType of visaTypes" [value]="visaType.valor">
-                                                    {{ visaType.clave }}
-                                                </option>
-                                            </select>
-                                            <div *ngIf="visa_invalid">
+                                            <ng-select [items]="visas" placeholder="Seleccione" formControlName="visaType_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
+                                            <div *ngIf="visaType_invalid">
                                                 <small class="invalid text-danger">Es necesario el campo de Visa
                                                     </small>
                                             </div>
@@ -368,7 +359,7 @@
                         </div>
                     </div>
                     <div class="text-right mt-4">
-                        <button type="submit" class="btn btn-primary btn-sm btn-block">Guardar
+                        <button type="submit" class="btn btn-primary btn-sm btn-block" (click)="save()">Guardar
                             Vacante</button>
                     </div>
                 </form>

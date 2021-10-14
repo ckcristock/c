@@ -29,11 +29,12 @@ export class VacantesCrearComponent implements OnInit {
     groups: any[] = [];
     dependencies: any[] = [];
     positions: any[] = [];
+    contracts: any[] = [];
+    visas: any[] = [];
+    licenses: any[] = [];
 
     turns = consts.turnTypes;
     options = consts.options;
-    visaTypes = consts.visaTypes;
-    driving_requirement = consts.driving_requirements;
     rangeSalary:boolean;
 
     constructor(
@@ -54,6 +55,27 @@ export class VacantesCrearComponent implements OnInit {
         this.getCompanies()
         this.getGroups()
         this.getDepartments()
+        this.getContractType();
+        this.getVisaTypes();
+        this.getDrivingLicenses();
+    }
+
+    getDrivingLicenses(){
+        this._job.getDrivingLicenses().subscribe((r:any) => {
+            this.licenses = r.data;
+        })
+    }
+
+    getVisaTypes(){
+        this._job.getVisaTypes().subscribe((r:any) => {
+            this.visas = r.data;
+        })
+    }
+
+    getContractType(){
+        this._job.getContractTypes().subscribe((r:any) => {
+            this.contracts = r.data;
+        })
     }
 
     getDepartments() {
@@ -105,10 +127,9 @@ export class VacantesCrearComponent implements OnInit {
     }
 
     save() {
-
-        this.form.markAllAsTouched()
+        console.log(this.form.value);
+        /* this.form.markAllAsTouched()
         if (this.form.invalid) { return false }
-
         Swal.fire({
             title: '¿Seguro?',
             text: 'Se va a crear una nueva vacante',
@@ -121,7 +142,7 @@ export class VacantesCrearComponent implements OnInit {
             if (result.value) {
                 this.sendData()
             }
-        });
+        }); */
     }
 
     sendData() {
@@ -192,11 +213,12 @@ export class VacantesCrearComponent implements OnInit {
             gener: ['No Aplica', Validators.required],
             languages: ['', Validators.required],
             conveyance: ['Ninguno', Validators.required],
-            type_of_contract: ['', Validators.required],
+            contractType_id: ['', Validators.required],
             driving_license: ['', Validators.required],
             legal_documents: ['', Validators.required],
             passport: ['', Validators.required],            
-            visa: ['', Validators.required],            
+            visa: ['', Validators.required],
+            visaType_id: ['', Validators.required],      
             salary_type: ['A Convenir', Validators.required]
         })  
     }
@@ -282,8 +304,8 @@ export class VacantesCrearComponent implements OnInit {
         return this.form.get('conveyance').invalid && this.form.get('conveyance').touched;
     }
 
-    get type_of_contract_invalid() {
-        return this.form.get('type_of_contract').invalid && this.form.get('type_of_contract').touched;
+    get contractType_invalid() {
+        return this.form.get('contractType_id').invalid && this.form.get('contractType_id').touched;
     }
 
     get legal_documents_invalid() {
@@ -296,5 +318,9 @@ export class VacantesCrearComponent implements OnInit {
 
     get visa_invalid() {
         return this.form.get('visa').invalid && this.form.get('visa').touched;
+    }
+
+    get visaType_invalid() {
+        return this.form.get('visaType_id').invalid && this.form.get('visaType_id').touched;
     }
 }

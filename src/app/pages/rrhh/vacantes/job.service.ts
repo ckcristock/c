@@ -23,4 +23,15 @@ export class JobService {
         return this.http.post(`${environment.base_url}/jobs/set-state/${id}`, params)
     }
 
+    getContractTypes(){
+        return this.http.get(`${environment.base_url}/work-contract-type`);
+    }
+
+    getVisaTypes(){
+        return this.http.get(`${environment.base_url}/visa-types`);
+    }
+
+    getDrivingLicenses(){
+        return this.http.get(`${environment.base_url}/drivingLicenses`);
+    }
 }

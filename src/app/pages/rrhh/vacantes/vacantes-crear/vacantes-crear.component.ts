@@ -127,8 +127,7 @@ export class VacantesCrearComponent implements OnInit {
     }
 
     save() {
-        console.log(this.form.value);
-        /* this.form.markAllAsTouched()
+        this.form.markAllAsTouched()
         if (this.form.invalid) { return false }
         Swal.fire({
             title: '¿Seguro?',
@@ -142,7 +141,7 @@ export class VacantesCrearComponent implements OnInit {
             if (result.value) {
                 this.sendData()
             }
-        }); */
+        });
     }
 
     sendData() {

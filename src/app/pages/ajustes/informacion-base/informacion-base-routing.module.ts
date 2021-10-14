@@ -18,6 +18,8 @@ import { ConfiguracionEmpresaComponent } from '../configuracion/configuracion-em
 import { CrearTercerosComponent } from './terceros/crear-terceros/crear-terceros.component';
 import { TaxisComponent } from './taxis/taxis.component';
 import { HotelesComponent } from './hoteles/hoteles.component';
+import { CiudadesComponent } from './ciudades/ciudades.component';
+import { PaisesComponent } from './paises/paises.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
@@ -45,7 +47,10 @@ const routes: Routes = [
   { path: 'editar-tercero/:id/:origin', component: CrearTercerosComponent },
 
   { path: 'taxis', component: TaxisComponent },
-  { path: 'hoteles', component: HotelesComponent }
+  { path: 'hoteles', component: HotelesComponent },
+
+  { path: 'ciudades', component: CiudadesComponent },
+  { path: 'paises' , component: PaisesComponent },
 ];
 
 @NgModule({

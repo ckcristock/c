@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PaisesService } from './paises.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { SwalService } from '../services/swal.service';
 
 @Component({
   selector: 'app-paises',
@@ -19,11 +20,15 @@ export class PaisesComponent implements OnInit {
   }
   pagination:any = {
     page : 1,
-    pageSize: 5,
+    pageSize: 10,
     collectionSize: 0
   }
   form:FormGroup;
-  constructor( private _paisesService: PaisesService, private fb:FormBuilder  ) { }
+  constructor( 
+                private _paisesService: PaisesService,
+                private fb:FormBuilder,
+                private _swal: SwalService
+              ) { }
 
   ngOnInit(): void {
     this.getCountries();
@@ -76,6 +81,33 @@ export class PaisesComponent implements OnInit {
         title: res.data,  
         text: 'Se ha agregado a los paises con éxito.'
       })
+    })
+  }
+
+  activateOrInactivate(country, state) {
+    let data = {
+      id: country.id,
+      state
+    }
+    this._swal.show({
+      title: '¿Estas Seguro?',
+      text: (data.state == 'Inactivo' ? '¡El País será Desactivado!' : 'El País será Activado'),
+      icon: 'question',
+      showCancel: true
+    })
+    .then((result) =>{
+      if (result.isConfirmed) {
+        this._paisesService.createCountry(data).subscribe( (r:any) =>{
+          this.getCountries();
+        })
+        this._swal.show({
+          icon: 'success',
+          title: '¡Activado!',
+          text: (data.state == 'Activo' ? 'El País ha sido Activado con éxito.' : 'El País ha sido desactivado con éxito.'),
+          timer: 2500,
+          showCancel: false
+        })
+      }
     })
   }
  

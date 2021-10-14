@@ -21,7 +21,6 @@ import { TiposAnulacionComponent } from './tipos-anulacion/tipos-anulacion.compo
 import { TiposRechazoComponent } from './tipos-rechazo/tipos-rechazo.component';
 import { TiposActivoFijoComponent } from './tipos-activo-fijo/tipos-activo-fijo.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PaisesComponent } from './paises/paises.component';
 import { TiposRiesgoComponent } from './tipos-riesgo/tipos-riesgo.component';
 import { ProfesionesComponent } from './profesiones/profesiones.component';
 
@@ -41,8 +40,7 @@ import { ProfesionesComponent } from './profesiones/profesiones.component';
         TiposEstadoFinancieroComponent,
         TiposAnulacionComponent, 
         TiposRechazoComponent, 
-        TiposActivoFijoComponent, 
-        PaisesComponent, 
+        TiposActivoFijoComponent,
         TiposRiesgoComponent, 
         ProfesionesComponent
     ],

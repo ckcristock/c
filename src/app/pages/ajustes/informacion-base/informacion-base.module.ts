@@ -48,6 +48,8 @@ import { CrearTercerosComponent } from './terceros/crear-terceros/crear-terceros
 import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { TaxisComponent } from './taxis/taxis.component';
 import { HotelesComponent } from './hoteles/hoteles.component';
+import { CiudadesComponent } from './ciudades/ciudades.component';
+import { PaisesComponent } from './paises/paises.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,9 @@ import { HotelesComponent } from './hoteles/hoteles.component';
     TercerosComponent,
     CrearTercerosComponent,
     TaxisComponent,
-    HotelesComponent
+    HotelesComponent,
+    CiudadesComponent,
+    PaisesComponent
   ],
 
   imports: [

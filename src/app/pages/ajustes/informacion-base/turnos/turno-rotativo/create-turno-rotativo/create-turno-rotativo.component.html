@@ -1,9 +1,10 @@
-<app-modal-basic #modal [dialogClass]="'modal-lg'">
+
+<app-modal-basic  #modal [dialogClass]="'modal-lg'">
   <div class="app-modal-header">
     <h4>Turno Rotativo</h4>
   </div>
   <div class="app-modal-body">
-    <form [formGroup]="forma">
+    <form [formGroup]="forma" *ngIf="show">
       <div class="form-row">
         <div class="form-group col-md-4">
           <label class="custom-label" for="nombre">Nombre</label>
@@ -111,6 +112,38 @@
             </small>
           </ng-container>
         </div>
+
+      </div>
+      <div class="form-row mb-2">
+        <div class="col-6">
+          <label class="custom-label" for="dia">Sábado</label>
+
+          <ng-select
+            class="col-md-12 p-0"
+            formControlName="saturday_id"
+            [items]="turns"
+            bindLabel="text"
+            bindValue="value"
+            loadingText="loading "
+            
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
+
+        <div class="col-6">
+          <label class="custom-label" for="dia">Domingo</label>
+          <ng-select
+            class="col-md-12 p-0"
+            formControlName="sunday_id"
+            [items]="turns"
+            bindLabel="text"
+            bindValue="value"
+            loadingText="loading "
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-6 form-check">
@@ -207,7 +240,7 @@
           </ng-container>
         </div>
         <div class="form-group col-md-3">
-          <label class="custom-label" for="dia">Hora fin break  </label>
+          <label class="custom-label" for="dia">Hora fin break </label>
           <input
             type="time"
             class="form-control"
@@ -230,28 +263,7 @@
           </ng-container>
         </div>
       </div>
-     <!--  <div class="form-row">
-        <div class="col-6">
-          <label class="custom-label" for="dia">Sábado</label>
-          
-          <select name="" id="" class="form-control"  >
-            <option value="">Descanso</option>
-            <option value="">Turno Sabado 1</option>
-            <option value="">Turno Sabado 2</option>
-          </select>
-        </div>
-        
-        <div class="col-6">
-          <label class="custom-label" for="dia">Domingo</label>
-          
-          <select name="" id="" class="form-control"  >
-            <option value="">Descanso</option>
-            <option value="">Turno Sabado 1</option>
-            <option value="">Turno Sabado 2</option>
-          </select>
-        </div>
-  
-      </div> -->
+   
     </form>
   </div>
 

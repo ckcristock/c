@@ -21,7 +21,10 @@ export class CreateTurnoRotativoComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @Input('openModal') openModal: EventEmitter<any>;
   @Output('saved') saved = new EventEmitter<any>();
+
+  turns : any[]
   forma: FormGroup;
+  show = false;
   constructor(
     private fb: FormBuilder,
     private _valReactive: ValidatorsService,
@@ -30,14 +33,23 @@ export class CreateTurnoRotativoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getAll();
     this.createForm();
-    this.crearListeners();
+
     this.openModal.subscribe((id) => {
-      this.forma.reset();
+      this.createForm();
+      this.crearListeners();
       if (id) {
         this.getTur(id);
       }
+      this.show = true;
       this.modal.show();
+    });
+  }
+  getAll(){
+    this._rotatingT.getAll().subscribe((r:any)=>{
+      this.turns = r.data
+      this.turns.unshift({text:'Descanso', value:0})
     });
   }
   getTur(id) {
@@ -56,6 +68,8 @@ export class CreateTurnoRotativoComponent implements OnInit {
         breack: turn.breack,
         breack_time: turn.breack_time,
         breack_time_two: turn.breack_time_two,
+        saturday_id: turn.saturday_id,
+        sunday_id: turn.sunday_id,
         id: turn.id,
       });
     });
@@ -74,6 +88,8 @@ export class CreateTurnoRotativoComponent implements OnInit {
       breack: [0],
       breack_time: ['', this._valReactive.required],
       breack_time_two: ['', this._valReactive.required],
+      saturday_id:[0],
+      sunday_id:[0],
       id: [0],
     });
     this.forma.get('launch_time').disable();

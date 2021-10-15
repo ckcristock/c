@@ -9,11 +9,8 @@ const base_url = environment.base_url;
 })
 export class TimePipe implements PipeTransform {
 
-  transform(time: string): string {
-    
-      
+  transform(time: string): string {  
       return  moment(time,"h:mm").format("h:mm A")
-   
   }
 
 

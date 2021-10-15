@@ -85,11 +85,10 @@ export class SemanaTurnoComponent implements OnInit {
         dia,
         fecha: this.diaInicialSemana.format('YYYY-MM-DD'),
         color: dia == 'domingo' ? 'black' : '#9da4ad',
-        turno: dia == 'domingo' ? 0 : 'seleccione',
+        turno: dia == 'domingo' ? 0 : 'seleccione', 
       };
 
       this.diasSemana.push(pur);
-
       this.diaInicialSemana = moment(this.diaInicialSemana).add(1, 'd');
     }
 
@@ -102,8 +101,7 @@ export class SemanaTurnoComponent implements OnInit {
 
       p.fixed_turn_hours.forEach((turn) => {
         turn = this.getColors(turn, true);
-        p.diasSemana.forEach((dia, i) => {
-          
+        p.diasSemana.forEach((dia, i) => {          
           if (turn.date == dia.fecha) {
             dia.turno = turn.rotating_turn_id;
             dia.color = turn.color;

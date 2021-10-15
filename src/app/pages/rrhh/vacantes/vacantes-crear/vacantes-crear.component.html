@@ -114,7 +114,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <Label>Tipo de Salario</Label>
-                                    <ng-select formControlName="salaryType_id" [items]="salaries" (change)="salaryChange()" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                                    <ng-select formControlName="salary_type_id" [items]="salaries" (change)="salaryChange()" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
                                     </ng-select>
                                 </div>
                             </div>
@@ -199,7 +199,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Tipo de contrato</label>
-                                    <ng-select [items]="contracts" placeholder="Seleccione" formControlName="workContractType_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
+                                    <ng-select [items]="contracts" placeholder="Seleccione" formControlName="work_contract_type_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
                                     <div *ngIf="contractType_invalid">
                                         <small class="invalid text-danger"> Es nesario el tipo de contrato
                                         </small>
@@ -304,7 +304,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Documentos legales necesarios</label>
-                                            <ng-select [items]="documents" placeholder="Seleccione" formControlName="documentType_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
+                                            <ng-select [items]="documents" placeholder="Seleccione" formControlName="document_type_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
                                             <div *ngIf="documentType_invalid">
                                                 <small class="invalid text-danger">Es necesario el campo de documentos legales
                                                     </small>
@@ -344,7 +344,7 @@
                                     <div class="col-md-3" *ngIf="visaSelected == true">
                                         <div class="form-group">
                                             <label>Tipo de Visa</label>
-                                            <ng-select [items]="visas" placeholder="Seleccione" formControlName="visaType_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
+                                            <ng-select [items]="visas" placeholder="Seleccione" formControlName="visa_type_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
                                             <div *ngIf="visaType_invalid">
                                                 <small class="invalid text-danger">Es necesario el campo de Visa
                                                     </small>

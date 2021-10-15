@@ -229,12 +229,12 @@ export class VacantesCrearComponent implements OnInit {
             gener: ['No Aplica', Validators.required],
             languages: ['', Validators.required],
             conveyance: ['Ninguno'],
-            workContractType_id: ['', Validators.required],
-            documentType_id: ['', Validators.required],
+            work_contract_type_id: ['', Validators.required],
+            document_type_id: ['', Validators.required],
             passport: ['', Validators.required],            
             visa: ['', Validators.required],
-            visaType_id: [''],      
-            salaryType_id: [1],
+            visa_type_id: [''],      
+            salary_type_id: [1],
             drivingLicenseJob: [''],
         })  
     }
@@ -321,11 +321,11 @@ export class VacantesCrearComponent implements OnInit {
     }
 
     get contractType_invalid() {
-        return this.form.get('workContractType_id').invalid && this.form.get('workContractType_id').touched;
+        return this.form.get('work_contract_type_id').invalid && this.form.get('work_contract_type_id').touched;
     }
 
     get documentType_invalid() {
-        return this.form.get('documentType_id').invalid && this.form.get('documentType_id').touched;
+        return this.form.get('document_type_id').invalid && this.form.get('document_type_id').touched;
     }
 
     get passport_invalid() {
@@ -337,6 +337,6 @@ export class VacantesCrearComponent implements OnInit {
     }
 
     get visaType_invalid() {
-        return this.form.get('visaType_id').invalid && this.form.get('visaType_id').touched;
+        return this.form.get('visa_type_id').invalid && this.form.get('visa_type_id').touched;
     }
 }

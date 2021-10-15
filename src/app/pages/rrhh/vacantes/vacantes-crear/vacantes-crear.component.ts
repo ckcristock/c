@@ -11,6 +11,7 @@ import { DepartmentService } from 'src/app/core/services/department.service'
 import { JobService } from '../job.service';
 import Swal from 'sweetalert2';
 import { CompanyService } from 'src/app/pages/ajustes/informacion-base/services/company.service';
+import { isArraysEqual } from '@fullcalendar/core';
 
 @Component({
     selector: 'app-vacantes-crear',
@@ -32,6 +33,8 @@ export class VacantesCrearComponent implements OnInit {
     contracts: any[] = [];
     visas: any[] = [];
     licenses: any[] = [];
+    documents: any[] = [];
+    salaries :any[] = [];
 
     turns = consts.turnTypes;
     options = consts.options;
@@ -58,6 +61,20 @@ export class VacantesCrearComponent implements OnInit {
         this.getContractType();
         this.getVisaTypes();
         this.getDrivingLicenses();
+        this.getDocumentTypes();
+        this.getSalaryTypes();
+    }
+
+    getSalaryTypes(){
+        this._job.getSalaryTypes().subscribe((r:any) => {
+            this.salaries = r.data;
+        })
+    }
+
+    getDocumentTypes(){
+        this._job.getDocumentTypes().subscribe((r:any) => {
+            this.documents = r.data;
+        })
     }
 
     getDrivingLicenses(){
@@ -125,7 +142,7 @@ export class VacantesCrearComponent implements OnInit {
             })
         }
     }
-
+    
     save() {
         this.form.markAllAsTouched()
         if (this.form.invalid) { return false }
@@ -143,7 +160,7 @@ export class VacantesCrearComponent implements OnInit {
             }
         });
     }
-
+    
     sendData() {
         this._job.save(this.form.value).subscribe((r: any) => {
             if (r.code == 200) {
@@ -199,26 +216,26 @@ export class VacantesCrearComponent implements OnInit {
             position_id: ['', Validators.required],
             department_id: ['', Validators.required],
             municipality_id: ['', Validators.required],
-            min_salary: ['', Validators.required],
-            max_salary: ['', Validators.required],
+            min_salary: [''],
+            max_salary: [''],
             turn_type: ['', Validators.required],
             description: ['', Validators.required],
             education: ['', Validators.required],
             experience_year: ['', Validators.required],
-            min_age: ['', Validators.required],
-            max_age: ['', Validators.required],
+            min_age: [''],
+            max_age: [''],
             can_trip: ['', Validators.required],
             change_residence: ['', Validators.required],
             gener: ['No Aplica', Validators.required],
             languages: ['', Validators.required],
-            conveyance: ['Ninguno', Validators.required],
+            conveyance: ['Ninguno'],
             contractType_id: ['', Validators.required],
-            driving_license: ['', Validators.required],
-            legal_documents: ['', Validators.required],
+            documentType_id: ['', Validators.required],
             passport: ['', Validators.required],            
             visa: ['', Validators.required],
-            visaType_id: ['', Validators.required],      
-            salary_type: ['A Convenir', Validators.required]
+            visaType_id: [''],      
+            salaryType_id: [1],
+            drivingLicenseJob: [''],
         })  
     }
 
@@ -231,7 +248,7 @@ export class VacantesCrearComponent implements OnInit {
     }
 
     salaryChange() {
-        if (this.form.controls.salary_type.value == 'Rango') {
+        if (this.form.controls.salaryType_id.value == 2) {
             this.rangeSalary = true;
         }
         else {
@@ -307,8 +324,8 @@ export class VacantesCrearComponent implements OnInit {
         return this.form.get('contractType_id').invalid && this.form.get('contractType_id').touched;
     }
 
-    get legal_documents_invalid() {
-        return this.form.get('legal_documents').invalid && this.form.get('legal_documents').touched;
+    get documentType_invalid() {
+        return this.form.get('documentType_id').invalid && this.form.get('documentType_id').touched;
     }
 
     get passport_invalid() {

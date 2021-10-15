@@ -34,4 +34,12 @@ export class JobService {
     getDrivingLicenses(){
         return this.http.get(`${environment.base_url}/drivingLicenses`);
     }
+
+    getDocumentTypes(){
+        return this.http.get(`${environment.base_url}/documentTypes`);
+    }
+
+    getSalaryTypes(){
+        return this.http.get(`${environment.base_url}/salaryTypes`);
+    }
 }

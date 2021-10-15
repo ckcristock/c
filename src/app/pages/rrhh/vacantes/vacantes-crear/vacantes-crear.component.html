@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-body">
 
-                <form [formGroup]="form">
+                <form [formGroup]="form" (ngSubmit)="save()">
 
                     <div class="col-md-12 text-center">
                         <h4>Nueva Vacante</h4>
@@ -114,11 +114,8 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <Label>Tipo de Salario</Label>
-                                    <select class="form-control" formControlName="salary_type" (change)="salaryChange()">
-                                        <option>A Convenir</option>
-                                        <option>SMLV</option>
-                                        <option>Rango</option>
-                                    </select>
+                                    <ng-select formControlName="salaryType_id" [items]="salaries" (change)="salaryChange()" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                                    </ng-select>
                                 </div>
                             </div>
                             <div class="col-md-3" *ngIf="rangeSalary == true">
@@ -297,18 +294,18 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Requisitos de licencia conducción</label>
-                                            <ng-select multiple="true" [items]="licenses" placeholder="Seleccione" formControlName="driving_license" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
+                                            <ng-select multiple="true" [items]="licenses" appendTo="body" placeholder="Seleccione" formControlName="drivingLicenseJob" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
+                                            <div *ngIf="passport_invalid">
+                                                <small class="invalid text-danger">Es necesario el campo de licencia de conducción
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Documentos legales necesarios</label>
-                                            <select class="form-control custom-control" formControlName="legal_documents">
-                                                <option selected>Seleccione</option>
-                                                <option>Cédula de ciudadania</option>
-                                                <option>Cédula de extranjeria</option>
-                                            </select>
-                                            <div *ngIf="legal_documents_invalid">
+                                            <ng-select [items]="documents" placeholder="Seleccione" formControlName="documentType_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
+                                            <div *ngIf="documentType_invalid">
                                                 <small class="invalid text-danger">Es necesario el campo de documentos legales
                                                     </small>
                                             </div>
@@ -359,7 +356,7 @@
                         </div>
                     </div>
                     <div class="text-right mt-4">
-                        <button type="submit" class="btn btn-primary btn-sm btn-block" (click)="save()">Guardar
+                        <button type="submit" class="btn btn-primary btn-sm btn-block">Guardar
                             Vacante</button>
                     </div>
                 </form>

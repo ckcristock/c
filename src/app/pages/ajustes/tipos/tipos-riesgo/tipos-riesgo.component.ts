@@ -39,7 +39,7 @@ export class TiposRiesgoComponent implements OnInit {
   openModal() {
     this.modal.show();
     this.form.reset();
-    this.selected = 'Nuevo Tipo de Riego';
+    this.selected = 'Nuevo Tipo de Riesgo';
   }
 
   getData(data) {

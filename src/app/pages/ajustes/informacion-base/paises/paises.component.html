@@ -1,22 +1,20 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Nuevo País</button>
-            <h5>Paises</h5>
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">
+                <i class="fa fa-plus"></i> Nuevo País
+            </button>
+            <h5 class="text-primary">Paises</h5>
             <p>Paises registrados en nuestra bases de datos.</p>
-            <div class="form-row mt-4 ml-1">
-                <div class="form-group col-2">
+            <hr class="bg-primary">
+            <div class="form-row">
+                <div class="form-group col-4">
                     <label for="">Filtro nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getCountries()" name="name" autocomplete="off">
+                    <input type="text" class="form-control" [(ngModel)]="filtro.name" (change)="getCountries()" name="name" autocomplete="off">
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <table class="table table-bordered table-striped" *ngIf="!loading && paises.length > 0; else notData">
+        <table class="table table-sm table-borderless table-striped" *ngIf="!loading && paises.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th>Paises</th>
@@ -24,7 +22,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let pais of paises">
+                <tr *ngFor="let pais of paises" [ngClass]="{'bg-danger text-white': (pais.state == 'Inactivo')}">
                     <td> {{ pais.name | titlecase }} </td>
                     <td>
                         <div class="text-center">
@@ -33,8 +31,15 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getData(pais); modal.show()"><i
-                                            class="fa fa-file-pdf-o"></i>Editar</a>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" target="_blank" (click)="getData(pais); modal.show()">
+                                        <i class="far fa-edit"></i> Editar
+                                    </a>
+                                    <a *ngIf="pais.state == 'Inactivo'" class="dropdown-item waves-light text-success waves-effect" (click)="activateOrInactivate(pais, 'Activo')">
+                                        <i class="fas fa-check"></i> Activar
+                                    </a>
+                                    <a *ngIf="pais.state == 'Activo'" class="dropdown-item waves-light text-danger waves-effect" (click)="activateOrInactivate(pais, 'Inactivo')">
+                                        <i class="fas fa-trash-alt"></i> Anular
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -42,10 +47,10 @@
                 </tr>
             </tbody>
         </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getCountries($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getCountries($event)" aria-label="Default pagination"
-        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-    </ngb-pagination>
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">

@@ -106,10 +106,10 @@ export class CrearTercerosComponent implements OnInit {
       withholding_agent: [''],
       withholding_oninvoice:  [''],
       reteica_type: [''],
-      reteica_account: [''],
-      retefuente_account: [''],
+      reteica_account_id: [''],
+      retefuente_account_id: [''],
       g_contribut: [''],
-      reteiva_account: [''],
+      reteiva_account_id: [''],
       condition_payment: [''],
       assigned_space: [''],
       discount_prompt_payment: [''],
@@ -122,7 +122,16 @@ export class CrearTercerosComponent implements OnInit {
     this.valueChanges();
   }
 
-  formatter = (state: Code) => state.code;
+  inputFormatListValue(value: any) {
+    if (value.code)
+      return value.code
+    return value;
+  }
+
+  resultFormatListValue(value: any) {
+    return value.code;
+  }
+  
   search: OperatorFunction<string, readonly { code }[]> = (
     text$: Observable<string>
   ) =>
@@ -234,15 +243,15 @@ export class CrearTercerosComponent implements OnInit {
   searchAccount(tipo){
     switch (tipo) {
       case 'Reteica':
-        let reteica = this.form.get('reteica_account').value;
+        let reteica = this.form.get('reteica_account_id').value;
         this.retePercentage.reteica = (reteica.percent.replace(',','.') * 100).toFixed(2);
         break;
       case 'Reteiva':
-        let reteiva = this.form.get('reteiva_account').value;
+        let reteiva = this.form.get('reteiva_account_id').value;
         this.retePercentage.reteiva = (reteiva.percent.replace(',','.') * 100).toFixed(2);
         break;
       case 'Retefuente':
-        let retefuente = this.form.get('retefuente_account').value;
+        let retefuente = this.form.get('retefuente_account_id').value;
         this.retePercentage.retefuente = (retefuente.percent.replace(',','.') * 100).toFixed(2);
         break;
       default:
@@ -250,29 +259,19 @@ export class CrearTercerosComponent implements OnInit {
     }
   }
 
-  tipo(){
-    this.selected = this.form.get('reteica_account').value;
-    if (typeof this.selected == 'object') {
-      let id = this.selected.id;
-      this.form.patchValue({
-        reteica_account: id
-      })
-    }
-  }
-
   valueChanges(){
     this.form.get('withholding_agent').valueChanges.subscribe( value => {
       if (value == 'No') {
-        this.form.get('retefuente_account').disable();
+        this.form.get('retefuente_account_id').disable();
       } else {
-        this.form.get('retefuente_account').enable();
+        this.form.get('retefuente_account_id').enable();
       }
     });
     this.form.get('g_contribut').valueChanges.subscribe( value => {
       if (value == 'Si') {
-        this.form.get('reteiva_account').disable();
+        this.form.get('reteiva_account_id').disable();
       } else {
-        this.form.get('reteiva_account').enable();
+        this.form.get('reteiva_account_id').enable();
       }
     });
     this.form.get('dian_address').valueChanges.subscribe( value => {
@@ -344,10 +343,10 @@ export class CrearTercerosComponent implements OnInit {
         withholding_agent: this.third.withholding_agent,
         withholding_oninvoice:  this.third.withholding_oninvoice,
         reteica_type: this.third.reteica_type,
-        reteica_account: this.third.reteica_account,
-        retefuente_account: this.third.retefuente_account,
+        reteica_account_id: this.third.reteica_account_id,
+        retefuente_account_id: this.third.retefuente_account_id,
         g_contribut: this.third.g_contribut,
-        reteiva_account: this.third.reteiva_account,
+        reteiva_account_id: this.third.reteiva_account_id,
         condition_payment: this.third.condition_payment,
         assigned_space: this.third.assigned_space,
         discount_prompt_payment: this.third.discount_prompt_payment,
@@ -378,6 +377,14 @@ export class CrearTercerosComponent implements OnInit {
         showCancel: true
       }).then((r) => {
         if (r.isConfirmed) {
+          let reteica_account_id = this.form.value.reteica_account_id.id;
+          let retefuente_account_id = this.form.value.retefuente_account_id.id;
+          let reteiva_account_id = this.form.value.reteiva_account_id.id;
+          this.form.patchValue({
+            reteica_account_id,
+            retefuente_account_id,
+            reteiva_account_id
+          })
           this._terceros.saveInformation(this.form.value).subscribe((r:any) => {
             this._swal.show({
               icon: 'success',
@@ -397,6 +404,14 @@ export class CrearTercerosComponent implements OnInit {
         showCancel: true
       }).then((r) => {
         if (r.isConfirmed) {
+          let reteica_account_id = this.form.value.reteica_account_id.id;
+          let retefuente_account_id = this.form.value.retefuente_account_id.id;
+          let reteiva_account_id = this.form.value.reteiva_account_id.id;
+          this.form.patchValue({
+            reteica_account_id,
+            retefuente_account_id,
+            reteiva_account_id
+          })
           this._terceros.updateThirdParties(this.form.value, this.third.id).subscribe((r:any) => {
             this._swal.show({
               icon: 'success',

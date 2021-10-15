@@ -25,6 +25,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
   turns : any[]
   forma: FormGroup;
   show = false;
+
   constructor(
     private fb: FormBuilder,
     private _valReactive: ValidatorsService,
@@ -36,6 +37,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
     this.getAll();
     this.createForm();
 
+    this.colorHex();
     this.openModal.subscribe((id) => {
       this.createForm();
       this.crearListeners();
@@ -86,6 +88,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
       launch_time: [0, this._valReactive.required],
       launch_time_two: [0, this._valReactive.required],
       breack: [0],
+      color: [this.colorHex()],
       breack_time: ['', this._valReactive.required],
       breack_time_two: ['', this._valReactive.required],
       saturday_id:[0],
@@ -118,12 +121,28 @@ export class CreateTurnoRotativoComponent implements OnInit {
       }
     });
   }
+
+  generateLetters(){
+    let letters = ['a','b','c','d','e','f','0','1','2','3','4','5','6','7','8','9'];
+    let number = (Math.random()*15).toFixed(0);
+    return letters[number];
+  }
+    
+  colorHex(){
+    let color = "";
+    for(let i = 0; i< 6; i++){
+      color = color + this.generateLetters();
+    }
+    return "#" + color;
+    
+  }
+
   save() {
+   
     this.forma.markAllAsTouched();
     if (this.forma.invalid) {
       return false;
     }
-
     this._swal
       .show({
         title: '¿Está seguro?',

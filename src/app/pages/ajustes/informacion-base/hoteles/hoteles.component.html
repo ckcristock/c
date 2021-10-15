@@ -1,0 +1,145 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                <i class="fa fa-plus"></i> Agregar</button>
+            <h5 class="text-primary">Hoteles</h5>
+            <div class="form-row mt-4">
+                <div class="form-group col-md-2">
+                    <label for="">Filtro Tipo</label>
+                    <select class="form-control form-control-sm" [(ngModel)]="filtro.tipo" (change)="getHotels()">
+                        <option value="Nacional">Nacional</option>
+                        <option value="Internacional">Internacional</option>
+                    </select>
+                </div>
+            </div>
+            <hr class="bg-primary">
+        </div>
+        <table class="table table-borderless table-striped" *ngIf="!loading && hotels.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Tipo</th>
+                    <th>Hotel</th>
+                    <th>Dirección</th>
+                    <th>Tel. Contacto</th>
+                    <th>Tel. Fijo</th>
+                    <th>Acomodación</th>
+                    <th>T. Sencilla</th>
+                    <th>T. Doble</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let hotel of hotels">
+                    <td> {{ hotel.type }} </td>
+                    <td> {{ hotel.name }} </td>
+                    <td> {{ hotel.address }} </td>
+                    <td> {{ hotel.phone }} </td>
+                    <td> {{ hotel.landline }} </td>
+                    <td> {{ hotel.accommodation }} </td>
+                    <td> {{ hotel.simple_rate | currency }} </td>
+                    <td> {{ hotel.double_rate | currency }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getHotel(hotel); modal.show()">
+                                        <i class="far fa-edit"></i> Editar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getHotels($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Nuevo Hotel</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide()"></i>
+            </span>
+          </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-4">
+                            <label for="">Tipo</label>
+                            <select class="form-control form-control-sm" formControlName="type">
+                                <option value="Nacional">Nacional</option>
+                                <option value="Internacional">Internacional</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="">Nombre</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="name">
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="">Ciudad</label>
+                            <select class="form-control form-control-sm" formControlName="city_id">
+                                <option *ngFor="let item of cities" [value]="item.value">
+                                    {{ item.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="">Tel. Fijo</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="landline">
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="">Tel. Contacto</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="phone">
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="">Dirección</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="address">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">¿Incluye Desayuno?</label>
+                            <select class="form-control form-control-sm" formControlName="breakfast">
+                                <option value="Si">Si</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Tipo de Acomodación</label>
+                            <select class="form-control form-control-sm" formControlName="accommodation">
+                                <option value="Sencilla">Sencilla</option>
+                                <option value="Doble">Doble</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Tasa Simple</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="simple_rate">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="">Tasa Doble</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="double_rate">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="save()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

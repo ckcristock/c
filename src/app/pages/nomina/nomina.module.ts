@@ -31,6 +31,8 @@ import { HorasExtrasComponent } from './nomina/modals/horas-extras/horas-extras.
 import { ModalNovedadesComponent } from './nomina/modals/modal-novedades/modal-novedades.component';
 import { ModalIngresosPrestacionalesComponent } from './nomina/modals/modal-ingresos-prestacionales/modal-ingresos-prestacionales.component';
 import { IngresoPrestacionalComponent } from './nomina/forms/ingreso-prestacional/ingreso-prestacional.component';
+import { PrimasComponent } from './primas/primas.component';
+import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-funcionario.component';
 
 @NgModule({
   imports: [
@@ -67,7 +69,9 @@ import { IngresoPrestacionalComponent } from './nomina/forms/ingreso-prestaciona
     HorasExtrasComponent,
     ModalNovedadesComponent,
     ModalIngresosPrestacionalesComponent,
-    IngresoPrestacionalComponent
+    IngresoPrestacionalComponent,
+    PrimasComponent,
+    PrimaFuncionarioComponent
   ],
 })
 export class NominaModule {}

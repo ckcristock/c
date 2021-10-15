@@ -16,6 +16,11 @@ import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.compo
 import { TercerosComponent } from './terceros/terceros.component';
 import { ConfiguracionEmpresaComponent } from '../configuracion/configuracion-empresa.component';
 import { CrearTercerosComponent } from './terceros/crear-terceros/crear-terceros.component';
+import { TaxisComponent } from './taxis/taxis.component';
+import { HotelesComponent } from './hoteles/hoteles.component';
+import { CiudadesComponent } from './ciudades/ciudades.component';
+import { PaisesComponent } from './paises/paises.component';
+import { LicenciaConduccionComponent } from './licencia-conduccion/licencia-conduccion.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
@@ -36,10 +41,19 @@ const routes: Routes = [
   { path: 'arl', component: ArlComponent },
   { path: 'caja-compensacion', component: CajaCompensacionComponent },
   { path: 'fondo-cesantias', component: FondoCesantiasComponent },
-  { path: 'terceros', component: TercerosComponent },
   { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent },
+
+  { path: 'terceros', component: TercerosComponent },
   { path: 'crear-tercero/:origin', component: CrearTercerosComponent },
   { path: 'editar-tercero/:id/:origin', component: CrearTercerosComponent },
+
+  { path: 'taxis', component: TaxisComponent },
+  { path: 'hoteles', component: HotelesComponent },
+
+  { path: 'ciudades', component: CiudadesComponent },
+  { path: 'paises' , component: PaisesComponent },
+
+  { path: 'licencia-conduccion', component: LicenciaConduccionComponent }
 ];
 
 @NgModule({

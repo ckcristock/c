@@ -75,7 +75,7 @@ export class ProfesionesComponent implements OnInit {
     }
     this._swal.show({
       title: '¿Estas Seguro?',
-      text: "¡La Profesión será Desactivada",
+      text: "¡La Profesión será Desactivada!",
       icon: 'question',
       showCancel: true
     })

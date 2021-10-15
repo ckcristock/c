@@ -6,7 +6,7 @@ import { TiposContratoComponent } from './tipos-contrato/tipos-contrato.componen
 import { TiposSalarioComponent } from './tipos-salario/tipos-salario.component';
 import { TiposDocumentoComponent } from './tipos-documento/tipos-documento.component';
 import { ComponentsModule } from '../../../components/components.module';
-import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from "@angular/common";
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,9 +21,9 @@ import { TiposAnulacionComponent } from './tipos-anulacion/tipos-anulacion.compo
 import { TiposRechazoComponent } from './tipos-rechazo/tipos-rechazo.component';
 import { TiposActivoFijoComponent } from './tipos-activo-fijo/tipos-activo-fijo.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PaisesComponent } from './paises/paises.component';
 import { TiposRiesgoComponent } from './tipos-riesgo/tipos-riesgo.component';
 import { ProfesionesComponent } from './profesiones/profesiones.component';
+import { TiposVisaComponent } from './tipos-visa/tipos-visa.component';
 
 
 @NgModule({
@@ -41,10 +41,9 @@ import { ProfesionesComponent } from './profesiones/profesiones.component';
         TiposEstadoFinancieroComponent,
         TiposAnulacionComponent, 
         TiposRechazoComponent, 
-        TiposActivoFijoComponent, 
-        PaisesComponent, 
+        TiposActivoFijoComponent,
         TiposRiesgoComponent, 
-        ProfesionesComponent
+        ProfesionesComponent, TiposVisaComponent
     ],
     imports : [
         TiposRoutingModule,
@@ -56,7 +55,8 @@ import { ProfesionesComponent } from './profesiones/profesiones.component';
         ReactiveFormsModule,
         PipesModule,
         NgbPaginationModule,
-        NgSelectModule
+        NgSelectModule,
+        NgbTypeaheadModule
     ]
 })
 

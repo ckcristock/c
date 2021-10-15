@@ -130,8 +130,9 @@ export const consts = {
   ],
 
   status: [
+    { clave: 'Todos', valor: 'Todos' },
     { clave: 'Abierto', valor: 'Abierto' },
-    { clave: 'Cerrado', valor: 'Cerrado' }
+    { clave: 'Cerrado', valor: 'Cerrado' },
   ],
 
   modalities: [
@@ -158,11 +159,6 @@ export const consts = {
     { clave: 'Si', valor: 0 },
     { clave: 'No', valor: 1 }
   ],
-  
-  visaTypes: [
-    { clave: 'Visa de Trabajo', valor: 'visa de trabajo' },
-    { clave: 'Visa de Migrante', valor: 'visa de migrantes' },
-    { clave: 'Visa de Turista', valor: 'visa de turista' }
-  ]
+
 
 };

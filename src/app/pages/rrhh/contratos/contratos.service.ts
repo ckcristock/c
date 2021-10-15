@@ -33,6 +33,14 @@ export class ContratosService {
     return this.http.get(`${environment.base_url}/company`);
   }
 
+  getDependencies(){
+    return this.http.get(`${environment.base_url}/filter-all-depencencies`);
+  }
+
+  getPositions(){
+    return this.http.get(`${environment.base_url}/filter-all-positions`);
+  }
+
   getContractsToExpire( params = {} ) {
     return this.http.get(`${environment.base_url}/contractsToExpire`, { params });
   }

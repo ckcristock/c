@@ -28,29 +28,30 @@
                         </div>
                         <div class="form-group col-6">
                             <label for="">Pago de Deducciones</label>
-                            <select class="form-control form-control-sm" formControlName="pay_dedutions">
-                                <option value=""></option>
+                            <select class="form-control form-control-sm" formControlName="pay_deductions">
+                                <option value="proporcionales">Proporcionales en cada pago</option>
+                                <option value="final_periodo">Al final del periodo</option>
                             </select>
                         </div>
                         <div class="form-group col-6">
                             <label for="">¿Pago Recurrentes?</label>
                             <select class="form-control form-control-sm" formControlName="recurring_payment">
-                                <option value="">Proporcionales en cada pago</option>
-                                <option value="">Al final del periodo</option>
+                                <option value="proporcionales">Proporcionales</option>
+                                <option value="fijos">Fijos</option>
                             </select>
                         </div>
                         <div class="form-group col-6">
                             <label for="">¿Como se paga el auxilio de transporte?</label>
                             <select class="form-control form-control-sm" formControlName="payment_transport_subsidy">
-                                <option value="">Mensual</option>
-                                <option value="">Quincenal</option>
+                                <option value="Mensual">Mensual</option>
+                                <option value="Quincenal">Quincenal</option>
                             </select>
                         </div>
                         <div class="form-group col-6">
                             <label for="">¿Horas extras y recargos afectan auxilio de transporte?</label>
                             <select class="form-control form-control-sm" formControlName="affects_transportation_subsidy">
-                                <option value="">Si</option>
-                                <option value="">No</option>
+                                <option value="Si">Si</option>
+                                <option value="No">No</option>
                             </select>
                         </div>
                         <div class="form-group col-6">
@@ -68,7 +69,7 @@
     <div class="app-modal-footer">
         <div class="form-group text-right">
             <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Guardar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="changePaymentConfiguration()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

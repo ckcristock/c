@@ -13,8 +13,8 @@ export class AlmuerzosService {
     return this.http.get(`${environment.base_url}/people`);
   }
 
-  getLunches(){
-    return this.http.get(`${environment.base_url}/lunch`);
+  getLunches( params = {} ){
+    return this.http.get(`${environment.base_url}/lunch`, {params});
   }
 
   getLunch(id:any){
@@ -23,6 +23,10 @@ export class AlmuerzosService {
 
   createLunch( data:any ) {
     return this.http.post(`${environment.base_url}/lunch`, data);
+  }
+
+  activateOrInactivate( state ){
+    return this.http.put(`${environment.base_url}/state-change`, state);
   }
 
 }

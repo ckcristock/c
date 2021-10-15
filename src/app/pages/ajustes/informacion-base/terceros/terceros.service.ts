@@ -53,4 +53,8 @@ export class TercerosService {
     return this.http.get(`${environment.base_url}/account-plan`);
   }
 
+  changeState( data:any ){
+    return this.http.put(`${environment.base_url}/activate-inactivate`, data);
+  }
+
 }

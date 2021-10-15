@@ -1,83 +1,37 @@
 <div class="card">
-  <div class="card-body">
-    <div class="card-title">
-      <h5>Contratos</h5>
-      <p>Todos los contratos registrados en nuestra base de datos.</p>
+    <div class="card-body">
+        <div class="card-title">
+            <h5>Contratos</h5>
+            <p>Todos los contratos registrados en nuestra base de datos.</p>
+        </div>
+        <div class="form-row mt-4">
+            <div class="form-group col-md-2" *ngIf="companies.length>1">
+                <label for="">Empresa</label>
+                <ng-select class="mr-1" [items]="companies" [(ngModel)]="filtros.company" (change)="getAllContracts()" name="empresa" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="">Funcionario</label>
+                <input type="text" class="form-control" [(ngModel)]="filtros.person" (change)="getAllContracts()" name="funcionario" autocomplete="off" placeholder="Buscar" />
+            </div>
+            <div class="form-group col-md-3">
+                <label for="">Grupos</label>
+                <ng-select class="mr-1" [items]="groups" [(ngModel)]="filtros.group" (change)="getAllContracts()" name="group" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="">Dependencias</label>
+                <ng-select class="mr-1 mb-3" [items]="dependencies" [(ngModel)]="filtros.dependency" (change)="getAllContracts()" name="dependency" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                </ng-select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="">Cargo</label>
+                <ng-select class="mr-1 mb-3" [items]="positions" bindLabel="text" bindValue="value" [(ngModel)]="filtros.position" (change)="getAllContracts()" name="position" loadingText="loading" ngDefaultControl>
+                </ng-select>
+            </div>
+        </div>
     </div>
-    <div class="form-row mt-4" *ngIf="companies.length > 1">
-      <div class="form-group col-md-2">
-        <label for="">Empresa</label>
-        <ng-select
-          class="mr-1"
-          [items]="companies"
-          [(ngModel)]="filtros.company"
-          (change)="getAllContracts()"
-          name="empresa"
-          bindLabel="text"
-          bindValue="value"
-          loadingText="loading"
-          ngDefaultControl
-        >
-        </ng-select>
-      </div>
-      <div class="form-group col-md-2">
-        <label for="">Funcionario</label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="filtros.person"
-          (change)="getAllContracts()"
-          name="funcionario"
-          autocomplete="off"
-        />
-      </div>
-      <div class="form-group col-md-3">
-        <label for="">Grupos</label>
-        <ng-select
-          class="mr-1"
-          [items]="groups"
-          [(ngModel)]="filtros.group"
-          (change)="getDependencies($event.value); getAllContracts()"
-          name="group"
-          bindLabel="text"
-          bindValue="value"
-          loadingText="loading"
-          ngDefaultControl
-        >
-        </ng-select>
-      </div>
-      <div class="form-group col-md-3">
-        <label for="">Dependencias</label>
-        <ng-select
-          class="mr-1 mb-3"
-          [items]="dependencies"
-          [(ngModel)]="filtros.dependency"
-          (change)="getPositions($event.value); getAllContracts()"
-          name="dependency"
-          bindLabel="text"
-          bindValue="value"
-          loadingText="loading"
-          ngDefaultControl
-        >
-        </ng-select>
-      </div>
-      <div class="form-group col-md-2">
-        <label for="">Cargo</label>
-        <ng-select
-          class="mr-1 mb-3"
-          [items]="positions"
-          bindLabel="text"
-          bindValue="value"
-          [(ngModel)]="filtros.position"
-          (change)="getAllContracts()"
-          name="position"
-          loadingText="loading"
-          ngDefaultControl
-        >
-        </ng-select>
-      </div>
-    </div>
-  </div>
+  
 </div>
 <div class="row">
   <div class="col-10">

@@ -11,6 +11,7 @@ import { DepartmentService } from 'src/app/core/services/department.service'
 import { JobService } from '../job.service';
 import Swal from 'sweetalert2';
 import { CompanyService } from 'src/app/pages/ajustes/informacion-base/services/company.service';
+import { isArraysEqual } from '@fullcalendar/core';
 
 @Component({
     selector: 'app-vacantes-crear',
@@ -29,11 +30,14 @@ export class VacantesCrearComponent implements OnInit {
     groups: any[] = [];
     dependencies: any[] = [];
     positions: any[] = [];
+    contracts: any[] = [];
+    visas: any[] = [];
+    licenses: any[] = [];
+    documents: any[] = [];
+    salaries :any[] = [];
 
     turns = consts.turnTypes;
     options = consts.options;
-    visaTypes = consts.visaTypes;
-    driving_requirement = consts.driving_requirements;
     rangeSalary:boolean;
 
     constructor(
@@ -54,6 +58,41 @@ export class VacantesCrearComponent implements OnInit {
         this.getCompanies()
         this.getGroups()
         this.getDepartments()
+        this.getContractType();
+        this.getVisaTypes();
+        this.getDrivingLicenses();
+        this.getDocumentTypes();
+        this.getSalaryTypes();
+    }
+
+    getSalaryTypes(){
+        this._job.getSalaryTypes().subscribe((r:any) => {
+            this.salaries = r.data;
+        })
+    }
+
+    getDocumentTypes(){
+        this._job.getDocumentTypes().subscribe((r:any) => {
+            this.documents = r.data;
+        })
+    }
+
+    getDrivingLicenses(){
+        this._job.getDrivingLicenses().subscribe((r:any) => {
+            this.licenses = r.data;
+        })
+    }
+
+    getVisaTypes(){
+        this._job.getVisaTypes().subscribe((r:any) => {
+            this.visas = r.data;
+        })
+    }
+
+    getContractType(){
+        this._job.getContractTypes().subscribe((r:any) => {
+            this.contracts = r.data;
+        })
     }
 
     getDepartments() {
@@ -103,12 +142,10 @@ export class VacantesCrearComponent implements OnInit {
             })
         }
     }
-
+    
     save() {
-
         this.form.markAllAsTouched()
         if (this.form.invalid) { return false }
-
         Swal.fire({
             title: '¿Seguro?',
             text: 'Se va a crear una nueva vacante',
@@ -123,7 +160,7 @@ export class VacantesCrearComponent implements OnInit {
             }
         });
     }
-
+    
     sendData() {
         this._job.save(this.form.value).subscribe((r: any) => {
             if (r.code == 200) {
@@ -179,25 +216,26 @@ export class VacantesCrearComponent implements OnInit {
             position_id: ['', Validators.required],
             department_id: ['', Validators.required],
             municipality_id: ['', Validators.required],
-            min_salary: ['', Validators.required],
-            max_salary: ['', Validators.required],
+            min_salary: [''],
+            max_salary: [''],
             turn_type: ['', Validators.required],
             description: ['', Validators.required],
             education: ['', Validators.required],
             experience_year: ['', Validators.required],
-            min_age: ['', Validators.required],
-            max_age: ['', Validators.required],
+            min_age: [''],
+            max_age: [''],
             can_trip: ['', Validators.required],
             change_residence: ['', Validators.required],
             gener: ['No Aplica', Validators.required],
             languages: ['', Validators.required],
-            conveyance: ['Ninguno', Validators.required],
-            type_of_contract: ['', Validators.required],
-            driving_license: ['', Validators.required],
-            legal_documents: ['', Validators.required],
+            conveyance: ['Ninguno'],
+            contractType_id: ['', Validators.required],
+            documentType_id: ['', Validators.required],
             passport: ['', Validators.required],            
-            visa: ['', Validators.required],            
-            salary_type: ['A Convenir', Validators.required]
+            visa: ['', Validators.required],
+            visaType_id: [''],      
+            salaryType_id: [1],
+            drivingLicenseJob: [''],
         })  
     }
 
@@ -210,7 +248,7 @@ export class VacantesCrearComponent implements OnInit {
     }
 
     salaryChange() {
-        if (this.form.controls.salary_type.value == 'Rango') {
+        if (this.form.controls.salaryType_id.value == 2) {
             this.rangeSalary = true;
         }
         else {
@@ -282,12 +320,12 @@ export class VacantesCrearComponent implements OnInit {
         return this.form.get('conveyance').invalid && this.form.get('conveyance').touched;
     }
 
-    get type_of_contract_invalid() {
-        return this.form.get('type_of_contract').invalid && this.form.get('type_of_contract').touched;
+    get contractType_invalid() {
+        return this.form.get('contractType_id').invalid && this.form.get('contractType_id').touched;
     }
 
-    get legal_documents_invalid() {
-        return this.form.get('legal_documents').invalid && this.form.get('legal_documents').touched;
+    get documentType_invalid() {
+        return this.form.get('documentType_id').invalid && this.form.get('documentType_id').touched;
     }
 
     get passport_invalid() {
@@ -296,5 +334,9 @@ export class VacantesCrearComponent implements OnInit {
 
     get visa_invalid() {
         return this.form.get('visa').invalid && this.form.get('visa').touched;
+    }
+
+    get visaType_invalid() {
+        return this.form.get('visaType_id').invalid && this.form.get('visaType_id').touched;
     }
 }

@@ -7,6 +7,8 @@ import {VerViaticosComponent} from './viaticos/ver-viaticos/ver-viaticos.compone
 import { EditarViaticoComponent } from './viaticos/editar-viatico/editar-viatico.component';
 import { VacacionesComponent } from './vacaciones/vacaciones.component';
 import { NominaComponent } from './nomina/nomina.component';
+import { PrimasComponent } from './primas/primas.component';
+import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-funcionario.component';
 
 const routes: Routes = [
     { path:'prestamos', component: PrestamosLibranzasComponent},
@@ -15,7 +17,9 @@ const routes: Routes = [
     { path: 'crear-viatico', component: CrearViaticosComponent },
     { path: 'editar-viatico/:id', component: EditarViaticoComponent },
     { path: 'vacaciones', component: VacacionesComponent},
-    { path: 'nomina', component: NominaComponent}
+    { path: 'nomina', component: NominaComponent},
+    { path: 'primas', component: PrimasComponent},
+    { path: 'prima/:anio/:periodo', component: PrimaFuncionarioComponent},
 ]
 
 @NgModule({

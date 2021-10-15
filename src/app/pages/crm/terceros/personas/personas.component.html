@@ -1,0 +1,46 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="text-primary">Personas</h4>
+            <p>Todas las personas asociadas a un tercero.</p>
+        </div>
+        <div class="form-row mt-4">
+            <div class="form-group col-md-2">
+                <label for="">Filtro Tercero</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.third" (change)="getPerson()">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="">Filtro Nombre</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.name" (change)="getPerson()">
+            </div>
+        </div>
+        <table class="table table-borderless table-striped" *ngIf="!loading && people.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Persona</th>
+                    <th>Tercero</th>
+                    <th>Tel. Celular</th>
+                    <th>Email</th>
+                    <th>Cargo</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let person of people">
+                    <td> {{ person.name }} </td>
+                    <td> {{ person.third_party }} </td>
+                    <td> {{ person.cell_phone }} </td>
+                    <td> {{ person.email }} </td>
+                    <td> {{ person.position }} </td>
+                    <td> {{ person.observation }} </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getPerson($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

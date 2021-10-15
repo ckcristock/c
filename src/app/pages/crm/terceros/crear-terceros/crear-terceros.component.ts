@@ -3,9 +3,9 @@ import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { TercerosService } from '../terceros.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SwalService } from '../../services/swal.service';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, map, distinctUntilChanged, filter } from 'rxjs/operators';
+import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 type Code = { code: string };
 
 @Component({
@@ -62,7 +62,6 @@ export class CrearTercerosComponent implements OnInit {
     this.getDianAddress();
     this.getAccountPlan();
     this.getTitle();
-    this.parametro = this.actRoute.snapshot.params.origin;
   }
 
   regresar(){
@@ -75,6 +74,7 @@ export class CrearTercerosComponent implements OnInit {
       id: [''],
       nit: [''],
       person_type: [''],
+      third_party_type: [''],
       first_name: [''],
       second_name: [''],
       first_surname: [''],
@@ -351,7 +351,8 @@ export class CrearTercerosComponent implements OnInit {
         assigned_space: this.third.assigned_space,
         discount_prompt_payment: this.third.discount_prompt_payment,
         discount_days: this.third.discount_days,
-        state: this.third.state
+        state: this.third.state,
+        third_party_type: this.third.third_party_type
       });
       this.third.third_party_person.forEach(third => {
         this.personList.push(this.fb.group({
@@ -373,23 +374,16 @@ export class CrearTercerosComponent implements OnInit {
       this._swal.show({
         icon: 'question',
         title: '¿Estas seguro?',
-        text: 'Se agregará un nuevo Cliente.',
+        text: 'Se agregará un nuevo tercero.',
         showCancel: true
       }).then((r) => {
         if (r.isConfirmed) {
-          let reteica_account_id = this.form.value.reteica_account_id.id;
-          let retefuente_account_id = this.form.value.retefuente_account_id.id;
-          let reteiva_account_id = this.form.value.reteiva_account_id.id;
-          this.form.patchValue({
-            reteica_account_id,
-            retefuente_account_id,
-            reteiva_account_id
-          })
+          this.values();
           this._terceros.saveInformation(this.form.value).subscribe((r:any) => {
             this._swal.show({
               icon: 'success',
               title: 'Proceso Satisfactorio',
-              text: 'El Cliente ha sido Creado con éxito.',
+              text: 'El tercero ha sido creado con éxito.',
               showCancel: false
             })
             this.location.back();
@@ -400,23 +394,16 @@ export class CrearTercerosComponent implements OnInit {
       this._swal.show({
         icon: 'question',
         title: '¿Estas Seguro?',
-        text: 'El Cliente será acualizado.',
+        text: 'El tercero será acualizado.',
         showCancel: true
       }).then((r) => {
         if (r.isConfirmed) {
-          let reteica_account_id = this.form.value.reteica_account_id.id;
-          let retefuente_account_id = this.form.value.retefuente_account_id.id;
-          let reteiva_account_id = this.form.value.reteiva_account_id.id;
-          this.form.patchValue({
-            reteica_account_id,
-            retefuente_account_id,
-            reteiva_account_id
-          })
+          this.values()
           this._terceros.updateThirdParties(this.form.value, this.third.id).subscribe((r:any) => {
             this._swal.show({
               icon: 'success',
               title: 'Actualizado con éxito',
-              text: 'El Cliente ha sido actualizado con éxito.',
+              text: 'El tercero ha sido actualizado con éxito.',
               showCancel: false
             })
             this.location.back();
@@ -424,6 +411,17 @@ export class CrearTercerosComponent implements OnInit {
         }
       });
     }
+  }
+
+  values(){
+    let reteica_account_id = this.form.value.reteica_account_id?.id;
+    let retefuente_account_id = this.form.value.retefuente_account_id?.id;
+    let reteiva_account_id = this.form.value.reteiva_account_id?.id;
+    this.form.patchValue({
+    reteica_account_id,
+    retefuente_account_id,
+    reteiva_account_id
+    })
   }
 
 }

@@ -1,24 +1,29 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <ng-container>
-                <button class="btn btn-sm btn-primary" style="float: right;" [routerLink]="['/ajustes/informacion-base/crear-tercero', parametro]">
-                    <i class="fa fa-plus"></i>
-                    Agregar Tercero
-                </button>
-            </ng-container>
-
+            <button class="btn btn-sm btn-primary" style="float: right;" [routerLink]="['/crm/crear-tercero']">
+                <i class="fa fa-plus"></i>
+                Agregar Tercero
+            </button>
             <h5>Terceros</h5>
             <p>Todos los NITS registrados en nuestras bases de datos.</p>
         </div>
         <div class="form-row mt-4 ml-1">
-            <div class="form-group">
+            <div class="form-group col-2">
                 <label for="">Filtro NIT</label>
-                <input type="text" class="form-control form-control-sm" name="name" [(ngModel)]="filtros.nit" (change)="getThirdParties()">
+                <input type="text" class="form-control form-control-sm" name="nit" [(ngModel)]="filtros.nit" (change)="getThirdParties()">
             </div>
-            <div class="form-group ml-3">
+            <div class="form-group col-2">
                 <label for="">Filtro Nombre</label>
                 <input type="text" class="form-control form-control-sm" name="name" [(ngModel)]="filtros.name" (change)="getThirdParties()">
+            </div>
+            <div class="form-group col-2">
+                <label for="">Filtro Tipo Tercero</label>
+                <select class="form-control form-control-sm" name="third" [(ngModel)]="filtros.third_party_type" (change)="getThirdParties()">
+                    <option value="Todos" selected>Todos</option>
+                    <option value="Cliente">Cliente</option>
+                    <option value="Proveedor">Proveedor</option>
+                </select>
             </div>
         </div>
         <table class="table table-borderless table-striped" *ngIf="!loading && thirdParties.length > 0; else notData">
@@ -41,7 +46,7 @@
                     <td> {{ third.cod_dian_address }} </td>
                     <td> {{ third.municipality.name }} </td>
                     <td> {{ third.landline }} / {{ third.cell_phone }} </td>
-                    <td> </td>
+                    <td> {{ third.third_party_type }} </td>
                     <td>{{ third.state }}
                         <!-- <span [ngClass]="{'badge bg-info text-white': (third.state == 'Activo'), 'badge bg-danger text-white': (third.state == 'Inactivo')}">{{ third.state }}</span> --></td>
                     <td>
@@ -51,7 +56,7 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/ajustes/informacion-base/editar-tercero', third.id, parametro]">
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/editar-tercero', third.id]">
                                         <i class="far fa-edit"></i> editar
                                     </a>
                                     <a *ngIf="third.state == 'Activo'" (click)="changeState(third, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">

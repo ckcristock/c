@@ -13,9 +13,7 @@ import { FondoPensionComponent } from './fondo-pension/fondo-pension.component';
 import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
-import { TercerosComponent } from './terceros/terceros.component';
 import { ConfiguracionEmpresaComponent } from '../configuracion/configuracion-empresa.component';
-import { CrearTercerosComponent } from './terceros/crear-terceros/crear-terceros.component';
 import { TaxisComponent } from './taxis/taxis.component';
 import { HotelesComponent } from './hoteles/hoteles.component';
 import { CiudadesComponent } from './ciudades/ciudades.component';
@@ -42,10 +40,6 @@ const routes: Routes = [
   { path: 'caja-compensacion', component: CajaCompensacionComponent },
   { path: 'fondo-cesantias', component: FondoCesantiasComponent },
   { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent },
-
-  { path: 'terceros', component: TercerosComponent },
-  { path: 'crear-tercero/:origin', component: CrearTercerosComponent },
-  { path: 'editar-tercero/:id/:origin', component: CrearTercerosComponent },
 
   { path: 'taxis', component: TaxisComponent },
   { path: 'hoteles', component: HotelesComponent },

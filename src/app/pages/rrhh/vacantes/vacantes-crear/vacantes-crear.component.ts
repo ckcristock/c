@@ -229,7 +229,7 @@ export class VacantesCrearComponent implements OnInit {
             gener: ['No Aplica', Validators.required],
             languages: ['', Validators.required],
             conveyance: ['Ninguno'],
-            contractType_id: ['', Validators.required],
+            workContractType_id: ['', Validators.required],
             documentType_id: ['', Validators.required],
             passport: ['', Validators.required],            
             visa: ['', Validators.required],
@@ -321,7 +321,7 @@ export class VacantesCrearComponent implements OnInit {
     }
 
     get contractType_invalid() {
-        return this.form.get('contractType_id').invalid && this.form.get('contractType_id').touched;
+        return this.form.get('workContractType_id').invalid && this.form.get('workContractType_id').touched;
     }
 
     get documentType_invalid() {

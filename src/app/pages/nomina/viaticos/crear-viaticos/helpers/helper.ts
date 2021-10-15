@@ -121,7 +121,6 @@ export const functions = {
     form.get('total_hotels_usd').valueChanges.subscribe((r) => {
       this.sumarTotal(form);
     });
-
     form.get('total_feedings_usd').valueChanges.subscribe((r) => {
       this.sumarTotal(form);
     });

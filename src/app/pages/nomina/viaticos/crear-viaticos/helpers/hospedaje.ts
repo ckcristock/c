@@ -1,3 +1,4 @@
+import { functions } from './helper';
 import {
   FormGroup,
   FormBuilder,
@@ -81,6 +82,16 @@ export const hospedajeHelper = {
     group.get('n_night').valueChanges.subscribe((value) => {
       this.subtotalHotel(group, value, group.value.rate);
     });
+    group.get('who_cancels').valueChanges.subscribe((value) => {
+      if (value == 'agencia') {
+        form.patchValue({
+          total_hotels_cop: 0,
+          total_hotels_usd: 0,
+        })
+      } else {
+        this.subtotalHotel(group, group.value.n_night, group.value.rate, form, list);
+      }
+    });
   },
 
   subtotalHotel(
@@ -96,13 +107,14 @@ export const hospedajeHelper = {
   getTotalHospedaje(form: FormGroup, list: FormArray) {
     let total = list.value.reduce(
       (a, b) => {
-        if (b.tipo == 'Nacional')
-          return { inter: a.inter, nac: a.nac + b.total };
-        return { nac: a.nac, inter: a.inter + b.total };
+          if (b.tipo == 'Nacional'){
+            return { inter: a.inter, nac: a.nac + b.total };
+          }else{
+            return { nac: a.nac, inter: a.inter + b.total };
+          }
       },
       { nac: 0, inter: 0 }
     );
-
     form.patchValue({
       total_hotels_cop: total.nac,
       total_hotels_usd: total.inter,

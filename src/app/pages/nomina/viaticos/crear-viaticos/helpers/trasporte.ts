@@ -34,6 +34,15 @@ export const transporteHelper = {
     group.get('ticket_value').valueChanges.subscribe((value) => {
       this.getTotal(form, list);
     });
+    group.get('ticket_payment').valueChanges.subscribe((value) => {
+      if (value == 'Agencia') {
+        form.patchValue({
+          total_transports_cop: 0
+        })
+      } else {
+        this.getTotal(form, list);
+      }
+    });
   },
 
   getTotal(form: FormGroup, list: FormArray) {

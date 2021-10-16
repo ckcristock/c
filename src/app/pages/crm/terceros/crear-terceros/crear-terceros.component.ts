@@ -6,7 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, map, distinctUntilChanged, filter } from 'rxjs/operators';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
-type Code = { code: string };
+import { functionsUtils } from '../../../../core/utils/functionsUtils';
+import { ValidatorsService } from '../../../ajustes/informacion-base/services/reactive-validation/validators.service';
 
 @Component({
   selector: 'app-crear-terceros',
@@ -40,14 +41,20 @@ export class CrearTercerosComponent implements OnInit {
     { clave: '60 Días', valor: 3 },
     { clave: '90 Días', valor: 4 },
     { clave: '120 Días', valor: 5 },
-  ]
+  ];
+  file: any = '';
+  fileString: any = '';
+  rutString:any = '';
+  rutFile:any = '';
+  type:any = '';
   constructor( 
                private location: Location,
                private fb: FormBuilder,
                private _terceros: TercerosService,
                public router: Router,
                private _swal: SwalService,
-               private actRoute: ActivatedRoute
+               private actRoute: ActivatedRoute,
+               private _validators: ValidatorsService
               ) { }
 
   ngOnInit(): void {
@@ -72,27 +79,28 @@ export class CrearTercerosComponent implements OnInit {
     this.form = this.fb.group({
       /* Inicia Datos Básicos */
       id: [''],
-      nit: [''],
-      person_type: [''],
-      third_party_type: [''],
-      first_name: [''],
+      nit: ['', this._validators.required],
+      person_type: ['', this._validators.required],
+      third_party_type: ['', this._validators.required],
+      first_name: ['', this._validators.required],
       second_name: [''],
-      first_surname: [''],
+      first_surname: ['', this._validators.required],
       second_surname: [''],
-      social_reason: [''],
+      social_reason: ['', this._validators.required],
       tradename: [''],
-      dian_address: [''],
+      dian_address: ['', this._validators.required],
       address_one: [''],
       address_two: [''],
       address_three: [''],
       address_four: [''],
-      cod_dian_address: [''],
-      landline: [''],
-      cell_phone: [''],
+      cod_dian_address: ['', this._validators.required],
+      landline: ['', this._validators.required],
+      cell_phone: ['', this._validators.required],
       email: [''],
       zone_id: [''],
       department_id: [''],
-      municipality_id: [''],
+      municipality_id: ['', this._validators.required],
+      image: [''],
       /* Termina Datos Básicos */
       /* Inicia Datos Comerciales */
       winning_list_id: [''],
@@ -116,6 +124,7 @@ export class CrearTercerosComponent implements OnInit {
       discount_days: [''],
       state: [''],
       rut: [''],
+      type: [''],
       /* Termina Datos Comerciales */
       person: this.fb.array([])
     });
@@ -352,7 +361,8 @@ export class CrearTercerosComponent implements OnInit {
         discount_prompt_payment: this.third.discount_prompt_payment,
         discount_days: this.third.discount_days,
         state: this.third.state,
-        third_party_type: this.third.third_party_type
+        third_party_type: this.third.third_party_type,
+        image: this.third.image
       });
       this.third.third_party_person.forEach(third => {
         this.personList.push(this.fb.group({
@@ -369,7 +379,54 @@ export class CrearTercerosComponent implements OnInit {
     })
   }
 
+  onFileChanged(event) {
+    if (event.target.files[0]) {
+      let file = event.target.files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event) => {
+        this.fileString = (<FileReader>event.target).result;
+      };
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.file = base64;
+      });
+    }
+  }
+
+  rutChange(event) {
+    if (event.target.files[0]) {
+      let file = event.target.files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event) => {
+        this.rutString = (<FileReader>event.target).result;
+        const type = {ext:this.fileString};
+        this.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+      };
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.rutFile = base64;
+      });
+    }
+  }
+
   saveInformation(){
+    let image = this.fileString;
+    let rut = this.rutString;
+    let type = this.type;
+    this.form.patchValue({
+      image,
+      rut,
+      type
+    })
+    this.form.markAllAsTouched()
+    if (this.form.invalid) {
+      return this._swal.show({
+        icon: 'error',
+        title: '¡Incorrecto!',
+        text: 'Por favor, complete los campos requeridos.',
+        showCancel: false
+      })
+    }
     if (this.form.value.id == "") {
       this._swal.show({
         icon: 'question',
@@ -422,6 +479,50 @@ export class CrearTercerosComponent implements OnInit {
     retefuente_account_id,
     reteiva_account_id
     })
+  }
+
+  get nit_valid(){
+    return this.form.get('nit').invalid && this.form.get('nit').touched
+  }
+
+  get person_type_valid(){
+    return this.form.get('person_type').invalid && this.form.get('person_type').touched
+  }
+  
+  get third_party_type_valid(){
+    return this.form.get('third_party_type').invalid && this.form.get('third_party_type').touched
+  }
+
+  get first_name_valid(){
+    return this.form.get('first_name').invalid && this.form.get('first_name').touched
+  }
+
+  get first_surname_valid(){
+    return this.form.get('first_surname').invalid && this.form.get('first_surname').touched
+  }
+
+  get social_reason_valid(){
+    return this.form.get('social_reason').invalid && this.form.get('social_reason').touched
+  }
+
+  get cod_dian_address_valid(){
+    return this.form.get('cod_dian_address').invalid && this.form.get('cod_dian_address').touched
+  }
+
+  get dian_address_valid(){
+    return this.form.get('dian_address').invalid && this.form.get('dian_address').touched
+  }
+
+  get cell_phone_valid(){
+    return this.form.get('cell_phone').invalid && this.form.get('cell_phone').touched
+  }
+
+  get landline_valid(){
+    return this.form.get('landline').invalid && this.form.get('landline').touched
+  }
+
+  get municipality_valid(){
+    return this.form.get('municipality_id').invalid && this.form.get('municipality_id').touched
   }
 
 }

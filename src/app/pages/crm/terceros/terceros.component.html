@@ -29,6 +29,7 @@
         <table class="table table-borderless table-striped" *ngIf="!loading && thirdParties.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
+                    <th></th>
                     <th>NIT</th>
                     <th>Nombre Terceros</th>
                     <th>Dirección</th>
@@ -41,14 +42,16 @@
             </thead>
             <tbody>
                 <tr *ngFor="let third of thirdParties" [ngClass]="{'bg-danger text-white': (third.state == 'Inactivo')}">
+                    <th>
+                        <img [src]="third.image | image" class="p-0 m-0" alt="Imagen del Tercero">
+                    </th>
                     <td> {{ third.nit }} </td>
                     <td> {{ third.first_name }} {{ third.first_surname }} </td>
                     <td> {{ third.cod_dian_address }} </td>
                     <td> {{ third.municipality.name }} </td>
                     <td> {{ third.landline }} / {{ third.cell_phone }} </td>
                     <td> {{ third.third_party_type }} </td>
-                    <td>{{ third.state }}
-                        <!-- <span [ngClass]="{'badge bg-info text-white': (third.state == 'Activo'), 'badge bg-danger text-white': (third.state == 'Inactivo')}">{{ third.state }}</span> --></td>
+                    <td>{{ third.state }}</td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">

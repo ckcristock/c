@@ -17,6 +17,7 @@ export class TiposRetencionesComponent implements OnInit {
   accountPlan:any[] = [];
   retentionTypes:any[] = [];
   retention:any = {};
+  title:any = '';
   pagination = {
     page: 1,
     pageSize: 5,
@@ -36,6 +37,7 @@ export class TiposRetencionesComponent implements OnInit {
 
   openModal(){
     this.modal.show();
+    this.title = 'Nuevo tipo de retención';
   }
 
   closeModal(){
@@ -99,6 +101,7 @@ export class TiposRetencionesComponent implements OnInit {
 
   getRetention(retention){
     this.retention = {...retention};
+    this.title = 'Editar tipo de retención';
     this.form.patchValue({
       id: this.retention.id,
       name: this.retention.name,

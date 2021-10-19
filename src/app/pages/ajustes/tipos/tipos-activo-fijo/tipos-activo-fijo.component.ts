@@ -17,6 +17,7 @@ export class TiposActivoFijoComponent implements OnInit {
   fixedAssets:any[] = [];
   fixedAsset:any = {};
   accountPlan:any[] = [];
+  title:any = '';
   pagination:any = {
     page: 1,
     pageSize: 6,
@@ -42,6 +43,7 @@ export class TiposActivoFijoComponent implements OnInit {
 
   openModal(){
     this.modal.show();
+    this.title = 'Nuevo tipo de activo fijo';
   }
 
   closeModal(){
@@ -131,6 +133,7 @@ export class TiposActivoFijoComponent implements OnInit {
 
     getFixedAsset(fixedAsset){
       this.fixedAsset = {...fixedAsset};
+      this.title = 'Editar tipo de activo fijo';
       this.form.patchValue({
         id: this.fixedAsset.id,
         name: this.fixedAsset.name,

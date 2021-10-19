@@ -14,6 +14,7 @@ export class LicenciaConduccionComponent implements OnInit {
   form: FormGroup;
   licenses:any[] = [];
   license:any = {};
+  title:any = '';
   pagination = {
     page: 1,
     pageSize: 5,
@@ -32,6 +33,7 @@ export class LicenciaConduccionComponent implements OnInit {
 
   openModal(){
     this.modal.show();
+    this.title = 'Nueva Licencia de conducción';
   }
 
   createForm(){
@@ -44,6 +46,7 @@ export class LicenciaConduccionComponent implements OnInit {
 
   getDrivingLicense(license){
     this.license = {...license};
+    this.title = 'Editar Licencia de conducción';
     this.form.patchValue({
       id :this.license.id,
       type: this.license.type,

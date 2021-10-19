@@ -14,6 +14,7 @@ export class TiposVisaComponent implements OnInit {
   form: FormGroup;
   visas:any[] = [];
   visa:any = {};
+  title:any = '';
   pagination = {
     page: 1,
     pageSize: 6,
@@ -32,6 +33,7 @@ export class TiposVisaComponent implements OnInit {
 
   openModal(){
     this.modal.show();
+    this.title = 'Nuevo tipo de visa';
   }
 
   createForm(){
@@ -54,6 +56,7 @@ export class TiposVisaComponent implements OnInit {
 
   getVisaType(visa){
     this.visa = {...visa};
+    this.title = 'Editar Tipo de Visa';
     this.form.patchValue({
       id: this.visa.id,
       name: this.visa.name,

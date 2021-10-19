@@ -296,11 +296,11 @@ export class MemorandosComponent implements OnInit {
             }
          }) 
       } else {
+        this.formLlamada.patchValue({
+          person_id
+        })
         this.memorandosService.createNewAttentionCall(this.formLlamada.value)
         .subscribe( (res:any) =>{
-          this.formLlamada.patchValue({
-            person_id
-          })
           this.modalLlamada.hide();
           this.getMemorandumList();
           this.formLlamada.reset();

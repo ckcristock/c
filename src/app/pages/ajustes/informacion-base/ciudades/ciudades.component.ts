@@ -53,6 +53,7 @@ export class CiudadesComponent implements OnInit {
   getContries(){
     this._ciudades.getContries().subscribe((r:any) => {
       this.countries = r.data;
+      this.countries.unshift({ text: 'Todos', value: 0 });
     })
   }
 

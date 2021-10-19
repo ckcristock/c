@@ -72,7 +72,7 @@
             <div class="form-row">
                 <div class="form-group col-12">
                     <label for="" class="form-label">Funcionario</label>
-                    <input formControlName="fill_person" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue" [editable]='false' (change)="createPerson()" />
+                    <input formControlName="fill_person" #box class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue" (change)="createPerson(); box.value = '' ">
                 </div>
                 <div class="form-group col-12">
                     <label for="" class="form-label">Valor del Almuerzo</label>
@@ -93,7 +93,7 @@
                                     </td>
                                     <td [formGroupName]="i">
                                         <div class="text-center">
-                                            <button class="btn btn-outline-danger btn-sm">
+                                            <button class="btn btn-outline-danger btn-sm" type="button" (click)="deletePerson(i)">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </div>

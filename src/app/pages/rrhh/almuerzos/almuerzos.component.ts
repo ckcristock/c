@@ -28,6 +28,8 @@ export class AlmuerzosComponent implements OnInit {
   filtro = {
     date: ''
   }
+
+  values:any = '';
   constructor( 
                 private _almuerzo: AlmuerzosService,
                 private fb: FormBuilder,
@@ -86,10 +88,10 @@ export class AlmuerzosComponent implements OnInit {
     let group = this.fb.group({
       name: [''],
       person_id: ['']
-    })
+    });
     let value = this.form.get('fill_person').value;
     let name = value.text;
-    let id = value.value
+    let id = value.value;
     group.patchValue({
       name: name,
       person_id: id
@@ -107,6 +109,8 @@ export class AlmuerzosComponent implements OnInit {
   }
 
   deletePerson(i){
+    console.log(i);
+    
     let person = this.personList;
     person.removeAt(i);
   }

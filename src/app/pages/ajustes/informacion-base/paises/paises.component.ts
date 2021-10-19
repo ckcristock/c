@@ -43,7 +43,7 @@ export class PaisesComponent implements OnInit {
   
   getData( data ) {
     this.pais = {...data};
-    this.selected = 'Actualizar País';
+    this.selected = 'Editar País';
     this.form.patchValue({
       id: this.pais.id,
       name: this.pais.name

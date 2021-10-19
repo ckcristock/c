@@ -15,6 +15,7 @@ export class CiudadesComponent implements OnInit {
   countries:any[] = [];
   cities:any[] = [];
   city:any = {};
+  title:any = '';
   pagination = {
     page: 1,
     pageSize: 5,
@@ -38,6 +39,7 @@ export class CiudadesComponent implements OnInit {
 
   openModal(){
     this.modal.show();
+    this.title = 'Nueva Ciudad';
   }
 
   createForm(){
@@ -56,6 +58,7 @@ export class CiudadesComponent implements OnInit {
 
   getCity(city){
     this.city = {...city};
+    this.title = 'Editar Ciudad';
     this.form.patchValue({
       id: this.city.id,
       name: this.city.name,

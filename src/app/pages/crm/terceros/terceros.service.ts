@@ -57,4 +57,8 @@ export class TercerosService {
     return this.http.put(`${environment.base_url}/activate-inactivate`, data);
   }
 
+  getThirdPartyPerson( params = {} ){
+    return this.http.get(`${environment.base_url}/third-party-person`, {params});
+  }
+
 }

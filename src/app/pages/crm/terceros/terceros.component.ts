@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { TercerosService } from './terceros.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SwalService } from '../services/swal.service';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-terceros',
@@ -21,7 +21,8 @@ export class TercerosComponent implements OnInit {
   }
   filtros:any = {
     nit: '',
-    name: ''
+    name: '',
+    third_party_type: ''
   }
   constructor( 
                 private _tercerosService: TercerosService, private fb: FormBuilder,
@@ -31,7 +32,6 @@ export class TercerosComponent implements OnInit {
 
   ngOnInit(): void {
     this.getThirdParties();
-    this.parametro = this.router.url == '/ajustes/informacion-base/terceros' ? 'contabilidad' : 'crm';
   }
 
   getThirdParties(page = 1){
@@ -59,7 +59,7 @@ export class TercerosComponent implements OnInit {
     }).then((r) =>{
       if (r.isConfirmed) {
         this._tercerosService.changeState(data).subscribe((r:any) =>{
-          this.getThirdParties();
+        this.getThirdParties();
         this._swal.show({
             icon: 'success',
             title: 'Proceso Satisfactio',

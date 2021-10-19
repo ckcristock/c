@@ -42,9 +42,10 @@
                     <th>Func. Creó</th>
                     <th>F. Creación</th>
                     <th>F. Salida</th>
-                    <th># Noches</th>
+                    <th># Días</th>
                     <th>Total COP</th>
                     <th>Total USD</th>
+                    <th>Estado</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
@@ -68,6 +69,7 @@
                     <td>{{ item.n_nights }}</td>
                     <td>{{ item.total_cop | currency }}</td>
                     <td>{{ item.total_usd | currency }}</td>
+                    <td> {{ item.state }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -77,9 +79,8 @@
                                 <div ngbDropdownMenu>
                                     <a [routerLink]="['/nomina/ver-viatico', item.id]" class="dropdown-item waves-light waves-effect caja-botones">
                                         <i class="far fa-eye"></i> Ver</a>
-                                    <a [routerLink]="['/nomina/editar-viatico', item.id]" class="dropdown-item waves-light waves-effect caja-botones">
+                                    <a [routerLink]="['/nomina/editar-viatico', item.id]" class="dropdown-item waves-light text-info waves-effect caja-botones">
                                         <i class="far fa-edit"></i> Editar</a>
-
                                     <a *ngIf="permission.permissions.approve && item.state != 'Aprobado'" (click)="changeState(item, 'Aprobado')" class="dropdown-item waves-light text-success waves-effect caja-botones">
                                         <i class="far fa-thumbs-up"></i> Aprobar</a>
                                     <a *ngIf="!item.state == ''" (click)="changeState(item, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">

@@ -34,52 +34,99 @@
                         <div class="col-md-12 text-center mt-2 mb-4">
                             <h4>Datos Básicos</h4>
                         </div>
-                        <div class="form-goup col-md-1">
+                        <div class="form-goup col-md-2">
                             <label for="">NIT</label>
                             <input type="text" class="form-control form-control-sm" formControlName="nit">
+                            <ng-container *ngIf="nit_valid">
+                                <small *ngFor="let item of form.get('nit').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
                         </div>
-                        <div class="form-group col-md-1" style="margin-top: 29px;">
+                        <div class="form-group col-md-2" style="margin-top: 29px;">
                             <input type="text" readonly class="form-control form-control-sm">
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-4">
                             <label for="">Tipo de Persona</label>
                             <select class="form-control form-control-sm" formControlName="person_type" (change)="personType()">
                                 <option selected>Seleccione</option>
                                 <option value="natural">Natural</option>
                                 <option value="juridico">Jurídico</option>
                             </select>
+                            <ng-container *ngIf="person_type_valid">
+                                <small *ngFor="let item of form.get('person_type').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-4">
+                            <label for="">Tipo de Tercero</label>
+                            <select class="form-control form-control-sm" formControlName="third_party_type" (change)="personType()">
+                                <option selected>Seleccione</option>
+                                <option value="Cliente">Cliente</option>
+                                <option value="Proveedor">Proveedor</option>
+                            </select>
+                            <ng-container *ngIf="third_party_type_valid">
+                                <small *ngFor="let item of form.get('third_party_type').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
+                        </div>
+                        <div class="form-group col-md-3">
                             <label for="">Primer Nombre</label>
                             <input type="text" class="form-control form-control-sm" formControlName="first_name">
+                            <ng-container *ngIf="first_name_valid">
+                                <small *ngFor="let item of form.get('first_name').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-3">
                             <label for="">Segundo Nombre</label>
                             <input type="text" class="form-control form-control-sm" formControlName="second_name">
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-3">
                             <label for="">Primer Apellido</label>
                             <input type="text" class="form-control form-control-sm" formControlName="first_surname">
+                            <ng-container *ngIf="first_surname_valid">
+                                <small *ngFor="let item of form.get('first_surname').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-3">
                             <label for="">Segundo Apellido</label>
                             <input type="text" class="form-control form-control-sm" formControlName="second_surname">
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-4">
+                            <label for="">Foto</label>
+                            <input type="file" class="form-control form-control-sm" accept="image/*" (change)="onFileChanged($event)">
+                        </div>
+                        <div class="form-group col-md-4">
                             <label for="">Razón Social</label>
                             <input type="text" class="form-control form-control-sm" formControlName="social_reason">
+                            <ng-container *ngIf="social_reason_valid">
+                                <small *ngFor="let item of form.get('social_reason').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-4">
                             <label for="">Nombre Comercial</label>
                             <input type="text" class="form-control form-control-sm" formControlName="tradename">
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-3">
                             <label for="">Dirección</label>
                             <select class="form-control form-control-sm" formControlName="dian_address">
                                 <option *ngFor="let addre of address" [value]="addre.code">
                                     {{ addre.description }}
                                 </option>
                             </select>
+                            <ng-container *ngIf="dian_address_valid">
+                                <small *ngFor="let item of form.get('dian_address').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
                         </div>
                         <div class="form-group col-md-1" style="margin-top: 29px;">
                             <input type="text" class="form-control form-control-sm" formControlName="address_one">
@@ -88,7 +135,7 @@
                             <label for="">#</label>
                             <input type="text" class="form-control form-control-sm" formControlName="address_two">
                         </div>
-                        <div class="form-group col-md-1" style="margin-top: 29px;">
+                        <div class="form-group col-md-2" style="margin-top: 29px;">
                             <select class="form-control form-control-sm" readonly formControlName="address_three">
                                 <option *ngFor="let item of address" [value]="item.description">
                                     {{ item.description }}
@@ -98,17 +145,32 @@
                         <div class="form-group col-md-1" style="margin-top: 29px;">
                             <input type="text" class="form-control form-control-sm" formControlName="address_four">
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-4">
                             <label for="">Dirección Cod. Dian</label>
                             <input type="text" class="form-control form-control-sm" readonly formControlName="cod_dian_address">
+                            <ng-container *ngIf="cod_dian_address_valid">
+                                <small *ngFor="let item of form.get('cod_dian_address').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="">Tel. Fijo</label>
                             <input type="number" class="form-control form-control-sm" formControlName="landline">
+                            <ng-container *ngIf="landline_valid">
+                                <small *ngFor="let item of form.get('landline').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="">Tel. Celular</label>
                             <input type="text" class="form-control form-control-sm" formControlName="cell_phone">
+                            <ng-container *ngIf="cell_phone_valid">
+                                <small *ngFor="let item of form.get('cell_phone').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="">Email</label>
@@ -140,149 +202,152 @@
                                     {{ municipality.text }}
                                 </option>
                             </select>
+                            <ng-container *ngIf="municipality_valid">
+                                <small *ngFor="let item of form.get('municipality_id').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                            </ng-container>
                         </div>
                     </div>
-                    <ng-container *ngIf="parametro == 'contabilidad'">
-                        <hr class="bg-primary">
-                        <div class="row">
-                            <div class="col-12 text-primary text-center mt-2 mb-4">
-                                <h4>Datos Comerciales</h4>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Lista Ganancia</label>
-                                <select class="form-control form-control-sm" formControlName="winning_list_id">
+                    <hr class="bg-primary">
+                    <div class="row">
+                        <div class="col-12 text-primary text-center mt-2 mb-4">
+                            <h4>Datos Financieros</h4>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Lista Ganancia</label>
+                            <select class="form-control form-control-sm" formControlName="winning_list_id">
                                     <option *ngFor="let item of winnigLists" [value]="item.id">
                                         {{ item.name }} - {{ item.percentage }}%
                                     </option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">¿Aplica IVA?</label>
-                                <select class="form-control form-control-sm" formControlName="apply_iva">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">¿Aplica IVA?</label>
+                            <select class="form-control form-control-sm" formControlName="apply_iva">
                                     <option value="Si">Si</option>
                                     <option value="No">No</option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Contacto Pagos</label>
-                                <input type="text" class="form-control form-control-sm" formControlName="contact_payments">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Telefono Pagos</label>
-                                <input type="text" class="form-control form-control-sm" formControlName="phone_payments">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Email Pagos</label>
-                                <input type="text" class="form-control form-control-sm" formControlName="email_payments">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Tipo Regimen</label>
-                                <select class="form-control form-control-sm" formControlName="regime">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Contacto Pagos</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="contact_payments">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Telefono Pagos</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="phone_payments">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Email Pagos</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="email_payments">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Tipo Regimen</label>
+                            <select class="form-control form-control-sm" formControlName="regime">
                                     <option value="comun">Común</option>
                                     <option value="simplificado">Simplificado</option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Animo Lucro</label>
-                                <select class="form-control form-control-sm" formControlName="encourage_profit">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Animo Lucro</label>
+                            <select class="form-control form-control-sm" formControlName="encourage_profit">
                                     <option value="Si">Si</option>
                                     <option value="No">No</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="">Actividad Economica</label>
-                                <select class="form-control form-control-sm" formControlName="ciiu_code_id">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">Actividad Economica</label>
+                            <select class="form-control form-control-sm" formControlName="ciiu_code_id">
                                     <option *ngFor="let item of ciiuCodes" [value]="item.id">
                                        {{ item.code }} - {{ item.description }}
                                     </option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Agente de Retención</label>
-                                <select class="form-control form-control-sm" formControlName="withholding_agent">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Agente de Retención</label>
+                            <select class="form-control form-control-sm" formControlName="withholding_agent">
                                     <option value="Si">Si</option>
                                     <option value="No">No</option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">¿Retención en Factura?</label>
-                                <select class="form-control form-control-sm" formControlName="withholding_oninvoice">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">¿Retención en Factura?</label>
+                            <select class="form-control form-control-sm" formControlName="withholding_oninvoice">
                                     <option value="Si">Si</option>
                                     <option value="Si">No</option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Tipo Reteica</label>
-                                <select class="form-control form-control-sm" formControlName="reteica_type">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Tipo Reteica</label>
+                            <select class="form-control form-control-sm" formControlName="reteica_type">
                                     <option value="No">No</option>
                                     <option value="Supera Base">Supera Base</option>
                                     <option value="Permanente">Permanente</option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Cuenta Reteica</label>
-                                <input type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatListValue" [resultFormatter]="resultFormatListValue" (change)="searchAccount('Reteica')" formControlName="reteica_account_id">
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label for="">%</label>
-                                <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="reteica" [(ngModel)]="retePercentage.reteica" readonly>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Cuenta Retefuente</label>
-                                <input type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatListValue" [resultFormatter]="resultFormatListValue" (change)="searchAccount('Retefuente')" formControlName="retefuente_account_id">
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label for="">%</label>
-                                <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="retefuente" [(ngModel)]="retePercentage.retefuente" readonly>
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label for="">G. Contrib.</label>
-                                <select class="form-control form-control-sm" formControlName="g_contribut">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Cuenta Reteica</label>
+                            <input type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatListValue" [resultFormatter]="resultFormatListValue" (change)="searchAccount('Reteica')" formControlName="reteica_account_id">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="">%</label>
+                            <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="reteica" [(ngModel)]="retePercentage.reteica" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Cuenta Retefuente</label>
+                            <input type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatListValue" [resultFormatter]="resultFormatListValue" (change)="searchAccount('Retefuente')" formControlName="retefuente_account_id">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="">%</label>
+                            <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="retefuente" [(ngModel)]="retePercentage.retefuente" readonly>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="">G. Contrib.</label>
+                            <select class="form-control form-control-sm" formControlName="g_contribut">
                                     <option value="Si">Si</option>
                                     <option value="No">No</option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Cuenta Reteiva</label>
-                                <input type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatListValue" [resultFormatter]="resultFormatListValue" (change)="searchAccount('Reteiva')" formControlName="reteiva_account_id">
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label for="">%</label>
-                                <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="reteiva" [(ngModel)]="retePercentage.reteiva" readonly>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Condición de Pago</label>
-                                <select class="form-control form-control-sm" formControlName="condition_payment">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Cuenta Reteiva</label>
+                            <input type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatListValue" [resultFormatter]="resultFormatListValue" (change)="searchAccount('Reteiva')" formControlName="reteiva_account_id">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="">%</label>
+                            <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="reteiva" [(ngModel)]="retePercentage.reteiva" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Condición de Pago</label>
+                            <select class="form-control form-control-sm" formControlName="condition_payment">
                                     <option *ngFor="let item of pagos" [value]="item.valor">  
                                         {{ item.clave }}
                                     </option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Cupo Asignado</label>
-                                <input type="text" class="form-control form-control-sm" formControlName="assigned_space">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Descuento Pronto Pago</label>
-                                <input type="text" class="form-control form-control-sm" formControlName="discount_prompt_payment">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Descuento en días</label>
-                                <input type="text" class="form-control form-control-sm" formControlName="discount_days">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="">Estado</label>
-                                <select class="form-control form-control-sm" formControlName="state">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Cupo Asignado</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="assigned_space">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Descuento Pronto Pago</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="discount_prompt_payment">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="">Descuento en días</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="discount_days">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="">Estado</label>
+                            <select class="form-control form-control-sm" formControlName="state">
                                     <option value="Activo">Activo</option>
                                     <option value="Inactivo">Inactivo</option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-3 mb-3">
-                                <label for="formFile" class="form-label">RUT</label>
-                                <input class="form-control form-control-sm" type="file" id="formFile" formControlName="rut">
-                            </div>
                         </div>
-                    </ng-container>
+                        <div class="form-group col-md-3 mb-3">
+                            <label for="formFile" class="form-label">RUT</label>
+                            <input class="form-control form-control-sm" type="file" id="formFile" (change)="rutChange($event)">
+                        </div>
+                    </div>
                     <hr class="bg-primary">
                     <div class="row">
                         <div class="col-12 text-primary text-center mt-2 mb-4">
@@ -295,10 +360,10 @@
                                 <label for="">Nombre</label>
                                 <input type="text" class="form-control form-control-sm" formControlName="name">
                             </div>
-                            <div class="form-group col-md-3" [formGroupName]="i">
+                            <!-- <div class="form-group col-md-3" [formGroupName]="i">
                                 <label for=""># Documento</label>
                                 <input type="text" class="form-control form-control-sm" formControlName="n_document">
-                            </div>
+                            </div> -->
                             <div class="form-group col-md-2" [formGroupName]="i">
                                 <label for="">Tel. Fijo</label>
                                 <input type="number" class="form-control form-control-sm" formControlName="landline">
@@ -311,18 +376,21 @@
                                 <label for="">Email</label>
                                 <input type="text" class="form-control form-control-sm" formControlName="email">
                             </div>
-                            <div class="form-group col-md-5" [formGroupName]="i">
+                            <div class="form-group col-md-3" [formGroupName]="i">
                                 <label for="">Cargo</label>
                                 <input type="text" class="form-control form-control-sm" formControlName="position">
                             </div>
-                            <div class="form-group col-md-6" [formGroupName]="i">
+                            <div class="form-group col-md-11" [formGroupName]="i">
                                 <label for="">Observación</label>
-                                <input type="text" class="form-control form-control-sm" cols="5" rows="5" formControlName="observation" />
+                                <textarea class="form-control form-control-sm" cols="5" rows="3" formControlName="observation"></textarea>
                             </div>
                             <div class="form-group col-md-1 text-right" [formGroupName]="i" style="margin-top: 29px;">
                                 <button class="btn btn-sm btn-outline-danger" placement="top" ngbTooltip="Borrar Persona" style="width: 100%;" (click)="deletePerson(i)">
                                         <i class="fas fa-trash-alt"></i>
                                 </button>
+                            </div>
+                            <div class="col-12">
+                                <hr class="bg-success">
                             </div>
                         </div>
                     </ng-container>

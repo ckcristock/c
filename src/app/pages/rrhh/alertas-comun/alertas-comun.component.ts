@@ -9,12 +9,6 @@ export class AlertasComunComponent implements OnInit {
   @ViewChild('modal') modal:any;
   datas:any = [
     {
-      name: 'Néstor Eduardo Lima Rojas',
-      detail: 'Se ha eliminado el acta de entrega de la dispensacion: por el siguiente motivo: ERROR ACTA por favor vuelva adjuntar el acta!',
-      date: '12/05/20',
-      type: 'Dispensación'
-    },
-    {
       name: 'Julio Andres Perez Medina',
       detail: 'Se ha eliminado el acta de entrega de la dispensacion: por el siguiente motivo: DIS785880 - cambio por favor vuelva adjuntar el acta!',
       date: '05/06/12',

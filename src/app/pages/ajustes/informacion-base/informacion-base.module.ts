@@ -43,8 +43,6 @@ import { FondoPensionComponent } from './fondo-pension/fondo-pension.component';
 import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
-import { TercerosComponent } from './terceros/terceros.component';
-import { CrearTercerosComponent } from './terceros/crear-terceros/crear-terceros.component';
 import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { TaxisComponent } from './taxis/taxis.component';
 import { HotelesComponent } from './hoteles/hoteles.component';
@@ -83,8 +81,6 @@ import { LicenciaConduccionComponent } from './licencia-conduccion/licencia-cond
     ArlComponent,
     CajaCompensacionComponent,
     FondoCesantiasComponent,
-    TercerosComponent,
-    CrearTercerosComponent,
     TaxisComponent,
     HotelesComponent,
     CiudadesComponent,

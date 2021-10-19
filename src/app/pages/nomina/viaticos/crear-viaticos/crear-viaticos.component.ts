@@ -35,6 +35,7 @@ export class CrearViaticosComponent implements OnInit {
   people: any[] = [];
   person_selected: any;
   form: FormGroup;
+  value:any;
   constructor(
     private roter: Router,
     private _swal: SwalService,
@@ -81,6 +82,7 @@ export class CrearViaticosComponent implements OnInit {
     this.form = help.functions.createForm(this.fb);
     help.functions.listerTotal(this.form);
   }
+
   validateData() {
     if (this.data) {
       help.functions.fillInForm(this.form, this.data, this.fb);

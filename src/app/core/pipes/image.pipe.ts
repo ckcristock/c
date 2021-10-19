@@ -10,7 +10,8 @@ export class ImagePipe implements PipeTransform {
 
   transform(img: string, tipo: 'users' | 'persons' | 'companies'): string {
 
-  
+    
+    
     if (!img) {
       return `assets/images/users/no-image.png`;
     } else if (img.includes('https') || img.includes('http')) {
@@ -19,7 +20,7 @@ export class ImagePipe implements PipeTransform {
       return `${base_url}/image?path=${img}`;
     } else {
       return `assets/images/users/no-image.png`;
-      return `${base_url}/upload/usuarios/no-image`;
+      /* return `${base_url}/upload/usuarios/no-image`; */
     }
 
   }

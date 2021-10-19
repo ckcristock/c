@@ -35,6 +35,7 @@ const routes: Routes = [
   { path: 'turnos/horas-extras', component: HorasExtrasComponent },
   { path: 'turnos/reporte', component: ReporteHorarioComponent },
   { path: 'alertas-comun', component: AlertasComunComponent },
+  { path: 'alertas-comun/:pid', component: AlertasComunComponent },
   { path: 'preliquidados', component: PreliquidadosComponent },
   { path: 'liquidado/:id', component: LiquidadosComponent },
   { path: 'contratos', component: ContratosComponent },

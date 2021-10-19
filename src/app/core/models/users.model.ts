@@ -20,7 +20,7 @@ export class User {
     get imagenUrl() {
         if (!this.person.image) {
             return `assets/images/users/no-image.png`;
-        } else if (this.person.image.includes('https')) {
+        } else if (this.person.image.includes('https')  || this.person.image.includes('http') ) {
             return this.person.image;
         } else if (this.person.image) {
             return `${base_url}/upload/usuarios/${this.person.image}`;

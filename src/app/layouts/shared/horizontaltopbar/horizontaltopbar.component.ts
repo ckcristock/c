@@ -7,6 +7,7 @@ import { Router, NavigationEnd, ActivatedRoute, NavigationStart } from '@angular
 import { environment } from '../../../../environments/environment';
 import { UserService } from '../../../core/services/user.service';
 import { User } from 'src/app/core/models/users.model';
+import { interval, timer, Subscription } from 'rxjs';
 
 
 @Component({
@@ -15,9 +16,9 @@ import { User } from 'src/app/core/models/users.model';
   styleUrls: ['./horizontaltopbar.component.scss']
 })
 export class HorizontaltopbarComponent implements OnInit {
-
+  alerts$:Subscription;
   configData: any;
-
+  alerts:any[] = []
   element: any;
   cookieValue;
   flagvalue;
@@ -40,6 +41,7 @@ export class HorizontaltopbarComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.initSearch();
     this.element = document.documentElement;
     this.user = this._user.user;
     this.configData = {
@@ -129,4 +131,18 @@ export class HorizontaltopbarComponent implements OnInit {
     this._user.logout();
   }
 
+  initSearch(){
+    const source = interval(5000);//output: 0,1,2,3,4,5....
+    this.alerts$ = source.subscribe(val => {
+        this._user.getAlerts().subscribe( (r:any)=>{
+          this.alerts = r.data
+        })
+    });
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.alerts$.unsubscribe();
+  }
 }

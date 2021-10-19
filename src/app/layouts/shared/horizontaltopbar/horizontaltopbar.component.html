@@ -73,38 +73,45 @@
                 <h6 class="m-0">Notificaciones</h6>
               </div>
               <div class="col-auto">
-                <a href="javascript: void(0);" class="small">Ver todas</a>
+                <a 
+              [routerLink]="['/rrhh/alertas-comun',user.id]" 
+              class="small">Ver todas</a>
               </div>
             </div>
           </div>
           <perfect-scrollbar
-            style="position: relative; height: 230px"
+            style="position: relative; height: 330px"
             [config]="configData"
           >
-            <a href="" class="text-reset notification-item">
-              <div class="media">
-                <img
-                  src="assets/images/users/avatar-4.jpg"
-                  class="mr-3 rounded-circle avatar-xs"
-                  alt="user-pic"
-                />
-                <div class="media-body">
-                  <h6 class="mt-0 mb-1">{{ "notification.tile" }}</h6>
-                  <div class="font-size-12 text-muted">
-                    <p class="mb-1">{{ "notification.detail" }}</p>
-                    <p class="mb-0">
-                      <i class="mdi mdi-clock-outline"></i
-                      >{{ "notificaction.time" }}
-                    </p>
+          <ng-container *ngIf=" alerts.length ; else notData">
+              <a *ngFor="let notification of alerts" 
+              (click)="modalAlert.show(notification)"
+              class="text-reset notification-item">
+                <div class="media">
+                  <img
+                    [src]="notification.image"
+                    class="mr-3 rounded-circle avatar-xs"
+                    alt="user-pic"
+                  />
+                  <div class="media-body">
+                    <h6 class="mt-0 mb-1">{{ notification.title }}</h6>
+                    <div class="font-size-12 text-muted">
+                      <p class="mb-1">{{ notification.description |minWords }}</p>
+                      <p class="mb-0">
+                        <i class="mdi mdi-clock-outline"></i
+                        >{{ notification.created_at | date }}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </a>
+              </a>
+          </ng-container>
           </perfect-scrollbar>
           <div class="p-2 border-top">
             <a
               class="btn btn-sm btn-link font-size-14 btn-block text-center"
               href="javascript:void(0)"
+              [routerLink]="['/rrhh/alertas-comun',user.id]" 
             >
               <i class="mdi mdi-arrow-right-circle mr-1"></i> Ver Más
             </a>
@@ -155,3 +162,11 @@
     </div>
   </div>
 </header>
+
+<ng-template #notData>
+  <app-not-data [loading]="false" [text]="'Sin notificaciones'"></app-not-data>
+</ng-template>
+
+<app-modal-alert #modalAlert>
+
+</app-modal-alert>

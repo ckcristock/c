@@ -23,8 +23,6 @@ export class ContratosService {
         d.date_trial = this.getPeriod(d); 
         return d
       })
-      console.log(r.data.data);
-      
       return r
     }));
   }

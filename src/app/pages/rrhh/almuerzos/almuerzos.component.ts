@@ -109,8 +109,6 @@ export class AlmuerzosComponent implements OnInit {
   }
 
   deletePerson(i){
-    console.log(i);
-    
     let person = this.personList;
     person.removeAt(i);
   }
@@ -147,8 +145,9 @@ export class AlmuerzosComponent implements OnInit {
       this._swal.show({
         icon: 'success',
         title: 'Operación exitosa',
-        timer: 2000,
-        text: 'Almuerzo creado con éxito'
+        timer: 2500,
+        text: 'Almuerzo creado con éxito',
+        showCancel: false
       });
     });
   }

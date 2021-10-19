@@ -16,6 +16,7 @@ export class TaxisComponent implements OnInit {
   cities:any[] = [];
   taxis:any[] = [];
   taxi:any = {};
+  title:any = '';
   pagination = {
     page: 1,
     pageSize: 5,
@@ -39,6 +40,7 @@ export class TaxisComponent implements OnInit {
 
   openModal(){
     this.modal.show();
+    this.title = 'Nuevo taxi';
   }
 
   createForm(){
@@ -73,6 +75,7 @@ export class TaxisComponent implements OnInit {
 
   getTaxi(taxi){
     this.taxi = {...taxi};
+    this.title = 'Editar taxi';
     this.form.patchValue({
       id: this.taxi.id,
       route: this.taxi.route,

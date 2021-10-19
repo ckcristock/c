@@ -15,6 +15,7 @@ export class HotelesComponent implements OnInit {
   cities:any[] = [];
   hotels:any[] = [];
   hotel:any = {};
+  title:any = '';
   pagination = {
     page: 1,
     pageSize: 5,
@@ -37,6 +38,7 @@ export class HotelesComponent implements OnInit {
   
   openModal(){
     this.modal.show();
+    this.title = 'Nuevo hotel';
   }
 
   createForm(){
@@ -76,6 +78,7 @@ export class HotelesComponent implements OnInit {
 
   getHotel(hotel){
     this.hotel = {...hotel};
+    this.title = 'Editar Hotel';
     this.form.patchValue({
       id: this.hotel.id,
       type: this.hotel.type,

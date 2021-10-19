@@ -61,9 +61,9 @@
 <app-modal-basic #modal [dialogClass]="'modal-md'">
     <div class="app-modal-header">
         <h5 class="modal-title"> Nuevo Almuerzo </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
+        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
           <span aria-hidden="true">
-            <i class="fas fa-times" (click)="modal.hide()"></i>
+            <i class="fas fa-times" (click)="modal.hide(); form.reset()"></i>
           </span>
         </button>
     </div>
@@ -108,7 +108,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
             <button type="submit" class="btn btn-primary btn-sm raised" (click)="createLunch()" [disabled]="!form.valid">Guardar</button>
         </div>
     </div>

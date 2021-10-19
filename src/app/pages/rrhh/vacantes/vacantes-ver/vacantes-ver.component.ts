@@ -11,7 +11,8 @@ export class VacantesVerComponent implements OnInit {
   id = ''
   loading = false
   postulados:any = []
-  public job: any = [];
+  applicants:any[] = []
+  public job: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,12 +22,19 @@ export class VacantesVerComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getApplicants();
     this.getJob()
   }
 
   getJob() {
     this._job.getJob(this.id).subscribe((r: any) => {
       this.job = r.data
+    })
+  }
+
+  getApplicants(){
+    this._job.getApplicants( {job_id:this.id} ).subscribe((r:any)=>{
+      this.applicants = r.data
     })
   }
 }

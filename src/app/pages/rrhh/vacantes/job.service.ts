@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -41,5 +41,14 @@ export class JobService {
 
     getSalaryTypes(){
         return this.http.get(`${environment.base_url}/salaryTypes`);
+    }
+    
+    getApplicants(params = {}){
+        return this.http.get(`${environment.base_url}/applicants`,{params});
+    }
+    
+    download(id){
+        const headers = new HttpHeaders().set('Content-Type', 'application/json')
+        return this.http.get(`${environment.base_url}/download-applicants/${id}`, {headers, responseType: 'blob' as 'json' });
     }
 }

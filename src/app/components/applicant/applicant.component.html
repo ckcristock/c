@@ -1,0 +1,60 @@
+<app-modal-basic #applicantM [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <div class="row">
+            <h4 class=" text text-center justify-content-center modal-title   p-1">Detalle del postulante
+            </h4>
+
+        </div>
+    </div>
+    <div class="app-modal-body">
+        <div class="row mb-2">
+            <div class="col-4">
+                <Strong>Nombre:</Strong> {{data.name}} {{data.sur_name}}
+            </div>
+            <div class="col-4">
+                <Strong>Email:</Strong> {{data.email}}
+            </div>
+            <div class="col-4">
+                <Strong>Teléfono:</Strong> {{data.email}}
+            </div>
+        </div>
+       
+        <div class="row mb-2">
+            <div class="col-4">
+                <Strong>Educación:</Strong> {{data.education}}
+            </div>
+            <div class="col-4">
+                <Strong>Experiencia:</Strong> {{data.experience_year}}
+            </div>
+            <div class="col-4">
+                <Strong>Vehículo:</Strong> {{data.conveyance}} 
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-4">
+                <Strong>Visa:</Strong> {{data.visa == 1 ? 'Si' :'No'}}
+            </div>
+            <div class="col-4" >
+                <Strong>Tipo Visa:</Strong> {{data.visa_type?.name}}
+            </div>
+            <div class="col-4">
+                <Strong>Licencia:</Strong> {{data.driving_license?.type}}
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-4">
+                <Strong class="text-primary" 
+                (click)="download(data.id)">
+                    <i class="fas fa-file-pdf"></i>
+                    Currimulum</Strong> 
+
+            </div>
+           
+        </div>
+    </div>
+    <div class="app-modal-footer ">
+        <div class="text-right ">
+            <button type="button " class="btn btn-danger btn-sm mr-2"  (click)="applicantM.hide() ">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>

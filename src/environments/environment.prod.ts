@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  base_url: 'https://backend.lab.sigmaqmo.com/api',
+  base_url: 'https://backend.sigmaqmo.com/api',
   defaultauth: 'fackbackend',
   firebaseConfig: {
     apiKey: '',

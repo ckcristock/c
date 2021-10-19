@@ -232,10 +232,10 @@ export class VacantesCrearComponent implements OnInit {
             contractType_id: ['', Validators.required],
             documentType_id: ['', Validators.required],
             passport: ['', Validators.required],            
-            visa: ['', Validators.required],
+            visa: [''],
             visaType_id: [''],      
             salaryType_id: [1],
-            drivingLicenseJob: [''],
+            drivingLicenseJob: [[]],
         })  
     }
 

@@ -9,6 +9,7 @@ import { ConfiguracionEmpresaComponent } from './configuracion-empresa/configura
 import { DatosPilaComponent } from '../configuracion/configuracion-empresa/datos-pila/datos-pila.component';
 import { ConfiguracionRoutingModule } from './configuracion-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { CamposTercerosComponent } from './campos-terceros/campos-terceros.component';
 
 
 
@@ -18,7 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
     DatosNominaComponent,
     DatosPagoComponent,
     DatosPilaComponent,
-    DatosBasicosEmpresaComponent
+    DatosBasicosEmpresaComponent,
+    CamposTercerosComponent
   ],
   imports: [
     CommonModule,

@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from '@angular/router';
-import { ConfiguracionEmpresaComponent } from './configuracion-empresa.component';
+import { ConfiguracionEmpresaComponent } from './configuracion-empresa/configuracion-empresa.component';
 
 
 const routes : Routes = [

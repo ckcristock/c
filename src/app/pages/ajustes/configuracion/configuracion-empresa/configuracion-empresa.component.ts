@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { ConfiguracionEmpresaService } from './configuracion-empresa/configuracion-empresa.service';
+import { ConfiguracionEmpresaService } from './configuracion-empresa.service';
 
 @Component({
   selector: 'app-configuracion-empresa',

@@ -13,7 +13,7 @@ import { FondoPensionComponent } from './fondo-pension/fondo-pension.component';
 import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
-import { ConfiguracionEmpresaComponent } from '../configuracion/configuracion-empresa.component';
+import { ConfiguracionEmpresaComponent } from '../configuracion/configuracion-empresa/configuracion-empresa.component';
 import { TaxisComponent } from './taxis/taxis.component';
 import { HotelesComponent } from './hoteles/hoteles.component';
 import { CiudadesComponent } from './ciudades/ciudades.component';

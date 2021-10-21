@@ -1,0 +1,79 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button type="button" class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                <i class="fa fa-plus"></i> Agregar
+            </button>
+            <h5 class="text-primary">Campos Terceros</h5>
+            <hr class="bg-primary">
+        </div>
+        <table class="table table-borderless table-striped mt-5" *ngIf="!loading && fields.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Requerido</th>
+                    <th>Longitud</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let field of fields">
+                    <td> {{ field.label | titlecase }} </td>
+                    <td> {{ field.type | titlecase }} </td>
+                    <td> {{ field.required }} </td>
+                    <td> {{ field.length }} </td>
+                    <td> {{ field.state }} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Nuevo Campo </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
+            <span aria-hidden="true">
+              <i class="fas fa-times" (click)="modal.hide(); form.reset()"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="">Nombre</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="name">
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="">Tipo</label>
+                    <select class="form-control form-control-sm" formControlName="type">
+                        <option *ngFor="let tipo of tipos" [value]="tipo.valor">
+                            {{ tipo.clave }}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="">Requerido</label>
+                    <select class="form-control form-control-sm" formControlName="required">
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="">Longitud</label>
+                    <input type="number" class="form-control form-control-sm" formControlName="length">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="save()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

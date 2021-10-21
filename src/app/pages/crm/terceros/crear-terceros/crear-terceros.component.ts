@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
 import { TercerosService } from '../terceros.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, OperatorFunction } from 'rxjs';
@@ -28,6 +28,8 @@ export class CrearTercerosComponent implements OnInit {
   show:boolean;
   address:any[] = [];
   accountPlan:any[] = [];
+  fields:any[] = [];
+  newField:any = '';
   selected:any;
   parametro:any;
   retePercentage:any = {
@@ -46,7 +48,9 @@ export class CrearTercerosComponent implements OnInit {
   fileString: any = '';
   rutString:any = '';
   rutFile:any = '';
-  type:any = '';
+  typeRut:any = '';
+  typeImage:any = '';
+  field:any;
   constructor( 
                private location: Location,
                private fb: FormBuilder,
@@ -69,6 +73,7 @@ export class CrearTercerosComponent implements OnInit {
     this.getDianAddress();
     this.getAccountPlan();
     this.getTitle();
+    this.getFields();
   }
 
   regresar(){
@@ -124,7 +129,8 @@ export class CrearTercerosComponent implements OnInit {
       discount_days: [''],
       state: [''],
       rut: [''],
-      type: [''],
+      typeRut: [''],
+      typeImage: [''],
       /* Termina Datos Comerciales */
       person: this.fb.array([])
     });
@@ -197,6 +203,21 @@ export class CrearTercerosComponent implements OnInit {
       this.form.get('second_surname').disable();
       this.form.get('social_reason').enable();
     }
+  }
+
+  getFields(){
+    this._terceros.getFields().subscribe((r:any) => {
+      this.fields = r.data;
+      this.fields.forEach((field:any) => {
+        let field_name = field.name
+        this.field = field_name;
+        this.form.addControl(field_name, this.fb.control(''));
+        /* console.log(this.third.field_name);
+        this.form.patchValue({
+          nueva_fecha: this.third.nueva_fecha
+        }) */
+      });
+    })
   }
 
   getTitle(){
@@ -362,8 +383,10 @@ export class CrearTercerosComponent implements OnInit {
         discount_days: this.third.discount_days,
         state: this.third.state,
         third_party_type: this.third.third_party_type,
-        image: this.third.image
+        image: this.third.image,
+        rut: this.third.rut,
       });
+
       this.third.third_party_person.forEach(third => {
         this.personList.push(this.fb.group({
           id: third.id,
@@ -386,6 +409,8 @@ export class CrearTercerosComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event) => {
         this.fileString = (<FileReader>event.target).result;
+        const type = {ext:this.fileString};
+        this.typeImage = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.file = base64;
@@ -400,8 +425,8 @@ export class CrearTercerosComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event) => {
         this.rutString = (<FileReader>event.target).result;
-        const type = {ext:this.fileString};
-        this.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+        const type = {ext:this.rutString};
+        this.typeRut = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.rutFile = base64;
@@ -412,11 +437,13 @@ export class CrearTercerosComponent implements OnInit {
   saveInformation(){
     let image = this.fileString;
     let rut = this.rutString;
-    let type = this.type;
+    let typeRut = this.typeRut;
+    let typeImage = this.typeImage;
     this.form.patchValue({
       image,
       rut,
-      type
+      typeRut,
+      typeImage
     })
     this.form.markAllAsTouched()
     if (this.form.invalid) {

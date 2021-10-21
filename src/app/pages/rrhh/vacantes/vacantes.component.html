@@ -16,6 +16,7 @@
                 <table class="table" *ngIf="!loading && jobs.length > 0; else notData">
                     <thead>
                         <tr>
+                            <th>Código</th>
                             <th>Publicación</th>
                             <th>Inicio</th>
                             <th>Fin</th>
@@ -28,38 +29,30 @@
                             <th>Acciones</th>
                         </tr>
                         <tr>
+                            <th></th>
                             <th class="tabla-filtro" style="max-width: 100px; width: 100px !important;">
-                                <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions"
-                                    [(ngModel)]="filtro_Fecha" (dateRangeChanged)="dateRangeChanged($event)"
-                                    placeholder="Filtro Fecha Publicación"></my-date-range-picker>
+                                <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_Fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fecha Publicación"></my-date-range-picker>
                             </th>
                             <th class="tabla-filtro" style="max-width: 110px; width: 90px !important;">
-                                <input type="date" [(ngModel)]="filtro_Fecha_Inicio" (blur)="filtros()"
-                                    class="form-control input-sm" placeholder="Filtro Fecha Inicio">
+                                <input type="date" [(ngModel)]="filtro_Fecha_Inicio" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Fecha Inicio">
                             </th>
                             <th class="tabla-filtro" style="max-width: 110px; width: 80px !important;">
-                                <input type="date" [(ngModel)]="filtro_Fecha_Fin" (blur)="filtros()"
-                                    class="form-control input-sm" placeholder="Filtro Fecha Fin">
+                                <input type="date" [(ngModel)]="filtro_Fecha_Fin" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Fecha Fin">
                             </th>
                             <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                <input type="text" [(ngModel)]="filtro_titulo" (blur)="filtros()"
-                                    class="form-control input-sm" placeholder="Filtro Título">
+                                <input type="text" [(ngModel)]="filtro_titulo" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Título">
                             </th>
                             <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                <input type="text" [(ngModel)]="filtro_dependencia" (blur)="filtros()"
-                                    class="form-control input-sm" placeholder="Filtro Dependencia">
+                                <input type="text" [(ngModel)]="filtro_dependencia" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Dependencia">
                             </th>
                             <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                <input type="text" [(ngModel)]="filtro_Cargo" (blur)="filtros()"
-                                    class="form-control input-sm" placeholder="Filtro Cargo">
+                                <input type="text" [(ngModel)]="filtro_Cargo" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Cargo">
                             </th>
                             <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                <input type="text" [(ngModel)]="filtro_departamento" (blur)="filtros()"
-                                    class="form-control input-sm" placeholder="Filtro Departamento">
+                                <input type="text" [(ngModel)]="filtro_departamento" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Departamento">
                             </th>
                             <th class="tabla-filtro" style="max-width: 130px; width: 130px !important;">
-                                <input type="text" [(ngModel)]="filtro_municipio" (blur)="filtros()"
-                                    class="form-control input-sm" placeholder="Filtro Municipio">
+                                <input type="text" [(ngModel)]="filtro_municipio" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Municipio">
                             </th>
                             <th class="tabla-filtro" style="max-width: 70px; width: 70px !important;">
                                 <select [(ngModel)]="filtro_estado" (change)="filtros()" class="form-control input-sm">
@@ -72,16 +65,16 @@
                         </tr>
                     </thead>
                     <tbody>
-
                         <tr *ngFor="let job of jobs " class="{{job.state=='Cancelada' ? 'bg-danger text-white' : ''}}">
+                            <td> {{ 'vac' + job.id }} </td>
                             <td style="max-width: 80px; width: 80px !important;">
-                                {{job.created_at | date: 'dd/M/yyyy'}} 
+                                {{job.created_at | date: 'dd/M/yyyy'}}
                             </td>
                             <td style="max-width: 80px; width: 80px !important;">
-                                {{job.date_start | date: 'dd/M/yyyy'}} 
+                                {{job.date_start | date: 'dd/M/yyyy'}}
                             </td>
                             <td style="max-width: 80px; width: 80px !important;">
-                                {{job.date_end  | date: 'dd/M/yyyy'}} 
+                                {{job.date_end | date: 'dd/M/yyyy'}}
                             </td>
                             <td style="max-width: 100px; width: 100px !important;">
                                 {{job.title}}
@@ -100,29 +93,24 @@
                             </td>
                             <td style="max-width: 50px; width: 50px !important;">
                                 <div class="text-center">
-                                    <span
-                                        class="label {{job.status=='Activo' ? 'label-success' : 'label-primary'}}">{{job.state}}
+                                    <span class="label {{job.status=='Activo' ? 'label-success' : 'label-primary'}}">{{job.state}}
                                     </span>
                                 </div>
                             </td>
                             <td style="max-width: 70px !important; width: 70px !important;">
                                 <div class="text-center">
                                     <div ngbDropdown class="dropdown-primary">
-                                        <button ngbDropdownToggle
-                                            class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                        <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
                                             <i class="mdi mdi-chevron-down "></i>
                                         </button>
                                         <div ngbDropdownMenu>
-                                           <!--  <a *ngIf="job.state!='Cancelada'"
+                                            <!--  <a *ngIf="job.state!='Cancelada'"
                                                 class="dropdown-item waves-light waves-effect caja-botones" href=""
                                                 [routerLink]="['/vacanteseditar',job.id]">
                                                 <i class="ti-pencil"></i> Editar</a> -->
-                                            <a class="dropdown-item waves-light waves-effect caja-botones" 
-                                                [routerLink]="['/rrhh/vacantes-ver',job.id]">
+                                            <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/rrhh/vacantes-ver',job.id]">
                                                 <i class="ti-eye"></i> Ver</a>
-                                            <a *ngIf="job.state!='Cancelada'"
-                                                class="dropdown-item waves-light waves-effect caja-botones" 
-                                                (click)="cancelar(job.id)">
+                                            <a *ngIf="job.state!='Cancelada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="cancelar(job.id)">
                                                 <i class="fa fa-times"></i> Anular</a>
                                         </div>
                                     </div>
@@ -133,8 +121,7 @@
                 </table>
             </div>
         </div>
-        <ngb-pagination maxSize="5" [collectionSize]="pagination.collectionSize " (pageChange)="getJobs($event) "
-            [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination ">
+        <ngb-pagination maxSize="5" [collectionSize]="pagination.collectionSize " (pageChange)="getJobs($event) " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination ">
         </ngb-pagination>
 
     </div>

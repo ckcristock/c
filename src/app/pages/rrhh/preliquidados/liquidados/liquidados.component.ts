@@ -46,7 +46,7 @@ export class LiquidadosComponent implements OnInit {
       cancelButtonText: 'No, dejame comprobar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigate(['/rrhh/preliquidados']);
+        this.router.navigate(['/rrhh/liquidados']);
       }
     })
   }

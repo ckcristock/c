@@ -61,4 +61,8 @@ export class TercerosService {
     return this.http.get(`${environment.base_url}/third-party-person`, {params});
   }
 
+  getFields(){
+    return this.http.get(`${environment.base_url}/fields-third`);
+  }
+
 }

@@ -1,8 +1,9 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Route } from '@angular/router';
 import { DetalleService } from './detalle.service';
 import { DatosBasicosService } from './ver-funcionario/datos-basicos/datos-basicos.service';
+import { SwalService } from '../../services/swal.service';
 
 @Component({
   selector: 'app-detalle-funcionario',
@@ -29,7 +30,9 @@ export class DetalleFuncionarioComponent implements OnInit {
               private detalleService: DetalleService, 
               private activateRoute: ActivatedRoute,
               private basicDataService: DatosBasicosService,
-              private location: Location
+              private location: Location,
+              private _swal: SwalService,
+              private router: Router
               ) { }
 
 
@@ -49,6 +52,28 @@ export class DetalleFuncionarioComponent implements OnInit {
 
   verComponent( componente:string ){
     this.components = componente;
+  }
+
+  liquidar(status){
+    let data = {
+      status
+    }
+    this.detalleService.liquidar(data, this.id).subscribe((r:any) => {
+      this._swal.show({
+        icon: 'question',
+        title: '¿Estas Seguro?',
+        text: 'Se dispone a liquidar el empleado'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this._swal.show({
+            icon: 'success',
+            title: 'Proceso Satisfactorio',
+            text: 'El Funcionario ha sido liquidado con éxito.',
+            showCancel: false
+          });
+        }
+      });
+    });
   }
 
   getBasicData(){

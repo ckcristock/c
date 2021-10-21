@@ -248,7 +248,7 @@ export class VacantesCrearComponent implements OnInit {
     }
 
     salaryChange() {
-        if (this.form.controls.salaryType_id.value == 2) {
+        if (this.form.controls.salary_type_id.value == 2) {
             this.rangeSalary = true;
         }
         else {

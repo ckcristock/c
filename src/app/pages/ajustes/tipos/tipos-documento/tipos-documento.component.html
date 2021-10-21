@@ -75,7 +75,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label class="custom-label" for="funcionario_id">Código</label>
-                    <input type="number" class="form-control form-control-sm" formControlName="code" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="code" required>
                     <ng-container *ngIf="code_invalid">
                         <small *ngFor="let item of form.get('code').errors | ObjToArrayPipe" class="text-danger">
                               {{ item?.msj }}

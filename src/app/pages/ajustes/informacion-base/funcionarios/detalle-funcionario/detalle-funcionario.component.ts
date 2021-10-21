@@ -71,9 +71,6 @@ export class DetalleFuncionarioComponent implements OnInit {
             text: 'El Funcionario ha sido liquidado con éxito.',
             showCancel: false
           });
-          setTimeout(() => {
-            this.router.navigate(['/rrhh/liquidados']);
-          }, 1000);
         }
       });
     });

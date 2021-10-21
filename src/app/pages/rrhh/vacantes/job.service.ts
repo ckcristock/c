@@ -51,4 +51,13 @@ export class JobService {
         const headers = new HttpHeaders().set('Content-Type', 'application/json')
         return this.http.get(`${environment.base_url}/download-applicants/${id}`, {headers, responseType: 'blob' as 'json' });
     }
+    
+    getDependencies(){
+        return this.http.get(`${environment.base_url}/filter-all-depencencies`);
+      }
+    
+    getPositions(){
+        return this.http.get(`${environment.base_url}/filter-all-positions`);
+    }
+
 }

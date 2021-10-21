@@ -12,4 +12,8 @@ export class DetalleService {
   getBasicData(id){
     return this.http.get(`${environment.base_url}/person/${id}`);
   }
+
+  liquidar(data:any, id){
+    return this.http.put(`${environment.base_url}/liquidate/${id}`, data);
+  }
 }

@@ -54,12 +54,14 @@ export class CreateTurnoFijoComponent implements OnInit {
       let days = this.reduceDays(r.data.horarios_turno_fijo);
       this.dayList.controls.forEach((element) => {
         let day = element.get('day').value;
-        element.patchValue({
-          entry_time_one: days[day]['entry_time_one'],
-          entry_time_two: days[day]['entry_time_two'],
-          leave_time_one: days[day]['leave_time_one'],
-          leave_time_two: days[day]['leave_time_two'],
-        });
+        if (days[day]?.entry_time_one && days[day]?.entry_time_two) {
+          element.patchValue({
+            entry_time_one: days[day]['entry_time_one'],
+            entry_time_two: days[day]['entry_time_two'],
+            leave_time_one: days[day]['leave_time_one'],
+            leave_time_two: days[day]['leave_time_two'],
+          });
+        }
       });
     });
   }
@@ -71,8 +73,11 @@ export class CreateTurnoFijoComponent implements OnInit {
     if (this.forma.invalid) return false;
     this._swal
       .show({
-        title: (this.id == undefined ? '¿Desea Guardar?' : '¿Desea Actulizar?'),
-        text: (this.id == undefined ? 'Se Dispone a guardar el nuevo turno' : 'Se Dispone a actualizar el turno'),
+        title: this.id == undefined ? '¿Desea Guardar?' : '¿Desea Actulizar?',
+        text:
+          this.id == undefined
+            ? 'Se Dispone a guardar el nuevo turno'
+            : 'Se Dispone a actualizar el turno',
         icon: 'warning',
       })
       .then((r) => {
@@ -86,14 +91,28 @@ export class CreateTurnoFijoComponent implements OnInit {
       });
   }
   toSave() {
-    this._fixedTurn.saveTurnFixed(this.forma.value).subscribe((r: any) => {
+    this._fixedTurn.saveTurnFixed(this.getFormValue()).subscribe((r: any) => {
       this.successfull(r.code);
     });
   }
   toEdit() {
-    this._fixedTurn.updateTurnFixed(this.forma.value, this.id).subscribe((r: any) => {
-      this.successfull(r.code);
-    });
+    this._fixedTurn
+      .updateTurnFixed(this.getFormValue(), this.id)
+      .subscribe((r: any) => {
+        this.successfull(r.code);
+      });
+  }
+
+  getFormValue() {
+    let formValue = this.forma.value;
+    formValue.days = formValue.days.reduce((acc, el) => {
+      if (el.entry_time_one && el.entry_time_two) {
+        return [...acc, el];
+      } else {
+        return acc;
+      }
+    }, []);
+    return formValue;
   }
   successfull(code) {
     if (code == 200) {
@@ -123,17 +142,18 @@ export class CreateTurnoFijoComponent implements OnInit {
 
   bulds() {}
   createItem(d): FormGroup {
-    let controls: any = this.getBasicControl();
+    const required = d == 'Sabado' || d == 'Domingo' ? false : true;
+    let controls: any = this.getBasicControl(required);
     controls.day = [d];
     return this.fb.group(controls);
   }
 
-  getBasicControl() {
+  getBasicControl(required = true) {
     return {
-      entry_time_one: ['', this._valReactive.required],
-      leave_time_one: ['', this._valReactive.required],
-      entry_time_two: ['', this._valReactive.required],
-      leave_time_two: ['', this._valReactive.required],
+      entry_time_one: ['', required ? this._valReactive.required : ''],
+      leave_time_one: ['', required ? this._valReactive.required : ''],
+      entry_time_two: ['', required ? this._valReactive.required : ''],
+      leave_time_two: ['', required ? this._valReactive.required : ''],
     };
   }
 
@@ -144,12 +164,15 @@ export class CreateTurnoFijoComponent implements OnInit {
     }
 
     this.dayList.controls.forEach((element) => {
-      element.patchValue({
-        entry_time_one: this.miniForm.get('entry_time_one').value,
-        leave_time_one: this.miniForm.get('leave_time_one').value,
-        entry_time_two: this.miniForm.get('entry_time_two').value,
-        leave_time_two: this.miniForm.get('leave_time_two').value,
-      });
+      const day = element.get('day').value;
+      if (day != 'Sabado' && day != 'Domingo') {
+        element.patchValue({
+          entry_time_one: this.miniForm.get('entry_time_one').value,
+          leave_time_one: this.miniForm.get('leave_time_one').value,
+          entry_time_two: this.miniForm.get('entry_time_two').value,
+          leave_time_two: this.miniForm.get('leave_time_two').value,
+        });
+      }
     });
 
     this.modal.hide();

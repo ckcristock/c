@@ -5,10 +5,10 @@
         <tr>
           <th>Fecha</th>
           <th style="width: 14%">Entrada</th>
-          <th style="width: 14%">Lunch 1</th>
-          <th style="width: 14%">Lunch 2</th>
           <th style="width: 14%">break</th>
           <th style="width: 14%">break 2</th>
+          <th style="width: 14%">Lunch 1</th>
+          <th style="width: 14%">Lunch 2</th>
           <th style="width: 14%">Salida</th>
         </tr>
       </thead>
@@ -20,7 +20,7 @@
           <td>
             <!-- <span class="dot" [class]="horario.colors.entry"></span> -->
             <span class="custom-label"
-              >{{ "2020-01-01 " + horario.entry_time_one | date: "shortTime" }}
+              >{{ horario.entry_time_one | time }}
             </span>
             <a
               class="btn btn-link p-0"
@@ -29,38 +29,6 @@
               <i class="iconsmind-Celsius font-weight-bold"></i>
               - {{ horario.temp_one }}
             </a>
-          </td>
-          <td>
-            <div
-              *ngIf="
-                horario.launch_time_one &&
-                  horario.launch_time_one != '00:00:00';
-                else notHour2
-              "
-            >
-              <!-- <span class="dot" [class]="horario.colors.launchEntry"></span> -->
-              <span class="custom-label">
-                {{
-                  "0000-01-01 " + horario.launch_time_one | date: "shortTime"
-                }}</span
-              >
-            </div>
-          </td>
-          <td>
-            <div
-              *ngIf="
-                horario.launch_time_two &&
-                  horario.launch_time_two != '00:00:00';
-                else notHour2
-              "
-            >
-             <!--  <span class="dot" [class]="horario.colors.launchLeave"></span> -->
-              <span class="custom-label"
-                >{{
-                  "0000-01-01 " + horario.launch_time_two | date: "shortTime"
-                }}
-              </span>
-            </div>
           </td>
 
           <td>
@@ -74,7 +42,7 @@
               <!-- <span class="dot" [class]="horario.colors.breckEntry"></span> -->
               <span class="custom-label"
                 >{{
-                  "0000-01-01 " + horario.breack_time_one | date: "shortTime"
+                   horario.breack_time_one| time
                 }}
               </span>
             </div>
@@ -90,12 +58,44 @@
             >
               <!-- <span class="dot" [class]="'red'"></span> -->
               <span class="custom-label"
+                >{{ horario.breack_time_two | time }}
+              </span>
+            </div>
+          </td>
+
+          <td>
+            <div
+              *ngIf="
+                horario.launch_time_one &&
+                  horario.launch_time_one != '00:00:00';
+                else notHour2
+              "
+            >
+              <!-- <span class="dot" [class]="horario.colors.launchEntry"></span> -->
+              <span class="custom-label">
+                {{
+                 horario.launch_time_one | time
+                }}</span
+              >
+            </div>
+          </td>
+          <td>
+            <div
+              *ngIf="
+                horario.launch_time_two &&
+                  horario.launch_time_two != '00:00:00';
+                else notHour2
+              "
+            >
+              <!--  <span class="dot" [class]="horario.colors.launchLeave"></span> -->
+              <span class="custom-label"
                 >{{
-                  "0000-01-01 " + horario.breack_time_two | date: "shortTime"
+                 horario.launch_time_two | time
                 }}
               </span>
             </div>
           </td>
+
           <td>
             <div
               *ngIf="
@@ -106,7 +106,7 @@
               <!-- <span class="dot" [class]="horario.colors.leave"></span> -->
               <span class="custom-label"
                 >{{
-                  "0000-01-01 " + horario.leave_time_one | date: "shortTime"
+                 horario.leave_time_one | time
                 }}
               </span>
               <a

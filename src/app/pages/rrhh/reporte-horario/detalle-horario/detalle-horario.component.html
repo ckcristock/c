@@ -16,7 +16,7 @@
             <span class="custom-label text-center">{{ horario.date }}</span>
           </td>
           <td>
-            <span class="custom-label">{{ horario.entry_time_one }}  </span>
+            <span class="custom-label">{{ horario.entry_time_one | time}}  </span>
             <a class="btn btn-link p-0" *ngIf="horario.temp_one && horario.temp_one!= '0.0'">
               <i class="iconsmind-Celsius font-weight-bold"></i>
               - {{ horario.temp_one }}
@@ -30,7 +30,7 @@
                 else notHour2
               "
             >
-              <span class="custom-label">{{ horario.leave_time_one }}  </span>
+              <span class="custom-label">{{ horario.leave_time_one | time }}  </span>
               <a class="btn btn-link p-0" *ngIf="horario.temp_two && horario.temp_two!= '0.0'">
                 <i class="iconsmind-Celsius font-weight-bold"></i>
                 - {{ horario.temp_two }}
@@ -46,7 +46,7 @@
               "
             >
               <span class="custom-label"
-                >{{ horario.entry_time_two }} 
+                >{{ horario.entry_time_two | time }} 
               </span>
               <a class="btn btn-link p-0" *ngIf="horario.temp_three && horario.temp_three!= '0.0'">
                 <i class="iconsmind-Celsius font-weight-bold"></i>
@@ -62,7 +62,7 @@
                 else notHour2
               "
             >
-              <span class="custom-label">{{ horario.leave_time_two }} </span>
+              <span class="custom-label">{{ horario.leave_time_two | time }} </span>
               <a class="btn btn-link p-0" *ngIf="horario.temp_four && horario.temp_four!= '0.0'">
                 <i class="iconsmind-Celsius font-weight-bold"></i>
                 - {{ horario.temp_four }}

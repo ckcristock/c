@@ -8,7 +8,7 @@
         <div class="form-group">
           <label class="custom-label">Tipo de turno actual</label>
           <select
-            class="form-control form-control-sm"
+            class="form-control "
             name="turn_type"
             [(ngModel)]="turnType"
             (change)="getPeople()"
@@ -16,6 +16,20 @@
             <option value="rotativo">Rotativo</option>
             <option value="fijo">Fijo</option>
           </select>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="form-group">
+          <label class="custom-label" for="filtroDependencia">Funcionario</label>
+          <ng-select
+            [items]="people"
+            [(ngModel)]="people_id"
+            (change)="getPeople()"s
+            bindLabel="text"
+            bindValue="value"
+            ngDefaultControl
+          >
+          </ng-select>
         </div>
       </div>
       <div class="col-md-3">

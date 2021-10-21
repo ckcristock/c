@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ExtraHoursService } from './extra-hours.service';
+import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 
 @Component({
   selector: 'app-horas-extras',
@@ -12,13 +13,27 @@ export class HorasExtrasComponent implements OnInit {
   ultimoDiaSemana = moment().endOf('week').format('YYYY-MM-DD');
   semana = moment().format(moment.HTML5_FMT.WEEK);
   horasExtras: any[] = [];
+  people: any[] = [];
   diasSemanaActual: any[] = [];
   turnType = 'rotativo';
+  people_id = '';
   loading = false;
-  constructor(private _extraHours: ExtraHoursService) {}
+
+  constructor(
+    private _extraHours: ExtraHoursService,
+    private _people: PersonService
+  ) {}
 
   ngOnInit(): void {
     this.getPeople();
+    this.getPerson();
+  }
+
+  getPerson() {
+    this._people.getAll({}).subscribe((res: any) => {
+      this.people = res.data;
+      this.people.unshift({ text: 'Todos', value: '' });
+    });
   }
 
   get primerDiaSemanaFormato() {
@@ -27,8 +42,7 @@ export class HorasExtrasComponent implements OnInit {
   get ultimoDiaSemanaFormato() {
     return moment(this.ultimoDiaSemana, 'YYYY-MM-DD').format('DD/MM/YYYY');
   }
-  changeTipoTurno(turn) {
-  }
+  changeTipoTurno(turn) {}
 
   cambiarSemana() {
     let año = this.semana.split('-')[0];
@@ -69,8 +83,15 @@ export class HorasExtrasComponent implements OnInit {
 
   getPeople() {
     this.loading = true;
+    let params = { person_id: this.people_id ? this.people_id : '' };
+
     this._extraHours
-      .getPeople(this.primerDiaSemana, this.ultimoDiaSemana, this.turnType)
+      .getPeople(
+        this.primerDiaSemana,
+        this.ultimoDiaSemana,
+        this.turnType,
+        params
+      )
       .subscribe((r: any) => {
         this.loading = false;
         this.horasExtras = r.data;

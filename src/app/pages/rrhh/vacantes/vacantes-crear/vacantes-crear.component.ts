@@ -233,8 +233,8 @@ export class VacantesCrearComponent implements OnInit {
             document_type_id: ['', Validators.required],
             passport: ['', Validators.required],            
             visa: ['', Validators.required],
-            visaType_id: [''],      
-            salaryType_id: [1],
+            visa_type_id: [''],      
+            salary_type_id: [1],
             drivingLicenseJob: [[]],
         })  
     }
@@ -248,7 +248,7 @@ export class VacantesCrearComponent implements OnInit {
     }
 
     salaryChange() {
-        if (this.form.controls.salaryType_id.value == 2) {
+        if (this.form.controls.salary_type_id.value == 2) {
             this.rangeSalary = true;
         }
         else {

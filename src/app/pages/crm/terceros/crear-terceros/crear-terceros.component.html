@@ -208,6 +208,10 @@
                                 </small>
                             </ng-container>
                         </div>
+                        <div class="form-group col-md-3" *ngFor="let item of fields">
+                            <label for="">{{ item.label | titlecase }}</label>
+                            <input class="form-control form-control-sm" [type]="item.type" [formControlName]="item.name">
+                        </div>
                     </div>
                     <hr class="bg-primary">
                     <div class="row">

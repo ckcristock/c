@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -23,7 +23,6 @@ export class ReporteHorarioService {
                 dependency.people.forEach((person) => {
                   person.totalHours = 0;
                   person.diaries.forEach((diary) => {
-
                     person.totalHours += parseFloat(diary.working_hours);
                     if (diary.rotating_turn_id) {
                       diary = this.makeColorArrival(diary);
@@ -40,13 +39,13 @@ export class ReporteHorarioService {
   }
 
   makeColorArrival(diary) {
-    diary.colors = {}
+    diary.colors = {};
     let difEntry = this.makeDiff(diary.entry_time_real, diary.entry_time_one);
- 
+
     if (difEntry > diary.entry_tolerance * 60) {
       diary.colors.entry = 'red';
     } else {
-      diary.colors.entry  = 'green';
+      diary.colors.entry = 'green';
     }
 
     diary.colors.launchEntry = this.calculateEntry(
@@ -68,21 +67,21 @@ export class ReporteHorarioService {
     );
 
     if (diary.leave_time_real) {
-      let diffLeave = this.makeDiff(diary.leave_time_real, diary.leave_time_one);
-    
+      let diffLeave = this.makeDiff(
+        diary.leave_time_real,
+        diary.leave_time_one
+      );
+
       if (diffLeave < diary.leave_tolerance * 60) {
         diary.colors.leave = 'red';
       } else {
         diary.colors.leave = 'green';
       }
-      
-    }else{
+    } else {
       diary.colors.leave = '';
-
     }
-    
+
     return diary;
-  
   }
 
   calculateEntry(time, real) {
@@ -113,4 +112,12 @@ export class ReporteHorarioService {
     return moment(entry, 'HH:mm:ss').diff(moment(real, 'HH:mm:ss'));
   }
   hasLateArrival() {}
+
+  download(date1, date2, params = {}) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.get(
+      `${environment.base_url}/download/horarios/${date1}/${date2}`,
+      { params, headers, responseType: 'blob' as 'json' }
+    );
+  }
 }

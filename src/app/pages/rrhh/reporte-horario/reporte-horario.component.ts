@@ -39,10 +39,12 @@ export class ReporteHorarioComponent implements OnInit {
     let d2 = this.forma.get('last_day').value;
 
     this.loading = true;
-    this._reporteHorario.getFixedTurnsDiaries(d1, d2, this.forma.value).subscribe((r) => {
-      this.reporteHorarios = r.data;
-      this.loading = false;
-    });
+    this._reporteHorario
+      .getFixedTurnsDiaries(d1, d2, this.forma.value)
+      .subscribe((r) => {
+        this.reporteHorarios = r.data;
+        this.loading = false;
+      });
   }
   getGroup() {
     this._grups.getGroup().subscribe((r: any) => {
@@ -87,9 +89,34 @@ export class ReporteHorarioComponent implements OnInit {
   addElement() {
     this.dependencyList.unshift({ value: 0, text: 'Todas' });
   }
-  
-  get turn_type_value(){
-    return this.forma.get('turn_type').value
+
+  get turn_type_value() {
+    return this.forma.get('turn_type').value;
   }
-  
+  donwloading = false;
+  download() {
+    let d1 = this.forma.get('first_day').value;
+    let d2 = this.forma.get('last_day').value;
+
+    this.donwloading = true;
+    this._reporteHorario
+      .download(d1, d2, this.forma.value)
+      .subscribe((response: BlobPart) => {
+        let blob = new Blob([response], { type: 'application/excel' });
+        let link = document.createElement('a');
+        const filename = 'reporte_llegadas_tarde';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.xlsx`;
+        link.click();
+        this.donwloading = false;
+      }),
+      (error) => {
+        console.log('Error downloading the file');
+        this.donwloading = false;
+      },
+      () => {
+        console.info('File downloaded successfully');
+        this.donwloading = false;
+      };
+  }
 }

@@ -5,7 +5,7 @@
     <div class="card" *ngFor="let company of reporteHorarios">
       <div class="card-body ml-4 mt-1">
         <div class="row">
-          <h4 class="centro-nombre text-primary m-0 p-0">{{ company.name }}</h4>
+          <h4 class="centro-nombre text-primary m-0 p-0" *ngIf="reporteHorarios.length>1">{{ company.name }}</h4>
         </div>
         <div *ngFor="let group of company.groups">
           <div class="row mb-2">

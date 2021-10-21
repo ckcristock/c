@@ -20,6 +20,7 @@ export class LlegadasTardesComponent implements OnInit {
   people_id = '';
   dependency_id: any;
   loading = false;
+  donwloading = false;
 
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'Llegadas tardes' },
@@ -101,6 +102,29 @@ export class LlegadasTardesComponent implements OnInit {
         this.loading = false;
         this.transformData();
       });
+  }
+  downloadLateArrivals() {
+    let params = this.getParams();
+    this.donwloading = true;
+    this._lateArrivals
+      .downloadLateArrivals(this.firstDay, this.lastDay, params)
+      .subscribe((response: BlobPart) => {
+        let blob = new Blob([response], { type: 'application/excel' });
+        let link = document.createElement('a');
+        const filename = 'reporte_llegadas_tarde';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.xlsx`;
+        link.click();
+        this.donwloading = false;
+      }),
+      (error) => {
+        console.log('Error downloading the file');
+        this.donwloading = false;
+      },
+      () => {
+        console.info('File downloaded successfully');
+        this.donwloading = false;
+      };
   }
 
   getPeople() {
@@ -212,7 +236,7 @@ export class LlegadasTardesComponent implements OnInit {
       c.groups.forEach((g) => {
         g.dependencies.forEach((d) => {
           d.people.forEach((pr) => {
-            pr.averageTime = this.tiempoPromedio(pr.late_arrivals);
+            pr.averageTime = this.tiempoTotal(pr.late_arrivals);
           });
         });
       });
@@ -230,7 +254,7 @@ export class LlegadasTardesComponent implements OnInit {
     return duracion.as('milliseconds');
   }
 
-  tiempoPromedio(llegadasTarde = []) {
+  tiempoTotal(llegadasTarde = []) {
     let total = llegadasTarde.length;
     let suma = 0;
     let promedio = 0;
@@ -238,7 +262,8 @@ export class LlegadasTardesComponent implements OnInit {
     llegadasTarde.forEach((llegada) => {
       suma += this.tiempoEnMilisegundos(llegada.entry, llegada.real_entry);
     });
-    promedio = suma / total;
+    //promedio = suma / total;
+    promedio = suma;
     return moment.utc(promedio).format('HH:mm:ss');
   }
 }

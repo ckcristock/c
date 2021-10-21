@@ -51,7 +51,9 @@
           </div>
           <div class="col-md-2">
             <div class="form-group">
-              <label class="custom-label" for="filtroDependencia">Funcionario</label>
+              <label class="custom-label" for="filtroDependencia"
+                >Funcionario</label
+              >
               <ng-select
                 [items]="people"
                 [(ngModel)]="people_id"
@@ -89,16 +91,32 @@
           <div class="col-2">
             <div class="form-group">
               <label for=""></label>
-              <button
-                class="btn btn-success "
-                (click)="
-                  getLateArrivals(); getStatisticsByDays(); getLinearDataset()
-                "
-              >
-                Buscar
-              </button>
+              <div class="d-flex">
+                <button
+                  class="btn btn-success mr-2"
+                  (click)="
+                    getLateArrivals(); getStatisticsByDays(); getLinearDataset()
+                  "
+                >
+               
+                <i class="fas fa-search"></i>
+                  Buscar
+                </button>
+                <button class="btn btn-primary" (click)="downloadLateArrivals()">
+                  <i class="fas fa-file-download"></i>
+                
+                  <span *ngIf="!donwloading ;else status"> Descargar</span>
+                  <ng-template #status>
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                          Generando...
+                  </ng-template>
+                </button>
+
+              </div>
+              
             </div>
           </div>
+         
         </div>
       </div>
     </div>
@@ -119,7 +137,7 @@
       </div>
     </div>
   </div>
-  <div class=" col-sm-6">
+  <div class="col-sm-6">
     <div class="card text-white bg-warning">
       <div class="card-body stats align-items-center d-flex">
         <div style="width: 30%">
@@ -175,10 +193,9 @@
                 height="260"
               >
               </canvas>
-              
             </div>
             <div class="card-footer bg-white mt-2">
-                <h5 class="weight-bold mb-2 text-center">Areas de la empresa</h5>
+              <h5 class="weight-bold mb-2 text-center">Areas de la empresa</h5>
             </div>
           </div>
         </div>
@@ -266,11 +283,11 @@
       </div>
     </div>
   </div>
-
-
-
 </div>
 
 <ng-template #notData>
-  <app-not-data [loading]="loading" [text]="'No hay registro de llegadas tarde'"></app-not-data>
+  <app-not-data
+    [loading]="loading"
+    [text]="'No hay registro de llegadas tarde'"
+  ></app-not-data>
 </ng-template>

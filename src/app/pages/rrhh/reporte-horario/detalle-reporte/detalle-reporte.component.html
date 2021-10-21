@@ -5,66 +5,64 @@
     <div class="card" *ngFor="let company of reporteHorarios">
       <div class="card-body ml-4 mt-1">
         <div class="row">
-          <h4 class="centro-nombre text-primary m-0 p-0" *ngIf="reporteHorarios.length>1">{{ company.name }}</h4>
+          <h4
+            class="centro-nombre text-primary m-0 p-0"
+            *ngIf="reporteHorarios.length > 1"
+          >
+            {{ company.name }}
+          </h4>
         </div>
         <div *ngFor="let group of company.groups">
           <div class="row mb-2">
-            <p class="mb-1 centro-nombre">{{ group.name }}</p>
+            <p class="mb-1 centro-nombre text-primary">
+              Grupo: {{ group.name }}
+            </p>
 
             <div
               class="col-12 pl-0 dependency"
               *ngFor="let dependency of group.dependencies"
             >
-              <p class="font-weight-bold mt-3">{{ dependency.name }}</p>
+              <strong>
+                <p class="font-weight-bold mt-3">{{ dependency.name }}</p>
+              </strong>
 
               <div
-                *ngFor="let person of dependency.people"
+                *ngFor="let person of dependency.people;let i = index"
                 class="funcionario-fila"
               >
                 <div
                   class="
-                    d-flex
-                    flex-column flex-md-row
-                    justify-content-center
-                    align-items-center
                   "
                 >
-                  <div class="w-50 w-xs-100 mb-0">
+                  <div class="mb-0">
+                    <!-- {{i}} -->
                     <img
                       src="{{ person.image | image: 'users' }}"
                       class="rounded-circle avatar-sm"
                       alt="user-pic"
                     />
-                    <span class="custom-label"
+                    <span class="custom-label  mr-2"
                       >{{ person.first_name }} {{ person.first_surname }}</span
                     >
-                  </div>
-                  <div class="w-25 w-xs-100">
                     <button
                       class="btn btn-link"
                       (click)="person.show = !person.show"
                     >
-                      Detalles
+                    <i class="fas fa-chevron-down"></i>
                     </button>
-                  </div>
-                  <div class="w-25 w-xs-100">
-                    <p class="mb-1 text-mutedfont-weight-bold">
-                      Horas trabajadas:
-                      {{ person.totalHours }}
-                    </p>
                   </div>
                 </div>
                 <ng-container *ngIf="person.show">
-		  <ng-container 
-		       *ngIf="type == 'Rotativo'; else detalleFijo"
-                  >
+                  <ng-container *ngIf="type == 'Rotativo'; else detalleFijo">
                     <app-detalle-horario-rotativo
+                      [horas]="person.totalHours"
                       [horarios]="person.diaries"
                     ></app-detalle-horario-rotativo>
                   </ng-container>
 
                   <ng-template #detalleFijo>
                     <app-detalle-horario
+                      [horas]="person.totalHours"
                       [horarios]="person.diaries"
                     ></app-detalle-horario>
                   </ng-template>

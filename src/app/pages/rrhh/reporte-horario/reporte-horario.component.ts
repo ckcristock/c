@@ -6,6 +6,8 @@ import { GroupService } from '../../ajustes/informacion-base/services/group.serv
 import * as moment from 'moment';
 import { ReporteHorarioService } from './reporte-horario.service';
 import { CompanyService } from '../../ajustes/informacion-base/services/company.service';
+import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
+
 @Component({
   selector: 'app-reporte-horario',
   templateUrl: './reporte-horario.component.html',
@@ -18,12 +20,14 @@ export class ReporteHorarioComponent implements OnInit {
   dependencyList: any[] = [];
   companies: any[] = [];
   forma: FormGroup;
+  people: any[] = [];
   constructor(
     private _companies: CompanyService,
     private _grups: GroupService,
     private _dependencies: DependenciesService,
     private fb: FormBuilder,
-    private _reporteHorario: ReporteHorarioService
+    private _reporteHorario: ReporteHorarioService,
+    private _people: PersonService
   ) {}
 
   ngOnInit(): void {
@@ -32,15 +36,22 @@ export class ReporteHorarioComponent implements OnInit {
     this.getCompanies();
     this.addElement();
     this.getDiaries();
+    this.getPeople();
   }
 
+  getPeople() {
+    this._people.getAll({}).subscribe((res: any) => {
+      this.people = res.data;
+      this.people.unshift({ text: 'Todos', value: 0 });
+    });
+  }
   getDiaries() {
     let d1 = this.forma.get('first_day').value;
     let d2 = this.forma.get('last_day').value;
 
     this.loading = true;
     this._reporteHorario
-      .getFixedTurnsDiaries(d1, d2, this.forma.value)
+      .getFixedTurnsDiaries(d1, d2, this.getForm() )
       .subscribe((r) => {
         this.reporteHorarios = r.data;
         this.loading = false;
@@ -73,6 +84,7 @@ export class ReporteHorarioComponent implements OnInit {
       group_id: [0],
       dependency_id: [0],
       company_id: [0],
+      person_id: [0],
     });
 
     this.forma.get('group_id').valueChanges.subscribe((valor) => {
@@ -99,8 +111,9 @@ export class ReporteHorarioComponent implements OnInit {
     let d2 = this.forma.get('last_day').value;
 
     this.donwloading = true;
+   
     this._reporteHorario
-      .download(d1, d2, this.forma.value)
+      .download(d1, d2, this.getForm())
       .subscribe((response: BlobPart) => {
         let blob = new Blob([response], { type: 'application/excel' });
         let link = document.createElement('a');
@@ -118,5 +131,13 @@ export class ReporteHorarioComponent implements OnInit {
         console.info('File downloaded successfully');
         this.donwloading = false;
       };
+  }
+
+  getForm(){
+    let form = this.forma.value;
+    if (form.person_id == null) {
+       delete form.person_id
+    }
+    return form
   }
 }

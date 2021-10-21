@@ -77,6 +77,19 @@
                 />
               </div>
             </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="custom-label">Funcionario</label>
+                <ng-select
+                  [items]="people"
+                  formControlName="person_id"
+                  bindLabel="text"
+                  bindValue="value"
+                  ngDefaultControl
+                >
+                </ng-select>
+              </div>
+            </div>
 
             <div class="col-md-2">
               <div class="form-group">
@@ -103,7 +116,11 @@
           </button>
         </div>
         <div class="col-md-6">
-          <button type="button" class="btn btn-success btn-sm btn-block" (click)="download()">
+          <button
+            type="button"
+            class="btn btn-success btn-sm btn-block"
+            (click)="download()"
+          >
             <i class="fas fa-file-download"></i>
 
             <span *ngIf="!donwloading; else status"> Descargar</span>

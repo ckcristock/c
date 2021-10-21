@@ -87,36 +87,38 @@
               />
             </div>
           </div>
-
-          <div class="col-2">
-            <div class="form-group">
-              <label for=""></label>
-              <div class="d-flex">
-                <button
-                  class="btn btn-success mr-2"
-                  (click)="
-                    getLateArrivals(); getStatisticsByDays(); getLinearDataset()
-                  "
-                >
-               
-                <i class="fas fa-search"></i>
-                  Buscar
-                </button>
-                <button class="btn btn-primary" (click)="downloadLateArrivals()">
-                  <i class="fas fa-file-download"></i>
-                
-                  <span *ngIf="!donwloading ;else status"> Descargar</span>
-                  <ng-template #status>
-                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                          Generando...
-                  </ng-template>
-                </button>
-
-              </div>
-              
-            </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <button
+              class="btn btn-sm btn-success btn-block"
+              (click)="
+                getLateArrivals(); getStatisticsByDays(); getLinearDataset()
+              "
+            >
+              <i class="fas fa-search"></i>
+              Buscar
+            </button>
           </div>
-         
+
+          <div class="col-6">
+            <button
+              class="btn btn-sm btn-primary btn-block"
+              (click)="downloadLateArrivals()"
+            >
+              <i class="fas fa-file-download"></i>
+
+              <span *ngIf="!donwloading; else status"> Descargar</span>
+              <ng-template #status>
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Generando...
+              </ng-template>
+            </button>
+          </div>
         </div>
       </div>
     </div>

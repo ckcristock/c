@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class DetalleHorarioRotativoComponent implements OnInit {
   @Input('horarios') horarios:any
+  @Input('horas') horas:any
 
   constructor() { }
 

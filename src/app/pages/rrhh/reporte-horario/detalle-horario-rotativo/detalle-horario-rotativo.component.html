@@ -1,15 +1,22 @@
 <div class="mt-2">
+  <div class="col-12 text-right mb-2">
+    <p class="mb-1 text-mutedfont-weight-bold">
+       Total horas trabajadas:
+      {{ horas }}
+    </p>
+  </div>
   <div class="col-12 pl-4">
     <table class="table table-sm table-bordered">
       <thead>
         <tr>
           <th>Fecha</th>
-          <th style="width: 14%">Entrada</th>
-          <th style="width: 14%">break</th>
-          <th style="width: 14%">break 2</th>
-          <th style="width: 14%">Lunch 1</th>
-          <th style="width: 14%">Lunch 2</th>
-          <th style="width: 14%">Salida</th>
+          <th style="width: 12%">Entrada</th>
+          <th style="width: 12%">break</th>
+          <th style="width: 12%">break 2</th>
+          <th style="width: 12%">Lunch 1</th>
+          <th style="width: 12%">Lunch 2</th>
+          <th style="width: 12%">Salida</th>
+          <th style="width: 12%">Horas trabaj.</th>
         </tr>
       </thead>
       <tbody>
@@ -41,9 +48,7 @@
             >
               <!-- <span class="dot" [class]="horario.colors.breckEntry"></span> -->
               <span class="custom-label"
-                >{{
-                   horario.breack_time_one| time
-                }}
+                >{{ horario.breack_time_one | time }}
               </span>
             </div>
           </td>
@@ -73,9 +78,7 @@
             >
               <!-- <span class="dot" [class]="horario.colors.launchEntry"></span> -->
               <span class="custom-label">
-                {{
-                 horario.launch_time_one | time
-                }}</span
+                {{ horario.launch_time_one | time }}</span
               >
             </div>
           </td>
@@ -89,9 +92,7 @@
             >
               <!--  <span class="dot" [class]="horario.colors.launchLeave"></span> -->
               <span class="custom-label"
-                >{{
-                 horario.launch_time_two | time
-                }}
+                >{{ horario.launch_time_two | time }}
               </span>
             </div>
           </td>
@@ -105,9 +106,7 @@
             >
               <!-- <span class="dot" [class]="horario.colors.leave"></span> -->
               <span class="custom-label"
-                >{{
-                 horario.leave_time_one | time
-                }}
+                >{{ horario.leave_time_one | time }}
               </span>
               <a
                 class="btn btn-link p-0"
@@ -116,6 +115,20 @@
                 <i class="iconsmind-Celsius font-weight-bold"></i>
                 - {{ horario.temp_two }}
               </a>
+            </div>
+          </td>
+          <td>
+            <div
+              *ngIf="
+                horario.working_hours && horario.working_hours != '00:00:00';
+                else notHour2
+              "
+            >
+              <!-- <span class="dot" [class]="horario.colors.leave"></span> -->
+              <span class="custom-label"
+                >{{ horario.working_hours }} Hrs
+              </span>
+              
             </div>
           </td>
         </tr>

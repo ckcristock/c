@@ -1,24 +1,27 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
-import { Router, NavigationEnd, ActivatedRoute, NavigationStart } from '@angular/router';
-
+import {
+  Router,
+  NavigationEnd,
+  ActivatedRoute,
+  NavigationStart,
+} from '@angular/router';
 
 import { environment } from '../../../../environments/environment';
 import { UserService } from '../../../core/services/user.service';
 import { User } from 'src/app/core/models/users.model';
 import { interval, timer, Subscription } from 'rxjs';
 
-
 @Component({
   selector: 'app-horizontaltopbar',
   templateUrl: './horizontaltopbar.component.html',
-  styleUrls: ['./horizontaltopbar.component.scss']
+  styleUrls: ['./horizontaltopbar.component.scss'],
 })
 export class HorizontaltopbarComponent implements OnInit {
-  alerts$:Subscription;
+  alerts$: Subscription;
   configData: any;
-  alerts:any[] = []
+  alerts: any[] = [];
   element: any;
   cookieValue;
   flagvalue;
@@ -32,13 +35,14 @@ export class HorizontaltopbarComponent implements OnInit {
     { text: 'Italian', flag: 'assets/images/flags/italy.jpg', lang: 'it' },
     { text: 'Russian', flag: 'assets/images/flags/russia.jpg', lang: 'ru' },
   ];
-  
-  public user : User;
-  constructor(@Inject(DOCUMENT) private document: any,
+
+  public user: User;
+  constructor(
+    @Inject(DOCUMENT) private document: any,
     private router: Router,
     private _user: UserService,
-    public cookiesService: CookieService,
-    ) { }
+    public cookiesService: CookieService
+  ) {}
 
   ngOnInit(): void {
     this.initSearch();
@@ -46,24 +50,25 @@ export class HorizontaltopbarComponent implements OnInit {
     this.user = this._user.user;
     this.configData = {
       suppressScrollX: true,
-      wheelSpeed: 0.3
+      wheelSpeed: 0.3,
     };
 
     this.cookieValue = this.cookiesService.get('lang');
-    const val = this.listLang.filter(x => x.lang === this.cookieValue);
-    this.countryName = val.map(element => element.text);
+    const val = this.listLang.filter((x) => x.lang === this.cookieValue);
+    this.countryName = val.map((element) => element.text);
     if (val.length === 0) {
-      if (this.flagvalue === undefined) { this.valueset = 'assets/images/flags/us.jpg'; }
+      if (this.flagvalue === undefined) {
+        this.valueset = 'assets/images/flags/us.jpg';
+      }
     } else {
-      this.flagvalue = val.map(element => element.flag);
+      this.flagvalue = val.map((element) => element.flag);
     }
 
     this.router.events.subscribe((val) => {
-      if(val instanceof NavigationStart) {
+      if (val instanceof NavigationStart) {
         //notificaciones
-        
       }
-    })
+    });
   }
 
   /**
@@ -72,8 +77,10 @@ export class HorizontaltopbarComponent implements OnInit {
   fullscreen() {
     document.body.classList.toggle('fullscreen-enable');
     if (
-      !document.fullscreenElement && !this.element.mozFullScreenElement &&
-      !this.element.webkitFullscreenElement) {
+      !document.fullscreenElement &&
+      !this.element.mozFullScreenElement &&
+      !this.element.webkitFullscreenElement
+    ) {
       if (this.element.requestFullscreen) {
         this.element.requestFullscreen();
       } else if (this.element.mozRequestFullScreen) {
@@ -106,7 +113,6 @@ export class HorizontaltopbarComponent implements OnInit {
     this.countryName = text;
     this.flagvalue = flag;
     this.cookieValue = lang;
-
   }
 
   /**
@@ -131,12 +137,14 @@ export class HorizontaltopbarComponent implements OnInit {
     this._user.logout();
   }
 
-  initSearch(){
-    const source = interval(5000);//output: 0,1,2,3,4,5....
-    this.alerts$ = source.subscribe(val => {
-        this._user.getAlerts().subscribe( (r:any)=>{
-          this.alerts = r.data
-        })
+  initSearch() {
+    const source = interval(5000); //output: 0,1,2,3,4,5....
+    this.alerts$ = source.subscribe((val) => {
+      let param = { person_id: this.user.person.id };
+
+      this._user.getAlerts(param).subscribe((r: any) => {
+        this.alerts = r.data;
+      });
     });
   }
 

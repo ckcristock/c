@@ -7,4 +7,5 @@ export interface Person {
     second_surname: string;
     email: string;
     image: string;
+    id:string;
 }

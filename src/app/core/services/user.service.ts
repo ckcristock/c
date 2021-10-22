@@ -61,7 +61,7 @@ export class UserService {
     return this.http.get(`${base_url}/auth/change-password`, { params });
   }
 
-  getAlerts() {
-    return this.http.get(`${environment.base_url}/alerts`);
+  getAlerts(params = { }) {
+    return this.http.get(`${environment.base_url}/alerts` ,{params});
   }
 }

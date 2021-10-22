@@ -58,21 +58,21 @@ export class DetalleFuncionarioComponent implements OnInit {
     let data = {
       status
     }
-    this.detalleService.liquidar(data, this.id).subscribe((r:any) => {
-      this._swal.show({
-        icon: 'question',
-        title: '¿Estas Seguro?',
-        text: 'Se dispone a liquidar el empleado'
-      }).then((result) => {
-        if (result.isConfirmed) {
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estas Seguro?',
+      text: 'Se dispone a liquidar el empleado'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.detalleService.liquidar(data, this.id).subscribe((r:any) => {
           this._swal.show({
             icon: 'success',
             title: 'Proceso Satisfactorio',
             text: 'El Funcionario ha sido liquidado con éxito.',
             showCancel: false
           });
-        }
-      });
+        });
+      }
     });
   }
 

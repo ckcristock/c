@@ -1,20 +1,86 @@
 <div class="card">
-
     <div class="card-body">
-        <div class="row mb-2">
-            <div class="col-md-9">
-                <h5>Vacantes</h5>
-            </div>
-            <div class="col-md-3 text-right">
-                <button type="button" class=" btn btn-primary btn-sm" [routerLink]="['/rrhh/vacantes-crear']">
+        <div class="card-title">
+            <button type="button" class=" btn btn-primary btn-sm" style="float: right;" [routerLink]="['/rrhh/vacantes-crear']">
                     <i class="fa fa-plus"></i> Nueva Vacante
                 </button>
+            <h4 class="text-primary">Vacantes</h4>
+            <hr class="bg-primary">
+            <h5 class="text-center">Filtros</h5>
+            <div class="form-row mt-4">
+                <div class="form-group col-md-1">
+                    <label for="">Publición</label>
+                    <input type="date" [(ngModel)]="filtros.fecha" class="form-control input-sm" (change)="getJobs()" placeholder="Filtro Fecha Publicación">
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="">Fecha inicio</label>
+                    <input type="date" [(ngModel)]="filtros.fecha_Inicio" class="form-control input-sm" (change)="getJobs()" placeholder="Filtro Fecha Inicio">
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="">Fecha fin</label>
+                    <input type="date" [(ngModel)]="filtros.fecha_Fin" class="form-control input-sm" (change)="getJobs()" placeholder="Filtro Fecha Fin">
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="">Título</label>
+                    <input type="text" [(ngModel)]="filtros.titulo" class="form-control input-sm" (change)="getJobs()" placeholder="Filtro Título">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="">Dependencia</label>
+                    <ng-select [(ngModel)]="filtros.dependencia" [items]="dependencies" (change)="getJobs()" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="">Cargo</label>
+                    <ng-select [(ngModel)]="filtros.cargo" [items]="positions" (change)="getJobs()" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="">Departamento</label>
+                    <ng-select [(ngModel)]="filtros.departamento" [items]="department" (change)="getJobs()" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="">Municipio</label>
+                    <ng-select [(ngModel)]="filtros.municipio" [items]="municipalities" (change)="getJobs()" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                    </ng-select>
+                </div>
             </div>
+            <!-- <tr>
+                <th></th>
+                <th class="tabla-filtro">
+                </th>
+                <th class="tabla-filtro">
+                </th>
+                <th class="tabla-filtro">
+                </th>
+                <th class="tabla-filtro">
+                </th>
+                <th class="tabla-filtro">
+                </th>
+                <th class="tabla-filtro">
+                </th>
+                <th class="tabla-filtro">
+                </th>
+                <th class="tabla-filtro">
+                </th>
+                <th class="tabla-filtro">
+                    <select [(ngModel)]="filtros.estado" class="form-control input-sm">
+                        <option value="">Todos</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Anulada">Anulada</option>
+                    </select>
+                </th>
+                <th class="tabla-filtro"></th>
+            </tr> -->
         </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <table class="table" *ngIf="!loading && jobs.length > 0; else notData">
-                    <thead>
+                <table class="table table-borderless table-striped" *ngIf="!loading && jobs.length > 0; else notData">
+                    <thead class="bg-light">
                         <tr>
                             <th>Código</th>
                             <th>Publicación</th>
@@ -28,76 +94,41 @@
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
-                        <tr>
-                            <th></th>
-                            <th class="tabla-filtro" style="max-width: 100px; width: 100px !important;">
-                                <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_Fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fecha Publicación"></my-date-range-picker>
-                            </th>
-                            <th class="tabla-filtro" style="max-width: 110px; width: 90px !important;">
-                                <input type="date" [(ngModel)]="filtro_Fecha_Inicio" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Fecha Inicio">
-                            </th>
-                            <th class="tabla-filtro" style="max-width: 110px; width: 80px !important;">
-                                <input type="date" [(ngModel)]="filtro_Fecha_Fin" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Fecha Fin">
-                            </th>
-                            <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                <input type="text" [(ngModel)]="filtro_titulo" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Título">
-                            </th>
-                            <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                <input type="text" [(ngModel)]="filtro_dependencia" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Dependencia">
-                            </th>
-                            <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                <input type="text" [(ngModel)]="filtro_Cargo" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Cargo">
-                            </th>
-                            <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                <input type="text" [(ngModel)]="filtro_departamento" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Departamento">
-                            </th>
-                            <th class="tabla-filtro" style="max-width: 130px; width: 130px !important;">
-                                <input type="text" [(ngModel)]="filtro_municipio" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Municipio">
-                            </th>
-                            <th class="tabla-filtro" style="max-width: 70px; width: 70px !important;">
-                                <select [(ngModel)]="filtro_estado" (change)="filtros()" class="form-control input-sm">
-                                    <option value="">Todos</option>
-                                    <option value="Activo">Activo</option>
-                                    <option value="Anulada">Anulada</option>
-                                </select>
-                            </th>
-                            <th class="tabla-filtro" style="max-width: 50px; width: 50px !important;"></th>
-                        </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let job of jobs " class="{{job.state=='Cancelada' ? 'bg-danger text-white' : ''}}">
-                            <td> {{ 'vac' + job.id }} </td>
-                            <td style="max-width: 80px; width: 80px !important;">
+                            <td> {{ job.code }} </td>
+                            <td>
                                 {{job.created_at | date: 'dd/M/yyyy'}}
                             </td>
-                            <td style="max-width: 80px; width: 80px !important;">
+                            <td>
                                 {{job.date_start | date: 'dd/M/yyyy'}}
                             </td>
-                            <td style="max-width: 80px; width: 80px !important;">
+                            <td>
                                 {{job.date_end | date: 'dd/M/yyyy'}}
                             </td>
-                            <td style="max-width: 100px; width: 100px !important;">
+                            <td>
                                 {{job.title}}
                             </td>
-                            <td style="max-width: 70px; width: 70px !important;">
+                            <td>
                                 {{job.position.dependency.name}}
                             </td>
-                            <td style="max-width: 70px; width: 70px !important;">
+                            <td>
                                 {{job.position.name}}
                             </td>
-                            <td style="max-width: 70px; width: 70px !important;">
+                            <td>
                                 {{job.municipality.department.name}}
                             </td>
-                            <td style="max-width: 120px !important; width: 120px !important">
+                            <td>
                                 {{job.municipality.name}}
                             </td>
-                            <td style="max-width: 50px; width: 50px !important;">
+                            <td>
                                 <div class="text-center">
                                     <span class="label {{job.status=='Activo' ? 'label-success' : 'label-primary'}}">{{job.state}}
                                     </span>
                                 </div>
                             </td>
-                            <td style="max-width: 70px !important; width: 70px !important;">
+                            <td>
                                 <div class="text-center">
                                     <div ngbDropdown class="dropdown-primary">
                                         <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
@@ -121,7 +152,8 @@
                 </table>
             </div>
         </div>
-        <ngb-pagination maxSize="5" [collectionSize]="pagination.collectionSize " (pageChange)="getJobs($event) " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination ">
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" maxSize="5" [collectionSize]="pagination.collectionSize " (pageChange)="getJobs($event) " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination"
+            rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
         </ngb-pagination>
 
     </div>

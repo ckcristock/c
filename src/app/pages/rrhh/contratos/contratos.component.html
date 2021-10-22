@@ -41,8 +41,8 @@
                     <thead>
                         <tr>
                             <th>Código</th>
-                            <th>Documento</th>
                             <th>Funcionario</th>
+                            <th>Documento</th>
                             <!--  <th>Cargo</th> -->
                             <th>Tipo</th>
                             <th style="width: 110px">F. Inicio</th>
@@ -57,6 +57,12 @@
                         <tr *ngFor="let contract of contracts">
                             <td> {{ contract.code }} </td>
                             <td>
+                                <strong>
+                  {{ contract.first_name | titlecase }}
+                  {{ contract.first_surname | titlecase }}
+                </strong>
+                            </td>
+                            <td>
                                 {{ contract.identifier }}
 
                             </td>
@@ -68,12 +74,6 @@
                   alt=""
                 />
               </td> -->
-                            <td>
-                                <strong>
-                  {{ contract.first_name | titlecase }}
-                  {{ contract.first_surname | titlecase }}
-                </strong>
-                            </td>
                             <!--  <td>{{ contract.position }}</td> -->
                             <td>{{ contract.work_contract_type }}</td>
                             <td>{{ contract.date_of_admission }}</td>

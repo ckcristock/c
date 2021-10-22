@@ -26,7 +26,8 @@ export class AlmuerzosComponent implements OnInit {
     collectionSize: 0
   }
   filtro = {
-    date: ''
+    date: '',
+    person: ''
   }
 
   values:any = '';
@@ -127,13 +128,10 @@ export class AlmuerzosComponent implements OnInit {
     this.loading = true;
     this._almuerzo.getLunches(params).subscribe((r:any) =>{
         this.lunches = r.data.data;
+        console.log(this.lunches);
         this.pagination.collectionSize = r.data.total;
         this.loading = false;
     })
-  }
-
-  getLunch(lunch){
-    this.lunch = {...lunch};
   }
 
   createLunch(){
@@ -152,15 +150,15 @@ export class AlmuerzosComponent implements OnInit {
     });
   }
 
-  activateOrInactivate(lunch, state){
+  activateOrInactivate(id, state){
     let data = {
-      id: lunch.id,
+      id,
       state
     }
     this._swal.show({
       icon: 'question',
       title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? 'El Almuerzo será anulado' : 'El Almuerzo será activado')
+      text: (data.state == 'Inactivo' ? 'El funcionario será anulado del almuerzo' : 'El Almuerzo será activado al funcionario')
     }).then((r) => {
       if (r.isConfirmed) {
         this._almuerzo.activateOrInactivate(data).subscribe( (r:any) => {
@@ -168,7 +166,7 @@ export class AlmuerzosComponent implements OnInit {
           this._swal.show({
             icon: 'success',
             title: 'Proceso Satisfactorio',
-            text: (data.state == 'Inactivo' ? 'Almuerzo Anulado Correctamente' : 'Almuerzo Activado Correctamente'),
+            text: (data.state == 'Inactivo' ? 'Funcionario Anulado del almuerzo Correctamente' : 'Se le ha activado el almuerzo al funcionario correctamente'),
             showCancel: false
           })
         });

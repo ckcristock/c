@@ -9,6 +9,7 @@ import { VacacionesComponent } from './vacaciones/vacaciones.component';
 import { NominaComponent } from './nomina/nomina.component';
 import { PrimasComponent } from './primas/primas.component';
 import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-funcionario.component';
+import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
 
 const routes: Routes = [
     { path:'prestamos', component: PrestamosLibranzasComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
     { path: 'ver-viatico/:id', component: VerViaticosComponent },
     { path: 'crear-viatico', component: CrearViaticosComponent },
     { path: 'editar-viatico/:id', component: EditarViaticoComponent },
+    { path: 'viaticos/legalizar/:id', component: LegalizarComponent },
     { path: 'vacaciones', component: VacacionesComponent},
     { path: 'nomina', component: NominaComponent},
     { path: 'primas', component: PrimasComponent},

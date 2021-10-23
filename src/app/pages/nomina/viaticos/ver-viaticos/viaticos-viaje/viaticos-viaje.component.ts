@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ViaticosViajeComponent implements OnInit {
   @Input('data') data:any
+  @Input('all') all = true;
   constructor() { }
 
   ngOnInit(): void {

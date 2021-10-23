@@ -31,17 +31,23 @@
     </div>
   </div>
   <div class="card">
-
     <div class="card-body" *ngIf="!loading">
-      <app-viaticos-viaje [data]="data"></app-viaticos-viaje>
-      <app-hospedaje *ngIf="data.hotels.length"></app-hospedaje>
+      <app-viaticos-viaje *ngIf="data" [data]="data"></app-viaticos-viaje>
+      <app-hospedaje [legal]="true" *ngIf="data.hotels.length"></app-hospedaje>
+      {{ validHotel }}
+      <br />
       <app-transporte-terrestre
         *ngIf="data.transports.length"
+        [legal]="true"
       ></app-transporte-terrestre>
-
+      {{ validTransport }}
+ 
       <app-viaticos-taxis
-        *ngIf="data.expense_taxi_cities.length"
+        *ngIf="data.expense_taxi_cities.length" 
+        [legal]="true"
       ></app-viaticos-taxis>
+      {{validTaxi}}
+      
       <app-viaticos-alimentacion
         *ngIf="data.feedings.length"
         [feedings]="data.feedings"
@@ -52,7 +58,11 @@
 
   <div class="row mb-2">
     <div class="col-12">
-      <button (click)="download()" class="btn btn-primary btn-sm btn-block">
+      <button
+        (click)="download()"
+        [disabled]="!validHotel"
+        class="btn btn-primary btn-sm btn-block"
+      >
         <i class="fas fa-file-download"></i> Descargar
       </button>
     </div>

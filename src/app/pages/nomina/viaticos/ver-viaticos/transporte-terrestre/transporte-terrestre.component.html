@@ -1,14 +1,17 @@
 <hr style="background-color: rgb(180, 248, 79)" />
 <div class="title">
-    <h5>TRANSPORTE TERRESTRE</h5>
+  <h5>TRANSPORTE TERRESTRE</h5>
 </div>
 <div class="row">
-    <div class="col-12">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        <label for="tipo_transporte" class="col-form-label col-form-label-sm">Tipo</label
+  <div class="col-12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>
+            <label
+              for="tipo_transporte"
+              class="col-form-label col-form-label-sm"
+              >Tipo</label
             >
           </th>
           <th>
@@ -46,6 +49,20 @@
               >Valor Tiquete</label
             >
           </th>
+          <th *ngIf="legal">
+            <label
+              for="total_hospedaje"
+              class="col-form-label col-form-label-sm"
+              >Legalizar</label
+            >
+          </th>
+          <th *ngIf="legal">
+            <label
+              for="total_hospedaje"
+              class="col-form-label col-form-label-sm"
+              >Archivo</label
+            >
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -67,9 +84,31 @@
           <td>
             {{ item.departure_date }}
           </td>
-          <td class="text-right" >
-	     
+          <td class="text-right">
             {{ item.ticket_value }}
+          </td>
+          <td *ngIf="legal">
+            <input
+              type="number"
+              class="form-control form-control-sm"
+              placeholder="valor reportado"
+              name=""
+              [(ngModel)]="item.reported"
+              id=""
+            />
+          </td>
+          <td *ngIf="legal">
+            <div class="image-upload">
+              <label for="file-input-tr{{ i }}" class="text-right">
+                <i class="fas fa-cloud-upload-alt text-primary"></i>
+              </label>
+              <input
+                #file
+                (change)="onFileChanged($event, i, item)"
+                id="file-input-tr{{ i }}"
+                type="file"
+              />
+            </div>
           </td>
         </tr>
       </tbody>

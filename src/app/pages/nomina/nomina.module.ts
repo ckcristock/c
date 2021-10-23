@@ -33,6 +33,7 @@ import { ModalIngresosPrestacionalesComponent } from './nomina/modals/modal-ingr
 import { IngresoPrestacionalComponent } from './nomina/forms/ingreso-prestacional/ingreso-prestacional.component';
 import { PrimasComponent } from './primas/primas.component';
 import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-funcionario.component';
+import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
 
 @NgModule({
   imports: [
@@ -71,7 +72,8 @@ import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-func
     ModalIngresosPrestacionalesComponent,
     IngresoPrestacionalComponent,
     PrimasComponent,
-    PrimaFuncionarioComponent
+    PrimaFuncionarioComponent,
+    LegalizarComponent
   ],
 })
 export class NominaModule {}

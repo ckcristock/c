@@ -60,36 +60,30 @@
                         let-subSubitem
                         [ngForOf]="subitem.child"
                       >
+         
                         <div
                           class="dropdown"
                           *ngIf="hasItems(subSubitem); else refs"
                         >
-                          <ng-template
-                            ngFor
-                            let-subSubitem1
-                            [ngForOf]="subSubitem.child"
-                          >
-                            <a
-                              class="dropdown-item"
-                              (click)="onMenuClick($event)"
-                              >{{ subSubitem.name }}
-                              <div class="arrow-down"></div>
-                            </a>
-                            <div class="dropdown-menu">
+                          <a class="dropdown-item" (click)="onMenuClick($event)"
+                            >{{ subSubitem.name }}
+                            <div class="arrow-down"></div>
+                          </a>
+                          <div class="dropdown-menu">
                               <ng-template
-                                ngFor
-                                let-subSubitem2
-                                [ngForOf]="subSubitem.child"
+                              ngFor
+                              let-subSubitem2
+                              [ngForOf]="subSubitem.child"
                               >
-                                <a
-                                  class="dropdown-item side-nav-link-ref"
-                                  [routerLink]="subSubitem1.link"
-                                  routerLinkActive="active"
-                                  >{{ subSubitem2.name }}</a
-                                >
-                              </ng-template>
-                            </div>
-                          </ng-template>
+                        
+                              <a
+                                class="dropdown-item side-nav-link-ref"
+                                [routerLink]="subSubitem2.link"
+                                routerLinkActive="active"
+                                >{{ subSubitem2.name }}</a
+                              >
+                            </ng-template>
+                          </div>
                         </div>
                         <ng-template #refs>
                           <a

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HotelesService } from '../hoteles/hoteles.service';
 import { TaxisService } from './taxis.service';
-import { SwalService } from '../services/swal.service';
+import { SwalService } from '../../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-taxis',

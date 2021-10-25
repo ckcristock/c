@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LicenciaConduccionService } from './licencia-conduccion.service';
-import { SwalService } from '../services/swal.service';
+import { SwalService } from '../../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-licencia-conduccion',

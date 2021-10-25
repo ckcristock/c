@@ -15,6 +15,9 @@ import { DepartamentosComponent } from './departamentos/departamentos.component'
 import { MunicipiosComponent } from './municipios/municipios.component';
 import { BancosComponent } from './bancos/bancos.component';
 import { CuentasBancariasComponent } from './cuentas-bancarias/cuentas-bancarias.component';
+import { HotelesComponent } from './viaticos/hoteles/hoteles.component';
+import { TaxisComponent } from './viaticos/taxis/taxis.component';
+import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/licencia-conduccion.component';
 
 
 
@@ -23,7 +26,15 @@ import { CuentasBancariasComponent } from './cuentas-bancarias/cuentas-bancarias
         NotasTecnicasComponent, 
         PerfilesComponent, 
         ZonasComponent, 
-        RgpComponent, EpsComponent, DepartamentosComponent, MunicipiosComponent, BancosComponent, CuentasBancariasComponent
+        RgpComponent, 
+        EpsComponent, 
+        DepartamentosComponent, 
+        MunicipiosComponent, 
+        BancosComponent, 
+        CuentasBancariasComponent,
+        HotelesComponent,
+        TaxisComponent,
+        LicenciaConduccionComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

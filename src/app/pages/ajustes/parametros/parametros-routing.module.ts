@@ -8,6 +8,9 @@ import { EpsComponent } from "./eps/eps.component";
 import { DepartamentosComponent } from "./departamentos/departamentos.component";
 import { BancosComponent } from './bancos/bancos.component';
 import { CuentasBancariasComponent } from "./cuentas-bancarias/cuentas-bancarias.component";
+import { HotelesComponent } from './viaticos/hoteles/hoteles.component';
+import { TaxisComponent } from './viaticos/taxis/taxis.component';
+import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/licencia-conduccion.component';
 
 
 const routes : Routes = [
@@ -19,6 +22,9 @@ const routes : Routes = [
     { path: 'departamentos', component : DepartamentosComponent },
     { path: 'bancos', component : BancosComponent },
     { path: 'cuentas-bancarias', component : CuentasBancariasComponent },
+    { path: 'viaticos/hoteles', component: HotelesComponent },
+    { path: 'viaticos/taxis', component: TaxisComponent },
+    { path: 'vacantes/licencia-conduccion', component: LicenciaConduccionComponent }
 ]
 
 

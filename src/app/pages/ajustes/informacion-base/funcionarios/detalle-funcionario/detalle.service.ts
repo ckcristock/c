@@ -16,4 +16,12 @@ export class DetalleService {
   liquidar(data:any, id){
     return this.http.put(`${environment.base_url}/liquidateOrActivate/${id}`, data);
   }
+
+  getUser(id){
+    return this.http.get(`${environment.base_url}/users/${id}`);
+  }
+
+  blockUser( data:any, id ){
+    return this.http.put(`${environment.base_url}/blockOrActivate/${id}`, data);
+  }
 }

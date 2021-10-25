@@ -1,4 +1,5 @@
 export const consts = {
+  maxSizeFile:500000,
   degree: [
     { clave: 'Primaria', valor: 'Primaria' },
     { clave: 'Secundaria', valor: 'Secundaria' },

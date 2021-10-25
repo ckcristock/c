@@ -123,6 +123,8 @@ export class SemanaTurnoComponent implements OnInit {
 
       return turn;
     }
+    console.log('asd',turn,turn.rotating_turn_id);
+    
     if (!turn.rotating_turn_id) {
       turn.color = '#000';
     } else if (findColor){

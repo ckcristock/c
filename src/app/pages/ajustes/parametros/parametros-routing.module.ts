@@ -5,7 +5,6 @@ import { RgpComponent } from './rgp/rgp.component';
 import { NotasTecnicasComponent } from './notas-tecnicas/notas-tecnicas.component';
 import { ZonasComponent } from "./zonas/zonas.component";
 import { EpsComponent } from "./eps/eps.component";
-import { DepartamentosComponent } from "./departamentos/departamentos.component";
 import { BancosComponent } from './bancos/bancos.component';
 import { CuentasBancariasComponent } from "./cuentas-bancarias/cuentas-bancarias.component";
 import { HotelesComponent } from './viaticos/hoteles/hoteles.component';
@@ -19,7 +18,6 @@ const routes : Routes = [
     { path: 'zonas', component : ZonasComponent },
     { path: 'eps', component:  EpsComponent},
     { path: 'notas-tecnicas', component : NotasTecnicasComponent },
-    { path: 'departamentos', component : DepartamentosComponent },
     { path: 'bancos', component : BancosComponent },
     { path: 'cuentas-bancarias', component : CuentasBancariasComponent },
     { path: 'viaticos/hoteles', component: HotelesComponent },

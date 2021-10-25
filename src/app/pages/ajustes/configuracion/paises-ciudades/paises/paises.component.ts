@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PaisesService } from './paises.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { SwalService } from '../services/swal.service';
+import { SwalService } from '../../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-paises',

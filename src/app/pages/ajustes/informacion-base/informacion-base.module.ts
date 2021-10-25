@@ -44,8 +44,6 @@ import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
 import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
-import { CiudadesComponent } from './ciudades/ciudades.component';
-import { PaisesComponent } from './paises/paises.component';
 
 @NgModule({
   declarations: [
@@ -78,8 +76,6 @@ import { PaisesComponent } from './paises/paises.component';
     ArlComponent,
     CajaCompensacionComponent,
     FondoCesantiasComponent,
-    CiudadesComponent,
-    PaisesComponent
   ],
 
   imports: [

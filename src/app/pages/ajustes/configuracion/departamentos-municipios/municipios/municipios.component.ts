@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { DepartamentosService } from '../departamentos/departamentos.service';
 import { MunicipiosService } from './municipios.service';
 
 @Component({

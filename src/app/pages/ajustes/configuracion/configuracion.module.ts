@@ -10,6 +10,14 @@ import { DatosPilaComponent } from '../configuracion/configuracion-empresa/datos
 import { ConfiguracionRoutingModule } from './configuracion-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CamposTercerosComponent } from './campos-terceros/campos-terceros.component';
+import { MunicipiosComponent } from './departamentos-municipios/municipios/municipios.component';
+import { DepartamentosComponent } from './departamentos-municipios/departamentos/departamentos.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { PaisesComponent } from './paises-ciudades/paises/paises.component';
+import { CiudadesComponent } from './paises-ciudades/ciudades/ciudades.component';
+import { PaisesCiudadesComponent } from './paises-ciudades/paises-ciudades.component';
+import { DepartamentosMunicipiosComponent } from './departamentos-municipios/departamentos-municipios.component';
 
 
 
@@ -20,7 +28,13 @@ import { CamposTercerosComponent } from './campos-terceros/campos-terceros.compo
     DatosPagoComponent,
     DatosPilaComponent,
     DatosBasicosEmpresaComponent,
-    CamposTercerosComponent
+    CamposTercerosComponent,
+    MunicipiosComponent,
+    DepartamentosComponent,
+    PaisesComponent,
+    CiudadesComponent,
+    PaisesCiudadesComponent,
+    DepartamentosMunicipiosComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +42,10 @@ import { CamposTercerosComponent } from './campos-terceros/campos-terceros.compo
     FormsModule,
     ConfiguracionRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgSelectModule,
+    NgbDropdownModule,
+    NgbPaginationModule,
   ]
 })
 export class ConfiguracionModule { }

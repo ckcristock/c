@@ -11,8 +11,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { CommonModule } from "@angular/common";
 import { EpsComponent } from './eps/eps.component';
-import { DepartamentosComponent } from './departamentos/departamentos.component';
-import { MunicipiosComponent } from './municipios/municipios.component';
 import { BancosComponent } from './bancos/bancos.component';
 import { CuentasBancariasComponent } from './cuentas-bancarias/cuentas-bancarias.component';
 import { HotelesComponent } from './viaticos/hoteles/hoteles.component';
@@ -27,9 +25,7 @@ import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/lice
         PerfilesComponent, 
         ZonasComponent, 
         RgpComponent, 
-        EpsComponent, 
-        DepartamentosComponent, 
-        MunicipiosComponent, 
+        EpsComponent,  
         BancosComponent, 
         CuentasBancariasComponent,
         HotelesComponent,

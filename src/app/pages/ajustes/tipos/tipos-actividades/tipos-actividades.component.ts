@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TipoActividadesService } from './tipo-actividades.service';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-tipos-actividades',
@@ -24,7 +25,8 @@ export class TiposActividadesComponent implements OnInit {
   constructor( 
                 private fb: FormBuilder,
                 private _tipoAct: TipoActividadesService,
-                private _validators: ValidatorsService
+                private _validators: ValidatorsService,
+                private _swal: SwalService
               ) { }
 
   ngOnInit(): void {
@@ -67,9 +69,16 @@ export class TiposActividadesComponent implements OnInit {
 
   save(){
     this._tipoAct.saveActivityType(this.form.value).subscribe((r:any) => {
+      console.log(r);
       this.getActivityTypes();
       this.modal.hide();
       this.form.reset();
+      this._swal.show({
+        icon: 'success',
+        title: r.data,
+        text: '',
+        showCancel: false
+      })
     })
   }
 

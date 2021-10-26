@@ -16,6 +16,11 @@ import { CuentasBancariasComponent } from './cuentas-bancarias/cuentas-bancarias
 import { HotelesComponent } from './viaticos/hoteles/hoteles.component';
 import { TaxisComponent } from './viaticos/taxis/taxis.component';
 import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/licencia-conduccion.component';
+import { GeometriasComponent } from './apu/geometrias/geometrias.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-geometria.component';
+import { PipesModule } from '../../../core/pipes/pipes.module';
+import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
 
 
 
@@ -30,7 +35,10 @@ import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/lice
         CuentasBancariasComponent,
         HotelesComponent,
         TaxisComponent,
-        LicenciaConduccionComponent
+        LicenciaConduccionComponent,
+        GeometriasComponent,
+        CrearGeometriaComponent,
+        VerGeometriaComponent
     ],
     imports: [ 
         ParametrosRoutingModule,
@@ -41,7 +49,9 @@ import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/lice
         NgbPaginationModule,
         FormsModule,
         NgSelectModule,
-        CommonModule
+        CommonModule,
+        PerfectScrollbarModule,
+        PipesModule
     ],
     exports: []
 })

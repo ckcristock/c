@@ -10,6 +10,9 @@ import { CuentasBancariasComponent } from "./cuentas-bancarias/cuentas-bancarias
 import { HotelesComponent } from './viaticos/hoteles/hoteles.component';
 import { TaxisComponent } from './viaticos/taxis/taxis.component';
 import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/licencia-conduccion.component';
+import { GeometriasComponent } from './apu/geometrias/geometrias.component';
+import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-geometria.component';
+import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
 
 
 const routes : Routes = [
@@ -22,7 +25,11 @@ const routes : Routes = [
     { path: 'cuentas-bancarias', component : CuentasBancariasComponent },
     { path: 'viaticos/hoteles', component: HotelesComponent },
     { path: 'viaticos/taxis', component: TaxisComponent },
-    { path: 'vacantes/licencia-conduccion', component: LicenciaConduccionComponent }
+    { path: 'vacantes/licencia-conduccion', component: LicenciaConduccionComponent },
+    { path: 'apu/geometrias', component: GeometriasComponent },
+    { path: 'apu/crear-geometria', component: CrearGeometriaComponent },
+    { path: 'apu/editar-geometria/:id', component: CrearGeometriaComponent },
+    { path: 'apu/ver-geometria/:id', component: VerGeometriaComponent }
 ]
 
 

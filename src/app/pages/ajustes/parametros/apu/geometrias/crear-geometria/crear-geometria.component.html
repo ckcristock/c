@@ -1,0 +1,84 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <h4 class="text-primary">Crear/Editar Geometría</h4>
+                </div>
+                <hr class="bg-primary">
+                <form [formGroup]="form">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="col-12">
+                                <div class="form-row">
+                                    <div class="form-group col-6">
+                                        <label for="">Nombre</label>
+                                        <input type="text" class="form-control form-control-sm" formControlName="name">
+                                        <ng-container *ngIf="name_valid">
+                                            <small *ngFor="let item of form.get('name').errors | ObjToArrayPipe" class="text-danger">
+                                              {{ item?.msj }}
+                                            </small>
+                                        </ng-container>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="">Imagen</label>
+                                        <input type="file" accept="image/*" (change)="onFileChanged($event)">
+                                        <!-- <ng-container *ngIf="image_valid">
+                                            <small *ngFor="let item of form.get('image').errors | ObjToArrayPipe" class="text-danger">
+                                              {{ item?.msj }}
+                                            </small>
+                                        </ng-container> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <div class="row">
+                                    <div class="col-3" *ngFor="let selected of fill">
+                                        <span class="mt-3">{{selected.text}}:
+                                            <b class="text-dark">{{ '{' +selected.measure+ '}' }}</b>
+                                        </span>
+                                    </div>
+                                </div>
+                                <table class="table table-striped">
+                                    <tr class="bg-light" *ngIf="!fill.length">
+                                        <td colspan="100%" class="text-center">
+                                            <p class="mt-3" style="font-size: 20px; font-family: 'Noto Sans Display', sans-serif;">Sin datos agregados</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <label for="">Formula Peso</label>
+                                <textarea name="formula" id="" formControlName="weight_formula" cols="30" rows="2" class="form-control form-control-sm"></textarea>
+                                <ng-container *ngIf="weight_formula_valid">
+                                    <small *ngFor="let item of form.get('weight_formula').errors | ObjToArrayPipe" class="text-danger">
+                                      {{ item?.msj }}
+                                    </small>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card-body">
+                                <p class="text-danger"> {{ message }} </p>
+                                <perfect-scrollbar style="height: 300px;">
+                                    <!-- <ng-container *ngIf="measures_valid">
+                                        <small *ngFor="let item of form.get('measures').errors | ObjToArrayPipe" class="text-danger">
+                                          {{ item?.msj }}
+                                        </small>
+                                    </ng-container> -->
+                                    <div class="custom-control custom-checkbox" *ngFor="let item of measures">
+                                        <input class="custom-control-input" [checked]="item.checked" (change)="(item.checked = !item.checked); message = ''" type="checkbox" [id]="item.value">
+                                        <label class="custom-control-label" [for]="item.value">
+                                            {{ item.text }}
+                                        </label>
+                                    </div>
+                                </perfect-scrollbar>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row mt-2">
+                    <button class="col-12 btn btn-sm btn-primary" (click)="save()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

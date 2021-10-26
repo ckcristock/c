@@ -21,6 +21,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-geometria.component';
 import { PipesModule } from '../../../core/pipes/pipes.module';
 import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
+import { MaterialesComponent } from './apu/materiales/materiales.component';
 
 
 
@@ -38,7 +39,8 @@ import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geomet
         LicenciaConduccionComponent,
         GeometriasComponent,
         CrearGeometriaComponent,
-        VerGeometriaComponent
+        VerGeometriaComponent,
+        MaterialesComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

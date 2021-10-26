@@ -17,4 +17,8 @@ export class CamposTercerosService {
     return this.http.post(`${environment.base_url}/third-party-fields`, data);
   }
 
+  changeState(data, id){
+    return this.http.put(`${environment.base_url}/changeStateField/${id}`, data);
+  }
+
 }

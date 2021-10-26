@@ -15,15 +15,33 @@
                     <th>Requerido</th>
                     <th>Longitud</th>
                     <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let field of fields">
+                <tr *ngFor="let field of fields" [ngClass]="{'bg-danger text-white': (field.state == 'Inactivo')}">
                     <td> {{ field.label | titlecase }} </td>
                     <td> {{ field.type | titlecase }} </td>
                     <td> {{ field.required }} </td>
                     <td> {{ field.length }} </td>
                     <td> {{ field.state }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a *ngIf="field.state == 'Activo'" (click)="changeState(field.id, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                        <i class="far fa-trash-alt"></i> Anular
+                                    </a>
+                                    <a *ngIf="field.state == 'Inactivo'" (click)="changeState(field.id, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                        <i class="fas fa-check"></i> Activar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

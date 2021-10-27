@@ -36,6 +36,7 @@ export class UnidadesMedidasComponent implements OnInit {
 
   createForm(){
     this.form = this.fb.group({
+      id:[this.unit.id],
       name: ['', this._validators.required]
     })
   }
@@ -52,7 +53,7 @@ export class UnidadesMedidasComponent implements OnInit {
   getUnits(){
     this.loading = true;
     this._units.getUnits().subscribe((r:any) => {
-      this.units = r.data;
+      this.units = r;
       this.loading = false;
     })
   }

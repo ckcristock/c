@@ -15,6 +15,9 @@ import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-
 import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
 import { MaterialesComponent } from './apu/materiales/materiales.component';
 import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medidas.component';
+import { MaquinasHerramientasComponent } from './apu/maquinas-herramientas/maquinas-herramientas.component';
+import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-internos.component';
+import { ProcesosExternosComponent } from "./apu/procesos-externos/procesos-externos.component";
 
 
 const routes : Routes = [
@@ -28,13 +31,18 @@ const routes : Routes = [
     { path: 'viaticos/hoteles', component: HotelesComponent },
     { path: 'viaticos/taxis', component: TaxisComponent },
     { path: 'vacantes/licencia-conduccion', component: LicenciaConduccionComponent },
+
     { path: 'apu/geometrias', component: GeometriasComponent },
     { path: 'apu/crear-geometria', component: CrearGeometriaComponent },
     { path: 'apu/editar-geometria/:id', component: CrearGeometriaComponent },
     { path: 'apu/ver-geometria/:id', component: VerGeometriaComponent },
 
     { path: 'apu/materiales', component: MaterialesComponent },
+
     { path: 'apu/unidades-medidas', component: UnidadesMedidasComponent },
+    { path: 'apu/maquinas-herramientas', component: MaquinasHerramientasComponent },
+    { path: 'apu/procesos-internos', component: ProcesosInternosComponent },
+    { path: 'apu/procesos-externos', component: ProcesosExternosComponent },
 ]
 
 

@@ -23,6 +23,9 @@ import { PipesModule } from '../../../core/pipes/pipes.module';
 import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
 import { MaterialesComponent } from './apu/materiales/materiales.component';
 import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medidas.component';
+import { MaquinasHerramientasComponent } from './apu/maquinas-herramientas/maquinas-herramientas.component';
+import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-internos.component';
+import { ProcesosExternosComponent } from './apu/procesos-externos/procesos-externos.component';
 
 
 
@@ -42,7 +45,10 @@ import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medida
         CrearGeometriaComponent,
         VerGeometriaComponent,
         MaterialesComponent,
-        UnidadesMedidasComponent
+        UnidadesMedidasComponent,
+        MaquinasHerramientasComponent,
+        ProcesosInternosComponent,
+        ProcesosExternosComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

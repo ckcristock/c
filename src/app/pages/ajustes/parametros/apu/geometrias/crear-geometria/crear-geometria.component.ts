@@ -42,7 +42,7 @@ export class CrearGeometriaComponent implements OnInit {
       name: ['', this._validators.required],
       image: [''],
       weight_formula: ['', this._validators.required],
-      measures: ['', this._validators.required],
+      measures: [''],
     });
   }
 
@@ -54,6 +54,9 @@ export class CrearGeometriaComponent implements OnInit {
         image: this.geometry.image,
         weight_formula: this.geometry.weight_formula
       })
+      /* this.geometry.measures.forEach(r => {
+        return this.measures.filter((r) => r.checked);
+      }); */
     })
   }
   
@@ -87,8 +90,8 @@ export class CrearGeometriaComponent implements OnInit {
   }
 
   save() {
-    /* this.form.markAllAsTouched();
-    if (this.form.invalid) { return false;} */
+    this.form.markAllAsTouched();
+    if (this.form.invalid) { return false;}
     let image = this.imageString;
     let measures = this.measures.reduce((acc, el) => {
       return el.checked ? [...acc, el.value] : acc;

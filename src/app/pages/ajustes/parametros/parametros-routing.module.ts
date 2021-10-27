@@ -13,6 +13,7 @@ import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/lice
 import { GeometriasComponent } from './apu/geometrias/geometrias.component';
 import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-geometria.component';
 import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
+import { MaterialesComponent } from './apu/materiales/materiales.component';
 
 
 const routes : Routes = [
@@ -29,7 +30,9 @@ const routes : Routes = [
     { path: 'apu/geometrias', component: GeometriasComponent },
     { path: 'apu/crear-geometria', component: CrearGeometriaComponent },
     { path: 'apu/editar-geometria/:id', component: CrearGeometriaComponent },
-    { path: 'apu/ver-geometria/:id', component: VerGeometriaComponent }
+    { path: 'apu/ver-geometria/:id', component: VerGeometriaComponent },
+
+    { path: 'apu/materiales', component: MaterialesComponent },
 ]
 
 

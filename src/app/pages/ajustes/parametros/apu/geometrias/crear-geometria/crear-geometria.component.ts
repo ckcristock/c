@@ -50,10 +50,9 @@ export class CrearGeometriaComponent implements OnInit {
     this._geometrias.getGeometry(this.id).subscribe((r:any) => {
       this.geometry = r.data;
       this.form.patchValue({
-        name: this.geometry.name,
+        name: this.geometry.text,
         image: this.geometry.image,
-        weight_formula: this.geometry.weight_formula,
-        measures: this.geometry.measures
+        weight_formula: this.geometry.weight_formula
       })
     })
   }

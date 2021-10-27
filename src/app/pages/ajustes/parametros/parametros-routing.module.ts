@@ -14,6 +14,7 @@ import { GeometriasComponent } from './apu/geometrias/geometrias.component';
 import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-geometria.component';
 import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
 import { MaterialesComponent } from './apu/materiales/materiales.component';
+import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medidas.component';
 
 
 const routes : Routes = [
@@ -33,6 +34,7 @@ const routes : Routes = [
     { path: 'apu/ver-geometria/:id', component: VerGeometriaComponent },
 
     { path: 'apu/materiales', component: MaterialesComponent },
+    { path: 'apu/unidades-medidas', component: UnidadesMedidasComponent },
 ]
 
 

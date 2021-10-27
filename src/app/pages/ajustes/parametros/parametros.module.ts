@@ -22,6 +22,7 @@ import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-
 import { PipesModule } from '../../../core/pipes/pipes.module';
 import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
 import { MaterialesComponent } from './apu/materiales/materiales.component';
+import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medidas.component';
 
 
 
@@ -40,7 +41,8 @@ import { MaterialesComponent } from './apu/materiales/materiales.component';
         GeometriasComponent,
         CrearGeometriaComponent,
         VerGeometriaComponent,
-        MaterialesComponent
+        MaterialesComponent,
+        UnidadesMedidasComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

@@ -4,14 +4,13 @@
   </div>
   <div class="col-md-4 offset-4 text-right">
     <span class="font-weight-bold">Periodo de pago</span>:
-    <i class="simple-icon-calendar"></i>
+    <i class="fas fa-calendar-week"></i>
     <span class="font-weight-bold">
-      11-10-2021
-      <!-- {{inicioPeriodoPagoFormato}} --></span
+      {{inicioPeriodo}}</span
     >
     -
-    <i class="simple-icon-calendar"></i>
-    <span class="font-weight-bold">31-10-2021</span>
+    <i class="fas fa-calendar-week"></i>
+    <span class="font-weight-bold">{{finPeriodo}}</span>
   </div>
 </div>
 
@@ -28,33 +27,40 @@
     >Volver a editar el pago</a
   >
 </div>
-
-<div class="row icon-cards">
+<!-- Conceptos CARDS -->
+<div class="row icon-cards" >
   <div class="card-body">
     <div class="row">
-      <div class="col-2">
+      <div class="col">
         <app-card-concepto
           [concepto]="nomina?.salarios"
           [icon]="'fas fa-money-bill-wave '"
           [label]="'Salarios (neto)'"
         ></app-card-concepto>
       </div>
-      <div class="col-2">
+      <div class="col">
         <app-card-concepto
           [concepto]="nomina?.provisiones"
           [icon]="'fas fa-coins'"
           [label]="'Provisiones'"
         ></app-card-concepto>
       </div>
-      <div class="col-2">
+      <div class="col">
         <app-card-concepto
           [concepto]="nomina?.seguridad_social"
           [icon]="'fa fa-ambulance'"
           [label]="'Seg. Social'"
         ></app-card-concepto>
       </div>
+      <div class="col">
+        <app-card-concepto
+          [concepto]="nomina?.retenciones"
+          [icon]="'fa fa-ambulance'"
+          [label]="'Retenciones'"
+        ></app-card-concepto>
+      </div>
 
-      <div class="col-2">
+      <div class="col">
         <app-card-concepto
           [concepto]="nomina?.parafiscales"
           [icon]="'fa fa-users'"
@@ -62,18 +68,18 @@
         ></app-card-concepto>
       </div>
 
-      <div class="col-2">
+      <div class="col">
         <app-card-concepto
           [concepto]="nomina?.extras"
           [icon]="'fas fa-user-clock'"
-          [label]="'Horas Extras'"
+          [label]="'Hor. Extras'"
         ></app-card-concepto>
       </div>
-      <div class="col-2">
+      <div class="col">
         <app-card-concepto
           [concepto]="nomina?.ingresos"
           [icon]="'fas fa-wallet'"
-          [label]="'Ingresos Adicionales'"
+          [label]="'Ing. Adicionales'"
         ></app-card-concepto>
       </div>
     </div>
@@ -87,13 +93,14 @@
       <!-- {{
       nomina.costo_total_empresa | moneda
       }} -->
-      $ 90.000.000
+     
+      $ {{nomina.costo_total_empresa  | currency: '':''  }}
     </span>
   </p>
 </div>
 
-<!-- Nomina paga  -->
-<div class="alert alert-light">
+<!-- Eventos Nomina paga  -->
+<div class="alert alert-light" *ngIf="nomina?.nomina_paga">
   <div class="row">
     <div class="col-3">
       <a class="text-center font-weight-bold nomina-descargables">
@@ -154,7 +161,7 @@
   </div>
 </div>
 
-<div class="row" v-if="renderizar">
+<div class="row" *ngIf="funcionarios.length && !loadingPeople; else notData">
   <div class="col-12">
     <h3 class="font-weight-bold">Lista de Funcionarios</h3>
     <!-- <div class="form-group row">
@@ -170,6 +177,13 @@
       <div class="card-body">
         <table class="table table-striped tabla-funcionarios">
           <thead>
+            <tr>
+              <th  colspan="2">
+                <ng-select [items]="people"  (change)="filter($event.value)" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                </ng-select>
+              </th>
+              <th colspan="5"></th>
+            </tr>
             <tr class="text-center">
               <th colspan="2">Funcionario</th>
               <th>Ingresos Prestacionales</th>
@@ -184,33 +198,27 @@
             <tr *ngFor="let funcionario of funcionarios" class="text-center">
               <td style="padding: 3px; width: 48px">
                 <img
-                  v-if="funcionario.image != null"
-                  :src="`${funcionario.image}`"
-                  class="img-funcionario"
-                  alt
+                class="rounded-circle header-profile-user"
+                [src]="funcionario.image"
+                alt="Header Avatar"
                 />
-                <img
-                  v-else
-                  :src="`/img/robot.jpg`"
-                  class="img-funcionario"
-                  alt
-                />
+               
               </td>
               <td style="width: 200px" class="text-left">
-                {{ funcionario.first_name }}
-                {{ funcionario.first_surname }}
+                {{ funcionario.name }}
+                {{ funcionario.surname }}
               </td>
               <td>
-                {{ funcionario.valor_ingresos_salariales }}
+                {{ funcionario.valor_ingresos_salariales | currency: '':''  }}
               </td>
               <td>
-                {{ funcionario.valor_ingresos_no_salariales }}
+                {{ funcionario.valor_ingresos_no_salariales | currency: '':''  }}
               </td>
-              <td>{{ funcionario.valor_deducciones }}</td>
+              <td>{{ funcionario.valor_deducciones | currency: '':''  }}</td>
               <td>
                 <p class="custom-label">
-                  {{ funcionario.salario_neto }} /
-                  {{ nomina.frecuencia_pago }}
+                  {{ funcionario.salario_neto | currency: '':''  }} /
+                  {{ nomina.frecuencia_pago   }}
                 </p>
               </td>
               <td style="padding: 5px">
@@ -305,3 +313,8 @@
 <app-horas-extras #modalExtras></app-horas-extras>
 <app-modal-novedades #modalNovedades></app-modal-novedades>
 <app-modal-ingresos-prestacionales #modalIngPrest></app-modal-ingresos-prestacionales>
+
+
+<ng-template #notData>
+  <app-not-data [loading]="loadingPeople" ></app-not-data>
+</ng-template>

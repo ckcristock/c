@@ -53,7 +53,7 @@ export class UnidadesMedidasComponent implements OnInit {
   getUnits(){
     this.loading = true;
     this._units.getUnits().subscribe((r:any) => {
-      this.units = r;
+      this.units = r.data;
       this.loading = false;
     })
   }

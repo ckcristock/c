@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { PayRollService } from './pay-roll.service';
 
 @Component({
@@ -9,35 +10,84 @@ import { PayRollService } from './pay-roll.service';
 })
 export class NominaComponent implements OnInit {
   nomina: any = {
-    frecuencia_pago:30,
+    frecuencia_pago: 30,
   };
-  constructor(private _payroll: PayRollService) {}
-  
-  funcionarios = [
-    { 
-      first_name:'Carlos',
-      first_surname:'Cardona',
-      valor_ingresos_salariales:1000000,
-      valor_ingresos_no_salariales:20000,
-      valor_deducciones:50000,
-      salario_neto:100000,
-      horasExtras:[
-        {tipo:'Diurno',value:2}
-      ],
-      novedades:[
-        {concepto:'Suspensión',dias:1}
-      ]
-     
-    }
-  ]
-  ngOnInit(): void {}
+  loadingPeople = false;
+  pago: any = {};
+  renderizar = false;
+  funcionarios = [];
+  funcionariosBase = [];
+  people = [];
 
-  get inicioPeriodoPagoFormato() {
-    return moment(this.nomina.inicio_periodo).format('DD/MM/YYYY');
+  constructor(
+    private _payroll: PayRollService,
+    private _people: PersonService
+  ) {}
+
+  ngOnInit(): void {
+    this.getPagoNomina();
+    this.getPeople();
   }
 
+  getPagoNomina() {
+    this.loadingPeople = true;
+    this._payroll.getPayrollPays().subscribe((r: any) => {
+      this.nomina = r.data;
+      this.pago.id = this.nomina.nomina_paga_id
+        ? this.nomina.nomina_paga_id
+        : '';
+
+      this.getFuncionarios(r.data.funcionarios);
+      this.getUsuario();
+      this.loadingPeople = false;
+    });
+  }
+  getUsuario() {
+    this.pago.admin_id = 1;
+  }
+
+  getFuncionarios(data) {
+    this.funcionarios = data;
+    this.funcionariosBase = data;
+    this.renderizar = true;
+  }
+
+  filter(event) {
+    console.log(event);
+    
+    if(event){
+      let fun= this.funcionariosBase.find(r=> r.id==event )
+      console.log(fun);
+      
+      this.funcionarios = fun ? [fun] : []
+
+    }else{
+      this.funcionarios = this.funcionariosBase
+    }
+    console.log(event);
+    console.log(this.funcionarios);
+  
+  }
+
+  getPeople() {
+    this._people.getAll({}).subscribe((res: any) => {
+      this.people = res.data;
+      this.people.unshift({ text: 'Todos', value: '' });
+    });
+  }
+
+  get inicioPeriodo() {
+    return this.nomina.inicio_periodo
+      ? moment(this.nomina.inicio_periodo).format('DD/MM/YYYY')
+      : '';
+  }
+  get finPeriodo() {
+    return this.nomina.fin_periodo
+      ? moment(this.nomina.fin_periodo).format('DD/MM/YYYY')
+      : '';
+  }
   cargarDatosFuncionarios(fechaInicio, fechaFin) {
-    this._payroll.getPayRoll().subscribe((r: any) => {
+    this._payroll.getPeoplePayroll().subscribe((r: any) => {
       this.nomina = r.data;
     });
   }

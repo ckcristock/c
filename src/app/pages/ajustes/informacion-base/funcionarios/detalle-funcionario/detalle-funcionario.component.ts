@@ -26,6 +26,7 @@ export class DetalleFuncionarioComponent implements OnInit {
     signature: '',
     title: ''
   };
+  user:any = {};
   constructor( 
               private detalleService: DetalleService, 
               private activateRoute: ActivatedRoute,
@@ -43,7 +44,7 @@ export class DetalleFuncionarioComponent implements OnInit {
     this.data$ = this.basicDataService.datos$.subscribe( data => {
       this.getBasicData();
     });
-
+    this.getUser();
   }
 
   regresar() :void {
@@ -58,23 +59,53 @@ export class DetalleFuncionarioComponent implements OnInit {
     let data = {
       status
     }
-    this.detalleService.liquidar(data, this.id).subscribe((r:any) => {
-      this._swal.show({
-        icon: 'question',
-        title: '¿Estas Seguro?',
-        text: 'Se dispone a liquidar el empleado'
-      }).then((result) => {
-        if (result.isConfirmed) {
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estas Seguro?',
+      text: 'Se dispone a liquidar el empleado'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.detalleService.liquidar(data, this.id).subscribe((r:any) => {
           this._swal.show({
             icon: 'success',
             title: 'Proceso Satisfactorio',
             text: 'El Funcionario ha sido liquidado con éxito.',
             showCancel: false
           });
-        }
-      });
+        });
+      }
     });
   }
+
+  getUser(){
+    this.detalleService.getUser(this.id).subscribe((r:any) => {
+      this.user = r.data;
+    })
+  }
+
+  bloquear(state){
+    let data = {
+      state
+    }
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estas Seguro?',
+      text: (data.state == 'Inactivo' ? 'Se dispone a bloquear el funcionario.' : 'Se dispone a activar el funcionario.')
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.detalleService.blockUser(data, this.id).subscribe((r:any) => {
+          this.getUser();
+          this._swal.show({
+            icon: 'success',
+            title: 'Proceso Satisfactorio',
+            text: (data.state == 'Inactivo' ? 'El Funcionario ha sido bloqueado con éxito.' : 'El Funcionario ha sido activado con éxito.'),
+            showCancel: false
+          });
+        })
+      }
+    });
+  }
+
 
   getBasicData(){
     this.detalleService.getBasicData(this.id)

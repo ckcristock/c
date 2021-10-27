@@ -5,9 +5,19 @@ import { RgpComponent } from './rgp/rgp.component';
 import { NotasTecnicasComponent } from './notas-tecnicas/notas-tecnicas.component';
 import { ZonasComponent } from "./zonas/zonas.component";
 import { EpsComponent } from "./eps/eps.component";
-import { DepartamentosComponent } from "./departamentos/departamentos.component";
 import { BancosComponent } from './bancos/bancos.component';
 import { CuentasBancariasComponent } from "./cuentas-bancarias/cuentas-bancarias.component";
+import { HotelesComponent } from './viaticos/hoteles/hoteles.component';
+import { TaxisComponent } from './viaticos/taxis/taxis.component';
+import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/licencia-conduccion.component';
+import { GeometriasComponent } from './apu/geometrias/geometrias.component';
+import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-geometria.component';
+import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
+import { MaterialesComponent } from './apu/materiales/materiales.component';
+import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medidas.component';
+import { MaquinasHerramientasComponent } from './apu/maquinas-herramientas/maquinas-herramientas.component';
+import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-internos.component';
+import { ProcesosExternosComponent } from "./apu/procesos-externos/procesos-externos.component";
 
 
 const routes : Routes = [
@@ -16,9 +26,23 @@ const routes : Routes = [
     { path: 'zonas', component : ZonasComponent },
     { path: 'eps', component:  EpsComponent},
     { path: 'notas-tecnicas', component : NotasTecnicasComponent },
-    { path: 'departamentos', component : DepartamentosComponent },
     { path: 'bancos', component : BancosComponent },
     { path: 'cuentas-bancarias', component : CuentasBancariasComponent },
+    { path: 'viaticos/hoteles', component: HotelesComponent },
+    { path: 'viaticos/taxis', component: TaxisComponent },
+    { path: 'vacantes/licencia-conduccion', component: LicenciaConduccionComponent },
+
+    { path: 'apu/geometrias', component: GeometriasComponent },
+    { path: 'apu/crear-geometria', component: CrearGeometriaComponent },
+    { path: 'apu/editar-geometria/:id', component: CrearGeometriaComponent },
+    { path: 'apu/ver-geometria/:id', component: VerGeometriaComponent },
+
+    { path: 'apu/materiales', component: MaterialesComponent },
+
+    { path: 'apu/unidades-medidas', component: UnidadesMedidasComponent },
+    { path: 'apu/maquinas-herramientas', component: MaquinasHerramientasComponent },
+    { path: 'apu/procesos-internos', component: ProcesosInternosComponent },
+    { path: 'apu/procesos-externos', component: ProcesosExternosComponent },
 ]
 
 

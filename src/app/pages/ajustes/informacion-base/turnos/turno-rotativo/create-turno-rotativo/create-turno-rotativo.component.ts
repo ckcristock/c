@@ -96,7 +96,9 @@ export class CreateTurnoRotativoComponent implements OnInit {
       id: [0],
     });
     this.forma.get('launch_time').disable();
+    this.forma.get('launch_time_two').disable();
     this.forma.get('breack_time').disable();
+    this.forma.get('breack_time_two').disable();
   }
   crearListeners() {
     this.forma.get('launch').valueChanges.subscribe((valor) => {

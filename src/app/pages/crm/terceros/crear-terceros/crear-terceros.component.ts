@@ -67,7 +67,6 @@ export class CrearTercerosComponent implements OnInit {
     this.getDepartments();
     this.getMunicipalitites();
     this.id = this.actRoute.snapshot.params.id;
-    this.getThirdParty();
     this.getWinningLists();
     this.getCiiuCodeLists();
     this.getDianAddress();
@@ -209,14 +208,16 @@ export class CrearTercerosComponent implements OnInit {
     this._terceros.getFields().subscribe((r:any) => {
       this.fields = r.data;
       this.fields.forEach((field:any) => {
-        let field_name = field.name
+        let field_name = field.name;
         this.field = field_name;
         this.form.addControl(field_name, this.fb.control(''));
-        /* console.log(this.third.field_name);
         this.form.patchValue({
-          nueva_fecha: this.third.nueva_fecha
-        }) */
+          field_name
+        });
       });
+      if (this.id) {
+        this.getThirdParty();
+      }
     })
   }
 
@@ -386,7 +387,13 @@ export class CrearTercerosComponent implements OnInit {
         image: this.third.image,
         rut: this.third.rut,
       });
-
+      this.fields.forEach((field:any) => {
+        let field_name = field.name;
+        this.field = field_name;
+        let p:any = {}
+        p[field_name] =  this.third[field_name]
+        this.form.patchValue(p);
+      });
       this.third.third_party_person.forEach(third => {
         this.personList.push(this.fb.group({
           id: third.id,
@@ -454,7 +461,7 @@ export class CrearTercerosComponent implements OnInit {
         showCancel: false
       })
     }
-    if (this.form.value.id == "") {
+    if (!this.id) {
       this._swal.show({
         icon: 'question',
         title: '¿Estas seguro?',

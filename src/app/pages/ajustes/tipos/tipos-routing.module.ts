@@ -13,6 +13,7 @@ import { ProfesionesComponent } from './profesiones/profesiones.component';
 import { TiposActivoFijoComponent } from './tipos-activo-fijo/tipos-activo-fijo.component';
 import { TiposRetencionesComponent } from './tipos-retenciones/tipos-retenciones.component';
 import { TiposVisaComponent } from './tipos-visa/tipos-visa.component';
+import { TiposActividadesComponent } from './tipos-actividades/tipos-actividades.component';
 
 
 const routes : Routes = [
@@ -29,6 +30,7 @@ const routes : Routes = [
     { path: 'tipos-activo-fijo' , component: TiposActivoFijoComponent },
     { path: 'tipos-retenciones' , component: TiposRetencionesComponent },
     { path: 'tipos-visa' , component: TiposVisaComponent },
+    { path: 'tipos-actividades' , component: TiposActividadesComponent },
 ]
 
 @NgModule({

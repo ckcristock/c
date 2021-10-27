@@ -11,10 +11,21 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { CommonModule } from "@angular/common";
 import { EpsComponent } from './eps/eps.component';
-import { DepartamentosComponent } from './departamentos/departamentos.component';
-import { MunicipiosComponent } from './municipios/municipios.component';
 import { BancosComponent } from './bancos/bancos.component';
 import { CuentasBancariasComponent } from './cuentas-bancarias/cuentas-bancarias.component';
+import { HotelesComponent } from './viaticos/hoteles/hoteles.component';
+import { TaxisComponent } from './viaticos/taxis/taxis.component';
+import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/licencia-conduccion.component';
+import { GeometriasComponent } from './apu/geometrias/geometrias.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-geometria.component';
+import { PipesModule } from '../../../core/pipes/pipes.module';
+import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
+import { MaterialesComponent } from './apu/materiales/materiales.component';
+import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medidas.component';
+import { MaquinasHerramientasComponent } from './apu/maquinas-herramientas/maquinas-herramientas.component';
+import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-internos.component';
+import { ProcesosExternosComponent } from './apu/procesos-externos/procesos-externos.component';
 
 
 
@@ -23,7 +34,21 @@ import { CuentasBancariasComponent } from './cuentas-bancarias/cuentas-bancarias
         NotasTecnicasComponent, 
         PerfilesComponent, 
         ZonasComponent, 
-        RgpComponent, EpsComponent, DepartamentosComponent, MunicipiosComponent, BancosComponent, CuentasBancariasComponent
+        RgpComponent, 
+        EpsComponent,  
+        BancosComponent, 
+        CuentasBancariasComponent,
+        HotelesComponent,
+        TaxisComponent,
+        LicenciaConduccionComponent,
+        GeometriasComponent,
+        CrearGeometriaComponent,
+        VerGeometriaComponent,
+        MaterialesComponent,
+        UnidadesMedidasComponent,
+        MaquinasHerramientasComponent,
+        ProcesosInternosComponent,
+        ProcesosExternosComponent
     ],
     imports: [ 
         ParametrosRoutingModule,
@@ -34,7 +59,9 @@ import { CuentasBancariasComponent } from './cuentas-bancarias/cuentas-bancarias
         NgbPaginationModule,
         FormsModule,
         NgSelectModule,
-        CommonModule
+        CommonModule,
+        PerfectScrollbarModule,
+        PipesModule
     ],
     exports: []
 })

@@ -161,7 +161,7 @@
   </div>
 </div>
 
-<div class="row" *ngIf="funcionarios.length && !loadingPeople; else notData">
+<div class="row" >
   <div class="col-12">
     <h3 class="font-weight-bold">Lista de Funcionarios</h3>
     <!-- <div class="form-group row">
@@ -179,7 +179,7 @@
           <thead>
             <tr>
               <th  colspan="2">
-                <ng-select [items]="people"  (change)="filter($event.value)" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                <ng-select [items]="people"  (change)="filter($event?.value)" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
                 </ng-select>
               </th>
               <th colspan="5"></th>
@@ -194,7 +194,15 @@
             </tr>
           </thead>
 
-          <tbody>
+          <tbody >
+           
+              <tr *ngIf="!funcionarios.length">
+                <td colspan="7">
+                  <app-not-data  [loading]="loadingPeople" ></app-not-data>
+
+                </td>
+              </tr>
+             
             <tr *ngFor="let funcionario of funcionarios" class="text-center">
               <td style="padding: 3px; width: 48px">
                 <img
@@ -314,7 +322,3 @@
 <app-modal-novedades #modalNovedades></app-modal-novedades>
 <app-modal-ingresos-prestacionales #modalIngPrest></app-modal-ingresos-prestacionales>
 
-
-<ng-template #notData>
-  <app-not-data [loading]="loadingPeople" ></app-not-data>
-</ng-template>

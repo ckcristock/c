@@ -18,4 +18,8 @@ export class ModalNovedadesComponent implements OnInit {
     this.modal.show();
   }
 
+  get hasValues(){
+    return  Object.values(this.novedades).length
+  }
+
 }

@@ -1,16 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CountableIncomesService } from '../../../../../core/services/countable-incomes.service';
 import { NgForm } from '@angular/forms';
+import { CountableIncomesService } from 'src/app/core/services/countable-incomes.service';
 import { SwalService } from '../../../../ajustes/informacion-base/services/swal.service';
 
-const TYPE_INCOME: string = 'Constitutivo';
+const TYPE_INCOME: string = 'No Constitutivo';
 
 @Component({
-  selector: 'app-ingreso-prestacional',
-  templateUrl: './ingreso-prestacional.component.html',
-  styleUrls: ['./ingreso-prestacional.component.scss'],
+  selector: 'app-ingreso-no-prestacional',
+  templateUrl: './ingreso-no-prestacional.component.html',
+  styleUrls: ['./ingreso-no-prestacional.component.scss'],
 })
-export class IngresoPrestacionalComponent implements OnInit {
+export class IngresoNoPrestacionalComponent implements OnInit {
   @Input('person') person;
   @Input('periodo') periodo;
   @Input('nominaPaga') nominaPaga = false;
@@ -27,28 +27,28 @@ export class IngresoPrestacionalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getIngresosPrestacionales();
+    this.getIngresosNoPrestacionales();
   }
 
   save(form: NgForm) {
     this._swal
       .show({
         title: '¿Está seguro?',
-        text: 'Se dispone a guardar un ingreso prestacional',
+        text: 'Se dispone a guardar un ingreso NO prestacional',
         icon: 'question',
       })
       .then((r) => {
         if (r.isConfirmed) {
           this._countableIncomes
-            .saveBenefitIncome(form.value)
+            .saveBenefitNotIncome(form.value)
             .subscribe((r) => {
               this._swal.show({
                 title: 'Guardado con éxito',
-                text: 'Se ha guardado un ingreso prestacional',
+                text: 'Se ha guardado un ingreso no prestacional',
                 icon: 'success',
                 showCancel: false,
               });
-              this.getDatosIngresosP();
+              this.getDatosIngresosNP();
               this.update();
             });
         }
@@ -63,38 +63,38 @@ export class IngresoPrestacionalComponent implements OnInit {
       })
       .then((r) => {
         if (r.isConfirmed) {
-          this._countableIncomes.deleteBenefitIncome(id).subscribe((r) => {
+          this._countableIncomes.deleteBenefitNotIncome(id).subscribe((r) => {
             this._swal.show({
               title: 'Eliminado con éxito',
               text: 'Se ha eliminado un ingreso prestacional',
               icon: 'success',
               showCancel: false,
             });
-            this.getDatosIngresosP();
+            this.getDatosIngresosNP();
             this.update();
           });
         }
       });
   }
 
-  getIngresosPrestacionales() {
+  getIngresosNoPrestacionales() {
     this._countableIncomes
       .getCountableIncomes({ type: TYPE_INCOME })
       .subscribe((r: any) => {
         this.ingresosPDatos = r.data;
-        this.getDatosIngresosP();
+        this.getDatosIngresosNP();
       });
   }
-  getDatosIngresosP() {
+  getDatosIngresosNP() {
     this.loading = true;
     this._countableIncomes
-      .getBenefitIncome(this.person.id)
+      .getBenefitNotIncome(this.person.id)
       .subscribe((r: any) => {
         this.ingresos = r.data;
         this.loading = false;
       });
   }
-
+ 
   update() {
     this.updated.emit();
   }

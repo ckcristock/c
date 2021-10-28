@@ -1,6 +1,6 @@
 <app-modal-basic #modal [dialogClass]="'modal-md'">
   <div class="app-modal-header">
-    <h5 class="modal-title">Ingresos Prestacionales</h5>
+    <h5 class="modal-title">Ingresos No Prestacionales</h5>
     <button type="button" class="close basic-close" (click)="modal.hide();showData=false;">
       <span aria-hidden="true">
         <i class="fas fa-times" (click)="modal.hide()"></i>
@@ -15,14 +15,14 @@
         ref="ingresoPrestacional"
       ></app-ingreso-prestacional> -->
 
-    <app-ingreso-prestacional
+    <app-ingreso-no-prestacional
       #ingresoForm
       *ngIf="showData"
       [person]="person"
       [periodo]="periodo"
       [nominaPaga]="nominaPaga"
       (updated)="update()"
-    ></app-ingreso-prestacional>
+    ></app-ingreso-no-prestacional>
   </div>
   <div class="app-modal-footer">
     <div class="form-group text-right">

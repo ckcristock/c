@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-modal-ingresos-prestacionales',
-  templateUrl: './modal-ingresos-prestacionales.component.html',
-  styleUrls: ['./modal-ingresos-prestacionales.component.scss']
+  selector: 'app-modal-deducciones',
+  templateUrl: './modal-deducciones.component.html',
+  styleUrls: ['./modal-deducciones.component.scss']
 })
-export class ModalIngresosPrestacionalesComponent implements OnInit {
+export class ModalDeduccionesComponent implements OnInit {
   @ViewChild('modal') modal : any
   @ViewChild('ingresoForm') ingresoForm : any
   @Input('periodo') periodo :string
@@ -20,6 +20,8 @@ export class ModalIngresosPrestacionalesComponent implements OnInit {
   }
 
   show(funcionario){
+    console.log('asdasdas');
+    
     this.showData = false;
     this.person = funcionario
     this.showData = true;

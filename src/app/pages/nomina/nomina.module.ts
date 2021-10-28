@@ -30,10 +30,14 @@ import { CardConceptoComponent } from './nomina/card-concepto/card-concepto.comp
 import { HorasExtrasComponent } from './nomina/modals/horas-extras/horas-extras.component';
 import { ModalNovedadesComponent } from './nomina/modals/modal-novedades/modal-novedades.component';
 import { ModalIngresosPrestacionalesComponent } from './nomina/modals/modal-ingresos-prestacionales/modal-ingresos-prestacionales.component';
-import { IngresoPrestacionalComponent } from './nomina/forms/ingreso-prestacional/ingreso-prestacional.component';
 import { PrimasComponent } from './primas/primas.component';
 import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-funcionario.component';
 import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
+import { IngresoPrestacionalComponent } from './nomina/forms/ingreso-prestacional/ingreso-prestacional.component';
+import { IngresoNoPrestacionalComponent } from './nomina/forms/ingreso-no-prestacional/ingreso-no-prestacional.component';
+import { ModalIngresosNoPrestacionalesComponent } from './nomina/modals/modal-ingresos-no-prestacionales/modal-ingresos-no-prestacionales.component';
+import { ModalDeduccionesComponent } from './nomina/modals/modal-deducciones/modal-deducciones.component';
+import { DeduccionesComponent } from './nomina/forms/deducciones/deducciones.component';
 
 @NgModule({
   imports: [
@@ -70,10 +74,14 @@ import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
     HorasExtrasComponent,
     ModalNovedadesComponent,
     ModalIngresosPrestacionalesComponent,
-    IngresoPrestacionalComponent,
     PrimasComponent,
     PrimaFuncionarioComponent,
-    LegalizarComponent
+    LegalizarComponent,
+    IngresoPrestacionalComponent,
+    IngresoNoPrestacionalComponent,
+    ModalIngresosNoPrestacionalesComponent,
+    ModalDeduccionesComponent,
+    DeduccionesComponent
   ],
 })
 export class NominaModule {}

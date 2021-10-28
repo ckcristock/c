@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { PayRollService } from './pay-roll.service';
@@ -21,8 +22,12 @@ export class NominaComponent implements OnInit {
 
   constructor(
     private _payroll: PayRollService,
-    private _people: PersonService
-  ) {}
+    private _people: PersonService,
+    public config: NgbDropdownConfig
+  ) {
+    config.placement = 'left';
+    config.placement = 'left-bottom';
+  }
 
   ngOnInit(): void {
     this.getPagoNomina();
@@ -30,6 +35,8 @@ export class NominaComponent implements OnInit {
   }
 
   getPagoNomina() {
+    console.log('getting...');
+    
     this.loadingPeople = true;
     this._payroll.getPayrollPays().subscribe((r: any) => {
       this.nomina = r.data;
@@ -95,7 +102,7 @@ export class NominaComponent implements OnInit {
   deletePagoNomina() {}
 
   showInterfaceForGlobo(modal) {}
-  mostrarExtrasRecargos(fun) {}
+
   mostrarNovedades(fun) {}
   mostrarIngresosP(fun) {}
   mostrarIngresosNP(fun) {}

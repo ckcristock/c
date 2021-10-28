@@ -4,12 +4,12 @@ import { environment } from '../../../environments/environment';
 const base_url = environment.base_url;
 
 @Pipe({
-  name: 'ObjToArrayPipe'
+  name: 'ObjToArrayKeysPipe'
 })
-export class ObjToArrayPipe implements PipeTransform {
+export class ObjToArraykeysPipe implements PipeTransform {
 
   transform( object:any = []) : Array<any> {
-      return Object.values(object)
+      return Object.keys(object)
   }
 
 }

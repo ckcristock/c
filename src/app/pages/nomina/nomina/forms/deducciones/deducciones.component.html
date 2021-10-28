@@ -2,17 +2,16 @@
   <form #form="ngForm" (ngSubmit)="save(form)">
     <div class="form-group row">
       <label for="ingreso" class="col-md-4 col-form-label custom-label"
-        >Ingreso</label
+        >Deducción</label
       >
       <div class="col-md-8">
         <select
-          name="ingresosPDatos"
           required
-          name="countable_income_id"
+          name="countable_deduction_id"
           ngModel
           class="form-control custom-control"
         >
-          <option [value]="item.value" *ngFor="let item of ingresosPDatos">
+          <option [value]="item.value" *ngFor="let item of countDeducciones">
             {{ item.text }}
           </option>
         </select>
@@ -55,22 +54,22 @@
       </button>
     </div>
   </form>
-  <ng-container *ngIf="ingresos.length && !loading; else notData">
+  <ng-container *ngIf="deducciones.length && !loading; else notData">
     <div class="row mb-3 mt-2">
       <div class="col-md-12">
-        <h6>Ingresos actuales para {{ person.name }}</h6>
+        <h6>Deducciones actuales para {{ person.name }}</h6>
       </div>
     </div>
-    <div class="row" *ngFor="let ingresoP of ingresos">
+    <div class="row" *ngFor="let deduction of deducciones">
       <div class="col-md-6">
-        <p>{{ ingresoP.ingreso.concept }}</p>
+        <p>{{ deduction.deduccion.concept }}</p>
       </div>
       <div class="col-md-3">
-        <p>{{ ingresoP.value | currency: "":"" }}</p>
+        <p>{{ deduction.value | currency: "":"" }}</p>
       </div>
       <div class="col-md-3">
         <p class="text-right">
-          <a title="eliminar"  (click)="delete(ingresoP.id)" class="trash ml-1 text-danger" >
+          <a title="eliminar"  (click)="delete(deduction.id)" class="trash ml-1 text-danger" >
             <i class="fas fa-trash-alt"></i>
           </a>
         </p>
@@ -81,7 +80,7 @@
   <p class="alert alert-secondary mt-3">
     <small class="font-weight-bold"
       >Si se desea crear más ingresos constitutivos, puede ir al apartado de
-      parametrización "ingresos constitutivos"</small
+      parametrización "Deducciones"</small
     >
   </p>
 </div>

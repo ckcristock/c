@@ -238,7 +238,7 @@
                   >
                     <i class="mdi mdi-chevron-down"></i>
                   </button>
-                  <div ngbDropdownMenu>
+                  <div ngbDropdownMenu aria-labelledby="dropdownConfig"> 
                     <a
                       class="
                         dropdown-item
@@ -272,9 +272,20 @@
                         waves-light waves-effect
                         caja-botones
                       "
-                      (click)="mostrarIngresosNP(funcionario)"
+                      (click)="modalIngNoPrest.show(funcionario)"
                       >Ingresos no prestacionales</a
                     >
+                    
+                    <a
+                      class="
+                        dropdown-item
+                        waves-light waves-effect
+                        caja-botones
+                      "
+                      (click)="modalDeducciones.show(funcionario)"
+                      >Deducciones</a
+                    >
+                    <div class="dropdown-divider"></div>
                     <a
                       class="
                         dropdown-item
@@ -282,7 +293,7 @@
                         caja-botones
                       "
                       (click)="mostrarDeducciones(funcionario)"
-                      >Deducciones</a
+                      >Ver Cálculos</a
                     >
                   </div>
                 </div>
@@ -320,5 +331,28 @@
 
 <app-horas-extras #modalExtras></app-horas-extras>
 <app-modal-novedades #modalNovedades></app-modal-novedades>
-<app-modal-ingresos-prestacionales #modalIngPrest></app-modal-ingresos-prestacionales>
+
+<app-modal-ingresos-prestacionales 
+#modalIngPrest
+(updated)="getPagoNomina();"
+[nominaPaga]="nomina?.nomina_paga"
+[periodo]="nomina.frecuencia_pago" 
+>
+</app-modal-ingresos-prestacionales>
+
+<app-modal-ingresos-no-prestacionales 
+#modalIngNoPrest
+(updated)="getPagoNomina();"
+[nominaPaga]="nomina?.nomina_paga"
+[periodo]="nomina.frecuencia_pago" 
+>
+</app-modal-ingresos-no-prestacionales>
+
+<app-modal-deducciones 
+#modalDeducciones
+(updated)="getPagoNomina();"
+[nominaPaga]="nomina?.nomina_paga"
+[periodo]="nomina.frecuencia_pago" 
+>
+</app-modal-deducciones>
 

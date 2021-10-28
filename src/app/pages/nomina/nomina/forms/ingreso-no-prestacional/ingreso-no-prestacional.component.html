@@ -61,16 +61,16 @@
         <h6>Ingresos actuales para {{ person.name }}</h6>
       </div>
     </div>
-    <div class="row" *ngFor="let ingresoP of ingresos">
+    <div class="row" *ngFor="let ingresoNP of ingresos">
       <div class="col-md-6">
-        <p>{{ ingresoP.ingreso.concept }}</p>
+        <p>{{ ingresoNP.ingreso.concept }}</p>
       </div>
       <div class="col-md-3">
-        <p>{{ ingresoP.value | currency: "":"" }}</p>
+        <p>{{ ingresoNP.value | currency: "":"" }}</p>
       </div>
       <div class="col-md-3">
         <p class="text-right">
-          <a title="eliminar"  (click)="delete(ingresoP.id)" class="trash ml-1 text-danger" >
+          <a title="eliminar"  (click)="delete(ingresoNP.id)" class="trash ml-1 text-danger" >
             <i class="fas fa-trash-alt"></i>
           </a>
         </p>
@@ -92,5 +92,5 @@
 </div> -->
 
 <ng-template #notData>
-    <app-not-data  [loading]="loading" [text]="'No se encontraron ingresos constitutivos para este funcionario'" ></app-not-data>
+    <app-not-data  [loading]="loading" [text]="'No se encontraron ingresos no constitutivos para este funcionario'" ></app-not-data>
 </ng-template>

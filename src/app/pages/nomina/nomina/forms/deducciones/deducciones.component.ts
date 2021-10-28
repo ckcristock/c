@@ -1,16 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CountableIncomesService } from '../../../../../core/services/countable-incomes.service';
+
 import { NgForm } from '@angular/forms';
+import { DeductionService } from 'src/app/core/services/deductions.service';
 import { SwalService } from '../../../../ajustes/informacion-base/services/swal.service';
 
 const TYPE_INCOME: string = 'Constitutivo';
 
 @Component({
-  selector: 'app-ingreso-prestacional',
-  templateUrl: './ingreso-prestacional.component.html',
-  styleUrls: ['./ingreso-prestacional.component.scss'],
+  selector: 'app-deducciones',
+  templateUrl: './deducciones.component.html',
+  styleUrls: ['./deducciones.component.scss'],
 })
-export class IngresoPrestacionalComponent implements OnInit {
+export class DeduccionesComponent implements OnInit {
   @Input('person') person;
   @Input('periodo') periodo;
   @Input('nominaPaga') nominaPaga = false;
@@ -19,36 +20,36 @@ export class IngresoPrestacionalComponent implements OnInit {
   loading = false;
   private;
 
-  ingresos: any[] = [];
-  ingresosPDatos: any[] = [];
+  deducciones: any[] = [];
+  countDeducciones: any[] = [];
   constructor(
-    private _countableIncomes: CountableIncomesService,
+    private _deduction: DeductionService,
     private _swal: SwalService
   ) {}
 
   ngOnInit(): void {
-    this.getIngresosPrestacionales();
+    this.getCountDeducciones();
   }
 
   save(form: NgForm) {
     this._swal
       .show({
         title: '¿Está seguro?',
-        text: 'Se dispone a guardar un ingreso prestacional',
+        text: 'Se dispone a guardar una deducción',
         icon: 'question',
       })
       .then((r) => {
         if (r.isConfirmed) {
-          this._countableIncomes
-            .saveBenefitIncome(form.value)
+          this._deduction
+            .saveDeduction(form.value)
             .subscribe((r) => {
               this._swal.show({
                 title: 'Guardado con éxito',
-                text: 'Se ha guardado un ingreso prestacional',
+                text: 'Se ha guardado una deducción',
                 icon: 'success',
                 showCancel: false,
               });
-              this.getDatosIngresosP();
+              this.getDatosDeducciones();
               this.update();
             });
         }
@@ -58,39 +59,39 @@ export class IngresoPrestacionalComponent implements OnInit {
     this._swal
       .show({
         title: '¿Está seguro?',
-        text: 'Se dispone a eliminar un ingreso prestacional',
+        text: 'Se dispone a eliminar una deducción',
         icon: 'question',
       })
       .then((r) => {
         if (r.isConfirmed) {
-          this._countableIncomes.deleteBenefitIncome(id).subscribe((r) => {
+          this._deduction.deleteDeduction(id).subscribe((r) => {
             this._swal.show({
               title: 'Eliminado con éxito',
-              text: 'Se ha eliminado un ingreso prestacional',
+              text: 'Se ha eliminado una deducción',
               icon: 'success',
               showCancel: false,
             });
-            this.getDatosIngresosP();
+            this.getDatosDeducciones();
             this.update();
           });
         }
       });
   }
 
-  getIngresosPrestacionales() {
-    this._countableIncomes
-      .getCountableIncomes({ type: TYPE_INCOME })
+  getCountDeducciones() {
+    this._deduction
+      .getCountableDeductions()
       .subscribe((r: any) => {
-        this.ingresosPDatos = r.data;
-        this.getDatosIngresosP();
+        this.countDeducciones = r.data;
+        this.getDatosDeducciones();
       });
   }
-  getDatosIngresosP() {
+  getDatosDeducciones() {
     this.loading = true;
-    this._countableIncomes
-      .getBenefitIncome(this.person.id)
+    this._deduction
+      .getDeductions(this.person.id)
       .subscribe((r: any) => {
-        this.ingresos = r.data;
+        this.deducciones = r.data;
         this.loading = false;
       });
   }

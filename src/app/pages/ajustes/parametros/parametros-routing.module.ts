@@ -18,6 +18,7 @@ import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medida
 import { MaquinasHerramientasComponent } from './apu/maquinas-herramientas/maquinas-herramientas.component';
 import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-internos.component';
 import { ProcesosExternosComponent } from "./apu/procesos-externos/procesos-externos.component";
+import { MedidasComponent } from './apu/medidas/medidas.component';
 
 
 const routes : Routes = [
@@ -43,6 +44,8 @@ const routes : Routes = [
     { path: 'apu/maquinas-herramientas', component: MaquinasHerramientasComponent },
     { path: 'apu/procesos-internos', component: ProcesosInternosComponent },
     { path: 'apu/procesos-externos', component: ProcesosExternosComponent },
+
+    { path: 'apu/medidas', component: MedidasComponent }
 ]
 
 

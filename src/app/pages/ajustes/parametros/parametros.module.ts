@@ -26,6 +26,7 @@ import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medida
 import { MaquinasHerramientasComponent } from './apu/maquinas-herramientas/maquinas-herramientas.component';
 import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-internos.component';
 import { ProcesosExternosComponent } from './apu/procesos-externos/procesos-externos.component';
+import { MedidasComponent } from './apu/medidas/medidas.component';
 
 
 
@@ -48,7 +49,8 @@ import { ProcesosExternosComponent } from './apu/procesos-externos/procesos-exte
         UnidadesMedidasComponent,
         MaquinasHerramientasComponent,
         ProcesosInternosComponent,
-        ProcesosExternosComponent
+        ProcesosExternosComponent,
+        MedidasComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

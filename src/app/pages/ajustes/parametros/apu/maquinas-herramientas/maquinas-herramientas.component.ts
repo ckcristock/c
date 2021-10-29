@@ -34,7 +34,7 @@ export class MaquinasHerramientasComponent implements OnInit {
 
   openModal(){
     this.modal.show();
-    this.title = 'Nueva maquina herramienta';
+    this.title = 'Nueva variable';
   }
 
   createForm(){
@@ -42,7 +42,8 @@ export class MaquinasHerramientasComponent implements OnInit {
       id: [this.machine.id],
       name: ['', this._validators.required],
       unit_id: ['', this._validators.required],
-      unit_cost: ['', this._validators.required]
+      unit_cost: ['', this._validators.required],
+      type_id: ['', this._validators.required]
     })
   }
 
@@ -54,12 +55,14 @@ export class MaquinasHerramientasComponent implements OnInit {
 
   getMaquine(machine){
     this.machine = {...machine};
-    this.title = 'Actualizar maquina herramienta';
+    this.title = 'Actualizar variable';
+    let type_id = parseInt(this.machine.type_id);
     this.form.patchValue({
       id: this.machine.id,
       name: this.machine.name,
       unit_id: this.machine.unit_id,
-      unit_cost: this.machine.unit_cost
+      unit_cost: this.machine.unit_cost,
+      type_id: type_id
     })
   }
 

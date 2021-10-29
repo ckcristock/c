@@ -4,7 +4,7 @@
             <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
                 <i class="fa fa-plus"></i> Agregar
             </button>
-            <h5 class="text-primary">Maquinas Herramientas</h5>
+            <h5 class="text-primary">Variables APU</h5>
         </div>
         <hr class="bg-primary">
         <table class="table table-borderless table-striped" *ngIf="!loading && machines.length > 0; else notData">
@@ -13,14 +13,16 @@
                     <th>Nombre</th>
                     <th>Unidad</th>
                     <th>Costo</th>
+                    <th>Tipo</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of machines">
                     <td> {{ item.name }} </td>
-                    <td> {{ item.unit.name }} </td>
+                    <td> {{ item.unit_name }} </td>
                     <td> {{ item.unit_cost }} </td>
+                    <td> {{ item.type }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -66,6 +68,14 @@
                         <div class="form-group col-md-12">
                             <label for="">Costo</label>
                             <input type="number" class="form-control" formControlName="unit_cost">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="">Tipo</label>
+                            <select class="form-control" formControlName="type_id">
+                                <option value="1">Maquinas Herramientas</option>
+                                <option value="2">Procesos Internos</option>
+                                <option value="3">Procesos Externos</option>
+                            </select>
                         </div>
                     </div>
                 </div>

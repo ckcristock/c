@@ -41,7 +41,7 @@ const routes : Routes = [
     { path: 'apu/materiales', component: MaterialesComponent },
 
     { path: 'apu/unidades-medidas', component: UnidadesMedidasComponent },
-    { path: 'apu/maquinas-herramientas', component: MaquinasHerramientasComponent },
+    { path: 'apu/variables-apu', component: MaquinasHerramientasComponent },
     { path: 'apu/procesos-internos', component: ProcesosInternosComponent },
     { path: 'apu/procesos-externos', component: ProcesosExternosComponent },
 

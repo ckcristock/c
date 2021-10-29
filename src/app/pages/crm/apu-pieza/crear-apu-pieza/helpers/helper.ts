@@ -49,7 +49,7 @@ export const functionsApu = {
       Unforeseen: [0],
       administrative_Unforeseen_subTotal: [0],
       administrative_Unforeseen_unit: [0],
-      Utility: [0],
+      utility: [0],
       admin_unforeseen_utility_subTotal: [0],
       admin_unforeseen_utility_unit: [0],
       sale_price_cop_withholding_total: [0],

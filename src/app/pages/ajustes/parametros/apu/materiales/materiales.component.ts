@@ -45,8 +45,8 @@ export class MaterialesComponent implements OnInit {
     this.form = this.fb.group({
       name: ['', this._validators.required],
       unit: ['', this._validators.required],
-      cut_water: [false],
-      cut_laser: [false],
+      // cut_water: [false],
+      // cut_laser: [false],
       type: ['', this._validators.required],
       unit_price: ['']
     })
@@ -59,8 +59,8 @@ export class MaterialesComponent implements OnInit {
       id: this.material.id,
       name: this.material.name,
       unit: this.material.unit,
-      cut_water: this.material.cut_water,
-      cut_laser: this.material.cut_laser,
+      // cut_water: this.material.cut_water,
+      // cut_laser: this.material.cut_laser,
       type: this.material.type,
       unit_price: this.material.unit_price
     })

@@ -1,3 +1,4 @@
+
 import {
   FormGroup,
   FormBuilder,
@@ -18,28 +19,28 @@ export const materiaHelper = {
       image: [''],
       material_id: [''],
       peso_kg: [''],
-      measures: fb.array([]),
-      prueba: ['']
+      measures: fb.array([])
     });
     materia.get('geometry_id').valueChanges.subscribe(value => {
       let data = geometriesList.find(m => m.id == value);
       materia.patchValue({
-        image: data.image
+        image: data.image,
+        measures: ['']
       })
-      /* data.measures.forEach(element => {
-        materia.patchValue({
-          prueba: element.name
-        })
-      }); */
-      this.createMeasuresGroup(fb);
+      let measure =  materia.get('measures') as FormArray;
+      data.measures.forEach(element => {
+        measure.push(this.createMeasuresGroup(element, fb));
+      }); 
     });
     return materia;
   },
 
-  createMeasuresGroup(fb: FormBuilder) {
+  createMeasuresGroup(element, fb: FormBuilder) {
     return fb.group({
-      measure_id: [0],
-      value: [0]
+      measure_id: element.id,
+      value: [0],
+      name: [element.name],
+      measure: [element.measure]
     });
   },
 

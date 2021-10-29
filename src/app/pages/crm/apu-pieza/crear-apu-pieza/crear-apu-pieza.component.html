@@ -109,7 +109,7 @@
                                                 <th>
                                                     <label class="col-form-label col-form-label-sm" for="material_calculo">Material</label>
                                                 </th>
-                                                <th *ngFor="let item of measures.measures">
+                                                <th *ngFor="let item of item['controls']['measures']['value']">
                                                     <label class="col-form-label col-form-label-sm" for="">
                                                         {{ item.name }}
                                                     </label>
@@ -146,7 +146,7 @@
                                                     {{ i + 1 }}
                                                 </td>
                                                 <td [formGroupName]="i">
-                                                    <select name="" class="form-control form-control-sm" id="geometria_calculo" formControlName="geometry_id" (change)="imageChange($event.target.value)">
+                                                    <select name="" class="form-control form-control-sm" id="geometria_calculo" formControlName="geometry_id">
                                                         <option *ngFor="let item of geometries" [value]="item.value">
                                                             {{ item.text }}
                                                         </option>
@@ -154,7 +154,7 @@
                                                 </td>
                                                 <td [formGroupName]="i">
 
-                                                    <img [src]="item['controls']['image']['value']">
+                                                    <img [src]="item['controls']['image']['value'] | image">
                                                 </td>
                                                 <td [formGroupName]="i">
                                                     <select name="" class="form-control form-control-sm" id="material_calculo" formControlName="material_id">
@@ -163,9 +163,12 @@
                                                         </option>
                                                     </select>
                                                 </td>
-                                                <td *ngFor="let item of measures.measures">
-                                                    <input type="text" class="form-control form-control-sm">
-                                                </td>
+                                                <ng-container [formGroupName]="i">
+                                                    <td *ngFor="let item of item['controls']['measures']['value']; let j = index">
+                                                        <input type="number" class="form-control form-control-sm">
+                                                    </td>
+                                                </ng-container>
+
                                                 <!-- <td [formGroupName]="i">
                                                     <input type="number" class="form-control form-control-sm">
                                                 </td>

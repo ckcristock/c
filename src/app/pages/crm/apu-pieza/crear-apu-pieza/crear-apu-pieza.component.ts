@@ -77,7 +77,7 @@ export class CrearApuPiezaComponent implements OnInit {
   }
   /************** Materia Prima Inicio ****************/
   basicControl(): FormGroup{
-    let group = help.materiaHelper.createMateriaGroup(this.fb, this.geometries)
+    let group = help.materiaHelper.createMateriaGroup(this.fb, this.geometries);
     return group;
   }
 
@@ -85,23 +85,8 @@ export class CrearApuPiezaComponent implements OnInit {
     return this.form.get('materia_prima') as FormArray;
   }
 
-  /* get measuresList(){
-    return this.form.get('measures') as FormArray;
-  }
-
-  newMeasureList(){
-    let measure = this.measuresList;
-    measure.push(help.materiaHelper.createMeasuresGroup(this.fb))
-  } */
-
-  imageChange(value){
-    this.measures = this.geometries.find(m => m.id == value);
-  }
-
   newMateria(){
     let materia = this.materiaList;
-    console.log(this.materiaList);
-    
     materia.push(this.basicControl())
   }
 

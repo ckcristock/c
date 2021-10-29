@@ -17,13 +17,17 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpClientModule } from '@angular/common/http';
 import { PipesModule } from '../../core/pipes/pipes.module';
 import { PersonasComponent } from './terceros/personas/personas.component';
+import { ApuPiezaComponent } from './apu-pieza/apu-pieza.component';
+import { CrearApuPiezaComponent } from './apu-pieza/crear-apu-pieza/crear-apu-pieza.component';
 
 
 @NgModule({
   declarations: [
     TercerosComponent,
     CrearTercerosComponent,
-    PersonasComponent
+    PersonasComponent,
+    ApuPiezaComponent,
+    CrearApuPiezaComponent
   ],
   imports: [
     CommonModule,

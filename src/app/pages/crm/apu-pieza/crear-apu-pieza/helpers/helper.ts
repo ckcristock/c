@@ -1,0 +1,61 @@
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+
+export const functionsApu = {
+  consts: {},
+  fillInForm(form: FormGroup, data, fb: FormBuilder) {
+    
+  },
+
+  createForm(fb: FormBuilder) {
+    return fb.group({
+      name: [''],
+      city_id: [''],
+      third_party_id:[''],
+      line: [''],
+      amount: [0],
+      file: [''],
+      observation: [''],
+      materia_prima: fb.array([]),
+      materia_prima_subtotal: [0],
+      commercial_materials: fb.array([]),
+      commercial_materials_subtotal: [0],
+      cut_water: fb.array([]),
+      cut_water_total_amount: [0],
+      cut_water_unit_subtotal: [0],
+      cut_water_subtotal: [0],
+      cut_laser: fb.array([]),
+      cut_laser_total_amount: [0],
+      cut_laser_unit_subtotal: [0],
+      cut_laser_subtotal: [0],
+      machine_tools: fb.array([]),
+      machine_tools_subtotal: [0],
+      internal_proccesses: fb.array([]),
+      internal_proccesses_subtotal: [0],
+      external_proccesses: fb.array([]),
+      external_proccesses_subtotal: [0],
+      others: fb.array([]),
+      others_subtotal: [0],
+      total_direct_cost: [''],
+      unit_direct_cost: [''],
+      crates_packing: [0],
+      freights: [0],
+      freight_insurance: [0],
+      minor_tools: [0],
+      consumables: [0],
+      Industrial_Security: [''],
+      direct_Costs_Indirect_Costs_total: [0],
+      direct_Costs_Indirect_Costs_unit: [0],
+      Administrative: [0],
+      Unforeseen: [0],
+      administrative_Unforeseen_subTotal: [0],
+      administrative_Unforeseen_unit: [0],
+      Utility: [0],
+      admin_unforeseen_utility_subTotal: [0],
+      admin_unforeseen_utility_unit: [0],
+      sale_price_cop_withholding_total: [0],
+      salev_alue_cop_unit: [0],
+      sale_price_usd_withholding_total: [0],
+      salev_alue_usd_unit: [0]
+    });
+  },
+};

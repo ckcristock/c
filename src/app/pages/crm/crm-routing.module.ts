@@ -5,6 +5,7 @@ import { TercerosComponent } from './terceros/terceros.component';
 import { PersonasComponent } from './terceros/personas/personas.component';
 import { ApuPiezaComponent } from './apu-pieza/apu-pieza.component';
 import { CrearApuPiezaComponent } from './apu-pieza/crear-apu-pieza/crear-apu-pieza.component';
+import { VerApuPiezaComponent } from './apu-pieza/ver-apu-pieza/ver-apu-pieza.component';
 
 const routes: Routes = [
   { path: 'terceros', component: TercerosComponent },
@@ -14,6 +15,7 @@ const routes: Routes = [
 
   { path: 'apu-pieza', component: ApuPiezaComponent },
   { path: 'crear-apu-pieza', component: CrearApuPiezaComponent },
+  { path: 'ver-apu-pieza/:id', component: VerApuPiezaComponent },
 ];
 
 @NgModule({

@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-6 mt-3">
                     <h4 class="t">
-                        Formato de analisis unitarios maquinados y montajes
+                        Formato de analisis de precios unitarios maquinados y montajes
                     </h4>
                 </div>
                 <div class="col-6">
@@ -32,19 +32,19 @@
                     <div class="mb-3 row">
                         <label for="funcionario" class="col-sm-3 col-form-label col-form-label-sm">Nombre</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm">
+                            <input type="text" class="form-control form-control-sm" formControlName="name">
                         </div>
                     </div>
                     <div class="mb-3 row">
                         <label for="cc" class="col-sm-3 col-form-label col-form-label-sm">Destino</label>
                         <div class="col-sm-9">
-                            <ng-select class="" bindLabel="text" [items]="cities" bindValue="value" loadingText="loading " ngDefaultControl></ng-select>
+                            <ng-select class="" bindLabel="text" [items]="cities" bindValue="value" loadingText="loading " ngDefaultControl formControlName="city_id"></ng-select>
                         </div>
                     </div>
                     <div class="mb-3 row">
                         <label for="cargo" class="col-sm-3 col-form-label col-form-label-sm">Quien elabora</label>
                         <div class="col-sm-9">
-                            <ng-select class="" bindLabel="text" [items]="people" bindValue="value" loadingText="loading " ngDefaultControl></ng-select>
+                            <ng-select class="" bindLabel="text" [items]="people" bindValue="value" loadingText="loading " ngDefaultControl formControlName="person_id"></ng-select>
                         </div>
                     </div>
                 </div>
@@ -52,19 +52,19 @@
                     <div class="mb-3 row">
                         <label for="funcionario" class="col-sm-3 col-form-label col-form-label-sm">Cliente</label>
                         <div class="col-sm-9">
-                            <ng-select class="" bindLabel="text" [items]="clients" bindValue="value" loadingText="loading " ngDefaultControl></ng-select>
+                            <ng-select class="" bindLabel="text" [items]="clients" bindValue="value" loadingText="loading " ngDefaultControl formControlName="third_party_id"></ng-select>
                         </div>
                     </div>
                     <div class="mb-3 row">
                         <label for="cc" class="col-sm-3 col-form-label col-form-label-sm">Linea</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm">
+                            <input type="text" class="form-control form-control-sm" formControlName="line">
                         </div>
                     </div>
                     <div class="mb-3 row">
                         <label for="cargo" class="col-sm-3 col-form-label col-form-label-sm">Cantidad</label>
                         <div class="col-sm-9">
-                            <input type="number" class="form-control form-control-sm">
+                            <input type="number" class="form-control form-control-sm" formControlName="amount">
                         </div>
                     </div>
                 </div>
@@ -79,9 +79,17 @@
                 <div class="col">
                     <h5 class="text-center">Plano de referencia pieza</h5>
                     <div>
+                        <ngx-dropzone class="drop-zone" (change)="onSelect($event)">
+                            <ngx-dropzone-label>
+                                <span><i class="fas fa-cloud-download-alt"></i></span> Arrastre y suelte el archivo
+                            </ngx-dropzone-label>
+                            <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+                                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                            </ngx-dropzone-preview>
+                        </ngx-dropzone>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-12 mt-3">
                     <label for="">Observaciones</label>
                     <textarea class="form-control form-control-sm" name="" id="" rows="3"></textarea>
                 </div>
@@ -96,116 +104,101 @@
                         <div class="col">
                             <table class="table table-striped" formArrayName="materia_prima">
                                 <ng-container *ngIf="materiaList.controls.length; else notData">
-                                    <tr *ngFor="let item of materiaList.controls; let i = index">
-                                        <thead>
-                                            <tr>
-                                                <th>Item</th>
-                                                <th>
-                                                    <label class="col-form-label col-form-label-sm" for="geometria_calculo">Geometria</label>
-                                                </th>
-                                                <th>
-                                                    <label for=""></label>
-                                                </th>
-                                                <th>
-                                                    <label class="col-form-label col-form-label-sm" for="material_calculo">Material</label>
-                                                </th>
-                                                <th *ngFor="let item of item['controls']['measures']['value']">
-                                                    <label class="col-form-label col-form-label-sm" for="">
-                                                        {{ item.name }}
-                                                    </label>
-                                                </th>
-                                                <!-- <th>
-                                                    <label class="col-form-label col-form-label-sm" for=""></label>
-                                                </th>
-                                                <th>
-                                                    <label class="col-form-label col-form-label-sm" for=""></label>
-                                                </th>
-                                                <th>
-                                                    <label class="col-form-label col-form-label-sm" for=""></label>
-                                                </th> -->
-                                                <th>
-                                                    <label class="col-form-label col-form-label-sm" for="peso_kg_calculo">Peso KG</label>
-                                                </th>
-                                                <th>
-                                                    <label class="col-form-label col-form-label-sm" for="q_calculo">Q</label>
-                                                </th>
-                                                <th>
-                                                    <label class="col-form-label col-form-label-sm" for="peso_total_calculo">Peso Total</label>
-                                                </th>
-                                                <th>
-                                                    <label class="col-form-label col-form-label-sm" for="valor_kg_calculo">Valor KG</label>
-                                                </th>
-                                                <th>
-                                                    <label class="col-form-label col-form-label-sm" for="valor_total_calculo">Valor Total</label>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    {{ i + 1 }}
-                                                </td>
-                                                <td [formGroupName]="i">
-                                                    <select name="" class="form-control form-control-sm" id="geometria_calculo" formControlName="geometry_id">
+                                    <ng-container *ngFor="let item of materiaList.controls; let i = index">
+                                        <tr [formGroupName]="i">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <label class="col-form-label col-form-label-sm" for="">Item</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="col-form-label col-form-label-sm" for="geometria_calculo">Geometria</label>
+                                                    </th>
+                                                    <th>
+                                                        <label for=""></label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="col-form-label col-form-label-sm" for="material_calculo">Material</label>
+                                                    </th>
+                                                    <th *ngFor="let item of item['controls']['measures']['controls']">
+                                                        <label class="col-form-label col-form-label-sm" for="">{{ item.controls.name.value }}</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="col-form-label col-form-label-sm" for="peso_kg_calculo">Peso KG</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="col-form-label col-form-label-sm" for="q_calculo">Q</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="col-form-label col-form-label-sm" for="peso_total_calculo">Peso Total</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="col-form-label col-form-label-sm" for="valor_kg_calculo">Valor KG</label>
+                                                    </th>
+                                                    <th>
+                                                        <label class="col-form-label col-form-label-sm" for="valor_total_calculo">Valor Total</label>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        {{ i + 1 }}
+                                                    </td>
+                                                    <td>
+                                                        <select name="" class="form-control form-control-sm" id="geometria_calculo" formControlName="geometry_id">
                                                         <option *ngFor="let item of geometries" [value]="item.value">
                                                             {{ item.text }}
                                                         </option>
                                                         </select>
-                                                </td>
-                                                <td [formGroupName]="i">
+                                                    </td>
+                                                    <td>
 
-                                                    <img [src]="item['controls']['image']['value'] | image">
-                                                </td>
-                                                <td [formGroupName]="i">
-                                                    <select name="" class="form-control form-control-sm" id="material_calculo" formControlName="material_id">
+                                                        <img [src]="item['controls']['image']['value'] | image">
+                                                    </td>
+                                                    <td>
+                                                        <select name="" class="form-control form-control-sm" id="material_calculo" formControlName="material_id">
                                                         <option *ngFor="let item of materials" [value]="item.value">
                                                             {{ item.text }}
                                                         </option>
                                                     </select>
-                                                </td>
-                                                <ng-container [formGroupName]="i">
-                                                    <td *ngFor="let item of item['controls']['measures']['value']; let j = index">
-                                                        <input type="number" class="form-control form-control-sm">
                                                     </td>
-                                                </ng-container>
-
-                                                <!-- <td [formGroupName]="i">
-                                                    <input type="number" class="form-control form-control-sm">
-                                                </td>
-                                                <td [formGroupName]="i">
-                                                    <input type="number" class="form-control form-control-sm">
-                                                </td>
-                                                <td [formGroupName]="i">
-                                                    <input type="number" class="form-control form-control-sm">
-                                                </td> -->
-                                                <td [formGroupName]="i">
-                                                    <input type="number" class="form-control form-control-sm" formControlName="peso_kg">
-                                                </td>
-                                                <td [formGroupName]="i">
-                                                    <input type="number" class="form-control form-control-sm">
-                                                </td>
-                                                <td [formGroupName]="i">
-                                                    <input type="number" class="form-control form-control-sm">
-                                                </td>
-                                                <td [formGroupName]="i">
-                                                    <input type="number" class="form-control form-control-sm">
-                                                </td>
-                                                <td [formGroupName]="i">
-                                                    <input type="number" class="form-control form-control-sm">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </tr>
+                                                    <ng-container formArrayName="measures">
+                                                        <ng-container [formGroupName]="j" *ngFor="let item of item['controls']['measures']['controls']; let j = index">
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" formControlName="value">
+                                                            </td>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <td>
+                                                        <input type="number" class="form-control form-control-sm" formControlName="weight_kg">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control form-control-sm" formControlName="q">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control form-control-sm" formControlName="weight_total">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control form-control-sm" formControlName="value_kg">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control form-control-sm" formControlName="total_value">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </tr>
+                                    </ng-container>
                                 </ng-container>
                             </table>
                             <table style="float: right;">
                                 <tr>
                                     <td colspan="12">
-                                        <label for="" class="mr-3">SubTotal: </label>
+                                        <label for="" class="mr-3 mt-2">SubTotal: </label>
                                     </td>
                                     <td colspan="13">
                                         <div class="row" style="float: right">
-                                            <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                            <input type="text" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="materia_prima_subtotal">
                                         </div>
                                     </td>
                                 </tr>
@@ -263,44 +256,50 @@
                                 </thead>
                                 <tbody formArrayName="commercial_materials">
                                     <ng-container *ngIf="materialsList.controls.length; else notData">
-                                        <tr *ngFor="let item of materialsList.controls; let i = index">
-                                            <td>
-                                                {{ i + 1 }}
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="material_materiales" formControlName="material_id">
-                                                    <option *ngFor="let item of materials" [value]="item.value">
-                                                        {{ item.text }}
-                                                    </option>
-                                                </select>
-                                            </td>
-                                            <td></td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="unidad_materiales" formControlName="unit_id">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="q_unitaria_materiales">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="q_total_materiales">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="costo_unitario_materiales">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="total_materiales">
-                                            </td>
-                                        </tr>
+                                        <ng-container *ngFor="let item of materialsList.controls; let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>
+                                                    {{ i + 1 }}
+                                                </td>
+                                                <td>
+                                                    <select name="" class="form-control form-control-sm" id="material_materiales" formControlName="material_id">
+                                                        <option *ngFor="let item of materials" [value]="item.value">
+                                                            {{ item.text }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <select class="form-control form-control-sm" id="unidad_materiales" formControlName="unit_id">
+                                                        <option *ngFor="let item of units" [value]="item.id">
+                                                            {{ item.name }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="q_unitaria_materiales" formControlName="q_unit">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="q_total_materiales" formControlName="q_total">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_materiales" formControlName="unit_cost">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="total_materiales" formControlName="total">
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td colspan="7">
-                                            <label for="" style="float: right;">SubTotal: </label>
+                                            <label for="" class="mr-3 mt-2" style="float: right;">SubTotal: </label>
                                         </td>
                                         <td colspan="7">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="text" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="commercial_materials_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -355,6 +354,9 @@
                                             <label class="col-form-label col-form-label-sm" for="longitud_total_corte_agua">Longitud total</label>
                                         </th>
                                         <th>
+                                            <label class="col-form-label col-form-label-sm" for="cantidad_corte_corte_agua">Cantidad</label>
+                                        </th>
+                                        <th>
                                             <label class="col-form-label col-form-label-sm" for="diametro_corte_corte_agua">Diametro(mm)</label>
                                         </th>
                                         <th>
@@ -373,82 +375,87 @@
                                 </thead>
                                 <tbody formArrayName="cut_water">
                                     <ng-container *ngIf="cutWaterList.controls.length; else notData">
-                                        <tr *ngFor="let item of cutWaterList.controls; let i = index">
-                                            <td>
-                                                {{ i + 1 }}
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="material_corte_agua">
-                                                    <option *ngFor="let item of materials" [value]="item.value">
-                                                        {{ item.text }}
-                                                    </option>
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="espesor_corte_agua">
-                                                    <!-- <option *ngFor="let item of materials" [value]="item.value">
-                                                        {{ item.text }}
-                                                    </option> -->
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="cantidad_corte_agua">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="largo_corte_agua">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="ancho_corte_agua">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="longitud_total_corte_agua">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="diametro_corte_corte_agua">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="perimetro_corte_agua">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="tiempo_corte_agua">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="valor_minuto_corte_agua">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="valor_corte_agua">
-                                            </td>
-                                        </tr>
+                                        <ng-container *ngFor="let item of cutWaterList.controls; let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>
+                                                    {{ i + 1 }}
+                                                </td>
+                                                <td>
+                                                    <select name="" class="form-control form-control-sm" id="material_corte_agua" formControlName="material_id">
+                                                        <option *ngFor="let item of materials" [value]="item.value">
+                                                            {{ item.text }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control form-control-sm" id="unidad_materiales" formControlName="thickness">
+                                                        <!-- <option *ngFor="let item of units" [value]="item.id">
+                                                            {{ item.name }}
+                                                        </option> -->
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="cantidad_corte_agua" formControlName="amount">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="largo_corte_agua" formControlName="long">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="ancho_corte_agua" formControlName="width">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="longitud_total_corte_agua" formControlName="total_length">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="cantidad_corte_corte_agua" formControlName="amount_cut">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="diametro_corte_corte_agua" formControlName="diameter">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="perimetro_corte_agua" formControlName="total_hole_perimeter">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="tiempo_corte_agua" formControlName="time">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="valor_minuto_corte_agua" formControlName="minute_value">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="valor_corte_agua" formControlName="value">
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td colspan="11">
-                                            <label for="" style="float: right;">Cantidad Total: </label>
+                                            <label for="" class="mt-1" style="float: right;">SubTotal Unitario: </label>
                                         </td>
                                         <td colspan="12">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_unit_subtotal">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="11">
-                                            <label for="" style="float: right;">SubTotal Unitario: </label>
+                                            <label for="" class="mt-1" style="float: right;">Cantidad Total: </label>
                                         </td>
                                         <td colspan="12">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_total_amount">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="11">
-                                            <label for="" style="float: right;">SubTotal: </label>
+                                            <label for="" class="mt-1" style="float: right;">SubTotal: </label>
                                         </td>
                                         <td colspan="12">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -524,85 +531,87 @@
                                 </thead>
                                 <tbody formArrayName="cut_laser">
                                     <ng-container *ngIf="cutLaserList.controls.length; else notData">
-                                        <tr *ngFor="let item of cutLaserList.controls; let i = index">
-                                            <td>
-                                                {{ i + 1 }}
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="material_corte_laser">
-                                                    <option *ngFor="let item of materials" [value]="item.value">
-                                                        {{ item.text }}
-                                                    </option>
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="espesor_corte_laser">
-                                                    <!-- <option *ngFor="let item of materials" [value]="item.value">
-                                                        {{ item.text }}
-                                                    </option> -->
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="cantidad_corte_laser">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="largo_corte_laser">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="ancho_corte_laser">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="longitud_total_corte_laser">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="cantidad_agujeros_corte_laser">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="diametro_corte_corte_laser">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="perimetro_corte_laser">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="tiempo_corte_laser">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="valor_minuto_corte_laser">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="valor_corte_laser">
-                                            </td>
-                                        </tr>
+                                        <ng-container *ngFor="let item of cutLaserList.controls; let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>
+                                                    {{ i + 1 }}
+                                                </td>
+                                                <td>
+                                                    <select name="" class="form-control form-control-sm" id="material_corte_laser" formControlName="material_id">
+                                                        <option *ngFor="let item of materials" [value]="item.value">
+                                                            {{ item.text }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control form-control-sm" id="unidad_materiales" formControlName="thickness">
+                                                        <!-- <option *ngFor="let item of units" [value]="item.id">
+                                                            {{ item.name }}
+                                                        </option> -->
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="cantidad_corte_laser" formControlName="sheets_amount">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="largo_corte_laser" formControlName="long">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="ancho_corte_laser" formControlName="width">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="longitud_total_corte_laser" formControlName="total_length">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="cantidad_agujeros_corte_laser" formControlName="amount_holes">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="diametro_corte_corte_laser" formControlName="diameter">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="perimetro_corte_laser" formControlName="total_hole_perimeter">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="tiempo_corte_laser" formControlName="time">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="valor_minuto_corte_laser" formControlName="minute_value">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="valor_corte_laser" formControlName="value">
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td colspan="12">
-                                            <label for="" style="float: right;">Cantidad Total: </label>
+                                            <label for="" class="mt-1" style="float: right;">SubTotal Unitario: </label>
                                         </td>
                                         <td colspan="13">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_laser_unit_subtotal">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="12">
-                                            <label for="" style="float: right;">SubTotal Unitario: </label>
+                                            <label for="" class="mt-1" style="float: right;">Cantidad Total: </label>
                                         </td>
                                         <td colspan="13">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_laser_total_amount">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="12">
-                                            <label for="" style="float: right;">SubTotal: </label>
+                                            <label for="" class="mt-1" style="float: right;">SubTotal: </label>
                                         </td>
                                         <td colspan="13">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_laser_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -660,37 +669,35 @@
                                 </thead>
                                 <tbody formArrayName="machine_tools">
                                     <ng-container *ngIf="machineToolList.controls.length; else notData">
-                                        <tr *ngFor="let item of machineToolList.controls; let i = index">
-                                            <td>
-                                                {{ i + 1 }}
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="descripcion">
-                                                    <!-- <option *ngFor="let item of materials" [value]="item.value">
-                                                        {{ item.text }}
-                                                    </option> -->
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="unidad_maquinas_herra">
-                                                    <option *ngFor="let item of units" [value]="item.id">
-                                                        {{ item.name }}
-                                                    </option>
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="q_unitaria_maquinas_herra">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="q_total_maquinas_herra">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="costo_unitario_maquinas_herra">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="total_maquinas_herra">
-                                            </td>
-                                        </tr>
+                                        <ng-container *ngFor="let item of machineToolList.controls; let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>
+                                                    {{ i + 1 }}
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" id="descripcion" formControlName="description">
+                                                </td>
+                                                <td>
+                                                    <select name="" class="form-control form-control-sm" id="unidad_maquinas_herra" formControlName="unit_id">
+                                                        <option *ngFor="let item of units" [value]="item.id">
+                                                            {{ item.name }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="q_unitaria_maquinas_herra" formControlName="q_unit">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="q_total_maquinas_herra" formControlName="q_total">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="unit_cost">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="total_maquinas_herra" formControlName="total">
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
                                 </tbody>
                                 <tfoot>
@@ -700,7 +707,7 @@
                                         </td>
                                         <td colspan="7">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="machine_tools_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -758,35 +765,33 @@
                                 </thead>
                                 <tbody formArrayName="internal_proccesses">
                                     <ng-container *ngIf="internalProccessList.controls.length; else notData">
-                                        <tr *ngFor="let item of internalProccessList.controls; let i = index">
-                                            <td>1</td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="descripcion_proceso_interno">
-                                                    <!-- <option *ngFor="let item of materials" [value]="item.value">
-                                                        {{ item.text }}
-                                                    </option> -->
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="unidad_proceso_interno">
-                                                    <option *ngFor="let item of units" [value]="item.id">
-                                                        {{ item.name }}
-                                                    </option>
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="q_unitaria_proceso_interno">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="q_total_proceso_interno">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="costo_unitario_proceso_interno">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="total_proceso_interno">
-                                            </td>
-                                        </tr>
+                                        <ng-container *ngFor="let item of internalProccessList.controls; let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>1</td>
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" id="descripcion_proceso_interno" formControlName="description">
+                                                </td>
+                                                <td>
+                                                    <select name="" class="form-control form-control-sm" id="unidad_proceso_interno" formControlName="unit_id">
+                                                        <option *ngFor="let item of units" [value]="item.id">
+                                                            {{ item.name }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="q_unitaria_proceso_interno" formControlName="q_unit">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="q_total_proceso_interno" formControlName="q_total">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_proceso_interno" formControlName="unit_cost">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="total_proceso_interno" formControlName="total">
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
                                 </tbody>
                                 <tfoot>
@@ -796,7 +801,7 @@
                                         </td>
                                         <td colspan="7">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="text" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="internal_proccesses_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -854,37 +859,35 @@
                                 </thead>
                                 <tbody formArrayName="external_proccesses">
                                     <ng-container *ngIf="externalProccessList.controls.length; else notData">
-                                        <tr *ngFor="let item of externalProccessList.controls; let i = index">
-                                            <td>
-                                                {{ i + 1 }}
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="descripcion_proceso_externo">
-                                                    <!-- <option *ngFor="let item of materials" [value]="item.value">
-                                                        {{ item.text }}
-                                                    </option> -->
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="unidad_proceso_externo">
-                                                    <option *ngFor="let item of units" [value]="item.id">
-                                                        {{ item.name }}
-                                                    </option>
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="q_unitaria_proceso_externo">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="q_total_proceso_externo">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="costo_unitario_proceso_externo">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="total_proceso_externo">
-                                            </td>
-                                        </tr>
+                                        <ng-container *ngFor="let item of externalProccessList.controls; let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>
+                                                    {{ i + 1 }}
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" id="descripcion_proceso_externo" formControlName="description">
+                                                </td>
+                                                <td>
+                                                    <select name="" class="form-control form-control-sm" id="unidad_proceso_externo" formControlName="unit_id">
+                                                        <option *ngFor="let item of units" [value]="item.id">
+                                                            {{ item.name }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="q_unitaria_proceso_externo" formControlName="q_unit">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="q_total_proceso_externo" formControlName="q_total">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_proceso_externo" formControlName="unit_cost">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="total_proceso_externo" formControlName="total">
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
                                 </tbody>
                                 <tfoot>
@@ -894,7 +897,7 @@
                                         </td>
                                         <td colspan="7">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="external_proccesses_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -952,37 +955,35 @@
                                 </thead>
                                 <tbody formArrayName="others">
                                     <ng-container *ngIf="othersList.controls.length; else notData">
-                                        <tr *ngFor="let item of othersList.controls; let i = index">
-                                            <td>
-                                                {{ i + 1 }}
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="descripcion_otros">
-                                                    <!-- <option *ngFor="let item of materials" [value]="item.value">
-                                                        {{ item.text }}
-                                                    </option> -->
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <select name="" class="form-control form-control-sm" id="unidad_otros">
-                                                    <option *ngFor="let item of units" [value]="item.id">
-                                                        {{ item.name }}
-                                                    </option>
-                                                </select>
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="q_unitaria_otros">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="q_total_otros">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="costo_unitario_otros">
-                                            </td>
-                                            <td [formGroupName]="i">
-                                                <input type="number" class="form-control form-control-sm" id="total_otros">
-                                            </td>
-                                        </tr>
+                                        <ng-container *ngFor="let item of othersList.controls; let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>
+                                                    {{ i + 1 }}
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" id="descripcion_otros" formControlName="description">
+                                                </td>
+                                                <td>
+                                                    <select name="" class="form-control form-control-sm" id="unidad_otros" formControlName="unit_id">
+                                                        <option *ngFor="let item of units" [value]="item.id">
+                                                            {{ item.name }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="q_unitaria_otros" formControlName="q_unit">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="q_total_otros" formControlName="q_total">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_otros" formControlName="unit_cost">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" id="total_otros" formControlName="total">
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
                                 </tbody>
                                 <tfoot>
@@ -992,7 +993,7 @@
                                         </td>
                                         <td colspan="7">
                                             <div class="row" style="float: right">
-                                                <input type="text" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="others_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -1023,13 +1024,13 @@
                             <tr>
                                 <td>Costo directo total:</td>
                                 <td>
-                                    <input type="number" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="total_direct_cost">
                                 </td>
                             </tr>
                             <tr>
-                                <td>Costo directo unitario</td>
+                                <td>Costo directo unitario:</td>
                                 <td>
-                                    <input type="number" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="unit_direct_cost">
                                 </td>
                             </tr>
                         </tbody>
@@ -1043,68 +1044,28 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-6"></div>
                 <div class="col-6">
                     <table class="table table-striped">
                         <tbody class="bg-light">
+                            <ng-container formArrayName="indirect_cost">
+                                <ng-container *ngFor="let item of indirecCostList.controls; let i = index">
+                                    <tr [formGroupName]="i">
+                                        <td> {{ item.controls.name.value }} </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="percentage">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="value">
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
                             <tr>
-                                <td>Huacales, empaques y embalaje</td>
+                                <td class="text-center">Costos Indirectos</td>
                                 <td>
-                                    <select class="form-control form-control-plaintext form-control-sm">
-                                    </select>
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Fleteos y acarreos</td>
-                                <td>
-                                    <select class="form-control form-control-plaintext form-control-sm">
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Seguro Flete</td>
-                                <td>
-                                    <select class="form-control form-control-plaintext form-control-sm">
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Herramientas Menores</td>
-                                <td>
-                                    <select class="form-control form-control-plaintext form-control-sm">
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Consumibles</td>
-                                <td>
-                                    <select class="form-control form-control-plaintext form-control-sm">
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Seguridad industrial</td>
-                                <td>
-                                    <select class="form-control form-control-plaintext form-control-sm">
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="indirect_cost_total">
                                 </td>
                             </tr>
                         </tbody>
@@ -1115,52 +1076,51 @@
                             <tr>
                                 <td>Costos Directos + Costos Indirectos Totales</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="direct_Costs_Indirect_Costs_total">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Costos Directos + Costos Indirectos Unitario</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="direct_Costs_Indirect_Costs_unit">
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <hr class="bg-dark">
+                </div>
+                <div class="col-6">
                     <table class="table table-striped">
                         <tbody class="bg-light">
                             <tr>
                                 <td>Administrativos</td>
                                 <td>
-                                    <select class="form-control form-control-plaintext form-control-sm">
-                                    </select>
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_percentage">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_value">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Imprevistos</td>
                                 <td>
-                                    <select class="form-control form-control-plaintext form-control-sm">
-                                    </select>
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_percentage">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_value">
                                 </td>
                             </tr>
                             <tr>
                                 <td>SubTotal + Administrativos + Imprevistos</td>
                                 <td></td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_Unforeseen_subTotal">
                                 </td>
                             </tr>
                             <tr>
                                 <td>SubTotal + Administrativos + Imprevistos Unitario</td>
                                 <td></td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_Unforeseen_unit">
                                 </td>
                             </tr>
                         </tbody>
@@ -1169,13 +1129,11 @@
                     <table class="table table-striped">
                         <tbody class="bg-light">
                             <tr>
-                                <td>Utilidad</td>
-                                <td>
-                                    <select class="form-control form-control-plaintext form-control-sm">
-                                    </select>
+                                <td class="text-center">Utilidad</td>
+                                <td colspan="4">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="utility_percentage">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
                                 </td>
                             </tr>
                             <tr>
@@ -1183,7 +1141,7 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_subTotal">
                                 </td>
                             </tr>
                             <tr>
@@ -1191,7 +1149,7 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_unit">
                                 </td>
                             </tr>
                         </tbody>
@@ -1202,12 +1160,23 @@
                             <tr>
                                 <td>Precio Venta Total COP + Retención</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_cop_withholding_total">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Valor de Venta Unitario COP</td>
                                 <td>
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_cop_unit">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr class="bg-dark">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td>TRM</td>
+                                <td style="width: 228px;">
                                     <input type="number" class="form-control form-control-plaintext form-control-sm">
                                 </td>
                             </tr>
@@ -1219,13 +1188,13 @@
                             <tr>
                                 <td>Precio Venta Total USD + Retención</td>
                                 <td colspan="3">
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_usd_withholding_total">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Valor de Venta Unitario USD</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm">
+                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_usd_unit">
                                 </td>
                             </tr>
                         </tbody>

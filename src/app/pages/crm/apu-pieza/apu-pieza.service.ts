@@ -29,4 +29,8 @@ export class ApuPiezaService {
     return this.http.get(`${environment.base_url}/thirdPartyClient`);
   }
 
+  getIndirectCosts(){
+    return this.http.get(`${environment.base_url}/indirect-cost`);
+  }
+
 }

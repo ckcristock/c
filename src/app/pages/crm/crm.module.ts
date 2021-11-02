@@ -19,6 +19,8 @@ import { PipesModule } from '../../core/pipes/pipes.module';
 import { PersonasComponent } from './terceros/personas/personas.component';
 import { ApuPiezaComponent } from './apu-pieza/apu-pieza.component';
 import { CrearApuPiezaComponent } from './apu-pieza/crear-apu-pieza/crear-apu-pieza.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { VerApuPiezaComponent } from './apu-pieza/ver-apu-pieza/ver-apu-pieza.component';
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import { CrearApuPiezaComponent } from './apu-pieza/crear-apu-pieza/crear-apu-pi
     CrearTercerosComponent,
     PersonasComponent,
     ApuPiezaComponent,
-    CrearApuPiezaComponent
+    CrearApuPiezaComponent,
+    VerApuPiezaComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +48,8 @@ import { CrearApuPiezaComponent } from './apu-pieza/crear-apu-pieza/crear-apu-pi
     ReactiveFormsModule,
     NgbNavModule,
     NgbTooltipModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    NgxDropzoneModule
   ]
 })
 export class CrmModule { }

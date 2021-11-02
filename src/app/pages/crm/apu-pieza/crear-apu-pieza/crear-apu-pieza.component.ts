@@ -3,6 +3,14 @@ import { ApuPiezaService } from '../apu-pieza.service';
 import { UnidadesMedidasService } from '../../../ajustes/parametros/apu/unidades-medidas/unidades-medidas.service';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import * as help from './helpers/imports';
+import { materiaHelper } from './helpers/materia-prima';
+import { cutWaterHelper } from './helpers/cut-water';
+import { materialsHelper } from './helpers/materials';
+import { cutLaserHelper } from './helpers/cut-laser';
+import { internalProccessesHelper } from './helpers/internal_proccesses';
+import { machineToolHelper } from './helpers/machine-tools';
+import { externalProccessesHelper } from './helpers/external_proccesses';
+import { othersHelper } from './helpers/others';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -18,7 +26,8 @@ export class CrearApuPiezaComponent implements OnInit {
   materials:any[] = [];
   clients:any[] = [];
   units:any[] = [];
-  measures:any[] = [];
+  indirectCosts:any[] = [];
+  files: File[] = [];
 
   constructor(
                 private _apuPieza: ApuPiezaService,
@@ -34,6 +43,15 @@ export class CrearApuPiezaComponent implements OnInit {
     this.getClients();
     this.getUnits();
     this.createForm();
+    this.getIndirectCosts();
+  }
+
+  onSelect(event) {
+    this.files.push(...event.addedFiles);
+  }
+  
+  onRemove(event) {
+    this.files.splice(this.files.indexOf(event), 1);
   }
 
   getPeople(){
@@ -71,13 +89,22 @@ export class CrearApuPiezaComponent implements OnInit {
       this.units = r.data;
     })
   }
+
+  getIndirectCosts(){
+    this._apuPieza.getIndirectCosts().subscribe((r:any) => {
+      this.indirectCosts = r.data;
+      this.createForm();
+    })
+  }
   
   createForm(){
-    this.form = help.functionsApu.createForm(this.fb)
+    this.form = help.functionsApu.createForm(this.fb, this.indirectCosts);
+    help.functionsApu.listerTotalDirectCost(this.form);
+    /* this.newIndirectCost(); */
   }
   /************** Materia Prima Inicio ****************/
   basicControl(): FormGroup{
-    let group = help.materiaHelper.createMateriaGroup(this.fb, this.geometries);
+    let group = help.materiaHelper.createMateriaGroup(this.form, this.fb, this.geometries);
     return group;
   }
 
@@ -92,12 +119,13 @@ export class CrearApuPiezaComponent implements OnInit {
 
   deleteMateria(){
     this.materiaList.removeAt(this.materiaList.length - 1);
+    materiaHelper.subtotalMateria(this.materiaList, this.form);
   }
   /************** Materia Prima Fin ****************/
 
   /************** Materiales Comerciales Inicia ****************/
   materialsControl(): FormGroup{
-    let group = help.materialsHelper.createMaterialsGroup(this.fb);
+    let group = help.materialsHelper.createMaterialsGroup(this.form, this.fb);
     return group;
   }
 
@@ -112,6 +140,7 @@ export class CrearApuPiezaComponent implements OnInit {
 
   deleteMaterial(){
     this.materialsList.removeAt(this.materialsList.length - 1);
+    materialsHelper.subtotalMaterials(this.materiaList, this.form);
   }
 
   /************** Materiales Comerciales Fin ****************/
@@ -119,7 +148,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Corte de Agua Inicia ****************/
   
   cutWaterControl(): FormGroup{
-    let group = help.cutWaterHelper.createCutWaterGroup(this.fb);
+    let group = help.cutWaterHelper.createCutWaterGroup(this.form, this.fb);
     return group;
   }
 
@@ -134,6 +163,7 @@ export class CrearApuPiezaComponent implements OnInit {
 
   deleteCutWater(){
     this.cutWaterList.removeAt(this.cutWaterList.length - 1);
+    cutWaterHelper.subtotalUnit(this.cutWaterList, this.form);
   }
 
   /************** Corte de Agua Termina ****************/
@@ -142,7 +172,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Corte laser Termina ****************/
 
   cutLaserControl(): FormGroup{
-    let group = help.cutWaterHelper.createCutWaterGroup(this.fb);
+    let group = help.cutLaserHelper.createCutLaserGroup(this.form, this.fb);
     return group;
   }
 
@@ -152,11 +182,12 @@ export class CrearApuPiezaComponent implements OnInit {
 
   newCutLaser(){
     let laser = this.cutLaserList;
-    laser.push(this.cutLaserControl())
+    laser.push(this.cutLaserControl());
   }
 
   deleteCutLaser(){
     this.cutLaserList.removeAt(this.cutLaserList.length - 1);
+    cutLaserHelper.subtotalUnit(this.cutLaserList, this.form);
   }
 
   /************** Corte laser Termina ****************/
@@ -164,7 +195,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Maquinas Herramientas Inicia ****************/
 
   machineToolsControl(): FormGroup{
-    let group = help.machineToolHelper.createMachineToolGroup(this.fb);
+    let group = help.machineToolHelper.createMachineToolGroup(this.form, this.fb);
     return group;
   }
 
@@ -179,6 +210,7 @@ export class CrearApuPiezaComponent implements OnInit {
 
   deleteMachineTool(){
     this.machineToolList.removeAt(this.machineToolList.length - 1);
+    machineToolHelper.subtotalMachine(this.machineToolList, this.form);
   }
 
   /************** Maquinas Herramientas termina ****************/
@@ -186,7 +218,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Procesos Internos Inicia ****************/
   
   internalProccessesControl(): FormGroup{
-    let group = help.machineToolHelper.createMachineToolGroup(this.fb);
+    let group = help.internalProccessesHelper.createInternalProccessesGroup(this.form, this.fb);
     return group;
   }
 
@@ -201,6 +233,7 @@ export class CrearApuPiezaComponent implements OnInit {
 
   deleteInternalProccess(){
     this.internalProccessList.removeAt(this.internalProccessList.length - 1);
+    internalProccessesHelper.subtotalInternalProcesses(this.internalProccessList, this.form)
   }
 
   /************** Procesos Internos Termina ****************/
@@ -208,7 +241,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Procesos Externos Inicia ****************/
 
   externalProccessesControl(): FormGroup{
-    let group = help.externalProccessesHelper.createExternalProccessesGroup(this.fb);
+    let group = help.externalProccessesHelper.createExternalProccessesGroup(this.form, this.fb);
     return group;
   }
 
@@ -223,6 +256,7 @@ export class CrearApuPiezaComponent implements OnInit {
 
   deleteExternalProccess(){
     this.externalProccessList.removeAt(this.externalProccessList.length - 1);
+    externalProccessesHelper.subtotalExternalProcesses(this.externalProccessList, this.form);
   }
 
   /************** Procesos Externos termina ****************/
@@ -230,7 +264,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Otros Inicia ****************/
 
   othersControl(): FormGroup{
-    let group = help.othersHelper.createOthersGroup(this.fb);
+    let group = help.othersHelper.createOthersGroup(this.form, this.fb);
     return group;
   }
 
@@ -245,11 +279,14 @@ export class CrearApuPiezaComponent implements OnInit {
 
   deleteOthers(){
     this.othersList.removeAt(this.othersList.length - 1);
+    othersHelper.subtotalOthers(this.othersList, this.form);
   }
 
   /************** Otros Termina ****************/
 
-
+  get indirecCostList(){
+    return this.form.get('indirect_cost') as FormArray;
+  }
 
   save(){
     console.log(this.form.value);

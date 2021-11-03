@@ -9,11 +9,12 @@ import {
 export const materialsHelper = {
   consts: {},
   createMaterialsGroup(form: FormGroup, fb: FormBuilder) {
+    let amount = form.get('amount').value;
     let materials = fb.group({
       material_id: [''],
       unit_id: [''],
       q_unit: [0],
-      q_total: [0],
+      q_total: [amount],
       unit_cost: [0],
       total: [0]
     });
@@ -25,7 +26,7 @@ export const materialsHelper = {
       materials.patchValue({
         total: result
       })
-    })
+    }); 
     materials.get('q_total').valueChanges.subscribe(value => {
       let q_unit = materials.get('q_unit').value;
       let unit_cost = materials.get('unit_cost').value;
@@ -33,7 +34,7 @@ export const materialsHelper = {
       materials.patchValue({
         total: result
       })
-    })
+    });
     materials.get('unit_cost').valueChanges.subscribe(value => {
       let q_unit = materials.get('q_unit').value;
       let q_total = materials.get('q_total').value;
@@ -41,10 +42,23 @@ export const materialsHelper = {
       materials.patchValue({
         total: result
       })
-    })
+    });
+    materials.get('unit_cost').valueChanges.subscribe(value => {
+      let q_unit = materials.get('q_unit').value;
+      let q_total = materials.get('q_total').value;
+      let result =  q_total * value * q_unit;
+      materials.patchValue({
+        total: result
+      })
+    });
     materials.get('total').valueChanges.subscribe(value => {
-      this.subtotalMaterials(list, form)
-    })
+      this.subtotalMaterials(list, form);
+    });
+    form.get('amount').valueChanges.subscribe(value => {
+      materials.patchValue({
+        q_total: value
+      })
+    });
     /* materials.get('unit_cost').valueChanges.subscribe(value => { // Hace lo mismo solo que realiza la acción cuando cambia el costo unitario
       let q_unit = materials.get('q_unit').value;
       let q_total = materials.get('q_total').value;

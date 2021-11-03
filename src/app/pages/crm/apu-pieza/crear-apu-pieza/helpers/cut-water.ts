@@ -129,13 +129,13 @@ export const cutWaterHelper = {
     let subTotalUnit = form.get('cut_water_unit_subtotal').value;
     let cut_water_total_amount = form.get('cut_water_total_amount').value;
     form.get('cut_water_total_amount').valueChanges.subscribe(value => {
-      let result = value + subTotalUnit;
+      let result = value * subTotalUnit;
       form.patchValue({
         cut_water_subtotal: result
       }) 
     });
     form.get('cut_water_unit_subtotal').valueChanges.subscribe(value => {
-      let result = value + cut_water_total_amount;
+      let result = value * cut_water_total_amount;
       form.patchValue({
         cut_water_subtotal: result
       }) 

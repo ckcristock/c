@@ -130,13 +130,13 @@ export const cutLaserHelper = {
     let subTotalUnit = form.get('cut_laser_unit_subtotal').value;
     let cut_laser_total_amount = form.get('cut_laser_total_amount').value;
     form.get('cut_laser_total_amount').valueChanges.subscribe(value => {
-      let result = value + subTotalUnit;
+      let result = value * subTotalUnit;
       form.patchValue({
         cut_laser_subtotal: result
       }) 
     });
     form.get('cut_laser_unit_subtotal').valueChanges.subscribe(value => {
-      let result = value + cut_laser_total_amount;
+      let result = value * cut_laser_total_amount;
       form.patchValue({
         cut_laser_subtotal: result
       }) 

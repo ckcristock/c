@@ -289,6 +289,10 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   save(){
+    let files = this.files;
+    this.form.patchValue({
+      files
+    })
     console.log(this.form.value);
   }
 

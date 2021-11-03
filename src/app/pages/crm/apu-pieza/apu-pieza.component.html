@@ -13,12 +13,22 @@
         <table class="table table-borderless table-striped">
             <thead>
                 <tr>
-                    <th></th>
-                    <th>Acciones</th>
+                    <th>Nombre</th>
+                    <th>Destino</th>
+                    <th>Quien elabora</th>
+                    <th>Cliente</th>
+                    <th>Linea</th>
+                    <th>Cantidad</th>
+                    <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td>
                         <div class="text-center">
@@ -27,7 +37,10 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones">
+                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/crm/ver-apu-pieza', 1]">
+                                        <i class="far fa-eye"></i> Ver
+                                    </a>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/editar-apu-pieza', 1]">
                                         <i class="far fa-edit"></i> editar
                                     </a>
                                     <a class="dropdown-item waves-light text-danger waves-effect caja-botones">

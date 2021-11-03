@@ -21,6 +21,7 @@ import { ApuPiezaComponent } from './apu-pieza/apu-pieza.component';
 import { CrearApuPiezaComponent } from './apu-pieza/crear-apu-pieza/crear-apu-pieza.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { VerApuPiezaComponent } from './apu-pieza/ver-apu-pieza/ver-apu-pieza.component';
+import { EditarApuPiezaComponent } from './apu-pieza/editar-apu-pieza/editar-apu-pieza.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { VerApuPiezaComponent } from './apu-pieza/ver-apu-pieza/ver-apu-pieza.co
     PersonasComponent,
     ApuPiezaComponent,
     CrearApuPiezaComponent,
-    VerApuPiezaComponent
+    VerApuPiezaComponent,
+    EditarApuPiezaComponent
   ],
   imports: [
     CommonModule,

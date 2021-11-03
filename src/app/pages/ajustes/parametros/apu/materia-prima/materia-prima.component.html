@@ -1,10 +1,170 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <button class="btn btn-sm btn-primary" style="float: right;">
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
                <i class="fa fa-plus"></i> Agregar
            </button>
             <h5 class="text-primary">Materia Prima</h5>
         </div>
+        <table class="table table-borderless table-striped mt-5" *ngIf="!loading && rawMaterials.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Fecha Creación</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of rawMaterials">
+                    <td> {{ item.name }} </td>
+                    <td> {{ item.created_at | date: 'dd-MM-YYYY' }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" (click)="getRawMaterial(item); modalVer.show()">
+                                        <i class="far fa-eye"></i> Ver
+                                    </a>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getRawMaterial(item); modal.show()">
+                                        <i class="far fa-edit"></i> Editar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getRawMaterials($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
     </div>
 </div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">{{ title }}</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
+            <span aria-hidden="true">
+              <i class="fas fa-times"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="">Nombre</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="name">
+                        </div>
+                        <ng-container>
+                            <perfect-scrollbar style="height: 300px;">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label for="">Propiedad</label>
+                                            </th>
+                                            <th>
+                                                <label for="tipo">Caracteristica</label>
+                                            </th>
+                                            <th>
+                                                <label>Valor</label>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody formArrayName="fields">
+                                        <ng-container *ngFor="let item of fieldList.controls; let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" formControlName="property">
+                                                </td>
+                                                <td>
+                                                    <select class="form-control form-control-sm" name="color" formControlName="type">
+                                                        <option value="number">Number</option>
+                                                        <option value="text">Text</option>
+                                                        <option value="date">Date</option>
+                                                        <option value="text">Color</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input [type]="item['controls']['type']['value']" class="form-control form-control-sm" formControlName="value">
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                        <tr>
+                                            <td colspan="3">
+                                                <div class="btn-group" style="float: right">
+                                                    <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteField()">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                    <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newField()">
+                                                            <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </perfect-scrollbar>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="save()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<app-modal-basic #modalVer [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Ver Materia Prima</h5>
+        <button type="button" class="close basic-close" (click)="modalVer.hide(); closeModal()">
+            <span aria-hidden="true">
+              <i class="fas fa-times"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-12">
+                <perfect-scrollbar style="height: 300px;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Propiedad</th>
+                                <th>Tipo</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of rawMaterial.raw_material_fild">
+                                <td> {{ rawMaterial.name }} </td>
+                                <td> {{ item.property }} </td>
+                                <td> {{ item.type }} </td>
+                                <td> {{ item.value }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </perfect-scrollbar>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modalVer.hide(); closeModal()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

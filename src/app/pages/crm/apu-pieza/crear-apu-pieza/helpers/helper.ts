@@ -13,7 +13,7 @@ export const functionsApu = {
       third_party_id:[''],
       line: [''],
       amount: [0],
-      file: [''],
+      files: [''],
       observation: [''],
       materia_prima: fb.array([]),
       materia_prima_subtotal: [0],
@@ -52,6 +52,7 @@ export const functionsApu = {
       admin_unforeseen_utility_unit: [0],
       sale_price_cop_withholding_total: [0],
       sale_value_cop_unit: [0],
+      trm: [0],
       sale_price_usd_withholding_total: [0],
       sale_value_usd_unit: [0]
     });

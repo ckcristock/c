@@ -136,11 +136,11 @@
     <div class="app-modal-body">
         <div class="row">
             <div class="col-12">
+                <strong class="text-title"> {{ rawMaterial.name | titlecase }} </strong>
                 <perfect-scrollbar style="height: 300px;">
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Nombre</th>
                                 <th>Propiedad</th>
                                 <th>Tipo</th>
                                 <th>Valor</th>
@@ -148,7 +148,6 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of rawMaterial.raw_material_fild">
-                                <td> {{ rawMaterial.name }} </td>
                                 <td> {{ item.property }} </td>
                                 <td> {{ item.type }} </td>
                                 <td> {{ item.value }} </td>

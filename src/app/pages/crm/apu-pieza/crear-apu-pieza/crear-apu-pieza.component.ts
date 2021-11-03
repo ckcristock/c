@@ -11,6 +11,7 @@ import { internalProccessesHelper } from './helpers/internal_proccesses';
 import { machineToolHelper } from './helpers/machine-tools';
 import { externalProccessesHelper } from './helpers/external_proccesses';
 import { othersHelper } from './helpers/others';
+import { functionsUtils } from '../../../../core/utils/functionsUtils';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -28,6 +29,8 @@ export class CrearApuPiezaComponent implements OnInit {
   units:any[] = [];
   indirectCosts:any[] = [];
   files: File[] = [];
+  fileString:any = '';
+  file = '';
 
   constructor(
                 private _apuPieza: ApuPiezaService,
@@ -45,11 +48,11 @@ export class CrearApuPiezaComponent implements OnInit {
     this.createForm();
     this.getIndirectCosts();
   }
-
+  
   onSelect(event) {
     this.files.push(...event.addedFiles);
   }
-  
+
   onRemove(event) {
     this.files.splice(this.files.indexOf(event), 1);
   }
@@ -289,9 +292,21 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   save(){
-    let files = this.files;
+    let filess = this.files;
+    filess.forEach(elem => {
+      let file = elem;
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        this.fileString = (<FileReader>event.target).result;
+      };
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.file = base64;
+        this.files.push(this.fileString);
+      });
+    });
     this.form.patchValue({
-      files
+      files: filess
     })
     console.log(this.form.value);
   }

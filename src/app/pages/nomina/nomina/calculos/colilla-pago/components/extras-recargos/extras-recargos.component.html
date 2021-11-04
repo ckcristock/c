@@ -1,0 +1,88 @@
+<div *ngIf="horasExtrasDatos.valor_total > 0">
+    <p class="text-center text-uppercase font-weight-bold text-muted mt-3">
+      Horas Extras y recargos
+      <i class="iconsmind-Clock-Forward"></i>
+    </p>
+    <table class="table table-sm table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Concepto</th>
+          <th class="text-center">Valor sobre hora</th>
+          <th class="text-center">Cantidad de horas</th>
+          <th
+            class="text-center"
+          >x = Salario Promedio * Valor sobre hora * horas / (30 días * 8 horas)</th>
+          <th style="width:9.5%" class="text-center">Valor</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngIf="horasExtrasDatos.horas_reportadas.hed > 0">
+          <td>Hora extra diurna</td>
+          <td class="text-center">{{porcentajesExtrasDatos.hed}}</td>
+          <td class="text-center">{{horasExtrasDatos.horas_reportadas.hed}}</td>
+          <td
+            class="text-center"
+          >{{funcionario.contractultimate.salary | currency:'':''}} * {{porcentajesExtrasDatos.hed}} * {{horasExtrasDatos.horas_reportadas.hed}} / (30 * 8)</td>
+          <td class="text-center">{{horasExtrasDatos.horas_extras_totales.hed | currency:'':''}}</td>
+        </tr>
+
+        <tr *ngIf="horasExtrasDatos.horas_reportadas.hen > 0">
+          <td>Hora extra nocturna</td>
+          <td class="text-center">{{porcentajesExtrasDatos.hen}}</td>
+          <td class="text-center">{{horasExtrasDatos.horas_reportadas.hen}}</td>
+          <td
+            class="text-center"
+          >{{funcionario.contractultimate.salary | currency:'':''}} * {{porcentajesExtrasDatos.hen}} * {{horasExtrasDatos.horas_reportadas.hen}} / (30 * 8)</td>
+          <td class="text-center">{{horasExtrasDatos.horas_extras_totales.hen | currency:'':''}}</td>
+        </tr>
+
+        <tr *ngIf="horasExtrasDatos.horas_reportadas.hedfd > 0">
+          <td>Hora extra diurna dom/fest</td>
+          <td class="text-center">{{porcentajesExtrasDatos.hedfd}}</td>
+          <td class="text-center">{{horasExtrasDatos.horas_reportadas.hedfd}}</td>
+          <td
+            class="text-center"
+          >{{funcionario.contractultimate.salary | currency:'':''}} * {{porcentajesExtrasDatos.hedfd}} * {{horasExtrasDatos.horas_reportadas.hedfd}} / (30 * 8)</td>
+          <td class="text-center">{{horasExtrasDatos.horas_extras_totales.hedfd | currency:'':''}}</td>
+        </tr>
+
+        <tr *ngIf="horasExtrasDatos.horas_reportadas.hedfn > 0">
+          <td>Hora extra nocturna dom/fest</td>
+          <td class="text-center">{{porcentajesExtrasDatos.hedfn}}</td>
+          <td class="text-center">{{horasExtrasDatos.horas_reportadas.hedfn}}</td>
+          <td
+            class="text-center"
+          >{{funcionario.contractultimate.salary | currency:'':''}} * {{porcentajesExtrasDatos.hedfn}} * {{horasExtrasDatos.horas_reportadas.hedfn}} / (30 * 8)</td>
+          <td class="text-center">{{horasExtrasDatos.horas_extras_totales.hedfn | currency:'':''}}</td>
+        </tr>
+
+        <tr *ngIf="horasExtrasDatos.horas_reportadas.rn > 0">
+          <td>Recargo nocturno</td>
+          <td class="text-center">{{porcentajesExtrasDatos.rn}}</td>
+          <td class="text-center">{{horasExtrasDatos.horas_reportadas.rn}}</td>
+          <td
+            class="text-center"
+          >{{funcionario.contractultimate.salary | currency:'':''}} * {{porcentajesExtrasDatos.rn}} * {{horasExtrasDatos.horas_reportadas.rn}} / (30 * 8)</td>
+          <td class="text-center">{{horasExtrasDatos.horas_extras_totales.rn | currency:'':''}}</td>
+        </tr>
+        <tr *ngIf="horasExtrasDatos.horas_reportadas.rf > 0">
+          <td>Recargo dom/fest</td>
+          <td class="text-center">{{porcentajesExtrasDatos.rf}}</td>
+          <td class="text-center">{{horasExtrasDatos.horas_reportadas.rf}}</td>
+          <td
+            class="text-center"
+          >{{funcionario.contractultimate.salary | currency:'':''}} * {{porcentajesExtrasDatos.rf}} * {{horasExtrasDatos.horas_reportadas.rf}} / (30 * 8)</td>
+          <td class="text-center">{{horasExtrasDatos.horas_extras_totales.rf | currency:'':''}}</td>
+        </tr>
+
+        <tr class="fila-total">
+          <td>Total pago por horas</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="text-center">{{horasExtrasDatos.valor_total | currency:'':''}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> 

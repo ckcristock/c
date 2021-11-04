@@ -14,7 +14,7 @@ export class HorasExtrasComponent implements OnInit {
   }
 
   show(funcionario){
-    this.horasExtras = funcionario.horasExtras;
+    this.horasExtras = funcionario.horas_extras;
     this.modal.show();
   }
 

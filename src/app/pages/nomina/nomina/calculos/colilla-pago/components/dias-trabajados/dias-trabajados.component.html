@@ -1,0 +1,31 @@
+<div>
+    <p class="text-center text-uppercase font-weight-bold text-muted">Días trabajados</p>
+    <table class="table table-bordered table-striped table-sm">
+      <thead>
+        <tr>
+          <th style="width:80%">Concepto</th>
+          <th class="text-center">Días</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Días del periodo</td>
+      
+          <td class="text-center">{{salarioDatos.period_days}}</td>
+        </tr>
+        <tr *ngFor="let item of diasNovedades">
+          <td>{{item.concepto}}</td>
+          <td class="text-center">{{item.dias}}</td>
+        </tr>
+        <tr class="fila-total">
+          <td class="font-weight-bold">Total días trabajados</td>
+          <td class="text-center font-weight-bold">{{salarioDatos.worked_days}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      <small>A los 30 días del período se deben descontar los días que el empleado tuvo novedad para obtener los días realmente trabajados.</small>
+    </p>
+  </div>

@@ -1,0 +1,31 @@
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+  <div class="app-modal-header">
+    <h5 class="modal-title">Deducciones</h5>
+    <button type="button" class="close basic-close" (click)="modal.hide();showData=false;">
+      <span aria-hidden="true">
+        <i class="fas fa-times" (click)="modal.hide()"></i>
+      </span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <app-deducciones
+      #ingresoForm
+      *ngIf="showData"
+      [person]="person"
+      [periodo]="periodo"
+      [nominaPaga]="nominaPaga"
+      (updated)="update()"
+    ></app-deducciones>
+  </div>
+  <div class="app-modal-footer">
+    <div class="form-group text-right">
+      <button
+        (click)="modal.hide();showData=false;"
+        type="button"
+        class="btn btn-danger raised mr-2 btn-sm"
+      >
+        Cerrar
+      </button>
+    </div>
+  </div>
+</app-modal-basic>

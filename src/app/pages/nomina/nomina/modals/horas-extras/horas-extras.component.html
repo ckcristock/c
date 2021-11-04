@@ -18,9 +18,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of horasExtras">
-          <td class="custom-label text-left">{{ item.tipo }}</td>
-          <td class="custom-label text-center">{{ item.value }} h</td>
+        <tr *ngFor="let item of  horasExtras | ObjToArrayKeysPipe ">
+          <td class="custom-label text-left">{{ item }}</td>
+          <td class="custom-label text-center">{{ horasExtras[item] }} h</td>
         </tr>
         <!-- <tr v-for="(extra, index) in horasExtras" :key="index">
           <td class="custom-label text-left">{{ NombresExtras[index] }}</td>

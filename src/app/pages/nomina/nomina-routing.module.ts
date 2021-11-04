@@ -22,6 +22,7 @@ const routes: Routes = [
     { path: 'nomina', component: NominaComponent},
     { path: 'primas', component: PrimasComponent},
     { path: 'prima/:anio/:periodo', component: PrimaFuncionarioComponent},
+    { path: 'nomina',   loadChildren : () => import('./nomina/pago-nomina.module').then(m => m.PagoNominaModule )},
 ]
 
 @NgModule({

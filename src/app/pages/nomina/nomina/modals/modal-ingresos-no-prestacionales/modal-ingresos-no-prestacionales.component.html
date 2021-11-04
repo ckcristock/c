@@ -1,0 +1,38 @@
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+  <div class="app-modal-header">
+    <h5 class="modal-title">Ingresos No Prestacionales</h5>
+    <button type="button" class="close basic-close" (click)="modal.hide();showData=false;">
+      <span aria-hidden="true">
+        <i class="fas fa-times" (click)="modal.hide()"></i>
+      </span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <!--     <app-ingreso-prestacional
+        :funcionarioProp="FuncionarioSeleccionado"
+        :nominaPaga="nomina.nomina_paga"
+        @actualizar="getPagoNomina()"
+        ref="ingresoPrestacional"
+      ></app-ingreso-prestacional> -->
+
+    <app-ingreso-no-prestacional
+      #ingresoForm
+      *ngIf="showData"
+      [person]="person"
+      [periodo]="periodo"
+      [nominaPaga]="nominaPaga"
+      (updated)="update()"
+    ></app-ingreso-no-prestacional>
+  </div>
+  <div class="app-modal-footer">
+    <div class="form-group text-right">
+      <button
+        (click)="modal.hide();showData=false;"
+        type="button"
+        class="btn btn-danger raised mr-2 btn-sm"
+      >
+        Cerrar
+      </button>
+    </div>
+  </div>
+</app-modal-basic>

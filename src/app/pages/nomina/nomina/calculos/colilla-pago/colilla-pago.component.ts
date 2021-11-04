@@ -23,6 +23,7 @@ export class ColillaPagoComponent implements OnInit {
   deduccionesDatos: any = {};
   netoApagar: any = {};
   loading = false;
+  brand = false;
   constructor(
     private _payrollDetail: PayRollDetailService,
     private route: ActivatedRoute
@@ -31,9 +32,7 @@ export class ColillaPagoComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.params = this.route.snapshot.params;
-    this.getPeriodo();
     this.getNominaSeguridadFuncionario();
-    this.getPeriodo();
 
     this.getHorasExtrasDatos();
     this.getHorasExtrasPorcentajes();
@@ -43,10 +42,18 @@ export class ColillaPagoComponent implements OnInit {
     this.getRetencionesDatos();
     this.getDeduccionesDatos();
     this.getPagoNeto();
+
+    this.brand = this.getPeriodo();
   }
 
   getPeriodo() {
+    
     return moment().get('date') > 15;
+  }
+
+  get hasNovedad(){
+    
+    return Object.keys(this.novedadesDatos.novedades).length > 0
   }
 
   async getNominaSeguridadFuncionario() {
@@ -105,7 +112,6 @@ export class ColillaPagoComponent implements OnInit {
       .toPromise()
       .then((r: any) => {
         this.netoApagar = r.total_valor_neto;
-        console.log(this.netoApagar);
         this.loading = false;
       });
       

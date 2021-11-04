@@ -20,35 +20,38 @@
         [funcionario]="funcionario"
         [salarioDatos]="salarioDatos"
         [datosEmpresa]="datosEmpresa"
-        [brand]=" getPeriodo()"
+        [brand]="brand"
       ></app-salario>
+   
+      <app-extras-recargos
+        [horasExtrasDatos]="horasExtrasDatos"
+        [porcentajesExtrasDatos]="porcentajesExtrasDatos"
+        [funcionario]="funcionario"
+      ></app-extras-recargos>
+
+      <app-novedades *ngIf="hasNovedad"
+        [novedadesDatos]="novedadesDatos"
+        [datosEmpresa]="datosEmpresa"
+        [funcionario]="funcionario"
+        [brand]="brand"
+      ></app-novedades>
+    
+      <app-ingresos
+       [ingresosDatos]="ingresosDatos"
+       [brand]="brand" 
+       [datosEmpresa]="datosEmpresa">
+      </app-ingresos>
+ <!-- 
+      <app-retenciones
+        [retencionesDatos]="retencionesDatos"
+        [brand]="brand"
+        [datosEmpresa]="datosEmpresa"
+        [nominaSeguridadFuncionario]="nominaSeguridadFuncionario"
+      ></app-retenciones> -->
    <!--
-      <extras-recargos
-        :horasExtrasDatos="horasExtrasDatos"
-        :porcentajesExtrasDatos="porcentajesExtrasDatos"
-        :funcionario="funcionario"
-      ></extras-recargos>
-  
-  
-      <novedades v-if="Object.keys(novedadesDatos.novedades).length > 0"
-        :novedadesDatos="novedadesDatos"
-        :datosEmpresa="datosEmpresa"
-        :funcionario="funcionario"
-        :brand=" getPeriodo()"
-      ></novedades>
-  
-      <ingresos :ingresosDatos="ingresosDatos" :brand=" getPeriodo()" :datosEmpresa="datosEmpresa"></ingresos>
-  
-      <retenciones
-        :retencionesDatos="retencionesDatos"
-        :brand=" getPeriodo()"
-        :datosEmpresa="datosEmpresa"
-        :nominaSeguridadFuncionario="nominaSeguridadFuncionario"
-      ></retenciones>
-  
       <deducciones
         :deduccionesDatos="deduccionesDatos"
-        :brand=" getPeriodo()"
+        :brand="brand"
         :datosEmpresa="datosEmpresa"
       ></deducciones> -->
 

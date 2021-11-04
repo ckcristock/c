@@ -29,6 +29,7 @@ import { ExtrasRecargosComponent } from './calculos/colilla-pago/components/extr
 import { NovedadesComponent } from './calculos/colilla-pago/components/novedades/novedades.component';
 import { RetencionesComponent } from './calculos/colilla-pago/components/retenciones/retenciones.component';
 import { NominaFuncionarioComponent } from './calculos/nomina-funcionario.component';
+import { IngresosComponent } from './calculos/colilla-pago/components/ingresos/ingresos.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { NominaFuncionarioComponent } from './calculos/nomina-funcionario.compon
     NovedadesComponent,
     RetencionesComponent,
     NominaFuncionarioComponent,
+    IngresosComponent,
   ],
   imports: [
     PagoNominaRoutingModule,

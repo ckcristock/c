@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-extras-recargos',
@@ -6,6 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./extras-recargos.component.scss']
 })
 export class ExtrasRecargosComponent implements OnInit {
+  
+  @Input('horasExtrasDatos') horasExtrasDatos 
+  @Input('porcentajesExtrasDatos') porcentajesExtrasDatos 
+  @Input('funcionario') funcionario 
 
   constructor() { }
 

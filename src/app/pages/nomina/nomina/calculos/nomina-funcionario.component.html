@@ -67,7 +67,13 @@
                     v-if="tabActual === 'Colilla Pago'"
                   ></colilla-pago> -->
 
-                  <app-colilla-pago>
+                  <app-colilla-pago
+                        *ngIf="tabActual === 'Colilla Pago'"
+                        [funcionario]="funcionario"
+                        [datosEmpresa]="datosEmpresa"
+                        [fechaInicio]="inicio"
+                        [fechaFin]="fin"
+                  >
 
 
                   </app-colilla-pago>

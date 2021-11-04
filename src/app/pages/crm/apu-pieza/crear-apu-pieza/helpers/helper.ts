@@ -1,9 +1,66 @@
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { DayBgRow } from '@fullcalendar/daygrid';
 import { materiaHelper } from './materia-prima';
+import { materialsHelper } from './materials';
+import { cutWaterHelper } from './cut-water';
+import { cutLaserHelper } from './cut-laser';
+import { machineToolHelper } from './machine-tools';
+import { internalProccessesHelper } from './internal_proccesses';
+import { externalProccessesHelper } from './external_proccesses';
+import { othersHelper } from './others';
 
 export const functionsApu = {
   consts: {},
+
+  fillInForm(form: FormGroup, data, fb: FormBuilder) {
+    form.patchValue({
+      name: data.name,
+      city_id: data.city_id,
+      person_id: data.person_id,
+      third_party_id: data.third_party_id,
+      line: data.line,
+      amount: data.amount,
+      observation: data.observation,
+      direct_Costs_Indirect_Costs_total: data.direct_Costs_Indirect_Costs_total,
+      direct_Costs_Indirect_Costs_unit: data.direct_Costs_Indirect_Costs_unit,
+      administrative_percentage: data.administrative_percentage,
+      administrative_value: data.administrative_value,
+      unforeseen_percentage: data.unforeseen_percentage,
+      unforeseen_value: data.unforeseen_value,
+      administrative_Unforeseen_subTotal: data.administrative_Unforeseen_subTotal,
+      administrative_Unforeseen_unit: data.administrative_Unforeseen_unit,
+      utility_percentage: data.utility_percentage,
+      admin_unforeseen_utility_subTotal: data.admin_unforeseen_utility_subTotal,
+      admin_unforeseen_utility_unit: data.admin_unforeseen_utility_unit,
+      sale_price_cop_withholding_total: data.sale_price_cop_withholding_total,
+      sale_value_cop_unit: data.sale_value_cop_unit,
+      trm: data.trm,
+      sale_price_usd_withholding_total: data.sale_price_usd_withholding_total,
+      sale_value_usd_unit: data.sale_value_usd_unit,
+      others_subtotal: data.others_subtotal,
+      total_direct_cost: data.total_direct_cost,
+      unit_direct_cost: data.unit_direct_cost,
+      materia_prima_subtotal: data.materia_prima_subtotal,
+      commercial_materials_subtotal: data.commercial_materials_subtotal,
+      cut_water_total_amount: data.cut_water_total_amount,
+      cut_water_unit_subtotal: data.cut_water_unit_subtotal,
+      cut_water_subtotal: data.cut_water_subtotal,
+      cut_laser_total_amount: data.cut_laser_total_amount,
+      cut_laser_unit_subtotal: data.cut_laser_unit_subtotal,
+      cut_laser_subtotal: data.cut_laser_subtotal,
+      machine_tools_subtotal: data.machine_tools_subtotal,
+      internal_proccesses_subtotal: data.internal_proccesses_subtotal,
+      external_proccesses_subtotal: data.external_proccesses_subtotal
+    });
+    materiaHelper.createFillInMateria(form, fb, data);
+    materialsHelper.createFillInMaterials(form, fb, data);
+    cutWaterHelper.createFillInCutWater(form, fb, data);
+    cutLaserHelper.createFillInCutLaser(form, fb, data);
+    machineToolHelper.createFillInMachineTools(form, fb, data);
+    internalProccessesHelper.createFillInInternal(form, fb, data);
+    externalProccessesHelper.createFillInExternal(form, fb, data);
+    othersHelper.createFillInOthers(form, fb, data);
+  },
 
   createForm(fb: FormBuilder, indirectCost:Array<any>) {
     let group = fb.group({
@@ -144,7 +201,7 @@ export const functionsApu = {
     group.get('administrative_Unforeseen_subTotal').valueChanges.subscribe(value => {
       let amount = group.get('amount').value;
       let utility_percentage = group.get('utility_percentage').value;
-      let result = parseFloat(value) / (100 - parseFloat(utility_percentage))
+      let result = value / (100 - utility_percentage)
       group.patchValue({
         administrative_Unforeseen_unit: value / amount,
         admin_unforeseen_utility_subTotal: result
@@ -152,7 +209,7 @@ export const functionsApu = {
     });
     group.get('utility_percentage').valueChanges.subscribe(value => {
       let administrative_Unforeseen_subTotal = group.get('administrative_Unforeseen_subTotal').value;
-      let result = parseFloat(administrative_Unforeseen_subTotal) / (100 - parseFloat(value))
+      let result = administrative_Unforeseen_subTotal / (100 - value)
       group.patchValue({
         admin_unforeseen_utility_subTotal: result
       });

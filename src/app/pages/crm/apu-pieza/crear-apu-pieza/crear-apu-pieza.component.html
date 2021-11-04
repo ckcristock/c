@@ -64,7 +64,7 @@
                     <div class="mb-3 row">
                         <label for="cargo" class="col-sm-3 col-form-label col-form-label-sm">Cantidad</label>
                         <div class="col-sm-9">
-                            <input type="number" class="form-control form-control-sm" formControlName="amount">
+                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" formControlName="amount">
                         </div>
                     </div>
                 </div>
@@ -166,24 +166,24 @@
                                                     <ng-container formArrayName="measures">
                                                         <ng-container [formGroupName]="j" *ngFor="let item of item['controls']['measures']['controls']; let j = index">
                                                             <td>
-                                                                <input type="number" class="form-control form-control-sm" formControlName="value">
+                                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" formControlName="value">
                                                             </td>
                                                         </ng-container>
                                                     </ng-container>
                                                     <td>
-                                                        <input type="number" class="form-control form-control-sm" formControlName="weight_kg">
+                                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" formControlName="weight_kg">
                                                     </td>
                                                     <td>
-                                                        <input type="number" class="form-control form-control-sm" formControlName="q">
+                                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" formControlName="q">
                                                     </td>
                                                     <td>
-                                                        <input type="number" class="form-control form-control-sm" formControlName="weight_total">
+                                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" formControlName="weight_total">
                                                     </td>
                                                     <td>
-                                                        <input type="number" class="form-control form-control-sm" formControlName="value_kg">
+                                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" formControlName="value_kg">
                                                     </td>
                                                     <td>
-                                                        <input type="number" class="form-control form-control-sm" formControlName="total_value">
+                                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" formControlName="total_value">
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -198,7 +198,7 @@
                                     </td>
                                     <td colspan="13">
                                         <div class="row" style="float: right">
-                                            <input type="text" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="materia_prima_subtotal">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="materia_prima_subtotal">
                                         </div>
                                     </td>
                                 </tr>
@@ -277,16 +277,16 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="q_unitaria_materiales" formControlName="q_unit">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_unitaria_materiales" formControlName="q_unit">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="q_total_materiales" formControlName="q_total">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_total_materiales" formControlName="q_total">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_materiales" formControlName="unit_cost">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_materiales" formControlName="unit_cost">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="total_materiales" formControlName="total">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_materiales" formControlName="total">
                                                 </td>
                                             </tr>
                                         </ng-container>
@@ -299,7 +299,7 @@
                                         </td>
                                         <td colspan="7">
                                             <div class="row" style="float: right">
-                                                <input type="text" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="commercial_materials_subtotal">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="commercial_materials_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -395,34 +395,34 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="cantidad_corte_agua" formControlName="amount">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="cantidad_corte_agua" formControlName="amount">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="largo_corte_agua" formControlName="long">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="largo_corte_agua" formControlName="long">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="ancho_corte_agua" formControlName="width">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="ancho_corte_agua" formControlName="width">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="longitud_total_corte_agua" formControlName="total_length">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="longitud_total_corte_agua" formControlName="total_length">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="cantidad_corte_corte_agua" formControlName="amount_cut">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="cantidad_corte_corte_agua" formControlName="amount_cut">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="diametro_corte_corte_agua" formControlName="diameter">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="diametro_corte_corte_agua" formControlName="diameter">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="perimetro_corte_agua" formControlName="total_hole_perimeter">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="perimetro_corte_agua" formControlName="total_hole_perimeter">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="tiempo_corte_agua" formControlName="time">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="tiempo_corte_agua" formControlName="time">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="valor_minuto_corte_agua" formControlName="minute_value">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="valor_minuto_corte_agua" formControlName="minute_value">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="valor_corte_agua" formControlName="value">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="valor_corte_agua" formControlName="value">
                                                 </td>
                                             </tr>
                                         </ng-container>
@@ -435,7 +435,7 @@
                                         </td>
                                         <td colspan="12">
                                             <div class="row" style="float: right">
-                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_unit_subtotal">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_unit_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -445,7 +445,7 @@
                                         </td>
                                         <td colspan="12">
                                             <div class="row" style="float: right">
-                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_total_amount">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_total_amount">
                                             </div>
                                         </td>
                                     </tr>
@@ -455,7 +455,7 @@
                                         </td>
                                         <td colspan="12">
                                             <div class="row" style="float: right">
-                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_subtotal">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -551,34 +551,34 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="cantidad_corte_laser" formControlName="sheets_amount">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="cantidad_corte_laser" formControlName="sheets_amount">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="largo_corte_laser" formControlName="long">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="largo_corte_laser" formControlName="long">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="ancho_corte_laser" formControlName="width">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="ancho_corte_laser" formControlName="width">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="longitud_total_corte_laser" formControlName="total_length">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="longitud_total_corte_laser" formControlName="total_length">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="cantidad_agujeros_corte_laser" formControlName="amount_holes">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="cantidad_agujeros_corte_laser" formControlName="amount_holes">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="diametro_corte_corte_laser" formControlName="diameter">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="diametro_corte_corte_laser" formControlName="diameter">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="perimetro_corte_laser" formControlName="total_hole_perimeter">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="perimetro_corte_laser" formControlName="total_hole_perimeter">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="tiempo_corte_laser" formControlName="time">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="tiempo_corte_laser" formControlName="time">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="valor_minuto_corte_laser" formControlName="minute_value">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="valor_minuto_corte_laser" formControlName="minute_value">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="valor_corte_laser" formControlName="value">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="valor_corte_laser" formControlName="value">
                                                 </td>
                                             </tr>
                                         </ng-container>
@@ -591,7 +591,7 @@
                                         </td>
                                         <td colspan="13">
                                             <div class="row" style="float: right">
-                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_laser_unit_subtotal">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_laser_unit_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -601,7 +601,7 @@
                                         </td>
                                         <td colspan="13">
                                             <div class="row" style="float: right">
-                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_laser_total_amount">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_laser_total_amount">
                                             </div>
                                         </td>
                                     </tr>
@@ -611,7 +611,7 @@
                                         </td>
                                         <td colspan="13">
                                             <div class="row" style="float: right">
-                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_laser_subtotal">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_laser_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -685,16 +685,16 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="q_unitaria_maquinas_herra" formControlName="q_unit">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_unitaria_maquinas_herra" formControlName="q_unit">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="q_total_maquinas_herra" formControlName="q_total">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_total_maquinas_herra" formControlName="q_total">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="unit_cost">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="unit_cost">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="total_maquinas_herra" formControlName="total">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_maquinas_herra" formControlName="total">
                                                 </td>
                                             </tr>
                                         </ng-container>
@@ -707,7 +707,7 @@
                                         </td>
                                         <td colspan="7">
                                             <div class="row" style="float: right">
-                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="machine_tools_subtotal">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="machine_tools_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -779,16 +779,16 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="q_unitaria_proceso_interno" formControlName="q_unit">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_unitaria_proceso_interno" formControlName="q_unit">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="q_total_proceso_interno" formControlName="q_total">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_total_proceso_interno" formControlName="q_total">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_proceso_interno" formControlName="unit_cost">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_proceso_interno" formControlName="unit_cost">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="total_proceso_interno" formControlName="total">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_proceso_interno" formControlName="total">
                                                 </td>
                                             </tr>
                                         </ng-container>
@@ -801,7 +801,7 @@
                                         </td>
                                         <td colspan="7">
                                             <div class="row" style="float: right">
-                                                <input type="text" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="internal_proccesses_subtotal">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="internal_proccesses_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -875,16 +875,16 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="q_unitaria_proceso_externo" formControlName="q_unit">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_unitaria_proceso_externo" formControlName="q_unit">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="q_total_proceso_externo" formControlName="q_total">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_total_proceso_externo" formControlName="q_total">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_proceso_externo" formControlName="unit_cost">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_proceso_externo" formControlName="unit_cost">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="total_proceso_externo" formControlName="total">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_proceso_externo" formControlName="total">
                                                 </td>
                                             </tr>
                                         </ng-container>
@@ -897,7 +897,7 @@
                                         </td>
                                         <td colspan="7">
                                             <div class="row" style="float: right">
-                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="external_proccesses_subtotal">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="external_proccesses_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -971,16 +971,16 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="q_unitaria_otros" formControlName="q_unit">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_unitaria_otros" formControlName="q_unit">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="q_total_otros" formControlName="q_total">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_total_otros" formControlName="q_total">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_otros" formControlName="unit_cost">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_otros" formControlName="unit_cost">
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control form-control-sm" id="total_otros" formControlName="total">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_otros" formControlName="total">
                                                 </td>
                                             </tr>
                                         </ng-container>
@@ -993,7 +993,7 @@
                                         </td>
                                         <td colspan="7">
                                             <div class="row" style="float: right">
-                                                <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="others_subtotal">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="others_subtotal">
                                             </div>
                                         </td>
                                     </tr>
@@ -1024,13 +1024,17 @@
                             <tr>
                                 <td>Costo directo total:</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="total_direct_cost">
+                                    <div class="col-9" style="float: right;">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="total_direct_cost">
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Costo directo unitario:</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="unit_direct_cost">
+                                    <div class="col-9" style="float: right;">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="unit_direct_cost">
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -1052,10 +1056,10 @@
                                     <tr [formGroupName]="i">
                                         <td> {{ item.controls.name.value }} </td>
                                         <td>
-                                            <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="percentage">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="percentage">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="value">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="value">
                                         </td>
                                     </tr>
                                 </ng-container>
@@ -1065,7 +1069,7 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="indirect_cost_total">
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="indirect_cost_total">
                                 </td>
                             </tr>
                         </tbody>
@@ -1076,13 +1080,17 @@
                             <tr>
                                 <td>Costos Directos + Costos Indirectos Totales</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="direct_Costs_Indirect_Costs_total">
+                                    <div class="col-9" style="float: right;">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_Costs_Indirect_Costs_total">
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Costos Directos + Costos Indirectos Unitario</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="direct_Costs_Indirect_Costs_unit">
+                                    <div class="col-9" style="float: right;">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_Costs_Indirect_Costs_unit">
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -1094,33 +1102,33 @@
                             <tr>
                                 <td>Administrativos</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_percentage">
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_percentage">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_value">
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_value">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Imprevistos</td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_percentage">
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_percentage">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_value">
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_value">
                                 </td>
                             </tr>
                             <tr>
                                 <td>SubTotal + Administrativos + Imprevistos</td>
                                 <td></td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_Unforeseen_subTotal">
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_Unforeseen_subTotal">
                                 </td>
                             </tr>
                             <tr>
                                 <td>SubTotal + Administrativos + Imprevistos Unitario</td>
                                 <td></td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_Unforeseen_unit">
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_Unforeseen_unit">
                                 </td>
                             </tr>
                         </tbody>
@@ -1129,21 +1137,30 @@
                     <table class="table table-striped">
                         <tbody class="bg-light">
                             <tr>
-                                <td class="text-center">Utilidad</td>
+                                <td class="text-center">Utilidad </td>
+                                <td></td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="utility_percentage">
+                                    <div class="col-8">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="utility_percentage">
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>SubTotal + Admin + Imprevisto + Utilidad</td>
-                                <td colspan="4">
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_subTotal">
+                                <td></td>
+                                <td>
+                                    <div class="col-9" style="float: right">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_subTotal">
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>SubTotal + Admin + Imprevisto + Utilidad Unitario</td>
-                                <td colspan="4">
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_unit">
+                                <td></td>
+                                <td>
+                                    <div class="col-9" style="float: right">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_unit">
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -1153,14 +1170,20 @@
                         <tbody class="bg-light">
                             <tr>
                                 <td>Precio Venta Total COP + Retención</td>
+                                <td></td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_cop_withholding_total">
+                                    <div class="col-7" style="float: right">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_cop_withholding_total">
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Valor de Venta Unitario COP</td>
+                                <td></td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_cop_unit">
+                                    <div class="col-7" style="float: right">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_cop_unit">
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -1170,8 +1193,12 @@
                         <tbody>
                             <tr>
                                 <td>TRM</td>
-                                <td style="width: 232px;">
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="trm">
+                                <td>
+                                </td>
+                                <td>
+                                    <div class="col-4" style="float: right">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="trm">
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -1181,14 +1208,20 @@
                         <tbody class="bg-light">
                             <tr>
                                 <td>Precio Venta Total USD + Retención</td>
-                                <td colspan="3">
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_usd_withholding_total">
+                                <td></td>
+                                <td>
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_usd_withholding_total">
+                                    <!-- <div class="col-6" style="float: right">
+                                    </div> -->
                                 </td>
                             </tr>
                             <tr>
                                 <td>Valor de Venta Unitario USD</td>
+                                <td></td>
                                 <td>
-                                    <input type="number" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_usd_unit">
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_usd_unit">
+                                    <!-- <div class="col-6" style="float: right">
+                                    </div> -->
                                 </td>
                             </tr>
                         </tbody>

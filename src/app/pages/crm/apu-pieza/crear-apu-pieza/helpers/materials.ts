@@ -8,6 +8,25 @@ import {
 
 export const materialsHelper = {
   consts: {},
+
+  createFillInMaterials(form: FormGroup, fb: FormBuilder, data) {
+    if (data.material) {
+      let commercial_materials = form.get('commercial_materials') as FormArray;
+      data.material.forEach((r) => {
+        let group = fb.group({
+          material_id: [r.material_id],
+          unit_id: [r.unit_id],
+          q_unit: [r.q_unit],
+          q_total: [r.q_total],
+          unit_cost: [r.unit_cost],
+          total: [r.total]
+        });
+        commercial_materials.push(group);
+      });
+      this.subtotalMaterials(commercial_materials, form);
+    }
+  },
+
   createMaterialsGroup(form: FormGroup, fb: FormBuilder) {
     let amount = form.get('amount').value;
     let materials = fb.group({

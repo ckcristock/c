@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ApuPiezaService } from '../apu-pieza.service';
 import { UnidadesMedidasService } from '../../../ajustes/parametros/apu/unidades-medidas/unidades-medidas.service';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
@@ -12,6 +12,8 @@ import { machineToolHelper } from './helpers/machine-tools';
 import { externalProccessesHelper } from './helpers/external_proccesses';
 import { othersHelper } from './helpers/others';
 import { functionsUtils } from '../../../../core/utils/functionsUtils';
+import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -19,6 +21,8 @@ import { functionsUtils } from '../../../../core/utils/functionsUtils';
   styleUrls: ['./crear-apu-pieza.component.scss']
 })
 export class CrearApuPiezaComponent implements OnInit {
+  @Input('id') id;
+  @Input('data') data;
   form: FormGroup;
   date: Date = new Date();
   people:any[] = [];
@@ -31,11 +35,15 @@ export class CrearApuPiezaComponent implements OnInit {
   files: File[] = [];
   fileString:any = '';
   file = '';
+  fileArr:any[] = [];
 
   constructor(
                 private _apuPieza: ApuPiezaService,
                 private _units: UnidadesMedidasService,
-                private fb: FormBuilder
+                private fb: FormBuilder,
+                private _swal: SwalService,
+                private router: Router,
+                private actRoute: ActivatedRoute
               ) { }
 
   ngOnInit(): void {
@@ -103,7 +111,12 @@ export class CrearApuPiezaComponent implements OnInit {
   createForm(){
     this.form = help.functionsApu.createForm(this.fb, this.indirectCosts);
     help.functionsApu.listerTotalDirectCost(this.form);
-    /* this.newIndirectCost(); */
+  }
+
+  validateData() {
+    if (this.data) {
+      help.functionsApu.fillInForm(this.form, this.data, this.fb);
+    }
   }
   /************** Materia Prima Inicio ****************/
   basicControl(): FormGroup{
@@ -143,7 +156,7 @@ export class CrearApuPiezaComponent implements OnInit {
 
   deleteMaterial(){
     this.materialsList.removeAt(this.materialsList.length - 1);
-    materialsHelper.subtotalMaterials(this.materiaList, this.form);
+    materialsHelper.subtotalMaterials(this.materialsList, this.form);
   }
 
   /************** Materiales Comerciales Fin ****************/
@@ -303,12 +316,58 @@ export class CrearApuPiezaComponent implements OnInit {
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.file = base64;
         this.files.push(this.fileString);
+        // this.fileArr.push(this.fileString);
       });
     });
+    /* this.form.patchValue({
+      files: this.fileArr
+    }) */
     this.form.patchValue({
       files: filess
     })
-    console.log(this.form.value);
+    /* this._swal
+      .show({
+        text: `Se dispone a ${
+          this.id ? 'editar' : 'crear'
+        } una solicitud de viático`,
+        title: '¿Está seguro?',
+        icon: 'warning',
+      })
+      .then((r) => {
+        if (r.isConfirmed) {
+          if (this.id) {
+            this._apuPieza.actualizarViatico(this.id, this.form.value).subscribe(
+              (res: any) => this.showSucess(),
+              (err) => this.showError(err)
+            );
+          } else {
+            this._viatico.crearViatico(this.form.value).subscribe(
+              (res: any) => this.showSucess(),
+              (err) => this.showError(err)
+            );
+          }
+        }
+      }); */
+  }
+
+  showSuccess() {
+    this._swal.show({
+      icon: 'success',
+      text: `Apu Pieza  ${
+          this.id ? 'editado' : 'creado'
+        } con éxito`,
+      title: 'Operación exitosa',
+      showCancel: false,
+    });
+    this.router.navigateByUrl('/crm/apu-pieza');
+  }
+  showError(err) {
+    this._swal.show({
+      icon: 'error',
+      title: '¡Ooops!',
+      showCancel: false,
+      text: err.code,
+    });
   }
 
 }

@@ -8,8 +8,27 @@ import {
 export const materiaHelper = {
   consts: {},
   
-  createFillInMateria(){
-    
+  createFillInMateria(form: FormGroup, fb: FormBuilder, data) {
+    if (data.rowmaterial) {
+      let materia_prima = form.get('materia_prima') as FormArray;
+      data.rowmaterial.forEach((r) => {
+        let group = fb.group({
+          geometry_id: [r.geometry_id],
+          image: [r.image],
+          material_id: [r.material_id],
+          measures: fb.array([]),
+          weight_formula: [r.weight_formula],
+          weight_kg: [r.weight_kg],
+          q: [r.q],
+          weight_total: [r.weight_total],
+          value_kg: [r.value_kg],
+          total_value: [r.total_value]
+        });
+        this.subscribeMateria(group, form, materia_prima);
+        materia_prima.push(group);
+      });
+      this.getTotalHospedaje(form, materia_prima);
+    }
   },
 
   createMateriaGroup(form:FormGroup, fb: FormBuilder, geometriesList: Array<any>) {
@@ -86,6 +105,11 @@ export const materiaHelper = {
         total_value: weight_total * value
       });
     });
+    form.get('amount').valueChanges.subscribe(value => {
+      group.patchValue({
+        q: value
+      });
+    });
     group.get('total_value').valueChanges.subscribe(value => {
       this.subtotalMateria(list, form)
     })
@@ -102,7 +126,7 @@ export const materiaHelper = {
       form.patchValue({
         materia_prima_subtotal: total
       }) 
-    }, 100);
+    }, 130);
   },
   
 

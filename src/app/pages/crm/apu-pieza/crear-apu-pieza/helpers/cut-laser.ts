@@ -8,6 +8,31 @@ import {
 
 export const cutLaserHelper = {
   consts: {},
+
+  createFillInCutLaser(form: FormGroup, fb: FormBuilder, data) {
+    if (data.cutlaser) {
+      let cut_laser = form.get('cut_laser') as FormArray;
+      data.cutlaser.forEach((r) => {
+        let group = fb.group({
+          material_id: [r.material_id],
+          thickness: [r.thickness],
+          amount: [r.amount],
+          long: [r.long],
+          width: [r.width],
+          total_length: [r.total_length],
+          amount_cut: [r.amount_cut],
+          diameter: [r.diameter],
+          total_hole_perimeter: [r.total_hole_perimeter],
+          time: [r.time],
+          minute_value: [r.minute_value],
+          value: [r.value]
+        });
+        cut_laser.push(group);
+      });
+      this.subscribesCutLaser(cut_laser, form);
+    }
+  },
+
   createCutLaserGroup(form: FormGroup, fb: FormBuilder) {
     let cut_laser = fb.group({
       material_id: [''],

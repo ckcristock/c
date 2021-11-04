@@ -82,7 +82,7 @@ export const hospedajeHelper = {
     group.get('n_night').valueChanges.subscribe((value) => {
       this.subtotalHotel(group, value, group.value.rate);
     });
-    group.get('who_cancels').valueChanges.subscribe((value) => {
+    /* group.get('who_cancels').valueChanges.subscribe((value) => {
       if (value == 'agencia') {
         form.patchValue({
           total_hotels_cop: 0,
@@ -91,7 +91,7 @@ export const hospedajeHelper = {
       } else {
         this.subtotalHotel(group, group.value.n_night, group.value.rate, form, list);
       }
-    });
+    }); */
   },
 
   subtotalHotel(

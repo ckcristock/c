@@ -17,13 +17,22 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpClientModule } from '@angular/common/http';
 import { PipesModule } from '../../core/pipes/pipes.module';
 import { PersonasComponent } from './terceros/personas/personas.component';
+import { ApuPiezaComponent } from './apu-pieza/apu-pieza.component';
+import { CrearApuPiezaComponent } from './apu-pieza/crear-apu-pieza/crear-apu-pieza.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { VerApuPiezaComponent } from './apu-pieza/ver-apu-pieza/ver-apu-pieza.component';
+import { EditarApuPiezaComponent } from './apu-pieza/editar-apu-pieza/editar-apu-pieza.component';
 
 
 @NgModule({
   declarations: [
     TercerosComponent,
     CrearTercerosComponent,
-    PersonasComponent
+    PersonasComponent,
+    ApuPiezaComponent,
+    CrearApuPiezaComponent,
+    VerApuPiezaComponent,
+    EditarApuPiezaComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +50,8 @@ import { PersonasComponent } from './terceros/personas/personas.component';
     ReactiveFormsModule,
     NgbNavModule,
     NgbTooltipModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    NgxDropzoneModule
   ]
 })
 export class CrmModule { }

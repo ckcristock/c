@@ -1,0 +1,60 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" type="button" style="float: right;" [routerLink]="['/crm/crear-apu-pieza']">
+                <i class="fa fa-plus"></i> Agregar
+            </button>
+            <h5 class="text-primary">APU PIEZA</h5>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-borderless table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Destino</th>
+                    <th>Quien elabora</th>
+                    <th>Cliente</th>
+                    <th>Linea</th>
+                    <th>Cantidad</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/crm/ver-apu-pieza', 1]">
+                                        <i class="far fa-eye"></i> Ver
+                                    </a>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/editar-apu-pieza', 1]">
+                                        <i class="far fa-edit"></i> editar
+                                    </a>
+                                    <a class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                        <i class="far fa-trash-alt"></i> Anular
+                                    </a>
+                                    <a class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                        <i class="fas fa-check"></i> Activar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

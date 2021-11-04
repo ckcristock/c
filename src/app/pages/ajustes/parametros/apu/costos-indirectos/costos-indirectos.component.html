@@ -4,25 +4,23 @@
             <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
                 <i class="fa fa-plus"></i> Agregar
             </button>
-            <h5 class="text-primary">Variables APU</h5>
+            <h5 class="text-primary">Costos indirectos</h5>
         </div>
         <hr class="bg-primary">
-        <table class="table table-borderless table-striped" *ngIf="!loading && machines.length > 0; else notData">
+        <table class="table table-borderless table-striped" *ngIf="!loading && indirects.length > 0; else notData">
             <thead class="bg-light">
                 <tr>
                     <th>Nombre</th>
-                    <th>Unidad</th>
-                    <th>Costo</th>
-                    <th>Tipo</th>
+                    <th>%</th>
+                    <th>Fecha Creación</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of machines">
+                <tr *ngFor="let item of indirects" [ngClass]="{'bg-danger text-white': (item.state == 'Inactivo')}">
                     <td> {{ item.name }} </td>
-                    <td> {{ item.unit_name }} </td>
-                    <td> {{ item.unit_cost }} </td>
-                    <td> {{ item.type }} </td>
+                    <td> {{ item.percentage }} </td>
+                    <td> {{ item.created_at | date: 'dd-MM-YYYY' }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -30,8 +28,14 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getMaquine(item); modal.show()">
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getIndirect(item); modal.show()">
                                         <i class="far fa-edit"></i> Editar
+                                    </a>
+                                    <a *ngIf="item.state == 'Inactivo'" (click)="activateOrInactivate(item, 'Activo')" class="dropdown-item waves-light text-success waves-effect">
+                                        <i class="fas fa-check"></i> Activar
+                                    </a>
+                                    <a *ngIf="item.state == 'Activo'" (click)="activateOrInactivate(item, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect">
+                                        <i class="fas fa-trash-alt"></i> Anular
                                     </a>
                                 </div>
                             </div>
@@ -40,6 +44,9 @@
                 </tr>
             </tbody>
         </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getIndirectCosts($event)" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize"
+            [(page)]="pagination.page" aria-label="Default pagination">
+        </ngb-pagination>
     </div>
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-md'">
@@ -58,24 +65,11 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="">Nombre</label>
-                            <input type="text" class="form-control" formControlName="name">
+                            <input type="text" class="form-control form-control-sm" formControlName="name">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="">Unidad</label>
-                            <ng-select formControlName="unit_id" [items]="units" bindLabel="name" bindValue="id" loadingText="loading" ngDefaultControl>
-                            </ng-select>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label for="">Costo</label>
-                            <input type="number" class="form-control" formControlName="unit_cost">
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label for="">Tipo</label>
-                            <select class="form-control" formControlName="type_id">
-                                <option value="1">Maquinas Herramientas</option>
-                                <option value="2">Procesos Internos</option>
-                                <option value="3">Procesos Externos</option>
-                            </select>
+                            <label for="">%</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="percentage">
                         </div>
                     </div>
                 </div>

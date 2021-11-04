@@ -21,6 +21,7 @@ export class CrearGeometriaComponent implements OnInit {
   id:any;
   message:any = '';
   geometry:any = {};
+  measu:any;
 
   constructor(
                 private _geometrias: GeometriasService,
@@ -53,10 +54,7 @@ export class CrearGeometriaComponent implements OnInit {
         name: this.geometry.text,
         image: this.geometry.image,
         weight_formula: this.geometry.weight_formula
-      })
-      /* this.geometry.measures.forEach(r => {
-        return this.measures.filter((r) => r.checked);
-      }); */
+      });
     })
   }
   

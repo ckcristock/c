@@ -19,8 +19,8 @@
                     <th>Nombre</th>
                     <th>Unidad</th>
                     <th>Tipo</th>
-                    <th>Aplica Corte Agua</th>
-                    <th>Aplica Corte Luz</th>
+                    <!-- <th>Aplica Corte Agua</th>
+                    <th>Aplica Corte laser</th> -->
                     <th>Precio Unitario</th>
                     <th>F. Creación</th>
                     <th class="text-center">Acciones</th>
@@ -31,14 +31,14 @@
                     <td> {{ item.name | uppercase }} </td>
                     <td> {{ item.unit | titlecase }} </td>
                     <td> {{ item.type }} </td>
-                    <td>
+                    <!-- <td>
                         <span *ngIf="item.cut_water === 0; else si"></span>
                         <span *ngIf="item.cut_water === 1; else no"></span>
                     </td>
                     <td>
                         <span *ngIf="item.cut_laser === 0; else si"></span>
                         <span *ngIf="item.cut_laser === 1; else no"></span>
-                    </td>
+                    </td> -->
                     <td> {{ item.unit_price }} </td>
                     <td> {{ item.created_at | date: 'dd-MM-YYYY' }} </td>
                     <td>
@@ -95,7 +95,7 @@
                                 <option value="Comercial">Comercial</option>
                             </select>
                         </div>
-                        <div class="form-group col-6">
+                        <!-- <div class="form-group col-6">
                             <div class="custom-control custom-checkbox">
                                 <input class="custom-control-input" type="checkbox" id="cut_water" formControlName="cut_water">
                                 <label class="custom-control-label" for="cut_water">
@@ -107,10 +107,10 @@
                             <div class="custom-control custom-checkbox">
                                 <input class="custom-control-input" type="checkbox" id="cut_laser" formControlName="cut_laser">
                                 <label class="custom-control-label" for="cut_laser">
-                                    Aplica corte de luz
+                                    Aplica corte laser
                                 </label>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

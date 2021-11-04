@@ -5,12 +5,10 @@
   <div class="col-md-4 offset-4 text-right">
     <span class="font-weight-bold">Periodo de pago</span>:
     <i class="fas fa-calendar-week"></i>
-    <span class="font-weight-bold">
-      {{inicioPeriodo}}</span
-    >
+    <span class="font-weight-bold"> {{ inicioPeriodo }}</span>
     -
     <i class="fas fa-calendar-week"></i>
-    <span class="font-weight-bold">{{finPeriodo}}</span>
+    <span class="font-weight-bold">{{ finPeriodo }}</span>
   </div>
 </div>
 
@@ -28,7 +26,7 @@
   >
 </div>
 <!-- Conceptos CARDS -->
-<div class="row icon-cards" >
+<div class="row icon-cards">
   <div class="card-body">
     <div class="row">
       <div class="col">
@@ -93,8 +91,8 @@
       <!-- {{
       nomina.costo_total_empresa | moneda
       }} -->
-     
-      $ {{nomina.costo_total_empresa  | currency: '':''  }}
+
+      $ {{ nomina.costo_total_empresa | currency: "":"" }}
     </span>
   </p>
 </div>
@@ -161,7 +159,7 @@
   </div>
 </div>
 
-<div class="row" >
+<div class="row">
   <div class="col-12">
     <h3 class="font-weight-bold">Lista de Funcionarios</h3>
     <!-- <div class="form-group row">
@@ -178,8 +176,15 @@
         <table class="table table-striped tabla-funcionarios">
           <thead>
             <tr>
-              <th  colspan="2">
-                <ng-select [items]="people"  (change)="filter($event?.value)" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+              <th colspan="2">
+                <ng-select
+                  [items]="people"
+                  (change)="filter($event?.value)"
+                  bindLabel="text"
+                  bindValue="value"
+                  loadingText="loading "
+                  ngDefaultControl
+                >
                 </ng-select>
               </th>
               <th colspan="5"></th>
@@ -194,39 +199,36 @@
             </tr>
           </thead>
 
-          <tbody >
-           
-              <tr *ngIf="!funcionarios.length">
-                <td colspan="7">
-                  <app-not-data  [loading]="loadingPeople" ></app-not-data>
+          <tbody>
+            <tr *ngIf="!funcionarios.length">
+              <td colspan="7">
+                <app-not-data [loading]="loadingPeople"></app-not-data>
+              </td>
+            </tr>
 
-                </td>
-              </tr>
-             
             <tr *ngFor="let funcionario of funcionarios" class="text-center">
               <td style="padding: 3px; width: 48px">
                 <img
-                class="rounded-circle header-profile-user"
-                [src]="funcionario.image"
-                alt="Header Avatar"
+                  class="rounded-circle header-profile-user"
+                  [src]="funcionario.image"
+                  alt="Header Avatar"
                 />
-               
               </td>
               <td style="width: 200px" class="text-left">
                 {{ funcionario.name }}
                 {{ funcionario.surname }}
               </td>
               <td>
-                {{ funcionario.valor_ingresos_salariales | currency: '':''  }}
+                {{ funcionario.valor_ingresos_salariales | currency: "":"" }}
               </td>
               <td>
-                {{ funcionario.valor_ingresos_no_salariales | currency: '':''  }}
+                {{ funcionario.valor_ingresos_no_salariales | currency: "":"" }}
               </td>
-              <td>{{ funcionario.valor_deducciones | currency: '':''  }}</td>
+              <td>{{ funcionario.valor_deducciones | currency: "":"" }}</td>
               <td>
                 <p class="custom-label">
-                  {{ funcionario.salario_neto | currency: '':''  }} /
-                  {{ nomina.frecuencia_pago   }}
+                  {{ funcionario.salario_neto | currency: "":"" }} /
+                  {{ nomina.frecuencia_pago }}
                 </p>
               </td>
               <td style="padding: 5px">
@@ -238,7 +240,7 @@
                   >
                     <i class="mdi mdi-chevron-down"></i>
                   </button>
-                  <div ngbDropdownMenu aria-labelledby="dropdownConfig"> 
+                  <div ngbDropdownMenu aria-labelledby="dropdownConfig">
                     <a
                       class="
                         dropdown-item
@@ -275,7 +277,7 @@
                       (click)="modalIngNoPrest.show(funcionario)"
                       >Ingresos no prestacionales</a
                     >
-                    
+
                     <a
                       class="
                         dropdown-item
@@ -292,7 +294,12 @@
                         waves-light waves-effect
                         caja-botones
                       "
-                      (click)="mostrarDeducciones(funcionario)"
+                      [routerLink]="[
+                        'colilla',
+                        funcionario.id,
+                        nomina.inicio_periodo,
+                        nomina.fin_periodo
+                      ]"
                       >Ver Cálculos</a
                     >
                   </div>
@@ -332,27 +339,26 @@
 <app-horas-extras #modalExtras></app-horas-extras>
 <app-modal-novedades #modalNovedades></app-modal-novedades>
 
-<app-modal-ingresos-prestacionales 
-#modalIngPrest
-(updated)="getPagoNomina();"
-[nominaPaga]="nomina?.nomina_paga"
-[periodo]="nomina.frecuencia_pago" 
+<app-modal-ingresos-prestacionales
+  #modalIngPrest
+  (updated)="getPagoNomina()"
+  [nominaPaga]="nomina?.nomina_paga"
+  [periodo]="nomina.frecuencia_pago"
 >
 </app-modal-ingresos-prestacionales>
 
-<app-modal-ingresos-no-prestacionales 
-#modalIngNoPrest
-(updated)="getPagoNomina();"
-[nominaPaga]="nomina?.nomina_paga"
-[periodo]="nomina.frecuencia_pago" 
+<app-modal-ingresos-no-prestacionales
+  #modalIngNoPrest
+  (updated)="getPagoNomina()"
+  [nominaPaga]="nomina?.nomina_paga"
+  [periodo]="nomina.frecuencia_pago"
 >
 </app-modal-ingresos-no-prestacionales>
 
-<app-modal-deducciones 
-#modalDeducciones
-(updated)="getPagoNomina();"
-[nominaPaga]="nomina?.nomina_paga"
-[periodo]="nomina.frecuencia_pago" 
+<app-modal-deducciones
+  #modalDeducciones
+  (updated)="getPagoNomina()"
+  [nominaPaga]="nomina?.nomina_paga"
+  [periodo]="nomina.frecuencia_pago"
 >
 </app-modal-deducciones>
-

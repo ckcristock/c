@@ -25,19 +25,11 @@ import { ViaticosViajeComponent } from './viaticos/ver-viaticos/viaticos-viaje/v
 import { ViaticosTaxisComponent } from './viaticos/ver-viaticos/viaticos-taxis/viaticos-taxis.component';
 import { EditarViaticoComponent } from './viaticos/editar-viatico/editar-viatico.component';
 import { VacacionesComponent } from './vacaciones/vacaciones.component';
-import { NominaComponent } from './nomina/nomina.component';
-import { CardConceptoComponent } from './nomina/card-concepto/card-concepto.component';
-import { HorasExtrasComponent } from './nomina/modals/horas-extras/horas-extras.component';
-import { ModalNovedadesComponent } from './nomina/modals/modal-novedades/modal-novedades.component';
-import { ModalIngresosPrestacionalesComponent } from './nomina/modals/modal-ingresos-prestacionales/modal-ingresos-prestacionales.component';
 import { PrimasComponent } from './primas/primas.component';
 import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-funcionario.component';
 import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
-import { IngresoPrestacionalComponent } from './nomina/forms/ingreso-prestacional/ingreso-prestacional.component';
-import { IngresoNoPrestacionalComponent } from './nomina/forms/ingreso-no-prestacional/ingreso-no-prestacional.component';
-import { ModalIngresosNoPrestacionalesComponent } from './nomina/modals/modal-ingresos-no-prestacionales/modal-ingresos-no-prestacionales.component';
-import { ModalDeduccionesComponent } from './nomina/modals/modal-deducciones/modal-deducciones.component';
-import { DeduccionesComponent } from './nomina/forms/deducciones/deducciones.component';
+
+
 
 @NgModule({
   imports: [
@@ -69,19 +61,10 @@ import { DeduccionesComponent } from './nomina/forms/deducciones/deducciones.com
     ViaticosTaxisComponent,
     EditarViaticoComponent,
     VacacionesComponent,
-    NominaComponent,
-    CardConceptoComponent,
-    HorasExtrasComponent,
-    ModalNovedadesComponent,
-    ModalIngresosPrestacionalesComponent,
     PrimasComponent,
     PrimaFuncionarioComponent,
     LegalizarComponent,
-    IngresoPrestacionalComponent,
-    IngresoNoPrestacionalComponent,
-    ModalIngresosNoPrestacionalesComponent,
-    ModalDeduccionesComponent,
-    DeduccionesComponent
+    
   ],
 })
 export class NominaModule {}

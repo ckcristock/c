@@ -1,0 +1,80 @@
+<div class="card">
+  <div class="card-body" *ngIf="!loading; else notData">
+    <app-resumen-colilla
+      [salarioDatos]="salarioDatos"
+      [horasExtrasDatos]="horasExtrasDatos"
+      [novedadesDatos]="novedadesDatos"
+      [ingresosDatos]="ingresosDatos"
+      [retencionesDatos]="retencionesDatos"
+      [deduccionesDatos]="deduccionesDatos"
+      [netoApagar]="netoApagar"
+    ></app-resumen-colilla>
+
+    <app-dias-trabajados
+      *ngIf="salarioDatos"
+      [salarioDatos]="salarioDatos"
+      [novedadesDatos]="novedadesDatos"
+    ></app-dias-trabajados>
+   
+      <app-salario
+        [funcionario]="funcionario"
+        [salarioDatos]="salarioDatos"
+        [datosEmpresa]="datosEmpresa"
+        [brand]=" getPeriodo()"
+      ></app-salario>
+   <!--
+      <extras-recargos
+        :horasExtrasDatos="horasExtrasDatos"
+        :porcentajesExtrasDatos="porcentajesExtrasDatos"
+        :funcionario="funcionario"
+      ></extras-recargos>
+  
+  
+      <novedades v-if="Object.keys(novedadesDatos.novedades).length > 0"
+        :novedadesDatos="novedadesDatos"
+        :datosEmpresa="datosEmpresa"
+        :funcionario="funcionario"
+        :brand=" getPeriodo()"
+      ></novedades>
+  
+      <ingresos :ingresosDatos="ingresosDatos" :brand=" getPeriodo()" :datosEmpresa="datosEmpresa"></ingresos>
+  
+      <retenciones
+        :retencionesDatos="retencionesDatos"
+        :brand=" getPeriodo()"
+        :datosEmpresa="datosEmpresa"
+        :nominaSeguridadFuncionario="nominaSeguridadFuncionario"
+      ></retenciones>
+  
+      <deducciones
+        :deduccionesDatos="deduccionesDatos"
+        :brand=" getPeriodo()"
+        :datosEmpresa="datosEmpresa"
+      ></deducciones> -->
+
+    <p class="text-uppercase font-weight-bold text-muted">
+      Para tener en cuenta:
+    </p>
+
+    <p>
+      <small
+        >Para efectos laborales, todos los meses tienen 30 días, y los días
+        tienen 8 horas</small
+      >
+    </p>
+
+    <p>
+      <small
+        >Si desea editar alguna de las configuraciones mencionadas para estos
+        cálculos, puede ir al apartado de parametrización</small
+      >
+    </p>
+  </div>
+
+  <ng-template #notData>
+    <app-not-data
+      [loading]="false"
+      [text]="'Sin notificaciones'"
+    ></app-not-data>
+  </ng-template>
+</div>

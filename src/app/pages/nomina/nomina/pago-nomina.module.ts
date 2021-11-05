@@ -30,6 +30,16 @@ import { NovedadesComponent } from './calculos/colilla-pago/components/novedades
 import { RetencionesComponent } from './calculos/colilla-pago/components/retenciones/retenciones.component';
 import { NominaFuncionarioComponent } from './calculos/nomina-funcionario.component';
 import { IngresosComponent } from './calculos/colilla-pago/components/ingresos/ingresos.component';
+import { ColillaDeduccionesComponent } from './calculos/colilla-pago/components/deducciones/colilla-deducciones.component';
+import { SeguridadParafiscalesComponent } from './calculos/seguridad-parafiscales/seguridad-parafiscales.component';
+import { IbcParafiscalesComponent } from './calculos/seguridad-parafiscales/components/ibc-parafiscales/ibc-parafiscales.component';
+import { IbcRiesgosComponent } from './calculos/seguridad-parafiscales/components/ibc-riesgos/ibc-riesgos.component';
+import { IbcSaludPensionComponent } from './calculos/seguridad-parafiscales/components/ibc-salud-pension/ibc-salud-pension.component';
+import { SeguridadSocialResumenComponent } from './calculos/seguridad-parafiscales/components/seguridad-social-resumen/seguridad-social-resumen.component';
+import { ProvisionesComponent } from './calculos/provisiones/provisiones.component';
+import { BaseCalculoComponent } from './calculos/provisiones/base-calculo/base-calculo.component';
+import { DiasVacacionesComponent } from './calculos/provisiones/dias-vacaciones/dias-vacaciones.component';
+import { ResumenProvisionesComponent } from './calculos/provisiones/resumen-provisiones/resumen-provisiones.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +62,16 @@ import { IngresosComponent } from './calculos/colilla-pago/components/ingresos/i
     RetencionesComponent,
     NominaFuncionarioComponent,
     IngresosComponent,
+    ColillaDeduccionesComponent,
+    SeguridadParafiscalesComponent,
+    IbcParafiscalesComponent,
+    IbcRiesgosComponent,
+    IbcSaludPensionComponent,
+    SeguridadSocialResumenComponent,
+    ProvisionesComponent,
+    BaseCalculoComponent,
+    DiasVacacionesComponent,
+    ResumenProvisionesComponent
   ],
   imports: [
     PagoNominaRoutingModule,

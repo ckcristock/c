@@ -34,7 +34,6 @@ export class PreliquidadosComponent implements OnInit {
     this._preliquidadosService.getPreliquidados()
     .subscribe( (res:any) => {
       this.preliquidados = res.data;
-      console.log(this.preliquidados);
       this.loading = false;
       for (let index = 0; index < this.preliquidados.length; index++) {
         let fecha  = this.preliquidados[index].updated_at;

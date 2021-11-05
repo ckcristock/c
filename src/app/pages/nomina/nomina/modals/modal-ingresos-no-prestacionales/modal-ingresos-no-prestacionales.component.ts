@@ -27,7 +27,6 @@ export class ModalIngresosNoPrestacionalesComponent implements OnInit {
     this.modal.show();
   }
   update(){
-    console.log('payyyyyyyyyyyy');
     this.updated.emit();
   }
 }

@@ -22,7 +22,8 @@ export class ColillaPagoComponent implements OnInit {
   retencionesDatos: any = {};
   deduccionesDatos: any = {};
   netoApagar: any = {};
-  loading = false;
+  nominaSeguridadFuncionario: any = {};
+  loading = true;
   brand = false;
   constructor(
     private _payrollDetail: PayRollDetailService,
@@ -57,15 +58,11 @@ export class ColillaPagoComponent implements OnInit {
   }
 
   async getNominaSeguridadFuncionario() {
-    /*    const resp = await axios.get(
-      `/api/${localStorage.getItem(
-        "tenant"
-      )}/get-nomina-seguridad-funcionario`
-    );
     
-    this.
+    this._payrollDetail.getSocialSecurity().subscribe( (r:any ) =>{
+      this.nominaSeguridadFuncionario = r;
+    })
 
-    this.nominaSeguridadFuncionario = resp.data; */
   }
   getHorasExtrasDatos() {
     this._payrollDetail.getOvertimes(this.params).subscribe((r: any) => {

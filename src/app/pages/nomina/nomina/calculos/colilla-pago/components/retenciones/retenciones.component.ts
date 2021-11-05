@@ -16,11 +16,9 @@ export class RetencionesComponent implements OnInit {
   factorRetenciones:any[] = []
   totalRetenciones:any[] = []
   totalPorcentajes:any[] = []
-  factorDeConversion: 100
+  factorDeConversion = 100
 
   ngOnInit(): void {
-    console.log(this.nominaSeguridadFuncionario, 'asdasdsadas');
-    
     this.retenciones = this.retencionesDatos;
     this.organizarDatos(this.retenciones.retenciones, this.factorRetenciones);
     this.organizarDatos(

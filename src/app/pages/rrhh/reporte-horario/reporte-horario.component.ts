@@ -124,7 +124,6 @@ export class ReporteHorarioComponent implements OnInit {
         this.donwloading = false;
       }),
       (error) => {
-        console.log('Error downloading the file');
         this.donwloading = false;
       },
       () => {

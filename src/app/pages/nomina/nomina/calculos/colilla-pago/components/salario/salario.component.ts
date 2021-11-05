@@ -15,8 +15,6 @@ export class SalarioComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.funcionario);
-    
   }
 
 }

@@ -41,19 +41,19 @@
        [brand]="brand" 
        [datosEmpresa]="datosEmpresa">
       </app-ingresos>
- <!-- 
+ 
       <app-retenciones
         [retencionesDatos]="retencionesDatos"
         [brand]="brand"
         [datosEmpresa]="datosEmpresa"
         [nominaSeguridadFuncionario]="nominaSeguridadFuncionario"
-      ></app-retenciones> -->
-   <!--
-      <deducciones
-        :deduccionesDatos="deduccionesDatos"
-        :brand="brand"
-        :datosEmpresa="datosEmpresa"
-      ></deducciones> -->
+      ></app-retenciones> 
+   
+      <app-colilla-deducciones
+        [deduccionesDatos]="deduccionesDatos"
+        [brand]="brand"
+        [datosEmpresa]="datosEmpresa"
+      ></app-colilla-deducciones>
 
     <p class="text-uppercase font-weight-bold text-muted">
       Para tener en cuenta:
@@ -76,8 +76,8 @@
 
   <ng-template #notData>
     <app-not-data
-      [loading]="false"
-      [text]="'Sin notificaciones'"
+      [loading]="loading"
+      [text]="'Sin Datos'"
     ></app-not-data>
   </ng-template>
 </div>

@@ -35,7 +35,6 @@ export class NominaComponent implements OnInit {
   }
 
   getPagoNomina() {
-    console.log('getting...');
     
     this.loadingPeople = true;
     this._payroll.getPayrollPays().subscribe((r: any) => {
@@ -60,19 +59,13 @@ export class NominaComponent implements OnInit {
   }
 
   filter(event) {
-    console.log(event);
-    
     if(event){
       let fun= this.funcionariosBase.find(r=> r.id==event )
-      console.log(fun);
-      
       this.funcionarios = fun ? [fun] : []
 
     }else{
       this.funcionarios = this.funcionariosBase
     }
-    console.log(event);
-    console.log(this.funcionarios);
   
   }
 

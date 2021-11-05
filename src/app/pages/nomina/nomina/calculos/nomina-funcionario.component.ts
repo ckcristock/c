@@ -9,13 +9,15 @@ import * as moment from 'moment';
   styleUrls: ['./nomina-funcionario.component.scss'],
 })
 export class NominaFuncionarioComponent implements OnInit {
+  tabs = ["Colilla Pago", "Seguridad y Parafiscales", "Provisiones"]
+  tabActual = 'Colilla Pago';
   funcionario: any = {};
   datosEmpresa: any = {};
   pid = '';
   inicio = '';
   fin = '';
-  tabActual = 'Colilla Pago';
   show = false;
+
   constructor(
     private _payPerson: PayrollPersonService,
     private route: ActivatedRoute

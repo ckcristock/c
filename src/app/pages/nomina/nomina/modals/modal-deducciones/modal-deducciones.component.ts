@@ -20,7 +20,6 @@ export class ModalDeduccionesComponent implements OnInit {
   }
 
   show(funcionario){
-    console.log('asdasdas');
     
     this.showData = false;
     this.person = funcionario
@@ -29,7 +28,6 @@ export class ModalDeduccionesComponent implements OnInit {
     this.modal.show();
   }
   update(){
-    console.log('payyyyyyyyyyyy');
     this.updated.emit();
   }
 }

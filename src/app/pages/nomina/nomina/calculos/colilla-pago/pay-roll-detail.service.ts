@@ -33,5 +33,8 @@ export class PayRollDetailService {
   getNetPay( {pid, inicio , fin}  ) {
     return this.http.get(`${environment.base_url}/payroll/net-pay/person/${pid}/${inicio}/${fin}`);
   }
+  getSocialSecurity(  ) {
+    return this.http.get(`${environment.base_url}/payroll/social-security/person`);
+  }
 
 }

@@ -36,17 +36,15 @@
         </tr>
       </thead>
       <tbody>
-        {{totalRetenciones | json}}
-        <br>
-        {{nominaSeguridadFuncionario | json}}
-
+   
         <tr *ngFor=" let retencion of totalRetenciones; let i = index"  >
-          <td> {{i}}  {{retencion.concepto}}</td>
+     
+          <td> {{retencion.concepto}}</td>
           <td class="text-center">%</td>
           <td class="text-center">{{retenciones.IBC_seguridad | currency : '' : ''}}</td>
           <td
             class="text-center"
-          >{{retenciones.IBC_seguridad | currency : '' : ''}} * {{nominaSeguridadFuncionario[i].porcentaje * factorDeConversion }} %</td>
+          >{{retenciones.IBC_seguridad | currency : '' : ''}} * {{nominaSeguridadFuncionario[i].percentage * factorDeConversion }} %</td>
           <td class="text-center">{{retencion.valor | currency : '' : ''}}</td>
         </tr>
         <tr>

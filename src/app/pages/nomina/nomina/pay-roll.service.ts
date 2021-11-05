@@ -15,4 +15,9 @@ export class PayRollService {
   getPeoplePayroll() {
     return this.http.get(`${environment.base_url}/nomina/pago/funcionarios`);
   }
+  
+  savePayroll( body ){
+    
+    return this.http.post(`${environment.base_url}/payroll/pay`, body );
+  }
 }

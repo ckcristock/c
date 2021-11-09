@@ -37,6 +37,7 @@ export class CrearApuPiezaComponent implements OnInit {
   fileString:any = '';
   file = '';
   fileArr:any[] = [];
+  collapsed:boolean;
 
   thickness:any[] = [
     { percent: 1, value: 1 },

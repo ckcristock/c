@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApuPiezaService } from './apu-pieza.service';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-apu-pieza',
@@ -19,7 +20,8 @@ export class ApuPiezaComponent implements OnInit {
     creation_date: ''
   }
   constructor(
-                private _apuParts: ApuPiezaService
+                private _apuParts: ApuPiezaService,
+                private _swal: SwalService
               ) { }
 
   ngOnInit(): void {
@@ -37,6 +39,26 @@ export class ApuPiezaComponent implements OnInit {
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
+  }
+
+  activateOrInactive(state, id){
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estas Seguro?',
+      text: (state == 'Inactivo' ? '¡El APU Pieza será inactivado!': '¡El APU Pieza será activado!')
+    }).then((r) =>{
+      if (r.isConfirmed) {
+        this._apuParts.activateOrInactivate({state: state, id}).subscribe((r:any) => {
+          this.getApuParts();
+          this._swal.show({
+              icon: 'success',
+              title: 'Proceso Satisfactio',
+              text: (state == 'Inactivo' ? 'El APU Pieza ha sido inactivado.' : 'El APU Pieza ha sido Activado.'),
+              showCancel: false
+          }); 
+        });
+      }
+    });
   }
 
 }

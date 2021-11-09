@@ -14,8 +14,8 @@
             <thead>
                 <tr>
                     <th>Código</th>
-                    <th>Nombre</th>
                     <th>Func. Creó</th>
+                    <th>Nombre</th>
                     <th>Quien elabora</th>
                     <th>Cliente</th>
                     <th>Linea</th>
@@ -25,10 +25,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of apuParts">
+                <tr *ngFor="let item of apuParts" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
                     <td> {{ item.code }} </td>
-                    <td> {{ item.name }} </td>
                     <td> {{ item.user.person.first_name }} {{ item.user.person.first_surname }} </td>
+                    <td> {{ item.name }} </td>
                     <td> {{ item.person.first_name }} {{ item.person.first_surname }} </td>
                     <td> {{ item.thirdparty.first_name }} {{ item.thirdparty.first_surname }} </td>
                     <td> {{ item.line }} </td>
@@ -47,10 +47,10 @@
                                     <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/editar-apu-pieza', item.id]">
                                         <i class="far fa-edit"></i> editar
                                     </a>
-                                    <a class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                    <a *ngIf="item.state == 'Activo'" (click)="activateOrInactive('Inactivo', item.id)" class="dropdown-item waves-light text-danger waves-effect caja-botones">
                                         <i class="far fa-trash-alt"></i> Anular
                                     </a>
-                                    <a class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                    <a *ngIf="item.state == 'Inactivo'" (click)="activateOrInactive('Activo', item.id)" class="dropdown-item waves-light text-success waves-effect caja-botones">
                                         <i class="fas fa-check"></i> Activar
                                     </a>
                                 </div>

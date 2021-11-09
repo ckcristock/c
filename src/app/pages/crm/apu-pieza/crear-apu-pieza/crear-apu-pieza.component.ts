@@ -193,8 +193,8 @@ export class CrearApuPiezaComponent implements OnInit {
     water.push(this.cutWaterControl())
   }
 
-  deleteCutWater(){
-    this.cutWaterList.removeAt(this.cutWaterList.length - 1);
+  deleteCutWater(i){
+    this.cutWaterList.removeAt(i);
     cutWaterHelper.subtotalUnit(this.cutWaterList, this.form);
   }
 
@@ -217,8 +217,8 @@ export class CrearApuPiezaComponent implements OnInit {
     laser.push(this.cutLaserControl());
   }
 
-  deleteCutLaser(){
-    this.cutLaserList.removeAt(this.cutLaserList.length - 1);
+  deleteCutLaser(i){
+    this.cutLaserList.removeAt(i);
     cutLaserHelper.subtotalUnit(this.cutLaserList, this.form);
   }
 
@@ -240,8 +240,8 @@ export class CrearApuPiezaComponent implements OnInit {
     machine.push(this.machineToolsControl())
   }
 
-  deleteMachineTool(){
-    this.machineToolList.removeAt(this.machineToolList.length - 1);
+  deleteMachineTool(i){
+    this.machineToolList.removeAt(i);
     machineToolHelper.subtotalMachine(this.machineToolList, this.form);
   }
 
@@ -263,8 +263,8 @@ export class CrearApuPiezaComponent implements OnInit {
     internalProccess.push(this.internalProccessesControl())
   }
 
-  deleteInternalProccess(){
-    this.internalProccessList.removeAt(this.internalProccessList.length - 1);
+  deleteInternalProccess(i){
+    this.internalProccessList.removeAt(i);
     internalProccessesHelper.subtotalInternalProcesses(this.internalProccessList, this.form)
   }
 
@@ -286,8 +286,8 @@ export class CrearApuPiezaComponent implements OnInit {
     exteranlProccess.push(this.externalProccessesControl())
   }
 
-  deleteExternalProccess(){
-    this.externalProccessList.removeAt(this.externalProccessList.length - 1);
+  deleteExternalProccess(i){
+    this.externalProccessList.removeAt(i);
     externalProccessesHelper.subtotalExternalProcesses(this.externalProccessList, this.form);
   }
 
@@ -309,8 +309,8 @@ export class CrearApuPiezaComponent implements OnInit {
     others.push(this.othersControl())
   }
 
-  deleteOthers(){
-    this.othersList.removeAt(this.othersList.length - 1);
+  deleteOthers(i){
+    this.othersList.removeAt(i);
     othersHelper.subtotalOthers(this.othersList, this.form);
   }
 

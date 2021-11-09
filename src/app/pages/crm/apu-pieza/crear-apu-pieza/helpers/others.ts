@@ -14,22 +14,16 @@ export const othersHelper = {
       let others = form.get('others') as FormArray;
       data.other.forEach((r) => {
         let group = fb.group({
-          material_id: [r.material_id],
-          thickness: [r.thickness],
-          amount: [r.amount],
-          long: [r.long],
-          width: [r.width],
-          total_length: [r.total_length],
-          amount_cut: [r.amount_cut],
-          diameter: [r.diameter],
-          total_hole_perimeter: [r.total_hole_perimeter],
-          time: [r.time],
-          minute_value: [r.minute_value],
-          value: [r.value]
+          description: [r.description],
+          unit_id: [r.unit_id],
+          q_unit: [r.q_unit],
+          q_total: [r.q_total],
+          unit_cost: [r.unit_cost],
+          total: [r.total]
         });
+        this.subscribeOthers(group, form, others);
         others.push(group);
       });
-      this.subscribeExternalProcesses(others, form);
     }
   },
 

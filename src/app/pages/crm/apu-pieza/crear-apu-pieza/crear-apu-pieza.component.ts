@@ -14,6 +14,7 @@ import { othersHelper } from './helpers/others';
 import { functionsUtils } from '../../../../core/utils/functionsUtils';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { functionsApu } from './helpers/helper';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -37,24 +38,34 @@ export class CrearApuPiezaComponent implements OnInit {
   file = '';
   fileArr:any[] = [];
 
+  thickness:any[] = [
+    { percent: 1, value: 1 },
+    { percent: 2, value: 2 },
+    { percent: 3, value: 3 },
+    { percent: 4, value: 4 },
+    { percent: 5, value: 5 },
+    { percent: 6, value: 6 },
+  ]
+  
   constructor(
-                private _apuPieza: ApuPiezaService,
-                private _units: UnidadesMedidasService,
-                private fb: FormBuilder,
-                private _swal: SwalService,
-                private router: Router,
-                private actRoute: ActivatedRoute
-              ) { }
-
-  ngOnInit(): void {
-    this.getPeople();
-    this.getCities();
-    this.getGeometries();
-    this.getMaterials();
-    this.getClients();
-    this.getUnits();
-    this.createForm();
-    this.getIndirectCosts();
+    private _apuPieza: ApuPiezaService,
+    private _units: UnidadesMedidasService,
+    private fb: FormBuilder,
+    private _swal: SwalService,
+    private router: Router,
+    private actRoute: ActivatedRoute
+    ) { }
+    
+  ngOnInit():void {
+       this.getPeople();
+       this.getCities();
+       this.getGeometries();
+       this.getMaterials();
+       this.getClients();
+       this.getUnits();
+       this.createForm();
+       this.validateData();
+       this.getIndirectCosts();
   }
   
   onSelect(event) {
@@ -63,6 +74,11 @@ export class CrearApuPiezaComponent implements OnInit {
 
   onRemove(event) {
     this.files.splice(this.files.indexOf(event), 1);
+  }
+  
+  createForm(){
+    this.form = help.functionsApu.createForm(this.fb);
+    help.functionsApu.listerTotalDirectCost(this.form);
   }
 
   getPeople(){
@@ -104,18 +120,18 @@ export class CrearApuPiezaComponent implements OnInit {
   getIndirectCosts(){
     this._apuPieza.getIndirectCosts().subscribe((r:any) => {
       this.indirectCosts = r.data;
-      this.createForm();
+      if(!this.data){
+        this.indirectCostPush();
+      }
     })
   }
   
-  createForm(){
-    this.form = help.functionsApu.createForm(this.fb, this.indirectCosts);
-    help.functionsApu.listerTotalDirectCost(this.form);
-  }
 
   validateData() {
     if (this.data) {
-      help.functionsApu.fillInForm(this.form, this.data, this.fb);
+      setTimeout(() => {
+        help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries);
+      }, 1200);
     }
   }
   /************** Materia Prima Inicio ****************/
@@ -133,8 +149,8 @@ export class CrearApuPiezaComponent implements OnInit {
     materia.push(this.basicControl())
   }
 
-  deleteMateria(){
-    this.materiaList.removeAt(this.materiaList.length - 1);
+  deleteMateria(i){
+    this.materiaList.removeAt(i);
     materiaHelper.subtotalMateria(this.materiaList, this.form);
   }
   /************** Materia Prima Fin ****************/
@@ -154,8 +170,8 @@ export class CrearApuPiezaComponent implements OnInit {
     materials.push(this.materialsControl())
   }
 
-  deleteMaterial(){
-    this.materialsList.removeAt(this.materialsList.length - 1);
+  deleteMaterial(i){
+    this.materialsList.removeAt(i);
     materialsHelper.subtotalMaterials(this.materialsList, this.form);
   }
 
@@ -299,9 +315,27 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   /************** Otros Termina ****************/
-
+  
   get indirecCostList(){
     return this.form.get('indirect_cost') as FormArray;
+  }
+  
+  indirectCostPush(){
+    let indirect_cost = this.form.get('indirect_cost') as FormArray;
+    indirect_cost.clear();
+    this.indirectCosts.forEach(element => {
+      indirect_cost.push(this.indirectCostgroup(element, this.fb, this.form));
+    });
+  }
+  
+  indirectCostgroup(element, fb: FormBuilder, form: FormGroup){
+    let group = fb.group({
+      name: [element.text],
+      percentage: [element.percentage],
+      value: [0]
+    });
+    help.functionsApu.indirectCostOp(group, form);
+    return group;
   }
 
   save(){
@@ -315,47 +349,45 @@ export class CrearApuPiezaComponent implements OnInit {
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.file = base64;
-        this.files.push(this.fileString);
-        // this.fileArr.push(this.fileString);
+        // this.files.push(this.fileString);
+        this.fileArr.push(this.fileString);
       });
     });
-    /* this.form.patchValue({
-      files: this.fileArr
-    }) */
     this.form.patchValue({
-      files: filess
+      files: this.fileArr
     })
-    /* this._swal
+    console.log(this.form.value);
+    /* this.form.patchValue({
+      files: filess
+    }) */
+    this._swal
       .show({
-        text: `Se dispone a ${
-          this.id ? 'editar' : 'crear'
-        } una solicitud de viático`,
+        text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu pieza`,
         title: '¿Está seguro?',
         icon: 'warning',
       })
       .then((r) => {
         if (r.isConfirmed) {
           if (this.id) {
-            this._apuPieza.actualizarViatico(this.id, this.form.value).subscribe(
-              (res: any) => this.showSucess(),
+            console.log(this.id);
+            this._apuPieza.update(this.form.value, this.id).subscribe(
+              (res: any) => this.showSuccess(),
               (err) => this.showError(err)
             );
           } else {
-            this._viatico.crearViatico(this.form.value).subscribe(
-              (res: any) => this.showSucess(),
+            this._apuPieza.save(this.form.value).subscribe(
+              (res: any) => this.showSuccess(),
               (err) => this.showError(err)
             );
           }
         }
-      }); */
+      });
   }
 
   showSuccess() {
     this._swal.show({
       icon: 'success',
-      text: `Apu Pieza  ${
-          this.id ? 'editado' : 'creado'
-        } con éxito`,
+      text: `Apu Pieza ${ this.id ? 'editado' : 'creado' } con éxito`,
       title: 'Operación exitosa',
       showCancel: false,
     });

@@ -1,0 +1,82 @@
+<div class="row">
+    <div class="col">
+        <div class="title mt-3">
+            <h5>Materiales Comerciales</h5>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="">Item</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="material_materiales">Material</label>
+                            </th>
+                            <th></th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="unidad_materiales">Unidad</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="q_unitaria_materiales">Q Unitaria</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="q_total_materiales">Q Total</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="costo_unitario_materiales">Costo Unitario</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="total_materiales">Total</label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="comercials.length">
+                            <ng-container *ngFor="let item of comercials; let i = index">
+                                <tr>
+                                    <td>
+                                        {{ i + 1 }}
+                                    </td>
+                                    <td>
+                                        {{ item.material.name }}
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        {{ item.unit.name }}
+                                    </td>
+                                    <td>
+                                        {{ item.q_unit }}
+                                    </td>
+                                    <td>
+                                        {{ item.q_total }}
+                                    </td>
+                                    <td>
+                                        {{ item.unit_cost }}
+                                    </td>
+                                    <td>
+                                        {{ item.total }}
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <label for="" class="mr-3 mt-2" style="float: right;">SubTotal: </label>
+                            </td>
+                            <td colspan="7">
+                                <div class="row" style="float: right">
+                                    {{ commercial_materials_subtotal }}
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="bg-secondary">

@@ -16,20 +16,20 @@ export const cutLaserHelper = {
         let group = fb.group({
           material_id: [r.material_id],
           thickness: [r.thickness],
-          amount: [r.amount],
+          sheets_amount: [r.sheets_amount],
           long: [r.long],
           width: [r.width],
           total_length: [r.total_length],
-          amount_cut: [r.amount_cut],
+          amount_holes: [r.amount_holes],
           diameter: [r.diameter],
           total_hole_perimeter: [r.total_hole_perimeter],
           time: [r.time],
           minute_value: [r.minute_value],
           value: [r.value]
         });
+        this.subscribesCutLaser(group, cut_laser, form);
         cut_laser.push(group);
       });
-      this.subscribesCutLaser(cut_laser, form);
     }
   },
 

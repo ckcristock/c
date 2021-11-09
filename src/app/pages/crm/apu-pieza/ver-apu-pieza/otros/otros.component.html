@@ -1,0 +1,80 @@
+<div class="row">
+    <div class="col">
+        <div class="title mt-3">
+            <h5>Otros</h5>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="">Item</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="descripcion_otros">Descripción</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="unidad_otros">Unidad</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="q_unitaria_otros">Q Unitaria</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="q_total_otros">Q Total</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="costo_unitario_otros">Costo Unitario</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="total_otros">Total</label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="others.length">
+                            <ng-container *ngFor="let item of others; let i = index">
+                                <tr>
+                                    <td>
+                                        {{ i + 1 }}
+                                    </td>
+                                    <td>
+                                        {{ item.description }}
+                                    </td>
+                                    <td>
+                                        {{ item.unit.name }}
+                                    </td>
+                                    <td>
+                                        {{ item.q_unit }}
+                                    </td>
+                                    <td>
+                                        {{ item.q_total }}
+                                    </td>
+                                    <td>
+                                        {{ item.unit_cost }}
+                                    </td>
+                                    <td>
+                                        {{ item.total }}
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <label for="" style="float: right;">SubTotal: </label>
+                            </td>
+                            <td colspan="7">
+                                <div class="row" style="float: right">
+                                    {{ others_subtotal }}
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="bg-secondary">

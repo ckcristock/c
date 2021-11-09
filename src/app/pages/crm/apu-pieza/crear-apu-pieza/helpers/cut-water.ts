@@ -26,9 +26,9 @@ export const cutWaterHelper = {
           minute_value: [r.minute_value],
           value: [r.value]
         });
+        this.subscribesCutWater(group, cut_water, form);
         cut_water.push(group);
       });
-      this.subscribesCutWater(cut_water, form);
     }
   },
 

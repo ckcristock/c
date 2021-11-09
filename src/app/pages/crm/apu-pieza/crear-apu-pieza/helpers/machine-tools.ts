@@ -19,9 +19,9 @@ export const machineToolHelper = {
           unit_cost: [r.unit_cost],
           total: [r.total]
         });
+        this.subscribeMachine(group, form, machine_tools);
         machine_tools.push(group);
       });
-      this.subscribesCutWater(machine_tools, form);
     }
   },
 

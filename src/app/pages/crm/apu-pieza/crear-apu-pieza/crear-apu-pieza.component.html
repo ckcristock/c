@@ -38,7 +38,7 @@
                     <div class="mb-3 row">
                         <label for="cc" class="col-sm-3 col-form-label col-form-label-sm">Destino</label>
                         <div class="col-sm-9">
-                            <ng-select class="" bindLabel="text" [items]="cities" bindValue="value" loadingText="loading " ngDefaultControl formControlName="city_id"></ng-select>
+                            <ng-select bindLabel="text" [items]="cities" bindValue="value" loadingText="loading " ngDefaultControl formControlName="city_id"></ng-select>
                         </div>
                     </div>
                     <div class="mb-3 row">
@@ -91,7 +91,7 @@
                 </div>
                 <div class="col-12 mt-3">
                     <label for="">Observaciones</label>
-                    <textarea class="form-control form-control-sm" name="" id="" rows="3"></textarea>
+                    <textarea class="form-control form-control-sm" name="" id="" rows="3" formControlName="observation"></textarea>
                 </div>
             </div>
             <hr class="bg-secondary">
@@ -146,7 +146,7 @@
                                                         {{ i + 1 }}
                                                     </td>
                                                     <td>
-                                                        <select name="" class="form-control form-control-sm" id="geometria_calculo" formControlName="geometry_id">
+                                                        <select name="" class="form-control form-control-sm" formControlName="geometry_id">
                                                         <option *ngFor="let item of geometries" [value]="item.value">
                                                             {{ item.text }}
                                                         </option>
@@ -157,7 +157,7 @@
                                                         <img [src]="item['controls']['image']['value'] | image">
                                                     </td>
                                                     <td>
-                                                        <select name="" class="form-control form-control-sm" id="material_calculo" formControlName="material_id">
+                                                        <select name="" class="form-control form-control-sm" formControlName="material_id">
                                                         <option *ngFor="let item of materials" [value]="item.value">
                                                             {{ item.text }}
                                                         </option>
@@ -185,6 +185,11 @@
                                                     <td>
                                                         <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" formControlName="total_value">
                                                     </td>
+                                                    <td>
+                                                        <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteMateria(i)">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </tr>
@@ -198,16 +203,13 @@
                                     </td>
                                     <td colspan="13">
                                         <div class="row" style="float: right">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="materia_prima_subtotal">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="subtotal_raw_material">
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="13">
                                         <div class="btn-group" style="float: right">
-                                            <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteMateria()">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
                                             <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newMateria()">
                                                 <i class="fas fa-plus"></i>
                                             </button>
@@ -288,6 +290,11 @@
                                                 <td>
                                                     <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_materiales" formControlName="total">
                                                 </td>
+                                                <td>
+                                                    <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteMaterial(i)">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         </ng-container>
                                     </ng-container>
@@ -306,9 +313,6 @@
                                     <tr>
                                         <td colspan="13">
                                             <div class="btn-group" style="float: right">
-                                                <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteMaterial()">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
                                                 <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newMaterial()">
                                                     <i class="fas fa-plus"></i>
                                                 </button>
@@ -388,10 +392,10 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control form-control-sm" id="unidad_materiales" formControlName="thickness">
-                                                        <!-- <option *ngFor="let item of units" [value]="item.id">
-                                                            {{ item.name }}
-                                                        </option> -->
+                                                    <select class="form-control form-control-sm" id="espesor_corte_agua" formControlName="thickness">
+                                                        <option *ngFor="let item of thickness" [value]="item.value">
+                                                            {{ item.percent }}
+                                                        </option>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -544,10 +548,10 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control form-control-sm" id="unidad_materiales" formControlName="thickness">
-                                                        <!-- <option *ngFor="let item of units" [value]="item.id">
-                                                            {{ item.name }}
-                                                        </option> -->
+                                                    <select class="form-control form-control-sm" id="espesor_corte_laser" formControlName="thickness">
+                                                        <option *ngFor="let item of thickness" [value]="item.value">
+                                                            {{ item.percent }}
+                                                        </option>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -767,7 +771,7 @@
                                     <ng-container *ngIf="internalProccessList.controls.length; else notData">
                                         <ng-container *ngFor="let item of internalProccessList.controls; let i = index">
                                             <tr [formGroupName]="i">
-                                                <td>1</td>
+                                                <td> {{ i + 1 }} </td>
                                                 <td>
                                                     <input type="text" class="form-control form-control-sm" id="descripcion_proceso_interno" formControlName="description">
                                                 </td>
@@ -1081,7 +1085,7 @@
                                 <td>Costos Directos + Costos Indirectos Totales</td>
                                 <td>
                                     <div class="col-9" style="float: right;">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_Costs_Indirect_Costs_total">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_costs_indirect_costs_total">
                                     </div>
                                 </td>
                             </tr>
@@ -1089,7 +1093,7 @@
                                 <td>Costos Directos + Costos Indirectos Unitario</td>
                                 <td>
                                     <div class="col-9" style="float: right;">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_Costs_Indirect_Costs_unit">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_costs_indirect_costs_unit">
                                     </div>
                                 </td>
                             </tr>
@@ -1121,14 +1125,14 @@
                                 <td>SubTotal + Administrativos + Imprevistos</td>
                                 <td></td>
                                 <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_Unforeseen_subTotal">
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_unforeseen_subtotal">
                                 </td>
                             </tr>
                             <tr>
                                 <td>SubTotal + Administrativos + Imprevistos Unitario</td>
                                 <td></td>
                                 <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_Unforeseen_unit">
+                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_unforeseen_unit">
                                 </td>
                             </tr>
                         </tbody>
@@ -1150,7 +1154,7 @@
                                 <td></td>
                                 <td>
                                     <div class="col-9" style="float: right">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_subTotal">
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_subtotal">
                                     </div>
                                 </td>
                             </tr>

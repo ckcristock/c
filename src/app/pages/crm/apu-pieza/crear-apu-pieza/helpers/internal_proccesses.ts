@@ -14,22 +14,16 @@ export const internalProccessesHelper = {
       let internal_proccesses = form.get('internal_proccesses') as FormArray;
       data.internal.forEach((r) => {
         let group = fb.group({
-          material_id: [r.material_id],
-          thickness: [r.thickness],
-          amount: [r.amount],
-          long: [r.long],
-          width: [r.width],
-          total_length: [r.total_length],
-          amount_cut: [r.amount_cut],
-          diameter: [r.diameter],
-          total_hole_perimeter: [r.total_hole_perimeter],
-          time: [r.time],
-          minute_value: [r.minute_value],
-          value: [r.value]
+          description: [r.description],
+          unit_id: [r.unit_id],
+          q_unit: [r.q_unit],
+          q_total: [r.q_total],
+          unit_cost: [r.unit_cost],
+          total: [r.total]
         });
+        this.subscribeInternalProcesses(group, form, internal_proccesses);
         internal_proccesses.push(group);
       });
-      this.subscribeInternalProcesses(internal_proccesses, form);
     }
   },
 

@@ -37,7 +37,9 @@ export class CrearApuPiezaComponent implements OnInit {
   fileString:any = '';
   file = '';
   fileArr:any[] = [];
-  collapsed:boolean;
+  otherCollapsed:boolean;
+  indirectCollapsed:boolean;
+  auiCollapsed:boolean;
 
   thickness:any[] = [
     { percent: 1, value: 1 },
@@ -67,7 +69,13 @@ export class CrearApuPiezaComponent implements OnInit {
        this.createForm();
        this.validateData();
        this.getIndirectCosts();
+       this.collapses();
   }
+  
+  collapses(){
+    (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
+  }
+
   
   onSelect(event) {
     this.files.push(...event.addedFiles);
@@ -350,17 +358,12 @@ export class CrearApuPiezaComponent implements OnInit {
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.file = base64;
-        // this.files.push(this.fileString);
         this.fileArr.push(this.fileString);
       });
     });
     this.form.patchValue({
       files: this.fileArr
-    })
-    console.log(this.form.value);
-    /* this.form.patchValue({
-      files: filess
-    }) */
+    });
     this._swal
       .show({
         text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu pieza`,

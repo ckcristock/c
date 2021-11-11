@@ -18,7 +18,8 @@ export const materiaHelper = {
             name: [m.name],
             measure: [m.measure]
           });
-          this.operation(group);
+          console.log(group.parent);
+          // this.operation(group);
           measuress.push(group);
         });
         let group = fb.group({
@@ -64,19 +65,18 @@ export const materiaHelper = {
       name: [element.name],
       measure: [element.measure]
     });
-    this.operation(group);
+    this.operation(group, materia);
     return group;
   },
 
-  operation(group: FormGroup){
+  operation(group: FormGroup, materia: FormGroup){
     group.get('value').valueChanges.subscribe(r => {
-      let materia:any = group.parent.parent;
+      // let materia:any = group.parent.parent;
       let abuelo:any = group.parent.parent.controls;
       let padre:any = group.parent;
       let weight_formula = abuelo.weight_formula.value;
       let formula = weight_formula;
       padre.controls.forEach(element => {
-        console.log(element);
         let measure = element.controls.measure.value;
         let value = element.controls.value.value;
         formula = formula.replace( '{' + measure + '}',  value );

@@ -28,4 +28,21 @@ export class VerApuPiezaComponent implements OnInit {
       this.data = r.data;
     })
   }
+
+  download() {
+    this._apuParts.download(this.id).subscribe((response: BlobPart) => {
+      let blob = new Blob([response], { type: 'application/pdf' });
+      let link = document.createElement('a');
+      const filename = 'apu_pieza_' + this.id + '.pdf';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.pdf`;
+      link.click();
+    }),
+      (error) => {
+        console.log('Error downloading the file');
+      },
+      () => {
+        console.info('File downloaded successfully');
+      };
+  }
 }

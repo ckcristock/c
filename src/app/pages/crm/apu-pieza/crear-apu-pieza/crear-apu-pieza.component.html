@@ -127,7 +127,7 @@
                                                         <label class="col-form-label col-form-label-sm" for="peso_kg_calculo">Peso KG</label>
                                                     </th>
                                                     <th>
-                                                        <label class="col-form-label col-form-label-sm" for="q_calculo">Q</label>
+                                                        <label class="col-form-label col-form-label-sm" for="q_calculo">Cantidad</label>
                                                     </th>
                                                     <th>
                                                         <label class="col-form-label col-form-label-sm" for="peso_total_calculo">Peso Total</label>
@@ -199,11 +199,15 @@
                             <table style="float: right;">
                                 <tr>
                                     <td colspan="12">
-                                        <label for="" class="mr-3 mt-2">SubTotal: </label>
                                     </td>
                                     <td colspan="13">
                                         <div class="row" style="float: right">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="subtotal_raw_material">
+                                            <div class="col-6">
+                                                <label for="" class="mr-3 mt-2" style="float: right;">SubTotal: </label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="subtotal_raw_material">
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -243,10 +247,10 @@
                                             <label class="col-form-label col-form-label-sm" for="unidad_materiales">Unidad</label>
                                         </th>
                                         <th>
-                                            <label class="col-form-label col-form-label-sm" for="q_unitaria_materiales">Q Unitaria</label>
+                                            <label class="col-form-label col-form-label-sm" for="q_unitaria_materiales">Cant. Unitaria</label>
                                         </th>
                                         <th>
-                                            <label class="col-form-label col-form-label-sm" for="q_total_materiales">Q Total</label>
+                                            <label class="col-form-label col-form-label-sm" for="q_total_materiales">Cant. Total</label>
                                         </th>
                                         <th>
                                             <label class="col-form-label col-form-label-sm" for="costo_unitario_materiales">Costo Unitario</label>
@@ -301,12 +305,14 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="7">
-                                            <label for="" class="mr-3 mt-2" style="float: right;">SubTotal: </label>
-                                        </td>
-                                        <td colspan="7">
+                                        <td colspan="9">
                                             <div class="row" style="float: right">
-                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="commercial_materials_subtotal">
+                                                <div class="col-6">
+                                                    <label for="" class="mr-3 mt-2" style="float: right;">SubTotal: </label>
+                                                </div>
+                                                <div class="col-6">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="commercial_materials_subtotal">
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -439,37 +445,37 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="11">
+                                        <td colspan="12">
                                             <label for="" class="mt-1" style="float: right;">SubTotal Unitario: </label>
                                         </td>
-                                        <td colspan="12">
+                                        <td colspan="13">
                                             <div class="row" style="float: right">
                                                 <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_unit_subtotal">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="11">
+                                        <td colspan="12">
                                             <label for="" class="mt-1" style="float: right;">Cantidad Total: </label>
                                         </td>
-                                        <td colspan="12">
+                                        <td colspan="13">
                                             <div class="row" style="float: right">
                                                 <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_total_amount">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="11">
+                                        <td colspan="12">
                                             <label for="" class="mt-1" style="float: right;">SubTotal: </label>
                                         </td>
-                                        <td colspan="12">
+                                        <td colspan="13">
                                             <div class="row" style="float: right">
                                                 <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="cut_water_subtotal">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="13">
+                                        <td colspan="14">
                                             <div class="btn-group" style="float: right">
                                                 <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newCutWater()">
                                                     <i class="fas fa-plus"></i>
@@ -587,7 +593,7 @@
                                                     <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="valor_corte_laser" formControlName="value">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteCutLaser(i)">
+                                                    <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteCutLaser(i)">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
@@ -627,7 +633,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="13">
+                                        <td colspan="14">
                                             <div class="btn-group" style="float: right">
                                                 <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newCutLaser()">
                                                     <i class="fas fa-plus"></i>
@@ -662,10 +668,10 @@
                                             <label class="col-form-label col-form-label-sm" for="unidad_maquinas_herra">Unidad</label>
                                         </th>
                                         <th>
-                                            <label class="col-form-label col-form-label-sm" for="q_unitaria_maquinas_herra">Q Unitaria</label>
+                                            <label class="col-form-label col-form-label-sm" for="q_unitaria_maquinas_herra">Cant. Unitaria</label>
                                         </th>
                                         <th>
-                                            <label class="col-form-label col-form-label-sm" for="q_total_maquinas_herra">Q Total</label>
+                                            <label class="col-form-label col-form-label-sm" for="q_total_maquinas_herra">Cant. Total</label>
                                         </th>
                                         <th>
                                             <label class="col-form-label col-form-label-sm" for="costo_unitario_maquinas_herra">Costo Unitario</label>
@@ -705,7 +711,7 @@
                                                     <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_maquinas_herra" formControlName="total">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteMachineTool(i)">
+                                                    <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteMachineTool(i)">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
@@ -715,17 +721,19 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6">
-                                            <label for="" style="float: right;">SubTotal: </label>
-                                        </td>
-                                        <td colspan="7">
+                                        <td colspan="8">
                                             <div class="row" style="float: right">
-                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="machine_tools_subtotal">
+                                                <div class="col-6 text-right">
+                                                    <label for="" class="mt-1">SubTotal: </label>
+                                                </div>
+                                                <div class="col-6">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="machine_tools_subtotal">
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7">
+                                        <td colspan="8">
                                             <div class="btn-group" style="float: right">
                                                 <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newMachineTool()">
                                                     <i class="fas fa-plus"></i>
@@ -760,10 +768,10 @@
                                             <label class="col-form-label col-form-label-sm" for="unidad_proceso_interno">Unidad</label>
                                         </th>
                                         <th>
-                                            <label class="col-form-label col-form-label-sm" for="q_unitaria_proceso_interno">Q Unitaria</label>
+                                            <label class="col-form-label col-form-label-sm" for="q_unitaria_proceso_interno">Cant. Unitaria</label>
                                         </th>
                                         <th>
-                                            <label class="col-form-label col-form-label-sm" for="q_total_proceso_interno">Q Total</label>
+                                            <label class="col-form-label col-form-label-sm" for="q_total_proceso_interno">Cant. Total</label>
                                         </th>
                                         <th>
                                             <label class="col-form-label col-form-label-sm" for="costo_unitario_proceso_interno">Costo Unitario</label>
@@ -801,7 +809,7 @@
                                                     <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_proceso_interno" formControlName="total">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteInternalProccess(i)">
+                                                    <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteInternalProccess(i)">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
@@ -811,17 +819,19 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6">
-                                            <label for="" style="float: right;">SubTotal: </label>
-                                        </td>
-                                        <td colspan="7">
+                                        <td colspan="8">
                                             <div class="row" style="float: right">
-                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="internal_proccesses_subtotal">
+                                                <div class="col-6 text-right">
+                                                    <label for="" class="mt-1">SubTotal: </label>
+                                                </div>
+                                                <div class="col-6">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="internal_proccesses_subtotal">
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7">
+                                        <td colspan="8">
                                             <div class="btn-group" style="float: right">
                                                 <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newInternalProccesses()">
                                                     <i class="fas fa-plus"></i>
@@ -856,10 +866,10 @@
                                             <label class="col-form-label col-form-label-sm" for="unidad_proceso_externo">Unidad</label>
                                         </th>
                                         <th>
-                                            <label class="col-form-label col-form-label-sm" for="q_unitaria_proceso_externo">Q Unitaria</label>
+                                            <label class="col-form-label col-form-label-sm" for="q_unitaria_proceso_externo">Cant. Unitaria</label>
                                         </th>
                                         <th>
-                                            <label class="col-form-label col-form-label-sm" for="q_total_proceso_externo">Q Total</label>
+                                            <label class="col-form-label col-form-label-sm" for="q_total_proceso_externo">Cant. Total</label>
                                         </th>
                                         <th>
                                             <label class="col-form-label col-form-label-sm" for="costo_unitario_proceso_externo">Costo Unitario</label>
@@ -899,7 +909,7 @@
                                                     <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_proceso_externo" formControlName="total">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteExternalProccess(i)">
+                                                    <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteExternalProccess(i)">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
@@ -909,17 +919,19 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6">
-                                            <label for="" style="float: right;">SubTotal: </label>
-                                        </td>
-                                        <td colspan="7">
+                                        <td colspan="8">
                                             <div class="row" style="float: right">
-                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="external_proccesses_subtotal">
+                                                <div class="col-6 text-right">
+                                                    <label for="" class="mt-1">SubTotal: </label>
+                                                </div>
+                                                <div class="col-6">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="external_proccesses_subtotal">
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7">
+                                        <td colspan="8">
                                             <div class="btn-group" style="float: right">
                                                 <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newExternalProccesses()">
                                                     <i class="fas fa-plus"></i>
@@ -937,15 +949,15 @@
             <div class="row">
                 <div class="col">
                     <div class="row title mt-3">
-                        <h5 class="ml-3">Otros</h5>
-                        <span *ngIf="!collapsed" class="btn-sm others-icon ml-2" type="button" (click)="collapsed = !collapsed" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
+                        <span *ngIf="!otherCollapsed" class="btn-sm others-icon ml-2" type="button" (click)="otherCollapsed = !otherCollapsed" [attr.aria-expanded]="!otherCollapsed" aria-controls="collapseExample2">
                             <i class="fas fa-chevron-down"></i>
                         </span>
-                        <span *ngIf="collapsed" class="btn-sm others-icon ml-2" type="button" (click)="collapsed = !collapsed" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
+                        <span *ngIf="otherCollapsed" class="btn-sm others-icon ml-2" type="button" (click)="otherCollapsed = !otherCollapsed" [attr.aria-expanded]="!otherCollapsed" aria-controls="collapseExample2">
                             <i class="fas fa-chevron-up"></i>
                         </span>
+                        <h5 class="ml-3">Otros</h5>
                     </div>
-                    <div class="row" [ngbCollapse]="!collapsed">
+                    <div class="row" [ngbCollapse]="!otherCollapsed">
                         <div class="col">
                             <table class="table table-striped">
                                 <thead>
@@ -960,10 +972,10 @@
                                             <label class="col-form-label col-form-label-sm" for="unidad_otros">Unidad</label>
                                         </th>
                                         <th>
-                                            <label class="col-form-label col-form-label-sm" for="q_unitaria_otros">Q Unitaria</label>
+                                            <label class="col-form-label col-form-label-sm" for="q_unitaria_otros">Cant. Unitaria</label>
                                         </th>
                                         <th>
-                                            <label class="col-form-label col-form-label-sm" for="q_total_otros">Q Total</label>
+                                            <label class="col-form-label col-form-label-sm" for="q_total_otros">Cant. Total</label>
                                         </th>
                                         <th>
                                             <label class="col-form-label col-form-label-sm" for="costo_unitario_otros">Costo Unitario</label>
@@ -1003,7 +1015,7 @@
                                                     <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_otros" formControlName="total">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteOthers(i)">
+                                                    <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteOthers(i)">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
@@ -1013,17 +1025,19 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6">
-                                            <label for="" style="float: right;">SubTotal: </label>
-                                        </td>
-                                        <td colspan="7">
+                                        <td colspan="8">
                                             <div class="row" style="float: right">
-                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="others_subtotal">
+                                                <div class="col-6">
+                                                    <label for="" style="float: right;" class="mt-1">SubTotal: </label>
+                                                </div>
+                                                <div class="col-6">
+                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="others_subtotal">
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7">
+                                        <td colspan="8">
                                             <div class="btn-group" style="float: right">
                                                 <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newOthersList()">
                                                     <i class="fas fa-plus"></i>
@@ -1033,6 +1047,7 @@
                                     </tr>
                                 </tfoot>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -1044,17 +1059,17 @@
                     <table class="table table-striped">
                         <tbody>
                             <tr>
-                                <td>Costo directo total:</td>
+                                <td class="text-right">Costo directo total:</td>
                                 <td>
-                                    <div class="col-9" style="float: right;">
+                                    <div style="float: right;">
                                         <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="total_direct_cost">
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td>Costo directo unitario:</td>
+                                <td class="text-right">Costo directo unitario:</td>
                                 <td>
-                                    <div class="col-9" style="float: right;">
+                                    <div style="float: right;">
                                         <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="unit_direct_cost">
                                     </div>
                                 </td>
@@ -1065,187 +1080,211 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <h4 class="text-primary text-center">Costos Indirectos</h4>
+                    <div class="row">
+                        <span *ngIf="!indirectCollapsed" class="btn-sm others-icon" type="button" (click)="indirectCollapsed = !indirectCollapsed" [attr.aria-expanded]="!indirectCollapsed" aria-controls="indirectCost">
+                            <i class="fas fa-chevron-down text-primary ml-3"></i>
+                        </span>
+                        <span *ngIf="indirectCollapsed" class="btn-sm others-icon" type="button" (click)="indirectCollapsed = !indirectCollapsed" [attr.aria-expanded]="!indirectCollapsed" aria-controls="indirectCost">
+                            <i class="fas fa-chevron-up text-primary ml-3"></i>
+                        </span>
+                        <h4 class="text-primary text-center ml-3">Costos Indirectos</h4>
+                    </div>
                     <hr class="bg-primary">
-                    <table class="table table-striped">
-                        <tbody class="bg-light">
-                            <ng-container formArrayName="indirect_cost">
-                                <ng-container *ngFor="let item of indirecCostList.controls; let i = index">
-                                    <tr [formGroupName]="i">
-                                        <td> {{ item.controls.name.value }} </td>
-                                        <td>
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="percentage">
-                                        </td>
-                                        <td>
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="value">
-                                        </td>
-                                    </tr>
+                    <span [ngbCollapse]="indirectCollapsed">
+                        <table class="table table-striped">
+                            <tbody class="bg-light">
+                                <ng-container formArrayName="indirect_cost">
+                                    <ng-container *ngFor="let item of indirecCostList.controls; let i = index">
+                                        <tr [formGroupName]="i">
+                                            <td> {{ item.controls.name.value }} </td>
+                                            <td>
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="percentage">
+                                            </td>
+                                            <td>
+                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="value">
+                                            </td>
+                                        </tr>
+                                    </ng-container>
                                 </ng-container>
-                            </ng-container>
-                            <tr>
-                                <td class="text-center">Costos Indirectos</td>
-                                <td>
-                                </td>
-                                <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="indirect_cost_total">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr class="bg-dark">
-                    <table class="table table-striped">
-                        <tbody class="bg-light">
-                            <tr>
-                                <td>Costos Directos + Costos Indirectos Totales</td>
-                                <td>
-                                    <div class="col-9" style="float: right;">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_costs_indirect_costs_total">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Costos Directos + Costos Indirectos Unitario</td>
-                                <td>
-                                    <div class="col-9" style="float: right;">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_costs_indirect_costs_unit">
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <tr>
+                                    <td class="text-center">Costos Indirectos</td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="indirect_cost_total">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr class="bg-dark">
+                        <table class="table table-striped">
+                            <tbody class="bg-light">
+                                <tr>
+                                    <td>Costos Directos + Costos Indirectos Totales</td>
+                                    <td>
+                                        <div class="col-9" style="float: right;">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_costs_indirect_costs_total">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Costos Directos + Costos Indirectos Unitario</td>
+                                    <td>
+                                        <div class="col-9" style="float: right;">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_costs_indirect_costs_unit">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </span>
                 </div>
                 <div class="col-6">
-                    <h4 class="text-primary text-center">ASD</h4>
+                    <div class="row">
+                        <span *ngIf="!auiCollapsed" class="btn-sm others-icon" type="button" (click)="auiCollapsed = !auiCollapsed" [attr.aria-expanded]="!auiCollapsed" aria-controls="aiu">
+                            <i class="fas fa-chevron-down text-primary ml-3"></i>
+                        </span>
+                        <span *ngIf="auiCollapsed" class="btn-sm others-icon" type="button" (click)="auiCollapsed = !auiCollapsed" [attr.aria-expanded]="!auiCollapsed" aria-controls="aiu">
+                            <i class="fas fa-chevron-up text-primary ml-3"></i>
+                        </span>
+                        <h4 class="text-primary text-center ml-3">AIU</h4>
+                    </div>
                     <hr class="bg-primary">
-                    <table class="table table-striped">
-                        <tbody class="bg-light">
-                            <tr>
-                                <td>Administrativos</td>
-                                <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_percentage">
-                                </td>
-                                <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_value">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Imprevistos</td>
-                                <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_percentage">
-                                </td>
-                                <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_value">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>SubTotal + Administrativos + Imprevistos</td>
-                                <td></td>
-                                <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_unforeseen_subtotal">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>SubTotal + Administrativos + Imprevistos Unitario</td>
-                                <td></td>
-                                <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_unforeseen_unit">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr class="bg-dark">
-                    <table class="table table-striped">
-                        <tbody class="bg-light">
-                            <tr>
-                                <td class="text-center">Utilidad </td>
-                                <td></td>
-                                <td>
-                                    <div class="col-8">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="utility_percentage">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>SubTotal + Admin + Imprevisto + Utilidad</td>
-                                <td></td>
-                                <td>
-                                    <div class="col-9" style="float: right">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_subtotal">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>SubTotal + Admin + Imprevisto + Utilidad Unitario</td>
-                                <td></td>
-                                <td>
-                                    <div class="col-9" style="float: right">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_unit">
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr class="bg-dark">
-                    <table class="table table-striped">
-                        <tbody class="bg-light">
-                            <tr>
-                                <td>Precio Venta Total COP + Retención</td>
-                                <td></td>
-                                <td>
-                                    <div class="col-7" style="float: right">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_cop_withholding_total">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Valor de Venta Unitario COP</td>
-                                <td></td>
-                                <td>
-                                    <div class="col-7" style="float: right">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_cop_unit">
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr class="bg-dark">
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <td>TRM</td>
-                                <td>
-                                </td>
-                                <td>
-                                    <div class="col-4" style="float: right">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="trm">
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr class="bg-dark">
-                    <table class="table table-striped">
-                        <tbody class="bg-light">
-                            <tr>
-                                <td>Precio Venta Total USD + Retención</td>
-                                <td></td>
-                                <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_usd_withholding_total">
-                                    <!-- <div class="col-6" style="float: right">
-                                    </div> -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Valor de Venta Unitario USD</td>
-                                <td></td>
-                                <td>
-                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_usd_unit">
-                                    <!-- <div class="col-6" style="float: right">
-                                    </div> -->
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <span [ngbCollapse]="auiCollapsed">
+                        <table class="table table-striped">
+                            <tbody class="bg-light">
+                                <tr>
+                                    <td>Administrativos</td>
+                                    <td>
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_percentage">
+                                    </td>
+                                    <td>
+                                        <div style="float: right;">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_value">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Imprevistos</td>
+                                    <td>
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_percentage">
+                                    </td>
+                                    <td>
+                                        <div style="float: right;">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_value">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>SubTotal + Administrativos + Imprevistos</td>
+                                    <td></td>
+                                    <td>
+                                        <div style="float: right;">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_unforeseen_subtotal">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>SubTotal + Administrativos + Imprevistos Unitario</td>
+                                    <td></td>
+                                    <td>
+                                        <div style="float: right;">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_unforeseen_unit">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr class="bg-dark">
+                        <table class="table table-striped">
+                            <tbody class="bg-light">
+                                <tr>
+                                    <td class="text-center">Utilidad</td>
+                                    <td></td>
+                                    <td>
+                                        <div style="float: right;">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="utility_percentage">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>SubTotal + Admin + Imprevisto + Utilidad</td>
+                                    <td></td>
+                                    <td>
+                                        <div style="float: right">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_subtotal">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>SubTotal + Admin + Imprevisto + Utilidad Unitario</td>
+                                    <td></td>
+                                    <td>
+                                        <div style="float: right">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_unit">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr class="bg-dark">
+                        <table class="table table-striped">
+                            <tbody class="bg-light">
+                                <tr>
+                                    <td>Precio Venta Total COP + Retención</td>
+                                    <td></td>
+                                    <td>
+                                        <div style="float: right">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_cop_withholding_total">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Valor de Venta Unitario COP</td>
+                                    <td></td>
+                                    <td>
+                                        <div style="float: right">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_cop_unit">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr class="bg-dark">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td>TRM</td>
+                                    <td>
+                                        <div style="float: right">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="trm">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr class="bg-dark">
+                        <table class="table table-striped">
+                            <tbody class="bg-light">
+                                <tr>
+                                    <td>Precio Venta Total USD + Retención</td>
+                                    <td>
+                                        <div style="float: right">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_usd_withholding_total">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Valor de Venta Unitario USD</td>
+                                    <td>
+                                        <div style="float: right">
+                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_usd_unit">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </span>
                 </div>
             </div>
             <div class="row mt-4">

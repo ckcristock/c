@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
@@ -21,17 +22,25 @@ export class NominaComponent implements OnInit {
   funcionariosBase = [];
   people = [];
 
+  inicioParemeter: ""
+  finParemeter: ""
   constructor(
     private _payroll: PayRollService,
     private _people: PersonService,
     public config: NgbDropdownConfig,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private route: ActivatedRoute
   ) {
     config.placement = 'left';
     config.placement = 'left-bottom';
   }
 
   ngOnInit(): void {
+    const params = this.route.snapshot.queryParams;
+    if (Object.keys(params).length) {
+      this.inicioParemeter = params.inicio;
+      this.finParemeter = params.fin;
+    }
     this.getPagoNomina();
     this.getPeople();
   }
@@ -39,7 +48,11 @@ export class NominaComponent implements OnInit {
   getPagoNomina() {
 
     this.loadingPeople = true;
-    this._payroll.getPayrollPays().subscribe((r: any) => {
+    const params = this.inicioParemeter && this.finParemeter ?
+      {
+        date1: this.inicioParemeter, date2: this.finParemeter,
+      } : {}
+    this._payroll.getPayrollPays(params).subscribe((r: any) => {
       this.nomina = r.data;
       this.pago.id = this.nomina.nomina_paga_id
         ? this.nomina.nomina_paga_id
@@ -88,13 +101,20 @@ export class NominaComponent implements OnInit {
       ? moment(this.nomina.fin_periodo).format('DD/MM/YYYY')
       : '';
   }
+
   cargarDatosFuncionarios(fechaInicio, fechaFin) {
     this._payroll.getPeoplePayroll().subscribe((r: any) => {
       this.nomina = r.data;
     });
   }
 
-  deletePagoNomina() { }
+  deletePagoNomina() {
+    this._payroll.deletePayroll().subscribe(r => {
+
+    }, err => {
+
+    })
+  }
 
   showInterfaceForGlobo(modal) { }
 
@@ -123,8 +143,8 @@ export class NominaComponent implements OnInit {
         text:
           "Se dispone a generar una nómina, revise que todo coincida antes de continuar.",
         icon: "warning",
-       
-      }, this.savePayroll )
+
+      }, this.savePayroll)
       .then(result => {
         if (result.isConfirmed) {
           this.renderizar = false;
@@ -132,7 +152,7 @@ export class NominaComponent implements OnInit {
       });
   }
 
-   savePayroll = async ()=> {
+  savePayroll = async () => {
     await this._payroll.savePayroll(this.pago).toPromise().then((r: any) => {
       this._swal
         .show({

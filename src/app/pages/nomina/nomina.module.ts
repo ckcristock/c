@@ -28,6 +28,7 @@ import { VacacionesComponent } from './vacaciones/vacaciones.component';
 import { PrimasComponent } from './primas/primas.component';
 import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-funcionario.component';
 import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
+import { HistorialPagosComponent } from './historial-pagos/historial-pagos.component';
 
 
 
@@ -64,6 +65,7 @@ import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
     PrimasComponent,
     PrimaFuncionarioComponent,
     LegalizarComponent,
+    HistorialPagosComponent,
     
   ],
 })

@@ -10,6 +10,7 @@ import { NominaComponent } from './nomina/nomina.component';
 import { PrimasComponent } from './primas/primas.component';
 import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-funcionario.component';
 import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
+import { HistorialPagosComponent } from './historial-pagos/historial-pagos.component';
 
 const routes: Routes = [
     { path:'prestamos', component: PrestamosLibranzasComponent},
@@ -23,6 +24,8 @@ const routes: Routes = [
     { path: 'primas', component: PrimasComponent},
     { path: 'prima/:anio/:periodo', component: PrimaFuncionarioComponent},
     { path: 'nomina',   loadChildren : () => import('./nomina/pago-nomina.module').then(m => m.PagoNominaModule )},
+    { path: 'historial-pagos', component: HistorialPagosComponent},
+    
 ]
 
 @NgModule({

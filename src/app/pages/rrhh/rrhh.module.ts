@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { DEFAULT_CURRENCY_CODE, NgModule } from '@angular/core';
 import { RrhhRouterModule } from './rrhh-routing.module';
 import { VacantesComponent } from './vacantes/vacantes.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -115,7 +115,7 @@ import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
     FullCalendarModule,
     PerfectScrollbarModule,
   ],
-  providers:[],
+  providers:[{provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' }],
   exports: [],
 })
 export class RrhhModule {}

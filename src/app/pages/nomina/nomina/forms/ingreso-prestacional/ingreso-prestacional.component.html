@@ -1,77 +1,96 @@
+<div class="container"  *ngIf="person">
+  <form #form="ngForm" (ngSubmit)="save(form)">
+    <div class="form-group row">
+      <label for="ingreso" class="col-md-4 col-form-label custom-label"
+        >Ingreso</label
+      >
+      <div class="col-md-8">
+        <select
+          name="ingresosPDatos"
+          required
+          name="countable_income_id"
+          ngModel
+          class="form-control custom-control"
+        >
+          <option [value]="item.value" *ngFor="let item of ingresosPDatos">
+            {{ item.text }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label
+        for="valor"
+ 
+        class="col-md-4 col-form-label custom-label"
+        >Valor</label
+      >
+      <div class="col-md-8">
+        <input
+          type="number"
+          min="0"
+          name="value"
+          required
+          ngModel
+          class="form-control custom-control"
+          placeholder="0"
+        />
+        <input
 
-   <!--  <div class="container" v-if="mostrarForma">
-      <form >
-        <div class="form-group row">
-          <label for="ingreso" class="col-md-4 col-form-label custom-label">Ingreso</label>
-          <div class="col-md-8">
-            <select
-              name="ingresosPDatos"
-              v-model="lista.contable_ingreso_id"
-              class="form-control custom-control"
-            >
-              <option
-                v-for="(ingreso,index) in ingresosPDatos"
-                :key="index"
-                :value="ingreso.id"
-              >{{ingreso.concepto}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="valor" class="col-md-4 col-form-label custom-label">Valor</label>
-          <div class="col-md-8">
-            <input
-              type="number"
-              min="0"
-              name="valor"
-              v-validate="'required|numeric|min_value:1000'"
-              v-model="lista.valor"
-              class="form-control custom-control"
-              placeholder="0"
-            >
-            <small class="invalid" v-if="errors.has('valor')">{{errors.first('valor')}}</small>
-          </div>
-        </div>
-        <div class="form-group">
-          <p class="invalid" v-if="nominaPaga">No puede agregar mas ingresos, porque la nómina ya ha sido pagada.</p>
-          <button type="submit" v-else class="btn btn-secondary raised">Agregar</button>
-        </div>
-      </form>
-      <template v-if="ingresosPFuncionarioDatos.length > 0">
-        <div class="row mb-3 mt-2">
-          <div class="col-md-12">
-            <h6>Ingresos actuales para {{funcionarioProp.nombres}}</h6>
-          </div>
-        </div>
-        <div class="row" v-for="(ingresoP,index) in ingresosPFuncionarioDatos" :key="`C-${index}`">
-          <div class="col-md-6">
-            <p>{{ingresoP.ingreso.concepto}}</p>
-          </div>
-          <div class="col-md-3">
-            <p>{{ingresoP.valor | moneda}}</p>
-          </div>
-          <div class="col-md-3">
-            <p>
-              <a
-                title="eliminar"
-                class="ml-1"
-                href="#"
-                (click)="deleteIngresoPrestacional(ingresoP.id)"
-              >
-                <i class="simple-icon-trash"></i>
-              </a>
-            </p>
-          </div>
-        </div>
-      </template>
-      <p class="alert alert-secondary mt-3">
-        <small
-          class="font-weight-bold"
-        >Si se desea crear más ingresos constitutivos, puede ir al apartado de parametrización en la opción de contabilidad "Crear otros ingresos constitutivos"</small>
+          type="hidden"
+          min="0"
+          name="person_id"
+          [ngModel]="person.id"
+          class="form-control custom-control"
+          placeholder="0"
+        />
+      </div>
+    </div>
+    <div class="form-group">
+      <p class="invalid" *ngIf="nominaPaga">
+        No puede agregar mas ingresos, porque la nómina ya ha sido pagada.
       </p>
+      <button type="submit" [disabled]="form.invalid" class="btn btn-secondary raised">
+        Agregar
+      </button>
     </div>
-    <div class="container text-center" v-else>
-      <img src="/img/loading.gif" class="img-fluid" />
-      <p class="text-center">Cargando Información</p>
+  </form>
+  <ng-container *ngIf="ingresos.length && !loading; else notData">
+    <div class="row mb-3 mt-2">
+      <div class="col-md-12">
+        <h6>Ingresos actuales para {{ person.name }}</h6>
+      </div>
     </div>
-   -->
+    <div class="row" *ngFor="let ingresoP of ingresos">
+      <div class="col-md-6">
+        <p>{{ ingresoP.ingreso.concept }}</p>
+      </div>
+      <div class="col-md-3">
+        <p>{{ ingresoP.value | currency: "":"" }}</p>
+      </div>
+      <div class="col-md-3">
+        <p class="text-right">
+          <a title="eliminar"  (click)="delete(ingresoP.id)" class="trash ml-1 text-danger" >
+            <i class="fas fa-trash-alt"></i>
+          </a>
+        </p>
+      </div>
+    </div>
+  </ng-container>
+
+  <p class="alert alert-secondary mt-3">
+    <small class="font-weight-bold"
+      >Si se desea crear más ingresos constitutivos, puede ir al apartado de
+      parametrización "ingresos constitutivos"</small
+    >
+  </p>
+</div>
+
+<!-- <div class="container text-center" v-else>
+  <img src="/img/loading.gif" class="img-fluid" />
+  <p class="text-center">Cargando Información</p>
+</div> -->
+
+<ng-template #notData>
+    <app-not-data  [loading]="loading" [text]="'No se encontraron ingresos constitutivos para este funcionario'" ></app-not-data>
+</ng-template>

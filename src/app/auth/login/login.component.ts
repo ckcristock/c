@@ -53,7 +53,6 @@ export class LoginComponent implements OnInit {
 
        }, (err) => { 
         // Si sucede un error
-        
          Swal.fire('Error', 'Credenciales incorrectas', 'error'); 
        }); 
 

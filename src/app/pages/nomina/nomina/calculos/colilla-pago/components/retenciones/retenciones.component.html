@@ -1,0 +1,58 @@
+    <p class="text-center font-weight-bold text-uppercase text-muted mt-2">
+      Retenciones
+      <i class="iconsmind-Token-"></i>
+    </p>
+    <table class="table table-sm table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width:89%">Factores constitutivos de salario</th>
+          <th class="text-center">Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor=" let factor of factorRetenciones" >
+          <td>{{factor.concepto}}</td>
+          <td class="text-center">{{factor.valor | currency : '' : ''}}</td>
+        </tr>
+        <tr>
+          <td class="font-weight-bold">IBC Seguridad social</td>
+          <td class="text-center font-weight-bold">{{retenciones.IBC_seguridad | currency : '' : ''}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="mb-2">
+      <small>Para el cálculo del IBC Seguridad Social no se tiene en cuenta: subsidio de transporte, valor de vacaciones compensadas ni demás ingresos no constitutivos de salario.</small>
+    </p>
+
+    <table class="table table-sm table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Concepto</th>
+          <th class="text-center">%</th>
+          <th class="text-center">IBC Seguridad Social</th>
+          <th class="text-center">Fórmula = IBC Seguriddad Social * %</th>
+          <th class="text-center">Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+   
+        <tr *ngFor=" let retencion of totalRetenciones; let i = index"  >
+     
+          <td> {{retencion.concepto}}</td>
+          <td class="text-center">%</td>
+          <td class="text-center">{{retenciones.IBC_seguridad | currency : '' : ''}}</td>
+          <td
+            class="text-center"
+          >{{retenciones.IBC_seguridad | currency : '' : ''}} * {{nominaSeguridadFuncionario[i].percentage * factorDeConversion }} %</td>
+          <td class="text-center">{{retencion.valor | currency : '' : ''}}</td>
+        </tr>
+        <tr>
+          <td class="font-weight-bold">Total retenciones</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="text-center font-weight-bold">{{retenciones.valor_total | currency : '' : ''}}</td>
+        </tr>
+      </tbody>
+    </table>

@@ -26,8 +26,6 @@ export class VerViaticosComponent implements OnInit {
     this.id = this.route.snapshot.params.id;
     this.viaticos$ = this._viaticosData.viaticos.subscribe((r) => {
       if (r) {
-        console.log(r);
-
         this.data = r;
       }
     });

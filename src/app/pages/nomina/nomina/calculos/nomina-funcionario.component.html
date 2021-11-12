@@ -1,0 +1,96 @@
+<div *ngIf="show">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-2">
+            <img [src]="funcionario.image | image:'users'" class="rounded-circle avatar-sm"  alt="user-pic"  />
+          </div>
+          <div class="col-md-5">
+            <div>
+              <h3>{{funcionario.first_name}} {{funcionario.first_surname}}</h3>
+              <p class="cargo-funcionario font-weight-bold">{{funcionario.contractultimate.position.name}}</p>
+              <p>
+                <strong>C.C</strong>
+                {{funcionario.identifier}}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <h4>
+              Periodo de Pago
+              <i class="fas fa-calendar-week"></i>
+
+            </h4>
+            <p>{{inicioFormato}} - {{finFormato}}</p>
+            <p>
+              Frecuencia de pago:
+              <span class="custom-label">{{datosEmpresa.payment_frequency}}</span>
+            </p>
+          </div>
+         <!--  <div class="col-md-3">
+            <h4>
+              Compañia
+              <i class="fas fa-building"></i>
+            </h4>
+            <p>{{datosEmpresa.social_reason}}</p>
+            <p>
+              <strong>NIT</strong>
+              : {{datosEmpresa.document_number}}
+            </p>
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row mt-4 mb-2">
+              <div class="col-md-8 offset-4">
+                <div class="pl-3">
+                  <button
+                    *ngFor="let tab of tabs"
+                    class="tab-button btn"
+                    [ngClass]=" { 'active' : (tabActual === tab)   } "
+                    (click)="(tabActual=tab)"
+                  >{{tab}}</button>
+
+                    
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <div class="col-md-12">
+                  <app-colilla-pago
+                        *ngIf="tabActual === 'Colilla Pago'"
+                        [funcionario]="funcionario"
+                        [datosEmpresa]="datosEmpresa"
+                        [fechaInicio]="inicio"
+                        [fechaFin]="fin"
+                  ></app-colilla-pago>
+                  
+                   <app-seguridad-parafiscales
+                    [funcionarioProp]="funcionario"
+                    [datosEmpresaProp]="datosEmpresa"
+                    [fechaInicio]="inicio"
+                    [fechaFin]="fin"
+                    *ngIf="tabActual === 'Seguridad y Parafiscales'"
+                  ></app-seguridad-parafiscales>
+
+                  <app-provisiones
+                    [funcionarioProp]="funcionario"
+                    [datosEmpresaProp]="datosEmpresa"
+                    [fechaInicio]="inicio"
+                    [fechaFin]="fin"
+                    *ngIf="tabActual === 'Provisiones'"
+                  ></app-provisiones>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+

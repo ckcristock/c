@@ -9,7 +9,6 @@ const base_url = environment.base_url;
 export class ObjToArrayPipe implements PipeTransform {
 
   transform( object:any = []) : Array<any> {
-    
       return Object.values(object)
   }
 

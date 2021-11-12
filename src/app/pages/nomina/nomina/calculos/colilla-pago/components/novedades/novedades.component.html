@@ -1,0 +1,47 @@
+      <p class="text-center text-uppercase font-weight-bold text-muted mt-2">
+        Novedades
+        <i class="iconsmind-Bell-2"></i>
+      </p>
+
+      <table class="table table-sm table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th class="text-center">Días</th>
+            <th class="text-center">Salario Promedio</th>
+            <th class="text-center">Fórmula = Salario promedio * días / 30 días</th>
+            <th class="text-center">Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!--   <pre>
+                {{ arrayNovedades | json }}
+                {{ datosEmpresa | json }}
+
+            </pre> -->
+          <tr *ngFor="let novedad of arrayNovedades">
+            <td>{{novedad.concepto}}</td>
+            <td class="text-center">{{novedad.dias}}</td>
+            <td class="text-center">{{funcionario.contractultimate.salary | currency :'' :'' }}</td>
+            <td
+              class="text-center"
+            >{{funcionario.contractultimate.salary | currency :'' :'' }} * {{novedad.dias}}/ 30 días</td>
+            <td class="text-center">{{novedad.valor | currency :'' :'' }}</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold">Total novedades</td>
+            <td class="text-center font-weight-bold">{{novedades.total_dias}}</td>
+            <td></td>
+            <td></td>
+            <td class="text-center font-weight-bold">{{novedades.valor_total | currency :'' :'' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="existeIncapacidad">
+        <small>Tenga en cuenta que el auxilio por incapacidad no puede ser inferior al salario mínimo.
+             Cuando el valor diario del pago de la incapacidad sea inferior
+              al salario mínimo diario legal vigente
+               {{datosEmpresa.base_salary | currency :'' :'' }} / 30 = {{salaryProm | currency :'' :'' }}, 
+               se aproximará automáticamente a ese valor.</small>
+      </p>

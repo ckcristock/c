@@ -1,0 +1,27 @@
+<p>
+    {{title}}
+</p>
+<i [class]="icon"></i>
+
+<div>
+    <p class="text-center text-uppercase font-weight-bold text-muted mt-1">
+      <slot></slot>
+    </p>
+    <table class="table table-sm table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width:84%">Concepto</th>
+          <th class="text-center">Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr  *ngFor="let item of conceptos; let i = index">
+          <td [ngClass]="{cssBold: i == conceptos.length-1 }">{{item.concepto}}</td>
+          <td
+            class="text-center"
+            [ngClass]="{cssBold: i === conceptos.length -1 }"
+          >{{item.valor | currency : '' : ''}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

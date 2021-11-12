@@ -1,0 +1,93 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                <i class="fa fa-plus"></i> Agregar
+            </button>
+            <h5 class="text-primary">Procesos Internos</h5>
+            <div class="form-row ml-0 mt-2">
+                <div class="form-group">
+                    <label for="">Filtro nombre</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getInternalProcesses()" name="name" autocomplete="off">
+                </div>
+            </div>
+        </div>
+        <hr class="bg-primary">
+        <table class="table table-borderless table-striped" *ngIf="!loading && processes.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Unidad</th>
+                    <th>Costo</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of processes">
+                    <td> {{ item.name }} </td>
+                    <td> {{ item.unit.name }} </td>
+                    <td> {{ item.unit_cost }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getProcess(item); modal.show()">
+                                        <i class="far fa-edit"></i> Editar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getInternalProcesses($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">{{ title }}</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
+            <span aria-hidden="true">
+              <i class="fas fa-times"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="">Nombre</label>
+                            <input type="text" class="form-control" formControlName="name">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Unidad</label>
+                            <ng-select formControlName="unit_id" [items]="units" bindLabel="name" bindValue="id" loadingText="loading" ngDefaultControl>
+                            </ng-select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="">Costo</label>
+                            <input type="number" class="form-control" formControlName="unit_cost">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="save()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

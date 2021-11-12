@@ -1,0 +1,95 @@
+<div class="container"  *ngIf="person">
+  <form #form="ngForm" (ngSubmit)="save(form)">
+    <div class="form-group row">
+      <label for="ingreso" class="col-md-4 col-form-label custom-label"
+        >Deducción</label
+      >
+      <div class="col-md-8">
+        <select
+          required
+          name="countable_deduction_id"
+          ngModel
+          class="form-control custom-control"
+        >
+          <option [value]="item.value" *ngFor="let item of countDeducciones">
+            {{ item.text }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label
+        for="valor"
+ 
+        class="col-md-4 col-form-label custom-label"
+        >Valor</label
+      >
+      <div class="col-md-8">
+        <input
+          type="number"
+          min="0"
+          name="value"
+          required
+          ngModel
+          class="form-control custom-control"
+          placeholder="0"
+        />
+        <input
+
+          type="hidden"
+          min="0"
+          name="person_id"
+          [ngModel]="person.id"
+          class="form-control custom-control"
+          placeholder="0"
+        />
+      </div>
+    </div>
+    <div class="form-group">
+      <p class="invalid" *ngIf="nominaPaga">
+        No puede agregar mas ingresos, porque la nómina ya ha sido pagada.
+      </p>
+      <button type="submit" [disabled]="form.invalid" class="btn btn-secondary raised">
+        Agregar
+      </button>
+    </div>
+  </form>
+  <ng-container *ngIf="deducciones.length && !loading; else notData">
+    <div class="row mb-3 mt-2">
+      <div class="col-md-12">
+        <h6>Deducciones actuales para {{ person.name }}</h6>
+      </div>
+    </div>
+    <div class="row" *ngFor="let deduction of deducciones">
+      <div class="col-md-6">
+        <p>{{ deduction.deduccion.concept }}</p>
+      </div>
+      <div class="col-md-3">
+        <p>{{ deduction.value | currency: "":"" }}</p>
+      </div>
+      <div class="col-md-3">
+        <p class="text-right">
+          <a title="eliminar"  (click)="delete(deduction.id)" class="trash ml-1 text-danger" >
+            <i class="fas fa-trash-alt"></i>
+          </a>
+        </p>
+      </div>
+    </div>
+  </ng-container>
+
+  <p class="alert alert-secondary mt-3">
+    <small class="font-weight-bold"
+      >Si se desea crear más ingresos constitutivos, puede ir al apartado de
+      parametrización "Deducciones"</small
+    >
+  </p>
+</div>
+
+<!-- <div class="container text-center" v-else>
+  <img src="/img/loading.gif" class="img-fluid" />
+  <p class="text-center">Cargando Información</p>
+</div> -->
+
+<ng-template #notData>
+    <app-not-data  [loading]="loading" [text]="'No se encontraron ingresos constitutivos para este funcionario'" ></app-not-data>
+</ng-template>

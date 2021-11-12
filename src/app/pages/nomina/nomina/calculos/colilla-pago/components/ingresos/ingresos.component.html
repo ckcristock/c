@@ -1,0 +1,43 @@
+<div *ngIf="ingresosDatos">
+    <p class="text-center font-weight-bold text-uppercase text-muted mt-4">
+      Ingresos Adicionales
+      <i class="iconsmind-Financial"></i>
+    </p>
+
+    <ng-container *ngIf="constitutivos.length > 0">
+      <p class="text-center font-weight-bold mt-2">Constitutivos de Salario</p>
+      <table class="table table-bordered table-striped table-sm">
+        <thead>
+          <tr>
+            <th style="width:89%">Concepto</th>
+            <th class="text-center">Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+           
+          <tr *ngFor="let constitutivo of constitutivos">
+            <td>{{constitutivo.concepto}}</td>
+            <td class="text-center">{{constitutivo.valor | currency:'' : ''}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+
+    <ng-container *ngIf="noConstitutivos.length > 0">
+      <p class="text-center font-weight-bold mt-2">No Constitutivos de Salario</p>
+      <table class="table table-bordered table-striped table-sm">
+        <thead>
+          <tr>
+            <th style="width:89%">Concepto</th>
+            <th class="text-center">Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let noConstitutivo of  noConstitutivos" >
+            <td>{{noConstitutivo.concepto}}</td>
+            <td class="text-center">{{noConstitutivo.valor | currency:'' : ''}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>

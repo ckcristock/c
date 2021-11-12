@@ -8,10 +8,10 @@
       *ngIf="concepto > 0; else notValue"
       class="lead card-item-nomina text-center"
     >
-      {{ concepto  }}
+      {{ concepto | currency: '':''  }} 
     </p>
     <ng-template #notValue>
-      <p class="lead card-item-nomina text-center">$ 0</p>
+      <p class="lead card-item-nomina text-center">$ 0 </p>
     </ng-template>
   </div>
 </div>

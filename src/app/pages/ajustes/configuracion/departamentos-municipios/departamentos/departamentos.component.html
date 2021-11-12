@@ -1,0 +1,64 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Agregar nuevo Departamento</button>
+            <h5>Departamentos</h5>
+            <p>Departamentos del País</p>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <input type="text" placeholder="Nombre" class="form-control form-control-sm" (change)="getAllDepartment()" [(ngModel)]="filtro.name" name="name">
+            </div>
+        </div>
+        <table class="table table-bordered table-striped table-sm mt-4" *ngIf="!loading && departamentos.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let departamento of departamentos">
+                    <td scope="row"> {{ departamento.name }} </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getAllDepartment($event)" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize"
+            [(page)]="pagination.page" aria-label="Default pagination">
+        </ngb-pagination>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Nuevo Departamento </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+              <span aria-hidden="true">
+                <i class="fas fa-times" (click)="modal.hide()"></i>
+              </span>
+            </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label class="custom-label" for="department_name">Nombre</label>
+                    <input type="text" class="form-control form-control-sm" id="department_name" [(ngModel)]="department.name" [class.is-invalid]="name_department" formControlName="name" required>
+                    <div class="col-md-7 offset-4">
+                        <small class="invalid text-danger" *ngIf="name_department"> Es necesario la nombre del Departamento 
+                            </small>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createNewDepartment()" [disabled]="!form.valid">Guardar Departamento</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<!-- End department -->

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { camposTerceros } from './campos-terceros';
 import { CamposTercerosService } from './campos-terceros.service';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-campos-terceros',
@@ -16,7 +17,8 @@ export class CamposTercerosComponent implements OnInit {
   fields:any [] = [];
   constructor( 
                 private fb: FormBuilder,
-                private _field: CamposTercerosService
+                private _field: CamposTercerosService,
+                private _swal: SwalService
               ) { }
 
   ngOnInit(): void {
@@ -52,6 +54,26 @@ export class CamposTercerosComponent implements OnInit {
       this.form.reset();
       this.getFields();
     })
+  }
+
+  changeState(id, state){
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estas Seguro?',
+      text: (state == 'Inactivo' ? '¡El campo se Anulará!': '¡El campo se Activará!')
+    }).then((r) =>{
+      if (r.isConfirmed) {
+        this._field.changeState({state: state}, id).subscribe((r:any) => {
+          this.getFields();
+          this._swal.show({
+              icon: 'success',
+              title: 'Proceso Satisfactio',
+              text: (state == 'Inactivo' ? 'El campo ha sido Anulado.' : 'El campo ha sido Activado.'),
+              showCancel: false
+          }); 
+        })
+      }
+    });
   }
 
 }

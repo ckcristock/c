@@ -13,4 +13,8 @@ export class PreliquidadosService {
     return this.http.get(`${environment.base_url}/preLiquidado`);
   }
 
+  activate(data:any, id){
+    return this.http.put(`${environment.base_url}/liquidateOrActivate/${id}`, data);
+  }
+
 }

@@ -1,0 +1,77 @@
+<div *ngIf="renderizar">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="font-weight-bold">Historial de pagos</h1>
+        </div>
+        <div class="card-body">
+            <div class="row" *ngIf="!historialPagos.length; else data">
+                <div class="col-12">
+                    <div class="alert alert-secondary">
+                        <p class="font-weight-bold">Aún no se ha realizado el primer pago de nómina, una vez hecho el
+                            pago
+                            podrá
+                            visualizar y filtrar el historial de pagos por periodo.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<!-- 
+    { "id": 1, "user_id": null, 
+    "payment_frequency": "Mensual",
+     "start_period": "2021-11-01",
+      "end_period": "2021-11-30",
+       "total_salaries": 2085103,
+        "total_retentions": 167980,
+         "total_provisions": 488763, 
+    "total_social_secturity": 271634,
+    "total_parafiscals": 78657, 
+    "total_overtimes_surcharges": 8750, 
+    "total_incomes": 171000, 
+    "total_cost": 3092137, 
+    "created_at": "2021-11-05T23:21:48.000000Z", 
+    "updated_at": "2021-11-05T23:21:48.000000Z" }
+ -->
+
+<ng-template #data>
+
+    <div class="col-md-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Periodo</th>
+                    <th>Salarios</th>
+                    <th>Retenciones</th>
+                    <th>Provisiones</th>
+                    <th>Seguridad social</th>
+                    <th>Parafiscales</th>
+                    <th>Costo total empresa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pago of historialPagos">
+                    <!--  {{ pago | json }} -->
+                    <td class="custom-label">
+                        <a [routerLink]="['/nomina/nomina']" [queryParams]="{
+                            inicio: pago.start_period,
+                            fin:    pago.end_period    
+                        }" class="btn btn-link p-0" (click)="redirectToNomina(pago)">
+                            {{ pago.start_period }} -
+                            {{ pago.end_period }}
+
+                        </a>
+                    </td>
+                    <td class="custom-label">{{pago.total_salaries | currency:'':''}}</td>
+                    <td class="custom-label">{{pago.total_retentions | currency:'':''}}</td>
+                    <td class="custom-label">{{pago.total_provisions | currency:'':''}}</td>
+                    <td class="custom-label">{{pago.total_social_secturity | currency:'':''}}</td>
+                    <td class="custom-label">{{pago.total_parafiscals | currency:'':''}}</td>
+                    <td class="custom-label">{{pago.total_cost | currency:'':''}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-template>

@@ -1,0 +1,70 @@
+<div>
+    <h2 class="text-center" style="line-height:35px;">
+      Total a neto a pagar:
+      <br />
+      
+      {{netoApagar | currency :'':''}}
+    </h2>
+    <p class="text-center text-uppercase font-weight-bold text-muted mt-3">Resumen del pago</p>
+
+    <div class="row icon-cards-row d-flex">
+      <div class="col-md-4 col-lg-4 col-sm-4 col-6 mb-4">
+        <div>
+          <div class="text-center">
+            <i class="fas fa-money-bill"></i>
+            <p class="card-text font-weight-semibold mb-0" style="height:18px;">Salario</p>
+            <p class="lead text-center">{{salarioDatos.salary | currency :''}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-4 col-sm-6 col-6 mb-4">
+        <div>
+          <div class="text-center">
+            <i class="far fa-clock"></i>
+            <p
+              class="card-text font-weight-semibold mb-0"
+              style="height:18px;"
+            >Horas extras y recargos</p>
+            <p class="lead text-center">{{horasExtrasDatos.valor_total | currency :''}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-4 col-sm-6 col-6 mb-4">
+        <div>
+            
+          <div class="text-center">
+            <i class="far fa-bell"></i>
+            <p class="card-text font-weight-semibold mb-0" style="height:18px;">Novedades</p>
+            <p class="lead text-center">{{novedadesDatos.valor_total | currency :''}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-4 col-sm-6 col-6 mb-4">
+        <div>
+          <div class="text-center">
+            <i class="fas fa-coins"></i>
+            <p class="card-text font-weight-semibold mb-0" style="height:18px;">Ingresos adicionales</p>
+            <p class="lead text-center">{{ingresosDatos.valor_total | currency :''}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-4 col-sm-6 col-6 mb-4">
+        <div>
+          <div class="text-center">
+            <i class="fab fa-get-pocket"></i>
+            <p class="card-text font-weight-semibold mb-0" style="height:18px;">Retenciones</p>
+            <p class="lead text-center">{{retencionesDatos.valor_total | currency :''}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-4 col-sm-6 col-6 mb-4">
+        <div>
+          <div class="text-center">
+            <i class="fas fa-user-minus"></i>
+            <p class="card-text font-weight-semibold mb-0" style="height:18px;">Deducciones</p>
+            <p class="lead text-center">{{deduccionesDatos.valor_total | currency :''}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

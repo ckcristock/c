@@ -44,11 +44,6 @@ import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
 import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
-import { TaxisComponent } from './taxis/taxis.component';
-import { HotelesComponent } from './hoteles/hoteles.component';
-import { CiudadesComponent } from './ciudades/ciudades.component';
-import { PaisesComponent } from './paises/paises.component';
-import { LicenciaConduccionComponent } from './licencia-conduccion/licencia-conduccion.component';
 
 @NgModule({
   declarations: [
@@ -81,11 +76,6 @@ import { LicenciaConduccionComponent } from './licencia-conduccion/licencia-cond
     ArlComponent,
     CajaCompensacionComponent,
     FondoCesantiasComponent,
-    TaxisComponent,
-    HotelesComponent,
-    CiudadesComponent,
-    PaisesComponent,
-    LicenciaConduccionComponent
   ],
 
   imports: [

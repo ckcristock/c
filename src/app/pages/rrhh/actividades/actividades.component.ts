@@ -375,7 +375,6 @@ export class ActividadesComponent {
     let id = event.event.id;
     this.actividadObj = this.calendarEvents.find((x) => x.id == id);
 
-    console.log(this.actividadObj);
     
     if (this.actividadObj.state != 'Anulada') {
       this.eventoActividad = event;

@@ -6,6 +6,25 @@ import {
 
 export const machineToolHelper = {
   consts: {},
+
+  createFillInMachineTools(form: FormGroup, fb: FormBuilder, data) {
+    if (data.machine) {
+      let machine_tools = form.get('machine_tools') as FormArray;
+      data.machine.forEach((r) => {
+        let group = fb.group({
+          description: [r.description],
+          unit_id: [r.unit_id],
+          q_unit: [r.q_unit],
+          q_total: [r.q_total],
+          unit_cost: [r.unit_cost],
+          total: [r.total]
+        });
+        this.subscribeMachine(group, form, machine_tools);
+        machine_tools.push(group);
+      });
+    }
+  },
+
   createMachineToolGroup(form:FormGroup, fb: FormBuilder) {
     let amount = form.get('amount').value;
     let machine = fb.group({

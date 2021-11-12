@@ -8,6 +8,25 @@ import {
 
 export const othersHelper = {
   consts: {},
+
+  createFillInOthers(form: FormGroup, fb: FormBuilder, data) {
+    if (data.other) {
+      let others = form.get('others') as FormArray;
+      data.other.forEach((r) => {
+        let group = fb.group({
+          description: [r.description],
+          unit_id: [r.unit_id],
+          q_unit: [r.q_unit],
+          q_total: [r.q_total],
+          unit_cost: [r.unit_cost],
+          total: [r.total]
+        });
+        this.subscribeOthers(group, form, others);
+        others.push(group);
+      });
+    }
+  },
+
   createOthersGroup(form: FormGroup, fb: FormBuilder) {
     let amount = form.get('amount').value;
     let others = fb.group({

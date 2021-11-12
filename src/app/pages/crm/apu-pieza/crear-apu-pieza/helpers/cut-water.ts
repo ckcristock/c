@@ -7,6 +7,31 @@ import {
 
 export const cutWaterHelper = {
   consts: {},
+
+  createFillInCutWater(form: FormGroup, fb: FormBuilder, data) {
+    if (data.cutwater) {
+      let cut_water = form.get('cut_water') as FormArray;
+      data.cutwater.forEach((r) => {
+        let group = fb.group({
+          material_id: [r.material_id],
+          thickness: [r.thickness],
+          amount: [r.amount],
+          long: [r.long],
+          width: [r.width],
+          total_length: [r.total_length],
+          amount_cut: [r.amount_cut],
+          diameter: [r.diameter],
+          total_hole_perimeter: [r.total_hole_perimeter],
+          time: [r.time],
+          minute_value: [r.minute_value],
+          value: [r.value]
+        });
+        this.subscribesCutWater(group, cut_water, form);
+        cut_water.push(group);
+      });
+    }
+  },
+
   createCutWaterGroup(form:FormGroup, fb: FormBuilder) {
     let cut_water = fb.group({
       material_id: [''],

@@ -1,0 +1,136 @@
+<div class="row">
+    <div class="col">
+        <div class="title mt-3">
+            <h5>Corte laser</h5>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="">Item</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="material_corte_laser">Material</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="espesor_corte_laser">Espesor(mm)</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="cantidad_lamina_corte_laser">Cantidad Laminas</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="largo_corte_laser">Largo(mm)</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="ancho_corte_laser">Ancho(mm)</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="longitud_total_corte_laser">Longitud total</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="cantidad_agujeros_corte_laser">Cant. agujeros</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="diametro_corte_corte_laser">Diametro(mm)</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="perimetro_corte_laser">Perim total agujero</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="tiempo_corte_laser">Tiempo (min)</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="valor_minuto_corte_laser">Valor Minuto</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="valor_corte_laser">Valor</label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="cutlaser.length">
+                            <ng-container *ngFor="let item of cutlaser; let i = index">
+                                <tr>
+                                    <td>
+                                        {{ i + 1 }}
+                                    </td>
+                                    <td>
+                                        {{ item.material.name }}
+                                    </td>
+                                    <td>
+                                        {{ item.thickness }}
+                                    </td>
+                                    <td>
+                                        {{ item.amount }}
+                                    </td>
+                                    <td>
+                                        {{ item.long }}
+                                    </td>
+                                    <td>
+                                        {{ item.width }}
+                                    </td>
+                                    <td>
+                                        {{ item.total_length }}
+                                    </td>
+                                    <td>
+                                        {{ item.amount_cut }}
+                                    </td>
+                                    <td>
+                                        {{ item.diameter }}
+                                    </td>
+                                    <td>
+                                        {{ item.total_hole_perimeter }}
+                                    </td>
+                                    <td>
+                                        {{ item.time }}
+                                    </td>
+                                    <td>
+                                        {{ item.minute_value }}
+                                    </td>
+                                    <td>
+                                        {{ item.value }}
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="11">
+                                <label for="" class="mt-1" style="float: right;">SubTotal Unitario: </label>
+                            </td>
+                            <td colspan="12">
+                                <p class="text-right">
+                                    {{ cut_laser_unit_subtotal }}
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="11">
+                                <label for="" class="mt-1" style="float: right;">Cantidad Total: </label>
+                            </td>
+                            <td colspan="12">
+                                <p class="text-right">
+                                    {{ cut_laser_total_amount }}
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="11">
+                                <label for="" class="mt-1" style="float: right;">SubTotal: </label>
+                            </td>
+                            <td colspan="12">
+                                <p class="text-right">
+                                    {{ cut_laser_subtotal }}
+                                </p>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="bg-secondary">

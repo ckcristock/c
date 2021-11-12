@@ -8,6 +8,25 @@ import {
 
 export const internalProccessesHelper = {
   consts: {},
+
+  createFillInInternal(form: FormGroup, fb: FormBuilder, data) {
+    if (data.internal) {
+      let internal_proccesses = form.get('internal_proccesses') as FormArray;
+      data.internal.forEach((r) => {
+        let group = fb.group({
+          description: [r.description],
+          unit_id: [r.unit_id],
+          q_unit: [r.q_unit],
+          q_total: [r.q_total],
+          unit_cost: [r.unit_cost],
+          total: [r.total]
+        });
+        this.subscribeInternalProcesses(group, form, internal_proccesses);
+        internal_proccesses.push(group);
+      });
+    }
+  },
+
   createInternalProccessesGroup(form: FormGroup, fb: FormBuilder) {
     let amount = form.get('amount').value;
     let internal = fb.group({

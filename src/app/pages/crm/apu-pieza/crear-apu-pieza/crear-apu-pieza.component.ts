@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ApuPiezaService } from '../apu-pieza.service';
 import { UnidadesMedidasService } from '../../../ajustes/parametros/apu/unidades-medidas/unidades-medidas.service';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
@@ -12,6 +12,9 @@ import { machineToolHelper } from './helpers/machine-tools';
 import { externalProccessesHelper } from './helpers/external_proccesses';
 import { othersHelper } from './helpers/others';
 import { functionsUtils } from '../../../../core/utils/functionsUtils';
+import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { functionsApu } from './helpers/helper';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -19,6 +22,8 @@ import { functionsUtils } from '../../../../core/utils/functionsUtils';
   styleUrls: ['./crear-apu-pieza.component.scss']
 })
 export class CrearApuPiezaComponent implements OnInit {
+  @Input('id') id;
+  @Input('data') data;
   form: FormGroup;
   date: Date = new Date();
   people:any[] = [];
@@ -31,23 +36,46 @@ export class CrearApuPiezaComponent implements OnInit {
   files: File[] = [];
   fileString:any = '';
   file = '';
+  fileArr:any[] = [];
+  otherCollapsed:boolean;
+  indirectCollapsed:boolean;
+  auiCollapsed:boolean;
 
+  thickness:any[] = [
+    { percent: 1, value: 1 },
+    { percent: 2, value: 2 },
+    { percent: 3, value: 3 },
+    { percent: 4, value: 4 },
+    { percent: 5, value: 5 },
+    { percent: 6, value: 6 },
+  ]
+  
   constructor(
-                private _apuPieza: ApuPiezaService,
-                private _units: UnidadesMedidasService,
-                private fb: FormBuilder
-              ) { }
-
-  ngOnInit(): void {
-    this.getPeople();
-    this.getCities();
-    this.getGeometries();
-    this.getMaterials();
-    this.getClients();
-    this.getUnits();
-    this.createForm();
-    this.getIndirectCosts();
+    private _apuPieza: ApuPiezaService,
+    private _units: UnidadesMedidasService,
+    private fb: FormBuilder,
+    private _swal: SwalService,
+    private router: Router,
+    private actRoute: ActivatedRoute
+    ) { }
+    
+  ngOnInit():void {
+       this.getPeople();
+       this.getCities();
+       this.getGeometries();
+       this.getMaterials();
+       this.getClients();
+       this.getUnits();
+       this.createForm();
+       this.validateData();
+       this.getIndirectCosts();
+       this.collapses();
   }
+  
+  collapses(){
+    (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
+  }
+
   
   onSelect(event) {
     this.files.push(...event.addedFiles);
@@ -55,6 +83,11 @@ export class CrearApuPiezaComponent implements OnInit {
 
   onRemove(event) {
     this.files.splice(this.files.indexOf(event), 1);
+  }
+  
+  createForm(){
+    this.form = help.functionsApu.createForm(this.fb);
+    help.functionsApu.listerTotalDirectCost(this.form);
   }
 
   getPeople(){
@@ -96,14 +129,19 @@ export class CrearApuPiezaComponent implements OnInit {
   getIndirectCosts(){
     this._apuPieza.getIndirectCosts().subscribe((r:any) => {
       this.indirectCosts = r.data;
-      this.createForm();
+      if(!this.data){
+        this.indirectCostPush();
+      }
     })
   }
   
-  createForm(){
-    this.form = help.functionsApu.createForm(this.fb, this.indirectCosts);
-    help.functionsApu.listerTotalDirectCost(this.form);
-    /* this.newIndirectCost(); */
+
+  validateData() {
+    if (this.data) {
+      setTimeout(() => {
+        help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries);
+      }, 1200);
+    }
   }
   /************** Materia Prima Inicio ****************/
   basicControl(): FormGroup{
@@ -120,8 +158,8 @@ export class CrearApuPiezaComponent implements OnInit {
     materia.push(this.basicControl())
   }
 
-  deleteMateria(){
-    this.materiaList.removeAt(this.materiaList.length - 1);
+  deleteMateria(i){
+    this.materiaList.removeAt(i);
     materiaHelper.subtotalMateria(this.materiaList, this.form);
   }
   /************** Materia Prima Fin ****************/
@@ -141,9 +179,9 @@ export class CrearApuPiezaComponent implements OnInit {
     materials.push(this.materialsControl())
   }
 
-  deleteMaterial(){
-    this.materialsList.removeAt(this.materialsList.length - 1);
-    materialsHelper.subtotalMaterials(this.materiaList, this.form);
+  deleteMaterial(i){
+    this.materialsList.removeAt(i);
+    materialsHelper.subtotalMaterials(this.materialsList, this.form);
   }
 
   /************** Materiales Comerciales Fin ****************/
@@ -164,8 +202,8 @@ export class CrearApuPiezaComponent implements OnInit {
     water.push(this.cutWaterControl())
   }
 
-  deleteCutWater(){
-    this.cutWaterList.removeAt(this.cutWaterList.length - 1);
+  deleteCutWater(i){
+    this.cutWaterList.removeAt(i);
     cutWaterHelper.subtotalUnit(this.cutWaterList, this.form);
   }
 
@@ -188,8 +226,8 @@ export class CrearApuPiezaComponent implements OnInit {
     laser.push(this.cutLaserControl());
   }
 
-  deleteCutLaser(){
-    this.cutLaserList.removeAt(this.cutLaserList.length - 1);
+  deleteCutLaser(i){
+    this.cutLaserList.removeAt(i);
     cutLaserHelper.subtotalUnit(this.cutLaserList, this.form);
   }
 
@@ -211,8 +249,8 @@ export class CrearApuPiezaComponent implements OnInit {
     machine.push(this.machineToolsControl())
   }
 
-  deleteMachineTool(){
-    this.machineToolList.removeAt(this.machineToolList.length - 1);
+  deleteMachineTool(i){
+    this.machineToolList.removeAt(i);
     machineToolHelper.subtotalMachine(this.machineToolList, this.form);
   }
 
@@ -234,8 +272,8 @@ export class CrearApuPiezaComponent implements OnInit {
     internalProccess.push(this.internalProccessesControl())
   }
 
-  deleteInternalProccess(){
-    this.internalProccessList.removeAt(this.internalProccessList.length - 1);
+  deleteInternalProccess(i){
+    this.internalProccessList.removeAt(i);
     internalProccessesHelper.subtotalInternalProcesses(this.internalProccessList, this.form)
   }
 
@@ -257,8 +295,8 @@ export class CrearApuPiezaComponent implements OnInit {
     exteranlProccess.push(this.externalProccessesControl())
   }
 
-  deleteExternalProccess(){
-    this.externalProccessList.removeAt(this.externalProccessList.length - 1);
+  deleteExternalProccess(i){
+    this.externalProccessList.removeAt(i);
     externalProccessesHelper.subtotalExternalProcesses(this.externalProccessList, this.form);
   }
 
@@ -280,15 +318,33 @@ export class CrearApuPiezaComponent implements OnInit {
     others.push(this.othersControl())
   }
 
-  deleteOthers(){
-    this.othersList.removeAt(this.othersList.length - 1);
+  deleteOthers(i){
+    this.othersList.removeAt(i);
     othersHelper.subtotalOthers(this.othersList, this.form);
   }
 
   /************** Otros Termina ****************/
-
+  
   get indirecCostList(){
     return this.form.get('indirect_cost') as FormArray;
+  }
+  
+  indirectCostPush(){
+    let indirect_cost = this.form.get('indirect_cost') as FormArray;
+    indirect_cost.clear();
+    this.indirectCosts.forEach(element => {
+      indirect_cost.push(this.indirectCostgroup(element, this.fb, this.form));
+    });
+  }
+  
+  indirectCostgroup(element, fb: FormBuilder, form: FormGroup){
+    let group = fb.group({
+      name: [element.text],
+      percentage: [element.percentage],
+      value: [0]
+    });
+    help.functionsApu.indirectCostOp(group, form);
+    return group;
   }
 
   save(){
@@ -302,13 +358,52 @@ export class CrearApuPiezaComponent implements OnInit {
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.file = base64;
-        this.files.push(this.fileString);
+        this.fileArr.push(this.fileString);
       });
     });
     this.form.patchValue({
-      files: filess
-    })
-    console.log(this.form.value);
+      files: this.fileArr
+    });
+    this._swal
+      .show({
+        text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu pieza`,
+        title: '¿Está seguro?',
+        icon: 'warning',
+      })
+      .then((r) => {
+        if (r.isConfirmed) {
+          if (this.id) {
+            console.log(this.id);
+            this._apuPieza.update(this.form.value, this.id).subscribe(
+              (res: any) => this.showSuccess(),
+              (err) => this.showError(err)
+            );
+          } else {
+            this._apuPieza.save(this.form.value).subscribe(
+              (res: any) => this.showSuccess(),
+              (err) => this.showError(err)
+            );
+          }
+        }
+      });
+  }
+
+  showSuccess() {
+    this._swal.show({
+      icon: 'success',
+      text: `Apu Pieza ${ this.id ? 'editado' : 'creado' } con éxito`,
+      title: 'Operación exitosa',
+      showCancel: false,
+    });
+    this.router.navigateByUrl('/crm/apu-pieza');
+  }
+  showError(err) {
+    this._swal.show({
+      icon: 'error',
+      title: '¡Ooops!',
+      showCancel: false,
+      text: err.code,
+    });
   }
 
 }

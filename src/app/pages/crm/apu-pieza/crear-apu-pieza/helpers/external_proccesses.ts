@@ -8,6 +8,25 @@ import {
 
 export const externalProccessesHelper = {
   consts: {},
+
+  createFillInExternal(form: FormGroup, fb: FormBuilder, data) {
+    if (data.external) {
+      let external_proccesses = form.get('external_proccesses') as FormArray;
+      data.external.forEach((r) => {
+        let group = fb.group({
+          description: [r.description],
+          unit_id: [r.unit_id],
+          q_unit: [r.q_unit],
+          q_total: [r.q_total],
+          unit_cost: [r.unit_cost],
+          total: [r.total]
+        });
+        this.subscribeExternalProcesses(group, form, external_proccesses);
+        external_proccesses.push(group);
+      });
+    }
+  },
+
   createExternalProccessesGroup(form:FormGroup, fb: FormBuilder) {
     let amount = form.get('amount').value;
     let external = fb.group({

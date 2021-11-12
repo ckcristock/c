@@ -5,29 +5,28 @@ import {
 } from '@angular/forms';
 
 export const materiaHelper = {
-  consts: {},
+
   createFillInMateria(form: FormGroup, fb: FormBuilder, data, geometriesList: Array<any>) {
     if (data.rawmaterial) {
       let materia_prima = form.get('materia_prima') as FormArray;
       data.rawmaterial.forEach((r) => {
         let measuress = fb.array([]);
         r.measures.forEach(m => {
-          let group = fb.group({
+          let measure = fb.group({
             measure_id: [m.id],
             value: [m.value],
             name: [m.name],
             measure: [m.measure]
           });
-          console.log(group.parent);
-          // this.operation(group);
-          measuress.push(group);
+          this.operation(measure)
+          measuress.push(measure);
         });
         let group = fb.group({
           geometry_id: [r.geometry_id],
           image: [r.geometry.image],
           material_id: [r.material_id],
           measures: measuress,
-          weight_formula: [r.weight_formula],
+          weight_formula: [r.geometry.weight_formula],
           weight_kg: [r.weight_kg],
           q: [r.q],
           weight_total: [r.weight_total],
@@ -69,9 +68,9 @@ export const materiaHelper = {
     return group;
   },
 
-  operation(group: FormGroup, materia: FormGroup){
+  operation(group: FormGroup){
     group.get('value').valueChanges.subscribe(r => {
-      // let materia:any = group.parent.parent;
+      let materia:any = group.parent.parent;
       let abuelo:any = group.parent.parent.controls;
       let padre:any = group.parent;
       let weight_formula = abuelo.weight_formula.value;

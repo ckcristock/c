@@ -950,10 +950,10 @@
                 <div class="col">
                     <div class="row title mt-3">
                         <span *ngIf="!otherCollapsed" class="btn-sm others-icon ml-2" type="button" (click)="otherCollapsed = !otherCollapsed" [attr.aria-expanded]="!otherCollapsed" aria-controls="collapseExample2">
-                            <i class="fas fa-chevron-down"></i>
+                            <i class="fas fa-chevron-right"></i>
                         </span>
                         <span *ngIf="otherCollapsed" class="btn-sm others-icon ml-2" type="button" (click)="otherCollapsed = !otherCollapsed" [attr.aria-expanded]="!otherCollapsed" aria-controls="collapseExample2">
-                            <i class="fas fa-chevron-up"></i>
+                            <i class="fas fa-chevron-down"></i>
                         </span>
                         <h5 class="ml-3">Otros</h5>
                     </div>
@@ -1085,7 +1085,7 @@
                             <i class="fas fa-chevron-down text-primary ml-3"></i>
                         </span>
                         <span *ngIf="indirectCollapsed" class="btn-sm others-icon" type="button" (click)="indirectCollapsed = !indirectCollapsed" [attr.aria-expanded]="!indirectCollapsed" aria-controls="indirectCost">
-                            <i class="fas fa-chevron-up text-primary ml-3"></i>
+                            <i class="fas fa-chevron-right text-primary ml-3"></i>
                         </span>
                         <h4 class="text-primary text-center ml-3">Costos Indirectos</h4>
                     </div>
@@ -1116,7 +1116,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <hr class="bg-dark">
+                        <!-- <hr class="bg-dark"> -->
                         <table class="table table-striped">
                             <tbody class="bg-light">
                                 <tr>
@@ -1145,9 +1145,9 @@
                             <i class="fas fa-chevron-down text-primary ml-3"></i>
                         </span>
                         <span *ngIf="auiCollapsed" class="btn-sm others-icon" type="button" (click)="auiCollapsed = !auiCollapsed" [attr.aria-expanded]="!auiCollapsed" aria-controls="aiu">
-                            <i class="fas fa-chevron-up text-primary ml-3"></i>
+                            <i class="fas fa-chevron-right text-primary ml-3"></i>
                         </span>
-                        <h4 class="text-primary text-center ml-3">AIU</h4>
+                        <h4 class="text-primary text-center ml-3">AUI</h4>
                     </div>
                     <hr class="bg-primary">
                     <span [ngbCollapse]="auiCollapsed">
@@ -1195,7 +1195,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <hr class="bg-dark">
+                        <!-- <hr class="bg-dark"> -->
                         <table class="table table-striped">
                             <tbody class="bg-light">
                                 <tr>
@@ -1227,7 +1227,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <hr class="bg-dark">
+                        <hr class="bg-primary">
                         <table class="table table-striped">
                             <tbody class="bg-light">
                                 <tr>
@@ -1235,7 +1235,7 @@
                                     <td></td>
                                     <td>
                                         <div style="float: right">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_cop_withholding_total">
+                                            <input type="number" readonly style="background-color: transparent" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_cop_withholding_total">
                                         </div>
                                     </td>
                                 </tr>
@@ -1244,13 +1244,13 @@
                                     <td></td>
                                     <td>
                                         <div style="float: right">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_cop_unit">
+                                            <input type="number" readonly style="background-color: transparent" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_cop_unit">
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <hr class="bg-dark">
+                        <!-- <hr class="bg-dark"> -->
                         <table class="table table-striped">
                             <tbody>
                                 <tr>
@@ -1263,14 +1263,14 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <hr class="bg-dark">
+                        <!-- <hr class="bg-dark"> -->
                         <table class="table table-striped">
                             <tbody class="bg-light">
                                 <tr>
                                     <td>Precio Venta Total USD + Retención</td>
                                     <td>
                                         <div style="float: right">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_usd_withholding_total">
+                                            <input type="number" readonly style="background-color: transparent" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_usd_withholding_total">
                                         </div>
                                     </td>
                                 </tr>
@@ -1278,7 +1278,7 @@
                                     <td>Valor de Venta Unitario USD</td>
                                     <td>
                                         <div style="float: right">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_usd_unit">
+                                            <input type="number" readonly style="background-color: transparent" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_value_usd_unit">
                                         </div>
                                     </td>
                                 </tr>

@@ -177,10 +177,14 @@ export const functionsApu = {
       let direct_costs_indirect_costs_total = group.get('direct_costs_indirect_costs_total').value;
       let administrative_unforeseen_subtotal = group.get('administrative_unforeseen_subtotal').value;
       let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal').value;
+      let sale_price_cop_withholding_total = group.get('sale_price_cop_withholding_total').value;
+      let sale_price_usd_withholding_total = group.get('sale_price_usd_withholding_total').value;
       group.patchValue({
         direct_costs_indirect_costs_unit: direct_costs_indirect_costs_total / value,
         administrative_unforeseen_unit: administrative_unforeseen_subtotal / value,
-        admin_unforeseen_utility_unit: admin_unforeseen_utility_subtotal / value
+        admin_unforeseen_utility_unit: admin_unforeseen_utility_subtotal / value,
+        sale_value_cop_unit: sale_price_cop_withholding_total / value,
+        sale_value_usd_unit: sale_price_usd_withholding_total / value
       });
     });
     group.get('direct_costs_indirect_costs_total').valueChanges.subscribe(value => {
@@ -223,6 +227,26 @@ export const functionsApu = {
         admin_unforeseen_utility_unit: value * amount
       });
     });
+    group.get('sale_price_cop_withholding_total').valueChanges.subscribe(value => {
+      let trm = group.get('trm').value;
+      let amount = group.get('amount').value;
+      group.patchValue({
+        sale_price_usd_withholding_total: value / trm,
+        sale_value_cop_unit: value / amount
+      })
+    });
+    group.get('trm').valueChanges.subscribe(value => {
+      let sale_price_cop_withholding_total = group.get('sale_price_cop_withholding_total').value;
+      group.patchValue({
+        sale_price_usd_withholding_total: sale_price_cop_withholding_total / value
+      })
+    });
+    group.get('sale_price_usd_withholding_total').valueChanges.subscribe(value => {
+      let amount = group.get('amount').value;
+      group.patchValue({
+        sale_value_usd_unit: value / amount
+      })
+    })
   },
 
   subtotalIndirectCost(list: FormArray, form:FormGroup){

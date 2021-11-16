@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <button class="btn btn-sm btn-primary" type="button" style="float: right;" [routerLink]="['/crm/crear-apu-pieza']">
+            <button class="btn btn-sm btn-primary" type="button" style="float: right;" [routerLink]="['/crm/apu/crear-apu-pieza']">
                 <i class="fa fa-plus"></i> Agregar
             </button>
             <h5 class="text-primary">APU PIEZA</h5>
@@ -41,10 +41,10 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/crm/ver-apu-pieza', item.id]">
+                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/crm/apu/ver-apu-pieza', item.id]">
                                         <i class="far fa-eye"></i> Ver
                                     </a>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/editar-apu-pieza', item.id]">
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/apu/editar-apu-pieza', item.id]">
                                         <i class="far fa-edit"></i> editar
                                     </a>
                                     <a *ngIf="item.state == 'Activo'" (click)="activateOrInactive('Inactivo', item.id)" class="dropdown-item waves-light text-danger waves-effect caja-botones">

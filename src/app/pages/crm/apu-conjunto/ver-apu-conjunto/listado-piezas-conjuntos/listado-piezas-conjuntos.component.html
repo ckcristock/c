@@ -1,0 +1,83 @@
+<hr class="bg-secondary">
+<div class="row">
+    <div class="col">
+        <div class="title mt-3">
+            <h5>Listado de Piezas Conjunto</h5>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="">Item</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="">Tipo</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="descripcion">Descripción</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="unidad_maquinas_herra">Unidad</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="q_unitaria_maquinas_herra">Cantidad</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="costo_unitario_maquinas_herra">Costo Unitario</label>
+                            </th>
+                            <th>
+                                <label class="col-form-label col-form-label-sm" for="total_maquinas_herra">Total</label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="pieces_sets.length">
+                            <ng-container *ngFor="let item of pieces_sets; let i = index">
+                                <tr>
+                                    <td>
+                                        {{ i + 1 }}
+                                    </td>
+                                    <td>
+                                        {{ item.apu_type }}
+                                    </td>
+                                    <td>
+                                        <!-- {{ item. }} -->
+                                        <!-- <input type="text" class="form-control form-control-sm" id="descripcion" formControlName="apu_id"> -->
+                                    </td>
+                                    <td>
+                                        {{ item.unit }}
+                                    </td>
+                                    <td>
+                                        {{ item.amount }}
+                                    </td>
+                                    <td>
+                                        {{ item.unit_cost }}
+                                    </td>
+                                    <td>
+                                        {{ item.total }}
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="8">
+                                <div class="row" style="float: right">
+                                    <div class="col-6 text-right">
+                                        <label for="" class="mt-1">SubTotal: </label>
+                                    </div>
+                                    <div class="col-6">
+                                        {{ list_pieces_sets_subtotal }}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

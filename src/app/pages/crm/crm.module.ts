@@ -32,6 +32,13 @@ import { MaquinasHerramientasComponent } from './apu-pieza/ver-apu-pieza/maquina
 import { ProcesosInternosComponent } from './apu-pieza/ver-apu-pieza/procesos-internos/procesos-internos.component';
 import { ProcesosExternosComponent } from './apu-pieza/ver-apu-pieza/procesos-externos/procesos-externos.component';
 import { OtrosComponent } from './apu-pieza/ver-apu-pieza/otros/otros.component';
+import { EditarApuConjuntoComponent } from './apu-conjunto/editar-apu-conjunto/editar-apu-conjunto.component';
+import { VerApuConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/ver-apu-conjunto.component';
+import { ListadoPiezasConjuntosComponent } from './apu-conjunto/ver-apu-conjunto/listado-piezas-conjuntos/listado-piezas-conjuntos.component';
+import { MaquinasHerramientasConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/maquinas-herramientas-conjunto/maquinas-herramientas-conjunto.component';
+import { OtrosConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/otros-conjunto/otros-conjunto.component';
+import { ProcesosInternosConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/procesos-internos-conjunto/procesos-internos-conjunto.component';
+import { ProcesosExternosConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/procesos-externos-conjunto/procesos-externos-conjunto.component';
 
 
 @NgModule({
@@ -52,7 +59,14 @@ import { OtrosComponent } from './apu-pieza/ver-apu-pieza/otros/otros.component'
     MaquinasHerramientasComponent,
     ProcesosInternosComponent,
     ProcesosExternosComponent,
-    OtrosComponent
+    OtrosComponent,
+    EditarApuConjuntoComponent,
+    VerApuConjuntoComponent,
+    ListadoPiezasConjuntosComponent,
+    MaquinasHerramientasConjuntoComponent,
+    OtrosConjuntoComponent,
+    ProcesosInternosConjuntoComponent,
+    ProcesosExternosConjuntoComponent
   ],
   imports: [
     CommonModule,

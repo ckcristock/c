@@ -1,1 +1,68 @@
-<p>apu-conjunto works!</p>
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" type="button" style="float: right;" [routerLink]="['/crm/apu/crear-apu-conjunto']">
+                <i class="fa fa-plus"></i> Agregar
+            </button>
+            <h5 class="text-primary">APU CONJUNTO</h5>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-borderless table-striped" *ngIf="!loading && apuSets.length > 0; else notData">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Nombre</th>
+                    <th>Cliente</th>
+                    <th>Destino</th>
+                    <th>Linea</th>
+                    <th>Quien elabora</th>
+                    <th>F. Creación</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of apuSets" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
+                    <td> </td>
+                    <td> {{ item.name }} </td>
+                    <td> {{ item.thirdparty.name }} </td>
+                    <td> {{ item.city.name }} </td>
+                    <td> {{ item.line }} </td>
+                    <td> {{ item.person.name }} </td>
+                    <td> {{ item.created_at | date: 'dd-MM-YYYY' }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/crm/apu/ver-apu-conjunto', item.id]">
+                                        <i class="far fa-eye"></i> Ver
+                                    </a>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/apu/editar-apu-conjunto', item.id]">
+                                        <i class="far fa-edit"></i> editar
+                                    </a>
+                                    <a *ngIf="item.state == 'Activo'" (click)="activateOrInactive('Inactivo', item.id)" class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                        <i class="far fa-trash-alt"></i> Anular
+                                    </a>
+                                    <a *ngIf="item.state == 'Inactivo'" (click)="activateOrInactive('Activo', item.id)" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                        <i class="fas fa-check"></i> Activar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getApuParts($event)" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize"
+            [(page)]="pagination.page" aria-label="Default pagination">
+        </ngb-pagination> -->
+    </div>
+</div>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

@@ -35,7 +35,7 @@ export class ViaticosComponent implements OnInit {
     { clave: 'Pendiente' },
     { clave: 'Aprobado' },
     { clave: 'Legalizado' },
-    { clave: 'Activo' },
+   /*  { clave: 'Activo' }, */
     { clave: 'Inactivo' }
   ]
   constructor( private _viaticos:CrearViaticosService, private _permission: PermissionService, private _swal: SwalService ) {

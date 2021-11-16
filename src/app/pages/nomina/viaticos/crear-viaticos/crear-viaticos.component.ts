@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { Router } from '@angular/router';
 import * as help from './helpers/import';
+import * as moment from 'moment';
 @Component({
   selector: 'app-crear-viaticos',
   templateUrl: './crear-viaticos.component.html',
@@ -35,14 +36,14 @@ export class CrearViaticosComponent implements OnInit {
   people: any[] = [];
   person_selected: any;
   form: FormGroup;
-  value:any;
+  value: any;
   constructor(
     private roter: Router,
     private _swal: SwalService,
     private fb: FormBuilder,
     private location: Location,
     private _viatico: CrearViaticosService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.createForm();
@@ -76,6 +77,19 @@ export class CrearViaticosComponent implements OnInit {
       .valueChanges.subscribe((res) => {
         this.func = this.people.find((r) => r.id == res);
       });
+
+    this.form.get('travel').get('departure_date').valueChanges.subscribe(e => {
+      /* const date_end = moment(this.form.get('travel').get('departure_date').value, "YYYY-MM-DD");
+
+      console.log({ date_end, e });
+
+      console.log(moment(e, "YYYY-MM-DD").diff(date_end, 'days')); */
+
+
+    })
+    this.form.get('travel').get('arrival_date').valueChanges.subscribe(e => {
+      console.log(e);
+    })
   }
 
   createForm() {
@@ -210,9 +224,8 @@ export class CrearViaticosComponent implements OnInit {
   crearViatico() {
     this._swal
       .show({
-        text: `Se dispone a ${
-          this.id ? 'editar' : 'crear'
-        } una solicitud de viático`,
+        text: `Se dispone a ${this.id ? 'editar' : 'crear'
+          } una solicitud de viático`,
         title: '¿Está seguro?',
         icon: 'warning',
       })
@@ -236,8 +249,7 @@ export class CrearViaticosComponent implements OnInit {
   showSucess() {
     this._swal.show({
       icon: 'success',
-      text: `Viático  ${
-          this.id ? 'editado' : 'creado'
+      text: `Viático  ${this.id ? 'editado' : 'creado'
         } con éxito`,
       title: 'Operación exitosa',
       showCancel: false,

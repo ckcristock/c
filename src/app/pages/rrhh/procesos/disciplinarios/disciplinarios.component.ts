@@ -118,6 +118,17 @@ export class DisciplinariosComponent implements OnInit {
   onFileChanged(event) {
     if (event.target.files[0]) {
       let file = event.target.files[0];
+      console.log(file);
+      const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
+      if (!types.includes(file.type)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de archivo',
+          text: 'El tipo de archivo no es válido'
+        });
+        return null
+      }
+
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event) => {

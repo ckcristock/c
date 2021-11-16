@@ -136,7 +136,9 @@
                                                     </select>
                                                 </td>
                                                 <td *ngIf="item['controls']['apu_type']['value'] == 'pieza'">
-                                                    <ng-select bindLabel="name" [items]="apuParts" bindValue="id" loadingText="loading" ngDefaultControl formControlName="apu_id"></ng-select>
+                                                    <ng-select [items]="apuPart$ | async" bindLabel="Title" [loading]="apuPartLoading" [typeahead]="apuPartInput$">
+                                                    </ng-select>
+                                                    <!-- <ng-select bindLabel="name" [items]="apuParts" bindValue="id" loadingText="loading" ngDefaultControl formControlName="apu_id"></ng-select> -->
                                                 </td>
                                                 <td *ngIf="item['controls']['apu_type']['value'] == 'conjunto'">
                                                     <ng-select bindLabel="name" [items]="apuSets" bindValue="id" loadingText="loading" ngDefaultControl formControlName="apu_id"></ng-select>

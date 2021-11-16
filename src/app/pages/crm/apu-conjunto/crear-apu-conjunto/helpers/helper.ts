@@ -46,7 +46,6 @@ export const functionsApuConjunto = {
   fillInIndirectCost(form: FormGroup, fb: FormBuilder, data){
     if (data.indirect) {
       let indirect_cost = form.get('indirect_cost') as FormArray;
-      console.log(data.indirect);
       data.indirect.forEach(element => {
         let group = fb.group({
           name: [element.name],

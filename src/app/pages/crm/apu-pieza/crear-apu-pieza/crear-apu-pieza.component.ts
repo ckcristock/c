@@ -73,6 +73,9 @@ export class CrearApuPiezaComponent implements OnInit {
   }
   
   collapses(){
+    if (!this.data) {
+      return null
+    }
     (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
   }
 
@@ -139,13 +142,13 @@ export class CrearApuPiezaComponent implements OnInit {
   validateData() {
     if (this.data) {
       setTimeout(() => {
-        help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries);
+        help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials);
       }, 1200);
     }
   }
   /************** Materia Prima Inicio ****************/
   basicControl(): FormGroup{
-    let group = help.materiaHelper.createMateriaGroup(this.form, this.fb, this.geometries);
+    let group = help.materiaHelper.createMateriaGroup(this.form, this.fb, this.geometries, this.materials);
     return group;
   }
 

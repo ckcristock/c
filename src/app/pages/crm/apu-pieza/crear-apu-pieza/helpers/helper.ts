@@ -12,7 +12,7 @@ import { othersHelper } from './others';
 export const functionsApu = {
   consts: {},
 
-  fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>) {
+  fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>) {
     let indirect_cost = form.get('indirect_cost') as FormArray;
     form.patchValue({
       name: data.name,
@@ -53,7 +53,7 @@ export const functionsApu = {
       internal_proccesses_subtotal: data.internal_proccesses_subtotal,
       external_proccesses_subtotal: data.external_proccesses_subtotal
     });
-    materiaHelper.createFillInMateria(form, fb, data, geometriesList);
+    materiaHelper.createFillInMateria(form, fb, data, geometriesList, materials);
     materialsHelper.createFillInMaterials(form, fb, data);
     cutWaterHelper.createFillInCutWater(form, fb, data);
     cutLaserHelper.createFillInCutLaser(form, fb, data);

@@ -27,7 +27,6 @@ import { MaquinasHerramientasComponent } from './apu/maquinas-herramientas/maqui
 import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-internos.component';
 import { ProcesosExternosComponent } from './apu/procesos-externos/procesos-externos.component';
 import { MedidasComponent } from './apu/medidas/medidas.component';
-import { MateriaPrimaComponent } from './apu/materia-prima/materia-prima.component';
 import { CostosIndirectosComponent } from './apu/costos-indirectos/costos-indirectos.component';
 
 
@@ -53,7 +52,6 @@ import { CostosIndirectosComponent } from './apu/costos-indirectos/costos-indire
         ProcesosInternosComponent,
         ProcesosExternosComponent,
         MedidasComponent,
-        MateriaPrimaComponent,
         CostosIndirectosComponent
     ],
     imports: [ 

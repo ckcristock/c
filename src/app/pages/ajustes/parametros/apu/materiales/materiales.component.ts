@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { MaterialesService } from './materiales.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
@@ -41,14 +41,19 @@ export class MaterialesComponent implements OnInit {
     this.title = 'Nuevo Material';
   }
 
+  closeModalVer(){
+    this.modal.hide();
+    this.fieldList.clear();
+  }
+
   createForm(){
     this.form = this.fb.group({
       name: ['', this._validators.required],
       unit: ['', this._validators.required],
-      // cut_water: [false],
-      // cut_laser: [false],
       type: ['', this._validators.required],
-      unit_price: ['']
+      unit_price: [''],
+      kg_value: ['', this._validators.required],
+      fields: this.fb.array([])
     })
   }
 
@@ -59,11 +64,41 @@ export class MaterialesComponent implements OnInit {
       id: this.material.id,
       name: this.material.name,
       unit: this.material.unit,
-      // cut_water: this.material.cut_water,
-      // cut_laser: this.material.cut_laser,
       type: this.material.type,
-      unit_price: this.material.unit_price
-    })
+      unit_price: this.material.unit_price,
+      kg_value: this.material.kg_value
+    });
+    this.fieldList.clear();
+    this.material.material_field.forEach(r => {
+      let group = this.fb.group({
+        property: [r.property],
+        type: [r.type],
+        value: [r.value]
+      });
+      this.fieldList.push(group);
+    });
+  }
+
+  fieldsControl(){
+    let field = this.fb.group({
+      property: [''],
+      type: [''],
+      value: ['']
+    });
+    return field;
+  }
+
+  get fieldList(){
+    return this.form.get('fields') as FormArray;
+  }
+
+  newField(){
+    let field = this.fieldList;
+    field.push(this.fieldsControl());
+  }
+  
+  deleteField(i){
+    this.fieldList.removeAt(i);
   }
 
   getMaterials( page = 1 ){
@@ -74,6 +109,7 @@ export class MaterialesComponent implements OnInit {
     this.loading = true;
     this._materials.getMaterials(params).subscribe((r:any) => {
       this.materials = r.data.data;
+      console.log(this.materials);
       this.loading = false;
       this.pagination.collectionSize = r.data.total;
     })

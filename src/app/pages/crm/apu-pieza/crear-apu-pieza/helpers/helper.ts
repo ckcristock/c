@@ -62,7 +62,7 @@ export const functionsApu = {
     externalProccessesHelper.createFillInExternal(form, fb, data);
     othersHelper.createFillInOthers(form, fb, data);
     this.fillInIndirectCost(form, fb, data);
-    this.subscribes(form, indirect_cost)
+    this.subscribes(form)
   },
 
   fillInIndirectCost(form: FormGroup, fb: FormBuilder, data){
@@ -156,7 +156,7 @@ export const functionsApu = {
     });
   },
 
-  subscribes(group: FormGroup, list: FormArray){
+  subscribes(group: FormGroup){
     group.get('indirect_cost_total').valueChanges.subscribe(value => {
       let total_direct_cost = group.get('total_direct_cost').value;
       group.patchValue({
@@ -245,8 +245,8 @@ export const functionsApu = {
       let amount = group.get('amount').value;
       group.patchValue({
         sale_value_usd_unit: value / amount
-      })
-    })
+      });
+    });
   },
 
   subtotalIndirectCost(list: FormArray, form:FormGroup){

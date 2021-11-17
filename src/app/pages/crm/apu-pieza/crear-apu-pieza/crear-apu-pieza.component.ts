@@ -60,16 +60,16 @@ export class CrearApuPiezaComponent implements OnInit {
     ) { }
     
   ngOnInit():void {
-       this.getPeople();
-       this.getCities();
-       this.getGeometries();
-       this.getMaterials();
-       this.getClients();
-       this.getUnits();
-       this.createForm();
-       this.validateData();
-       this.getIndirectCosts();
-       this.collapses();
+    this.createForm();
+    this.validateData();
+    this.getClients();
+    this.getUnits();
+    this.getGeometries();
+    this.getMaterials();
+    this.getPeople();
+    this.getCities();
+    this.getIndirectCosts();
+    this.collapses();
   }
   
   collapses(){
@@ -87,48 +87,44 @@ export class CrearApuPiezaComponent implements OnInit {
   onRemove(event) {
     this.files.splice(this.files.indexOf(event), 1);
   }
-  
-  createForm(){
-    this.form = help.functionsApu.createForm(this.fb);
-    help.functionsApu.listerTotalDirectCost(this.form);
-  }
 
   getPeople(){
     this._apuPieza.getPeopleXSelect().subscribe((r:any) => {
       this.people = r.data;
     })
   }
-
+  
   getCities(){
     this._apuPieza.getCities().subscribe((r:any) => {
       this.cities = r.data;
     })
   }
-
+  
+  getClients(){
+    this._apuPieza.getClient().subscribe((r:any) => {
+      this.clients = r.data;
+      help.functionsApu.totalMasRetencion(this.form, this.clients);
+    });
+  }
+  
   getGeometries(){
     this._apuPieza.getGeometries().subscribe((r:any) => {
       this.geometries = r.data;
     })
   }
-
+  
   getMaterials(){
     this._apuPieza.getMaterials().subscribe((r:any) => {
       this.materials = r.data;
     })
   }
-
-  getClients(){
-    this._apuPieza.getClient().subscribe((r:any) => {
-      this.clients = r.data;
-    })
-  }
-
+  
   getUnits(){
     this._units.getUnits().subscribe((r:any) => {
       this.units = r.data;
     })
   }
-
+  
   getIndirectCosts(){
     this._apuPieza.getIndirectCosts().subscribe((r:any) => {
       this.indirectCosts = r.data;
@@ -138,6 +134,10 @@ export class CrearApuPiezaComponent implements OnInit {
     })
   }
   
+  createForm(){
+    this.form = help.functionsApu.createForm(this.fb);
+    help.functionsApu.listerTotalDirectCost(this.form);
+  }
 
   validateData() {
     if (this.data) {
@@ -367,6 +367,7 @@ export class CrearApuPiezaComponent implements OnInit {
     this.form.patchValue({
       files: this.fileArr
     });
+    console.log(this.form.value);
     this._swal
       .show({
         text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu pieza`,
@@ -398,7 +399,7 @@ export class CrearApuPiezaComponent implements OnInit {
       title: 'Operación exitosa',
       showCancel: false,
     });
-    this.router.navigateByUrl('/crm/apu-pieza');
+    this.router.navigateByUrl('/crm/apu/apu-pieza');
   }
   showError(err) {
     this._swal.show({

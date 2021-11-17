@@ -13,12 +13,12 @@ export const materiaHelper = {
         let measuress = fb.array([]);
         r.measures.forEach(m => {
           let measure = fb.group({
-            measure_id: [m.id],
+            measure_id: [m.measure_id],
             value: [m.value],
             name: [m.name],
             measure: [m.measure]
           });
-          this.operation(measure)
+          this.operation(measure);
           measuress.push(measure);
         });
         let group = fb.group({
@@ -33,7 +33,7 @@ export const materiaHelper = {
           value_kg: [r.value_kg],
           total_value: [r.total_value]
         });
-        this.subscribeMateria(group, materia_prima, form, geometriesList, fb);
+        this.subscribeMateria(group, materia_prima, form, geometriesList, fb, materials);
         materia_prima.push(group);
       });
     }
@@ -78,6 +78,7 @@ export const materiaHelper = {
       padre.controls.forEach(element => {
         let measure = element.controls.measure.value;
         let value = element.controls.value.value;
+        console.log(formula);
         formula = formula.replace( '{' + measure + '}',  value );
       });  
       let result = eval(formula);

@@ -10,10 +10,11 @@ import { externalProccessesHelper } from './external_proccesses';
 import { othersHelper } from './others';
 
 export const functionsApu = {
-  consts: {},
+  consts: {
+    retefuente_percentage: []
+  },
 
   fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>) {
-    let indirect_cost = form.get('indirect_cost') as FormArray;
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
@@ -133,6 +134,22 @@ export const functionsApu = {
     });
     this.subscribes(group)
     return group;
+  },
+
+  totalMasRetencion(group: FormGroup, clients:Array<any>){
+    group.get('third_party_id').valueChanges.subscribe(value => {
+      let data = clients.find(c => c.value == value);
+      this.consts.retefuente_percentage = data.retefuente_percentage;
+      let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal').value;
+      group.patchValue({
+        sale_price_cop_withholding_total: admin_unforeseen_utility_subtotal + this.consts.retefuente_percentage
+      })
+    });
+    group.get('admin_unforeseen_utility_subtotal').valueChanges.subscribe(value => {
+      group.patchValue({
+        sale_price_cop_withholding_total: value + this.consts.retefuente_percentage
+      });
+    });
   },
 
   indirectCostOp(indirect:FormGroup, form:FormGroup){

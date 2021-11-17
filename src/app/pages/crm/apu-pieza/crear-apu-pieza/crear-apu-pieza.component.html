@@ -10,7 +10,7 @@
                 <div class="col-6">
                     <div class="row mt-3 mb-3 mr-4" style="float: right">
                         <div class="ml-4">
-                            <p> 22 de octubre del 2018 </p>
+                            <p class="text-right"> {{ date | date:'EEEE, MMMM d, y' | titlecase }} </p>
                             <p>Bucaramanga - Colombia</p>
                         </div>
                     </div>
@@ -20,11 +20,11 @@
     </div>
 </div>
 <div class="card">
-    <div class="card-title mt-3 mr-3">
+    <!-- <div class="card-title mt-3 mr-3">
         <strong style="float: right;">
-            {{ date | date:'dd-MM-YYYY' }}
+            
         </strong>
-    </div>
+    </div> -->
     <div class="card-body">
         <form [formGroup]="form">
             <div class="row">

@@ -10,7 +10,8 @@
                 <div class="col-6">
                     <div class="row mt-3 mb-3 mr-4" style="float: right">
                         <div class="ml-4">
-                            <p> 22 de octubre del 2018 </p>
+                            <p class="text-right"> {{ date | date:'dd-MM-YYYY' }} </p>
+                            <!-- <p> 22 de octubre del 2018 </p> -->
                             <p>Bucaramanga - Colombia</p>
                         </div>
                     </div>
@@ -20,11 +21,10 @@
     </div>
 </div>
 <div class="card">
-    <div class="card-title mt-3 mr-3">
+    <!-- <div class="card-title mt-3 mr-3">
         <strong style="float: right;">
-            {{ date | date:'dd-MM-YYYY' }}
         </strong>
-    </div>
+    </div> -->
     <div class="card-body">
         <form [formGroup]="form">
             <div class="row">
@@ -135,25 +135,25 @@
                                                         <option value="conjunto">Conjunto</option>
                                                     </select>
                                                 </td>
-                                                <td *ngIf="item['controls']['apu_type']['value'] == 'pieza'">
-                                                    <ng-select [items]="apuPart$ | async" bindLabel="Title" [loading]="apuPartLoading" [typeahead]="apuPartInput$">
+                                                <td *ngIf="item['controls']['apu_type']['value'] == 'pieza'" style="width: 15%;">
+                                                    <ng-select [items]="apuPart$ | async" bindLabel="name" bindValue="id" [loading]="apuPartLoading" [typeahead]="apuPartInput$" formControlName="apu_id">
                                                     </ng-select>
-                                                    <!-- <ng-select bindLabel="name" [items]="apuParts" bindValue="id" loadingText="loading" ngDefaultControl formControlName="apu_id"></ng-select> -->
                                                 </td>
-                                                <td *ngIf="item['controls']['apu_type']['value'] == 'conjunto'">
-                                                    <ng-select bindLabel="name" [items]="apuSets" bindValue="id" loadingText="loading" ngDefaultControl formControlName="apu_id"></ng-select>
+                                                <td *ngIf="item['controls']['apu_type']['value'] == 'conjunto'" style="width: 15%;">
+                                                    <ng-select [items]="apuSets$ | async" bindLabel="name" bindValue="id" [loading]="apuSetsLoading" [typeahead]="apuSetsInput$" formControlName="apu_id">
+                                                    </ng-select>
                                                 </td>
                                                 <td>
                                                     <input type="text" class="form-control form-control-sm" id="unidad_maquinas_herra" formControlName="unit">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="amount">
+                                                    <input type="number" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="amount">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="unit_cost">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="unit_cost">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_maquinas_herra" formControlName="total">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="total_maquinas_herra" formControlName="total">
                                                 </td>
                                                 <td>
                                                     <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deletePiecesSets(i)">
@@ -172,7 +172,7 @@
                                                     <label for="" class="mt-1">SubTotal: </label>
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="list_pieces_sets_subtotal">
+                                                    <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="list_pieces_sets_subtotal">
                                                 </div>
                                             </div>
                                         </td>
@@ -237,13 +237,13 @@
                                                     <input type="text" class="form-control form-control-sm" id="unidad_maquinas_herra" formControlName="unit">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="amount">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="amount">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="unit_cost">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="costo_unitario_maquinas_herra" formControlName="unit_cost">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_maquinas_herra" formControlName="total">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="total_maquinas_herra" formControlName="total">
                                                 </td>
                                                 <td>
                                                     <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteMachineTool(i)">
@@ -262,7 +262,7 @@
                                                     <label for="" class="mt-1">SubTotal: </label>
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="machine_tools_subtotal">
+                                                    <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="machine_tools_subtotal">
                                                 </div>
                                             </div>
                                         </td>
@@ -325,13 +325,13 @@
                                                     <input type="text" class="form-control form-control-sm" id="descripcion_proceso_interno" formControlName="unit">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_proceso_interno" formControlName="amount">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="costo_unitario_proceso_interno" formControlName="amount">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_proceso_interno" formControlName="unit_cost">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="costo_unitario_proceso_interno" formControlName="unit_cost">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_proceso_interno" formControlName="total">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="total_proceso_interno" formControlName="total">
                                                 </td>
                                                 <td>
                                                     <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteInternalProccess(i)">
@@ -350,7 +350,7 @@
                                                     <label for="" class="mt-1">SubTotal: </label>
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="internal_processes_subtotal">
+                                                    <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="internal_processes_subtotal">
                                                 </div>
                                             </div>
                                         </td>
@@ -415,13 +415,13 @@
                                                     <input type="text" class="form-control form-control-sm" id="descripcion_proceso_externo" formControlName="unit">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_unitaria_proceso_externo" formControlName="amount">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="q_unitaria_proceso_externo" formControlName="amount">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_proceso_externo" formControlName="unit_cost">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="costo_unitario_proceso_externo" formControlName="unit_cost">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_proceso_externo" formControlName="total">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="total_proceso_externo" formControlName="total">
                                                 </td>
                                                 <td>
                                                     <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteExternalProccess(i)">
@@ -440,7 +440,7 @@
                                                     <label for="" class="mt-1">SubTotal: </label>
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="external_processes_subtotal">
+                                                    <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="external_processes_subtotal">
                                                 </div>
                                             </div>
                                         </td>
@@ -511,13 +511,13 @@
                                                     <input type="text" class="form-control form-control-sm" id="descripcion_otros" formControlName="unit">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="q_unitaria_otros" formControlName="amount">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="q_unitaria_otros" formControlName="amount">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="costo_unitario_otros" formControlName="unit_cost">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="costo_unitario_otros" formControlName="unit_cost">
                                                 </td>
                                                 <td>
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-sm" id="total_otros" formControlName="total">
+                                                    <input type="number" min="0" class="form-control form-control-sm" id="total_otros" formControlName="total">
                                                 </td>
                                                 <td>
                                                     <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteOthers(i)">
@@ -536,7 +536,7 @@
                                                     <label for="" style="float: right;" class="mt-1">SubTotal: </label>
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="others_subtotal">
+                                                    <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="others_subtotal">
                                                 </div>
                                             </div>
                                         </td>
@@ -566,7 +566,7 @@
                                 <td class="text-right">Costo directo total:</td>
                                 <td>
                                     <div style="float: right;">
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="total_direct_cost">
+                                        <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" formControlName="total_direct_cost">
                                     </div>
                                 </td>
                             </tr>
@@ -594,10 +594,10 @@
                                         <tr [formGroupName]="i">
                                             <td> {{ item.controls.name.value }} </td>
                                             <td>
-                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="percentage">
+                                                <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="percentage">
                                             </td>
                                             <td>
-                                                <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="value">
+                                                <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="value">
                                             </td>
                                         </tr>
                                     </ng-container>
@@ -607,7 +607,7 @@
                                     <td>
                                     </td>
                                     <td>
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="indirect_cost_total">
+                                        <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="indirect_cost_total">
                                     </td>
                                 </tr>
                             </tbody>
@@ -619,7 +619,7 @@
                                     <td>Costos Directos + Costos Indirectos Totales</td>
                                     <td>
                                         <div class="col-9" style="float: right;">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_costs_indirect_costs_total">
+                                            <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="direct_costs_indirect_costs_total">
                                         </div>
                                     </td>
                                 </tr>
@@ -644,22 +644,22 @@
                                 <tr>
                                     <td>Administrativos</td>
                                     <td>
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_percentage">
+                                        <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_percentage">
                                     </td>
                                     <td>
                                         <div style="float: right;">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_value">
+                                            <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_value">
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Imprevistos</td>
                                     <td>
-                                        <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_percentage">
+                                        <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_percentage">
                                     </td>
                                     <td>
                                         <div style="float: right;">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_value">
+                                            <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="unforeseen_value">
                                         </div>
                                     </td>
                                 </tr>
@@ -668,7 +668,7 @@
                                     <td></td>
                                     <td>
                                         <div style="float: right;">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_unforeseen_subtotal">
+                                            <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="administrative_unforeseen_subtotal">
                                         </div>
                                     </td>
                                 </tr>
@@ -682,7 +682,7 @@
                                     <td></td>
                                     <td>
                                         <div style="float: right;">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="utility_percentage">
+                                            <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="utility_percentage">
                                         </div>
                                     </td>
                                 </tr>
@@ -691,7 +691,7 @@
                                     <td></td>
                                     <td>
                                         <div style="float: right">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_subtotal">
+                                            <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="admin_unforeseen_utility_subtotal">
                                         </div>
                                     </td>
                                 </tr>
@@ -718,7 +718,7 @@
                                     <td>TRM</td>
                                     <td>
                                         <div style="float: right">
-                                            <input type="number" onkeypress="return event.charCode >= 48" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="trm">
+                                            <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="trm">
                                         </div>
                                     </td>
                                 </tr>

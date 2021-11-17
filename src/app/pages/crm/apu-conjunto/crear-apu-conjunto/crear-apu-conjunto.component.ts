@@ -45,6 +45,10 @@ export class CrearApuConjuntoComponent implements OnInit {
   apuPartLoading = false;
   apuPartInput$ = new Subject<string>();
   minLengthTerm = 3;
+  apuSets$: Observable<any>;
+  apuSetsLoading = false;
+  apuSetsInput$ = new Subject<string>();
+  minLengthSetTerm = 3;
     
   constructor( 
                 private fb: FormBuilder,
@@ -59,13 +63,14 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.getPeople();
     this.getCities();
     this.getClients();
-    this.getApuParts();
     this.getApuSets();
+    this.getApuPart();
     this.createForm();
     this.getIndirectCosts();
     this.validateData();
     this.collapses();
     this.loadApuParts();
+    this.loadApuSets();
   }
 
   collapses(){
@@ -74,16 +79,16 @@ export class CrearApuConjuntoComponent implements OnInit {
     }
     (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
   }
-  
-  getApuParts(){
-    this._apuConjunto.getApuParts().subscribe((r:any) => {
-      this.apuParts = r.data.data;
-    })
-  }
 
   getApuSets(){
     this._apuConjunto.getApuSets().subscribe((r:any) => {
       this.apuSets = r.data.data;
+    })
+  }
+
+  getApuPart(){
+    this._apuConjunto.getApuParts().subscribe((r:any) => {
+      this.apuParts = r.data;
     })
   }
 
@@ -99,14 +104,37 @@ export class CrearApuConjuntoComponent implements OnInit {
         tap(() => this.apuPartLoading = true),
         switchMap(term => {
           let param = { name: term }
-          return this._apuConjunto.getApuSets(param).pipe(
+          return this._apuConjunto.getApuParts(param).pipe(
+            map( (r:any) => { return  r.data }),
             catchError(() => of([])), // empty list on error
             tap(() => this.apuPartLoading = false)
           )
         })
       )
     );
-  } 
+  }
+
+  loadApuSets() {
+    this.apuSets$ = concat(
+      of([]), // default items
+      this.apuSetsInput$.pipe(
+        filter(res => {
+          return res !== null && res.length >= this.minLengthSetTerm
+        }),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.apuSetsLoading = true),
+        switchMap(term => {
+          let param = { name: term }
+          return this._apuConjunto.getApuSetList(param).pipe(
+            map( (r:any) => { return  r.data }),
+            catchError(() => of([])), // empty list on error
+            tap(() => this.apuSetsLoading = false)
+          )
+        })
+      )
+    );
+  }
 
   onSelect(event) {
     this.files.push(...event.addedFiles);

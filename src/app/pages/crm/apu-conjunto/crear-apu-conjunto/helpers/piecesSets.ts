@@ -42,11 +42,6 @@ export const piecesSetsHelper = {
     group.get('apu_id').valueChanges.subscribe(value => {
       let type = group.get('apu_type').value;
       let data = (type == 'pieza' ? apuParts.find(a => a.id == value) : apuSets.find(a => a.id == value));
-      console.log(data);
-      
-      /* if (type == 'pieza') {
-        let data = apuParts.find(a => a.id == value)
-      } */
       group.patchValue({
         unit_cost: data.unit_direct_cost
       });

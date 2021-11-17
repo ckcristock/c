@@ -27,8 +27,12 @@ export class ApuConjuntoService {
     return this.http.get(`${environment.base_url}/thirdPartyClient`);
   }
 
-  getApuParts(){
-    return this.http.get(`${environment.base_url}/apu-parts`)
+  getApuParts( params = {} ){
+    return this.http.get(`${environment.base_url}/apu-parts-list`, {params});
+  }
+
+  getApuSetList( params = {} ){
+    return this.http.get(`${environment.base_url}/apu-sets-list`, {params});
   }
   
   getApuSets( params = {} ){

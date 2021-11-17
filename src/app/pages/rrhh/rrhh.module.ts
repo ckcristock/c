@@ -8,6 +8,7 @@ import {
   NgbPaginationModule,
   NgbDropdownModule,
   NgbTypeaheadModule,
+  NgbNavModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { VacantesCrearComponent } from './vacantes/vacantes-crear/vacantes-crear.component';
@@ -23,6 +24,7 @@ import { VacantesVerComponent } from './vacantes/vacantes-ver/vacantes-ver.compo
 import { CrearNovedadComponent } from './novedades/crear-novedad/crear-novedad.component';
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
+import { TableInventaryComponent } from './dotacion/dotaciones/table-inventary/table-inventary.component';
 import { ActividadesComponent } from './actividades/actividades.component';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -56,6 +58,7 @@ import { EditDiarioRotatingComponent } from './horas-extras/lista-fijos/edit-dia
 import { RotativoComponent } from './horas-extras/lista-fijos/rotativo/rotativo.component';
 import { EditDiarioFixedComponent } from './horas-extras/lista-fijos/edit-diario-fixed/edit-diario-fixed.component';
 import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
+import { TableInventaryEppComponent } from './dotacion/dotaciones/table-inventary-epp/table-inventary-epp.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +71,7 @@ import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
     CrearNovedadComponent,
     InventarioDotacionComponent,
     DotacionesComponent,
+    TableInventaryComponent,
     AsignacionTurnosComponent,
     SemanaTurnoComponent,
     TurnoComponent,
@@ -95,6 +99,7 @@ import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
     EditDiarioRotatingComponent,
     EditDiarioFixedComponent,
     AlmuerzosComponent,
+    TableInventaryEppComponent,
   ],
   imports: [
     RrhhRouterModule,
@@ -114,6 +119,7 @@ import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
     NgSelectModule,
     FullCalendarModule,
     PerfectScrollbarModule,
+    NgbNavModule,
   ],
   providers:[{provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' }],
   exports: [],

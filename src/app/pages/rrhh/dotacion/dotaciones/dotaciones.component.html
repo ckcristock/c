@@ -27,40 +27,97 @@
                             </div>
                         </div>
                     </div>
-                    <hr class="hr">
+                    <!-- <hr class="hr"> -->
                 </div>
-                <div class="col-md-12">
-                    <div class="card-block">
-                        <div class="row" style="margin-top:5px;">
-                            <div class="col-12 text-center">
-                                <h4>Stock por categorías</h4>
-                            </div>
-                            <div class="col-md-12 text-center">
-                                <table class="table table-hover table-bordered">
-                                    <tr *ngFor="let lgi of Lista_Grupos_Inventario">
-                                        <td class="text-left">{{lgi.name}}</td>
-                                        <td style="width:50px;">{{lgi.stock}}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-6">
+                <!-- <div class="row"> -->
+                <!-- <div class="col-md-6"> -->
+                <!-- </div> -->
+
+                <!-- </div> -->
+            </div>
             <div class="card">
                 <div class="card-header">
                     <h5>Dotación y Epp's x Categorías Anualmente</h5>
                 </div>
                 <div class="card-block" #dotacion_chart>
                     <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
-          </canvas>
+                    </canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="col-md-12">
+                    <div class="card-block">
+                        <div class="row" style="margin-top:5px;">
+                            <div class="m-3 col-12 text-center">
+                                <h4>Stock por categorías</h4>
+                            </div>
+                            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-pills">
+                                <li [ngbNavItem]="1">
+                                    <a ngbNavLink>Dotación</a>
+                                    <ng-template ngbNavContent>
+                                        <div class="col-md-12 text-center">
+                                            <table class="table table-hover table-bordered">
+                                                <ng-container *ngFor="let lgi of Lista_Grupos_Inventario1">
+                                                    <tr>
+                                                        <td class="text-left">{{lgi.name}}</td>
+                                                        <td style="width:100px;">{{lgi.stock}}</td>
+                                                        <td style="width:100px;">
+                                                            <button class="btn btn-primary btn-sm" (click)="(lgi.show = !lgi.show)">
+                                                              <i class="fas fa-sort-down"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="12">
+                                                            <app-table-inventary *ngIf="lgi.show" [totalCategory]="lgi.inventary"></app-table-inventary>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                            </table>
+                                        </div>
+                                    </ng-template>
+                                </li>
+                                <li [ngbNavItem]="2">
+                                    <a ngbNavLink>Epp</a>
+                                    <ng-template ngbNavContent>
+                                        <div class="col-md-12 text-center">
+                                            <table class="table table-hover table-bordered">
+                                                <ng-container *ngFor="let lgi of Lista_Grupos_Inventario_Epp">
+                                                    <tr>
+                                                        <td style="width:435px;" class="text-left">{{lgi.name}}</td>
+                                                        <td style="width:100px;">{{lgi.stock}}</td>
+                                                        <td style="width:100px;">
+                                                            <button class="btn btn-primary btn-sm" (click)="(lgi.show = !lgi.show)">
+                                                          <i class="fas fa-sort-down"></i>
+                                                        </button>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="12">
+                                                            <app-table-inventary-epp *ngIf="lgi.show" [totalCategory]="lgi.inventary"></app-table-inventary-epp>
+                                                        </td>
+                                                    </tr>
+
+                                                </ng-container>
+                                            </table>
+                                        </div>
+                                    </ng-template>
+                                </li>
+                            </ul>
+
+                            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
 
 

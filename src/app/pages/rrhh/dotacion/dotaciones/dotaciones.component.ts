@@ -52,6 +52,7 @@ export class DotacionesComponent implements OnInit {
   public Lista_Grupos: any[] = [];
   public Lista_Grupos_Inventario: any = [];
   public Lista_Grupos_Inventario1: any = [];
+  public Lista_Grupos_Inventario_Epp: any = [];
   public Pro_Van: any = {
     Empleado: '',
     Fecha: '',
@@ -91,8 +92,11 @@ export class DotacionesComponent implements OnInit {
   public Productos_Devolver: any[] = [];
   public personas: any = [];
   public valores: any = [];
-  public CantidadTotal: 0;
 
+  public CantidadTotal: 0;
+  public totalCategory: any = [];
+
+  public tableInventoryComponent: any = [];
 
   public studentChartData: any;
   public studentChartOption: any;
@@ -106,6 +110,9 @@ export class DotacionesComponent implements OnInit {
   ) {
 
   }
+
+  //ngbNavItem
+  active = 1;
 
   formatter4 = (x: { Nombres: string }) => x.Nombres;
   search4 = (text$: Observable<string>) =>
@@ -125,6 +132,7 @@ export class DotacionesComponent implements OnInit {
     this.Lista_Productos();
     this.stockGroup()
     this.onChange1()
+    this.getStokEpp()
   }
   dateRangeChanged(event) {
     if (event.formatted != "") {
@@ -194,13 +202,25 @@ export class DotacionesComponent implements OnInit {
     })
 
   }
+
   // metodo para listar en el modal
   onChange1() {
 
     this._dotation.getStok().subscribe((r: any) => {
       this.Lista_Grupos_Inventario1 = r.data;
+
     });
   }
+
+  getStokEpp() {
+
+    this._dotation.getStokEpp().subscribe((r: any) => {
+      this.Lista_Grupos_Inventario_Epp = r.data;
+
+    });
+  }
+
+
   cambio(prod) {
     Object.keys(prod).forEach(x => {
       if (prod["quantity"] > prod["Cantidad"]) {

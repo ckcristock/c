@@ -21,6 +21,8 @@ import {ReporteHorarioComponent} from './reporte-horario/reporte-horario.compone
 import {FondoEmpleadoComponent} from './fondo-empleado/fondo-empleado.component';
 import { AsignarHorasExtrasComponent } from './asignar-horas-extras/asignar-horas-extras.component';
 import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
+import { TableInventaryComponent } from './dotacion/dotaciones/table-inventary/table-inventary.component';
+import { TableInventaryEppComponent } from './dotacion/dotaciones/table-inventary-epp/table-inventary-epp.component';
 
 const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
@@ -30,6 +32,8 @@ const routes: Routes = [
   { path: 'novedades', component: NovedadesComponent },
   { path: 'llegadas-tarde', component: LlegadasTardesComponent },
   { path: 'dotacion/dotaciones', component: DotacionesComponent },
+  { path: 'dotacion/dotaciones/table-inventary', component: TableInventaryComponent },
+  { path: 'dotacion/dotaciones/table-inventary-epp', component: TableInventaryEppComponent },
   { path: 'dotacion/inventario', component: InventarioDotacionComponent },
   { path: 'turnos/asignacion', component: AsignacionTurnosComponent },
   { path: 'turnos/horas-extras', component: HorasExtrasComponent },

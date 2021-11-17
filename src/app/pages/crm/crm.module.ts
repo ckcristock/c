@@ -66,7 +66,7 @@ import { ProcesosExternosConjuntoComponent } from './apu-conjunto/ver-apu-conjun
     MaquinasHerramientasConjuntoComponent,
     OtrosConjuntoComponent,
     ProcesosInternosConjuntoComponent,
-    ProcesosExternosConjuntoComponent
+    ProcesosExternosConjuntoComponent,
   ],
   imports: [
     CommonModule,

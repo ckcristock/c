@@ -40,13 +40,13 @@ export const othersHelper = {
     others.get('amount').valueChanges.subscribe(value => {
       let unit_cost = others.get('unit_cost').value;
       others.patchValue({
-        total: unit_cost * value
+        total: Math.round(unit_cost * value)
       })
     });
     others.get('unit_cost').valueChanges.subscribe(value => {
       let amount = others.get('amount').value;
       others.patchValue({
-        total: value * amount
+        total: Math.round(value * amount)
       })
     });
     others.get('total').valueChanges.subscribe(value => {

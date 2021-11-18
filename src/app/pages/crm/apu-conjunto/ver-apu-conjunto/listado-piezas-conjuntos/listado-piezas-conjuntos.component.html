@@ -42,9 +42,11 @@
                                     <td>
                                         {{ item.apu_type }}
                                     </td>
-                                    <td>
-                                        <!-- {{ item. }} -->
-                                        <!-- <input type="text" class="form-control form-control-sm" id="descripcion" formControlName="apu_id"> -->
+                                    <td *ngIf="item.apu_type == 'conjunto'">
+                                        {{ item.apuset.name }}
+                                    </td>
+                                    <td *ngIf="item.apu_type == 'pieza'">
+                                        {{ item.apupart.name }}
                                     </td>
                                     <td>
                                         {{ item.unit }}

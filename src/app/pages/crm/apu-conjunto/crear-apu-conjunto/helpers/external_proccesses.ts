@@ -41,13 +41,13 @@ export const externalProcessesHelper = {
     external.get('amount').valueChanges.subscribe(value => {
       let unit_cost = external.get('unit_cost').value;
       external.patchValue({
-        total: unit_cost * value
+        total: Math.round(unit_cost * value)
       })
     });
     external.get('unit_cost').valueChanges.subscribe(value => {
       let amount = external.get('amount').value;
       external.patchValue({
-        total: value * amount
+        total: Math.round(value * amount)
       })
     });
     external.get('total').valueChanges.subscribe(value => {

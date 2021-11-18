@@ -12,7 +12,8 @@ export const piecesSetsHelper = {
       data.setpartlist.forEach((r) => {
         let group = fb.group({
           apu_type: [r.apu_type],
-          apu_id: [r.apu_id],
+          apu_part_id: [r.apu_part_id],
+          apu_set_child_id: [r.apu_set_child_id],
           unit: [r.unit],
           amount: [r.amount],
           unit_cost: [r.unit_cost],
@@ -27,7 +28,8 @@ export const piecesSetsHelper = {
   createPiecesSetsGroup(form: FormGroup, fb: FormBuilder, apuParts:Array<any>, apuSets:Array<any>) {
     let setpartlist = fb.group({
       apu_type: [''],
-      apu_id: [''],
+      apu_part_id: [0],
+      apu_set_child_id: [0],
       unit: [''],
       amount: [0],
       unit_cost: [0],
@@ -39,23 +41,49 @@ export const piecesSetsHelper = {
   },
 
   subscribePiecesSets( group: FormGroup, form:FormGroup, list: FormArray, apuParts:Array<any>, apuSets:Array<any>){
-    group.get('apu_id').valueChanges.subscribe(value => {
-      let type = group.get('apu_type').value;
-      let data = (type == 'pieza' ? apuParts.find(a => a.id == value) : apuSets.find(a => a.id == value));
+    group.get('apu_type').valueChanges.subscribe(value => {
+      (value == 'conjunto'
+      ?
+      group.patchValue({
+        apu_part_id: 0,
+        unit: '',
+        amount: 0,
+        unit_cost: 0,
+        total: 0
+      }) 
+      :
+      group.patchValue({
+        apu_set_child_id: 0,
+        unit: '',
+        amount: 0,
+        unit_cost: 0,
+        total: 0
+      }))
+    })
+    group.get('apu_part_id').valueChanges.subscribe(value => {
+      let data = apuParts.find(a => a.id == value);
       group.patchValue({
         unit_cost: data.unit_direct_cost
       });
     });
+    /* group.get('apu_set_child_id').valueChanges.subscribe(value => {
+      let data = apuSets.find(a => a.id == value);
+      group.patchValue({
+        unit_cost: data.unit_direct_cost
+      });
+    }); */
     group.get('amount').valueChanges.subscribe(value => {
       let unit_cost = group.get('unit_cost').value;
+      let result = unit_cost * value;
       group.patchValue({
-        total: unit_cost * value
+        total: Math.round(result)
       })
     });
     group.get('unit_cost').valueChanges.subscribe(value => {
       let amount = group.get('amount').value;
+      let result = value * amount; 
       group.patchValue({
-        total: value * amount
+        total: Math.round(result)
       })
     });
     group.get('total').valueChanges.subscribe(value => {

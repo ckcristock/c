@@ -6,9 +6,11 @@ import { othersHelper } from './others';
 import { piecesSetsHelper } from './piecesSets';
 
 export const functionsApuConjunto = {
+  consts: {
+    retefuente_percentage: []
+  },
 
   fillInForm(form: FormGroup, data, fb: FormBuilder, apuParts:Array<any>) {
-    let indirect_cost = form.get('indirect_cost') as FormArray;
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
@@ -40,7 +42,7 @@ export const functionsApuConjunto = {
     externalProcessesHelper.createFillInExternal(form, fb, data);
     othersHelper.createFillInOthers(form, fb, data);
     this.fillInIndirectCost(form, fb, data);
-    this.subscribes(form, indirect_cost)
+    this.subscribes(form)
   },
 
   fillInIndirectCost(form: FormGroup, fb: FormBuilder, data){
@@ -118,7 +120,23 @@ export const functionsApuConjunto = {
     });
   },
 
-  subscribes(group: FormGroup, list: FormArray){
+  totalMasRetencion(group: FormGroup, clients:Array<any>){
+    group.get('third_party_id').valueChanges.subscribe(value => {
+      let data = clients.find(c => c.value == value);
+      this.consts.retefuente_percentage = data.retefuente_percentage;
+      let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal').value;
+      group.patchValue({
+        sale_price_cop_withholding_total: admin_unforeseen_utility_subtotal + this.consts.retefuente_percentage
+      })
+    });
+    group.get('admin_unforeseen_utility_subtotal').valueChanges.subscribe(value => {
+      group.patchValue({
+        sale_price_cop_withholding_total: value + this.consts.retefuente_percentage
+      });
+    });
+  },
+
+  subscribes(group: FormGroup, clients:Array<any>){
     group.get('indirect_cost_total').valueChanges.subscribe(value => {
       let total_direct_cost = group.get('total_direct_cost').value;
       group.patchValue({
@@ -193,7 +211,7 @@ export const functionsApuConjunto = {
       group.patchValue({
         administrative_unforeseen_subtotal: direct_costs_indirect_costs_total + administrative_value + value
       });
-    })
+    });
   },
 
   subtotalIndirectCost(list: FormArray, form:FormGroup){

@@ -181,6 +181,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   getClients(){
     this._apuConjunto.getClient().subscribe((r:any) => {
       this.clients = r.data;
+      help.functionsApuConjunto.totalMasRetencion(this.form, this.clients);
     })
   }
 
@@ -341,13 +342,11 @@ export class CrearApuConjuntoComponent implements OnInit {
       .then((r) => {
         if (r.isConfirmed) {
           if (this.id) {
-            // this.apuIdToCreateOrEdit();
             this._apuConjunto.update(this.form.value, this.id).subscribe(
               (res: any) => this.showSuccess(),
               (err) => this.showError(err)
             );
           } else {
-            // this.apuIdToCreateOrEdit();
             this._apuConjunto.save(this.form.value).subscribe(
               (res: any) => this.showSuccess(),
               (err) => this.showError(err)

@@ -15,6 +15,7 @@ export class MaterialesComponent implements OnInit {
   form: FormGroup;
   title:any = '';
   materials:any[] = [];
+  thicknesses:any[] = [];
   material:any = {};
   pagination = {
     page: 1,
@@ -34,6 +35,7 @@ export class MaterialesComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.getMaterials();
+    this.getThicknesses();
   }
 
   openModal(){
@@ -53,7 +55,15 @@ export class MaterialesComponent implements OnInit {
       type: ['', this._validators.required],
       unit_price: [''],
       kg_value: ['', this._validators.required],
-      fields: this.fb.array([])
+      fields: this.fb.array([]),
+      thicknesses: this.fb.array([]),
+    });
+  }
+
+  getThicknesses(){
+    this._materials.getThicknesses().subscribe((r:any) => {
+      this.thicknesses = r.data;
+      this.thicknessPush();
     })
   }
 
@@ -77,6 +87,36 @@ export class MaterialesComponent implements OnInit {
       });
       this.fieldList.push(group);
     });
+    this.thicknessList.clear();
+    this.material.thicknesses.forEach(r => {
+      let group = this.fb.group({
+        thickness: [r.thickness.thickness],
+        thickness_id: [r.thickness_id],
+        value: [r.value]
+      });
+      this.thicknessList.push(group);
+    });
+  }
+
+  get thicknessList(){
+    return this.form.get('thicknesses') as FormArray;
+  }
+
+  thicknessPush(){
+    let thicknesses = this.form.get('thicknesses') as FormArray;
+    thicknesses.clear();
+    this.thicknesses.forEach(element => {
+      thicknesses.push(this.thicknessGroup(element, this.fb));
+    });
+  }
+
+  thicknessGroup(element, fb: FormBuilder){
+    let group = fb.group({
+      thickness: [element.thickness],
+      thickness_id: [element.id],
+      value: [0]
+    });
+    return group;
   }
 
   fieldsControl(){
@@ -109,13 +149,13 @@ export class MaterialesComponent implements OnInit {
     this.loading = true;
     this._materials.getMaterials(params).subscribe((r:any) => {
       this.materials = r.data.data;
-      console.log(this.materials);
       this.loading = false;
       this.pagination.collectionSize = r.data.total;
     })
   }
 
   save(){
+    console.log(this.form.value);
     if (this.material.id) {
       this._materials.update(this.form.value, this.material.id).subscribe((r:any) => {
         this.modal.hide();

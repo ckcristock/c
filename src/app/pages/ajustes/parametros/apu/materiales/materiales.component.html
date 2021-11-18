@@ -56,7 +56,7 @@
         </ngb-pagination>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
         <h5 class="modal-title">{{ title }}</h5>
         <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
@@ -81,20 +81,31 @@
                                 <option value="unidad">Unidad</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                             <label for="tipo">Tipo</label>
                             <select class="form-control form-control-sm" name="color" formControlName="type">
                                 <option value="Interno">Interno</option>
                                 <option value="Comercial">Comercial</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                             <label for="tipo">Valor KG</label>
                             <input type="number" class="form-control form-control-sm" formControlName="kg_value">
                         </div>
+                        <div class="col-12">
+                            <label for="" style="font-size: 18px;">Espesores</label>
+                        </div>
+                        <ng-container formArrayName="thicknesses">
+                            <div class="form-group col-1" *ngFor="let item of thicknessList.controls; let i = index">
+                                <ng-container [formGroupName]="i">
+                                    <label for=""> {{ item.controls.thickness.value }} </label>
+                                    <input type="number" class="form-control form-control-sm" formControlName="value">
+                                </ng-container>
+                            </div>
+                        </ng-container>
                         <ng-container>
-                            <perfect-scrollbar style="height: 200px;">
-                                <table class="table">
+                            <perfect-scrollbar style="height: 250px;">
+                                <table class="table table-sm">
                                     <thead>
                                         <tr>
                                             <th>
@@ -127,7 +138,7 @@
                                                         <input [type]="item['controls']['type']['value']" class="form-control form-control-sm" formControlName="value">
                                                     </td>
                                                     <td>
-                                                        <button class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteField(i)">
+                                                        <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteField(i)">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </button>
                                                     </td>
@@ -159,7 +170,7 @@
         </div>
     </div>
 </app-modal-basic>
-<app-modal-basic #modalVer [dialogClass]="'modal-md'">
+<app-modal-basic #modalVer [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
         <h5 class="modal-title">Ver Materia Material</h5>
         <button type="button" class="close basic-close" (click)="modalVer.hide(); closeModalVer()">
@@ -170,12 +181,12 @@
     </div>
     <div class="app-modal-body">
         <div class="row">
-            <div class="col-12">
-                <strong class="text-title"> {{ material.name | titlecase }} </strong>
+            <div class="col-6">
+                <strong class="text-title"> PROPIEDADES ({{ material.name | titlecase }}) </strong>
                 <perfect-scrollbar style="height: 300px;">
-                    <table class="table table-striped">
+                    <table class="table table-sm table-striped">
                         <thead>
-                            <tr>
+                            <tr class="bg-light stay">
                                 <th>Propiedad</th>
                                 <th>Tipo</th>
                                 <th>Valor</th>
@@ -185,6 +196,25 @@
                             <tr *ngFor="let item of material.material_field">
                                 <td> {{ item.property }} </td>
                                 <td> {{ item.type }} </td>
+                                <td> {{ item.value }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </perfect-scrollbar>
+            </div>
+            <div class="col-6">
+                <strong class="text-title"> ESPESORES ({{ material.name | titlecase }}) </strong>
+                <perfect-scrollbar style="height: 400px;">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr class="bg-light stay">
+                                <th>Espesor</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of material.thicknesses">
+                                <td> {{ item.thickness.thickness }} </td>
                                 <td> {{ item.value }} </td>
                             </tr>
                         </tbody>

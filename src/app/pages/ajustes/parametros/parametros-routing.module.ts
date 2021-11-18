@@ -20,6 +20,7 @@ import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-inte
 import { ProcesosExternosComponent } from "./apu/procesos-externos/procesos-externos.component";
 import { MedidasComponent } from './apu/medidas/medidas.component';
 import { CostosIndirectosComponent } from "./apu/costos-indirectos/costos-indirectos.component";
+import { EspesoresComponent } from './apu/espesores/espesores.component';
 
 
 const routes : Routes = [
@@ -48,7 +49,9 @@ const routes : Routes = [
 
     { path: 'apu/medidas', component: MedidasComponent },
 
-    { path: 'apu/costos-indirectos', component: CostosIndirectosComponent }
+    { path: 'apu/costos-indirectos', component: CostosIndirectosComponent },
+
+    { path: 'apu/espesores', component: EspesoresComponent }
 ]
 
 

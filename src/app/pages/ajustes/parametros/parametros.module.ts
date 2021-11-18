@@ -28,6 +28,7 @@ import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-inte
 import { ProcesosExternosComponent } from './apu/procesos-externos/procesos-externos.component';
 import { MedidasComponent } from './apu/medidas/medidas.component';
 import { CostosIndirectosComponent } from './apu/costos-indirectos/costos-indirectos.component';
+import { EspesoresComponent } from './apu/espesores/espesores.component';
 
 
 
@@ -52,7 +53,8 @@ import { CostosIndirectosComponent } from './apu/costos-indirectos/costos-indire
         ProcesosInternosComponent,
         ProcesosExternosComponent,
         MedidasComponent,
-        CostosIndirectosComponent
+        CostosIndirectosComponent,
+        EspesoresComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

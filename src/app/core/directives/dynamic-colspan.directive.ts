@@ -4,31 +4,25 @@ import { Directive, ElementRef, Input, Renderer2, OnInit, HostListener } from '@
   selector: '[DynamicColspan]'
 })
 export class DynamicColspanDirective {
-  valor = 1;
+  valor
   @Input() DynamicColspan: any
+  @Input() min = 1
+  @Input() max
 
-  @HostListener("click") onclik(){
+  @HostListener("click") onclik() {
+    this.valor = this.valor == this.min ? this.max : this.min;
     
-    switch (this.DynamicColspan ) {
-      case 'indirect_cost':
-        this.valor = this.valor == 1 ? 4 : 1; 
-        break;
-    
-      default:
-        break;
-    }
-    console.log(this.valor,'valor');
-    this.renderer.setAttribute(this.el.nativeElement,'colspan', this.valor.toString())
+    this.renderer.setAttribute(this.el.nativeElement, 'colspan', this.valor.toString())
   }
+
   constructor(public el: ElementRef, public renderer: Renderer2) {
+
   }
 
   ngOnInit() {
-    
-   
+    this.valor = this.min
+    this.renderer.setAttribute(this.el.nativeElement, 'colspan', this.valor.toString())
 
-    console.log(this.DynamicColspan,'oninit');/* 
-    this.renderer.setAttribute(this.el.nativeElement,'colspan','4') */
   }
 
 }

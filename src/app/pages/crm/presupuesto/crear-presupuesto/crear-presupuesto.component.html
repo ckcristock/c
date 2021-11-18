@@ -125,22 +125,32 @@
                   </tr>
                   <tr>
                     <th colspan="7">Costos Directos</th>
-                    <th [DynamicColspan]="'indirect_cost'" class="detachable"
+                    <th [DynamicColspan]="'indirect_cost'" min="1" [max]="(indirectCosts.length + 1)" class="detachable"
                       (click)="changeView(item,'indirect_cost')">
                       <ng-container *ngIf="item.controls.shows.value.indirect_cost ; else down">
                         <i class=" fas fa-chevron-right text-primary"></i>
                       </ng-container>
                       Cost. Indirectos
                     </th>
-                    <th colspan="1">ADM + IMP + UTI</th>
-                    <th colspan="4">Valor Venta</th>
+                    <th DynamicColspan min="1" [max]="(7)" class="detachable" (click)="changeView(item,'sum_others')">
+                      <ng-container *ngIf="item.controls.shows.value.sum_others ; else down">
+                        <i class=" fas fa-chevron-right text-primary"></i>
+                      </ng-container>
+                      ADM + IMP + UTI
+                    </th>
+                    <th DynamicColspan min="4" (click)="changeView(item,'total_sale')" [max]="6" class="detachable">
+                      <ng-container *ngIf="item.controls.shows.value.total_sale ; else down">
+                        <i class=" fas fa-chevron-right text-primary"></i>
+                      </ng-container>
+                      Valor Venta
+                    </th>
                     <th></th>
                     <th></th>
                   </tr>
                   <tr>
                     <th>#</th>
                     <th>Tipo</th>
-                    <th style="width: 280px;">Descripción</th>
+                    <th>Descripción</th>
                     <th>Unidad</th>
                     <th>Cantidad</th>
                     <th>C. Unitario</th>
@@ -153,8 +163,23 @@
                     </ng-container>
 
                     <th title="Subtotal Indirectos">SubT. Indirectos</th>
+
+                    <ng-container *ngIf="item.controls.shows.value.sum_others">
+
+                      <th>%</th>
+                      <th>AMD</th>
+                      <th>%</th>
+                      <th>Imprevistos</th>
+                      <th>%</th>
+                      <th>Utilidad</th>
+                    </ng-container>
+
                     <th>ADM+IMP+UTI</th>
                     <th>Otros Cargos</th>
+                    <ng-container *ngIf="item.controls.shows.value.total_sale">
+                      <th>Subtotal</th>
+                      <th>Retención</th>
+                    </ng-container>
                     <th>%</th>
                     <th>V/U Venta COP</th>
                     <th>V/U Venta USD</th>
@@ -169,70 +194,129 @@
                       <tr>
                         <td> {{i + 1 }}.{{y+1}}</td>
                         <td>
-                          <select formControlName="type" class="form-control form-control-sm">
+                          <select formControlName="type" style="width: 50px;" class="form-control form-control-sm">
                             <option [value]="type.value" *ngFor="let type of types">
                               {{ type.name }}
                             </option>
                           </select>
                         </td>
                         <td>
-                          <input type="text" formControlName="description" class="form-control form-control-sm" />
+                          <input type="text" style="width:280px" formControlName="description"
+                            class="form-control form-control-sm" />
                         </td>
                         <td>
-                          <input type="text" class="form-control form-control-sm" />
+                          <input type="text" style="width:70px" class="form-control form-control-sm" />
                         </td>
                         <td>
-                          <input type="number" formControlName="cuantity" class="form-control form-control-sm" />
+                          <input type="number" style="width:80px" formControlName="cuantity"
+                            class="form-control form-control-sm" />
                         </td>
                         <td>
-                          <input type="number" formControlName="unit_cost" class="form-control form-control-sm" />
+                          <input type="number" style="width:90px" formControlName="unit_cost"
+                            class="form-control form-control-sm" />
                         </td>
                         <td>
-                          <input type="number" readonly formControlName="total_cost"
-                            class="form-control form-control-sm form-control-plaintext" />
+                          <div class="values" style="width:90px">{{ subItem.controls.total_cost.value | currency:'':''
+                            }}</div>
                         </td>
                         <ng-container formArrayName="indirect_costs" *ngIf="item.controls.shows.value.indirect_cost">
                           <ng-container [formGroupName]="indirecIndex"
                             *ngFor="let indirect of  subItem.controls.indirect_costs.controls ; let indirecIndex = index">
-                            <td><input readonly style="width: 110px;" formControlName="value"
-                                class="form-control form-control-sm form-control-plaintext" type="number"></td>
+                            <td>
+                              <div class="values" style="width:90px">
+                                {{ indirect.controls.value.value | currency:'':''}}</div>
+                            </td>
                           </ng-container>
 
                         </ng-container>
+                        <td>
+                          <div class="values" style="width:90px">{{ subItem.controls.subtotal_indirect_cost.value |
+                            currency:'':'' }}
+                          </div>
+                        </td>
 
-                        <ng-container *ngIf="item.controls.shows.value.indirect_cost">
+                        <!-- Variables AMD IMPREVISTOS UTILIDAD -->
+                        <ng-container *ngIf="item.controls.shows.value.sum_others">
 
-                        <!--   <td><input readonly style="width: 110px;" 
-                              class="form-control form-control-sm form-control-plaintext" type="number"></td>
-                          <td><input readonly style="width: 110px;" 
-                              class="form-control form-control-sm form-control-plaintext" type="number"></td>
-                          <td><input readonly style="width: 110px;" 
-                              class="form-control form-control-sm form-control-plaintext" type="number"></td> -->
+                          <td><input formControlName="percentage_amd" type="number" style="width: 50px;"
+                              class="form-control form-control-sm"> </td>
+                          <td>
+                            <div class="values" style="width:90px">
+                              {{ subItem.controls.value_amd.value | currency:'':'' }}
+                            </div>
 
+                          </td>
+
+                          <td><input formControlName="percentage_unforeseen" type="number" style="width: 50px;"
+                              class="form-control form-control-sm">
+                          </td>
+                          <td>
+                            <div class="values" style="width:90px">
+                              {{ subItem.controls.value_unforeseen.value | currency:'':'' }}
+                            </div>
+                          </td>
+
+                          <td><input formControlName="percentage_utility" type="number" style="width: 50px;"
+                              class="form-control form-control-sm"> </td>
+                          <td>
+                            <div class="values" style="width:90px">
+                              {{ subItem.controls.value_utility.value | currency:'':'' }}
+                            </div>
+
+                          </td>
 
                         </ng-container>
 
                         <td>
-                          <input type="number" readonly formControlName="subtotal_indirect_cost"
-                            class="form-control form-control-sm form-control-plaintext" />
+                          <div class="values" style="width:90px">
+                            {{ subItem.controls.total_amd_imp_uti.value | currency:'':'' }}
+                          </div>
+                          <!--  <input type="number" style="width: 90px;" formControlName="total_amd_imp_uti" readonly
+                            class="form-control form-control-sm form-control-plaintext" /> -->
+                        </td>
+
+                        <!-- END Variables AMD IMPREVISTOS UTILIDAD -->
+
+
+
+                        <!-- Variables TOTAl Venta -->
+                        <td>
+                          <input type="number" formControlName="another_values" style="width: 90px;"
+                            class="form-control form-control-sm" />
+                        </td>
+                        <ng-container *ngIf="item.controls.shows.value.total_sale">
+
+                          <td>
+                            <div class="values" style="width: 90px;">
+                              {{ subItem.controls.subTotal.value | currency:'':'' }}
+                            </div>
+                          <td>
+                            <div class="values" style="width: 90px;">
+                              {{ subItem.controls.retention.value | currency:'':'' }}
+                            </div>
+
+                          </td>
+
+                        </ng-container>
+                        <td>
+                          <input type="number" style="width:66px;" formControlName="percentage_sale"
+                            class="form-control form-control-sm" />
                         </td>
                         <td>
-                          <input type="number" class="form-control form-control-sm" />
+                          <div class="values" style="width: 110px;">
+                            {{ subItem.controls.value_cop.value | currency:'':'' }}
+                          </div>
                         </td>
                         <td>
-                          <input type="number" class="form-control form-control-sm" />
+                          <div class="values" style="width: 110px;">
+                            {{ subItem.controls.value_usd.value | currency:'':'' }}
+                          </div>
+
                         </td>
+                        <!-- END Variables TOTAl Venta -->
+
                         <td>
-                          <input type="number" class="form-control form-control-sm" />
-                        </td>
-                        <td>
-                          <input type="number" class="form-control form-control-sm" />
-                        </td>
-                        <td>
-                          <input type="number" class="form-control form-control-sm" />
-                        </td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm" />
+                          <input type="text" style="width: 90px;" class="form-control form-control-sm" />
                         </td>
                         <td class="text-center"><i ngbTooltip="Eliminar Sub Item" (click)="deleteSubItem(item,y)"
                             class="text-danger far fa-trash-alt"></i></td>

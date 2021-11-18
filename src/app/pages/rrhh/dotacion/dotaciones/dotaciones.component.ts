@@ -27,6 +27,7 @@ export class DotacionesComponent implements OnInit {
   @ViewChild('confirmacionDevolucion') private confirmacionDevolucion;
   @ViewChild('modalEntrega') modalEntrega: any;
   @ViewChild('modalDevolver') modalDevolver: any;
+  @ViewChild('modalEntregaEpp') modalEntregaEpp: any;
 
   pagination = {
     pageSize: 15,
@@ -35,9 +36,22 @@ export class DotacionesComponent implements OnInit {
   }
   loading = false;
 
+  people: any[] = [];
+
+  filtros:any = {
+    cod: '',
+    type: '',
+    recibe: '',
+    entrega: '',
+    name: '',
+    description: '',
+    fechaD: ''
+  }
+
   public fecha: Date = new Date();
   public filtro_fecha: any = '';
   public filtro_cod: string = '';
+  public filtro_tip: string = '';
   public filtro_entrega: string = '';
   public filtro_recibe: string = '';
   public filtro_detalles: string = '';
@@ -45,6 +59,8 @@ export class DotacionesComponent implements OnInit {
   public Totales = 0
   public TotalesMes = 0
   public SumaMes = 0
+  public prefijoCodigo: string = 'ED00';
+  public flagDotacionApp: boolean = false;
 
   selectedMes: string;
   public Meses = consts.meses;
@@ -61,7 +77,7 @@ export class DotacionesComponent implements OnInit {
   };
   myDateRangePickerOptions: IMyDrpOptions = {
     width: '100px',
-    height: '21px',
+    height: '33px',
     selectBeginDateTxt: 'Inicio',
     selectEndDateTxt: 'Fin',
     selectionTxtFontSize: '10px',
@@ -76,7 +92,7 @@ export class DotacionesComponent implements OnInit {
     person_id: '',
     cost: 0,
     description: '',
-    type: 'Dotacion'
+    type: ''
   }
   public Devolucion: any = {
     Detalles: '',
@@ -123,7 +139,7 @@ export class DotacionesComponent implements OnInit {
     );
   ngOnInit() {
     this.selectedMes = moment().format('Y-MM');
-
+    this.getPeople()
     this.listarTotales(this.selectedMes)
     this.ListarDotaciones();
     this.listarGrupos();
@@ -134,14 +150,45 @@ export class DotacionesComponent implements OnInit {
     this.onChange1()
     this.getStokEpp()
   }
+
+  getPeople() {
+    this._person.getAll({}).subscribe((res: any) => {
+      this.people = res.data;
+      this.people.unshift({ text: 'Todos', value: 0 });
+    });
+  }
+
   dateRangeChanged(event) {
     if (event.formatted != "") {
-      this.filtro_fecha = event.formatted;
+      this.filtros.fechaD = event.formatted;
+      this.ListarDotaciones()
     } else {
-      this.filtro_fecha = '';
+      this.filtros.fechaD = '';
+      this.ListarDotaciones()
     }
-    this.filtros();
   }
+
+  ListarDotaciones(page = 1){
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtros
+    }
+    this.loading = true;
+    this._dotation.getDotations(params).subscribe((r:any) => {
+      this.Lista_Dotaciones = r.data.data;
+      this.pagination.collectionSize = r.data.total;
+      this.loading = false;
+    });
+  }
+
+
+  // this._dotation.getDotations(params).subscribe((r: any) => {
+  //   this.Lista_Dotaciones = r.data.data;
+  //   this.pagination.collectionSize = r.data.total;
+  //   this.loading = false
+  // })
+
+
   Lista_Empleados() {
     this._person.getPeopleIndex().subscribe((r: any) => {
       this.Empleados = r.data;
@@ -206,9 +253,10 @@ export class DotacionesComponent implements OnInit {
   // metodo para listar en el modal
   onChange1() {
 
+    this.loading = true;
     this._dotation.getStok().subscribe((r: any) => {
       this.Lista_Grupos_Inventario1 = r.data;
-
+      this.loading = false;
     });
   }
 
@@ -244,69 +292,73 @@ export class DotacionesComponent implements OnInit {
     });
 
   }
-  ListarDotaciones(page = 1) {
-    this.pagination.page = page;
-    let params = this.route.snapshot.queryParams;
-    let queryString = '';
-    if (Object.keys(params).length > 0) { // Si existe parametros o filtros
-      // actualizando la variables con los valores de los paremetros.
-      this.pagination.page = params.pag ? params.pag : 1;
-      this.filtro_fecha = params.fecha ? params.fecha : '';
-      this.filtro_cod = params.cod ? params.cod : '';
-      this.filtro_entrega = params.entrega ? params.entrega : '';
-      this.filtro_recibe = params.recibe ? params.recibe : '';
-      this.filtro_detalles = params.detalles ? params.detalles : '';
-      this.filtro_valor = params.valor ? params.valor : '';
+  // ListarDotaciones(page = 1) {
+  //   this.pagination.page = page;
+  //   let params = this.route.snapshot.queryParams;
+  //   let queryString = '';
+  //   if (Object.keys(params).length > 0) { // Si existe parametros o filtros
+  //     // actualizando la variables con los valores de los paremetros.
+  //     this.pagination.page = params.pag ? params.pag : 1;
+  //     this.filtro_fecha = params.fecha ? params.fecha : '';
+  //     this.filtro_cod = params.cod ? params.cod : '';
+  //     this.filtro_tip = params.tip ? params.tip : '';
+  //     this.filtro_entrega = params.entrega ? params.entrega : '';
+  //     this.filtro_recibe = params.recibe ? params.recibe : '';
+  //     this.filtro_detalles = params.detalles ? params.detalles : '';
+  //     this.filtro_valor = params.valor ? params.valor : '';
 
-      queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
-    }
+  //     queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
+  //   }
 
-    params = this.pagination
-    this.loading = true;
-    this._dotation.getDotations(params).subscribe((r: any) => {
-      this.Lista_Dotaciones = r.data.data;
-      this.pagination.collectionSize = r.data.total;
-      this.loading = false
-    })
-  }
-  filtros() {
-    let params: any = {};
-    this.pagination.page = 1;
-    params.pag = this.pagination.page;
+  //   params = this.pagination
+  //   this.loading = true;
+  //   this._dotation.getDotations(params).subscribe((r: any) => {
+  //     this.Lista_Dotaciones = r.data.data;
+  //     this.pagination.collectionSize = r.data.total;
+  //     this.loading = false
+  //   })
+  // }
+  // filtros() {
+  //   let params: any = {};
+  //   this.pagination.page = 1;
+  //   params.pag = this.pagination.page;
 
-    if (this.filtro_fecha != "" && this.filtro_fecha != null) {
-      params.fecha = this.filtro_fecha;
-    }
-    if (this.filtro_cod != "") {
-      params.cod = this.filtro_cod;
-    }
-    if (this.filtro_entrega != "") {
-      params.entrega = this.filtro_entrega;
-    }
-    if (this.filtro_recibe != "") {
-      params.recibe = this.filtro_recibe;
-    }
-    if (this.filtro_detalles != "") {
-      params.detalles = this.filtro_detalles;
-    }
-    if (this.filtro_valor != "") {
-      params.valor = this.filtro_valor;
-    }
+  //   if (this.filtro_fecha != "" && this.filtro_fecha != null) {
+  //     params.fecha = this.filtro_fecha;
+  //   }
+  //   if (this.filtro_cod != "") {
+  //     params.cod = this.filtro_cod;
+  //   }
+  //   if (this.filtro_tip != "") {
+  //     params.tip = this.filtro_tip;
+  //   }
+  //   if (this.filtro_entrega != "") {
+  //     params.entrega = this.filtro_entrega;
+  //   }
+  //   if (this.filtro_recibe != "") {
+  //     params.recibe = this.filtro_recibe;
+  //   }
+  //   if (this.filtro_detalles != "") {
+  //     params.detalles = this.filtro_detalles;
+  //   }
+  //   if (this.filtro_valor != "") {
+  //     params.valor = this.filtro_valor;
+  //   }
 
-    let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+  //   let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
-    this.location.replaceState('/dotacion', queryString);
+  //   this.location.replaceState('/dotacion', queryString);
 
-    this.Cargando = true;
-    /*  this.http.get(this.globales.ruta + 'php/dotaciones/lista_dotaciones.php?'+queryString).subscribe((data: any) => {
-       this.Cargando = false;
-       this.Lista_Dotaciones = data.Listado;
-       this.TotalItems = data.Totales.Cantidad;
-       this.Totales = data.Totales;
-       this.CantidadTotal = data.costs.Totalescosts;
+  //   this.Cargando = true;
+  //   /*  this.http.get(this.globales.ruta + 'php/dotaciones/lista_dotaciones.php?'+queryString).subscribe((data: any) => {
+  //      this.Cargando = false;
+  //      this.Lista_Dotaciones = data.Listado;
+  //      this.TotalItems = data.Totales.Cantidad;
+  //      this.Totales = data.Totales;
+  //      this.CantidadTotal = data.costs.Totalescosts;
 
-     }); */
-  }
+  //    }); */
+  // }
   showAlert4(evt: any) {
     this.confirmacionEntrega.show();
   }
@@ -347,16 +399,18 @@ export class DotacionesComponent implements OnInit {
     }); */
   }
   GuardarEntrega() {
-    // this.modalEntrega.hide();
 
-    let datos = new FormData();
+    this.Entrega.type = this.flagDotacionApp ? 'Dotacion' : 'EPP';
     let entrega = this.Entrega;
-    let prods: Array<any> = this.Lista_Grupos_Inventario1;
+
+    // let prods: Array<any> = this.Lista_Grupos_Inventario1;
+    let prods: Array<any> = this.flagDotacionApp ? this.Lista_Grupos_Inventario1 : this.Lista_Grupos_Inventario_Epp;
 
     prods = prods.reduce((acc, el) => {
       let prod: Array<any> = el.inventary.filter(r => (r.quantity && r.quantity != "0"))
       return (prod.length == 0 ? acc : [...acc, ...prod])
     }, [])
+
     this._dotation.saveDotation({ entrega, prods }).subscribe((r: any) => {
 
       if (r.code == 200) {
@@ -369,11 +423,15 @@ export class DotacionesComponent implements OnInit {
         })
         this.onChange1();
         this.modalEntrega.hide()
+        this.modalEntregaEpp.hide()
+        this.ListarDotaciones()
+
         this.Entrega = {
           person_id: '',
           cost: 0,
           description: '',
-          type: 'Dotacion'
+          // type: 'Dotacion'
+          type: ''
         }
       } else {
         Swal.fire({
@@ -405,6 +463,11 @@ export class DotacionesComponent implements OnInit {
       }
     });
 
+  }
+
+  configEntrega(value: string) {
+    // this.prefijoCodigo = value;
+    this.flagDotacionApp = value == 'Dotacion' ? true : false;
   }
 
   paginacion() {

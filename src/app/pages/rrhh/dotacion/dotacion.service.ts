@@ -68,6 +68,11 @@ export class DotacionService {
     return this.http.post(`${environment.base_url}/dotations-update/${id}`, data)
 
   }
+  approveDotation({ id, data }) {
+    return this.http.post(`${environment.base_url}/dotations-approve/${id}`, data)
+
+  }
+
   getDotationTotalByCategory( params ){
     return this.http.get(`${environment.base_url}/dotations-total-types`, { params })
   }

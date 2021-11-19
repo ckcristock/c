@@ -509,5 +509,41 @@ export class DotacionesComponent implements OnInit {
     });
 
   }
+  aprobarDotacion(id) {
+
+    Swal.fire({
+      title: '¿Seguro?',
+      text: 'Va a aprobar la dotación',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#34c38f',
+      cancelButtonColor: '#f46a6a',
+      confirmButtonText: 'Si, Hazlo!'
+    }).then(result => {
+      if (result.value) {
+        this._dotation.approveDotation({ id, data: { state: 'Aprobado' } }).subscribe((r: any) => {
+          if (r.code == 200) {
+            Swal.fire({
+              title: 'Opersación exitosa',
+              text: 'Felicidades, aprobó la dotación',
+              icon: 'success',
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+            })
+            this.ListarDotaciones()
+          } else {
+            Swal.fire({
+              title: 'Operación denegada',
+              text: r.err,
+              icon: 'error',
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+            })
+          }
+        })
+      }
+    });
+
+  }
 
 }

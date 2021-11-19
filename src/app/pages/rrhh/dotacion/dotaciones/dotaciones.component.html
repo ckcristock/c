@@ -236,6 +236,9 @@
                                                     <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
                                                         <i class="fa fa-times"></i> Anular
                                                     </a>
+                                                    <a *ngIf="item.delivery_state == 'Pendiente'" class="dropdown-item waves-light waves-effect caja-botones" (click)="aprobarDotacion(item.id)">
+                                                        <i class="far fa-thumbs-up"></i> Aprobar
+                                                    </a>
                                                 </div>
                                             </div>
                                         </td>

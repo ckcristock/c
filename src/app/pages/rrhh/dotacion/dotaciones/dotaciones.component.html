@@ -152,7 +152,8 @@
                                 <th style="width:135px;">Detalles</th>
                                 <th>Artículos</th>
                                 <th style="width:90px;">Valor</th>
-                                <th style="width:80px;">Estado</th>
+                                <th style="width:70px;">Estado</th>
+                                <th style="width:90px;">Estado Entrega</th>
                                 <th style="width:30px;"> - </th>
                             </tr>
                             <tr>
@@ -195,7 +196,18 @@
                                 </th>
 
                                 <th></th>
-                                <th>
+                                <th></th>
+                                <th class="tabla-filtro">
+
+                                    <select style="height: 36px;" name="Tipo" id="tipo" (change)="ListarDotaciones()" class="form-control form-control-sm" [(ngModel)]="filtros.delivery" required>
+                                      <option value="" disabled selected>Seleccionar</option>
+                                      <option value="">Todos</option>
+                                      <option value="Pendiente">Pendiente</option>
+                                      <option value="Anulado">Anulado</option>
+                                      <option value="Aprobado">Aprobado</option>
+                                      <option value="Entregado">Entregado</option>
+                                  </select>
+
                                 </th>
                             </tr>
                         </thead>
@@ -215,17 +227,18 @@
                                     </td>
                                     <td>$ {{item.total | number | puntos}}</td>
                                     <td><span>{{item.state}}</span>
-                                    </td>
-                                    <td>
-                                        <div ngbDropdown class="dropdown-primary">
-                                            <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
-                                            <div ngbDropdownMenu>
-                                                <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
-                                                    <i class="fa fa-times"></i> Anular
-                                                </a>
+                                        <td><span>{{item.delivery_state}}</span>
+                                        </td>
+                                        <td>
+                                            <div ngbDropdown class="dropdown-primary">
+                                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
+                                                <div ngbDropdownMenu>
+                                                    <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
+                                                        <i class="fa fa-times"></i> Anular
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
+                                        </td>
                                 </tr>
 
                             </ng-container>
@@ -381,7 +394,7 @@
                                     <input (onChange)="maxLengthCheck(prod)" type="number" name="producto{{i}}" class="form-control form-control-sm" min="0" (blur)="cambio(prod)" max="{{prod.Cantidad}}" [(ngModel)]="prod.quantity" placeholder="0" required>
                                 </div>
                                 <div [ngClass]="{'bg-danger text-white': prod.quantity > prod.stock}" class="col-md-8">
-                                    <span class="f-9"> <strong>({{prod.stock}})</strong> - {{ prod.name }}
+                                    <span class="f-9"> <strong>({{prod.stock}})</strong> - {{ prod.name }} - {{category.delivery_type}}
                   </span>
                                     <md-tooltip ngbTooltip="Error en la Cantidad" *ngIf="prod.quantity > prod.stock">
                                         Cantidad Incorrecta
@@ -454,7 +467,7 @@
                                     <input (onChange)="maxLengthCheck(prod)" type="number" name="producto{{i}}" class="form-control form-control-sm" min="0" (blur)="cambio(prod)" max="{{prod.Cantidad}}" [(ngModel)]="prod.quantity" placeholder="0" required>
                                 </div>
                                 <div [ngClass]="{'bg-danger text-white': prod.quantity > prod.stock}" class="col-md-8">
-                                    <span class="f-9"> <strong>({{prod.stock}})</strong> - {{ prod.name }}
+                                    <span class="f-9"> <strong>({{prod.stock}})</strong> - {{ prod.name }} - {{category.delivery_type}}
                 </span>
                                     <md-tooltip ngbTooltip="Error en la Cantidad" *ngIf="prod.quantity > prod.stock">
                                         Cantidad Incorrecta

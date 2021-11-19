@@ -45,7 +45,8 @@ export class DotacionesComponent implements OnInit {
     entrega: '',
     name: '',
     description: '',
-    fechaD: ''
+    fechaD: '',
+    delivery: ''
   }
 
   public fecha: Date = new Date();

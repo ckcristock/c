@@ -155,10 +155,11 @@ export class MaterialesComponent implements OnInit {
   }
 
   save(){
-    console.log(this.form.value);
     if (this.material.id) {
       this._materials.update(this.form.value, this.material.id).subscribe((r:any) => {
         this.modal.hide();
+        this.thicknessList.clear();
+        this.fieldList.clear();
         this.getMaterials();
         this.form.reset();
         this._swal.show({
@@ -171,6 +172,8 @@ export class MaterialesComponent implements OnInit {
     } else {
       this._materials.save(this.form.value).subscribe((r:any) =>{
         this.modal.hide();
+        this.thicknessList.clear();
+        this.fieldList.clear();
         this.getMaterials();
         this.form.reset();
         this._swal.show({

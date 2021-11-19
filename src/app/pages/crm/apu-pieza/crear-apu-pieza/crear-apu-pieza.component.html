@@ -158,7 +158,7 @@
                                                     </td>
                                                     <td>
                                                         <select name="" class="form-control form-control-sm" formControlName="material_id">
-                                                        <option *ngFor="let item of materials" [value]="item.value">
+                                                        <option *ngFor="let item of materials" [value]="item.id">
                                                             {{ item.text }}
                                                         </option>
                                                     </select>
@@ -269,7 +269,7 @@
                                                 </td>
                                                 <td>
                                                     <select name="" class="form-control form-control-sm" id="material_materiales" formControlName="material_id">
-                                                        <option *ngFor="let item of materials" [value]="item.value">
+                                                        <option *ngFor="let item of materials" [value]="item.id">
                                                             {{ item.text }}
                                                         </option>
                                                     </select>
@@ -392,15 +392,15 @@
                                                 </td>
                                                 <td>
                                                     <select name="" class="form-control form-control-sm" id="material_corte_agua" formControlName="material_id">
-                                                        <option *ngFor="let item of materials" [value]="item.value">
+                                                        <option *ngFor="let item of materials" [value]="item.id">
                                                             {{ item.text }}
                                                         </option>
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control form-control-sm" id="espesor_corte_agua" formControlName="thickness">
-                                                        <option *ngFor="let item of thickness" [value]="item.value">
-                                                            {{ item.percent }}
+                                                    <select class="form-control form-control-sm" id="espesor_corte_agua" formControlName="thickness_id">
+                                                        <option *ngFor="let item of thicknesses" [value]="item.id">
+                                                            {{ item.thickness }}
                                                         </option>
                                                     </select>
                                                 </td>
@@ -550,7 +550,7 @@
                                                 </td>
                                                 <td>
                                                     <select name="" class="form-control form-control-sm" id="material_corte_laser" formControlName="material_id">
-                                                        <option *ngFor="let item of materials" [value]="item.value">
+                                                        <option *ngFor="let item of materials" [value]="item.id">
                                                             {{ item.text }}
                                                         </option>
                                                     </select>

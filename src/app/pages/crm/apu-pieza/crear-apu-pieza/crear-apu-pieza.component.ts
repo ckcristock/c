@@ -33,6 +33,7 @@ export class CrearApuPiezaComponent implements OnInit {
   clients:any[] = [];
   units:any[] = [];
   indirectCosts:any[] = [];
+  thicknesses:any[] = [];
   files: File[] = [];
   fileString:any = '';
   file = '';
@@ -40,15 +41,6 @@ export class CrearApuPiezaComponent implements OnInit {
   otherCollapsed:boolean;
   indirectCollapsed:boolean;
   auiCollapsed:boolean;
-
-  thickness:any[] = [
-    { percent: 1, value: 1 },
-    { percent: 2, value: 2 },
-    { percent: 3, value: 3 },
-    { percent: 4, value: 4 },
-    { percent: 5, value: 5 },
-    { percent: 6, value: 6 },
-  ]
   
   constructor(
     private _apuPieza: ApuPiezaService,
@@ -70,6 +62,7 @@ export class CrearApuPiezaComponent implements OnInit {
     this.getCities();
     this.getIndirectCosts();
     this.collapses();
+    this.getThicknesses();
   }
   
   collapses(){
@@ -122,6 +115,12 @@ export class CrearApuPiezaComponent implements OnInit {
   getUnits(){
     this._units.getUnits().subscribe((r:any) => {
       this.units = r.data;
+    })
+  }
+
+  getThicknesses(){
+    this._apuPieza.getThicknesses().subscribe((r:any) => {
+      this.thicknesses = r.data;
     })
   }
   
@@ -192,7 +191,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Corte de Agua Inicia ****************/
   
   cutWaterControl(): FormGroup{
-    let group = help.cutWaterHelper.createCutWaterGroup(this.form, this.fb);
+    let group = help.cutWaterHelper.createCutWaterGroup(this.form, this.fb, this.materials);
     return group;
   }
 
@@ -368,7 +367,7 @@ export class CrearApuPiezaComponent implements OnInit {
       files: this.fileArr
     });
     console.log(this.form.value);
-    this._swal
+    /* this._swal
       .show({
         text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu pieza`,
         title: '¿Está seguro?',
@@ -389,7 +388,7 @@ export class CrearApuPiezaComponent implements OnInit {
             );
           }
         }
-      });
+      }); */
   }
 
   showSuccess() {

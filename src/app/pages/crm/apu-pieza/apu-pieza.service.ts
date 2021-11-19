@@ -53,6 +53,14 @@ export class ApuPiezaService {
     return this.http.put(`${environment.base_url}/apu-part-activate-Inactive`, data);
   }
 
+  getThicknesses(){
+    return this.http.get(`${environment.base_url}/thicknesses`);
+  }
+
+  getMaterialThickness(){
+    return this.http.get(`${environment.base_url}/material-thickness`);
+  }
+
   download(id: string) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
     return this.http.get(`${environment.base_url}/apu-pieza/pdf/${id}`, { headers, responseType: 'blob' as 'json' });

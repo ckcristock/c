@@ -29,6 +29,7 @@ import { ProcesosExternosComponent } from './apu/procesos-externos/procesos-exte
 import { MedidasComponent } from './apu/medidas/medidas.component';
 import { CostosIndirectosComponent } from './apu/costos-indirectos/costos-indirectos.component';
 import { EspesoresComponent } from './apu/espesores/espesores.component';
+import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-laser-material.component';
 
 
 
@@ -54,7 +55,8 @@ import { EspesoresComponent } from './apu/espesores/espesores.component';
         ProcesosExternosComponent,
         MedidasComponent,
         CostosIndirectosComponent,
-        EspesoresComponent
+        EspesoresComponent,
+        CorteLaserMaterialComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

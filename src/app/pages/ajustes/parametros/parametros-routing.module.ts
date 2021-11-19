@@ -21,6 +21,7 @@ import { ProcesosExternosComponent } from "./apu/procesos-externos/procesos-exte
 import { MedidasComponent } from './apu/medidas/medidas.component';
 import { CostosIndirectosComponent } from "./apu/costos-indirectos/costos-indirectos.component";
 import { EspesoresComponent } from './apu/espesores/espesores.component';
+import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-laser-material.component';
 
 
 const routes : Routes = [
@@ -51,7 +52,8 @@ const routes : Routes = [
 
     { path: 'apu/costos-indirectos', component: CostosIndirectosComponent },
 
-    { path: 'apu/espesores', component: EspesoresComponent }
+    { path: 'apu/espesores', component: EspesoresComponent },
+    { path: 'apu/corte-laser-material', component: CorteLaserMaterialComponent }
 ]
 
 

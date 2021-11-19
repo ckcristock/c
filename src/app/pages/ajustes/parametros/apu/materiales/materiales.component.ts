@@ -50,6 +50,7 @@ export class MaterialesComponent implements OnInit {
 
   createForm(){
     this.form = this.fb.group({
+      id: [this.material.id],
       name: ['', this._validators.required],
       unit: ['', this._validators.required],
       type: ['', this._validators.required],
@@ -88,7 +89,7 @@ export class MaterialesComponent implements OnInit {
       this.fieldList.push(group);
     });
     this.thicknessList.clear();
-    this.material.thicknesses.forEach(r => {
+    this.material.material_thickness.forEach(r => {
       let group = this.fb.group({
         thickness: [r.thickness.thickness],
         thickness_id: [r.thickness_id],
@@ -155,13 +156,13 @@ export class MaterialesComponent implements OnInit {
   }
 
   save(){
-    if (this.material.id) {
+    if (this.form.get('id').value) {
       this._materials.update(this.form.value, this.material.id).subscribe((r:any) => {
+        this.form.reset();
         this.modal.hide();
         this.thicknessList.clear();
         this.fieldList.clear();
         this.getMaterials();
-        this.form.reset();
         this._swal.show({
           icon: 'success',
           title: 'Material actualizado con éxito',
@@ -171,11 +172,11 @@ export class MaterialesComponent implements OnInit {
       })
     } else {
       this._materials.save(this.form.value).subscribe((r:any) =>{
+        this.form.reset();
         this.modal.hide();
         this.thicknessList.clear();
         this.fieldList.clear();
         this.getMaterials();
-        this.form.reset();
         this._swal.show({
           icon: 'success',
           title: 'Material creado con éxito',

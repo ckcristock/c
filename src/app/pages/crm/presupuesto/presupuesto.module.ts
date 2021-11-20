@@ -10,10 +10,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { PresupuestosComponent } from './presupuestos.component';
 import { CrearPresupuestoComponent } from './crear-presupuesto/crear-presupuesto.component';
 import { DirectivesModule } from '../../../core/directives/directives.module';
+import { SubItemsComponent } from './crear-presupuesto/components/sub-items/sub-items.component';
+import { ItemsComponent } from './crear-presupuesto/components/items/items.component';
 
 
 @NgModule({
-    declarations: [PresupuestosComponent,  CrearPresupuestoComponent],
+    declarations: [PresupuestosComponent,  CrearPresupuestoComponent, SubItemsComponent, ItemsComponent],
     imports: [
         PresupuestoRoutingModule,
         CommonModule,

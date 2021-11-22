@@ -8,7 +8,7 @@ import {
 export const cutWaterHelper = {
   consts: {},
 
-  createFillInCutWater(form: FormGroup, fb: FormBuilder, data) {
+  createFillInCutWater(form: FormGroup, fb: FormBuilder, data, materials:Array<any>) {
     if (data.cutwater) {
       let cut_water = form.get('cut_water') as FormArray;
       data.cutwater.forEach((r) => {
@@ -26,7 +26,7 @@ export const cutWaterHelper = {
           minute_value: [r.minute_value],
           value: [r.value]
         });
-        this.subscribesCutWater(group, cut_water, form);
+        this.subscribesCutWater(group, cut_water, form, materials);
         cut_water.push(group);
       });
     }

@@ -71,11 +71,11 @@ export const materiaHelper = {
   operation(group: FormGroup){
     group.get('value').valueChanges.subscribe(r => {
       let materia:any = group.parent.parent;
-      let abuelo:any = group.parent.parent.controls;
-      let padre:any = group.parent;
-      let weight_formula = abuelo.weight_formula.value;
+      let materiaControl:any = group.parent.parent.controls;
+      let measureGroup:any = group.parent;
+      let weight_formula = materiaControl.weight_formula.value;
       let formula = weight_formula;
-      padre.controls.forEach(element => {
+      measureGroup.controls.forEach(element => {
         let measure = element.controls.measure.value;
         let value = element.controls.value.value;
         console.log(formula);
@@ -128,7 +128,7 @@ export const materiaHelper = {
       }); 
     });
     group.get('material_id').valueChanges.subscribe(value => {
-      let data = materials.find(m => m.value == value);
+      let data = materials.find(m => m.id == value);
       group.patchValue({
         value_kg: data.kg_value
       })

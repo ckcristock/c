@@ -1,4 +1,5 @@
 import { functionsApu} from './helper';
+import { FormControl } from '@angular/forms';
 import {
   FormGroup,
   FormBuilder,
@@ -7,15 +8,15 @@ import {
 } from '@angular/forms';
 
 export const cutLaserHelper = {
-  consts: {},
-
+  
   createFillInCutLaser(form: FormGroup, fb: FormBuilder, data) {
     if (data.cutlaser) {
       let cut_laser = form.get('cut_laser') as FormArray;
       data.cutlaser.forEach((r) => {
         let group = fb.group({
-          material_id: [r.material_id],
+          cut_laser_material_id: [r.cut_laser_material_id],
           thickness: [r.thickness],
+          thicknessSelected: [r.thicknessSelected],
           sheets_amount: [r.sheets_amount],
           long: [r.long],
           width: [r.width],
@@ -33,10 +34,12 @@ export const cutLaserHelper = {
     }
   },
 
-  createCutLaserGroup(form: FormGroup, fb: FormBuilder) {
+  createCutLaserGroup(form: FormGroup, fb: FormBuilder, materials:Array<any>) {
     let cut_laser = fb.group({
-      material_id: [''],
+      cut_laser_material_id: [''],
+      thicknesses: [''],
       thickness: [''],
+      thicknessSelected: [''],
       sheets_amount: [0],
       long: [0],
       width: [0],
@@ -46,14 +49,60 @@ export const cutLaserHelper = {
       total_hole_perimeter: [0],
       time: [0],
       minute_value: [0],
-      value: [0]
+      value: [0],
+      formula: [''],
+      unit_value: [0],
+      actual_speed: [0],
+      seconds_percing: [0]
     });
     let list = form.get('cut_laser') as FormArray;
-    this.subscribesCutLaser(cut_laser, list, form);
+    this.subscribesCutLaser(cut_laser, list, form, materials);
     return cut_laser;
   },
 
-  subscribesCutLaser( cut_laser:FormGroup, list: FormArray , form: FormGroup){
+  operation(cut_laser:FormGroup, list: FormArray, materials){
+    let formu = cut_laser.controls.formula.value;
+      let formula = formu;
+      let material_id = cut_laser.get('cut_laser_material_id').value;
+      let thickness_id = cut_laser.get('thicknessSelected').value;
+      let material = materials.find(m => m.id == material_id);
+      let data = material.cut_laser_material_value.find(c => c.id == thickness_id);
+      cut_laser.patchValue({
+        thickness: data.thickness
+      })
+      list.controls.forEach((element:FormControl) => {
+        let el = element.value;
+        for (const key in el) {
+          if (formula.includes(key)) {
+            formula = formula.replace( '{' + key + '}', el[key]);
+          }
+        }
+      });  
+      let result = eval(formula);
+      cut_laser.patchValue({
+        time: (result / 60)
+      });
+  },
+
+  subscribesCutLaser(cut_laser:FormGroup, list: FormArray , form: FormGroup, materials:Array<any>){
+    cut_laser.get('cut_laser_material_id').valueChanges.subscribe(value => {
+      let data = materials.find(m => m.id == value);
+      cut_laser.patchValue({
+        formula: data.formula,
+        thicknesses: data.cut_laser_material_value
+      });
+    });
+    cut_laser.get('thicknessSelected').valueChanges.subscribe(r => {
+      let materialValues:any = cut_laser.get('thicknesses');
+      materialValues.value.forEach(value => { 
+        cut_laser.patchValue({
+          unit_value: value.unit_value,
+          actual_speed: value.actual_speed,
+          seconds_percing: value.seconds_percing
+        })
+      });
+      this.operation(cut_laser, list, materials);
+    });
     cut_laser.get('sheets_amount').valueChanges.subscribe(value => {
       let long = cut_laser.get('long').value;
       let width = cut_laser.get('width').value;
@@ -84,6 +133,12 @@ export const cutLaserHelper = {
         })
       }
     });
+    cut_laser.get('total_length').valueChanges.subscribe(value => {
+      this.operation(cut_laser, list, materials);
+    })
+    cut_laser.get('total_hole_perimeter').valueChanges.subscribe(value => {
+      this.operation(cut_laser, list, materials);
+    })
     cut_laser.get('width').valueChanges.subscribe(value => {
       let sheets_amount = cut_laser.get('sheets_amount').value;
       let long = cut_laser.get('long').value;

@@ -38,6 +38,7 @@ export class CrearApuPiezaComponent implements OnInit {
   fileString:any = '';
   file = '';
   fileArr:any[] = [];
+  cutLaserMaterials:any[] = [];
   otherCollapsed:boolean;
   indirectCollapsed:boolean;
   auiCollapsed:boolean;
@@ -63,6 +64,7 @@ export class CrearApuPiezaComponent implements OnInit {
     this.getIndirectCosts();
     this.collapses();
     this.getThicknesses();
+    this.getCutLaserMaterial();
   }
   
   collapses(){
@@ -90,6 +92,12 @@ export class CrearApuPiezaComponent implements OnInit {
   getCities(){
     this._apuPieza.getCities().subscribe((r:any) => {
       this.cities = r.data;
+    })
+  }
+
+  getCutLaserMaterial(){
+    this._apuPieza.cutLaserMaterial().subscribe((r:any) => {
+      this.cutLaserMaterials = r.data;
     })
   }
   
@@ -215,7 +223,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Corte laser Termina ****************/
 
   cutLaserControl(): FormGroup{
-    let group = help.cutLaserHelper.createCutLaserGroup(this.form, this.fb);
+    let group = help.cutLaserHelper.createCutLaserGroup(this.form, this.fb, this.cutLaserMaterials);
     return group;
   }
 

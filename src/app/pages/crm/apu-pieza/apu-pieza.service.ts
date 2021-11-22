@@ -49,6 +49,10 @@ export class ApuPiezaService {
     return this.http.get(`${environment.base_url}/apu-parts`, {params});
   }
 
+  cutLaserMaterial(){
+    return this.http.get(`${environment.base_url}/cut-laser-material`);
+  }
+
   activateOrInactivate( data ){
     return this.http.put(`${environment.base_url}/apu-part-activate-Inactive`, data);
   }

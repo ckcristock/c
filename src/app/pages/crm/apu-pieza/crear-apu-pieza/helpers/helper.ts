@@ -56,7 +56,7 @@ export const functionsApu = {
     });
     materiaHelper.createFillInMateria(form, fb, data, geometriesList, materials);
     materialsHelper.createFillInMaterials(form, fb, data);
-    cutWaterHelper.createFillInCutWater(form, fb, data);
+    cutWaterHelper.createFillInCutWater(form, fb, data, materials);
     cutLaserHelper.createFillInCutLaser(form, fb, data);
     machineToolHelper.createFillInMachineTools(form, fb, data);
     internalProccessesHelper.createFillInInternal(form, fb, data);

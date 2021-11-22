@@ -44,7 +44,7 @@
         </ngb-pagination>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
+<app-modal-basic #modal [dialogClass]="'modal-xl'">
     <div class="app-modal-header">
         <h5 class="modal-title">{{ title }}</h5>
         <button type="button" class="close basic-close" (click)="modal.hide(); form.reset(); materialsList.clear()">
@@ -58,62 +58,80 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="">Nombre</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="name">
-                        </div>
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <label>Espesor</label>
-                                    </th>
-                                    <th>
-                                        <label>Valor Unitario</label>
-                                    </th>
-                                    <th>
-                                        <label>Velocidad Real</label>
-                                    </th>
-                                    <th>
-                                        <label>Seg. Percing</label>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody formArrayName="materials">
-                                <ng-container *ngIf="materialsList.controls.length; else sinDatos">
-                                    <ng-container *ngFor="let item of materialsList.controls; let i = index">
-                                        <tr [formGroupName]="i">
-                                            <td>
-                                                <input type="number" class="form-control form-control-sm" formControlName="thickness">
-                                            </td>
-                                            <td>
-                                                <input type="number" class="form-control form-control-sm" formControlName="unit_value">
-                                            </td>
-                                            <td>
-                                                <input type="number" class="form-control form-control-sm" formControlName="actual_speed">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control form-control-sm" formControlName="seconds_percing">
-                                            </td>
-                                            <td>
-                                                <button style="float: right;" class="btn btn-outline-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteMaterial(i)">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                        <div class="col-5">
+                            <div class="form-group col-md-12">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="name">
+                            </div>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label>Espesor</label>
+                                        </th>
+                                        <th>
+                                            <label>Valor Unitario</label>
+                                        </th>
+                                        <th>
+                                            <label>Velocidad Real</label>
+                                        </th>
+                                        <th>
+                                            <label>Seg. Percing</label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody formArrayName="materials">
+                                    <ng-container *ngIf="materialsList.controls.length; else sinDatos">
+                                        <ng-container *ngFor="let item of materialsList.controls; let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" formControlName="thickness">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" formControlName="unit_value">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" formControlName="actual_speed">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" formControlName="seconds_percing">
+                                                </td>
+                                                <td>
+                                                    <button style="float: right;" class="btn btn-outline-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteMaterial(i)">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
-                                </ng-container>
-                                <tr>
-                                    <td colspan="5">
-                                        <div class="btn-group" style="float: right">
-                                            <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newMaterial()">
-                                                    <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="btn-group" style="float: right">
+                                                <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newMaterial()">
+                                                        <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-7">
+                            <div class="text-center">
+                                <h6>Variables</h6>
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-3" *ngFor="let item of variables">
+                                    <label for="">{{ item.label }}</label>
+                                    <p> {{ '{' + item.var + '}' }} </p>
+                                </div>
+                            </div>
+                            <div class="form-group col-12">
+                                <label for="">Formula</label>
+                                <textarea class="form-control form-control-sm" formControlName="formula" name="formula" cols="30" rows="3"></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

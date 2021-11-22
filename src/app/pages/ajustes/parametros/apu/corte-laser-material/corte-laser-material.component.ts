@@ -22,6 +22,22 @@ export class CorteLaserMaterialComponent implements OnInit {
     pageSize: 10,
     collectionSize: 0
   }
+  variables = [
+    { label: 'Espesor', var: 'thickness' },
+    { label: 'Cantidad', var: 'sheets_amount' },
+    { label: 'Largo', var: 'long' },
+    { label: 'Ancho', var: 'width' },
+    { label: 'Longitud total', var: 'total_length' },
+    { label: 'Cant. Agujeros', var: 'amount_holes' },
+    { label: 'Diametro', var: 'diameter' },
+    { label: 'Perim. Total Agujero', var: 'total_hole_perimeter' },
+    { label: 'Tiempo', var: 'time' },
+    { label: 'Valor Unitario', var: 'unit_value' },
+    { label: 'Velocidad Real', var: 'actual_speed' },
+    { label: 'Seg. Percing', var: 'seconds_percing' }
+  ]
+
+
   constructor( 
     private fb: FormBuilder,
     private _validators: ValidatorsService,
@@ -49,6 +65,7 @@ export class CorteLaserMaterialComponent implements OnInit {
     this.form = this.fb.group({
       id: [this.material.id],
       name: ['', this._validators.required],
+      formula: ['', this._validators.required],
       materials: this.fb.array([]),
     });
     }
@@ -58,7 +75,8 @@ export class CorteLaserMaterialComponent implements OnInit {
       this.title = 'Editar Material';
       this.form.patchValue({
         id: this.material.id,
-        name: this.material.name
+        name: this.material.name,
+        formula: this.material.formula
       });
       this.materialsList.clear();
       this.material.cut_laser_material_value.forEach(r => {

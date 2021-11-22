@@ -61,22 +61,57 @@
                                     <a ngbNavLink>Dotación</a>
                                     <ng-template ngbNavContent>
                                         <div class="col-md-12 text-center" *ngIf="!loading && Lista_Grupos_Inventario1.length > 0; else notData">
-                                            <table class="table table-hover table-bordered">
+                                            <table class="table table-sm table-hover table-bordered">
                                                 <ng-container *ngFor="let lgi of Lista_Grupos_Inventario1">
-                                                    <tr>
-                                                        <td class="text-left">{{lgi.name}}</td>
-                                                        <td style="width:100px;">{{lgi.stock}}</td>
-                                                        <td style="width:100px;">
+                                                    <tr *ngFor="let l of lgi.inventary">
+
+                                                        <!-- <thead>
+                                                        <tr>
+                                                            <th>Cod.</th>
+                                                            <th>Nombre</th>
+                                                            <th>Talla</th>
+                                                            <th>Total</th>
+                                                            <th>Calidad</th>
+                                                            <th>Tipo</th>
+                                                            <th>Costo</th>
+                                                        </tr>
+
+                                                    </thead> -->
+
+                                                        <td class="text-left">{{l.code}}</td>
+                                                        <td class="text-left">{{l.name}}</td>
+                                                        <td style="width:100px;">{{l.size}}</td>
+                                                        <td style="width:100px;">{{l.stock}}</td>
+                                                        <td style="width:100px;">{{l.status}}</td>
+                                                        <td style="width:80px;">{{l.type}}</td>
+                                                        <td style="width:40px;">{{l.cost}}</td>
+                                                        <!-- <td style="width:100px;">
                                                             <button class="btn btn-primary btn-sm" (click)="(lgi.show = !lgi.show)">
                                                               <i class="fas fa-sort-down"></i>
                                                             </button>
+                                                        </td> -->
+                                                        <td style="width:100px;">
+                                                            <div ngbDropdown class="dropdown-primary">
+                                                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">
+                                                              <i class="fas fa-sort-down"></i>
+
+                                                                </button>
+                                                                <div ngbDropdownMenu>
+                                                                    <a class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
+                                                                        <i class="fas fa-inbox-in"></i> Entregas
+                                                                    </a>
+                                                                    <a class="dropdown-item waves-light waves-effect caja-botones" (click)="listarEntradas(l)">
+                                                                        <i class="fal fa-sign-out"></i> Salidas
+                                                                    </a>
+                                                                </div>
+                                                            </div>
                                                         </td>
                                                     </tr>
-                                                    <tr>
+                                                    <!-- <tr>
                                                         <td colspan="12">
                                                             <app-table-inventary *ngIf="lgi.show" [totalCategory]="lgi.inventary"></app-table-inventary>
                                                         </td>
-                                                    </tr>
+                                                    </tr> -->
                                                 </ng-container>
                                             </table>
                                         </div>
@@ -90,6 +125,7 @@
                                                 <ng-container *ngFor="let lgi of Lista_Grupos_Inventario_Epp">
                                                     <tr>
                                                         <td style="width:435px;" class="text-left">{{lgi.name}}</td>
+                                                        <td style="width:100px;">{{lgi.size}}</td>
                                                         <td style="width:100px;">{{lgi.stock}}</td>
                                                         <td style="width:100px;">
                                                             <button class="btn btn-primary btn-sm" (click)="(lgi.show = !lgi.show)">
@@ -428,6 +464,8 @@
 </app-modal-basic>
 <!-- fin modal entrega dotacion -->
 
+
+
 <!-- modal entrega epp -->
 <app-modal-basic #modalEntregaEpp [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
@@ -501,6 +539,135 @@
 </app-modal-basic>
 <!-- fin modal entrega epp -->
 
+
+
+<!-- modal salidas-->
+<app-modal-basic #modalSalidas [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">Salidas</h4>
+        <button type="button" class="close basic-close" (click)="modalSalidas.hide();">
+  <span aria-hidden="true">&times;</span>
+   </button>
+    </div>
+    <div class="app-modal-body">
+
+        <div class="card-body">
+            <table class="table table-striped" style="font-size: 10px;">
+                <thead>
+                    <tr>
+                        <th style="width:80px;">Código</th>
+                        <th style="width:100px;">Tipo</th>
+                        <th style="width:120px;">Fecha</th>
+                        <th style="width:135px;">Funcionario Entrega</th>
+                        <th style="width:135px;">Funcionario Recibe</th>
+                        <th style="width:135px;">Detalles</th>
+                        <th>Artículos</th>
+                        <th style="width:90px;">Valor</th>
+                        <th style="width:70px;">Estado</th>
+                        <th style="width:90px;">Estado Entrega</th>
+                        <th style="width:30px;"> - </th>
+                    </tr>
+                    <!-- <tr>
+                  <th class="tabla-filtro">
+                      <input style="height: 36px;" type="text" [(ngModel)]="filtros.cod" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Cod.">
+                  </th>
+                  <th class="tabla-filtro">
+
+                      <select style="height: 36px;" name="Tipo" id="tipo" (change)="ListarDotaciones()" class="form-control form-control-sm" [(ngModel)]="filtros.type" required>
+                          <option value="" disabled selected>Seleccionar</option>
+                          <option value="">Todos</option>
+                          <option value="Dotacion">Dotacion</option>
+                          <option value="EPP">EPP</option>
+                      </select>
+
+                  </th>
+
+                  <th class="tabla-filtro" style="max-width: 100px; width: 200px !important">
+                      <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
+                  </th>
+
+                  <th>
+                      <ng-select [items]="people" [(ngModel)]="filtros.entrega" (change)="ListarDotaciones()" bindLabel="text" bindValue="value">
+                      </ng-select>
+                  </th>
+
+                  <th>
+                      <ng-select [items]="people" [(ngModel)]="filtros.recibe" (change)="ListarDotaciones()" bindLabel="text" bindValue="value">
+                      </ng-select>
+                  </th>
+
+                  <th>
+                      <input style="height: 36px;" type="text" [(ngModel)]="filtros.description" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Detalles">
+                  </th>
+
+                  <th>
+
+                      <input style="height: 36px;" type="text" [(ngModel)]="filtros.name" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Art.">
+
+                  </th>
+
+                  <th></th>
+                  <th></th>
+                  <th class="tabla-filtro">
+
+                      <select style="height: 36px;" name="Tipo" id="tipo" (change)="ListarDotaciones()" class="form-control form-control-sm" [(ngModel)]="filtros.delivery" required>
+                        <option value="" disabled selected>Seleccionar</option>
+                        <option value="">Todos</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Anulado">Anulado</option>
+                        <option value="Aprobado">Aprobado</option>
+                        <option value="Entregado">Entregado</option>
+                    </select>
+
+                  </th>
+              </tr> -->
+                </thead>
+                <tbody>
+                    <!-- <ng-container *ngIf="!loading && Lista_Dotaciones.length > 0; else notDataTable">
+                  <tr *ngFor="let item of Lista_Dotaciones" [ngClass]="{'bg-danger text-white': item.state == 'Anulada'}">
+                      <td>{{item.delivery_code}}</td>
+                      <td>{{item.type}}</td>
+                      <td>{{item.created_at | date:'dd/MM/yyyy'}}</td>
+                      <td>{{item.entrega}}</td>
+                      <td>{{item.recibe}}</td>
+                      <td>{{item.description}}</td>
+                      <td>
+                          <div class="articulos-table">
+                              {{item.product_name}}
+                          </div>
+                      </td>
+                      <td>$ {{item.total | number | puntos}}</td>
+                      <td><span>{{item.state}}</span>
+                          <td><span>{{item.delivery_state}}</span>
+                          </td>
+                          <td>
+                              <div ngbDropdown class="dropdown-primary">
+                                  <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
+                                  <div ngbDropdownMenu>
+                                      <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
+                                          <i class="fa fa-times"></i> Anular
+                                      </a>
+                                      <a *ngIf="item.delivery_state == 'Pendiente'" class="dropdown-item waves-light waves-effect caja-botones" (click)="aprobarDotacion(item.id)">
+                                          <i class="far fa-thumbs-up"></i> Aprobar
+                                      </a>
+                                  </div>
+                              </div>
+                          </td>
+                  </tr>
+
+              </ng-container> -->
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</app-modal-basic>
+<!-- fin modal salidas -->
+
+
+
 <ng-template #rt3 let-r="result" let-t="term">
     <span class="f-9">{{ r.Nombres }} {{ r.Apellidos }}</span>
 </ng-template>
@@ -533,3 +700,5 @@
         </td>
     </tr>
 </ng-template>
+
+<app-dotacion-entradas [open]="openModal"></app-dotacion-entradas>

@@ -1,0 +1,46 @@
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Salidas</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+            <span aria-hidden="true">
+              <i class="fas fa-times"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-12">
+                <!-- <strong class="text-title"> {{ material.name | titlecase }} </strong> -->
+                <strong class="text-title">  </strong>
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Orden</th>
+                            <th>Proveedor</th>
+                            <th>Fun.Ingresa</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+
+                    <!-- <tbody>
+                        <tr *ngFor="let item of material.cut_laser_material_value">
+                            <td> {{ item.thickness }} </td>
+                            <td> {{ item.unit_value }} </td>
+                            <td> {{ item.actual_speed }} </td>
+                            <td> {{ item.seconds_percing }} </td>
+                        </tr>
+                    </tbody> -->
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>

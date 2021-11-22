@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation, TemplateRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import 'rxjs/add/operator/takeWhile';
 import { HttpClient } from '@angular/common/http';
 
@@ -23,11 +23,14 @@ import { Label } from 'ng2-charts';
 })
 export class DotacionesComponent implements OnInit {
 
+  openModal = new EventEmitter<any>()
+
   @ViewChild('confirmacionEntrega') private confirmacionEntrega;
   @ViewChild('confirmacionDevolucion') private confirmacionDevolucion;
   @ViewChild('modalEntrega') modalEntrega: any;
   @ViewChild('modalDevolver') modalDevolver: any;
   @ViewChild('modalEntregaEpp') modalEntregaEpp: any;
+  @ViewChild('modalSalidas') modalSalidas: any;
 
   pagination = {
     pageSize: 15,
@@ -159,6 +162,12 @@ export class DotacionesComponent implements OnInit {
     });
   }
 
+  listarEntradas(l){
+    console.log(l);
+
+    this.openModal.next({data:l})
+  }
+
   dateRangeChanged(event) {
     if (event.formatted != "") {
       this.filtros.fechaD = event.formatted;
@@ -262,10 +271,8 @@ export class DotacionesComponent implements OnInit {
   }
 
   getStokEpp() {
-
     this._dotation.getStokEpp().subscribe((r: any) => {
       this.Lista_Grupos_Inventario_Epp = r.data;
-
     });
   }
 

@@ -23,6 +23,7 @@ import { AsignarHorasExtrasComponent } from './asignar-horas-extras/asignar-hora
 import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
 import { TableInventaryComponent } from './dotacion/dotaciones/table-inventary/table-inventary.component';
 import { TableInventaryEppComponent } from './dotacion/dotaciones/table-inventary-epp/table-inventary-epp.component';
+import { DotacionEntradasComponent } from './dotacion/dotaciones/dotacion-entradas/dotacion-entradas.component';
 
 const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'dotacion/dotaciones', component: DotacionesComponent },
   { path: 'dotacion/dotaciones/table-inventary', component: TableInventaryComponent },
   { path: 'dotacion/dotaciones/table-inventary-epp', component: TableInventaryEppComponent },
+  { path: 'dotacion/dotaciones/app-dotacion-entradas', component: DotacionEntradasComponent },
   { path: 'dotacion/inventario', component: InventarioDotacionComponent },
   { path: 'turnos/asignacion', component: AsignacionTurnosComponent },
   { path: 'turnos/horas-extras', component: HorasExtrasComponent },

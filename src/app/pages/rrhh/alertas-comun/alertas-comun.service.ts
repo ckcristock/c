@@ -9,7 +9,7 @@ export class AlertasComunService {
   constructor(private http: HttpClient) {}
 
   getAlerts(params = {}) {
-    return this.http.get(`${environment.base_url}/alerts`, {params});
+    return this.http.get(`${environment.base_url}/paginateAlert`, {params});
   }
 
   sendAlert(data: any) {

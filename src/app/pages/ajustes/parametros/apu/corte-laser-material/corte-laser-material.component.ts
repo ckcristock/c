@@ -24,7 +24,7 @@ export class CorteLaserMaterialComponent implements OnInit {
   }
   variables = [
     { label: 'Espesor', var: 'thickness' },
-    { label: 'Cantidad', var: 'sheets_amount' },
+    { label: 'Cantidad Laminas', var: 'sheets_amount' },
     { label: 'Largo', var: 'long' },
     { label: 'Ancho', var: 'width' },
     { label: 'Longitud total', var: 'total_length' },

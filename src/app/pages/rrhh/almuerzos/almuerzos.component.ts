@@ -139,6 +139,7 @@ export class AlmuerzosComponent implements OnInit {
     .subscribe( (r) =>{
       this.modal.hide();
       this.form.reset();
+      this.personList.clear();
       this.getLunches();
       this._swal.show({
         icon: 'success',

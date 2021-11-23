@@ -61,17 +61,21 @@ export const piecesSetsHelper = {
       }))
     })
     group.get('apu_part_id').valueChanges.subscribe(value => {
-      let data = apuParts.find(a => a.id == value);
-      group.patchValue({
-        unit_cost: data.unit_direct_cost
-      });
+      if (group.get('apu_type').value == 'pieza') {
+        let data = apuParts.find(a => a.id == value);
+        group.patchValue({
+          unit_cost: data.unit_direct_cost
+        });
+      }
     });
-    /* group.get('apu_set_child_id').valueChanges.subscribe(value => {
-      let data = apuSets.find(a => a.id == value);
-      group.patchValue({
-        unit_cost: data.unit_direct_cost
-      });
-    }); */
+    group.get('apu_set_child_id').valueChanges.subscribe(value => {
+      if (group.get('apu_type').value == 'conjunto') {
+        let data = apuSets.find(a => a.id == value);
+        group.patchValue({
+          unit_cost: data.total_direct_cost
+        });
+      }
+    });
     group.get('amount').valueChanges.subscribe(value => {
       let unit_cost = group.get('unit_cost').value;
       let result = unit_cost * value;

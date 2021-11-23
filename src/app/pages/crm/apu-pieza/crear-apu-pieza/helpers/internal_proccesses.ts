@@ -44,27 +44,27 @@ export const internalProccessesHelper = {
 
   subscribeInternalProcesses( internal: FormGroup, form:FormGroup, list: FormArray){
     internal.get('q_unit').valueChanges.subscribe(value => {
-      let q_total = internal.get('q_total').value;
-      let unit_cost = internal.get('unit_cost').value;
-      let result = value * q_total * unit_cost;
+      let q_total = internal.get('q_total');
+      let unit_cost = internal.get('unit_cost');
+      let result = value * q_total.value * unit_cost.value;
       internal.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     internal.get('q_total').valueChanges.subscribe(value => {
-      let q_unit = internal.get('q_unit').value;
-      let unit_cost = internal.get('unit_cost').value;
-      let result = q_unit * value * unit_cost;
+      let q_unit = internal.get('q_unit');
+      let unit_cost = internal.get('unit_cost');
+      let result = q_unit.value * value * unit_cost.value;
       internal.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     internal.get('unit_cost').valueChanges.subscribe(value => {
-      let q_unit = internal.get('q_unit').value;
-      let q_total = internal.get('q_total').value;
-      let result = q_unit * q_total * value;
+      let q_unit = internal.get('q_unit');
+      let q_total = internal.get('q_total');
+      let result = q_unit.value * q_total.value * value;
       internal.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     internal.get('total').valueChanges.subscribe(value => {

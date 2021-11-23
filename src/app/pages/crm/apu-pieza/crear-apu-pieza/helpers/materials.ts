@@ -49,7 +49,7 @@ export const materialsHelper = {
       let unit_cost = materials.get('unit_cost').value;
       let result = value * unit_cost * q_total;
       materials.patchValue({
-        total: result
+        total: Math.round(result)
       })
     }); 
     materials.get('q_total').valueChanges.subscribe(value => {
@@ -57,7 +57,7 @@ export const materialsHelper = {
       let unit_cost = materials.get('unit_cost').value;
       let result = q_unit * unit_cost * value;
       materials.patchValue({
-        total: result
+        total: Math.round(result)
       })
     });
     materials.get('unit_cost').valueChanges.subscribe(value => {
@@ -65,7 +65,7 @@ export const materialsHelper = {
       let q_total = materials.get('q_total').value;
       let result =  q_total * value * q_unit;
       materials.patchValue({
-        total: result
+        total: Math.round(result)
       })
     });
     materials.get('unit_cost').valueChanges.subscribe(value => {
@@ -73,7 +73,7 @@ export const materialsHelper = {
       let q_total = materials.get('q_total').value;
       let result =  q_total * value * q_unit;
       materials.patchValue({
-        total: result
+        total: Math.round(result)
       })
     });
     materials.get('total').valueChanges.subscribe(value => {

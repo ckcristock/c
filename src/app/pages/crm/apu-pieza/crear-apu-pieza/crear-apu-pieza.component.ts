@@ -374,6 +374,8 @@ export class CrearApuPiezaComponent implements OnInit {
     this.form.patchValue({
       files: this.fileArr
     });
+    console.log(this.form.value);
+    
     this._swal
       .show({
         text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu pieza`,

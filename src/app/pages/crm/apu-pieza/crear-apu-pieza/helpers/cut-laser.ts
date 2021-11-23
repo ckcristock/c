@@ -16,9 +16,10 @@ export const cutLaserHelper = {
         console.log(r);
         let group = fb.group({
           cut_laser_material_id: [r.cut_laser_material_id],
+          cut_laser_material_value_id: [r.cut_laser_material_value_id],
+          thicknessSelected: [r.cut_laser_material_value_id],
           thickness: [r.thickness],
-          thicknessSelected: [r.thicknessSelected],
-          thicknesses: [r.cut_laser_material_id],
+          thicknesses: [''],
           sheets_amount: [r.sheets_amount],
           long: [r.long],
           width: [r.width],
@@ -26,10 +27,13 @@ export const cutLaserHelper = {
           amount_holes: [r.amount_holes],
           diameter: [r.diameter],
           total_hole_perimeter: [r.total_hole_perimeter],
-          formula: [r.formula.cut_laser_material],
+          formula: [r.cut_laser_material.formula],
           time: [r.time],
           minute_value: [r.minute_value],
           value: [r.value],
+          unit_value: [r.cut_laser_material_value.unit_value],
+          actual_speed: [r.cut_laser_material_value.actual_speed],
+          seconds_percing: [r.cut_laser_material_value.seconds_percing]
         });
         this.subscribesCutLaser(group, cut_laser, form);
         cut_laser.push(group);
@@ -40,6 +44,7 @@ export const cutLaserHelper = {
   createCutLaserGroup(form: FormGroup, fb: FormBuilder, materials:Array<any>) {
     let cut_laser = fb.group({
       cut_laser_material_id: [''],
+      cut_laser_material_value_id: [''],
       thicknesses: [''],
       thickness: [''],
       thicknessSelected: [''],
@@ -100,7 +105,8 @@ export const cutLaserHelper = {
       cut_laser.patchValue({
         unit_value: data.unit_value,
         actual_speed: data.actual_speed,
-        seconds_percing: data.seconds_percing
+        seconds_percing: data.seconds_percing,
+        cut_laser_material_value_id: r
       })
       this.operation(cut_laser, list, materials);
     });
@@ -182,7 +188,7 @@ export const cutLaserHelper = {
       let time = cut_laser.get('time');
       let result = value * time.value;
       cut_laser.patchValue({
-        value: result
+        value: Math.round(result)
       })
     });
     cut_laser.get('value').valueChanges.subscribe(value => {

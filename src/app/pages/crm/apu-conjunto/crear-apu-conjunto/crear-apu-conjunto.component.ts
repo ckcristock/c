@@ -81,8 +81,8 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   getApuSets(){
-    this._apuConjunto.getApuSets().subscribe((r:any) => {
-      this.apuSets = r.data.data;
+    this._apuConjunto.getApuSetList().subscribe((r:any) => {
+      this.apuSets = r.data;
     })
   }
 

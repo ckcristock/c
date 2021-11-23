@@ -136,11 +136,11 @@
                                                     </select>
                                                 </td>
                                                 <td *ngIf="item['controls']['apu_type']['value'] == 'pieza'" style="width: 15%;">
-                                                    <ng-select [items]="apuPart$ | async" bindLabel="name" bindValue="id" [loading]="apuPartLoading" [typeahead]="apuPartInput$" formControlName="apu_part_id">
+                                                    <ng-select [items]="apuPart$ | async" bindLabel="name" bindValue="id" [loading]="apuPartLoading" [typeahead]="apuPartInput$" typeToSearchText="Por favor para buscar" formControlName="apu_part_id">
                                                     </ng-select>
                                                 </td>
                                                 <td *ngIf="item['controls']['apu_type']['value'] == 'conjunto'" style="width: 15%;">
-                                                    <ng-select [items]="apuSets$ | async" bindLabel="name" bindValue="id" [loading]="apuSetsLoading" [typeahead]="apuSetsInput$" formControlName="apu_set_child_id">
+                                                    <ng-select [items]="apuSets$ | async" bindLabel="name" bindValue="id" [loading]="apuSetsLoading" [typeahead]="apuSetsInput$" typeToSearchText="Por favor para buscar" formControlName="apu_set_child_id">
                                                     </ng-select>
                                                 </td>
                                                 <td>

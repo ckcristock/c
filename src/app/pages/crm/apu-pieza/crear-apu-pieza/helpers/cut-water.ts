@@ -14,7 +14,8 @@ export const cutWaterHelper = {
       data.cutwater.forEach((r) => {
         let group = fb.group({
           material_id: [r.material_id],
-          thickness_id: [r.thickness_id],
+          thickness_id: [r.thickness.id],
+          thickness_value: [r.thickness_value],
           amount: [r.amount],
           long: [r.long],
           width: [r.width],
@@ -158,7 +159,7 @@ export const cutWaterHelper = {
       let time = cut_water.get('time').value;
       let result = value * time;
       cut_water.patchValue({
-        value: result
+        value: Math.round(result)
       })
     });
     cut_water.get('value').valueChanges.subscribe(value => {

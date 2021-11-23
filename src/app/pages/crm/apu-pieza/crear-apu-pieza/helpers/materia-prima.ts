@@ -104,7 +104,7 @@ export const materiaHelper = {
     group.get('value_kg').valueChanges.subscribe(value => {
       let weight_total = group.get('weight_total').value;
       group.patchValue({
-        total_value: weight_total * value
+        total_value: Math.round(weight_total * value)
       });
     });
     form.get('amount').valueChanges.subscribe(value => {
@@ -136,13 +136,13 @@ export const materiaHelper = {
     group.get('value_kg').valueChanges.subscribe(value => {
       let weight_total = group.get('weight_total').value;
       group.patchValue({
-        total_value: weight_total * value
+        total_value: Math.round(weight_total * value)
       });
     });
     group.get('weight_total').valueChanges.subscribe(value => {
       let value_kg = group.get('value_kg').value;
       group.patchValue({
-        total_value: value * value_kg
+        total_value: Math.round(value * value_kg)
       });
     });
   },

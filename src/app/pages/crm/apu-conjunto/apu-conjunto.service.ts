@@ -57,7 +57,7 @@ export class ApuConjuntoService {
 
   download(id: string) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
-    return this.http.get(`${environment.base_url}/apu-sets/pdf/${id}`, { headers, responseType: 'blob' as 'json' });
+    return this.http.get(`${environment.base_url}/apu-set/pdf/${id}`, { headers, responseType: 'blob' as 'json' });
   }
 
 }

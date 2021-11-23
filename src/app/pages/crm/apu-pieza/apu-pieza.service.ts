@@ -49,15 +49,11 @@ export class ApuPiezaService {
     return this.http.get(`${environment.base_url}/apu-parts`, { params });
   }
 
-<<<<<<< HEAD
-  activateOrInactivate(data) {
-=======
   cutLaserMaterial(){
     return this.http.get(`${environment.base_url}/cut-laser-material`);
   }
 
   activateOrInactivate( data ){
->>>>>>> origin/nestor
     return this.http.put(`${environment.base_url}/apu-part-activate-Inactive`, data);
   }
 

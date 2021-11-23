@@ -12,7 +12,7 @@ export class VerApuPiezaComponent implements OnInit {
   date: Date = new Date();
   id:any;
   data:Data;
- 
+  isData:boolean = false;
   constructor( 
                 private _apuParts: ApuPiezaService,
                 private actRoute: ActivatedRoute
@@ -26,6 +26,7 @@ export class VerApuPiezaComponent implements OnInit {
   getApuPart(){
     this._apuParts.getApuPart(this.id).subscribe((r:ApuPart) => {
       this.data = r.data;
+      this.isData = true;
     })
   }
 

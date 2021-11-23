@@ -22,8 +22,8 @@
                                     <th>
                                         <label class="col-form-label col-form-label-sm" for="material_calculo">Material</label>
                                     </th>
-                                    <th *ngFor="let item of item.measures">
-                                        <label class="col-form-label col-form-label-sm" for="">{{ item.name }}</label>
+                                    <th *ngFor="let measure of item.measures">
+                                        <label class="col-form-label col-form-label-sm" for="">{{ measure.name }}</label>
                                     </th>
                                     <th>
                                         <label class="col-form-label col-form-label-sm" for="peso_kg_calculo">Peso KG</label>
@@ -56,11 +56,9 @@
                                     <td>
                                         {{ item.material.name }}
                                     </td>
-                                    <ng-container *ngFor="let item of item.measures; let j = index">
-                                        <td>
-                                            {{ item.value }}
-                                        </td>
-                                    </ng-container>
+                                    <td *ngFor="let measure of item.measures; let j = index">
+                                        {{ measure.value }}
+                                    </td>
                                     <td>
                                         {{ item.weight_kg }}
                                     </td>

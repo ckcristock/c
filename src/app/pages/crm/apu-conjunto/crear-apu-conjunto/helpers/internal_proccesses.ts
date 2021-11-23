@@ -43,13 +43,13 @@ export const internalProcessesHelper = {
     internal.get('amount').valueChanges.subscribe(value => {
       let unit_cost = internal.get('unit_cost').value;
       internal.patchValue({
-        total: unit_cost * value
+        total: Math.round(unit_cost * value)
       })
     });
     internal.get('unit_cost').valueChanges.subscribe(value => {
       let amount = internal.get('amount').value;
       internal.patchValue({
-        total: value * amount
+        total: Math.round(value * amount)
       })
     });
     internal.get('total').valueChanges.subscribe(value => {

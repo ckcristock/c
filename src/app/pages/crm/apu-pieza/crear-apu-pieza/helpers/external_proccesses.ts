@@ -48,7 +48,7 @@ export const externalProccessesHelper = {
       let unit_cost = external.get('unit_cost').value;
       let result = value * q_total * unit_cost;
       external.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     external.get('q_total').valueChanges.subscribe(value => {
@@ -56,7 +56,7 @@ export const externalProccessesHelper = {
       let unit_cost = external.get('unit_cost').value;
       let result = q_unit * value * unit_cost;
       external.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     external.get('unit_cost').valueChanges.subscribe(value => {
@@ -64,7 +64,7 @@ export const externalProccessesHelper = {
       let q_total = external.get('q_total').value;
       let result = q_unit * q_total * value;
       external.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     external.get('total').valueChanges.subscribe(value => {

@@ -19,9 +19,7 @@
                     <th>Nombre</th>
                     <th>Unidad</th>
                     <th>Tipo</th>
-                    <!-- <th>Aplica Corte Agua</th>
-                    <th>Aplica Corte laser</th> -->
-                    <th>Precio Unitario</th>
+                    <th>Valor KG</th>
                     <th>F. Creación</th>
                     <th class="text-center">Acciones</th>
                 </tr>
@@ -31,15 +29,7 @@
                     <td> {{ item.name | uppercase }} </td>
                     <td> {{ item.unit | titlecase }} </td>
                     <td> {{ item.type }} </td>
-                    <!-- <td>
-                        <span *ngIf="item.cut_water === 0; else si"></span>
-                        <span *ngIf="item.cut_water === 1; else no"></span>
-                    </td>
-                    <td>
-                        <span *ngIf="item.cut_laser === 0; else si"></span>
-                        <span *ngIf="item.cut_laser === 1; else no"></span>
-                    </td> -->
-                    <td> {{ item.unit_price }} </td>
+                    <td> {{ item.kg_value }} </td>
                     <td> {{ item.created_at | date: 'dd-MM-YYYY' }} </td>
                     <td>
                         <div class="text-center">
@@ -48,6 +38,9 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" (click)="getMaterial(item); modalVer.show()">
+                                        <i class="far fa-eye"></i> Ver
+                                    </a>
                                     <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getMaterial(item); modal.show()">
                                         <i class="far fa-edit"></i> Editar
                                     </a>
@@ -63,7 +56,7 @@
         </ngb-pagination>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
         <h5 class="modal-title">{{ title }}</h5>
         <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
@@ -88,29 +81,83 @@
                                 <option value="unidad">Unidad</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                             <label for="tipo">Tipo</label>
                             <select class="form-control form-control-sm" name="color" formControlName="type">
                                 <option value="Interno">Interno</option>
                                 <option value="Comercial">Comercial</option>
                             </select>
                         </div>
-                        <!-- <div class="form-group col-6">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="cut_water" formControlName="cut_water">
-                                <label class="custom-control-label" for="cut_water">
-                                    Aplica corte de agua
-                                </label>
-                            </div>
+                        <div class="form-group col-md-6">
+                            <label for="tipo">Valor KG</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="kg_value">
                         </div>
-                        <div class="form-group col-6">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="cut_laser" formControlName="cut_laser">
-                                <label class="custom-control-label" for="cut_laser">
-                                    Aplica corte laser
-                                </label>
+                        <div class="col-12">
+                            <label for="" style="font-size: 18px;">Espesores</label>
+                        </div>
+                        <ng-container formArrayName="thicknesses">
+                            <div class="form-group col-1" *ngFor="let item of thicknessList.controls; let i = index">
+                                <ng-container [formGroupName]="i">
+                                    <label for=""> {{ item.controls.thickness.value }} </label>
+                                    <input type="number" class="form-control form-control-sm" formControlName="value">
+                                </ng-container>
                             </div>
-                        </div> -->
+                        </ng-container>
+                        <ng-container>
+                            <perfect-scrollbar style="height: 250px;">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label for="">Propiedad</label>
+                                            </th>
+                                            <th>
+                                                <label for="tipo">Caracteristica</label>
+                                            </th>
+                                            <th>
+                                                <label>Valor</label>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody formArrayName="fields">
+                                        <ng-container *ngIf="fieldList.controls.length; else sinDatos">
+                                            <ng-container *ngFor="let item of fieldList.controls; let i = index">
+                                                <tr [formGroupName]="i">
+                                                    <td>
+                                                        <input type="text" class="form-control form-control-sm" formControlName="property">
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-control form-control-sm" name="color" formControlName="type">
+                                                            <option value="number">Number</option>
+                                                            <option value="text">Text</option>
+                                                            <option value="date">Date</option>
+                                                            <option value="text">Color</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input [type]="item['controls']['type']['value']" class="form-control form-control-sm" formControlName="value">
+                                                    </td>
+                                                    <td>
+                                                        <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteField(i)">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </ng-container>
+                                        <tr>
+                                            <td colspan="4">
+                                                <div class="btn-group" style="float: right">
+                                                    <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newField()">
+                                                            <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </perfect-scrollbar>
+                        </ng-container>
                     </div>
                 </div>
             </div>
@@ -123,6 +170,65 @@
         </div>
     </div>
 </app-modal-basic>
+<app-modal-basic #modalVer [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Ver Materia Material</h5>
+        <button type="button" class="close basic-close" (click)="modalVer.hide(); closeModalVer()">
+            <span aria-hidden="true">
+              <i class="fas fa-times"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-6">
+                <strong class="text-title"> PROPIEDADES ({{ material.name | titlecase }}) </strong>
+                <perfect-scrollbar style="height: 300px;">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr class="bg-light stay">
+                                <th>Propiedad</th>
+                                <th>Tipo</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of material.material_field">
+                                <td> {{ item.property }} </td>
+                                <td> {{ item.type }} </td>
+                                <td> {{ item.value }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </perfect-scrollbar>
+            </div>
+            <div class="col-6">
+                <strong class="text-title"> ESPESORES ({{ material.name | titlecase }}) </strong>
+                <perfect-scrollbar style="height: 400px;">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr class="bg-light stay">
+                                <th>Espesor</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of material.material_thickness">
+                                <td> {{ item.thickness.thickness }} </td>
+                                <td> {{ item.value }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </perfect-scrollbar>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modalVer.hide(); closeModalVer()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
@@ -131,4 +237,11 @@
 </ng-template>
 <ng-template #no>
     <p>No</p>
+</ng-template>
+<ng-template #sinDatos>
+    <tr class="bg-light">
+        <td colspan="100%" class="text-center">
+            <p class="text-dark">Sin datos agregados</p>
+        </td>
+    </tr>
 </ng-template>

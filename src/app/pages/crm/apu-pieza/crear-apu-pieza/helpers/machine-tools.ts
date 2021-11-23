@@ -46,7 +46,7 @@ export const machineToolHelper = {
       let unit_cost = machine.get('unit_cost').value;
       let result = value * q_total * unit_cost;
       machine.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     machine.get('q_total').valueChanges.subscribe(value => {
@@ -54,7 +54,7 @@ export const machineToolHelper = {
       let unit_cost = machine.get('unit_cost').value;
       let result = q_unit * value * unit_cost;
       machine.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     machine.get('unit_cost').valueChanges.subscribe(value => {
@@ -62,7 +62,7 @@ export const machineToolHelper = {
       let q_total = machine.get('q_total').value;
       let result = q_unit * q_total * value;
       machine.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     machine.get('total').valueChanges.subscribe(value => {

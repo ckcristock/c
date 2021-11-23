@@ -119,9 +119,12 @@ export class CrearTercerosComponent implements OnInit {
       withholding_oninvoice:  [''],
       reteica_type: [''],
       reteica_account_id: [''],
+      reteica_percentage: [0],
       retefuente_account_id: [''],
+      retefuente_percentage: [0],
       g_contribut: [''],
       reteiva_account_id: [''],
+      reteiva_percentage: [0],
       condition_payment: [''],
       assigned_space: [''],
       discount_prompt_payment: [''],
@@ -385,8 +388,11 @@ export class CrearTercerosComponent implements OnInit {
         state: this.third.state,
         third_party_type: this.third.third_party_type,
         image: this.third.image,
-        rut: this.third.rut,
+        rut: this.third.rut
       });
+      this.retePercentage.retefuente = this.third.retefuente_percentage;
+      this.retePercentage.reteiva = this.third.reteiva_percentage;
+      this.retePercentage.reteica = this.third.reteica_percentage;
       this.fields.forEach((field:any) => {
         let field_name = field.name;
         this.field = field_name;
@@ -450,7 +456,10 @@ export class CrearTercerosComponent implements OnInit {
       image,
       rut,
       typeRut,
-      typeImage
+      typeImage,
+      reteica_percentage: this.retePercentage.reteica,
+      reteiva_percentage: this.retePercentage.reteiva,
+      retefuente_percentage: this.retePercentage.retefuente
     })
     this.form.markAllAsTouched()
     if (this.form.invalid) {

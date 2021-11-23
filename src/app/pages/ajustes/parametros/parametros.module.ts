@@ -27,8 +27,9 @@ import { MaquinasHerramientasComponent } from './apu/maquinas-herramientas/maqui
 import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-internos.component';
 import { ProcesosExternosComponent } from './apu/procesos-externos/procesos-externos.component';
 import { MedidasComponent } from './apu/medidas/medidas.component';
-import { MateriaPrimaComponent } from './apu/materia-prima/materia-prima.component';
 import { CostosIndirectosComponent } from './apu/costos-indirectos/costos-indirectos.component';
+import { EspesoresComponent } from './apu/espesores/espesores.component';
+import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-laser-material.component';
 
 
 
@@ -53,8 +54,9 @@ import { CostosIndirectosComponent } from './apu/costos-indirectos/costos-indire
         ProcesosInternosComponent,
         ProcesosExternosComponent,
         MedidasComponent,
-        MateriaPrimaComponent,
-        CostosIndirectosComponent
+        CostosIndirectosComponent,
+        EspesoresComponent,
+        CorteLaserMaterialComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

@@ -12,6 +12,7 @@ export class VerApuConjuntoComponent implements OnInit {
   date: Date = new Date();
   id:any;
   data:any;
+  isData:boolean = false;
   constructor(
               private _apuConjunto: ApuConjuntoService,
               private actRoute: ActivatedRoute
@@ -25,7 +26,7 @@ export class VerApuConjuntoComponent implements OnInit {
   getApuPart(){
     this._apuConjunto.getApuSet(this.id).subscribe((r:any) => {
       this.data = r.data;
-      console.log(this.data);
+      this.isData = true;
     })
   }
 

@@ -33,22 +33,15 @@ export class CrearApuPiezaComponent implements OnInit {
   clients:any[] = [];
   units:any[] = [];
   indirectCosts:any[] = [];
+  thicknesses:any[] = [];
   files: File[] = [];
   fileString:any = '';
   file = '';
   fileArr:any[] = [];
+  cutLaserMaterials:any[] = [];
   otherCollapsed:boolean;
   indirectCollapsed:boolean;
   auiCollapsed:boolean;
-
-  thickness:any[] = [
-    { percent: 1, value: 1 },
-    { percent: 2, value: 2 },
-    { percent: 3, value: 3 },
-    { percent: 4, value: 4 },
-    { percent: 5, value: 5 },
-    { percent: 6, value: 6 },
-  ]
   
   constructor(
     private _apuPieza: ApuPiezaService,
@@ -60,19 +53,24 @@ export class CrearApuPiezaComponent implements OnInit {
     ) { }
     
   ngOnInit():void {
-       this.getPeople();
-       this.getCities();
-       this.getGeometries();
-       this.getMaterials();
-       this.getClients();
-       this.getUnits();
-       this.createForm();
-       this.validateData();
-       this.getIndirectCosts();
-       this.collapses();
+    this.createForm();
+    this.validateData();
+    this.getClients();
+    this.getUnits();
+    this.getGeometries();
+    this.getMaterials();
+    this.getPeople();
+    this.getCities();
+    this.getIndirectCosts();
+    this.collapses();
+    this.getThicknesses();
+    this.getCutLaserMaterial();
   }
   
   collapses(){
+    if (!this.data) {
+      return null
+    }
     (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
   }
 
@@ -84,48 +82,56 @@ export class CrearApuPiezaComponent implements OnInit {
   onRemove(event) {
     this.files.splice(this.files.indexOf(event), 1);
   }
-  
-  createForm(){
-    this.form = help.functionsApu.createForm(this.fb);
-    help.functionsApu.listerTotalDirectCost(this.form);
-  }
 
   getPeople(){
     this._apuPieza.getPeopleXSelect().subscribe((r:any) => {
       this.people = r.data;
     })
   }
-
+  
   getCities(){
     this._apuPieza.getCities().subscribe((r:any) => {
       this.cities = r.data;
     })
   }
 
+  getCutLaserMaterial(){
+    this._apuPieza.cutLaserMaterial().subscribe((r:any) => {
+      this.cutLaserMaterials = r.data;
+    })
+  }
+  
+  getClients(){
+    this._apuPieza.getClient().subscribe((r:any) => {
+      this.clients = r.data;
+      help.functionsApu.totalMasRetencion(this.form, this.clients);
+    });
+  }
+  
   getGeometries(){
     this._apuPieza.getGeometries().subscribe((r:any) => {
       this.geometries = r.data;
     })
   }
-
+  
   getMaterials(){
     this._apuPieza.getMaterials().subscribe((r:any) => {
       this.materials = r.data;
     })
   }
-
-  getClients(){
-    this._apuPieza.getClient().subscribe((r:any) => {
-      this.clients = r.data;
-    })
-  }
-
+  
   getUnits(){
     this._units.getUnits().subscribe((r:any) => {
       this.units = r.data;
     })
   }
 
+  getThicknesses(){
+    this._apuPieza.getThicknesses().subscribe((r:any) => {
+      this.thicknesses = r.data;
+    })
+  }
+  
   getIndirectCosts(){
     this._apuPieza.getIndirectCosts().subscribe((r:any) => {
       this.indirectCosts = r.data;
@@ -135,17 +141,21 @@ export class CrearApuPiezaComponent implements OnInit {
     })
   }
   
+  createForm(){
+    this.form = help.functionsApu.createForm(this.fb);
+    help.functionsApu.listerTotalDirectCost(this.form);
+  }
 
   validateData() {
     if (this.data) {
       setTimeout(() => {
-        help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries);
+        help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials);
       }, 1200);
     }
   }
   /************** Materia Prima Inicio ****************/
   basicControl(): FormGroup{
-    let group = help.materiaHelper.createMateriaGroup(this.form, this.fb, this.geometries);
+    let group = help.materiaHelper.createMateriaGroup(this.form, this.fb, this.geometries, this.materials);
     return group;
   }
 
@@ -189,7 +199,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Corte de Agua Inicia ****************/
   
   cutWaterControl(): FormGroup{
-    let group = help.cutWaterHelper.createCutWaterGroup(this.form, this.fb);
+    let group = help.cutWaterHelper.createCutWaterGroup(this.form, this.fb, this.materials);
     return group;
   }
 
@@ -213,7 +223,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Corte laser Termina ****************/
 
   cutLaserControl(): FormGroup{
-    let group = help.cutLaserHelper.createCutLaserGroup(this.form, this.fb);
+    let group = help.cutLaserHelper.createCutLaserGroup(this.form, this.fb, this.cutLaserMaterials);
     return group;
   }
 
@@ -364,6 +374,8 @@ export class CrearApuPiezaComponent implements OnInit {
     this.form.patchValue({
       files: this.fileArr
     });
+    console.log(this.form.value);
+    
     this._swal
       .show({
         text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu pieza`,
@@ -395,7 +407,7 @@ export class CrearApuPiezaComponent implements OnInit {
       title: 'Operación exitosa',
       showCancel: false,
     });
-    this.router.navigateByUrl('/crm/apu-pieza');
+    this.router.navigateByUrl('/crm/apu/apu-pieza');
   }
   showError(err) {
     this._swal.show({

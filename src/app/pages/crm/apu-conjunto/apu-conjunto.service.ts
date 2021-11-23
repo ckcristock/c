@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +27,12 @@ export class ApuConjuntoService {
     return this.http.get(`${environment.base_url}/thirdPartyClient`);
   }
 
-  getApuParts(){
-    return this.http.get(`${environment.base_url}/apu-parts`)
+  getApuParts( params = {} ){
+    return this.http.get(`${environment.base_url}/apu-parts-list`, {params});
+  }
+
+  getApuSetList( params = {} ){
+    return this.http.get(`${environment.base_url}/apu-sets-list`, {params});
   }
   
   getApuSets( params = {} ){

@@ -6,19 +6,19 @@ import {
 
 export const materiaHelper = {
 
-  createFillInMateria(form: FormGroup, fb: FormBuilder, data, geometriesList: Array<any>) {
+  createFillInMateria(form: FormGroup, fb: FormBuilder, data, geometriesList: Array<any>, materials:Array<any>) {
     if (data.rawmaterial) {
       let materia_prima = form.get('materia_prima') as FormArray;
       data.rawmaterial.forEach((r) => {
         let measuress = fb.array([]);
         r.measures.forEach(m => {
           let measure = fb.group({
-            measure_id: [m.id],
+            measure_id: [m.measure_id],
             value: [m.value],
             name: [m.name],
             measure: [m.measure]
           });
-          this.operation(measure)
+          this.operation(measure);
           measuress.push(measure);
         });
         let group = fb.group({
@@ -33,13 +33,13 @@ export const materiaHelper = {
           value_kg: [r.value_kg],
           total_value: [r.total_value]
         });
-        this.subscribeMateria(group, materia_prima, form, geometriesList, fb);
+        this.subscribeMateria(group, materia_prima, form, geometriesList, fb, materials);
         materia_prima.push(group);
       });
     }
   },
 
-  createMateriaGroup(form:FormGroup, fb: FormBuilder, geometriesList: Array<any>) {
+  createMateriaGroup(form:FormGroup, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>) {
     let materia = fb.group({
       geometry_id: [''],
       image: [''],
@@ -53,7 +53,7 @@ export const materiaHelper = {
       total_value: [0]
     });
     let list = form.get('materia_prima') as FormArray;
-    this.subscribeMateria(materia, list, form, geometriesList, fb);
+    this.subscribeMateria(materia, list, form, geometriesList, fb, materials);
     return materia;
   },
 
@@ -71,13 +71,14 @@ export const materiaHelper = {
   operation(group: FormGroup){
     group.get('value').valueChanges.subscribe(r => {
       let materia:any = group.parent.parent;
-      let abuelo:any = group.parent.parent.controls;
-      let padre:any = group.parent;
-      let weight_formula = abuelo.weight_formula.value;
+      let materiaControl:any = group.parent.parent.controls;
+      let measureGroup:any = group.parent;
+      let weight_formula = materiaControl.weight_formula.value;
       let formula = weight_formula;
-      padre.controls.forEach(element => {
+      measureGroup.controls.forEach(element => {
         let measure = element.controls.measure.value;
         let value = element.controls.value.value;
+        console.log(formula);
         formula = formula.replace( '{' + measure + '}',  value );
       });  
       let result = eval(formula);
@@ -87,7 +88,7 @@ export const materiaHelper = {
     })
   },
 
-  subscribeMateria(group: FormGroup, list: FormArray, form: FormGroup, geometriesList: Array<any>, fb: FormBuilder){
+  subscribeMateria(group: FormGroup, list: FormArray, form: FormGroup, geometriesList: Array<any>, fb: FormBuilder, materials:Array<any>){
     group.get('q').valueChanges.subscribe(value => {
       let weight_kg = group.get('weight_kg').value;
       group.patchValue({
@@ -103,7 +104,7 @@ export const materiaHelper = {
     group.get('value_kg').valueChanges.subscribe(value => {
       let weight_total = group.get('weight_total').value;
       group.patchValue({
-        total_value: weight_total * value
+        total_value: Math.round(weight_total * value)
       });
     });
     form.get('amount').valueChanges.subscribe(value => {
@@ -125,6 +126,24 @@ export const materiaHelper = {
       data.measures.forEach(element => {
         measure.push(this.createMeasuresGroup(element, fb, group));
       }); 
+    });
+    group.get('material_id').valueChanges.subscribe(value => {
+      let data = materials.find(m => m.id == value);
+      group.patchValue({
+        value_kg: data.kg_value
+      })
+    });
+    group.get('value_kg').valueChanges.subscribe(value => {
+      let weight_total = group.get('weight_total').value;
+      group.patchValue({
+        total_value: Math.round(weight_total * value)
+      });
+    });
+    group.get('weight_total').valueChanges.subscribe(value => {
+      let value_kg = group.get('value_kg').value;
+      group.patchValue({
+        total_value: Math.round(value * value_kg)
+      });
     });
   },
 

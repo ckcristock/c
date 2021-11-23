@@ -1,0 +1,202 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                <i class="fa fa-plus"></i> Agregar
+            </button>
+            <h5 class="text-primary">Corte Laser - Materiales</h5>
+            <hr class="bg-primary">
+        </div>
+        <table class="table table-borderless table-striped mt-4" *ngIf="!loading && materials.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>F. Creación</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of materials">
+                    <td> {{ item.name | uppercase }} </td>
+                    <td> {{ item.created_at | date: 'dd-MM-YYYY' }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" (click)="getMaterial(item); modalVer.show()">
+                                        <i class="far fa-eye"></i> Ver
+                                    </a>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getMaterial(item); modal.show()">
+                                        <i class="far fa-edit"></i> Editar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getMaterials($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-xl'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">{{ title }}</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset(); materialsList.clear()">
+            <span aria-hidden="true">
+              <i class="fas fa-times"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="col-5">
+                            <div class="form-group col-md-12">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control form-control-sm" formControlName="name">
+                            </div>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label>Espesor</label>
+                                        </th>
+                                        <th>
+                                            <label>Valor Unitario</label>
+                                        </th>
+                                        <th>
+                                            <label>Velocidad Real</label>
+                                        </th>
+                                        <th>
+                                            <label>Seg. Percing</label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody formArrayName="materials">
+                                    <ng-container *ngIf="materialsList.controls.length; else sinDatos">
+                                        <ng-container *ngFor="let item of materialsList.controls; let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" formControlName="thickness">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" formControlName="unit_value">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" formControlName="actual_speed">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" formControlName="seconds_percing">
+                                                </td>
+                                                <td>
+                                                    <button style="float: right;" class="btn btn-outline-danger btn-sm" placement="bottom" type="button" ngbTooltip="Borrar" (click)="deleteMaterial(i)">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="btn-group" style="float: right">
+                                                <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newMaterial()">
+                                                        <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-7">
+                            <div class="text-center">
+                                <h6>Variables</h6>
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-3 mb-0" *ngFor="let item of variables">
+                                    <label for="">{{ item.label }}</label>
+                                    <p> {{ '{' + item.var + '}' }} </p>
+                                </div>
+                            </div>
+                            <div class="form-group col-12">
+                                <label for="">Formula</label>
+                                <textarea class="form-control form-control-sm" formControlName="formula" name="formula" cols="30" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide(); form.reset(); materialsList.clear()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="save()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<app-modal-basic #modalVer [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Ver Material</h5>
+        <button type="button" class="close basic-close" (click)="modalVer.hide(); closeModalVer()">
+            <span aria-hidden="true">
+              <i class="fas fa-times"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-12">
+                <strong class="text-title"> {{ material.name | titlecase }} </strong>
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr class="bg-light stay">
+                            <th>Espesor</th>
+                            <th>Valor Unitario</th>
+                            <th>Velocidad Real</th>
+                            <th>Seg. Percing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of material.cut_laser_material_value">
+                            <td> {{ item.thickness }} </td>
+                            <td> {{ item.unit_value }} </td>
+                            <td> {{ item.actual_speed }} </td>
+                            <td> {{ item.seconds_percing }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modalVer.hide(); closeModalVer()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<ng-template #si>
+    <p>Si</p>
+</ng-template>
+<ng-template #no>
+    <p>No</p>
+</ng-template>
+<ng-template #sinDatos>
+    <tr class="bg-light">
+        <td colspan="100%" class="text-center">
+            <p class="text-dark">Sin datos agregados</p>
+        </td>
+    </tr>
+</ng-template>

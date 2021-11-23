@@ -48,7 +48,7 @@ export const othersHelper = {
       let unit_cost = others.get('unit_cost').value;
       let result = value * q_total * unit_cost;
       others.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     others.get('q_total').valueChanges.subscribe(value => {
@@ -56,7 +56,7 @@ export const othersHelper = {
       let unit_cost = others.get('unit_cost').value;
       let result = q_unit * value * unit_cost;
       others.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     others.get('unit_cost').valueChanges.subscribe(value => {
@@ -64,7 +64,7 @@ export const othersHelper = {
       let q_total = others.get('q_total').value;
       let result = q_unit * q_total * value;
       others.patchValue({
-        total: result
+        total: Math.round(result)
       });
     });
     others.get('total').valueChanges.subscribe(value => {

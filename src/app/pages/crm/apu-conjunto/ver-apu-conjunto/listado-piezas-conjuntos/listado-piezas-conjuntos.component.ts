@@ -11,6 +11,8 @@ export class ListadoPiezasConjuntosComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.pieces_sets);
+    
   }
 
 }

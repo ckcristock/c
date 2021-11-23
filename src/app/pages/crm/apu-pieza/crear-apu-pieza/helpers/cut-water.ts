@@ -8,13 +8,14 @@ import {
 export const cutWaterHelper = {
   consts: {},
 
-  createFillInCutWater(form: FormGroup, fb: FormBuilder, data) {
+  createFillInCutWater(form: FormGroup, fb: FormBuilder, data, materials:Array<any>) {
     if (data.cutwater) {
       let cut_water = form.get('cut_water') as FormArray;
       data.cutwater.forEach((r) => {
         let group = fb.group({
           material_id: [r.material_id],
-          thickness: [r.thickness],
+          thickness_id: [r.thickness.id],
+          thickness_value: [r.thickness_value],
           amount: [r.amount],
           long: [r.long],
           width: [r.width],
@@ -26,16 +27,17 @@ export const cutWaterHelper = {
           minute_value: [r.minute_value],
           value: [r.value]
         });
-        this.subscribesCutWater(group, cut_water, form);
+        this.subscribesCutWater(group, cut_water, form, materials);
         cut_water.push(group);
       });
     }
   },
 
-  createCutWaterGroup(form:FormGroup, fb: FormBuilder) {
+  createCutWaterGroup(form:FormGroup, fb: FormBuilder, materials:Array<any>) {
     let cut_water = fb.group({
       material_id: [''],
-      thickness: [''],
+      thickness_id: [''],
+      thickness_value: [0],
       amount: [0],
       long: [0],
       width: [0],
@@ -48,11 +50,43 @@ export const cutWaterHelper = {
       value: [0]
     });
     let list = form.get('cut_water') as FormArray;
-    this.subscribesCutWater(cut_water, list, form);
+    this.subscribesCutWater(cut_water, list, form, materials);
     return cut_water;
   },
 
-  subscribesCutWater( cut_water:FormGroup, list: FormArray , form: FormGroup){
+  subscribesCutWater( cut_water:FormGroup, list: FormArray , form: FormGroup, materials:Array<any>){
+    cut_water.get('thickness_id').valueChanges.subscribe(value => {
+      let material_id = cut_water.get('material_id').value;
+      let data = materials.find(m => m.id == material_id);
+      let thickness = data.material_thickness.find(t => t.thickness_id == value);
+      cut_water.patchValue({
+        thickness_value: thickness.value
+      })
+    });
+    cut_water.get('thickness_value').valueChanges.subscribe(value => {
+      let total_length = cut_water.get('total_length').value;
+      let total_hole_perimeter = cut_water.get('total_hole_perimeter').value;
+      let result = ((total_hole_perimeter + total_length) * (value)) / (60*100);
+      cut_water.patchValue({
+        time: result
+      })
+    })
+    cut_water.get('total_length').valueChanges.subscribe(value => {
+      let thickness_value = cut_water.get('thickness_value').value;
+      let total_hole_perimeter = cut_water.get('total_hole_perimeter').value;
+      let result = ((total_hole_perimeter + value) * (thickness_value)) / (60*100);
+      cut_water.patchValue({
+        time: result
+      })
+    })
+    cut_water.get('total_hole_perimeter').valueChanges.subscribe(value => {
+      let thickness_value = cut_water.get('thickness_value').value;
+      let total_length = cut_water.get('total_length').value;
+      let result = ((value + total_length) * (thickness_value)) / (60*100);
+      cut_water.patchValue({
+        time: result
+      })
+    })
     cut_water.get('amount').valueChanges.subscribe(value => {
       let long = cut_water.get('long').value;
       let width = cut_water.get('width').value;
@@ -125,7 +159,7 @@ export const cutWaterHelper = {
       let time = cut_water.get('time').value;
       let result = value * time;
       cut_water.patchValue({
-        value: result
+        value: Math.round(result)
       })
     });
     cut_water.get('value').valueChanges.subscribe(value => {

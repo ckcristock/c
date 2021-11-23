@@ -7,11 +7,15 @@ import { internalProcessesHelper } from './helpers/internal_proccesses';
 import { externalProcessesHelper } from './helpers/external_proccesses';
 import { othersHelper } from './helpers/others';
 import { piecesSetsHelper } from './helpers/piecesSets';
-import { OperatorFunction, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { functionsUtils } from '../../../../core/utils/functionsUtils';
+import { concat, Observable, Subject, of } from 'rxjs';
+import { map, filter, distinctUntilChanged, debounceTime, tap, switchMap, catchError } from 'rxjs/operators';
+interface ApuPart {
+  name: string;
+  id: number;
+}
 
 @Component({
   selector: 'app-crear-apu-conjunto',
@@ -20,7 +24,7 @@ import { functionsUtils } from '../../../../core/utils/functionsUtils';
 })
 export class CrearApuConjuntoComponent implements OnInit {
   @Input('id') id;
-  @Input('data') data;
+  @Input('data') data:any;
   form: FormGroup;
   date:Date = new Date();
   indirectCosts:any[] = [];
@@ -37,66 +41,100 @@ export class CrearApuConjuntoComponent implements OnInit {
   indirectCollapsed:boolean;
   auiCollapsed:boolean;
   peopleLoading = false;
-
+  apuPart$: Observable<any>;
+  apuPartLoading = false;
+  apuPartInput$ = new Subject<string>();
+  minLengthTerm = 3;
+  apuSets$: Observable<any>;
+  apuSetsLoading = false;
+  apuSetsInput$ = new Subject<string>();
+  minLengthSetTerm = 3;
+    
   constructor( 
                 private fb: FormBuilder,
                 private router: Router,
                 private _apuConjunto: ApuConjuntoService,
                 private _swal: SwalService
-              ) { }
+              ) {
+                
+              }
 
   ngOnInit(): void {
     this.getPeople();
     this.getCities();
     this.getClients();
-    this.getApuParts();
     this.getApuSets();
+    this.getApuPart();
     this.createForm();
     this.getIndirectCosts();
     this.validateData();
     this.collapses();
+    this.loadApuParts();
+    this.loadApuSets();
   }
 
   collapses(){
+    if (this.data == undefined) {
+      return null;
+    }
     (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
-  }
-  
-  getApuParts(){
-    this._apuConjunto.getApuParts().subscribe((r:any) => {
-      this.apuParts = r.data.data;
-    })
   }
 
   getApuSets(){
-    this._apuConjunto.getApuSets().subscribe((r:any) => {
-      this.apuSets = r.data.data;
+    this._apuConjunto.getApuSetList().subscribe((r:any) => {
+      this.apuSets = r.data;
     })
   }
 
-  inputFormatListValue(value: any) {
-    if (value.name)
-      return value.name
-    return value;
+  getApuPart(){
+    this._apuConjunto.getApuParts().subscribe((r:any) => {
+      this.apuParts = r.data;
+    })
   }
 
-  resultFormatListValue(value: any) {
-    return value.id;
-  }
-
-  // formatter = (x: { name: string }) => x.name;
-  search: OperatorFunction<string, readonly { name }[]> = (
-    text$: Observable<string>
-  ) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      filter((term) => term.length >= 3),
-      map((term) =>
-        this.apuParts
-          .filter((state) => new RegExp(term, 'mi').test(state.name))
-          .slice(0, 10)
+  loadApuParts() {
+    this.apuPart$ = concat(
+      of([]), // default items
+      this.apuPartInput$.pipe(
+        filter(res => {
+          return res !== null && res.length >= this.minLengthTerm
+        }),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.apuPartLoading = true),
+        switchMap(term => {
+          let param = { name: term }
+          return this._apuConjunto.getApuParts(param).pipe(
+            map( (r:any) => { return  r.data }),
+            catchError(() => of([])), // empty list on error
+            tap(() => this.apuPartLoading = false)
+          )
+        })
       )
     );
+  }
+
+  loadApuSets() {
+    this.apuSets$ = concat(
+      of([]), // default items
+      this.apuSetsInput$.pipe(
+        filter(res => {
+          return res !== null && res.length >= this.minLengthSetTerm
+        }),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.apuSetsLoading = true),
+        switchMap(term => {
+          let param = { name: term }
+          return this._apuConjunto.getApuSetList(param).pipe(
+            map( (r:any) => { return  r.data }),
+            catchError(() => of([])), // empty list on error
+            tap(() => this.apuSetsLoading = false)
+          )
+        })
+      )
+    );
+  }
 
   onSelect(event) {
     this.files.push(...event.addedFiles);
@@ -143,6 +181,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   getClients(){
     this._apuConjunto.getClient().subscribe((r:any) => {
       this.clients = r.data;
+      help.functionsApuConjunto.totalMasRetencion(this.form, this.clients);
     })
   }
 
@@ -303,13 +342,11 @@ export class CrearApuConjuntoComponent implements OnInit {
       .then((r) => {
         if (r.isConfirmed) {
           if (this.id) {
-            // this.apuIdToCreateOrEdit();
             this._apuConjunto.update(this.form.value, this.id).subscribe(
               (res: any) => this.showSuccess(),
               (err) => this.showError(err)
             );
           } else {
-            // this.apuIdToCreateOrEdit();
             this._apuConjunto.save(this.form.value).subscribe(
               (res: any) => this.showSuccess(),
               (err) => this.showError(err)

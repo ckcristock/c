@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MateriaPrimaComponent } from './materia-prima.component';
+import { EspesoresComponent } from './espesores.component';
 
-describe('MateriaPrimaComponent', () => {
-  let component: MateriaPrimaComponent;
-  let fixture: ComponentFixture<MateriaPrimaComponent>;
+describe('EspesoresComponent', () => {
+  let component: EspesoresComponent;
+  let fixture: ComponentFixture<EspesoresComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MateriaPrimaComponent ]
+      declarations: [ EspesoresComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MateriaPrimaComponent);
+    fixture = TestBed.createComponent(EspesoresComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

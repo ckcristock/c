@@ -18,6 +18,7 @@ import { PaisesComponent } from './paises-ciudades/paises/paises.component';
 import { CiudadesComponent } from './paises-ciudades/ciudades/ciudades.component';
 import { PaisesCiudadesComponent } from './paises-ciudades/paises-ciudades.component';
 import { DepartamentosMunicipiosComponent } from './departamentos-municipios/departamentos-municipios.component';
+import { BaseCalculosComponent } from './base-calculos/base-calculos.component';
 
 
 
@@ -34,7 +35,8 @@ import { DepartamentosMunicipiosComponent } from './departamentos-municipios/dep
     PaisesComponent,
     CiudadesComponent,
     PaisesCiudadesComponent,
-    DepartamentosMunicipiosComponent
+    DepartamentosMunicipiosComponent,
+    BaseCalculosComponent
   ],
   imports: [
     CommonModule,

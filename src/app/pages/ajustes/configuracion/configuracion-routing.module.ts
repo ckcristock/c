@@ -6,13 +6,16 @@ import { DepartamentosComponent } from './departamentos-municipios/departamentos
 import { CiudadesComponent } from './paises-ciudades/ciudades/ciudades.component';
 import { PaisesCiudadesComponent } from "./paises-ciudades/paises-ciudades.component";
 import { DepartamentosMunicipiosComponent } from './departamentos-municipios/departamentos-municipios.component';
+import { BaseCalculosComponent } from "./base-calculos/base-calculos.component";
+
 
 
 const routes : Routes = [
     { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent },
     { path: 'campos-terceros', component: CamposTercerosComponent },
     { path: 'dep-mun', component: DepartamentosMunicipiosComponent },
-    { path: 'pais-ciud', component: PaisesCiudadesComponent }
+    { path: 'pais-ciud', component: PaisesCiudadesComponent },
+    { path: 'base-calculos', component: BaseCalculosComponent }
 ]
 
 

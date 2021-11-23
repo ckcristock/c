@@ -1,0 +1,98 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h5 class="text-primary">Base Calculos</h5>
+        </div>
+        <hr class="bg-primary">
+    </div>
+
+    <div class="row mx-2">
+        <div class="col-6" style="font-weight: bold;">
+            Porcentaje
+        </div>
+    </div>
+
+    <hr class="mx-3">
+    <form #formP="ngForm" (submit)="guardar(formP)" >
+        <div class="row mx-2 my-2">
+            <div class="col-6">
+                Administración
+            </div>
+            <div class="col-5">
+                <input 
+
+                [(ngModel)]="data.administracion"
+
+                #admin="ngModel"
+                name="administracion"
+                placeholder="0" class="form-control" type="number" required>
+            </div>
+            %
+        </div>
+        <div class="row mx-2 my-2">
+            <div class="col-6">
+                Imprevistos
+            </div>
+            <div class="col-5">
+                <input placeholder="0" class="form-control" type="number"
+                [ngModel]="data.imprevistos" name="imprevistos" required>
+            </div>
+            %
+        </div>
+        <div class="row mx-2 my-2">
+            <div class="col-6">
+                Utilidad
+            </div>
+            <div class="col-5">
+                <input placeholder="0" class="form-control" type="number"
+                name="utilidad" [ngModel]="data.utilidad"
+                required>
+            </div>
+            %
+        </div>
+
+        <div class="row mx-2">
+            <div class="col-6" style="font-weight: bold;">
+                Valor
+            </div>
+        </div>
+    
+        <hr class="mx-3">
+
+        <div class="row mx-2 my-2">
+            <div class="col-6">
+                TRM
+            </div>
+            <div class="col-5">
+                <input placeholder="0" class="form-control" type="number"
+                name="trm" [ngModel]="data.trm"  required>
+            </div>
+        </div>
+
+        <div class="row mx-2 my-2">
+            <div class="col-6">
+                Valor Minuto Corte Laser
+            </div>
+            <div class="col-5">
+                <input placeholder="0" class="form-control" type="number"
+                [ngModel]="data.valor_minuto_corte_laser" name="valor_minuto_corte_laser" required>
+            </div>
+        </div>
+
+        <div class="row mx-2 my-2">
+            <div class="col-6">
+                Valor Minuto Corte Agua
+            </div>
+            <div class="col-5">
+                <input placeholder="0" class="form-control" type="number"
+                [ngModel]="data.valor_minuto_corte_agua" name="valor_minuto_corte_agua" required>
+            </div>
+        </div>
+        <div class="p-3 col-11">
+            <button 
+            [disabled]="formP.invalid"
+            class="btn btn-primary btn-block" 
+            type="submit">Guardar</button>
+        </div>
+    </form>
+</div>

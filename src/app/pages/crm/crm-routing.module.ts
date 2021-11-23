@@ -28,7 +28,8 @@ const routes: Routes = [
   { path: 'apu/editar-apu-conjunto/:id', component: EditarApuConjuntoComponent },
   { path: 'apu/ver-apu-conjunto/:id', component: VerApuConjuntoComponent },
 
-  { path: 'presupuesto', loadChildren: () => import('./presupuesto/presupuesto.module').then(m => m.PresupuestoModule) }
+  { path: 'presupuesto', loadChildren: () => import('./presupuesto/presupuesto.module').then(m => m.PresupuestoModule) },
+  { path: 'cotizacion', loadChildren: () => import('./cotizacion/cotizacion.module').then(m => m.CotizacionModule) }
 ];
 
 @NgModule({

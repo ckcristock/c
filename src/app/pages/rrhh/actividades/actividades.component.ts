@@ -134,6 +134,8 @@ export class ActividadesComponent {
      }); */
     this.GetActividadesMes();
     //alert(`i'm here`);
+    console.log(this.ActividadModel);
+    
   }
   GetActividadesMes() {
     this._actividad.getActivities().subscribe((r: any) => {
@@ -212,7 +214,7 @@ export class ActividadesComponent {
   }
 
   GetTiposActividad() {
-    this._actividad.getActivityTypes().subscribe((r: any) => {
+    this._actividad.getActivityTypesAll().subscribe((r: any) => {
       if (r.data) {
         this.TiposActividad = r.data;
       }

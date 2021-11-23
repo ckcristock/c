@@ -1,0 +1,64 @@
+<div class="mb-4">
+
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                <h4 class="t">PRESUPUESTO DE PROYECTO MAQUINADOS Y MONTAJES</h4>
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="forma" (submit)="save()">
+        <div class="card">
+            <div class="card-body">
+                <!-- HEADER -->
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Cliente</label>
+                            <div class="col-sm-10">
+                                <ng-select [items]="apuPart$ | async" bindLabel="text" bindValue="value"
+                                    [loading]="apuPartLoading" [typeahead]="apuPartInput$" formControlName="customer_id"
+                                    typeToSearchText="Por favor escriba para buscar"></ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Destino</label>
+                            <div class="col-sm-10">
+                                <ng-select [items]="cities" bindLabel="text" bindValue="value"
+                                    formControlName="destinity_id"></ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Linea</label>
+                            <div class="col-sm-10">
+                                <input formControlName="line" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">TRM</label>
+                            <div class="col-sm-10">
+                                <input formControlName="trm" type="number" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Proyecto</label>
+                            <div class="col-sm-10">
+                                <input formControlName="project" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- END HEADER -->

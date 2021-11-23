@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <form [formGroup]="forma">
+  <form [formGroup]="forma" (submit)="save()">
     <div class="card">
       <div class="card-body">
         <!-- HEADER -->
@@ -17,7 +17,10 @@
             <div class="form-group row">
               <label for="staticEmail" class="col-sm-2 col-form-label">Cliente</label>
               <div class="col-sm-10">
-                <input formControlName="customer_id" type="text" class="form-control" />
+                <ng-select [items]="custumer$ | async" bindLabel="text" bindValue="value" 
+                [loading]="custumerLoading" [typeahead]="custumerInput$" formControlName="customer_id"
+                typeToSearchText="Por favor escriba para buscar"
+                ></ng-select>
               </div>
             </div>
           </div>
@@ -25,7 +28,7 @@
             <div class="form-group row">
               <label for="staticEmail" class="col-sm-2 col-form-label">Destino</label>
               <div class="col-sm-10">
-                <input formControlName="destinity_id" type="text" class="form-control" />
+                <ng-select [items]="cities" bindLabel="text" bindValue="value" formControlName="destinity_id"  ></ng-select>
               </div>
             </div>
           </div>
@@ -89,8 +92,7 @@
           <div class="col-12">
             <div class="form-group">
               <label for="staticEmail">Observaciones</label>
-              <textarea formControlName="observation" class="form-control" formControlName="customer_id" cols="100%"
-                rows="3"></textarea>
+              <textarea formControlName="observation" class="form-control" cols="100%" rows="3"></textarea>
             </div>
           </div>
         </div>
@@ -102,9 +104,44 @@
 
     </app-items>
 
+    <div *ngIf="hasItems" class="col-12 card card-body">
+      <table class="table table-sm table-striped">
+
+        <thead>
+          <tr>
+            <th colspan="2" class="text-center">TOTAL PRESUPUESTO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>TOTAL COP $ </td>
+            <td style="width:90px"> {{total_cop | currency:'':''}}</td>
+          </tr>
+          <tr>
+            <td>TOTAL USD $ </td>
+            <td style="width:90px"> {{total_usd | currency:'':''}}</td>
+          </tr>
+          <tr>
+            <td>V/U VENTA PRORRATEADO COP $ </td>
+            <td style="width:90px"> {{unit_value_prorrateado_cop | currency:'':''}}</td>
+          </tr>
+          <tr>
+            <td>V/U VENTA PRORRATEADO USD $ </td>
+            <td style="width:90px"> {{unit_value_prorrateado_usd | currency:'':''}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
 
     <!-- END ITEMS -->
-
+    <!--  -->
+    <div class="row">
+      <div class="col-12">
+        <button class="btn btn-block btn-sm btn-primary" type="submit" >Guardar</button>
+      </div>
+    </div>
   </form>
 
 </div>
@@ -119,5 +156,3 @@
     </div>
   </div>
 </ng-template>
-
-

@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { diffDates } from '@fullcalendar/core/util/misc';
+import { concat, Observable, of, OperatorFunction, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
+import { ApuPiezaService } from 'src/app/pages/crm/apu-pieza/apu-pieza.service';
 
 @Component({
   selector: 'app-items',
@@ -17,11 +20,12 @@ export class ItemsComponent implements OnInit {
   ];
   indirectCosts: any[]
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private _apuPieza: ApuPiezaService) { }
   ngOnInit(): void {
     this.getIndirectCosts.subscribe(r => {
       this.indirectCosts = r
     })
+    this.loadApuParts()
   }
 
   get items() {
@@ -53,8 +57,8 @@ export class ItemsComponent implements OnInit {
         value_usd: 0,
         value_prorrota_cop: 22,
         value_prorrota_usd: 0,
-        value_unit_prorroteado_cop: 0,
-        value_unit_prorroteado_usd: 0,
+        unit_value_prorrateado_cop: 0,
+        unit_value_prorrateado_usd: 0,
       }
     )
     const value_cop = item.get('value_cop')
@@ -70,6 +74,8 @@ export class ItemsComponent implements OnInit {
         subItem.patchValue({ percentage_sale })
       })
       item.patchValue({ percentage_sale: Math.round(total) })
+      this.updateTotals('value_cop', 'total_cop');
+
     })
     const valueProrrotaCop = item.get('value_prorrota_cop')
     const valueProrrotaUsd = item.get('value_prorrota_usd')
@@ -98,6 +104,14 @@ export class ItemsComponent implements OnInit {
       })
 
     })
+
+    item.get('unit_value_prorrateado_cop').valueChanges.subscribe(r => {
+      this.updateTotals('unit_value_prorrateado_cop', 'unit_value_prorrateado_cop');
+    })
+    item.get('unit_value_prorrateado_usd').valueChanges.subscribe(r => {
+      this.updateTotals('unit_value_prorrateado_usd', 'unit_value_prorrateado_usd');
+    })
+
 
     trm.valueChanges.subscribe(r => {
       subItems.controls.forEach((subItem: FormControl) => {
@@ -163,8 +177,8 @@ export class ItemsComponent implements OnInit {
       unit_value_usd: 0,
       value_prorrota_cop: 0,
       value_prorrota_usd: 0,
-      value_unit_prorroteado_cop: 0,
-      value_unit_prorroteado_usd: 0,
+      unit_value_prorrateado_cop: 0,
+      unit_value_prorrateado_usd: 0,
       observation: '',
     })
 
@@ -300,37 +314,33 @@ export class ItemsComponent implements OnInit {
 
       subItemGroup.patchValue({ value_prorrota_cop, value_prorrota_usd })
     })
-    /*  value_unit_prorroteado_cop: 0,
-          value_unit_prorroteado_usd: 0, */
+    /*  unit_value_prorrateado_cop: 0,
+          unit_value_prorrateado_usd: 0, */
     const valueProrrotaUsd = subItemGroup.get('value_prorrota_usd')
     const valueProrrotaCop = subItemGroup.get('value_prorrota_cop')
 
     valueProrrotaCop.valueChanges.subscribe(r => {
-      const value_unit_prorroteado_cop = r + valueCop.value
-      subItemGroup.patchValue({ value_unit_prorroteado_cop })
-      this.updateSubTotals(subItemGroup.parent as FormArray, ['value_unit_prorroteado_cop'])
+      const unit_value_prorrateado_cop = r + valueCop.value
+      subItemGroup.patchValue({ unit_value_prorrateado_cop })
+      this.updateSubTotals(subItemGroup.parent as FormArray, ['unit_value_prorrateado_cop'])
     })
     valueProrrotaUsd.valueChanges.subscribe(r => {
-      const value_unit_prorroteado_usd = r + valueUsd.value
-      subItemGroup.patchValue({ value_unit_prorroteado_usd })
-      this.updateSubTotals(subItemGroup.parent as FormArray, ['value_unit_prorroteado_usd'])
+      const unit_value_prorrateado_usd = r + valueUsd.value
+      subItemGroup.patchValue({ unit_value_prorrateado_usd })
+      this.updateSubTotals(subItemGroup.parent as FormArray, ['unit_value_prorrateado_usd'])
     })
     subItemGroup.get('value_cop').valueChanges.subscribe(r => {
-      let value_unit_prorroteado_cop = 0
-      if (valueProrrotaCop.value > 0 && r > 0) {
-        value_unit_prorroteado_cop = r + valueProrrotaCop.value
+      let unit_value_prorrateado_cop = valueProrrotaCop.value ? r + valueProrrotaCop.value : r
 
-      }
-      subItemGroup.patchValue({ value_unit_prorroteado_cop })
-      this.updateSubTotals(subItemGroup.parent as FormArray, ['value_unit_prorroteado_cop'])
+      subItemGroup.patchValue({ unit_value_prorrateado_cop })
+      this.updateSubTotals(subItemGroup.parent as FormArray, ['unit_value_prorrateado_cop'])
     })
     subItemGroup.get('value_usd').valueChanges.subscribe(r => {
-      let value_unit_prorroteado_usd = 0
-      if (valueProrrotaUsd.value > 0 && r > 0) {
-        value_unit_prorroteado_usd = r + valueProrrotaUsd.value
-      }
-      subItemGroup.patchValue({ value_unit_prorroteado_usd })
-      this.updateSubTotals(subItemGroup.parent as FormArray, ['value_unit_prorroteado_usd'])
+      let unit_value_prorrateado_usd = valueProrrotaUsd.value ? r + valueProrrotaUsd.value : r
+      subItemGroup.patchValue({ unit_value_prorrateado_usd })
+      this.updateSubTotals(subItemGroup.parent as FormArray, ['unit_value_prorrateado_usd'])
+      this.updateTotals('value_usd', 'total_usd');
+
     })
 
     /*   const percentage = subItem.get('percentage_sale').value
@@ -352,6 +362,19 @@ export class ItemsComponent implements OnInit {
 
     return subItemGroup
   }
+
+  updateTotals(keyBase, keytoUpdate) {
+    let total_key = 0
+    this.items.controls.forEach(x => {
+      const subItems = x.get('subItems').value
+      subItems.forEach(sub => {
+        total_key += sub[keyBase]
+      });
+    })
+    this.forma.patchValue({ [keytoUpdate]: total_key })
+  }
+
+
 
   updateSubTotals(itemGroup: FormArray, keysToUpdate: Array<string>) {
     const subItems = itemGroup.value;
@@ -457,5 +480,52 @@ export class ItemsComponent implements OnInit {
       }));
     });
     return totals
+  }
+
+  model:any
+  searching=false;
+  searchFailed=false;
+  /*  */
+  search = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    tap(() => this.searching = true),
+    switchMap(name =>
+      {
+        return this._apuPieza.getClient({ name }).pipe(
+        tap(() => this.searchFailed = false),
+        catchError(() => {
+          this.searchFailed = true;
+          return of([]);
+        }))}
+    ),
+    tap(() => this.searching = false)
+  )
+/*  */
+  apuPart$: Observable<any>;
+  apuPartLoading = false;
+  apuPartInput$ = new Subject<string>();
+  minLengthTerm = 3;
+  loadApuParts() {
+    this.apuPart$ = concat(
+      of([]), // default items
+      this.apuPartInput$.pipe(
+        filter(res => {
+          return res !== null && res.length >= this.minLengthTerm
+        }),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.apuPartLoading = true),
+        switchMap(term => {
+          let param = { name: term }
+          return this._apuPieza.getApuPart(param).pipe(
+            map((r: any) => { return r.data }),
+            catchError(() => of([])), // empty list on error
+            tap(() => this.apuPartLoading = false)
+          )
+        })
+      )
+    );
   }
 }

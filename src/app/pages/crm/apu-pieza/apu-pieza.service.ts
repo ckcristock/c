@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ApuPiezaService {
 
-  constructor( private http: HttpClient ) { }
+  constructor(private http: HttpClient) { }
 
   getPeopleXSelect() {
     return this.http.get(`${environment.base_url}/people`);
@@ -21,35 +21,35 @@ export class ApuPiezaService {
     return this.http.get(`${environment.base_url}/geometry`);
   }
 
-  getMaterials(){
+  getMaterials() {
     return this.http.get(`${environment.base_url}/materials`);
   }
 
-  getClient(){
-    return this.http.get(`${environment.base_url}/thirdPartyClient`);
+  getClient(params = {}) {
+    return this.http.get(`${environment.base_url}/thirdPartyClient`, {params});
   }
 
-  getIndirectCosts(){
+  getIndirectCosts() {
     return this.http.get(`${environment.base_url}/indirect-cost`);
   }
 
-  save( data:any ){
+  save(data: any) {
     return this.http.post(`${environment.base_url}/apu-parts`, data);
   }
 
-  getApuPart(id){
+  getApuPart(id) {
     return this.http.get(`${environment.base_url}/apu-parts/${id}`);
   }
 
-  update( data:any, id ){
+  update(data: any, id) {
     return this.http.put(`${environment.base_url}/apu-parts/${id}`, data)
   }
 
-  apuPartPaginate( params = {} ){
-    return this.http.get(`${environment.base_url}/apu-parts`, {params});
+  apuPartPaginate(params = {}) {
+    return this.http.get(`${environment.base_url}/apu-parts`, { params });
   }
 
-  activateOrInactivate( data ){
+  activateOrInactivate(data) {
     return this.http.put(`${environment.base_url}/apu-part-activate-Inactive`, data);
   }
 

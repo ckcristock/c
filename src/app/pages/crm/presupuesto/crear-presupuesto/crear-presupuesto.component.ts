@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ApuPiezaService } from '../../apu-pieza/apu-pieza.service';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap, tap, catchError, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-crear-presupuesto',
@@ -12,12 +14,15 @@ export class CrearPresupuestoComponent implements OnInit {
   sendIndirectCost = new EventEmitter<any[]>()
   forma: FormGroup;
   data = '';
- 
+  cities:any[] = []
+
   constructor(private _apuPieza: ApuPiezaService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.createForm();
     this.getIndirectCosts();
+    this.getCustumers();
+    this.getCities();
   }
   getIndirectCosts() {
     this._apuPieza.getIndirectCosts().subscribe((r: any) => {
@@ -31,6 +36,34 @@ export class CrearPresupuestoComponent implements OnInit {
     });
   }
 
+  custumer$: Observable<any>;
+  custumerLoading = false;
+  custumerInput$ = new Subject<string>();
+  minLengthTerm = 3;
+
+  getCustumers() {
+    this.custumer$ = concat(
+      of([]), // default items
+      this.custumerInput$.pipe(
+        filter((res: any) => {
+          return res !== null && res.length >= this.minLengthTerm
+        }),
+        distinctUntilChanged(),
+        debounceTime(600),
+        tap(() => this.custumerLoading = true),
+        switchMap(name => {
+          return this._apuPieza.getClient({ name }).pipe(
+            map((r: any) => { return r.data }),
+            catchError(() => of([])), // empty list on error
+            tap(() => this.custumerLoading = false)
+          )
+        })
+      )
+    );
+  }
+ 
+
+
   createForm() {
     this.forma = this.fb.group({
       customer_id: '',
@@ -41,15 +74,33 @@ export class CrearPresupuestoComponent implements OnInit {
       indirect_costs: this.fb.array([]),
       observation: '',
       items: this.fb.array([]),
-     
+      total_cop: 0,
+      total_usd: 0,
+      unit_value_prorrateado_cop: 0,
+      unit_value_prorrateado_usd: 0,
+
+
     });
-
-
   }
 
-
+  get total_cop() {
+    return this.forma.get('total_cop').value
+  }
+  get total_usd() {
+    return this.forma.get('total_usd').value
+  }
+  get unit_value_prorrateado_cop() {
+    return this.forma.get('unit_value_prorrateado_cop').value
+  }
+  get unit_value_prorrateado_usd() {
+    return this.forma.get('unit_value_prorrateado_usd').value
+  }
   get indirecCostList() {
     return this.forma.get('indirect_costs') as FormArray;
+  }
+
+  get hasItems() {
+    return this.forma.get('items').value.length
   }
 
   indirectCostPush(indirect, all = true) {
@@ -72,14 +123,12 @@ export class CrearPresupuestoComponent implements OnInit {
 
       const items = this.forma.get('items') as FormArray
       group.get('percentage').valueChanges.subscribe(r => {
-        
+
         /* Actualizar todos los subtotales de los elementos cuand cambia el porcetaje global */
         items.controls.forEach((i: FormGroup) => {
           const subItems = i.controls.subItems as FormArray
           subItems.controls.forEach((sub: FormGroup) => {
             const totalCost = sub.controls.type
-            console.log(totalCost, sub);
-            
             setTimeout(() => {
               totalCost.patchValue(totalCost.value)
             }, 500);
@@ -91,5 +140,14 @@ export class CrearPresupuestoComponent implements OnInit {
 
     /*  help.functionsApu.indirectCostOp(group, form); */
     return group;
+  }
+  getCities() {
+    this._apuPieza.getCities().subscribe((r: any) => {
+      this.cities = r.data;
+    })
+  }
+  save() {
+    console.log(this.forma.value);
+
   }
 }

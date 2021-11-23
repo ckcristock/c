@@ -138,7 +138,7 @@ export class HorizontaltopbarComponent implements OnInit {
   }
 
   initSearch() {
-    const source = interval(5000); //output: 0,1,2,3,4,5....
+    const source = interval(10000); //output: 0,1,2,3,4,5....
     this.alerts$ = source.subscribe((val) => {
       let param = { person_id: this.user.person.id };
 

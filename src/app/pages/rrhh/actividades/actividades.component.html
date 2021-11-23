@@ -154,8 +154,8 @@
                         <label for="tipo_actividad">Tipo Actividad</label>
                         <select class="otra form-control form-control-sm" name="rrhh_activity_type_id" id="tipo_actividad" [disabled]="ver == 1" [(ngModel)]="ActividadModel.Id_Tipo_Actividad_Recursos_Humanos" required>
               <option value="" selected>Seleccione tipo</option>
-              <option *ngFor="let ta of TiposActividad" [value]="ta.id">
-                {{ ta.name }}
+              <option *ngFor="let ta of TiposActividad" [value]="ta.value">
+                {{ ta.text }}
               </option>
             </select>
                     </div>

@@ -121,8 +121,15 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type="text" style="width:280px" formControlName="description"
-                                                    class="form-control form-control-sm" />
+                                                <!--  <input type="text" style="width:280px" formControlName="description"
+                                                    class="form-control form-control-sm" /> -->
+                                                    <input id="typeahead-http" type="text" class="form-control mx-sm-3" [class.is-invalid]="searchFailed"  [ngbTypeahead]="search" placeholder="Wikipedia search" />
+                                                    <small *ngIf="searching" class="form-text text-muted">searching...</small>
+
+                                                <ng-select style="width:280px" [items]="apuPart$ | async"
+                                                    bindLabel="name" bindValue="id" [loading]="apuPartLoading"
+                                                    [typeahead]="apuPartInput$" >
+                                                </ng-select>
                                             </td>
                                             <td>
                                                 <input type="text" style="width:70px"
@@ -257,14 +264,14 @@
                                                 </td>
                                                 <td>
                                                     <div class="values" style="width:90px">
-                                                        {{ subItem.controls.value_unit_prorroteado_cop.value |
+                                                        {{ subItem.controls.unit_value_prorrateado_cop.value |
                                                         currency:'':'' }}
                                                     </div>
 
                                                 </td>
                                                 <td>
                                                     <div class="values" style="width:90px">
-                                                        {{ subItem.controls.value_unit_prorroteado_usd.value |
+                                                        {{ subItem.controls.unit_value_prorrateado_usd.value |
                                                         currency:'':'' }}
                                                     </div>
 
@@ -383,12 +390,12 @@
                                         </td>
                                         <td>
                                             <div class="values">
-                                                {{ item.controls.value_unit_prorroteado_cop.value | currency:'':''}}
+                                                {{ item.controls.unit_value_prorrateado_cop.value | currency:'':''}}
                                             </div>
                                         </td>
                                         <td>
                                             <div class="values">
-                                                {{ item.controls.value_unit_prorroteado_usd.value | currency:'':''}}
+                                                {{ item.controls.unit_value_prorrateado_usd.value | currency:'':''}}
                                             </div>
                                         </td>
                                     </ng-container>
@@ -419,19 +426,7 @@
             </button>
         </div>
 
-        <div *ngIf="items.controls.length" class="col-12 card card-body">
-            <table>
 
-                <tbody>
-                    <tr>
-                        <td colspan="10"> TOTAL PRESUPUESTO </td>
-                        <td colspan="1">COP $</td>
-                        <td colspan="1">USD $</td>
-
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 
     <ng-template #notData>

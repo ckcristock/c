@@ -126,14 +126,16 @@ export const functionsApuConjunto = {
     group.get('third_party_id').valueChanges.subscribe(value => {
       let data = clients.find(c => c.value == value);
       this.consts.retefuente_percentage = data.retefuente_percentage;
-      let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal').value;
+      let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
+      let result = admin_unforeseen_utility_subtotal.value / ( 1 - (this.consts.retefuente_percentage / 100));
       group.patchValue({
-        sale_price_cop_withholding_total: admin_unforeseen_utility_subtotal + this.consts.retefuente_percentage
+        sale_price_cop_withholding_total: Math.round(result)
       })
     });
     group.get('admin_unforeseen_utility_subtotal').valueChanges.subscribe(value => {
+      let result = value / ( 1 - (this.consts.retefuente_percentage / 100));
       group.patchValue({
-        sale_price_cop_withholding_total: value + this.consts.retefuente_percentage
+        sale_price_cop_withholding_total: Math.round(result)
       });
     });
   },
@@ -169,16 +171,16 @@ export const functionsApuConjunto = {
     });
     group.get('administrative_unforeseen_subtotal').valueChanges.subscribe(value => {
       let utility_percentage = group.get('utility_percentage');
-      let result = (value / (100 - (utility_percentage.value / 100)))
+      let result = (value / (1 - (utility_percentage.value / 100)))
       group.patchValue({
-        admin_unforeseen_utility_subtotal: result
+        admin_unforeseen_utility_subtotal: Math.round(result)
       });
     });
     group.get('utility_percentage').valueChanges.subscribe(value => {
       let administrative_unforeseen_subtotal = group.get('administrative_unforeseen_subtotal');
-      let result = (administrative_unforeseen_subtotal.value / (100 - (value / 100)))
+      let result = (administrative_unforeseen_subtotal.value / (1 - (value / 100)))
       group.patchValue({
-        admin_unforeseen_utility_subtotal: result
+        admin_unforeseen_utility_subtotal: Math.round(result)
       });
     });
     group.get('sale_price_cop_withholding_total').valueChanges.subscribe(value => {

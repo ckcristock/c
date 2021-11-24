@@ -15,8 +15,8 @@ export class ApuConjuntoService {
     return this.http.get(`${environment.base_url}/indirect-cost`);
   }
 
-  getPeopleXSelect() {
-    return this.http.get(`${environment.base_url}/people`);
+  getPeopleXSelect( params = {} ) {
+    return this.http.get(`${environment.base_url}/peopleSelects`, {params});
   }
 
   getCities() {

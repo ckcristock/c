@@ -19,7 +19,7 @@ export const cutLaserHelper = {
           cut_laser_material_value_id: [r.cut_laser_material_value_id],
           thicknessSelected: [r.cut_laser_material_value_id],
           thickness: [r.thickness],
-          thicknesses: [''],
+          thicknesses: [r.cut_laser_material.cut_laser_material_value],
           sheets_amount: [r.sheets_amount],
           long: [r.long],
           width: [r.width],

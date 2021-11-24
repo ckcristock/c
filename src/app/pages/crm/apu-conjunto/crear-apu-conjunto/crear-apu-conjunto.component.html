@@ -44,6 +44,8 @@
                     <div class="mb-3 row">
                         <label for="cargo" class="col-sm-3 col-form-label col-form-label-sm">Quien elabora</label>
                         <div class="col-sm-9">
+                            <!-- <ng-select [items]="people$ | async" bindLabel="text" bindValue="id" [loading]="peopleLoading" [typeahead]="peopleInput$" typeToSearchText="Por favor para buscar" formControlName="person_id">
+                            </ng-select> -->
                             <ng-select class="" bindLabel="text" [items]="people" bindValue="value" loadingText="loading " ngDefaultControl formControlName="person_id"></ng-select>
                         </div>
                     </div>
@@ -135,14 +137,22 @@
                                                         <option value="conjunto">Conjunto</option>
                                                     </select>
                                                 </td>
-                                                <td *ngIf="item['controls']['apu_type']['value'] == 'pieza'" style="width: 15%;">
-                                                    <ng-select [items]="apuPart$ | async" bindLabel="name" bindValue="id" [loading]="apuPartLoading" [typeahead]="apuPartInput$" typeToSearchText="Por favor para buscar" formControlName="apu_part_id">
-                                                    </ng-select>
+                                                <td>
+                                                    <div style="position: relative;">
+                                                        <input *ngIf="item['controls']['apu_type']['value'] == 'pieza'" style="width:280px" id="typeahead-http" type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" placeholder="Piezas" formControlName="description"
+                                                            (change)="select(item, 'description', 'apu_part_id')" />
+                                                    </div>
+                                                    <div style="position: relative;">
+                                                        <input *ngIf="item['controls']['apu_type']['value'] == 'conjunto'" style="width:280px" id="typeahead-httpp" type="text" class="form-control form-control-sm" [ngbTypeahead]="searchSet" [resultTemplate]="rt" [inputFormatter]="formatterSet" placeholder="Conjuntos"
+                                                            formControlName="description" (change)="select(item, 'description', 'apu_set_child_id')" />
+                                                    </div>
+                                                    <!-- <ng-select [items]="apuPart$ | async" bindLabel="name" bindValue="id" [loading]="apuPartLoading" [typeahead]="apuPartInput$" typeToSearchText="Por favor para buscar" formControlName="apu_part_id">
+                                                    </ng-select> -->
                                                 </td>
-                                                <td *ngIf="item['controls']['apu_type']['value'] == 'conjunto'" style="width: 15%;">
+                                                <!-- <td>
                                                     <ng-select [items]="apuSets$ | async" bindLabel="name" bindValue="id" [loading]="apuSetsLoading" [typeahead]="apuSetsInput$" typeToSearchText="Por favor para buscar" formControlName="apu_set_child_id">
                                                     </ng-select>
-                                                </td>
+                                                </td> -->
                                                 <td>
                                                     <input type="text" class="form-control form-control-sm" id="unidad_maquinas_herra" formControlName="unit">
                                                 </td>
@@ -626,8 +636,6 @@
                             </tbody>
                         </table>
                     </span>
-                </div>
-                <div class="col-6">
                     <div class="row">
                         <span *ngIf="!auiCollapsed" class="btn-sm others-icon" type="button" (click)="auiCollapsed = !auiCollapsed" [attr.aria-expanded]="!auiCollapsed" aria-controls="aiu">
                             <i class="fas fa-chevron-down text-primary ml-3"></i>
@@ -739,6 +747,8 @@
                         </table>
                     </span>
                 </div>
+                <!-- <div class="col-6">
+                </div> -->
             </div>
             <div class="row mt-4">
                 <button class="col-12 btn btn-sm btn-info" type="button" (click)="save()">

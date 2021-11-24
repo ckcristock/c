@@ -11,6 +11,8 @@ export const functionsApuConjunto = {
   },
 
   fillInForm(form: FormGroup, data, fb: FormBuilder, apuParts:Array<any>) {
+    console.log(data);
+    
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
@@ -36,7 +38,7 @@ export const functionsApuConjunto = {
       internal_processes_subtotal: data.internal_processes_subtotal,
       external_processes_subtotal: data.external_processes_subtotal
     });
-    piecesSetsHelper.createFillInPiecesSets(form, fb, data, apuParts)
+    piecesSetsHelper.createFillInPiecesSets(form, fb, data)
     machineToolHelper.createFillInMachineTools(form, fb, data);
     internalProcessesHelper.createFillInInternal(form, fb, data);
     externalProcessesHelper.createFillInExternal(form, fb, data);
@@ -182,13 +184,13 @@ export const functionsApuConjunto = {
     group.get('sale_price_cop_withholding_total').valueChanges.subscribe(value => {
       let trm = group.get('trm').value;
       group.patchValue({
-        sale_price_usd_withholding_total: value / trm,
+        sale_price_usd_withholding_total: Math.round(value / trm),
       })
     });
     group.get('trm').valueChanges.subscribe(value => {
       let sale_price_cop_withholding_total = group.get('sale_price_cop_withholding_total').value;
       group.patchValue({
-        sale_price_usd_withholding_total: sale_price_cop_withholding_total / value
+        sale_price_usd_withholding_total: Math.round(sale_price_cop_withholding_total / value)
       })
     });
     group.get('direct_costs_indirect_costs_total').valueChanges.subscribe(value => {

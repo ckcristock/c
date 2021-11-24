@@ -68,7 +68,7 @@ export const cutWaterHelper = {
       let total_hole_perimeter = cut_water.get('total_hole_perimeter').value;
       let result = ((total_hole_perimeter + total_length) * (value)) / (60*100);
       cut_water.patchValue({
-        time: result
+        time: result.toFixed(7)
       })
     })
     cut_water.get('total_length').valueChanges.subscribe(value => {
@@ -76,7 +76,7 @@ export const cutWaterHelper = {
       let total_hole_perimeter = cut_water.get('total_hole_perimeter').value;
       let result = ((total_hole_perimeter + value) * (thickness_value)) / (60*100);
       cut_water.patchValue({
-        time: result
+        time: result.toFixed(7)
       })
     })
     cut_water.get('total_hole_perimeter').valueChanges.subscribe(value => {
@@ -84,8 +84,11 @@ export const cutWaterHelper = {
       let total_length = cut_water.get('total_length').value;
       let result = ((value + total_length) * (thickness_value)) / (60*100);
       cut_water.patchValue({
-        time: result
+        time: result.toFixed(7)
       })
+      console.log('thickness_value: '+thickness_value);
+      console.log('total_length: '+total_length);
+      console.log('total_hole_perimeter: '+value);
     })
     cut_water.get('amount').valueChanges.subscribe(value => {
       let long = cut_water.get('long').value;

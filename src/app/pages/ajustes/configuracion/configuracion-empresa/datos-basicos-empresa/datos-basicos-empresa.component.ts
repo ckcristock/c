@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ConfiguracionEmpresaService } from '../configuracion-empresa.service';
+import { functionsUtils } from '../../../../../core/utils/functionsUtils';
 
 @Component({
   selector: 'app-datos-basicos-empresa',
@@ -12,6 +13,9 @@ export class DatosBasicosEmpresaComponent implements OnInit {
   @ViewChild('modal') modal:any;
   company:any = [];
   form:FormGroup;
+  imageString:any = '';
+  typeImage:any = '';
+  image:any = '';
   constructor( 
                 private _configuracionEmpresaService: ConfiguracionEmpresaService,
                 private fb:FormBuilder  
@@ -29,13 +33,15 @@ export class DatosBasicosEmpresaComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [this.company.id],
+      logo: [''],
       social_reason: [''],
       document_type: [''],
       document_number: [''],
       verification_digit: [''],
       constitution_date: [''],
       email_contact: [''],
-      phone: ['']
+      phone: [''],
+      typeImage: ['']
     });
     
   }
@@ -58,7 +64,26 @@ export class DatosBasicosEmpresaComponent implements OnInit {
     })
   }
 
+  onImageChanged(event) {
+    if (event.target.files[0]) {
+      let file = event.target.files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event) => {
+        this.imageString = (<FileReader>event.target).result;
+        const type = {ext:this.imageString};
+        this.typeImage = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+      };
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.image = base64;
+      });
+    }
+  }
+
   saveBasicData() {
+    let logo = this.imageString;
+    let typeImage = this.typeImage;
+    this.form.patchValue({logo, typeImage})
     this._configuracionEmpresaService.saveCompanyData(this.form.value)
     .subscribe( (res:any) => {
       this.modal.hide();

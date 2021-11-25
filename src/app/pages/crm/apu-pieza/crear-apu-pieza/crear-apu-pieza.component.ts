@@ -42,7 +42,7 @@ export class CrearApuPiezaComponent implements OnInit {
   otherCollapsed:boolean;
   indirectCollapsed:boolean;
   auiCollapsed:boolean;
-  
+  loading:boolean = false;;
   constructor(
     private _apuPieza: ApuPiezaService,
     private _units: UnidadesMedidasService,
@@ -52,7 +52,8 @@ export class CrearApuPiezaComponent implements OnInit {
     private actRoute: ActivatedRoute
     ) { }
     
-  ngOnInit():void {
+  async ngOnInit() {
+    this.loading = false;
     this.createForm();
     this.getClients();
     this.getUnits();
@@ -63,8 +64,9 @@ export class CrearApuPiezaComponent implements OnInit {
     this.getCities();
     this.collapses();
     this.getThicknesses();
-    this.getCutLaserMaterial();
+    await this.getCutLaserMaterial();
     this.validateData();
+    this.loading = true;
   }
   
   collapses(){
@@ -95,8 +97,8 @@ export class CrearApuPiezaComponent implements OnInit {
     })
   }
 
-  getCutLaserMaterial(){
-    this._apuPieza.cutLaserMaterial().subscribe((r:any) => {
+  async getCutLaserMaterial(){
+    await this._apuPieza.cutLaserMaterial().toPromise().then((r:any) => {
       this.cutLaserMaterials = r.data;
     })
   }
@@ -148,9 +150,7 @@ export class CrearApuPiezaComponent implements OnInit {
 
   validateData() {
     if (this.data) {
-      setTimeout(() => {
-        help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials, this.cutLaserMaterials);
-      }, 1200);
+      help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials, this.cutLaserMaterials);
     }
   }
   /************** Materia Prima Inicio ****************/

@@ -17,7 +17,7 @@
                 Logo Empresa
             </p>
             <p class="col-6 font-weight-bold">
-                <img src="../../../../../../assets/images/logo.png" alt="">
+                <img [src]="company.logo" alt="">
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Razón Social
@@ -67,9 +67,9 @@
                 <div class="col-12">
                     <div class="form-row">
                         <div class="form-group col-12">
-                            <img src="../../../../../../assets/images/logo.png" class="img-form d-block m-auto" alt="">
+                            <img [src]="company.logo" class="img-form d-block m-auto" alt="">
                             <label for="image" class="subir-archivo mt-3">Cargar imagen</label>
-                            <input type="file" name="image" class="form-control-file text-center" id="image" placeholder="Imagen" />
+                            <input type="file" accept="image/*" name="image" (change)="onImageChanged($event)" class="form-control-file text-center" id="image" placeholder="Imagen" />
                         </div>
                     </div>
                     <div class="form-row">

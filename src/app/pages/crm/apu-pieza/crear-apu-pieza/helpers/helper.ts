@@ -14,7 +14,8 @@ export const functionsApu = {
     retefuente_percentage: []
   },
 
-  fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>) {
+  fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>, cutLmaterials:Array<any>) {
+    
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
@@ -57,7 +58,7 @@ export const functionsApu = {
     materiaHelper.createFillInMateria(form, fb, data, geometriesList, materials);
     materialsHelper.createFillInMaterials(form, fb, data);
     cutWaterHelper.createFillInCutWater(form, fb, data, materials);
-    cutLaserHelper.createFillInCutLaser(form, fb, data);
+    cutLaserHelper.createFillInCutLaser(form, fb, data, cutLmaterials);
     machineToolHelper.createFillInMachineTools(form, fb, data);
     internalProccessesHelper.createFillInInternal(form, fb, data);
     externalProccessesHelper.createFillInExternal(form, fb, data);

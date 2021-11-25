@@ -54,17 +54,17 @@ export class CrearApuPiezaComponent implements OnInit {
     
   ngOnInit():void {
     this.createForm();
-    this.validateData();
     this.getClients();
     this.getUnits();
     this.getGeometries();
     this.getMaterials();
+    this.getIndirectCosts();
     this.getPeople();
     this.getCities();
-    this.getIndirectCosts();
     this.collapses();
     this.getThicknesses();
     this.getCutLaserMaterial();
+    this.validateData();
   }
   
   collapses(){
@@ -149,7 +149,7 @@ export class CrearApuPiezaComponent implements OnInit {
   validateData() {
     if (this.data) {
       setTimeout(() => {
-        help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials);
+        help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials, this.cutLaserMaterials);
       }, 1200);
     }
   }

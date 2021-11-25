@@ -36,17 +36,17 @@
                         </div>
                         <div class="form-goup col-md-2">
                             <label for="">NIT</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="nit">
+                            <input type="number" class="form-control form-control-sm" formControlName="nit">
                             <ng-container *ngIf="nit_valid">
                                 <small *ngFor="let item of form.get('nit').errors | ObjToArrayPipe" class="text-danger">
                                   {{ item?.msj }}
                                 </small>
                             </ng-container>
                         </div>
-                        <div class="form-group col-md-2" style="margin-top: 29px;">
+                        <!-- <div class="form-group col-md-2" style="margin-top: 29px;">
                             <input type="text" readonly class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-md-4">
+                        </div> -->
+                        <div class="form-group col-md-5">
                             <label for="">Tipo de Persona</label>
                             <select class="form-control form-control-sm" formControlName="person_type" (change)="personType()">
                                 <option selected>Seleccione</option>
@@ -59,7 +59,7 @@
                                 </small>
                             </ng-container>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-5">
                             <label for="">Tipo de Tercero</label>
                             <select class="form-control form-control-sm" formControlName="third_party_type" (change)="personType()">
                                 <option selected>Seleccione</option>
@@ -165,7 +165,7 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label for="">Tel. Celular</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="cell_phone">
+                            <input type="number" class="form-control form-control-sm" formControlName="cell_phone">
                             <ng-container *ngIf="cell_phone_valid">
                                 <small *ngFor="let item of form.get('cell_phone').errors | ObjToArrayPipe" class="text-danger">
                                   {{ item?.msj }}
@@ -174,7 +174,14 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label for="">Email</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="email">
+                            <input type="email" class="form-control form-control-sm" formControlName="email">
+                            <ng-container *ngIf="email_valid">
+                                <small *ngFor="let item of form.get('email').errors | ObjToArrayPipe" class="text-danger">
+                                  {{ item?.msj }}
+                                </small>
+                                <small class="text-danger" *ngIf="form.get('email').errors?.email">Email invalido</small>
+                                <!-- <div *ngIf="(userRegistrationForm.get('email').invalid && userRegistrationForm.get('email').touched) || userRegistrationForm.get('email').dirty"> -->
+                            </ng-container>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="">Zona</label>
@@ -235,15 +242,16 @@
                         </div>
                         <div class="form-group col-md-2">
                             <label for="">Contacto Pagos</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="contact_payments">
+                            <input type="number" class="form-control form-control-sm" formControlName="contact_payments">
                         </div>
                         <div class="form-group col-md-2">
                             <label for="">Telefono Pagos</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="phone_payments">
+                            <input type="number" class="form-control form-control-sm" formControlName="phone_payments">
                         </div>
                         <div class="form-group col-md-2">
                             <label for="">Email Pagos</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="email_payments">
+                            <input type="email" class="form-control form-control-sm" formControlName="email_payments">
+                            <small class="text-danger" *ngIf="form.get('email_payments').errors?.email">Email invalido</small>
                         </div>
                         <div class="form-group col-md-2">
                             <label for="">Tipo Regimen</label>
@@ -295,7 +303,7 @@
                         </div>
                         <div class="form-group col-md-1">
                             <label for="">%</label>
-                            <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="reteica" [(ngModel)]="retePercentage.reteica" readonly>
+                            <input type="number" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="reteica" [(ngModel)]="retePercentage.reteica" readonly>
                             <!-- <input type="text" class="form-control form-control-sm" formControlName="reteica_percentage" readonly> -->
                         </div>
                         <div class="form-group col-md-2">
@@ -304,7 +312,7 @@
                         </div>
                         <div class="form-group col-md-1">
                             <label for="">%</label>
-                            <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="retefuente" [(ngModel)]="retePercentage.retefuente" readonly>
+                            <input type="number" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="retefuente" [(ngModel)]="retePercentage.retefuente" readonly>
                         </div>
                         <div class="form-group col-md-1">
                             <label for="">G. Contrib.</label>
@@ -319,7 +327,7 @@
                         </div>
                         <div class="form-group col-md-1">
                             <label for="">%</label>
-                            <input type="text" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="reteiva" [(ngModel)]="retePercentage.reteiva" readonly>
+                            <input type="number" class="form-control form-control-sm" [ngModelOptions]="{standalone: true}" name="reteiva" [(ngModel)]="retePercentage.reteiva" readonly>
                         </div>
                         <div class="form-group col-md-2">
                             <label for="">Condición de Pago</label>
@@ -335,11 +343,11 @@
                         </div>
                         <div class="form-group col-md-2">
                             <label for="">Descuento Pronto Pago</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="discount_prompt_payment">
+                            <input type="number" class="form-control form-control-sm" formControlName="discount_prompt_payment">
                         </div>
                         <div class="form-group col-md-2">
                             <label for="">Descuento en días</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="discount_days">
+                            <input type="number" class="form-control form-control-sm" formControlName="discount_days">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="">Estado</label>
@@ -379,7 +387,7 @@
                             </div>
                             <div class="form-group col-md-2" [formGroupName]="i">
                                 <label for="">Email</label>
-                                <input type="text" class="form-control form-control-sm" formControlName="email">
+                                <input type="email" class="form-control form-control-sm" formControlName="email">
                             </div>
                             <div class="form-group col-md-3" [formGroupName]="i">
                                 <label for="">Cargo</label>

@@ -1,0 +1,727 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <div class="row">
+                <div class="col-6 mt-3">
+                    <h4 class="t">
+                        Estimación de costos de mano de obra maquinados y montajes
+                    </h4>
+                </div>
+                <div class="col-6">
+                    <div class="row mt-3 mb-3 mr-4" style="float: right">
+                        <div class="ml-4">
+                            <!-- <p class="text-right"> {{ date | date:'EEEE, MMMM d, y' | titlecase }} </p> -->
+                            <!-- <p> 22 de octubre del 2018 </p> -->
+                            <p>Bucaramanga - Colombia</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                <div class="mb-3 row">
+                    <label for="funcionario" class="col-sm-3 col-form-label col-form-label-sm">Nombre</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="cc" class="col-sm-3 col-form-label col-form-label-sm">Destino</label>
+                    <div class="col-sm-9">
+                        <!-- <ng-select bindLabel="text" [items]="cities" bindValue="value" loadingText="loading " ngDefaultControl></ng-select> -->
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="cargo" class="col-sm-3 col-form-label col-form-label-sm">Quien elabora</label>
+                    <div class="col-sm-9">
+                        <!-- <ng-select [items]="people$ | async" bindLabel="text" bindValue="id" [loading]="peopleLoading" [typeahead]="peopleInput$" typeToSearchText="Por favor para buscar" formControlName="person_id">
+                    </ng-select> -->
+                        <!-- <ng-select class="" bindLabel="text" [items]="people" bindValue="value" loadingText="loading " ngDefaultControl></ng-select> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="mb-3 row">
+                    <label for="funcionario" class="col-sm-3 col-form-label col-form-label-sm">Cliente</label>
+                    <div class="col-sm-9">
+                        <!-- <ng-select class="" bindLabel="text" [items]="clients" bindValue="value" loadingText="loading " ngDefaultControl></ng-select> -->
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="cc" class="col-sm-3 col-form-label col-form-label-sm">Linea</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control form-control-sm">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <label> Observaciones </label>
+                <textarea class="form-control form-control-sm" name="" id="" rows="3"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col mt-2">
+        <h4 class="text-dark text-center">Validación Dimensional</h4>
+        <hr class="line">
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="title mt-3">
+                    <h5>Calculo de mano de obra</h5>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-sm table-bordered">
+                            <thead class="titles">
+                                <th colspan="4"></th>
+                                <th colspan="5" class="text-center">Desplazamiento</th>
+                                <th colspan="5" class="text-center">Ordinarias</th>
+                                <th colspan="5" class="text-center">Festivas</th>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm"> Item </label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm"> Perfil </label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Tipo Desplaza</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">N. Persona</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">N. Días</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Jornada</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Horas</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Horas</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Total</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">N. Días</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Jornada</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Horas</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Hora</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Total</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">N. Días</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Jornada</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Horas</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Hora</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Total</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Salarial</label>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <select class="form-control form-control-sm">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-sm">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-sm">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-sm">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-sm">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td colspan="3"></td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td colspan="3"></td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td colspan="3"></td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="20">
+                                        <div class="btn-group" style="float: right">
+                                            <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div class="col-4">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>Subtotal mano de obra</td>
+                                        <td>
+                                            <input type="text" style="float: left;" class="form-control form-control-sm">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="title mt-3">
+                    <h5>Estimación de Viáticos</h5>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Perfil</th>
+                                    <th>
+                                        <input type="number" readonly style="background-color: transparent" min="0" class="form-control form-control-plaintext form-control-sm">
+                                    </th>
+                                    <th colspan="3" class="text-center">
+                                        Viáticos
+                                    </th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Descripción</th>
+                                    <th>Unidad</th>
+                                    <th>Valor Unitario</th>
+                                    <th>Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">
+                                        <input type="text" class="form-control form-control-sm">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>SubTotal Viáticos</td>
+                                <td>
+                                    <input type="text" style="float: left;" class="form-control form-control-sm">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Subtotal Valid. Dimensional</td>
+                                <td>
+                                    <input type="text" style="float: left;" class="form-control form-control-sm">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col mt-2">
+        <h4 class="text-dark text-center">Montaje y Puesta en Marcha</h4>
+        <hr class="line">
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="title mt-3">
+                    <h5>Calculo de mano de obra</h5>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-sm table-bordered">
+                            <thead class="titles">
+                                <th colspan="4"></th>
+                                <th colspan="5" class="text-center">Desplazamiento</th>
+                                <th colspan="5" class="text-center">Ordinarias</th>
+                                <th colspan="5" class="text-center">Festivas</th>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm"> Item </label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm"> Perfil </label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Tipo Desplaza</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">N. Persona</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">N. Días</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Jornada</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Horas</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Horas</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Total</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">N. Días</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Jornada</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Horas</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Hora</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Total</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">N. Días</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Jornada</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Horas</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Hora</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Total</label>
+                                    </th>
+                                    <th>
+                                        <label class="col-form-label col-form-label-sm">Valor Salarial</label>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <select class="form-control form-control-sm">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-sm">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-sm">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-sm">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-sm">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td colspan="3"></td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td colspan="3"></td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td colspan="3"></td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="20">
+                                        <div class="btn-group" style="float: right">
+                                            <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div class="col-4">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>Subtotal mano de obra</td>
+                                        <td>
+                                            <input type="text" style="float: left;" class="form-control form-control-sm">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="title mt-3">
+                    <h5>Estimación de Viáticos</h5>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Perfil</th>
+                                    <th>
+                                        <input type="number" readonly style="background-color: transparent" min="0" class="form-control form-control-plaintext form-control-sm">
+                                    </th>
+                                    <th colspan="3" class="text-center">
+                                        Viáticos
+                                    </th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Descripción</th>
+                                    <th>Unidad</th>
+                                    <th>Valor Unitario</th>
+                                    <th>Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">
+                                        <input type="text" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label class="col-form-label col-form-label-sm">SubTotal Viáticos</label>
+                                </td>
+                                <td>
+                                    <input type="text" style="float: left;" class="form-control form-control-sm">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="col-form-label col-form-label-sm">Subtotal Montaje y Puesta en marcha</label>
+                                </td>
+                                <td>
+                                    <input type="text" style="float: left;" class="form-control form-control-sm">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="col-form-label col-form-label-sm">Subtotal general Viáticos + Mano de obra</label>
+                                </td>
+                                <td>
+                                    <input type="text" style="float: left;" class="form-control form-control-sm">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col mt-2">
+        <h4 class="text-dark text-center">AUI</h4>
+        <hr class="line">
+    </div>
+</div>
+<div class="card">
+    <div class="row mt-3 ml-2">
+        <div class="col-5">
+            <table class="table table-striped">
+                <tbody class="bg-light">
+                    <tr>
+                        <td>
+                            <label class="col-form-label col-form-label-sm">Administrativos</label>
+                        </td>
+                        <td>
+                            <input type="text" style="float: left;" readonly style="background-color: transparent" class="form-control form-control-plaintext form-control-sm">
+                        </td>
+                        <td>
+                            <input type="text" style="float: left;" readonly style="background-color: transparent" class="form-control form-control-plaintext form-control-sm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="col-form-label col-form-label-sm">Imprevistos</label>
+                        </td>
+                        <td>
+                            <input type="text" style="float: left;" readonly style="background-color: transparent" class="form-control form-control-plaintext form-control-sm">
+                        </td>
+                        <td>
+                            <input type="text" style="float: left;" readonly style="background-color: transparent" class="form-control form-control-plaintext form-control-sm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label class="col-form-label col-form-label-sm">Subtotal A + I</label>
+                        </td>
+                        <td>
+                            <input type="text" style="float: left;" readonly style="background-color: transparent" class="form-control form-control-plaintext form-control-sm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label class="col-form-label col-form-label-sm">Utilidad</label>
+                        </td>
+                        <td>
+                            <input type="text" style="float: left;" readonly style="background-color: transparent" class="form-control form-control-plaintext form-control-sm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label class="col-form-label col-form-label-sm">SubTotal A + I + U</label>
+                        </td>
+                        <td>
+                            <input type="text" style="float: left;" readonly style="background-color: transparent" class="form-control form-control-plaintext form-control-sm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label class="col-form-label col-form-label-sm">Precio Venta COP Incluye retención</label>
+                        </td>
+                        <td>
+                            <input type="text" style="float: left;" readonly style="background-color: transparent" class="form-control form-control-plaintext form-control-sm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label class="col-form-label col-form-label-sm">TRM</label>
+                        </td>
+                        <td>
+                            <input type="text" style="float: left;" style="background-color: transparent" class="form-control form-control-plaintext form-control-sm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label class="col-form-label col-form-label-sm">Precio Venta USD Incluye retención</label>
+                        </td>
+                        <td>
+                            <input type="text" style="float: left;" readonly style="background-color: transparent" class="form-control form-control-plaintext form-control-sm">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

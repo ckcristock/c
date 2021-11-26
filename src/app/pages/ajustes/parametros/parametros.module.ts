@@ -30,6 +30,8 @@ import { MedidasComponent } from './apu/medidas/medidas.component';
 import { CostosIndirectosComponent } from './apu/costos-indirectos/costos-indirectos.component';
 import { EspesoresComponent } from './apu/espesores/espesores.component';
 import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-laser-material.component';
+import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component';
+
 
 
 
@@ -56,7 +58,8 @@ import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-la
         MedidasComponent,
         CostosIndirectosComponent,
         EspesoresComponent,
-        CorteLaserMaterialComponent
+        CorteLaserMaterialComponent,
+        PerfilesApuComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

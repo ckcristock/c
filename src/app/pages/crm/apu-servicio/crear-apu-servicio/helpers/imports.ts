@@ -1,4 +1,5 @@
 import { functionsApuService } from "./helper";
-import { mypmHelper } from "./montaje-puesta-marcha";
+import { cmoHelper } from "./calculo-mano-obra";
+import { mpmCalculateLaborHelper } from "./mp-calculo-mano-obra";
 
-export { functionsApuService, mypmHelper }
+export { functionsApuService, cmoHelper, mpmCalculateLaborHelper }

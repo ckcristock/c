@@ -30,6 +30,9 @@ export class ApuConjuntoService {
   getApuParts( params = {} ){
     return this.http.get(`${environment.base_url}/apu-parts-list`, {params});
   }
+  findApuParts( params = {} ){
+    return this.http.get(`${environment.base_url}/apu-parts-find`, {params});
+  }
 
   getApuSetList( params = {} ){
     return this.http.get(`${environment.base_url}/apu-sets-list`, {params});

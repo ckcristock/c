@@ -14,6 +14,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PipesModule } from '../core/pipes/pipes.module';
 import { NotDataComponent } from './not-data/not-data.component';
 import { ApplicantComponent } from './applicant/applicant.component';
+import { GetApusComponent } from './get-apus/get-apus.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ApplicantComponent } from './applicant/applicant.component';
     TimeLineComponent,
     NotDataComponent,
     ApplicantComponent,
+    GetApusComponent,
   ],
   exports: [
     ModalBasicComponent,
@@ -32,7 +34,8 @@ import { ApplicantComponent } from './applicant/applicant.component';
     StatsComponent,
     TimeLineComponent,
     NotDataComponent,
-    ApplicantComponent
+    ApplicantComponent,
+    GetApusComponent,
   ],
   imports: [
     NgbAccordionModule,

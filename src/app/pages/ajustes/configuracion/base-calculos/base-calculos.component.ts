@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { CalculationBasesService } from './calculation-bases.service';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-base-calculos',
@@ -9,21 +11,43 @@ import { NgForm } from '@angular/forms';
 
 export class BaseCalculosComponent implements OnInit {
   data = {
-    administracion: undefined, 
-    imprevistos: undefined,
-    utilidad: undefined, 
+    administration_percentage: undefined,
+    unforeseen_percentage: undefined,
+    utility_percentage: undefined,
     trm: undefined,
-    valor_minuto_corte_laser: undefined,
-    valor_minuto_corte_agua: undefined
+    laser_cut_minute_value: undefined,
+    warer_cut_minute_value: undefined
   }
 
-  constructor() { }
+  constructor(private _calculationBase: CalculationBasesService, private _swal :SwalService) { }
 
   ngOnInit(): void {
+    this.getBases()
   }
 
-  guardar(form: NgForm){
-    console.log({form, data:this.data})
+  guardar(form: NgForm) {
+    const data =  Object.entries(form.value);
+    
+    this._calculationBase.update({data}).subscribe(r => { 
+      this._swal.show({
+          icon:'success',
+          title:'Se ha guardado con éxito',
+          text:'',
+          showCancel:false
+      })
+    });
+  }
+
+  getBases() {
+    this._calculationBase.getAll().subscribe((r: any) => {
+      const { data } = r
+
+      data.forEach(el => {
+        if (Object.prototype.hasOwnProperty.call(this.data, el.concept)) {
+          this.data[el.concept] = el.value;
+        }
+      })
+    })
   }
 
 }

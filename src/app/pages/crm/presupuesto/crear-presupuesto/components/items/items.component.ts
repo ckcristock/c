@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { diffDates } from '@fullcalendar/core/util/misc';
 import { concat, Observable, of, OperatorFunction, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 import { ApuPiezaService } from 'src/app/pages/crm/apu-pieza/apu-pieza.service';
+import { ApuConjuntoService } from '../../../../apu-conjunto/apu-conjunto.service';
 
 @Component({
   selector: 'app-items',
@@ -13,26 +14,47 @@ import { ApuPiezaService } from 'src/app/pages/crm/apu-pieza/apu-pieza.service';
 export class ItemsComponent implements OnInit {
 
   @Input('forma') forma: FormGroup
-  @Input('getIndirectCosts') getIndirectCosts: EventEmitter<any>
+  @Input('indirectCosts') indirectCosts: EventEmitter<any>
+  @Input('calculationBase') calculationBase: any
+  @Input('dataEdit') dataEdit: any
+
+  @ViewChild('apus') apus: any
+  tempItem: FormGroup
   types = [
     { name: 'P', value: 'P' },
     { name: 'S', value: 'S' },
   ];
-  indirectCosts: any[]
+  /*  indirectCosts: any[] */
 
-  constructor(private fb: FormBuilder, private _apuPieza: ApuPiezaService) { }
+  constructor(private fb: FormBuilder,
+    private _apuPieza: ApuPiezaService,
+    private _apuSet: ApuConjuntoService
+
+  ) { }
   ngOnInit(): void {
-    this.getIndirectCosts.subscribe(r => {
-      this.indirectCosts = r
-    })
-    this.loadApuParts()
+    console.log(this.calculationBase);
+
+    this.fillData();
+
+    /* this.loadApuParts()
+     */
+
   }
 
   get items() {
     return this.forma.get('items') as FormArray;
   }
 
-  addItems() {
+  fillData() {
+    console.log(this.dataEdit,'daaaaaaaaaaaa');
+    
+    if (this.dataEdit) {
+      this.dataEdit.items.forEach(item => {
+        this.addItems(item)
+      });
+    }
+  }
+  addItems(itemToAdd = null) {
     let item = this.fb.group(
       {
         shows: {
@@ -41,8 +63,8 @@ export class ItemsComponent implements OnInit {
           total_sale: false,
           prorrateo: false
         },
-        subItems: this.fb.array([this.makeSubItem()]),
-        total_cost: 0,
+        subItems: this.fb.array([]),
+        total_cost: itemToAdd ? itemToAdd.total_cost : 0,
         subtotal_indirect_cost_dynamic: this.makeTotalIndirectCost(),
         subtotal_indirect_cost: 0,
         value_amd: 0,
@@ -63,8 +85,8 @@ export class ItemsComponent implements OnInit {
     )
     const value_cop = item.get('value_cop')
     const subItems = item.get('subItems') as FormArray
-    value_cop.valueChanges.subscribe(r => {
 
+    value_cop.valueChanges.subscribe(r => {
       let total = 0;
       subItems.controls.forEach((subItem: FormControl) => {
         const percentage_sale =
@@ -126,7 +148,14 @@ export class ItemsComponent implements OnInit {
     })
 
     this.items.push(item);
+    if (itemToAdd) {
+      const subItems = item.get('subItems') as FormArray
+      subItems.push(this.makeSubItem(itemToAdd.subitems[0]))
+    }
   }
+
+
+
 
   changeView(group: FormGroup, key: string) {
     const shows = group.get('shows').value
@@ -141,9 +170,19 @@ export class ItemsComponent implements OnInit {
         'value_amd', 'value_unforeseen', 'value_utility',
         'subTotal', 'another_values', 'retention',
         'value_cop', 'value_usd'])
+
+    this.recalculateTotals()
   }
   deleteItem(pos) {
     this.items.removeAt(pos)
+    this.recalculateTotals()
+  }
+
+  recalculateTotals() {
+    this.updateTotals('unit_value_prorrateado_cop', 'unit_value_prorrateado_cop')
+    this.updateTotals('unit_value_prorrateado_usd', 'unit_value_prorrateado_usd')
+    this.updateTotals('value_cop', 'value_cop')
+    this.updateTotals('value_usd', 'total_usd')
   }
 
   addSubItem(group: FormGroup) {
@@ -151,18 +190,54 @@ export class ItemsComponent implements OnInit {
     subItems.push(this.makeSubItem())
   }
 
-  makeSubItem() {
-    const subItemGroup = this.fb.group({
-      type: 'P',
-      description: '',
+  select(group: FormGroup, key, toUpdate) {
+
+    let control = group.get(key).value
+    if (typeof control == 'object') {
+
+      group.patchValue({ [toUpdate]: control['value'] })
+
+    } else {
+      group.patchValue({ [toUpdate]: '' })
+    }
+    /*     group.patchValue({ [key]: e.target.value }) */
+    /*  return e.preventDefault() */
+    console.log(control);
+
+    group.patchValue({ 'unit_cost': control.unit_direct_cost })
+
+  }
+
+  findApus(item: FormGroup) {
+    this.tempItem = item;
+    this.apus.show()
+  }
+  getApus(e: any[]) {
+    let subItems = this.tempItem.get('subItems') as FormArray
+    e.forEach(apu => {
+      const exist = subItems.value.some(x => (x.apu_id == apu.id && x.type_module == apu.type_module))
+      !exist ? subItems.push(this.makeSubItem(apu)) : ''
+    });
+
+  }
+
+  makeSubItemGroup(apu){
+    const percentages = {
+      percentage_amd: this.calculationBase.administration_percentage.value,
+      percentage_unforeseen: this.calculationBase.unforeseen_percentage.value,
+      percentage_utility: this.calculationBase.utility_percentage.value,
+    }
+
+   return this.fb.group({
+      type: (apu ? apu.type : 'P'),
+      description: (apu ? apu.name : ''),
+      apu_id: [(apu ? apu.id : ''), Validators.required],
       cuantity: 0,
-      unit_cost: 0,
+      unit_cost: (apu ? apu.unit_cost : ''),
       total_cost: 0,
       indirect_costs: this.makeIndirectCost(),
       subtotal_indirect_cost: 0,
-      percentage_amd: 13,
-      percentage_unforeseen: 2,
-      percentage_utility: 10,
+      ...percentages,
       value_amd: 0,
       value_unforeseen: 0,
       value_utility: 0,
@@ -180,7 +255,12 @@ export class ItemsComponent implements OnInit {
       unit_value_prorrateado_cop: 0,
       unit_value_prorrateado_usd: 0,
       observation: '',
+      type_module: (apu ? apu.type_module : '')
     })
+  }
+  makeSubItem(apu = null) {
+  
+    const subItemGroup = this.makeSubItemGroup(apu)
 
     const cuantity = subItemGroup.get('cuantity')
     const unitCost = subItemGroup.get('unit_cost')
@@ -209,9 +289,11 @@ export class ItemsComponent implements OnInit {
       this.updateSubTotals(subItemGroup.parent as FormArray, ['total_cost'])
 
     })
-
+    const partId = subItemGroup.get('apu_part_id')
+    const serviceId = subItemGroup.get('service_id')
     type.valueChanges.subscribe(r => {
       const set = r == 'P' ? subItemGroup.get('total_cost').value : 0
+
       const value = this.calculateSutIndirectos(indirectCosts, set)
       subItemGroup.patchValue({ subtotal_indirect_cost: value })
     })
@@ -463,6 +545,8 @@ export class ItemsComponent implements OnInit {
           const indirectCosts: Array<any> = subItem.get('indirect_costs').value
           total += indirectCosts.find(x => x.indirect_cost_id == id).value
         });
+        console.log(indirectTotals);
+        
 
         const toUpdate = indirectTotals.controls.find(r => r.get('indirect_cost_id').value == id);
         toUpdate.patchValue({ sub_total: total })
@@ -482,27 +566,36 @@ export class ItemsComponent implements OnInit {
     return totals
   }
 
-  model:any
-  searching=false;
-  searchFailed=false;
+  model: any
+  searching = false;
+  searchFailed = false;
   /*  */
-  search = (text$: Observable<string>) =>
-  text$.pipe(
+  search = (text$: Observable<string>) => text$.pipe(
     debounceTime(300),
     distinctUntilChanged(),
     tap(() => this.searching = true),
     switchMap(name =>
-      {
-        return this._apuPieza.getClient({ name }).pipe(
+      this._apuSet.findApuParts({ name }).pipe(
+        map((r: any) => r.data),
         tap(() => this.searchFailed = false),
         catchError(() => {
           this.searchFailed = true;
           return of([]);
-        }))}
+        }))
+
     ),
     tap(() => this.searching = false)
   )
-/*  */
+
+  formatter = (x: { text: string }) => x.text;
+  inputFormatBandListValue(value: any) {
+    if (value.code)
+      return value.code
+    return value;
+  }
+
+
+  /*  */
   apuPart$: Observable<any>;
   apuPartLoading = false;
   apuPartInput$ = new Subject<string>();

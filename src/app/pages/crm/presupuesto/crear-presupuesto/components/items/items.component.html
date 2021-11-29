@@ -7,7 +7,7 @@
         </div>
         <ng-container *ngIf="items.controls.length ; else notData">
 
-            <div class="card " *ngFor="let item of items.controls; let i = index">
+            <div class="card " style="width:100% ;" *ngFor="let item of items.controls; let i = index">
                 <div class="card-header header-item w-100">
                     <div class=" d-flex align-items-center justify-content-between">
                         <span class="bg-info p-2 text-white">{{ i + 1 }}</span>
@@ -113,23 +113,42 @@
                                         <tr>
                                             <td> {{i + 1 }}.{{y+1}}</td>
                                             <td>
-                                                <select formControlName="type" style="width: 50px;"
-                                                    class="form-control form-control-sm">
+                                                <select formControlName="type" *ngIf="!subItem.controls.type_module.value;else type"
+                                                 
+                                                    style="width: 50px;" class="form-control form-control-sm">
                                                     <option [value]="type.value" *ngFor="let type of types">
                                                         {{ type.name }}
                                                     </option>
                                                 </select>
+                                                <ng-template #type> {{subItem.controls.type.value}} </ng-template>
+                                                
                                             </td>
                                             <td>
                                                 <!--  <input type="text" style="width:280px" formControlName="description"
                                                     class="form-control form-control-sm" /> -->
-                                                    <input id="typeahead-http" type="text" class="form-control mx-sm-3" [class.is-invalid]="searchFailed"  [ngbTypeahead]="search" placeholder="Wikipedia search" />
-                                                    <small *ngIf="searching" class="form-text text-muted">searching...</small>
+                                                <!--  <input id="typeahead-focus" type="text" class="form-control"
+                                                    [(ngModel)]="model" [ngbTypeahead]="search"
+                                                    (focus)="focus$.next($any($event).target.value)"
+                                                    (click)="click$.next($any($event).target.value)"
+                                                    #instance="ngbTypeahead" /> -->
 
-                                                <ng-select style="width:280px" [items]="apuPart$ | async"
-                                                    bindLabel="name" bindValue="id" [loading]="apuPartLoading"
-                                                    [typeahead]="apuPartInput$" >
-                                                </ng-select>
+                                                <div style="position: relative;">
+                                                    <!-- [class.is-invalid]="(subItem.get('apu_id').invalid && subItem.get('description').touched)" -->
+
+                                                    <input style="width:280px" id="typeahead-http" type="text"
+                                                        class="form-control form-control-sm"
+                                                        [readonly]="subItem.get('type_module').value"
+                                                        [ngClass]="{'form-control-plaintext': subItem.get('type_module').value}"
+                                                        formControlName="description" />
+
+
+
+                                                </div>
+                                                <!--  <small *ngIf="searching"
+                                                    class="form-text text-muted">searching...</small> -->
+
+
+
                                             </td>
                                             <td>
                                                 <input type="text" style="width:70px"
@@ -405,23 +424,28 @@
                                 </tr>
                             </ng-container>
 
-
-
                         </tbody>
                     </table>
 
 
                 </div>
                 <div class="card-footer text-right w-100 bg-white mt-3">
-                    <button ngbTooltip="Agregar Sub Item" (click)="addSubItem(item)" class="btn btn-info btn-sm ">
+
+                    <button ngbTooltip="Agregar Sub Item Manual" type="button" (click)="addSubItem(item)"
+                        class="btn btn-info btn-sm mr-2">
                         <i class="fas fa-plus"></i>
+                    </button>
+                    <button ngbTooltip="Agregar Sub Item" type="button" (click)="findApus(item)"
+                        class="btn btn-info btn-sm ">
+                        <i class="fas fa-search"></i>
                     </button>
                 </div>
             </div>
         </ng-container>
 
         <div class="col-12 mb-4 text-right">
-            <button (click)="addItems()" class="btn btn-success btn-sm" ngbTooltip="Agregar Item">
+
+            <button (click)="addItems()" class="btn btn-success btn-sm" type="button" ngbTooltip="Agregar Item">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
@@ -453,3 +477,14 @@
         </td>
     </tr>
 </ng-template>
+
+
+
+<ng-template #rt let-r="result" let-t="term">
+
+    <ngb-highlight [result]="r.text" [term]="t"></ngb-highlight>
+</ng-template>
+
+<app-get-apus #apus (sendApus)="getApus($event)">
+
+</app-get-apus>

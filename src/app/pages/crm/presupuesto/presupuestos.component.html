@@ -10,30 +10,32 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <table class="table table-borderless table-striped" *ngIf="!loading && presupuestos.length > 0; else notData">
+        <table class="table table-borderless table-striped" *ngIf="!loading && budgets.length > 0; else notData">
             <thead>
                 <tr>
                     <th>Item</th>
-                    <th>Nombre</th>
+                    <th>Fecha</th>
                     <th>Cliente</th>
                     <th>Destino</th>
                     <th>Linea</th>
                     <th>Quien elabora</th>
-                    <th>Cantidad</th>
-                    <th>F. Creación</th>
+                    <th>Total COP</th>
+                    <th>Total USD</th>
+                  
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-             <!--    <tr *ngFor="let item of apuParts" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
-                    <td> {{ item.code }} </td>
-                    <td> {{ item.name }} </td>
-                    <td> {{ item.thirdparty.first_name }} {{ item.thirdparty.first_surname }} </td>
-                    <td> {{ item.city.name }} </td>
-                    <td> {{ item.line }} </td>
-                    <td> {{ item.person.first_name }} {{ item.person.first_surname }} </td>
-                    <td> {{ item.amount }} </td>
+                <tr *ngFor="let item of budgets" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
+                    <td> PRES{{ item.id }} </td>
                     <td> {{ item.created_at | date:'dd-MM-YYYY' }} </td>
+
+                    <td> {{ item.customer.name }} </td> 
+                    <td> {{ item.destiny.name }} </td>
+                    <td> {{ item.line }} </td>
+                    <td> {{ item.user.person.first_name }} {{ item.user.person.first_surname }} </td>
+                    <td> ${{ item.total_cop | currency:'':'' }} </td>
+                    <td> ${{ item.total_usd | currency:'':'' }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -41,10 +43,10 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/crm/apu/ver-apu-pieza', item.id]">
+                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/crm/presupuesto/', item.id]">
                                         <i class="far fa-eye"></i> Ver
                                     </a>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/apu/editar-apu-pieza', item.id]">
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/presupuesto/editar', item.id]">
                                         <i class="far fa-edit"></i> editar
                                     </a>
                                     <a *ngIf="item.state == 'Activo'" (click)="activateOrInactive('Inactivo', item.id)" class="dropdown-item waves-light text-danger waves-effect caja-botones">
@@ -57,10 +59,10 @@
                             </div>
                         </div>
                     </td>
-                </tr> -->
+                </tr>
             </tbody>
         </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getData($event)" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize"
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getBudgets($event)" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize"
             [(page)]="pagination.page" aria-label="Default pagination">
         </ngb-pagination>
     </div>

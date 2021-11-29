@@ -1,4 +1,4 @@
-<div class="mb-4">
+<div class="mb-4" *ngIf="!loading">
 
   <div class="card">
     <div class="card-body">
@@ -16,12 +16,15 @@
           <div class="col-6">
             <div class="form-group row">
               <label for="staticEmail" class="col-sm-2 col-form-label">Cliente</label>
-              <div class="col-sm-10">
+              <!-- <div class="col-sm-10">
                 <ng-select [items]="custumer$ | async" bindLabel="text" bindValue="value" 
                 [loading]="custumerLoading" [typeahead]="custumerInput$" formControlName="customer_id"
                 typeToSearchText="Por favor escriba para buscar"
                 ></ng-select>
-              </div>
+              </div> -->
+              <div class="col-sm-10">
+                <ng-select class="" bindLabel="text" [items]="clients" bindValue="value" loadingText="loading " ngDefaultControl formControlName="customer_id"></ng-select>
+            </div>
             </div>
           </div>
           <div class="col-6">
@@ -100,7 +103,7 @@
     </div>
     <!-- ITEMS -->
 
-    <app-items [forma]="forma" [getIndirectCosts]="sendIndirectCost">
+    <app-items [forma]="forma" [dataEdit]="dataEdit" [indirectCosts]="indirectCosts" [calculationBase]="calculationBase">
 
     </app-items>
 
@@ -115,19 +118,19 @@
         <tbody>
           <tr>
             <td>TOTAL COP $ </td>
-            <td style="width:90px"> {{total_cop | currency:'':''}}</td>
+            <td class="text-right" style="width:90px"> {{total_cop | currency:'':''}}</td>
           </tr>
           <tr>
             <td>TOTAL USD $ </td>
-            <td style="width:90px"> {{total_usd | currency:'':''}}</td>
+            <td class="text-right" style="width:90px"> {{total_usd | currency:'':''}}</td>
           </tr>
           <tr>
             <td>V/U VENTA PRORRATEADO COP $ </td>
-            <td style="width:90px"> {{unit_value_prorrateado_cop | currency:'':''}}</td>
+            <td class="text-right" style="width:90px"> {{unit_value_prorrateado_cop | currency:'':''}}</td>
           </tr>
           <tr>
             <td>V/U VENTA PRORRATEADO USD $ </td>
-            <td style="width:90px"> {{unit_value_prorrateado_usd | currency:'':''}}</td>
+            <td class="text-right" style="width:90px"> {{unit_value_prorrateado_usd | currency:'':''}}</td>
           </tr>
 
         </tbody>

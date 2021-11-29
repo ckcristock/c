@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { PresupuestoRoutingModule } from './presupuesto-routing.module';
 import { CommonModule } from '@angular/common';
-import { NgbPaginationModule, NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPaginationModule, NgbDropdownModule, NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsModule } from '../../../components/components.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -12,10 +12,11 @@ import { CrearPresupuestoComponent } from './crear-presupuesto/crear-presupuesto
 import { DirectivesModule } from '../../../core/directives/directives.module';
 import { SubItemsComponent } from './crear-presupuesto/components/sub-items/sub-items.component';
 import { ItemsComponent } from './crear-presupuesto/components/items/items.component';
+import { EditarPresupuestoComponent } from './editar-presupuesto/editar-presupuesto.component';
 
 
 @NgModule({
-    declarations: [PresupuestosComponent,  CrearPresupuestoComponent, SubItemsComponent, ItemsComponent],
+    declarations: [PresupuestosComponent,  CrearPresupuestoComponent, SubItemsComponent, ItemsComponent, EditarPresupuestoComponent],
     imports: [
         PresupuestoRoutingModule,
         CommonModule,
@@ -28,6 +29,7 @@ import { ItemsComponent } from './crear-presupuesto/components/items/items.compo
         ReactiveFormsModule,
         NgbTooltipModule,
         DirectivesModule,
+        NgbTypeaheadModule,
     ],
     exports: [],
 })

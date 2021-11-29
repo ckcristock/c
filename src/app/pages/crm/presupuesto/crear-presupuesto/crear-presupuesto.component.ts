@@ -1,8 +1,12 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { ApuPiezaService } from '../../apu-pieza/apu-pieza.service';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap, catchError, map } from 'rxjs/operators';
+import { CalculationBasesService } from '../../../ajustes/configuracion/base-calculos/calculation-bases.service';
+import { BudgetService } from '../budget.service';
+import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-crear-presupuesto',
@@ -10,31 +14,76 @@ import { debounceTime, distinctUntilChanged, filter, switchMap, tap, catchError,
   styleUrls: ['./crear-presupuesto.component.scss'],
 })
 export class CrearPresupuestoComponent implements OnInit {
+  @Input('id') id;
+  @Input('dataEdit') dataEdit;
+
   indirectCosts: any = [];
-  sendIndirectCost = new EventEmitter<any[]>()
+  clients: any = [];
   forma: FormGroup;
   data = '';
-  cities:any[] = []
+  cities: any[] = []
+  calculationBase: any = {}
+  loading = false;
 
-  constructor(private _apuPieza: ApuPiezaService, private fb: FormBuilder) { }
-
-  ngOnInit(): void {
-    this.createForm();
-    this.getIndirectCosts();
-    this.getCustumers();
-    this.getCities();
-  }
-  getIndirectCosts() {
-    this._apuPieza.getIndirectCosts().subscribe((r: any) => {
-      this.indirectCosts = r.data;
-
-      if (!this.data) {
-        this.sendIndirectCost.emit(r.data)
-        this.indirectCostPush(this.indirecCostList);
+  constructor(
+    private _apuPieza: ApuPiezaService,
+    private fb: FormBuilder,
+    private _calculationBase: CalculationBasesService,
+    private _budget: BudgetService,
+    private _swal: SwalService,
+    private router: Router) { }
+  async ngOnInit() {
+    this.loading = true;
+    /*   this.getCustumers(); */
+    this.getClients();
+    
+    if (this.dataEdit) {
+      console.log(this.dataEdit, 'aaaaaaaaaa');
+    
+      this.calculationBase.trm = {
+        value: this.dataEdit.trm
       }
+    } else {
+      await this.getBases()
+    }
 
-    });
+    this.createForm();
+    await this.getIndirectCosts();
+    this.loading = false;
+    this.getCities();
+
+
   }
+
+  async getBases() {
+    await this._calculationBase.getAll().toPromise().then((r: any) => {
+      this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+    })
+  }
+  async getIndirectCosts() {
+    if (this.dataEdit) {
+      this.indirectCosts =
+        this.dataEdit.indirect_costs.reduce((acc, el) => {
+          return [...acc,
+          { text: el.indirect_cost.name, value: el.indirect_cost_id, percentage: el.percentage }
+          ]
+        }, [])
+
+    } else {
+
+      await this._apuPieza.getIndirectCosts().toPromise().then((r: any) => {
+        this.indirectCosts = r.data;
+      });
+    }
+    this.indirectCostPush(this.indirecCostList);
+  }
+
+  getClients(){
+    this._apuPieza.getClient().subscribe((r:any) => {
+      this.clients = r.data;
+    })
+  }
+
 
   custumer$: Observable<any>;
   custumerLoading = false;
@@ -61,16 +110,16 @@ export class CrearPresupuestoComponent implements OnInit {
       )
     );
   }
- 
+
 
 
   createForm() {
     this.forma = this.fb.group({
-      customer_id: '',
-      destinity_id: '',
-      line: '',
-      trm: '',
-      project: '',
+      customer_id: (this.dataEdit ? this.dataEdit.customer_id : ''),
+      destinity_id: (this.dataEdit ? this.dataEdit.destinity_id : ''),
+      line: (this.dataEdit ? this.dataEdit.line : ''),
+      trm: this.calculationBase.trm.value,
+      project: (this.dataEdit ? this.dataEdit.project : ''),
       indirect_costs: this.fb.array([]),
       observation: '',
       items: this.fb.array([]),
@@ -78,8 +127,6 @@ export class CrearPresupuestoComponent implements OnInit {
       total_usd: 0,
       unit_value_prorrateado_cop: 0,
       unit_value_prorrateado_usd: 0,
-
-
     });
   }
 
@@ -147,7 +194,30 @@ export class CrearPresupuestoComponent implements OnInit {
     })
   }
   save() {
-    console.log(this.forma.value);
+    this._swal.show({
+      title: '¿Está seguro?',
+      text: 'Se dispone a guardar un presupuesto',
+      icon: 'question'
+    }, this.saveData).then(r => {
+      if (r.isConfirmed) {
+
+      }
+    })
+
+
+  }
+
+  saveData = () => {
+    const data = this.forma.value;
+    this._budget.save({ data }).subscribe(r => {
+      this._swal.show({
+        title: 'Se ha guardado con éxito',
+        text: '',
+        icon: 'success',
+        showCancel: false
+      })
+      this.router.navigate(['crm/presupuesto'])
+    })
 
   }
 }

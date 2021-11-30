@@ -1,11 +1,74 @@
 <div class="page-body">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
+    <div class="card">
+        <div class="row">
+            <div class="col-12">
                 <div class="card-body">
-                    <!-- <div class="card-header"> -->
-                    <h4 class="text-center">Montos Totales</h4>
-                    <!-- </div> -->
+                    <!-- <h4 class="text-center text-primary">Inventarios</h4>
+                    <hr class="line"> -->
+
+                    <!-- <div class="col-md-12">
+                        <div class="card-block"> -->
+                    <div class="row">
+
+                        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs ">
+                            <li [ngbNavItem]="1">
+                                <a ngbNavLink>Inventario Dotación</a>
+                                <ng-template ngbNavContent>
+
+                                    <!-- <ng-container *ngIf="!loading; else notDataTable"> -->
+                                    <app-category-stock></app-category-stock>
+                                    <!-- </ng-container> -->
+
+                                    <!-- <div class="card">
+                                                <div class="col-md-12">
+                                                    <div class="card-block">
+                                                        <div class="m-3 col-12 text-center">
+                                                            <h4>Stock por categorías</h4>
+                                                            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-pills">
+                                                                <li [ngbNavItem]="1">
+                                                                    <a ngbNavLink>Dotación</a>
+                                                                    <ng-template ngbNavContent>
+
+                                                                        <app-table-stock [type]="'Dotacion'" [find]="true"></app-table-stock>
+
+                                                                    </ng-template>
+                                                                </li>
+                                                                <li [ngbNavItem]="2">
+                                                                    <a ngbNavLink>Epp</a>
+                                                                    <ng-template ngbNavContent>
+                                                                        <app-table-stock [type]="'EPP'" [find]="true"></app-table-stock>
+
+                                                                    </ng-template>
+                                                                </li>
+                                                            </ul>
+
+                                                            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+
+                                </ng-template>
+                            </li>
+
+                            <li [ngbNavItem]="2">
+                                <a ngbNavLink>Entrega Dotación</a>
+                                <ng-template ngbNavContent>
+
+                                    <app-table-inventary></app-table-inventary>
+
+                                </ng-template>
+                            </li>
+                        </ul>
+
+                        <!-- <div [ngbNavOutlet]="nav" class="mt-2"></div> -->
+
+                    </div>
+                    <!-- </div>
+                    </div> -->
+
+                    <!-- <h4 class="text-center">Montos Totales</h4>
+
                     <div class="form-group">
                         <input type="month" (change)="listarTotales($event.target.value);Graficar()" [(ngModel)]="selectedMes" class="form-control form-control-sm" name="mouth" id="">
                     </div>
@@ -26,17 +89,12 @@
                                 <p>entregas realizadas</p>
                             </div>
                         </div>
-                    </div>
-                    <!-- <hr class="hr"> -->
+                    </div> -->
                 </div>
 
-                <!-- <div class="row"> -->
-                <!-- <div class="col-md-6"> -->
-                <!-- </div> -->
-
-                <!-- </div> -->
             </div>
-            <div class="card">
+
+            <!-- <div class="card">
                 <div class="card-header">
                     <h5>Dotación y Epp's x Categorías Anualmente</h5>
                 </div>
@@ -44,11 +102,15 @@
                     <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
                     </canvas>
                 </div>
-            </div>
+            </div> -->
 
         </div>
 
-        <div class="col-md-6">
+
+
+
+
+        <!-- <div class="col-md-6">
             <div class="card">
                 <div class="col-md-12">
                     <div class="card-block">
@@ -60,89 +122,16 @@
                                 <li [ngbNavItem]="1">
                                     <a ngbNavLink>Dotación</a>
                                     <ng-template ngbNavContent>
-                                        <div class="col-md-12 text-center" *ngIf="!loading && Lista_Grupos_Inventario1.length > 0; else notData">
-                                            <table class="table table-sm table-hover table-bordered">
-                                                <ng-container *ngFor="let lgi of Lista_Grupos_Inventario1">
-                                                    <tr *ngFor="let l of lgi.inventary">
 
-                                                        <!-- <thead>
-                                                        <tr>
-                                                            <th>Cod.</th>
-                                                            <th>Nombre</th>
-                                                            <th>Talla</th>
-                                                            <th>Total</th>
-                                                            <th>Calidad</th>
-                                                            <th>Tipo</th>
-                                                            <th>Costo</th>
-                                                        </tr>
+                                        <app-table-stock [type]="'Dotacion'" [find]="true"></app-table-stock>
 
-                                                    </thead> -->
-
-                                                        <td class="text-left">{{l.code}}</td>
-                                                        <td class="text-left">{{l.name}}</td>
-                                                        <td style="width:100px;">{{l.size}}</td>
-                                                        <td style="width:100px;">{{l.stock}}</td>
-                                                        <td style="width:100px;">{{l.status}}</td>
-                                                        <td style="width:80px;">{{l.type}}</td>
-                                                        <td style="width:40px;">{{l.cost}}</td>
-                                                        <!-- <td style="width:100px;">
-                                                            <button class="btn btn-primary btn-sm" (click)="(lgi.show = !lgi.show)">
-                                                              <i class="fas fa-sort-down"></i>
-                                                            </button>
-                                                        </td> -->
-                                                        <td style="width:100px;">
-                                                            <div ngbDropdown class="dropdown-primary">
-                                                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">
-                                                              <i class="fas fa-sort-down"></i>
-
-                                                                </button>
-                                                                <div ngbDropdownMenu>
-                                                                    <a class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
-                                                                        <i class="fas fa-inbox-in"></i> Entregas
-                                                                    </a>
-                                                                    <a class="dropdown-item waves-light waves-effect caja-botones" (click)="listarEntradas(l)">
-                                                                        <i class="fal fa-sign-out"></i> Salidas
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <!-- <tr>
-                                                        <td colspan="12">
-                                                            <app-table-inventary *ngIf="lgi.show" [totalCategory]="lgi.inventary"></app-table-inventary>
-                                                        </td>
-                                                    </tr> -->
-                                                </ng-container>
-                                            </table>
-                                        </div>
                                     </ng-template>
                                 </li>
                                 <li [ngbNavItem]="2">
                                     <a ngbNavLink>Epp</a>
                                     <ng-template ngbNavContent>
-                                        <div class="col-md-12 text-center">
-                                            <table class="table table-hover table-bordered">
-                                                <ng-container *ngFor="let lgi of Lista_Grupos_Inventario_Epp">
-                                                    <tr>
-                                                        <td style="width:435px;" class="text-left">{{lgi.name}}</td>
-                                                        <td style="width:100px;">{{lgi.size}}</td>
-                                                        <td style="width:100px;">{{lgi.stock}}</td>
-                                                        <td style="width:100px;">
-                                                            <button class="btn btn-primary btn-sm" (click)="(lgi.show = !lgi.show)">
-                                                          <i class="fas fa-sort-down"></i>
-                                                        </button>
-                                                        </td>
-                                                    </tr>
+                                        <app-table-stock [type]="'EPP'" [find]="true"></app-table-stock>
 
-                                                    <tr>
-                                                        <td colspan="12">
-                                                            <app-table-inventary-epp *ngIf="lgi.show" [totalCategory]="lgi.inventary"></app-table-inventary-epp>
-                                                        </td>
-                                                    </tr>
-
-                                                </ng-container>
-                                            </table>
-                                        </div>
                                     </ng-template>
                                 </li>
                             </ul>
@@ -153,11 +142,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
+    <div [ngbNavOutlet]="nav" class="mt-0"></div>
 
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -166,11 +156,11 @@
                             <h5>Listado de Entregas de Dotación y EPP</h5>
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="configEntrega('Dotacion');modalEntrega.show()"><i class="fa fa-plus"></i> Entrega Dotación</button>
+                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="configEntrega('Dotacion')"><i class="fa fa-plus"></i> Entrega Dotación</button>
                         </div>
 
                         <div class="col-md-2">
-                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="configEntrega('Epp');modalEntregaEpp.show()"><i class="fa fa-plus"></i> Entrega Epp</button>
+                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="configEntrega('EPP')"><i class="fa fa-plus"></i> Entrega Epp</button>
                         </div>
 
                     </div>
@@ -291,7 +281,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <app-modal-basic #modalDevolver [dialogClass]="'modal-lg'">
@@ -310,14 +300,8 @@
                             <tbody>
                                 <tr>
                                     <td style="width:100px;padding:0 !important;">
-                                        <!--  <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="{{globales.Nombre}}"> -->
                                     </td>
-                                    <!-- <td>
-                                        {{globales.Nombre}}
-                                        <br> {{globales.Nit}}
-                                        <br> {{globales.Direccion}}
-                                        <br> {{globales.Telefono}}
-                                    </td> -->
+
                                 </tr>
                             </tbody>
                         </table>
@@ -391,76 +375,26 @@
 
 
 
-<!-- modal entrega dotacion -->
+
 <app-modal-basic #modalEntrega [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h4 class="modal-title">Nueva Entrega de Dotación</h4>
-        <button type="button" class="close basic-close" (click)="modalEntrega.hide();">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    </div>
+
     <div class="app-modal-body">
 
-        <form #FormDotacion="ngForm">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Empleado Recibe</label>
+        <div class="row">
+            <div class="col-md-12 ">
 
-                        <ng-select [(ngModel)]="Entrega.person_id" name="Empleado_Entrega" [items]="Empleados" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                        </ng-select>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Fecha Entrega</label>
-                        <input type="date" name="dispatched_at" placeholder="Ingrese Fecha" class="form-control form-control-sm f-9" [(ngModel)]="Entrega.dispatched_at" required>
-                    </div>
-                </div>
-            </div>
+                <div class="col-md-12 text-center">
 
-            <div class="row">
-                <div class="col-md-12 ">
-                    <h4 class="mb-2">Elementos disponibles</h4>
-                    <div class="row mb-2" *ngFor="let category of Lista_Grupos_Inventario1;
-                                         i as index">
-                        <div class="col-12">
-                            <h5>{{category.name}}</h5>
-                        </div>
-                        <div class="col-md-4 mb-2" *ngFor="let prod of category.inventary">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <input (onChange)="maxLengthCheck(prod)" type="number" name="producto{{i}}" class="form-control form-control-sm" min="0" (blur)="cambio(prod)" max="{{prod.Cantidad}}" [(ngModel)]="prod.quantity" placeholder="0" required>
-                                </div>
-                                <div [ngClass]="{'bg-danger text-white': prod.quantity > prod.stock}" class="col-md-8">
-                                    <span class="f-9"> <strong>({{prod.stock}})</strong> - {{ prod.name }} - {{category.delivery_type}}
-                  </span>
-                                    <md-tooltip ngbTooltip="Error en la Cantidad" *ngIf="prod.quantity > prod.stock">
-                                        Cantidad Incorrecta
-                                    </md-tooltip>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <app-table-stock [type]="flagDotacionApp" #tablestock [entrega]="true" [find]="false" (closeModal)="closeModal()"></app-table-stock>
+
+
                 </div>
+
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Detalles de al Entrega</label>
-                        <textarea placeholder="Ingrese Detalles Importantes" class="form-control f-9" name="description" rows="7" [(ngModel)]="Entrega.description" required></textarea>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer" style="width:100%;">
-        <div class="text-right">
-            <button *ngIf="!cam" type="button" class="btn btn-primary btn-sm" (click)="save()" [disabled]="!FormDotacion.valid">
-        Reportar Entrega de Dotación
-      </button>
         </div>
+
     </div>
+
 </app-modal-basic>
 <!-- fin modal entrega dotacion -->
 
@@ -700,5 +634,3 @@
         </td>
     </tr>
 </ng-template>
-
-<app-dotacion-entradas [open]="openModal"></app-dotacion-entradas>

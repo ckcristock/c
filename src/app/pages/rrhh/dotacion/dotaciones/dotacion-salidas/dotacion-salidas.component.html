@@ -1,0 +1,54 @@
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Entregas</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide();limpiar()">
+          <span aria-hidden="true">
+            <i class="fas fa-times"></i>
+          </span>
+      </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-12">
+                <!-- <strong class="text-title"> {{ material.name | titlecase }} </strong> -->
+                <strong class="text-title">  </strong>
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Fun.Entrega</th>
+                            <th>Fecha Recibe</th>
+                            <th>Articulo</th>
+                            <th>Cantidad</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let item of Lista_Entrega_Dotacion">
+                            <td> {{ item.delivery_code }} </td>
+                            <td> {{ item.entrega }} </td>
+                            <td> {{ item.recibe }} </td>
+                            <td> {{ item.product_name }} </td>
+                            <td> {{ item.quantity }} </td>
+                            <td> {{ item.created_at }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <!-- <div class="form-group text-right">
+            <button (click)="modal.hide();limpiar()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+        </div> -->
+        <div>
+            <ngb-pagination maxSize="5" [collectionSize]="pagination.collectionSize" (pageChange)="getDotationsProduct($event) " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination ">
+            </ngb-pagination>
+        </div>
+    </div>
+</app-modal-basic>
+
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

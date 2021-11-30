@@ -1,0 +1,226 @@
+<ng-container *ngIf="entrega">
+    <div>
+        <h5 class="text-left text-primary">Nueva Entrega de Dotación</h5>
+        <button class="btn btn-primary btn-sm" style="float: right;" (click)="cerrarModal()">Cerrar</button>
+        <hr class="bg-primary">
+    </div>
+
+</ng-container>
+
+
+<form #FormDotacion="ngForm">
+    <ng-container *ngIf="entrega">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Empleado Recibe</label>
+
+                    <ng-select [(ngModel)]="Entrega.person_id" name="Empleado_Entrega" [items]="Empleados" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Fecha Entrega</label>
+                    <input type="date" name="dispatched_at" placeholder="Ingrese Fecha" class="form-control form-control-sm f-9" [(ngModel)]="Entrega.dispatched_at" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 ">
+                <h4 class="mb-2">Elementos disponibles</h4>
+            </div>
+        </div>
+    </ng-container>
+
+    <div class="col-md-12 text-center" *ngIf="!loading && Lista_Grupos_Inventario1.length > 0; else notData">
+        <table class="table table-sm table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Cod.</th>
+                    <th>Nombre</th>
+                    <th>Talla</th>
+                    <th>Calidad</th>
+                    <ng-container *ngIf="!entrega">
+                        <th>Tipo</th>
+                        <th>Costo</th>
+                        <th>Total</th>
+                        <th>Apartada</th>
+                    </ng-container>
+                    <th>Disponible</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let l of Lista_Grupos_Inventario1;i as index">
+
+                    <td class="text-left">{{l.code}}</td>
+                    <td class="text-left">{{l.name}}</td>
+                    <td style="width:100px;">{{l.size}}</td>
+                    <td style="width:100px;">{{l.status}}</td>
+
+                    <ng-container *ngIf="!entrega">
+                        <td style="width:80px;">{{l.type}}</td>
+                        <td style="width:40px;">{{l.cost}}</td>
+                        <td style="width:100px;">{{l.stock}}</td>
+                        <td style="width:100px;">{{l.cantidadA}}</td>
+                    </ng-container>
+
+                    <td style="width:100px;">{{l.stock - l.cantidadA }}</td>
+
+                    <td style="width:100px;">
+                        <ng-container *ngIf="!entrega;else input">
+
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">
+                                           <i class="fas fa-sort-down"></i>
+
+                                            </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" (click)="listarSalidas(l)">
+                                        <i class="fas fa-inbox-in"></i> Entregas
+                                    </a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" (click)="listarEntradas(l)">
+                                        <i class="fal fa-sign-out"></i> Salidas
+                                    </a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" (click)="getApartadas(l)">
+                                        <i class="fal fa-sign-out"></i> Apartadas
+                                    </a>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-template #input>
+
+                            <div [ngClass]="{'bg-danger text-white': l.quantity > (l.stock - l.cantidadA)}" class="col-md-8">
+                                <md-tooltip ngbTooltip="Error en la Cantidad" *ngIf="l.quantity > (l.stock - l.cantidadA)">
+                                    Cantidad Incorrecta
+                                </md-tooltip>
+                            </div>
+                            <input (onChange)="maxLengthCheck(l)" type="number" name="producto{{i}}" class="form-control form-control-sm" min="0" max="{{l.stock}}" (blur)="cambio(l)" [(ngModel)]="l.quantity" placeholder="0" required>
+
+
+                        </ng-template>
+
+                        <!-- <div class="row mb-2" *ngFor="let category of Lista_Grupos_Inventario1;i as index">
+                            <div class="col-12">
+                                <h5>{{category.name}}</h5>
+                            </div>
+                            <div class="col-md-4 mb-2" *ngFor="let prod of category.inventary">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input (onChange)="maxLengthCheck(prod)" type="number" name="producto{{i}}" class="form-control form-control-sm" min="0" (blur)="cambio(prod)" max="{{prod.Cantidad}}" [(ngModel)]="prod.quantity" placeholder="0" required>
+                                    </div>
+                                    <div [ngClass]="{'bg-danger text-white': prod.quantity > prod.stock}" class="col-md-8">
+                                        <span class="f-9"> <strong>({{prod.stock}})</strong> - {{ prod.name }} - {{category.delivery_type}}
+                                    </span>
+                                        <md-tooltip ngbTooltip="Error en la Cantidad" *ngIf="prod.quantity > prod.stock">
+                                            Cantidad Incorrecta
+                                        </md-tooltip>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    </td>
+                </tr>
+
+
+            </tbody>
+
+        </table>
+
+        <ng-container *ngIf="entrega">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles de al Entrega</label>
+                        <textarea placeholder="Ingrese Detalles Importantes" class="form-control f-9" name="description" rows="7" [(ngModel)]="Entrega.description" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-modal-footer" style="width:100%;">
+                <div class="text-right">
+                    <button *ngIf="!cam" type="button" class="btn btn-primary btn-sm" (click)="save()" [disabled]="!FormDotacion.valid">
+        Reportar Entrega de Dotación
+      </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="card-footer bg-white">
+        <ngb-pagination maxSize="5" [collectionSize]="pagination.collectionSize" (pageChange)="getData($event) " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination ">
+        </ngb-pagination>
+    </div>
+</form>
+
+
+<app-dotacion-entradas [open]="openModal"></app-dotacion-entradas>
+<app-dotacion-salidas [openSalida]="openModalSalidas"></app-dotacion-salidas>
+
+<app-modal-basic #modalApartadas [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Apartadas</h5>
+        <button type="button" class="close basic-close" (click)="modalApartadas.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times"></i>
+          </span>
+      </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="col-md-12 text-center" *ngIf="!loading && Apartadas.length > 0; else notData">
+                    <strong class="text-title">  </strong>
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Funcionario</th>
+                                <th>Funcionario</th>
+                                <th>Tipo</th>
+                                <th>Cantidad</th>
+                                <th>Estado</th>
+                                <!--<th>Tipo</th>
+                            <th>Valor</th>
+                            <th>Cantidad</th>
+                            <th>Total</th> -->
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let item of Apartadas; else notData">
+                                <td> {{ item.created_at | date }} </td>
+                                <td> {{item.delivery_code}} </td>
+                                <td> {{item.nameF}} </td>
+                                <td> {{ item.type }} </td>
+                                <td> {{ item.quantity }} </td>
+                                <td> {{ item.delivery_state }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modalApartadas.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+
+<ng-template #rt3 let-r="result" let-t="term">
+    <span class="f-9">{{ r.Nombres }} {{ r.Apellidos }}</span>
+</ng-template>

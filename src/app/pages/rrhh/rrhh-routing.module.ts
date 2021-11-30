@@ -24,6 +24,11 @@ import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
 import { TableInventaryComponent } from './dotacion/dotaciones/table-inventary/table-inventary.component';
 import { TableInventaryEppComponent } from './dotacion/dotaciones/table-inventary-epp/table-inventary-epp.component';
 import { DotacionEntradasComponent } from './dotacion/dotaciones/dotacion-entradas/dotacion-entradas.component';
+import { DotacionSalidasComponent } from './dotacion/dotaciones/dotacion-salidas/dotacion-salidas.component';
+import { TableStockComponent } from './dotacion/dotaciones/table-stock/table-stock.component';
+import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/category-stock.component';
+
+
 
 const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
@@ -36,6 +41,8 @@ const routes: Routes = [
   { path: 'dotacion/dotaciones/table-inventary', component: TableInventaryComponent },
   { path: 'dotacion/dotaciones/table-inventary-epp', component: TableInventaryEppComponent },
   { path: 'dotacion/dotaciones/app-dotacion-entradas', component: DotacionEntradasComponent },
+  { path: 'dotacion/dotaciones/app-dotacion-salidas', component: DotacionSalidasComponent },
+  { path: 'dotacion/dotaciones/app-table-stock', component: TableStockComponent },
   { path: 'dotacion/inventario', component: InventarioDotacionComponent },
   { path: 'turnos/asignacion', component: AsignacionTurnosComponent },
   { path: 'turnos/horas-extras', component: HorasExtrasComponent },

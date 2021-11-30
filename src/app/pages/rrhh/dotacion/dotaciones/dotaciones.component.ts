@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, EventEmitter } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 import 'rxjs/add/operator/takeWhile';
 import { HttpClient } from '@angular/common/http';
 
@@ -24,13 +24,16 @@ import { Label } from 'ng2-charts';
 export class DotacionesComponent implements OnInit {
 
   openModal = new EventEmitter<any>()
+  openModalSalidas = new EventEmitter<any>()
 
   @ViewChild('confirmacionEntrega') private confirmacionEntrega;
   @ViewChild('confirmacionDevolucion') private confirmacionDevolucion;
+  @ViewChild('tablestock') private tablestock;
   @ViewChild('modalEntrega') modalEntrega: any;
   @ViewChild('modalDevolver') modalDevolver: any;
-  @ViewChild('modalEntregaEpp') modalEntregaEpp: any;
-  @ViewChild('modalSalidas') modalSalidas: any;
+
+  @Output('getDatos') getDatos = new EventEmitter();
+
 
   pagination = {
     pageSize: 15,
@@ -64,7 +67,7 @@ export class DotacionesComponent implements OnInit {
   public TotalesMes = 0
   public SumaMes = 0
   public prefijoCodigo: string = 'ED00';
-  public flagDotacionApp: boolean = false;
+  public flagDotacionApp:  string = '';
 
   selectedMes: string;
   public Meses = consts.meses;
@@ -95,6 +98,7 @@ export class DotacionesComponent implements OnInit {
   public Entrega: any = {
     person_id: '',
     cost: 0,
+    code: '',
     description: '',
     type: ''
   }
@@ -151,8 +155,14 @@ export class DotacionesComponent implements OnInit {
     this.Graficar();
     this.Lista_Productos();
     this.stockGroup()
-    this.onChange1()
+    // this.onChange1()
     this.getStokEpp()
+  }
+
+  closeModal(){
+    this.modalEntrega.hide();
+    this.ListarDotaciones();
+    // this.flagDotacionApp = ''
   }
 
   getPeople() {
@@ -163,10 +173,9 @@ export class DotacionesComponent implements OnInit {
   }
 
   listarEntradas(l){
-    console.log(l);
-
     this.openModal.next({data:l})
   }
+
 
   dateRangeChanged(event) {
     if (event.formatted != "") {
@@ -232,6 +241,7 @@ export class DotacionesComponent implements OnInit {
   public barChartData : ChartDataSets[] = [];
 
   graphicData:any = {}
+
   Graficar() {
 
     this._dotation.getDotationTotalByCategory({ cantMes: this.selectedMes }).subscribe((d: any) => {
@@ -261,14 +271,14 @@ export class DotacionesComponent implements OnInit {
   }
 
   // metodo para listar en el modal
-  onChange1() {
+  // onChange1() {
 
-    this.loading = true;
-    this._dotation.getStok().subscribe((r: any) => {
-      this.Lista_Grupos_Inventario1 = r.data;
-      this.loading = false;
-    });
-  }
+  //   this.loading = true;
+  //   this._dotation.getStok().subscribe((r: any) => {
+  //     this.Lista_Grupos_Inventario1 = r.data;
+  //     this.loading = false;
+  //   });
+  // }
 
   getStokEpp() {
     this._dotation.getStokEpp().subscribe((r: any) => {
@@ -429,14 +439,15 @@ export class DotacionesComponent implements OnInit {
           allowOutsideClick: false,
           allowEscapeKey: false,
         })
-        this.onChange1();
-        this.modalEntrega.hide()
-        this.modalEntregaEpp.hide()
+        // this.onChange1();
+        // this.modalEntrega.hide()
+        // this.modalEntregaEpp.hide()
         this.ListarDotaciones()
 
         this.Entrega = {
           person_id: '',
           cost: 0,
+          code: '',
           description: '',
           // type: 'Dotacion'
           type: ''
@@ -474,8 +485,9 @@ export class DotacionesComponent implements OnInit {
   }
 
   configEntrega(value: string) {
-    // this.prefijoCodigo = value;
-    this.flagDotacionApp = value == 'Dotacion' ? true : false;
+    this.tablestock.search();
+    this.modalEntrega.show()
+    this.flagDotacionApp = value;
   }
 
   paginacion() {

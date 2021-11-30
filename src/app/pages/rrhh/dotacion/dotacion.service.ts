@@ -30,18 +30,29 @@ export class DotacionService {
   }
 
 
-  getStok(params = {}) {
+  getStok(params ) {
     return this.http.get(`${environment.base_url}/inventary-dotation-stock`, { params })
-    .pipe(
-      map((data:any) =>{
-        data.data.forEach(element => {
-         element.stock = element.inventary.reduce((acc, el) => {return acc + el.stock},0)
-         element.show = false;
-        });
-        return data;
-      })
-      );
+    // .pipe(
+    //   map((data:any) =>{
+    //     data.data.forEach(element => {
+    //      element.stock = element.inventary.reduce((acc, el) => {return acc + el.stock},0)
+
+    //      element.inventary.forEach(e => {
+    //       e.apartada = e.dotacion_producto.reduce((acc, el) => {return acc + el.quantity},0)
+
+    //     })
+    //     });
+
+
+    //     return data;
+    //   })
+    //   );
   }
+
+  getSelected(params = {}){
+    return this.http.get(`${environment.base_url}/get-selected`, { params })
+  }
+
 
   getStokEpp(params = {}) {
     return this.http.get(`${environment.base_url}/inventary-dotation-stock-epp`, { params })
@@ -62,6 +73,13 @@ export class DotacionService {
 
   getDotations(params = {}) {
     return this.http.get(`${environment.base_url}/dotations`, { params })
+  }
+
+  // getDotationsProduct(params = {}) {
+  getDotationsProduct({ params }) {
+        console.log(params);
+
+    return this.http.get(`${environment.base_url}/dotations-list-product`, {params} )
   }
 
   setDotation({ id, data }) {

@@ -60,6 +60,9 @@ import { EditDiarioFixedComponent } from './horas-extras/lista-fijos/edit-diario
 import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
 import { TableInventaryEppComponent } from './dotacion/dotaciones/table-inventary-epp/table-inventary-epp.component';
 import { DotacionEntradasComponent } from './dotacion/dotaciones/dotacion-entradas/dotacion-entradas.component';
+import { DotacionSalidasComponent } from './dotacion/dotaciones/dotacion-salidas/dotacion-salidas.component';
+import { TableStockComponent } from './dotacion/dotaciones/table-stock/table-stock.component';
+import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/category-stock.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +105,9 @@ import { DotacionEntradasComponent } from './dotacion/dotaciones/dotacion-entrad
     AlmuerzosComponent,
     TableInventaryEppComponent,
     DotacionEntradasComponent,
+    DotacionSalidasComponent,
+    TableStockComponent,
+    CategoryStockComponent,
   ],
   imports: [
     RrhhRouterModule,

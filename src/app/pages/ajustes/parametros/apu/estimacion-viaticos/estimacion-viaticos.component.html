@@ -1,0 +1,115 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                <i class="fa fa-plus"></i> Agregar
+            </button>
+            <h5 class="text-primary">Medidas</h5>
+        </div>
+        <hr class="bg-primary">
+        <table class="table table-sm table-borderless" *ngIf="!loading && estimations.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th>Descripción</th>
+                    <th>Unidad</th>
+                    <th>Cantidad</th>
+                    <th>Valor unitario</th>
+                    <th>Fecha Creación</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of estimations">
+                    <td> {{ item.description }} </td>
+                    <td> {{ item.unit }} </td>
+                    <td> {{ item.amount }} </td>
+                    <td> {{ item.unit_value }} </td>
+                    <td> {{ item.created_at | date: 'dd-MM-YYYY' }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getEstimation(item); modal.show()">
+                                        <i class="far fa-edit"></i> Editar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">{{ title }}</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
+            <span aria-hidden="true">
+              <i class="fas fa-times"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="form-group col-3">
+                            <label>Descripción</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="description">
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Unidad</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="unit">
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Cantidad</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="amount">
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Valor Unitario</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="unit_value">
+                        </div>
+                        <div class="col-12">
+                            <div class="text-center">
+                                <h6>Variables</h6>
+                                <hr>
+                            </div>
+                            <perfect-scrollbar style="height: 250px;">
+                                <div class="row">
+                                    <div class="form-group col-4 mb-0" *ngFor="let item of variables">
+                                        <label> {{ item.label }} </label>
+                                        <p class="text-info">{{ '{' + item.var + '}' }}</p>
+                                    </div>
+                                </div>
+                            </perfect-scrollbar>
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label for="">Formula Cantidad</label>
+                                    <textarea class="form-control form-control-sm" formControlName="formula_amount" name="formula" cols="30" rows="3"></textarea>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="">Formula Valor Total</label>
+                                    <textarea class="form-control form-control-sm" formControlName="formula_total_value" name="formula" cols="30" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="save()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

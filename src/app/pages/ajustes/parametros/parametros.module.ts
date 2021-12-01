@@ -30,6 +30,7 @@ import { CostosIndirectosComponent } from './apu/costos-indirectos/costos-indire
 import { EspesoresComponent } from './apu/espesores/espesores.component';
 import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-laser-material.component';
 import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component';
+import { EstimacionViaticosComponent } from './apu/estimacion-viaticos/estimacion-viaticos.component';
 
 
 
@@ -58,7 +59,8 @@ import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component'
         CostosIndirectosComponent,
         EspesoresComponent,
         CorteLaserMaterialComponent,
-        PerfilesApuComponent
+        PerfilesApuComponent,
+        EstimacionViaticosComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

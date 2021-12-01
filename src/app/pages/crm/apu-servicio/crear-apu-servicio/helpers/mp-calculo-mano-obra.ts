@@ -23,7 +23,7 @@ import {
       }
     },
   
-    createMpmCalculateLaborGroup(form: FormGroup, fb: FormBuilder) {
+    createMpmCalculateLaborGroup(form: FormGroup, fb: FormBuilder, profiles:Array<any>) {
       let group = fb.group({
         profile: [''],
         displacement_type: [''],
@@ -48,7 +48,7 @@ import {
       });
       let list = form.get('mpm_calculate_labor') as FormArray;
       let viact = group.get('viatic_estimation') as FormArray;
-      this.subscribeMpm(group, form, list);
+      this.subscribeMpm(group, form, list, profiles);
       viact.push(this.viaticEstimationControl(group, fb));
       return group;
     },
@@ -66,12 +66,10 @@ import {
     },
 
     viaticEstimationSubscribe(form:FormGroup, group: FormGroup){
-      form.get('profile').valueChanges.subscribe(value => {
-        group.patchValue({ profile: value });
-      })
+      
     },
   
-    subscribeMpm( group: FormGroup, form:FormGroup, list: FormArray){
+    subscribeMpm( group: FormGroup, form:FormGroup, list: FormArray, profiles:Array<any>){
       group.get('people_number').valueChanges.subscribe(value => {
         let hours_value_displacement = group.get('hours_value_displacement');
         let hours_displacement = group.get('hours_displacement')
@@ -182,6 +180,33 @@ import {
         let total_value_ordinary = group.get('total_value_ordinary');
         let result = (total_value_displacement.value + total_value_ordinary.value + value)
         group.patchValue({salary_value: Math.round(result)})
+      });
+      group.get('workind_day_displacement').valueChanges.subscribe(value => {
+        let profile = group.get('profile');
+        let data = profiles.find(p => p.id == profile.value);
+        if (value == 'Diurna') {
+          group.patchValue({ hours_value_displacement: data.value_time_daytime_displacement });
+        } else if (value == 'Nocturna') {
+          group.patchValue({ hours_value_displacement: data.value_time_night_displacement });
+        }
+      });
+      group.get('working_day_ordinary').valueChanges.subscribe(value => {
+        let profile = group.get('profile');
+        let data = profiles.find(p => p.id == profile.value);
+        if (value == 'Diurna') {
+          group.patchValue({ hours_value_ordinary: data.daytime_ordinary_hour_value });
+        } else if (value == 'Nocturna') {
+          group.patchValue({ hours_value_ordinary: data.night_ordinary_hour_value });
+        }
+      });
+      group.get('working_day_festive').valueChanges.subscribe(value => {
+        let profile = group.get('profile');
+        let data = profiles.find(p => p.id == profile.value);
+        if (value == 'Diurna') {
+          group.patchValue({ hours_value_festive: data.sunday_daytime_value });
+        } else if (value == 'Nocturna') {
+          group.patchValue({ hours_value_festive: data.sunday_night_time_value });
+        }
       });
       group.get('salary_value').valueChanges.subscribe(value => {
         this.subtotalLabor(list, form);

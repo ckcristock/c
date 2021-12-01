@@ -21,4 +21,13 @@ export class ApuServicioService {
     return this.http.get(`${environment.base_url}/thirdPartyClient`);
   }
 
+  getProfiles(){
+    return this.http.get(`${environment.base_url}/apu-profile`);
+  }
+
+  getTravelExpenseEstimation(){
+    return this.http.get(`${environment.base_url}/travel-expense-estimation`);
+  }
+  
+
 }

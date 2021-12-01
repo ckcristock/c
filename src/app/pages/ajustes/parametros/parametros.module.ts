@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { ParametrosRoutingModule } from "./parametros-routing.module";
-import { PerfilesComponent } from './perfiles/perfiles.component';
 import { RgpComponent } from './rgp/rgp.component';
 import { NotasTecnicasComponent } from './notas-tecnicas/notas-tecnicas.component';
 import { ZonasComponent } from './zonas/zonas.component';
@@ -38,7 +37,7 @@ import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component'
 @NgModule({
     declarations : [
         NotasTecnicasComponent, 
-        PerfilesComponent, 
+        // PerfilesComponent, 
         ZonasComponent, 
         RgpComponent, 
         EpsComponent,  

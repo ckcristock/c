@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from '@angular/router';
-import { PerfilesComponent } from './perfiles/perfiles.component';
 import { RgpComponent } from './rgp/rgp.component';
 import { NotasTecnicasComponent } from './notas-tecnicas/notas-tecnicas.component';
 import { ZonasComponent } from "./zonas/zonas.component";
@@ -26,7 +25,7 @@ import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component'
 
 
 const routes : Routes = [
-    { path: 'perfiles', component : PerfilesComponent },
+    // { path: 'perfiles', component : PerfilesComponent },
     { path: 'rgp', component : RgpComponent },
     { path: 'zonas', component : ZonasComponent },
     { path: 'eps', component:  EpsComponent},

@@ -1,5 +1,6 @@
 import {
     FormGroup,
+    FormControl,
     FormBuilder,
     FormArray
   } from '@angular/forms';
@@ -23,7 +24,12 @@ import {
       }
     },
   
-    createcmoGroup(form: FormGroup, fb: FormBuilder) {
+    createcmoGroup(  
+      form: FormGroup, 
+      fb: FormBuilder, 
+      profiles:Array<any>, 
+      tEestimation:Array<any>,
+      cities) {
       let group = fb.group({
         profile: [''],
         displacement_type: [''],
@@ -44,38 +50,171 @@ import {
         hours_value_festive: [0],
         total_value_festive: [0],
         salary_value: [0],
-        viatic_estimation: fb.group({
-          profile: [''],
-          viactic_estimation_values: fb.array([])
-        })
+        viatic_estimation: fb.array([])
       });
       let list = form.get('calculate_labor') as FormArray;
-      let viact = group.get('viatic_estimation').get('viactic_estimation_values') as FormArray;
-      console.log(viact);
-      
-      this.subscribecmo(group, form, list);
-      viact.push(this.viaticEstimationControl(group, fb));
+      let viact = group.get('viatic_estimation') as FormArray;
+      this.subscribecmo(group, form, list, profiles);
+      tEestimation.forEach(r => {
+        let est = fb.group({
+          description: [r.description],
+          amount: [r.amount],
+          unit: [r.unit],
+          unit_value: [r.unit_value],
+          total_value: [0],
+          formula_amount: [r.formula_amount],
+          formula_total_value: [r.formula_total_value],
+          days_number_displacement: [0],
+          people_number: [0],
+          hours_displacement: [0],
+          hours_value_displacement: [0],
+          total_value_displacement: [0],
+          days_number_ordinary: [0],
+          hours_ordinary: [0],
+          hours_value_ordinary: [0],
+          total_value_ordinary: [0],
+          days_number_festive: [0],
+          hours_festive: [0],
+          hours_value_festive: [0],
+          total_value_festive: [0],
+          salary_value: [0]
+        });
+        form.patchValue({ unit_value: r.unit_value, amount: r.amount });
+        viact.push(est);
+        this.viaticEstimationSubscribe(form, group, est, r, cities, list);
+      });
       return group;
     },
 
-    viaticEstimationControl(form: FormGroup, fb: FormBuilder){
+    /* viaticEstimationControl(form: FormGroup, fb: FormBuilder){
       let group = fb.group({
         description: [''],
         unit: [''],
         unit_value: [0],
         total_value: [0]
       });
-      this.viaticEstimationSubscribe(form, group);
       return group;
+    }, */
+
+    operationAmount(group:FormGroup){
+      let formu = group.controls.formula_amount.value;
+      let formula = formu;
+      let el = group.value;
+      for (const key in el) {
+        if (formula?.includes(key)) {
+          formula = formula.replaceAll( '{' + key + '}', el[key]);
+        }
+      }
+      let result = eval(formula);
+      group.patchValue({
+        amount: Math.round(result)
+      });
     },
 
-    viaticEstimationSubscribe(form:FormGroup, group: FormGroup){
-      form.get('profile').valueChanges.subscribe(value => {
-        // form.get('viatic_estimation').patchValue({ profile: value });
+    operationValue(group){
+      let formu = group.controls.formula_total_value.value;  
+      let formula = formu;
+      let el = group.value;
+      for (const key in el) {
+        if (formula?.includes(key)) {
+          formula = formula.replaceAll( '{' + key + '}', el[key]);
+        }
+      }
+      let result = eval(formula);
+       group.patchValue({
+        total_value: Math.round(result)
+      });
+    },
+
+    viaticEstimationSubscribe(
+          forma:FormGroup, 
+          form:FormGroup, 
+          group: FormGroup, 
+          estimation,
+          cities,
+          list
+    ){
+      form.get('displacement_type').valueChanges.subscribe(value => {
+        let city_id = forma.get('city_id');
+        let city = cities.find(c => c.id == city_id.value);
+        if (value == 1 && city.country_id != 1) {
+          group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_international_value })
+        } else if (value == 2 && city.country_id != 1) {
+          group.patchValue({ unit_value: estimation.travel_expense_estimation_values.land_international_value })
+        } else if (value == 3) {
+          group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_international_value })
+        }
+        if (value == 1 && city.country_id == 1) {
+          group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_national_value })
+        } else if (value == 2 && city.country_id == 1) {
+          group.patchValue({ unit_value: estimation.travel_expense_estimation_values.land_national_value })
+        }
+      });
+      forma.get('city_id').valueChanges.subscribe(value => {
+        let city = cities.find(c => c.id == value);
+        if (city.country_id != 1) {
+          group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_international_value })
+        } else {
+          group.patchValue({ unit_value: estimation.travel_expense_estimation_values.land_national_value })
+        }
+      });
+      group.get('amount').valueChanges.subscribe( value => {
+        this.operationValue(group)
       })
+      group.get('unit_value').valueChanges.subscribe(value => {
+        this.operationValue(group)
+      })
+      if (estimation.formula_amount === '{people_number}') {
+          form.get('people_number').valueChanges.subscribe(value => {
+            group.patchValue({ amount: value })
+          })
+      }
+      form.get('people_number').valueChanges.subscribe(value => {
+        group.patchValue({ people_number: value })
+        this.operationAmount(group);
+      });
+      form.get('days_number_displacement').valueChanges.subscribe(value => {
+        group.patchValue({ days_number_displacement: value })
+      })
+      form.get('hours_displacement').valueChanges.subscribe(value => {
+        group.patchValue({ hours_displacement: value })
+      })
+      form.get('hours_value_displacement').valueChanges.subscribe(value => {
+        group.patchValue({ hours_value_displacement: value })
+      })
+      form.get('total_value_displacement').valueChanges.subscribe(value => {
+        group.patchValue({ total_value_displacement: value })
+      })
+      form.get('days_number_ordinary').valueChanges.subscribe(value => {
+        group.patchValue({ days_number_ordinary: value })
+      })
+      form.get('hours_ordinary').valueChanges.subscribe(value => {
+        group.patchValue({ hours_ordinary: value })
+      })
+      form.get('hours_value_ordinary').valueChanges.subscribe(value => {
+        group.patchValue({ hours_value_ordinary: value })
+      })
+      form.get('total_value_ordinary').valueChanges.subscribe(value => {
+        group.patchValue({ total_value_ordinary: value })
+      })
+      form.get('days_number_festive').valueChanges.subscribe(value => {
+        group.patchValue({ days_number_festive: value })
+      })
+      form.get('hours_festive').valueChanges.subscribe(value => {
+        group.patchValue({ hours_festive: value })
+      })
+      form.get('hours_value_festive').valueChanges.subscribe(value => {
+        group.patchValue({ hours_value_festive: value })
+      })
+      form.get('total_value_festive').valueChanges.subscribe(value => {
+        group.patchValue({ total_value_festive: value })
+      })
+      form.get('salary_value').valueChanges.subscribe(value => {
+        this.operationAmount(group);
+      });
     },
     
-    subscribecmo( group: FormGroup, form:FormGroup, list: FormArray){
+    subscribecmo( group: FormGroup, form:FormGroup, list: FormArray, profiles:Array<any>){
       group.get('people_number').valueChanges.subscribe(value => {
         let hours_value_displacement = group.get('hours_value_displacement');
         let hours_displacement = group.get('hours_displacement')
@@ -186,6 +325,33 @@ import {
         let total_value_ordinary = group.get('total_value_ordinary');
         let result = (total_value_displacement.value + total_value_ordinary.value + value)
         group.patchValue({salary_value: Math.round(result)})
+      });
+      group.get('workind_day_displacement').valueChanges.subscribe(value => {
+        let profile = group.get('profile');
+        let data = profiles.find(p => p.id == profile.value);
+        if (value == 'Diurna') {
+          group.patchValue({ hours_value_displacement: data.value_time_daytime_displacement });
+        } else if (value == 'Nocturna') {
+          group.patchValue({ hours_value_displacement: data.value_time_night_displacement });
+        }
+      });
+      group.get('working_day_ordinary').valueChanges.subscribe(value => {
+        let profile = group.get('profile');
+        let data = profiles.find(p => p.id == profile.value);
+        if (value == 'Diurna') {
+          group.patchValue({ hours_value_ordinary: data.daytime_ordinary_hour_value });
+        } else if (value == 'Nocturna') {
+          group.patchValue({ hours_value_ordinary: data.night_ordinary_hour_value });
+        }
+      });
+      group.get('working_day_festive').valueChanges.subscribe(value => {
+        let profile = group.get('profile');
+        let data = profiles.find(p => p.id == profile.value);
+        if (value == 'Diurna') {
+          group.patchValue({ hours_value_festive: data.sunday_daytime_value });
+        } else if (value == 'Nocturna') {
+          group.patchValue({ hours_value_festive: data.sunday_night_time_value });
+        }
       });
       group.get('salary_value').valueChanges.subscribe(value => {
         this.subtotalLabor(list, form);

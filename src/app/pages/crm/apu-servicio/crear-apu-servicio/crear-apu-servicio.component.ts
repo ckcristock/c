@@ -19,19 +19,16 @@ export class CrearApuServicioComponent implements OnInit {
   clients:any[] = [];
   collapsed:boolean[] = [];
   mpMcollapsed:boolean[] = [];
-  profiles = [
-    { name: 'Supervisor' },
-    { name: 'Soldador' },
-  ]
-
+  profiles:any[] = [];
+  tEestimations:any = [];
   desplazamientos = [
     { text: 'Aero', value: 1 },
-    { text: 'Terrestre', value: 2 }
+    { text: 'Terrestre', value: 2 },
+    { text: 'N/A', value:3 }
   ]
-
   jornadas = [
-    { text: 'Diurna', value: 1 },
-    { text: 'Nocturna', value: 2 }
+    { text: 'Diurna', value: 'Diurna' },
+    { text: 'Nocturna', value: 'Nocturna' }
   ]
 
   constructor(
@@ -41,11 +38,13 @@ export class CrearApuServicioComponent implements OnInit {
                 private router: Router
               ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.createForm();
+    this.getProfiles();
     this.getClients();
     this.getPeople();
-    this.getCities();
+    await this.getCities();
+    this.getTravelExpenseEstimation();
   }
 
   createForm(){
@@ -55,6 +54,12 @@ export class CrearApuServicioComponent implements OnInit {
   getPeople(){
     this._apuService.getPeopleXSelect().subscribe((r:any) => {
       this.people = r.data;
+    })
+  }
+
+  getProfiles(){
+    this._apuService.getProfiles().subscribe((r:any) => {
+      this.profiles = r.data;
     })
   }
 
@@ -71,8 +76,19 @@ export class CrearApuServicioComponent implements OnInit {
     })
   }
 
+  getTravelExpenseEstimation(){
+    this._apuService.getTravelExpenseEstimation().subscribe((r:any) => {
+      this.tEestimations = r.data;
+    })
+  }  
+
   cmoControl(): FormGroup{ // cmo = Calculo Mano Obra
-    let group = help.cmoHelper.createcmoGroup(this.form, this.fb);
+    let group = help.cmoHelper.createcmoGroup(
+          this.form, 
+          this.fb, 
+          this.profiles, 
+          this.tEestimations, 
+          this.cities);
     return group;
   }
 
@@ -89,7 +105,7 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   mpMCalculateLaborControl(): FormGroup{ // cmo = Calculo Mano Obra
-    let group = help.mpmCalculateLaborHelper.createMpmCalculateLaborGroup(this.form, this.fb);
+    let group = help.mpmCalculateLaborHelper.createMpmCalculateLaborGroup(this.form, this.fb, this.profiles);
     return group;
   }
 

@@ -46,7 +46,7 @@ export const functionsApuService = {
       calculate_labor: fb.array([]),
       mpm_calculate_labor: fb.array([])
     });
-    this.subscribes(group, clients)
+    this.subscribes(group)
     return group;
   },
 
@@ -64,7 +64,7 @@ export const functionsApuService = {
     });
   },
 
-  subscribes(form: FormGroup, clients:Array<any>){
+  subscribes(form: FormGroup, ){
     form.get('subtotal_labor').valueChanges.subscribe(value => {
       let subtotal_travel_expense = form.get('subtotal_travel_expense')
       let result = (value + subtotal_travel_expense.value);
@@ -147,7 +147,7 @@ export const functionsApuService = {
       let sale_price_cop_withholding_total = form.get('sale_price_cop_withholding_total')
       let result = (sale_price_cop_withholding_total.value / value);
       form.patchValue({ sale_price_usd_withholding_total: Math.round(result) })
-    })
+    });
   },
 
 };

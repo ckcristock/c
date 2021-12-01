@@ -169,8 +169,8 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control form-control-sm" style="width: 100px;" formControlName="profile">
-                                                                    <option *ngFor="let item of profiles" [value]="item.name">
-                                                                        {{ item.name }}
+                                                                    <option *ngFor="let item of profiles" [value]="item.id">
+                                                                        {{ item.profile }}
                                                                     </option>
                                                                 </select>
                                                         </td>
@@ -246,15 +246,9 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group">
-                                                                <button class="btn btn-outline-success btn-sm" placement="bottom" type="button" ngbTooltip="Est. Viáticos" (click)="collapsed[i] = !collapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
+                                                                <button class="btn btn-outline-success btn-sm" placement="top" type="button" ngbTooltip="Est. Viáticos" (click)="collapsed[i] = !collapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
                                                                     <i class="fas fa-eye"></i>
                                                                 </button>
-                                                                <button class="btn btn-outline-info btn-sm" type="button">
-                                                                    <i class="fas fa-plus"></i>
-                                                                </button>
-                                                                <!-- <button *ngIf="!collapsed[i]" class="btn btn-outline-success btn-sm" type="button" (click)="collapsed = !collapsed" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
-                                                                    <i class="fas fa-chevron-down"></i>
-                                                                </button> -->
                                                                 <button class="btn btn-outline-danger btn-sm" type="button" (click)="deleteCmoList(i)">
                                                                         <i class="fas fa-trash-alt"></i>
                                                                 </button>
@@ -264,45 +258,44 @@
                                                     <tr>
                                                         <td colspan="20">
                                                             <table [ngbCollapse]="!collapsed[i]" class="table table-sm table-bordered table-viat" style="width: 50%;">
-                                                                <ng-container formGroupName="viatic_estimation">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Perfil {{ i + 1 }}</th>
-                                                                            <th>
-                                                                                <input type="text" readonly style="background-color: transparent" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="profile">
-                                                                            </th>
-                                                                            <th colspan="3" class="text-center">
-                                                                                Viáticos
-                                                                            </th>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center">Perfil</th>
+                                                                        <th colspan="4" class="text-center">
+                                                                            Viáticos
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th colspan="2">Descripción</th>
+                                                                        <th>Unidad</th>
+                                                                        <th>Cantidad</th>
+                                                                        <th>Valor Unitario</th>
+                                                                        <th>Valor Total</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody formArrayName="viatic_estimation">
+                                                                    <ng-container *ngFor="let item of item['controls']['viatic_estimation']['controls']; let j = index">
+                                                                        <tr [formGroupName]="j">
+                                                                            <td colspan="2">
+                                                                                <input type="text" class="form-control form-control-sm" formControlName="description">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="text" class="form-control form-control-sm" formControlName="unit">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" class="form-control form-control-sm" formControlName="amount">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" readonly class="form-control form-control-sm" formControlName="unit_value">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" class="form-control form-control-sm" formControlName="total_value">
+                                                                            </td>
                                                                         </tr>
-                                                                    </thead>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th colspan="2">Descripción</th>
-                                                                            <th>Unidad</th>
-                                                                            <th>Valor Unitario</th>
-                                                                            <th>Valor Total</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody formArrayName="viatic_estimation_values">
-                                                                        <ng-container *ngFor="let itemx of item['viatic_estimation']['controls']['viatic_estimation_values']['controls']; let j = index">
-                                                                            <tr [formGroupName]="j">
-                                                                                <td colspan="2">
-                                                                                    <input type="text" class="form-control form-control-sm" formControlName="description">
-                                                                                </td>
-                                                                                <td>
-                                                                                    <input type="text" class="form-control form-control-sm" formControlName="unit">
-                                                                                </td>
-                                                                                <td>
-                                                                                    <input type="text" class="form-control form-control-sm" formControlName="unit_value">
-                                                                                </td>
-                                                                                <td>
-                                                                                    <input type="text" class="form-control form-control-sm" formControlName="total_value">
-                                                                                </td>
-                                                                            </tr>
-                                                                        </ng-container>
-                                                                    </tbody>
-                                                                </ng-container>
+                                                                    </ng-container>
+                                                                </tbody>
                                                             </table>
                                                         </td>
                                                     </tr>
@@ -311,7 +304,6 @@
                                         </ng-container>
                                     </ng-container>
                                 </ng-container>
-
                                 <!-- <tfoot>
                                     <tr>
                                         <td colspan="3"></td>
@@ -478,14 +470,16 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control form-control-sm" style="width: 100px;" formControlName="profile">
-                                                                    <option *ngFor="let item of profiles" [value]="item.name">
-                                                                        {{ item.name }}
+                                                                    <option *ngFor="let item of profiles" [value]="item.id">
+                                                                        {{ item.profile }}
                                                                     </option>
                                                             </select>
                                                         </td>
                                                         <td>
                                                             <select class="form-control form-control-sm" style="width: 100px;" formControlName="displacement_type">
-                                                                    <option value=""></option>
+                                                                    <option *ngFor="let item of desplazamientos" [value]="item.value">
+                                                                        {{ item.text }}
+                                                                    </option>
                                                                 </select>
                                                         </td>
                                                         <td>
@@ -496,7 +490,9 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control form-control-sm" style="width: 100px;" formControlName="workind_day_displacement">
-                                                                    <option value=""></option>
+                                                                <option *ngFor="let item of jornadas" [value]="item.value">
+                                                                    {{ item.text }}
+                                                                </option>
                                                                 </select>
                                                         </td>
                                                         <td>
@@ -513,7 +509,9 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control form-control-sm" style="width: 100px;" formControlName="working_day_ordinary">
-                                                                    <option value=""></option>
+                                                                <option *ngFor="let item of jornadas" [value]="item.value">
+                                                                    {{ item.text }}
+                                                                </option>
                                                                 </select>
                                                         </td>
                                                         <td>
@@ -530,7 +528,9 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control form-control-sm" style="width: 100px;" formControlName="working_day_festive">
-                                                                    <option value=""></option>
+                                                                <option *ngFor="let item of jornadas" [value]="item.value">
+                                                                    {{ item.text }}
+                                                                </option>
                                                                 </select>
                                                         </td>
                                                         <td>
@@ -547,12 +547,9 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group">
-                                                                <button class="btn btn-outline-success btn-sm" placement="bottom" type="button" ngbTooltip="Est. Viáticos" (click)="mpMcollapsed[i] = !mpMcollapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
+                                                                <button class="btn btn-outline-success btn-sm" placement="top" type="button" ngbTooltip="Est. Viáticos" (click)="mpMcollapsed[i] = !mpMcollapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
                                                                     <i class="fas fa-eye"></i>
                                                                 </button>
-                                                                <!-- <button *ngIf="!collapsed[i]" class="btn btn-outline-success btn-sm" type="button" (click)="collapsed = !collapsed" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
-                                                                    <i class="fas fa-chevron-down"></i>
-                                                                </button> -->
                                                                 <button class="btn btn-outline-danger btn-sm" type="button" (click)="deletempMCalculateLaborList(i)">
                                                                         <i class="fas fa-trash-alt"></i>
                                                                 </button>
@@ -561,49 +558,42 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="20">
-                                                            <ng-container formArrayName="viatic_estimation">
-                                                                <ng-container *ngFor="let item of item['controls']['viatic_estimation']['controls']; let j = index">
-                                                                    <ng-container [formGroupName]="j">
-                                                                        <table [ngbCollapse]="!mpMcollapsed[i]" class="table table-sm table-bordered table-viat" style="width: 50%;">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>Perfil {{ j + 1 }}</th>
-                                                                                    <th>
-                                                                                        <input type="text" readonly style="background-color: transparent" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="profile">
-                                                                                    </th>
-                                                                                    <th colspan="3" class="text-center">
-                                                                                        Viáticos
-                                                                                    </th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th colspan="2">Descripción</th>
-                                                                                    <th>Unidad</th>
-                                                                                    <th>Valor Unitario</th>
-                                                                                    <th>Valor Total</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td colspan="2">
-                                                                                        <input type="text" class="form-control form-control-sm" formControlName="description">
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <input type="text" class="form-control form-control-sm" formControlName="unit">
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <input type="text" class="form-control form-control-sm" formControlName="unit_value">
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <input type="text" class="form-control form-control-sm" formControlName="total_value">
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
+                                                            <table [ngbCollapse]="!mpMcollapsed[i]" class="table table-sm table-bordered table-viat" style="width: 50%;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center">Perfil</th>
+                                                                        <th colspan="4" class="text-center">
+                                                                            Viáticos
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th colspan="2">Descripción</th>
+                                                                        <th>Unidad</th>
+                                                                        <th>Valor Unitario</th>
+                                                                        <th>Valor Total</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody formArrayName="viatic_estimation">
+                                                                    <ng-container *ngFor="let item of item['controls']['viatic_estimation']['controls']; let j = index">
+                                                                        <tr [formGroupName]="j">
+                                                                            <td colspan="2">
+                                                                                <input type="text" class="form-control form-control-sm" formControlName="description">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="text" class="form-control form-control-sm" formControlName="unit">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="text" class="form-control form-control-sm" formControlName="unit_value">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="text" class="form-control form-control-sm" formControlName="total_value">
+                                                                            </td>
+                                                                        </tr>
                                                                     </ng-container>
-                                                                </ng-container>
-                                                            </ng-container>
+                                                                </tbody>
+                                                            </table>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -692,7 +682,7 @@
     </div>
     <div class="row">
         <div class="col mt-2">
-            <h4 class="text-dark text-center">AUI</h4>
+            <h4 class="text-dark text-center">AIU</h4>
             <hr class="line">
         </div>
     </div>

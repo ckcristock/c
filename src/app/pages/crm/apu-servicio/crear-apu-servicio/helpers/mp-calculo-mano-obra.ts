@@ -23,7 +23,12 @@ import {
       }
     },
   
-    createMpmCalculateLaborGroup(form: FormGroup, fb: FormBuilder, profiles:Array<any>) {
+    createMpmCalculateLaborGroup(
+      form: FormGroup,
+      fb: FormBuilder, 
+      profiles:Array<any>,
+      tEestimation:Array<any>,
+      cities) {
       let group = fb.group({
         profile: [''],
         displacement_type: [''],
@@ -44,16 +49,44 @@ import {
         hours_value_festive: [0],
         total_value_festive: [0],
         salary_value: [0],
+        subtotal:[0],
         viatic_estimation: fb.array([])
       });
       let list = form.get('mpm_calculate_labor') as FormArray;
       let viact = group.get('viatic_estimation') as FormArray;
       this.subscribeMpm(group, form, list, profiles);
-      viact.push(this.viaticEstimationControl(group, fb));
+      tEestimation.forEach(r => {
+        let est = fb.group({
+          description: [r.description],
+          amount: [r.amount],
+          unit: [r.unit],
+          unit_value: [r.unit_value],
+          total_value: [0],
+          formula_amount: [r.formula_amount],
+          formula_total_value: [r.formula_total_value],
+          days_number_displacement: [0],
+          people_number: [0],
+          hours_displacement: [0],
+          hours_value_displacement: [0],
+          total_value_displacement: [0],
+          days_number_ordinary: [0],
+          hours_ordinary: [0],
+          hours_value_ordinary: [0],
+          total_value_ordinary: [0],
+          days_number_festive: [0],
+          hours_festive: [0],
+          hours_value_festive: [0],
+          total_value_festive: [0],
+          salary_value: [0]
+        });
+        form.patchValue({ unit_value: r.unit_value, amount: r.amount });
+        viact.push(est);
+        this.viaticEstimationSubscribe(form, group, est, r, cities, viact, list);
+      });
       return group;
     },
 
-    viaticEstimationControl(form: FormGroup, fb: FormBuilder){
+    /* viaticEstimationControl(form: FormGroup, fb: FormBuilder){
       let group = fb.group({
         profile: [''],
         description: [''],
@@ -63,11 +96,132 @@ import {
       });
       this.viaticEstimationSubscribe(form, group);
       return group;
+    }, */
+
+    operationAmount(group:FormGroup){
+      let formu = group.controls.formula_amount.value;
+      let formula = formu;
+      let el = group.value;
+      for (const key in el) {
+        if (formula?.includes(key)) {
+          formula = formula.replaceAll( '{' + key + '}', el[key]);
+        }
+      }
+      let result = eval(formula);
+      group.patchValue({
+        amount: Math.round(result)
+      });
     },
 
-    viaticEstimationSubscribe(form:FormGroup, group: FormGroup){
-      
+    operationValue(group){
+      let formu = group.controls.formula_total_value.value;  
+      let formula = formu;
+      let el = group.value;
+      for (const key in el) {
+        if (formula?.includes(key)) {
+          formula = formula.replaceAll( '{' + key + '}', el[key]);
+        }
+      }
+      let result = eval(formula);
+       group.patchValue({
+        total_value: Math.round(result)
+      });
     },
+
+    viaticEstimationSubscribe(
+      forma:FormGroup, 
+      form:FormGroup, 
+      group: FormGroup, 
+      estimation,
+      cities,
+      viact,
+      list
+){
+  form.get('displacement_type').valueChanges.subscribe(value => {
+    let city_id = forma.get('city_id');
+    let city = cities.find(c => c.id == city_id.value);
+    if (value == 1 && city.country_id != 1) {
+      group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_international_value })
+    } else if (value == 2 && city.country_id != 1) {
+      group.patchValue({ unit_value: estimation.travel_expense_estimation_values.land_international_value })
+    } else if (value == 3) {
+      group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_international_value })
+    }
+    if (value == 1 && city.country_id == 1) {
+      group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_national_value })
+    } else if (value == 2 && city.country_id == 1) {
+      group.patchValue({ unit_value: estimation.travel_expense_estimation_values.land_national_value })
+    }
+  });
+  forma.get('city_id').valueChanges.subscribe(value => {
+    let city = cities.find(c => c.id == value);
+    if (city.country_id != 1) {
+      group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_international_value })
+    } else {
+      group.patchValue({ unit_value: estimation.travel_expense_estimation_values.land_national_value })
+    }
+  });
+  group.get('amount').valueChanges.subscribe( value => {
+    this.operationValue(group)
+  })
+  group.get('unit_value').valueChanges.subscribe(value => {
+    this.operationValue(group)
+  })
+  if (estimation.formula_amount === '{people_number}') {
+      form.get('people_number').valueChanges.subscribe(value => {
+        group.patchValue({ amount: value })
+      })
+  }
+  group.get('total_value').valueChanges.subscribe(value => {
+    this.subtotalTravelExpenseEstimation(viact, form);
+  })
+  form.get('people_number').valueChanges.subscribe(value => {
+    group.patchValue({ people_number: value })
+    this.operationAmount(group);
+  });
+  form.get('days_number_displacement').valueChanges.subscribe(value => {
+    group.patchValue({ days_number_displacement: value })
+  })
+  form.get('hours_displacement').valueChanges.subscribe(value => {
+    group.patchValue({ hours_displacement: value })
+  })
+  form.get('hours_value_displacement').valueChanges.subscribe(value => {
+    group.patchValue({ hours_value_displacement: value })
+  })
+  form.get('total_value_displacement').valueChanges.subscribe(value => {
+    group.patchValue({ total_value_displacement: value })
+  })
+  form.get('days_number_ordinary').valueChanges.subscribe(value => {
+    group.patchValue({ days_number_ordinary: value })
+  })
+  form.get('hours_ordinary').valueChanges.subscribe(value => {
+    group.patchValue({ hours_ordinary: value })
+  })
+  form.get('hours_value_ordinary').valueChanges.subscribe(value => {
+    group.patchValue({ hours_value_ordinary: value })
+  })
+  form.get('total_value_ordinary').valueChanges.subscribe(value => {
+    group.patchValue({ total_value_ordinary: value })
+  })
+  form.get('days_number_festive').valueChanges.subscribe(value => {
+    group.patchValue({ days_number_festive: value })
+  })
+  form.get('hours_festive').valueChanges.subscribe(value => {
+    group.patchValue({ hours_festive: value })
+  })
+  form.get('hours_value_festive').valueChanges.subscribe(value => {
+    group.patchValue({ hours_value_festive: value })
+  })
+  form.get('total_value_festive').valueChanges.subscribe(value => {
+    group.patchValue({ total_value_festive: value })
+  })
+  form.get('salary_value').valueChanges.subscribe(value => {
+    this.operationAmount(group);
+  });
+  form.get('subtotal').valueChanges.subscribe(value => {
+    this.subtotalTravelExpense(list, forma)
+  })
+},
   
     subscribeMpm( group: FormGroup, form:FormGroup, list: FormArray, profiles:Array<any>){
       group.get('people_number').valueChanges.subscribe(value => {
@@ -211,6 +365,20 @@ import {
       group.get('salary_value').valueChanges.subscribe(value => {
         this.subtotalLabor(list, form);
       });
+    },
+
+    subtotalTravelExpenseEstimation(viact: FormArray, form: FormGroup){
+      setTimeout(() => {
+        let total = viact.value.reduce((a, b) => { return  a + b.total_value }, 0);
+        form.patchValue({ subtotal: total })
+      }, 100);
+    },
+
+    subtotalTravelExpense(list: FormArray, form:FormGroup){
+      setTimeout(() => {
+        let total = list.value.reduce((a, b) => { return  a + b.subtotal }, 0);
+        form.patchValue({ subtotal_travel_expense_mpm: total })
+      }, 100);
     },
   
     subtotalLabor(list: FormArray, form: FormGroup){

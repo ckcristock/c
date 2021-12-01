@@ -43,6 +43,7 @@ import { ApuServicioComponent } from './apu-servicio/apu-servicio.component';
 import { CrearApuServicioComponent } from './apu-servicio/crear-apu-servicio/crear-apu-servicio.component';
 import { VerApuServicioComponent } from './apu-servicio/ver-apu-servicio/ver-apu-servicio.component';
 import { EditarApuServicioComponent } from './apu-servicio/editar-apu-servicio/editar-apu-servicio.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 
 @NgModule({
@@ -93,7 +94,8 @@ import { EditarApuServicioComponent } from './apu-servicio/editar-apu-servicio/e
     NgbNavModule,
     NgbTooltipModule,
     NgbTypeaheadModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    PerfectScrollbarModule
   ]
 })
 export class CrmModule { }

@@ -105,7 +105,8 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   mpMCalculateLaborControl(): FormGroup{ // cmo = Calculo Mano Obra
-    let group = help.mpmCalculateLaborHelper.createMpmCalculateLaborGroup(this.form, this.fb, this.profiles);
+    let group = help.mpmCalculateLaborHelper.createMpmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations, 
+      this.cities);
     return group;
   }
 

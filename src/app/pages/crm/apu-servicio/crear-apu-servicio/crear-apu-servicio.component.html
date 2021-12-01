@@ -86,255 +86,267 @@
                         <h5>Calculo de mano de obra</h5>
                     </div>
                     <div class="row">
-                        <div class="col" style="overflow-x:auto;" class="items table-responsive">
-                            <table class="table table-bordered table-sm table-items">
-                                <thead class="titles">
-                                    <th colspan="4"></th>
-                                    <th colspan="5" class="text-center">Desplazamiento</th>
-                                    <th colspan="5" class="text-center">Ordinarias</th>
-                                    <th colspan="5" class="text-center">Festivas</th>
-                                </thead>
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm"> Item </label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm"> Perfil </label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Tipo Desplaza</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">N. Persona</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">N. Días</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Jornada</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Horas</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Valor Horas</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Valor Total</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">N. Días</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Jornada</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Horas</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Valor Hora</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Valor Total</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">N. Días</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Jornada</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Horas</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Valor Hora</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Valor Total</label>
-                                        </th>
-                                        <th>
-                                            <label class="col-form-label col-form-label-sm">Valor Salarial</label>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <ng-container formArrayName="calculate_labor">
-                                    <ng-container *ngFor="let item of cmoList.controls; let i = index">
-                                        <ng-container *ngIf="cmoList.controls.length; else notData">
-                                            <ng-container [formGroupName]="i">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            {{ i + 1 }}
-                                                        </td>
-                                                        <td>
-                                                            <select class="form-control form-control-sm" style="width: 100px;" formControlName="profile">
-                                                                    <option *ngFor="let item of profiles" [value]="item.id">
-                                                                        {{ item.profile }}
-                                                                    </option>
+                        <perfect-scrollbar style="height: 600px;">
+                            <div class="col" style="overflow-x:auto;" class="items table-responsive">
+                                <table class="table table-bordered table-sm table-items">
+                                    <thead class="titles">
+                                        <th colspan="4"></th>
+                                        <th colspan="5" class="text-center">Desplazamiento</th>
+                                        <th colspan="5" class="text-center">Ordinarias</th>
+                                        <th colspan="5" class="text-center">Festivas</th>
+                                    </thead>
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm"> Item </label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm"> Perfil </label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Tipo Desplaza</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">N. Persona</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">N. Días</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Jornada</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Horas</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Valor Horas</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Valor Total</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">N. Días</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Jornada</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Horas</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Valor Hora</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Valor Total</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">N. Días</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Jornada</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Horas</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Valor Hora</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Valor Total</label>
+                                            </th>
+                                            <th>
+                                                <label class="col-form-label col-form-label-sm">Valor Salarial</label>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <ng-container formArrayName="calculate_labor">
+                                        <ng-container *ngFor="let item of cmoList.controls; let i = index">
+                                            <ng-container *ngIf="cmoList.controls.length; else notData">
+                                                <ng-container [formGroupName]="i">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                {{ i + 1 }}
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control form-control-sm" style="width: 100px;" formControlName="profile">
+                                                                        <option *ngFor="let item of profiles" [value]="item.id">
+                                                                            {{ item.profile }}
+                                                                        </option>
+                                                                    </select>
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control form-control-sm" style="width: 100px;" formControlName="displacement_type">
+                                                                        <option *ngFor="let item of desplazamientos" [value]="item.value">
+                                                                            {{ item.text }}
+                                                                        </option>
                                                                 </select>
-                                                        </td>
-                                                        <td>
-                                                            <select class="form-control form-control-sm" style="width: 100px;" formControlName="displacement_type">
-                                                                    <option *ngFor="let item of desplazamientos" [value]="item.value">
-                                                                        {{ item.text }}
-                                                                    </option>
-                                                            </select>
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="people_number">
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="days_number_displacement">
-                                                        </td>
-                                                        <td>
-                                                            <select class="form-control form-control-sm" style="width: 100px;" formControlName="workind_day_displacement">
-                                                                <option *ngFor="let item of jornadas" [value]="item.value">
-                                                                    {{ item.text }}
-                                                                </option>
-                                                            </select>
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_displacement">
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_value_displacement">
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="total_value_displacement">
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="days_number_ordinary">
-                                                        </td>
-                                                        <td>
-                                                            <select class="form-control form-control-sm" style="width: 100px;" formControlName="working_day_ordinary">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="people_number">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="days_number_displacement">
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control form-control-sm" style="width: 100px;" formControlName="workind_day_displacement">
                                                                     <option *ngFor="let item of jornadas" [value]="item.value">
                                                                         {{ item.text }}
                                                                     </option>
                                                                 </select>
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_ordinary">
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_value_ordinary">
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="total_value_ordinary">
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="days_number_festive">
-                                                        </td>
-                                                        <td>
-                                                            <select class="form-control form-control-sm" style="width: 100px;" formControlName="working_day_festive">
-                                                                    <option *ngFor="let item of jornadas" [value]="item.value">
-                                                                        {{ item.text }}
-                                                                    </option>
-                                                                </select>
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_festive">
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_value_festive">
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="total_value_festive">
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="salary_value">
-                                                        </td>
-                                                        <td>
-                                                            <div class="btn-group">
-                                                                <button class="btn btn-outline-success btn-sm" placement="top" type="button" ngbTooltip="Est. Viáticos" (click)="collapsed[i] = !collapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
-                                                                    <i class="fas fa-eye"></i>
-                                                                </button>
-                                                                <button class="btn btn-outline-danger btn-sm" type="button" (click)="deleteCmoList(i)">
-                                                                        <i class="fas fa-trash-alt"></i>
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="20">
-                                                            <table [ngbCollapse]="!collapsed[i]" class="table table-sm table-bordered table-viat" style="width: 50%;">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th class="text-center">Perfil</th>
-                                                                        <th colspan="4" class="text-center">
-                                                                            Viáticos
-                                                                        </th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th colspan="2">Descripción</th>
-                                                                        <th>Unidad</th>
-                                                                        <th>Cantidad</th>
-                                                                        <th>Valor Unitario</th>
-                                                                        <th>Valor Total</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody formArrayName="viatic_estimation">
-                                                                    <ng-container *ngFor="let item of item['controls']['viatic_estimation']['controls']; let j = index">
-                                                                        <tr [formGroupName]="j">
-                                                                            <td colspan="2">
-                                                                                <input type="text" class="form-control form-control-sm" formControlName="description">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_displacement">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_value_displacement">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="total_value_displacement">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="days_number_ordinary">
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control form-control-sm" style="width: 100px;" formControlName="working_day_ordinary">
+                                                                        <option *ngFor="let item of jornadas" [value]="item.value">
+                                                                            {{ item.text }}
+                                                                        </option>
+                                                                    </select>
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_ordinary">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_value_ordinary">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="total_value_ordinary">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="days_number_festive">
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control form-control-sm" style="width: 100px;" formControlName="working_day_festive">
+                                                                        <option *ngFor="let item of jornadas" [value]="item.value">
+                                                                            {{ item.text }}
+                                                                        </option>
+                                                                    </select>
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_festive">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="hours_value_festive">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="total_value_festive">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm" style="width: 100px;" formControlName="salary_value">
+                                                            </td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <button class="btn btn-outline-success btn-sm" placement="top" type="button" ngbTooltip="Est. Viáticos" (click)="collapsed[i] = !collapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-outline-danger btn-sm" type="button" (click)="deleteCmoList(i)">
+                                                                            <i class="fas fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="20">
+                                                                <table [ngbCollapse]="!collapsed[i]" class="table table-sm table-bordered table-viat" style="width: 50%;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="text-center">Perfil</th>
+                                                                            <th colspan="4" class="text-center">
+                                                                                Viáticos
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th colspan="2">Descripción</th>
+                                                                            <th>Unidad</th>
+                                                                            <th>Cantidad</th>
+                                                                            <th>Valor Unitario</th>
+                                                                            <th>Valor Total</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody formArrayName="viatic_estimation">
+                                                                        <ng-container *ngFor="let item of item['controls']['viatic_estimation']['controls']; let j = index">
+                                                                            <tr [formGroupName]="j">
+                                                                                <td colspan="2">
+                                                                                    <input type="text" class="form-control form-control-sm" formControlName="description">
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="text" class="form-control form-control-sm" formControlName="unit">
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="number" class="form-control form-control-sm" formControlName="amount">
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="number" readonly class="form-control form-control-sm" formControlName="unit_value">
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="number" class="form-control form-control-sm" formControlName="total_value">
+                                                                                </td>
+                                                                            </tr>
+                                                                        </ng-container>
+                                                                    </tbody>
+                                                                    <tfoot>
+                                                                        <tr>
+                                                                            <td colspan="5">
+                                                                                <label style="width: 19%; float: right;" class="text-right text-info mt-1">Subtotal</label>
                                                                             </td>
-                                                                            <td>
-                                                                                <input type="text" class="form-control form-control-sm" formControlName="unit">
-                                                                            </td>
-                                                                            <td>
-                                                                                <input type="number" class="form-control form-control-sm" formControlName="amount">
-                                                                            </td>
-                                                                            <td>
-                                                                                <input type="number" readonly class="form-control form-control-sm" formControlName="unit_value">
-                                                                            </td>
-                                                                            <td>
-                                                                                <input type="number" class="form-control form-control-sm" formControlName="total_value">
+                                                                            <td colspan="6">
+                                                                                <input type="number" class="form-control form-control-sm" formControlName="subtotal">
                                                                             </td>
                                                                         </tr>
-                                                                    </ng-container>
-                                                                </tbody>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
+                                                                    </tfoot>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </ng-container>
                                             </ng-container>
                                         </ng-container>
                                     </ng-container>
-                                </ng-container>
-                                <!-- <tfoot>
-                                    <tr>
-                                        <td colspan="3"></td>
-                                        <td>
-                                            <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                        </td>
-                                        <td colspan="3"></td>
-                                        <td>
-                                            <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                        </td>
-                                        <td colspan="3"></td>
-                                        <td>
-                                            <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                        </td>
-                                        <td colspan="3"></td>
-                                        <td>
-                                            <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                        </td>
-                                    </tr>
-                                </tfoot> -->
-                            </table>
-                        </div>
+                                    <!-- <tfoot>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td colspan="3"></td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td colspan="3"></td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td colspan="3"></td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                        </tr>
+                                    </tfoot> -->
+                                </table>
+                            </div>
+                        </perfect-scrollbar>
                     </div>
                 </div>
             </div>
@@ -571,6 +583,7 @@
                                                                     <tr>
                                                                         <th colspan="2">Descripción</th>
                                                                         <th>Unidad</th>
+                                                                        <th>Cantidad</th>
                                                                         <th>Valor Unitario</th>
                                                                         <th>Valor Total</th>
                                                                     </tr>
@@ -585,6 +598,9 @@
                                                                                 <input type="text" class="form-control form-control-sm" formControlName="unit">
                                                                             </td>
                                                                             <td>
+                                                                                <input type="number" class="form-control form-control-sm" formControlName="amount">
+                                                                            </td>
+                                                                            <td>
                                                                                 <input type="text" class="form-control form-control-sm" formControlName="unit_value">
                                                                             </td>
                                                                             <td>
@@ -593,6 +609,16 @@
                                                                         </tr>
                                                                     </ng-container>
                                                                 </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <td colspan="5">
+                                                                            <label style="width: 19%; float: right;" class="text-right text-info mt-1">Subtotal</label>
+                                                                        </td>
+                                                                        <td colspan="6">
+                                                                            <input type="number" class="form-control form-control-sm" formControlName="subtotal">
+                                                                        </td>
+                                                                    </tr>
+                                                                </tfoot>
                                                             </table>
                                                         </td>
                                                     </tr>

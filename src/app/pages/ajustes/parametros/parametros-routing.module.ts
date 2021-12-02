@@ -23,6 +23,7 @@ import { EspesoresComponent } from './apu/espesores/espesores.component';
 import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-laser-material.component';
 import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component';
 import { EstimacionViaticosComponent } from './apu/estimacion-viaticos/estimacion-viaticos.component';
+import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-values/estimacion-viaticos-values.component';
 
 
 const routes : Routes = [
@@ -57,7 +58,8 @@ const routes : Routes = [
     { path: 'apu/corte-laser-material', component: CorteLaserMaterialComponent },
 
     { path: 'apu/perfiles', component: PerfilesApuComponent },
-    { path: 'apu/estimacion-viaticos', component: EstimacionViaticosComponent }
+    { path: 'apu/estimacion-viaticos', component: EstimacionViaticosComponent },
+    { path: 'apu/est-viaticos-valores', component: EstimacionViaticosValuesComponent }
 ]
 
 

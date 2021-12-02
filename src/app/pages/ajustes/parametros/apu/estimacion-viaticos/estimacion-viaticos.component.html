@@ -4,7 +4,7 @@
             <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
                 <i class="fa fa-plus"></i> Agregar
             </button>
-            <h5 class="text-primary">Medidas</h5>
+            <h5 class="text-primary">Estimación de viáticos</h5>
         </div>
         <hr class="bg-primary">
         <table class="table table-sm table-borderless" *ngIf="!loading && estimations.length > 0; else notData">
@@ -23,7 +23,7 @@
                     <td> {{ item.description }} </td>
                     <td> {{ item.unit }} </td>
                     <td> {{ item.amount }} </td>
-                    <td> {{ item.unit_value }} </td>
+                    <td> {{ item.unit_value | currency:'COP' }} </td>
                     <td> {{ item.created_at | date: 'dd-MM-YYYY' }} </td>
                     <td>
                         <div class="text-center">

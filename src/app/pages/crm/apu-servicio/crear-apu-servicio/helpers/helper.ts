@@ -1,19 +1,40 @@
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { cmoHelper } from './calculo-mano-obra';
+import { mpmCalculateLaborHelper } from './mp-calculo-mano-obra';
 
 export const functionsApuService = {
   consts: {
     retefuente_percentage: []
   },
 
-  fillInForm(form: FormGroup, data, fb: FormBuilder) {
+  fillInForm(form: FormGroup, data, fb: FormBuilder, profiles, cities) {
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
       person_id: data.person_id,
       third_party_id: data.third_party_id,
       line: data.line,
-      observation: data.observation
+      observation: data.observation,
+      administrative_percentage: data.administrative_percentage,
+      administrative_value: data.administrative_value,
+      general_subtotal_travel_expense_labor: data.general_subtotal_travel_expense_labor,
+      sale_price_cop_withholding_total: data.sale_price_cop_withholding_total,
+      sale_price_usd_withholding_total: data.sale_price_usd_withholding_total,
+      subtotal_administrative_unforeseen: data.subtotal_administrative_unforeseen,
+      subtotal_administrative_unforeseen_utility: data.subtotal_administrative_unforeseen_utility,
+      subtotal_assembly_commissioning: data.subtotal_assembly_commissioning,
+      subtotal_dimensional_validation: data.subtotal_dimensional_validation,
+      subtotal_labor: data.subtotal_labor,
+      subtotal_labor_mpm: data.subtotal_labor_mpm,
+      subtotal_travel_expense: data.subtotal_travel_expense,
+      subtotal_travel_expense_mpm: data.subtotal_travel_expense_mpm,
+      unforeseen_percentage: data.unforeseen_percentage,
+      unforeseen_value: data.unforeseen_value,
+      utility_percentage: data.utility_percentage,
+      trm: data.trm
     });
+    cmoHelper.createFillIncmo(form, fb, data, profiles, cities);
+    mpmCalculateLaborHelper.createFillInMpm(form, fb, data, profiles, cities)
     this.subscribes(form)
   },
 

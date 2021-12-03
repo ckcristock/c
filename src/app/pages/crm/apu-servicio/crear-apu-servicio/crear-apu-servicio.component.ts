@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ApuServicioService } from '../apu-servicio.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
@@ -12,8 +12,11 @@ import * as help from './helpers/imports';
   styleUrls: ['./crear-apu-servicio.component.scss']
 })
 export class CrearApuServicioComponent implements OnInit {
+  @Input('id') id;
+  @Input('data') data:any;
   form: FormGroup;
   date:Date = new Date();
+  loading:boolean = false;
   people:any[] = [];
   cities:any[] = [];
   clients:any[] = [];
@@ -39,16 +42,27 @@ export class CrearApuServicioComponent implements OnInit {
               ) { }
 
   async ngOnInit() {
+    this.loading = true;
     this.createForm();
     this.getProfiles();
     this.getClients();
     this.getPeople();
     await this.getCities();
     this.getTravelExpenseEstimation();
+    this.validateData();
+    this.loading = false;
   }
 
   createForm(){
     this.form = help.functionsApuService.createForm(this.fb, this.clients);
+  }
+
+  validateData() {
+    if (this.data) {
+      setTimeout(() => {
+        help.functionsApuService.fillInForm(this.form, this.data, this.fb, this.profiles, this.cities);
+      }, 1200);
+    }
   }
 
   getPeople(){
@@ -123,7 +137,45 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   save(){
-    console.log(this.form);
+    this._swal
+      .show({
+        text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu servicio`,
+        title: '¿Está seguro?',
+        icon: 'warning',
+      })
+      .then((r) => {
+        if (r.isConfirmed) {
+          if (this.id) {
+            this._apuService.update(this.form.value, this.id).subscribe(
+              (res: any) => this.showSuccess(),
+              (err) => this.showError(err)
+            );
+          } else {
+            this._apuService.save(this.form.value).subscribe(
+              (res: any) => this.showSuccess(),
+              (err) => this.showError(err)
+            );
+          }
+        }
+      });
+  }
+
+  showSuccess() {
+    this._swal.show({
+      icon: 'success',
+      text: `Apu Servicio ${ this.id ? 'editado' : 'creado' } con éxito`,
+      title: 'Operación exitosa',
+      showCancel: false,
+    });
+    this.router.navigateByUrl('/crm/apu/apu-servicio');
+  }
+  showError(err) {
+    this._swal.show({
+      icon: 'error',
+      title: '¡Ooops!',
+      showCancel: false,
+      text: err.code,
+    });
   }
 
 }

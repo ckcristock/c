@@ -10,7 +10,7 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <table class="table table-borderless table-striped">
+        <table class="table table-borderless table-striped" *ngIf="!loading && apuService.length > 0; else notData">
             <thead>
                 <tr>
                     <th>Item</th>
@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- <tr *ngFor="let item of apuSets" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
+                <tr *ngFor="let item of apuService" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
                     <td> {{ item.code }} </td>
                     <td> {{ item.name }} </td>
                     <td> {{ item.thirdparty.name }} </td>
@@ -39,10 +39,10 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/crm/apu/ver-apu-conjunto', item.id]">
+                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/crm/apu/ver-apu-servicio', item.id]">
                                         <i class="far fa-eye"></i> Ver
                                     </a>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/apu/editar-apu-conjunto', item.id]">
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/apu/editar-apu-servicio', item.id]">
                                         <i class="far fa-edit"></i> editar
                                     </a>
                                     <a *ngIf="item.state == 'Activo'" (click)="activateOrInactive('Inactivo', item.id)" class="dropdown-item waves-light text-danger waves-effect caja-botones">
@@ -55,12 +55,12 @@
                             </div>
                         </div>
                     </td>
-                </tr> -->
+                </tr>
             </tbody>
         </table>
-        <!-- <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getApuParts($event)" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize"
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getApuServices($event)" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize"
             [(page)]="pagination.page" aria-label="Default pagination">
-        </ngb-pagination> -->
+        </ngb-pagination>
     </div>
 </div>
 <ng-template #notData>

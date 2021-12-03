@@ -35,7 +35,7 @@ const routes: Routes = [
   { path: 'apu/apu-servicio', component: ApuServicioComponent },
   { path: 'apu/crear-apu-servicio', component: CrearApuServicioComponent },
   { path: 'apu/editar-apu-servicio/:id', component: EditarApuServicioComponent },
-  { path: 'apu/ver-apu-servicio', component: VerApuServicioComponent },
+  { path: 'apu/ver-apu-servicio/:id', component: VerApuServicioComponent },
 
   { path: 'presupuesto', loadChildren: () => import('./presupuesto/presupuesto.module').then(m => m.PresupuestoModule) },
   { path: 'cotizacion', loadChildren: () => import('./cotizacion/cotizacion.module').then(m => m.CotizacionModule) }

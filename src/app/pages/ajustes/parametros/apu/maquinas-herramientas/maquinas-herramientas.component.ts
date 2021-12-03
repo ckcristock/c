@@ -34,7 +34,7 @@ export class MaquinasHerramientasComponent implements OnInit {
 
   openModal(){
     this.modal.show();
-    this.title = 'Nueva variable';
+    this.title = 'Nueva maquina';
   }
 
   createForm(){
@@ -55,7 +55,7 @@ export class MaquinasHerramientasComponent implements OnInit {
 
   getMaquine(machine){
     this.machine = {...machine};
-    this.title = 'Actualizar variable';
+    this.title = 'Actualizar maquina';
     let type_id = parseInt(this.machine.type_id);
     this.form.patchValue({
       id: this.machine.id,

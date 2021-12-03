@@ -25,6 +25,8 @@ export class TableInventaryComponent implements OnInit {
 
   public TotalesMes = 0
   public Totales = 0
+  public TotalesDotaciones = 0
+  public totalEpp = 0
   public CantidadTotal: 0;
   public SumaMes = 0
 
@@ -39,7 +41,7 @@ export class TableInventaryComponent implements OnInit {
   art = ''
 
   filtrosVer = false;
-
+  donwloading = false;
 
   public Empleados: any[] = [];
   public Lista_Dotaciones: any = [];
@@ -113,6 +115,9 @@ export class TableInventaryComponent implements OnInit {
 
       this.CantidadTotal = r.data.year.totalAnual
       this.Totales = r.data.year.totalCostoAnual
+
+      this.TotalesDotaciones = r.data.td.totalDotacion
+      this.totalEpp = r.data.te.totalEpp
     });
 
   }
@@ -169,6 +174,33 @@ export class TableInventaryComponent implements OnInit {
 
   }
 
+  downloadDeliveries() {
+
+    let params = '';
+    this.donwloading = true;
+
+    console.log(this.firstDay);
+    console.log(this.lastDay);
+
+    this._dotation.downloadDeliveries(this.firstDay, this.lastDay, params).subscribe((response: BlobPart) => {
+        let blob = new Blob([response], { type: 'application/excel' });
+        let link = document.createElement('a');
+        const filename = 'reporte_inventario';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.xlsx`;
+        link.click();
+        this.donwloading = false;
+      }),
+      (error) => {
+        console.log('Error downloading the file');
+        this.donwloading = false;
+      },
+      () => {
+        console.info('File downloaded successfully');
+        this.donwloading = false;
+      };
+  }
+
   ListarDotaciones(page = 1){
     this.pagination.page = page;
     let params = {
@@ -192,9 +224,11 @@ export class TableInventaryComponent implements OnInit {
 
 
   configEntrega(value: string) {
-    this.tablestock.search();
+    // this.flagDotacionApp = value;
+    // console.log(this.flagDotacionApp);
+
+    this.tablestock.search(value);
     this.modalEntrega.show()
-    this.flagDotacionApp = value;
   }
 
   dateRangeChanged(event) {
@@ -210,9 +244,6 @@ export class TableInventaryComponent implements OnInit {
   getPeople() {
     this._person.getAll({}).subscribe((res: any) => {
       this.people = res.data;
-      console.log("gente");
-      console.log(this.people);
-
       this.people.unshift({ text: 'Todos', value: 0 });
     });
   }

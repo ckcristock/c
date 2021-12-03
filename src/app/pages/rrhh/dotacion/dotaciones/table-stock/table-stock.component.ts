@@ -32,11 +32,13 @@ export class TableStockComponent implements OnInit {
   public Empleados: any[] = [];
   people: any[] = [];
 
+
   loading = false;
   public cam: boolean = false;
   public flagDotacionApp: boolean = false;
 
   titulo:string = '';
+  tipoEntrega:string = '';
 
   pagination = {
     pageSize: 15,
@@ -74,18 +76,20 @@ export class TableStockComponent implements OnInit {
     }
   }
 
-  search(){
-
+  search(value=''){
+// console.log(value);
+    this.tipoEntrega = value;
     this.getPeople()
     this.Lista_Empleados()
     this.getData();
   }
 
   getData(page=1){
+
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtros,
-      type : this.type,
+      type : this.type ? this.type :  this.tipoEntrega,
       name : this.name
     }
 
@@ -105,13 +109,9 @@ export class TableStockComponent implements OnInit {
     });
   }
 
-
   Lista_Empleados() {
     this._person.getPeopleIndex().subscribe((r: any) => {
       this.Empleados = r.data;
-      console.log("empleados");
-      console.log(this.Empleados);
-
     });
   }///FINAL LISTAR EMPLEADOS
 
@@ -128,20 +128,15 @@ export class TableStockComponent implements OnInit {
   }
 
   getApartadas({id}){
-
-
     let params = {
       ...this.pagination, ...this.filtros,
       id: id
     }
     this.loading = true;
     this._dotation.getSelected(params).subscribe((r: any) => {
-
       this.Apartadas = r.data.data;
       this.pagination.collectionSize = r.data.total;
-
       this.loading = false;
-
 
     })
     this.modalApartadas.show();
@@ -186,8 +181,9 @@ export class TableStockComponent implements OnInit {
 }
 
   GuardarEntrega() {
-
-  this.Entrega.type = this.flagDotacionApp ? 'Dotacion' : 'EPP';
+  // this.Entrega.type = this.flagDotacionApp ? 'Dotacion' : 'EPP';
+  // this.Entrega.type = this.type ? 'Dotacion' : 'EPP';
+  this.Entrega.type = this.type ? this.type :  this.tipoEntrega;
   let entrega = this.Entrega;
 
   // let prods: Array<any> = this.Lista_Grupos_Inventario1;

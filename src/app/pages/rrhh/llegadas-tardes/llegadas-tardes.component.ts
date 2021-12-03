@@ -106,10 +106,11 @@ export class LlegadasTardesComponent implements OnInit {
   downloadLateArrivals() {
     let params = this.getParams();
     this.donwloading = true;
-    this._lateArrivals
-      .downloadLateArrivals(this.firstDay, this.lastDay, params)
-      .subscribe((response: BlobPart) => {
-        let blob = new Blob([response], { type: 'application/excel' });
+    this._lateArrivals.downloadLateArrivals(this.firstDay, this.lastDay, params).subscribe((response: BlobPart) => {
+
+
+      let blob = new Blob([response], { type: 'application/excel' });
+
         let link = document.createElement('a');
         const filename = 'reporte_llegadas_tarde';
         link.href = window.URL.createObjectURL(blob);
@@ -175,21 +176,16 @@ export class LlegadasTardesComponent implements OnInit {
   }
 
   getParams() {
+
     let params: any = {};
-    this.company_id != '0' && this.company_id
-      ? (params.company_id = this.company_id)
-      : '';
 
-    this.group_id && this.group_id != '0'
-      ? (params.group_id = this.group_id)
-      : '';
+    this.company_id != '0' && this.company_id ? (params.company_id = this.company_id) : '';
 
-    this.dependency_id != '0' && this.dependency_id
-      ? (params.dependency_id = this.dependency_id)
-      : '';
-    this.people_id != '0' && this.people_id
-      ? (params.person_id = this.people_id)
-      : '';
+    this.group_id && this.group_id != '0' ? (params.group_id = this.group_id) : '';
+
+    this.dependency_id != '0' && this.dependency_id ? (params.dependency_id = this.dependency_id) : '';
+
+    this.people_id != '0' && this.people_id ? (params.person_id = this.people_id) : '';
 
     return params;
   }

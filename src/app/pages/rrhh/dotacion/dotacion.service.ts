@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
-
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +48,10 @@ export class DotacionService {
     //   );
   }
 
+  getTotatInventary(params = {}){
+    return this.http.get(`${environment.base_url}/get-total-inventary`, { params })
+  }
+
   getSelected(params = {}){
     return this.http.get(`${environment.base_url}/get-selected`, { params })
   }
@@ -93,6 +96,16 @@ export class DotacionService {
 
   getDotationTotalByCategory( params ){
     return this.http.get(`${environment.base_url}/dotations-total-types`, { params })
+  }
+
+  DownloadInventoryDotation(date1, date2, params = {}) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.get(`${environment.base_url}/dotations/download/${date1}/${date2}`,{ params, headers, responseType: 'blob' as 'json' });
+  }
+
+  downloadDeliveries(date1, date2, params = {}) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.get(`${environment.base_url}/downloadeliveries/download/${date1}/${date2}`,{ params, headers, responseType: 'blob' as 'json' });
   }
 
 }

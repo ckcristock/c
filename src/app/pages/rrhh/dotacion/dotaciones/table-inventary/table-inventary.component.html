@@ -1,18 +1,16 @@
 <ng-container *ngIf="!loading; else notData">
 
-    <div class="row mb-1">
+    <div class="row mb-1 mt-2">
         <div class="col-md-12">
-            <div class="card h-100">
+            <div class="">
 
-                <div class="card-body">
+                <div [ngClass]="{'card card-body': filtrosVer } ">
 
-                    <div class="text-center">
-                        <h4 class="ttext-primary">Filtros</h4>
-                        <button class="btn btn-primary btn-sm" (click)="filtrosVer = !filtrosVer">
+                    <div class="d-flex justify-content-end">
+                        <h6 class="text-primary">Filtros</h6>
+                        <button class="btn btn-primary btn-sm ml-2" (click)="filtrosVer = !filtrosVer">
                                 <i class="fas fa-sort-down"></i>
                           </button>
-                        <hr class="bg-primary">
-
                     </div>
 
                     <div [ngClass]="{'display-none': !filtrosVer } " colspan="6" class="text-center">
@@ -118,39 +116,44 @@
         <div class="col-md-6">
             <div class="card mt-4 mb-4 ">
                 <h4 class="text-center mt-3">Montos Totales</h4>
-
-                <!-- <div class="form-group">
-                    <input type="month" (change)="listarTotales($event.target.value);Graficar()" [(ngModel)]="selectedMes" class="form-control form-control-sm" name="mouth" id="">
-                </div> -->
                 <hr class="line">
-                <div class="row" style="margin-top:2px;">
-                    <div class="col-md-6 text-center">
-                        <p>Costos Año</p>
+
+
+                <div class="row text-center mt-3">
+                    <div class="col-md-6 costo">
+                        <i class="fas fa-dollar-sign"></i>
+                        <p class="card-text mb-0">Costos Total</p>
                         <h5 class="mb-1">$ {{ Totales | number | puntos }} </h5>
-                        <p>distribuidos en</p>
-                        <h5> {{ CantidadTotal| number | puntos}}</h5>
-                        <p>entregas realizadas</p>
                     </div>
-                    <div class="col-md-6 text-center">
-                        <p>Costos Mes</p>
-                        <div class="form-group">
-                            <h5> ${{ SumaMes | number | puntos }} </h5>
-                            <p>distribuidos en</p>
-                            <h5> {{ TotalesMes| number }}</h5>
-                            <p>entregas realizadas</p>
-                        </div>
+
+                    <div class="col-md-6 costo">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <p class="card-text mb-0"># Entregas Realizadas</p>
+                        <h5> {{ CantidadTotal| number | puntos}}</h5>
                     </div>
                 </div>
 
+
+                <div class="row text-center mt-4 mb-3">
+                    <div class="col-md-6 costo">
+                        <i class="fas fa-street-view"></i>
+                        <p class="card-text mb-0"># Dotaciones Total</p>
+                        <h5 class="mb-1"> {{ TotalesDotaciones | number | puntos }} </h5>
+                    </div>
+
+                    <div class="col-md-6 costo">
+                        <i class="fas fa-user-shield"></i>
+                        <p class="card-text mb-0"># Epp Total</p>
+                        <h5> {{ totalEpp| number | puntos}}</h5>
+                    </div>
+                </div>
             </div>
-
-
         </div>
 
         <div class="col-md-6">
             <div class="card mt-4">
                 <div class="card-header">
-                    <h5>Dotación y Epp's x Categorías Anualmente</h5>
+                    <h5>Dotación y Epp's x Categorías</h5>
                 </div>
                 <div class="card-block" #dotacion_chart>
                     <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
@@ -166,8 +169,8 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-8">
+                    <div class="row mt-3">
+                        <div class="col-md-6">
                             <h5>Listado de Entregas de Dotación y EPP</h5>
                         </div>
                         <div class="col-md-2">
@@ -176,6 +179,18 @@
 
                         <div class="col-md-2">
                             <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="configEntrega('EPP')"><i class="fa fa-plus"></i> Entrega Epp</button>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button class="btn btn-sm btn-primary btn-block" (click)="downloadDeliveries()">
+                            <i class="fas fa-file-download"></i>
+
+                            <span *ngIf="!donwloading; else status"> Descargar</span>
+                              <ng-template #status>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Generando...
+                              </ng-template>
+                          </button>
                         </div>
 
                     </div>
@@ -312,27 +327,16 @@
 
 
 <app-modal-basic #modalEntrega [dialogClass]="'modal-lg'">
-
     <div class="app-modal-body">
-
         <div class="row">
             <div class="col-md-12 ">
-
                 <div class="col-md-12 text-center">
-
-                    <app-table-stock #tablestock [type]="'Dotacion'" [name]="nombre" [type]="flagDotacionApp" [entrega]="true" [find]="false" (closeModal)="closeModal()"></app-table-stock>
-
-
+                    <app-table-stock #tablestock [name]="nombre" [type]="flagDotacionApp" [entrega]="true" [find]="false" (closeModal)="closeModal()"></app-table-stock>
                 </div>
-
             </div>
         </div>
-
     </div>
-
 </app-modal-basic>
-<!-- fin modal entrega dotacion -->
-
 
 
 <ng-template #notData>

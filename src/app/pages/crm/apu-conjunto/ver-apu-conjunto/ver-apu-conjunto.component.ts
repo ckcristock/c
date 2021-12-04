@@ -30,7 +30,10 @@ export class VerApuConjuntoComponent implements OnInit {
     })
   }
 
+  donwloading = false;
+
   download() {
+    this.donwloading = true;
     this._apuConjunto.download(this.id).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
       let link = document.createElement('a');
@@ -38,12 +41,15 @@ export class VerApuConjuntoComponent implements OnInit {
       link.href = window.URL.createObjectURL(blob);
       link.download = `${filename}.pdf`;
       link.click();
+      this.donwloading = false;
     }),
       (error) => {
         console.log('Error downloading the file');
+        this.donwloading = false;
       },
       () => {
         console.info('File downloaded successfully');
+        this.donwloading = false;
       };
   }
 

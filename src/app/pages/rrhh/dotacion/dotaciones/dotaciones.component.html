@@ -1,11 +1,74 @@
 <div class="page-body">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <!-- <div class="card-header"> -->
-                    <h4 class="text-center">Montos Totales</h4>
-                    <!-- </div> -->
+    <div class="">
+        <div class="row">
+            <div class="col-12">
+                <div class="">
+                    <!-- <h4 class="text-center text-primary">Inventarios</h4>
+                    <hr class="line"> -->
+
+                    <!-- <div class="col-md-12">
+                        <div class="card-block"> -->
+                    <div class="row">
+
+                        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs ">
+                            <li [ngbNavItem]="1">
+                                <a ngbNavLink>Inventario Dotación</a>
+                                <ng-template ngbNavContent>
+
+                                    <!-- <ng-container *ngIf="!loading; else notDataTable"> -->
+                                    <app-category-stock></app-category-stock>
+                                    <!-- </ng-container> -->
+
+                                    <!-- <div class="card">
+                                                <div class="col-md-12">
+                                                    <div class="card-block">
+                                                        <div class="m-3 col-12 text-center">
+                                                            <h4>Stock por categorías</h4>
+                                                            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-pills">
+                                                                <li [ngbNavItem]="1">
+                                                                    <a ngbNavLink>Dotación</a>
+                                                                    <ng-template ngbNavContent>
+
+                                                                        <app-table-stock [type]="'Dotacion'" [find]="true"></app-table-stock>
+
+                                                                    </ng-template>
+                                                                </li>
+                                                                <li [ngbNavItem]="2">
+                                                                    <a ngbNavLink>Epp</a>
+                                                                    <ng-template ngbNavContent>
+                                                                        <app-table-stock [type]="'EPP'" [find]="true"></app-table-stock>
+
+                                                                    </ng-template>
+                                                                </li>
+                                                            </ul>
+
+                                                            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+
+                                </ng-template>
+                            </li>
+
+                            <li [ngbNavItem]="2">
+                                <a ngbNavLink>Entrega Dotación</a>
+                                <ng-template ngbNavContent>
+
+                                    <app-table-inventary></app-table-inventary>
+
+                                </ng-template>
+                            </li>
+                        </ul>
+
+                        <!-- <div [ngbNavOutlet]="nav" class="mt-2"></div> -->
+
+                    </div>
+                    <!-- </div>
+                    </div> -->
+
+                    <!-- <h4 class="text-center">Montos Totales</h4>
+
                     <div class="form-group">
                         <input type="month" (change)="listarTotales($event.target.value);Graficar()" [(ngModel)]="selectedMes" class="form-control form-control-sm" name="mouth" id="">
                     </div>
@@ -26,144 +89,199 @@
                                 <p>entregas realizadas</p>
                             </div>
                         </div>
-                    </div>
-                    <hr class="hr">
+                    </div> -->
                 </div>
-                <div class="col-md-12">
-                    <div class="card-block">
-                        <div class="row" style="margin-top:5px;">
-                            <div class="col-12 text-center">
-                                <h4>Stock por categorías</h4>
-                            </div>
-                            <div class="col-md-12 text-center">
-                                <table class="table table-hover table-bordered">
-                                    <tr *ngFor="let lgi of Lista_Grupos_Inventario">
-                                        <td class="text-left">{{lgi.name}}</td>
-                                        <td style="width:50px;">{{lgi.stock}}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-6">
-            <div class="card">
+            </div>
+
+            <!-- <div class="card">
                 <div class="card-header">
                     <h5>Dotación y Epp's x Categorías Anualmente</h5>
                 </div>
                 <div class="card-block" #dotacion_chart>
                     <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
-          </canvas>
+                    </canvas>
                 </div>
-            </div>
+            </div> -->
+
         </div>
 
+
+
+
+
+        <!-- <div class="col-md-6">
+            <div class="card">
+                <div class="col-md-12">
+                    <div class="card-block">
+                        <div class="row" style="margin-top:5px;">
+                            <div class="m-3 col-12 text-center">
+                                <h4>Stock por categorías</h4>
+                            </div>
+                            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-pills">
+                                <li [ngbNavItem]="1">
+                                    <a ngbNavLink>Dotación</a>
+                                    <ng-template ngbNavContent>
+
+                                        <app-table-stock [type]="'Dotacion'" [find]="true"></app-table-stock>
+
+                                    </ng-template>
+                                </li>
+                                <li [ngbNavItem]="2">
+                                    <a ngbNavLink>Epp</a>
+                                    <ng-template ngbNavContent>
+                                        <app-table-stock [type]="'EPP'" [find]="true"></app-table-stock>
+
+                                    </ng-template>
+                                </li>
+                            </ul>
+
+                            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
     </div>
 
+    <div [ngbNavOutlet]="nav" class="mt-0"></div>
 
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-8">
                             <h5>Listado de Entregas de Dotación y EPP</h5>
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="modalEntrega.show()"><i class="fa fa-plus"></i> Entrega Dotación</button>
+                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="configEntrega('Dotacion')"><i class="fa fa-plus"></i> Entrega Dotación</button>
                         </div>
+
+                        <div class="col-md-2">
+                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="configEntrega('EPP')"><i class="fa fa-plus"></i> Entrega Epp</button>
+                        </div>
+
                     </div>
 
                 </div>
-                <div class="card-block">
-                    <table class="table table-striped" style="font-size: 10px;" *ngIf="!loading && Lista_Dotaciones.length > 0; else notData">
+                <div class="card-body">
+                    <table class="table table-striped" style="font-size: 10px;">
                         <thead>
                             <tr>
                                 <th style="width:80px;">Código</th>
+                                <th style="width:100px;">Tipo</th>
                                 <th style="width:120px;">Fecha</th>
                                 <th style="width:135px;">Funcionario Entrega</th>
                                 <th style="width:135px;">Funcionario Recibe</th>
                                 <th style="width:135px;">Detalles</th>
                                 <th>Artículos</th>
                                 <th style="width:90px;">Valor</th>
-                                <th style="width:80px;">Estado</th>
+                                <th style="width:70px;">Estado</th>
+                                <th style="width:90px;">Estado Entrega</th>
                                 <th style="width:30px;"> - </th>
                             </tr>
                             <tr>
                                 <th class="tabla-filtro">
-                                    <input type="text" [(ngModel)]="filtro_cod" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro Cod.">
+                                    <input style="height: 36px;" type="text" [(ngModel)]="filtros.cod" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Cod.">
                                 </th>
-                                <th class="tabla-filtro" style="max-width: 100px; width: 100px !important;">
-                                    <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
+                                <th class="tabla-filtro">
+
+                                    <select style="height: 36px;" name="Tipo" id="tipo" (change)="ListarDotaciones()" class="form-control form-control-sm" [(ngModel)]="filtros.type" required>
+                                        <option value="" disabled selected>Seleccionar</option>
+                                        <option value="">Todos</option>
+                                        <option value="Dotacion">Dotacion</option>
+                                        <option value="EPP">EPP</option>
+                                    </select>
+
                                 </th>
-                                <th>
-                                    <input type="text" [(ngModel)]="filtro_entrega" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro Entrega">
-                                </th>
-                                <th>
-                                    <input type="text" [(ngModel)]="filtro_recibe" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro Recibe">
-                                </th>
-                                <th>
-                                    <input type="text" [(ngModel)]="filtro_detalles" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro Detalles">
+
+                                <th class="tabla-filtro" style="max-width: 100px; width: 200px !important">
+                                    <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
                                 </th>
 
                                 <th>
-                                    <input type="text" [(ngModel)]="filtro_valor" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro Valor">
+                                    <ng-select [items]="people" [(ngModel)]="filtros.entrega" (change)="ListarDotaciones()" bindLabel="text" bindValue="value">
+                                    </ng-select>
                                 </th>
-                                <th></th>
+
                                 <th>
+                                    <ng-select [items]="people" [(ngModel)]="filtros.recibe" (change)="ListarDotaciones()" bindLabel="text" bindValue="value">
+                                    </ng-select>
+                                </th>
+
+                                <th>
+                                    <input style="height: 36px;" type="text" [(ngModel)]="filtros.description" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Detalles">
+                                </th>
+
+                                <th>
+
+                                    <input style="height: 36px;" type="text" [(ngModel)]="filtros.name" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Art.">
+
+                                </th>
+
+                                <th></th>
+                                <th></th>
+                                <th class="tabla-filtro">
+
+                                    <select style="height: 36px;" name="Tipo" id="tipo" (change)="ListarDotaciones()" class="form-control form-control-sm" [(ngModel)]="filtros.delivery" required>
+                                      <option value="" disabled selected>Seleccionar</option>
+                                      <option value="">Todos</option>
+                                      <option value="Pendiente">Pendiente</option>
+                                      <option value="Anulado">Anulado</option>
+                                      <option value="Aprobado">Aprobado</option>
+                                      <option value="Entregado">Entregado</option>
+                                  </select>
+
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-
-
-                            <tr *ngFor="let item of Lista_Dotaciones" [ngClass]="{'bg-danger text-white': item.state == 'Anulada'}">
-                                <td>ED00{{item.id}}</td>
-                                <td>{{item.created_at | date:'dd/MM/yyyy'}}</td>
-                                <td>{{item.entrega}}</td>
-                                <td>{{item.recibe}}</td>
-                                <td>{{item.description}}</td>
-                                <td>
-                                    <div class="articulos-table">
-                                        {{item.product_name}}
-                                    </div>
-                                </td>
-                                <td>$ {{item.total | number | puntos}}</td>
-                                <td><span>{{item.state}}</span>
-                                </td>
-                                <td>
-                                    <div ngbDropdown class="dropdown-primary">
-                                        <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
-                                        <div ngbDropdownMenu>
-                                            <!--   <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank">
-                                                <i class="fa fa-print"></i> Imprimir Entrega
-                                            </a> -->
-                                            <!-- <a *ngIf="item.Estado!='Anulada'&&item.Estado!='Devuelta'" class="dropdown-item waves-light waves-effect caja-botones" (click)="devolverDotacion(item.Id_Dotacion)" >
-                      <i class="fa fa-undo"></i> Devolver
-                    </a> -->
-                                            <!--   <a *ngIf="item.Estado=='Devuelta'" class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/dotaciones/descarga_devolucion.php?id={{item.Id_Dotacion}}" target="_blank">
-                                                <i class="fa fa-print"></i> Imprimir Devolucion
-                                            </a> -->
-                                            <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
-                                                <i class="fa fa-times"></i> Anular
-                                            </a>
+                            <ng-container *ngIf="!loading && Lista_Dotaciones.length > 0; else notDataTable">
+                                <tr *ngFor="let item of Lista_Dotaciones" [ngClass]="{'bg-danger text-white': item.state == 'Anulada'}">
+                                    <td>{{item.delivery_code}}</td>
+                                    <td>{{item.type}}</td>
+                                    <td>{{item.created_at | date:'dd/MM/yyyy'}}</td>
+                                    <td>{{item.entrega}}</td>
+                                    <td>{{item.recibe}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>
+                                        <div class="articulos-table">
+                                            {{item.product_name}}
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td>$ {{item.total | number | puntos}}</td>
+                                    <td><span>{{item.state}}</span>
+                                        <td><span>{{item.delivery_state}}</span>
+                                        </td>
+                                        <td>
+                                            <div ngbDropdown class="dropdown-primary">
+                                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
+                                                <div ngbDropdownMenu>
+                                                    <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
+                                                        <i class="fa fa-times"></i> Anular
+                                                    </a>
+                                                    <a *ngIf="item.delivery_state == 'Pendiente'" class="dropdown-item waves-light waves-effect caja-botones" (click)="aprobarDotacion(item.id)">
+                                                        <i class="far fa-thumbs-up"></i> Aprobar
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                </tr>
+
+                            </ng-container>
+
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer bg-white">
                     <ngb-pagination maxSize="5" [collectionSize]="pagination.collectionSize" (pageChange)="ListarDotaciones($event) " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination ">
                     </ngb-pagination>
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <app-modal-basic #modalDevolver [dialogClass]="'modal-lg'">
@@ -182,14 +300,8 @@
                             <tbody>
                                 <tr>
                                     <td style="width:100px;padding:0 !important;">
-                                        <!--  <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="{{globales.Nombre}}"> -->
                                     </td>
-                                    <!-- <td>
-                                        {{globales.Nombre}}
-                                        <br> {{globales.Nit}}
-                                        <br> {{globales.Direccion}}
-                                        <br> {{globales.Telefono}}
-                                    </td> -->
+
                                 </tr>
                             </tbody>
                         </table>
@@ -263,17 +375,42 @@
 
 
 
-<!-- modal entrega dotacion -->
+
 <app-modal-basic #modalEntrega [dialogClass]="'modal-lg'">
+
+    <div class="app-modal-body">
+
+        <div class="row">
+            <div class="col-md-12 ">
+
+                <div class="col-md-12 text-center">
+
+                    <app-table-stock [type]="flagDotacionApp" #tablestock [entrega]="true" [find]="false" (closeModal)="closeModal()"></app-table-stock>
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</app-modal-basic>
+<!-- fin modal entrega dotacion -->
+
+
+
+<!-- modal entrega epp -->
+<app-modal-basic #modalEntregaEpp [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
-        <h4 class="modal-title">Nueva Entrega de Dotación</h4>
-        <button type="button" class="close basic-close" (click)="modalEntrega.hide();">
-      <span aria-hidden="true">&times;</span>
-    </button>
+        <h4 class="modal-title">Nueva Entrega de EPP</h4>
+        <button type="button" class="close basic-close" (click)="modalEntregaEpp.hide();">
+    <span aria-hidden="true">&times;</span>
+  </button>
     </div>
     <div class="app-modal-body">
 
-        <form #FormDotacion="ngForm">
+        <form #FormEpp="ngForm">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -294,8 +431,8 @@
             <div class="row">
                 <div class="col-md-12 ">
                     <h4 class="mb-2">Elementos disponibles</h4>
-                    <div class="row mb-2" *ngFor="let category of Lista_Grupos_Inventario1;
-                                         i as index">
+                    <div class="row mb-2" *ngFor="let category of Lista_Grupos_Inventario_Epp;
+                                       i as index">
                         <div class="col-12">
                             <h5>{{category.name}}</h5>
                         </div>
@@ -305,8 +442,8 @@
                                     <input (onChange)="maxLengthCheck(prod)" type="number" name="producto{{i}}" class="form-control form-control-sm" min="0" (blur)="cambio(prod)" max="{{prod.Cantidad}}" [(ngModel)]="prod.quantity" placeholder="0" required>
                                 </div>
                                 <div [ngClass]="{'bg-danger text-white': prod.quantity > prod.stock}" class="col-md-8">
-                                    <span class="f-9"> <strong>({{prod.stock}})</strong> - {{ prod.name }}
-                  </span>
+                                    <span class="f-9"> <strong>({{prod.stock}})</strong> - {{ prod.name }} - {{category.delivery_type}}
+                </span>
                                     <md-tooltip ngbTooltip="Error en la Cantidad" *ngIf="prod.quantity > prod.stock">
                                         Cantidad Incorrecta
                                     </md-tooltip>
@@ -328,13 +465,141 @@
     </div>
     <div class="app-modal-footer" style="width:100%;">
         <div class="text-right">
-            <button *ngIf="!cam" type="button" class="btn btn-primary btn-sm" (click)="save()" [disabled]="!FormDotacion.valid">
-        Reportar Entrega de Dotación
-      </button>
+            <button *ngIf="!cam" type="button" class="btn btn-primary btn-sm" (click)="save()" [disabled]="!FormEpp.valid">
+      Reportar Entrega de Dotación
+    </button>
         </div>
     </div>
 </app-modal-basic>
-<!-- fin modal entrega dotacion -->
+<!-- fin modal entrega epp -->
+
+
+
+<!-- modal salidas-->
+<app-modal-basic #modalSalidas [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">Salidas</h4>
+        <button type="button" class="close basic-close" (click)="modalSalidas.hide();">
+  <span aria-hidden="true">&times;</span>
+   </button>
+    </div>
+    <div class="app-modal-body">
+
+        <div class="card-body">
+            <table class="table table-striped" style="font-size: 10px;">
+                <thead>
+                    <tr>
+                        <th style="width:80px;">Código</th>
+                        <th style="width:100px;">Tipo</th>
+                        <th style="width:120px;">Fecha</th>
+                        <th style="width:135px;">Funcionario Entrega</th>
+                        <th style="width:135px;">Funcionario Recibe</th>
+                        <th style="width:135px;">Detalles</th>
+                        <th>Artículos</th>
+                        <th style="width:90px;">Valor</th>
+                        <th style="width:70px;">Estado</th>
+                        <th style="width:90px;">Estado Entrega</th>
+                        <th style="width:30px;"> - </th>
+                    </tr>
+                    <!-- <tr>
+                  <th class="tabla-filtro">
+                      <input style="height: 36px;" type="text" [(ngModel)]="filtros.cod" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Cod.">
+                  </th>
+                  <th class="tabla-filtro">
+
+                      <select style="height: 36px;" name="Tipo" id="tipo" (change)="ListarDotaciones()" class="form-control form-control-sm" [(ngModel)]="filtros.type" required>
+                          <option value="" disabled selected>Seleccionar</option>
+                          <option value="">Todos</option>
+                          <option value="Dotacion">Dotacion</option>
+                          <option value="EPP">EPP</option>
+                      </select>
+
+                  </th>
+
+                  <th class="tabla-filtro" style="max-width: 100px; width: 200px !important">
+                      <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
+                  </th>
+
+                  <th>
+                      <ng-select [items]="people" [(ngModel)]="filtros.entrega" (change)="ListarDotaciones()" bindLabel="text" bindValue="value">
+                      </ng-select>
+                  </th>
+
+                  <th>
+                      <ng-select [items]="people" [(ngModel)]="filtros.recibe" (change)="ListarDotaciones()" bindLabel="text" bindValue="value">
+                      </ng-select>
+                  </th>
+
+                  <th>
+                      <input style="height: 36px;" type="text" [(ngModel)]="filtros.description" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Detalles">
+                  </th>
+
+                  <th>
+
+                      <input style="height: 36px;" type="text" [(ngModel)]="filtros.name" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Art.">
+
+                  </th>
+
+                  <th></th>
+                  <th></th>
+                  <th class="tabla-filtro">
+
+                      <select style="height: 36px;" name="Tipo" id="tipo" (change)="ListarDotaciones()" class="form-control form-control-sm" [(ngModel)]="filtros.delivery" required>
+                        <option value="" disabled selected>Seleccionar</option>
+                        <option value="">Todos</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Anulado">Anulado</option>
+                        <option value="Aprobado">Aprobado</option>
+                        <option value="Entregado">Entregado</option>
+                    </select>
+
+                  </th>
+              </tr> -->
+                </thead>
+                <tbody>
+                    <!-- <ng-container *ngIf="!loading && Lista_Dotaciones.length > 0; else notDataTable">
+                  <tr *ngFor="let item of Lista_Dotaciones" [ngClass]="{'bg-danger text-white': item.state == 'Anulada'}">
+                      <td>{{item.delivery_code}}</td>
+                      <td>{{item.type}}</td>
+                      <td>{{item.created_at | date:'dd/MM/yyyy'}}</td>
+                      <td>{{item.entrega}}</td>
+                      <td>{{item.recibe}}</td>
+                      <td>{{item.description}}</td>
+                      <td>
+                          <div class="articulos-table">
+                              {{item.product_name}}
+                          </div>
+                      </td>
+                      <td>$ {{item.total | number | puntos}}</td>
+                      <td><span>{{item.state}}</span>
+                          <td><span>{{item.delivery_state}}</span>
+                          </td>
+                          <td>
+                              <div ngbDropdown class="dropdown-primary">
+                                  <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
+                                  <div ngbDropdownMenu>
+                                      <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
+                                          <i class="fa fa-times"></i> Anular
+                                      </a>
+                                      <a *ngIf="item.delivery_state == 'Pendiente'" class="dropdown-item waves-light waves-effect caja-botones" (click)="aprobarDotacion(item.id)">
+                                          <i class="far fa-thumbs-up"></i> Aprobar
+                                      </a>
+                                  </div>
+                              </div>
+                          </td>
+                  </tr>
+
+              </ng-container> -->
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</app-modal-basic>
+<!-- fin modal salidas -->
+
 
 
 <ng-template #rt3 let-r="result" let-t="term">
@@ -360,4 +625,12 @@
 
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #notDataTable>
+    <tr>
+        <td colspan="10">
+            <app-not-data [loading]="loading"></app-not-data>
+        </td>
+    </tr>
 </ng-template>

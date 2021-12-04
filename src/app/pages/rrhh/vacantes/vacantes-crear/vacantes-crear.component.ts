@@ -65,6 +65,41 @@ export class VacantesCrearComponent implements OnInit {
         this.getSalaryTypes();
     }
 
+    createForm() {
+      this.form = this.fb.group({
+          company_id: ['', Validators.required],
+          title: ['', Validators.required],
+          date_start: ['', Validators.required],
+          date_end: ['', Validators.required],
+          group_id: ['', Validators.required],
+          dependency_id: ['', Validators.required],
+          position_id: ['', Validators.required],
+          department_id: ['', Validators.required],
+          municipality_id: ['', Validators.required],
+          min_salary: [''],
+          max_salary: [''],
+          turn_type: ['', Validators.required],
+          description: ['', Validators.required],
+          education: ['', Validators.required],
+          experience_year: ['', Validators.required],
+          min_age: [''],
+          max_age: [''],
+          can_trip: ['', Validators.required],
+          change_residence: ['', Validators.required],
+          gener: ['No Aplica', Validators.required],
+          languages: ['', Validators.required],
+          conveyance: ['Ninguno'],
+          work_contract_type_id: ['', Validators.required],
+          document_type_id: ['', Validators.required],
+          passport: ['', Validators.required],
+          visa: ['', Validators.required],
+          visa_type_id: [''],
+          salary_type_id: [1],
+          drivingLicenseJob: [[]],
+      })
+  }
+
+
     getSalaryTypes(){
         this._job.getSalaryTypes().subscribe((r:any) => {
             this.salaries = r.data;
@@ -142,7 +177,7 @@ export class VacantesCrearComponent implements OnInit {
             })
         }
     }
-    
+
     save() {
         this.form.markAllAsTouched()
         if (this.form.invalid) { return false }
@@ -160,7 +195,7 @@ export class VacantesCrearComponent implements OnInit {
             }
         });
     }
-    
+
     sendData() {
         this._job.save(this.form.value).subscribe((r: any) => {
             if (r.code == 200) {
@@ -203,40 +238,6 @@ export class VacantesCrearComponent implements OnInit {
             this.groups = r.data
             this.groups.unshift({ text: 'Seleccione uno', value: '' });
         })
-    }
-
-    createForm() {
-        this.form = this.fb.group({
-            company_id: ['', Validators.required],
-            title: ['', Validators.required],
-            date_start: ['', Validators.required],
-            date_end: ['', Validators.required],
-            group_id: ['', Validators.required],
-            dependency_id: ['', Validators.required],
-            position_id: ['', Validators.required],
-            department_id: ['', Validators.required],
-            municipality_id: ['', Validators.required],
-            min_salary: [''],
-            max_salary: [''],
-            turn_type: ['', Validators.required],
-            description: ['', Validators.required],
-            education: ['', Validators.required],
-            experience_year: ['', Validators.required],
-            min_age: [''],
-            max_age: [''],
-            can_trip: ['', Validators.required],
-            change_residence: ['', Validators.required],
-            gener: ['No Aplica', Validators.required],
-            languages: ['', Validators.required],
-            conveyance: ['Ninguno'],
-            work_contract_type_id: ['', Validators.required],
-            document_type_id: ['', Validators.required],
-            passport: ['', Validators.required],            
-            visa: ['', Validators.required],
-            visa_type_id: [''],      
-            salary_type_id: [1],
-            drivingLicenseJob: [[]],
-        })  
     }
 
     visa() {

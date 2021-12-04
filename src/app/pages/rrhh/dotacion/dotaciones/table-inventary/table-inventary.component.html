@@ -1,0 +1,344 @@
+<ng-container *ngIf="!loading; else notData">
+
+    <div class="row mb-1 mt-2">
+        <div class="col-md-12">
+            <div class="">
+
+                <div [ngClass]="{'card card-body': filtrosVer } ">
+
+                    <div class="d-flex justify-content-end">
+                        <h6 class="text-primary">Filtros</h6>
+                        <button class="btn btn-primary btn-sm ml-2" (click)="filtrosVer = !filtrosVer">
+                                <i class="fas fa-sort-down"></i>
+                          </button>
+                    </div>
+
+                    <div [ngClass]="{'display-none': !filtrosVer } " colspan="6" class="text-center">
+
+                        <div class="row d-flex align-items-end">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="custom-label">F.Entrega</label>
+                                    <ng-select [items]="people" [(ngModel)]="people_id" name="Person" id="person" bindLabel="text" bindValue="value" ngDefaultControl>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="custom-label">F.Recibe</label>
+                                    <ng-select [items]="people" [(ngModel)]="people_id_two" name="PersonTwo" id="persontwo" bindLabel="text" bindValue="value" ngDefaultControl>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="custom-label">Codigo</label>
+                                    <input style="height: 36px;" type="text" [(ngModel)]="cod" class="form-control form-control-sm" placeholder="Cod.">
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="custom-label">Tipo</label>
+
+                                    <select style="height: 36px;" name="Tipo" id="tipo" class="form-control form-control-sm" [(ngModel)]="type" required>
+                                          <option value="" disabled selected>Seleccionar</option>
+                                          <option value="">Todos</option>
+                                          <option value="Dotacion">Dotacion</option>
+                                          <option value="EPP">EPP</option>
+                                      </select>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="">Fecha Inicio</label>
+                                    <input type="date" [(ngModel)]="firstDay" id="Fecha_Inicio" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="">Fecha Fin</label>
+                                    <input type="date" [(ngModel)]="lastDay" id="Fecha_Fin" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row d-flex align-items-end">
+                            <div class="col-md-2">
+                                <div class="form-group">
+
+                                    <label class="custom-label">Estado</label>
+                                    <select style="height: 36px;" name="Estado" id="estado" class="form-control form-control-sm" [(ngModel)]="delivery" required>
+                                <option value="" disabled selected>Seleccionar</option>
+                                <option value="">Todos</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Anulado">Anulado</option>
+                                <option value="Aprobado">Aprobado</option>
+                                <option value="Entregado">Entregado</option>
+                            </select>
+
+                                </div>
+                            </div>
+
+
+                            <!-- <div class="col-md-2">
+                              <div class="form-group">
+                                  <label class="custom-label">Articulo</label>
+                                  <input style="height: 36px;" type="text" name="Art" id="art" [(ngModel)]="art" class="form-control form-control-sm" placeholder="Filtro Art.">
+                              </div>
+                          </div> -->
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-sm btn-success btn-block" (click)="ListarDotaciones();listarTotales(); Graficar()">
+                                <i class="fas fa-search"></i>
+                                Buscar
+                              </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mt-4 mb-4 ">
+                <h4 class="text-center mt-3">Montos Totales</h4>
+                <hr class="line">
+
+
+                <div class="row text-center mt-3">
+                    <div class="col-md-6 costo">
+                        <i class="fas fa-dollar-sign"></i>
+                        <p class="card-text mb-0">Costos Total</p>
+                        <h5 class="mb-1">$ {{ Totales | number | puntos }} </h5>
+                    </div>
+
+                    <div class="col-md-6 costo">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <p class="card-text mb-0"># Entregas Realizadas</p>
+                        <h5> {{ CantidadTotal| number | puntos}}</h5>
+                    </div>
+                </div>
+
+
+                <div class="row text-center mt-4 mb-3">
+                    <div class="col-md-6 costo">
+                        <i class="fas fa-street-view"></i>
+                        <p class="card-text mb-0"># Dotaciones Total</p>
+                        <h5 class="mb-1"> {{ TotalesDotaciones | number | puntos }} </h5>
+                    </div>
+
+                    <div class="col-md-6 costo">
+                        <i class="fas fa-user-shield"></i>
+                        <p class="card-text mb-0"># Epp Total</p>
+                        <h5> {{ totalEpp| number | puntos}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Dotación y Epp's x Categorías</h5>
+                </div>
+                <div class="card-block" #dotacion_chart>
+                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h5>Listado de Entregas de Dotación y EPP</h5>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="configEntrega('Dotacion')"><i class="fa fa-plus"></i> Entrega Dotación</button>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button class="btn btn-info btn-block btn-sm f-9" style="margin-top:0 !important;margin-bottom: 10px;" (click)="configEntrega('EPP')"><i class="fa fa-plus"></i> Entrega Epp</button>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button class="btn btn-sm btn-primary btn-block" (click)="downloadDeliveries()">
+                            <i class="fas fa-file-download"></i>
+
+                            <span *ngIf="!donwloading; else status"> Descargar</span>
+                              <ng-template #status>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Generando...
+                              </ng-template>
+                          </button>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped" style="font-size: 10px;">
+                        <thead>
+                            <tr>
+                                <th style="width:80px;">Código</th>
+                                <th style="width:100px;">Tipo</th>
+                                <th style="width:120px;">Fecha</th>
+                                <th style="width:135px;">Funcionario Entrega</th>
+                                <th style="width:135px;">Funcionario Recibe</th>
+                                <th style="width:135px;">Detalles</th>
+                                <th>Artículos</th>
+                                <th style="width:90px;">Valor</th>
+                                <th style="width:70px;">Estado</th>
+                                <th style="width:90px;">Estado Entrega</th>
+                                <th style="width:30px;"> - </th>
+                            </tr>
+                            <!-- <tr>
+                                <th class="tabla-filtro">
+                                    <input style="height: 36px;" type="text" [(ngModel)]="filtros.cod" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Cod.">
+                                </th>
+                                <th class="tabla-filtro">
+
+                                    <select style="height: 36px;" name="Tipo" id="tipo" (change)="ListarDotaciones()" class="form-control form-control-sm" [(ngModel)]="filtros.type" required>
+                                        <option value="" disabled selected>Seleccionar</option>
+                                        <option value="">Todos</option>
+                                        <option value="Dotacion">Dotacion</option>
+                                        <option value="EPP">EPP</option>
+                                    </select>
+
+                                </th>
+
+                                <th class="tabla-filtro" style="max-width: 100px; width: 200px !important">
+                                    <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
+                                </th>
+
+                                <th>
+                                    <ng-select [items]="people" [(ngModel)]="filtros.entrega" (change)="ListarDotaciones()" bindLabel="text" bindValue="value">
+                                    </ng-select>
+                                </th>
+
+                                <th>
+                                    <ng-select [items]="people" [(ngModel)]="filtros.recibe" (change)="ListarDotaciones()" bindLabel="text" bindValue="value">
+                                    </ng-select>
+                                </th>
+
+                                <th>
+                                    <input style="height: 36px;" type="text" [(ngModel)]="filtros.description" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Detalles">
+                                </th>
+
+                                <th>
+
+                                    <input style="height: 36px;" type="text" [(ngModel)]="filtros.name" (change)="ListarDotaciones()" class="form-control form-control-sm" placeholder="Filtro Art.">
+
+                                </th>
+
+                                <th></th>
+                                <th></th>
+                                <th class="tabla-filtro">
+
+                                    <select style="height: 36px;" name="Tipo" id="tipo" (change)="ListarDotaciones()" class="form-control form-control-sm" [(ngModel)]="filtros.delivery" required>
+                                      <option value="" disabled selected>Seleccionar</option>
+                                      <option value="">Todos</option>
+                                      <option value="Pendiente">Pendiente</option>
+                                      <option value="Anulado">Anulado</option>
+                                      <option value="Aprobado">Aprobado</option>
+                                      <option value="Entregado">Entregado</option>
+                                  </select>
+
+                                </th>
+                            </tr> -->
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="!loading && Lista_Dotaciones.length > 0; else notDataTable">
+                                <tr *ngFor="let item of Lista_Dotaciones" [ngClass]="{'bg-danger text-white': item.state == 'Anulada'}">
+                                    <td>{{item.delivery_code}}</td>
+                                    <td>{{item.type}}</td>
+                                    <td>{{item.created_at | date:'dd/MM/yyyy'}}</td>
+                                    <td>{{item.entrega}}</td>
+                                    <td>{{item.recibe}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>
+                                        <div class="articulos-table">
+                                            {{item.product_name}}
+                                        </div>
+                                    </td>
+                                    <td>$ {{item.total | number | puntos}}</td>
+                                    <td><span>{{item.state}}</span>
+                                        <td><span>{{item.delivery_state}}</span>
+                                        </td>
+                                        <td>
+                                            <div ngbDropdown class="dropdown-primary">
+                                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
+                                                <div ngbDropdownMenu>
+                                                    <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularDotacion(item.id)">
+                                                        <i class="fa fa-times"></i> Anular
+                                                    </a>
+                                                    <a *ngIf="item.delivery_state == 'Pendiente'" class="dropdown-item waves-light waves-effect caja-botones" (click)="aprobarDotacion(item.id)">
+                                                        <i class="far fa-thumbs-up"></i> Aprobar
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                </tr>
+
+                            </ng-container>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-white">
+                    <ngb-pagination maxSize="5" [collectionSize]="pagination.collectionSize" (pageChange)="ListarDotaciones($event) " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination ">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</ng-container>
+
+
+<ng-template #notDataTable>
+    <tr>
+        <td colspan="10">
+            <app-not-data [loading]="loading"></app-not-data>
+        </td>
+    </tr>
+</ng-template>
+
+
+<app-modal-basic #modalEntrega [dialogClass]="'modal-lg'">
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-md-12 ">
+                <div class="col-md-12 text-center">
+                    <app-table-stock #tablestock [name]="nombre" [type]="flagDotacionApp" [entrega]="true" [find]="false" (closeModal)="closeModal()"></app-table-stock>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-modal-basic>
+
+
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

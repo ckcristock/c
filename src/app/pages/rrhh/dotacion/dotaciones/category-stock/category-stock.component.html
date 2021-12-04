@@ -1,0 +1,162 @@
+<ng-container *ngIf="loading; else notDataTable">
+
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card mt-2">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="">
+                            <h5>Stock por Categorías</h5>
+                        </div>
+                        <div class="">
+                            <input type="text" class="form-control" (change)="findName()" [(ngModel)]="nombre" name="funcionario" autocomplete="off" placeholder="Nombre" />
+                        </div>
+                        <div class="">
+                            <button class="btn btn-sm btn-primary btn-block" (click)="DownloadInventoryDotation()">
+                              <i class="fas fa-file-download"></i>
+
+                              <span *ngIf="!donwloading; else status"> Descargar</span>
+                                <ng-template #status>
+                                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                  Generando...
+                                </ng-template>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-pills">
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Dotación</a>
+                            <ng-template ngbNavContent>
+
+                                <app-table-stock #tablestock [type]="'Dotacion'" [name]="nombre" [find]="true"></app-table-stock>
+
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2">
+                            <a ngbNavLink>Epp</a>
+                            <ng-template ngbNavContent>
+
+                                <app-table-stock #tablestock [type]="'EPP'" [name]="nombre" [find]="true"></app-table-stock>
+
+                            </ng-template>
+                        </li>
+                    </ul>
+
+                    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-5">
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h5>Dotación y Epp's x Categorías</h5>
+                </div>
+                <div class="card-block" #dotacion_chart>
+                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
+                </canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <!--
+    <div class="row">
+      <div class="col-md-6">
+          <div class="card mt-4 mb-4 ">
+              <h4 class="text-center mt-3">Montos Totales</h4>
+
+              <div class="form-group">
+                  <input type="month" (change)="listarTotales($event.target.value);Graficar()" [(ngModel)]="selectedMes" class="form-control form-control-sm" name="mouth" id="">
+              </div>
+              <hr class="line">
+              <div class="row" style="margin-top:2px;">
+                  <div class="col-md-6 text-center">
+                      <p>Costos Año</p>
+                      <h5 class="mb-1">$ {{ Totales | number | puntos }} </h5>
+                      <p>distribuidos en</p>
+                      <h5> {{ CantidadTotal| number | puntos}}</h5>
+                      <p>entregas realizadas</p>
+                  </div>
+                  <div class="col-md-6 text-center">
+                      <p>Costos Mes</p>
+                      <div class="form-group">
+                          <h5> ${{ SumaMes | number | puntos }} </h5>
+                          <p>distribuidos en</p>
+                          <h5> {{ TotalesMes| number }}</h5>
+                          <p>entregas realizadas</p>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+
+
+      </div>
+
+      <div class="col-md-6">
+          <div class="card mt-4">
+              <div class="card-header">
+                  <h5>Dotación y Epp's x Categorías Anualmente</h5>
+              </div>
+              <div class="card-block" #dotacion_chart>
+                  <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
+                  </canvas>
+              </div>
+          </div>
+      </div>
+
+  </div>
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ng-container>
+
+
+<ng-template #notDataTable>
+    <tr>
+        <td colspan="12">
+            <app-not-data></app-not-data>
+        </td>
+    </tr>
+</ng-template>

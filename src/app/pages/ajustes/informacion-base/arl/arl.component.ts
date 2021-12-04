@@ -24,8 +24,8 @@ export class ArlComponent implements OnInit {
     name: ''
   }
   form: FormGroup;
-  constructor( 
-                private _arlService:ArlService, 
+  constructor(
+                private _arlService:ArlService,
                 private fb: FormBuilder,
                 private _validators: ValidatorsService ) { }
 
@@ -109,7 +109,7 @@ export class ArlComponent implements OnInit {
     .subscribe( (res:any) => {
         this.getArls();
         this.modal.hide();
-        Swal.fire({ 
+        Swal.fire({
           icon: 'success',
           title: res.data,
           text: 'Se ha agregado a las ARL con éxito.'

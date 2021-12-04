@@ -58,7 +58,7 @@ export class GetApusComponent implements OnInit {
 
   setState(  apu   ){
     apu.selected = !apu.selected
-    const index = this.state.findIndex(x=> ( x.id == apu.id && x.type == apu.type ) )
+    const index = this.state.findIndex(x=> ( x.apu_id == apu.apu_id && x.type == apu.type ) )
     if (index >= 0 && !apu.selected) {
           this.state.splice(index,1)
     }else{

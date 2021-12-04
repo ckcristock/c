@@ -12,7 +12,8 @@ import { ApuConjuntoService } from '../../../../apu-conjunto/apu-conjunto.servic
   styleUrls: ['./items.component.scss']
 })
 export class ItemsComponent implements OnInit {
-
+  subItemsToDelete: Array<number> = []
+  itemsTodelete: Array<number> = []
   @Input('forma') forma: FormGroup
   @Input('indirectCosts') indirectCosts: EventEmitter<any>
   @Input('calculationBase') calculationBase: any
@@ -46,15 +47,20 @@ export class ItemsComponent implements OnInit {
   }
 
   fillData() {
-    console.log(this.dataEdit,'daaaaaaaaaaaa');
-    
+    console.log(this.dataEdit, 'daaaaaaaaaaaa');
+
     if (this.dataEdit) {
       this.dataEdit.items.forEach(item => {
-        this.addItems(item)
+        let itemGroup = this.addItems(item)
+        /*  item.subitems.forEach(subItem =>{
+           this.addSubItem(itemGroup)
+         }) */
       });
     }
   }
   addItems(itemToAdd = null) {
+    console.log(itemToAdd, 'ite,,');
+
     let item = this.fb.group(
       {
         shows: {
@@ -64,23 +70,24 @@ export class ItemsComponent implements OnInit {
           prorrateo: false
         },
         subItems: this.fb.array([]),
+        id: itemToAdd ? itemToAdd.id : '',
         total_cost: itemToAdd ? itemToAdd.total_cost : 0,
         subtotal_indirect_cost_dynamic: this.makeTotalIndirectCost(),
-        subtotal_indirect_cost: 0,
-        value_amd: 0,
-        value_unforeseen: 0,
-        value_utility: 0,
-        total_amd_imp_uti: 0,
-        another_values: 0,
-        subTotal: 0,
-        retention: 0,
-        percentage_sale: 0,
-        value_cop: 0,
-        value_usd: 0,
-        value_prorrota_cop: 22,
-        value_prorrota_usd: 0,
-        unit_value_prorrateado_cop: 0,
-        unit_value_prorrateado_usd: 0,
+        subtotal_indirect_cost: itemToAdd ? itemToAdd.subtotal_indirect_cost : 0,
+        value_amd: itemToAdd ? itemToAdd.value_amd : 0,
+        value_unforeseen: itemToAdd ? itemToAdd.value_unforeseen : 0,
+        value_utility: itemToAdd ? itemToAdd.value_utility : 0,
+        total_amd_imp_uti: itemToAdd ? itemToAdd.total_amd_imp_uti : 0,
+        another_values: itemToAdd ? itemToAdd.another_values : 0,
+        subTotal: itemToAdd ? itemToAdd.subTotal : 0,
+        retention: itemToAdd ? itemToAdd.retention : 0,
+        percentage_sale: itemToAdd ? itemToAdd.percentage_sale : 0,
+        value_cop: itemToAdd ? itemToAdd.value_cop : 0,
+        value_usd: itemToAdd ? itemToAdd.value_usd : 0,
+        value_prorrota_cop: 0,
+        value_prorrota_usd: itemToAdd ? itemToAdd.value_prorrota_usd : 0,
+        unit_value_prorrateado_cop: itemToAdd ? itemToAdd.unit_value_prorrateado_cop : 0,
+        unit_value_prorrateado_usd: itemToAdd ? itemToAdd.unit_value_prorrateado_usd : 0,
       }
     )
     const value_cop = item.get('value_cop')
@@ -150,8 +157,21 @@ export class ItemsComponent implements OnInit {
     this.items.push(item);
     if (itemToAdd) {
       const subItems = item.get('subItems') as FormArray
-      subItems.push(this.makeSubItem(itemToAdd.subitems[0]))
+      itemToAdd.subitems.forEach(subi => {
+        if (subi.type_module == 'apu_set') {
+          subi.apu_id = subi.apu_set_id
+        }
+        if (subi.type_module == 'apu_part') {
+          subi.apu_id = subi.apu_part_id
+        }
+        if (subi.type_module == 'apu_service') {
+          subi.apu_id = subi.service_id
+        }
+        subItems.push(this.makeSubItem(subi, true))
+      });
+
     }
+    return item
   }
 
 
@@ -164,6 +184,12 @@ export class ItemsComponent implements OnInit {
 
   deleteSubItem(group: FormGroup, pos: number) {
     const subItems = group.get('subItems') as FormArray
+    console.log(subItems.at(pos));
+
+    const id = subItems.at(pos).get('id').value;
+    id ? this.subItemsToDelete.push(id) : ''
+
+    this.forma.patchValue({ subItemsToDelete: this.subItemsToDelete })
     subItems.removeAt(pos)
     this.updateSubTotals(subItems,
       ['total_cost', 'subtotal_indirect_cost', 'total_amd_imp_uti',
@@ -174,6 +200,10 @@ export class ItemsComponent implements OnInit {
     this.recalculateTotals()
   }
   deleteItem(pos) {
+    const id = this.items.at(pos).get('id').value;
+    id ? this.itemsTodelete.push(id) : ''
+    this.forma.patchValue({ itemsTodelete: this.itemsTodelete })
+
     this.items.removeAt(pos)
     this.recalculateTotals()
   }
@@ -213,54 +243,67 @@ export class ItemsComponent implements OnInit {
     this.apus.show()
   }
   getApus(e: any[]) {
+    console.log(e);
+
     let subItems = this.tempItem.get('subItems') as FormArray
+    console.log(subItems.value);
+
     e.forEach(apu => {
-      const exist = subItems.value.some(x => (x.apu_id == apu.id && x.type_module == apu.type_module))
+      const exist = subItems.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
       !exist ? subItems.push(this.makeSubItem(apu)) : ''
     });
 
   }
 
-  makeSubItemGroup(apu){
+  makeSubItemGroup(apu, edit = false) {
     const percentages = {
-      percentage_amd: this.calculationBase.administration_percentage.value,
-      percentage_unforeseen: this.calculationBase.unforeseen_percentage.value,
-      percentage_utility: this.calculationBase.utility_percentage.value,
+      percentage_amd: edit ? apu.percentage_amd : this.calculationBase.administration_percentage.value,
+      percentage_unforeseen: edit ? apu.percentage_unforeseen : this.calculationBase.unforeseen_percentage.value,
+      percentage_utility: edit ? apu.percentage_utility : this.calculationBase.utility_percentage.value,
     }
+    let description = ''
+    if (edit) {
+      description = apu.type_module ? apu[apu.type_module]['name'] : apu['description']
+    } else {
+      description = (apu ? apu.name : '')
+    }
+    console.log({ apu });
 
-   return this.fb.group({
+    return this.fb.group({
+      id: ((edit && apu?.id) ? apu.id : ''),
       type: (apu ? apu.type : 'P'),
-      description: (apu ? apu.name : ''),
-      apu_id: [(apu ? apu.id : ''), Validators.required],
-      cuantity: 0,
+      description,
+      apu_id: [(apu ? apu.apu_id : ''), Validators.required],
+      cuantity: edit ? apu.cuantity : 0,
       unit_cost: (apu ? apu.unit_cost : ''),
-      total_cost: 0,
+      total_cost: edit ? apu.total_cost : 0,
       indirect_costs: this.makeIndirectCost(),
-      subtotal_indirect_cost: 0,
+      subtotal_indirect_cost: edit ? apu.subtotal_indirect_cost : 0,
       ...percentages,
-      value_amd: 0,
-      value_unforeseen: 0,
-      value_utility: 0,
-      total_amd_imp_uti: 0,
-      another_values: 0,
-      subTotal: 0,
+      value_amd: edit ? apu.value_amd : 0,
+      value_unforeseen: edit ? apu.value_unforeseen : 0,
+      value_utility: edit ? apu.value_utility : 0,
+      total_amd_imp_uti: edit ? apu.total_amd_imp_uti : 0,
+      another_values: edit ? apu.another_values : 0,
+      subTotal: edit ? apu.subTotal : 0,
       retention: 23,
-      percentage_sale: 0,
-      value_cop: 0,
-      value_usd: 0,
-      unit_value_cop: 0,
-      unit_value_usd: 0,
-      value_prorrota_cop: 0,
-      value_prorrota_usd: 0,
-      unit_value_prorrateado_cop: 0,
-      unit_value_prorrateado_usd: 0,
+      percentage_sale: edit ? apu.percentage_sale : 0,
+      value_cop: edit ? apu.value_cop : 0,
+      value_usd: edit ? apu.value_usd : 0,
+      unit_value_cop: edit ? apu.unit_value_cop : 0,
+      unit_value_usd: edit ? apu.unit_value_usd : 0,
+      value_prorrota_cop: edit ? apu.value_prorrota_cop : 0,
+      value_prorrota_usd: edit ? apu.value_prorrota_usd : 0,
+      unit_value_prorrateado_cop: edit ? apu.unit_value_prorrateado_cop : 0,
+      unit_value_prorrateado_usd: edit ? apu.unit_value_prorrateado_usd : 0,
       observation: '',
       type_module: (apu ? apu.type_module : '')
     })
   }
-  makeSubItem(apu = null) {
-  
-    const subItemGroup = this.makeSubItemGroup(apu)
+
+  makeSubItem(apu = null, edit = false) {
+
+    const subItemGroup = this.makeSubItemGroup(apu, edit)
 
     const cuantity = subItemGroup.get('cuantity')
     const unitCost = subItemGroup.get('unit_cost')
@@ -546,7 +589,7 @@ export class ItemsComponent implements OnInit {
           total += indirectCosts.find(x => x.indirect_cost_id == id).value
         });
         console.log(indirectTotals);
-        
+
 
         const toUpdate = indirectTotals.controls.find(r => r.get('indirect_cost_id').value == id);
         toUpdate.patchValue({ sub_total: total })

@@ -15,6 +15,9 @@ export class BudgetService {
   save(data: any) {
     return this.http.post(`${environment.base_url}/budgets`, data);
   }
+  update(body = {}, id) {
+    return this.http.patch(`${environment.base_url}/budgets/${id}`, body);
+  }
 
   getAll() {
     return this.http.get(`${environment.base_url}/budgets`);
@@ -24,6 +27,11 @@ export class BudgetService {
   }
   get(id) {
     return this.http.get(`${environment.base_url}/budgets/${id}`);
+  }
+
+  downloadClient(body) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.post(`${environment.base_url}/budgets-download-client`, body, { headers, responseType: 'blob' as 'json' });
   }
 
 }

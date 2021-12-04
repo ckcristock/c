@@ -36,16 +36,19 @@ export class CrearPresupuestoComponent implements OnInit {
     this.loading = true;
     /*   this.getCustumers(); */
     this.getClients();
-    
-    if (this.dataEdit) {
+
+    /* if (this.dataEdit) {
       console.log(this.dataEdit, 'aaaaaaaaaa');
-    
-      this.calculationBase.trm = {
-        value: this.dataEdit.trm
+
+      this.calculationBase = {
+        trm: { value: this.dataEdit.trm },
+        utility_percentage: { value: this.dataEdit.utility_percentage },
+        unforeseen_percentage: { value: this.dataEdit.unforeseen_percentage },
+        administration_percentage: { value: this.dataEdit.administration_percentage },
       }
-    } else {
-      await this.getBases()
-    }
+    } else { */
+    await this.getBases()
+    /*   } */
 
     this.createForm();
     await this.getIndirectCosts();
@@ -58,6 +61,11 @@ export class CrearPresupuestoComponent implements OnInit {
   async getBases() {
     await this._calculationBase.getAll().toPromise().then((r: any) => {
       this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+      console.log(this.dataEdit, 'asdr2222');
+
+      if (this.dataEdit) {
+        this.calculationBase.trm.value = this.dataEdit.trm
+      }
     })
   }
   async getIndirectCosts() {
@@ -78,8 +86,8 @@ export class CrearPresupuestoComponent implements OnInit {
     this.indirectCostPush(this.indirecCostList);
   }
 
-  getClients(){
-    this._apuPieza.getClient().subscribe((r:any) => {
+  getClients() {
+    this._apuPieza.getClient().subscribe((r: any) => {
       this.clients = r.data;
     })
   }
@@ -115,6 +123,7 @@ export class CrearPresupuestoComponent implements OnInit {
 
   createForm() {
     this.forma = this.fb.group({
+      id: (this.dataEdit ? this.dataEdit.id : ''),
       customer_id: (this.dataEdit ? this.dataEdit.customer_id : ''),
       destinity_id: (this.dataEdit ? this.dataEdit.destinity_id : ''),
       line: (this.dataEdit ? this.dataEdit.line : ''),
@@ -123,10 +132,12 @@ export class CrearPresupuestoComponent implements OnInit {
       indirect_costs: this.fb.array([]),
       observation: '',
       items: this.fb.array([]),
-      total_cop: 0,
-      total_usd: 0,
-      unit_value_prorrateado_cop: 0,
-      unit_value_prorrateado_usd: 0,
+      total_cop: (this.dataEdit ? this.dataEdit.total_cop : ''),
+      total_usd: (this.dataEdit ? this.dataEdit.total_usd : ''),
+      unit_value_prorrateado_cop: (this.dataEdit ? this.dataEdit.unit_value_prorrateado_cop : ''),
+      unit_value_prorrateado_usd: (this.dataEdit ? this.dataEdit.unit_value_prorrateado_usd : ''),
+      subItemsToDelete: [[]],
+      itemsTodelete: [[]]
     });
   }
 
@@ -198,8 +209,18 @@ export class CrearPresupuestoComponent implements OnInit {
       title: '¿Está seguro?',
       text: 'Se dispone a guardar un presupuesto',
       icon: 'question'
-    }, this.saveData).then(r => {
+    },
+      this.dataEdit ? this.updateData : this.saveData
+
+    ).then(r => {
       if (r.isConfirmed) {
+        this._swal.show({
+          title: 'Se ha guardado con éxito',
+          text: '',
+          icon: 'success',
+          showCancel: false
+        })
+        this.router.navigate(['crm/presupuesto'])
 
       }
     })
@@ -209,15 +230,14 @@ export class CrearPresupuestoComponent implements OnInit {
 
   saveData = () => {
     const data = this.forma.value;
-    this._budget.save({ data }).subscribe(r => {
-      this._swal.show({
-        title: 'Se ha guardado con éxito',
-        text: '',
-        icon: 'success',
-        showCancel: false
-      })
-      this.router.navigate(['crm/presupuesto'])
-    })
+    this._budget.save({ data }).subscribe(r => { })
+
+  }
+
+  updateData = () => {
+    const data = this.forma.value;
+
+    this._budget.update(data, this.id).subscribe(r => { })
 
   }
 }

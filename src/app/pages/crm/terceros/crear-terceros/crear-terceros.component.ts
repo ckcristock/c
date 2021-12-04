@@ -100,7 +100,7 @@ export class CrearTercerosComponent implements OnInit {
       cod_dian_address: ['', this._validators.required],
       landline: ['', this._validators.required],
       cell_phone: ['', this._validators.required],
-      email: [''],
+      email: ['', [this._validators.required, Validators.email]],
       zone_id: [''],
       department_id: [''],
       municipality_id: ['', this._validators.required],
@@ -111,7 +111,7 @@ export class CrearTercerosComponent implements OnInit {
       apply_iva: [''],
       contact_payments: [''],
       phone_payments:[''],
-      email_payments: [''],
+      email_payments: ['',  Validators.email],
       regime: [''],
       encourage_profit: [''],
       ciiu_code_id: [''],
@@ -278,15 +278,15 @@ export class CrearTercerosComponent implements OnInit {
     switch (tipo) {
       case 'Reteica':
         let reteica = this.form.get('reteica_account_id').value;
-        this.retePercentage.reteica = (reteica.percent.replace(',','.') * 100).toFixed(2);
+        this.retePercentage.reteica = (reteica.percent.replace(',','.') / 100).toFixed(2);
         break;
       case 'Reteiva':
         let reteiva = this.form.get('reteiva_account_id').value;
-        this.retePercentage.reteiva = (reteiva.percent.replace(',','.') * 100).toFixed(2);
+        this.retePercentage.reteiva = (reteiva.percent.replace(',','.') / 100).toFixed(2);
         break;
       case 'Retefuente':
         let retefuente = this.form.get('retefuente_account_id').value;
-        this.retePercentage.retefuente = (retefuente.percent.replace(',','.') * 100).toFixed(2);
+        this.retePercentage.retefuente = (retefuente.percent.replace(',','.') / 100).toFixed(2);
         break;
       default:
         break;
@@ -566,6 +566,9 @@ export class CrearTercerosComponent implements OnInit {
 
   get municipality_valid(){
     return this.form.get('municipality_id').invalid && this.form.get('municipality_id').touched
+  }
+  get email_valid(){
+    return this.form.get('email').invalid && this.form.get('email').touched
   }
 
 }

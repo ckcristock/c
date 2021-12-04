@@ -322,7 +322,16 @@
         <div class="row mb-2">
             <div class="col-12">
                 <button (click)="download()" class="btn btn-primary btn-sm btn-block">
-                <i class="fas fa-file-download"></i> Descargar
+                    <i class="fas fa-file-download"></i>
+                    <span *ngIf="!donwloading; else status"> Descargar</span>
+                    <ng-template #status>
+                    <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                    ></span>
+                    Generando...
+                    </ng-template>
               </button>
             </div>
         </div>

@@ -40,15 +40,14 @@ export class CrearApuConjuntoComponent implements OnInit {
   otherCollapsed:boolean;
   indirectCollapsed:boolean;
   auiCollapsed:boolean;
+  people$: Observable<any>;
   peopleLoading = false;
-  apuPart$: Observable<any>;
-  apuPartLoading = false;
-  apuPartInput$ = new Subject<string>();
+  peopleInput$ = new Subject<string>();
   minLengthTerm = 3;
-  apuSets$: Observable<any>;
-  apuSetsLoading = false;
-  apuSetsInput$ = new Subject<string>();
-  minLengthSetTerm = 3;
+  searching:boolean;
+  searchFailed:boolean;
+  searchingSet:boolean;
+  searchFailedSet:boolean;
     
   constructor( 
                 private fb: FormBuilder,
@@ -69,8 +68,7 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.getIndirectCosts();
     this.validateData();
     this.collapses();
-    this.loadApuParts();
-    this.loadApuSets();
+    this.loadPeople();
   }
 
   collapses(){
@@ -92,48 +90,76 @@ export class CrearApuConjuntoComponent implements OnInit {
     })
   }
 
-  loadApuParts() {
-    this.apuPart$ = concat(
+  loadPeople() {
+    this.people$ = concat(
       of([]), // default items
-      this.apuPartInput$.pipe(
+      this.peopleInput$.pipe(
         filter(res => {
           return res !== null && res.length >= this.minLengthTerm
         }),
         distinctUntilChanged(),
         debounceTime(800),
-        tap(() => this.apuPartLoading = true),
+        tap(() => this.peopleLoading = true),
         switchMap(term => {
           let param = { name: term }
-          return this._apuConjunto.getApuParts(param).pipe(
+          return this._apuConjunto.getPeopleXSelect(param).pipe(
             map( (r:any) => { return  r.data }),
             catchError(() => of([])), // empty list on error
-            tap(() => this.apuPartLoading = false)
+            tap(() => this.peopleLoading = false)
           )
         })
       )
     );
   }
 
-  loadApuSets() {
-    this.apuSets$ = concat(
-      of([]), // default items
-      this.apuSetsInput$.pipe(
-        filter(res => {
-          return res !== null && res.length >= this.minLengthSetTerm
-        }),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.apuSetsLoading = true),
-        switchMap(term => {
-          let param = { name: term }
-          return this._apuConjunto.getApuSetList(param).pipe(
-            map( (r:any) => { return  r.data }),
-            catchError(() => of([])), // empty list on error
-            tap(() => this.apuSetsLoading = false)
-          )
-        })
-      )
-    );
+  searchSet = (text$: Observable<string>) => text$.pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    tap(() => this.searchingSet = true),
+    switchMap(name =>
+      this._apuConjunto.getApuSetList({ name }).pipe(
+        map((r: any) => r.data),
+        tap(() => this.searchFailedSet = false),
+        catchError(() => {
+          this.searchFailedSet = true;
+          return of([]);
+      }))
+
+    ),
+    tap(() => this.searchingSet = false)
+  )
+
+  formatterSet = (x: { name: string }) => x.name;
+
+  search = (text$: Observable<string>) => text$.pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    tap(() => this.searching = true),
+    switchMap(name =>
+      this._apuConjunto.getApuParts({ name }).pipe(
+        map((r: any) => r.data),
+        tap(() => this.searchFailed = false),
+        catchError(() => {
+          this.searchFailed = true;
+          return of([]);
+      }))
+
+    ),
+    tap(() => this.searching = false)
+  )
+
+  formatter = (x: { name: string }) => x.name;
+
+  select(group: FormGroup, key, toUpdate) {
+ 
+    let control = group.get(key).value
+    if (typeof control == 'object') {
+      group.patchValue({ [toUpdate]: control['id'] })
+    } else {
+      group.patchValue({ [toUpdate]: '' })
+    }
+/*         group.patchValue({ [key]: e.target.value })
+     return e.preventDefault() */
   }
 
   onSelect(event) {
@@ -186,7 +212,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   piecesSetsControl(): FormGroup{
-    let group = help.piecesSetsHelper.createPiecesSetsGroup(this.form, this.fb, this.apuParts, this.apuSets);
+    let group = help.piecesSetsHelper.createPiecesSetsGroup(this.form, this.fb);
     return group;
   }
 
@@ -333,6 +359,8 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.form.patchValue({
       files: this.fileArr
     });
+    console.log(this.form.value);
+    
     this._swal
       .show({
         text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu conjunto`,

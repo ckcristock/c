@@ -6,7 +6,7 @@ import {
 
 export const piecesSetsHelper = {
 
-  createFillInPiecesSets(form: FormGroup, fb: FormBuilder, data, apuParts:Array<any>) {
+  createFillInPiecesSets(form: FormGroup, fb: FormBuilder, data) {
     if (data.setpartlist) {
       let list_pieces_sets = form.get('list_pieces_sets') as FormArray;
       data.setpartlist.forEach((r) => {
@@ -17,35 +17,38 @@ export const piecesSetsHelper = {
           unit: [r.unit],
           amount: [r.amount],
           unit_cost: [r.unit_cost],
-          total: [r.total]
+          total: [r.total],
+          description: []
         });
-        this.subscribePiecesSets(group, form, list_pieces_sets, apuParts);
+        this.subscribePiecesSets(group, form, list_pieces_sets);
         list_pieces_sets.push(group);
       });
     }
   },
 
-  createPiecesSetsGroup(form: FormGroup, fb: FormBuilder, apuParts:Array<any>, apuSets:Array<any>) {
+  createPiecesSetsGroup(form: FormGroup, fb: FormBuilder) {
     let setpartlist = fb.group({
-      apu_type: [''],
-      apu_part_id: [0],
-      apu_set_child_id: [0],
+      apu_type: ['pieza'],
+      apu_part_id: [''],
+      apu_set_child_id: [''],
       unit: [''],
       amount: [0],
       unit_cost: [0],
-      total: [0]
+      total: [0],
+      description: []
     });
     let list = form.get('list_pieces_sets') as FormArray;
-    this.subscribePiecesSets(setpartlist, form, list, apuParts, apuSets);
+    this.subscribePiecesSets(setpartlist, form, list);
     return setpartlist;
   },
 
-  subscribePiecesSets( group: FormGroup, form:FormGroup, list: FormArray, apuParts:Array<any>, apuSets:Array<any>){
+  subscribePiecesSets( group: FormGroup, form:FormGroup, list: FormArray){
     group.get('apu_type').valueChanges.subscribe(value => {
       (value == 'conjunto'
       ?
       group.patchValue({
-        apu_part_id: 0,
+        description: '',
+        apu_part_id: '',
         unit: '',
         amount: 0,
         unit_cost: 0,
@@ -53,26 +56,22 @@ export const piecesSetsHelper = {
       }) 
       :
       group.patchValue({
-        apu_set_child_id: 0,
+        description: '',
+        apu_set_child_id: '',
         unit: '',
         amount: 0,
         unit_cost: 0,
         total: 0
       }))
     })
-    group.get('apu_part_id').valueChanges.subscribe(value => {
+    group.get('description').valueChanges.subscribe(value => {
       if (group.get('apu_type').value == 'pieza') {
-        let data = apuParts.find(a => a.id == value);
         group.patchValue({
-          unit_cost: data.unit_direct_cost
+          unit_cost: value.unit_direct_cost
         });
-      }
-    });
-    group.get('apu_set_child_id').valueChanges.subscribe(value => {
-      if (group.get('apu_type').value == 'conjunto') {
-        let data = apuSets.find(a => a.id == value);
+      } else if (group.get('apu_type').value == 'conjunto') {
         group.patchValue({
-          unit_cost: data.total_direct_cost
+          unit_cost: value.total_direct_cost
         });
       }
     });

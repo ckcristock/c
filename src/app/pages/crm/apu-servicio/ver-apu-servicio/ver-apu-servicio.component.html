@@ -1,0 +1,278 @@
+<ng-container *ngIf="!loading; else notDataL">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                <div class="row">
+                    <div class="col-6 mt-3">
+                        <h4 class="t">
+                            Estimación de costos de mano de obra maquinados y montajes
+                        </h4>
+                    </div>
+                    <div class="col-6">
+                        <div class="row mt-3 mb-3 mr-4" style="float: right">
+                            <div class="ml-4">
+                                <p class="text-right"> {{ data.created_at | date:'EEEE, MMMM d, y' | titlecase }} </p>
+                                <!-- <p> 22 de octubre del 2018 </p> -->
+                                <p>Bucaramanga - Colombia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <div class="mb-3 row">
+                        <label for="funcionario" class="col-sm-3 col-form-label col-form-label-sm">Nombre</label>
+                        <div class="col-sm-9">
+                            {{ data.name }}
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="cc" class="col-sm-3 col-form-label col-form-label-sm">Destino</label>
+                        <div class="col-sm-9">
+                            {{ data.city.name }}
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="cargo" class="col-sm-3 col-form-label col-form-label-sm">Quien elabora</label>
+                        <div class="col-sm-9">
+                            {{ data.person.name }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="mb-3 row">
+                        <label for="funcionario" class="col-sm-3 col-form-label col-form-label-sm">Cliente</label>
+                        <div class="col-sm-9">
+                            {{ data.thirdparty.name }}
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="cc" class="col-sm-3 col-form-label col-form-label-sm">Linea</label>
+                        <div class="col-sm-9">
+                            {{ data.line }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label> Observaciones: </label> {{ data.observation }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mt-2">
+            <h4 class="text-dark text-center">Validación Dimensional</h4>
+            <hr class="line">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div class="title mt-3">
+                        <h5>Calculo de mano de obra</h5>
+                    </div>
+                    <div class="row">
+                        <app-validacion-dimensional *ngIf="data.dimensional_validation.length" [data]="data.dimensional_validation"></app-validacion-dimensional>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="col-4">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Subtotal mano de obra</td>
+                                    <td>
+                                        {{ data.subtotal_labor }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>SubTotal Viáticos</td>
+                                    <td>
+                                        {{ data.subtotal_travel_expense }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Subtotal Valid. Dimensional</td>
+                                    <td>
+                                        {{ data.subtotal_dimensional_validation }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mt-2">
+            <h4 class="text-dark text-center">Montaje y Puesta en Marcha</h4>
+            <hr class="line">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div class="title mt-3">
+                        <h5>Calculo de mano de obra</h5>
+                    </div>
+                    <div class="row">
+                        <app-montaje-puesta-marcha *ngIf="data.assemblies_start_up.length" [data]="data.assemblies_start_up"></app-montaje-puesta-marcha>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="col-4">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label col-form-label-sm">SubTotal Mano de Obra</label>
+                                    </td>
+                                    <td>
+                                        {{ data.subtotal_labor_mpm }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label col-form-label-sm">SubTotal Viáticos</label>
+                                    </td>
+                                    <td>
+                                        {{ data.subtotal_travel_expense_mpm }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label col-form-label-sm">Subtotal Montaje y Puesta en marcha</label>
+                                    </td>
+                                    <td>
+                                        {{ data.subtotal_assembly_commissioning }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label col-form-label-sm">Subtotal general Viáticos + Mano de obra</label>
+                                    </td>
+                                    <td>
+                                        {{ data.general_subtotal_travel_expense_labor }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mt-2">
+            <h4 class="text-dark text-center">AIU</h4>
+            <hr class="line">
+        </div>
+    </div>
+    <div class="card">
+        <div class="row mt-3 ml-2">
+            <div class="col-5">
+                <table class="table table-striped">
+                    <tbody class="bg-light">
+                        <tr>
+                            <td>
+                                <label class="col-form-label col-form-label-sm">Administrativos</label>
+                            </td>
+                            <td>
+                                {{ data.administrative_percentage }}
+                            </td>
+                            <td>
+                                {{ data.administrative_value }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="col-form-label col-form-label-sm">Imprevistos</label>
+                            </td>
+                            <td>
+                                {{ data.unforeseen_percentage }}
+                            </td>
+                            <td>
+                                {{ data.unforeseen_value }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <label class="col-form-label col-form-label-sm">Subtotal A + I</label>
+                            </td>
+                            <td>
+                                {{ data.subtotal_administrative_unforeseen }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <label class="col-form-label col-form-label-sm">Utilidad</label>
+                            </td>
+                            <td>
+                                {{ data.utility_percentage }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <label class="col-form-label col-form-label-sm">SubTotal A + I + U</label>
+                            </td>
+                            <td>
+                                {{ data.subtotal_administrative_unforeseen_utility }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <label class="col-form-label col-form-label-sm">Precio Venta COP Incluye retención</label>
+                            </td>
+                            <td>
+                                {{ data.sale_price_cop_withholding_total }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <label class="col-form-label col-form-label-sm">TRM</label>
+                            </td>
+                            <td>
+                                {{ data.trm }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <label class="col-form-label col-form-label-sm">Precio Venta USD Incluye retención</label>
+                            </td>
+                            <td>
+                                {{ data.sale_price_usd_withholding_total }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <button class="col btn btn-sm btn-primary">
+            Descargar
+        </button>
+    </div>
+</ng-container>
+<ng-template #notDataL>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<ng-template #notData>
+    <tr class="bg-light">
+        <td colspan="100%" class="text-center">
+            <p class="text-dark">Sin datos agregados</p>
+        </td>
+    </tr>
+</ng-template>

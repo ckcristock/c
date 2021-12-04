@@ -29,19 +29,22 @@
                 Aplica Ley 1429 de 2010
             </p>
             <p class="col-6 font-weight-bold">
-                {{ pilas.law_1429 }}
+                <span *ngIf="pilas.law_1429 === 0; else si"></span>
+                <span *ngIf="pilas.law_1429 === 1; else no"></span>
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Aplica Ley 590 de 2010
             </p>
             <p class="col-6 font-weight-bold">
-                {{ pilas.law_590 }}
+                <span *ngIf="pilas.law_590 === 0; else si"></span>
+                <span *ngIf="pilas.law_590 === 1; else no"></span>
             </p>
             <p class="col-6 font-weight-bold text-mute item-subtitle">
                 Aplica Ley de 1607 de 2012
             </p>
             <p class="col-6 font-weight-bold">
-                {{ pilas.law_1607 }}
+                <span *ngIf="pilas.law_1607 === 0; else si"></span>
+                <span *ngIf="pilas.law_1607 === 1; else no"></span>
             </p>
         </div>
     </div>
@@ -107,3 +110,9 @@
         </div>
     </div>
 </app-modal-basic>
+<ng-template #si>
+    Si
+</ng-template>
+<ng-template #no>
+    No
+</ng-template>

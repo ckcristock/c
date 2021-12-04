@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from '@angular/router';
-import { PerfilesComponent } from './perfiles/perfiles.component';
 import { RgpComponent } from './rgp/rgp.component';
 import { NotasTecnicasComponent } from './notas-tecnicas/notas-tecnicas.component';
 import { ZonasComponent } from "./zonas/zonas.component";
@@ -22,10 +21,13 @@ import { MedidasComponent } from './apu/medidas/medidas.component';
 import { CostosIndirectosComponent } from "./apu/costos-indirectos/costos-indirectos.component";
 import { EspesoresComponent } from './apu/espesores/espesores.component';
 import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-laser-material.component';
+import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component';
+import { EstimacionViaticosComponent } from './apu/estimacion-viaticos/estimacion-viaticos.component';
+import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-values/estimacion-viaticos-values.component';
 
 
 const routes : Routes = [
-    { path: 'perfiles', component : PerfilesComponent },
+    // { path: 'perfiles', component : PerfilesComponent },
     { path: 'rgp', component : RgpComponent },
     { path: 'zonas', component : ZonasComponent },
     { path: 'eps', component:  EpsComponent},
@@ -53,7 +55,11 @@ const routes : Routes = [
     { path: 'apu/costos-indirectos', component: CostosIndirectosComponent },
 
     { path: 'apu/espesores', component: EspesoresComponent },
-    { path: 'apu/corte-laser-material', component: CorteLaserMaterialComponent }
+    { path: 'apu/corte-laser-material', component: CorteLaserMaterialComponent },
+
+    { path: 'apu/perfiles', component: PerfilesApuComponent },
+    { path: 'apu/estimacion-viaticos', component: EstimacionViaticosComponent },
+    { path: 'apu/est-viaticos-valores', component: EstimacionViaticosValuesComponent }
 ]
 
 

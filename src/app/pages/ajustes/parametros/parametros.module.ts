@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { ParametrosRoutingModule } from "./parametros-routing.module";
-import { PerfilesComponent } from './perfiles/perfiles.component';
 import { RgpComponent } from './rgp/rgp.component';
 import { NotasTecnicasComponent } from './notas-tecnicas/notas-tecnicas.component';
 import { ZonasComponent } from './zonas/zonas.component';
@@ -30,13 +29,17 @@ import { MedidasComponent } from './apu/medidas/medidas.component';
 import { CostosIndirectosComponent } from './apu/costos-indirectos/costos-indirectos.component';
 import { EspesoresComponent } from './apu/espesores/espesores.component';
 import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-laser-material.component';
+import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component';
+import { EstimacionViaticosComponent } from './apu/estimacion-viaticos/estimacion-viaticos.component';
+import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-values/estimacion-viaticos-values.component';
+
 
 
 
 @NgModule({
     declarations : [
         NotasTecnicasComponent, 
-        PerfilesComponent, 
+        // PerfilesComponent, 
         ZonasComponent, 
         RgpComponent, 
         EpsComponent,  
@@ -56,7 +59,10 @@ import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-la
         MedidasComponent,
         CostosIndirectosComponent,
         EspesoresComponent,
-        CorteLaserMaterialComponent
+        CorteLaserMaterialComponent,
+        PerfilesApuComponent,
+        EstimacionViaticosComponent,
+        EstimacionViaticosValuesComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

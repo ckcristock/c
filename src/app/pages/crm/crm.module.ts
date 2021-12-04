@@ -39,6 +39,13 @@ import { MaquinasHerramientasConjuntoComponent } from './apu-conjunto/ver-apu-co
 import { OtrosConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/otros-conjunto/otros-conjunto.component';
 import { ProcesosInternosConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/procesos-internos-conjunto/procesos-internos-conjunto.component';
 import { ProcesosExternosConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/procesos-externos-conjunto/procesos-externos-conjunto.component';
+import { ApuServicioComponent } from './apu-servicio/apu-servicio.component';
+import { CrearApuServicioComponent } from './apu-servicio/crear-apu-servicio/crear-apu-servicio.component';
+import { VerApuServicioComponent } from './apu-servicio/ver-apu-servicio/ver-apu-servicio.component';
+import { EditarApuServicioComponent } from './apu-servicio/editar-apu-servicio/editar-apu-servicio.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { ValidacionDimensionalComponent } from './apu-servicio/ver-apu-servicio/validacion-dimensional/validacion-dimensional.component';
+import { MontajePuestaMarchaComponent } from './apu-servicio/ver-apu-servicio/montaje-puesta-marcha/montaje-puesta-marcha.component';
 
 
 @NgModule({
@@ -67,6 +74,12 @@ import { ProcesosExternosConjuntoComponent } from './apu-conjunto/ver-apu-conjun
     OtrosConjuntoComponent,
     ProcesosInternosConjuntoComponent,
     ProcesosExternosConjuntoComponent,
+    ApuServicioComponent,
+    CrearApuServicioComponent,
+    VerApuServicioComponent,
+    EditarApuServicioComponent,
+    ValidacionDimensionalComponent,
+    MontajePuestaMarchaComponent,
   ],
   imports: [
     CommonModule,
@@ -85,7 +98,8 @@ import { ProcesosExternosConjuntoComponent } from './apu-conjunto/ver-apu-conjun
     NgbNavModule,
     NgbTooltipModule,
     NgbTypeaheadModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    PerfectScrollbarModule
   ]
 })
 export class CrmModule { }

@@ -14,7 +14,8 @@ export const functionsApu = {
     retefuente_percentage: []
   },
 
-  fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>) {
+  fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>, cutLmaterials:Array<any>) {
+    
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
@@ -57,7 +58,7 @@ export const functionsApu = {
     materiaHelper.createFillInMateria(form, fb, data, geometriesList, materials);
     materialsHelper.createFillInMaterials(form, fb, data);
     cutWaterHelper.createFillInCutWater(form, fb, data, materials);
-    cutLaserHelper.createFillInCutLaser(form, fb, data);
+    cutLaserHelper.createFillInCutLaser(form, fb, data, cutLmaterials);
     machineToolHelper.createFillInMachineTools(form, fb, data);
     internalProccessesHelper.createFillInInternal(form, fb, data);
     externalProccessesHelper.createFillInExternal(form, fb, data);
@@ -140,14 +141,16 @@ export const functionsApu = {
     group.get('third_party_id').valueChanges.subscribe(value => {
       let data = clients.find(c => c.value == value);
       this.consts.retefuente_percentage = data.retefuente_percentage;
-      let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal').value;
+      let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
+      let result = admin_unforeseen_utility_subtotal.value / ( 1 - (this.consts.retefuente_percentage / 100));
       group.patchValue({
-        sale_price_cop_withholding_total: admin_unforeseen_utility_subtotal + this.consts.retefuente_percentage
+        sale_price_cop_withholding_total: Math.round(result)
       })
     });
     group.get('admin_unforeseen_utility_subtotal').valueChanges.subscribe(value => {
+      let result = value / ( 1 - (this.consts.retefuente_percentage / 100));
       group.patchValue({
-        sale_price_cop_withholding_total: value + this.consts.retefuente_percentage
+        sale_price_cop_withholding_total: Math.round(result)
       });
     });
   },
@@ -225,7 +228,7 @@ export const functionsApu = {
     group.get('administrative_unforeseen_subtotal').valueChanges.subscribe(value => {
       let amount = group.get('amount');
       let utility_percentage = group.get('utility_percentage');
-      let result = value / (100 - (utility_percentage.value / 100))
+      let result = value / (1 - (utility_percentage.value / 100))
       group.patchValue({
         administrative_unforeseen_unit: value / amount.value,
         admin_unforeseen_utility_subtotal: Math.round(result)
@@ -233,7 +236,7 @@ export const functionsApu = {
     });
     group.get('utility_percentage').valueChanges.subscribe(value => {
       let administrative_unforeseen_subtotal = group.get('administrative_unforeseen_subtotal');
-      let result = (administrative_unforeseen_subtotal.value / (100 - (value / 100)))
+      let result = (administrative_unforeseen_subtotal.value / (1 - (value / 100)))
       group.patchValue({
         admin_unforeseen_utility_subtotal: Math.round(result)
       });
@@ -248,20 +251,20 @@ export const functionsApu = {
       let trm = group.get('trm').value;
       let amount = group.get('amount').value;
       group.patchValue({
-        sale_price_usd_withholding_total: value / trm,
-        sale_value_cop_unit: value / amount
+        sale_price_usd_withholding_total: Math.round(value / trm),
+        sale_value_cop_unit: Math.round(value / amount)
       })
     });
     group.get('trm').valueChanges.subscribe(value => {
       let sale_price_cop_withholding_total = group.get('sale_price_cop_withholding_total').value;
       group.patchValue({
-        sale_price_usd_withholding_total: sale_price_cop_withholding_total / value
+        sale_price_usd_withholding_total: Math.round(sale_price_cop_withholding_total / value)
       })
     });
     group.get('sale_price_usd_withholding_total').valueChanges.subscribe(value => {
       let amount = group.get('amount').value;
       group.patchValue({
-        sale_value_usd_unit: value / amount
+        sale_value_usd_unit: Math.round(value / amount)
       });
     });
   },

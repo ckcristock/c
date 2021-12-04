@@ -11,6 +11,8 @@ export const functionsApuConjunto = {
   },
 
   fillInForm(form: FormGroup, data, fb: FormBuilder, apuParts:Array<any>) {
+    console.log(data);
+    
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
@@ -36,7 +38,7 @@ export const functionsApuConjunto = {
       internal_processes_subtotal: data.internal_processes_subtotal,
       external_processes_subtotal: data.external_processes_subtotal
     });
-    piecesSetsHelper.createFillInPiecesSets(form, fb, data, apuParts)
+    piecesSetsHelper.createFillInPiecesSets(form, fb, data)
     machineToolHelper.createFillInMachineTools(form, fb, data);
     internalProcessesHelper.createFillInInternal(form, fb, data);
     externalProcessesHelper.createFillInExternal(form, fb, data);
@@ -124,14 +126,16 @@ export const functionsApuConjunto = {
     group.get('third_party_id').valueChanges.subscribe(value => {
       let data = clients.find(c => c.value == value);
       this.consts.retefuente_percentage = data.retefuente_percentage;
-      let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal').value;
+      let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
+      let result = admin_unforeseen_utility_subtotal.value / ( 1 - (this.consts.retefuente_percentage / 100));
       group.patchValue({
-        sale_price_cop_withholding_total: admin_unforeseen_utility_subtotal + this.consts.retefuente_percentage
+        sale_price_cop_withholding_total: Math.round(result)
       })
     });
     group.get('admin_unforeseen_utility_subtotal').valueChanges.subscribe(value => {
+      let result = value / ( 1 - (this.consts.retefuente_percentage / 100));
       group.patchValue({
-        sale_price_cop_withholding_total: value + this.consts.retefuente_percentage
+        sale_price_cop_withholding_total: Math.round(result)
       });
     });
   },
@@ -167,28 +171,28 @@ export const functionsApuConjunto = {
     });
     group.get('administrative_unforeseen_subtotal').valueChanges.subscribe(value => {
       let utility_percentage = group.get('utility_percentage');
-      let result = (value / (100 - (utility_percentage.value / 100)))
+      let result = (value / (1 - (utility_percentage.value / 100)))
       group.patchValue({
-        admin_unforeseen_utility_subtotal: result
+        admin_unforeseen_utility_subtotal: Math.round(result)
       });
     });
     group.get('utility_percentage').valueChanges.subscribe(value => {
       let administrative_unforeseen_subtotal = group.get('administrative_unforeseen_subtotal');
-      let result = (administrative_unforeseen_subtotal.value / (100 - (value / 100)))
+      let result = (administrative_unforeseen_subtotal.value / (1 - (value / 100)))
       group.patchValue({
-        admin_unforeseen_utility_subtotal: result
+        admin_unforeseen_utility_subtotal: Math.round(result)
       });
     });
     group.get('sale_price_cop_withholding_total').valueChanges.subscribe(value => {
       let trm = group.get('trm').value;
       group.patchValue({
-        sale_price_usd_withholding_total: value / trm,
+        sale_price_usd_withholding_total: Math.round(value / trm),
       })
     });
     group.get('trm').valueChanges.subscribe(value => {
       let sale_price_cop_withholding_total = group.get('sale_price_cop_withholding_total').value;
       group.patchValue({
-        sale_price_usd_withholding_total: sale_price_cop_withholding_total / value
+        sale_price_usd_withholding_total: Math.round(sale_price_cop_withholding_total / value)
       })
     });
     group.get('direct_costs_indirect_costs_total').valueChanges.subscribe(value => {

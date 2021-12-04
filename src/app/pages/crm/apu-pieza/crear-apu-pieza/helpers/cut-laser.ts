@@ -9,17 +9,16 @@ import {
 
 export const cutLaserHelper = {
   
-  createFillInCutLaser(form: FormGroup, fb: FormBuilder, data) {
+  createFillInCutLaser(form: FormGroup, fb: FormBuilder, data, materials:Array<any>) {
     if (data.cutlaser) {
       let cut_laser = form.get('cut_laser') as FormArray;
       data.cutlaser.forEach((r) => {
-        console.log(r);
         let group = fb.group({
           cut_laser_material_id: [r.cut_laser_material_id],
           cut_laser_material_value_id: [r.cut_laser_material_value_id],
           thicknessSelected: [r.cut_laser_material_value_id],
           thickness: [r.thickness],
-          thicknesses: [''],
+          thicknesses: [r.cut_laser_material.cut_laser_material_value],
           sheets_amount: [r.sheets_amount],
           long: [r.long],
           width: [r.width],
@@ -35,7 +34,7 @@ export const cutLaserHelper = {
           actual_speed: [r.cut_laser_material_value.actual_speed],
           seconds_percing: [r.cut_laser_material_value.seconds_percing]
         });
-        this.subscribesCutLaser(group, cut_laser, form);
+        this.subscribesCutLaser(group, cut_laser, form, materials);
         cut_laser.push(group);
       });
     }

@@ -11,6 +11,10 @@ import { ApuConjuntoComponent } from './apu-conjunto/apu-conjunto.component';
 import { CrearApuConjuntoComponent } from './apu-conjunto/crear-apu-conjunto/crear-apu-conjunto.component';
 import { EditarApuConjuntoComponent } from './apu-conjunto/editar-apu-conjunto/editar-apu-conjunto.component';
 import { VerApuConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/ver-apu-conjunto.component';
+import { ApuServicioComponent } from './apu-servicio/apu-servicio.component';
+import { CrearApuServicioComponent } from './apu-servicio/crear-apu-servicio/crear-apu-servicio.component';
+import { EditarApuServicioComponent } from './apu-servicio/editar-apu-servicio/editar-apu-servicio.component';
+import { VerApuServicioComponent } from './apu-servicio/ver-apu-servicio/ver-apu-servicio.component';
 
 const routes: Routes = [
   { path: 'terceros', component: TercerosComponent },
@@ -27,6 +31,11 @@ const routes: Routes = [
   { path: 'apu/crear-apu-conjunto', component: CrearApuConjuntoComponent },
   { path: 'apu/editar-apu-conjunto/:id', component: EditarApuConjuntoComponent },
   { path: 'apu/ver-apu-conjunto/:id', component: VerApuConjuntoComponent },
+
+  { path: 'apu/apu-servicio', component: ApuServicioComponent },
+  { path: 'apu/crear-apu-servicio', component: CrearApuServicioComponent },
+  { path: 'apu/editar-apu-servicio/:id', component: EditarApuServicioComponent },
+  { path: 'apu/ver-apu-servicio/:id', component: VerApuServicioComponent },
 
   { path: 'presupuesto', loadChildren: () => import('./presupuesto/presupuesto.module').then(m => m.PresupuestoModule) },
   { path: 'cotizacion', loadChildren: () => import('./cotizacion/cotizacion.module').then(m => m.CotizacionModule) }

@@ -24,6 +24,8 @@
                 <tr>
                     <th>Ciudad</th>
                     <th>País</th>
+                    <td>% Retención Productos</td>
+                    <td>% Retención Servicios</td>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
@@ -31,6 +33,8 @@
                 <tr *ngFor="let item of cities" [ngClass]="{'bg-danger text-white': (item.state == 'Inactivo')}">
                     <td> {{ item.name }} </td>
                     <td> {{ item.country }} </td>
+                    <td> {{ item.percentage_product }} </td>
+                    <td> {{ item.percentage_service }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -73,14 +77,22 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-row">
-                        <div class="form-group col-12">
+                        <div class="form-group col-6">
                             <label for="">Pais</label>
                             <ng-select formControlName="country_id" [items]="countries" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
                             </ng-select>
                         </div>
-                        <div class="form-group col-12">
+                        <div class="form-group col-6">
                             <label for="">Nombre</label>
                             <input type="text" class="form-control" formControlName="name">
+                        </div>
+                        <div class="form-group col-6">
+                            <label>% Retención Productos</label>
+                            <input type="number" class="form-control" formControlName="percentage_product">
+                        </div>
+                        <div class="form-group col-6">
+                            <label>% Retención Servicios</label>
+                            <input type="number" class="form-control" formControlName="percentage_service">
                         </div>
                     </div>
                 </div>

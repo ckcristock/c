@@ -122,18 +122,19 @@ export const functionsApuConjunto = {
     });
   },
 
-  totalMasRetencion(group: FormGroup, clients:Array<any>){
-    group.get('third_party_id').valueChanges.subscribe(value => {
-      let data = clients.find(c => c.value == value);
-      this.consts.retefuente_percentage = data.retefuente_percentage;
+  cityRetention(group: FormGroup, cities:Array<any>){
+    group.get('city_id').valueChanges.subscribe(value => {
+      let data = cities.find(c => c.value == value);
       let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
-      let result = admin_unforeseen_utility_subtotal.value / ( 1 - (this.consts.retefuente_percentage / 100));
+      let result = admin_unforeseen_utility_subtotal.value / ( 1 - (data.percentage_product / 100));
       group.patchValue({
         sale_price_cop_withholding_total: Math.round(result)
       })
     });
     group.get('admin_unforeseen_utility_subtotal').valueChanges.subscribe(value => {
-      let result = value / ( 1 - (this.consts.retefuente_percentage / 100));
+      let city = group.get('city_id');
+      let data = cities.find(c => c.value == city.value);
+      let result = value / ( 1 - (data.percentage_product / 100));
       group.patchValue({
         sale_price_cop_withholding_total: Math.round(result)
       });
@@ -153,20 +154,20 @@ export const functionsApuConjunto = {
       let unforeseen_percentage = group.get('unforeseen_percentage');
       group.patchValue({
         direct_costs_indirect_costs_total: indirect_cost_total.value + value,
-        administrative_value: (value * (administrative_percentage.value / 100)),
-        unforeseen_value: (value * (unforeseen_percentage.value / 100))
+        administrative_value: Math.round((value * (administrative_percentage.value / 100))),
+        unforeseen_value: Math.round((value * (unforeseen_percentage.value / 100)))
       });
     });
     group.get('administrative_percentage').valueChanges.subscribe(value => {
       let total_direct_cost = group.get('total_direct_cost');
       group.patchValue({
-        administrative_value: (total_direct_cost.value * (value / 100))
+        administrative_value: Math.round((total_direct_cost.value * (value / 100)))
       });
     });
     group.get('unforeseen_percentage').valueChanges.subscribe(value => {
       let total_direct_cost = group.get('total_direct_cost').value;
       group.patchValue({
-        unforeseen_value: (total_direct_cost * (value / 100))
+        unforeseen_value: Math.round((total_direct_cost * (value / 100)))
       });
     });
     group.get('administrative_unforeseen_subtotal').valueChanges.subscribe(value => {

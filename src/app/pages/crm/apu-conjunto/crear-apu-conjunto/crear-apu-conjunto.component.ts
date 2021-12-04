@@ -201,13 +201,13 @@ export class CrearApuConjuntoComponent implements OnInit {
   getCities(){
     this._apuConjunto.getCities().subscribe((r:any) => {
       this.cities = r.data;
+      help.functionsApuConjunto.cityRetention(this.form, this.cities);
     })
   }
 
   getClients(){
     this._apuConjunto.getClient().subscribe((r:any) => {
       this.clients = r.data;
-      help.functionsApuConjunto.totalMasRetencion(this.form, this.clients);
     })
   }
 

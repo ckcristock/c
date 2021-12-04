@@ -42,7 +42,7 @@ export class CrearApuPiezaComponent implements OnInit {
   otherCollapsed:boolean;
   indirectCollapsed:boolean;
   auiCollapsed:boolean;
-  loading:boolean = false;;
+  loading:boolean = false;
   constructor(
     private _apuPieza: ApuPiezaService,
     private _units: UnidadesMedidasService,
@@ -94,6 +94,7 @@ export class CrearApuPiezaComponent implements OnInit {
   getCities(){
     this._apuPieza.getCities().subscribe((r:any) => {
       this.cities = r.data;
+      help.functionsApu.cityRetention(this.form, this.cities);
     })
   }
 
@@ -106,7 +107,6 @@ export class CrearApuPiezaComponent implements OnInit {
   getClients(){
     this._apuPieza.getClient().subscribe((r:any) => {
       this.clients = r.data;
-      help.functionsApu.totalMasRetencion(this.form, this.clients);
     });
   }
   

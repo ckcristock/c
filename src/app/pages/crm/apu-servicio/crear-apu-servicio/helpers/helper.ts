@@ -71,17 +71,22 @@ export const functionsApuService = {
     return group;
   },
 
-  totalMasRetencion(group: FormGroup, clients:Array<any>){
-    group.get('third_party_id').valueChanges.subscribe(value => {
-      let data = clients.find(c => c.value == value);
-      this.consts.retefuente_percentage = data.retefuente_percentage;
+  cityRetention(group: FormGroup, cities:Array<any>){
+    group.get('city_id').valueChanges.subscribe(value => {
+      let data = cities.find(c => c.value == value);
       let subtotal_administrative_unforeseen_utility = group.get('subtotal_administrative_unforeseen_utility');
-      let result = subtotal_administrative_unforeseen_utility.value / ( 1 - (this.consts.retefuente_percentage / 100));
-      group.patchValue({sale_price_cop_withholding_total: Math.round(result)})
+      let result = subtotal_administrative_unforeseen_utility.value / ( 1 - (data.percentage_product / 100));
+      group.patchValue({
+        sale_price_cop_withholding_total: Math.round(result)
+      })
     });
     group.get('subtotal_administrative_unforeseen_utility').valueChanges.subscribe(value => {
-      let result = value / ( 1 - (this.consts.retefuente_percentage / 100));
-      group.patchValue({sale_price_cop_withholding_total: Math.round(result)});
+      let city = group.get('city_id');
+      let data = cities.find(c => c.value == city.value);
+      let result = value / ( 1 - (data.percentage_product / 100));
+      group.patchValue({
+        sale_price_cop_withholding_total: Math.round(result)
+      });
     });
   },
 

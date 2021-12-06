@@ -407,7 +407,7 @@ export class CrearApuPiezaComponent implements OnInit {
       title: 'Operación exitosa',
       showCancel: false,
     });
-    this.router.navigateByUrl('/crm/apu/apu-pieza');
+    this.router.navigateByUrl('/crm/apus');
   }
   showError(err) {
     this._swal.show({

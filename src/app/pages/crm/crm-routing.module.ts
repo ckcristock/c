@@ -22,26 +22,26 @@ const routes: Routes = [
   { path: 'crear-tercero', component: CrearTercerosComponent },
   { path: 'editar-tercero/:id', component: CrearTercerosComponent },
   { path: 'personas', component: PersonasComponent },
-
-  { path: 'apu/apu-pieza', component: ApuPiezaComponent },
+  
+  { path: 'apus', component: ApusComponent },
+  // { path: 'apu/apu-pieza', component: ApuPiezaComponent },
   { path: 'apu/crear-apu-pieza', component: CrearApuPiezaComponent },
   { path: 'apu/editar-apu-pieza/:id', component: EditarApuPiezaComponent },
   { path: 'apu/ver-apu-pieza/:id', component: VerApuPiezaComponent },
 
-  { path: 'apu/apu-conjunto', component: ApuConjuntoComponent },
+  // { path: 'apu/apu-conjunto', component: ApuConjuntoComponent },
   { path: 'apu/crear-apu-conjunto', component: CrearApuConjuntoComponent },
   { path: 'apu/editar-apu-conjunto/:id', component: EditarApuConjuntoComponent },
   { path: 'apu/ver-apu-conjunto/:id', component: VerApuConjuntoComponent },
 
-  { path: 'apu/apu-servicio', component: ApuServicioComponent },
+  // { path: 'apu/apu-servicio', component: ApuServicioComponent },
   { path: 'apu/crear-apu-servicio', component: CrearApuServicioComponent },
   { path: 'apu/editar-apu-servicio/:id', component: EditarApuServicioComponent },
   { path: 'apu/ver-apu-servicio/:id', component: VerApuServicioComponent },
 
   { path: 'presupuesto', loadChildren: () => import('./presupuesto/presupuesto.module').then(m => m.PresupuestoModule) },
-  { path: 'cotizacion', loadChildren: () => import('./cotizacion/cotizacion.module').then(m => m.CotizacionModule) },
+  { path: 'cotizacion', loadChildren: () => import('./cotizacion/cotizacion.module').then(m => m.CotizacionModule) }
 
-  { path: 'apus', component: ApusComponent }
 ];
 
 @NgModule({

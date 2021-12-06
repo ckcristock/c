@@ -417,7 +417,7 @@ export class CrearApuConjuntoComponent implements OnInit {
       title: 'Operación exitosa',
       showCancel: false,
     });
-    this.router.navigateByUrl('/crm/apu/apu-conjunto');
+    this.router.navigateByUrl('/crm/apus');
   }
   showError(err) {
     this._swal.show({

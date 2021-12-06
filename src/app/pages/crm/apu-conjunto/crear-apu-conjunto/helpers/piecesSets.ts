@@ -76,15 +76,15 @@ export const piecesSetsHelper = {
       }
     });
     group.get('amount').valueChanges.subscribe(value => {
-      let unit_cost = group.get('unit_cost').value;
-      let result = unit_cost * value;
+      let unit_cost = group.get('unit_cost');
+      let result = (typeof value == 'number' && typeof unit_cost.value == 'number' ? (unit_cost.value * value) : 0);
       group.patchValue({
         total: Math.round(result)
       })
     });
     group.get('unit_cost').valueChanges.subscribe(value => {
-      let amount = group.get('amount').value;
-      let result = value * amount; 
+      let amount = group.get('amount');
+      let result = (typeof value == 'number' && typeof amount.value == 'number' ? (value * amount.value) : 0); 
       group.patchValue({
         total: Math.round(result)
       })

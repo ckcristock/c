@@ -39,15 +39,17 @@ export const externalProcessesHelper = {
 
   subscribeExternalProcesses( external: FormGroup, form:FormGroup, list: FormArray){
     external.get('amount').valueChanges.subscribe(value => {
-      let unit_cost = external.get('unit_cost').value;
+      let unit_cost = external.get('unit_cost');
+      let result = (typeof unit_cost.value == 'number' && typeof value == 'number' ? (unit_cost.value * value) : 0)
       external.patchValue({
-        total: Math.round(unit_cost * value)
+        total: Math.round(result)
       })
     });
     external.get('unit_cost').valueChanges.subscribe(value => {
-      let amount = external.get('amount').value;
+      let amount = external.get('amount');
+      let result = (typeof amount.value == 'number' && typeof value == 'number' ? (value * amount.value) : 0)
       external.patchValue({
-        total: Math.round(value * amount)
+        total: Math.round(result)
       })
     });
     external.get('total').valueChanges.subscribe(value => {

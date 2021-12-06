@@ -38,15 +38,17 @@ export const othersHelper = {
 
   subscribeOthers( others: FormGroup, form:FormGroup, list: FormArray){
     others.get('amount').valueChanges.subscribe(value => {
-      let unit_cost = others.get('unit_cost').value;
+      let unit_cost = others.get('unit_cost');
+      let result = (typeof unit_cost.value == 'number' && typeof value == 'number' ? (unit_cost.value * value) : 0)
       others.patchValue({
-        total: Math.round(unit_cost * value)
+        total: Math.round(result)
       })
     });
     others.get('unit_cost').valueChanges.subscribe(value => {
-      let amount = others.get('amount').value;
+      let amount = others.get('amount');
+      let result = (typeof amount.value == 'number' && typeof value == 'number' ? (value * amount.value) : 0)
       others.patchValue({
-        total: Math.round(value * amount)
+        total: Math.round(result)
       })
     });
     others.get('total').valueChanges.subscribe(value => {

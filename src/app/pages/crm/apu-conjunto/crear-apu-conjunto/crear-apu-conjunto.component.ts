@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ApuConjuntoService } from '../apu-conjunto.service';
 import * as help from './helpers/imports';
@@ -26,6 +26,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   @Input('id') id;
   @Input('data') data:any;
   form: FormGroup;
+  formGroup: FormGroup;
   date:Date = new Date();
   indirectCosts:any[] = [];
   files: File[] = [];
@@ -48,6 +49,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   searchFailed:boolean;
   searchingSet:boolean;
   searchFailedSet:boolean;
+  @ViewChild('apus') apus: any
     
   constructor( 
                 private fb: FormBuilder,
@@ -162,6 +164,20 @@ export class CrearApuConjuntoComponent implements OnInit {
      return e.preventDefault() */
   }
 
+  findApus() {
+    // this.formGroup = item;
+    this.apus.show()
+  }
+
+  getApus(e: any[]) {
+    let item = this.form.get('list_pieces_sets') as FormArray
+    e.forEach(apu => {
+      const exist = item.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
+      !exist ? item.push(this.piecesSetsControl(apu)) : ''
+    });
+
+  }
+
   onSelect(event) {
     this.files.push(...event.addedFiles);
   }
@@ -211,8 +227,8 @@ export class CrearApuConjuntoComponent implements OnInit {
     })
   }
 
-  piecesSetsControl(): FormGroup{
-    let group = help.piecesSetsHelper.createPiecesSetsGroup(this.form, this.fb);
+  piecesSetsControl(item): FormGroup{
+    let group = help.piecesSetsHelper.createPiecesSetsGroup(this.form, this.fb, item);
     return group;
   }
 
@@ -222,7 +238,7 @@ export class CrearApuConjuntoComponent implements OnInit {
 
   newPiecesSets(){
     let machine = this.piecesSetsList;
-    machine.push(this.piecesSetsControl())
+    machine.push(this.piecesSetsControl(''))
   }
 
   deletePiecesSets(i){

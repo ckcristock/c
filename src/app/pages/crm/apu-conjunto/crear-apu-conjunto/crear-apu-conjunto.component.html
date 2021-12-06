@@ -133,8 +133,8 @@
                                                 </td>
                                                 <td>
                                                     <select class="form-control form-control-sm" id="descripcion" formControlName="apu_type">
-                                                        <option value="pieza">Pieza</option>
-                                                        <option value="conjunto">Conjunto</option>
+                                                        <option value="P">Pieza</option>
+                                                        <option value="C">Conjunto</option>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -192,6 +192,9 @@
                                             <div class="btn-group" style="float: right">
                                                 <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newPiecesSets()">
                                                     <i class="fas fa-plus"></i>
+                                                </button>
+                                                <button ngbTooltip="Agregar Item" type="button" (click)="findApus()" class="btn btn-success btn-sm ">
+                                                    <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
                                         </td>
@@ -766,6 +769,7 @@
     </tr>
 </ng-template>
 
+<app-get-apus #apus (sendApus)="getApus($event)"></app-get-apus>
 
 <ng-template #rt let-r="result" let-t="term">
     <span class="f-9">{{ r.name }} </span>

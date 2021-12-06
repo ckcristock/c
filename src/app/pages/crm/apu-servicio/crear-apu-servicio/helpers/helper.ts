@@ -74,19 +74,23 @@ export const functionsApuService = {
   cityRetention(group: FormGroup, cities:Array<any>){
     group.get('city_id').valueChanges.subscribe(value => {
       let data = cities.find(c => c.value == value);
-      let subtotal_administrative_unforeseen_utility = group.get('subtotal_administrative_unforeseen_utility');
-      let result = subtotal_administrative_unforeseen_utility.value / ( 1 - (data.percentage_product / 100));
-      group.patchValue({
-        sale_price_cop_withholding_total: Math.round(result)
-      })
+      if (data) {
+        let subtotal_administrative_unforeseen_utility = group.get('subtotal_administrative_unforeseen_utility');
+        let result = subtotal_administrative_unforeseen_utility.value / ( 1 - (data.percentage_product / 100));
+        group.patchValue({
+          sale_price_cop_withholding_total: Math.round(result)
+        })
+      }
     });
     group.get('subtotal_administrative_unforeseen_utility').valueChanges.subscribe(value => {
       let city = group.get('city_id');
       let data = cities.find(c => c.value == city.value);
-      let result = value / ( 1 - (data.percentage_product / 100));
-      group.patchValue({
-        sale_price_cop_withholding_total: Math.round(result)
-      });
+      if (data) {
+        let result = value / ( 1 - (data.percentage_product / 100));
+        group.patchValue({
+          sale_price_cop_withholding_total: Math.round(result)
+        });
+      }
     });
   },
 

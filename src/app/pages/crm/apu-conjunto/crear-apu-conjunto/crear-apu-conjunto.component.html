@@ -139,11 +139,11 @@
                                                 </td>
                                                 <td>
                                                     <div style="position: relative;">
-                                                        <input *ngIf="item['controls']['apu_type']['value'] == 'pieza'" style="width:280px" id="typeahead-http" type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" placeholder="Piezas" formControlName="description"
+                                                        <input *ngIf="item['controls']['apu_type']['value'] == 'P'" style="width:280px" id="typeahead-http" type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" placeholder="Piezas" formControlName="description"
                                                             (change)="select(item, 'description', 'apu_part_id')" />
                                                     </div>
                                                     <div style="position: relative;">
-                                                        <input *ngIf="item['controls']['apu_type']['value'] == 'conjunto'" style="width:280px" id="typeahead-httpp" type="text" class="form-control form-control-sm" [ngbTypeahead]="searchSet" [resultTemplate]="rt" [inputFormatter]="formatterSet" placeholder="Conjuntos"
+                                                        <input *ngIf="item['controls']['apu_type']['value'] == 'C'" style="width:280px" id="typeahead-httpp" type="text" class="form-control form-control-sm" [ngbTypeahead]="searchSet" [resultTemplate]="rt" [inputFormatter]="formatterSet" placeholder="Conjuntos"
                                                             formControlName="description" (change)="select(item, 'description', 'apu_set_child_id')" />
                                                     </div>
                                                     <!-- <ng-select [items]="apuPart$ | async" bindLabel="name" bindValue="id" [loading]="apuPartLoading" [typeahead]="apuPartInput$" typeToSearchText="Por favor para buscar" formControlName="apu_part_id">

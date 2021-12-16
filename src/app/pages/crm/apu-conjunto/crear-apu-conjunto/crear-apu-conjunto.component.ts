@@ -12,6 +12,7 @@ import { SwalService } from '../../../ajustes/informacion-base/services/swal.ser
 import { functionsUtils } from '../../../../core/utils/functionsUtils';
 import { concat, Observable, Subject, of } from 'rxjs';
 import { map, filter, distinctUntilChanged, debounceTime, tap, switchMap, catchError } from 'rxjs/operators';
+import { CalculationBasesService } from '../../../ajustes/configuracion/base-calculos/calculation-bases.service';
 interface ApuPart {
   name: string;
   id: number;
@@ -49,18 +50,21 @@ export class CrearApuConjuntoComponent implements OnInit {
   searchFailed:boolean;
   searchingSet:boolean;
   searchFailedSet:boolean;
+  calculationBase: any = {}
   @ViewChild('apus') apus: any
     
   constructor( 
                 private fb: FormBuilder,
                 private router: Router,
                 private _apuConjunto: ApuConjuntoService,
-                private _swal: SwalService
+                private _swal: SwalService,
+                private _calculationBase: CalculationBasesService
               ) {
                 
               }
 
-  ngOnInit(): void {
+  ngOnInit():void {
+    // await this.getBases()
     this.getPeople();
     this.getCities();
     this.getClients();
@@ -71,6 +75,7 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.validateData();
     this.collapses();
     this.loadPeople();
+    
   }
 
   collapses(){
@@ -176,6 +181,16 @@ export class CrearApuConjuntoComponent implements OnInit {
       !exist ? item.push(this.piecesSetsControl(apu)) : ''
     });
 
+  }
+
+
+  async getBases() {
+    await this._calculationBase.getAll().toPromise().then((r: any) => {
+      this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+      /* if (this.dataEdit) {
+        this.calculationBase.trm.value = this.dataEdit.trm
+      } */
+    })
   }
 
   onSelect(event) {

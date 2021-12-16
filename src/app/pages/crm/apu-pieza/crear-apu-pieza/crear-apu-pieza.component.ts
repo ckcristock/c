@@ -15,6 +15,7 @@ import { functionsUtils } from '../../../../core/utils/functionsUtils';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { functionsApu } from './helpers/helper';
+import { CalculationBasesService } from '../../../ajustes/configuracion/base-calculos/calculation-bases.service';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -43,17 +44,20 @@ export class CrearApuPiezaComponent implements OnInit {
   indirectCollapsed:boolean;
   auiCollapsed:boolean;
   loading:boolean = false;
+  calculationBase: any = {}
   constructor(
     private _apuPieza: ApuPiezaService,
     private _units: UnidadesMedidasService,
     private fb: FormBuilder,
     private _swal: SwalService,
     private router: Router,
-    private actRoute: ActivatedRoute
+    private actRoute: ActivatedRoute,
+    private _calculationBase: CalculationBasesService
     ) { }
     
   async ngOnInit() {
     this.loading = false;
+    await this.getBases()
     this.createForm();
     this.getClients();
     this.getUnits();
@@ -76,6 +80,14 @@ export class CrearApuPiezaComponent implements OnInit {
     (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
   }
 
+  async getBases() {
+    await this._calculationBase.getAll().toPromise().then((r: any) => {
+      this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+      /* if (this.dataEdit) {
+        this.calculationBase.trm.value = this.dataEdit.trm
+      } */
+    })
+  }
   
   onSelect(event) {
     this.files.push(...event.addedFiles);
@@ -144,7 +156,7 @@ export class CrearApuPiezaComponent implements OnInit {
   }
   
   createForm(){
-    this.form = help.functionsApu.createForm(this.fb);
+    this.form = help.functionsApu.createForm(this.fb, this.calculationBase);
     help.functionsApu.listerTotalDirectCost(this.form);
   }
 

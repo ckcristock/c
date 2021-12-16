@@ -1,0 +1,147 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Comprobantes de Egresos</h5>
+                            <span>Comprobantes de Egresos por Conceptos de Pagos Realizados a nuestros Proveedores</span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="pull-right">
+                                <div class="card-header-left">
+                                    <button style="float: right;" type="button" class="btn btn-primary btn-sm" [routerLink]="['/contabilidad/comprobantes/comprobanteegresovarioscrear']"><i
+                                        class="fa fa-plus"></i>
+                                    Nuevo Comprobante de Egreso
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped" style="font-size: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Documento</th>
+                                        <th>Beneficiario</th>
+                                        <th>Concepto</th>
+                                        <th>Cheques</th>
+                                        <th>Total Debito</th>
+                                        <th>Total Credito</th>
+                                        <th>Total Debito NIIF</th>
+                                        <th>Total Credito NIIF</th>
+                                        <th>Funcionario</th>
+                                        <th>Estado</th>
+                                        <th style="max-width: 70px; width: 70px !important;">Acciones</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="tabla-filtro">
+                                            <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" class="form-control input-sm " placeholder="Filtro Código" [(ngModel)]="filtro_codigo" (change)="filtros()">
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" class="form-control input-sm" placeholder="Filtro Cliente" [(ngModel)]="filtro_cliente" (change)="filtros()">
+                                        </th>
+                                        <th class="tabla-filtro">
+
+
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" class="form-control input-sm" placeholder="Filtro Cheque" [(ngModel)]="filtro_cheque" (change)="filtros()">
+                                        </th>
+                                        <th class="tabla-filtro">
+
+                                        </th>
+                                        <th class="tabla-filtro">
+
+                                        </th>
+                                        <th class="tabla-filtro"></th>
+                                        <th class="tabla-filtro"></th>
+                                        <th class="tabla-filtro"></th>
+                                        <th class="tabla-filtro">
+                                            <select class="form-control input-sm" [(ngModel)]="filtro_estado" (change)="filtros()">
+                          <option value="">Todas</option>
+                          <option value="Activo">Activas</option>
+                          <option value="Anulada">Anuladas</option>
+                        </select>
+                                        </th>
+                                        <th class="tabla-filtro"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngIf="Comprobantes.length == 0" class="text-center">
+                                        <td colspan="12" class="text-center">
+                                            <i class="fa fa-exclamation-circle fa-5x"></i>
+                                            <h4>No Existen Comprobantes de Egresos para mostrar</h4>
+                                        </td>
+                                    </tr>
+                                    <tr *ngFor="let comprobante of Comprobantes" [ngClass]="{'bg-danger': comprobante.Estado == 'Anulada'}">
+                                        <td>{{comprobante.Fecha}}</td>
+                                        <td>{{comprobante.Codigo}}</td>
+                                        <td>{{comprobante.Beneficiario}} - {{comprobante.Tercero}}</td>
+                                        <td>{{comprobante.Concepto}}</td>
+                                        <td>{{comprobante.Cheques}}</td>
+                                        <td>{{comprobante.Total_Debe_PCGA | currency }}</td>
+                                        <td>{{comprobante.Total_Haber_PCGA | currency }}</td>
+                                        <td>{{comprobante.Total_Debe_NIIF | currency }}</td>
+                                        <td>{{comprobante.Total_Haber_NIIF | currency }}</td>
+                                        <td>{{comprobante.Funcionario }}</td>
+                                        <td width="60"><span *ngIf="comprobante.Estado != 'Anulada'" class="label label-success">{{comprobante.Estado }}</span></td>
+                                        <td style="max-width: 70px !important; width: 70px !important;">
+                                            <div class="text-center">
+                                                <div ngbDropdown class="dropdown-primary">
+                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                    <div ngbDropdownMenu>
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}/php/comprobantes/egreso_descarga_pdf.php?id={{comprobante.Id_Documento_Contable}}" target="_blank">
+                                                            <i class="fa fa-print"></i> Ver PCGA</a>
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}/php/comprobantes/egreso_descarga_pdf.php?id={{comprobante.Id_Documento_Contable}}&tipo=Niif" target="_blank">
+                                                            <i class="fa fa-print"></i> Ver NIIF</a>
+                                                        <a *ngIf="comprobante.Estado != 'Anulada' && perfilUsuario == '27'" class="dropdown-item waves-light waves-effect caja-botones bg-danger" href="javascript:;" [swal]="confirmacionAnular" (click)="IdDocumento = comprobante.Id_Documento_Contable">
+                                                            <i class="fa fa-close"></i> Anular</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="paginacion-container" *ngIf="Comprobantes.length > 0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="filtros(true)" [boundaryLinks]="true"></ngb-pagination>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #rt2 let-r="result" let-t="term">
+    <span class="f-9"><strong>{{ r.NombreProveedor }}</strong> 
+    </span>
+</ng-template>
+
+<!-- <swal #confirmacionAnular [options]="alertOption"></swal> -->
+
+<!-- <swal #alertSwal title="" html="" type=""></swal> -->
+<ng-template #rt let-r="result" let-t="term">
+    <span class="f-9">{{ r.Nombre }} </span>
+</ng-template>
+
+<ng-template #rtCuenta let-r="result" let-t="term">
+    <span class="f-9">{{ r.Codigo }} </span>
+</ng-template>

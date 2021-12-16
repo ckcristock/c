@@ -1,125 +1,127 @@
 <div class="row">
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Nombre Activo</label>
-            <p> asdas </p>
+            <label for="">Nombre Activo</label>
+            <p>{{Activo_Fijo.Nombre | uppercase}} </p>
         </div>
 
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Tipo Activo</label>
-            <p> asdasdas </p>
+            <label for="">Tipo Activo</label>
+            <p>{{Activo_Fijo.Tipo_Activo | uppercase}} </p>
         </div>
 
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Proveedor</label>
-            <p> asdasdasd </p>
+            <label for="">Proveedor</label>
+            <p>{{Activo_Fijo.Proveedor | uppercase}} </p>
         </div>
 
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Centro Costo</label>
-            <p>asdasd </p>
+            <label for="">Centro Costo</label>
+            <p>{{Activo_Fijo.Centro_Costo | uppercase}} </p>
         </div>
 
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Cuenta Contrapartida</label>
-            <p> asdasd </p>
+            <label for="">Cuenta Contrapartida</label>
+            <p>{{Activo_Fijo.Contrapartida | uppercase}} </p>
         </div>
 
     </div>
 
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Documento</label>
-            <p> asdasd </p>
+            <label for="">Documento</label>
+            <p>{{Activo_Fijo.Documento | uppercase}} </p>
         </div>
 
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Concepto</label>
-            <p> asasdasd </p>
+            <label for="">Concepto</label>
+            <p>{{Activo_Fijo.Concepto | uppercase }} </p>
         </div>
     </div>
 
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Referencia</label>
-            <p>asdassad </p>
+            <label for="">Referencia</label>
+            <p>{{Activo_Fijo.Referencia}} </p>
         </div>
 
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Base</label>
-            <p> asdasd </p>
+            <label for="">Base</label>
+            <p>{{Activo_Fijo.Base | currency}} </p>
         </div>
 
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Iva</label>
-            <p> 23423 </p>
+            <label for="">Iva</label>
+            <p>{{Activo_Fijo.Iva | currency}} </p>
         </div>
 
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Costo PCGA</label>
-            <p> 23423423 </p>
+            <label for="">Costo PCGA</label>
+            <p>{{Activo_Fijo.Costo_PCGA | currency}} </p>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Costo NIIF</label>
-            <p> 23423423 </p>
+            <label for="">Costo NIIF</label>
+            <p>{{Activo_Fijo.Costo_NIIF | currency}} </p>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Cuenta  Rete Iva</label>
-            <p> 23423423 </p>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label class="label">Cuenta  Rete Ica</label>
-            <p> 234234 </p>
+            <label for="">Cuenta  Rete Iva</label>
+            <p>{{Activo_Fijo.Cuenta_Rete_Iva | uppercase}} </p>
         </div>
 
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Costo Rete Iva</label>
-            <p> 234234 </p>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label class="label">Costo Rete Ica</label>
-            <p> 548545 </p>
+            <label for="">Cuenta  Rete Ica</label>
+            <p>{{Activo_Fijo.Cuenta_Rete_Ica | uppercase}} </p>
         </div>
 
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Funcionario Creacion</label>
-            <p> Néstor </p>
+            <label for="">Costo Rete Iva</label>
+            <p>{{Activo_Fijo.Costo_Rete_Iva=='' ? 0: Activo_Fijo.Costo_Rete_Iva }} </p>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label class="label">Fecha Creacion</label>
-            <p> 12/12/02 </p>
+            <label for="">Costo Rete Ica</label>
+            <p>{{Activo_Fijo.Costo_Rete_Fuente=='' ? 0: Activo_Fijo.Costo_Rete_Fuente }} </p>
+        </div>
+
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label for="">Funcionario Creacion</label>
+            <p>{{Activo_Fijo.Funcionario | uppercase}} </p>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label for="">Fecha Creacion</label>
+            <p>{{Activo_Fijo.Fecha | date:'dd/MM/yyyy'}} </p>
         </div>
     </div>
 
 </div>
+
+<swal #alertSwal title="" text="" type=""></swal>

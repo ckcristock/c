@@ -1,0 +1,107 @@
+<div class="page-body">
+
+
+    <div class="card">
+
+
+        <div class="card-block">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <h4>Notas Crédito</h4>
+                <a [routerLink]="['/contabilidad/comprobantes/notas-credito/crear']" class="btn btn-primary btn-sm mb-2">
+                    Crear Nota Crédito
+                </a>
+
+            </div>
+            <table class="table table-condesed table-striped">
+                <thead>
+                    <tr>
+                        <th style="width:200px;">Código Nota</th>
+                        <th style="width:200px;">Fecha</th>
+                        <th style="width:200px;">Funcionario</th>
+                        <th style="width:200;">Cliente</th>
+                        <th style="width:200;">Código Factura</th>
+                        <th style="width:80px;">Acciones</th>
+                    </tr>
+                    <tr>
+                        <th class="table-filtro">
+                            <input type="text" [(ngModel)]="filtro_cod_nota" (blur)="filtros1()" class="form-control input-sm" placeholder="Filtro Codigo">
+                        </th>
+                        <th class="table-filtro">
+                            <my-date-range-picker name="mydaterange1" [options]="myDateRangePickerOptions1" (dateRangeChanged)="dateRangeChanged1($event)" [(ngModel)]="filtro_fecha_nota" placeholder="Rango Fechas"></my-date-range-picker>
+                        </th>
+                        <th class="table-filtro">
+                            <input type="text" [(ngModel)]="filtro_funcionario" (blur)="filtros1()" class="form-control input-sm" placeholder="Filtro Funcionario">
+                        </th>
+                        <th class="table-filtro">
+                            <input type="text" [(ngModel)]="filtro_cliente" (blur)="filtros1()" class="form-control input-sm" placeholder="Filtro Cliente">
+                        </th>
+                        <th class="table-filtro">
+                            <input type="text" [(ngModel)]="filtro_cod_factura" (blur)="filtros1()" class="form-control input-sm" placeholder="Filtro Factura">
+                        </th>
+
+                        <th class="table-filtro">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="Notas.length == 0 && !Cargando">
+                        <td colspan="8" class="text-center">
+                            <i class="fa fa-exclamation-circle fa-5x"></i>
+                            <h4>No Existen Notas Crédito para mostrar</h4>
+                        </td>
+                    </tr>
+                    <tr *ngIf="Cargando">
+                        <td colspan="14" class="text-center">
+                            <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                            <span class="sr-only">Cargando...</span>
+                            <h4>Cargando Notas ...</h4>
+                        </td>
+                    </tr>
+
+                    <tr *ngFor="let nota of Notas">
+                        <td><strong>{{nota.Codigo_Nota}}</strong></td>
+                        <td class="text-center">
+                            {{nota.Fecha_Nota | date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td>
+                            {{nota.Funcionario}}
+                        </td>
+                        <td>{{nota.Cliente}}</td>
+                        <td>
+                            {{nota.Codigo_Factura}}
+                        </td>
+                        <td>
+                            <div class="text-center">
+                                <div ngbDropdown class="dropdown-primary">
+                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                    <div ngbDropdownMenu>
+
+                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="" [routerLink]="['/contabilidad/notas-credito/ver',nota.Id_Nota_Credito_Global]">
+                                            <i class="ti-eye"></i>Ver Nota</a>
+                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{enviromen.ruta}}php/notas_credito_nuevo/descarga_pdf.php?tipo=Nota_Credito&id={{nota.Id_Nota_Credito_Global}}" target="_blank">
+                                            <i class="ti-printer"></i>Imprimir</a>
+                                        <a *ngIf="perfilUsuario == '27' || perfilUsuario == '16'" class="dropdown-item waves-light waves-effect caja-botones" href="{{enviromen.ruta}}php/contabilidad/movimientoscontables/movimientos_nota_credito_global_pdf.php?id_registro={{nota.Id_Nota_Credito_Global}}&id_funcionario_elabora={{funcionario}}"
+                                            target="_blank">
+                                            <i class="fa fa-book"></i> Contab. PCGA
+                                        </a>
+                                        <a *ngIf="perfilUsuario == '27' || perfilUsuario == '16'" class="dropdown-item waves-light waves-effect caja-botones" href="{{enviromen.ruta}}php/contabilidad/movimientoscontables/movimientos_nota_credito_global_pdf.php?id_registro={{nota.Id_Nota_Credito_Global}}&id_funcionario_elabora={{funcionario}}&tipo_valor=Niif"
+                                            target="_blank">
+                                            <i class="fa fa-book"></i> Contab. NIIF
+                                        </a>
+
+                                        <!--        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{enviromen.ruta}}php/facturasventas/factura_dis_pdf.php?id={{factura.Id_Factura_Administrativa}}" target="_blank">
+                                            <i class="ti-printer"></i>Imprimir Factura</a> -->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {{(page1*maxSize)-maxSize+1}} al {{((page1*maxSize) > TotalItems1 ? TotalItems1 : (page1*maxSize))}} de {{ TotalItems1 }}
+            <ngb-pagination class="pull-right" [collectionSize]="TotalItems1" [(page)]="page1" [maxSize]="10" [pageSize]="maxSize" size="sm" (pageChange)="paginacion()" [boundaryLinks]="true"></ngb-pagination>
+        </div>
+    </div>
+</div>

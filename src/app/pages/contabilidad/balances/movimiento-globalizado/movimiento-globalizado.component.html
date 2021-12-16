@@ -1,0 +1,117 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+
+            <div class="card">
+
+                <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+
+                <div class="card-body">
+                    <form #FormFiltros="ngForm">
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                      Fecha Inicial
+                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="date" class="form-control form-control-sm" (change)="setQueryParams()" [(ngModel)]="MovimientoGlobalizadoModel.Fecha_Inicial" name="Fecha_Inicial" id="Fecha_Inicial" required>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Fecha Corte
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="date" class="form-control form-control-sm" (change)="setQueryParams()" [(ngModel)]="MovimientoGlobalizadoModel.Fecha_Corte" name="Fecha_Corte" id="Fecha_Corte" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Fuente
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select name="Fuente" id="Fuente" [(ngModel)]="MovimientoGlobalizadoModel.Fuente" class="form-control form-control-sm" (change)="setQueryParams()" required>
+                        <option value="">Ninguno</option>
+                        <option *ngFor="let item of listaTiposDocumentos" [value]="item.Id_Modulo">{{ item.Documento }}</option>
+                      </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Nit
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input class="form-control form-control-sm" name="Nit" (change)="AsignarTercero(TerceroSeleccionado)" [(ngModel)]="TerceroSeleccionado" type="text" placeholder="Nombre o Nit" [ngbTypeahead]="search_tercero" [resultTemplate]="rt_tercero" [inputFormatter]="formatter_tercero">
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Estado
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select name="Estado" id="Estado" (change)="setQueryParams()" [(ngModel)]="MovimientoGlobalizadoModel.Estado" class="form-control form-control-sm">
+                        <option value="">Todos</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Anulado">Inactivo</option>
+                      </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- FIN ROW-->
+                    </form>
+
+                    <div class="row m-t-20">
+                        <div class="col-md-12">
+
+                            <div class="m-t-10 text-center">
+                                <button class="btn btn-info btn-sm" target="_blank" (click)="generarReporte()" [disabled]="!FormFiltros.valid"><i class="fa fa-file-text"></i> Generar</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+
+<ng-template #rt1 let-r="result" let-t="term">
+    <span class="f-9">{{ r.Codigo }} </span>
+</ng-template>
+<ng-template #rt_tercero let-r="result" let-t="term">
+    <span class="f-9">
+          {{r.Nombre_Tercero}}
+      </span>
+</ng-template>

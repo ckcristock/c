@@ -1,0 +1,150 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Cierres Contables</h5>
+                            <span>Módulo que maneja toda la información de los cierres contables mensuales y anuales.</span>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-primary btn-sm mr-2" style="float: right;" (click)="abrirModalCierre('Mes')">
+                                <i class="fa fa-lock"></i> Cerrar Mes
+                            </button>
+                            <button class="btn btn-primary btn-sm mr-2" style="float: right;" (click)="abrirModalCierre('Anio')">
+                                <i class="fa fa-lock"></i> Cerrar Año
+                            </button>
+                            <button class="btn btn-warning btn-sm mr-2" style="float: right;" (click)="abrirPlanesCuenta.emit('Mensual')">
+                                <i class="fa fa-list"></i> Plan Cuentas Mes
+                            </button>
+                            <button class="btn btn-warning btn-sm mr-2" style="float: right;" (click)="abrirPlanesCuenta.emit('Anual')">
+                                <i class="fa fa-list"></i> Plan Cuentas Año
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-12"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Cierre de Mes</h5>
+                </div>
+
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-hover">
+                                <tr>
+                                    <th></th>
+                                    <th>Fecha Creación</th>
+                                    <th>Mes</th>
+                                    <th>Año</th>
+                                    <th>Observaciones</th>
+                                    <th></th>
+                                </tr>
+                                <tr *ngFor="let item of Cierres.Mes; let i=index">
+                                    <td class="text-center">
+                                        <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
+                                        <img *ngIf="item.Imagen !=''" src="{{enviroment.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
+                                    </td>
+                                    <td class="text-center">{{item.Created_At | date: 'dd/MM/yyyy'}}</td>
+                                    <td class="text-center">{{ nombreMes(item.Mes) }}</td>
+                                    <td class="text-center">{{ item.Anio }}</td>
+                                    <td class="text-center">
+                                        <span class="mytooltip tooltip-effect-2"><span class="tooltip-item2">
+                        <p style="font-size:11px">
+                          <i class="fa fa-info-circle"></i> </p>
+                      </span><span class="tooltip-content4 clearfix"><span
+                          class="tooltip-text2">{{item.Observaciones=='' ? "No tiene Observaciones!" : item.Observaciones }}</span></span>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="text-center">
+                                            <div ngbDropdown class="dropdown-primary">
+                                                <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                <div ngbDropdownMenu>
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="javascript:;">
+                                                        <i class="fa fa-power-off"></i> {{ item.Estado == 'Cerrado' ? 'Habilitar' : 'Cerrar' }}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Cierres de Año</h5>
+                </div>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-hover">
+                                <tr>
+                                    <th></th>
+                                    <th>Fecha Creación</th>
+                                    <th>Documento</th>
+                                    <th>Año</th>
+                                    <th>Observaciones</th>
+                                    <th></th>
+                                </tr>
+                                <tr *ngFor="let item of Cierres.Anio; let i=index" [ngClass]="{'bg-danger': item.Estado == 'Anulado'}">
+                                    <td class="text-center">
+                                        <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
+                                        <img *ngIf="item.Imagen !=''" src="{{envirom.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
+                                    </td>
+                                    <td class="text-center">{{item.Created_At | date: 'dd/MM/yyyy'}}</td>
+                                    <td class="text-center">{{ item.Codigo }}</td>
+                                    <td class="text-center">{{ item.Anio }}</td>
+                                    <td class="text-center">
+                                        <span class="mytooltip tooltip-effect-2"><span class="tooltip-item2">
+                        <p style="font-size:11px">
+                          <i class="fa fa-info-circle"></i> </p>
+                      </span><span class="tooltip-content4 clearfix"><span
+                          class="tooltip-text2">{{item.Observaciones=='' ? "No tiene Observaciones!" : item.Observaciones }}</span></span>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="text-center">
+                                            <div ngbDropdown class="dropdown-primary">
+                                                <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                <div ngbDropdownMenu>
+                                                    <a *ngIf="item.Estado != 'Anulado'" class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Cierre de Año, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                                        (confirm)="anularCierreAnio(item.Id_Cierre_Contable)">
+                                                        <i class="fa fa-times"></i> Anular</a>
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{funcionario}}">
+                                                        <i class="fa fa-table"></i> Cont. PCGA</a>
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{funcionario}}&tipo_valor=Niif">
+                                                        <i class="fa fa-table"></i> Cont. NIIF</a>
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{funcionario}}&tipo_rep=act-pas">
+                                                        <i class="fa fa-table"></i> Cont. PCGA Activos-Pasivos</a>
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{funcionario}}&tipo_valor=Niif&tipo_rep=act-pas">
+                                                        <i class="fa fa-table"></i> Cont. NIIF Activos-Pasivos</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-modalcierrecontable [abrirModal]="modalCierre.asObservable()" (recargarListas)="listaCierres()">
+</app-modalcierrecontable>
+<app-modalplancuentas [abrirPlanesCuenta]="abrirPlanesCuenta"></app-modalplancuentas>

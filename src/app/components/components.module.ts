@@ -15,6 +15,7 @@ import { PipesModule } from '../core/pipes/pipes.module';
 import { NotDataComponent } from './not-data/not-data.component';
 import { ApplicantComponent } from './applicant/applicant.component';
 import { GetApusComponent } from './get-apus/get-apus.component';
+import { CabeceraComponent } from './cabecera/cabecera.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { GetApusComponent } from './get-apus/get-apus.component';
     NotDataComponent,
     ApplicantComponent,
     GetApusComponent,
+    CabeceraComponent,
   ],
   exports: [
     ModalBasicComponent,
@@ -36,6 +38,7 @@ import { GetApusComponent } from './get-apus/get-apus.component';
     NotDataComponent,
     ApplicantComponent,
     GetApusComponent,
+    CabeceraComponent
   ],
   imports: [
     NgbAccordionModule,

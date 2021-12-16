@@ -1,0 +1,46 @@
+<app-modal-basic #ModalCierreContable>
+    <div class="app-modal-header">
+        <h4 class="modal-title">Cierre de {{ modelCierre.Tipo_Cierre }}</h4>
+        <button type="button" class="close basic-close" (click)="ModalCierreContable.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCierre="ngForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Anio">Año: </label>
+                        <select name="Anio" id="Anio" [(ngModel)]="modelCierre.Anio" class="form-control form-control-sm" required>
+                <option value="">Seleccione Año</option>
+                <option value="{{ Anio-1 }}">{{ Anio-1 }}</option>
+                <option value="{{ Anio }}">{{ Anio }}</option>
+              </select>
+                    </div>
+                </div>
+                <div *ngIf="modelCierre.Tipo_Cierre == 'Mes'" class="col-md-6">
+                    <div class="form-group">
+                        <label for="Mes">Mes: </label>
+                        <select name="Mes" id="Mes" [(ngModel)]="modelCierre.Mes" class="form-control form-control-sm" required>
+                <option value="">Seleccione Mes</option>
+                <option *ngFor="let mes of meses; let i=index" [value]="i+1">{{ mes }}</option>
+              </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="Observaciones">Observaciones: </label>
+                        <textarea name="Observaciones" [(ngModel)]="modelCierre.Observaciones" id="Observaciones" rows="10" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="ModalCierreContable.hide()">Cancelar</button>
+            <button type="button" class="btn btn-outline-primary btn-rounded btn-sm" [disabled]="!FormCierre.valid">Guardar Cierre</button>
+        </div>
+    </div>
+</app-modal-basic>
+<!-- <swal #confirmacionGuardar></swal> -->

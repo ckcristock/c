@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="row pl-4">
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="mes">Mes</label>
+
+                    <select name="Mes" id="mes" class="form-control form-control-sm custom-select" [(ngModel)]="DepreciacionModel.Mes" (change)="setQueryParams()">
+              <option value="">Seleccione Mes</option>
+              <ng-container *ngFor="let mes of Meses; let i=index">
+                <option *ngIf="i <= (mesActual-1)" [value]="i+1">{{ mes }}</option>
+              </ng-container>
+              
+            </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="mes">Año</label>
+
+                    <select name="Year" id="year" class="form-control form-control-sm custom-select" [(ngModel)]="DepreciacionModel.Year" (change)="setQueryParams()">
+              <ng-container *ngFor="let year of Years">
+                <option [value]="year">{{ year }}</option>
+              </ng-container>            
+            </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="tipo">Tipo</label>
+                    <select name="Tipo" id="tipo" class="form-control form-control-sm custom-select" [(ngModel)]="DepreciacionModel.Tipo" (change)="setQueryParams()">
+              <option value="PCGA" selected>PCGA</option> 
+              <option value="NIIF">NIIF</option>
+            </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label style="display:block; margin: 0;" for="">&nbsp;</label>
+                    <a style="margin-top: 6px !important" class="btn btn-inverse btn-sm" [ngClass]="{'disabled': queryParams === ''}" href="{{enviromen.ruta}}php/depreciacion/vista_previa.php?{{queryParams}}" target="_blank"><i class="fa fa-eye"></i> Vista Previa</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-header" style="margin-top:0 !important;">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="pull-left">
+                        <button class="btn btn-rounded btn-primary btn-sm" style="display:flex; align-items:center;" (click)="guardar()">
+                <i class="ti-plus font-size-15 mr-2"></i> Contabilizar
+              </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<swal #alertSwal title="" text="" type=""></swal>
+<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>

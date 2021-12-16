@@ -17,4 +17,13 @@ export class NotasContablesService {
     return this.http.get(`${environment.base_url}/third-parties-list`);
   }
 
+  public tabular(event, ele) {
+    if (event.keyCode == 13) {
+      setTimeout(() => {
+        (document.getElementById(ele) as HTMLInputElement).focus();
+
+      }, 200);      
+    }
+  }
+
 }

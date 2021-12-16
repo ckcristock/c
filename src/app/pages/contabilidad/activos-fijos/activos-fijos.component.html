@@ -1,116 +1,188 @@
-<div class="row">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    <button class="btn btn-info btn-sm" style="float: right;" [routerLink]="['/contabilidad/crear']">Agregar Nuevo Activo Fijo</button>
-                    <h5>Activos Fijos</h5>
-                    <p>Todos los Activos Fijo de la Compañia</p>
-                    <div class="row mt-4">
-                        <div class="form-group col-md-2">
-                            <label class="custom-label col-form-label-sm" for="code">Filtro Código</label>
-                            <input type="text" class="form-control form-control-sm" id="code">
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Activos Fijos</h5>
+                            <span>Todos los Activos Fijos de la Compañía</span>
                         </div>
-                        <div class="form-group col-md-2">
-                            <label class="custom-label col-form-label-sm " for="name">Filtro name</label>
-                            <input type="text" class="form-control form-control-sm" id="name">
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label class="custom-label col-form-label-sm" for="assets_types">Tipo de Activo</label>
-                            <select class="form-control form-control-sm" id="assets_types">
-                                <option selected>Seleccione</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label class="custom-label col-form-label-sm" for="cost_pcga">Filtro Costo PCGA</label>
-                            <input type="number" class="form-control form-control-sm" id="cost_pcga">
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label class="custom-label col-form-label-sm" for="niif_cost">Filtro costo niif</label>
-                            <input type="number" class="form-control form-control-sm" id="niif_cost">
+                        <div class="col-md-6">
+                            <div class="pull-right">
+                                <div class="card-header-left">
+                                    <!-- <button type="button" class="pull-left btn btn-primary btn-sm" (click)="CrearActivoFijo()"><i
+                        class="fa fa-plus"></i>
+                      Agregar Nuevo Activo Fijo
+                    </button> -->
+                                    <button type="button" style="float: right;" class="pull-left btn btn-primary btn-sm" [routerLink]="['/contabilidad/activos-fijos-crear']"><i
+                                        class="fa fa-plus"></i>
+                                    Agregar Nuevo Activo Fijo
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <table class="table table-borderless table-striped">
-                    <thead class="bg-light">
-                        <tr>
-                            <th>Documento</th>
-                            <th>Nombre</th>
-                            <th>Tipo de Activo</th>
-                            <th>Centro Costo</th>
-                            <th>Costo PCGA(local)</th>
-                            <th>Costo NIIF</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let d of datos">
-                            <td> {{ d.document }} </td>
-                            <td> {{ d.name }} </td>
-                            <td> {{ d.assetsType }} </td>
-                            <td> {{ d.cost_center }} </td>
-                            <td> $ {{ d.cost_pgca }} </td>
-                            <td> $ {{ d.niif_cost }} </td>
-                            <td>
-                                <div class="text-center">
-                                    <div ngbDropdown class="dropdown-primary">
-                                        <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                            <i class="mdi mdi-chevron-down"></i>
-                                        </button>
-                                        <div ngbDropdownMenu>
-                                            <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank"><i
-                                                    class="fa fa-file-pdf-o"></i>Ver Contabilización PCGA</a>
-                                            <a class="dropdown-item waves-light waves-effect caja-botones">
-                                                <i class="fa fa-pencil"></i>Ver Contabilización NIIF</a>
-                                            <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/contabilidad/crear']">
-                                                <i class="fa fa-pencil"></i>Adición</a>
-                                            <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/contabilidad/ver']">
-                                                <i class="fa fa-pencil"></i>Ver</a>
-                                        </div>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped" style="font-size: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 110px !important;">Documento</th>
+                                        <th class="text-center" style="width: 150px !important;">Nombre</th>
+                                        <th class="text-center">Tipo de Activo</th>
+                                        <th class="text-center" style="width: 150px !important;">Centro Costo</th>
+                                        <th class="text-right">Costo PCGA(Local)</th>
+                                        <th class="text-right">Costo NIIF</th>
+                                        <th class="text-center" style="max-width: 70px; width: 70px !important;">Acciones</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="tabla-filtro" style="max-width: 110px; width: 110px !important;">
+                                            <input type="text" class="form-control input-sm " placeholder="Filtro Codigo" [(ngModel)]="Filtros.codigo" (change)="ConsultaFiltrada()">
+                                        </th>
+                                        <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
+                                            <input type="text" class="form-control input-sm " placeholder="Filtro Nombre" [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()">
+                                        </th>
+                                        <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
+                                            <select name="Id_Tipo_Activo_Fijo" id="tipo_activo" class="form-control form-control-sm custom-select" [(ngModel)]="Filtros.tipo" (change)="ConsultaFiltrada()">
+                                <option value="" selected>Seleccione tipo</option>
+                                <option *ngFor="let ta of TipoActivos" [value]="ta.Id_Tipo_Activo_Fijo">{{ta.Nombre_Tipo_Activo}}</option>
+                            </select>
+                                        </th>
+                                        <th class="tabla-filtro"></th>
+                                        <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
+                                            <input type="text" class="form-control input-sm" placeholder="Filtro costo pcga" [(ngModel)]="Filtros.costo_pcga" (change)="ConsultaFiltrada()">
+                                        </th>
+                                        <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
+                                            <input type="text" class="form-control input-sm" placeholder="Filtro costo niif" [(ngModel)]="Filtros.costo_niif" (change)="ConsultaFiltrada()">
+                                        </th>
+                                        <th class="tabla-filtro" style="max-width: 50px; width: 50px !important;"></th>
+                                    </tr>
+                                    <tr *ngIf="Cargando">
+                                        <td colspan="6" class="text-center">
+                                            <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                                            <span class="sr-only">Cargando...</span>
+                                            <h4>Cargando activos fijos...</h4>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="ActivosFijos.length == 0 && !Cargando">
+                                        <td colspan="6" class="text-center">
+                                            <i class="fa fa-exclamation-circle fa-5x"></i>
+                                            <h4>No hay datos para mostrar</h4>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="!Cargando">
+                                    <tr *ngFor="let af of ActivosFijos" [ngClass]="{'bg-danger': af.Estado == 'Anulada'}">
+                                        <td>{{af.Codigo}}</td>
+                                        <td>{{af.Nombre}}</td>
+                                        <td>{{af.Tipo_Activo}}</td>
+                                        <td class="text-center">{{af.Centro_Costo}}</td>
+                                        <td class="text-right">$ {{af.Costo_PCGA | number | puntos}}</td>
+                                        <td class="text-right">$ {{af.Costo_NIIF | number | puntos}}</td>
+                                        <td style="max-width: 70px !important; width: 70px !important;">
+                                            <div class="text-center">
+                                                <div ngbDropdown class="dropdown-primary">
+                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                    <div ngbDropdownMenu>
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}"
+                                                            target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion PCGA</a>
+
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}&tipo=Niif"
+                                                            target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion NIIF</a>
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/activofijo/crear']" [queryParams]="{Tipo: 'Adicion', AF: af.Id_Activo_Fijo}">
+                                                            <i class="fa fa-plus"></i> Adición</a>
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/activofijover',af.Id_Activo_Fijo]">
+                                                            <i class="fa fa-eye"></i> Ver</a>
+                                                        <a *ngIf="af.Estado != 'Anulada' && perfilUsuario == '27'" class="dropdown-item waves-light waves-effect caja-botones bg-danger" href="javascript:;" [swal]="confirmacionAnular" (click)="IdDocumento = af.Id_Activo_Fijo">
+                                                            <i class="fa fa-close"></i> Anular</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="paginacion-container" *ngIf="ActivosFijos.length > 0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
                                     </div>
                                 </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-                boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-            </ngb-pagination>
-        </div>
-    </div>
-    <!-- REPORTES -->
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    <h5>Reportes</h5>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="row mt-4">
-                    <div class="form-group col-md-6">
-                        <label class="custom-label" for="report_type">Tipo Reporte</label>
-                        <select class="form-control form-control-sm" id="report_type">
-                            <option selected>Seleccione</option>
-                        </select>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-header-left">
+                        <h5>Reportes</h5>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label class="custom-label" for="dates">Fechas</label>
-                        <input type="date" class="form-control form-control-sm" id="dates">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="custom-label" for="assets_types">Tipo Activo</label>
-                        <select class="form-control form-control-sm" id="assets_types">
-                            <option selected>Seleccione</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="custom-label" for="center_cost">Centro Costo</label>
-                        <select class="form-control form-control-sm" id="center_cost">
-                            <option selected>Seleccione</option>
-                        </select>
+
+                    <div class="card-body">
+                        <div class="row f-10">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tipo_reporte">
+                      Tipo Reporte
+                    </label>
+                                    <select name="tipo_reporte" id="tipo_reporte" [(ngModel)]="ReporteModel.Tipo_Reporte" class="form-control form-control-sm">
+                      <option value="Compras">Compras de un Periodo</option>
+                      <option value="Movimientos">Movimientos de un Periodo</option>
+                      <option value="Relacion">Relacion de Activos</option>
+                      <option value="Adiciones">Adiciones de Activos</option>
+                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fechas">
+                      Fechas
+                    </label>
+                                    <my-date-range-picker *ngIf="ReporteModel.Tipo_Reporte != 'Relacion'" name="mydaterange" [options]="myDateRangePickerOptions" (dateRangeChanged)="dateRangeChanged2($event)" placeholder="Rango Fechas"></my-date-range-picker>
+                                    <input *ngIf="ReporteModel.Tipo_Reporte == 'Relacion'" type="date" name="fechas" id="fechas" [(ngModel)]="ReporteModel.Fechas" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tipo_activo">Tipo Activo</label>
+                                    <ng-select id="tipo_activo" class="f-10" name="tipo_activo" [(ngModel)]="ReporteModel.Tipo_Activo" placeholder="Filtrar por Tipo de Activo" [items]="listaTipoActivo"></ng-select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="centro_costo">Centro Costo</label>
+                                <ng-select id="centro_costo" class="f-10" name="centro_costo" [(ngModel)]="ReporteModel.Centro_Costo" placeholder="Filtrar por Centro de Costo" [items]="listaCentroCosto"></ng-select>
+                            </div>
+                            <div *ngIf="ReporteModel.Fechas != ''" class="col-md-12">
+                                <button class="btn btn-sm btn-success btn-block" (click)="verReporte()"><i class="fa fa-table"></i> Descargar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
+<!-- <swal #confirmacionAnular [options]="alertOption"></swal> -->
+
+
+
+<!-- <swal #alertSwal title="" text="" type=""></swal> -->
+
+<ng-template #rt_tercero let-r="result" let-t="term">
+    <span class="f-9">
+        {{r.Nombre_Tercero}}
+    </span>
+</ng-template>

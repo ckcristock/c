@@ -15,6 +15,8 @@ type Person = { value: number, text: string };
 })
 export class DisciplinariosComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild('modalseguimiento') modalseguimiento: any;
+
   form: FormGroup;
   loading = false;
   process: any;
@@ -36,6 +38,7 @@ export class DisciplinariosComponent implements OnInit {
   fileString: any = '';
   file: any = '';
   type: any = '';
+
   constructor(
     private fb: FormBuilder,
     private _reactiveValid: ValidatorsService,
@@ -118,7 +121,6 @@ export class DisciplinariosComponent implements OnInit {
   onFileChanged(event) {
     if (event.target.files[0]) {
       let file = event.target.files[0];
-      console.log(file);
       const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
       if (!types.includes(file.type)) {
         Swal.fire({

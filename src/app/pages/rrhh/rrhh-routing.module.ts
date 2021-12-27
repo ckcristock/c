@@ -27,6 +27,8 @@ import { DotacionEntradasComponent } from './dotacion/dotaciones/dotacion-entrad
 import { DotacionSalidasComponent } from './dotacion/dotaciones/dotacion-salidas/dotacion-salidas.component';
 import { TableStockComponent } from './dotacion/dotaciones/table-stock/table-stock.component';
 import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/category-stock.component';
+import { DescargoComponent } from './procesos/disciplinarios/descargo/descargo.component';
+import { CerrarProcesoComponent } from './procesos/disciplinarios/cerrar-proceso/cerrar-proceso.component';
 
 
 
@@ -53,6 +55,8 @@ const routes: Routes = [
   { path: 'liquidado/:id', component: LiquidadosComponent },
   { path: 'contratos', component: ContratosComponent },
   { path: 'procesos/disciplinarios', component: DisciplinariosComponent },
+  { path: 'procesos/disciplinarios/cerrar/:id', component: CerrarProcesoComponent },
+  { path: 'procesos/disciplinarios/:id', component: DescargoComponent },
   { path: 'procesos/memorandos', component: MemorandosComponent },
   { path: 'certificados', component: CertificadosComponent },
   { path: 'fondo-empleado', component: FondoEmpleadoComponent },

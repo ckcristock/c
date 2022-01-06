@@ -27,6 +27,7 @@
                                 <thead>
                                     <tr>
                                         <th>Fecha</th>
+                                        <!-- <th>Empresa</th> -->
                                         <th>Documento</th>
                                         <th>Beneficiario</th>
                                         <th>Concepto</th>
@@ -42,6 +43,13 @@
                                         <th class="tabla-filtro">
                                             <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
                                         </th>
+                                        <!--  <th>
+                                            <select (change)="filtrar()" name="Id_Empresa" id="Id_Empresa" [(ngModel)]="filtros.Id_Empresa" class="form-control input-sm" placeholder="Filtro Empresa" required>
+                                                <option *ngFor="let item of companies" [value]="item.value">
+                                                    {{ item.text }}
+                                                </option>
+                                            </select>
+                                        </th> -->
                                         <th class="tabla-filtro">
                                             <input type="text" class="form-control input-sm " placeholder="Filtro Código" [(ngModel)]="filtros.codigo" (change)="filtrar()">
                                         </th>
@@ -49,7 +57,6 @@
                                             <input type="text" class="form-control input-sm" placeholder="Filtro Cliente" [(ngModel)]="filtros.tercero" (change)="filtrar()">
                                         </th>
                                         <th class="tabla-filtro">
-
 
                                         </th>
                                         <th class="tabla-filtro">
@@ -65,10 +72,10 @@
                                         <th class="tabla-filtro"></th>
                                         <th class="tabla-filtro">
                                             <select class="form-control input-sm" [(ngModel)]="filtros.estado" (change)="filtrar()">
-                              <option value="">Todas</option>
-                              <option value="Activo">Activas</option>
-                              <option value="Anulada">Anuladas</option>
-                            </select>
+                                            <option value="">Todas</option>
+                                            <option value="Activo">Activas</option>
+                                            <option value="Anulada">Anuladas</option>
+                                            </select>
                                         </th>
                                         <th class="tabla-filtro"></th>
                                     </tr>
@@ -90,6 +97,7 @@
                                     </tr>
                                     <tr *ngFor="let item of NotasContables" [ngClass]="{'bg-danger': item.Estado == 'Anulada'}">
                                         <td>{{item.Fecha}}</td>
+                                        <!-- <td> {{ item.Empresa }} </td> -->
                                         <td>{{item.Codigo}}</td>
                                         <td>{{item.Beneficiario}} - {{item.Tercero}}</td>
                                         <td>{{item.Concepto}}</td>
@@ -102,7 +110,9 @@
                                         <td>
                                             <div class="text-center">
                                                 <div ngbDropdown class="dropdown-primary">
-                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                    <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
                                                     <div ngbDropdownMenu>
                                                         <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envirom.ruta}}php/contabilidad/notascontables/descarga_pdf.php?id={{item.Id_Documento_Contable}}" target="_blank">
                                                             <i class="fa fa-print"></i> Ver PCGA</a>
@@ -115,7 +125,6 @@
                                             </div>
                                         </td>
                                     </tr>
-
                                 </tbody>
                             </table>
                             <span class="text-center">
@@ -130,4 +139,4 @@
     </div>
 </div>
 
-<!-- <swal #confirmacionAnular [options]="alertOption"></swal> -->
+<swal #confirmacionAnular [swalOptions]="alertOption"></swal>

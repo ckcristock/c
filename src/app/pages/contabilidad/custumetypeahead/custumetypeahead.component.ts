@@ -2,7 +2,10 @@ import { Component, OnInit, SimpleChanges, Input, Output, EventEmitter } from '@
 import { CustometypeaheadService } from './custometypeahead.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-custumetypeahead',
@@ -15,12 +18,18 @@ export class CustumetypeaheadComponent implements OnInit {
     if(changes.Campo.currentValue!=undefined){
  
       this.Model=changes.Campo.currentValue
+      // console.log(this.Ruta);
+      this.datosObtenidos();
     }
    }
  
    public Model:any='';
    public Id:any='';
-   constructor( private _custome:CustometypeaheadService, private swalService: SwalService) { }
+   datos:any[] = [];
+   constructor( 
+                private _custome:CustometypeaheadService, private swalService: SwalService,
+                private http: HttpClient
+              ) { }
    @Input() Modelo;
    @Input() Ruta;
    @Input() Campo;
@@ -30,15 +39,31 @@ export class CustumetypeaheadComponent implements OnInit {
    search_tercero = (text$: Observable<string>) =>
    text$
    .pipe(
-     debounceTime(200),
+    debounceTime(200),
+    map(term => term.length < 4 ? []
+        : 
+        this.datos.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10)
+        )
+     /* debounceTime(200),
      distinctUntilChanged(),
      switchMap( term => term.length <= 2 ? [] :
-       this._custome.Filtrar(term,this.Ruta)
+       this.Filtrar(term,this.Ruta)
        .map(response => response)
-     )
+     ) */
    );
  
  formatter_tercero = (x: { Nombre: string }) => x.Nombre;
+
+  datosObtenidos(){
+    this.Filtrar().subscribe((data:any) => {
+      this.datos = data;
+    })
+  }
+
+ Filtrar():Observable<any>{
+  // let p = {coincidencia:match};
+  return this.http.get(environment.ruta+this.Ruta);
+}
  
  AsignarId(){  
    if (typeof(this.Model) == 'object') {
@@ -55,14 +80,13 @@ export class CustumetypeaheadComponent implements OnInit {
  
  validarCampo(campo, event, tipo) { // Funcion que validará los campos de typeahead
    if (typeof(campo) != 'object' && campo != '') {
-     let id = event.target.id;
-     (document.getElementById(id) as HTMLInputElement).focus();
-     let swal = {
+    //  let id = event.target.id;
+     Swal.fire({
        icon: 'error',
-       titulo: 'Incorrecto!',
-       mensaje: `El valor ${tipo} no es valido.`
-     };
-     this.swalService.ShowMessage(swal);
+       title: 'Incorrecto!',
+       text: `El valor ${tipo} no es valido.`
+     })
+    //  this.swalService.ShowMessage(swal);
    }
  }
 

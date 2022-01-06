@@ -10,7 +10,9 @@ import { HttpClient } from '@angular/common/http';
 import { SwalService } from '../../../../ajustes/informacion-base/services/swal.service';
 import swal from 'sweetalert2';
 import { CierrecontableService } from '../../../cierres-contables/cierrecontable.service';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from 'src/environments/environment';
+import { PlanCuentasService } from '../../../plan-cuentas/plan-cuentas.service';
+import Swal from 'sweetalert2';
 type centerCost = { value: number; text: string };
 type third = { name: string };
 
@@ -118,13 +120,16 @@ export class CrearNotaContableComponent implements OnInit {
   public Codigo:string = '';
   public Total_Abono:number = 0;
   public Datos_Invalidos:any = false;
+  Id_Empresa:any = '';
+  companies:any[] = [];
   constructor( 
                 private route: ActivatedRoute, 
                 private http: HttpClient, 
                 private router: Router, 
                 private swalService: SwalService, 
                 private _notasContables: NotasContablesService,
-                private _general: CierrecontableService
+                private _general: CierrecontableService,
+                private _company: PlanCuentasService
                 ) {
     
     let queryParams = this.route.snapshot.queryParams;
@@ -155,7 +160,7 @@ export class CrearNotaContableComponent implements OnInit {
       confirmButtonText: 'Si, Guardar',
       showLoaderOnConfirm: true,
       focusCancel: true,
-      // type: 'info',
+      icon: 'info',
       input: 'select',
       inputOptions: {
         Pcga: 'Imprimir en PCGA',
@@ -210,6 +215,7 @@ export class CrearNotaContableComponent implements OnInit {
       this.getCodigoNuevaNota();
 
       this.ListarRetenciones();
+      // this.ListasEmpresas();
 
     }
   BuscarProveedor(modelo) {
@@ -229,6 +235,12 @@ export class CrearNotaContableComponent implements OnInit {
     }
     
   }
+
+/*   ListasEmpresas(){
+    this._company.getCompanies().subscribe((data:any) => {
+      this.companies = data.data;
+    })
+  } */
 
   getDatosTercero(nit) {
     return this.Cliente.find(x => x.ID == nit);
@@ -253,7 +265,7 @@ export class CrearNotaContableComponent implements OnInit {
   BuscarCuenta(cuenta, pos){
    let pos2=pos+1;
 
-      console.log("Model Cuenta --> ",cuenta);
+      // console.log("Model Cuenta --> ",cuenta);
       
       if (cuenta.Centro_Costo == 'S') { // Validar si la cuenta es para Centro de costos o no.
         this.Cuentas_Contables[pos].Centro_Costo = this.Nom_Centro_Costo;
@@ -351,7 +363,7 @@ export class CrearNotaContableComponent implements OnInit {
   guardarNotaContable(Formulario:NgForm, tipo) {
 
     let info = JSON.stringify(Formulario.value);
-
+    console.log(info);
     let datos = new FormData(); 
 
     datos.append('Datos', info);
@@ -361,8 +373,8 @@ export class CrearNotaContableComponent implements OnInit {
  
       this.confirmacionSwal.title =data.titulo;
       this.confirmacionSwal.text = data.mensaje;
-      this.confirmacionSwal.type = data.tipo;
-      this.confirmacionSwal.show();
+      this.confirmacionSwal.icon = data.tipo;
+      this.confirmacionSwal.fire();
 
       if (data.tipo == 'success' && data.id != undefined) {
         if (tipo == 'Pcga') { 
@@ -372,15 +384,15 @@ export class CrearNotaContableComponent implements OnInit {
         }
         setTimeout(() => {
         
-          this.router.navigate(['/comprobante/notascontables']);
+          this.router.navigate(['/comprobantes/notas-contables']);
         }, 1000);
       }
       
     }, error => {
       this.confirmacionSwal.text = "Ha ocurrido un error inesperado, la conexión a fallado.";
       this.confirmacionSwal.title = "Oops!";
-      this.confirmacionSwal.type = "error";
-      this.confirmacionSwal.show();
+      this.confirmacionSwal.icon = "error";
+      this.confirmacionSwal.fire();
     });
     
   }
@@ -611,12 +623,12 @@ export class CrearNotaContableComponent implements OnInit {
     if (typeof(campo) != 'object' && campo != '') {
       let id = event.target.id;
       (document.getElementById(id) as HTMLInputElement).focus();
-      let swal = {
-        codigo: 'error',
-        titulo: 'Incorrecto!',
-        mensaje: `El valor ${tipo} no es valido.`
-      };
-      this.swalService.ShowMessage(swal);
+      Swal.fire({
+        icon: 'error',
+        title: 'Incorrecto!',
+        text: `El valor ${tipo} no es valido.`
+      });
+      // this.swalService.ShowMessage(swal);
     }
   }
 
@@ -627,12 +639,12 @@ export class CrearNotaContableComponent implements OnInit {
     if (abono > saldo) { // Validando que el abono no pueda ser mayor al saldo de una factura de cartera.
       let id = event.target.id;
       (document.getElementById(id) as HTMLInputElement).focus();
-      let swal = {
-        codigo: 'error',
-        titulo: 'Incorrecto!',
-        mensaje: `El valor del abono no puede ser mayor al saldo de la factura.`
-      };
-      this.swalService.ShowMessage(swal);
+      Swal.fire({
+        icon: 'error',
+        title: 'Incorrecto!',
+        text: `El valor del abono no puede ser mayor al saldo de la factura.`
+      });
+      // this.swalService.ShowMessage(swal);
     }
 
     setTimeout(() => {
@@ -680,12 +692,12 @@ export class CrearNotaContableComponent implements OnInit {
       }, 300);
     }, error => {
       this.Cargando = false;
-      let swal = {
-        codigo: 'warning',
-        titulo: 'Oops!',
-        mensaje: "Se perdió la conexión a internet. Por favor vuelve a intentarlo."
-      };
-      this.swalService.ShowMessage(swal);
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops!',
+        text: "Se perdió la conexión a internet. Por favor vuelve a intentarlo."
+      });
+      // this.swalService.ShowMessage(swal);
     })
   }
 
@@ -724,7 +736,7 @@ export class CrearNotaContableComponent implements OnInit {
         Id_Borrador_Contabilidad: this.idBorrador,
         Codigo: this.Codigo,
         Tipo_Comprobante: 'Nota Contable',
-        Identificacion_Funcionario: this.Funcionario.Identificacion_Funcionario,
+        // Identificacion_Funcionario: this.Funcionario.Identificacion_Funcionario,
         Datos: Datos
       }
   

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SweetAlertOptions } from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { SwalService } from '../../../../ajustes/informacion-base/services/swal.service';
@@ -7,7 +7,8 @@ import swal from 'sweetalert2';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from 'src/environments/environment';
+import { PlanCuentasService } from '../../../plan-cuentas/plan-cuentas.service';
 
 @Component({
   selector: 'app-comprobanteingresocrear',
@@ -42,6 +43,7 @@ export class ComprobanteingresocrearComponent implements OnInit {
   public Nom_Cliente:any;
   public Id_Cliente = '';
   public Cliente = [];
+  public Id_Empresa = '';
   // public Funcionario=JSON.parse(localStorage.getItem("User"));
   public Cuenta=[];
   public Cuentas: Array<any>;
@@ -94,8 +96,15 @@ export class ComprobanteingresocrearComponent implements OnInit {
   public Total_Debito:number = 0;
   public Total_Credito:number = 0;
   public Valor_Devoluciones:number = 0;
+  companies:any[] = [];
 
-  constructor( private route: ActivatedRoute, private http: HttpClient, private router: Router, private _swalService:SwalService) {
+  constructor( 
+                private route: ActivatedRoute, 
+                private http: HttpClient, 
+                private router: Router, 
+                private _swalService:SwalService,
+                private _companies: PlanCuentasService
+              ) {
 
     let queryParams = this.route.snapshot.queryParams;
 
@@ -127,7 +136,7 @@ export class ComprobanteingresocrearComponent implements OnInit {
       confirmButtonText: 'Si, Guardar',
       showLoaderOnConfirm: true,
       focusCancel: true,
-      // type: 'info',
+      icon: 'info',
       input: 'select',
       inputOptions: {
         Pcga: 'Imprimir en PCGA',
@@ -157,6 +166,7 @@ export class ComprobanteingresocrearComponent implements OnInit {
     );
 formatter1 = (x: { Codigo: string }) => x.Codigo;
     ngOnInit() {
+      // this.ListasEmpresas();
       this.http.get(environment.ruta + 'php/comprobantes/lista_cliente.php').subscribe((data: any) => {
         this.Cliente = data;
       });
@@ -182,7 +192,13 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
     this.NombreProveedor = modelo.Proveedores;
     this.Id_Proveedor = modelo.Id_Proveedor;
   }
-
+/* 
+  ListasEmpresas(){
+    this._companies.getCompanies().subscribe((data:any) => {
+      this.companies = data.data;
+    })
+  }
+ */
   BuscarDatosCliente(cliente) {
     this.Id_Cliente=cliente.Id_Cliente;
     this.ListaFact = [];
@@ -209,8 +225,8 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
           } else {
             this.confirmacionSwal.title = "Sin Facturas!";
             this.confirmacionSwal.text = `${this.Nom_Cliente.Nombre} no tiene facturas asociadas.`;
-            this.confirmacionSwal.type = "info";
-            this.confirmacionSwal.show();
+            this.confirmacionSwal.icon = "info";
+            this.confirmacionSwal.fire();
             $('input[type=radio]').prop('checked', false);
           }
 
@@ -219,8 +235,8 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
       } else {
         this.confirmacionSwal.title = "Faltan datos!";
         this.confirmacionSwal.text = `No se ha seleccionado el Cliente, por favor revisar.`;
-        this.confirmacionSwal.type = "error";
-        this.confirmacionSwal.show();
+        this.confirmacionSwal.icon = "error";
+        this.confirmacionSwal.fire();
         $('input[type=radio]').prop('checked', false);
       }
 
@@ -263,8 +279,8 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
       }else{
         this.confirmacionSwal.title = "Faltan datos!";
         this.confirmacionSwal.text = `No se ha seleccionado el Cliente o un banco, por favor revise.`;
-        this.confirmacionSwal.type = "error";
-        this.confirmacionSwal.show();
+        this.confirmacionSwal.icon = "error";
+        this.confirmacionSwal.fire();
         $('input[type=radio]').prop('checked', false);
       }
     }
@@ -425,9 +441,9 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
       });
     } else {
       this.confirmacionSwal.title = 'Advertencia!';
-      this.confirmacionSwal.type = 'warning';
+      this.confirmacionSwal.icon = 'warning';
       this.confirmacionSwal.text = 'No puedes agregar más descuentos en esta factura.';
-      this.confirmacionSwal.show();
+      this.confirmacionSwal.fire();
     }
 
   }
@@ -557,7 +573,6 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
   }
 
   guardarComprobante(Formulario:NgForm, tipo) {
-
     let info = JSON.stringify(Formulario.value);
 
     let datos = new FormData();
@@ -571,8 +586,8 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
 
       this.confirmacionSwal.title =data.titulo;
       this.confirmacionSwal.text = data.mensaje;
-      this.confirmacionSwal.type = data.tipo;
-      this.confirmacionSwal.show();
+      this.confirmacionSwal.icon = data.tipo;
+      this.confirmacionSwal.fire();
 
       if (data.tipo == 'success' && data.id != undefined) {
         window.open(environment.ruta+'php/comprobantes/comprobantes_pdf.php?id='+data.id+'&tipo='+Formulario.value.Tipo,'_blank');
@@ -597,8 +612,8 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
     if (parseFloat(valor) > parseFloat(this.Lista_Facturas[pos].Por_Pagar)) {
       this.confirmacionSwal.title ="Error!";
       this.confirmacionSwal.text = "El valor no puede ser superior al valor que se corresponde pagar.";
-      this.confirmacionSwal.type = "error";
-      this.confirmacionSwal.show();
+      this.confirmacionSwal.icon = "error";
+      this.confirmacionSwal.fire();
       this.Lista_Facturas[pos].ValorIngresado = this.Lista_Facturas[pos].Por_Pagar;
     }
   }
@@ -658,8 +673,8 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
       this.Cargando = false;
       this.confirmacionSwal.title = "Oops!";
       this.confirmacionSwal.text = "Se perdió la conexión a internet. Por favor vuelve a intentarlo.";
-      this.confirmacionSwal.type = "warning";
-      this.confirmacionSwal.show();
+      this.confirmacionSwal.icon = "warning";
+      this.confirmacionSwal.fire();
     })
   }
 
@@ -678,12 +693,12 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
     if (typeof(campo) != 'object' && campo != '') {
       let id = event.target.id;
       (document.getElementById(id) as HTMLInputElement).focus();
-      let swal = {
-        codigo: 'error',
-        titulo: 'Incorrecto!',
-        mensaje: `El valor ${tipo} no es valido.`
-      };
-      this._swalService.ShowMessage(swal);
+      Swal.fire({
+        icon: 'error',
+        title: 'Incorrecto!',
+        text: `El valor ${tipo} no es valido.`
+      });
+      // this._swalService.ShowMessage(swal);
     }
   }
 

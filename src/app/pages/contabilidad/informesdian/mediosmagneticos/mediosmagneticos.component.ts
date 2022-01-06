@@ -5,6 +5,7 @@ import { SwalService } from '../../../ajustes/informacion-base/services/swal.ser
 import { Router } from '@angular/router';
 import swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mediosmagneticos',
@@ -62,21 +63,21 @@ export class MediosmagneticosComponent implements OnInit {
     let p = {id: this.IdMedioMag};
 
     this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/eliminar_mediomagnetico.php', {params: p}).subscribe((data:any)=> {
-      let swal = {
-        codigo: data.tipo,
-        titulo: data.titulo,
-        mensaje: data.mensaje
-      };
-      this.swalService.ShowMessage(swal);
+      Swal.fire({
+        icon: data.tipo,
+        title: data.titulo,
+        text: data.mensaje
+      });
+      // this.swalService.ShowMessage(swal);
 
       this.getListaMediosMag();
     }, error => {
-      let swal = {
-        codigo: 'warning',
-        mensaje: 'Se perdió la conexión a internet. Por favor vuelve a intentarlo',
-        titulo: 'Oops!'
-      };
-      this.swalService.ShowMessage(swal);
+      Swal.fire({
+        icon: 'warning',
+        title: 'Se perdió la conexión a internet. Por favor vuelve a intentarlo',
+        text: 'Oops!'
+      });
+      // this.swalService.ShowMessage(swal);
     })
   }
 

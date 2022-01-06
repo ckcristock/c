@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 import { Globales } from '../../globales';
 import { HttpClient } from '@angular/common/http';
 import { CertificadoRetencionModel } from '../certificadoretencion/CertificadoRetencionModel';
@@ -20,29 +20,24 @@ export class CertificadoingresoyretencionComponent implements OnInit {
   public CertificadoRetencionModel: CertificadoRetencionModel = new CertificadoRetencionModel();
   public TerceroSeleccionado:any;
   queryParams: string;
+  private _rutaBase:string = environment.ruta+'php/terceros/';
+  terceros:any[] = [];
   
   constructor(private globales: Globales, private http: HttpClient) { }
 
   ngOnInit() {
+    this.FiltrarTerceros().subscribe((data:any) => {
+      this.terceros = data;
+    })
   }
 
   search_tercero = (text$: Observable<string>) =>
-  text$
-  .pipe(
-    debounceTime(500),
-    distinctUntilChanged(),
-    switchMap( term => term.length < 4 ? [] :
-      this.FiltrarTerceros(term)
-      .map(response => response)
-    )
+  text$.pipe(
+    debounceTime(200),
+    map(term => term.length < 4 ? []
+      : this.terceros.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
   );
-
-formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
-
-FiltrarTerceros(match:string):Observable<any>{
-  let p = {coincidencia:match};
-  return this.http.get(environment.ruta+'filtrar_terceros.php', {params:p});
-}
+  formatter_tercero = (x: { Nombre: string }) => x.Nombre;
 
 AsignarTercero(model){
     
@@ -57,6 +52,11 @@ AsignarTercero(model){
 
   this.setQueryParams();
 
+}
+
+FiltrarTerceros():Observable<any>{
+  // let p = {coincidencia:match};
+  return this.http.get(this._rutaBase+'filtrar_terceros.php');
 }
 
 setQueryParams() {

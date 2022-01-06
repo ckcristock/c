@@ -6,7 +6,7 @@ import swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../../globales';
-import { SweetAlertOptions } from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -18,7 +18,7 @@ export class NotascreditocrearComponent implements OnInit {
   enviromen:any;
 
   public Tipo_Factura = [
-    {Nombre:'Factura Dispensación',Modulo:'Factura'},
+    // {Nombre:'Factura Dispensación',Modulo:'Factura'},
     {Nombre:'Factura Capita',Modulo:'Factura_Capita'},
     {Nombre:'Factura Venta',Modulo:'Factura_Venta'},
     {Nombre:'Factura Administrativa',Modulo:'Factura_Administrativa'}
@@ -82,7 +82,7 @@ export class NotascreditocrearComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.User);
+    // this.user = JSON.parse(localStorage.User);
     this.enviromen = environment
   
     this.http.get(environment.ruta+'php/lista_generales.php',{ params: { modulo: 'Causal_No_Conforme'}}).subscribe((data:any)=>{
@@ -142,6 +142,7 @@ export class NotascreditocrearComponent implements OnInit {
     this.TipoClienteSelected='';
     this.http.get(environment.ruta+'php/lista_generales.php',{ params: { modulo: 'Cliente'} }).subscribe((data:any)=>{
       this.Cliente= data;
+      console.log(data);
     });
     
   }
@@ -179,10 +180,15 @@ export class NotascreditocrearComponent implements OnInit {
             //buscar productos de la factura  
             this.BuscarProductosFactura(data.Factura.Id_Factura);
           }else{
-            this.confirmacionSwal.title=data.title;
+            Swal.fire({
+              icon: data.tipo,
+              text: data.mensaje,
+              title: data.title
+            })
+            /* this.confirmacionSwal.title=data.title;
             this.confirmacionSwal.text= data.mensaje;
             this.confirmacionSwal.type= data.tipo;
-            this.confirmacionSwal.show();
+            this.confirmacionSwal.fire(); */
             this.Codigo_Factura='';
           }
         });
@@ -233,10 +239,15 @@ export class NotascreditocrearComponent implements OnInit {
     
     let productos_seleccionados=this.Lista_Productos.filter(producto=>producto.Disabled==false);
     if (productos_seleccionados.length==0) {
-      this.confirmacionSwal.title="Operación denegada";
+      Swal.fire({
+        icon: 'error',
+        title: 'Operación denegada',
+        text: 'Debe agregar al menos un producto para realizar la nota crédito'
+      })
+      /* this.confirmacionSwal.title="Operación denegada";
       this.confirmacionSwal.text= "Debe agregar al menos un producto para realizar la nota crédito";
-      this.confirmacionSwal.type= "error";
-      this.confirmacionSwal.show();
+      this.confirmacionSwal.icon= "error";
+      this.confirmacionSwal.fire(); */
       return false;
     } 
  
@@ -271,15 +282,25 @@ export class NotascreditocrearComponent implements OnInit {
     
     this.http.post(environment.ruta + 'php/notas_credito_nuevo/guardar_nota_credito.php', datos).subscribe((data: any) => { 
       if (data.tipo=='success') {
-        this.finalizacionSwal.title = data.title;
+        Swal.fire({
+          icon: data.tipo,
+          text: data.mensaje,
+          title: data.title
+        })
+        /* this.finalizacionSwal.title = data.title;
         this.finalizacionSwal.text = data.mensaje;
         this.finalizacionSwal.icon = data.tipo;
-        this.finalizacionSwal.show();
+        this.finalizacionSwal.show(); */
       }else{
-        this.confirmacionSwal.title = data.title;
+        Swal.fire({
+          icon: data.tipo,
+          text: data.mensaje,
+          title: data.title
+        })
+        /* this.confirmacionSwal.title = data.title;
         this.confirmacionSwal.text = data.mensaje;
         this.confirmacionSwal.type = data.tipo;    
-        this.confirmacionSwal.show();
+        this.confirmacionSwal.show(); */
       }
 
      });
@@ -349,10 +370,15 @@ export class NotascreditocrearComponent implements OnInit {
       item.Precio_Nota = 0;
       item.Valor_Nota = 0;
       item.Valor_Nota_Total=0;
-      this.confirmacionSwal.title="Error en precio ingresado";
+      Swal.fire({
+        title: 'Error en precio ingresado',
+        icon: 'error',
+        text: 'El precio del producto no puede ser mayor que el subtotal sin Iva.',
+      })
+      /* this.confirmacionSwal.title="Error en precio ingresado";
       this.confirmacionSwal.text= "El precio del producto no puede ser mayor que el subtotal sin Iva.";
       this.confirmacionSwal.type= "error";
-      this.confirmacionSwal.show();
+      this.confirmacionSwal.show(); */
     }
 
     this.calcularTotal();
@@ -362,6 +388,11 @@ export class NotascreditocrearComponent implements OnInit {
   validarCliente(){
     if (typeof(this.DatosCliente)!='object') {
       this.DatosCliente='';
+      Swal.fire({
+        icon: 'warning',
+        title: 'Cliente incorrecto',
+        text: 'El cliente que has ingresado es incorrecto.'
+      })
     }
 
     this.FacturaCliente =[];

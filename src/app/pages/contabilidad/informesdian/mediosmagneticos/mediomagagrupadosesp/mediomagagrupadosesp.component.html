@@ -47,11 +47,13 @@
                                         <td style="width: 60px">
                                             <div class="text-center">
                                                 <div ngbDropdown class="dropdown-primary">
-                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
                                                     <div ngbDropdownMenu>
                                                         <a class="dropdown-item waves-light waves-effect caja-botones" href="{{enviromen.ruta}}php/contabilidad/mediosmagneticos/reporte_formatos_agrupados.php?id={{item.Id}}" target="_blank">
                                                             <i class="fa fa-table"></i> Reporte</a>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/informesdian/agruparmediosmagneticos/editar', item.Id]">
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/contabilidad/informesdian/agruparmediosmagneticos/editar', item.Id]">
                                                             <i class="fa fa-pencil"></i> Editar</a>
                                                         <a class="dropdown-item waves-light waves-effect caja-botones bg-danger" [swal]="confirmacionEliminar" (click)="IdMedioMag = item.Id">
                                                             <i class="fa fa-trash"></i> Eliminar</a>

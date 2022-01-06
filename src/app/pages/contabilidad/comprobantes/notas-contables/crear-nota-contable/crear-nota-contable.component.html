@@ -11,14 +11,24 @@
                     <form #FormNotaContable="ngForm">
                         <input type="hidden" name="Id_Borrador" [(ngModel)]="idBorrador">
                         <div class="row invoive-info" style="margin-bottom: 0; padding-bottom: 0px;">
-                            <div class=" col-md-2  ">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Fecha</label>
                                     <input type="date" name="Fecha_Documento" id="Fecha_Nota_Contable" [(ngModel)]="Fecha_Nota_Contable" class="form-control form-control-sm tab" (keyup)="tab($event,'Cliente')" (change)="getCodigoNuevaNota($event.target.value)" required>
                                 </div>
 
                             </div>
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Empresa</label>
+                                    <select [(ngModel)]="Id_Empresa" name="Id_Empresa" id="Id_Empresa" class="form-control form-control-sm" required>
+                                        <option *ngFor="let item of companies" [value]="item.value">
+                                            {{ item.text }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div class="col-md-2">
 
                                 <div class="form-group">
                                     <label>Beneficiario Documento</label>
@@ -301,12 +311,12 @@
             <div class="row">
                 <div class="col-md-8"></div>
                 <div class="col-md-2 botonFlotante1">
-                    <button href="" [routerLink]="['/contabilidad/comprobantes/notas-contables']" type="button" class="btn btn-success btn-block btn-enviar ">
+                    <button [routerLink]="['/contabilidad/comprobantes/notas-contables']" type="button" class="btn btn-success btn-block btn-enviar ">
                   Volver
               </button>
                 </div>
                 <div class="col-md-2 botonFlotante">
-                    <button type="button" class="btn btn-success btn-block btn-enviar" [disabled]="( ( Total_Debito != Total_Credito ) || ( Total_Debito_Niif != Total_Credito_Niif ) || Datos_Invalidos )">
+                    <button type="button" class="btn btn-success btn-block btn-enviar" [swal]="confirmacionGuardar">
                   Guardar
               </button>
                 </div>
@@ -320,9 +330,9 @@
     <span class="f-9"><strong>{{ r.Nombre }}</strong>
   </span>
 </ng-template>
-<!-- <swal #confirmacionSwal title="" text="" type=""></swal> -->
+<swal #confirmacionSwal title="" text="" type=""></swal>
 
-<!-- <swal #confirmacionGuardar [options]="alertOption"></swal> -->
+<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
 
 
 <ng-template #rt1 let-r="result" let-t="term">

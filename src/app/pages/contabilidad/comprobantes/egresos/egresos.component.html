@@ -43,6 +43,13 @@
                                         <th class="tabla-filtro">
                                             <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
                                         </th>
+                                        <!-- <th>
+                                            <select (change)="filtros()" name="Id_Empresa" id="Id_Empresa" [(ngModel)]="filtro_empresa" class="form-control input-sm" placeholder="Filtro Empresa" required>
+                                                <option *ngFor="let item of companies" [value]="item.value">
+                                                    {{ item.text }}
+                                                </option>
+                                            </select>
+                                        </th> -->
                                         <th class="tabla-filtro">
                                             <input type="text" class="form-control input-sm " placeholder="Filtro Código" [(ngModel)]="filtro_codigo" (change)="filtros()">
                                         </th>
@@ -67,10 +74,10 @@
                                         <th class="tabla-filtro"></th>
                                         <th class="tabla-filtro">
                                             <select class="form-control input-sm" [(ngModel)]="filtro_estado" (change)="filtros()">
-                          <option value="">Todas</option>
-                          <option value="Activo">Activas</option>
-                          <option value="Anulada">Anuladas</option>
-                        </select>
+                                                <option value="">Todas</option>
+                                                <option value="Activo">Activas</option>
+                                                <option value="Anulada">Anuladas</option>
+                                            </select>
                                         </th>
                                         <th class="tabla-filtro"></th>
                                     </tr>
@@ -97,11 +104,13 @@
                                         <td style="max-width: 70px !important; width: 70px !important;">
                                             <div class="text-center">
                                                 <div ngbDropdown class="dropdown-primary">
-                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
                                                     <div ngbDropdownMenu>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}/php/comprobantes/egreso_descarga_pdf.php?id={{comprobante.Id_Documento_Contable}}" target="_blank">
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{enviromen.ruta}}/php/comprobantes/egreso_descarga_pdf.php?id={{comprobante.Id_Documento_Contable}}" target="_blank">
                                                             <i class="fa fa-print"></i> Ver PCGA</a>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}/php/comprobantes/egreso_descarga_pdf.php?id={{comprobante.Id_Documento_Contable}}&tipo=Niif" target="_blank">
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{enviromen.ruta}}/php/comprobantes/egreso_descarga_pdf.php?id={{comprobante.Id_Documento_Contable}}&tipo=Niif" target="_blank">
                                                             <i class="fa fa-print"></i> Ver NIIF</a>
                                                         <a *ngIf="comprobante.Estado != 'Anulada' && perfilUsuario == '27'" class="dropdown-item waves-light waves-effect caja-botones bg-danger" href="javascript:;" [swal]="confirmacionAnular" (click)="IdDocumento = comprobante.Id_Documento_Contable">
                                                             <i class="fa fa-close"></i> Anular</a>
@@ -113,14 +122,12 @@
                                 </tbody>
                             </table>
                             <div id="paginacion-container" *ngIf="Comprobantes.length > 0">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+                                <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="filtros(true)" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                                <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+                                <!-- <div class="row">
+                                    <div class="col">
                                     </div>
-                                    <div class="col-md-9">
-                                        <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="filtros(true)" [boundaryLinks]="true"></ngb-pagination>
-                                    </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -135,9 +142,9 @@
     </span>
 </ng-template>
 
-<!-- <swal #confirmacionAnular [options]="alertOption"></swal> -->
+<swal #confirmacionAnular [swalOptions]="alertOption"></swal>
 
-<!-- <swal #alertSwal title="" html="" type=""></swal> -->
+<swal #alertSwal title="" html="" type=""></swal>
 <ng-template #rt let-r="result" let-t="term">
     <span class="f-9">{{ r.Nombre }} </span>
 </ng-template>

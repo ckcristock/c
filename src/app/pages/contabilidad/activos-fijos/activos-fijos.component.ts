@@ -1,14 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { SweetAlertOptions } from 'sweetalert2';
-import { IMyDrpOptions } from 'mydaterangepicker';
-import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
-import { HttpClient } from '@angular/common/http';
-import { ActivosFijosService } from './activos-fijos.service';
-import { ActivoFijoModel } from './activo-fijo-model';
 import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import swal from 'sweetalert2';
+import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
+import { isThisTypeNode } from 'typescript';
+import { ActivoFijoModel } from './activo-fijo-model';
+import swal,{ SweetAlertOptions } from 'sweetalert2';
+import { IMyDrpOptions } from 'mydaterangepicker';
+import { HttpClient } from '@angular/common/http';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
+import { ActivosFijosService } from './activos-fijos.service';
+import { NgOption } from '@ng-select/ng-select';
+import { environment } from 'src/environments/environment';
+import { CentroCostosService } from '../centro-costos/centro-costos.service';
 
 @Component({
   selector: 'app-activos-fijos',
@@ -31,7 +33,8 @@ export class ActivosFijosComponent implements OnInit {
     codigo:'',
     tipo:'',
     costo_niif:'',
-    costo_pcga:''
+    costo_pcga:'',
+    Id_Empresa: ''
   };
 
 
@@ -105,11 +108,12 @@ export class ActivosFijosComponent implements OnInit {
   };
   public listaTipoActivo: Array<any>;
   public listaCentroCosto: Array<any>;
-
+  companies:any[] = [];
   constructor(
               private swalService: SwalService,
               private http: HttpClient,
-              private _activoFijo: ActivosFijosService
+              private _activoFijo: ActivosFijosService,
+              private _company: CentroCostosService
               ) 
   {
     this.GetTipoActivos();
@@ -125,7 +129,7 @@ export class ActivosFijosComponent implements OnInit {
       confirmButtonText: 'Si, Anular',
       showLoaderOnConfirm: true,
       focusCancel: true,
-      // type: 'warning',
+      icon: 'warning',
       preConfirm: () => {
         return new Promise((resolve) => {
           this.anularDocumento();
@@ -136,7 +140,7 @@ export class ActivosFijosComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+    // this.ListasEmpresas();
   }
   
   search_tercero = (text$: Observable<string>) =>
@@ -202,6 +206,12 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
       this.ShowSwal(data.codigo, data.titulo, data.mensaje);
     })
   }
+
+/*   ListasEmpresas(){
+    this._company.getCompanies().subscribe((data:any) => {
+      this.companies = data.data;
+    })
+  } */
 
   ValidateBeforeSubmit(){
     if (this.ActivoFijoModel.Costo_NIIF == 0) {
@@ -305,6 +315,9 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
     if (this.Filtros.costo_pcga.trim() != "") {
       params.costo_pcga = this.Filtros.costo_pcga;
     }
+    if (this.Filtros.Id_Empresa.trim() != "") {
+      params.empresa = this.Filtros.Id_Empresa;
+    }
 
     return params;
   }
@@ -323,6 +336,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
     .subscribe((data:any) => {
       if (data.codigo == 'success') {
         this.ActivosFijos = data.query_result;
+        console.log(data);
         this.TotalItems = data.numReg;
       }else{
         this.ActivosFijos = [];
@@ -540,4 +554,5 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
 
     window.open(environment.ruta+'php/activofijo/reportes.php'+queryString, '_blank');
   }
+
 }

@@ -5,6 +5,7 @@ import { SweetAlertOptions } from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { SwalService } from '../../../../ajustes/informacion-base/services/swal.service';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mediomagagrupadosesp',
@@ -52,21 +53,20 @@ export class MediomagagrupadosespComponent implements OnInit {
     let p = {id: this.IdMedioMag};
 
     this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/eliminar_mediomagnetico_agrupados.php', {params: p}).subscribe((data:any)=> {
-      let swal = {
-        codigo: data.tipo,
-        titulo: data.titulo,
-        mensaje: data.mensaje
-      };
-      this.swalService.ShowMessage(swal);
-
+      Swal.fire({
+        icon: data.tipo,
+        title: data.titulo,
+        text: data.mensaje
+      });
+      // this.swalService.ShowMessage(swal);
       this.listaFormatosAgrupados();
     }, error => {
-      let swal = {
-        codigo: 'warning',
-        mensaje: 'Se perdió la conexión a internet. Por favor vuelve a intentarlo',
-        titulo: 'Oops!'
-      };
-      this.swalService.ShowMessage(swal);
+      Swal.fire({
+        icon: 'warning',
+        text: 'Se perdió la conexión a internet. Por favor vuelve a intentarlo',
+        title: 'Oops!'
+      });
+      // this.swalService.ShowMessage(swal);
     })
   }
 

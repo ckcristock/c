@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
@@ -35,6 +35,5 @@ export class TablaActivoFijoComponent implements OnInit {
     this.alertSwal.text = msg;
     this.alertSwal.show();
   }
-
 
 }

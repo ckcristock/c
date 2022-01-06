@@ -27,8 +27,6 @@
                                         <th></th>
                                     </tr>
                                     <tr>
-
-
                                         <th class="tabla-filtro" style="text-align:left">
                                             <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" (dateRangeChanged)="OnDateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
                                         </th>
@@ -72,15 +70,13 @@
                                         <td>
                                             <div class="text-center">
                                                 <div ngbDropdown class="dropdown-primary">
-                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                    <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
                                                     <div ngbDropdownMenu>
-
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro={{ai.Id_Depreciacion}}&id_funcionario_elabora={{generalService.FuncionarioData.Identificacion_Funcionario}}"
-                                                            target="_blank">
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{enviromen.ruta}}php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro={{ai.Id_Depreciacion}}&id_funcionario_elabora={{1}}" target="_blank">
                                                             <i class="fa fa-print"></i> Ver PCGA </a>
-
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro={{ai.Id_Depreciacion}}&id_funcionario_elabora={{generalService.FuncionarioData.Identificacion_Funcionario}}&tipo_valor=Niif"
-                                                            target="_blank">
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{enviromen.ruta}}php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro={{ai.Id_Depreciacion}}&id_funcionario_elabora={{1}}&tipo_valor=Niif" target="_blank">
                                                             <i class="fa fa-print"></i> Ver NIIF </a>
                                                     </div>
                                                 </div>
@@ -89,16 +85,16 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div id="paginacion-container" *ngIf="Depreciaciones.length > 0">
+                            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
+                            <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+                            <!-- <div id="paginacion-container" *ngIf="Depreciaciones.length > 0">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
                                     </div>
                                     <div class="col-md-8">
-                                        <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

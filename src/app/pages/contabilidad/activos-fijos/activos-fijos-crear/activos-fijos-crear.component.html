@@ -2,10 +2,11 @@
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
-                <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
-                <!-- Layout de Cabecera. -->
-
                 <div class="card-body" style="padding-bottom:0px">
+                    <div class="card-title">
+                        <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+                        <!-- Layout de Cabecera. -->
+                    </div>
                     <form #FormActivoFijo="ngForm">
                         <div class="form-row mb-2 f-10">
                             <div class="col-md-2">
@@ -21,8 +22,17 @@
                                         required [resultTemplate]="rt_tercero" [inputFormatter]="formatter_tercero" autocomplete="off">
                                 </div>
                             </div>
-
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Empresa</label>
+                                    <select [(ngModel)]="ActivoFijoModel.Id_Empresa" name="Id_Empresa" id="Id_Empresa" class="form-control form-control-sm" required>
+                                        <option *ngFor="let item of companies" [value]="item.value">
+                                            {{ item.text }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="nombre">Nombre Activo</label>
                                     <input type="text" style="text-transform: uppercase" class="form-control form-control-sm" name="Nombre" id="nombre" (change)="AsignarConcepto()" required [(ngModel)]="ActivoFijoModel.Nombre">
@@ -35,7 +45,7 @@
                                     <input style="text-transform: uppercase" type="text" name="documento" id="documento" (change)="AsignarConcepto()" [(ngModel)]="ActivoFijoModel.Documento" class="form-control form-control-sm">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="concepto">Concepto</label>
                                     <input style="text-transform: uppercase" type="text" name="concepto" id="concepto" [(ngModel)]="ActivoFijoModel.Concepto" class="form-control form-control-sm" readonly>
@@ -45,9 +55,9 @@
                                 <div class="form-group">
                                     <label for="tipo_activo">Tipo Activo</label>
                                     <select name="Id_Tipo_Activo_Fijo" id="tipo_activo" class="form-control form-control-sm" required [(ngModel)]="ActivoFijoModel.Id_Tipo_Activo_Fijo">
-                      <option value="" selected>Seleccione tipo</option>
-                      <option *ngFor="let ta of TipoActivos" [value]="ta.Id_Tipo_Activo_Fijo">{{ta.Nombre_Tipo_Activo}}</option>
-                      </select>
+                                        <option value="" selected>Seleccione tipo</option>
+                                        <option *ngFor="let ta of TipoActivos" [value]="ta.Id_Tipo_Activo_Fijo">{{ta.Nombre_Tipo_Activo}}</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-3" *ngIf="!Crear">
@@ -59,7 +69,7 @@
                             <div class="col-md-3" *ngIf="Crear">
                                 <div class="form-group">
                                     <label for="tipo_activo">C. Costo</label>
-                                    <app-custometypeahead [Ruta]="Ruta" [Modelo]="typeahead" [Campo]="Campo_Centro_Costo" (RetornarId)="CapturarIdCentroCosto($event,'Centro')"></app-custometypeahead>
+                                    <app-custumetypeahead [Ruta]="Ruta" [Modelo]="typeahead" [Campo]="Campo_Centro_Costo" (RetornarId)="CapturarIdCentroCosto($event,'Centro')"></app-custumetypeahead>
                                 </div>
                             </div>
                             <div class="col-md-3" *ngIf="!Crear">
@@ -126,7 +136,7 @@
                             <!-- <div class="col-md-6">
                     <div class="form-group">
                         <label for="tipo_activo">Contrapartida</label>
-                      <app-custometypeahead [Ruta]="Ruta_Cuentas" [Modelo]="typeahead_Cuenta" (RetornarId)="CapturarIdCentroCosto($event,'Contrapartida')"  [Campo]="Campo_Contrapartida" ></app-custometypeahead>
+                      <app-custumetypeahead [Ruta]="Ruta_Cuentas" [Modelo]="typeahead_Cuenta" (RetornarId)="CapturarIdCentroCosto($event,'Contrapartida')"  [Campo]="Campo_Contrapartida" ></app-custumetypeahead>
                     </div>
                   </div> -->
 
@@ -239,21 +249,21 @@
                                 <div *ngFor="let item of Ctas_Anticipo; let i = index" class="row">
                                     <div class="col-md-3">
                                         <label for="tipo_activo">Cuenta Anticipo</label>
-                                        <app-custometypeahead [Ruta]="Ruta_Cuentas" [Modelo]="{
-                            placeholder: 'Cta Anticipo',
-                            name: 'Cta_Anticipo'+i,
-                            id: 'Cta_Anticipo'+i, 
-                            Requerido: false
-                          }" (RetornarId)="CapturarIdCentroCosto($event,'Anticipo',i)" [Campo]="item.Cta_Anticipo"></app-custometypeahead>
+                                        <app-custumetypeahead [Ruta]="Ruta_Cuentas" [Modelo]="{
+                                        placeholder: 'Cta Anticipo',
+                                        name: 'Cta_Anticipo'+i,
+                                        id: 'Cta_Anticipo'+i, 
+                                        Requerido: false
+                                        }" (RetornarId)="CapturarIdCentroCosto($event,'Anticipo',i)" [Campo]="item.Cta_Anticipo"></app-custumetypeahead>
                                     </div>
                                     <div class="col-md-2">
                                         <label for="tipo_activo">Nit</label>
-                                        <app-custometypeahead [Ruta]="Ruta_Nit" [Modelo]="{
-                            placeholder: 'Nombre o Nit',
-                            name: 'Nit'+i,
-                            id: 'Nit'+i,
-                            Requerido: false
-                          }" (RetornarId)="CapturarIdCentroCosto($event,'Nit_Anticipo', i)" [Campo]="item.Nit_Anticipo"></app-custometypeahead>
+                                        <app-custumetypeahead [Ruta]="Ruta_Nit" [Modelo]="{
+                                            placeholder: 'Nombre o Nit',
+                                            name: 'Nit'+i,
+                                            id: 'Nit'+i,
+                                            Requerido: false
+                                        }" (RetornarId)="CapturarIdCentroCosto($event,'Nit_Anticipo', i)" [Campo]="item.Nit_Anticipo"></app-custumetypeahead>
                                     </div>
                                     <div style="padding: 0px" class="col-md-2">
                                         <label for="tipo_activo">Documento</label>
@@ -328,7 +338,9 @@
 
 
                             <div class="col-md-12">
-                                <button class="btn btn-primary btn-sm pull-right" style="display:flex;align-items:center;" [disabled]="!FormActivoFijo.valid || (Total_Debito-Total_Credito) != 0"><i class="ti-save font-size-15 mr-2"></i> Guardar datos</button>
+                                <button class="btn btn-primary btn-sm pull-right" style="display:flex;
+                                align-items:center;" [swal]="confirmacionGuardar">
+                                <i class="ti-save font-size-15 mr-2"></i> Guardar datos</button>
                             </div>
 
                         </div>

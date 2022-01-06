@@ -27,6 +27,16 @@
               </select>
                     </div>
                 </div>
+                <!-- <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Empresa</label>
+                        <select name="Id_Empresa" id="Id_Empresa" class="form-control form-control-sm" [(ngModel)]="modelCierre.Id_Empresa">
+                            <option *ngFor="let item of companies" [value]="item.value">
+                                {{ item.text }}
+                            </option>
+                        </select>
+                    </div>
+                </div> -->
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="Observaciones">Observaciones: </label>
@@ -39,8 +49,8 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="ModalCierreContable.hide()">Cancelar</button>
-            <button type="button" class="btn btn-outline-primary btn-rounded btn-sm" [disabled]="!FormCierre.valid">Guardar Cierre</button>
+            <button type="button" class="btn btn-outline-primary btn-rounded btn-sm" [swal]="confirmacionGuardar" [disabled]="!FormCierre.valid">Guardar Cierre</button>
         </div>
     </div>
 </app-modal-basic>
-<!-- <swal #confirmacionGuardar></swal> -->
+<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>

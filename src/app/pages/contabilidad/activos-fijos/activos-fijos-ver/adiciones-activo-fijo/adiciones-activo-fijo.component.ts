@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
@@ -11,7 +11,7 @@ export class AdicionesActivoFijoComponent implements OnInit {
 
   @Input() Id:any;
   public Adiciones:any = [];
-  public funcionario:any = JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario;
+  // public funcionario:any = JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario;
   public reducer_total = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Costo);
   envirom:any;
 
@@ -31,5 +31,6 @@ export class AdicionesActivoFijoComponent implements OnInit {
   getTotal() {
     return this.Adiciones.reduce(this.reducer_total, 0);
   }
+
 
 }

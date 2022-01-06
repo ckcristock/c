@@ -12,7 +12,9 @@
                         <div class="col-md-6">
                             <div class="pull-right">
                                 <div class="card-header-left">
-                                    <a style="float: right;" href="{{enviromen.ruta}}php/centroscostos/exportar.php" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Exportar</a>
+                                    <a style="float: right;" href="{{enviromen.ruta}}php/centroscostos/exportar.php" target="_blank" class="btn btn-success btn-sm">
+                                        <i class="fas fa-table"></i> Exportar
+                                    </a>
                                     <button style="float: right;" type="button" class="pull-left btn btn-primary btn-sm mr-2" (click)="AbrirModalNuevoCentro()">
                                         <i class="fa fa-plus"></i>
                                     Agregar Nuevo Centro de Costo
@@ -30,7 +32,6 @@
                                     <tr>
                                         <th style="max-width: 100px; width: 100px !important;">Codigo</th>
                                         <th style="max-width:250px;width:250px">Nombre</th>
-                                        <th style="max-width: 100px; width: 100px !important;">Empresa</th>
                                         <th style="max-width: 100px; width: 100px !important;">Centro Padre</th>
                                         <th style="max-width: 100px; width: 100px !important;">Tipo Centro</th>
                                         <th style="max-width: 130px; width: 130px !important;">Asignado a</th>
@@ -45,7 +46,13 @@
                                         <th class="tabla-filtro">
                                             <input type="text" placeholder="Filtro Nombre" (change)="filtrar('No')" [(ngModel)]="Filtros.Nombre" class="form-control input-sm">
                                         </th>
-                                        <th class="tabla-filtro"></th>
+                                        <!-- <th class="tabla-filtro">
+                                            <select (change)="filtrar('No')" name="Id_Empresa" id="Id_Empresa" [(ngModel)]="Filtros.Id_Empresa" class="form-control input-sm" placeholder="Filtro Empresa" required>
+                                                <option *ngFor="let item of companies" [value]="item.value">
+                                                    {{ item.text }}
+                                                </option>
+                                            </select>
+                                        </th> -->
                                         <th class="tabla-filtro"></th>
                                         <th class="tabla-filtro"></th>
                                         <th class="tabla-filtro"></th>
@@ -57,7 +64,7 @@
                                     <tr *ngFor="let item of items" [ngClass]="{'bg-danger text-white': ( item.Estado == 'Inactivo' )}">
                                         <td>{{ item.Codigo }}</td>
                                         <td>{{ item.Nombre }}</td>
-                                        <td> </td>
+                                        <!-- <td> {{ item.Empresa }} </td> -->
                                         <td>{{ item.PadreCentro }}</td>
                                         <td>{{ item.Tipo_Centro }}</td>
                                         <td>{{ item.ValorTipoCentro }}</td>
@@ -113,27 +120,28 @@
     <div style="overflow-x: unset !important;overflow-y: unset !important" class="app-modal-body">
         <form #FormCentroCosto="ngForm">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" name="Nombre" [(ngModel)]="CentroCostoModel.Nombre" id="Nombre_Centro" class="form-control f-9" placeholder="Ej: Administracion" required/>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <label>Empresa</label>
+                    <ng-select bindLabel="text" bindValue="value" loadingText="loading " id="Id_Empresa" class="f-10" name="Id_Empresa" [(ngModel)]="CentroCostoModel.Id_Empresa" placeholder="Seleccione la empresa" [items]="companies"></ng-select>
                     <select name="Id_Empresa" id="Id_Empresa" [(ngModel)]="CentroCostoModel.Id_Empresa" class="form-control" required>
                         <option *ngFor="let item of companies" [value]="item.value">
                             {{ item.text }}
                         </option>
                     </select>
-                </div>
-                <div class="col-md-3">
+                </div> -->
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Codigo</label>
                         <input name="Codigo" type="text" [(ngModel)]="CentroCostoModel.Codigo" [placeholder]="CodigoPlaceholder" class="form-control" required>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="Padre">Padre</label>
                     <!--<select name="Padre" id="Centro_Padre" class="form-control" [disabled]="CentroCostoModel.EsCentroPadre" [(ngModel)]="CentroCostoModel.Id_Centro_Padre">
                 <option value="" selected>Escoja el centro padre</option>
@@ -141,25 +149,25 @@
                 <ng-container *ngTemplateOutlet="opcionesPadres; context:{ $implicit: items }"></ng-container>
               </select>-->
 
-                    <ng-select id="Centro_Padre" class="f-10" name="Padre" [(ngModel)]="CentroCostoModel.Id_Centro_Padre" placeholder="Seleccione el centro costo" [items]="CentrosCostosPadre"></ng-select>
+                    <ng-select bindLabel="label" bindValue="value" loadingText="loading" id="Centro_Padre" class="f-10" name="Padre" [(ngModel)]="CentroCostoModel.Id_Centro_Padre" placeholder="Seleccione el centro costo" [items]="CentrosCostosPadre"></ng-select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>Tipo</label>
                     <select name="Tipo" id="Tipo_Centro" class="form-control" (change)="ValorTipoCentro($event.target.value)" [(ngModel)]="CentroCostoModel.Id_Tipo_Centro">
                 <option value="" selected>Escoja el tipo de centro</option>
                 <option *ngFor="let t of TiposCentro" [value]="t.Id_Tipo_Centro">{{t.Nombre}}</option>
               </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>{{ValorTipo}}</label>
                     <select name="Valor_Centro_Costo" id="Valor_Centro" class="form-control" [disabled]="CentroCostoModel.Tipo==''" [(ngModel)]="CentroCostoModel.Valor_Tipo_Centro">
                 <option value="" selected>Escoja el {{ValorTipo}}</option>
                 <option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">{{vtc.Nombre}}</option>
               </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>Movimiento</label>
                     <select name="Movimiento" id="Movimiento" class="form-control" [(ngModel)]="CentroCostoModel.Movimiento">
                 <option value="Si" selected>Sí</option>
@@ -197,11 +205,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Empresa</label>
-                        <select ngModel name="Id_Empresa" id="Id_Empresa" [(ngModel)]="EditarCentroCostoModel.Id_Empresa" class="form-control" required>
-                            <option *ngFor="let item of companies" [value]="item.value">
-                                {{ item.text }}
-                            </option>
-                        </select>
+                        <ng-select bindLabel="text" bindValue="value" loadingText="loading " id="Id_Empresa" class="f-10" name="Id_Empresa" [(ngModel)]="EditarCentroCostoModel.Id_Empresa" placeholder="Seleccione la empresa" [items]="companies"></ng-select>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -218,7 +222,7 @@
                 <ng-container *ngTemplateOutlet="opcionesPadres; context:{ $implicit: items }"></ng-container>
               </select>-->
 
-                    <ng-select id="CentroPadre" class="f-10" name="Padre" [(ngModel)]="EditarCentroCostoModel.Id_Centro_Padre" placeholder="Seleccione el centro costo" [items]="CentrosCostosPadre"></ng-select>
+                    <ng-select bindLabel="label" bindValue="value" loadingText="loading" id="CentroPadre" class="f-10" name="Padre" [(ngModel)]="EditarCentroCostoModel.Id_Centro_Padre" placeholder="Seleccione el centro costo" [items]="CentrosCostosPadre"></ng-select>
                 </div>
             </div>
             <div class="row">

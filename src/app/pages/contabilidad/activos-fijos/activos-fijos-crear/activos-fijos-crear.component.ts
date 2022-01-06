@@ -4,13 +4,15 @@ import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { OperatorFunction, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { ActivosFijosService } from '../activos-fijos.service';
-import { environment } from 'src/environments/environment';
-import swal, { SweetAlertOptions } from 'sweetalert2';
+import { SweetAlertOptions } from 'sweetalert2';
+import { ActivoFijoModel } from '../activo-fijo-model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
-import { TercerosService } from '../../../crm/terceros/terceros.service';
-import { ActivoFijoModel } from '../activo-fijo-model';
+import swal from 'sweetalert2';
+import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
+import { PlanCuentasService } from '../../plan-cuentas/plan-cuentas.service';
 type Person = {value: number, text: string};
 
 @Component({
@@ -100,15 +102,17 @@ export class ActivosFijosCrearComponent implements OnInit {
   Total_Credito:number = 0;
   public Tipo_Creacion = 'Nuevo';
   public reducer_anticipo = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Valor);
-
-
+  private _rutaBase:string = environment.ruta+'php/terceros/';
+  terceros:any[] = [];
+  companies:any[] = [];
   constructor( 
               private route: ActivatedRoute, 
               private http: HttpClient, 
               private router: Router, 
               private swalService: SwalService,
-              private _terceroService: TercerosService,
-              private _activoFijos: ActivosFijosService
+              // private _terceroService: TerceroService,
+              private _activoFijos: ActivosFijosService,
+              private _company: PlanCuentasService
               ) { 
 
     this.alertOption = {
@@ -146,25 +150,40 @@ export class ActivosFijosCrearComponent implements OnInit {
     this.http.get(environment.ruta + this.Ruta_Nit).subscribe((data: any) => {
       this.Cliente = data;
     });
+    this.FiltrarTerceros().subscribe((data:any) => {
+      this.terceros = data;
+    })
+    // this.ListasEmpresas();
   }
+
+  FiltrarTerceros():Observable<any>{
+    // let p = {coincidencia:match};
+    return this.http.get(this._rutaBase+'filtrar_terceros.php');
+  }
+
+/*   ListasEmpresas(){
+    this._company.getCompanies().subscribe((data:any) => {
+      this.companies = data.data;
+    })
+  } */
+
 
   search_tercero = (text$: Observable<string>) =>
   text$
   .pipe(
     debounceTime(200),
+    map(term => term.length < 4 ? []
+        : 
+        this.terceros.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10)
+        )
+    /* debounceTime(200),
     distinctUntilChanged(),
     switchMap( term => term.length < 4 ? [] :
-      this.FiltrarTerceros(term)
-      .map(response => response)
-    )
+      this.terceros.map(response => response)
+    ) */
   );
 
 formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
-
-  FiltrarTerceros(match:string):Observable<any>{
-    let p = {coincidencia:match};
-    return this.http.get(environment.ruta+'filtrar_terceros.php', {params:p});
-  }
 
   AsignarTercero(){
     
@@ -206,7 +225,6 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
       this.ActivoFijoModel.Id_Cuenta_Rete_Ica=parseInt(id);
       if (id!='') {
        let  pos=this.Retenciones.findIndex(x=> x.Id_Plan_Cuenta==id);
-       
        if(pos>=0){
          
          this.ActivoFijoModel.Costo_Rete_Ica=Math.round((parseFloat(this.Retenciones[pos].Porcentaje)/100)*this.ActivoFijoModel.Base);
@@ -293,18 +311,19 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
       this.http.post(environment.ruta+'php/activofijo/guardar_activo_fijo.php', data)
       .subscribe((data:any) => {
         if (data.codigo == 'success') {
-          
           if (tipo == 'Pcga') {
             // window.open(environment+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario,'_blank');
           } else {
             // window.open(environment+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario+'&tipo=Niif','_blank');
           }
-  
-          this.router.navigate(['/activosfijos']);
-          
+          this.router.navigate(['/contabilidad/activos-fijos']);
         }
-  
-        this.ShowSwal(data.codigo, data.titulo, data.mensaje);
+        Swal.fire({
+          icon: data.codigo,
+          title: data.titulo,
+          text: data.mensaje
+        })
+        // this.ShowSwal(data.codigo, data.titulo, data.mensaje);
       })
     } else {
       this.http.post(environment.ruta+'php/activofijo/guardar_activo_fijo_adicion.php', data)
@@ -316,12 +335,14 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
           } else {
             // window.open(environment.ruta+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&activo=Adicion&id_adicion='+data.Id_Adicion+'&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario+'&tipo=Niif','_blank');
           }
-  
-          this.router.navigate(['/activosfijos']);
-          
+          this.router.navigate(['/contabilidad/activos-fijos']);
         }
-  
-        this.ShowSwal(data.codigo, data.titulo, data.mensaje);
+        Swal.fire({
+          icon: data.codigo,
+          title: data.titulo,
+          text: data.mensaje
+        })
+        // this.ShowSwal(data.codigo, data.titulo, data.mensaje);
       })
     }
     
@@ -352,10 +373,10 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
   }
 
   ShowSwal(tipo:string, titulo:string, msg:string){
-    this.alertSwal.type = tipo;
+    this.alertSwal.icon = tipo;
     this.alertSwal.title = titulo;
     this.alertSwal.text = msg;
-    this.alertSwal.show();
+    this.alertSwal.fire();
   }
 
   GetTipoActivos(){
@@ -489,7 +510,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
         this.ActivoFijoModel.Id_Tipo_Activo_Fijo=data.Id_Tipo_Activo_Fijo;
         this.ActivoFijoModel.Id_Centro_Costo=data.Id_Centro_Costo;
         this.ActivoFijoModel.Centro_Costo=data.Centro_Costo;
-        this.Crear=false;
+        this.Crear = false;
   
       }else{
         
@@ -509,13 +530,13 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
   validarCampo(campo, event, tipo) { // Funcion que validará los campos de typeahead
     if (typeof(campo) != 'object' && campo != '') {
       let id = event.target.id;
-      (document.getElementById(id) as HTMLInputElement).focus();
-      let swal = {
-        codigo: 'error',
-        titulo: 'Incorrecto!',
-        mensaje: `El valor ${tipo} no es valido.`
-      };
-      this.swalService.ShowMessage(swal);
+      // (document.getElementById(id) as HTMLInputElement).focus();
+      Swal.fire({
+        icon: 'error',
+        title: 'Incorrecto!',
+        text: `El valor ${tipo} no es valido.`
+      })
+      // this.swalService.ShowMessage(swal);
     }
   }
 
@@ -525,13 +546,13 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
 
     if (abono > saldo) { // Validando que el abono no pueda ser mayor al saldo de una factura de cartera.
       let id = event.target.id;
-      (document.getElementById(id) as HTMLInputElement).focus();
-      let swal = {
-        codigo: 'error',
-        titulo: 'Incorrecto!',
-        mensaje: `El valor del abono no puede ser mayor al saldo de la factura.`
-      };
-      this.swalService.ShowMessage(swal);
+      // (document.getElementById(id) as HTMLInputElement).focus();
+      Swal.fire({
+        icon: 'error',
+        title: 'Incorrecto!',
+        text: `El valor del abono no puede ser mayor al saldo de la factura.`
+      })
+      // this.swalService.ShowMessage(swal);
     }
   }
 

@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SwalService } from '../../../../../ajustes/informacion-base/services/swal.service';
 import swal from 'sweetalert2';
+import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mediomagneticoagrupacioncrear',
@@ -84,32 +86,32 @@ export class MediomagneticoagrupacioncrearComponent implements OnInit {
     datos.append('datos', info);
     datos.append('formatos', formatos);
 
-   this.http.post(this.globales.ruta+'php/contabilidad/mediosmagneticos/guardar_agrupacion_especiales.php',datos).subscribe((data:any)=>{
+   this.http.post(environment.ruta+'php/contabilidad/mediosmagneticos/guardar_agrupacion_especiales.php',datos).subscribe((data:any)=>{
     if (data.tipo == 'success') {
-      let swal = {
-        codigo: data.tipo,
-        titulo: data.titulo,
-        mensaje: data.mensaje
-      };
-      this.swalService.ShowMessage(swal);
+      Swal.fire({
+        icon: data.tipo,
+        title: data.titulo,
+        text: data.mensaje
+      });
+      // this.swalService.ShowMessage(swal);
 
       setTimeout(() => {
-        this.router.navigate(['/informesdian/agruparmediosmagneticos']);
+        this.router.navigate(['/contabilidad/informesdian/agruparmediosmagneticos']);
       }, 300);
     }
    }, error => {
-    let swal = {
-      codigo: 'warning',
-      mensaje: 'Se perdió la conexión a internet. Por favor vuelve a intentarlo',
-      titulo: 'Oops!'
-    };
-    this.swalService.ShowMessage(swal);
+    Swal.fire({
+      icon: 'warning',
+      text: 'Se perdió la conexión a internet. Por favor vuelve a intentarlo',
+      title: 'Oops!'
+    });
+    // this.swalService.ShowMessage(swal);
      
    }) 
   }
 
   getListaFormatosEspeciales() {
-    this.http.get(this.globales.ruta+'php/contabilidad/mediosmagneticos/formatos_especiales.php').subscribe((data:any) => {
+    this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/formatos_especiales.php').subscribe((data:any) => {
       this.listaFormatosEspeciales = data;
     })
   }
@@ -117,7 +119,7 @@ export class MediomagneticoagrupacioncrearComponent implements OnInit {
   getDetallesFormato(id) {
     let p = {id: id};
 
-    this.http.get(this.globales.ruta+'php/contabilidad/mediosmagneticos/detalles_formatos_agrup.php',{params: p}).subscribe((data:any) => {
+    this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/detalles_formatos_agrup.php',{params: p}).subscribe((data:any) => {
       this.MediosMagModel = data.encabezado;
       this.Formatos = data.formatos;
 

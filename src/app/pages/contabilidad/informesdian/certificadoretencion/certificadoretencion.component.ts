@@ -23,31 +23,40 @@ export class CertificadoretencionComponent implements OnInit {
   queryParams: string;
   Cuentas: any = [];
   enviromen:any;
+  private _rutaBase:string = environment.ruta+'php/terceros/';
+  terceros:any[] = [];
+  
 
   constructor(private globales: Globales, private http: HttpClient) { }
 
   ngOnInit() {
     this.ListarCuentas();
     this.enviromen = environment;
+    this.FiltrarTerceros().subscribe((data:any) => {
+      this.terceros = data;
+    })
   }
 
   search_tercero = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(200),
+    map(term => term.length < 4 ? []
+      : this.terceros.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
+  );
+  formatter_tercero = (x: { Nombre: string }) => x.Nombre;
+
+/*   search_tercero = (text$: Observable<string>) =>
   text$
   .pipe(
     debounceTime(500),
     distinctUntilChanged(),
     switchMap( term => term.length < 4 ? [] :
-      this.FiltrarTerceros(term)
+      this._terceroService.FiltrarTerceros(term)
       .map(response => response)
     )
   );
 
-formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
-
-FiltrarTerceros(match:string):Observable<any>{
-  let p = {coincidencia:match};
-  return this.http.get(environment.ruta+'filtrar_terceros.php', {params:p});
-}
+formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero; */
 
 search1 = (text$: Observable<string>) =>
     text$.pipe(
@@ -64,6 +73,11 @@ search1 = (text$: Observable<string>) =>
     /* this.http.get(this.globales.ruta+'php/contabilidad/balanceprueba/lista_cuentas.php').subscribe((data:any)=>{
       this.Cuentas = data.Activo;
     }); */
+  }
+
+  FiltrarTerceros():Observable<any>{
+    // let p = {coincidencia:match};
+    return this.http.get(this._rutaBase+'filtrar_terceros.php');
   }
 
 AsignarTercero(model){

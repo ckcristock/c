@@ -45,6 +45,13 @@
                                         <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
                                             <input type="text" class="form-control input-sm " placeholder="Filtro Nombre" [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()">
                                         </th>
+                                        <!-- <th>
+                                            <select (change)="ConsultaFiltrada()" name="Id_Empresa" id="Id_Empresa" [(ngModel)]="Filtros.Id_Empresa" class="form-control input-sm" placeholder="Filtro Empresa" required>
+                                                <option *ngFor="let item of companies" [value]="item.value">
+                                                    {{ item.text }}
+                                                </option>
+                                            </select>
+                                        </th> -->
                                         <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
                                             <select name="Id_Tipo_Activo_Fijo" id="tipo_activo" class="form-control form-control-sm custom-select" [(ngModel)]="Filtros.tipo" (change)="ConsultaFiltrada()">
                                 <option value="" selected>Seleccione tipo</option>
@@ -78,6 +85,7 @@
                                     <tr *ngFor="let af of ActivosFijos" [ngClass]="{'bg-danger': af.Estado == 'Anulada'}">
                                         <td>{{af.Codigo}}</td>
                                         <td>{{af.Nombre}}</td>
+                                        <td> {{ af.Empresa }} </td>
                                         <td>{{af.Tipo_Activo}}</td>
                                         <td class="text-center">{{af.Centro_Costo}}</td>
                                         <td class="text-right">$ {{af.Costo_PCGA | number | puntos}}</td>
@@ -85,16 +93,18 @@
                                         <td style="max-width: 70px !important; width: 70px !important;">
                                             <div class="text-center">
                                                 <div ngbDropdown class="dropdown-primary">
-                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                    <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
                                                     <div ngbDropdownMenu>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}"
-                                                            target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion PCGA</a>
+                                                        <!-- <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}"
+                                                                target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion PCGA</a>
 
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}&tipo=Niif"
-                                                            target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion NIIF</a>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/activofijo/crear']" [queryParams]="{Tipo: 'Adicion', AF: af.Id_Activo_Fijo}">
+                                                            <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}&tipo=Niif"
+                                                                target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion NIIF</a> -->
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/contabilidad/activos-fijos-crear']" [queryParams]="{Tipo: 'Adicion', AF: af.Id_Activo_Fijo}">
                                                             <i class="fa fa-plus"></i> Adición</a>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/activofijover',af.Id_Activo_Fijo]">
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/contabilidad/activo-fijo-ver',af.Id_Activo_Fijo]">
                                                             <i class="fa fa-eye"></i> Ver</a>
                                                         <a *ngIf="af.Estado != 'Anulada' && perfilUsuario == '27'" class="dropdown-item waves-light waves-effect caja-botones bg-danger" href="javascript:;" [swal]="confirmacionAnular" (click)="IdDocumento = af.Id_Activo_Fijo">
                                                             <i class="fa fa-close"></i> Anular</a>

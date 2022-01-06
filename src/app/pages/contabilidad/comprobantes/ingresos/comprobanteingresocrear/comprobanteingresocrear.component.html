@@ -10,16 +10,24 @@
                 <div class="card-body" style="padding-bottom: 0px;">
                     <form #FormComprobante="ngForm">
                         <div class="row invoive-info" style="margin-bottom: 0; padding-bottom: 0px;">
-                            <div class=" col-md-2  ">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Fecha</label>
                                     <input type="date" name="Fecha_Comprobante" id="Fecha_Comprobante" [(ngModel)]="Fecha_Comprobante" class="form-control form-control-sm" (change)="getCodigoIngreso($event.target.value)" required>
                                 </div>
                                 <input type="hidden" name="Tipo" [ngModel]="'Ingreso'">
-
                             </div>
-                            <div class="col-md-2 ">
-
+                            <!-- <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Empresa</label>
+                                    <select [(ngModel)]="Id_Empresa" name="Id_Empresa" id="Id_Empresa" class="form-control form-control-sm" required>
+                                        <option *ngFor="let item of companies" [value]="item.value">
+                                            {{ item.text }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Cliente</label>
                                     <input *ngIf="Mostrar_Input_Cli" [(ngModel)]="Nom_Cliente" type="text" name="Cliente" id="Cliente" class="form-control form-control-sm f-9" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" (ngModelChange)="BuscarDatosCliente(Nom_Cliente)"
@@ -29,22 +37,20 @@
                                     <!-- <input hidden [(ngModel)]="Funcionario.Identificacion_Funcionario" name="Id_Funcionario" id="Id_Funcionario" class="form-control form-control-sm " required> -->
                                 </div>
                             </div>
-
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Banco</label>
-                                    <ng-select id="Cuentas" name="Id_Banco" style="margin-bottom:5px; font-size: 10px; height: 23px; max-height: 23px; line-height: 21px" placeholder="Seleccione el Banco" [items]="Cuentas" [(ngModel)]="Cuenta_Banco" required>
+                                    <ng-select id="Cuentas" name="Id_Banco" style="margin-bottom:5px; font-size: 10px; height: 23px; max-height: 23px; line-height: 21px" placeholder="Seleccione el Banco" [items]="Cuentas" bindLabel="label" bindValue="value" [(ngModel)]="Cuenta_Banco" required>
                                     </ng-select>
                                 </div>
                             </div>
-
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Valor Banco</label>
                                     <input class="form-control form-control-sm" type="number" name="Valor_Banco" id="Valor_Banco" [(ngModel)]="Valor_Banco" (change)="calcularTotalesDebitoCredito()" required>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Forma de Pago</label>
                                     <select class="form-control form-control-sm" ngModel name="Id_Forma_Pago" required>
@@ -373,7 +379,7 @@
             </button>
                 </div>
                 <div class="col-md-2 botonFlotante">
-                    <button type="button" class="btn btn-success  btn-block btn-enviar" [disabled]="!FormComprobante.valid || ((Total_Debito - Total_Credito) != 0 && Facturas_Multiple)">
+                    <button type="button" class="btn btn-success  btn-block btn-enviar" [swal]="confirmacionGuardar">
               Guardar
             </button>
                 </div>
@@ -387,9 +393,9 @@
     <span class="f-9"><strong>{{ r.Nombre }}</strong>
     </span>
 </ng-template>
-<!-- <swal #confirmacionSwal title="" text="" type=""></swal> -->
+<swal #confirmacionSwal title="" text="" type=""></swal>
 
-<!-- <swal #confirmacionGuardar [options]="alertOption"></swal> -->
+<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
 
 
 <ng-template #rt1 let-r="result" let-t="term">

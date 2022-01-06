@@ -9,7 +9,7 @@ import swal from 'sweetalert2';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
-import { environment } from '../../../../../environments/environment';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-ingresos',
@@ -193,7 +193,7 @@ AbrirModalNuevoComprobante(){
 
     let queryString = this.getQueryString(pagination);
 
-    this.location.replaceState('/comprobante/ingresos', queryString);
+    this.location.replaceState('/comprobantes/ingresos', queryString);
 
     
     this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php'+queryString).subscribe((data: any) => {

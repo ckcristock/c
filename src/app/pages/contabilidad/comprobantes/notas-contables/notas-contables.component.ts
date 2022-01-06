@@ -6,7 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { Location } from '@angular/common';
-import { environment } from '../../../../../environments/environment';
+import { environment } from 'src/environments/environment';
+import { CentroCostosService } from '../../centro-costos/centro-costos.service';
 
 @Component({
   selector: 'app-notas-contables',
@@ -20,11 +21,12 @@ export class NotasContablesComponent implements OnInit {
   public maxSize = 20; 
   public TotalItems:number;
   public page = 1;
-  public filtros:any = {
+  public filtros = {
     codigo: '',
     fechas: '',
     tercero: '',
-    estado: ''
+    estado: '',
+    Id_Empresa: ''
   }
 public filtro_fecha:any='';
 myDateRangePickerOptions: IMyDrpOptions = {
@@ -40,8 +42,8 @@ myDateRangePickerOptions: IMyDrpOptions = {
   // id_funcionario: any = JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario;
   alertOption: SweetAlertOptions;
   // perfilUsuario:any = localStorage.getItem('miPerfil');
-
-  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location, private swalService: SwalService) { 
+  companies:any[] = [];
+  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location, private swalService: SwalService, private _company: CentroCostosService) { 
     this.alertOption = {
       title: "¿Está Seguro?",
       text: "Se dispone a Anular este Documento",
@@ -50,7 +52,7 @@ myDateRangePickerOptions: IMyDrpOptions = {
       confirmButtonText: 'Si, Anular',
       showLoaderOnConfirm: true,
       focusCancel: true,
-      // type: 'warning',
+      icon: 'warning',
       preConfirm: () => {
         return new Promise((resolve) => {
           this.anularDocumento();
@@ -63,6 +65,7 @@ myDateRangePickerOptions: IMyDrpOptions = {
   ngOnInit() {
     this.ListarNotasContables()
     this.envirom = environment;
+    // this.listarEmpresas();
   }
 
   ListarNotasContables() {
@@ -74,6 +77,12 @@ myDateRangePickerOptions: IMyDrpOptions = {
     });    
     
   }
+  
+/*   listarEmpresas(){
+    this._company.getCompanies().subscribe((data:any) => {
+      this.companies = data.data;
+    })
+  } */
 
   dateRangeChanged(event) {
     
@@ -101,6 +110,9 @@ myDateRangePickerOptions: IMyDrpOptions = {
     if (this.filtros.estado != '') {
       params.est = this.filtros.estado;
     }
+    if (this.filtros.Id_Empresa != '') {
+      params.empresa = this.filtros.Id_Empresa;
+    }
     if (pagination) {
       params.pag = this.page
     } else {
@@ -109,7 +121,7 @@ myDateRangePickerOptions: IMyDrpOptions = {
 
     let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
-    this.location.replaceState('/comprobante/notascontables', queryString);
+    this.location.replaceState('/contabilidad/comprobantes/notas-contables', queryString);
 
     return queryString;
   }

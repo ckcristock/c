@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import { SweetAlertOptions } from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { SwalService } from '../../../../ajustes/informacion-base/services/swal.service';
@@ -10,7 +10,8 @@ import { debounceTime, map } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 import { EgresosService } from '../egresos.service';
 import { NotasContablesService } from '../../notas-contables/notas-contables.service';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from 'src/environments/environment';
+import { CentroCostosService } from '../../../centro-costos/centro-costos.service';
 
 @Component({
   selector: 'app-comprobanteegresovarioscrear',
@@ -51,6 +52,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   public Nom_Centro_Costo:any= '';
   public Fecha_Nota_Contable=this.fechaHoy();
   public Id_Proveedor: any = '';
+  public Id_Empresa:any = '';
   public NombreProveedor: string = '';
   public Nom_Cliente:any;
   public Id_Cliente = '';
@@ -117,15 +119,16 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   idBorrador: any = '';
   Codigo: string = '';
   public Total_Abono:number = 0;
-
+  companies:any[] = [];
 
   constructor( 
               private route: ActivatedRoute, 
               private http: HttpClient, 
               private router: Router, 
-              private swalService: SwalService, 
+              // private swalService: SwalService, 
               private _egresos: EgresosService,
-              private _general: NotasContablesService
+              private _general: NotasContablesService,
+              private _companies: CentroCostosService
               ) { 
     
     this.http.get(environment.ruta + 'php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
@@ -139,7 +142,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       confirmButtonText: 'Si, Guardar',
       showLoaderOnConfirm: true,
       focusCancel: true,
-      // type: 'info',
+      icon: 'info',
       input: 'select',
       inputOptions: {
         Pcga: 'Imprimir en PCGA',
@@ -161,7 +164,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       confirmButtonText: 'Si, Registrar',
       showLoaderOnConfirm: true,
       focusCancel: true,
-      // type: 'info',
+      icon: 'info',
       preConfirm: () => {
         return new Promise((resolve) => {
           this.nuevoCheque(this.modalAgregarCheque);
@@ -214,8 +217,15 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       this.ListarRetenciones();
 
       this.listarCheques();
-
+      // this.getCompanies();
     }
+
+    /* getCompanies(){
+      this._companies.getCompanies().subscribe((data:any) => {
+        this.companies = data.data;
+      })
+    } */
+
   BuscarProveedor(modelo) {
     this.NombreProveedor = modelo.Proveedores;
     this.Id_Proveedor = modelo.Id_Proveedor;
@@ -341,8 +351,8 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
 
       this.confirmacionSwal.title =data.titulo;
       this.confirmacionSwal.text = data.mensaje;
-      this.confirmacionSwal.type = data.tipo;
-      this.confirmacionSwal.show();
+      this.confirmacionSwal.icon = data.tipo;
+      this.confirmacionSwal.fire();
 
       if (data.tipo == 'success' && data.id != undefined) {
         if (tipo == 'Pcga') { 
@@ -352,15 +362,15 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
         }
         setTimeout(() => {
         
-          this.router.navigate(['/comprobante/egresos']);
+          this.router.navigate(['/comprobantes/egresos']);
         }, 1000);
       }
       
     }, error => {
       this.confirmacionSwal.text = "Ha ocurrido un error inesperado, la conexión a fallado.";
       this.confirmacionSwal.title = "Oops!";
-      this.confirmacionSwal.type = "error";
-      this.confirmacionSwal.show();
+      this.confirmacionSwal.icon = "error";
+      this.confirmacionSwal.fire();
     });
     
   }
@@ -608,12 +618,12 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     if (typeof(campo) != 'object' && campo != '') {
       let id = event.target.id;
       (document.getElementById(id) as HTMLInputElement).focus();
-      let swal = {
-        codigo: 'error',
-        titulo: 'Incorrecto!',
-        mensaje: `El valor ${tipo} no es valido.`
-      };
-      this.swalService.ShowMessage(swal);
+      Swal.fire({
+        icon: 'error',
+        title: 'Incorrecto!',
+        text: `El valor ${tipo} no es valido.`
+      })
+      // this.swalService.ShowMessage(swal);
     }
   }
 
@@ -624,12 +634,12 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     if (abono > saldo) { // Validando que el abono no pueda ser mayor al saldo de una factura de cartera.
       let id = event.target.id;
       (document.getElementById(id) as HTMLInputElement).focus();
-      let swal = {
-        codigo: 'error',
-        titulo: 'Incorrecto!',
-        mensaje: `El valor del abono no puede ser mayor al saldo de la factura.`
-      };
-      this.swalService.ShowMessage(swal);
+      Swal.fire({
+        icon: 'error',
+        title: 'Incorrecto!',
+        text: `El valor del abono no puede ser mayor al saldo de la factura.`
+      });
+      // this.swalService.ShowMessage(swal);
     }
 
     setTimeout(() => {

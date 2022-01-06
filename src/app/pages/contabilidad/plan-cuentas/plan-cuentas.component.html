@@ -11,18 +11,9 @@
                         <div class="col-6">
                             <div class="pull-right">
                                 <div>
-                                    <div ngbDropdown class="dropdown-primary">
-                                        <button ngbDropdownToggle style="float: right;" class="btn btn-success btn-sm waves-effect waves-light " type="button"><i class="fas fa-table"></i> Imprimir</button>
-                                        <div ngbDropdownMenu>
-                                            <div style="position: relative;">
-                                                <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envirom.ruta}}php/contabilidad/plancuentas/descargar_informe_plan_cuentas_excel.php" target="_blank">
-                                                    <i class="fa fa-file-excel-o"></i> Excel</a>
-                                            </div>
-                                            <!-- <a class="dropdown-item waves-light waves-effect caja-botones"
-                          href="{{globales.ruta}}php/contabilidad/plancuentas/descargar_informe_plan_cuentas.php" target="_blank">
-                          <i class="fa fa-file-pdf-o"></i> PDF</a> -->
-                                        </div>
-                                    </div>
+                                    <a style="float: right;" href="{{envirom.ruta}}php/centroscostos/exportar.php" target="_blank" class="btn btn-success btn-sm">
+                                        <i class="fas fa-table"></i> Exportar
+                                    </a>
                                 </div>
                                 <div class="card-header-left">
                                     <button type="button" style="float: right;" class="pull-left btn btn-primary btn-sm mr-2" (click)="modalCrearCuenta.show();habCampos('N')"><i
@@ -84,9 +75,10 @@
                                             <h4>No Existen Planes de cuentas para mostrar</h4>
                                         </td>
                                     </tr>
-                                    <tr *ngFor="let item of Planes" class="{{item.Estado=='Anulada' ? 'bg-danger' : ''}}">
+                                    <tr *ngFor="let item of Planes">
                                         <td>{{ item.Codigo }}</td>
                                         <td>{{ item.Nombre }}</td>
+                                        <!-- <td> {{ item.Empresa }} </td> -->
                                         <td>{{ item.Codigo_Niif }}</td>
                                         <td>{{ item.Nombre_Niif }}</td>
                                         <td>{{ item.Estado }}</td>
@@ -101,9 +93,9 @@
                                                             <i class="far fa-eye"></i> Ver</a>
                                                         <a *ngIf="item.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" (click)="EditarPlanCuenta(item.Id_Plan_Cuentas)">
                                                             <i class="far fa-edit"></i> Editar</a>
-                                                        <a *ngIf="item.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a cambiar el estado de este plan de cuenta' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                                        <!-- <a *ngIf="item.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a cambiar el estado de este plan de cuenta' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
                                                             (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)">
-                                                            <i class="far fa-trash-alt"></i> Desactivar</a>
+                                                            <i class="far fa-trash-alt"></i> Desactivar</a> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -228,14 +220,14 @@
 
                         <hr>
                         <div class="row">
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <label for="company_id">Empresa</label>
-                                <select ngModel name="company_id" id="company_id" class="form-control form-control-sm" required>
+                                <select ngModel name="Id_Empresa" id="Id_Empresa" class="form-control form-control-sm" required>
                                 <option *ngFor="let item of companies" [value]="item.value">
                                     {{ item.text }}
                                 </option>
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="col-md-6">
                                 <label for="">Cuenta es Movimiento?</label>
                                 <select [ngModel]="'N'" name="Movimiento" id="Movimiento" class="form-control form-control-sm" (change)="habCampos($event.target.value)">

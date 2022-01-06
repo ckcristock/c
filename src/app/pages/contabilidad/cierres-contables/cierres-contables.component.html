@@ -43,10 +43,11 @@
                             <table class="table table-striped table-hover">
                                 <tr>
                                     <th></th>
-                                    <th>Fecha Creación</th>
-                                    <th>Mes</th>
-                                    <th>Año</th>
-                                    <th>Observaciones</th>
+                                    <th class="text-center">Empresa</th>
+                                    <th class="text-center">Fecha Creación</th>
+                                    <th class="text-center">Mes</th>
+                                    <th class="text-center">Año</th>
+                                    <th class="text-center">Observaciones</th>
                                     <th></th>
                                 </tr>
                                 <tr *ngFor="let item of Cierres.Mes; let i=index">
@@ -54,6 +55,7 @@
                                         <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
                                         <img *ngIf="item.Imagen !=''" src="{{enviroment.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
                                     </td>
+                                    <td class="text-center">{{item.Empresa}}</td>
                                     <td class="text-center">{{item.Created_At | date: 'dd/MM/yyyy'}}</td>
                                     <td class="text-center">{{ nombreMes(item.Mes) }}</td>
                                     <td class="text-center">{{ item.Anio }}</td>
@@ -68,7 +70,7 @@
                                     <td class="text-center">
                                         <div class="text-center">
                                             <div ngbDropdown class="dropdown-primary">
-                                                <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
                                                 <div ngbDropdownMenu>
                                                     <a class="dropdown-item waves-light waves-effect caja-botones" href="javascript:;">
                                                         <i class="fa fa-power-off"></i> {{ item.Estado == 'Cerrado' ? 'Habilitar' : 'Cerrar' }}</a>
@@ -88,16 +90,17 @@
                 <div class="card-header">
                     <h5>Cierres de Año</h5>
                 </div>
-                <div class="card-block">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
                             <table class="table table-striped table-hover">
                                 <tr>
-                                    <th></th>
-                                    <th>Fecha Creación</th>
-                                    <th>Documento</th>
-                                    <th>Año</th>
-                                    <th>Observaciones</th>
+                                    <th class="text-center"></th>
+                                    <th class="text-center">Empresa</th>
+                                    <th class="text-center">Fecha Creación</th>
+                                    <th class="text-center">Documento</th>
+                                    <th class="text-center">Año</th>
+                                    <th class="text-center">Observaciones</th>
                                     <th></th>
                                 </tr>
                                 <tr *ngFor="let item of Cierres.Anio; let i=index" [ngClass]="{'bg-danger': item.Estado == 'Anulado'}">
@@ -105,6 +108,7 @@
                                         <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
                                         <img *ngIf="item.Imagen !=''" src="{{envirom.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
                                     </td>
+                                    <td class="text-center"> {{ item.Empresa }} </td>
                                     <td class="text-center">{{item.Created_At | date: 'dd/MM/yyyy'}}</td>
                                     <td class="text-center">{{ item.Codigo }}</td>
                                     <td class="text-center">{{ item.Anio }}</td>
@@ -119,18 +123,18 @@
                                     <td class="text-center">
                                         <div class="text-center">
                                             <div ngbDropdown class="dropdown-primary">
-                                                <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
                                                 <div ngbDropdownMenu>
                                                     <a *ngIf="item.Estado != 'Anulado'" class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Cierre de Año, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
                                                         (confirm)="anularCierreAnio(item.Id_Cierre_Contable)">
                                                         <i class="fa fa-times"></i> Anular</a>
-                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{funcionario}}">
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envirom.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{1}}">
                                                         <i class="fa fa-table"></i> Cont. PCGA</a>
-                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{funcionario}}&tipo_valor=Niif">
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envirom.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{1}}&tipo_valor=Niif">
                                                         <i class="fa fa-table"></i> Cont. NIIF</a>
-                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{funcionario}}&tipo_rep=act-pas">
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envirom.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{1}}&tipo_rep=act-pas">
                                                         <i class="fa fa-table"></i> Cont. PCGA Activos-Pasivos</a>
-                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{funcionario}}&tipo_valor=Niif&tipo_rep=act-pas">
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envirom.ruta}}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{item.Id_Cierre_Contable}}&id_funcionario_elabora={{1}}&tipo_valor=Niif&tipo_rep=act-pas">
                                                         <i class="fa fa-table"></i> Cont. NIIF Activos-Pasivos</a>
                                                 </div>
                                             </div>

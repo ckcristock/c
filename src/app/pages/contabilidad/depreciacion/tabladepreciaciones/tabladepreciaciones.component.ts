@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./tabladepreciaciones.component.scss']
 })
 export class TabladepreciacionesComponent implements OnInit {
-
+  enviromen:any;
   public Cargando:boolean = false;
   public Filtros:any = {
     codigo_acta:'',
@@ -44,6 +44,7 @@ export class TabladepreciacionesComponent implements OnInit {
      }
 
   ngOnInit() {
+    this.enviromen = environment;
   }
 
   SetFiltros(paginacion:boolean) {

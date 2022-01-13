@@ -11,7 +11,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { ComponentsModule } from '../../../components/components.module';
 import { Globales } from '../globales';
 import { CertificadoretencionComponent } from './certificadoretencion/certificadoretencion.component';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTypeaheadModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CertificadoingresoyretencionComponent } from './certificadoingresoyretencion/certificadoingresoyretencion.component';
 import { ResumenretencionesComponent } from './resumenretenciones/resumenretenciones.component';
@@ -31,7 +31,8 @@ import { ResumenretencionesComponent } from './resumenretenciones/resumenretenci
     SweetAlert2Module.forRoot(),
     ComponentsModule,
     NgbTypeaheadModule,
-    NgSelectModule
+    NgSelectModule,
+    NgbDropdownModule
   ],
   providers: [
     Globales

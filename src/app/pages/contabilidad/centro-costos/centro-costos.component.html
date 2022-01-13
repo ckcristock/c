@@ -196,25 +196,19 @@
     <div style="overflow-x: unset !important;overflow-y: unset !important" class="app-modal-body">
         <form #FormEditarCentroCosto="ngForm">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" name="Nombre" [(ngModel)]="EditarCentroCostoModel.Nombre" id="NombreCentro" class="form-control f-9" placeholder="Ej: Administracion, Dispensacion" required/>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Empresa</label>
-                        <ng-select bindLabel="text" bindValue="value" loadingText="loading " id="Id_Empresa" class="f-10" name="Id_Empresa" [(ngModel)]="EditarCentroCostoModel.Id_Empresa" placeholder="Seleccione la empresa" [items]="companies"></ng-select>
-                    </div>
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Codigo</label>
                         <input name="Codigo" type="text" [(ngModel)]="EditarCentroCostoModel.Codigo" [placeholder]="CodigoPlaceholder" class="form-control" required>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="Padre">Padre</label>
                     <!--<select name="Padre" id="CentroPadre" class="form-control" [disabled]="EditarCentroCostoModel.EsCentroPadre" [(ngModel)]="EditarCentroCostoModel.Id_Centro_Padre">
                 <option value="" selected>Escoja el centro padre</option>
@@ -226,21 +220,21 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>Tipo</label>
                     <select name="Tipo" id="TipoCentro" class="form-control" (change)="ValorTipoCentro($event.target.value)" [(ngModel)]="EditarCentroCostoModel.Id_Tipo_Centro">
                 <option value="" selected>Escoja el tipo de centro</option>
                 <option *ngFor="let t of TiposCentro" [value]="t.Id_Tipo_Centro">{{t.Nombre}}</option>
               </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>{{ValorTipo}}</label>
                     <select name="Valor_Centro_Costo" id="ValorCentro" class="form-control" [disabled]="EditarCentroCostoModel.Tipo==''" [(ngModel)]="EditarCentroCostoModel.Valor_Tipo_Centro">
                 <option value="" selected>Escoja el {{ValorTipo}}</option>
                 <option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">{{vtc.Nombre}}</option>
               </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>Movimiento</label>
                     <select name="Movimiento" id="Movimiento_Editar" class="form-control" [(ngModel)]="EditarCentroCostoModel.Movimiento">
                 <option value="Si" selected>Sí</option>
@@ -253,7 +247,7 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="button" class="btn btn-default btn-sm" (click)="modalEditarCentroCosto.hide()">Cancelar</button>
-            <button type="button" [swal]="{ title: '¿Está Seguro?', text: 'Se dispone a guardar un centro de costo\n¿Está seguro(a)?', type: 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }" (confirm)="GuardarCentroCosto(FormEditarCentroCosto,modalEditarCentroCosto, 'editar')"
+            <button type="button" [swal]="{ title: '¿Está Seguro?', text: 'Se dispone a guardar un centro de costo\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }" (confirm)="GuardarCentroCosto(FormEditarCentroCosto,modalEditarCentroCosto, 'editar')"
                 [disabled]="!FormEditarCentroCosto.valid" class="btn btn-primary btn-sm">Guardar</button>
         </div>
     </div>

@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { PlanCuentasService } from './plan-cuentas.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import swal from 'sweetalert2';
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-plan-cuentas',

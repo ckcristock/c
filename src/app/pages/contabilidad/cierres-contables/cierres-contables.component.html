@@ -43,7 +43,6 @@
                             <table class="table table-striped table-hover">
                                 <tr>
                                     <th></th>
-                                    <th class="text-center">Empresa</th>
                                     <th class="text-center">Fecha Creación</th>
                                     <th class="text-center">Mes</th>
                                     <th class="text-center">Año</th>
@@ -55,7 +54,6 @@
                                         <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
                                         <img *ngIf="item.Imagen !=''" src="{{enviroment.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
                                     </td>
-                                    <td class="text-center">{{item.Empresa}}</td>
                                     <td class="text-center">{{item.Created_At | date: 'dd/MM/yyyy'}}</td>
                                     <td class="text-center">{{ nombreMes(item.Mes) }}</td>
                                     <td class="text-center">{{ item.Anio }}</td>
@@ -96,19 +94,17 @@
                             <table class="table table-striped table-hover">
                                 <tr>
                                     <th class="text-center"></th>
-                                    <th class="text-center">Empresa</th>
                                     <th class="text-center">Fecha Creación</th>
                                     <th class="text-center">Documento</th>
                                     <th class="text-center">Año</th>
                                     <th class="text-center">Observaciones</th>
                                     <th></th>
                                 </tr>
-                                <tr *ngFor="let item of Cierres.Anio; let i=index" [ngClass]="{'bg-danger': item.Estado == 'Anulado'}">
+                                <tr *ngFor="let item of Cierres.Anio; let i=index" [ngClass]="{'bg-danger text-white': item.Estado == 'Anulado'}">
                                     <td class="text-center">
                                         <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
                                         <img *ngIf="item.Imagen !=''" src="{{envirom.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
                                     </td>
-                                    <td class="text-center"> {{ item.Empresa }} </td>
                                     <td class="text-center">{{item.Created_At | date: 'dd/MM/yyyy'}}</td>
                                     <td class="text-center">{{ item.Codigo }}</td>
                                     <td class="text-center">{{ item.Anio }}</td>

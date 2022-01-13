@@ -11,8 +11,8 @@
                         <div class="col-6">
                             <div class="pull-right">
                                 <div>
-                                    <a style="float: right;" href="{{envirom.ruta}}php/centroscostos/exportar.php" target="_blank" class="btn btn-success btn-sm">
-                                        <i class="fas fa-table"></i> Exportar
+                                    <a style="float: right;" href="{{envirom.ruta}}php/contabilidad/plancuentas/descargar_informe_plan_cuentas_excel.php" target="_blank" class="btn btn-success btn-sm">
+                                        <i class="fas fa-table"></i> Imprimir Excel
                                     </a>
                                 </div>
                                 <div class="card-header-left">
@@ -384,7 +384,7 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="button" class="btn btn-default btn-sm" (click)="modalCrearCuenta.hide()">Cancelar</button>
-            <button type="button" class="btn btn-primary btn-sm" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
+            <button type="button" class="btn btn-primary btn-sm" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
                 (confirm)="guardarPlan(FormPlan, 'guardar')" [disabled]="!FormPlan.valid">Guardar</button>
         </div>
     </div>
@@ -485,14 +485,6 @@
 
                         <hr>
                         <div class="row">
-                            <div class="col-md-6">
-                                <label for="company_id">Empresa</label>
-                                <select [(ngModel)]="PlanCuentaModel.company_id" name="company_id" id="company_id" class="form-control form-control-sm" required>
-                                    <option *ngFor="let item of companies" [value]="item.value">
-                                        {{ item.text }}
-                                    </option>
-                                </select>
-                            </div>
                             <div class="col-md-6">
                                 <label for="">Cuenta es Movimiento?</label>
                                 <select [(ngModel)]="PlanCuentaModel.Movimiento" name="Movimiento" id="Movimiento_Editar" class="form-control form-control-sm" (change)="habCampos($event.target.value)">
@@ -651,7 +643,7 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="button" class="btn btn-default btn-sm" (click)="modalEditarCuenta.hide()">Cancelar</button>
-            <button type="button" class="btn btn-primary btn-sm" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
+            <button type="button" class="btn btn-primary btn-sm" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
                 (confirm)="guardarPlan(FormEditarPlan, 'editar')">Guardar</button>
         </div>
     </div>
@@ -729,14 +721,12 @@
                             <table class="table table-striped">
                                 <tbody>
                                     <tr>
-                                        <td style="font-weight: bold; font-size: .8rem">Empresa</td>
                                         <td style="font-weight: bold; font-size: .8rem">¿Cuenta es Movimiento?</td>
                                         <td style="font-weight: bold; font-size: .8rem">Base</td>
                                         <td style="font-weight: bold; font-size: .8rem">Valor</td>
                                         <td style="font-weight: bold; font-size: .8rem">Porcentaje</td>
                                     </tr>
                                     <tr>
-                                        <td> {{ PlanCuentaModel.company_name }} </td>
                                         <td>{{TransformarValor(PlanCuentaModel.Movimiento)}}</td>
                                         <td>{{TransformarValor(PlanCuentaModel.Base)}}</td>
                                         <td>{{PlanCuentaModel.Valor}}</td>
@@ -803,5 +793,5 @@
     </div>
 </app-modal-basic>
 
-<swal #alertSwal title="" text="" type="">
+<swal #alertSwal title="" text="" icon="">
 </swal>

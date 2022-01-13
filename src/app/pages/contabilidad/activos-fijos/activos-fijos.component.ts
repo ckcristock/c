@@ -33,8 +33,7 @@ export class ActivosFijosComponent implements OnInit {
     codigo:'',
     tipo:'',
     costo_niif:'',
-    costo_pcga:'',
-    Id_Empresa: ''
+    costo_pcga:''
   };
 
 
@@ -314,9 +313,6 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
 
     if (this.Filtros.costo_pcga.trim() != "") {
       params.costo_pcga = this.Filtros.costo_pcga;
-    }
-    if (this.Filtros.Id_Empresa.trim() != "") {
-      params.empresa = this.Filtros.Id_Empresa;
     }
 
     return params;

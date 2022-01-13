@@ -27,6 +27,7 @@ export class ActivoFijoModel{
     public Tipo:string='';
     public Tipo_Depreciacion:string='';
     // public Identificacion_Funcionario:string=(JSON.parse(localStorage.getItem("User"))).Identificacion_Funcionario;
+    public Identificacion_Funcionario:string='1';
     public Centro_Costo:string='';
     public Id_Activo_Fijo:string='';
     public Nit_CtaPorPagar:string='';

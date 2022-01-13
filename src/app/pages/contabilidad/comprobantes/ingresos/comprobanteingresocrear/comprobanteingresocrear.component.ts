@@ -590,6 +590,8 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
       this.confirmacionSwal.fire();
 
       if (data.tipo == 'success' && data.id != undefined) {
+        console.log(data.id);
+        
         window.open(environment.ruta+'php/comprobantes/comprobantes_pdf.php?id='+data.id+'&tipo='+Formulario.value.Tipo,'_blank');
         if (tipo == 'Pcga') {
           window.open(environment.ruta+'php/contabilidad/movimientoscontables/movimientos_comprobante_pdf.php?id_registro='+data.id+'&id_funcionario_elabora='+Formulario.value.Id_Funcionario+'&tipo='+Formulario.value.Tipo,'_blank');
@@ -599,7 +601,7 @@ formatter1 = (x: { Codigo: string }) => x.Codigo;
 
         setTimeout(() => {
 
-          this.router.navigate(['/comprobante/ingresos']);
+          this.router.navigate(['/contabilidad/comprobantes/ingresos']);
         }, 1000);
       }
 

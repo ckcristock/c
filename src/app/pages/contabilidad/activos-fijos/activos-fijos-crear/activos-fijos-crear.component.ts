@@ -309,19 +309,20 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
 
     if (this.Tipo_Creacion == 'Nuevo') {
       this.http.post(environment.ruta+'php/activofijo/guardar_activo_fijo.php', data)
-      .subscribe((data:any) => {
-        if (data.codigo == 'success') {
+      .subscribe((datos:any) => {
+        console.log(datos);
+        if (datos.codigo == 'success') {
           if (tipo == 'Pcga') {
-            // window.open(environment+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario,'_blank');
+            window.open(environment.ruta+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+datos.Id+'&id_funcionario_elabora='+1,'_blank');
           } else {
-            // window.open(environment+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario+'&tipo=Niif','_blank');
+            window.open(environment.ruta+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+datos.Id+'&id_funcionario_elabora='+1+'&tipo=Niif','_blank');
           }
           this.router.navigate(['/contabilidad/activos-fijos']);
         }
         Swal.fire({
-          icon: data.codigo,
-          title: data.titulo,
-          text: data.mensaje
+          icon: datos.codigo,
+          title: datos.titulo,
+          text: datos.mensaje
         })
         // this.ShowSwal(data.codigo, data.titulo, data.mensaje);
       })
@@ -331,9 +332,9 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
         if (data.codigo == 'success') {
           
           if (tipo == 'Pcga') {
-            // window.open(environment.ruta+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&activo=Adicion&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario,'_blank');
+            window.open(environment.ruta+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&activo=Adicion&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario,'_blank');
           } else {
-            // window.open(environment.ruta+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&activo=Adicion&id_adicion='+data.Id_Adicion+'&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario+'&tipo=Niif','_blank');
+            window.open(environment.ruta+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&activo=Adicion&id_adicion='+data.Id_Adicion+'&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario+'&tipo=Niif','_blank');
           }
           this.router.navigate(['/contabilidad/activos-fijos']);
         }
@@ -351,15 +352,30 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
 
   ValidateBeforeSubmit(){
     if (this.ActivoFijoModel.Costo_NIIF == 0) {
-      this.ShowSwal('warning', 'Alerta', 'El costo no puede ser 0, verifique el costo NIIF!');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Alerta',
+        text: 'El costo no puede ser 0, verifique el costo NIIF!'
+      })
+      // this.ShowSwal('warning', 'Alerta', 'El costo no puede ser 0, verifique el costo NIIF!');
       return false;
 
     }else if (this.ActivoFijoModel.Costo_PCGA == 0) {
-      this.ShowSwal('warning', 'Alerta', 'El costo no puede ser 0, verifique el costo PCGA!');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Alerta',
+        text: 'El costo no puede ser 0, verifique el costo PCGA!'
+      })
+      // this.ShowSwal('warning', 'Alerta', 'El costo no puede ser 0, verifique el costo PCGA!');
       return false;
 
     }else if (this.ActivoFijoModel.Id_Centro_Costo == '' ) {
-      this.ShowSwal('warning', 'Alerta', 'No ha agregado un centro de costo!');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Alerta',
+        text: 'No ha agregado un centro de costo!'
+      })
+      // this.ShowSwal('warning', 'Alerta', 'No ha agregado un centro de costo!');
       return false;
 
     }/* else if (this.ActivoFijoModel.Id_Cuenta_Contrapartida == '' ) {

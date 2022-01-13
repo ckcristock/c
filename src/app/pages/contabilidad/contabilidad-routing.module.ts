@@ -16,7 +16,7 @@ const routes: Routes = [
     { path: 'centro-costos', component: CentroCostosComponent },
     { path: 'activos-fijos', component: ActivosFijosComponent },
     { path: 'activos-fijos-crear', component: ActivosFijosCrearComponent },
-    { path: 'activos-fijos-ver', component: ActivosFijosVerComponent },
+    { path: 'activo-fijo-ver/:id', component: ActivosFijosVerComponent },
     { path: 'depreciacion', component: DepreciacionComponent },
     { path: 'depreciaciones', component: TabladepreciacionesComponent },
     { path: 'cajas', component: CajasComponent },

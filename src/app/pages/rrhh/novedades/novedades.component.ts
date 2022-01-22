@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import * as moment from 'moment';
 import { DisabilityLeavesService } from './disability-leaves.service';
 import { PayrollFactorService } from './payroll-factor.service';
+import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 
 @Component({
   selector: 'app-novedades',
@@ -13,19 +14,22 @@ export class NovedadesComponent implements OnInit {
   openModal = new EventEmitter<any>()
   form: FormGroup
 
-  people: any[] = []
+  people: any[] = [];
+  peopleSelects:any[] = [];
   loading = false
   paylads: any[] = []
 
   constructor(
     private _payroll: PayrollFactorService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _people: PersonService
   ) {
 
   }
   ngOnInit() {
     this.createFrom()
     this.cargarNovedades()
+    this.getPeople()
   }
 
   cargarNovedades() {
@@ -42,9 +46,17 @@ export class NovedadesComponent implements OnInit {
     let dateStart = moment().startOf("month").format(moment.HTML5_FMT.DATE)
     let dateEnd = moment().endOf("month").format(moment.HTML5_FMT.DATE)
     this.form = this.fb.group({
-      date_start: [dateStart, Validators.required],
-      date_end: [dateEnd, Validators.required],
+      date_start: ['', Validators.required],
+      date_end: ['', Validators.required],
+      personfill: ['']
     })
+  }
+
+  getPeople() {
+    this._people.getPeopleIndex().subscribe((r: any) => {
+      this.peopleSelects = r.data;
+      this.peopleSelects.unshift({ text: 'Seleccione', value: '' });
+    });
   }
 
   editarNovedad(fact){

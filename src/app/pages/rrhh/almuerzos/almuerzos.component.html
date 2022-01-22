@@ -6,15 +6,34 @@
             </button>
             <h5 class="text-primary">Almuerzos</h5>
         </div>
+        <hr class="line">
         <div class="row mt-4">
             <div class="form-group col-3">
                 <label for="">Filtro Funcionario</label>
                 <ng-select [(ngModel)]="filtro.person" (change)="getLunches()" [items]="people" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
                 </ng-select>
             </div>
-            <div class="form-group col-3">
-                <label for="">Filtro Fecha</label>
-                <input type="date" class="form-control" [(ngModel)]="filtro.date" (change)="getLunches()">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="fecha_inicio" class="custom-label">Fecha de Inicio</label>
+                    <input type="date" [(ngModel)]="filtro.date_start" (change)="getLunches()" class="form-control custom-control" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="fecha_fin" class="custom-label">Fecha de Fin</label>
+                    <input type="date" [(ngModel)]="filtro.date_end" class="form-control custom-control" (change)="getLunches()" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-sm btn-primary btn-block mt-4" style="float: right;" (click)="Download()">
+                    <i class="fas fa-file-download"></i>
+                    <span *ngIf="!donwloading; else status"> Descargar</span>
+                      <ng-template #status>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Generando...
+                      </ng-template>
+                  </button>
             </div>
         </div>
     </div>
@@ -80,7 +99,7 @@
                 </div>
                 <div class="form-group col-12">
                     <label for="" class="form-label">Valor del Almuerzo</label>
-                    <input type="number" formControlName="value" class="form-control form-control-sm">
+                    <input type="number" formControlName="value" class="form-control form-control-sm" readonly>
                 </div>
                 <div class="form-group col-12" *ngIf="personList.controls.length > 0">
                     <div class="table-wrapper-scroll-y my-custom-scrollbar">

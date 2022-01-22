@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -27,6 +27,11 @@ export class AlmuerzosService {
 
   activateOrInactivate( state ){
     return this.http.put(`${environment.base_url}/state-change`, state);
+  }
+
+  Download( params = {}) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.get(`${environment.base_url}/lunches/download`,{ params, headers, responseType: 'blob' as 'json' });
   }
 
 }

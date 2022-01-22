@@ -2,27 +2,22 @@
     <div class="card-body">
         <div class="card-title">
             <button class="btn btn-primary btn-sm" style="float: right;" (click)="open()">
-                <i class="fa fa-plus"></i> Nuevo Descargo
+                <i class="fa fa-plus"></i> Nuevo Proceso disciplinario
             </button>
-            <h5 class="text-primary">Descargos</h5>
+            <h5 class="text-primary">Procesos disciplinarios</h5>
         </div>
         <div class="form-row mt-4">
             <div class="form-group col-md-2">
                 <label for="codigo">Código</label>
-                <input type="text" id="codigo" class="form-control form-control-sm" [(ngModel)]="filtros.code"
-                    (change)="getDisciplinaryProcess()" name="codigo" placeholder="Filtro por código"
-                    autocomplete="off">
+                <input type="text" id="codigo" class="form-control form-control-sm" [(ngModel)]="filtros.code" (change)="getDisciplinaryProcess()" name="codigo" placeholder="Filtro por código" autocomplete="off">
             </div>
             <div class="form-group col-md-2">
                 <label for="funcionario">Funcionario</label>
-                <input type="text" id="funcionario" class="form-control form-control-sm" [(ngModel)]="filtros.person"
-                    (change)="getDisciplinaryProcess()" name="funcionario" placeholder="Filtro por Funcionario"
-                    autocomplete="off">
+                <input type="text" id="funcionario" class="form-control form-control-sm" [(ngModel)]="filtros.person" (change)="getDisciplinaryProcess()" name="funcionario" placeholder="Filtro por Funcionario" autocomplete="off">
             </div>
             <div class="form-group col-md-2">
                 <label for="">Estado</label>
-                <select class="form-select form-control form-control-sm" [(ngModel)]="filtros.status"
-                    (change)="getDisciplinaryProcess()" aria-label="Default select example">
+                <select class="form-select form-control form-control-sm" [(ngModel)]="filtros.status" (change)="getDisciplinaryProcess()" aria-label="Default select example">
                     <option *ngFor="let statu of status" [value]="statu.valor">
                         {{ statu.clave }}
                     </option>
@@ -47,26 +42,21 @@
             <tbody>
                 <tr *ngFor="let proces of process">
                     <td scope="row"> {{ proces.id }} </td>
-                    <td> {{ proces.first_name }} {{ proces.second_name }} {{ proces.first_surname }} {{
-                        proces.second_surname }} </td>
+                    <td> {{ proces.first_name }} {{ proces.second_name }} {{ proces.first_surname }} {{ proces.second_surname }} </td>
                     <td> {{ proces.process_description }} </td>
                     <td> {{ proces.date_of_admission }} </td>
                     <td> {{ proces.date_end }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light "
-                                    type="button">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a (click)="downloadVer(proces.id)"
-                                        class="dropdown-item waves-light waves-effect caja-botones">
+                                    <a (click)="downloadVer(proces.id)" class="dropdown-item waves-light waves-effect caja-botones">
                                         <i class="fa fa-pencil"></i> Ver / imprimir
                                     </a>
-                                    <a *ngIf="proces.file != null"
-                                        class="dropdown-item waves-light waves-effect caja-botones"
-                                        (click)="download(proces.file)">
+                                    <a *ngIf="proces.file != null" class="dropdown-item waves-light waves-effect caja-botones" (click)="download(proces.file)">
                                         <i class="fa fa-pencil"></i> Ver Evidencia
                                     </a>
                                 </div>
@@ -76,16 +66,14 @@
                 </tr>
             </tbody>
         </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-            [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
-            (pageChange)="getDisciplinaryProcess($event)" aria-label="Default pagination" maxSize="5" rotate="true"
-            ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getDisciplinaryProcess($event)" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
         </ngb-pagination>
     </div>
 </div>
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
-        <h5 class="modal-title"> Descargo </h5>
+        <h5 class="modal-title"> Proceso disciplinario </h5>
         <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
             <span aria-hidden="true">
                 <i class="fas fa-times" (click)="modal.hide(); form.reset()"></i>
@@ -99,14 +87,10 @@
                     <div class="form-group">
                         <div class="col-12">
                             <label class="custom-label" for="funcionario_id">Funcionario</label>
-                            <input id="typeahead-format" type="text" class="form-control form-control-sm"
-                                placeholder="Funcionario..." formControlName="person_id"
-                                (change)="getHistory(); getProcess()" [ngbTypeahead]="search"
-                                [inputFormatter]="inputFormatBandListValue"
-                                [resultFormatter]="resultFormatBandListValue" [editable]='false' />
+                            <input id="typeahead-format" type="text" class="form-control form-control-sm" placeholder="Funcionario..." formControlName="person_id" (change)="getHistory(); getProcess()" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue"
+                                [editable]='false' />
                             <ng-container *ngIf="person_id_valid">
-                                <small *ngFor="let item of form.get('person_id').errors | ObjToArrayPipe"
-                                    class="text-danger">
+                                <small *ngFor="let item of form.get('person_id').errors | ObjToArrayPipe" class="text-danger">
                                     {{ item?.msj }}
                                 </small>
                             </ng-container>
@@ -115,17 +99,13 @@
                     <div class="row ml-0 mr-0">
                         <div class="form-group col-md-6">
                             <label for="codigo">Fecha inicio</label>
-                            <input type="date" id="fecha_inicio" [class.is-invalid]="date_of_admission_valid"
-                                formControlName="date_of_admission" class="form-control" name="fecha_inicio"
-                                autocomplete="off">
+                            <input type="date" id="fecha_inicio" [class.is-invalid]="date_of_admission_valid" formControlName="date_of_admission" class="form-control" name="fecha_inicio" autocomplete="off">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="codigo">Fecha Fin</label>
-                            <input type="date" id="fecha_fin" [class.is-invalid]="date_end_valid"
-                                formControlName="date_end" class="form-control" name="fecha_fin" autocomplete="off">
+                            <input type="date" id="fecha_fin" [class.is-invalid]="date_end_valid" formControlName="date_end" class="form-control" name="fecha_fin" autocomplete="off">
                             <ng-container *ngIf="date_end_valid">
-                                <small *ngFor="let item of form.get('date_end').errors | ObjToArrayPipe"
-                                    class="text-danger">
+                                <small *ngFor="let item of form.get('date_end').errors | ObjToArrayPipe" class="text-danger">
                                     {{ item?.msj }}
                                 </small>
                             </ng-container>
@@ -140,9 +120,7 @@
                     <div class="form-group mt-3">
                         <div class="col-12">
                             <label for="">Descripción</label>
-                            <textarea class="form-control form-control-sm"
-                                [class.is-invalid]="process_description_valid" formControlName="process_description"
-                                id="descripcion" name="notas" rows="3" placeholder="Descripción Proceso Disciplinario">
+                            <textarea class="form-control form-control-sm" [class.is-invalid]="process_description_valid" formControlName="process_description" id="descripcion" name="notas" rows="3" placeholder="Descripción Proceso Disciplinario">
                             </textarea>
                         </div>
                     </div>
@@ -181,10 +159,8 @@
     </div>
     <div class="app-modal-footer">
         <div class="form-group text-right">
-            <button (click)="modal.hide(); form.reset()" type="button"
-                class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid"
-                (click)="createNewProcess()">Guardar</button>
+            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="createNewProcess()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

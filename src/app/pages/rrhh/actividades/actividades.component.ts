@@ -73,7 +73,7 @@ export class ActividadesComponent {
   cliente_seleccionado: any = '';
   funcionario_seleccionado: any = '';
   Funcionarios: any[] = [];
-
+  id_activity:any;
   alertOption: any = {};
   private eventoActividad: any;
   eventsModel: any;
@@ -115,7 +115,7 @@ export class ActividadesComponent {
   companies: any[] = [];
   groups: any[] = [];
   dependencies: any[] = [];
-
+  editar:boolean = false;
   constructor(
     private http: HttpClient,
     private _actividad: ActividadesService,
@@ -134,12 +134,14 @@ export class ActividadesComponent {
      }); */
     this.GetActividadesMes();
     //alert(`i'm here`);
-    console.log(this.ActividadModel);
+    // console.log(this.ActividadModel);
     
   }
   GetActividadesMes() {
     this._actividad.getActivities().subscribe((r: any) => {
       this.calendarEvents = r.data;
+      console.log(this.calendarEvents);
+      
     });
     this.DataActivities = [];
     this.Actividades = [];
@@ -248,11 +250,18 @@ export class ActividadesComponent {
   ////////////////FIN FUNCIONES TIPO////////////////////////
 
   GuardarActividad(form: NgForm) {
-    this._actividad.saveActivity(form.value).subscribe((data: any) => {
-      this.CerrarModal();
-      this.GetActividadesMes();
-    });
+    console.log(form.value);
+      this._actividad.saveActivity(form.value).subscribe((data: any) => {
+        this.CerrarModal();
+        this.GetActividadesMes();
+        this._swal.show({
+          text: '¡Proceso exitoso!',
+          title: (this.editar == true ? 'Actualizado con éxito' : 'Guardado con éxito'),
+          icon: 'success',
+        });
+      });
   }
+
   CerrarModal() {
     this.LimpiarModelo();
     this.ModalActividad.hide();
@@ -274,7 +283,7 @@ export class ActividadesComponent {
   }
   editarEvento() {
     let data = this.actividadObj;
-
+    this.ActividadModel.id = this.id_activity;
     this.ActividadModel.Id_Actividad_Recursos_Humanos = data.id;
     this.ActividadModel.Fecha_Inicio = moment
       .utc(data.date_start)
@@ -320,13 +329,14 @@ export class ActividadesComponent {
   FuncionariosSelec(id) {
     this._actividad.getPeopleActivity(id).subscribe((r: any) => {
       this.FuncionariosSele = r.data;
+      console.log(this.FuncionariosSele);
       if (r.data) {
-        /*  this.ActividadModel.Funcionario_Asignado =
+         this.ActividadModel.Funcionario_Asignado =
           this.FuncionariosSele.reduce((acc, el) => {
             return [...acc, el.person.id]
-          }, []) */
+          }, [])
       } else {
-        /*   this.ActividadModel.Funcionario_Asignado = ['0']; */
+          this.ActividadModel.Funcionario_Asignado = ['0'];
       }
     });
   }
@@ -347,6 +357,7 @@ export class ActividadesComponent {
   // funcion que no desabilita los input
   agregarEvento() {
     this.ver = 0;
+    this.editar = false;
     /* this.userLogin = (JSON.parse(localStorage.getItem("User"))).Id_Grupo
     this.userDepen = (JSON.parse(localStorage.getItem("User"))).Id_Dependencia */
     this.Grupo_Dependencia(this.userLogin);
@@ -363,10 +374,11 @@ export class ActividadesComponent {
         this.editarEvento();
         this.ver = 1;
         break;
-      /* case 'Editar':
+      case 'Editar':
         this.editarEvento();
-        this.ver = 1;
-        break; */
+        this.editar = true;
+        this.ver = 0;
+        break;
       case 'Anular':
         this.anularEvento();
         break;
@@ -374,35 +386,38 @@ export class ActividadesComponent {
   }
   actividadObj: any = {};
   accionarEvento(event) {
-    let id = event.event.id;
-    this.actividadObj = this.calendarEvents.find((x) => x.id == id);
+    if(event.event){
+      let id = event.event._def.publicId;
+      this.actividadObj = this.calendarEvents.find((x) => x.id == id);
+      this.id_activity = id;
+      if (this.actividadObj.state != 'Anulada') {
+        this.eventoActividad = event;
+        Swal.fire({
+          title: 'Escoja una acción',
+          text: '¿Qué acción desea elegir?',
+          icon: 'warning',
+          showCancelButton: true,
+          input: 'select',
+          confirmButtonColor: '#34c38f',
+          cancelButtonColor: '#f46a6a',
+          confirmButtonText: 'Continuar',
+          inputOptions: {
+            Ver: 'Ver',
+            Editar: 'Editar',
+            Anular: 'Anular',
+          },
+          inputPlaceholder: 'Operaciones...',
+        }).then((result) => {
+          if (result.value) {
+            this.accionEvento(result.value);
+          }
+        });
+          
+        /*  accionEvento */
+      }
+    }
 
     
-    if (this.actividadObj.state != 'Anulada') {
-      this.eventoActividad = event;
-      Swal.fire({
-        title: 'Escoja una acción',
-        text: '¿Qué acción desea elegir?',
-        icon: 'warning',
-        showCancelButton: true,
-        input: 'select',
-        confirmButtonColor: '#34c38f',
-        cancelButtonColor: '#f46a6a',
-        confirmButtonText: 'Continuar',
-        inputOptions: {
-          Ver: 'Ver',
-          /* Editar: 'Editar', */
-          Anular: 'Anular',
-        },
-        inputPlaceholder: 'Operaciones...',
-      }).then((result) => {
-        if (result.value) {
-          this.accionEvento(result.value);
-        }
-      });
-
-      /*  accionEvento */
-    }
   }
   Grupo_Dependencia(Grupo) {
     /* if (Grupo == "Todas") {

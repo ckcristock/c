@@ -5,6 +5,8 @@ import { SwalService } from '../../ajustes/informacion-base/services/swal.servic
 import { ValidatorsService } from '../../ajustes/informacion-base/services/reactive-validation/validators.service';
 import { OperatorFunction, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { ValorAlmuerzosService } from '../../ajustes/parametros/valor-almuerzos/valor-almuerzos.service';
+import { IMyDrpOptions } from 'mydaterangepicker';
 
 @Component({
   selector: 'app-almuerzos',
@@ -26,21 +28,32 @@ export class AlmuerzosComponent implements OnInit {
     collectionSize: 0
   }
   filtro = {
-    date: '',
-    person: ''
+    date_start: '',
+    date_end: '',
+    person: '',
+
   }
 
   values:any = '';
+  lunchValue:any;
+  myDateRangePickerOptions: IMyDrpOptions = {
+    // other options...
+    dateFormat: 'dd-mm-yyyy',
+};
+donwloading = false;
+
   constructor( 
                 private _almuerzo: AlmuerzosService,
                 private fb: FormBuilder,
                 private _swal: SwalService,
-                private _validator: ValidatorsService
+                private _validator: ValidatorsService,
+                private _lunchValues: ValorAlmuerzosService
               ) { }
 
   ngOnInit(): void {
     this.createForm();
     this.getPeople();
+    this.getLunchValues();
     this.getLunches();
   }
 
@@ -50,6 +63,12 @@ export class AlmuerzosComponent implements OnInit {
 
   openModalVer() {
     this.modalVer.show();
+  }
+
+  getLunchValues() {
+    this._lunchValues.getAll().subscribe((data: any) => {
+    this.form.patchValue({value: data.data.value})
+    })
   }
 
   inputFormatBandListValue(value: any) {
@@ -80,7 +99,7 @@ export class AlmuerzosComponent implements OnInit {
   createForm(){
     this.form = this.fb.group({
       fill_person: ['', Validators.required],
-      value: ['', Validators.required],
+      value: [0, Validators.required],
       persons: this.fb.array([])
     });
   }
@@ -173,6 +192,29 @@ export class AlmuerzosComponent implements OnInit {
         });
       }
     })
+  }
+
+  Download() {
+    // let params = this.getParams();
+    let params = '';
+    this.donwloading = true;
+    this._almuerzo.Download(params).subscribe((response: BlobPart) => {
+        let blob = new Blob([response], { type: 'application/excel' });
+        let link = document.createElement('a');
+        const filename = 'reporte_almuerzos';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.xlsx`;
+        link.click();
+        this.donwloading = false;
+      }),
+      (error) => {
+        console.log('Error downloading the file');
+        this.donwloading = false;
+      },
+      () => {
+        console.info('File downloaded successfully');
+        this.donwloading = false;
+      };
   }
 
   get person_valid() {

@@ -14,6 +14,6 @@ export class Actividad{
   public Id_Grupo:string = '0';
   public Id_Dependencia:string = '0';
   public Funcionario_Asignado : string[] = [];
-
+  public id:any;
 
 }

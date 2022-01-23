@@ -41,4 +41,14 @@ export class MemorandosService {
     return this.http.get(`${environment.base_url}/alert/${id}`);
   }
 
+  saveFile(file){
+    localStorage.setItem("file",file)
+  }
+  
+  download(file, params = {}) {
+    // const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    // return this.http.get(`${environment.base_url}/file?path=${file}`, { responseType: 'blob' as 'json' });
+    return localStorage.getItem("file")
+  }
+
 }

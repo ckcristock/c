@@ -63,6 +63,8 @@ import { DotacionEntradasComponent } from './dotacion/dotaciones/dotacion-entrad
 import { DotacionSalidasComponent } from './dotacion/dotaciones/dotacion-salidas/dotacion-salidas.component';
 import { TableStockComponent } from './dotacion/dotaciones/table-stock/table-stock.component';
 import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/category-stock.component';
+import { DescargoComponent } from './procesos/disciplinarios/descargo/descargo.component';
+import { CerrarProcesoComponent } from './procesos/disciplinarios/cerrar-proceso/cerrar-proceso.component';
 
 @NgModule({
   declarations: [
@@ -108,6 +110,8 @@ import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/cat
     DotacionSalidasComponent,
     TableStockComponent,
     CategoryStockComponent,
+    DescargoComponent,
+    CerrarProcesoComponent,
   ],
   imports: [
     RrhhRouterModule,

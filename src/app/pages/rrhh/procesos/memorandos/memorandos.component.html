@@ -67,6 +67,9 @@
                                     <a (click)="aprobarMemorando(memorandum, 'Aprobado')" *ngIf="memorandum.state == 'Pendiente'" class="dropdown-item waves-light text-success waves-effect caja-botones">
                                         <i class="far fa-thumbs-up"></i> Aprobar
                                     </a>
+                                    <a class="dropdown-item waves-light text-success waves-effect caja-botones" (click)="download(memorandum.file)">
+                                        Descargar archivo
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +136,7 @@
 </app-modal-basic>
 <!--  -->
 
-<!-- Nuevo memorando -->
+<!-- Nuevo motivo -->
 
 <app-modal-basic #modalMotivo [dialogClass]="'modal-md'">
     <div class="app-modal-header">
@@ -220,6 +223,14 @@
                             <option value="Grave">Grave</option>
                         </select>
                     </div>
+
+                    <div class="col-12">
+                        <div class="form-label mt-3">
+                        <label for="" class="form-label">Cargar documento legal</label>
+                            <input type="file" id="importFile" (change)="onFileChanged($event)">
+                        </div>
+                    </div>
+
                     <div class="col-12">
                         <label for="" class="form-label mt-3">Detalles</label>
                         <textarea name="detalles" cols="20" rows="3" formControlName="details" class="form-control form-control-sm col-sm-12 mr-4 mt-1" placeholder="Detalles del nuevo memorando..."></textarea>

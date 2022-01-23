@@ -40,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let proces of process">
+                <tr *ngFor="let proces of process; let i=index">
                     <td scope="row"> {{ proces.id }} </td>
                     <td> {{ proces.first_name }} {{ proces.second_name }} {{ proces.first_surname }} {{ proces.second_surname }} </td>
                     <td> {{ proces.process_description }} </td>
@@ -54,10 +54,18 @@
                                 </button>
                                 <div ngbDropdownMenu>
                                     <a (click)="downloadVer(proces.id)" class="dropdown-item waves-light waves-effect caja-botones">
-                                        <i class="fa fa-pencil"></i> Ver / imprimir
+                                        <i class="fa fa-print"></i> Ver / imprimir
                                     </a>
                                     <a *ngIf="proces.file != null" class="dropdown-item waves-light waves-effect caja-botones" (click)="download(proces.file)">
-                                        <i class="fa fa-pencil"></i> Ver Evidencia
+                                        <i class="fa fa-file"></i> Ver Evidencia
+                                    </a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/rrhh/procesos/disciplinarios/', proces.id]">
+                                        <i class="fa fa-eye"></i> Seguimiento
+                                    </a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]">
+
+                                        <a *ngIf="proces.status=='Abierto'"> <i class="fa fa-times-circle"></i> Cerrar proceso</a>
+                                        <a *ngIf="proces.status=='Cerrado'"> <i class="fa fa-external-link-alt"></i> Ver conclusión</a>
                                     </a>
                                 </div>
                             </div>
@@ -114,7 +122,7 @@
                     <div class="col-12">
                         <div class="input-group mb-3">
                             <label for="importFile">Evidencia</label>
-                            <input type="file" id="importFile" (change)="onFileChanged($event)">
+                            <input type="file" id="importFile" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
                         </div>
                     </div>
                     <div class="form-group mt-3">

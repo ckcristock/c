@@ -62,13 +62,14 @@
                                     <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/rrhh/procesos/disciplinarios/', proces.id]">
                                         <i class="fa fa-eye"></i> Seguimiento
                                     </a>
+                                    <a *ngIf="proces.status=='Abierto' || proces.status=='Aprobado'" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]" class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-times-circle"></i> Cerrar proceso
+                                    </a>
+                                    <a *ngIf="proces.status=='Cerrado'" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]" class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="fa fa-external-link-alt"></i> Ver conclusión
+                                    </a>
                                     <a *ngIf="permission.permissions.approve && proces.status != 'Aprobado'" (click)="aprobar(proces.id)" class="dropdown-item waves-light waves-effect caja-botones">
                                         <i class="far fa-thumbs-up"></i> Aprobar
-                                    </a>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]">
-
-                                        <a *ngIf="proces.status!='Abierto'"> <i class="fa fa-times-circle"></i> Cerrar proceso</a>
-                                        <a *ngIf="proces.status=='Cerrado'"> <i class="fa fa-external-link-alt"></i> Ver conclusión</a>
                                     </a>
                                 </div>
                             </div>

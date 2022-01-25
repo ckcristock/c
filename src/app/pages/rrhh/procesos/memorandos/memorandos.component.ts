@@ -187,6 +187,8 @@ export class MemorandosComponent implements OnInit {
     this.memorandosService.getMemorandumList( params )
     .subscribe( (res:any) => {
       this.memorandums = res.data.data;
+      console.log(res.data);
+      
       this.paginationMemorando.collectionSize = res.data.total;
       this.loading = false;
     })
@@ -205,7 +207,6 @@ export class MemorandosComponent implements OnInit {
     });
 
     ///this.memorandosService.saveFile(file);
-   
     this.memorandosService.createNewMemorandum( this.formMemorando.value )
     .subscribe( (res:any) => {
       this.modalMemorando.hide();
@@ -226,17 +227,17 @@ export class MemorandosComponent implements OnInit {
    * TODO 
    */
   download(file) {
-    // this.memorandosService.download(file)
-    //   .subscribe((response: BlobPart) => {
-    //     let blob = new Blob([response], { type: "application/pdf" });
-    //     let link = document.createElement("a");
-    //     link.href = window.URL.createObjectURL(blob);
-    //     link.download = file;
-    //     link.click();
-    //     this.loading = false
-    //   }),
-    //   error => { console.log('Error downloading the file'); this.loading = false },
-    //   () => { console.info('File downloaded successfully'); this.loading = false };
+    this.memorandosService.download(file)
+      .subscribe((response: BlobPart) => {
+        let blob = new Blob([response], { type: "application/pdf" });
+        let link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = file;
+        link.click();
+        this.loading = false
+      }),
+      error => { console.log('Error downloading the file'); this.loading = false },
+      () => { console.info('File downloaded successfully'); this.loading = false };
   }
 
   aprobarMemorando( memorando, state ) {

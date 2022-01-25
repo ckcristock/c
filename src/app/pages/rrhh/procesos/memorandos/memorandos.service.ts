@@ -45,10 +45,9 @@ export class MemorandosService {
     localStorage.setItem("file",file)
   }
   
-  download(file, params = {}) {
+  download(file) {
     // const headers = new HttpHeaders().set('Content-Type', 'application/json')
-    // return this.http.get(`${environment.base_url}/file?path=${file}`, { responseType: 'blob' as 'json' });
-    return localStorage.getItem("file")
+    return this.http.get(`${environment.base_url}/file?path=${file}`, { responseType: 'blob' as 'json' });
   }
 
 }

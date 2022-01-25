@@ -39,4 +39,8 @@ export class DisciplinariosService {
     return this.http.get(`${environment.base_url}/file?path=${file}`, { responseType: 'blob' as 'json' });
   }
 
+  approve(data, id){
+    return this.http.post(`${environment.base_url}/approve_process/${id}`, data);
+  }
+
 }

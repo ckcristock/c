@@ -40,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let proces of process; let i=index">
+                <tr *ngFor="let proces of process; let i=index" [ngClass]="{'bg-success text-white': (proces.status == 'Aprobado')}">
                     <td scope="row"> {{ proces.id }} </td>
                     <td> {{ proces.first_name }} {{ proces.second_name }} {{ proces.first_surname }} {{ proces.second_surname }} </td>
                     <td> {{ proces.process_description }} </td>
@@ -62,9 +62,12 @@
                                     <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/rrhh/procesos/disciplinarios/', proces.id]">
                                         <i class="fa fa-eye"></i> Seguimiento
                                     </a>
+                                    <a *ngIf="permission.permissions.approve && proces.status != 'Aprobado'" (click)="aprobar(proces.id)" class="dropdown-item waves-light waves-effect caja-botones">
+                                        <i class="far fa-thumbs-up"></i> Aprobar
+                                    </a>
                                     <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]">
 
-                                        <a *ngIf="proces.status=='Abierto'"> <i class="fa fa-times-circle"></i> Cerrar proceso</a>
+                                        <a *ngIf="proces.status!='Abierto'"> <i class="fa fa-times-circle"></i> Cerrar proceso</a>
                                         <a *ngIf="proces.status=='Cerrado'"> <i class="fa fa-external-link-alt"></i> Ver conclusión</a>
                                     </a>
                                 </div>

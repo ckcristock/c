@@ -63,11 +63,11 @@
                                 <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light" type="button">
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
-                                <div ngbDropdownMenu>
-                                    <a (click)="aprobarMemorando(memorandum, 'Aprobado')" *ngIf="memorandum.state == 'Pendiente'" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                <div ngbDropdownMenu *ngIf="memorandum.type == 'Memorando'">
+                                    <a (click)="aprobarMemorando(memorandum, 'Aprobado')" *ngIf="permission.permissions.approve && memorandum.state == 'Pendiente'" class="dropdown-item waves-light text-success waves-effect caja-botones">
                                         <i class="far fa-thumbs-up"></i> Aprobar
                                     </a>
-                                    <a class="dropdown-item waves-light text-success waves-effect caja-botones" (click)="download(memorandum.file)">
+                                    <a *ngIf="memorandum.type == 'Memorando'" class="dropdown-item waves-light text-success waves-effect caja-botones" (click)="download(memorandum.file)">
                                         Descargar archivo
                                     </a>
                                 </div>
@@ -226,7 +226,7 @@
 
                     <div class="col-12">
                         <div class="form-label mt-3">
-                        <label for="" class="form-label">Cargar documento legal</label>
+                            <label for="" class="form-label">Cargar documento legal</label>
                             <input type="file" id="importFile" (change)="onFileChanged($event)">
                         </div>
                     </div>

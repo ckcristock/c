@@ -1,8 +1,7 @@
 <div class="card" *ngIf="process">
     <div class="card-header">
-        <h5 class="card-title"> Cerrar Descargo </h5>
-        <h6 class="card-title" *ngIf="process.status=='Cerrado'"> Proceso cerrado anteriormente, no se permiten mas
-            cambios </h6>
+        <h5 class="card-title text-primary"> Cerrar Proceso Disciplinario </h5>
+        <h6 class="card-title" *ngIf="process.status=='Cerrado'"> Proceso cerrado anteriormente, no se permiten mas cambios </h6>
     </div>
     <div class="card-body">
         <form [formGroup]="form">
@@ -13,16 +12,13 @@
                             <label class="custom-label" for="funcionario_id">Funcionario(s) responsable(s)</label>
                             <div class="row ml-0 mr-0">
 
-                                <input id="typeahead-format" type="text" class="form-control form-control-sm col-9"
-                                    placeholder="Funcionario..." formControlName="person_id" (change)="getHistory()"
-                                    [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue"
-                                    [resultFormatter]="resultFormatBandListValue" [editable]='false' />
-                                <button class="btn btn-primary col-2 ml-2" (click)="open();">Agregar</button>
+                                <input id="typeahead-format" type="text" class="form-control form-control-sm col-9" placeholder="Funcionario..." formControlName="person_id" (change)="getHistory()" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue"
+                                    [editable]='false' />
+                                <button class="btn btn-primary btn-sm col-2 ml-2" (click)="open();">Agregar</button>
                             </div>
 
                             <ng-container *ngIf="person_id_valid">
-                                <small *ngFor="let item of form.get('person_id').errors | ObjToArrayPipe"
-                                    class="text-danger">
+                                <small *ngFor="let item of form.get('person_id').errors | ObjToArrayPipe" class="text-danger">
                                     {{ item?.msj }}
                                 </small>
                             </ng-container>
@@ -31,12 +27,10 @@
                     <div class="row">
                         <div class="input-group mb-3 col-7">
                             <label for="importFile">Documento Legal</label>
-                            <input *ngIf="process.status=='Abierto'" class="ml-1" type="file" id="importFile"
-                                (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
+                            <input *ngIf="process.status=='Abierto'" class="ml-1" type="file" id="importFile" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
                         </div>
                         <div class="col-5 text-right">
-                            <button class="btn btn-sm btn-primary" *ngIf="process.status=='Cerrado'"
-                            (click)="download(file)">Descargar</button>
+                            <button class="btn btn-sm btn-primary" *ngIf="process.status=='Cerrado'" (click)="download(legalDocument)">Descargar</button>
                         </div>
                     </div>
 
@@ -52,36 +46,38 @@
         </form>
 
 
-    <table *ngIf="funcionarios.length" class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Funcionarios Responsables</th>
-                <th scope="col">Memorandos</th>
-                <th scope="col">Fecha Memorando</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let user of funcionarios; let i= index">
-                <th scope="row">{{i+1}}</th>
-                <td>{{user.personId.name}}</td>
-                <td *ngIf="user.memorandos.length>0">
-                    <p  *ngFor="let memo of user.memorandos">{{memo.name}}</p>
-                </td>
-                <td *ngIf="!user.memorandos.length>0">
-                    <p>Sin Memorandos</p>
-                </td>
-                <td><p  *ngFor="let memo of user.memorandos">{{memo.value}}</p></td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="col" *ngIf="process.status=='Abierto'">
-        <button class="btn btn-errorbtn btn-danger mr-2 btn-sm btn-block" (click)="cerrarDescargo()"> Cerrar
+        <table *ngIf="funcionarios.length" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Funcionarios Responsables</th>
+                    <th scope="col">Memorandos</th>
+                    <th scope="col">Fecha Memorando</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of funcionarios; let i= index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{user.personId.name}}</td>
+                    <td *ngIf="user.memorandos.length>0">
+                        <p *ngFor="let memo of user.memorandos">{{memo.name}}</p>
+                    </td>
+                    <td *ngIf="!user.memorandos.length>0">
+                        <p>Sin Memorandos</p>
+                    </td>
+                    <td>
+                        <p *ngFor="let memo of user.memorandos">{{memo.value}}</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col" *ngIf="process.status=='Abierto'">
+            <button class="btn btn-errorbtn btn-danger mr-2 btn-sm btn-block" (click)="cerrarDescargo()"> Cerrar
             Descargo</button>
 
-    </div>
+        </div>
 
-</div>
+    </div>
 
     <app-modal-basic #modal [dialogClass]="'modal-lg'">
         <div class="app-modal-header">
@@ -95,7 +91,7 @@
             </button>
         </div>
         <div class="app-modal-body">
-            <form >
+            <form>
                 <div class="form-row">
                     <div class="col-md-12 panel">
                         <div class="panel-body">
@@ -110,8 +106,7 @@
                                 <div class="mt-4" style="margin-left: 30px; margin-right: 50px;">
 
                                     <div *ngFor="let historyInf of historyInfo">
-                                        <input class="mr-2" type="checkbox" [value]="historyInf.created_at_memorandum"
-                                            [id]="historyInf.id" (change)="onSelectOption($event)" [name]="historyInf.memorandumType">
+                                        <input class="mr-2" type="checkbox" [value]="historyInf.created_at_memorandum" [id]="historyInf.id" (change)="onSelectOption($event)" [name]="historyInf.memorandumType">
                                         <label for="checkbox">
 
                                             <b lass="fs-3"> Memorando | <i styles="color:gray;"> {{
@@ -132,10 +127,8 @@
         </div>
         <div class="app-modal-footer">
             <div class="form-group text-right">
-                <button (click)="modal.hide(); " type="button"
-                    class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-                <button type="submit" class="btn btn-primary btn-sm raised" 
-                    (click)="modal.hide(); guardarFuncionario(form.value.person_id); form.reset()">Guardar</button>
+                <button (click)="modal.hide(); " type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+                <button type="submit" class="btn btn-primary btn-sm raised" (click)="modal.hide(); guardarFuncionario(form.value.person_id); form.reset()">Guardar</button>
             </div>
         </div>
     </app-modal-basic>

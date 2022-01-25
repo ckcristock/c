@@ -39,7 +39,6 @@ export class DescargoComponent implements OnInit {
 
 
   anotacion: {
-    person_id: string,
     description: string,
     disciplinary_process_id: any,
     date: any,
@@ -60,6 +59,7 @@ export class DescargoComponent implements OnInit {
     this.filtros.code = this.rutaActiva.snapshot.params.id;
     this.getDisciplinaryProcess();
     this.createFormSeguimiento();
+    this.getAnnotation();
   }
 
 
@@ -67,7 +67,9 @@ export class DescargoComponent implements OnInit {
 
   createFormSeguimiento() {
     this.formSeguimiento = this.fb.group({
-      anotacion: ['', Validators.required]
+      description: ['', Validators.required],
+      disciplinary_process_id: [''],
+      file: ['']
     });    
   }
 
@@ -131,22 +133,30 @@ export class DescargoComponent implements OnInit {
       icon: 'question'
     }).then(r => {
       if (r.isConfirmed) {
-        this.anotacion = {
-          person_id: 'Yo', //persona logueada
-          date: new Date(),
+        this.formSeguimiento.patchValue({
           disciplinary_process_id: this.filtros.code,
-          description: this.formSeguimiento.value.anotacion,
           file: this.fileAnotacion
-        }
-        this.anotaciones.push(this.anotacion)
-        this.formSeguimiento.reset();
-        this.fileAnotacion = null;
-        this._descargo.createAnotacion(this.anotacion)
-
+        })
+        this._descargo.createAnotacion(this.formSeguimiento.value).subscribe( (data:any) => {
+          this.fileAnotacion = null;
+          this.formSeguimiento.reset();
+          this.getAnnotation();
+          this._swal.show({
+            icon: 'success',
+            title: 'Guardado correctamente',
+            text: 'La Anotación a sido agregada con éxito'
+          })
+        })
       }
     })
 
 
+  }
+
+  getAnnotation(){
+    this._descargo.getAnnotations(this.filtros.code).subscribe((data:any) => {
+      this.anotaciones = data.data
+    })
   }
 
 

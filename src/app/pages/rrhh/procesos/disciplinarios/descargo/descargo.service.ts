@@ -21,9 +21,11 @@ export class DescargoService {
 
 
   createAnotacion(data){
-    // TODO endpoint to conect backend 
+    return this.http.post(`${environment.base_url}/annotation`, data);
+  }
 
-    console.log(data);
+  getAnnotations(id){
+    return this.http.get(`${environment.base_url}/annotation/${id}`);
   }
 
 }

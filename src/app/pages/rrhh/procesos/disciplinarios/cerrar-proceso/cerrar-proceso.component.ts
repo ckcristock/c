@@ -54,7 +54,7 @@ export class CerrarProcesoComponent implements OnInit {
   funcionarios: any[] = [];
   seleccionadas: any[] = [];
   payload: any = {};
-
+  legalDocument:any;
 
   constructor(
     private disciplinarioService: DisciplinariosService,
@@ -71,7 +71,7 @@ export class CerrarProcesoComponent implements OnInit {
     this.createForm();
     this.getDisciplinaryProcess();
     this.getPeople();
-
+    this.getLegalDocument();
     this.proceso = {
       id: '',
       responsables: []
@@ -186,6 +186,14 @@ export class CerrarProcesoComponent implements OnInit {
 
   }
 
+  getLegalDocument(){
+    this._proceso.getFileToDownload(this.filtros.code).subscribe((file:any) => {
+      this.legalDocument = file.data.file;
+      console.log(this.legalDocument);
+      
+    })
+  }
+
   search: OperatorFunction<string, readonly { value, text }[]> = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
@@ -208,6 +216,8 @@ export class CerrarProcesoComponent implements OnInit {
   guardarFuncionario(persona) {
 
     let resp: { personId: any, memorandos: any[] } = { personId: { id: persona.value, name: persona.text }, memorandos: this.seleccionadas }
+    console.log(resp);
+    
     let i = this.funcionarios.findIndex(funcionar => funcionar.personId.id === persona.value)
     i < 0 ? this.funcionarios.push(resp) : this.funcionarios[i] = resp;
     this.proceso.responsables = this.funcionarios;
@@ -232,8 +242,7 @@ export class CerrarProcesoComponent implements OnInit {
         this.payload.status = "Cerrado"
         this.payload.file = this.file;
         this.process.status = "Cerrado"
-        console.log(this.payload);
-
+        this.process.file = this.file;
         this._proceso.cerrarProceso(this.process.id, this.process).subscribe((r)=>{
           this.ruta.navigate(['/rrhh/procesos/disciplinarios'])
           Swal.fire('Success', 'Cerrado con éxito', 'success')

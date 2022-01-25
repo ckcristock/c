@@ -3,7 +3,7 @@
     <div class="card-header">
         <div class="card-title">
 
-            <h5 class="text-primary"> Descargo Seguimiento</h5>
+            <h5 class="text-primary"> Seguimiento Proceso Disciplinario </h5>
         </div>
 
     </div>
@@ -11,58 +11,69 @@
         <form [formGroup]="formSeguimiento">
             <div class=" row ml-0 mr-0">
                 <div class="form-group col-md-2">
-                    <label>{{fullNameSelected}}</label>
+                    <label style="color: black;">Funcionario</label>
+                    <p>{{fullNameSelected}}</p>
                 </div>
                 <!-- <div class="row  ml-0 mr-0"> -->
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-2">
+                    <label style="color: black;">Fecha Inicio</label>
                     <p>{{processSelected.date_of_admission}}</p>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-2">
+                    <label style="color: black;">Fecha Final</label>
                     <p>{{processSelected.date_end}}</p>
                 </div>
                 <!-- </div> -->
-                <div class="col-md-4 text-right ">
+                <div class=" form-group col-3">
+                    <label style="color: black;">Descripción</label>
+                    <p>{{processSelected.process_description}}</p>
+                </div>
+                <div class="col-md-3 text-right ">
                     <button class="btn btn-primary btn-sm" *ngIf="file" (click)="download(file)">
                         <i class="far fa-arrow-alt-circle-down"> Descargar Evidencia</i>
                     </button>
                 </div>
-                <div class=" form-group col-12">
-
-                    <label for="">Descripción</label>
-                    <p>{{processSelected.process_description}}</p>
-                </div>
                 <div class="col-12">
+                    <hr class="line">
                     <label for="">Anotaciones</label>
 
                     <div class="col panel-anotaciones">
-
                         <div class="card card-anotation" *ngFor="let anotacion of anotaciones">
                             <div class="card-body">
                                 <div class="row">
-                                    <h5 class="card-title col-9">{{anotacion.person_id}}</h5>
-                                    <a *ngIf="anotacion.file" (click)="download(anotacion.file)"
-                                        class="col-3 card-link pointer">Descargar archivo</a>
+                                    <div class="col-5">
+                                        <label for="">Func. Creó</label>
+                                        <h6 class="mb-2 text-muted">{{anotacion.user.person.first_name + ' ' + anotacion.user.person.first_surname }}</h6>
+                                    </div>
+                                    <div class="col-5">
+                                        <label for="">Fecha Creación</label>
+                                        <h6 class="mb-2 text-muted">{{ anotacion.created_at | date }}</h6>
+                                    </div>
+                                    <div class="col-2">
+                                        <a *ngIf="anotacion.file" (click)="download(anotacion.file)" class="col-3 card-link pointer">Descargar archivo</a>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="">Descripción:</label>
+                                        <p class="card-text"> {{ anotacion.description }}</p>
+                                    </div>
                                 </div>
-                                <h6 class="card-subtitle mb-2 text-muted">{{anotacion.date}}</h6>
-                                <p class="card-text"> {{anotacion.description}}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12" *ngIf="processSelected">
-                    <div *ngIf="processSelected.status=='Abierto'">
-
-                        <div>
-
-                            <textarea class="form-control form-control-sm" formControlName="anotacion"
-                                name="anotaciones" rows="3" placeholder="Descripción de la anotación">
-                        </textarea>
-                        </div>
-                        <input type="file" class="col-md-12" name="file" id="importFile"
-                            (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg" #inputFile>
-                        <button class="btn btn-primary btn-sm btn-block mt-3" [disabled]="!formSeguimiento.valid"
-                            (click)="agregarAnotacion(); inputFile.value=''"> Agregar </button>
+                    <div class="row">
+                        <ng-container *ngIf="processSelected.status=='Abierto'">
+                            <div class="col-12">
+                                <textarea class="form-control form-control-sm" formControlName="description" name="anotaciones" rows="3" placeholder="Descripción de la anotación">
+                                </textarea>
+                            </div>
+                            <div class="col-12">
+                                <input type="file" name="file" id="importFile" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg" #inputFile>
+                            </div>
+                            <button class="btn btn-primary btn-sm btn-block mt-3" [disabled]="!formSeguimiento.valid" (click)="agregarAnotacion(); inputFile.value=''"> Agregar </button>
+                        </ng-container>
                     </div>
                 </div>
             </div>

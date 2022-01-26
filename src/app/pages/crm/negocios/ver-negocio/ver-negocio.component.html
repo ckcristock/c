@@ -7,8 +7,7 @@
     <div class="card-body">
         <div class="row ml-0 mr-0" style="border-top: solid black">
             <div class="col-md-2 mt-3 mb-3">
-                <img [src]="negocio.empresa.logo" alt="Logo para la empresa"
-                    style="max-width: -webkit-fill-available" />
+                <img [src]="negocio.empresa.logo" alt="Logo para la empresa" style="max-width: -webkit-fill-available" />
             </div>
             <div class="col-md-2 mt-3">
                 <label>{{ negocio.id }}</label>
@@ -43,8 +42,7 @@
                             </tr>
                             <tr>
                                 <td scope="row" colspan="2"><strong>Agregar Presupuesto(s)</strong></td>
-                                <td class="text-center btn btn-success btn-block" role="button"
-                                    (click)="addPresupuesto('Presupuesto')">
+                                <td class="text-center btn btn-success btn-block" role="button" (click)="addPresupuesto()">
                                     <i class="fa fa-plus"></i>
                                 </td>
                             </tr>
@@ -66,9 +64,8 @@
                                 <td>$ {{ coti.valor | number }}</td>
                             </tr>
                             <tr>
-                                <td scope="row" colspan="2" ><strong>Agregar Cotizacion(es)</strong></td>
-                                <td class="text-center btn btn-success btn-block" role="button"
-                                    (click)="addPresupuesto('Cotizacion'); modalPresupuestos.show()">
+                                <td scope="row" colspan="2"><strong>Agregar Cotizacion(es)</strong></td>
+                                <td class="text-center btn btn-success btn-block" role="button" (click)="addCotizacion(); modalPresupuestos.show()">
                                     <i class="fa fa-plus"></i>
                                 </td>
                             </tr>
@@ -78,72 +75,124 @@
             </div>
             <div class="col-md-4" style="border-left: solid black">
                 <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-pills  mt-2">
-                    <li [ngbNavItem]="1">
+                    <li [ngbNavItem]="2">
                         <a ngbNavLink>Tareas</a>
                         <ng-template ngbNavContent>
-                            <app-tareas-negocio [tareas]="tareas" (addTask)="createTask($event)" (editTask)="editTask($event)"></app-tareas-negocio>
+                            <app-tareas-negocio [tareas]="tareas" (addTask)="createTask($event)" (editTask)="editTask($event)">
+                            </app-tareas-negocio>
                         </ng-template>
                     </li>
-                    <li [ngbNavItem]="2">
+                    <li [ngbNavItem]="1">
                         <a ngbNavLink>History</a>
                         <ng-template ngbNavContent>
                             <div class="text-center">
-                                <h6>Historial</h6>
+                                <app-historial-negocio></app-historial-negocio>
                             </div>
                         </ng-template>
                     </li>
                 </ul>
-
                 <div [ngbNavOutlet]="nav" class="mt-2"></div>
             </div>
         </div>
     </div>
 </div>
-
 <app-modal-basic #modalPresupuestos [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
-        <h5 class="modal-title">Seleccionar {{ modal_title }}</h5>
+        <h5 class="modal-title">Seleccionar Presupuestos disponibles</h5>
         <button type="button" class="close basic-close" (click)="modalPresupuestos.hide()">
-            <span aria-hidden="true">
-                <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
+      <span aria-hidden="true">
+        <i class="fas fa-times" (click)="modalPresupuestos.hide()"></i>
+        </span>
         </button>
     </div>
-
     <div class="app-modal-body">
-        <br />
-        <br />
-        <ng-select [items]="dataModal" bindLabel="descripcion" [multiple]="true" [closeOnSelect]="false"
-            [selectableGroup]="true" [selectableGroupAsModel]="false" [(ngModel)]="seleccionadas">
-        </ng-select>
-        <div class="mt-4">
-            <h6>Seleccionadas</h6>
-            <table class="table table-bordered ">
-                <thead class="table-dark text-center">
-                    <th class="col-md-8">Descripción</th>
-                    <th class="col-md-2">Fecha</th>
-                    <th class="col-md-2">Valor</th>
-                </thead>
-                <tbody class="table-bordered border border-dark" style="font-weight: 100">
-                    <tr *ngFor="let data of seleccionadas">
-                        <td scope="row">{{ data.descripcion }}</td>
-                        <td>{{ data.fecha | date }}</td>
-                        <td>$ {{ data.valor | number }}</td>
-                    </tr>
-                   
-                </tbody>
-            </table>
+        <table class="mt-2 table table-borderless table-striped" *ngIf="!loading && presupuestos.length > 0">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Destino</th>
+                    <th>Linea</th>
+                    <th>Quien elabora</th>
+                    <th>Total COP</th>
+                    <th>Total USD</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of presupuestos" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
+                    <td>
+                        <input type="checkbox" [selected]="presupuestosSeleccionados.includes(item.id)" [change]=" guardarPresupuesto(item.id) " />
+                        <label [for]=" item.id " class="ml-1 "> PRES {{ item.id }} </label>
+                    </td>
+                    <td> {{ item.created_at | date:'dd-MM-YYYY' }} </td>
+                    <td> {{ item.customer.name }} </td>
+                    <td> {{ item.destiny.name }} </td>
+                    <td> {{ item.line }} </td>
+                    <td> {{ item.user.person.first_name }} {{ item.user.person.first_surname }} </td>
+                    <td> ${{ item.total_cop | currency:'':'' }} </td>
+                    <td> ${{ item.total_usd | currency:'':'' }} </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <ng-select [items]="dataModal " bindLabel="descripcion " [multiple]="true " [closeOnSelect]="false " [selectableGroup]="true " [selectableGroupAsModel]="false " [(ngModel)]="seleccionadas ">
+        </ng-select> -->
+    </div>
+    <div class="app-modal-footer ">
+        <div class="form-group text-right ">
+            <button (click)="modalPresupuestos.hide() " type="reset " class="btn btn-danger raised mr-2 btn-sm "> Cerrar
+            </button>
+            <button type="submit " class="btn btn-primary btn-sm raised " (click)="modalPresupuestos.hide(); closeModalPresupuesto() "> Guardar </button>
         </div>
     </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modalPresupuestos.hide()" type="reset" class="btn btn-danger raised mr-2 btn-sm">
-                Cerrar
-            </button>
-            <button type="submit" class="btn btn-primary btn-sm raised"
-                (click)="modalPresupuestos.hide(); closeModal()">
-                Guardar
-            </button>
+</app-modal-basic>
+<app-modal-basic #modalCotizaciones [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Seleccionar cotizaciones disponibles</h5>
+        <button type="button" class="close basic-close" (click)="modalCotizaciones.hide()">
+      <span aria-hidden="true">
+        <i class="fas fa-times" (click)="modalCotizaciones.hide()"></i>
+      </span>
+    </button>
+    </div>
+    <div class="app-modal-body">
+        <table class="mt-2 table table-borderless table-striped" *ngIf="!loading && cotizaciones.length > 0">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Destino</th>
+                    <th>Linea</th>
+                    <th>Quien elabora</th>
+                    <th>Total COP</th>
+                    <th>Total USD</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="cotizaciones.lenght>=1">
+                <tr *ngFor="let item of cotizaciones" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
+                    <td>
+                        <input type="checkbox" [selected]="cotizacionesSeleccionadas.includes(item.id)" [change]=" guardarCotizacion(item.id) ">
+                        <label [for]=" item.id " class="ml-1 "> PRES {{ item.id }} </label>
+                    </td>
+                    <td> {{ item.created_at | date:'dd-MM-YYYY' }} </td>
+                    <td> {{ item.customer.name }} </td>
+                    <td> {{ item.destiny.name }} </td>
+                    <td> {{ item.line }} </td>
+                    <td> {{ item.user.person.first_name }} {{ item.user.person.first_surname }} </td>
+                    <td> ${{ item.total_cop | currency:'':'' }} </td>
+                    <td> ${{ item.total_usd | currency:'':'' }} </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <ng-select [items]="dataModal " bindLabel="descripcion " [multiple]="true " [closeOnSelect]="false " [selectableGroup]="true " [selectableGroupAsModel]="false " [(ngModel)]="seleccionadas ">
+        </ng-select> -->
+    </div>
+    <div class="app-modal-footer ">
+        <div class="form-group text-right ">
+            <button (click)="modalPresupuestos.hide() " type="reset " class="btn btn-danger raised mr-2 btn-sm "> Cerrar
+        </button>
+            <button type="submit " class="btn btn-primary btn-sm raised " (click)="modalCotizaciones.hide(); closeModalCotizaciones() "> Guardar </button>
         </div>
     </div>
 </app-modal-basic>

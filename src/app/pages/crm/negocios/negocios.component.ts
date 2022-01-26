@@ -8,7 +8,6 @@ import {
   map,
 } from 'rxjs/operators';
 import { ValidatorsService } from '../../ajustes/informacion-base/services/reactive-validation/validators.service';
-import { negocios } from './data';
 import { Negocio } from './negocio.interface';
 import { NegociosService } from './negocios.service';
 
@@ -20,20 +19,22 @@ import { NegociosService } from './negocios.service';
 export class NegociosComponent implements OnInit {
   @ViewChild('modal') modal: any;
 
-
-  negocios:any[];
+  negocios: any[];
 
   negocios_tercera_etapa: Negocio[];
   negocios_segunda_etapa: Negocio[];
   negocios_primera_etapa: Negocio[];
   form: FormGroup;
 
-  active=1;
+  active = 1;
   contacts: any[];
   selectedContact: any;
 
   countries: any[];
   selectedCountry: any;
+
+  budgets: any[] = [];
+  budgetsSelected: any[] = [];
 
   total = {
     first: 0,
@@ -52,7 +53,7 @@ export class NegociosComponent implements OnInit {
     private _reactiveValid: ValidatorsService,
     private fb: FormBuilder,
     private _negocios: NegociosService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getCompanies();
@@ -63,10 +64,10 @@ export class NegociosComponent implements OnInit {
     this.getCountries();
   }
 
-  getNegocios(){
-    this._negocios.getNeg().subscribe((resp:any)=>{
-      this.negocios=resp;
-    })
+  getNegocios() {
+    this._negocios.getNeg().subscribe((resp: any) => {
+      this.negocios = resp;
+    });
   }
 
   selectContact() {
@@ -113,9 +114,15 @@ export class NegociosComponent implements OnInit {
   }
 
   private getLists() {
-    this.negocios_segunda_etapa = this.negocios.filter((t) => t.status === 'second');
-    this.negocios_tercera_etapa = this.negocios.filter((t) => t.status === 'third');
-    this.negocios_primera_etapa = this.negocios.filter((t) => t.status === 'first');
+    this.negocios_segunda_etapa = this.negocios.filter(
+      (t) => t.status === 'second'
+    );
+    this.negocios_tercera_etapa = this.negocios.filter(
+      (t) => t.status === 'third'
+    );
+    this.negocios_primera_etapa = this.negocios.filter(
+      (t) => t.status === 'first'
+    );
   }
 
   calcularTotal() {
@@ -145,7 +152,7 @@ export class NegociosComponent implements OnInit {
       (resp: any) => {
         this.companies = resp.data.data;
       },
-      () => { },
+      () => {},
       () => {
         console.log(this.companies);
       }
@@ -155,7 +162,6 @@ export class NegociosComponent implements OnInit {
   getCountries() {
     this._negocios.getCountries().subscribe((data: any) => {
       this.countries = data.data;
-      console.log(this.countries);
     });
   }
 
@@ -166,7 +172,6 @@ export class NegociosComponent implements OnInit {
     };
     this._negocios.getCities(params).subscribe((data: any) => {
       this.cities = data.data;
-      console.log(this.cities);
     });
   }
 
@@ -190,7 +195,7 @@ export class NegociosComponent implements OnInit {
     );
 
   getContacts(event: any) {
-    this.selectedContact=null;
+    this.selectedContact = null;
     let params = {
       third: event?.first_name,
     };
@@ -198,6 +203,32 @@ export class NegociosComponent implements OnInit {
     this._negocios.getThirdPartyPerson(params).subscribe((resp: any) => {
       this.contacts = resp.data.data;
     });
+  }
+
+  getBudgets(event: any) {
+    console.log(event);
+
+    let params = {
+      customer_id: event?.id,
+    };
+    this._negocios.getBudgets(params).subscribe((resp: any) => {
+      this.budgets = resp.data.data;
+      console.log(this.budgets);
+    });
+  }
+
+  guardarPresupuesto(value) {
+    if (this.budgetsSelected.includes(value)) {
+      this.budgetsSelected = this.budgetsSelected.filter(
+        (data) => data !== value
+      );
+      console.log(this.budgetsSelected);
+
+      return;
+    }
+    console.log(this.budgetsSelected);
+    this.budgetsSelected.push(value);
+    return;
   }
 
   createNeg() {
@@ -209,8 +240,14 @@ export class NegociosComponent implements OnInit {
     this._negocios.saveNeg(this.form.value).subscribe((data) => {
       console.log(data);
     });
+    this.addEventToHistory('Negocio Creado');
   }
 
+  addEventToHistory(desc) {
+    this._negocios.addEventToHistroy(desc).subscribe((data) => {
+      console.log(data);
+    });
+  }
   get process_description_valid() {
     return (
       this.form.get('request_description').invalid &&

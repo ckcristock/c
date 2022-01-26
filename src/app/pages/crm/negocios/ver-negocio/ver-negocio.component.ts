@@ -4,7 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { negocios } from '../data';
 import { NegociosService } from '../negocios.service';
 import { Business } from './negocio.inteface';
-import { negocioData, OTROS_PRESUPUESTOS, OTRAS_COTIZACIONES } from './negocio.data';
+import {
+  negocioData,
+  OTROS_PRESUPUESTOS,
+  OTRAS_COTIZACIONES,
+} from './negocio.data';
 
 @Component({
   selector: 'app-ver-negocio',
@@ -12,12 +16,14 @@ import { negocioData, OTROS_PRESUPUESTOS, OTRAS_COTIZACIONES } from './negocio.d
   styleUrls: ['./ver-negocio.component.scss'],
 })
 export class VerNegocioComponent implements OnInit {
-  @ViewChild('modal') modal;
-  @ViewChild('modalPresupuestos') modalPresupuestos;
+  @ViewChild('modal') modal: any;
+  @ViewChild('modalPresupuestos') modalPresupuestos: any;
+  @ViewChild('modalCotizaciones') modalCotizaciones: any;
 
   tareas: any[];
   data = negocios;
-  active = 1
+  active = 1;
+  loading = false;
 
   contactos: any[];
   negocio: Business = negocioData;
@@ -25,12 +31,11 @@ export class VerNegocioComponent implements OnInit {
   dataModal: any = [];
 
   presupuestos: any[];
+  presupuestosSeleccionados: any[] = [];
   cotizaciones: any[];
+  cotizacionesSeleccionadas: any[] = [];
 
-  seleccionadas: any[]
-
-
-  modal_title = "";
+  modal_title = '';
 
   filtros = {
     id: '',
@@ -38,11 +43,11 @@ export class VerNegocioComponent implements OnInit {
 
   constructor(
     private ruta: ActivatedRoute,
-    private _negocio: NegociosService,
-  ) { }
+    private _negocio: NegociosService
+  ) {}
 
   ngOnInit(): void {
-    this.getPresupuestos()
+    this.getPresupuestos();
     this.getCotizaciones();
     this.getTasks();
     this.filtros.id = this.ruta.snapshot.params.id;
@@ -50,7 +55,28 @@ export class VerNegocioComponent implements OnInit {
   }
 
   getPresupuestos() {
-    this.presupuestos = OTROS_PRESUPUESTOS;
+    this.loading = true;
+    this._negocio.getBudgets().subscribe((resp: any) => {
+      this.presupuestos = resp.data.data;
+      console.log(this.presupuestos);
+      this.loading = false;
+    });
+    // this.presupuestos = OTROS_PRESUPUESTOS;
+  }
+
+  guardarPresupuesto(id) {
+    if (this.presupuestosSeleccionados.includes(id))
+      this.presupuestosSeleccionados = this.presupuestosSeleccionados.filter(
+        (pres) => pres !== id
+      );
+    else this.presupuestosSeleccionados.push(id);
+  }
+  guardarCotizacion(id) {
+    if (this.cotizacionesSeleccionadas.includes(id))
+      this.cotizacionesSeleccionadas = this.cotizacionesSeleccionadas.filter(
+        (cot) => cot !== id
+      );
+    else this.cotizacionesSeleccionadas.push(id);
   }
 
   getCotizaciones() {
@@ -60,32 +86,39 @@ export class VerNegocioComponent implements OnInit {
   getTasks() {
     this._negocio.getTasks().subscribe((data: any) => {
       this.tareas = data;
-    })
+    });
   }
 
   createTask(event) {
     this._negocio.createTask(event).subscribe(() => {
-      console.log('guardado');
-    })
+      this.addEventToHistory('Se creó una tarea en la seccion de tareas');
+    });
     this.getTasks();
   }
   editTask(event) {
-    this._negocio.editTask(event.index-1, event.value).subscribe((data) => {
-      console.log(data);
-    })
+    this._negocio.editTask(event.index - 1, event.value).subscribe((data) => {
+      this.addEventToHistory(
+        'Se ha editado la tarea de ' + event.value.responsable
+      );
+    });
     this.getTasks();
   }
 
-  addPresupuesto(title: string) {
-    if (title == 'Presupuesto') {
-      this.dataModal = this.presupuestos;
-      this.seleccionadas = this.negocio.presupuestos
-    } else {
-      this.dataModal = this.cotizaciones
-      this.seleccionadas = this.negocio.cotizaciones
-    }
-    this.modal_title = title;
+  addEventToHistory(desc) {
+    this._negocio.addEventToHistroy(desc).subscribe(() => {
+      console.log('Evento añadido');
+    });
+  }
+
+  addPresupuesto() {
+    this.presupuestosSeleccionados = this.negocio.presupuestos.map((n) => n.id);
+
     this.modalPresupuestos.show();
+  }
+  addCotizacion() {
+    this.cotizacionesSeleccionadas = this.negocio.cotizaciones.map((n) => n.id);
+
+    this.modalCotizaciones.show();
   }
 
   obtenerContactos(thirdCompany: string) {
@@ -98,13 +131,13 @@ export class VerNegocioComponent implements OnInit {
     });
   }
 
-  closeModal() {
-    if (this.modal_title == 'Presupuesto') {
-      this.negocio.presupuestos = this.seleccionadas;
-    }
-    else {
-      this.negocio.cotizaciones = this.seleccionadas
-    }
+  closeModalPresupuesto() {
+    this.negocio.presupuestos = this.presupuestosSeleccionados;
+    this.addEventToHistory('Se modificaron los presupuestos del negocio');
   }
 
+  closeModalCotizaciones() {
+    this.negocio.cotizaciones = this.cotizacionesSeleccionadas;
+    this.addEventToHistory('se modificaron las cotizaciones del negocio');
+  }
 }

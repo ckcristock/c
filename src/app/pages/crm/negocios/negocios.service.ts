@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { observable, Observable, of, Subscriber } from 'rxjs';
 import { ObserveOnSubscriber } from 'rxjs/internal/operators/observeOn';
 import { environment } from 'src/environments/environment';
-import { negocios } from './data';
+import { history, negocios } from './data';
 import { tareas } from './ver-negocio/tareas.data';
 
 @Injectable({
@@ -62,5 +62,26 @@ export class NegociosService {
     return of(
       tareas
     )
+  }
+
+  getHistory(){
+    return of(
+      history
+    )
+  }
+  addEventToHistroy(event){
+    let item = {
+      date: new Date().toISOString().slice(0,10),
+      action: event,
+      autor:'yo'
+    };
+
+    return of(
+      history.push(item)
+    )
+  }
+  getBudgets(params={}){
+    return this.http.get(`${this.url}/budgets-paginate`)
+
   }
 }

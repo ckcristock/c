@@ -51,6 +51,7 @@ import { VerNegocioComponent } from './negocios/ver-negocio/ver-negocio.componen
 import { DndModule } from 'ngx-drag-drop';
 import { TareasNegocioComponent } from './negocios/tareas-negocio/tareas-negocio.component';
 import { TableNegociosComponent } from './negocios/table-negocios/table-negocios.component';
+import { HistorialNegocioComponent } from './negocios/historial-negocio/historial-negocio.component';
 
 
 
@@ -90,6 +91,7 @@ import { TableNegociosComponent } from './negocios/table-negocios/table-negocios
     VerNegocioComponent,
     TareasNegocioComponent,
     TableNegociosComponent,
+    HistorialNegocioComponent,
   ],
   imports: [
     CommonModule,

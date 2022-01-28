@@ -188,7 +188,7 @@
                     </div>
                 </div>
 
-                <div class="col-12" *ngIf="!ver">
+                <div class="col-12" *ngIf="!ver && !editar">
                     <div class="form-group">
                         <label>Dias (*)</label>
                         <ng-select [ngClass]="'ng-select'" name="days" [items]="daysOfWeek" bindLabel="text" bindValue="value" required [multiple]="true" [(ngModel)]="ActividadModel.Days">

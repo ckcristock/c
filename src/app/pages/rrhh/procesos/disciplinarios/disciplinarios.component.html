@@ -40,7 +40,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let proces of process; let i=index" [ngClass]="{'bg-success text-white': (proces.status == 'Aprobado')}">
+                <tr *ngFor="let proces of process; let i=index" [ngClass]="{
+                    'bg-success text-white': (proces.status == 'Aprobado'),
+                    'bg-danger text-white' : (proces.status == 'Cerrado')
+                }">
                     <td scope="row"> {{ proces.id }} </td>
                     <td> {{ proces.first_name }} {{ proces.second_name }} {{ proces.first_surname }} {{ proces.second_surname }} </td>
                     <td> {{ proces.process_description }} </td>

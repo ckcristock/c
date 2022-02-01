@@ -258,6 +258,7 @@ export class ActividadesComponent {
           text: '¡Proceso exitoso!',
           title: (this.editar == true ? 'Actualizado con éxito' : 'Guardado con éxito'),
           icon: 'success',
+          showCancel: false
         });
       });
   }
@@ -340,18 +341,32 @@ export class ActividadesComponent {
       }
     });
   }
-  anularEvento() {
+  anularDia() {
     let id = this.actividadObj.id;
     this._actividad.cancelActivity(id).subscribe((r: any) => {
       if (r.code == 200) {
         this._swal.show({
-          text: 'Actualizado',
+          text: 'Dia anulado',
           title: 'Operación exitosa',
           icon: 'success',
         });
       }
       this.GetActividadesMes();
     });
+  }
+
+  cancelCycle(){
+    let id = this.actividadObj.rrhh_activity_cycle_id;
+    this._actividad.cancelCycleActivity(id, {state: 'Anulada'}).subscribe((r:any) => {
+      if (r.code == 200) {
+        this._swal.show({
+          text: 'Ciclo Anulado',
+          title: 'Operación exitosa',
+          icon: 'success',
+        });
+      }
+      this.GetActividadesMes();
+    })
   }
 
   // funcion que no desabilita los input
@@ -380,10 +395,36 @@ export class ActividadesComponent {
         this.ver = 0;
         break;
       case 'Anular':
-        this.anularEvento();
+        this.cancelOptions();
+        // this.anularEvento();
         break;
     }
   }
+
+  cancelOptions(){
+    Swal.fire({
+      title: 'Eliminar la actividad',
+      text: '¿Qué acción desea elegir?',
+      icon: 'warning',
+      showCancelButton: true,
+      input: 'select',
+      confirmButtonColor: '#34c38f',
+      cancelButtonColor: '#f46a6a',
+      confirmButtonText: 'Continuar',
+      inputOptions: {
+        cancelAll: 'Anular Ciclo',
+        cancelDay: 'Anular día',
+      },
+      inputPlaceholder: 'Operaciones...',
+    }).then((result) => {
+      if (result.value) {
+        console.log(result.value);
+        result.value == 'cancelDay' ? this.anularDia() :  this.cancelCycle()
+      }
+    });
+  }
+
+
   actividadObj: any = {};
   accionarEvento(event) {
     if(event.event){

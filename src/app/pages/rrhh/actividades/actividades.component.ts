@@ -356,8 +356,8 @@ export class ActividadesComponent {
   }
 
   cancelCycle(){
-    let id = this.actividadObj.rrhh_activity_cycle_id;
-    this._actividad.cancelCycleActivity(id, {state: 'Anulada'}).subscribe((r:any) => {
+    let code = this.actividadObj.code;
+    this._actividad.cancelCycleActivity(code, {state: 'Anulada'}).subscribe((r:any) => {
       if (r.code == 200) {
         this._swal.show({
           text: 'Ciclo Anulado',

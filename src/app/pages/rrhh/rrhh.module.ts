@@ -65,6 +65,7 @@ import { TableStockComponent } from './dotacion/dotaciones/table-stock/table-sto
 import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/category-stock.component';
 import { DescargoComponent } from './procesos/disciplinarios/descargo/descargo.component';
 import { CerrarProcesoComponent } from './procesos/disciplinarios/cerrar-proceso/cerrar-proceso.component';
+import { CrearProcesoComponent } from './procesos/disciplinarios/crear-proceso/crear-proceso.component';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,7 @@ import { CerrarProcesoComponent } from './procesos/disciplinarios/cerrar-proceso
     CategoryStockComponent,
     DescargoComponent,
     CerrarProcesoComponent,
+    CrearProcesoComponent,
   ],
   imports: [
     RrhhRouterModule,

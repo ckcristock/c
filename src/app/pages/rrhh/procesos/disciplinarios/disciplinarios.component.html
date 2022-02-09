@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">
-            <button class="btn btn-primary btn-sm" style="float: right;" (click)="open()">
+            <button class="btn btn-primary btn-sm" style="float: right;" [routerLink]="['/rrhh/procesos/disciplinarios/crear']">
                 <i class="fa fa-plus"></i> Nuevo Proceso disciplinario
             </button>
             <h5 class="text-primary">Procesos disciplinarios</h5>
@@ -16,6 +16,10 @@
                 <input type="text" id="funcionario" class="form-control form-control-sm" [(ngModel)]="filtros.person" (change)="getDisciplinaryProcess()" name="funcionario" placeholder="Filtro por Funcionario" autocomplete="off">
             </div>
             <div class="form-group col-md-2">
+                <label for="involucrado">Involucrados</label>
+                <input type="text" id="involucrado" class="form-control form-control-sm" [(ngModel)]="filtros.involved" (change)="getDisciplinaryProcess()" name="involucrado" placeholder="Filtro por involucrado" autocomplete="off">
+            </div>
+            <div class="form-group col-md-2">
                 <label for="">Estado</label>
                 <select class="form-select form-control form-control-sm" [(ngModel)]="filtros.status" (change)="getDisciplinaryProcess()" aria-label="Default select example">
                     <option *ngFor="let statu of status" [value]="statu.valor">
@@ -28,11 +32,12 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <table class="table table-striped" *ngIf="!loading && process.length > 0; else notData">
+        <table class="table table-striped table-sm" *ngIf="!loading && process.length > 0; else notData">
             <thead>
                 <tr>
                     <th scope="col">Código</th>
-                    <th scope="col">Funcionario</th>
+                    <th scope="col">Funcionario Resp.</th>
+                    <th scope="col">Involucrados</th>
                     <th scope="col">Descripción</th>
                     <th scope="col">Fecha Inicial</th>
                     <th scope="col">Fecha Final</th>
@@ -40,45 +45,64 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let proces of process; let i=index" [ngClass]="{
-                    'bg-success text-white': (proces.status == 'Aprobado'),
-                    'bg-danger text-white' : (proces.status == 'Cerrado')
-                }">
-                    <td scope="row"> {{ proces.id }} </td>
-                    <td> {{ proces.first_name }} {{ proces.second_name }} {{ proces.first_surname }} {{ proces.second_surname }} </td>
-                    <td> {{ proces.process_description }} </td>
-                    <td> {{ proces.date_of_admission }} </td>
-                    <td> {{ proces.date_end }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
+                <ng-container *ngFor="let proces of process; let i=index">
+                    <tr [ngClass]="{
+                        'bg-success text-white': (proces.status == 'Aprobado'),
+                        'bg-danger text-white' : (proces.status == 'Cerrado')
+                    }">
+                        <td scope="row"> {{ proces.code }} </td>
+                        <td> {{ proces.person.first_name }} {{ proces.person.second_name }} {{ proces.person.first_surname }} {{ proces.person.second_surname }} </td>
+                        <td>
+                            <div>
+                                <button class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="collapsed[i] = !collapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
+                                    <i class="mdi mdi-chevron-down" *ngIf="!collapsed[i]"></i>
+                                    <i class="mdi mdi-chevron-up" *ngIf="collapsed[i]"></i>
                                 </button>
-                                <div ngbDropdownMenu>
-                                    <a (click)="downloadVer(proces.id)" class="dropdown-item waves-light waves-effect caja-botones">
-                                        <i class="fa fa-print"></i> Ver / imprimir
-                                    </a>
-                                    <a *ngIf="proces.file != null" class="dropdown-item waves-light waves-effect caja-botones" (click)="download(proces.file)">
-                                        <i class="fa fa-file"></i> Ver Evidencia
-                                    </a>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/rrhh/procesos/disciplinarios/', proces.id]">
-                                        <i class="fa fa-eye"></i> Seguimiento
-                                    </a>
-                                    <a *ngIf="proces.status=='Abierto' || proces.status=='Aprobado'" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]" class="dropdown-item waves-light waves-effect caja-botones">
-                                        <i class="fa fa-times-circle"></i> Cerrar proceso
-                                    </a>
-                                    <a *ngIf="proces.status=='Cerrado'" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]" class="dropdown-item waves-light waves-effect caja-botones">
-                                        <i class="fa fa-external-link-alt"></i> Ver conclusión
-                                    </a>
-                                    <a *ngIf="permission.permissions.approve && proces.status != 'Aprobado'" (click)="aprobar(proces.id)" class="dropdown-item waves-light waves-effect caja-botones">
-                                        <i class="far fa-thumbs-up"></i> Aprobar
-                                    </a>
+                            </div>
+                        </td>
+                        <td> {{ proces.process_description }} </td>
+                        <td> {{ proces.date_of_admission | date }} </td>
+                        <td>
+                            <p *ngIf="proces.status == 'Cerrado'"> {{ proces.date_end | date }} </p>
+                        </td>
+                        <td>
+                            <div class="text-center">
+                                <div ngbDropdown class="dropdown-primary">
+                                    <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                        <i class="mdi mdi-chevron-down"></i>
+                                    </button>
+                                    <div ngbDropdownMenu>
+                                        <a *ngIf="proces.file != null" class="dropdown-item waves-light waves-effect caja-botones" (click)="download(proces.file)">
+                                            <i class="fa fa-file"></i> Ver Evidencia
+                                        </a>
+                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/rrhh/procesos/disciplinarios/', proces.id]">
+                                            <i class="fa fa-eye"></i> Seguimiento
+                                        </a>
+                                        <!-- <a *ngIf="proces.status=='Abierto' || proces.status=='Aprobado'" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]" class="dropdown-item waves-light waves-effect caja-botones">
+                                            <i class="fa fa-times-circle"></i> Cerrar proceso
+                                        </a> -->
+                                        <a *ngIf="permission.permissions.approve && proces.status != 'Aprobado'" (click)="aprobar(proces.id)" class="dropdown-item waves-light waves-effect caja-botones">
+                                            <i class="far fa-thumbs-up"></i> Aprobar
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                    <tr [ngbCollapse]="!collapsed[i]">
+                        <td colspan="7">
+                            <table class="table table-sm">
+                                <ng-container *ngIf="proces.person_involved.length > 0; else notI">
+                                    <tbody>
+                                        <tr *ngFor="let item of proces.person_involved">
+                                            <td> {{ item.person.first_name }} {{ item.person.first_surname }} </td>
+                                        </tr>
+                                    </tbody>
+                                </ng-container>
+                            </table>
+                        </td>
+                    </tr>
+                </ng-container>
             </tbody>
         </table>
         <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getDisciplinaryProcess($event)" aria-label="Default pagination"
@@ -181,4 +205,11 @@
 </app-modal-basic>
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<ng-template #notI>
+    <tr class="bg-light">
+        <td colspan="3" class="text-center">
+            <p class="text-dark">Sin involucrados agregados</p>
+        </td>
+    </tr>
 </ng-template>

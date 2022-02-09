@@ -31,13 +31,14 @@ export class DisciplinariosComponent implements OnInit {
   status = consts.status;
   pagination = {
     page: 1,
-    pageSize: 5,
+    pageSize: 10,
     collectionSize: 0
   }
   filtros: any = {
     person: '',
-    status: '',
-    code: ''
+    status: 'Todos',
+    code: '',
+    involved: ''
   }
   people: any[] = [];
   person_selected: any;
@@ -46,6 +47,8 @@ export class DisciplinariosComponent implements OnInit {
   fileString: any = '';
   file: any = '';
   type: any = '';
+  collapsed:boolean[] = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -109,6 +112,7 @@ export class DisciplinariosComponent implements OnInit {
     this.disciplinarioService.getDisciplinaryProcess(params)
       .subscribe((res: any) => {
         this.process = res.data.data;
+        console.log(this.process);
         this.loading = false;
         this.pagination.collectionSize = res.data.total;
       });

@@ -24,8 +24,16 @@ export class DescargoService {
     return this.http.post(`${environment.base_url}/annotation`, data);
   }
 
+  cancelAnnotation(id, data){
+    return this.http.put(`${environment.base_url}/annotation/${id}`, data);
+  }
+
   getAnnotations(id){
     return this.http.get(`${environment.base_url}/annotation/${id}`);
+  }
+
+  closeOrOpenProccess(id, data){
+    return this.http.put(`${environment.base_url}/process/${id}`, data);
   }
 
 }

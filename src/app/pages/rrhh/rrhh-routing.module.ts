@@ -29,6 +29,7 @@ import { TableStockComponent } from './dotacion/dotaciones/table-stock/table-sto
 import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/category-stock.component';
 import { DescargoComponent } from './procesos/disciplinarios/descargo/descargo.component';
 import { CerrarProcesoComponent } from './procesos/disciplinarios/cerrar-proceso/cerrar-proceso.component';
+import { CrearProcesoComponent } from './procesos/disciplinarios/crear-proceso/crear-proceso.component';
 
 
 
@@ -56,6 +57,7 @@ const routes: Routes = [
   { path: 'contratos', component: ContratosComponent },
   { path: 'procesos/disciplinarios', component: DisciplinariosComponent },
   { path: 'procesos/disciplinarios/cerrar/:id', component: CerrarProcesoComponent },
+  { path: 'procesos/disciplinarios/crear', component: CrearProcesoComponent },
   { path: 'procesos/disciplinarios/:id', component: DescargoComponent },
   { path: 'procesos/memorandos', component: MemorandosComponent },
   { path: 'certificados', component: CertificadosComponent },

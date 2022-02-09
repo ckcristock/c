@@ -10,6 +10,8 @@ import { DisciplinariosService } from '../disciplinarios.service';
 import { OperatorFunction, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
+import { PermissionService } from '../../../../../core/services/permission.service';
+import { Permissions } from '../../../../../core/interfaces/permissions-interface';
 
 @Component({
   selector: 'app-descargo',
@@ -42,7 +44,6 @@ export class DescargoComponent implements OnInit {
   type: any;
   historyInfo:any[] = [];
   people: any[] = [];
-
   anotacion: {
     description: string,
     disciplinary_process_id: any,
@@ -50,6 +51,13 @@ export class DescargoComponent implements OnInit {
     id?: number,
     file?: any,
   }
+  permission: Permissions = {
+    menu: 'Disciplinarios',
+    permissions: {
+      close: false,
+      open: false
+    }
+  };
   collapsed:boolean[] = [];
   date: Date = new Date();
   seleccionadas:any[] = [];
@@ -60,8 +68,9 @@ export class DescargoComponent implements OnInit {
     private rutaActiva: ActivatedRoute,
     private _swal: SwalService,
     private disciplinarioService: DisciplinariosService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private _permission: PermissionService
+  ) { this.permission = this._permission.validatePermissions(this.permission) }
 
   ngOnInit(): void {
     this.filtros.code = this.rutaActiva.snapshot.params.id;

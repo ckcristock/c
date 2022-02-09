@@ -109,14 +109,17 @@
             <div class="col-12" *ngIf="processSelected">
                 <div class="row">
                     <ng-container *ngIf="processSelected.status=='Abierto'">
-                        <div class="col-6">
+                        <div [ngClass]="{
+                            'col-12': permission.permissions.close == false,
+                            'col-6': permission.permissions.close == true
+                        }">
                             <button class="btn btn-info btn-sm btn-block mt-3" (click)="openModal()"> Agregar </button>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6" *ngIf="permission.permissions.close">
                             <button class="btn btn-danger btn-sm btn-block mt-3" (click)="closeProccess()"> Cerrar </button>
                         </div>
                     </ng-container>
-                    <div class="col-12" *ngIf="processSelected.status == 'Cerrado'">
+                    <div class="col-12" *ngIf="processSelected.status == 'Cerrado' && permission.permissions.open">
                         <button class="btn btn-success btn-sm btn-block mt-3" (click)="openProccess()"> Abrir </button>
                     </div>
                 </div>

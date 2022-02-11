@@ -112,7 +112,6 @@ export class DisciplinariosComponent implements OnInit {
     this.disciplinarioService.getDisciplinaryProcess(params)
       .subscribe((res: any) => {
         this.process = res.data.data;
-        console.log(this.process);
         this.loading = false;
         this.pagination.collectionSize = res.data.total;
       });

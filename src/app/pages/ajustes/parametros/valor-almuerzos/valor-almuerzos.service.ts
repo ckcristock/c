@@ -10,10 +10,10 @@ export class ValorAlmuerzosService {
 
   constructor(private http: HttpClient) { }
 
-  update(data) {
+  save(data) {
     return this.http.post(environment.base_url + '/lunch-value', data);
   }
-  getAll() {
-    return this.http.get(environment.base_url + '/lunch-value');
-}
+  getAll( params = {} ) {
+    return this.http.get(environment.base_url + '/paginateLunchValue', {params});
+  }
 }

@@ -46,15 +46,17 @@
                     <th scope="col">Funcionario</th>
                     <th scope="col">Func. Creó</th>
                     <th scope="col">Valor</th>
+                    <th scope="col">¿Aplica?</th>
                     <th scope="col">Fecha</th>
                     <th scope="col" class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let lunch of lunches" [ngClass]="{'bg-danger text-white': (lunch.personState == 'Inactivo')}">
+                <tr *ngFor="let lunch of lunches" [ngClass]="{'bg-danger text-white': (lunch.state == 'Inactivo')}">
                     <td> {{ lunch.first_name | titlecase}} {{ lunch.first_surname | titlecase }} </td>
                     <td> {{ lunch.user }} </td>
                     <td> {{ lunch.value | currency }} </td>
+                    <td>Si</td>
                     <td> {{ lunch.created_at | date: 'dd-MM-yyyy' }} </td>
                     <td>
                         <div class="text-center">
@@ -63,10 +65,13 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a *ngIf="lunch.personState == 'Activo'" (click)="activateOrInactivate(lunch.lunch_person_id, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                    <a (click)="getLunchValu(lunch); modalEdit.show()" class="dropdown-item waves-light text-info waves-effect caja-botones">
+                                        <i class="far fa-edit"></i> Editar
+                                    </a>
+                                    <a *ngIf="lunch.state == 'Activo'" (click)="activateOrInactivate(lunch.id, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
                                         <i class="far fa-trash-alt"></i> Anular
                                     </a>
-                                    <a *ngIf="lunch.personState == 'Inactivo'" (click)="activateOrInactivate(lunch.lunch_person_id, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                    <a *ngIf="lunch.state == 'Inactivo'" (click)="activateOrInactivate(lunch.id, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
                                         <i class="fas fa-check"></i> Activar
                                     </a>
                                 </div>
@@ -81,7 +86,7 @@
         </ngb-pagination>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
         <h5 class="modal-title"> Nuevo Almuerzo </h5>
         <button type="button" class="close basic-close" (click)="modal.hide(); form.reset(); personList.clear()">
@@ -93,15 +98,32 @@
     <div class="app-modal-body">
         <form [formGroup]="form">
             <div class="form-row">
+                <div class="form-group col-6">
+                    <label>Grupo (*)</label>
+                    <ng-select name="group_id" (change)="getDependencies($event.value)" [items]="groups" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl formControlName="group_id">
+                    </ng-select>
+                </div>
+                <div class="form-group col-6">
+                    <label>Dependencia (*)</label>
+                    <ng-select name="dependency_id" (change)="Dependencia_Cargo($event.value)" [items]="dependencies" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl formControlName="dependency_id">
+                    </ng-select>
+                </div>
                 <div class="form-group col-12">
                     <label for="" class="form-label">Funcionario</label>
-                    <input formControlName="fill_person" #box class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue" (change)="createPerson(); box.value = '' ">
+                    <ng-select formControlName="people_id" [ngClass]="'ng-select'" name="days" [items]="people" bindLabel="text" bindValue="value" [multiple]="true">
+                    </ng-select>
+                    <!-- <input formControlName="fill_person" #box class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue" (change)="createPerson(); box.value = '' "> -->
                 </div>
                 <div class="form-group col-12">
                     <label for="" class="form-label">Valor del Almuerzo</label>
-                    <input type="number" formControlName="value" class="form-control form-control-sm" readonly>
+                    <ng-select appearance="outline" [searchable]="false" [clearable]="false" labelForId="value" formControlName="value">
+                        <ng-option *ngFor="let item of lunchvalues" [value]="item.value">
+                            {{ item.value | currency: 'COP'}}
+                        </ng-option>
+                    </ng-select>
+                    <!-- <input type="number" formControlName="value" class="form-control form-control-sm" readonly> -->
                 </div>
-                <div class="form-group col-12" *ngIf="personList.controls.length > 0">
+                <!-- <div class="form-group col-12" *ngIf="personList.controls.length > 0">
                     <div class="table-wrapper-scroll-y my-custom-scrollbar">
                         <table class="table table-sm table-borderless table-striped">
                             <thead class="bg-light stay">
@@ -125,7 +147,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> -->
             </div>
         </form>
     </div>
@@ -133,6 +155,35 @@
         <div class="form-group text-right">
             <button (click)="modal.hide(); form.reset(); personList.clear()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
             <button type="submit" class="btn btn-primary btn-sm raised" (click)="createLunch()" [disabled]="!form.valid">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<app-modal-basic #modalEdit [dialogClass]="'modal-sm'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Editar Valor </h5>
+        <button type="button" class="close basic-close" (click)="modalEdit.hide()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide()"></i>
+          </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="form-row">
+            <div class="form-group col-12">
+                <label for="" class="form-label">Valor del Almuerzo</label>
+                <ng-select appearance="outline" [searchable]="false" [clearable]="false" labelForId="value" [(ngModel)]="value">
+                    <ng-option *ngFor="let item of lunchvalues" [value]="item.value">
+                        {{ item.value | currency: 'COP'}}
+                    </ng-option>
+                </ng-select>
+                <!-- <input type="number" formControlName="value" class="form-control form-control-sm" readonly> -->
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="editLunchValue()">Editar</button>
         </div>
     </div>
 </app-modal-basic>

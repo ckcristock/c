@@ -25,13 +25,21 @@ export class AlmuerzosService {
     return this.http.post(`${environment.base_url}/lunch`, data);
   }
 
+  edit( id, data:any ) {
+    return this.http.put(`${environment.base_url}/lunch/${id}`, data);
+  }
+
   activateOrInactivate( state ){
     return this.http.put(`${environment.base_url}/state-change`, state);
   }
 
-  Download( params = {}) {
+  getValues() {
+    return this.http.get(environment.base_url + '/lunch-value');
+  }
+
+  Download(date1, date2, params = {}) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.get(`${environment.base_url}/lunches/download`,{ params, headers, responseType: 'blob' as 'json' });
+    return this.http.get(`${environment.base_url}/lunches/download/${date1}/${date2}`,{ params, headers, responseType: 'blob' as 'json' });
   }
 
 }

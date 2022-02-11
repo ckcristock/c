@@ -1,23 +1,78 @@
-<div class="margins">
-    <div class="card">
-        <div class="card-body">
-            <div class="card-title">
-                <h5 class="text-primary">Valor de Almuerzos</h5>
-            </div>
-            <hr class="line">
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Agregar nuevo valor</button>
+            <h5 class="text-primary">Valor de almuerzos</h5>
         </div>
-        <form #formP="ngForm" (submit)="guardar(formP)">
-            <div class="row mx-2 my-2">
-                <div class="col-8">
-                    Valor de Almuerzo
+        <table class="table table-bordered table-striped mt-4" *ngIf="!loading && values.length > 0; else notData">
+            <thead class="bg-light">
+                <tr>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Descrición</th>
+                    <th scope="col">Fecha C.</th>
+                    <th scope="col" style="width: 50px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let value of values" [ngClass]="{'bg-danger text-white': (value.state === 'Inactivo' )}">
+                    <td scope="row"> {{ value.value | currency: 'COP' }} </td>
+                    <td> {{ value.description }} </td>
+                    <td> {{ value.created_at | date }} </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary ">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getValue(value); modal.show()">
+                                        <i class="fa fa-file-pdf-o"></i>Editar</a>
+                                    <a *ngIf="value.state === 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularOActivar(value, 'Inactivo')">
+                                        <i class="fa fa-pencil"></i>Inactivar</a>
+                                    <a *ngIf="value.state === 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularOActivar(value, 'Activo')">
+                                        <i class="fa fa-pencil"></i>Activar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getValues($event)" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination"
+            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-md'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> {{ title}} </h5>
+        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
+          <span aria-hidden="true">
+            <i class="fas fa-times" (click)="modal.hide(); form.reset()"></i>
+          </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="funcionario_id">Valor</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="value">
                 </div>
-                <div class="col-4">
-                    <input [(ngModel)]="data.value" #admin="ngModel" name="value" placeholder="0" class="form-control form-control-sm" type="number" required>
-                </div>
-                <div class="p-3 col-12">
-                    <button [disabled]="formP.invalid" class="btn btn-primary btn-sm btn-block" type="submit">Guardar</button>
+                <div class="form-group col-md-6">
+                    <label class="custom-label" for="funcionario_id">Descripción</label>
+                    <textarea class="form-control form-control-sm" rows="3" formControlName="description"></textarea>
                 </div>
             </div>
         </form>
     </div>
-</div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="save()" [disabled]="!form.valid">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

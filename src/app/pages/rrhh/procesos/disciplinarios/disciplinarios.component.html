@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-<div class="card">
+<div class="card mb-5">
     <div class="card-body">
         <table class="table table-striped table-sm" *ngIf="!loading && process.length > 0; else notData">
             <thead>
@@ -45,7 +45,7 @@
                 </tr>
             </thead>
             <tbody>
-                <ng-container *ngFor="let proces of process; let i=index">
+                <ng-container *ngFor="let proces of process; let i = index">
                     <tr [ngClass]="{
                         'bg-success text-white': (proces.status == 'Aprobado'),
                         'bg-danger text-white' : (proces.status == 'Cerrado')
@@ -54,7 +54,7 @@
                         <td> {{ proces.person.first_name }} {{ proces.person.second_name }} {{ proces.person.first_surname }} {{ proces.person.second_surname }} </td>
                         <td>
                             <div>
-                                <button class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="collapsed[i] = !collapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
+                                <button class="btn btn-info btn-sm waves-effect waves-light" type="button" (click)="collapsed[i] = !collapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
                                     <i class="mdi mdi-chevron-down" *ngIf="!collapsed[i]"></i>
                                     <i class="mdi mdi-chevron-up" *ngIf="collapsed[i]"></i>
                                 </button>
@@ -209,7 +209,7 @@
 <ng-template #notI>
     <tr class="bg-light">
         <td colspan="3" class="text-center">
-            <p class="text-dark">Sin involucrados agregados</p>
+            <p class="text-dark">Sin Involucrados</p>
         </td>
     </tr>
 </ng-template>

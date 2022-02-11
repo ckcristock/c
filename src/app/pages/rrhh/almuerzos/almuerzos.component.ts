@@ -7,6 +7,9 @@ import { OperatorFunction, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { ValorAlmuerzosService } from '../../ajustes/parametros/valor-almuerzos/valor-almuerzos.service';
 import { IMyDrpOptions } from 'mydaterangepicker';
+import { GroupService } from '../../ajustes/informacion-base/services/group.service';
+import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
+import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 
 @Component({
   selector: 'app-almuerzos',
@@ -16,6 +19,7 @@ import { IMyDrpOptions } from 'mydaterangepicker';
 export class AlmuerzosComponent implements OnInit {
   @ViewChild('modal') modal:any;
   @ViewChild('modalVer') modalVer:any;
+  @ViewChild('modalEdit') modalEdit:any;
   loading:boolean = false;
   form: FormGroup;
   people:any[] = [];
@@ -24,7 +28,7 @@ export class AlmuerzosComponent implements OnInit {
   lunch_id:any;
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 15,
     collectionSize: 0
   }
   filtro = {
@@ -40,19 +44,28 @@ export class AlmuerzosComponent implements OnInit {
     // other options...
     dateFormat: 'dd-mm-yyyy',
 };
-donwloading = false;
+  donwloading = false;
+  lunchvalues:any[] = [];
+  groups: any[] = [];
+  dependencies: any[] = [];
+  value:any;
+  id:any;
 
   constructor( 
                 private _almuerzo: AlmuerzosService,
                 private fb: FormBuilder,
                 private _swal: SwalService,
                 private _validator: ValidatorsService,
-                private _lunchValues: ValorAlmuerzosService
+                private _dependecies: DependenciesService,
+                private _group: GroupService,
+                private _person: PersonService,
+
               ) { }
 
   ngOnInit(): void {
     this.createForm();
-    this.getPeople();
+    // this.getPeople();
+    this.getGroups();
     this.getLunchValues();
     this.getLunches();
   }
@@ -65,9 +78,37 @@ donwloading = false;
     this.modalVer.show();
   }
 
+  getGroups() {
+    this._group.getGroup().subscribe((r: any) => {
+      this.groups = r.data;
+      this.groups.unshift({ text: 'Todas', value: 0 });
+    });
+  }
+
+  getDependencies(group_id) {
+    if (group_id == '0') {
+      this.dependencies = [];
+      this.dependencies.unshift({ text: 'Todas', value: 0 });
+      return false;
+    }
+    this._dependecies.getDependencies({ group_id }).subscribe((d: any) => {
+      this.dependencies = d.data;
+      this.dependencies.unshift({ text: 'Todas', value: 0 });
+    });
+  }
+
+  Dependencia_Cargo(dependencies) {
+    this._person
+      .getAll({ dependencies: [dependencies] })
+      .subscribe((r: any) => {
+        this.people = r.data;
+        this.people.unshift({ value: '0', text: 'Todos' });
+      });
+  }
+
   getLunchValues() {
-    this._lunchValues.getAll().subscribe((data: any) => {
-    this.form.patchValue({value: data.data.value})
+    this._almuerzo.getValues().subscribe((data: any) => {
+      this.lunchvalues = data.data;
     })
   }
 
@@ -98,13 +139,15 @@ donwloading = false;
 
   createForm(){
     this.form = this.fb.group({
-      fill_person: ['', Validators.required],
+      people_id: ['', Validators.required],
+      people: this.fb.array([]),
       value: [0, Validators.required],
-      persons: this.fb.array([])
+      group_id: [''],
+      dependency_id: ['']
     });
   }
 
-  personControl(){
+/*   personControl(){
     let group = this.fb.group({
       name: [''],
       person_id: ['']
@@ -117,28 +160,36 @@ donwloading = false;
       person_id: id
     })
     return group;
+  } */
+
+  personControl(person_id, value){
+    let group = this.fb.group({
+      person_id: person_id,
+      value: value
+    })
+    return group;
   }
 
   get personList(){
-    return this.form.get('persons') as FormArray;
+    return this.form.get('people') as FormArray;
   }
 
-  createPerson(){
+/*   createPerson(){
     let person = this.personList;
     person.push(this.personControl());
-  }
+  } */
 
-  deletePerson(i){
+/*   deletePerson(i){
     let person = this.personList;
     person.removeAt(i);
-  }
+  } */
 
-  getPeople(){
+/*   getPeople(){
     this._almuerzo.getPeople().subscribe((r:any) =>{
       this.people = r.data;
     })
   }
-
+ */
   getLunches( page = 1 ){
     this.pagination.page = page;
     let params = {
@@ -147,13 +198,17 @@ donwloading = false;
     this.loading = true;
     this._almuerzo.getLunches(params).subscribe((r:any) =>{
         this.lunches = r.data.data;
-        console.log(this.lunches);
         this.pagination.collectionSize = r.data.total;
         this.loading = false;
     })
   }
 
+
   createLunch(){
+    this.form.value.people_id.forEach(el => {
+      this.personList.push(this.personControl(el, this.form.value.value));
+    });
+    console.log(this.form.value);
     this._almuerzo.createLunch(this.form.value)
     .subscribe( (r) =>{
       this.modal.hide();
@@ -168,6 +223,26 @@ donwloading = false;
         showCancel: false
       });
     });
+  }
+
+  getLunchValu(value){
+    this.value = value.value;
+    this.id = value.id;
+  }
+
+  editLunchValue(){
+    this._almuerzo.edit(this.id, {value: this.value})
+    .subscribe((r:any) => {
+      this.getLunches();
+      this.modalEdit.hide();
+      this._swal.show({
+        icon: 'success',
+        title: 'Operación exitosa',
+        timer: 2500,
+        text: 'Valor del Almuerzo editado con éxito',
+        showCancel: false
+      });
+    })
   }
 
   activateOrInactivate(id, state){
@@ -198,7 +273,9 @@ donwloading = false;
     // let params = this.getParams();
     let params = '';
     this.donwloading = true;
-    this._almuerzo.Download(params).subscribe((response: BlobPart) => {
+    let fechaInicio = this.filtro.date_start;
+    let fechafin = this.filtro.date_end;
+    this._almuerzo.Download(fechaInicio, fechafin, params).subscribe((response: BlobPart) => {
         let blob = new Blob([response], { type: 'application/excel' });
         let link = document.createElement('a');
         const filename = 'reporte_almuerzos';
@@ -218,7 +295,7 @@ donwloading = false;
   }
 
   get person_valid() {
-    return this.form.get('person_id').invalid && this.form.get('person_id').touched;
+    return this.form.get('people_id').invalid && this.form.get('people_id').touched;
   }
 
   get value_valid() {

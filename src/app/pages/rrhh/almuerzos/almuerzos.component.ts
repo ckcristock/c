@@ -22,6 +22,7 @@ export class AlmuerzosComponent implements OnInit {
   @ViewChild('modalEdit') modalEdit:any;
   loading:boolean = false;
   form: FormGroup;
+  peopleFill:any[] = [];
   people:any[] = [];
   lunches:any[] = [];
   lunch:any = {};
@@ -49,6 +50,7 @@ export class AlmuerzosComponent implements OnInit {
   groups: any[] = [];
   dependencies: any[] = [];
   value:any;
+  person:any;
   id:any;
 
   constructor( 
@@ -64,10 +66,17 @@ export class AlmuerzosComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
-    // this.getPeople();
+    this.getPeople();
     this.getGroups();
     this.getLunchValues();
     this.getLunches();
+  }
+
+  getPeople(){
+    this._almuerzo.getPeople().subscribe((data:any) => {
+      this.peopleFill = data.data;
+      this.peopleFill.unshift({ text: 'Todos', value: '' });
+    })
   }
 
   openModal(){
@@ -198,6 +207,7 @@ export class AlmuerzosComponent implements OnInit {
     this.loading = true;
     this._almuerzo.getLunches(params).subscribe((r:any) =>{
         this.lunches = r.data.data;
+        console.log(this.lunches);
         this.pagination.collectionSize = r.data.total;
         this.loading = false;
     })
@@ -226,6 +236,7 @@ export class AlmuerzosComponent implements OnInit {
   }
 
   getLunchValu(value){
+    this.person = `${value.first_name} ${value.first_surname}`
     this.value = value.value;
     this.id = value.id;
   }

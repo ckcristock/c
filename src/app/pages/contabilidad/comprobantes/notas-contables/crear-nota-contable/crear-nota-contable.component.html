@@ -1,185 +1,344 @@
-<div class="row mb-4">
-    <div class="col text-left">
-        <a class="text-primary back" (click)="regresar()">Regresar</a>
-    </div>
-</div>
-<div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <div style="float: right;" class="text-right">
-                <h5>Nueva Nota Contable</h5>
-                <h6></h6>
-                <strong> {{ date | date:'dd/MM/yyyy' }} </strong>
-            </div>
-            <div class="row">
-                <div>
-                    <img src="../../../../assets/images/users/no-image.png" class="p-0 m-0">
-                </div>
-                <div class="ml-3">
-                    <small>
-                        <strong>
-                            Productos Pruebas S.A <br>
-                            NIT 804.016.084-5 <br>
-                            Calle 15 No. 17 - 55 Barrio San Francisco <br>
-                            Tel 61547855
-                        </strong>
-                    </small>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="page-body" style="margin-top: 40px;">
-            <form [formGroup]="form">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="fecha">Fecha</label>
-                                <input type="date" formControlName="date" class="form-control form-control-sm">
+<div class="page-body">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-md-offset-4">
+
+            <div class="card">
+
+                <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+                <!-- Layout de Cabecera. -->
+
+                <div class="card-body" style="padding-bottom: 0px;">
+                    <form #FormNotaContable="ngForm">
+                        <input type="hidden" name="Id_Borrador" [(ngModel)]="idBorrador">
+                        <div class="row invoive-info" style="margin-bottom: 0; padding-bottom: 0px;">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Fecha</label>
+                                    <input type="date" name="Fecha_Documento" id="Fecha_Nota_Contable" [(ngModel)]="Fecha_Nota_Contable" class="form-control form-control-sm tab" (keyup)="tab($event,'Cliente')" (change)="getCodigoNuevaNota($event.target.value)" required>
+                                </div>
+
                             </div>
-                            <div class="form-group col-md-4">
-                                <label class="custom-label" for="beneficiario_documento">Beneficiario Documento</label>
-                                <input type="text" [ngbTypeahead]="searchthird" [inputFormatter]="formatterthird" [resultFormatter]="formatterthird" [editable]="false" formControlName="beneficiary" class="form-control form-control-sm">
+                            <!-- <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Empresa</label>
+                                    <select [(ngModel)]="Id_Empresa" name="Id_Empresa" id="Id_Empresa" class="form-control form-control-sm" required>
+                                        <option *ngFor="let item of companies" [value]="item.value">
+                                            {{ item.text }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div class="col-md-2">
+
+                                <div class="form-group">
+                                    <label>Beneficiario Documento</label>
+                                    <input [(ngModel)]="Nom_Cliente" type="text" name="Cliente" id="Cliente" class="form-control form-control-sm f-9 tab" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" (ngModelChange)="BuscarDatosCliente(Nom_Cliente)" (keyup)="tab($event,'Centro_Costo')"
+                                        (blur)="validarCampo(Nom_Cliente,$event,'Beneficiario')" />
+                                    <input hidden [(ngModel)]="Id_Cliente" name="Beneficiario" id="Beneficiario" class="form-control form-control-sm " required>
+                                    <input hidden [(ngModel)]="Tipo_Beneficiario" name="Tipo_Beneficiario" id="Tipo_Beneficiario" class="form-control form-control-sm " required>
+                                    <!-- <input hidden [(ngModel)]="Funcionario.Identificacion_Funcionario" name="Identificacion_Funcionario" id="Id_Funcionario" class="form-control form-control-sm " required> -->
+                                </div>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label class="custom-label" for="centro_costo">Centro Costo</label>
-                                <input type="text" [ngbTypeahead]="search" [inputFormatter]="formatter" [resultFormatter]="formatter" [editable]="false" formControlName="cost_center" class="form-control form-control-sm">
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="Centro_Costo">Centro Costo</label>
+                                    <input [(ngModel)]="Nom_Centro_Costo" type="text" name="Nom_Centro_Costo" id="Centro_Costo" class="form-control form-control-sm f-9 tab" [ngbTypeahead]="search2" [resultTemplate]="rt2" [inputFormatter]="formatter2" (ngModelChange)="BuscarDatosCentro(Nom_Centro_Costo)"
+                                        (keyup)="tab($event,'Documento')" (blur)="validarCampo(Nom_Centro_Costo,$event,'Centro de Costo')" />
+                                    <input type="hidden" name="Id_Centro_Costo" [(ngModel)]="Centro_Costo">
+                                </div>
                             </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="documento_">Documento</label>
-                                <input type="text" formControlName="document" class="form-control form-control-sm">
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="">Documento</label>
+                                    <input type="text" name="Documento" id="Documento" (keyup)="tab($event,'Concepto')" [(ngModel)]="Documento" class="form-control form-control-sm">
+                                </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label class="custom-label" for="concepto_">Concepto</label>
-                                <input type="text" formControlName="concept" class="form-control form-control-sm">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Concepto</label>
+                                    <textarea name="Concepto" id="Concepto" class="form-control" (keyup)="tab($event,'Cuenta0')" [(ngModel)]="Concepto" rows="3"></textarea>
+                                </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label class="custom-label" for="borradores_">Borradores</label>
-                                <select formControlName="drafts" class="form-control form-control-sm">
-                                    <option value=""></option>
-                                </select>
+
+                            <!-- Componente para listar los borradores de los comprobantes contables. -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="borrador">Borradores</label>
+                                    <app-borradorcomprobantes [Tipo_Comprobante]="Tipo_Comprobante" (Borrador)="setDatosBorrador($event)"></app-borradorcomprobantes>
+                                </div>
                             </div>
+
                         </div>
-                        <hr class="mt-4">
-                        <div class="row">
-                            <table class="table">
+                    </form>
+
+                    <div *ngIf="Mostrar_Facturas" class="row">
+                        <div class="col-md-12 text-center">
+                            <h6>Facturas</h6>
+                        </div>
+                        <div class="col-sm-12">
+
+                            <table class="table  invoice-detail-table tabla">
                                 <thead>
-                                    <tr>
-                                        <th>
-                                            <label for="cuenta">Cuenta</label>
-                                        </th>
-                                        <th>
-                                            <label for="nit">NIT</label>
-                                        </th>
-                                        <th>
-                                            <label for="centro_costo">Centro Costo</label>
-                                        </th>
-                                        <th>
-                                            <label for="documento">Documento</label>
-                                        </th>
-                                        <th>
-                                            <label for="concepto">Concepto</label>
-                                        </th>
-                                        <th>
-                                            <label for="base">Base</label>
-                                        </th>
-                                        <th>
-                                            <label for="debito">Debito</label>
-                                        </th>
-                                        <th>
-                                            <label for="credito">Crédito</label>
-                                        </th>
-                                        <th>
-                                            <label for="deb_NIIF">Deb. NIIF</label>
-                                        </th>
-                                        <th>
-                                            <label for="cred_niif">Créd. NIIF</label>
-                                        </th>
+                                    <tr class="thead-default">
+                                        <th style="width:25px"></th>
+                                        <th style="width:50px;">Cuenta</th>
+                                        <th style="width:50px;">Fecha</th>
+                                        <th style="width:60px;">Documento</th>
+                                        <th style="width:80px; text-align: right">Vlr. Factura </th>
+                                        <th style="width:80px; text-align: right">Vlr. Abono </th>
+                                        <th style="width:80px; text-align: right">Vlr. Saldo</th>
+                                        <th style="width:80px; text-align: right">Abono</th>
+                                        <th style="width:20px;">Nat</th>
+                                        <th style="width:60px; text-align: right">Movimiento Debito</th>
+                                        <th style="width:60px; text-align: right">Movimiento_Credito</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr formArrayName="datos" *ngFor="let item of datosList.controls; let i = index">
-                                        <td [formGroupName]="i">
-                                            <input type="text" formControlName="account" (change)="createData()" class="form-control form-control-sm" id="cuenta">
+                                    <tr *ngIf="Lista_Facturas.length == 0 && !Cargando">
+                                        <td colspan="11">
+                                            <i class="fa fa-exclamation-circle fa-5x"></i>
+                                            <h4>No Existen Facturas para mostrar</h4>
+
                                         </td>
-                                        <td [formGroupName]="i">
-                                            <input type="text" formControlName="nit" class="form-control form-control-sm" id="nit">
+                                    </tr>
+                                    <tr *ngFor="let item of Lista_Facturas; let i = index" id="fila{{i}}">
+                                        <td style="width:25px" class="text-center">
+                                            <input type="checkbox" name="Factura{{i}}" id="Factura{{i}}" (change)="addListInvoice(item, i)">
                                         </td>
-                                        <td [formGroupName]="i">
-                                            <input type="text" formControlName="cost_center" class="form-control form-control-sm" id="centro_costo">
+                                        <td style="width:50px;">{{item.Codigo}}</td>
+                                        <td style="width:50px;">{{item.Fecha }} </td>
+                                        <td style="width:60px;">{{ item.Factura }} </td>
+                                        <td style="width:80px; text-align: right">{{item.Valor_Factura |currency}} </td>
+                                        <td style="width:80px; text-align: right">{{item.Valor_Abono |currency}} </td>
+                                        <td style="width:80px; text-align: right">{{item.Valor_Saldo | currency }} </td>
+                                        <td style="width:80px; text-align: right">
+                                            <input type="number" name="abono{{i}}" id="abono{{i}}" [(ngModel)]="item.Abono" (blur)="armarDatosBorrador();validarSaldoFactura(i,$event)">
                                         </td>
-                                        <td [formGroupName]="i">
-                                            <input type="text" formControlName="document" class="form-control form-control-sm" id="documento">
+                                        <td style="width:20px;">{{item.Nat }} </td>
+                                        <td style="width:60px; text-align: right">{{item.Movimiento_Debito |currency}} </td>
+                                        <td style="width:60px; text-align: right">{{item.Movimiento_Credito |currency}} </td>
+                                    </tr>
+                                    <tr *ngIf="Lista_Facturas.length > 0">
+                                        <td colspan="7"></td>
+                                        <td style="width:80px; text-align: right">
+                                            <b>Total: {{ Total_Abono | currency }}</b>
                                         </td>
-                                        <td [formGroupName]="i">
-                                            <input type="text" formControlName="concept" class="form-control form-control-sm" id="concepto">
-                                        </td>
-                                        <td [formGroupName]="i">
-                                            <input type="text" formControlName="base" class="form-control form-control-sm" readonly id="base">
-                                        </td>
-                                        <td [formGroupName]="i">
-                                            <input type="number" formControlName="debit" class="form-control form-control-sm" id="debito">
-                                        </td>
-                                        <td [formGroupName]="i">
-                                            <input type="number" formControlName="credit" class="form-control form-control-sm" id="credito">
-                                        </td>
-                                        <td [formGroupName]="i">
-                                            <input type="text" formControlName="deb_niif" class="form-control form-control-sm" id="deb_NIIF">
-                                        </td>
-                                        <td [formGroupName]="i">
-                                            <input type="text" formControlName="cred_niif" class="form-control form-control-sm" id="cred_niif">
+                                        <td colspan="3"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <button class="btn btn-info btn-sm pull-left" (click)="addInvoicesToAccount()">Confirmar</button>
+
+
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div *ngIf="!Cargando" class="row m-t-10">
+                        <div class="col-md-12">
+                            <button class="btn btn-link btn-sm pull-right" title="Recargar datos iniciales (Terceros, PUC, Centros Costos)" (click)="reloadData()"><i class="fa fa-refresh"></i> Recargar</button>
+                            <div style="display:inline-block;margin-top: 14px;" class="pull-right">
+                                <label style="cursor: pointer;" for="Facturas_Masivas" class="f-10">
+                                    <span style="text-decoration: underline"><i class="fa fa-upload"></i> Cargar facturas</span>
+                                </label>
+
+                                <input type="file" id="Facturas_Masivas" ngModel accept="application/vnd.ms-excel" data-max-size="2048" name="Facturas_Masivas" class="form-control form-control-sm" (change)="CargarArchivo($event)" style="display: none">
+                            </div>
+                            <table class="table  invoice-detail-table tabla">
+                                <thead>
+                                    <tr class="thead-default">
+
+                                        <th style="width:200px">Cuenta</th>
+                                        <th>Nit</th>
+                                        <th>Centro Costo</th>
+                                        <th>Documento</th>
+                                        <th>Concepto</th>
+                                        <th>Base</th>
+                                        <th>Debito</th>
+                                        <th>Credito</th>
+                                        <th>Deb Niif</th>
+                                        <th>Cred Niif</th>
+                                        <th></th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of Cuentas_Contables; let i = index" id="fila{{i}}" [ngClass]="{'bg-danger': item.Valido === false}">
+                                        <td><input *ngIf="Facturas_Multiple" [(ngModel)]="item.Cuenta" type="text" name="Cuenta" id="Cuenta{{i}}" class="form-control form-control-sm f-9" [ngbTypeahead]="search1" [resultTemplate]="rt1" [inputFormatter]="formatter1"
+                                                (ngModelChange)="BuscarCuenta(item.Cuenta, i)" (keyup)="tab($event,'Nit'+i)" (blur)="armarDatosBorrador();validarCampo(item.Cuenta,$event,'Cuenta')" [required]="(Cuentas_Contables.length-1) != i" />
+
+
+                                            <span *ngIf="!Facturas_Multiple"> {{ item.Cuenta.Nombre }} </span>
+                                            <!-- Solo se muestra cuando se suben datos desde la carga masiva de facturas -->
                                         </td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-danger" (click)="deleteData(i)">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
+                                            <input *ngIf="Facturas_Multiple" [(ngModel)]="item.Nit" type="text" name="Nit{{i}}" id="Nit{{i}}" class="form-control form-control-sm f-9" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" (keyup)="tab($event,'Centro_Costo'+i)"
+                                                (ngModelChange)="BuscarDatosCliente(item.Nit, i)" (blur)="armarDatosBorrador();validarCampo(item.Nit,$event,'Nit')" />
+
+
+                                            <span *ngIf="!Facturas_Multiple"> {{ item.Nit.Nombre }} </span>
+                                            <!-- Solo se muestra cuando se suben datos desde la carga masiva de facturas -->
+                                        </td>
+                                        <td>
+                                            <input *ngIf="Facturas_Multiple" [(ngModel)]="item.Centro_Costo" type="text" name="Centro_Costo{{i}}" id="Centro_Costo{{i}}" class="form-control form-control-sm f-9" [ngbTypeahead]="search2" [resultTemplate]="rt2" [inputFormatter]="formatter2" (ngModelChange)="BuscarDatosCentro(item.Centro_Costo, i)"
+                                                (keyup)="tab($event,'Documento'+i)" (blur)="armarDatosBorrador();validarCampo(item.Centro_Costo,$event,'Centro de Costo')" />
+
+
+                                            <span *ngIf="!Facturas_Multiple">{{ item.Centro_Costo.Nombre }}</span>
+                                            <!-- Solo se muestra cuando se suben datos desde la carga masiva de facturas -->
+                                        </td>
+                                        <td>
+                                            <input *ngIf="Facturas_Multiple" name="Documento{{i}}" id="Documento{{i}}" (keyup)="tab($event,'Concepto'+i)" [(ngModel)]="item.Documento" (blur)="armarDatosBorrador()" class="form-control form-control-sm text-right input-document" type="text">
+                                            <a *ngIf="Facturas_Multiple" href="javascript:;" (click)="showFacturas(item.Nit_Cuenta, i)">
+                                                <i style="font-weight: bold" class="fa fa-search"></i>
+                                            </a>
+
+
+                                            <span *ngIf="!Facturas_Multiple"> {{ item.Documento }} </span>
+                                            <!-- Solo se muestra cuando se suben datos desde la carga masiva de facturas -->
+                                        </td>
+                                        <td><input *ngIf="Facturas_Multiple" name="Concepto{{i}}" id="Concepto{{i}}" (keyup)="tab($event,'Base'+i)" [(ngModel)]="item.Concepto" (blur)="armarDatosBorrador()" class="form-control form-control-sm">
+
+                                            <span *ngIf="!Facturas_Multiple">{{ item.Concepto  }}</span>
+                                            <!-- Solo se muestra cuando se suben datos desde la carga masiva de facturas -->
+                                        </td>
+
+                                        <td><input *ngIf="Facturas_Multiple" name="Base{{i}}" id="Base{{i}}" (keyup)="tab($event,'Debito'+i)" (change)="calcularBase(i, $event.target.value)" (blur)="armarDatosBorrador()" [(ngModel)]="item.Base" class="form-control form-control-sm text-right"
+                                                readonly>
+
+                                            <span *ngIf="!Facturas_Multiple"> {{ item.Base | currency }} </span>
+                                            <!-- Solo se muestra cuando se suben datos desde la carga masiva de facturas -->
+                                        </td>
+                                        <td><input *ngIf="Facturas_Multiple" name="Debito{{i}}" id="Debito{{i}}" min="0" (keyup)="tab($event,'Credito'+i)" (change)="ActualizaValores(i);validarDebCred(i)" (blur)="armarDatosBorrador()" [(ngModel)]="item.Debito"
+                                                class="form-control form-control-sm text-right" type="number">
+
+                                            <span *ngIf="!Facturas_Multiple"> {{ item.Debito | currency }} </span>
+                                            <!-- Solo se muestra cuando se suben datos desde la carga masiva de facturas -->
+                                        </td>
+                                        <td><input *ngIf="Facturas_Multiple" name="Credito{{i}}" id="Credito{{i}}" min="0" (keyup)="tab($event,'Deb_Niif'+i)" (change)="ActualizaValores(i);validarDebCred(i)" (blur)="armarDatosBorrador()" [(ngModel)]="item.Credito"
+                                                class="form-control form-control-sm text-right" type="number">
+
+                                            <span *ngIf="!Facturas_Multiple"> {{ item.Credito | currency }} </span>
+                                            <!-- Solo se muestra cuando se suben datos desde la carga masiva de facturas -->
+                                        </td>
+                                        <td><input *ngIf="Facturas_Multiple" name="Deb_Niif{{i}}" id="Deb_Niif{{i}}" min="0" (keyup)="tab($event,'Cred_Niif'+i)" (change)="ActualizaValores(i,false);validarDebCred(i)" (blur)="armarDatosBorrador()" [(ngModel)]="item.Deb_Niif"
+                                                class="form-control form-control-sm text-right" type="number">
+
+                                            <span *ngIf="!Facturas_Multiple"> {{ item.Deb_Niif | currency }} </span>
+                                            <!-- Solo se muestra cuando se suben datos desde la carga masiva de facturas -->
+                                        </td>
+                                        <td><input *ngIf="Facturas_Multiple" name="Cred_Niif{{i}}" id="Cred_Niif{{i}}" min="0" (keyup)="tab($event,'Cuenta'+(i+1))" (change)="ActualizaValores(i,false);validarDebCred(i)" (blur)="armarDatosBorrador()" [(ngModel)]="item.Cred_Niif"
+                                                class="form-control form-control-sm text-right" type="number">
+
+                                            <span *ngIf="!Facturas_Multiple"> {{ item.Cred_Niif | currency }} </span>
+                                            <!-- Solo se muestra cuando se suben datos desde la carga masiva de facturas -->
+                                        </td>
+                                        <td class="text-center">
+                                            <a *ngIf="(Cuentas_Contables.length-1) != i" href="javascript:;" (click)="EliminarCuenta(i);armarDatosBorrador()">
+                                                <span>
+                                    <i class="fa fa-trash-o"  [ngClass]="{'text-white': item.Valido === false,  'text-danger': item.Valido != false  }"></i>
+                                  </span>
+                                            </a>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 m-t-20">
-                                <table class="table table-borderless table-striped">
-                                    <tbody class="bg-light">
-                                        <tr>
-                                            <th>Total Debito:</th>
-                                            <td>
-                                                <!-- <input type="number" formControlName="total_debit" class="form-control form-control-sm"> -->
-                                                {{ total_debit | currency }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Total Credito:</th>
-                                            <td>
-                                                <!-- <input type="number" formControlName="total_credit" class="form-control form-control-sm"> -->
-                                                {{ total_credit | currency }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Total Debito NIFF:</th>
-                                            <td>{{ total_debit_niif | currency }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Total Crédito NIFF:</th>
-                                            <td>{{ total_credit_niif | currency }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Diferencia:</th>
-                                            <td>{{ diference | currency }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Diferencia NIIF:</th>
-                                            <td>{{ diference_niff | currency }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    </div>
+
+                    <div *ngIf="Cargando" class="row">
+                        <div class="col-md-12 text-center">
+                            <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                            <span class="sr-only">Cargando...</span>
+                            <h4>Cargando Facturas...</h4>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-info col-12">Guardar Nota Contable</button>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-responsive invoice-table invoice-total">
+                                <tbody>
+                                    <tr>
+                                        <th>Total Debito:</th>
+                                        <td>{{ Total_Debito | currency }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Total Credito:</th>
+                                        <td>{{ Total_Credito | currency }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Total Debito NIFF:</th>
+                                        <td>{{ Total_Debito_Niif | currency }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Total Credito NIFF:</th>
+                                        <td>{{ Total_Credito_Niif | currency }}</td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <th>Diferencia:</th>
+                                        <td>{{ (Total_Debito-Total_Credito) | currency }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Diferencia NIFF:</th>
+                                        <td>{{ (Total_Debito_Niif-Total_Credito_Niif) | currency }}</td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <th>Datos_Invalidos</th>
+                                        <td>{{ Datos_Invalidos }} - {{( ( Total_Debito != Total_Credito ) || ( Total_Debito_Niif != Total_Credito_Niif ) || Datos_Invalidos )}}</td>
+
+                                    </tr> -->
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
                 </div>
-            </form>
+
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-2 botonFlotante1">
+                    <button [routerLink]="['/contabilidad/comprobantes/notas-contables']" type="button" class="btn btn-success btn-block btn-enviar ">
+                  Volver
+              </button>
+                </div>
+                <div class="col-md-2 botonFlotante">
+                    <button type="button" class="btn btn-success btn-block btn-enviar" [swal]="confirmacionGuardar">
+                  Guardar
+              </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+
+<ng-template #rt let-r="result" let-t="term">
+    <span class="f-9"><strong>{{ r.Nombre }}</strong>
+  </span>
+</ng-template>
+<swal #confirmacionSwal title="" text="" type=""></swal>
+
+<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
+
+
+<ng-template #rt1 let-r="result" let-t="term">
+    <span class="f-9">{{ r.Codigo }} </span>
+</ng-template>
+
+<ng-template #rt2 let-r="result" let-t="term">
+    <span class="f-9">{{ r.Nombre }} </span>
+</ng-template>

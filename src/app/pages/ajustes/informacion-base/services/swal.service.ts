@@ -5,8 +5,35 @@ import Swal from 'sweetalert2';
   providedIn: 'root',
 })
 export class SwalService {
+  public SwalObj: any = {
+    type: 'warning',
+    title: 'Alerta',
+    msg: '',
+    html: ''
+  };
+
   constructor() { }
 
+  public ShowMessage(data: any) {
+    this.SetSwalData(data);
+  }
+
+  private SetSwalData(data: any) {
+    if (typeof (data) == 'object') {
+      if (Array.isArray(data)) {
+        let i = 0;
+        for (const key in this.SwalObj) {
+          this.SwalObj[key] = data[i];
+          i++;
+        }
+      } else {
+        this.SwalObj.type = data.codigo;
+        this.SwalObj.title = data.titulo;
+        this.SwalObj.msg = data.mensaje;
+        this.SwalObj.html = data.html;
+      }
+    }
+  }
   show({ title, text, icon, timer = 0, showCancel = true,
 
   },  preConfirm ?  ) {

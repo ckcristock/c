@@ -80,13 +80,13 @@ export class CrearApuServicioComponent implements OnInit {
   getCities(){
     this._apuService.getCities().subscribe((r:any) => {
       this.cities = r.data;
+      help.functionsApuService.cityRetention(this.form, this.cities);
     })
   }
 
   getClients(){
     this._apuService.getClient().subscribe((r:any) => {
       this.clients = r.data;
-      help.functionsApuService.totalMasRetencion(this.form, this.clients);
     })
   }
 
@@ -167,7 +167,7 @@ export class CrearApuServicioComponent implements OnInit {
       title: 'Operación exitosa',
       showCancel: false,
     });
-    this.router.navigateByUrl('/crm/apu/apu-servicio');
+    this.router.navigateByUrl('/crm/apus');
   }
   showError(err) {
     this._swal.show({

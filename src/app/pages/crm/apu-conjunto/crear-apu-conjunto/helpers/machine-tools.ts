@@ -38,15 +38,15 @@ export const machineToolHelper = {
 
   subscribeMachine( machine: FormGroup, form:FormGroup, list: FormArray){
     machine.get('amount').valueChanges.subscribe(value => {
-      let unit_cost = machine.get('unit_cost').value;
-      machine.patchValue({
-        total: Math.round(unit_cost * value)
-      })
+      let unit_cost = machine.get('unit_cost');
+      let result = (typeof unit_cost.value == 'number' && typeof value == 'number' ? (unit_cost.value * value) : 0 )
+      machine.patchValue({ total: Math.round(result) })
     });
     machine.get('unit_cost').valueChanges.subscribe(value => {
-      let amount = machine.get('amount').value;
+      let amount = machine.get('amount');
+      let result = (typeof amount.value == 'number' && typeof value == 'number' ? (value * amount.value) : 0 );
       machine.patchValue({
-        total: Math.round(value * amount)
+        total: Math.round(result)
       })
     });
     machine.get('total').valueChanges.subscribe(value => {

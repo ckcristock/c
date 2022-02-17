@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { Permissions } from '../../../../core/interfaces/permissions-interface';
 import { PermissionService } from '../../../../core/services/permission.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
+import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 type Person = {value: number, text: string};
 @Component({
   selector: 'app-memorandos',
@@ -54,6 +55,12 @@ export class MemorandosComponent implements OnInit {
     { clave: 'Aprobado' },
     { clave: 'Legalizado' }
   ]
+
+  fileString: any = '';
+  type: any = '';
+  file: any = '';
+  fileLocalstorage: String = '' //Eliminar al introducir backend
+
   people:any[] = [];
   public model: Person;
   constructor( 
@@ -140,6 +147,7 @@ export class MemorandosComponent implements OnInit {
       person_id: ['', this._reactiveValid.required],
       memorandum_type_id: ['', this._reactiveValid.required],
       details: ['', this._reactiveValid.required],
+      file:[''],
       level: ['Seleccione', this._reactiveValid.required]
     }); 
   }
@@ -179,6 +187,8 @@ export class MemorandosComponent implements OnInit {
     this.memorandosService.getMemorandumList( params )
     .subscribe( (res:any) => {
       this.memorandums = res.data.data;
+      console.log(res.data);
+      
       this.paginationMemorando.collectionSize = res.data.total;
       this.loading = false;
     })
@@ -186,21 +196,48 @@ export class MemorandosComponent implements OnInit {
 
   saveMemorandum() {
     let person_id = this.formMemorando.value.person_id.value;
+    let file= this.formMemorando.value.file;
+    file = this.fileString;
+    this.fileLocalstorage=file;
+    let type = this.type;
     this.formMemorando.patchValue({
-      person_id
-    })
+      person_id,
+      file,
+      type
+    });
+
+    ///this.memorandosService.saveFile(file);
     this.memorandosService.createNewMemorandum( this.formMemorando.value )
     .subscribe( (res:any) => {
       this.modalMemorando.hide();
       this.formMemorando.reset();
       this.person_selected = '';
       this.getMemorandumList();
-        Swal.fire({
-          icon: 'success',
-          title: res.data,
-          text: 'Felicidades, Creado Satisfactiamente'
-        })
+      Swal.fire({
+        icon: 'success',
+        //title: res.data,
+        text: 'Felicidades, Creado Satisfactiamente'
+      })
     });
+  }
+
+  /**
+   * 
+   * ! Pendiente de Back
+   * TODO 
+   */
+  download(file) {
+    this.memorandosService.download(file)
+      .subscribe((response: BlobPart) => {
+        let blob = new Blob([response], { type: "application/pdf" });
+        let link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = file;
+        link.click();
+        this.loading = false
+      }),
+      error => { console.log('Error downloading the file'); this.loading = false },
+      () => { console.info('File downloaded successfully'); this.loading = false };
   }
 
   aprobarMemorando( memorando, state ) {
@@ -252,6 +289,36 @@ export class MemorandosComponent implements OnInit {
   openModalLlamada() {
     this.modalLlamada.show();
   }
+ 
+
+  onFileChanged(event) {
+    if (event.target.files[0]) {
+      let file = event.target.files[0];
+      console.log(file);
+      const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
+      if (!types.includes(file.type)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de archivo',
+          text: 'El tipo de archivo no es válido'
+        });
+        return null
+      }
+
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event) => {
+        this.fileString = (<FileReader>event.target).result;
+        const type = { ext: this.fileString };
+        this.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+      };
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.file = base64;
+      });
+
+    }
+  }
+
 
   createFormLLamada() {
     this.formLlamada = this.fb.group({

@@ -1,0 +1,182 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <form #FormNotaCredito="ngForm">
+                <div class="card">
+                    <div class="row invoice-contact" style="align-items:flex-start !important;">
+                        <div class="col-md-8">
+                            <div class="invoice-box row">
+                                <div class="col-sm-12">
+                                    <table class="table table-responsive invoice-table table-borderless">
+                                        <tbody>
+                                            <!--  <tr>
+                                                <td style="width:100px;">
+                                                    <img src="{{enviromen.urlLogoColor}}" class="m-b-10 img-60" alt="Pro-H Software">
+                                                </td>
+                                                <td> {{enviromen.Nombre}}
+                                                    <br> {{enviromen.Nit}}
+                                                    <br> {{enviromen.Direccion}}
+                                                    <br> {{enviromen.Telefono}} </td>
+                                            </tr> -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row text-right" style="margin:0;">
+                                <div class="col-sm-12">
+                                    <h4>Nueva Nota Crédito</h4>
+                                    <h6>{{Fecha | date: 'dd/MM/yyyy' }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row invoive-info" style="margin-bottom: 0;">
+
+
+                            <div class="col-md-4">
+                                <label>Tipo de facturas</label>
+                                <div class="form-group">
+
+                                    <select class="form-control form-control-sm tipo-dis-select" (change)="BuscarClientesTerceros('Cliente')" name="Tipo_Selected" [(ngModel)]="Tipo_Factura_Selected" required>
+                                        <option value="">Seleccione</option>
+                                        <option *ngFor="let tipo of Tipo_Factura; let i=index" [value]="tipo.Modulo">{{tipo.Nombre}}</option>
+                                    </select>
+
+                                    <!--<input type="radio" name="factura" (change)="BuscarProductosFactura($event,item.IdFV,i)"> {{ item.Codigo }}</label>-->
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-6" *ngIf="Tipo_Factura_Selected=='Factura_Administrativa'">
+                                <div class="form-group">
+                                    <label>Tipo de Cliente</label>
+                                    <select name="tipoCliente" [(ngModel)]="TipoClienteSelected" class="form-control form-control-sm f-9" (change)="BuscarClientesTerceros()">
+                                        <option *ngFor="let tipoCliente of TipoClientes" [value]="tipoCliente.Nombre">{{tipoCliente.Nombre}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-6" *ngIf="(Tipo_Factura_Selected && Tipo_Factura_Selected!='Factura_Administrativa'|| TipoClienteSelected )">
+                                <div class="form-group">
+                                    <label>Cliente</label>
+                                    <input type="text" name="Cliente" id="Cliente" class="form-control form-control-sm f-9" (change)="validarCliente()" [(ngModel)]="DatosCliente" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" required />
+
+                                </div>
+                            </div>
+                            <div class="col-md-2" *ngIf="DatosCliente">
+                                <label>Código de la factura</label>
+                                <div class="form-group">
+
+                                    <input type="text" class="form-control form-control-sm " placeholder="Ingrese el código" name="Codigo_Factura" [(ngModel)]="Codigo_Factura" (change)="BuscarFactura($event.target.value)" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row invoive-info" style="margin-bottom: 0;">
+                            <div class="col-md-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>Observaciones</label>
+                                    <br/>
+                                    <textarea name="Observacion" [(ngModel)]="Observaciones_General" style="width:100%;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="Mostrar" class="row" style="margin-top:30px;">
+                            <div class="col-sm-12">
+                                <div class="table-responsive tabla">
+                                    <table class="table invoice-detail-table space" style="table-layout: auto !important;">
+                                        <thead>
+                                            <tr class="thead-default">
+                                                <th style="width:30px;">
+                                                    <input type="checkbox" #check1 title="Realizar Nota Credito" (change)="CheckeoMultiple($event.target.checked)" name="Nota1">
+
+                                                </th>
+                                                <th>Producto</th>
+
+                                                <th style="width:60px;">Cantidad</th>
+                                                <th style="width:100px;">Precio U.</th>
+                                                <th style="width:80px;">Desc.</th>
+                                                <th style="width:50px;">Iva</th>
+
+                                                <th style="width:120px;">Total</th>
+                                                <th style="width:120px;">Precio NC.</th>
+                                                <th style="width:120px;">Total NC.</th>
+                                                <th style="width:150px;">Motivo</th>
+                                                <th style="width:150px;">Observación</th>
+                                                <th style="width:100px;">Precio U.</th>
+                                                <th style="width:150px;">Subt. NC.</th>
+                                                <th style="width:150px;">Total NC.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of Lista_Productos; let i = index" id="fila{{i}}">
+                                                <td>
+                                                    <input [disabled]="item.Valor_Nota_Credito_Acumulado == item.Subtotal_Factura" type="checkbox" class="checks" id="RealizarNota{{i}}" #check title="Realizar Nota Credito" (change)="NotaCredito(item,$event.target.checked)" [(ngModel)]="item.Nota" name="Nota">
+                                                </td>
+
+                                                <td style="text-align: left">{{ item.Producto }}</td>
+
+
+                                                <td style="text-align: center">{{ item.Cantidad }}</td>
+
+                                                <td style="text-align: right">{{ item.Precio | currency }}</td>
+                                                <td style="text-align: right">{{ item.Descuento | currency }}</td>
+                                                <td style="text-align: right">{{ item.Impuesto }} </td>
+                                                <td style="text-align: right">$ {{ item.Total_Producto_Factura }}</td>
+                                                <td style="text-align: right">$ {{ item.Precio_Nota_Credito_Acumulado }}</td>
+                                                <td style="text-align: right">$ {{ item.Valor_Nota_Credito_Acumulado }}</td>
+                                                <td>
+                                                    <select class="form-control form-control-sm" [disabled]="item.Disabled" [(ngModel)]="item.Id_Motivo" name="Id_Motivo{{i}}" required>
+                                                        <option *ngFor="let item of Motivos; let i=index" [value]="item.Id_Causal_No_Conforme">{{item.Nombre}}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="Observacion{{i}}" [disabled]="item.Disabled" [(ngModel)]="item.Observacion" class="form-control form-control-sm" required="item.Required">
+                                                </td>
+                                                <td>
+                                                    <input type="number" min="0" step="0.01" name="Valor_Vota{{i}}" [disabled]="item.Disabled" (change)="ValidarValorNota(item)" [(ngModel)]="item.Precio_Nota" class="form-control form-control-sm" required="item.Required">
+
+                                                </td>
+
+                                                <td style="text-align: right">$ {{ item.Valor_Nota }}</td>
+                                                <td style="text-align: right">$ {{ item.Valor_Nota_Total }}</td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-responsive invoice-table invoice-total">
+                                    <tbody>
+                                        <tr>
+                                            <td>Total:</td>
+                                            <td>{{ Total | currency }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <button type="button" [swal]="alerOptions" [disabled]="!FormNotaCredito.valid || Lista_Productos.length == 0" class="btn btn-success btn-block btn-sm btn-enviar">Realizar Nota Credito</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<ng-template #rt let-r="result" let-t="term">
+    <span class="f-9">{{ r.Nombre }} </span>
+</ng-template>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>
+
+<swal #finalizacionSwal title="" text="" type="" (confirm)="VerPantallaLista()"></swal>

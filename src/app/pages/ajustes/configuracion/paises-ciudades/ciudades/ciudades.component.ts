@@ -46,7 +46,9 @@ export class CiudadesComponent implements OnInit {
     this.form = this.fb.group({
       id: [this.city.id],
       name: ['', Validators.required],
-      country_id: ['', Validators.required]
+      country_id: ['', Validators.required],
+      percentage_product: [''],
+      percentage_service: ['']
     });
   }
 
@@ -63,7 +65,9 @@ export class CiudadesComponent implements OnInit {
     this.form.patchValue({
       id: this.city.id,
       name: this.city.name,
-      country_id: this.city.country_id
+      country_id: this.city.country_id,
+      percentage_product: this.city.percentage_product,
+      percentage_service: this.city.percentage_service
     });
   }
 
@@ -75,6 +79,8 @@ export class CiudadesComponent implements OnInit {
     this.loading = true;
     this._ciudades.getCities(params).subscribe((r:any) => {
       this.cities = r.data.data;
+      console.log(this.cities);
+      
       this.loading = false;
       this.pagination.collectionSize = r.data.total;
     })

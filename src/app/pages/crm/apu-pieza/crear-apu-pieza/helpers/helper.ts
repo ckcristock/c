@@ -11,7 +11,7 @@ import { othersHelper } from './others';
 
 export const functionsApu = {
   consts: {
-    retefuente_percentage: []
+    percentage_product: []
   },
 
   fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>, cutLmaterials:Array<any>) {
@@ -82,7 +82,7 @@ export const functionsApu = {
     }
   },
 
-  createForm(fb: FormBuilder) {
+  createForm(fb: FormBuilder, calculationBase) {
     let group = fb.group({
       name: [''],
       city_id: [''],
@@ -118,18 +118,18 @@ export const functionsApu = {
       indirect_cost_total: [0],
       direct_costs_indirect_costs_total: [0],
       direct_costs_indirect_costs_unit: [0],
-      administrative_percentage: [0],
+      administrative_percentage: [calculationBase.administration_percentage.value],
       administrative_value: [0],
-      unforeseen_percentage: [0],
+      unforeseen_percentage: [calculationBase.unforeseen_percentage.value],
       unforeseen_value: [0],
       administrative_unforeseen_subtotal: [0],
       administrative_unforeseen_unit: [0],
-      utility_percentage: [0],
+      utility_percentage: [calculationBase.utility_percentage.value],
       admin_unforeseen_utility_subtotal: [0],
       admin_unforeseen_utility_unit: [0],
       sale_price_cop_withholding_total: [0],
       sale_value_cop_unit: [0],
-      trm: [0],
+      trm: [calculationBase.trm.value],
       sale_price_usd_withholding_total: [0],
       sale_value_usd_unit: [0]
     });
@@ -137,21 +137,26 @@ export const functionsApu = {
     return group;
   },
 
-  totalMasRetencion(group: FormGroup, clients:Array<any>){
-    group.get('third_party_id').valueChanges.subscribe(value => {
-      let data = clients.find(c => c.value == value);
-      this.consts.retefuente_percentage = data.retefuente_percentage;
-      let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
-      let result = admin_unforeseen_utility_subtotal.value / ( 1 - (this.consts.retefuente_percentage / 100));
-      group.patchValue({
-        sale_price_cop_withholding_total: Math.round(result)
-      })
+  cityRetention(group: FormGroup, cities:Array<any>){
+    group.get('city_id').valueChanges.subscribe(value => {
+      let data = cities.find(c => c.value == value);
+      if (data) {
+        let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
+        let result = admin_unforeseen_utility_subtotal.value / ( 1 - (data.percentage_product / 100));
+        group.patchValue({
+          sale_price_cop_withholding_total: Math.round(result)
+        })
+      }
     });
     group.get('admin_unforeseen_utility_subtotal').valueChanges.subscribe(value => {
-      let result = value / ( 1 - (this.consts.retefuente_percentage / 100));
-      group.patchValue({
-        sale_price_cop_withholding_total: Math.round(result)
-      });
+      let city = group.get('city_id');
+      let data = cities.find(c => c.value == city.value);
+      if (data) {
+        let result = value / ( 1 - (data.percentage_product / 100));
+        group.patchValue({
+          sale_price_cop_withholding_total: Math.round(result)
+        });
+      }
     });
   },
 

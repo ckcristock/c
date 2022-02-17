@@ -32,6 +32,7 @@ import { CorteLaserMaterialComponent } from './apu/corte-laser-material/corte-la
 import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component';
 import { EstimacionViaticosComponent } from './apu/estimacion-viaticos/estimacion-viaticos.component';
 import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-values/estimacion-viaticos-values.component';
+import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.component';
 
 
 
@@ -62,7 +63,8 @@ import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-val
         CorteLaserMaterialComponent,
         PerfilesApuComponent,
         EstimacionViaticosComponent,
-        EstimacionViaticosValuesComponent
+        EstimacionViaticosValuesComponent,
+        ValorAlmuerzosComponent
     ],
     imports: [ 
         ParametrosRoutingModule,

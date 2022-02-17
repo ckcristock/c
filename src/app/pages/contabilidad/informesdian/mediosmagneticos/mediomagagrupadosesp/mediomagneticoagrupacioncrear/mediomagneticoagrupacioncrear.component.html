@@ -1,0 +1,82 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-lg-1 col-md-1"></div>
+        <div class="col-lg-10 col-md-10">
+
+            <div class="card">
+
+                <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+                <!-- Layout de Cabecera. -->
+
+                <div class="card-body" style="padding-bottom: 0px;">
+
+                    <form #FormMediosMag="ngForm">
+                        <div class="row">
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="cod_formato">Codigo Formato</label>
+                                    <input type="text" id="cod_formato" class="form-control form-control-sm" name="codigo_formato" [(ngModel)]="MediosMagModel.Codigo_Formato" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="nombre_formato">Nombre Formato</label>
+                                    <input type="text" id="nombre_formato" class="form-control form-control-sm" name="nombre_formato" [(ngModel)]="MediosMagModel.Nombre_Formato" required>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
+
+                        <div class="col-md-3">
+                            <h5 class="m-b-10">Tipos</h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-inverse">
+                                        <th>Formatos</th>
+                                        <th width="20"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of Formatos; let i=index">
+                                        <td>
+                                            <ng-select id="formato{{i}}" class="f-10" name="formato{{i}}" [(ngModel)]="item.Formato" (ngModelChange)="nuevoFormato(i)" placeholder="Seleccione el formato" [options]="listaFormatosEspeciales"></ng-select>
+                                        </td>
+                                        <td>
+                                            <button *ngIf="i != (Formatos.length - 1)" style="padding: 0" class="btn btn-link text-danger" (click)="eliminarFila(i)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-md-3">
+                            <button class="btn btn-primary btn-sm m-l-20" style="margin-top: 30px !important" [swal]="confirmacionGuardar" [disabled]="!FormMediosMag.valid">
+                            <i class="fa fa-save"></i> Guardar
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-lg-1 col-md-1"></div>
+    </div>
+</div>
+
+
+<ng-template #rt let-r="result" let-t="term">
+    <span class="f-9"><strong>{{ r.Nombre }}</strong>
+    </span>
+</ng-template>
+
+<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>

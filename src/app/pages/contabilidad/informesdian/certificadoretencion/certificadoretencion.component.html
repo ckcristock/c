@@ -1,0 +1,124 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+
+            <div class="card">
+
+                <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+
+                <div class="card-body">
+                    <form #FormFiltros="ngForm">
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                      Fecha Inicial
+                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="date" class="form-control form-control-sm" (change)="setQueryParams()" [(ngModel)]="CertificadoRetencionModel.Fecha_Inicial" name="Fecha_Inicial" id="Fecha_Inicial" required>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Fecha Corte
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="date" class="form-control form-control-sm" (change)="setQueryParams()" [(ngModel)]="CertificadoRetencionModel.Fecha_Final" name="Fecha_Corte" id="Fecha_Corte" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Cuentas
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <!-- <input [(ngModel)]="Cuenta_Inicial" type="text" name="Cuenta_Inicial" id="Cuenta_Inicial" class="form-control form-control-sm f-9"
+                            [ngbTypeahead]="search1" [resultTemplate]="rt1" [inputFormatter]="formatter1" (ngModelChange)="BuscarCuenta(Cuenta_Inicial, 'Inicial')" />
+                      <input type="hidden" name="Cuenta_I" [(ngModel)]="CertificadoRetencionModel.Cuenta_Inicial"> -->
+                                    <ng-select [ngClass]="'ng-select'" class="puntos f-9" [items]="Cuentas" name="cuentas" [(ngModel)]="CertificadoRetencionModel.Cuentas" (ngModelChange)="setQueryParams()" [multiple]="true"></ng-select>
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-md-2 text-right">
+                    <div>
+                      <label for="" class="f-12">
+                        Cuenta Final
+                      </label>
+                    </div>
+                </div>
+  
+                <div class="col-md-4">
+                    <div class="form-group">
+                      <input [(ngModel)]="Cuenta_Final" type="text" name="Cuenta_Final" id="Cuenta_Final" class="form-control form-control-sm f-9"
+                            [ngbTypeahead]="search1" [resultTemplate]="rt1" [inputFormatter]="formatter1" (ngModelChange)="BuscarCuenta(Cuenta_Final, 'Final')"
+                             />
+                      <input type="hidden" name="Cuenta_F" [(ngModel)]="CertificadoRetencionModel.Cuenta_Final">
+                    </div>
+                </div> -->
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Nit ó C.C
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input class="form-control form-control-sm" name="Nit" (change)="AsignarTercero(TerceroSeleccionado)" [(ngModel)]="TerceroSeleccionado" type="text" placeholder="Nombre o Nit" [ngbTypeahead]="search_tercero" [resultTemplate]="rt_tercero" [inputFormatter]="formatter_tercero">
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Fecha de Expedición
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="date" name="fecha_expedicion" id="fecha_expedicion" [(ngModel)]="CertificadoRetencionModel.Fecha_Expedicion" class="form-control form-control-sm" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-info btn-sm" [disabled]="!FormFiltros.valid" (click)="generarCertificado()"><i class="fa fa-eye"></i> Generar certificado</button>
+                            </div>
+
+                        </div>
+                        <!-- FIN ROW-->
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+
+<ng-template #rt1 let-r="result" let-t="term">
+    <span class="f-9">{{ r.Codigo }} </span>
+</ng-template>
+<ng-template #rt_tercero let-r="result" let-t="term">
+    <span class="f-9">
+          {{r.Nombre_Tercero}}
+      </span>
+</ng-template>

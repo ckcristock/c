@@ -1,22 +1,56 @@
-<table class="table table-borderless table-striped">
-    <thead class="bg-light">
-        <tr>
-            <th>Fecha</th>
-            <th>Nombre Adición</th>
-            <th>Concepto</th>
-            <th>Base</th>
-            <th>IVA</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>12/14/01</td>
-            <td>Prueba</td>
-            <td>Asdasdas</td>
-            <td>asdas</td>
-            <td>111</td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-md-12">
+        <h4 class="m-b-10">Adiciones</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Nombre Adición</th>
+                    <th>Concepto</th>
+                    <th class="text-right">Base</th>
+                    <th class="text-right">Iva</th>
+                    <th class="text-right">Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="Adiciones.length == 0">
+                    <td colspan="6" class="text-center">
+                        <i class="fa fa-exclamation-circle fa-5x"></i>
+                        <h4>No existen adiciones para este activo</h4>
+                    </td>
+                </tr>
+                <tr *ngFor="let item of Adiciones">
+                    <td>{{ item.Fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ item.Nombre }}</td>
+                    <td>{{ item.Concepto }}</td>
+                    <td class="text-right">{{ item.Base | currency }}</td>
+                    <td class="text-right">{{ item.Iva | currency }}</td>
+                    <td class="text-right">{{ item.Costo | currency }}</td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envirom.ruta}}php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_adicion={{item.Id_Adicion_Activo_Fijo}}&id_registro={{item.Id_Activo_Fijo}}&id_funcionario_elabora={{1}}&activo=Adicion"
+                                        target="_blank">
+                                        <i class="fa fa-print"></i> Ver PCGA</a>
+                                    <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envirom.ruta}}php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_adicion={{item.Id_Adicion_Activo_Fijo}}&id_registro={{item.Id_Activo_Fijo}}&id_funcionario_elabora={{1}}&activo=Adicion&tipo=Niif"
+                                        target="_blank">
+                                        <i class="fa fa-print"></i> Ver NIIF</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5" style="text-align: right;font-weight: bold;">Totales:</td>
+                    <td style="text-align: right;font-weight: bold;">{{ getTotal() | currency }}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

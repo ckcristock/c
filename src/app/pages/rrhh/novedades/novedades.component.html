@@ -18,21 +18,29 @@
             <div class="card-body">
                 <form [formGroup]="form" (ngSubmit)="cargarNovedades()">
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="fecha_inicio" class="custom-label">Funcionario</label>
+                                <ng-select formControlName="personfill" [items]="peopleSelects" bindLabel="text" bindValue="value" loadingText="loading" (change)="
+                                cargarNovedades()" ngDefaultControl>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="fecha_inicio" class="custom-label">Fecha de Inicio</label>
                                 <input type="date" formControlName="date_start" class="form-control custom-control" />
                             </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="fecha_fin" class="custom-label">Fecha de Fin</label>
                                 <input type="date" formControlName="date_end" class="form-control custom-control" />
                             </div>
                         </div>
-                        <div class="col-md-2 pt-4 text-center">
+                        <div class="col-md-3 pt-4 text-center">
                             <button type="submit" class="btn btn-outline-secondary default btn-xs mt-2 w-100">
-                                <i class="iconsmind-Search-People"></i> Filtrar
+                                <i class="iconsmind-Search-People"></i> Filtrar rango de fechas
                             </button>
                         </div>
                     </div>
@@ -43,19 +51,16 @@
                     </div>
 
                     <div class="col-12 mb-4 fila-novedad" *ngFor="let person of people">
-                        <div
-                            class="align-self-center d-flex flex-column flex-md-row justify-content-between min-width-zero align-items-md-center">
+                        <div class="align-self-center d-flex flex-column flex-md-row justify-content-between min-width-zero align-items-md-center">
                             <p class="w-40 w-xs-100 mb-0 d-flex align-items-center">
-                                <img src="{{person?.image| image:'users' }}" alt=""
-                                class="img-thumbnail rounded-circle header-profile-user mx-auto d-block">
+                                <img src="{{person?.image| image:'users' }}" alt="" class="img-thumbnail rounded-circle header-profile-user mx-auto d-block">
                                 <span class="font-weight-bold ml-2">
                                     {{ person.first_name }}
                                     {{ person.first_surname }}
                                 </span>
                             </p>
 
-                            <p class="mb-1 font-weight-bold w-40 w-xs-100">{{
-                                person.contractultimate.position.dependency.name }}</p>
+                            <p class="mb-1 font-weight-bold w-40 w-xs-100">{{ person.contractultimate.position.dependency.name }}</p>
                             <div class="w-xs-100 detalles">
                                 <button class="btn btn-primary btn-sm" (click)="person.selected = !person.selected">
                                     <i class="fas fa-sort-down"></i>
@@ -63,7 +68,7 @@
                             </div>
                         </div>
                         <div class="mt-3">
-  
+
                             <div [ngClass]="{  'display-none': (!person.selected ) } " colspan="6" class="text-center">
                                 <table class="table table-hover table-bordered detalles">
                                     <tr>
@@ -86,15 +91,12 @@
                                         <td style="width:80px;">
                                             <div class="text-center">
                                                 <div ngbDropdown class="dropdown-primary">
-                                                    <button ngbDropdownToggle
-                                                        class="btn btn-secondary btn-sm waves-effect waves-light "
-                                                        type="button">
+                                                    <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">
                                                         <i class="fa fa-search "></i>
 
                                                     </button>
                                                     <div ngbDropdownMenu>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones"
-                                                            (click)="editarNovedad(fact)">
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" (click)="editarNovedad(fact)">
                                                             <i class="ti-pencil"></i> Edi.</a>
                                                         <!-- <a class="dropdown-item waves-light waves-effect caja-botones" href="" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a eliminar la novedad' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'Dejame verificar'}"
                                                     (confirm)="EliminarNovedad(novedad.Id_Novedad)">

@@ -1,0 +1,117 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+
+            <div class="card">
+
+                <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+
+                <div class="card-body">
+                    <form #FormFiltros="ngForm">
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Fecha Inicial
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="date" class="form-control form-control-sm" [(ngModel)]="EstResultadoModel.Fecha_Inicial" name="Fecha_Inicial" id="Fecha_Inicial" (change)="setQueryParams()" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                          Fecha Corte
+                        </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="date" class="form-control form-control-sm" [(ngModel)]="EstResultadoModel.Fecha_Final" name="Fecha_Corte" id="Fecha_Corte" (change)="setQueryParams()" required>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Tipo Reporte
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select name="Discriminado" id="Discriminado" [(ngModel)]="EstResultadoModel.Tipo" class="form-control form-control-sm" (change)="setQueryParams()" required>
+                        <option value="">Seleccione</option>
+                        <option value="Pcga">Pcga</option>
+                        <option value="Niif">Niif</option>
+                      </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                      Nivel
+                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <select name="Nivel" id="Nivel" [(ngModel)]="EstResultadoModel.Nivel" class="form-control form-control-sm" (change)="setQueryParams()">
+                      <option value="">Seleccione</option>
+                      <option *ngFor="let Nivel of Niveles" [value]="Nivel">{{ Nivel }}</option>
+                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3"></div>
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                        Centro Costo
+                      </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <ng-select id="Centro_Costo" class="f-10" name="Centro_Costo" [(ngModel)]="EstResultadoModel.Centro_Costo" placeholder="Seleccione el centro costo" [items]="Centro_Costos" (ngModelChange)="setQueryParams()"></ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- FIN ROW-->
+                    </form>
+
+                    <div class="row m-t-20">
+                        <div class="col-md-12">
+
+                            <div class="m-t-10 text-center">
+                                <a href="{{ envirom.ruta }}php/contabilidad/estadoresultado/descarga_pdf.php?{{queryParams}}" target="_blank" class="btn btn-inverse btn-sm"><i class="fa fa-file-text"></i> PDF</a>
+                                <a href="{{ envirom.ruta }}php/contabilidad/estadoresultado/descarga_excel.php?{{queryParams}}" class="btn btn-inverse btn-sm"><i class="fa fa-table"></i> EXCEL</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+
+<ng-template #rt1 let-r="result" let-t="term">
+    <span class="f-9">{{ r.Codigo }} </span>
+</ng-template>

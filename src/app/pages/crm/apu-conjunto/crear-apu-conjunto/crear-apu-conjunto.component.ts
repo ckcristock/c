@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ApuConjuntoService } from '../apu-conjunto.service';
 import * as help from './helpers/imports';
@@ -12,6 +12,7 @@ import { SwalService } from '../../../ajustes/informacion-base/services/swal.ser
 import { functionsUtils } from '../../../../core/utils/functionsUtils';
 import { concat, Observable, Subject, of } from 'rxjs';
 import { map, filter, distinctUntilChanged, debounceTime, tap, switchMap, catchError } from 'rxjs/operators';
+import { CalculationBasesService } from '../../../ajustes/configuracion/base-calculos/calculation-bases.service';
 interface ApuPart {
   name: string;
   id: number;
@@ -26,6 +27,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   @Input('id') id;
   @Input('data') data:any;
   form: FormGroup;
+  formGroup: FormGroup;
   date:Date = new Date();
   indirectCosts:any[] = [];
   files: File[] = [];
@@ -48,17 +50,21 @@ export class CrearApuConjuntoComponent implements OnInit {
   searchFailed:boolean;
   searchingSet:boolean;
   searchFailedSet:boolean;
+  calculationBase: any = {}
+  @ViewChild('apus') apus: any
     
   constructor( 
                 private fb: FormBuilder,
                 private router: Router,
                 private _apuConjunto: ApuConjuntoService,
-                private _swal: SwalService
+                private _swal: SwalService,
+                private _calculationBase: CalculationBasesService
               ) {
                 
               }
 
-  ngOnInit(): void {
+  ngOnInit():void {
+    // await this.getBases()
     this.getPeople();
     this.getCities();
     this.getClients();
@@ -69,6 +75,7 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.validateData();
     this.collapses();
     this.loadPeople();
+    
   }
 
   collapses(){
@@ -162,6 +169,30 @@ export class CrearApuConjuntoComponent implements OnInit {
      return e.preventDefault() */
   }
 
+  findApus() {
+    // this.formGroup = item;
+    this.apus.show()
+  }
+
+  getApus(e: any[]) {
+    let item = this.form.get('list_pieces_sets') as FormArray
+    e.forEach(apu => {
+      const exist = item.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
+      !exist ? item.push(this.piecesSetsControl(apu)) : ''
+    });
+
+  }
+
+
+  async getBases() {
+    await this._calculationBase.getAll().toPromise().then((r: any) => {
+      this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+      /* if (this.dataEdit) {
+        this.calculationBase.trm.value = this.dataEdit.trm
+      } */
+    })
+  }
+
   onSelect(event) {
     this.files.push(...event.addedFiles);
   }
@@ -201,18 +232,18 @@ export class CrearApuConjuntoComponent implements OnInit {
   getCities(){
     this._apuConjunto.getCities().subscribe((r:any) => {
       this.cities = r.data;
+      help.functionsApuConjunto.cityRetention(this.form, this.cities);
     })
   }
 
   getClients(){
     this._apuConjunto.getClient().subscribe((r:any) => {
       this.clients = r.data;
-      help.functionsApuConjunto.totalMasRetencion(this.form, this.clients);
     })
   }
 
-  piecesSetsControl(): FormGroup{
-    let group = help.piecesSetsHelper.createPiecesSetsGroup(this.form, this.fb);
+  piecesSetsControl(item): FormGroup{
+    let group = help.piecesSetsHelper.createPiecesSetsGroup(this.form, this.fb, item);
     return group;
   }
 
@@ -222,7 +253,7 @@ export class CrearApuConjuntoComponent implements OnInit {
 
   newPiecesSets(){
     let machine = this.piecesSetsList;
-    machine.push(this.piecesSetsControl())
+    machine.push(this.piecesSetsControl(''))
   }
 
   deletePiecesSets(i){
@@ -401,7 +432,7 @@ export class CrearApuConjuntoComponent implements OnInit {
       title: 'Operación exitosa',
       showCancel: false,
     });
-    this.router.navigateByUrl('/crm/apu/apu-conjunto');
+    this.router.navigateByUrl('/crm/apus');
   }
   showError(err) {
     this._swal.show({

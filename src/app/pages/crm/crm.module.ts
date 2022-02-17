@@ -46,6 +46,7 @@ import { EditarApuServicioComponent } from './apu-servicio/editar-apu-servicio/e
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ValidacionDimensionalComponent } from './apu-servicio/ver-apu-servicio/validacion-dimensional/validacion-dimensional.component';
 import { MontajePuestaMarchaComponent } from './apu-servicio/ver-apu-servicio/montaje-puesta-marcha/montaje-puesta-marcha.component';
+import { ApusComponent } from './apus/apus.component';
 
 
 @NgModule({
@@ -80,6 +81,7 @@ import { MontajePuestaMarchaComponent } from './apu-servicio/ver-apu-servicio/mo
     EditarApuServicioComponent,
     ValidacionDimensionalComponent,
     MontajePuestaMarchaComponent,
+    ApusComponent,
   ],
   imports: [
     CommonModule,

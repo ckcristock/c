@@ -11,8 +11,6 @@ export const functionsApuConjunto = {
   },
 
   fillInForm(form: FormGroup, data, fb: FormBuilder, apuParts:Array<any>) {
-    console.log(data);
-    
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
@@ -122,99 +120,117 @@ export const functionsApuConjunto = {
     });
   },
 
-  totalMasRetencion(group: FormGroup, clients:Array<any>){
-    group.get('third_party_id').valueChanges.subscribe(value => {
-      let data = clients.find(c => c.value == value);
-      this.consts.retefuente_percentage = data.retefuente_percentage;
-      let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
-      let result = admin_unforeseen_utility_subtotal.value / ( 1 - (this.consts.retefuente_percentage / 100));
-      group.patchValue({
-        sale_price_cop_withholding_total: Math.round(result)
-      })
+  cityRetention(group: FormGroup, cities:Array<any>){
+    group.get('city_id').valueChanges.subscribe(value => {
+      let data = cities.find(c => c.value == value);
+      if (data) {
+        let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
+        let result = (typeof admin_unforeseen_utility_subtotal.value == 'number' && typeof data.percentage_product == 'number' 
+        ?
+        admin_unforeseen_utility_subtotal.value / ( 1 - (data.percentage_product / 100))
+        : 
+        0);
+        group.patchValue({ sale_price_cop_withholding_total: Math.round(result) })
+      }
     });
     group.get('admin_unforeseen_utility_subtotal').valueChanges.subscribe(value => {
-      let result = value / ( 1 - (this.consts.retefuente_percentage / 100));
-      group.patchValue({
-        sale_price_cop_withholding_total: Math.round(result)
-      });
+      let city = group.get('city_id');
+      let data = cities.find(c => c.value == city.value);
+      if (data) {
+        let result = (typeof data.percentage_product == 'number' 
+        && 
+        typeof value == 'number' ? value / ( 1 - (data.percentage_product / 100)) : 0);
+        group.patchValue({
+          sale_price_cop_withholding_total: Math.round(result)
+        });
+      }
     });
   },
 
   subscribes(group: FormGroup, clients:Array<any>){
     group.get('indirect_cost_total').valueChanges.subscribe(value => {
       let total_direct_cost = group.get('total_direct_cost');
-      group.patchValue({
-        direct_costs_indirect_costs_total: total_direct_cost.value + value
-      });
+      let result = (typeof total_direct_cost.value == 'number' && typeof value == 'number' ? (total_direct_cost.value + value) : 0)
+      group.patchValue({ direct_costs_indirect_costs_total: result });
     });
     group.get('total_direct_cost').valueChanges.subscribe(value => {
       let indirect_cost_total = group.get('indirect_cost_total');
       let administrative_percentage = group.get('administrative_percentage');
       let unforeseen_percentage = group.get('unforeseen_percentage');
+      let administrativeResult = (typeof administrative_percentage.value == 'number' && typeof value == 'number' ? (value * (administrative_percentage.value / 100)) : 0)
+      let unforeseenResult = (typeof value == 'number' && typeof unforeseen_percentage.value == 'number' ? (value * (unforeseen_percentage.value / 100)) : 0)
       group.patchValue({
-        direct_costs_indirect_costs_total: indirect_cost_total.value + value,
-        administrative_value: (value * (administrative_percentage.value / 100)),
-        unforeseen_value: (value * (unforeseen_percentage.value / 100))
+        direct_costs_indirect_costs_total: (typeof indirect_cost_total.value == 'number' && typeof value == 'number' ? (indirect_cost_total.value + value) : 0),
+        administrative_value: Math.round(administrativeResult),
+        unforeseen_value: Math.round(unforeseenResult)
       });
     });
     group.get('administrative_percentage').valueChanges.subscribe(value => {
       let total_direct_cost = group.get('total_direct_cost');
+      let result = (typeof total_direct_cost.value == 'number' && typeof value == 'number' ? (total_direct_cost.value * (value / 100)) : 0)
       group.patchValue({
-        administrative_value: (total_direct_cost.value * (value / 100))
+        administrative_value: Math.round(result)
       });
     });
     group.get('unforeseen_percentage').valueChanges.subscribe(value => {
-      let total_direct_cost = group.get('total_direct_cost').value;
+      let total_direct_cost = group.get('total_direct_cost');
+      let result = (typeof total_direct_cost.value == 'number' && typeof value == 'number' ? (total_direct_cost.value * (value / 100)) : 0)
       group.patchValue({
-        unforeseen_value: (total_direct_cost * (value / 100))
+        unforeseen_value: Math.round(result)
       });
     });
     group.get('administrative_unforeseen_subtotal').valueChanges.subscribe(value => {
       let utility_percentage = group.get('utility_percentage');
-      let result = (value / (1 - (utility_percentage.value / 100)))
+      let result = (typeof value == 'number' && utility_percentage.value ? (value / (1 - (utility_percentage.value / 100))) : 0)
       group.patchValue({
         admin_unforeseen_utility_subtotal: Math.round(result)
       });
     });
     group.get('utility_percentage').valueChanges.subscribe(value => {
       let administrative_unforeseen_subtotal = group.get('administrative_unforeseen_subtotal');
-      let result = (administrative_unforeseen_subtotal.value / (1 - (value / 100)))
+      let result = (typeof administrative_unforeseen_subtotal.value == 'number' && typeof value == 'number' ? (administrative_unforeseen_subtotal.value / (1 - (value / 100))) : 0)
       group.patchValue({
         admin_unforeseen_utility_subtotal: Math.round(result)
       });
     });
     group.get('sale_price_cop_withholding_total').valueChanges.subscribe(value => {
-      let trm = group.get('trm').value;
-      group.patchValue({
-        sale_price_usd_withholding_total: Math.round(value / trm),
-      })
+      let trm = group.get('trm');
+      let result = (typeof value == 'number' && typeof trm.value == 'number' ? (value / trm.value) : 0)
+      group.patchValue({ sale_price_usd_withholding_total: Math.round(result) })
     });
     group.get('trm').valueChanges.subscribe(value => {
-      let sale_price_cop_withholding_total = group.get('sale_price_cop_withholding_total').value;
-      group.patchValue({
-        sale_price_usd_withholding_total: Math.round(sale_price_cop_withholding_total / value)
-      })
+      let sale_price_cop_withholding_total = group.get('sale_price_cop_withholding_total');
+      let result = (typeof sale_price_cop_withholding_total.value == 'number' && typeof value == 'number' ?(sale_price_cop_withholding_total.value / value) : 0)
+      group.patchValue({ sale_price_usd_withholding_total: Math.round(result) })
     });
     group.get('direct_costs_indirect_costs_total').valueChanges.subscribe(value => {
-      let administrative_value = group.get('administrative_value').value;
-      let unforeseen_value = group.get('unforeseen_value').value;
+      let administrative_value = group.get('administrative_value');
+      let unforeseen_value = group.get('unforeseen_value');
       group.patchValue({
-        administrative_unforeseen_subtotal: administrative_value + unforeseen_value + value
+        administrative_unforeseen_subtotal: administrative_value.value + unforeseen_value.value + value
       });
     })
     group.get('administrative_value').valueChanges.subscribe(value => {
-      let direct_costs_indirect_costs_total = group.get('direct_costs_indirect_costs_total').value;
-      let unforeseen_value = group.get('unforeseen_value').value;
-      group.patchValue({
-        administrative_unforeseen_subtotal: direct_costs_indirect_costs_total + unforeseen_value + value
-      });
+      let direct_costs_indirect_costs_total = group.get('direct_costs_indirect_costs_total');
+      let unforeseen_value = group.get('unforeseen_value');
+      let result = (typeof direct_costs_indirect_costs_total.value == 'number' 
+      && 
+      typeof unforeseen_value.value == 'number' 
+      && 
+      typeof value == 'number' ?
+      (direct_costs_indirect_costs_total.value + unforeseen_value.value + value):
+      0)
+      group.patchValue({ administrative_unforeseen_subtotal: result });
     });
     group.get('unforeseen_value').valueChanges.subscribe(value => {
-      let direct_costs_indirect_costs_total = group.get('direct_costs_indirect_costs_total').value;
-      let administrative_value = group.get('administrative_value').value;
-      group.patchValue({
-        administrative_unforeseen_subtotal: direct_costs_indirect_costs_total + administrative_value + value
-      });
+      let direct_costs_indirect_costs_total = group.get('direct_costs_indirect_costs_total');
+      let administrative_value = group.get('administrative_value');
+      let result = (typeof direct_costs_indirect_costs_total.value == 'number' 
+      &&
+      typeof administrative_value.value == 'number' 
+      && typeof value == 'number' ? (direct_costs_indirect_costs_total.value + administrative_value.value + value) 
+      : 0)
+      group.patchValue({ administrative_unforeseen_subtotal: result });
     });
   },
 

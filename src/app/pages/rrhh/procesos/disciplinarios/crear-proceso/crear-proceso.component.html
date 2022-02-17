@@ -1,0 +1,218 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h5 class="mb-4 text-primary">Crear Proceso Disciplinario</h5>
+        </div>
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <div class="col-12">
+                            <label class="custom-label" for="funcionario_id">Funcionario</label>
+                            <input id="typeahead-format" type="text" class="form-control form-control-sm" placeholder="Funcionario..." formControlName="person_id" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue" [editable]='false'
+                            />
+                            <ng-container *ngIf="person_valid">
+                                <small *ngFor="let item of form.get('person_id').errors | ObjToArrayPipe" class="text-danger">
+                                    {{ item?.msj }}
+                                </small>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="row ml-0 mr-0">
+                        <div class="form-group col-md-6">
+                            <label for="codigo">Fecha inicio</label>
+                            <input type="date" id="fecha_inicio" [class.is-invalid]="date_of_admission_valid" formControlName="date_of_admission" class="form-control" name="fecha_inicio" autocomplete="off">
+                        </div>
+                        <!-- div class="form-group col-md-6">
+                            <label for="codigo">Fecha Fin</label>
+                            <input type="date" id="fecha_fin" [class.is-invalid]="date_end_valid" formControlName="date_end" class="form-control" name="fecha_fin" autocomplete="off">
+                            <ng-container *ngIf="date_end_valid">
+                                <small *ngFor="let item of form.get('date_end').errors | ObjToArrayPipe" class="text-danger">
+                                    {{ item?.msj }}
+                                </small>
+                            </ng-container>
+                    </div> -->
+                        <div class="form-group col-md-6">
+                            <div class="input-group mb-3">
+                                <label for="importFile">Evidencia</label>
+                                <input type="file" id="importFile" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <div class="col-12">
+                            <label for="">Descripción</label>
+                            <textarea class="form-control form-control-sm" [class.is-invalid]="process_description_valid" formControlName="process_description" id="descripcion" name="notas" rows="3" placeholder="Descripción Proceso Disciplinario">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 panel">
+                    <div class="panel-body">
+                        <div class="ml-4">
+                            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">
+                                <i class="fa fa-plus"></i> Agregar
+                            </button>
+                            <h5>Involucrados</h5>
+                        </div>
+                        <div class="ml-4">
+                            <div class="mt-4" style="margin-left: 30px; margin-right: 50px;" *ngIf="!loading && involvedList.length > 0; else notData">
+                                <div>
+                                    <table class="table table-borderless table-sm">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th>Funcionario</th>
+                                                <th>Observación</th>
+                                                <th>Evidencia</th>
+                                                <th class="text-center">Memorandos</th>
+                                                <th class="text-center">Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let involved of involvedList.controls; let i = index">
+                                                <tr>
+                                                    <td> {{ involved.value.person.text }} </td>
+                                                    <td> {{ involved.value.observation }} </td>
+                                                    <td> {{ involved.value.filename }} </td>
+                                                    <td>
+                                                        <div class="text-center">
+                                                            <button class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="collapsed[i] = !collapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
+                                                                <i class="mdi mdi-chevron-down" *ngIf="!collapsed[i]"></i>
+                                                                <i class="mdi mdi-chevron-up" *ngIf="collapsed[i]"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="text-center">
+                                                            <button class="btn btn-outline-danger btn-sm" type="button" (click)="deletedInvolved(i)">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <table class="table table-bordered table-sm" [ngbCollapse]="!collapsed[i]">
+                                                            <ng-container *ngIf="involved.controls.memorandums.value.length > 0; else notM">
+                                                                <thead class="bg-light">
+                                                                    <tr>
+                                                                        <th>Motivo</th>
+                                                                        <th>Detalle</th>
+                                                                        <th>Fecha C.</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let item of involved['controls']['memorandums']['value']">
+                                                                        <td> {{ item.name }} </td>
+                                                                        <td> {{ item.value }} </td>
+                                                                        <td> {{ item.date | date }} </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </ng-container>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="col-12 btn btn-info btn-sm" (click)="save()" [disabled]="form.valid">
+                        Guardar
+                </button>
+            </div>
+        </form>
+        <!-- <div class="row">
+        </div> -->
+    </div>
+</div>
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Agregar involucrados </h5>
+        <button type="button" class="close basic-close" (click)="closeModal()">
+            <span aria-hidden="true">
+                <i class="fas fa-times" (click)="closeModal()"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="formInvolved">
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <div class="col-12">
+                            <label class="custom-label" for="funcionario_id">Funcionario</label>
+                            <input id="typeahead" type="text" class="form-control form-control-sm" placeholder="Funcionario..." formControlName="person" (change)="getHistory(); validateInvolved()" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue"
+                                [editable]='false' />
+                            <ng-container *ngIf="person_id_valid">
+                                <small *ngFor="let item of formInvolved.get('person').errors | ObjToArrayPipe" class="text-danger">
+                                    {{ item?.msj }}
+                                </small>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-12">
+                            <label for="">Observaciones</label>
+                            <textarea class="form-control form-control-sm" name="ob" id="obervaciones" rows="3" formControlName="observation"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-12">
+                            <label for="importFile">Evidencia</label>
+                            <input type="file" id="importFileP" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 panel">
+                    <div class="panel-body">
+                        <div class="ml-4">
+                            <div class="mt-5 text-center" *ngIf="!formInvolved.get('person').value">
+                                <i class="fa fa-exclamation-circle fa-3x"></i>
+                                <h4>Seleccione Un Usuario</h4>
+                            </div>
+                            <div class="mt-5 text-center" *ngIf="historyInfo.length < 0">
+                                <i class="fas fa-cloud"></i>
+                                <h4>Sin Memorandos</h4>
+                            </div>
+                            <div class="mt-4">
+                                <div *ngFor="let historyInf of historyInfo; let i = index">
+                                    <input class="mr-2" type="checkbox" [value]="historyInf.details" [id]="historyInf.id" [date]="historyInf.created_at_memorandum" (change)="onSelectOption($event, i)" [name]="historyInf.memorandumType">
+                                    <label for="checkbox" class="ml-3">
+                                        <b lass="fs-3"> Memorando | <i styles="color:gray;"> {{
+                                                historyInf.created_at_memorandum | date:'MM-dd-yy' }} </i>
+                                        </b><br>
+                                        <strong>Categoria:</strong> <b> {{ historyInf.activity !="" ?
+                                            historyInf.memorandumType : 'Sin Categoria' }} </b>
+                                            <br>
+                                        <label>Detalle: {{ historyInf.details }} </label>
+                                    </label>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="closeModal()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="newInvolved(); formInvolved.reset()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<ng-template #notData>
+    <app-not-data [loading]="loading" [text]="'Sin datos agregados'"></app-not-data>
+</ng-template>
+<ng-template #notM>
+    <tr class="bg-light">
+        <td colspan="100%" class="text-center">
+            <p class="text-dark">Sin memorandos agregados</p>
+        </td>
+    </tr>
+</ng-template>

@@ -1,0 +1,189 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+
+            <div class="card">
+
+                <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+
+                <div class="card-body">
+                    <form #FormFiltros="ngForm">
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                      Fecha Corte
+                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="date" class="form-control form-control-sm" [(ngModel)]="Parametros.Fecha_Corte" name="Fecha_Corte" id="Fecha_Corte" (change)="getQueryParams()" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6"></div>
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                      Tipo Reporte
+                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select name="Discriminado" id="Discriminado" [(ngModel)]="Parametros.Tipo_Reporte" class="form-control form-control-sm" (change)="getQueryParams()" required>
+                      <option value="">Seleccione</option>
+                      <option value="Pcga">Pcga</option>
+                      <option value="Niif">Niif</option>
+                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                    Nivel
+                  </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <select name="Nivel" id="Nivel" [(ngModel)]="Parametros.Nivel" (change)="getQueryParams()" class="form-control form-control-sm">
+                    <option value="">Seleccione</option>
+                    <option *ngFor="let Nivel of Niveles" [value]="Nivel">{{ Nivel }}</option>
+                  </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3"></div>
+
+                            <div class="col-md-2 text-right">
+                                <div>
+                                    <label for="" class="f-12">
+                      Centro Costo
+                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <ng-select id="Centro_Costo" class="f-10" name="Centro_Costo" [(ngModel)]="Parametros.Centro_Costo" (ngModelChange)="getQueryParams()" placeholder="Seleccione el centro costo" [items]="Centro_Costos"></ng-select>
+                                </div>
+                            </div>
+
+
+
+                            <!--  <div class="col-md-12 text-center">
+                <button class="btn btn-info btn-sm" [disabled]="!FormFiltros.valid"><i class="fa fa-eye"></i> Ver Balance</button>
+              </div> -->
+
+                        </div>
+                        <!-- FIN ROW-->
+                    </form>
+
+                    <div class="row m-t-20">
+                        <div class="col-md-12">
+                            <!--
+                            <div style="max-height: 400px;overflow:auto">
+
+                                <h4>ACTIVO</h4>
+
+                                <table class="table">
+                                    <tr>
+                                        <td colspan="3" class="bold td-padding">DISPONIBLE</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">11051001</td>
+                                        <td>CAJA MENOR GENERAL</td>
+                                        <td style="width: 80px" class="text-right">2.000.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">11051001</td>
+                                        <td>CAJA MENOR GENERAL</td>
+                                        <td style="width: 80px" class="text-right">2.000.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">11051001</td>
+                                        <td>CAJA MENOR GENERAL</td>
+                                        <td style="width: 80px" class="text-right">2.000.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">11051001</td>
+                                        <td>CAJA MENOR GENERAL</td>
+                                        <td style="width: 80px" class="text-right">2.000.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">11051001</td>
+                                        <td>CAJA MENOR GENERAL</td>
+                                        <td style="width: 80px" class="text-right">2.000.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">11051001</td>
+                                        <td>CAJA MENOR GENERAL</td>
+                                        <td style="width: 80px" class="text-right">2.000.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">11051001</td>
+                                        <td>CAJA MENOR GENERAL</td>
+                                        <td style="width: 80px" class="text-right">2.000.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" class="bold td-padding">INVERSIONES DEUDORES</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">5465155</td>
+                                        <td>Lorem, ipsum dolor.</td>
+                                        <td style="width: 80px" class="text-right">100.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">5465155</td>
+                                        <td>Lorem, ipsum dolor.</td>
+                                        <td style="width: 80px" class="text-right">100.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">5465155</td>
+                                        <td>Lorem, ipsum dolor.</td>
+                                        <td style="width: 80px" class="text-right">100.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 60px">5465155</td>
+                                        <td>Lorem, ipsum dolor.</td>
+                                        <td style="width: 80px" class="text-right">100.000,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-left:1px solid #000;border-bottom:1px solid #000;border-top:1px solid #000;" colspan="2" class="bold td-padding">Total Activo</td>
+                                        <td style="border-right:1px solid #000;border-bottom:1px solid #000;border-top:1px solid #000;" class="text-right bold td-padding">27.382.633.956,94</td>
+                                    </tr>
+                                </table>
+
+                            </div> -->
+                            <!-- FIN DEL CONTENEDOR -->
+
+                            <div class="m-t-10 text-center">
+                                <a href="{{envirom.ruta}}php/contabilidad/balancegeneral/descarga_pdf.php?{{queryParams}}" class="btn btn-inverse btn-sm" target="_blank"><i class="fa fa-file-text"></i> PDF</a>
+                                <a href="{{envirom.ruta}}php/contabilidad/balancegeneral/descarga_excel.php?{{queryParams}}" target="_blank" class="btn btn-inverse btn-sm"><i class="fa fa-table"></i> EXCEL</a>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+
+<ng-template #rt1 let-r="result" let-t="term">
+    <span class="f-9">{{ r.Codigo }} </span>
+</ng-template>

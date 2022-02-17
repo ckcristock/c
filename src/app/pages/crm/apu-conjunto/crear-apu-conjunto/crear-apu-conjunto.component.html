@@ -133,17 +133,17 @@
                                                 </td>
                                                 <td>
                                                     <select class="form-control form-control-sm" id="descripcion" formControlName="apu_type">
-                                                        <option value="pieza">Pieza</option>
-                                                        <option value="conjunto">Conjunto</option>
+                                                        <option value="P">Pieza</option>
+                                                        <option value="C">Conjunto</option>
                                                     </select>
                                                 </td>
                                                 <td>
                                                     <div style="position: relative;">
-                                                        <input *ngIf="item['controls']['apu_type']['value'] == 'pieza'" style="width:280px" id="typeahead-http" type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" placeholder="Piezas" formControlName="description"
+                                                        <input *ngIf="item['controls']['apu_type']['value'] == 'P'" style="width:280px" id="typeahead-http" type="text" class="form-control form-control-sm" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" placeholder="Piezas" formControlName="description"
                                                             (change)="select(item, 'description', 'apu_part_id')" />
                                                     </div>
                                                     <div style="position: relative;">
-                                                        <input *ngIf="item['controls']['apu_type']['value'] == 'conjunto'" style="width:280px" id="typeahead-httpp" type="text" class="form-control form-control-sm" [ngbTypeahead]="searchSet" [resultTemplate]="rt" [inputFormatter]="formatterSet" placeholder="Conjuntos"
+                                                        <input *ngIf="item['controls']['apu_type']['value'] == 'C'" style="width:280px" id="typeahead-httpp" type="text" class="form-control form-control-sm" [ngbTypeahead]="searchSet" [resultTemplate]="rt" [inputFormatter]="formatterSet" placeholder="Conjuntos"
                                                             formControlName="description" (change)="select(item, 'description', 'apu_set_child_id')" />
                                                     </div>
                                                     <!-- <ng-select [items]="apuPart$ | async" bindLabel="name" bindValue="id" [loading]="apuPartLoading" [typeahead]="apuPartInput$" typeToSearchText="Por favor para buscar" formControlName="apu_part_id">
@@ -192,6 +192,9 @@
                                             <div class="btn-group" style="float: right">
                                                 <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar" (click)="newPiecesSets()">
                                                     <i class="fas fa-plus"></i>
+                                                </button>
+                                                <button ngbTooltip="Agregar Item" type="button" (click)="findApus()" class="btn btn-success btn-sm ">
+                                                    <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
                                         </td>
@@ -636,6 +639,8 @@
                             </tbody>
                         </table>
                     </span>
+                </div>
+                <div class="col-6">
                     <div class="row">
                         <span *ngIf="!auiCollapsed" class="btn-sm others-icon" type="button" (click)="auiCollapsed = !auiCollapsed" [attr.aria-expanded]="!auiCollapsed" aria-controls="aiu">
                             <i class="fas fa-chevron-down text-primary ml-3"></i>
@@ -643,7 +648,7 @@
                         <span *ngIf="auiCollapsed" class="btn-sm others-icon" type="button" (click)="auiCollapsed = !auiCollapsed" [attr.aria-expanded]="!auiCollapsed" aria-controls="aiu">
                             <i class="fas fa-chevron-right text-primary ml-3"></i>
                         </span>
-                        <h4 class="text-primary text-center ml-3">AUI</h4>
+                        <h4 class="text-primary text-center ml-3">AIU</h4>
                     </div>
                     <hr class="bg-primary">
                     <span [ngbCollapse]="auiCollapsed">
@@ -706,49 +711,47 @@
                             </tbody>
                         </table>
                         <hr class="bg-primary">
-                        <table class="table table-striped">
-                            <tbody class="bg-light">
-                                <tr>
-                                    <td>Precio Venta Total COP + Retención</td>
-                                    <td></td>
-                                    <td>
-                                        <div style="float: right">
-                                            <input type="number" style="background-color: transparent" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_cop_withholding_total">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <!-- <hr class="bg-dark"> -->
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr>
-                                    <td>TRM</td>
-                                    <td>
-                                        <div style="float: right">
-                                            <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="trm">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <!-- <hr class="bg-dark"> -->
-                        <table class="table table-striped">
-                            <tbody class="bg-light">
-                                <tr>
-                                    <td>Precio Venta Total USD + Retención</td>
-                                    <td>
-                                        <div style="float: right">
-                                            <input type="number" readonly style="background-color: transparent" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_usd_withholding_total">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </span>
+                    <table class="table table-striped">
+                        <tbody class="bg-light">
+                            <tr>
+                                <td>Precio Venta Total COP + Retención</td>
+                                <td></td>
+                                <td>
+                                    <div style="float: right">
+                                        <input type="number" style="background-color: transparent" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_cop_withholding_total">
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <hr class="bg-dark"> -->
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td>TRM</td>
+                                <td>
+                                    <div style="float: right">
+                                        <input type="number" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="trm">
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <hr class="bg-dark"> -->
+                    <table class="table table-striped">
+                        <tbody class="bg-light">
+                            <tr>
+                                <td>Precio Venta Total USD + Retención</td>
+                                <td>
+                                    <div style="float: right">
+                                        <input type="number" readonly style="background-color: transparent" min="0" class="form-control form-control-plaintext form-control-sm" formControlName="sale_price_usd_withholding_total">
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <!-- <div class="col-6">
-                </div> -->
             </div>
             <div class="row mt-4">
                 <button class="col-12 btn btn-sm btn-info" type="button" (click)="save()">
@@ -766,6 +769,7 @@
     </tr>
 </ng-template>
 
+<app-get-apus #apus (sendApus)="getApus($event)"></app-get-apus>
 
 <ng-template #rt let-r="result" let-t="term">
     <span class="f-9">{{ r.name }} </span>

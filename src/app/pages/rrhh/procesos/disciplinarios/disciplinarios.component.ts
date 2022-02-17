@@ -7,6 +7,9 @@ import { DisciplinariosService } from './disciplinarios.service';
 import { consts } from '../../../../core/utils/consts';
 import Swal from 'sweetalert2';
 import { functionsUtils } from '../../../../core/utils/functionsUtils';
+import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
+import { PermissionService } from '../../../../core/services/permission.service';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 type Person = { value: number, text: string };
 @Component({
   selector: 'app-disciplinarios',
@@ -15,19 +18,27 @@ type Person = { value: number, text: string };
 })
 export class DisciplinariosComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild('modalseguimiento') modalseguimiento: any;
+  permission: Permissions = {
+    menu: 'Disciplinarios',
+    permissions: {
+      approve: false
+    }
+  };
   form: FormGroup;
   loading = false;
   process: any;
   status = consts.status;
   pagination = {
     page: 1,
-    pageSize: 5,
+    pageSize: 10,
     collectionSize: 0
   }
   filtros: any = {
     person: '',
-    status: '',
-    code: ''
+    status: 'Todos',
+    code: '',
+    involved: ''
   }
   people: any[] = [];
   person_selected: any;
@@ -36,11 +47,16 @@ export class DisciplinariosComponent implements OnInit {
   fileString: any = '';
   file: any = '';
   type: any = '';
+  collapsed:boolean[] = [];
+
+
   constructor(
     private fb: FormBuilder,
     private _reactiveValid: ValidatorsService,
     private disciplinarioService: DisciplinariosService,
-  ) { }
+    private _swal: SwalService,
+    private _permission: PermissionService
+  ) { this.permission = this._permission.validatePermissions(this.permission) }
 
   ngOnInit(): void {
     this.createForm();
@@ -115,10 +131,33 @@ export class DisciplinariosComponent implements OnInit {
       });
   }
 
+  
+  aprobar(id) {
+    this._swal.show({
+      title: '¿Estas Seguro?',
+      text: "¡El Proceso será aprobado",
+      icon: 'question',
+      showCancel: true
+    })
+    .then((result) =>{
+      if (result.isConfirmed) {
+        this.disciplinarioService.approve({status: 'Aprobado'}, id).subscribe( (r:any) =>{
+          this._swal.show({
+            icon: 'success',
+            title: 'El Proceso Ha sido Aprobado!',
+            text: '¡Aprobado!',
+            timer: 2500,
+            showCancel: false
+          })
+          this.getDisciplinaryProcess();
+        })
+      }
+    })
+  }
+
   onFileChanged(event) {
     if (event.target.files[0]) {
       let file = event.target.files[0];
-      console.log(file);
       const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
       if (!types.includes(file.type)) {
         Swal.fire({

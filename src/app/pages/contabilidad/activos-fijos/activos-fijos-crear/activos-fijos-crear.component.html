@@ -1,215 +1,362 @@
-<div class="row mb-4">
-    <div class="col text-left">
-        <a class="text-primary back" (click)="regresar()">Regresar</a>
-    </div>
-</div>
-<div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <div style="float: right;" class="text-right">
-                <h5>Nuevo Activo Fijo</h5>
-                <h6>AAFF2012213</h6>
-                <strong> {{ date | date:'dd/MM/yyyy' }} </strong>
-            </div>
-            <div class="row">
-                <div>
-                    <img src="../../../../assets/images/users/no-image.png" class="p-0 m-0">
-                </div>
-                <div class="ml-3">
-                    <small>
-                        <strong>
-                            Productos Pruebas S.A <br>
-                            NIT 804.016.084-5 <br>
-                            Calle 15 No. 17 - 55 Barrio San Francisco <br>
-                            Tel 61547855
-                        </strong>
-                    </small>
-                </div>
-            </div>
-        </div>
-        <div class="page-body" style="margin-top: 60px;">
-            <form [formGroup]="form">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="fecha">Fecha</label>
-                                <input type="date" formControlName="date" class="form-control form-control-sm" id="fecha">
+<div class="page-body">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body" style="padding-bottom:0px">
+                    <div class="card-title">
+                        <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+                        <!-- Layout de Cabecera. -->
+                    </div>
+                    <form #FormActivoFijo="ngForm">
+                        <div class="form-row mb-2 f-10">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="fecha">Fecha</label>
+                                    <input type="date" name="fecha" id="fecha" [(ngModel)]="ActivoFijoModel.Fecha" (change)="getCodigo($event.target.value)" class="form-control form-control-sm">
+                                </div>
                             </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="nit_">NIT</label>
-                                <input type="number" formControlName="nit" class="form-control form-control-sm" id="nit_">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="nit_empresa">Nit</label>
+                                    <input class="form-control form-control-sm" name="nit_empresa" id="nit_empresa" (change)="AsignarTercero()" (blur)="validarCampo(TerceroSeleccionado,$event,'Nit')" [(ngModel)]="TerceroSeleccionado" type="text" placeholder="Nombre o NIT" [ngbTypeahead]="search_tercero"
+                                        required [resultTemplate]="rt_tercero" [inputFormatter]="formatter_tercero" autocomplete="off">
+                                </div>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label class="custom-label" for="person">Func. Responsable</label>
-                                <input type="text" [ngModelOptions]="{standalone: true}" (change)="getPersonId()" class="form-control form-control-sm" [(ngModel)]="person_selected" [ngbTypeahead]="searchPeople" [inputFormatter]="formatterPeople" [resultFormatter]="formatterPeople" [editable]='false'
-                                    id="person">
+                            <!-- <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Empresa</label>
+                                    <select [(ngModel)]="ActivoFijoModel.Id_Empresa" name="Id_Empresa" id="Id_Empresa" class="form-control form-control-sm" required>
+                                        <option *ngFor="let item of companies" [value]="item.value">
+                                            {{ item.text }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre Activo</label>
+                                    <input type="text" style="text-transform: uppercase" class="form-control form-control-sm" name="Nombre" id="nombre" (change)="AsignarConcepto()" required [(ngModel)]="ActivoFijoModel.Nombre">
+                                </div>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label class="custom-label" for="nombre_activo">Nombre Activo</label>
-                                <input type="text" formControlName="name" class="form-control form-control-sm" id="nombre_activo">
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="documento">Documento</label>
+                                    <input style="text-transform: uppercase" type="text" name="documento" id="documento" (change)="AsignarConcepto()" [(ngModel)]="ActivoFijoModel.Documento" class="form-control form-control-sm">
+                                </div>
                             </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="document_">Documento</label>
-                                <input type="text" formControlName="document" class="form-control form-control-sm" id="document_">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="concepto">Concepto</label>
+                                    <input style="text-transform: uppercase" type="text" name="concepto" id="concepto" [(ngModel)]="ActivoFijoModel.Concepto" class="form-control form-control-sm" readonly>
+                                </div>
                             </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="conceptoo">Concepto</label>
-                                <input type="text" formControlName="concept" readonly class="form-control form-control-sm" id="conceptoo">
+                            <div class="col-md-3" *ngIf="Crear">
+                                <div class="form-group">
+                                    <label for="tipo_activo">Tipo Activo</label>
+                                    <select name="Id_Tipo_Activo_Fijo" id="tipo_activo" class="form-control form-control-sm" required [(ngModel)]="ActivoFijoModel.Id_Tipo_Activo_Fijo">
+                                        <option value="" selected>Seleccione tipo</option>
+                                        <option *ngFor="let ta of TipoActivos" [value]="ta.Id_Tipo_Activo_Fijo">{{ta.Nombre_Tipo_Activo}}</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="tipo-activo">Tipo Activo</label>
-                                <select formControlName="type" class="form-control form-control-sm" id="tipo-activo">
-                                    <option *ngFor="let item of tipoActivos" [value]="item.value">
-                                        {{ item.text }}
-                                    </option>
-                                </select>
+                            <div class="col-md-3" *ngIf="!Crear">
+                                <div class="form-group">
+                                    <label for="tipo_activo">Tipo Activo</label>
+                                    <input style="text-transform: uppercase" type="text" name="Tipo_activo" id="Tipo_Activo" [(ngModel)]="ActivoFijoModel.Tipo_Activo" readonly class="form-control form-control-sm">
+                                </div>
                             </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="c_costo">C. Costo</label>
-                                <input type="text" formControlName="center_cost_id" class="form-control form-control-sm" id="c_costo">
+                            <div class="col-md-3" *ngIf="Crear">
+                                <div class="form-group">
+                                    <label for="tipo_activo">C. Costo</label>
+                                    <app-custumetypeahead [Ruta]="Ruta" [Modelo]="typeahead" [Campo]="Campo_Centro_Costo" (RetornarId)="CapturarIdCentroCosto($event,'Centro')"></app-custumetypeahead>
+                                </div>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label class="custom-label" for="referencia">Referencia</label>
-                                <input type="text" formControlName="reference" class="form-control form-control-sm" id="referencia">
+                            <div class="col-md-3" *ngIf="!Crear">
+                                <div class="form-group">
+                                    <label for="tipo_activo">C. Costo</label>
+                                    <input style="text-transform: uppercase" type="text" name="Centro_Costo" id="Centro_Costo" [(ngModel)]="ActivoFijoModel.Centro_Costo" readonly class="form-control form-control-sm">
+                                </div>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label class="custom-label" for="cantidad">Cantidad</label>
-                                <input type="text" formControlName="source" class="form-control form-control-sm" id="cantidad">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="referencia">Referencia</label>
+                                    <input type="text" class="form-control form-control-sm" name="referencia" id="referencia" [(ngModel)]="ActivoFijoModel.Referencia">
+                                </div>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label class="custom-label" for="base">Base</label>
-                                <input type="number" formControlName="base" class="form-control form-control-sm" id="base">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cantidad">Cantidad</label>
+                                    <input type="text" class="form-control form-control-sm" name="cantidad" id="cantidad" required [(ngModel)]="ActivoFijoModel.Cantidad">
+                                </div>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label class="custom-label" for="iva">IVA</label>
-                                <input type="number" formControlName="iva" class="form-control form-control-sm" id="iva">
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Base</label>
+                                    <input type="number" class="form-control form-control-sm" name="Base" required (change)="AsignarValor('Pcga')" [(ngModel)]="ActivoFijoModel.Base">
+                                </div>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label class="custom-label" for="niif_base">Base NIIF</label>
-                                <input type="number" formControlName="niif_base" class="form-control form-control-sm" id="base_niif">
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Iva</label>
+                                    <input type="number" class="form-control form-control-sm" name="Iva" required (change)="AsignarValor('Pcga')" [(ngModel)]="ActivoFijoModel.Iva">
+                                </div>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label class="custom-label" for="niif_iva">IVA NIIF</label>
-                                <input type="number" formControlName="niif_iva" class="form-control form-control-sm" id="iva_niif">
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Base NIIF</label>
+                                    <input type="number" class="form-control form-control-sm" name="Base" required (change)="AsignarValor('Niif')" [(ngModel)]="ActivoFijoModel.Base_NIIF">
+                                </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label class="custom-label" for="costo_pcga">Costo PCGA(Local)</label>
-                                <input type="text" formControlName="pcga_cost" readonly class="form-control form-control-sm" id="costo_pcga">
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Iva NIIF</label>
+                                    <input type="number" class="form-control form-control-sm" name="Iva" required (change)="AsignarValor('Niif')" [(ngModel)]="ActivoFijoModel.Iva_NIIF">
+                                </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label class="custom-label" for="costo_niif">Costo NIIF</label>
-                                <input type="text" formControlName="niif_cost" readonly class="form-control form-control-sm" id="costo_niif">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="cuenta_rte_fte">Cuenta Rte Fte</label>
-                                <input type="text" formControlName="source_rete_account" class="form-control form-control-sm" id="cuenta_rte_fte">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="valor_">Valor</label>
-                                <input type="number" formControlName="source_rete_cost" class="form-control form-control-sm" id="valor_">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="valor_niif_">Valor NIIF</label>
-                                <input type="text" formControlName="niif_source_rete_cost" class="form-control form-control-sm" id="valor_niif_">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="cuenta_rte_Ica">Cuenta Rte Ica</label>
-                                <input type="text" formControlName="source_ica_account" class="form-control form-control-sm" id="cuenta_rte_Ica">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="rte_valor_">Valor</label>
-                                <input type="number" formControlName="source_ica_cost" class="form-control form-control-sm" id="rte_valor_">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="custom-label" for="valor_niif">Valor NIIF</label>
-                                <input type="text" formControlName="niif_ica_rete_cost" class="form-control form-control-sm" id="valor_niif">
-                            </div>
-                        </div>
-                        <div class="row mt-4">
+
                             <div class="col-md-6">
-                                <h5>Anticipo</h5>
-                                <hr>
-                                <div class="row" formArrayName="anticipo" *ngFor="let item of anticipoList.controls; let i = index">
-                                    <div class="form-group col-md-2" [formGroupName]="i">
-                                        <label class="custom-label col-form-label-sm" for="cuenta_anticipo">Cuenta Anticipo</label>
-                                        <input type="text" formControlName="advance_account" (change)="createNewAdvance()" class="form-control form-control-sm" id="cuenta_anticipo">
+                                <div class="form-group">
+                                    <label>Costo PCGA(Local)</label>
+                                    <input type="number" class="form-control form-control-sm" name="Costo_PCGA" readonly [(ngModel)]="ActivoFijoModel.Costo_PCGA">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Costo NIIF</label>
+                                    <input type="number" class="form-control form-control-sm" name="Costo_NIIF" readonly [(ngModel)]="ActivoFijoModel.Costo_NIIF">
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="tipo_activo">Contrapartida</label>
+                      <app-custumetypeahead [Ruta]="Ruta_Cuentas" [Modelo]="typeahead_Cuenta" (RetornarId)="CapturarIdCentroCosto($event,'Contrapartida')"  [Campo]="Campo_Contrapartida" ></app-custumetypeahead>
+                    </div>
+                  </div> -->
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="tipo_activo">Cuenta Rte Fte</label>
+                                    <app-custumetypeahead [Ruta]="Ruta_Cuenta_Renteciones" [Modelo]="typeahead_Rete_Fuente" (RetornarId)="CapturarIdCentroCosto($event,'Rete_Fuente')" [Campo]="Campo_Rete_Fuente"></app-custumetypeahead>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="tipo_activo">Valor</label><input type="number" class="form-control form-control-sm" name="Costo_Rete_Fuente" readonly [(ngModel)]="ActivoFijoModel.Costo_Rete_Fuente">
+
+                                        </div>
                                     </div>
-                                    <div class="form-group col-md-2" [formGroupName]="i">
-                                        <label class="custom-label col-form-label-sm" for="ant_nit">NIT</label>
-                                        <input type="text" formControlName="nit" class="form-control form-control-sm" id="ant_nit">
-                                    </div>
-                                    <div class="form-group col-md-3" [formGroupName]="i">
-                                        <label class="custom-label col-form-label-sm" for="ant_documento">Documento</label>
-                                        <input type="text" formControlName="document" class="form-control form-control-sm" id="ant_documento">
-                                    </div>
-                                    <div class="form-group col-md-3" [formGroupName]="i">
-                                        <label class="custom-label col-form-label-sm" for="concepto">Concepto</label>
-                                        <input type="text" formControlName="concept" class="form-control form-control-sm" id="concepto">
-                                    </div>
-                                    <div class="form-group col-md-2" [formGroupName]="i">
-                                        <label class="custom-label col-form-label-sm" for="value">Valor</label>
-                                        <input type="number" formControlName="value" class="form-control form-control-sm" id="value">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="tipo_activo">Valor NIIF</label><input type="number" class="form-control form-control-sm" name="Costo_Rete_Fuente_NIIF" readonly [(ngModel)]="ActivoFijoModel.Costo_Rete_Fuente_NIIF">
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="tipo_activo">Cuenta Rte Ica</label>
+                                    <app-custumetypeahead [Ruta]="Ruta_Cuenta_Renteciones" [Modelo]="typeahead_Rete_Ica" (RetornarId)="CapturarIdCentroCosto($event,'Rete_Ica')" [Campo]="Campo_Rete_Ica"></app-custumetypeahead>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="tipo_activo">Valor</label><input type="number" class="form-control form-control-sm" name="Costo_Rete_Ica" readonly [(ngModel)]="ActivoFijoModel.Costo_Rete_Ica">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="tipo_activo">Valor NIIF</label><input type="number" class="form-control form-control-sm" name="Costo_Rete_Ica_NIIF" readonly [(ngModel)]="ActivoFijoModel.Costo_Rete_Ica_NIIF">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="Mostrar_Facturas" class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <h6>Facturas</h6>
+                                    </div>
+                                    <div class="col-md-12" style="max-height: 400px; overflow:auto">
+
+                                        <table class="table  invoice-detail-table tabla">
+                                            <thead>
+                                                <tr class="thead-default">
+                                                    <th style="width:25px"></th>
+                                                    <th style="width:50px;">Cuenta</th>
+                                                    <th style="width:50px;">Fecha</th>
+                                                    <th style="width:60px;">Documento</th>
+                                                    <th style="width:80px; text-align: right">Vlr. Factura </th>
+                                                    <th style="width:80px; text-align: right">Vlr. Abono </th>
+                                                    <th style="width:80px; text-align: right">Vlr. Saldo</th>
+                                                    <th style="width:80px; text-align: right">Abono</th>
+                                                    <th style="width:20px;">Nat</th>
+                                                    <th style="width:60px; text-align: right">Movimiento Debito</th>
+                                                    <th style="width:60px; text-align: right">Movimiento_Credito</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngIf="Lista_Facturas.length == 0 && !Cargando">
+                                                    <td colspan="11">
+                                                        <i class="fa fa-exclamation-circle fa-5x"></i>
+                                                        <h4>No Existen Facturas para mostrar</h4>
+
+                                                    </td>
+                                                </tr>
+                                                <tr *ngFor="let item of Lista_Facturas; let i = index" id="fila{{i}}">
+                                                    <td style="width:25px" class="text-center">
+                                                        <input type="checkbox" name="Factura{{i}}" id="Factura{{i}}" (change)="addListInvoice(item, i)">
+                                                    </td>
+                                                    <td style="width:50px;">{{item.Codigo}}</td>
+                                                    <td style="width:50px;">{{item.Fecha }} </td>
+                                                    <td style="width:60px;">{{ item.Factura }} </td>
+                                                    <td style="width:80px; text-align: right">{{item.Valor_Factura |currency}} </td>
+                                                    <td style="width:80px; text-align: right">{{item.Valor_Abono |currency}} </td>
+                                                    <td style="width:80px; text-align: right">{{item.Valor_Saldo | currency }} </td>
+                                                    <td style="width:80px; text-align: right">
+                                                        <input type="number" name="abono{{i}}" id="abono{{i}}" [(ngModel)]="item.Abono" (blur)="validarSaldoFactura(i,$event)">
+                                                    </td>
+                                                    <td style="width:20px;">{{item.Nat }} </td>
+                                                    <td style="width:60px; text-align: right">{{item.Movimiento_Debito |currency}} </td>
+                                                    <td style="width:60px; text-align: right">{{item.Movimiento_Credito |currency}} </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-info btn-sm pull-left" (click)="addInvoicesToAccount()">Confirmar</button>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <h5>Anticipo</h5>
+                                <hr>
+                                <div *ngFor="let item of Ctas_Anticipo; let i = index" class="row">
+                                    <div class="col-md-3">
+                                        <label for="tipo_activo">Cuenta Anticipo</label>
+                                        <app-custumetypeahead [Ruta]="Ruta_Cuentas" [Modelo]="{
+                                        placeholder: 'Cta Anticipo',
+                                        name: 'Cta_Anticipo'+i,
+                                        id: 'Cta_Anticipo'+i, 
+                                        Requerido: false
+                                        }" (RetornarId)="CapturarIdCentroCosto($event,'Anticipo',i)" [Campo]="item.Cta_Anticipo"></app-custumetypeahead>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="tipo_activo">Nit</label>
+                                        <app-custumetypeahead [Ruta]="Ruta_Nit" [Modelo]="{
+                                            placeholder: 'Nombre o Nit',
+                                            name: 'Nit'+i,
+                                            id: 'Nit'+i,
+                                            Requerido: false
+                                        }" (RetornarId)="CapturarIdCentroCosto($event,'Nit_Anticipo', i)" [Campo]="item.Nit_Anticipo"></app-custumetypeahead>
+                                    </div>
+                                    <div style="padding: 0px" class="col-md-2">
+                                        <label for="tipo_activo">Documento</label>
+                                        <input type="text" name="documento_anticipo{{i}}" class="form-control form-control-sm input-document" id="documento_anticipo{{i}}" [(ngModel)]="item.Documento">
+                                        <a style="margin: 0px" href="javascript:;" (click)="showFacturas(i)">
+                                            <i style="font-weight: bold" class="fa fa-search"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="tipo_activo">Concepto</label>
+                                        <input type="text" name="detalles{{i}}" class="form-control form-control-sm input-document" id="detalles{{i}}" [(ngModel)]="item.Detalles">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="tipo_activo">Valor</label>
+                                        <br>
+                                        <input style="width:65%;margin-right: 0 !important;display: inline-block;" type="number" name="valor_anticipo{{i}}" class="form-control form-control-sm" id="valor_anticipo{{i}}" [(ngModel)]="item.Valor" (change)="calcularTotales()">
+                                        <span><button *ngIf="(Ctas_Anticipo.length - 1) != i" style="padding: 0px !important;margin: 0px !important;" class="btn btn-link btn-sm text-danger" (click)="deleteRowCtaAnticipo(i)"><i class="fa fa-trash"></i></button></span>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="col-md-6">
                                 <h5>Por Pagar</h5>
                                 <hr>
                                 <div class="row">
-                                    <div class="form-group col-md-2">
-                                        <label class="custom-label col-form-label-sm" for="cta_pagar">Cta x pagar</label>
-                                        <input type="number" class="form-control form-control-sm" id="cta_pagar">
+                                    <div class="col-md-3">
+                                        <label for="tipo_activo">Cta x Pagar</label>
+                                        <app-custumetypeahead [Ruta]="Ruta_Cuentas" [Modelo]="typeahead_CuentaXPagar" (RetornarId)="CapturarIdCentroCosto($event,'CxP')" [Campo]="Campo_CtaPorPagar"></app-custumetypeahead>
                                     </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="custom-label col-form-label-sm" for="p_nit">NIT</label>
-                                        <input type="number" class="form-control form-control-sm" id="p_nit">
+                                    <div class="col-md-2">
+                                        <label for="tipo_activo">Nit</label>
+                                        <app-custumetypeahead [Ruta]="Ruta_Nit" [Modelo]="typeahead_Terceros" (RetornarId)="CapturarIdCentroCosto($event,'Nit_CtaPorPagar')" [Campo]="Campo_NitPorPagar"></app-custumetypeahead>
                                     </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="custom-label col-form-label-sm" for="p_document">Documento</label>
-                                        <input type="number" class="form-control form-control-sm" id="p_document">
+                                    <div class="col-md-2">
+                                        <label for="tipo_activo">Documento</label>
+                                        <input type="text" name="documento_cta_pagar" class="form-control form-control-sm" id="documento_cta_pagar" [(ngModel)]="ActivoFijoModel.Documento_CtaPorPagar">
                                     </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="custom-label col-form-label-sm" for="concept">Concepto</label>
-                                        <input type="number" class="form-control form-control-sm" id="p_concept">
+                                    <div class="col-md-3">
+                                        <label for="tipo_activo">Concepto</label>
+                                        <input type="text" name="detalles" class="form-control form-control-sm" id="detalles" [(ngModel)]="ActivoFijoModel.Detalles">
                                     </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="custom-label col-form-label-sm" for="values">Valor</label>
-                                        <input type="number" formControlName="valueCtaxPay" class="form-control form-control-sm" id="values">
+                                    <div class="col-md-2">
+                                        <label for="tipo_activo">Valor</label>
+                                        <input type="number" name="valor_cta_pagar" class="form-control form-control-sm" id="valor_cta_pagar" [(ngModel)]="ActivoFijoModel.Valor_CtaPorPagar" (change)="calcularTotales()">
                                     </div>
                                 </div>
                             </div>
+
+                            <hr>
+
+                            <div class="col-md-12 m-t-20">
+                                <table class="table table-responsive invoice-table invoice-total">
+                                    <tbody>
+                                        <tr>
+                                            <th>Total Debito:</th>
+                                            <td>{{ Total_Debito | currency }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Total Credito:</th>
+                                            <td>{{ Total_Credito | currency }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Diferencia:</th>
+                                            <td>{{ (Total_Debito-Total_Credito) | currency }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+
+                            <div class="col-md-12">
+                                <button class="btn btn-primary btn-sm pull-right" style="display:flex;
+                                align-items:center;" [swal]="confirmacionGuardar">
+                                <i class="ti-save font-size-15 mr-2"></i> Guardar datos</button>
+                            </div>
+
                         </div>
-                    </div>
+                    </form>
                 </div>
-                <div class="row">
-                    <div class="col-md-12 m-t-20">
-                        <table class="table table-borderless table-striped">
-                            <tbody class="bg-light">
-                                <tr>
-                                    <th>Total Debito:</th>
-                                    <td class="text-left">
-                                        {{ total_debit | currency }}
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th>Total Credito:</th>
-                                    <td class="text-left">
-                                        {{ total_credits | currency }}
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th>Diferencia:</th>
-                                    <td class="text-left">
-                                        {{ diference | currency }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </form>
-            <button class="btn btn-info btn-sm mt-3 col-12" style="float: right;">Guardar Activo Fijo</button>
+            </div>
         </div>
+    </div>
+</div>
+
+<swal #alertSwal title="" text="" icon=""></swal>
+
+<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
+
+<ng-template #rt_tercero let-r="result" let-t="term">
+    <span class="f-9">
+        {{r.Nombre_Tercero}}
+    </span>
+</ng-template>

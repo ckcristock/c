@@ -25,11 +25,16 @@ export class ActividadesService {
   saveActivity( data ){
     return this.http.post(environment.base_url+'/rrhh-activity',data)
   }
+  
   getActivities( params={} ){
     return this.http.get(environment.base_url+'/rrhh-activity',{params})
   }
   cancelActivity( id ){
     return this.http.get(environment.base_url+'/rrhh-activity/cancel/'+id)
+  }
+  
+  cancelCycleActivity( id, data ){
+    return this.http.post(environment.base_url+'/rrhh-activity/cancelCycle/'+id, data);
   }
   getPeopleActivity( id ){
     return this.http.get(environment.base_url+'/rrhh-activity-people/'+id)

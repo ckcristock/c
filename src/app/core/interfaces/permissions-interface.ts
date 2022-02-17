@@ -1,6 +1,8 @@
 export interface Permissions {
     menu: string,
     permissions: {
-        approve: boolean
+        approve?: boolean,
+        close?: boolean,
+        open?: boolean
     }
 }

@@ -134,6 +134,7 @@ export const consts = {
     { clave: 'Todos', valor: 'Todos' },
     { clave: 'Abierto', valor: 'Abierto' },
     { clave: 'Cerrado', valor: 'Cerrado' },
+    { clave: 'Aprobado', valor: 'Aprobado' }
   ],
 
   modalities: [

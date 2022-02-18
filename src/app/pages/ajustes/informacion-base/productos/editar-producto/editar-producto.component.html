@@ -1,0 +1,574 @@
+<div class="page-body">
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-12">
+          <h5>Editar Medicamento</h5>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="col-md-12">
+        <form #FormMedicamentoEditar="ngForm">
+          <input hidden name="id" ngModel="{{ Producto.Id_Producto }}" />
+          <div class="row">
+            <div class="col-md-2">
+              <div style="text-align: center" class="form-group">
+                <label style="display: block" for="Foto">
+                  <!-- <img *ngIf="Producto.Imagen==''" src="assets/images/producto.png" style="-moz-border-radius: 50px;border-radius: 36px;height: 120px; max-width: 100%;" id="foto_visual">
+                        <img *ngIf="Producto.Imagen!=''" src="{{environment.ruta}}IMAGENES/PRODUCTOS/{{Producto.Imagen}}" style="-moz-border-radius: 50px;border-radius: 36px;height: 120px; max-width: 100%;" id="foto_visual"> -->
+                </label>
+                <div class="col-md-6">
+                  <input
+                    name="Foto"
+                    id="Foto"
+                    type="file"
+                    accept="image/png, image/jpeg"
+                    class="form-control form-control-sm text-right f-9"
+                    style="display: none"
+                    (change)="CargaFoto($event)"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-10">
+              <div class="row">
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label>Código CUM</label>
+                    <input
+                      readonly
+                      name="Codigo_Cum"
+                      type="text"
+                      placeholder=""
+                      class="form-control"
+                      ngModel="{{ Producto.Codigo_Cum }}"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label>Presentación</label>
+                    <input
+                      readonly
+                      name="Presentacion"
+                      type="text"
+                      placeholder=""
+                      class="form-control"
+                      ngModel="{{ Producto.Presentacion }}"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>Concentración</label>
+                    <input
+                      readonly
+                      name="Concentracion"
+                      type="text"
+                      placeholder=""
+                      class="form-control"
+                      ngModel="{{ Producto.Concentracion }}"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>Código de barras</label>
+                    <input
+                      name="Codigo_Barras"
+                      [(ngModel)]="Codigo_Barras"
+                      type="text"
+                      placeholder=""
+                      class="form-control"
+                      (change)="ValidarCodigo()"
+                      ngModel="{{ Producto.Codigo_Barras }}"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label>ATC</label>
+                    <input
+                      readonly
+                      name="ATC"
+                      type="text"
+                      placeholder=""
+                      class="form-control"
+                      ngModel="{{ Producto.ATC }}"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Principio Activo</label>
+                    <input
+                      readonly
+                      name="Principio_Activo"
+                      type="text"
+                      placeholder=""
+                      class="form-control"
+                      ngModel="{{ Producto.Principio_Activo }}"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Embalaje</label>
+                <input
+                  readonly
+                  name="Embalaje"
+                  type="text"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Embalaje }}"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Nombre Comercial</label>
+                <input
+                  name="Nombre_Comercial"
+                  type="text"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Nombre_Comercial }}"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Laboratorio Generico</label>
+                <input
+                  readonly
+                  name="Laboratorio_Generico"
+                  type="text"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Laboratorio_Generico }}"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Laboratorio Comercial</label>
+                <input
+                  readonly
+                  name="Laboratorio_Comercial"
+                  type="text"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Laboratorio_Comercial }}"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Invima</label>
+                <input
+                  name="Invima"
+                  type="text"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Invima }}"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label>Descripcion ATC</label>
+                <input
+                  name="Descripcion_ATC"
+                  type="text"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Descripcion_ATC }}"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Cantidad</label>
+                <input
+                  name="Cantidad"
+                  type="text"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Cantidad }}"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Unidad De Medida</label>
+                <input
+                  name="Unidad_Medida"
+                  type="text"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Unidad_Medida }}"
+                />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Via De Administracion</label>
+                <input
+                  name="Via_Administracion"
+                  type="text"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Via_Administracion }}"
+                />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Forma Farmaceutica </label>
+                <input
+                  name="Forma_Farmaceutica"
+                  type="text"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Forma_Farmaceutica }}"
+                  [readonly]="Producto.Forma_Farmaceutica != ''"
+                />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Fecha Expedición</label>
+                <input
+                  name="Fecha_Expedicion_Invima"
+                  type="date"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Fecha_Expedicion_Invima }}"
+                />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Fecha Vencimiento</label>
+                <input
+                  name="Fecha_Vencimiento_Invima"
+                  type="date"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Fecha_Vencimiento_Invima }}"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Cant. Min</label>
+                <input
+                  name="Cantidad_Minima"
+                  type="number"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Cantidad_Minima }}"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Cant. Max</label>
+                <input
+                  name="Cantidad_Maxima"
+                  type="number"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Cantidad_Maxima }}"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Precio Min</label>
+                <input
+                  name="Precio_Minimo"
+                  type="number"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Precio_Minimo }}"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Precio Max</label>
+                <input
+                  name="Precio_Maximo"
+                  type="number"
+                  placeholder=""
+                  class="form-control"
+                  ngModel="{{ Producto.Precio_Maximo }}"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Tipo Regulación</label>
+                <select
+                  class="form-control"
+                  name="Tipo_Regulacion"
+                  ngModel="{{ Producto.Tipo_Regulacion }}"
+                  required
+                >
+                  <option value="Regulado">Regulado</option>
+                  <option value="No Regulado">No Regulado</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Tipo POS</label>
+                <select
+                  class="form-control"
+                  name="Tipo_Pos"
+                  ngModel="{{ Producto.Tipo_Pos }}"
+                  required
+                >
+                  <option value="POS">POS</option>
+                  <option value="NO POS">NO POS</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Familia</label>
+                <select
+                  class="form-control form-control-sm"
+                  name="Familia"
+                  ngModel="{{ Producto.Familia }}"
+                >
+                  <option value="">Seleccione Familia</option>
+                  <option
+                    *ngFor="let familia of Familias"
+                    [value]="familia.Nombre"
+                  >
+                    {{ familia.Nombre }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Subcategoria</label>
+                <select
+                  class="form-control form-control-sm"
+                  (change)="getDinamicVariables($event.target.value)"
+                  name="Id_Subcategoria"
+                  ngModel="{{ Producto.Id_Subcategoria }}"
+                  required
+                >
+                  <option value="">Seleccione Subcategoria</option>
+                  <option
+                    *ngFor="let subcategoria of Subcategorias"
+                    [value]="subcategoria.Id_Subcategoria"
+                  >
+                    {{ subcategoria.Nombre }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Mantis</label>
+                <input
+                  name="Mantis"
+                  type="text"
+                  class="form-control form-control-sm"
+                  ngModel="{{ Producto.Mantis }}"
+                />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Cantidad Presentación</label>
+                <input
+                  name="Cantidad_Presentacion"
+                  type="text"
+                  class="form-control form-control-sm"
+                  ngModel="{{ Producto.Cantidad_Presentacion }}"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Peso Mínimo</label>
+                <input
+                  name="Peso_Presentacion_Minima"
+                  type="number"
+                  class="form-control form-control-sm"
+                  ngModel="{{ Producto.Peso_Presentacion_Minima }}"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Peso Regular</label>
+                <input
+                  name="Peso_Presentacion_Regular"
+                  type="number"
+                  min="1"
+                  class="form-control form-control-sm"
+                  ngModel="{{ Producto.Peso_Presentacion_Regular }}"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Peso Máximo</label>
+                <input
+                  name="Peso_Presentacion_Maxima"
+                  type="number"
+                  min="1"
+                  class="form-control form-control-sm"
+                  ngModel="{{ Producto.Peso_Presentacion_Maxima }}"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Gravado</label>
+                <select
+                  class="form-control"
+                  name="Gravado"
+                  ngModel="{{ Producto.Gravado }}"
+                  required
+                >
+                  <option value="">Seleccione opción</option>
+                  <option value="Si">Si</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Aplica Rotativo CLientes</label>
+                <select
+                  class="form-control form-control-sm"
+                  name="RotativoC"
+                  ngModel="{{ Producto.RotativoC }}"
+                  required
+                >
+                  <option value="">Seleccione</option>
+                  <option value="Si">Si</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Aplica Rotativo Dispensación</label>
+                <select
+                  class="form-control form-control-sm"
+                  name="RotativoD"
+                  ngModel="{{ Producto.RotativoD }}"
+                  required
+                >
+                  <option value="">Seleccione</option>
+                  <option value="Si">Si</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div
+              class="col-md-3"
+              *ngFor="let item of fieldDinamic; let i = index"
+              id="fila{{ i }}"
+            >
+              <label for="">{{ item.label | titlecase }}</label>
+              <input
+                class="form-control form-control-sm"
+                [type]="item.type"
+                name="Value{{ i }}"
+                ngModel="{{ item.valor }}"
+                (change)="editVariablesDinamic($event.target.value, item, i)"
+              />
+            </div>
+          </div>
+        </form>
+        <hr />
+        <div class="row">
+          <div
+            *ngFor="let f of Lista; let i = index"
+            id="fila{{ i }}"
+            class="col-md-2"
+          >
+            <div class="form-group">
+              <label for="">{{ f.Nombre }}</label>
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                name="Precio{{ i }}"
+                [(ngModel)]="f.Precio"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <button
+            type="button"
+            [swal]="{
+              title: '¿Está Seguro?',
+              text: 'Se Dispone Actualizar Esta Información',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Si, Guardar',
+              cancelButtonText: 'No, Dejame Comprobar!'
+            }"
+            (confirm)="GuardarProducto(FormMedicamentoEditar)"
+            [disabled]="!FormMedicamentoEditar.valid"
+            class="btn btn-info btn-block btn-sm"
+          >
+            Actualizar la Informacion
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #confirmacionSwal title="" text="" html="" icon=""></swal>

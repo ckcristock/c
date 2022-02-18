@@ -1,0 +1,243 @@
+<div class="page-body">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card" style="max-height: 750px;height:750px;overflow: auto;">
+                    <div class="card-header">
+                        <h6>Seguimiento del Producto</h6>
+                    </div>
+                    <div class="card-block">
+                        <ul class="feed-blog ">
+                            <li class="active-feed contenido2" *ngFor="let Actividad of Actividades">
+                                <div class="feed-user-img">
+                                    <!-- TODO Funcionar imagenes -->
+                                  <!--   <a *ngIf="Actividad.Imagen!=''" href="javascript:">
+                                        <img class="img-radius img-40" src="{{environment.ruta}}/IMAGENES/FUNCIONARIOS/{{Actividad.Imagen}}" alt="">
+                                    </a>
+                                    <a *ngIf="Actividad.Imagen==''" href="javascript:">
+                                        <img class="img-radius img-40" src="assets/images/user.jpg" alt="chat-user">
+                                    </a> -->
+                                </div>
+                                <h6>
+                                    <span class="label label-warning">Edición</span>
+
+                                </h6>
+                                <p>{{Actividad.Detalles}} <br>
+                                    <small class="text-muted"> {{Actividad.Fecha}}</small></p>
+                            </li>
+
+                        </ul>
+                        <div *ngIf="Mostrar" class="col-md-12 text-center">
+                            <i class="fa fa-exclamation-triangle fa-5x "></i><br>
+                            <h6>Este Producto no tiene ninguna actividad</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Detalle del Medicamento</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-2" style="text-align: center;">
+                                                 <!-- TODO Funcionar imagenes -->
+                                                <!-- <img *ngIf="productover.Imagen!==''" src="{{environment.ruta}}IMAGENES/PRODUCTOS/{{productover.Imagen}}" style="-moz-border-radius: 50px;border-radius: 23px;height: 150px; max-width: 100%;">
+                                                <img *ngIf="productover.Imagen==='' " src="assets/images/producto.png" style="-moz-border-radius: 50px;border-radius: 23px;height: 150px; max-width: 100%;"> -->
+                                            </div>
+                                            <div class="col-md-10">
+                                                <div class="table-responsive">
+                                                    <table class="invoice-detail-table table">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <strong>Código CUM</strong>
+                                                                    <p> {{productover.Codigo_Cum}} </p>
+                                                                    <p *ngIf="productover.Codigo_Cum==''"> No Tiene Registro</p>
+                                                                </td>
+                                                                <td>
+                                                                    <strong>Presentación</strong>
+                                                                    <p> {{productover.Presentacion}} </p>
+                                                                    <p *ngIf="productover.Presentacion==''"> No Tiene Registro</p>
+                                                                </td>
+                                                                <td>
+                                                                    <strong>Concentración</strong>
+                                                                    <p> {{productover.Concentracion}} </p>
+                                                                    <p *ngIf="productover.Concentracion==''"> No Tiene Registro</p>
+                                                                </td>
+                                                                <td>
+                                                                    <strong>Código de barras</strong>
+
+                                                                    <p *ngIf="productover.Codigo_Barras!=''"> {{productover.Codigo_Barras}} </p>
+                                                                    <p *ngIf="productover.Codigo_Barras==''"> No Tiene Registro</p>
+                                                                </td>
+                                                                <td>
+                                                                    <strong>ATC</strong>
+                                                                    <p> {{productover.ATC}} </p>
+                                                                    <p *ngIf="productover.ATC==''"> No Tiene Registro</p>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5"><strong>Embalaje</strong>
+                                                                    <p>{{productover.Embalaje}}</p>
+                                                                </td>
+                                                                <p *ngIf="productover.Embalaje==''"> No Tiene Registro</p>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="invoice-detail-table table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <strong>Principio Activo</strong>
+                                                            <p> {{productover.Principio_Activo}} </p>
+                                                            <p *ngIf="productover.Principio_Activo==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td> <strong>Nombre Comercial</strong>
+                                                            <p> {{productover.Nombre_Comercial}} </p>
+                                                            <p *ngIf="productover.Nombre_Comercial==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td> <strong>Laboratorio Generico</strong>
+                                                            <p> {{productover.Laboratorio_Generico}} </p>
+                                                            <p *ngIf="productover.Laboratorio_Generico==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td> <strong>Laboratorio Comercial</strong>
+                                                            <p> {{productover.Laboratorio_Comercial}} </p>
+                                                            <p *ngIf="productover.Laboratorio_Comercial==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td> <strong>Descripcion ATC</strong>
+                                                            <p> {{productover.Descripcion_ATC}} </p>
+                                                            <p *ngIf="productover.Descripcion_ATC==''"> No Tiene Registro</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> <strong>Invima</strong>
+                                                            <p> {{productover.Invima}} </p>
+                                                            <p *ngIf="productover.Invima==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td> <strong>Cantidad</strong>
+                                                            <p> {{productover.Cantidad}} </p>
+                                                            <p *ngIf="productover.Cantidad==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td> <strong>Unidad De Medida</strong>
+                                                            <p> {{productover.Unidad_Medida}} </p>
+                                                            <p *ngIf="productover.Unidad_Medida==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td> <strong>Via De Administracion</strong>
+                                                            <p> {{productover.Via_Administracion}} </p>
+                                                            <p *ngIf="productover.Via_Administracion==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td> <strong>Fecha Expedición</strong>
+                                                            <p> {{productover.Fecha_Expedicion_Invima}} </p>
+                                                            <p *ngIf="productover.Fecha_Expedicion_Invima==''"> No Tiene Registro</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <strong>Fecha Vencimiento</strong>
+                                                            <p>{{productover.Fecha_Vencimiento_Invima}}</p>
+                                                            <p *ngIf="productover.Fecha_Vencimiento_Invima==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td>
+                                                            <strong>Cant. Min</strong>
+                                                            <p>{{productover.Cantidad_Minima}}</p>
+                                                            <p *ngIf="productover.Cantidad_Minima==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td>
+                                                            <strong>Cant. Max</strong>
+                                                            <p>{{productover.Cantidad_Maxima}}</p>
+                                                            <p *ngIf="productover.Cantidad_Maxima==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td>
+                                                            <strong>Precio Min</strong>
+                                                            <p>{{productover.Precio_Minimo}}</p>
+                                                            <p *ngIf="productover.Precio_Minimo==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td>
+                                                            <strong>Precio Max</strong>
+                                                            <p>{{productover.Precio_Maximo}}</p>
+                                                            <p *ngIf="productover.Precio_Maximo==''"> No Tiene Registro</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <strong>Mantis</strong>
+                                                            <p> {{productover.Mantis}} </p>
+                                                            <p *ngIf="productover.Mantis==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td>
+                                                            <strong>Cantidad Presentación</strong>
+                                                            <p>{{productover.Cantidad_Presentacion}}</p>
+                                                            <p *ngIf="productover.Cantidad_Presentacion==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td>
+                                                            <strong>Peso Mínimo</strong>
+                                                            <p>{{productover.Peso_Presentacion_Minima}}</p>
+                                                            <p *ngIf="productover.Peso_Presentacion_Minima==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td>
+                                                            <strong>Peso Regular</strong>
+                                                            <p>{{productover.Peso_Presentacion_Regular}}</p>
+                                                            <p *ngIf="productover.Peso_Presentacion_Regular==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td>
+                                                            <strong>Peso Máximo</strong>
+                                                            <p>{{productover.Peso_Presentacion_Maxima}}</p>
+                                                            <p *ngIf="productover.Peso_Presentacion_Maxima==''"> No Tiene Registro</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <strong>Tipo Regulación</strong>
+                                                            <p>{{productover.Tipo_Regulacion}}</p>
+                                                            <p *ngIf="productover.Tipo_Regulacion==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td>
+                                                            <strong>Tipo POS</strong>
+                                                            <p>{{productover.Tipo_Pos}}</p>
+                                                            <p *ngIf="productover.Tipo_Pos==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td>
+                                                            <strong>Familia</strong>
+                                                            <p> {{productover.Familia}} </p>
+                                                            <p *ngIf="productover.Familia==''"> No Tiene Registro</p>
+                                                        </td>
+                                                        <td colspan="2">
+                                                            <strong>Subcategoria</strong>
+                                                            <p> {{productover.Subcategoria}} </p>
+                                                            <p *ngIf="productover.Subcategoria==''"> No Tiene Registro</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<swal #confirmacionSwal title="" text="" icon=""></swal>

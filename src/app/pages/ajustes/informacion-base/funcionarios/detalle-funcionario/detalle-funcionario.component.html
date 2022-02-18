@@ -84,10 +84,10 @@
                                 Liquidar empleado
                             </button>
                         </div>
-                        <button *ngIf="user.state == 'Activo'" type="button" class="btn btn-secondary btn-sm ml-3 mt-4" style="width: 250px;" (click)="bloquear('Inactivo')">
+                        <button *ngIf="user?.state == 'Activo'" type="button" class="btn btn-secondary btn-sm ml-3 mt-4" style="width: 250px;" (click)="bloquear('Inactivo')">
                             <i class="fas fa-ban"></i> Bloquear
                         </button>
-                        <button *ngIf="user.state == 'Inactivo'" type="button" class="btn btn-success btn-sm ml-3 mt-4" style="width: 250px;" (click)="bloquear('Activo')">
+                        <button *ngIf="user?.state == 'Inactivo'" type="button" class="btn btn-success btn-sm ml-3 mt-4" style="width: 250px;" (click)="bloquear('Activo')">
                             <i class="fas fa-check"></i> Activar
                         </button>
                     </div>

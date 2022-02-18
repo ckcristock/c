@@ -22,7 +22,7 @@ export class DatosBasicosComponent implements OnInit {
   form: FormGroup;
   id: any;
   file: any = '';
-  funcionario:any = {
+  funcionario = {
     cell_phone: '',
     date_of_birth: '',
     address: '',
@@ -34,7 +34,8 @@ export class DatosBasicosComponent implements OnInit {
     gener: '',
     identifier: '',
     marital_status: '',
-    degree: ''
+    degree: '',
+    image: ''
   }
   data:any;
   fileString: any ='';
@@ -56,19 +57,37 @@ export class DatosBasicosComponent implements OnInit {
   openModal(){
     this.modal.show();
   }
+
+  hideModal(){
+    this.modal.hide();
+    this.getBasicsData();
+  }
   
   getBasicsData(){
     this.basicDataService.getBasicsData(this.id)
     .subscribe( (res:any) => {
-      this.funcionario = res.data; 
-     // this.form.patchValue({image:this.funcionario.image})
+      this.funcionario = res.data;
+      this.form.patchValue({
+        address: this.funcionario.address,
+        cell_phone: this.funcionario.cell_phone,
+        date_of_birth: this.funcionario.date_of_birth,
+        degree: this.funcionario.degree,
+        email: this.funcionario.email,
+        first_name: this.funcionario.first_name,
+        second_name: this.funcionario.second_name,
+        first_surname: this.funcionario.first_surname,
+        second_surname: this.funcionario.second_surname,
+        identifier: this.funcionario.identifier,
+        marital_status: this.funcionario.marital_status,
+        gener: this.funcionario.gener
+      })
       this.fileString = this.funcionario.image
     })
   }
 
   createForm(){
     this.form = this.fb.group({
-      image: ['', ],
+      image: [''],
       first_name: ['', Validators.required],
       second_name: ['', Validators.required],
       first_surname: ['', Validators.required],
@@ -86,7 +105,7 @@ export class DatosBasicosComponent implements OnInit {
       ],
       gener: ['', Validators.required],
       marital_status: ['', Validators.required],
-      cell_phone: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(9)]]
+      cell_phone: ['', Validators.required]
     }); 
   }
 
@@ -183,12 +202,10 @@ export class DatosBasicosComponent implements OnInit {
   guardar() {
     this.form.markAllAsTouched();
     if (this.form.invalid || this.image_valid ) { return false;}
-    if(this.form.get('image').dirty){
-      this.funcionario.image = this.fileString
-    }else{
-      delete this.funcionario.image;
-    }
-    this.basicDataService.updateBasicData(this.funcionario, this.id)
+    this.form.patchValue({
+      image: this.file
+    })
+    this.basicDataService.updateBasicData(this.form.value, this.id)
     .subscribe( res => {
       this.modal.hide();
       this.getBasicsData();

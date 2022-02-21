@@ -47,6 +47,12 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ValidacionDimensionalComponent } from './apu-servicio/ver-apu-servicio/validacion-dimensional/validacion-dimensional.component';
 import { MontajePuestaMarchaComponent } from './apu-servicio/ver-apu-servicio/montaje-puesta-marcha/montaje-puesta-marcha.component';
 import { ApusComponent } from './apus/apus.component';
+import { NegociosComponent } from './negocios/negocios.component';
+import { VerNegocioComponent } from './negocios/ver-negocio/ver-negocio.component';
+import { DndModule } from 'ngx-drag-drop';
+import { TareasNegocioComponent } from './negocios/tareas-negocio/tareas-negocio.component';
+import { TableNegociosComponent } from './negocios/table-negocios/table-negocios.component';
+
 
 
 @NgModule({
@@ -82,6 +88,10 @@ import { ApusComponent } from './apus/apus.component';
     ValidacionDimensionalComponent,
     MontajePuestaMarchaComponent,
     ApusComponent,
+    NegociosComponent,
+    VerNegocioComponent,
+    TareasNegocioComponent,
+    TableNegociosComponent,
   ],
   imports: [
     CommonModule,
@@ -101,7 +111,9 @@ import { ApusComponent } from './apus/apus.component';
     NgbTooltipModule,
     NgbTypeaheadModule,
     NgxDropzoneModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    DndModule,
+    
   ]
 })
 export class CrmModule { }

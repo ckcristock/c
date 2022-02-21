@@ -1,0 +1,271 @@
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-lg-6">
+            <div class="media">
+                <div class="mr-3">
+                    <h5>Panel de negocios</h5>
+                </div>
+
+                <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+                    <li [ngbNavItem]="1">
+                        <a ngbNavLink>
+                            <i class="fa fa-list"></i>
+                        </a>
+                        <ng-template ngbNavContent>
+                            <app-table-negocios [negocios]="negocios"></app-table-negocios>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2">
+                        <a ngbNavLink>
+                            <i class="fa fa-th"></i>
+                        </a>
+                        <ng-template ngbNavContent>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Etapa 1</h4>
+                                        <div class="row">
+                                            <div class="col-6 mb-0 ml-0">
+                                                <p>{{ negocios_primera_etapa.length }} Negocio(s)</p>
+                                            </div>
+                                            <div class="col-6 text-right">
+                                                <p>$ {{ total.first | number }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body border-bottom">
+                                            <div id="Todo-task" class="task-list" dndDropzone dndEffectAllowed="move" (dndDrop)="onDrop($event, negocios_primera_etapa, 'first')">
+                                                <ng-container *ngFor="let task of negocios_primera_etapa">
+                                                    <div [dndDraggable]="task" dndEffectAllowed="move" (dndMoved)="onDragged(task, negocios_primera_etapa)">
+                                                        <ng-template [ngTemplateOutlet]="NegocioContent" [ngTemplateOutletContext]="{ neg: task }">
+                                                        </ng-template>
+                                                    </div>
+                                                </ng-container>
+                                                <!-- end task card -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Etapa 2</h4>
+                                        <div class="row ml-0">
+                                            <div class="col-6 mb-0 ml-0">
+                                                <p>{{ negocios_segunda_etapa.length }} Negocio(s)</p>
+                                            </div>
+                                            <div class="col-6 text-right">
+                                                <p>$ {{ total.second | number }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body border-bottom">
+                                            <div id="Progress-task" class="task-list" dndDropzone dndEffectAllowed="move" (dndDrop)="onDrop($event, negocios_segunda_etapa, 'second')">
+                                                <ng-container *ngFor="let task of negocios_segunda_etapa">
+                                                    <div [dndDraggable]="task" dndEffectAllowed="move" (dndMoved)="onDragged(task, negocios_segunda_etapa)">
+                                                        <ng-template [ngTemplateOutlet]="NegocioContent" [ngTemplateOutletContext]="{ neg: task }">
+                                                        </ng-template>
+                                                    </div>
+                                                </ng-container>
+                                                <!-- end task card -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Etapa 3</h4>
+                                        <div class="row">
+                                            <div class="col-6 mb-0 ml-0">
+                                                <p>{{ negocios_tercera_etapa.length }} Negocio(s)</p>
+                                            </div>
+                                            <div class="col-6 text-right">
+                                                <p>$ {{ total.third | number }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body border-bottom">
+                                            <div id="Progress-task" class="task-list" dndDropzone dndEffectAllowed="move" (dndDrop)="onDrop($event, negocios_tercera_etapa, 'third')">
+                                                <ng-container *ngFor="let neg of negocios_tercera_etapa">
+                                                    <div [dndDraggable]="neg" dndEffectAllowed="move" (dndMoved)="onDragged(neg, negocios_tercera_etapa)">
+                                                        <ng-template [ngTemplateOutlet]="NegocioContent" [ngTemplateOutletContext]="{ neg: neg }">
+                                                        </ng-template>
+                                                    </div>
+                                                </ng-container>
+                                                <!-- end task card -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col text-right">
+            <button class="btn btn-primary mt-1 waves-effect waves-light" (click)="modal.show()">
+              <i class="fa fa-plus"></i> Add New </button>
+        </div>
+    </div>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+</div>
+<ng-template #NegocioContent let-neg="neg">
+    <div class="card task-box">
+        <div class="progress progress-sm animated-progess" style="height: 3px">
+            <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="card-body" style="cursor: move">
+            <div class="float-right ml-2">
+                <div>
+                    {{ neg.date }}
+                </div>
+            </div>
+            <div class="mb-3">
+                <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{ neg.id }}</a>
+            </div>
+            <div>
+                <h5 class="font-size-16">
+                    <a class="text-dark">{{ neg.company }}</a>
+                </h5>
+                <p class="mb-4">{{ neg.request_name }}</p>
+            </div>
+
+            <div class="d-inline-flex team mb-0">
+                <div class="mr-3 align-self-center">
+                    Presupuesto :
+                    <p class="mb-4">{{ neg.presupuesto | number }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Agregar nuevo negocio</h5>
+        <button type="button" class="close basic-close" (click)="modal.hide()">
+      <span aria-hidden="true">
+        <i class="fas fa-times" (click)="modal.hide()"></i>
+      </span>
+      </button>
+    </div>
+    <div class="app-modal-body">
+        <form [formGroup]="form">
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group row ml-0 mr-0">
+                        <div class="col-md-6">
+                            <label class="custom-label" for="funcionario_id">Nombre de la solicitud</label>
+                            <!--[ngbTypeahead]="search"  -->
+                            <input id="request_name" type="text" formControlName="request_name" name="solicitud" placeholder="Nombre de la solicitud" class="form-control form-control-sm" />
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <label for="date">Fecha de entrega: <input type="date" [min]="today" name="plazo" id="date"
+                                class="form-control" formControlName="date" />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <div class="col-12">
+                            <label for="">Descripción</label>
+                            <textarea class="form-control form-control-sm" formControlName="request_description" id="descripcion" name="description" rows="3" placeholder="Descripción del negocio">
+              </textarea>
+                        </div>
+                    </div>
+
+                    <div class="row ml-0 mr-0">
+                        <div class="form-group col-md-6">
+                            <label for="company">Compañia</label>
+
+                            <ng-select [items]="companies" [(ngModel)]="companySelected" formControlName="company_id" placeholder="Seleccione un tercero" (change)="getContacts($event); getBudgets($event)" bindValue="id" notFoundText="No hay registros">
+                                <ng-template ng-label-tmp let-item="item">
+                                    <span>{{ item.first_name ? item.first_name + " " + item.first_surname : item.social_reason }}</span>
+                                </ng-template>
+                                <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                                    <span>{{ item.first_name ? item.first_name + " " + item.first_surname : item.social_reason }}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <!-- <div *ngIf="contacts"> -->
+                            <label for="contact"> Contacto: </label>
+                            <ng-select [items]="contacts" [(ngModel)]="selectedContact" formControlName="contact_id" placeholder="Persona de contacto" bindLabel="name" bindValue="id" notFoundText="No hay registros">
+                            </ng-select>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group mb-3 row ml-0 mr-0">
+                            <label for="country" class="col-md-6" style="padding-left: 0">Pais <ng-select
+                              [items]="countries" [(ngModel)]="selectedCountry" formControlName="country"
+                              placeholder="Seleccione un pais" (change)="getCities()" bindLabel="text" bindValue="value"
+                              ngDefaultControl notFoundText="No hay registros"> </ng-select>
+                          </label>
+                            <label for="city" class="col-md-6" style="padding-left: 0"> Ciudad <ng-select
+                                [items]="cities" [(ngModel)]="city" formControlName="city" bindLabel="name"
+                                bindValue="id" ngDefaultControl placeholder="Seleccione una ciudad"
+                                notFoundText="No hay registros">
+                              </ng-select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12 ml-0" style="padding-left: 0">
+                        <div class="input-group row ml-0 mr-0">
+                            <label for="" class="col-md-12">
+                              Presupuestos disponibles:
+                            </label>
+                            <table class="mt-2 table table-borderless table-striped" *ngIf="budgets.length > 0">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Fecha</th>
+                                        <th>Cliente</th>
+                                        <th>Destino</th>
+                                        <th>Linea</th>
+                                        <th>Quien elabora</th>
+                                        <th>Total COP</th>
+                                        <th>Total USD</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of budgets" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
+                                        <td>
+                                            <input type="checkbox" [selected]="budgetsSelected.includes(item.id)" [select]=" guardarPresupuesto(item.id) " />
+                                            <p class="ml-1 "> PRES {{ item.id }} </p>
+                                        </td>
+                                        <td> {{ item.created_at | date:'dd-MM-YYYY' }} </td>
+                                        <td> {{ item.customer.name }} </td>
+                                        <td> {{ item.destiny.name }} </td>
+                                        <td> {{ item.line }} </td>
+                                        <td> {{ item.user.person.first_name }} {{ item.user.person.first_surname }} </td>
+                                        <td> ${{ item.total_cop | currency:'':'' }} </td>
+                                        <td> ${{ item.total_usd | currency:'':'' }} </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="input-group row ml-0 mr-0">
+                            <label for="" class="col-md-12">
+                              Cotizacion: <select class="form-control" name="cotizaciones"
+                                formControlName="cotizacion_id" id="cotizacion" placeholder="cotizacion_id...">
+                                <option value="null">cotizacion...</option>
+                                <option value="coti">cotizacion</option>
+                              </select>
+                              </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="createNeg(); form.reset(); modal.hide()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>

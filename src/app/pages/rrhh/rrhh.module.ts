@@ -66,6 +66,7 @@ import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/cat
 import { DescargoComponent } from './procesos/disciplinarios/descargo/descargo.component';
 import { CerrarProcesoComponent } from './procesos/disciplinarios/cerrar-proceso/cerrar-proceso.component';
 import { CrearProcesoComponent } from './procesos/disciplinarios/crear-proceso/crear-proceso.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 @NgModule({
   declarations: [
@@ -134,6 +135,7 @@ import { CrearProcesoComponent } from './procesos/disciplinarios/crear-proceso/c
     FullCalendarModule,
     PerfectScrollbarModule,
     NgbNavModule,
+    NgxDropzoneModule
   ],
   providers:[{provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' }],
   exports: [],

@@ -14,11 +14,20 @@ export class DescargoService {
     return this.http.get(`${environment.base_url}/disciplinary_process`, {params});
   }
 
-  download(file, params = {}) {
+  download(file, type?, params = {}) {
     // const headers = new HttpHeaders().set('Content-Type', 'application/json')
-    return this.http.get(`${environment.base_url}/file?path=${file}`, { responseType: 'blob' as 'json' });
+    return this.http.get(
+      `${environment.base_url}/${type == 'jpge' || type == 'jpg' || type == 'png' ? 'image?path=': 'file?path='}${file}`, { responseType: 'blob' as 'json' }
+      );
   }
 
+  getFilesToDownload(id){
+    return this.http.get(`${environment.base_url}/legal_document/${id}`);
+  }
+
+  saveFiles(data){
+    return this.http.post(`${environment.base_url}/legal_document`, data);
+  }
 
   createAnotacion(data){
     return this.http.post(`${environment.base_url}/annotation`, data);
@@ -34,6 +43,10 @@ export class DescargoService {
 
   closeOrOpenProccess(id, data){
     return this.http.put(`${environment.base_url}/process/${id}`, data);
+  }
+
+  deleteDocuments(data, id){
+    return this.http.put(`${environment.base_url}/legal_document/${id}`, data);
   }
 
 }

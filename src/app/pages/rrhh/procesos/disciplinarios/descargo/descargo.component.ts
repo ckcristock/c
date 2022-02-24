@@ -69,8 +69,8 @@ export class DescargoComponent implements OnInit {
   files: File[] = [];  // Para Documentos legales
   fileArr:any[] = [];
   legalDocuments:any[] = [];
-
-
+  fileType:any;
+  filename:any;
   constructor(
     private fb: FormBuilder,
     private _descargo: DescargoService,
@@ -120,7 +120,9 @@ export class DescargoComponent implements OnInit {
     this.formSeguimiento = this.fb.group({
       description: ['', Validators.required],
       disciplinary_process_id: [''],
-      file: ['']
+      file: [''],
+      filename: [''],
+      type: ['']
     });    
   }
 
@@ -130,6 +132,7 @@ export class DescargoComponent implements OnInit {
       person: ['', Validators.required],
       file: [''],
       filename:[''],
+      type: [''],
       observation:[''],
       disciplinary_process_id:['']
     })
@@ -178,6 +181,7 @@ export class DescargoComponent implements OnInit {
         this.processSelected = this.process[0];
         this.anotaciones = JSON.parse(this.processSelected.anotaciones ? this.processSelected.anotaciones : null) || [];
         this.file = this.processSelected.file;
+        this.fileType = this.processSelected.fileType;
         this.fullNameSelected = `${this.processSelected.person.first_name} ${this.processSelected.person.first_surname}`
       });
   }
@@ -201,7 +205,6 @@ export class DescargoComponent implements OnInit {
         });
         return null
       }
-
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event) => {
@@ -257,11 +260,13 @@ export class DescargoComponent implements OnInit {
           this.formSeguimiento.patchValue({
             disciplinary_process_id: this.filtros.code,
             file: this.fileAnotacion,
+            type: this.type,
+            filename: this.filename,
             person_id: this.formSeguimiento.value.person.value
           })
           this.formSeguimiento.addControl('memorandums', this.fb.control(this.seleccionadas))
           let forma = this.formSeguimiento.value;
-          forma.memorandums = this.seleccionadas;          
+          forma.memorandums = this.seleccionadas;
           this._descargo.createAnotacion(forma).subscribe( (data:any) => {
             this.fileAnotacion = null;
             this.formSeguimiento.reset();
@@ -406,7 +411,6 @@ export class DescargoComponent implements OnInit {
     this.loading = true;
     this._descargo.getAnnotations(this.filtros.code).subscribe((data:any) => {
       this.anotaciones = data.data
-      console.log(this.anotaciones);
       this.loading = false;
     })
   }
@@ -443,14 +447,16 @@ export class DescargoComponent implements OnInit {
     return this.formSeguimiento.get('person').invalid && this.formSeguimiento.get('person').touched;
   }
 
-  download(file) {
-    this._descargo.download(file)
+  download(file, fileType) {
+    this._descargo.download(file, fileType)
       .subscribe((response: BlobPart) => {
-        let blob = new Blob([response], { type: "application/pdf" });
+        let type = ''
+        fileType == 'jpge' || fileType == 'jpg' || fileType == 'png' ? type = `image/${fileType}` : `application/${fileType}`
+        let blob = new Blob([response], { type: type });
         let link = document.createElement("a");
-        const filename = 'Evidencia';
+        const filename = `evidencia.${fileType}`;
         link.href = window.URL.createObjectURL(blob);
-        link.download = file;
+        link.download = `${file}.${fileType}`;
         link.click();
         this.loading = false
       }),

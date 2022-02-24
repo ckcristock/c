@@ -76,7 +76,8 @@ export class CrearProcesoComponent implements OnInit {
       person: ['', this._reactiveValid.required],
       file: [''],
       filename:[''],
-      observation:[''],
+      type: [''],
+      observation:['']
       // memorandums: this.fb.array([]),
     })
   }
@@ -153,6 +154,7 @@ export class CrearProcesoComponent implements OnInit {
       person: [data.person],
       file: [data.file],
       filename: [data.filename],
+      type: [data.type],
       observation: [data.observation],
       memorandums: this.fb.array([])
     })
@@ -178,7 +180,7 @@ export class CrearProcesoComponent implements OnInit {
   }
 
   newInvolved(){
-    this.formInvolved.patchValue({file: this.file, filename: this.filename})
+    this.formInvolved.patchValue({file: this.file, filename: this.filename, type: this.type})
     this.formInvolved.addControl('memorandums', this.fb.control(this.seleccionadas))
     let forma = this.formInvolved.value;
     forma.memorandums = this.seleccionadas;

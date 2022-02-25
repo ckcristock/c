@@ -12,10 +12,10 @@
                 </div>
                 <div class="col-6 text-right" *ngIf="!loading && processSelected">
                     <div *ngIf="permission.permissions.close && processSelected.status!='Cerrado'">
-                        <button class="btn btn-danger btn-sm col-3" style="float: right;" (click)="closeProccess()"> Cerrar </button>
+                        <button class="btn btn-danger btn-sm col-2" style="float: right;" (click)="closeProccess()"> Cerrar </button>
                     </div>
                     <div *ngIf="processSelected.status == 'Cerrado' && permission.permissions.open">
-                        <button class="btn btn-success btn-sm col-3" style="float: right;" (click)="openProccess()"> Abrir </button>
+                        <button class="btn btn-success btn-sm col-2" style="float: right;" (click)="openProccess()"> Abrir </button>
                     </div>
                 </div>
             </div>
@@ -46,11 +46,13 @@
                             <i class="far fa-arrow-alt-circle-down"> Descargar Evidencia</i>
                         </button>
             </div>
-            <div class=" form-group col-3" *ngIf="processSelected.status == 'Cerrado'">
+            <div class=" form-group col-12" *ngIf="processSelected.status == 'Cerrado'">
                 <label style="color: black;">Observación del cierre</label>
                 <p>{{processSelected.close_description}}</p>
             </div>
-            <hr class="line">
+            <div class="col-12">
+                <hr class="line">
+            </div>
             <div class="col-12">
                 <div class="row">
                     <div class="col-6">
@@ -136,14 +138,16 @@
                         <div class="col-2">
                             <div class="card card-file">
                                 <div class="card-title">
-                                    <button type="button" *ngIf="processSelected.status != 'Cerrado'" class="close basic-close mt-2 mr-3" (click)="deleteDocument(item)">
+                                    <button type="button" *ngIf="processSelected.status != 'Cerrado'" placement="top" ngbTooltip="Eliminar" class="close basic-close mt-2 mr-3" (click)="deleteDocument(item)">
                                         <span aria-hidden="true">
                                             <i class="fas fa-times"></i>
                                         </span>
                                     </button>
                                 </div>
-                                <div class="card-body" (click)="downloadDocument(item)">
-                                    <h6 class="file-title text-center"> {{ item.name }} </h6>
+                                <div class="card-body" (click)="downloadDocument(item)" placement="left" ngbTooltip="Descargar">
+                                    <h6 class="file-title text-center">
+                                        {{ item.name }}
+                                    </h6>
                                 </div>
                             </div>
                         </div>

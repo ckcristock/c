@@ -10,6 +10,9 @@ const routes: Routes = [
     { path: 'contabilidad',   loadChildren : () => import('./contabilidad/contabilidad.module').then(m => m.ContabilidadModule )},
     { path: 'nomina',   loadChildren : () => import('./nomina/nomina.module').then(m => m.NominaModule )},
     { path: 'crm',   loadChildren : () => import('./crm/crm.module').then(m => m.CrmModule )},
+    { path: 'compras',   loadChildren : () => import('./compras/compras.module').then(m => m.ComprasModule )},
+    { path: 'inventario', loadChildren: () => import('./inventario/inventario.module').then(m => m.InventarioModule) },
+
 
 ];
 

@@ -32,6 +32,9 @@ export class UserService {
   validarToken(): Observable<boolean> {
     return this.http.get(`${base_url}/auth/renew`, {}).pipe(
       map((resp: any) => {
+        console.log("xxxxxxxxxxxxxxxxx");
+        console.log(resp.user);
+
         const { id, usuario, change_password, person, menu } = resp.user;
         this.user = new User(id, usuario, change_password, person, menu);
         this.guardarLocalStorage(resp.token);
@@ -61,7 +64,7 @@ export class UserService {
     return this.http.get(`${base_url}/auth/change-password`, { params });
   }
 
-  getAlerts(params = { }) {
-    return this.http.get(`${environment.base_url}/alerts` ,{params});
+  changeCompany(companyId) {
+    return this.http.post(`${base_url}/change-company-work/${companyId}`, {});
   }
 }

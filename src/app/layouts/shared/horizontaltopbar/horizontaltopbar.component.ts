@@ -45,7 +45,7 @@ export class HorizontaltopbarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.initSearch();
+   // this.initSearch();
     this.element = document.documentElement;
     this.user = this._user.user;
     this.configData = {
@@ -136,7 +136,7 @@ export class HorizontaltopbarComponent implements OnInit {
   logout() {
     this._user.logout();
   }
-
+/*
   initSearch() {
     const source = interval(10000); //output: 0,1,2,3,4,5....
     this.alerts$ = source.subscribe((val) => {
@@ -146,7 +146,7 @@ export class HorizontaltopbarComponent implements OnInit {
         this.alerts = r.data;
       });
     });
-  }
+  }*/
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.

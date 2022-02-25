@@ -4,8 +4,13 @@
 
 export const environment = {
   production: false,
+  id_funcionario: 1,
+
    base_url: 'http://127.0.0.1:8000/api',
-   ruta: 'https://inventario.sigmaqmo.com/'
+   //ruta: 'http://localhost/sigmaqmo-back-php/',
+   ruta: 'http://localhost/inventario.sigmagmo.com/',
+
+
 
 //base_url: 'http://127.0.0.1:8000/api',
 

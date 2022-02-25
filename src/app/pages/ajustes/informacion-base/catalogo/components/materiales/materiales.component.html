@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="card-title">
-          <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+          <button class="pull-right btn btn-success btn-sm" style="float: right;" (click)="openModal()">
             <i class="fa fa-plus"></i> Agregar
           </button>
           <h5 class="text-primary">Materiales</h5>
@@ -65,10 +65,13 @@
     </div>
   </div>
 </div>
+
+
+
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
   <div class="app-modal-header">
     <h5 class="modal-title">{{ title }}</h5>
-    <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
+    <button type="button" class="close basic-close" (click)="closeModal()">
       <span aria-hidden="true">
         <i class="fas fa-times"></i>
       </span>
@@ -77,6 +80,8 @@
   <div class="app-modal-body">
     <form [formGroup]="form">
       <div class="row">
+        <input type="hidden" class="form-control form-control-sm" formControlName="product_id">
+
         <div class="col-12">
           <div class="form-row">
             <div class="form-group col-md-6">
@@ -114,56 +119,6 @@
                 <!--<option value="Epp">Epp</option>-->
               </select>
             </div>
-
-
-
-
-<!-- -->
-<!-- -->
-<!--
-   <div class="form-group col-md-4">
-              <label for="">Código</label>
-              <input type="text" class="form-control form-control-sm" formControlName="Codigo">
-            </div>
-
-
-
-  <div class="form-group col-md-6">
-                <label>Estado</label>
-                <select class="form-control form-control-sm" formControlName="Status">
-                  <option value="">Seleccione un estado</option>
-                  <option value="Nuevo">Nuevo</option>
-                  <option value="Usado">Usado</option>
-                </select>
-            </div>
-  <div class="form-group col-md-4">
-                <label>Tipo</label>
-                <select class="form-control form-control-sm" formControlName="Producto_Dotacion_Tipo">
-                  <option value="">Seleccione un tipo</option>
-                  <option value="Dotacion">Dotacion</option>
-                  <option value="EPP">Epp</option>
-                </select>
-            </div>
-
-            <div class="form-group col-md-4">
-              <label>Tipo Dotación</label>
-              <ng-select
-                formControlName="Producto_Dotation_Type_Id"
-                [items]="DotationType"
-                bindLabel="text"
-                bindValue="value"
-                loadingText="loading"
-                ngDefaultControl
-              >
-            </ng-select>
-            </div>
-
-
-
- -->
-
-
-
 
             <div class="col-md-6">
               <div class="form-group">
@@ -272,13 +227,16 @@
   </div>
   <div class="app-modal-footer">
     <div class="form-group text-right">
-      <button (click)="modal.hide(); form.reset()" type="button"
+      <button (click)="closeModal()" type="button"
         class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
       <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid"
         (click)="save()">Guardar</button>
     </div>
   </div>
 </app-modal-basic>
+
+
+
 <app-modal-basic #modalVer [dialogClass]="'modal-lg'">
   <div class="app-modal-header">
     <h5 class="modal-title">Ver Materia Material</h5>
@@ -339,6 +297,8 @@
     </div>
   </div>
 </app-modal-basic>
+
+
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

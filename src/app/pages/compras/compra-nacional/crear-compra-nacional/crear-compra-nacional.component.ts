@@ -118,10 +118,12 @@ export class CrearCompraNacionalComponent implements OnInit {
 
 
     this.http
-      .get(environment.ruta + 'php/comprasnacionales/proveedor_buscar.php', {params:{
+      .get(environment.ruta + 'php/comprasnacionales/proveedor_buscar.php', {
+        params: {
 
-        company_id:this._user.user.person.company_worked.id
-      }})
+          company_id: this._user.user.person.company_worked.id
+        }
+      })
       .subscribe((data: any) => {
         this.Proveedores = data;
       });
@@ -135,8 +137,8 @@ export class CrearCompraNacionalComponent implements OnInit {
         term.length < 4
           ? []
           : this.ListaProducto.filter(
-              (v) => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1
-            ).slice(0, 10)
+            (v) => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1
+          ).slice(0, 10)
       )
     );
   formatter1 = (x: { Nombre: string }) => x.Nombre;
@@ -150,9 +152,9 @@ export class CrearCompraNacionalComponent implements OnInit {
         term.length < 4
           ? []
           : this.Proveedores.filter(
-              (v) =>
-                v.NombreProveedor.toLowerCase().indexOf(term.toLowerCase()) > -1
-            ).slice(0, 10)
+            (v) =>
+              v.NombreProveedor.toLowerCase().indexOf(term.toLowerCase()) > -1
+          ).slice(0, 10)
       )
     );
   formatter2 = (x: { NombreProveedor: string }) => x.NombreProveedor;
@@ -189,9 +191,11 @@ export class CrearCompraNacionalComponent implements OnInit {
     }
 
     this.http
-      .get(environment.ruta + 'php/bodega_nuevo/get_bodegas.php',{params:{
-        company_id:this._user.user.person.company_worked.id
-      }})
+      .get(environment.ruta + 'php/bodega_nuevo/get_bodegas.php', {
+        params: {
+          company_id: this._user.user.person.company_worked.id
+        }
+      })
       .subscribe((data: any) => {
         this.Bodegas = data.Bodegas;
         this.Impuestos = data.impuestoli;
@@ -256,7 +260,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     this.http
       .get(
         environment.ruta +
-          'php/inventario_fisico_puntos/lista_punto_funcionario.php',
+        'php/inventario_fisico_puntos/lista_punto_funcionario.php',
         { params: { id: '1' } }
       )
       .subscribe((data: any) => {
@@ -299,8 +303,8 @@ export class CrearCompraNacionalComponent implements OnInit {
       this.http
         .get(
           environment.ruta +
-            'php/comprasnacionales/lista_productos.php?' +
-            queryString, {params:{company_id:this._user.user.person.company_worked.id}}
+          'php/comprasnacionales/lista_productos.php?' +
+          queryString, { params: { company_id: this._user.user.person.company_worked.id } }
         )
         .subscribe((data: any) => {
           this.Cargando = false;
@@ -316,7 +320,7 @@ export class CrearCompraNacionalComponent implements OnInit {
 
       this.http
         .get(environment.ruta + 'php/comprasnacionales/lista_productos.php', {
-          params: { nom: this.filtro_nombre , company_id:this._user.user.person.company_worked.id},
+          params: { nom: this.filtro_nombre, company_id: this._user.user.person.company_worked.id },
         })
         .subscribe((data: any) => {
           this.Cargando = false;
@@ -345,7 +349,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       this.http
 
         .get(environment.ruta + 'php/comprasnacionales/lista_productos.php', {
-          params: { nom: producto , company_id:this._user.user.person.company_worked.id},
+          params: { nom: producto, company_id: this._user.user.person.company_worked.id },
         })
         .subscribe((data: any) => {
           this.Cargando = false;
@@ -381,7 +385,7 @@ export class CrearCompraNacionalComponent implements OnInit {
           environment.ruta + '/php/rotativoscompras/actualizar_estado.php',
           datos
         )
-        .subscribe((data: any) => {});
+        .subscribe((data: any) => { });
     }
 
     if (this.Lista_Productos.length > 1) {
@@ -401,7 +405,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       return await this.http
         .post(
           environment.ruta +
-            'php/comprasnacionales/guardar_compra_nacional.php',
+          'php/comprasnacionales/guardar_compra_nacional.php',
           datos
         )
         .toPromise()

@@ -4,6 +4,9 @@ import { ValidatorsService } from '../../../../informacion-base/services/reactiv
 import { MaterialesService } from './materiales.service';
 import { SwalService } from '../../../../informacion-base/services/swal.service';
 import { CategoryService } from '../../../services/category.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { throwIfEmpty } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-materiales',
@@ -11,19 +14,20 @@ import { CategoryService } from '../../../services/category.service';
   styleUrls: ['./materiales.component.scss']
 })
 export class MaterialesComponent implements OnInit {
-  @ViewChild('modal') modal:any;
-  loading:boolean = false;
+  @ViewChild('modalVer') modalVer: any;
+  @ViewChild('modal') modal: any;
+  loading: boolean = false;
   form: FormGroup;
-  title:any = '';
-  materials:any[] = [];
+  title: any = '';
+  materials: any[] = [];
   Categorias: any[] = [];
   SubCategorias: any[] = [];
   Producto: any = {};
   DotationType: any[] = [];
 
 
-  thicknesses:any[] = [];
-  material:any = {};
+  thicknesses: any[] = [];
+  material: any = {};
   pagination = {
     page: 1,
     pageSize: 10,
@@ -33,12 +37,13 @@ export class MaterialesComponent implements OnInit {
     name: ''
   }
   constructor(
-                private _category: CategoryService,
-                private fb: FormBuilder,
-                private _validators: ValidatorsService,
-                private _materials: MaterialesService,
-                private _swal: SwalService
-              ) { }
+    private _category: CategoryService,
+    private fb: FormBuilder,
+    private _user: UserService,
+    private _validators: ValidatorsService,
+    private _materials: MaterialesService,
+    private _swal: SwalService
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -64,7 +69,7 @@ export class MaterialesComponent implements OnInit {
   }
   getDinamicField(Id_Subcategoria) {
     this.Producto.Id_Producto
-      ? this.getSubCategoryEdit(this.Producto.Id_Producto, Id_Subcategoria)
+      ? this.getSubCategoryEditar(this.Producto.Id_Producto, Id_Subcategoria)
       : this.getDinamicVariables(Id_Subcategoria);
   }
   getSubCategoryEdit(Id_Producto, Id_Subcategoria) {
@@ -104,15 +109,39 @@ export class MaterialesComponent implements OnInit {
     return this.form.get('dynamic') as FormArray;
   }
 
-  openModal(){
+  openModal() {
     this.modal.show();
     this.title = 'Nuevo Material';
   }
 
-  closeModalVer(){
-    this.modal.hide();
+  closeModalVer() {
+    this.modalVer.hide();
     this.fieldList.clear();
   }
+
+  closeModal() {
+    this.modal.hide();
+    this.form.reset();
+    this.thicknessList.clear();
+    this.fieldList.clear();
+    this.getThicknesses();
+  }
+
+  getThicknesses() {
+    this._materials.getThicknesses().subscribe((r: any) => {
+      this.thicknesses = r.data;
+      this.thicknessPush();
+    })
+  }
+
+  thicknessPush() {
+    let thicknesses = this.form.get('thicknesses') as FormArray;
+    thicknesses.clear();
+    this.thicknesses.forEach(element => {
+      thicknesses.push(this.thicknessGroup(element, this.fb));
+    });
+  }
+
 
   getDotationType() {
     this._category.getDotationType().subscribe((r: any) => {
@@ -121,23 +150,17 @@ export class MaterialesComponent implements OnInit {
     });
   }
 
-  createForm(){
+  createForm() {
     this.form = this.fb.group({
       id: [this.material.id],
       name: ['', this._validators.required],
       unit: ['', this._validators.required],
       type: ['', this._validators.required],
-
-      Id_Categoria: [''],
-      Id_Subcategoria: [''],
-      //Producto_Dotation_Type_Id: [''],
-      //Codigo: [''],
-      Codigo_Barras: [''],
-      Tipo_Catalogo: [''],
-      //Status: [''],
-      //Producto_Dotacion_Tipo: [''],
-
-
+      Id_Categoria: ['', this._validators.required],
+      Id_Subcategoria: ['', this._validators.required],
+      Codigo_Barras: ['', this._validators.required],
+      Tipo_Catalogo: ['', this._validators.required],
+      product_id: [''],
       unit_price: [''],
       kg_value: ['', this._validators.required],
       fields: this.fb.array([]),
@@ -147,24 +170,27 @@ export class MaterialesComponent implements OnInit {
     });
   }
 
-  getThicknesses(){
-    this._materials.getThicknesses().subscribe((r:any) => {
-      this.thicknesses = r.data;
-      this.thicknessPush();
-    })
-  }
 
-  getMaterial(material){
-    this.material = {...material};
+  getMaterial(material) {
+    this.material = { ...material };
     this.title = 'Editar Material';
     this.form.patchValue({
       id: this.material.id,
+      product_id: this.material.product_id,
       name: this.material.name,
       unit: this.material.unit,
       type: this.material.type,
+      Codigo_Barras: this.material.product.Codigo_Barras,
+      Tipo_Catalogo: this.material.product.Tipo_Catalogo,
+      Id_Categoria: this.material.product.Id_Categoria,
+      Id_Subcategoria: Number(this.material.product.Id_Subcategoria),
       unit_price: this.material.unit_price,
       kg_value: this.material.kg_value
     });
+
+
+    this.getSubCategories(this.material.product.Id_Subcategoria);
+    this.getSubCategoryEditar(this.material.product_id, this.material.product.Id_Subcategoria);
     this.fieldList.clear();
     this.material.material_field.forEach(r => {
       let group = this.fb.group({
@@ -185,19 +211,33 @@ export class MaterialesComponent implements OnInit {
     });
   }
 
-  get thicknessList(){
+
+  getSubCategoryEditar(Id_Producto, Id_Subcategoria) {
+    this._category
+      .getSubCategoryEdit(Id_Producto, Id_Subcategoria)
+      .subscribe((r: any) => {
+        this.fieldDinamic.clear();
+        r.data.forEach((e) => {
+          let group = this.fb.group({
+            subcategory_variables_id: e.subcategory_variables_id,
+            id: e.id,
+            label: e.label,
+            type: e.type,
+            valor: e.valor,
+          });
+          this.fieldDinamic.push(group);
+        });
+      });
+  }
+
+
+  get thicknessList() {
     return this.form.get('thicknesses') as FormArray;
   }
 
-  thicknessPush(){
-    let thicknesses = this.form.get('thicknesses') as FormArray;
-    thicknesses.clear();
-    this.thicknesses.forEach(element => {
-      thicknesses.push(this.thicknessGroup(element, this.fb));
-    });
-  }
 
-  thicknessGroup(element, fb: FormBuilder){
+
+  thicknessGroup(element, fb: FormBuilder) {
     let group = fb.group({
       thickness: [element.thickness],
       thickness_id: [element.id],
@@ -206,7 +246,7 @@ export class MaterialesComponent implements OnInit {
     return group;
   }
 
-  fieldsControl(){
+  fieldsControl() {
     let field = this.fb.group({
       property: [''],
       type: [''],
@@ -215,35 +255,39 @@ export class MaterialesComponent implements OnInit {
     return field;
   }
 
-  get fieldList(){
+  get fieldList() {
     return this.form.get('fields') as FormArray;
   }
 
-  newField(){
+  newField() {
     let field = this.fieldList;
     field.push(this.fieldsControl());
   }
 
-  deleteField(i){
+  deleteField(i) {
     this.fieldList.removeAt(i);
   }
 
-  getMaterials( page = 1 ){
+  getMaterials(page = 1) {
     this.pagination.page = page;
     let params = {
-      ...this.pagination, ...this.filtro
+      ...this.pagination,
+      ...this.filtro,
+      company_id: this._user.user.person.company_worked.id
+
     }
+
     this.loading = true;
-    this._materials.getMaterials(params).subscribe((r:any) => {
+    this._materials.getMaterials(params).subscribe((r: any) => {
       this.materials = r.data.data;
       this.loading = false;
       this.pagination.collectionSize = r.data.total;
     })
   }
 
-  save(){
+  save() {
     if (this.form.get('id').value) {
-      this._materials.update(this.form.value, this.material.id).subscribe((r:any) => {
+      this._materials.update(this.form.value, this.material.id).subscribe((r: any) => {
         this.form.reset();
         this.modal.hide();
         this.thicknessList.clear();
@@ -257,7 +301,7 @@ export class MaterialesComponent implements OnInit {
         })
       })
     } else {
-      this._materials.save(this.form.value).subscribe((r:any) =>{
+      this._materials.save(this.form.value).subscribe((r: any) => {
         this.form.reset();
         this.modal.hide();
         this.thicknessList.clear();

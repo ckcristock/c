@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../../../environments/environment';
 import { SwalService } from '../../../services/swal.service';
 import { User } from 'src/app/core/models/users.model';
+import { UserService } from 'src/app/core/services/user.service';
+
 
 @Component({
   selector: 'app-activo-fijo-catalogo',
@@ -34,6 +36,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
     private _category: CategoryService,
     private fb: FormBuilder,
     private http: HttpClient,
+    private _user: UserService,
     private swal: SwalService
   ) {}
 
@@ -92,6 +95,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
       Id_Producto: [''],
       Id_Categoria: [''],
       Id_Subcategoria: [''],
+      company_id: [ this._user.user.person.company_worked.id],
       Nombre_Comercial: [''],
       Descripcion_ATC: [''],
       Codigo_Barras: [''],
@@ -122,6 +126,9 @@ export class ActivoFijoCatalogoComponent implements OnInit {
 
   closeModal() {
     this.modal.hide();
+    this.form.reset();
+    this.fieldDinamic.clear();
+
   }
 
   saveGeneric() {
@@ -161,7 +168,8 @@ export class ActivoFijoCatalogoComponent implements OnInit {
     let params = {
       tipo: 'Activo_Fijo',
       ...this.pagination,
-     // company_id: this.user.person.company_worked.id,
+      company_id: this._user.user.person.company_worked.id
+
     };
     this._category.getProducts(params).subscribe((r: any) => {
       this.loading = false;

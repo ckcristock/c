@@ -1,0 +1,131 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row invoice-contact" style="align-items:flex-start !important;">
+                    <div class="col-md-8">
+                        <div class="invoice-box row">
+                            <div class="col-sm-12">
+                                <table class="table table-responsive invoice-table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:100px;">
+                                                <!-- TODO Data company -->
+                                                <!-- <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="Pro-H Software"> -->
+                                            </td>
+                                            <td>
+                                              <!--   {{globales.Nombre}}
+                                                <br> {{globales.Nit}}
+                                                <br> {{globales.Direccion}}
+                                                <br> {{globales.Telefono}} -->
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row text-right" style="margin:0;">
+                            <div class="col-sm-7">
+                                <h6>Acta Recepción</h6>
+                                <h4>{{ Datos.Codigo }}</h4>
+                                <h6>{{Datos.Fecha_Creacion | date: 'dd/MM/yyyy'}}</h6>
+                            </div>
+                            <div class="col-sm-5" style="padding-left:0;">
+                                <!-- TODO QR -->
+                               <!--  <img *ngIf="Datos.Codigo_Qr!=''" src="{{globales.ruta}}IMAGENES/QR/{{Datos.Codigo_Qr}}" class="img-fluid" style="margin-top: -20px;">
+                                <img *ngIf="Datos.Codigo_Qr==''" src="assets/images/sinqr.png" class="img-fluid" style="margin-top: -20px;"> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row invoive-info" style="margin-bottom: 0;">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="form-group grupo">
+                                <h5 style="font-size:16px; color:#4099ff;">Compra:{{ Datos.Codigo_Compra }} </h5>
+                                <p *ngIf="Tipo == 'Bodega'" class="titular"><b>Bodega:</b> {{ Datos.Nombre_Bodega }} </p>
+                                <p *ngIf="Tipo == 'Punto_Dispensacion'" class="titular"><b>Punto:</b> {{ Datos.Nombre_Bodega }} </p>
+                                <p class="titular"><b>Productos Ingresados:</b> {{Datos.ConteoProductos}} Producto{{ Datos.ConteoProductos>1 ? 's': '' }} Diferente{{ Datos.ConteoProductos>1 ? 's': '' }}</p>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="form-group grupo">
+                                <p class="titular"><strong>Proveedor:</strong> {{ Datos.NombreProveedor }} </p>
+                                <p class="titular"><strong>Dirección:</strong> {{ Datos.DireccionProveedor }} </p>
+                                <p class="titular"><strong>Teléfono :</strong> {{ Datos.TelefonoProveedor }} </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="row m-0">
+                        <div class="col-md-12  ver">
+                            <h6>Observaciones</h6>
+                            <p>{{Datos.Observaciones}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top:30px;">
+                        <div class="col-sm-12">
+                            <table class="table table-striped tabla">
+                                <thead>
+                                    <tr class="thead-default">
+                                        <th style="width:20px;"></th>
+                                        <th>Producto</th>
+                                        <th style="width:220px;" class="text-center">Embalaje</th>
+                                        <th style="width:170px;" class="text-center">Labolatorio Gen.</th>
+                                        <th style="width:90px;" class="text-center">Cantidad</th>
+                                        <th style="width:120px;" class="text-center">Lote</th>
+                                        <th style="width:120px;" class="text-center">Fecha Venc.</th>
+                                        <th *ngIf="Datos.Cambio_Estiba" style="width:140px;" class="text-center">Estiba Nueva</th>
+                                        <th style="width:140px;" class="text-center">Estiba</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of Productos; let i = index" id="fila{{i}}" [ngClass]="{'bg-success': item.Id_Estiba}">
+                                        <td class="text-center"><strong>{{i+1}}</strong></td>
+                                        <td class="text-left"><strong>{{item.Nombre_Comercial}}</strong>
+                                            <p class="text-muted" style="font-size:9px;">{{item.Nombre_Producto}}</p>
+                                        </td>
+
+                                        <td class="text-left">{{item.Embalaje}}</td>
+                                        <td class="text-left">{{item.Laboratorio_Generico}}</td>
+                                        <td style="width:60px;border-left: 0;border-top: 0;" class="text-center">{{item.Cantidad | number | puntos }} </td>
+
+                                        <td style="width:90px;border-top: 0;" class="text-center">{{item.Lote}} </td>
+                                        <td class="text-center">{{item.Fecha_Vencimiento}}</td>
+                                        <td *ngIf="Datos.Cambio_Estiba" class="text-center">{{item.Estiba}}</td>
+                                        <td style="width:100px;border-top: 0;" class="text-right">
+                                            <input [(ngModel)]="item.Codgo_Barras_Estiba" (blur)="focus()" class="form-control form-control-sm tabla codigos" #CodigoBarra placeholder="Digite el código de barras" name="CodigoBarra" id="CodigBarra{{i}}" (change)="validarEstiba(item,$event.target.value)"
+                                                type="text" id="cant{{i}}">
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-right">
+                                <button *ngIf="Tipo == 'Bodega'" type="button" [routerLink]="['/inventario/acta-recepcion-aprobados']" class="btn btn-primary btn-sm btn-block">Volver</button>
+                                <button *ngIf="Tipo == 'Punto_Dispensacion'" type="button" [routerLink]="['/inventario/acta-recepcion-aprobados']" class="btn btn-primary btn-sm btn-block">Volver</button>
+                                <button [swal]="confirmacionGuardarSwal" (confirm)="validarProductos()" icon="button" class="btn btn-success btn-sm btn-block">Guardar Productos</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<swal #confirmacionGuardarSwal [swalOptions]="alertOptionGuardar"></swal>
+<swal #confirmacionSwal title="" text="" icon=""></swal>
+<swal #actaAcomodadaSwal [swalOptions]="alertOption"></swal>
+<swal #inventarioSwal title="" text="" type="" allowEscapeKey="false" confirmButtonText="Entendido" (confirm)="redireccionar()"></swal>

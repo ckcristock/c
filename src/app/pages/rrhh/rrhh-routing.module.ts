@@ -40,6 +40,8 @@ const routes: Routes = [
   { path: 'actividades', component: ActividadesComponent },
   { path: 'novedades', component: NovedadesComponent },
   { path: 'llegadas-tarde', component: LlegadasTardesComponent },
+
+
   { path: 'dotacion/dotaciones', component: DotacionesComponent },
   { path: 'dotacion/dotaciones/table-inventary', component: TableInventaryComponent },
   { path: 'dotacion/dotaciones/table-inventary-epp', component: TableInventaryEppComponent },
@@ -47,6 +49,8 @@ const routes: Routes = [
   { path: 'dotacion/dotaciones/app-dotacion-salidas', component: DotacionSalidasComponent },
   { path: 'dotacion/dotaciones/app-table-stock', component: TableStockComponent },
   { path: 'dotacion/inventario', component: InventarioDotacionComponent },
+
+
   { path: 'turnos/asignacion', component: AsignacionTurnosComponent },
   { path: 'turnos/horas-extras', component: HorasExtrasComponent },
   { path: 'turnos/reporte', component: ReporteHorarioComponent },

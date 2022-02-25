@@ -1,0 +1,182 @@
+<!-- <div class="page-body"> -->
+<!-- <div class="row"> -->
+<div class="col md-12 p-3">
+    <div class="card">
+
+        <form #FormTraslado="ngForm" style="padding-bottom: 0px;">
+            <div class="row invoice-contact" style="align-items:flex-start !important;">
+                <div class="col-md-8">
+                    <div class="invoice-box row">
+                        <div class="col-sm-12">
+                            <table class="table table-responsive invoice-table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:100px;">
+                                            <!-- <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="Pro-H Software"> -->
+                                        </td>
+                                        <td>
+                                                      <!-- {{globales.Nombre}}
+                                                    <br> {{globales.Nit}}
+                                                    <br> {{globales.Direccion}}
+                                                    <br> {{globales.Telefono}}
+                                                       -->
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row text-right mt-3" style="margin-right: 5px;">
+                        <div class="col-sm-12">
+                            <h4>{{Datos.Titulo}}</h4>
+                            <h6>{{Datos.Fecha | date: 'dd/MM/yyyy'}}</h6>
+                            <span class="f-right">
+                                <select name="Tipo" id="Tipo" class="form-control form-control-sm tipo-dis-select"
+                                    [(ngModel)]="ModeloRemision.Tipo" (change)="Cambiar_Remision()" required>
+                                    <option value="Cliente">Tipo Cliente</option>
+                                    <option value="Interna" selected>Tipo Interna</option>
+                                    <option value="Contrato" selected>Tipo Contrato</option>
+                                </select>
+                            </span>
+
+
+                            <ng-container *ngIf="ModeloRemision.Tipo !='Contrato'">
+                                <div class="clearfix"></div>
+                                <span class="f-right m-t-10 " placeholder="Tipo de Prioridad">
+                                    <select name="Prioridad" [(ngModel)]="ModeloRemision.Prioridad" id="Prioridad"
+                                        class="form-control form-control-sm tipo-dis-select" (change)="EnviarModelo();"
+                                        required>
+                                        <option value="1">Prioridad I</option>
+                                        <option value="2">Prioridad II</option>
+                                        <option value="3">Prioridad III</option>
+                                    </select>
+                                </span>
+                                <div class="clearfix"></div>
+                                <span class="f-right m-t-10" *ngIf="ModeloRemision.Tipo=='Interna'">
+                                    <select name="Modelo" id="Modelo"
+                                        class="form-control form-control-sm tipo-dis-select" (change)="CambiarPunto();"
+                                        [(ngModel)]="ModeloRemision.Modelo" required>
+                                        <option value="Punto-Bodega">Punto-Bodega</option>
+                                        <option value="Punto-Punto">Punto-Punto</option>
+                                        <option value="Bodega-Punto" selected>Bodega-Punto</option>
+                                        <option value="Bodega-Bodega">Bodega-Bodega</option>
+                                    </select>
+                                </span>
+
+                                <span class="f-right m-t-10 " placeholder="Meses de Vencimiento ">
+                                    <select name="Meses" id="Meses" class="form-control form-control-sm tipo-dis-select"
+                                        [(ngModel)]="ModeloRemision.Meses" required (change)="EnviarModelo();">
+                                        <option *ngFor="let item of Meses; let i=index" [value]="item.dia">
+                                            {{item.dia}}</option>
+                                    </select>
+                                </span>
+                            </ng-container>
+
+                            <span *ngIf="ModeloRemision.Tipo=='Cliente'" class="f-right m-t-10 m-l-10"
+                                placeholder="Tipo de Pago">
+                                <select name="Tipo_Pago" id="Tipo_Pago"
+                                    class="form-control form-control-sm tipo-dis-select"
+                                    [(ngModel)]="ModeloRemision.Tipo_Pago" (change)="EnviarModelo();" required>
+                                    <option value="" disabled>Tipo de pago</option>
+                                    <option value="Credito">Crédito</option>
+                                    <option value="Contado">Contado</option>
+                                </select>
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <hr>
+
+            <br>
+
+            <div class="card-body" style="padding-bottom: 0px;">
+                <div class="row invoive-info" style="margin-bottom: 0; padding-bottom: 0px;">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Origen</label>
+                            <ng-select bindLabel="label" bindValue="value" id="Bodegas_Nuevo" name="Bodegas_Nuevo"
+                                placeholder="Seleccione el Origen" [items]="Origen" [(ngModel)]="Datos.Origen"
+                                (ngModelChange)="AsignarNombre('Origen')" required>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" *ngIf="Grupos.length>0 && ModeloRemision.Tipo_Origen=='Bodega'">
+                        <div class="form-group">
+                            <label>Grupo Estiba</label>
+                            <ng-select bindLabel="label" bindValue="value" id="Grupos" name="Origen_Grupo"
+                                placeholder="Seleccione el Grupo" [items]="Grupos" [(ngModel)]="Datos.Origen_Grupo"
+                                (ngModelChange)="AsignarNombre('Grupo')" required></ng-select>
+                        </div>
+                    </div>
+
+                    <div [ngClass]="'col-md-4'" *ngIf="ModeloRemision.Tipo!='Contrato'">
+                        <div class="form-group">
+                            <label>Destino</label>
+                            <ng-select bindLabel="label" bindValue="value" id="Puntos" name="Destino"
+                                placeholder="Seleccione el Destino" [items]="Destino" [(ngModel)]="Datos.Destino"
+                                (ngModelChange)="AsignarNombre('Destino')" required>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div [ngClass]="'col-md-4'" *ngIf="ModeloRemision.Tipo=='Contrato'">
+                        <div class="form-group">
+                            <label>Contratos</label>
+                            <ng-select bindLabel="label" bindValue="value" id="Id_Contrato" name="Contrato"
+                                placeholder="Seleccione el Contrato" [items]="Contratos"
+                                [(ngModel)]="Datos.DestinoContrato" (ngModelChange)="AsignarNombre('Contrato')"
+                                required>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2" *ngIf="ModeloRemision.Tipo=='Cliente'">
+                        <div class="form-group">
+                            <label>L. Ganancia</label>
+                            <input name="ListaGanancia" id="ListaGanancia" class="form-control form-control-sm f-9"
+                                readonly [(ngModel)]="ModeloRemision.Id_Lista">
+                        </div>
+                    </div>
+                    <div class="col-md-1" *ngIf="ModeloRemision.Tipo=='Cliente'">
+                        <div class="form-group">
+                            <label>O. Compra</label>
+                            <input name="Orden_Compra" id="Orden_Compra" class="form-control form-control-sm f-9"
+                                [(ngModel)]="ModeloRemision.Orden_Compra" (change)="EnviarModelo();" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row invoive-info" style="margin-bottom: 0;">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Observaciones</label>
+                            <textarea [(ngModel)]="ModeloRemision.Observaciones" id="Observaciones" name="Observaciones"
+                                type="text" rows="3" class="form-control " (change)="EnviarModelo(false)"
+                                (keypress)="tab($event)" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+
+        <app-productosremisionnuevo [_remisionModel]="ModeloRemision"
+            [ActualizarModelo]="ActualizarModelProductos.asObservable()" (CargarBorrador)="ActualizarModelo($event)">
+        </app-productosremisionnuevo>
+
+        <ng-template #rt let-r="result" let-t="term">
+            <span class="f-9">{{ r.Nombre }} </span>
+        </ng-template>
+
+    </div>
+</div>
+<!-- </div> -->
+<!-- </div> -->

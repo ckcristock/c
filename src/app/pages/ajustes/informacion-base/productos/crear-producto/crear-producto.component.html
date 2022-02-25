@@ -1,0 +1,583 @@
+<div class="page-body">
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-12">
+          <h5>Nuevo Medicamento</h5>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <form #FormMedicamento="ngForm">
+            <input
+              name="company_id"
+              type="hidden"
+              placeholder=""
+              class="form-control"
+              [(ngModel)]="company_id"
+            />
+            <input
+              hidden
+              name="Tipo"
+              type="text"
+              placeholder=""
+              class="form-control"
+              required
+              [(ngModel)]="Medicamento"
+              readonly
+            />
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-2">
+                    <div style="text-align: center" class="form-group">
+                      <label style="display: block" for="Foto">
+                        <img
+                          src="assets/images/producto.png"
+                          style="
+                            -moz-border-radius: 50px;
+                            border-radius: 36px;
+                            height: 120px;
+                            max-width: 100%;
+                          "
+                          id="foto_visual"
+                        />
+                      </label>
+                      <div class="col-md-6">
+                        <input
+                          name="Foto"
+                          id="Foto"
+                          ngModel
+                          type="file"
+                          accept="image/png, image/jpeg"
+                          class="form-control form-control-sm text-right f-9"
+                          style="display: none"
+                          (change)="CargaFoto($event)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-10">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>Código CUM</label>
+                          <input
+                            name="Codigo_Cum"
+                            type="text"
+                            placeholder=""
+                            class="form-control"
+                            [(ngModel)]="Codigo_Cum"
+                            (change)="
+                              BuscarProducto(
+                                $event.target.value,
+                                FormMedicamento
+                              )
+                            "
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>Concentración</label>
+                          <input
+                            name="Concentracion"
+                            type="text"
+                            placeholder=""
+                            class="form-control"
+                            [(ngModel)]="Concentracion"
+                            [readonly]="Si"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>Código de barras</label>
+                          <input
+                            name="Codigo_Barras"
+                            [(ngModel)]="Codigo_Barras"
+                            (change)="ValidarCodigo()"
+                            type="text"
+                            placeholder=""
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>Subcategoría</label>
+                          <select
+                            class="form-control form-control-sm"
+                            name="Id_Subcategoria"
+                            ngModel
+                            required
+                            (change)="getVariablesDinamic($event.target.value)"
+                          >
+                            <option value="">Seleccione Subcategoría</option>
+                            <option
+                              *ngFor="let Subcategoria of Subcategoria"
+                              [value]="Subcategoria.Id_Subcategoria"
+                            >
+                              {{ Subcategoria.Nombre }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>Presentación</label>
+                          <input
+                            name="Presentacion"
+                            type="text"
+                            placeholder=""
+                            class="form-control"
+                            [(ngModel)]="Presentacion"
+                            [readonly]="Si"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label>Cantidad Presentación</label>
+                          <input
+                            name="Cantidad_Presentacion"
+                            type="number"
+                            ngModel
+                            class="form-control form-control-sm"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>ATC</label>
+                          <input
+                            name="ATC"
+                            type="text"
+                            placeholder=""
+                            class="form-control"
+                            [(ngModel)]="ATC"
+                            [readonly]="Si"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label>Descripcion ATC</label>
+                          <input
+                            name="Descripcion_ATC"
+                            type="text"
+                            placeholder=""
+                            class="form-control"
+                            [(ngModel)]="DescripcionATC"
+                            [readonly]="Si"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label>Embalaje</label>
+                          <input
+                            name="Embalaje"
+                            type="text"
+                            placeholder=""
+                            class="form-control"
+                            [(ngModel)]="Embalaje"
+                            [readonly]="Si"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-7">
+                        <div class="form-group">
+                          <label>Principio Activo</label>
+                          <input
+                            name="Principio_Activo"
+                            type="text"
+                            placeholder=""
+                            class="form-control"
+                            [(ngModel)]="PrincipioActivo"
+                            [readonly]="Si"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Nombre Comercial</label>
+                  <input
+                    name="Nombre_Comercial"
+                    type="text"
+                    placeholder=""
+                    class="form-control"
+                    [(ngModel)]="NombreComercial"
+                    [readonly]="Si"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Invima</label>
+                  <input
+                    name="Invima"
+                    type="text"
+                    placeholder=""
+                    class="form-control"
+                    [(ngModel)]="Invima"
+                    [readonly]="Si"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Laboratorio Generico</label>
+                  <input
+                    name="Laboratorio_Generico"
+                    type="text"
+                    placeholder=""
+                    class="form-control"
+                    [(ngModel)]="LaboratorioGenerico"
+                    [readonly]="Si"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Laboratorio Comercial</label>
+                  <input
+                    name="Laboratorio_Comercial"
+                    type="text"
+                    placeholder=""
+                    class="form-control"
+                    [(ngModel)]="LaboratorioComercial"
+                    [readonly]="Si"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Via De Administracion</label>
+                  <input
+                    name="Via_Administracion"
+                    type="text"
+                    placeholder=""
+                    class="form-control"
+                    [(ngModel)]="ViaAdministracion"
+                    [readonly]="Si"
+                  />
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Tipo Regulación</label>
+                  <select
+                    class="form-control"
+                    name="Tipo_Regulacion"
+                    ngModel
+                    required
+                  >
+                    <option value="">Seleccione un tipo</option>
+                    <option value="Regulado">Regulado</option>
+                    <option value="No Regulado">No Regulado</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Forma Farmaceutica </label>
+                  <input
+                    name="Forma_Farmaceutica"
+                    type="text"
+                    placeholder=""
+                    class="form-control"
+                    [(ngModel)]="Forma_Farmaceutica"
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Fecha Expedición</label>
+                  <input
+                    name="Fecha_Expedicion_Invima"
+                    type="date"
+                    placeholder=""
+                    class="form-control"
+                    [(ngModel)]="FechaExpedicionInvima"
+                    [readonly]="Si"
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Fecha Vencimiento</label>
+                  <input
+                    name="Fecha_Vencimiento_Invima"
+                    type="date"
+                    placeholder=""
+                    class="form-control"
+                    [(ngModel)]="FechaVencimientoInvima"
+                    [readonly]="Si"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Tipo POS</label>
+                  <select class="form-control" name="Tipo_Pos" ngModel required>
+                    <option value="">Seleccione un tipo</option>
+                    <option value="POS">POS</option>
+                    <option value="NO POS">NO POS</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Cantidad</label>
+                  <input
+                    name="Cantidad"
+                    type="number"
+                    placeholder=""
+                    class="form-control"
+                    [(ngModel)]="Cantidad"
+                    [readonly]="Si"
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Cant. Min</label>
+                  <input
+                    name="Cantidad_Minima"
+                    type="number"
+                    min="0"
+                    placeholder=""
+                    class="form-control"
+                    ngModel
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Cant. Max</label>
+                  <input
+                    name="Cantidad_Maxima"
+                    type="number"
+                    placeholder=""
+                    min="0"
+                    class="form-control"
+                    ngModel
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Precio Min</label>
+                  <input
+                    name="Precio_Minimo"
+                    type="number"
+                    min="0"
+                    placeholder=""
+                    class="form-control"
+                    ngModel
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Precio Max</label>
+                  <input
+                    name="Precio_Maximo"
+                    type="number"
+                    min="0"
+                    placeholder=""
+                    class="form-control"
+                    ngModel
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Mantis</label>
+                  <input
+                    name="Mantis"
+                    type="text"
+                    ngModel
+                    class="form-control form-control-sm"
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Unidad De Medida</label>
+                  <input
+                    name="Unidad_Medida"
+                    type="text"
+                    placeholder=""
+                    class="form-control"
+                    [(ngModel)]="UnidadMedida"
+                    [readonly]="Si"
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Peso Regular</label>
+                  <input
+                    name="Peso_Presentacion_Regular"
+                    ngModel
+                    type="text"
+                    class="form-control form-control-sm"
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Peso Mínimo</label>
+                  <input
+                    name="Peso_Presentacion_Minima"
+                    ngModel
+                    type="text"
+                    class="form-control form-control-sm"
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Peso Máximo</label>
+                  <input
+                    name="Peso_Presentacion_Maxima"
+                    ngModel
+                    type="text"
+                    class="form-control form-control-sm"
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Gravado</label>
+                  <select class="form-control" name="Gravado" ngModel required>
+                    <option value="">Seleccione opción</option>
+                    <option value="Si">Si</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Aplica Rotativo CLientes</label>
+                  <select
+                    class="form-control form-control-sm"
+                    name="RotativoC"
+                    ngModel
+                    required
+                  >
+                    <option value="">Seleccione</option>
+                    <option value="Si">Si</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Aplica Rotativo Dispensación</label>
+                  <select
+                    class="form-control form-control-sm"
+                    name="RotativoD"
+                    ngModel
+                    required
+                  >
+                    <option value="">Seleccione</option>
+                    <option value="Si">Si</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div
+                class="col-md-2"
+                *ngFor="let item of fieldDinamic; let i = index"
+              >
+                <label for="">{{ item.label | titlecase }}</label>
+                <input
+                  class="form-control form-control-sm"
+                  [type]="item.type"
+                  (change)="saveVariablesDinamic($event.target.value, item, i)"
+                />
+              </div>
+            </div>
+
+            <hr />
+            <div class="row">
+              <div
+                *ngFor="let f of Lista; let i = index"
+                id="fila{{ i }}"
+                class="col-md-2"
+              >
+                <div class="form-group">
+                  <label for="">{{ f.Nombre }}</label>
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    name="Precio{{ i }}"
+                    [(ngModel)]="f.Precio"
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10"></div>
+        <div class="col-md-2">
+          <button
+            type="button"
+            [swal]="{
+              title: '¿Está Seguro?',
+              text: 'Se Dispone a Guardar Esta Informacion',
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Si, Guardar',
+              cancelButtonText: 'No, Dejame Comprobar!'
+            }"
+            (confirm)="GuardarProducto(FormMedicamento)"
+            [disabled]="!FormMedicamento.valid"
+            class="btn btn-info btn-block btn-sm"
+          >
+            <i class="fa fa-save"></i> Guardar la Informacion
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #confirmacionSwal title="" text="" html="" icon=""></swal>

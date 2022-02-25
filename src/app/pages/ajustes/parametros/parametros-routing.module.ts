@@ -12,7 +12,7 @@ import { LicenciaConduccionComponent } from './vacantes/licencia-conduccion/lice
 import { GeometriasComponent } from './apu/geometrias/geometrias.component';
 import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-geometria.component';
 import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
-import { MaterialesComponent } from './apu/materiales/materiales.component';
+//import { MaterialesComponent } from './apu/materiales/materiales.component';
 import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medidas.component';
 import { MaquinasHerramientasComponent } from './apu/maquinas-herramientas/maquinas-herramientas.component';
 import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-internos.component';
@@ -44,7 +44,7 @@ const routes : Routes = [
     { path: 'apu/editar-geometria/:id', component: CrearGeometriaComponent },
     { path: 'apu/ver-geometria/:id', component: VerGeometriaComponent },
 
-    { path: 'apu/materiales', component: MaterialesComponent },
+    //{ path: 'apu/materiales', component: MaterialesComponent },
 
     { path: 'apu/unidades-medidas', component: UnidadesMedidasComponent },
     { path: 'apu/variables-apu', component: MaquinasHerramientasComponent },

@@ -1,0 +1,68 @@
+<div class="page-body">
+  <div class="row">
+    <div class="col-12">
+
+      <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+
+        <li [ngbNavItem]="1">
+          <a ngbNavLink>Materiales</a>
+          <ng-template ngbNavContent>
+
+           <!-- <app-productos [user]="_user.user" [type]="'Material'"></app-productos>-->
+           <app-materiales></app-materiales>
+
+
+
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a ngbNavLink>Activos Fijos</a>
+          <ng-template ngbNavContent>
+
+            <app-activo-fijo-catalogo [user]="_user.user"> </app-activo-fijo-catalogo>
+
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <a ngbNavLink>Dotacion EPP</a>
+          <ng-template ngbNavContent>
+
+            <app-dotacion-crear [user]="_user.user"></app-dotacion-crear>
+
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="4">
+          <a ngbNavLink>Servicios</a>
+          <ng-template ngbNavContent>
+
+            <app-table-inventary></app-table-inventary>
+
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="5">
+          <a ngbNavLink>CUPS</a>
+          <ng-template ngbNavContent>
+
+            <app-table-inventary></app-table-inventary>
+
+          </ng-template>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+<div [ngbNavOutlet]="nav" class="mt-0"></div>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #notDataTable>
+  <tr>
+    <td colspan="10">
+      <app-not-data [loading]="loading"></app-not-data>
+    </td>
+  </tr>
+</ng-template>

@@ -1,0 +1,316 @@
+
+<div class="row mt-2">
+  <div class="col-12">
+    <div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6">
+        <h5>Productos</h5>
+        <span>Listado de Productos registrados en nuestras bases de datos</span>
+      </div>
+      <div class="col-md-6 text-right">
+        <button type="button" class="pull-right btn btn-success btn-sm" (click)="modal.show()">
+          <i class="fa fa-plus"></i> Agregar Nuevo Producto
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <br />
+
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-striped" style="font-size: 10px">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Embalaje</th>
+              <th>Descripción</th>
+              <th>Codigo Barras</th>
+              <th>Categoria</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="Productos.length && !loading; else notData">
+              <tr
+                *ngFor="let producto of Productos"
+                [ngClass]="{ 'bg-danger': producto.Estado == 'Inactivo' }"
+              >
+                <td>
+                  {{ producto.Nombre_Comercial }}
+                </td>
+                <td>
+                  {{ producto.Embalaje }}
+                </td>
+                <td>
+                  {{ producto.Descripcion_ATC }}
+                </td>
+
+                <td>
+                  {{ producto.Codigo_Barras }}
+                </td>
+                <td>
+                  {{ producto.type }}
+                </td>
+                <td>
+                  <div ngbDropdown class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm waves-effect waves-light"
+                      type="button"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        class="dropdown-item waves-light waves-effect"
+                        (click)="editDotationProduct(producto)"
+                      >
+                        <i class="fas fa-user-edit mr-1"></i>Editar
+                      </a>
+                      <a
+                        class="dropdown-item waves-light waves-effect"
+                        [swal]="{
+                          title: '¿Está Seguro?',
+                          text: 'Se dispone a Eliminar esta Subcategoria, esta acción no se puede revertir',
+                          type: 'warning',
+                          showCancelButton: true,
+                          confirmButtonText: 'Si, Eliminar',
+                          cancelButtonText: 'No, Dejame Comprobar!'
+                        }"
+                        (confirm)="deleteSubcategory(item.Id_subcategoria)"
+                      >
+                        <i class="far fa-trash-alt mr-1"></i>Eliminar</a
+                      >
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="getData($event)"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
+</div>
+
+</div>
+</div>
+
+<app-modal-basic #modal [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <!-- <h4 class="modal-title">{{title}}</h4> -->
+    <h4 class="modal-title">Crear Producto</h4>
+    <button type="button" class="close basic-close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body modal-lg">
+    <form [formGroup]="form">
+      <!-- <input type="hidden" class="form-control"> -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Nombre</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="Nombre_Comercial"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Tipo</label>
+                    <select
+                      class="form-control"
+                      formControlName="Producto_Dotacion_Tipo"
+                    >
+                      <option value="">Seleccione un tipo</option>
+                      <option value="Dotacion">Dotacion</option>
+                      <option value="EPP">Epp</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Embalaje</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="Embalaje"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Tipo Dotación</label>
+                    <ng-select
+                      formControlName="Producto_Dotation_Type_Id"
+                      [items]="DotationType"
+                      bindLabel="text"
+                      bindValue="value"
+                      loadingText="loading"
+                      ngDefaultControl
+                    >
+                    </ng-select>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Codigo Barras</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="Codigo_Barras"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Código</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="Codigo"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Estado</label>
+                    <select class="form-control" formControlName="Status">
+                      <option value="">Seleccione un tipo</option>
+                      <option value="Nuevo">Nuevo</option>
+                      <option value="Usado">Usado</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <label>Descripcion</label>
+                    <textarea
+                      type="text"
+                      class="form-control"
+                      formControlName="Descripcion_ATC"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Categoria</label>
+                    <ng-select
+                      formControlName="Id_Categoria"
+                      [items]="Categorias"
+                      bindLabel="text"
+                      (change)="getSubCategories($event.value)"
+                      bindValue="value"
+                      loadingText="loading"
+                      ngDefaultControl
+                    >
+                    </ng-select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Subcategoría</label>
+                    <ng-select
+                      formControlName="Id_Subcategoria"
+                      [items]="SubCategorias"
+                      bindLabel="text"
+                      (change)="getDinamicField($event.value)"
+                      bindValue="value"
+                      loadingText="loading"
+                      ngDefaultControl
+                    >
+                    </ng-select>
+                  </div>
+                </div>
+
+                <ng-container formArrayName="dynamic">
+                  <ng-container
+                    *ngFor="let item of fieldDinamic.controls; let i = index"
+                  >
+                    <div class="col-md-3" [formGroupName]="i">
+                      <label for="">{{
+                        item["controls"]["label"]["value"] | titlecase
+                      }}</label>
+                      <input
+                        class="form-control form-control-sm"
+                        [type]="item['controls']['type']['value']"
+                        formControlName="valor"
+                      />
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button
+        type="button"
+        class="btn btn-default btn-sm"
+        (click)="closeModal()"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary btn-sm"
+        [swal]="{
+          title: '¿Está Seguro?',
+          text: 'Se dispone a Guardar este Producto',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Si, Guardar',
+          cancelButtonText: 'No,Dejame Comprobar!'
+        }"
+        (confirm)="saveProduct()"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<ng-template #notData>
+  <tr>
+    <td colspan="100%">
+      <app-not-data [loading]="loading"></app-not-data>
+    </td>
+  </tr>
+</ng-template>

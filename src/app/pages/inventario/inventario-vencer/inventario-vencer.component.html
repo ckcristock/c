@@ -1,0 +1,107 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-12 filter-bar">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h5>Productos a Vencer</h5>
+                            <span>Todas los productos a vencer </span>
+                        </div>
+                        <!-- <div class="col-md-3" style="text-align:right;">
+                            <div class="form-group t-10">
+                                <div class="card-header-left">
+                                    <button type="button" class="pull-left btn btn-primary btn-sm mr-2" [routerLink]="['/base/proveedorcrear']">
+                                      <i class="fa fa-plus"></i>
+                                      Agregar Nuevo Proveedor
+                                  </button> &nbsp;
+                                    <a href="{{globales.ruta}}php/proveedores/exportar.php?Tipo=Proveedor" target="_blank" class="pull-left btn btn-primary btn-sm">
+                                        <i class="fa fa-download"></i> Exportar
+                                    </a>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Lote</th>
+                                        <th>Cantidades</th>
+                                        <th>Fecha Entrega</th>
+                                        <th>Fecha Vencimiento</th>
+                                        <th>Meses Devolución</th>
+                                        <th>Proveedor</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="tabla-filtro" style="max-width: 200px; width: 200px !important;">
+                                            <input type="text" class="form-control form-control-sm " [(ngModel)]="filtro_nom" (change)="filtros()" placeholder="Filtro Producto">
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" [(ngModel)]="filtro_lot" (change)="filtros()" class="form-control form-control-sm" placeholder="Filtro Lote">
+                                        </th>
+
+                                        <th class="tabla-filtro">
+                                            <input type="text" class="form-control form-control-sm" placeholder="">
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" class="form-control form-control-sm" placeholder="">
+                                        </th>
+                                        <th class="tabla-filtro">
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" class="form-control form-control-sm" placeholder="">
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" [(ngModel)]="filtro_pro" (change)="filtros()" class="form-control form-control-sm" placeholder="Filtro Proveedor">
+                                        </th>
+
+                                        <th class="tabla-filtro">
+                                        </th>
+                                        <th class="tabla-filtro">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngIf="Cargando">
+                                        <td colspan="9" class="text-center">
+                                            <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                                            <span class="sr-only">Cargando...</span>
+                                            <h4>Cargando Proveedores...</h4>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="Vencidos.length == 0 && !Cargando">
+                                        <td colspan="9" class="text-center">
+                                            <i class="fa fa-exclamation-circle fa-5x"></i>
+                                            <h4>No Existen Productos para mostrar</h4>
+                                        </td>
+                                    </tr>
+                                    <tr *ngFor="let vencido of Vencidos">
+                                        <td>{{ vencido.NomProducto }}</td>
+                                        <td>{{ vencido.Lote }}</td>
+                                        <td>{{ vencido.Cantidades }}</td>
+                                        <td>{{ vencido.FechaEntrega }}</td>
+                                        <td>{{ vencido.Fecha_Vencimiento }}</td>
+                                        <td>{{ vencido.Meses_Devolucion }}</td>
+                                        <td>{{ vencido.NomProveedor }}</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <span *ngIf="Vencidos.length>0">{{(page*10)-10+1}} al {{((page*10) > TotalItems ? TotalItems :
+                      (page*10))}} de {{ TotalItems }}</span>
+                    <ngb-pagination [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="10" [rotate]="true" size="sm" (pageChange)="paginacion()" [boundaryLinks]="true"></ngb-pagination>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

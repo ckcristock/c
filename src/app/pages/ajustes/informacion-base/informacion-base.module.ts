@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { EmpresasComponent } from './empresas/empresas.component';
 import { CommonModule } from '@angular/common';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+
+
 import { InformacionBaseRoutingModule } from './informacion-base-routing.module';
 import { FuncionariosComponent } from './funcionarios/funcionarios.component';
 import { RegimenesNivelesComponent } from './regimenes-niveles/regimenes-niveles.component';
@@ -44,6 +48,16 @@ import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
 import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { CatalogoComponent } from './catalogo/catalogo.component';
+import { TableProductosCatalogoComponent } from './catalogo/components/table-productos-catalogo/table-productos-catalogo.component';
+import { ActivoFijoCatalogoComponent } from './catalogo/components/activo-fijo-catalogo/activo-fijo-catalogo.component';
+import { ProductoComponent } from './productos/producto/producto.component';
+import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
+import { CrearProductoComponent } from './productos/crear-producto/crear-producto.component';
+import { ProductosComponent } from './productos/productos.component';
+import { MaterialesComponent } from './catalogo/components/materiales/materiales.component';
+import { DotacionCrearComponent } from './catalogo/components/dotacion-crear/dotacion-crear.component';
+//import { MaterialesComponent } from '../parametros/apu/materiales/materiales.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +90,16 @@ import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap
     ArlComponent,
     CajaCompensacionComponent,
     FondoCesantiasComponent,
+    CatalogoComponent,
+    TableProductosCatalogoComponent,
+    ActivoFijoCatalogoComponent,
+    ProductoComponent,
+    EditarProductoComponent,
+    CrearProductoComponent,
+    ProductosComponent,
+    MaterialesComponent,
+    DotacionCrearComponent
+
   ],
 
   imports: [
@@ -91,12 +115,13 @@ import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap
     NgbDropdownModule,
     NgbCollapseModule,
     PipesModule,
-    NgbNavModule,
     ReactiveFormsModule,
     ArchwizardModule,
     NgbNavModule,
     NgbTooltipModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    PerfectScrollbarModule,
+    SweetAlert2Module.forRoot(),
   ],
 })
 export class InformacionBaseModule {}

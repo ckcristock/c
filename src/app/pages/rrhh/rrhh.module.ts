@@ -22,8 +22,12 @@ import { NovedadesComponent } from './novedades/novedades.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { VacantesVerComponent } from './vacantes/vacantes-ver/vacantes-ver.component';
 import { CrearNovedadComponent } from './novedades/crear-novedad/crear-novedad.component';
+
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
+import { DotacionEntradasComponent } from './dotacion/dotaciones/dotacion-entradas/dotacion-entradas.component';
+import { DotacionSalidasComponent } from './dotacion/dotaciones/dotacion-salidas/dotacion-salidas.component';
+
 import { TableInventaryComponent } from './dotacion/dotaciones/table-inventary/table-inventary.component';
 import { ActividadesComponent } from './actividades/actividades.component';
 
@@ -59,8 +63,8 @@ import { RotativoComponent } from './horas-extras/lista-fijos/rotativo/rotativo.
 import { EditDiarioFixedComponent } from './horas-extras/lista-fijos/edit-diario-fixed/edit-diario-fixed.component';
 import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
 import { TableInventaryEppComponent } from './dotacion/dotaciones/table-inventary-epp/table-inventary-epp.component';
-import { DotacionEntradasComponent } from './dotacion/dotaciones/dotacion-entradas/dotacion-entradas.component';
-import { DotacionSalidasComponent } from './dotacion/dotaciones/dotacion-salidas/dotacion-salidas.component';
+
+
 import { TableStockComponent } from './dotacion/dotaciones/table-stock/table-stock.component';
 import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/category-stock.component';
 import { DescargoComponent } from './procesos/disciplinarios/descargo/descargo.component';
@@ -77,8 +81,12 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     NovedadesComponent,
     VacantesVerComponent,
     CrearNovedadComponent,
+
     InventarioDotacionComponent,
+    DotacionEntradasComponent,
+    DotacionSalidasComponent,
     DotacionesComponent,
+
     TableInventaryComponent,
     AsignacionTurnosComponent,
     SemanaTurnoComponent,
@@ -108,8 +116,6 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     EditDiarioFixedComponent,
     AlmuerzosComponent,
     TableInventaryEppComponent,
-    DotacionEntradasComponent,
-    DotacionSalidasComponent,
     TableStockComponent,
     CategoryStockComponent,
     DescargoComponent,

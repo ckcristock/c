@@ -20,7 +20,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { CrearGeometriaComponent } from './apu/geometrias/crear-geometria/crear-geometria.component';
 import { PipesModule } from '../../../core/pipes/pipes.module';
 import { VerGeometriaComponent } from './apu/geometrias/ver-geometria/ver-geometria.component';
-import { MaterialesComponent } from './apu/materiales/materiales.component';
+//import { MaterialesComponent } from './apu/materiales/materiales.component';
 import { UnidadesMedidasComponent } from './apu/unidades-medidas/unidades-medidas.component';
 import { MaquinasHerramientasComponent } from './apu/maquinas-herramientas/maquinas-herramientas.component';
 import { ProcesosInternosComponent } from './apu/procesos-internos/procesos-internos.component';
@@ -39,12 +39,12 @@ import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.compo
 
 @NgModule({
     declarations : [
-        NotasTecnicasComponent, 
-        // PerfilesComponent, 
-        ZonasComponent, 
-        RgpComponent, 
-        EpsComponent,  
-        BancosComponent, 
+        NotasTecnicasComponent,
+        // PerfilesComponent,
+        ZonasComponent,
+        RgpComponent,
+        EpsComponent,
+        BancosComponent,
         CuentasBancariasComponent,
         HotelesComponent,
         TaxisComponent,
@@ -52,7 +52,7 @@ import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.compo
         GeometriasComponent,
         CrearGeometriaComponent,
         VerGeometriaComponent,
-        MaterialesComponent,
+        //MaterialesComponent,
         UnidadesMedidasComponent,
         MaquinasHerramientasComponent,
         ProcesosInternosComponent,
@@ -66,7 +66,7 @@ import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.compo
         EstimacionViaticosValuesComponent,
         ValorAlmuerzosComponent
     ],
-    imports: [ 
+    imports: [
         ParametrosRoutingModule,
         ReactiveFormsModule,
         ComponentsModule,

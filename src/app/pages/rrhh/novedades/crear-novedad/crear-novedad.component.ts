@@ -73,13 +73,9 @@ export class CrearNovedadComponent implements OnInit {
   }
 
   obtenerTipoNovedad(value) {
-    let novedad = this.disabilityLeaves.find(
-      (novedad) => novedad.value === value
-    );
+    let novedad = this.disabilityLeaves.find((novedad) => novedad.value === value);
     let tipo = novedad.text.split(' ')[0];
-    tipo == 'Vacaciones'
-      ? (this.vacationSelected = true)
-      : (this.vacationSelected = false);
+    tipo == 'Vacaciones' ? (this.vacationSelected = true) : (this.vacationSelected = false);
     this.form.patchValue({ disability_type: tipo });
   }
 
@@ -104,9 +100,7 @@ export class CrearNovedadComponent implements OnInit {
   }
   sendData() {
     this.form.get('disability_type').enable();
-    this._payrollFactor
-      .savePayrollFactor(this.form.value)
-      .subscribe((r: any) => {
+    this._payrollFactor.savePayrollFactor(this.form.value).subscribe((r: any) => {
         if (r.code == 200) {
           Swal.fire({
             title: 'Opersación exitosa',
@@ -147,10 +141,7 @@ export class CrearNovedadComponent implements OnInit {
       if (date_start.value) {
         const date_end = this.form.get('date_end');
         const payback_date = this.form.get('payback_date');
-
-        const finalDate = moment(date_start.value)
-          .add(r, 'days')
-          .format('YYYY-MM-DD');
+        const finalDate = moment(date_start.value).add(r, 'days').format('YYYY-MM-DD');
 
         date_end.patchValue(finalDate);
         payback_date.patchValue(finalDate);

@@ -1,0 +1,102 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header ">
+                    <h5>Actas de Recepción Aprobadas</h5>
+                    <span>Actas de Recepción que faltan ser acomodadas en las estibas</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width:60px;"></th>
+                                        <th style="width:100px;">Código Acta</th>
+                                        <th style="width:120px;">Fecha Acta</th>
+                                        <th style="width:100px;">Orden Compra</th>
+                                        <th style="width:120px;">Fecha Compra</th>
+                                        <th style="width:100px;">Facturas</th>
+                                        <th>Proveedor</th>
+                                        <th style="width:60px;">Acciones</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="tabla-filtro"></th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" [(ngModel)]="filtro_cod" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Acta">
+                                        </th>
+                                        <th class="tabla-filtro" style="text-align:left">
+                                            <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" [(ngModel)]="filtro_compra" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Compra">
+                                        </th>
+                                        <th class="tabla-filtro" style="text-align:left">
+                                            <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha2" (dateRangeChanged)="dateRangeChanged2($event)" placeholder="Filtro Fecha Compra"></my-date-range-picker>
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" [(ngModel)]="filtro_fact" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Facturas">
+                                        </th>
+                                        <th class="tabla-filtro">
+                                            <input type="text" [(ngModel)]="filtro_proveedor" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Proveedor">
+                                        </th>
+                                        <th class="tabla-filtro"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngIf="Cargando">
+                                        <td colspan="8" class="text-center">
+                                            <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                                            <span class="sr-only">Cargando...</span>
+                                            <h4>Cargando Actas Aprobadas...</h4>
+                                        </td>
+                                    </tr>
+                                    <tr *ngFor="let item of actarecepciones">
+
+                                        <td>
+                                            <!-- TODO image person -->
+                                           <!--  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen">
+                                            <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen"> -->
+                                        </td>
+                                        <td><strong>{{ item.Codigo }}</strong></td>
+                                        <td>{{ item.Fecha_Creacion | date: 'dd/MM/yyyy' }}</td>
+                                        <td><strong>{{ item.Codigo_Compra_N!='' ? item.Codigo_Compra_N : item.Codigo_Compra_I }}</strong>
+                                        </td>
+                                        <td *ngIf="item.Fecha_Compra_N">
+                                            {{ item.Fecha_Compra_N!='INTERNA' ? (item.Fecha_Compra_N | date: 'dd/MM/yyyy') : item.Fecha_Compra_N }}
+
+                                        </td>
+                                        <td *ngIf="item.Fecha_Compra_I">
+                                            {{ item.Fecha_Compra_I!='INTERNA' ? (item.Fecha_Compra_I | date: 'dd/MM/yyyy') : item.Fecha_Compra_I }}
+                                        </td>
+                                        <td>{{ item.Facturas }}</td>
+                                        <td class="text-left"><strong>{{ item.Proveedor }}</strong></td>
+                                        <td>
+                                            <div class="text-center">
+                                                <div ngbDropdown class="dropdown-primary">
+                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                    <div ngbDropdownMenu>
+
+                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="" [routerLink]="['/inventario/acta-recepcion-acomodar',item.Tipo_Acomodar,item.Id_Acta,'Bodega_Nuevo',0]">
+                                                            <i class="ti-eye"></i> Acomodar</a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <ngb-pagination style="margin-top:20px;" class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" size="sm" (pageChange)="paginacion()" [pageSize]="10" [boundaryLinks]="true">
+                    </ngb-pagination>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

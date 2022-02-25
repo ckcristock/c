@@ -14,6 +14,10 @@ import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
 import { ConfiguracionEmpresaComponent } from '../configuracion/configuracion-empresa/configuracion-empresa.component';
+import { CatalogoComponent } from './catalogo/catalogo.component';
+import { CrearProductoComponent } from './productos/crear-producto/crear-producto.component';
+import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
+import { ProductoComponent } from './productos/producto/producto.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
@@ -34,7 +38,13 @@ const routes: Routes = [
   { path: 'arl', component: ArlComponent },
   { path: 'caja-compensacion', component: CajaCompensacionComponent },
   { path: 'fondo-cesantias', component: FondoCesantiasComponent },
-  { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent }
+  { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent },
+
+   /**Productos */
+   { path: 'catalogo', component: CatalogoComponent },
+   { path: 'catalogo/crear', component: CrearProductoComponent },
+   { path: 'catalogo/editar/:id', component: EditarProductoComponent },
+   { path: 'catalogo/ver/:id', component: ProductoComponent },
 
 ];
 

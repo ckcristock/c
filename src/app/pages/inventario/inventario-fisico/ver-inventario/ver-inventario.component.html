@@ -1,0 +1,143 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <!--Encabezado-->
+                    <div class="row m-2">
+                        <div class="col-6">
+                            <div class="col-md-6 p-0">
+                                <div class="invoice-box row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-responsive invoice-table table-borderless P-0">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:100px;">
+                                                        <!-- TODO Imprimir etiqueta -->
+                                                        <!-- <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="Pro-H Software"> -->
+                                                    </td>
+                                                    <td>
+                                                        <!-- {{globales.Nombre}}
+                                                        <br> {{globales.Nit}}
+                                                        <br> {{globales.Direccion}}
+                                                        <br> {{globales.Telefono}} -->
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="row text-right" style="margin-right: 5px;">
+                                <div class="col-sm-12">
+                                    <h4>Inventario Fisico : {{id_inventario}}</h4>
+                                    <h4>Grupo: {{grupo}} </h4>
+                                    <h4>Realizado: {{fecha_realizado}} </h4>
+                                    <div class="clearfix"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row ">
+                        <div class="col-md-12 col-sm-12 listado-sin-diferencia">
+                            <h4 class="text-center" style="color:blue;">Listado de Productos </h4>
+                            <table class="table">
+                                <thead class="thead-default">
+                                    <tr>
+                                        <th class="text-center" style="width:60px;">Documento</th>
+                                        <th class="text-center" style="width:60px;">Producto</th>
+                                        <th class="text-center" style="width:90px;">Estiba</th>
+                                        <th class="text-center" style="width:80px;">1er Conteo</th>
+                                        <th class="text-center" style="width:100px;">Fecha 1er Conteo </th>
+                                        <th class="text-center" style="width:80px;">2do Conteo</th>
+                                        <th class="text-center" style="width:110px;">Fecha 2do Conteo </th>
+                                        <th class="text-center" style="width:90px;">Conteo Auditor</th>
+                                        <th class="text-center" style="width:100px;">Cant Inventario</th>
+                                        <th class="text-center" style="width:80px;">Lote </th>
+                                        <th class="text-center" style="width:80px;">Diferencia</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="inventario.length>0">
+                                    <tr *ngIf="Cargando">
+                                        <td colspan="11" class="text-center">
+                                            <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                                            <span class="sr-only">Cargando...</span>
+                                            <h4>Cargando Productos ...</h4>
+                                        </td>
+                                    </tr>
+
+                                    <tr *ngFor="let producto of inventario; let i=index">
+                                        <td class="text-center">
+                                            <strong>{{ producto.Id_Doc_Inventario_Fisico }}</strong><br>
+
+                                        </td>
+                                        <td>
+                                            <strong>{{ producto.Nombre_Comercial }}</strong><br>
+                                            <span class="text-muted">{{ producto.Nombre_Producto }}</span>
+                                        </td>
+
+                                        <td class="text-center">
+                                            {{producto.Nombre_Estiba}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{producto.Primer_Conteo}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{producto.Fecha_Primer_Conteo}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{producto.Segundo_Conteo}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{producto.Fecha_Segundo_Conteo}}
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="producto.Cantidad_Auditada">{{producto.Cantidad_Auditada}}</span>
+
+                                        </td>
+                                        <td class="text-center">
+                                            {{producto.Cantidad_Inventario}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{producto.Lote}}
+                                        </td>
+                                        <td class="text-center font-size: 14px;font-weight: bold">
+                                            <span [ngClass]="{'text-danger':producto.Cantidad_Diferencial<0, 'text-success':producto.Cantidad_Diferencial>0 }">
+                        <span *ngIf="producto.Cantidad_Diferencial>0">+</span> {{ producto.Cantidad_Diferencial }}
+                                            </span>
+
+                                        </td>
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger btn-sm " routerLink="/inventario/inventario-fisico">
+
+                <i class="fa fa-arrow-left"></i> Volver</button>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,220 @@
+<!-- <div class="page-body"> -->
+  <div class="row">
+    <div class="col-lg-4 col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h6>Seguimiento de la Remisión</h6>
+        </div>
+        <div class="card-block">
+          <ul class="feed-blog ">
+            <li class="active-feed contenido2" *ngFor="let Actividad of Actividades">
+              <div class="feed-user-img">
+                <a *ngIf="Actividad.Imagen!=''" href="javascript:">
+                  <!-- <img class="img-radius img-40" src="{{env.ruta}}/IMAGENES/FUNCIONARIOS/{{Actividad.Imagen}}" alt=""> -->
+                </a>
+                <a *ngIf="Actividad.Imagen==''" href="javascript:">
+                  <img class="img-radius img-40" src="assets/images/user.jpg" alt="chat-user">
+                </a>
+              </div>
+              <h6 style="font-size: 9px !important;">
+                <span
+                  class="label {{Actividad.Estado=='Creacion' ? 'label-info' : '' }} {{Actividad.Estado=='Edicion' ? 'label-warning' : '' }}{{Actividad.Estado=='Anulada' ? 'label-danger' : '' }}{{Actividad.Estado=='Alistamiento' || Actividad.Estado=='Fase 1' || Actividad.Estado=='Fase 2' ? 'label-inverse' : '' }}{{Actividad.Estado=='Enviada' ? 'label-success ' : '' }} {{Actividad.Estado=='Recibida' ? 'label-1 ' : '' }}{{Actividad.Estado=='Facturada' ? 'label-2 ' : '' }}">{{Actividad.Estado}}</span>
+                {{Actividad.Funcionario}}
+
+              </h6>
+              <p>{{Actividad.Detalles}} <br>
+                <small class="text-muted"> {{Actividad.Fecha}}</small>
+              </p>
+            </li>
+
+          </ul>
+          <button *ngIf="remision.Id_Factura!=''" [routerLink]="['/facturasventasver',remision.Id_Factura ]"
+            class="btn btn-block btn-info"><i class="fa fa-file"></i> Ver Factura</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12">
+      <div class="card ">
+        <div class="row invoice-contact  p-4" style="align-items:flex-start !important;">
+          <div class="col-md-7">
+            <div class="invoice-box row">
+              <div class="col-sm-12">
+                <table class="table table-responsive invoice-table table-borderless">
+                  <tbody>
+                    <tr>
+                      <td style="width:100px;">
+                        <img src="assets/images/logo-color.png" class="m-b-10 img-60" alt="Pro-H Software">
+                      </td>
+                      <!-- <td>
+                        {{env.Nombre}}
+                        <br> {{env.Nit}}
+                        <br> {{env.Direccion}}
+                        <br> {{env.Telefono}}
+                      </td> -->
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="row text-right" style="margin:0;">
+              <div class="col-sm-7">
+                <h4>{{remision.Codigo}}</h4>
+                <h6>{{remision.Fecha| date: 'dd/MM/yyyy'}}</h6>
+                <h4>{{remision.Tipo}}</h4>
+                <div class="clearfix"></div>
+              </div>
+              <div class="col-sm-5" style="padding-left:0;">
+                <!-- <img *ngIf="remision.Codigo_Qr!=''" src="{{env.ruta}}IMAGENES/QR/{{remision.Codigo_Qr}}" class="img-fluid" style="margin-top: -20px;"> -->
+                <img *ngIf="remision.Codigo_Qr==''" src="assets/images/sinqr.png" class="img-fluid"
+                  style="margin-top: -20px;">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+
+          <div class="row invoive-info" style="margin-bottom: 0;">
+            <div class="col-sm-12">
+              <table class="table invoice-detail-table tabla">
+                <thead>
+                  <tr class="thead-default">
+                    <th colspan="2" style="width:200px; text-align: center">Origen</th>
+                    <th colspan="2" style="width:200px;">Destino</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="width:100px;">
+                      <p>
+                        <strong>{{origen.Nombre}}</strong>
+                      </p>
+                    </td>
+                    <td style="width:100px;">
+                      <p>
+                        <strong> Dirección:</strong> {{origen.Direccion}}
+                      </p>
+                    </td>
+                    <td style="width:100px;">
+                      <p><strong> {{destino.Nombre}}</strong>
+                      </p>
+                    </td>
+                    <td style="width:100px;">
+                      <p><strong> Dirección:</strong>{{destino.Direccion}}</p>
+                    </td>
+
+                  </tr>
+                  <tr>
+                    <td style="width:100px;">
+                      <p>
+                        <strong>Teléfono:</strong> {{origen.Telefono}}
+                      </p>
+
+                    </td>
+                    <td style="width:100px;">
+                      <p>
+                        <strong> Correo:</strong> {{origen.Correo}}
+                      </p>
+                    </td>
+                    <td style="width:100px;">
+                      <p><strong> Teléfono:</strong>{{destino.Celular}}
+                      </p>
+                    </td>
+                    <td style="width:100px;">
+                      <p><strong> Correo:</strong>{{destino.Correo}}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr>
+          <div class="row m-0">
+            <div class="col-md-12  ver">
+              <h6>Observaciones</h6>
+              <p>{{remision.Observaciones}}</p>
+            </div>
+          </div>
+
+
+          <div class="row" style="margin-top:30px;">
+            <div class="col-sm-12">
+              <div class="table-responsive">
+                <table class="table  invoice-detail-table space">
+                  <thead>
+                    <tr class="thead-default">
+                      <th>Producto</th>
+                      <th style="width:10px;"></th>
+                      <th style="width:40px;">Lote</th>
+                      <th style="width:70px;">Fecha Vencimiento</th>
+                      <th style="width: 80px">Cantidad</th>
+                      <th *ngIf="remision.Tipo == 'Cliente'" style="width: 80px">Precio</th>
+                      <th *ngIf="remision.Tipo == 'Cliente'" style="width: 80px">Descuento</th>
+                      <th *ngIf="remision.Tipo == 'Cliente'" style="width: 80px">IVA</th>
+                      <th *ngIf="remision.Tipo == 'Cliente'" style="width: 80px">Total</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of productos; let i = index" id="fila{{i}}">
+                      <td>{{item.Nombre_Producto}}</td>
+                      <td><i *ngIf="item.Id_Categoria==9" class="fa fa-registered"></i></td>
+                      <td>{{item.Lote}}</td>
+                      <td>{{item.Fecha_Vencimiento}}</td>
+                      <td>{{item.Cantidad}}</td>
+                      <td *ngIf="remision.Tipo == 'Cliente'">{{item.Precio}}</td>
+                      <td *ngIf="remision.Tipo == 'Cliente'">{{item.Descuento}}</td>
+                      <td *ngIf="remision.Tipo == 'Cliente'">{{item.Impuesto}}</td>
+                      <td *ngIf="remision.Tipo == 'Cliente'">{{item.Subtotal}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+          <!--<div *ngIf="remision.Tipo==Cliente" class="row">
+            <div class="col-sm-12">
+              <table class="table table-responsive invoice-table invoice-total">
+                <tbody>
+                  <tr>
+                    <th>Productos Solicitados :</th>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th>Productos Entregados :</th>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th>Diferencia :</th>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>-->
+
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="pull-right">
+                <button type="button" class="btn btn-danger btn-sm m-l-4 m-r-1 mx-1"
+                  [routerLink]="['/inventario/remisiones']">
+                  <i class="fa fa-sign-out"></i> Salir</button>
+                <a type="button" class="btn btn-success btn-sm m-l-5"
+                  href="{{env.ruta}}/php/archivos/descarga_pdf.php?tipo=Remision&id={{id}}" target="_blank">
+                  <i class="fa fa-print"></i> Imprimir</a>
+                <a type="button" class="btn btn-info btn-sm m-l-5 mx-1"
+                  href="{{env.ruta}}/php/archivos/descarga_pdf_price.php?tipo=Remision&id={{id}}" target="_blank">
+                  <i class="fa fa-print"></i> Imprimir con Precio</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- </div> -->

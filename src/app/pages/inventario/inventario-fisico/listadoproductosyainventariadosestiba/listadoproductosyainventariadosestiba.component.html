@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <h4 class="text-center" style="color:blue;">Listado de Productos ya Inventariados</h4>
+        <table class="table">
+            <thead class="thead-default">
+                <tr>
+                    <th style="width:550px;">Producto</th>
+                    <th style="width:300px;">Lab.</th>
+                    <th class="width:400px">Lotes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of Productos; let i = index" id="fila{{i}}">
+
+                    <td id="hilera{{i}}">{{ item.Nombre }}</td>
+                    <td>{{ item.Laboratorio_Comercial }}</td>
+                    <td>
+                        <table class="table table-mini">
+                            <tr>
+                                <td>Lote</td>
+                                <td style="width: 200px">Vencimiento</td>
+                                <td style="width: 60px">Cantidad</td>
+                                <td style="width: 10px"></td>
+                            </tr>
+                            <tr *ngFor="let lote of item.Lotes; let j=index">
+
+                                <td>
+                                    <span *ngIf="lote.AgregarLote == 'none' || lote.AgregarLote == undefined">{{lote.Lote}}</span>
+                                    <input *ngIf="lote.AgregarLote == 'block'" type="text" class="form-control form-control-xs" [(ngModel)]="lote.Lote" (change)="reValidarLote(i,j)">
+                                </td>
+                                <td>
+                                    <span *ngIf="lote.AgregarLote == 'none' || lote.AgregarLote == undefined">{{lote.Fecha_Vencimiento}}</span>
+                                    <input *ngIf="lote.AgregarLote == 'block'" type="date" class="form-control form-control-xs" [(ngModel)]="lote.Fecha_Vencimiento" (blur)="reValidarFecha(i,j)">
+                                </td>
+                                <td>
+                                    <span *ngIf="lote.AgregarLote == 'none' || lote.AgregarLote == undefined">{{lote.Cantidad_Encontrada}}</span>
+                                    <input *ngIf="lote.AgregarLote == 'block'" type="number" min="0" class="form-control form-control-xs" [(ngModel)]="lote.Cantidad_Encontrada" min="0" onkeypress="return event.charCode >= 48  && event.charCode <= 57 " (blur)="reValidarCantidad(i,j)">
+                                </td>
+                                <td>
+                                    <!-- Agregar nuevo lote -->
+                                    <button style="padding: 0px !important" *ngIf="(item.Lotes.length-1)==j  && lote.AgregarLote != 'block'" class="btn btn-primary btn-sm" (click)="mostrarUltimo(i, j)"><i style="padding-left: 5px" class="fa fa-plus"></i></button>
+
+                                    <!-- Editar Lote -->
+                                    <button style="padding: 0px !important" *ngIf="(item.Lotes.length-1)!=j && lote.AgregarLote != 'block'" class="btn btn-secondary btn-sm" (click)="editLote(i, j)"><i style="padding-left: 5px" class="fas fa-edit"></i> </button>
+                                    <!-- Guardar Lote -->
+                                    <button style="padding: 0px !important; margin: 0;" *ngIf="lote.AgregarLote == 'block'" class="btn btn-success btn-sm" (click)="reValidarCantidad(i,j)"><i style="padding-left: 5px" class="fa fa-check-circle"></i> </button>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

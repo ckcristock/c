@@ -1,0 +1,607 @@
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-md-offset-4">
+    <form #FormCompra="ngForm">
+      <div class="card">
+        <div class="card-header">
+          <div
+            class="row invoice-contact"
+            style="align-items: flex-start !important"
+          >
+            <div class="col-md-8">
+              <div class="invoice-box row">
+                <div class="col-sm-12">
+                  <table
+                    class="
+                      table table-responsive
+                      invoice-table
+                      table-borderless
+                    "
+                    style="text-align: left; font-size: 12px"
+                  >
+                    <tbody>
+                      <tr>
+                        <td style="width: 100px">
+                          <!--  <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="Pro-H Software"> -->
+                        </td>
+                        <td>
+                          <!-- TODO DATOS DE EMPRESA -->
+                          <!-- {{globales.Nombre}}
+                                                    <br> {{globales.Nit}}
+                                                    <br> {{globales.Direccion}}
+                                                    <br> {{globales.Telefono}} -->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="row text-right" style="margin-right: 5px">
+                <div class="col-sm-12">
+                  <h4>Nueva Orden de Compra</h4>
+                  <div class="clearfix"></div>
+                  <h6>{{ fecha | date: "dd/MM/yyyy" }}</h6>
+
+                  <!-- <span class="f-right"> -->
+                  <div class="row">
+
+                    <div class="col-sm-6">
+                      <label>Tipo De Compra</label>
+                      <select
+                        name="Tipo"
+                        [(ngModel)]="Tipo"
+                        class="form-control form-control-sm"
+                        required
+                      >
+                        <option value="Recurrente" selected>Recurrente</option>
+                        <option value="Ocasional">Ocasional</option>
+                      </select>
+                    </div>
+
+                    <div class="col-sm-6">
+                      <label>Tipo De Bodega</label>
+                      <select
+                        name="TipoBodega"
+                        [(ngModel)]="TipoBodega"
+                        class="form-control form-control-sm tipo-dis-select"
+                        (change)="TipoBodega = $event.target.value"
+                        required
+                      >
+                        <option value="Bodega" selected>Bodega</option>
+                        <option value="Punto">Punto Dispensación</option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- </span> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="row invoive-info" style="margin-bottom: 0">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Proveedor</label>
+                <input
+                  type="text"
+                  name="NombreProveedor"
+                  id="NombreProveedor"
+                  class="form-control prod f-9"
+                  [(ngModel)]="NombreProveedor"
+                  [ngbTypeahead]="search2"
+                  [resultTemplate]="rt2"
+                  [inputFormatter]="formatter2"
+                  (ngModelChange)="BuscarProveedor(NombreProveedor)"
+                  required
+                />
+
+                <input
+                  ngModel="{{ Id_Proveedor }}"
+                  type="hidden"
+                  name="Id_Proveedor"
+                  id="Id_Proveedor"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label *ngIf="TipoBodega == 'Bodega'">Bodega</label>
+                <select
+                  *ngIf="TipoBodega == 'Bodega'"
+                  name="Id_Bodega_Nuevo"
+                  class="form-control form-control-sm texto"
+                  required
+                  ngModel
+                >
+                  <option [ngValue]="undefined">Seleccione una Bodega</option>
+                  <option
+                    *ngFor="let Bodega of Bodegas; let i = index"
+                    [value]="Bodega.Id_Bodega_Nuevo"
+                  >
+                    {{ Bodega.Nombre }}
+                  </option>
+                </select>
+                <label *ngIf="TipoBodega == 'Punto'">Punto Dispensación</label>
+                <select
+                  *ngIf="TipoBodega == 'Punto'"
+                  name="Id_Punto_Dispensacion"
+                  class="form-control form-control-sm texto"
+                  required
+                  ngModel
+                >
+                  <option [ngValue]="undefined">Seleccione un Punto</option>
+                  <option
+                    *ngFor="let item of puntos; let i = index"
+                    [value]="item.Id_Punto_Dispensacion"
+                  >
+                    {{ item.Nombre }}
+                  </option>
+                </select>
+                <input
+                  type="text"
+                  [(ngModel)]="user"
+                  name="Identificacion_Funcionario"
+                  readonly
+                  hidden
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Fecha Probable de Entrega</label>
+                <input
+                  ngModel
+                  type="date"
+                  name="Fecha_Entrega_Probable"
+                  placeholder=""
+                  required
+                  class="form-control form-control-sm texto"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row invoive-info" style="margin-bottom: 0">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Observaciones</label>
+                <textarea
+                  ngModel
+                  name="Observaciones"
+                  placeholder="Digite detalles importantes de la orden de compra"
+                  type="text"
+                  rows="3"
+                  class="form-control"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 30px">
+            <div class="col-sm-12">
+              <table class="table invoice-detail-table">
+                <thead>
+                  <tr class="thead-default">
+                    <th>Producto</th>
+                    <th style="width: 50px"></th>
+                    <th style="width: 20px">Presentación</th>
+                    <th *ngIf="Rotativo" style="width: 20px">Rotativo</th>
+                    <th style="width: 20px">Cantidad</th>
+                    <th style="width: 20px">Costo</th>
+                    <th style="width: 20px">IVA</th>
+                    <th style="width: 20px">Subtotal</th>
+                    <th style="width: 10px"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let item of Lista_Productos; let i = index"
+                    id="fila{{ i }}"
+                  >
+                    <td>
+                      <input
+                        type="hidden"
+                        name="productoModel{{ i }}"
+                        [ngModel]="item.producto"
+                      />
+                      <input
+                        *ngIf="item.Id_Producto == ''"
+                        type="text"
+                        name="producto{{ i }}"
+                        id="Producto{{ i }}"
+                        class="form-control form-control-sm f-9 input-product"
+                        autocomplete="off"
+                        [value]="item.producto"
+                        [readonly]="item.producto != ''"
+                      />
+                      <label *ngIf="item.Id_Producto != ''">{{
+                        item.producto
+                      }}</label>
+                      <!-- <input type="text" name="producto{{i}}" id="Producto{{i}}" class="form-control form-control-sm f-9 input-product" [ngModel]="item.producto"
+                          [ngbTypeahead]="search1" [resultTemplate]="rt" [inputFormatter]="formatter1" (ngModelChange)="BuscarLote(item.producto, i)"
+                        /> -->
+                      <button
+                        *ngIf="item.producto == ''"
+                        class="btn btn-primary btn-xs btn-search"
+                        (click)="
+                          searchProduct(i, item.editar); modalProductos.show()
+                        "
+                        title="Buscar Producto"
+                        style="display: inline-block"
+                      >
+                        &nbsp;<i class="fa fa-search"></i>
+                      </button>
+                      <!-- <button *ngIf="item.delete" class="btn btn-danger btn-xs btn-search" (click)="deleteProduct(i);" title="Eliminar producto" style="display: inline-block;">
+                          &nbsp;<i class="fa fa-trash"></i>
+                        </button> -->
+                    </td>
+                    <td>
+                      <span
+                        *ngIf="item.producto != ''"
+                        class="mytooltip tooltip-effect-2"
+                        ><span class="tooltip-item2">Embalaje</span
+                        ><span class="tooltip-content4 clearfix"
+                          ><span class="tooltip-text2">{{
+                            item.Embalaje
+                          }}</span></span
+                        >
+                      </span>
+                    </td>
+                    <td>
+                      <input
+                        type="hidden"
+                        name="PresentacionModel{{ i }}"
+                        [ngModel]="item.Presentacion"
+                      />
+                      <input
+                        readonly
+                        id="Presentacion{{ i }}"
+                        name="Presentacion{{ i }}"
+                        [value]="item.Presentacion"
+                        type="text"
+                        class="form-control form-control-sm text-right f-9"
+                      />
+                    </td>
+
+                    <td *ngIf="Rotativo">
+                      <input
+                        readonly
+                        id="Rotativo{{ i }}"
+                        name="Rotativo{{ i }}"
+                        [ngModel]="item.Rotativo"
+                        type="number"
+                        min="1"
+                        class="form-control form-control-sm text-right f-9"
+                      />
+                    </td>
+
+                    <td>
+                      <!--<input id="Cantidad{{i}}" name="Cantidad{{i}}" [ngModel]="item.Cantidad" type="number" min="1" class="form-control form-control-sm text-right f-9"
+                          (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
+                      <input
+                        type="hidden"
+                        name="CantidadModel{{ i }}"
+                        [ngModel]="item.Cantidad"
+                      />
+                      <input
+                        id="Cantidad{{ i }}"
+                        name="Cantidad{{ i }}"
+                        [value]="item.Cantidad"
+                        type="number"
+                        min="1"
+                        class="form-control form-control-sm text-right f-9"
+                        (change)="
+                          CalculoTotal(i);
+                          ActualizaValores();
+                          CapturarDigitacion(i)
+                        "
+                        (keyup)="ActualizaValores(); CapturarDigitacion(i)"
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        type="hidden"
+                        name="CostoModel{{ i }}"
+                        [ngModel]="item.Costo"
+                      />
+                      <input
+                        id="Costo{{ i }}"
+                        name="Costo{{ i }}"
+                        [value]="item.Costo"
+                        type="text"
+                        min="1"
+                        class="form-control form-control-sm text-right f-9"
+                        (change)="
+                          CalculoTotal(i);
+                          ActualizaValores();
+                          CapturarDigitacion(i)
+                        "
+                        (keyup)="ActualizaValores(); CapturarDigitacion(i)"
+                        pattern="[0-9\.]*"
+                      />
+                    </td>
+
+                    <td>
+                      <!--<input id="Iva{{i}}" name="Iva{{i}}" [ngModel]="item.Iva" type="number" min="1" class="form-control form-control-sm text-right f-9"
+                          (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
+                      <input
+                        type="hidden"
+                        name="IvaModel{{ i }}"
+                        [ngModel]="item.Iva"
+                      />
+                      <select
+                        [ngModel]="item.Iva"
+                        id="Iva{{ i }}"
+                        name="Iva{{ i }}"
+                        class="form-control form-control-sm"
+                        (change)="
+                          CalculoTotal(i);
+                          ActualizaValores();
+                          CapturarDigitacion(i)
+                        "
+                      >
+                        <option
+                          *ngFor="let Impuesto of Impuestos; let i = index"
+                          [value]="Impuesto.Valor"
+                        >
+                          {{ Impuesto.Valor }}
+                        </option>
+                      </select>
+                    </td>
+                    <td>
+                      <input
+                        type="hidden"
+                        name="TotalModel{{ i }}"
+                        [ngModel]="item.Total"
+                      />
+                      <input
+                        name="Total{{ i }}"
+                        [value]="item.Total"
+                        id="Total{{ i }}"
+                        type="text"
+                        min="1"
+                        class="form-control form-control-sm text-right f-9"
+                        (change)="
+                          CalculoTotal(i);
+                          ActualizaValores();
+                          CapturarDigitacion(i)
+                        "
+                        readonly
+                      />
+                    </td>
+                    <td>
+                      <button
+                        class="btn btn-danger btn-mini btn-eliminar"
+                        (click)="deleteProduct(i, $event)"
+                        *ngIf="item.producto != ''"
+                      >
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- <div *ngIf="Lista_Productos.length > 1" >
+                    <button class="btn btn-info btn-sm"><i class="fa fa-plus"></i> Agregar Fila</button>
+                  </div> -->
+              <small
+                >Nota: Para hacer más efectiva la busqueda, por favor digite el
+                nombre completo del producto.</small
+              >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6"></div>
+            <div class="col-sm-6 text-right">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <th>( = ) Subtotal :</th>
+                    <td>{{ Subtotal_F | currency }}</td>
+                  </tr>
+                  <tr>
+                    <th>( + ) Iva :</th>
+                    <td>{{ Iva_F | currency }}</td>
+                  </tr>
+                  <tr>
+                    <th>( = ) Total :</th>
+                    <td>{{ Total_F | currency }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button
+                type="button"
+                [swal]="confirmacionGuardar"
+                [disabled]="!FormCompra.valid"
+                class="btn btn-primary btn-sm btn-block"
+              >
+                Realizar Compra
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-template #rt let-r="result" let-t="term">
+  <span class="f-9">{{ r.Nombre }} </span>
+</ng-template>
+
+<ng-template #rt2 let-r="result" let-t="term">
+  <span class="f-9"
+    ><strong>{{ r.NombreProveedor }}</strong>
+  </span>
+</ng-template>
+
+<app-modal-basic #modalProductos [dialogClass]="'modal-lg modal-full'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">Busqueda Productos</h4>
+    <button
+      type="button"
+      class="close basic-close"
+      (click)="modalProductos.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <div class="row">
+      <div class="col-md-12" style="max-height: 450px; overflow-y: scroll">
+        <input type="hidden" name="pos" [(ngModel)]="posicion" />
+        <table class="table table-product table-striped">
+          <thead>
+            <tr>
+              <th style="width: 40px"></th>
+              <td></td>
+              <td>Catalogo</td>
+              <th>Nombre</th>
+              <th style="width: 120px">Lab. Comercial</th>
+              <th style="width: 120px">Lab. Generico</th>
+              <th style="width: 100px">Cum</th>
+              <th>Embalaje</th>
+            </tr>
+            <tr>
+              <th style="width: 40px" class="tabla-filtro"></th>
+              <th class="tabla-filtro"></th>
+              <th class="tabla-filtro">
+                <select (change)="filtros()" [(ngModel)]="filtro_catalogo" class="form-control input-sm">
+                  <option *ngFor="let item of tipoMaterial" [value]="item">{{item}}</option>
+                </select>
+              </th>
+              <th class="tabla-filtro">
+                <input
+                  type="text"
+                  [(ngModel)]="filtro_nombre"
+                  (blur)="filtros()"
+                  class="form-control input-sm"
+                  placeholder="Filtro Nombre"
+                />
+              </th>
+              <th style="width: 150px" class="tabla-filtro">
+                <input
+                  type="text"
+                  [(ngModel)]="filtro_lab_com"
+                  (blur)="filtros()"
+                  class="form-control input-sm"
+                  placeholder="Filtro Lab. Comercial"
+                />
+              </th>
+              <th style="width: 150px" class="tabla-filtro">
+                <input
+                  type="text"
+                  [(ngModel)]="filtro_lab_gen"
+                  (blur)="filtros()"
+                  class="form-control input-sm"
+                  placeholder="Filtro Lab. Generico"
+                />
+              </th>
+              <th style="width: 100px" class="tabla-filtro">
+                <input
+                  type="text"
+                  [(ngModel)]="filtro_cum"
+                  (blur)="filtros()"
+                  class="form-control input-sm"
+                  placeholder="Filtro Cum"
+                />
+              </th>
+              <th class="tabla-filtro"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="Cargando">
+              <td colspan="7" class="text-center">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                <span class="sr-only">Cargando...</span>
+                <h4>Buscando producto...</h4>
+              </td>
+            </tr>
+            <tr *ngIf="ListaProducto.length == 0 && !Cargando">
+              <td colspan="7" class="text-center">
+                <i class="fa fa-exclamation-circle fa-5x"></i>
+                <h4>No se encontró el producto.</h4>
+              </td>
+            </tr>
+            <tr *ngFor="let producto of ListaProducto; let i = index">
+              <td class="text-center">
+                <input
+                  type="checkbox"
+                  id="check{{ i }}"
+                  [value]="producto.Producto"
+                  (change)="addProduct(i)"
+                />
+              </td>
+
+              <td style="width: 50px !important; max-width: 50px !important">
+                <div class="text-center">
+                  <img
+                    class="img-radius imagen"
+                    src="assets/images/product.png"
+                    alt=""
+                  />
+                  <!-- TODO IMAGEN DEL PRODUCTO DINAMICO  -->
+                  <!--   <a *ngIf="producto.Imagen != ''" href="{{environment.ruta}}IMAGENES/PRODUCTOS/{{producto.Imagen}}" target="_blank">
+                                        <img class="img-radius imagen" src="{{environment.ruta}}IMAGENES/PRODUCTOS/{{producto.Imagen}}" alt="">
+                                    </a> -->
+                </div>
+              </td>
+              <td>{{producto.Tipo_Catalogo}}</td>
+
+              <td>
+                <strong>{{ producto.Nombre_Comercial }}</strong>
+                <p class="text-muted" style="font-size: 9px">
+                  {{ producto.Nombre }}
+                </p>
+              </td>
+              <td>
+                {{ producto.Laboratorio_Comercial }}
+              </td>
+              <td>
+                {{ producto.Laboratorio_Generico }}
+              </td>
+              <td>
+                {{ producto.Codigo_Cum }}
+              </td>
+              <td>
+                {{ producto.Embalaje }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button
+        type="button"
+        class="btn btn-default btn-sm"
+        (click)="modalProductos.hide()"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        (click)="AgregarProducto()"
+        class="btn btn-primary btn-sm"
+      >
+        Agregar
+      </button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>
+<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>

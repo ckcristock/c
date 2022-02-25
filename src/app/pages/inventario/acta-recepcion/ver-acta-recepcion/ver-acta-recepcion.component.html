@@ -1,0 +1,323 @@
+<div class="page-body">
+  <div class="row">
+    <div class="col-lg-4 col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h6>Seguimiento del acta</h6>
+        </div>
+        <div class="card-body">
+          <ul class="feed-blog">
+            <li
+              class="active-feed contenido2"
+              *ngFor="let Actividad of ActividadesActa"
+            >
+              <div class="feed-user-img">
+                <a *ngIf="Actividad.Imagen != ''" href="javascript:">
+                  <!-- TODO Images -->
+                  <!--   <img class="img-radius img-40" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{Actividad.Imagen}}" alt=""> -->
+                </a>
+                <a *ngIf="Actividad.Imagen == ''" href="javascript:">
+                  <!--    <img class="img-radius img-40" src="assets/images/user.jpg" alt="chat-user"> -->
+                </a>
+              </div>
+              <h6>
+                <span [class]="AsignarClaseLabel(Actividad.Estado)">{{
+                  Actividad.Estado
+                }}</span>
+              </h6>
+              <p>
+                {{ Actividad.Detalles }} <br />
+                <small class="text-muted"> {{ Actividad.Fecha }}</small>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-8">
+      <div class="card">
+        <div
+          class="row invoice-contact"
+          style="align-items: flex-start !important"
+        >
+          <div class="col-md-8">
+            <div class="invoice-box row">
+              <div class="col-sm-12">
+                <table
+                  class="table table-responsive invoice-table table-borderless"
+                >
+                  <tbody>
+                    <tr>
+                      <td style="width: 100px">
+                        <!-- TODO images -->
+                        <!--   <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="Pro-H Software"> -->
+                      </td>
+                      <td>
+                        <!--    {{globales.Nombre}}
+                                                <br> {{globales.Nit}}
+                                                <br> {{globales.Direccion}}
+                                                <br> {{globales.Telefono}} -->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row text-right" style="margin: 0">
+              <div class="col-sm-7">
+                <h6>Acta Recepción</h6>
+                <h4>{{ Datos.Codigo }}</h4>
+                <h6>{{ Datos.Fecha_Creacion | date: "dd/MM/yyyy" }}</h6>
+              </div>
+              <div class="col-sm-5" style="padding-left: 0">
+                <img
+                  *ngIf="Datos.Codigo_Qr != ''"
+                  src="{{ envi.ruta }}IMAGENES/QR/{{ Datos.Codigo_Qr }}"
+                  class="img-fluid"
+                  style="margin-top: -20px"
+                />
+                <img
+                  *ngIf="Datos.Codigo_Qr == ''"
+                  src="assets/images/sinqr.png"
+                  class="img-fluid"
+                  style="margin-top: -20px"
+                />
+              </div>
+            </div>
+            <!--
+                  <div class="row text-right" style="margin:0;">, P.
+                    <div class="col-sm-12">
+                      <h4>Acta de Recepción</h4>
+                      <div class="clearfix"></div>
+                      <h5>{{Datos.Codigo}} </h5>
+                      <h6 style="font-weight: normal">Fecha: {{ Fecha | date: 'dd/MM/yyyy' }}</h6>
+                      <h6 style="font-weight: normal">Prov.: {{ Datos.Proveedor }}</h6>
+                      <h6 style="font-weight: normal">Compra: {{ Datos.Codigo_Compra }}</h6>
+                    </div>
+                  </div>
+                -->
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row invoive-info" style="margin-bottom: 0">
+            <div class="col-md-6 col-sm-6">
+              <div class="form-group grupo">
+                <h5 style="font-size: 16px; color: #4099ff">
+                  Compra:{{ Datos.Codigo_Compra }}
+                </h5>
+                <p *ngIf="Tipo == 'Bodega'" class="titular">
+                  <b>Bodega:</b> {{ Datos.Nombre_Bodega }}
+                </p>
+                <p *ngIf="Tipo == 'Punto_Dispensacion'" class="titular">
+                  <b>Punto:</b> {{ Datos.Nombre_Bodega }}
+                </p>
+                <p class="titular">
+                  <b>Productos Ingresados:</b>
+                  {{ Datos.ConteoProductos }} Producto{{
+                    Datos.ConteoProductos > 1 ? "s" : ""
+                  }}
+                  Diferente{{ Datos.ConteoProductos > 1 ? "s" : "" }}
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+              <div class="form-group grupo">
+                <p class="titular">
+                  <strong>Proveedor:</strong> {{ Datos.NombreProveedor }}
+                </p>
+                <p class="titular">
+                  <strong>Dirección:</strong> {{ Datos.DireccionProveedor }}
+                </p>
+                <p class="titular">
+                  <strong>Teléfono :</strong> {{ Datos.TelefonoProveedor }}
+                </p>
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 m-t-10">
+              <div class="form-group grupo" style="min-height: 0">
+                <table border="0" cellpadding="0" style="width: 100%">
+                  <tr *ngFor="let item of Facturas; let i = index">
+                    <td>
+                      <b>Factura #{{ i + 1 }}: </b>{{ item.Factura }}
+                    </td>
+                    <td>
+                      <b>Fecha Factura #{{ i + 1 }}: </b
+                      >{{ item.Fecha_Factura }}
+                    </td>
+                    <td>
+                      <b>Archivo Factura #{{ i + 1 }}: </b
+                      ><a
+                        href="{{ envi.ruta }}ARCHIVOS/FACTURAS_COMPRA/{{
+                          item.Archivo_Factura
+                        }}"
+                        target="_blank"
+                        title="Descargar Archivo"
+                        ><i class="fas fa-file-pdf"></i
+                      ></a>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr />
+          <div class="row m-0">
+            <div class="col-md-12 ver">
+              <h6>Observaciones</h6>
+              <p>{{ Datos.Observaciones }}</p>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 30px">
+            <div class="col-sm-12">
+              <table class="table table-striped tabla">
+                <thead>
+                  <tr class="thead-default">
+                    <th style="width: 20px"></th>
+                    <th>Producto</th>
+                    <th style="width: 80px" class="text-center">Solicitadas</th>
+                    <th style="width: 60px" class="text-center">Cantidad</th>
+                    <th style="width: 90px" class="text-center">Lote</th>
+                    <th style="width: 80px" class="text-center">Fecha Venc.</th>
+                    <th style="width: 100px" class="text-center">Precio</th>
+                    <th style="width: 30px" class="text-center">Iva</th>
+                    <th style="width: 100px" class="text-center">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let item of Productos; let i = index"
+                    id="fila{{ i }}"
+                  >
+                    <td class="text-center">
+                      <strong>{{ i + 1 }}</strong>
+                    </td>
+                    <td class="text-left">
+                      <strong>{{ item.Nombre_Comercial }}</strong>
+                      <p class="text-muted" style="font-size: 9px">
+                        {{ item.Nombre_Producto }}
+                      </p>
+                    </td>
+                    <td class="text-center">
+                      {{ item.Cantidad_Solicitada | number | puntos }}
+                    </td>
+                    <td colspan="6" style="padding: 0">
+                      <table class="table tabla-interna" style="margin: 0">
+                        <tr *ngFor="let lote of item.Lotes">
+                          <td
+                            style="width: 60px; border-left: 0; border-top: 0"
+                            class="text-center"
+                          >
+                            {{ lote.Cantidad | number | puntos }}
+                          </td>
+                          <td
+                            style="width: 90px; border-top: 0"
+                            class="text-center"
+                          >
+                            {{ lote.Lote }}
+                          </td>
+                          <td
+                            style="width: 80px; border-right: 0; border-top: 0"
+                            class="text-center"
+                          >
+                            {{ lote.Fecha_Vencimiento }}
+                          </td>
+                          <td
+                            style="width: 100px; border-top: 0"
+                            class="text-right"
+                          >
+                            {{ lote.Precio | currency }}
+                          </td>
+                          <td
+                            style="width: 30px; border-top: 0"
+                            class="text-cennter"
+                          >
+                            {{ lote.Impuesto }}%
+                          </td>
+                          <td
+                            style="width: 100px; border-top: 0"
+                            class="text-right"
+                          >
+                            {{ lote.Precio * lote.Cantidad | currency }}
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+
+                    <!-- <td class="text-center">{{item.Precio}} </td>
+                            <td class="text-center">{{item.Lote}} </td>
+                            <td class="text-center">{{item.Fecha_Vencimiento}} </td> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6"></div>
+            <div class="col-md-6">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td style="font-weight: bold">(=) SubTotal :</td>
+                    <td>{{ Datos.Subtotal | currency }}</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: bold">(+) Iva :</td>
+                    <td>{{ Datos.Impuesto | currency }}</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: bold">(=) Total :</td>
+                    <td>{{ Datos.Total | currency }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="float-right">
+                <button
+                  *ngIf="Tipo == 'Bodega'"
+                  type="button"
+                  [routerLink]="['/inventario/acta-recepcion']"
+                  class="btn btn-primary btn-sm btn-block"
+                >
+                  Volver
+                </button>
+                <button
+                  *ngIf="Tipo == 'Punto_Dispensacion'"
+                  type="button"
+                  [routerLink]="['/inventario/acta-recepcion']"
+                  class="btn btn-primary btn-sm btn-block"
+                >
+                  Volver
+                </button>
+                <button
+                  *ngIf="permiso && Datos.Estado == 'Pendiente'"
+                  [swal]="{
+                    title: '¿Está Seguro?',
+                    text: 'Se dispone a aprobar el acta de recepción ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, Aprobar',
+                    cancelButtonText: 'No, Dejame Comprobar!'
+                  }"
+                  (confirm)="aprobarActa(Datos.Id_Acta_Recepcion, Datos.Id_Bodega_Nuevo)"
+                  type="button"
+                  class="btn btn-success btn-sm btn-block"
+                >
+                  Aprobar acta
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>

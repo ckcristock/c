@@ -1,0 +1,48 @@
+<div class="modal-header ">
+
+    <h4 class="modal-title">
+        Iniciar Inventario Físico.
+        <br>
+        <span class="h5 text-primary">Ingrese los datos por favor</span>
+    </h4>
+
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12 ">
+            <div class="form-group ">
+                <label>Ident. Funcionario Digitador</label>
+                <input type="number " class="form-control form-control-sm " [(ngModel)]="Funcionario_Digita" id="Funcionario_Digita" name="Funcionario_Digita" />
+                <p *ngIf="Error_Funcionario_Digita" class="text-danger">Debe ingresar este campo</p>
+            </div>
+        </div>
+        <div class="col-md-12 ">
+            <div class="form-group ">
+                <label>Ident. Funcionario Contador</label>
+                <input type="number " class="form-control form-control-sm  " [(ngModel)]="Funcionario_Cuenta" id="Funcionario_Cuenta" name="Funcionario_Cuenta" />
+                <p *ngIf="Error_Funcionario_Cuenta" class="text-danger">Debe ingresar este campo</p>
+            </div>
+        </div>
+
+        <div class="col-md-12 ">
+            <div class="form-group ">
+                <label>Código de Barras de Estiba</label>
+                <input type="text" class="form-control " [(ngModel)]="Codigo_Barras" #Barra name="Barras" id="Barras" />
+                <p *ngIf="Error_Codigo_Barras" class="text-danger">Debe ingresar este campo</p>
+                <div class="col-md-12 text-center m-2">
+                    <i class="fa fa-barcode fa-4x"></i>
+                    <h5 class="text">Escanee el Código de Barras de la Estiba</h5>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-primary" (click)="listarProductosCategoria()">Iniciar Inventario</button>
+        <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')">Cancelar</button>
+    </div>

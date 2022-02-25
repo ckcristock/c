@@ -1,0 +1,304 @@
+<div class="page-body">
+  <div class="row">
+      <div class="col-md-12">
+          <div class="card">
+              <div class="card-header">
+                  <div class="row">
+                      <div class="col-md-7">
+                          <h5>Ordenes De Compras</h5>
+                          <span>Todas las Ordenes de Compras Aprobadas y por Proceder</span>
+                      </div>
+                      <div class="col-md-5 text-right">
+                          <button type="button" class="pull-right btn btn-primary btn-sm" [routerLink]="['/compras/crear-nacional']">
+              <i class="fa fa-plus"></i>
+              Nueva Orden De Compra
+            </button>
+
+                      </div>
+                  </div>
+              </div>
+              <div class="card-body">
+                  <div class="row">
+                      <div class="col-sm-12">
+                          <table class="table table-bordered table-striped">
+                              <thead>
+
+                                  <tr>
+                                      <th></th>
+                                      <th style="width: 100px">Fecha</th>
+                                      <th style="width: 100px">Código</th>
+                                      <th>Proveedor</th>
+                                      <th style="width: 100px">Estado</th>
+                                      <th style="width: 100px">Aprobación</th>
+                                      <th style="width: 80px">Acciones</th>
+                                  </tr>
+                                  <tr>
+                                      <th class="tabla-filtro">
+                                          <input class="form-control input-sm" placeholder="Filtro Funcionario" [(ngModel)]="filtro_func" (blur)="filtros()" />
+                                      </th>
+                                      <th style="width: 100px" class="tabla-filtro">
+                                          <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
+                                      </th>
+                                      <th class="tabla-filtro">
+                                          <input class="form-control input-sm" placeholder="Filtro Código" [(ngModel)]="filtro_cod" (blur)="filtros()" />
+                                      </th>
+
+                                      <th class="tabla-filtro">
+                                          <input class="form-control input-sm" placeholder="Filtro Proveedor" [(ngModel)]="filtro_prov" (blur)="filtros()" />
+                                      </th>
+                                      <th class="tabla-filtro">
+                                          <select [(ngModel)]="filtro_est" (change)="filtros()" class="form-control input-sm">
+                                              <option value="">Todos</option>
+                                              <option value="Pendiente">Pendiente</option>
+                                              <option value="No conforme">No Conforme</option>
+                                              <option value="Anulada">Anulada</option>
+                                              <option value="Recibida">Recibida</option>
+                                              <option value="Devuelta">Devuelta</option>
+                                          </select>
+                                      </th>
+                                      <th class="tabla-filtro"></th>
+                                      <th class="tabla-filtro"></th>
+                                  </tr>
+
+                              </thead>
+                              <tbody>
+                                  <tr *ngIf="comprasnacionales.length == 0">
+                                      <td colspan="7" class="text-center">
+                                          <i class="fa fa-exclamation-circle fa-5x"></i>
+                                          <h4>
+                                              No Existen Órdenes de Compra Nacionales para mostrar
+                                          </h4>
+                                          <a href [routerLink]="['/compras/crear-nacional']" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Cree Una Acá</a
+                    >
+                  </td>
+                </tr>
+                <tr *ngFor="let compra of comprasnacionales">
+                  <td>
+                    <img
+                    [src]="compra.Imagen | image: 'users'"
+                      style="width: 15px;"
+                      class="img-radius imagen"
+                    />
+                    {{compra.Funcionario}}
+                  </td>
+                  <td>{{ compra.Fecha | date: "dd/MM/yyyy" }}</td>
+                  <td>{{ compra.Codigo }}</td>
+
+                  <td>
+                    <div class="text-center">
+                      {{ compra.Proveedor }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="text-center">
+                      <span
+                        class="label {{
+                          compra.Estado == 'Anulada' ? 'label-danger' : ''
+                        }} {{
+                          compra.Estado == 'Recibida' ? 'label-inverse' : ''
+                        }} {{
+                          compra.Estado == 'Pendiente' ? 'label-warning' : ''
+                        }}"
+                        >{{ compra.Estado }}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="text-center">
+                      <span class="label label-success">{{
+                        compra.Aprobacion
+                      }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="text-center">
+                      <div ngbDropdown class="dropdown-primary">
+                        <button
+                          ngbDropdownToggle
+                          class="
+                            btn-sm
+                            btn btn-secondary btn-mini
+                            waves-effect waves-light
+                          "
+                          type="button"
+                        >
+                          Acciones
+                        </button>
+                        <div ngbDropdownMenu>
+                          <a
+                            *ngIf="
+                              compra.Estado != 'Anulada' &&
+                              compra.Estado != 'Recibida' &&
+                              compra.Estado_Aprobacion == 'Rechazada'
+                            "
+                            class="
+                              dropdown-item
+                              waves-light waves-effect
+                              caja-botones
+                            "
+                            href=""
+                            [routerLink]="[
+                              '/comprasnacionaleseditar',
+                              compra.Id_Orden_Compra_Nacional
+                            ]"
+                          >
+                            <i class="ti-pencil"></i>Editar</a
+                          >
+                          <a
+                            class="
+                              dropdown-item
+                              waves-light waves-effect
+                              caja-botones
+                            "
+                            href=""
+                            [routerLink]="[
+                              '/compras/ver-nacional',
+                              compra.Id_Orden_Compra_Nacional
+                            ]"
+                          >
+                            <i class="ti-eye"></i>Ver</a
+                          >
+                          <!-- TODO Imprimir Orden Compra -->
+                         <!--  <a
+                            class="
+                              dropdown-item
+                              waves-light waves-effect
+                              caja-botones
+                            "
+                            href="{{
+                              environment.ruta
+                            }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_Nacional&id={{
+                              compra.Id_Orden_Compra_Nacional
+                            }}"
+                            target="_blank"
+                          >
+                            <i class="ti-printer"></i>Imprimir</a
+                          > -->
+                          <a
+                            *ngIf="compra.Estado != 'Anulada'"
+                            class="
+                              dropdown-item
+                              waves-light waves-effect
+                              caja-botones
+                            "
+                            href=""
+                            [swal]="anulacion"
+                            (confirm)="
+                              anularCompra(
+                                compra.Id_Orden_Compra_Nacional,
+                                $event
+                              )
+                            "
+                          >
+                            <i class="fa fa-times"></i>Anular</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {{ page * maxSize - maxSize + 1 }} al {{ page * maxSize }} de
+        {{ TotalItems }}
+        <ngb-pagination
+          *ngIf="comprasnacionales.length > 0"
+          class="pull-right"
+          [collectionSize]="TotalItems"
+          [(page)]="page"
+          [maxSize]="maxSize"
+          [pageSize]="20"
+          size="sm"
+          (pageChange)="paginacion()"
+          [boundaryLinks]="true"
+        ></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<swal
+#anulacion
+title="¿Está Seguro?"
+text="Ingrese la causal de anulación"
+input="text"
+type="warning"
+showCancelButton="true"
+confirmButtonText="Si, Eliminar"
+cancelButtonText="No, Dejame Comprobar!"
+></swal>
+
+<swal
+#deleteSwal
+title="Orden de Compra Anulada"
+text="Se ha Anulado Correctamente la Orden de Compra"
+type="success"
+>
+</swal>
+
+<swal #infoSwal title="" text="" type=""> </swal>
+
+<ng-template #Message>No existe precompras en este momento </ng-template>
+
+<app-modal-basic #configuracion>
+<div class="app-modal-header">
+  <h4>Configuración</h4>
+  <button
+    type="button"
+    class="close basic-close"
+    (click)="configuracion.hide()"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="app-modal-body">
+  <h5>Caducidad en la compra</h5>
+  <p>
+    Según el número de días que escriba se anularán las compras sin acta de
+    recepción.
+  </p>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label for="dias"> Modifique los dias: </label>
+        <input
+          type="number"
+          pattern="[0-9]+"
+          [(ngModel)]="dias_anulacion"
+          placeholder="numero de días"
+          class="form-control mb-4"
+        />
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label for="responsable"> Modifique el responsable: </label>
+        <select
+          class="form-control"
+          [(ngModel)]="funcionario_anulacion"
+          id="responsable"
+        >
+          <option
+            *ngFor="let func of funcionarios_anulacion"
+            [value]="func.Identificacion_Funcionario"
+          >
+            {{ func.Funcionario }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="app-modal-footer">
+  <button class="btn btn-sm btn-success" (click)="setDiasAnulacion()">
+    Actualizar
+  </button>
+  <button class="btn btn-sm btn-danger" (click)="configuracion.hide()">
+    Cerrar
+  </button>
+</div>
+</app-modal-basic>

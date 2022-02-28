@@ -62,11 +62,12 @@ export class DotacionCrearComponent implements OnInit {
       Nombre_Comercial: [''],
       Embalaje: [''],
       Status: [''],
+      id_inventary_dotations:[''],
       Descripcion_ATC: [''],
       Codigo_Barras: [''],
       Codigo: [''],
       Tipo_Catalogo: ['Dotacion_EPP'],
-      Producto_Dotacion_Tipo: [''],
+      Tipo: [''],
       dynamic: this.fb.array([]),
     });
   }
@@ -81,18 +82,19 @@ export class DotacionCrearComponent implements OnInit {
     this.form.patchValue({
       Id_Producto: producto.Id_Producto,
       Nombre_Comercial: producto.Nombre_Comercial,
-      Producto_Dotacion_Tipo: producto.type,
+      Tipo: producto.Tipo,
       Embalaje: producto.Embalaje,
       Descripcion_ATC: producto.Descripcion_ATC,
       Orden_Compra: 1,
       Ubicar: '0',
       Codigo_Barras: producto.Codigo_Barras,
-      Codigo: producto.codeInventary,
+      Codigo: producto.code_inventary_dotations,
       Status: producto.status,
       Tipo_Catalogo: 'Dotacion_EPP',
       Id_Categoria: Number(producto.Id_Categoria),
-      Producto_Dotation_Type_Id: Number(producto.product_dotation_type_id),
+      Producto_Dotation_Type_Id: Number(producto.Producto_Dotation_Type_Id),
       Id_Subcategoria: Number(producto.Id_Subcategoria),
+      id_inventary_dotations: producto.id_inventary_dotations,
       Principio_Activo: producto.Principio_Activo,
     });
     this.getSubCategories(producto.Id_Subcategoria);

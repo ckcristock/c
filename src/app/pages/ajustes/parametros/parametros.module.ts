@@ -33,6 +33,10 @@ import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component'
 import { EstimacionViaticosComponent } from './apu/estimacion-viaticos/estimacion-viaticos.component';
 import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-values/estimacion-viaticos-values.component';
 import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.component';
+import { CategoriasComponent } from './categorias/categorias.component';
+import { SubcategoriasComponent } from './subcategorias/subcategorias.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+
 
 
 
@@ -64,7 +68,9 @@ import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.compo
         PerfilesApuComponent,
         EstimacionViaticosComponent,
         EstimacionViaticosValuesComponent,
-        ValorAlmuerzosComponent
+        ValorAlmuerzosComponent,
+        CategoriasComponent,
+        SubcategoriasComponent
     ],
     imports: [
         ParametrosRoutingModule,
@@ -77,7 +83,9 @@ import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.compo
         NgSelectModule,
         CommonModule,
         PerfectScrollbarModule,
-        PipesModule
+        PipesModule,
+        SweetAlert2Module.forRoot(),
+
     ],
     exports: []
 })

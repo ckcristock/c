@@ -25,6 +25,8 @@ import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component'
 import { EstimacionViaticosComponent } from './apu/estimacion-viaticos/estimacion-viaticos.component';
 import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-values/estimacion-viaticos-values.component';
 import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.component';
+import { CategoriasComponent } from './categorias/categorias.component';
+import { SubcategoriasComponent } from './subcategorias/subcategorias.component';
 
 
 const routes : Routes = [
@@ -62,7 +64,10 @@ const routes : Routes = [
     { path: 'apu/estimacion-viaticos', component: EstimacionViaticosComponent },
     { path: 'apu/est-viaticos-valores', component: EstimacionViaticosValuesComponent },
 
-    { path: 'valor-almuerzos', component: ValorAlmuerzosComponent }
+    { path: 'valor-almuerzos', component: ValorAlmuerzosComponent },
+
+    { path: 'categorias', component : CategoriasComponent },
+    { path: 'subcategorias', component : SubcategoriasComponent },
 ]
 
 

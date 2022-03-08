@@ -1,0 +1,29 @@
+<div class="card">
+    <div class="card-header">
+
+    </div>
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">Desripcion</th>
+                    <th scope="col">Presupuesto</th>
+                    <th scope="col">Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let neg of negocios">
+                    <th scope="row"> <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{neg.id}}</a> </th>
+                    <td>{{neg.company}}</td>
+                    <td>{{neg.request_name}}</td>
+                    <td>$ {{neg.presupuesto |number}}</td>
+                    <td>{{neg.date | date}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -250,17 +250,17 @@ export class ActividadesComponent {
   ////////////////FIN FUNCIONES TIPO////////////////////////
 
   GuardarActividad(form: NgForm) {
-    console.log(form.value);
-      this._actividad.saveActivity(form.value).subscribe((data: any) => {
-        this.CerrarModal();
-        this.GetActividadesMes();
-        this._swal.show({
-          text: '¡Proceso exitoso!',
-          title: (this.editar == true ? 'Actualizado con éxito' : 'Guardado con éxito'),
-          icon: 'success',
-          showCancel: false
-        });
+    this.editar ? form.value.days = [] : null;
+    this._actividad.saveActivity(form.value).subscribe((data: any) => {
+      this.CerrarModal();
+      this.GetActividadesMes();
+      this._swal.show({
+        text: '¡Proceso exitoso!',
+        title: (this.editar == true ? 'Actualizado con éxito' : 'Guardado con éxito'),
+        icon: 'success',
+        showCancel: false
       });
+    });
   }
 
   CerrarModal() {
@@ -307,7 +307,6 @@ export class ActividadesComponent {
     /*  this.FuncionariosSelec(data.Id_Actividad_Recursos_Humanos); */
     this.getDependencies(data.group_id);
     this.Dependencia_Cargo(data.dependency_id);
-
     this.verificarUser();
     this.ModalActividad.show();
     this.ModalActividad.show();

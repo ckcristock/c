@@ -13,7 +13,7 @@ export class ValorAlmuerzosComponent implements OnInit {
   @ViewChild('modal') modal:any;
   values:any[] = [];
   value:any = {};
-  loading:any;
+  loading:boolean = false;
   pagination = {
     pageSize: 10,
     page: 1,
@@ -34,8 +34,7 @@ export class ValorAlmuerzosComponent implements OnInit {
   createForm(){
     this.form = this.fb.group({
       id: [this.value.id],
-      value: [0, Validators.required],
-      description: ['']
+      value: [0, Validators.required]
     })
   }
 
@@ -96,9 +95,11 @@ export class ValorAlmuerzosComponent implements OnInit {
 
   getValues( page = 1) {
     this.pagination.page = page;
+    this.loading = true;
     this._lunchValues.getAll(this.pagination).subscribe((data: any) => {
       this.values = data.data.data;
       this.pagination.collectionSize = data.data.total;
+      this.loading = false;
     })
   }
 

@@ -6,7 +6,19 @@
 <div class="card">
     <div class="card-header">
         <div class="card-title">
-            <h5 class="text-primary"> Seguimiento Proceso Disciplinario </h5>
+            <div class="row">
+                <div class="col-6">
+                    <h5 class="text-primary"> Seguimiento Proceso Disciplinario </h5>
+                </div>
+                <div class="col-6 text-right" *ngIf="!loading && processSelected">
+                    <div *ngIf="permission.permissions.close && processSelected.status!='Cerrado'">
+                        <button class="btn btn-danger btn-sm col-2" style="float: right;" (click)="closeProccess()"> Cerrar </button>
+                    </div>
+                    <div *ngIf="processSelected.status == 'Cerrado' && permission.permissions.open">
+                        <button class="btn btn-success btn-sm col-2" style="float: right;" (click)="openProccess()"> Abrir </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="card-body" *ngIf="!loading; else notData">
@@ -30,14 +42,27 @@
                 <p>{{processSelected.process_description}}</p>
             </div>
             <div class="col-md-3 text-right ">
-                <button class="btn btn-primary btn-sm" *ngIf="file" (click)="download(file)">
+                <button class="btn btn-primary btn-sm" *ngIf="file" (click)="download(file, fileType)">
                             <i class="far fa-arrow-alt-circle-down"> Descargar Evidencia</i>
                         </button>
             </div>
-            <hr class="line">
+            <div class=" form-group col-12" *ngIf="processSelected.status == 'Cerrado'">
+                <label style="color: black;">Observación del cierre</label>
+                <p>{{processSelected.close_description}}</p>
+            </div>
             <div class="col-12">
-                <label for="">Anotaciones</label>
-                <div class="col panel-anotaciones">
+                <hr class="line">
+            </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="">Anotaciones</label>
+                    </div>
+                    <div class="col-6 text-right" *ngIf="processSelected.status != 'Cerrado'">
+                        <button class="btn btn-info btn-sm" (click)="openModal()"> Agregar </button>
+                    </div>
+                </div>
+                <div class="col panel-anotaciones mt-3">
                     <div class="card card-anotation" *ngFor="let anotacion of anotaciones; let i = index">
                         <div class="card-body">
                             <div class="row">
@@ -69,9 +94,9 @@
                                     <h6 class="mb-2 text-muted">{{ anotacion.created_at | date }}</h6>
                                 </div>
                                 <div class="col-2">
-                                    <a *ngIf="anotacion.file" (click)="download(anotacion.file)" class="col-3 card-link pointer">Descargar evidencia</a>
+                                    <a *ngIf="anotacion.file" (click)="download(anotacion.file, anotacion.fileType)" class="col-3 card-link pointer">Descargar evidencia</a>
                                 </div>
-                                <div class="col-1">
+                                <div class="col-1" *ngIf="processSelected.status != 'Cerrado'">
                                     <label for="">Anular</label>
                                     <h6 class="mb-2 text-muted">
                                         <div>
@@ -105,23 +130,35 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-12" *ngIf="processSelected">
+                <div class="col">
+                    <label class="ml-0" *ngIf="legalDocuments.length > 0">Documentos</label>
+                </div>
                 <div class="row">
-                    <ng-container *ngIf="processSelected.status=='Abierto'">
-                        <div [ngClass]="{
-                            'col-12': permission.permissions.close == false,
-                            'col-6': permission.permissions.close == true
-                        }">
-                            <button class="btn btn-info btn-sm btn-block mt-3" (click)="openModal()"> Agregar </button>
-                        </div>
-                        <div class="col-6" *ngIf="permission.permissions.close">
-                            <button class="btn btn-danger btn-sm btn-block mt-3" (click)="closeProccess()"> Cerrar </button>
+                    <ng-container *ngFor="let item of legalDocuments">
+                        <div class="col-2">
+                            <div class="card card-file">
+                                <div class="card-title">
+                                    <button type="button" *ngIf="processSelected.status != 'Cerrado'" placement="top" ngbTooltip="Eliminar" class="close basic-close mt-2 mr-3" (click)="deleteDocument(item)">
+                                        <span aria-hidden="true">
+                                            <i class="fas fa-times"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="card-body" (click)="downloadDocument(item)" placement="left" ngbTooltip="Descargar">
+                                    <h6 class="file-title text-center">
+                                        {{ item.name }}
+                                    </h6>
+                                </div>
+                            </div>
                         </div>
                     </ng-container>
-                    <div class="col-12" *ngIf="processSelected.status == 'Cerrado' && permission.permissions.open">
-                        <button class="btn btn-success btn-sm btn-block mt-3" (click)="openProccess()"> Abrir </button>
-                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-3" *ngIf="processSelected">
+                <div class="row">
+                    <ng-container *ngIf="processSelected.status != 'Cerrado'">
+                        <button class="btn btn-success btn-sm btn-block" style="float: right;" (click)="modalDocuments.show()"> Agregar Documentos </button>
+                    </ng-container>
                 </div>
             </div>
         </div>
@@ -230,6 +267,37 @@
         <div class="form-group text-right">
             <button (click)="modalClose.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cancelar</button>
             <button type="submit" class="btn btn-primary btn-sm raised">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
+<app-modal-basic #modalDocuments [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h5 class="modal-title"> Agregar Documentos </h5>
+        <button type="button" class="close basic-close" (click)="hideModalDocuments()">
+            <span aria-hidden="true">
+                <i class="fas fa-times" (click)="hideModalDocuments()"></i>
+            </span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="col-12">
+            <label for="">Documentos</label>
+            <div class="col">
+                <ngx-dropzone class="drop-zone" (change)="onSelect($event)">
+                    <ngx-dropzone-label>
+                        <span><i class="fas fa-cloud-download-alt"></i></span> Arrastre y suelte el archivo
+                    </ngx-dropzone-label>
+                    <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+                        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                </ngx-dropzone>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="form-group text-right">
+            <button (click)="hideModalDocuments()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="saveDocuments()">Guardar Documentos</button>
         </div>
     </div>
 </app-modal-basic>

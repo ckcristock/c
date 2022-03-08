@@ -8,15 +8,13 @@
             <thead class="bg-light">
                 <tr>
                     <th scope="col">Valor</th>
-                    <th scope="col">Descrición</th>
                     <th scope="col">Fecha C.</th>
                     <th scope="col" style="width: 50px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let value of values" [ngClass]="{'bg-danger text-white': (value.state === 'Inactivo' )}">
-                    <td scope="row"> {{ value.value | currency: 'COP' }} </td>
-                    <td> {{ value.description }} </td>
+                    <td scope="row"> {{ value.value | currency: '' : '' }} </td>
                     <td> {{ value.created_at | date }} </td>
                     <td>
                         <div class="text-center">
@@ -43,7 +41,7 @@
         </ngb-pagination>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
+<app-modal-basic #modal [dialogClass]="'modal-sm'">
     <div class="app-modal-header">
         <h5 class="modal-title"> {{ title}} </h5>
         <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
@@ -55,14 +53,14 @@
     <div class="app-modal-body">
         <form [formGroup]="form">
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-12">
                     <label class="custom-label" for="funcionario_id">Valor</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="value">
+                    <input type="number" class="form-control form-control-sm" formControlName="value">
                 </div>
-                <div class="form-group col-md-6">
+                <!-- <div class="form-group col-md-6">
                     <label class="custom-label" for="funcionario_id">Descripción</label>
                     <textarea class="form-control form-control-sm" rows="3" formControlName="description"></textarea>
-                </div>
+                </div> -->
             </div>
         </form>
     </div>

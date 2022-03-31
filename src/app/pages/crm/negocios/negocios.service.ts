@@ -58,11 +58,12 @@ export class NegociosService {
     )
 
   }
+  /*
   getTasks(){
     return of(
       tareas
     )
-  }
+  }*/
 
   getHistory(){
     return of(
@@ -83,5 +84,17 @@ export class NegociosService {
   getBudgets(params={}){
     return this.http.get(`${this.url}/budgets-paginate`)
 
+  }
+
+  getTasks() {
+    return this.http.get(`${this.url}/get-tasks`)
+  }
+
+  saveTask( data:any ){
+    return this.http.post(`${environment.base_url}/save-task`, data);
+  }
+
+  updateTask( data:any ){
+    return this.http.post(`${environment.base_url}/save-task`, data);
   }
 }

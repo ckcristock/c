@@ -34,6 +34,8 @@ export class VerNegocioComponent implements OnInit {
   presupuestosSeleccionados: any[] = [];
   cotizaciones: any[];
   cotizacionesSeleccionadas: any[] = [];
+  business_budget_id:any = '';
+
 
   modal_title = '';
 
@@ -44,13 +46,14 @@ export class VerNegocioComponent implements OnInit {
   constructor(
     private ruta: ActivatedRoute,
     private _negocio: NegociosService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getPresupuestos();
     this.getCotizaciones();
     this.getTasks();
     this.filtros.id = this.ruta.snapshot.params.id;
+    this.business_budget_id = this.ruta.snapshot.params.id;
     this.negocio.id = this.ruta.snapshot.params.id;
   }
 
@@ -58,10 +61,8 @@ export class VerNegocioComponent implements OnInit {
     this.loading = true;
     this._negocio.getBudgets().subscribe((resp: any) => {
       this.presupuestos = resp.data.data;
-      console.log(this.presupuestos);
       this.loading = false;
     });
-    // this.presupuestos = OTROS_PRESUPUESTOS;
   }
 
   guardarPresupuesto(id) {
@@ -82,11 +83,23 @@ export class VerNegocioComponent implements OnInit {
   getCotizaciones() {
     this.cotizaciones = OTRAS_COTIZACIONES;
   }
+  /*
+    getTasks() {
+      this._negocio.getTasks().subscribe((data: any) => {
+        this.tareas = data;
+      });
+    }*/
 
   getTasks() {
-    this._negocio.getTasks().subscribe((data: any) => {
-      this.tareas = data;
+    this._negocio.getTasks().subscribe((resp: any) => {
+      this.tareas = resp.data.data;
     });
+  }
+
+  updateListTask() {
+    console.log("llego hasta aqui");
+
+    this.getTasks();
   }
 
   createTask(event) {

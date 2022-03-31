@@ -101,8 +101,8 @@ export class NegociosService {
     return this.http.post(`${this.url}/new-business-budget`, data);
   }
 
-  getTasks() {
-    return this.http.get(`${this.url}/get-tasks`)
+  getTasks(id) {
+    return this.http.get(`${this.url}/get-tasks/${id}`)
   }
 
   saveTask( data:any ){

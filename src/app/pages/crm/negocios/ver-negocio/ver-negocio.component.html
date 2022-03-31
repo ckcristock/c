@@ -146,7 +146,7 @@
         </div>
     </div>
 </app-modal-basic>
-<app-modal-basic #modalCotizaciones [dialogClass]="'modal-lg'">
+<!-- <app-modal-basic #modalCotizaciones [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
         <h5 class="modal-title">Seleccionar cotizaciones disponibles</h5>
         <button type="button" class="close basic-close" (click)="modalCotizaciones.hide()">
@@ -156,7 +156,7 @@
     </button>
     </div>
     <div class="app-modal-body">
-        <table class="mt-2 table table-borderless table-striped" *ngIf="!loading && cotizaciones.length > 0">
+        <table class="mt-2 table table-borderless table-striped">
             <thead>
                 <tr>
                     <th>Item</th>
@@ -169,7 +169,7 @@
                     <th>Total USD</th>
                 </tr>
             </thead>
-            <tbody *ngIf="cotizaciones.lenght>=1">
+            <tbody>
                 <tr *ngFor="let item of cotizaciones" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
                     <td>
                         <input type="checkbox" [selected]="cotizacionesSeleccionadas.includes(item.id)" [change]=" guardarCotizacion(item.id) ">
@@ -185,8 +185,6 @@
                 </tr>
             </tbody>
         </table>
-        <!-- <ng-select [items]="dataModal " bindLabel="descripcion " [multiple]="true " [closeOnSelect]="false " [selectableGroup]="true " [selectableGroupAsModel]="false " [(ngModel)]="seleccionadas ">
-        </ng-select> -->
     </div>
     <div class="app-modal-footer ">
         <div class="form-group text-right ">
@@ -195,4 +193,4 @@
             <button type="submit " class="btn btn-primary btn-sm raised " (click)="modalCotizaciones.hide(); closeModalCotizaciones() "> Guardar </button>
         </div>
     </div>
-</app-modal-basic>
+</app-modal-basic> -->

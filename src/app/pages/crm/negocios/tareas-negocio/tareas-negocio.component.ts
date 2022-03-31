@@ -44,7 +44,7 @@ export class TareasNegocioComponent implements OnInit {
     });
   }
   getTasks() {
-    this._negocios.getTasks().subscribe((resp: any) => {
+    this._negocios.getTasks(this.business_budget_id).subscribe((resp: any) => {
       this.tasks = resp.data.data;
     });
   }

@@ -63,7 +63,7 @@ export class VerNegocioComponent implements OnInit {
       this.negocio = data.data;
     })
     this.business_budget_id = this.ruta.snapshot.params.id;
-    this.negocio.id = this.ruta.snapshot.params.id;
+    //this.negocio.id = this.ruta.snapshot.params.id;
   }
 
   getPresupuestos() {
@@ -104,7 +104,7 @@ export class VerNegocioComponent implements OnInit {
     }*/
 
   getTasks() {
-    this._negocio.getTasks().subscribe((resp: any) => {
+    this._negocio.getTasks(this.business_budget_id).subscribe((resp: any) => {
       this.tareas = resp.data.data;
     });
   }

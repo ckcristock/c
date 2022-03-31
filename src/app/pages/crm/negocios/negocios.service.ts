@@ -65,11 +65,12 @@ export class NegociosService {
     )
 
   }
+  /*
   getTasks(){
     return of(
       tareas
     )
-  }
+  }*/
 
   getHistory(){
     return of(
@@ -100,4 +101,15 @@ export class NegociosService {
     return this.http.post(`${this.url}/new-business-budget`, data);
   }
 
+  getTasks() {
+    return this.http.get(`${this.url}/get-tasks`)
+  }
+
+  saveTask( data:any ){
+    return this.http.post(`${environment.base_url}/save-task`, data);
+  }
+
+  updateTask( data:any ){
+    return this.http.post(`${environment.base_url}/save-task`, data);
+  }
 }

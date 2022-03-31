@@ -78,7 +78,7 @@
                     <li [ngbNavItem]="2">
                         <a ngbNavLink>Tareas</a>
                         <ng-template ngbNavContent>
-                            <app-tareas-negocio [tareas]="tareas" (addTask)="createTask($event)" (editTask)="editTask($event)">
+                            <app-tareas-negocio [tareas]="tareas" [business_budget_id]="business_budget_id"  (updateListTask)="updateListTask($event)">
                             </app-tareas-negocio>
                         </ng-template>
                     </li>

@@ -1,64 +1,68 @@
 <div class="ngbNavContent text-center">
-    <button class="btn btn-sm btn-primary" (click)="open()">
-        <i class="fa fa-plus"></i>Agregar tarea
-    </button>
-    <div class="card mt-3" *ngFor="let task of tareas; let i = index" style="box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 8%)">
-        <div class="row">
-            <i *ngIf="!task.completed" class="col-2 fa fa-clock" style="align-self: center"></i>
-            <i *ngIf="task.completed" class="col-2 fa fa-check-circle" style="align-self: center"></i>
-            <div class="col">
-                <h5 class="card-title">{{ task.responsable | slice:0:20 }}</h5>
+  <button class="btn btn-sm btn-primary" (click)="open()">
+    <i class="fa fa-plus"></i>Agregar tarea
+  </button>
+  <div class="card mt-3" *ngFor="let task of tareas; let i = index" style="box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 8%)">
+    <div class="row">
+      <i *ngIf="!task.completed" class="col-2 fa fa-clock" style="align-self: center"></i>
+      <i *ngIf="task.completed" class="col-2 fa fa-check-circle" style="align-self: center"></i>
+      <div class="col">
+     <!--   <h5 class="card-title">{{ task.responsable | slice:0:20 }}</h5>-->
 
-                <div class="card-body m-0 p-0">
-                    <p class="card-text">{{(task.description.length>30)? (task.description |
-                        slice:0:30)+'...':(task.description) }}</p>
-                </div>
-            </div>
-            <i role="button" class="col col-2 fa fa-external-link-alt" style="align-self: center;"
-                (click)="open(task, i+1)"></i>
+        <div class="card-body m-0 p-0">
+          <p class="card-text">{{(task.description.length>30)? (task.description |
+            slice:0:30)+'...':(task.description) }}</p>
         </div>
+      </div>
+      <i role="button" class="col col-2 fa fa-external-link-alt" style="align-self: center;"
+        (click)="editTask(task)"></i>
     </div>
+  </div>
 </div>
 
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Agregar nueva tarea</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-                <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-        </button>
-    </div>
+  <div class="app-modal-header">
+    <h5 class="modal-title">Agregar nueva tarea</h5>
+    <button type="button" class="close basic-close" (click)="modal.hide()">
+      <span aria-hidden="true">
+        <i class="fas fa-times" (click)="modal.hide()"></i>
+      </span>
+    </button>
+  </div>
 
-    <div class="app-modal-body">
-        <form [formGroup]="form" class="text-center">
-            <div class="form-group">
-                <label for="Responsable">Responsable</label>
-                <input type="text" id="responsable" class="form-control" placeholder="Responsable..." name="responsable"
-                    formControlName="responsable" />
-            </div>
-            <div class="form-group">
-                <label for="contacto">Tarea a realizar</label>
-                <textarea name="description" id="description" rows="4" class="form-control"
-                    formControlName="description" placeholder="Descripcion de la tarea">
+  <div class="app-modal-body">
+    <form [formGroup]="form" class="text-center">
+      <input type="hidden" formControlName="business_budget_id">
+      <div class="form-group">
+        <label for="fecha_inicio" class="custom-label">Responsable</label>
+        <ng-select formControlName="person_id" [items]="peopleSelects" bindLabel="text" bindValue="value"
+          loadingText="loading">
+        </ng-select>
+
+
+      </div>
+      <div class="form-group">
+        <label for="contacto">Tarea a realizar</label>
+        <textarea name="description" id="description" rows="4" class="form-control" formControlName="description"
+          placeholder="Descripcion de la tarea">
                 </textarea>
-            </div>
-            <!-- (change)="permit.Activo = !permit.Activo" -->
-            <div class="custom-switch mb-2" dir="ltr ">
-                <input type="checkbox" class="custom-control-input"  formControlName="completed" id="input" />
-                <label class="custom-control-label" for="input">Terminado</label>
-            </div>
-        </form>
+      </div>
+      <!-- (change)="permit.Activo = !permit.Activo" -->
+      <div class="custom-switch mb-2" dir="ltr ">
+        <input type="checkbox" class="custom-control-input" formControlName="completed" id="input" />
+        <label class="custom-control-label" for="input">Terminado</label>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="form-group text-right">
+      <button (click)="modal.hide()" type="reset" class="btn btn-danger raised mr-2 btn-sm">
+        Cerrar
+      </button>
+      <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid"
+        (click)="saveTask()">
+        Guardar
+      </button>
     </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="reset" class="btn btn-danger raised mr-2 btn-sm">
-                Cerrar
-            </button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid"
-                (click)="createTask(); modal.hide(); form.reset()">
-                Guardar
-            </button>
-        </div>
-    </div>
+  </div>
 </app-modal-basic>

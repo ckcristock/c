@@ -15,7 +15,7 @@ export class MenuChildComponent implements OnInit {
   /*   @Input('menuItems') menuItems:any; */
   @Input() navItems: NavItem[];
   title:any = '';
-  changeState:boolean = true;
+  checked: boolean = true;
   collapsed:boolean[] = [];
   constructor( private _swal:SwalService ) { }
 
@@ -26,14 +26,24 @@ export class MenuChildComponent implements OnInit {
     item['permissions'][position] != item['permissions'][position];
   }
 
-  changeAll(permissions){
-    permissions.forEach( el => {
-      el.Activo = !el.Activo
-      if (el.Activo) {
-        this.changeState = true;
-      } else {
-        this.changeState = false;
-      }
+  changeAll(item){
+    item.child.forEach( el => {
+      el.permissions?.forEach(permission => {
+        permission.Activo = !permission.Activo  
+      });
+      el.child?.forEach(child => {
+        child.permissions?.forEach(childPermission => {
+          childPermission.Activo = !childPermission.Activo
+        });
+      });
+    });
+  }
+
+  changeAllChild(item){
+    item.child.forEach(child => {
+      child.permissions.forEach(el => {
+        el.Activo = !el.Activo;
+      });
     });
   }
 

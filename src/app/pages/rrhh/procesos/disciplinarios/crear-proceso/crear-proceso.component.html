@@ -35,7 +35,7 @@
                         <div class="form-group col-md-6">
                             <div class="input-group mb-3">
                                 <label for="importFile">Evidencia</label>
-                                <input type="file" id="importFile" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
+                                <input #invenceFile type="file" id="importFile" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
                             </div>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="col-12 btn btn-info btn-sm" (click)="save()" [disabled]="form.valid">
+                <button class="col-12 btn btn-info btn-sm" (click)="save(); invenceFile.value = ''" [disabled]="form.valid">
                         Guardar
                 </button>
             </div>
@@ -132,7 +132,7 @@
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
         <h5 class="modal-title"> Agregar involucrados </h5>
-        <button type="button" class="close basic-close" (click)="closeModal()">
+        <button type="button" class="close basic-close" (click)="closeModal(); fileInvolved.value = ''">
             <span aria-hidden="true">
                 <i class="fas fa-times" (click)="closeModal()"></i>
             </span>
@@ -163,7 +163,7 @@
                     <div class="form-group">
                         <div class="col-12">
                             <label for="importFile">Evidencia</label>
-                            <input type="file" id="importFileP" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
+                            <input #fileInvolved type="file" id="importFileP" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
                         </div>
                     </div>
                 </div>
@@ -201,8 +201,8 @@
     </div>
     <div class="app-modal-footer">
         <div class="form-group text-right">
-            <button (click)="closeModal()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="newInvolved(); formInvolved.reset()">Guardar</button>
+            <button (click)="closeModal(); fileInvolved.value = ''" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-sm raised" (click)="newInvolved(); fileInvolved.value = ''">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

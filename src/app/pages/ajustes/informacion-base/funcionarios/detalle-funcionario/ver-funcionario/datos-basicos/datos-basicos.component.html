@@ -1,105 +1,94 @@
 <div class="card-body">
-  <div class="card-title">
-    <div class="row">
-      <div class="col-6">
-        <h5>Datos Básicos</h5>
-      </div>
-      <div class="col-6">
-        <button
-          class="btn btn-link pt-0 edit"
-          style="float: right"
-          (click)="openModal()"
-        >
+    <div class="card-title">
+        <div class="row">
+            <div class="col-6">
+                <h5>Datos Básicos</h5>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-link pt-0 edit" style="float: right" (click)="openModal()">
           <i class="fas fa-pencil-alt"></i>
         </button>
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="row">
-    <p class="col-6 text-right font-weight-bold text-mute item-subtitle">
-      Nombre completo
-    </p>
-    <p class="col-6 text font-weight-bold">
-      {{ funcionario.first_name }} {{ funcionario.second_name }}
-      {{ funcionario.first_surname }} {{ funcionario.second_surname }}
-    </p>
-    <p class="col-6 font-weight-bold text-mute item-subtitle">
-      Documento de identidad
-    </p>
-    <p class="col-6 font-weight-bold">
-      {{ funcionario.identifier }}
-    </p>
-    <p class="col-6 font-weight-bold text-mute item-subtitle">
-      Correo electrónico
-    </p>
-    <p class="col-6 font-weight-bold">
-      {{ funcionario.email }}
-    </p>
+    <div class="row">
+        <p class="col-6 text-right font-weight-bold text-mute item-subtitle">
+            Nombre completo
+        </p>
+        <p class="col-6 text font-weight-bold">
+            {{ funcionario.first_name }} {{ funcionario.second_name }} {{ funcionario.first_surname }} {{ funcionario.second_surname }}
+        </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Documento de identidad
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.identifier }}
+        </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Correo electrónico
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.email }}
+        </p>
 
-    <p class="col-6 font-weight-bold text-mute item-subtitle">
-      Título de estudio
-    </p>
-    <p class="col-6 font-weight-bold">
-      {{ funcionario.degree }}
-    </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Título de estudio
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.degree }}
+        </p>
 
-    <p class="col-6 font-weight-bold text-mute item-subtitle">
-      Fecha de nacimiento
-    </p>
-    <p class="col-6 font-weight-bold">
-      {{ funcionario.date_of_birth }}
-    </p>
-    <p class="col-6 font-weight-bold text-mute item-subtitle">Género</p>
-    <p class="col-6 font-weight-bold">
-      {{ funcionario.gener }}
-    </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Fecha de nacimiento
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.date_of_birth }}
+        </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">Género</p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.gener }}
+        </p>
 
-    <p class="col-6 font-weight-bold text-mute item-subtitle">Estado civil</p>
-    <p class="col-6 font-weight-bold">
-      {{ funcionario.marital_status }}
-    </p>
-    <p class="col-6 font-weight-bold text-mute item-subtitle">
-      Dirección de residencia
-    </p>
-    <p class="col-6 font-weight-bold">
-      {{ funcionario.address }}
-    </p>
-    <p class="col-6 font-weight-bold text-mute item-subtitle">Celular</p>
-    <p class="col-6 font-weight-bold">
-      {{ funcionario.cell_phone }}
-    </p>
-  </div>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">Estado civil</p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.marital_status }}
+        </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">
+            Dirección de residencia
+        </p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.address }}
+        </p>
+        <p class="col-6 font-weight-bold text-mute item-subtitle">Celular</p>
+        <p class="col-6 font-weight-bold">
+            {{ funcionario.cell_phone }}
+        </p>
+    </div>
 </div>
 
 <app-modal-basic #modal [dialogClass]="'modal-xl'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">Actualizar funcionario</h5>
-    <button type="button" class="close basic-close" (click)="modal.hide()">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Actualizar funcionario</h5>
+        <button type="button" class="close basic-close" (click)="hideModal()">
       <span aria-hidden="true">
-        <i class="fas fa-times" (click)="modal.hide()"></i>
+        <i class="fas fa-times" (click)="hideModal()"></i>
       </span>
     </button>
-  </div>
-  <div class="app-modal-body">
-    <div class="row mt-3">
-      <div class="col-12">
-        <form [formGroup]="form">
-          <div class="form-row mt-3">
-            <div class="form-group col-md-2 text-center">
-              <img
-                [src]="fileString"
-                class="img-rounded d-block m-auto"
-                alt=""
-              />
-              <label for="image" class="subir-archivo mt-3"
-                >Cargar imagen</label
+    </div>
+    <div class="app-modal-body">
+        <div class="row mt-3">
+            <div class="col-12">
+                <form [formGroup]="form">
+                    <div class="form-row mt-3">
+                        <div class="form-group col-md-2 text-center">
+                            <img [src]="fileString" class="img-rounded d-block m-auto" alt="" />
+                            <label for="image" class="subir-archivo mt-3">Cargar imagen</label
               >
               <input
                 type="file"
                 name="image"
                 class="form-control-file"
                 id="image"
-                formControlName="image"
                 (change)="onFileChanged($event)"
                 [class.is-invalid]="image_valid"
                 placeholder="Imagen"
@@ -121,7 +110,6 @@
                   placeholder=""
                   id="first_name"
                   [class.is-invalid]="first_name_valid"
-                  [(ngModel)]="funcionario.first_name"
                   formControlName="first_name"
                   class="form-control custom-control col-md-7"
                 />
@@ -142,7 +130,6 @@
                   placeholder=""
                   id="second_name"
                   [class.is-invalid]="second_name_valid"
-                  [(ngModel)]="funcionario.second_name"
                   formControlName="second_name"
                   class="form-control custom-control col-md-7"
                 />
@@ -163,7 +150,6 @@
                   placeholder=""
                   id="first_surname"
                   [class.is-invalid]="first_surname_valid"
-                  [(ngModel)]="funcionario.first_surname"
                   formControlName="first_surname"
                   class="form-control custom-control col-md-7"
                 />
@@ -187,7 +173,6 @@
                   placeholder=""
                   id="second_surname"
                   [class.is-invalid]="second_surname_valid"
-                  [(ngModel)]="funcionario.second_surname"
                   formControlName="second_surname"
                   class="form-control custom-control col-md-7"
                 />
@@ -210,7 +195,6 @@
                   type="number"
                   placeholder=""
                   [class.is-invalid]="identifier_valid"
-                  [(ngModel)]="funcionario.identifier"
                   formControlName="identifier"
                   name="identifier"
                   id="identifier"
@@ -231,7 +215,6 @@
                 <input
                   type="text"
                   [class.is-invalid]="address_valid"
-                  [(ngModel)]="funcionario.address"
                   id="address"
                   formControlName="address"
                   class="form-control custom-control col-md-7"
@@ -253,7 +236,6 @@
                 <input
                   type="date"
                   [class.is-invalid]="date_of_birth_valid"
-                  [(ngModel)]="funcionario.date_of_birth"
                   id="date_of_birth"
                   formControlName="date_of_birth"
                   class="form-control custom-control col-md-7"
@@ -276,7 +258,6 @@
                 <select
                   [class.is-invalid]="degree_valid"
                   id="degree"
-                  [(ngModel)]="funcionario.degree"
                   formControlName="degree"
                   class="form-select form-control custom-control col-md-7"
                 >
@@ -301,7 +282,6 @@
                   placeholder=""
                   id="email"
                   [class.is-invalid]="email_valid"
-                  [(ngModel)]="funcionario.email"
                   formControlName="email"
                   class="form-control custom-control col-md-7"
                 />
@@ -320,7 +300,6 @@
                 <select
                   [class.is-invalid]="gener_valid"
                   id="gener"
-                  [(ngModel)]="funcionario.gener"
                   formControlName="gener"
                   class="form-select form-control custom-control col-md-7"
                 >
@@ -342,7 +321,6 @@
                 <select
                   [class.is-invalid]="marital_status_valid"
                   id="marital_status"
-                  [(ngModel)]="funcionario.marital_status"
                   formControlName="marital_status"
                   class="form-select form-control custom-control col-md-7"
                 >
@@ -369,7 +347,6 @@
                   type="number"
                   id="cell_phone"
                   [class.is-invalid]="cell_phone_valid"
-                  [(ngModel)]="funcionario.cell_phone"
                   formControlName="cell_phone"
                   class="form-control custom-control col-md-7"
                 />
@@ -388,7 +365,7 @@
   <div class="app-modal-footer">
     <div class="form-group text-right">
       <button
-        (click)="modal.hide()"
+        (click)="hideModal()"
         type="button"
         class="btn btn-danger raised mr-2 btn-sm"
       >
@@ -396,7 +373,6 @@
       </button>
       <button
         type="submit"
-	[disabled]="form.pristine"
         class="btn btn-primary btn-sm raised"
         (click)="guardar()"
       >
@@ -405,4 +381,3 @@
     </div>
   </div>
 </app-modal-basic>
-

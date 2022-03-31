@@ -23,7 +23,7 @@
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
   <div class="app-modal-header">
     <h5 class="modal-title">Agregar nueva tarea</h5>
-    <button type="button" class="close basic-close" (click)="modal.hide()">
+    <button type="button" class="close basic-close" (click)="closeModal()">
       <span aria-hidden="true">
         <i class="fas fa-times" (click)="modal.hide()"></i>
       </span>
@@ -56,7 +56,7 @@
   </div>
   <div class="app-modal-footer">
     <div class="form-group text-right">
-      <button (click)="modal.hide()" type="reset" class="btn btn-danger raised mr-2 btn-sm">
+      <button (click)="closeModal()" type="reset" class="btn btn-danger raised mr-2 btn-sm">
         Cerrar
       </button>
       <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid"

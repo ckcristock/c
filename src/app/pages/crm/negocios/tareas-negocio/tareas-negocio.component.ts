@@ -121,5 +121,10 @@ export class TareasNegocioComponent implements OnInit {
     this.modal.show()*/
   }
 
+  closeModal(){
+    this.form.reset();
+    this.modal.hide();
+  }
+
 
 }

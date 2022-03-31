@@ -19,18 +19,25 @@ export class NegociosService {
     return this.http.get(`${this.url}/third-party`, { params })
   }
 
-  saveNeg(data): Observable<any> {
-    //TODO Backend para guardar negocio
+  saveNeg(data) {
+    return this.http.post(`${this.url}/business`, data);
+    // return new Observable(() => {
+    //   localStorage.setItem(`negocio ${data.request_name}`, JSON.stringify(data))
+    // })
+  }
 
-    return new Observable(() => {
-      localStorage.setItem(`negocio ${data.request_name}`, JSON.stringify(data))
-    })
+  changeState(data, id){
+    return this.http.put(`${this.url}/business/${id}`, data);
   }
 
   getNeg() {
     return of(
       negocios
     )
+  }
+
+  getBusinesses(){
+    return this.http.get(`${this.url}/business`);
   }
 
   getThirdPartyPerson(params = {}) {
@@ -80,8 +87,17 @@ export class NegociosService {
       history.push(item)
     )
   }
+
   getBudgets(params={}){
     return this.http.get(`${this.url}/budgets-paginate`)
-
   }
+
+  getBusiness(id){
+    return this.http.get(`${this.url}/business/${id}`)
+  }
+
+  newBusinessBudget( data ){
+    return this.http.post(`${this.url}/new-business-budget`, data);
+  }
+
 }

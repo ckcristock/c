@@ -16,10 +16,10 @@
             </thead>
             <tbody>
                 <tr *ngFor="let neg of negocios">
-                    <th scope="row"> <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{neg.id}}</a> </th>
-                    <td>{{neg.company}}</td>
-                    <td>{{neg.request_name}}</td>
-                    <td>$ {{neg.presupuesto |number}}</td>
+                    <th scope="row"> <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{neg.code}}</a> </th>
+                    <td>{{neg.third_party.first_name ? neg.third_party.first_name + " " + neg.third_party.first_surname : neg.third_party.social_reason}}</td>
+                    <td>{{neg.name}}</td>
+                    <td>$ {{neg.budget_value |number}}</td>
                     <td>{{neg.date | date}}</td>
                 </tr>
 

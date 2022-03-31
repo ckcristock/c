@@ -26,7 +26,7 @@ export class VerNegocioComponent implements OnInit {
   loading = false;
 
   contactos: any[];
-  negocio: Business = negocioData;
+  negocio: any;
 
   dataModal: any = [];
 
@@ -40,6 +40,7 @@ export class VerNegocioComponent implements OnInit {
   filtros = {
     id: '',
   };
+  budget_value:number;
 
   constructor(
     private ruta: ActivatedRoute,
@@ -47,29 +48,37 @@ export class VerNegocioComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getBussines();
     this.getPresupuestos();
     this.getCotizaciones();
     this.getTasks();
     this.filtros.id = this.ruta.snapshot.params.id;
-    this.negocio.id = this.ruta.snapshot.params.id;
+    //this.negocio.id = this.ruta.snapshot.params.id;
+  }
+
+  getBussines(){
+    this._negocio.getBusiness(this.ruta.snapshot.params.id).subscribe((data:any) => {
+      this.negocio = data.data;
+    })
   }
 
   getPresupuestos() {
     this.loading = true;
     this._negocio.getBudgets().subscribe((resp: any) => {
       this.presupuestos = resp.data.data;
-      console.log(this.presupuestos);
-      this.loading = false;
     });
-    // this.presupuestos = OTROS_PRESUPUESTOS;
   }
 
-  guardarPresupuesto(id) {
+  guardarPresupuesto(id, total_cop?) {
     if (this.presupuestosSeleccionados.includes(id))
       this.presupuestosSeleccionados = this.presupuestosSeleccionados.filter(
         (pres) => pres !== id
       );
-    else this.presupuestosSeleccionados.push(id);
+    else this.presupuestosSeleccionados.push({
+      budget_id: id,
+      business_budget_id: this.ruta.snapshot.params.id,
+      total_cop:  total_cop
+    });
   }
   guardarCotizacion(id) {
     if (this.cotizacionesSeleccionadas.includes(id))
@@ -111,7 +120,7 @@ export class VerNegocioComponent implements OnInit {
   }
 
   addPresupuesto() {
-    this.presupuestosSeleccionados = this.negocio.presupuestos.map((n) => n.id);
+    //this.presupuestosSeleccionados = this.presupuestos.map((n) => n.id);
 
     this.modalPresupuestos.show();
   }
@@ -131,9 +140,22 @@ export class VerNegocioComponent implements OnInit {
     });
   }
 
-  closeModalPresupuesto() {
-    this.negocio.presupuestos = this.presupuestosSeleccionados;
-    this.addEventToHistory('Se modificaron los presupuestos del negocio');
+  saveBudget() {
+    this.presupuestosSeleccionados.reduce((a, b) => {
+      return this.budget_value = a + b.total_cop;
+    }, this.negocio.budget_value)
+    let data = {
+      business_id: this.filtros.id,
+      budget_value: this.budget_value,
+      budgets: this.presupuestosSeleccionados
+    }
+    this._negocio.newBusinessBudget(data).subscribe(data => {
+      this.addEventToHistory('Se modificaron los presupuestos del negocio');
+      this.getBussines();
+      this.getPresupuestos();
+      this.modalPresupuestos.hide();
+      this.presupuestosSeleccionados = [];
+    });
   }
 
   closeModalCotizaciones() {

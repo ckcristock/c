@@ -1,6 +1,6 @@
 import { Negocio } from './negocio.interface';
 
-const negocios: Negocio[] = [
+const negocios: any[] = [
   {
     id: 'NZ1220',
     company: '25',

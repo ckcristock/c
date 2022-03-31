@@ -7,21 +7,21 @@
     <div class="card-body">
         <div class="row ml-0 mr-0" style="border-top: solid black">
             <div class="col-md-2 mt-3 mb-3">
-                <img [src]="negocio.empresa.logo" alt="Logo para la empresa" style="max-width: -webkit-fill-available" />
+                <img [src]="negocio?.third_party.image | image" alt="Logo para la empresa" style="max-width: -webkit-fill-available" />
             </div>
             <div class="col-md-2 mt-3">
-                <label>{{ negocio.id }}</label>
-                <p class="d-block m-0">{{ negocio.pais }}</p>
-                <p class="d-block m-0">{{ negocio.fechaEntrega | date }}</p>
-                <p class="d-block m-0">{{ negocio.empresa.name }}</p>
-                <p class="d-block m-0">{{ negocio.contacto }}</p>
+                <label>{{ negocio?.code }}</label>
+                <p class="d-block m-0">{{ negocio?.country.name }}</p>
+                <p class="d-block m-0">{{ negocio?.date | date }}</p>
+                <p class="d-block m-0">{{ negocio?.third_party.first_name ? negocio?.third_party.first_name + " " + negocio?.third_party.first_surname : negocio?.third_party.social_reason }}</p>
+                <p class="d-block m-0">{{ negocio?.third_party_person.name }}</p>
             </div>
             <div class="col-md-6 mt-3">
                 <label for="" class="d-block">Detalles</label>
-                <p class="text-justify">{{ negocio.detalles }}</p>
+                <p class="text-justify">{{ negocio?.description }}</p>
             </div>
             <div class="col-md-2 mt-3 mb-3">
-                <img [src]="negocio.qr" alt="qrNegocio" style="max-width: -webkit-fill-available" />
+                <!-- <img [src]="negocio.qr " alt="qrNegocio" style="max-width: -webkit-fill-available" /> -->
             </div>
         </div>
         <div class="row mr-0 ml-0" style="border-top: solid black">
@@ -35,10 +35,10 @@
                             <th class="col-md-2">Valor</th>
                         </thead>
                         <tbody style="font-weight: 100">
-                            <tr *ngFor="let pres of negocio.presupuestos">
-                                <td scope="row">{{ pres.descripcion }}</td>
-                                <td>{{ pres.fecha | date }}</td>
-                                <td>$ {{ pres.valor | number }}</td>
+                            <tr *ngFor="let pres of negocio?.business_budget">
+                                <td scope="row">{{ pres?.budget.observation }}</td>
+                                <td>{{ pres?.budget.created_at | date }}</td>
+                                <td>$ {{ pres?.budget.total_cop | number }}</td>
                             </tr>
                             <tr>
                                 <td scope="row" colspan="2"><strong>Agregar Presupuesto(s)</strong></td>
@@ -50,7 +50,7 @@
                     </table>
                 </div>
                 <div>
-                    <h6>Cotizaciones</h6>
+                    <!-- <h6>Cotizaciones</h6>
                     <table class="table table-bordered">
                         <thead class="table-dark text-center">
                             <th class="col-md-8">Descripción</th>
@@ -70,7 +70,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> -->
                 </div>
             </div>
             <div class="col-md-4" style="border-left: solid black">
@@ -106,7 +106,7 @@
         </button>
     </div>
     <div class="app-modal-body">
-        <table class="mt-2 table table-borderless table-striped" *ngIf="!loading && presupuestos.length > 0">
+        <table class="mt-2 table table-borderless table-striped">
             <thead>
                 <tr>
                     <th>Item</th>
@@ -122,7 +122,7 @@
             <tbody>
                 <tr *ngFor="let item of presupuestos" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
                     <td>
-                        <input type="checkbox" [selected]="presupuestosSeleccionados.includes(item.id)" [change]=" guardarPresupuesto(item.id) " />
+                        <input type="checkbox" (change)="guardarPresupuesto(item.id, item.total_cop)"/>
                         <label [for]=" item.id " class="ml-1 "> PRES {{ item.id }} </label>
                     </td>
                     <td> {{ item.created_at | date:'dd-MM-YYYY' }} </td>
@@ -142,7 +142,7 @@
         <div class="form-group text-right ">
             <button (click)="modalPresupuestos.hide() " type="reset " class="btn btn-danger raised mr-2 btn-sm "> Cerrar
             </button>
-            <button type="submit " class="btn btn-primary btn-sm raised " (click)="modalPresupuestos.hide(); closeModalPresupuesto() "> Guardar </button>
+            <button type="submit " class="btn btn-primary btn-sm raised " (click)="saveBudget()"> Guardar </button>
         </div>
     </div>
 </app-modal-basic>

@@ -108,7 +108,7 @@
         </div>
         <div class="col text-right">
             <button class="btn btn-primary mt-1 waves-effect waves-light" (click)="modal.show()">
-              <i class="fa fa-plus"></i> Add New </button>
+              <i class="fa fa-plus"></i> Agregar Negocio </button>
         </div>
     </div>
     <div [ngbNavOutlet]="nav" class="mt-2"></div>
@@ -125,19 +125,19 @@
                 </div>
             </div>
             <div class="mb-3">
-                <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{ neg.id }}</a>
+                <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{ neg.code }}</a>
             </div>
             <div>
                 <h5 class="font-size-16">
-                    <a class="text-dark">{{ neg.company }}</a>
+                    <a class="text-dark">{{ neg.third_party.first_name ? neg.third_party.first_name + " " + neg.third_party.first_surname : neg.third_party.social_reason }}</a>
                 </h5>
-                <p class="mb-4">{{ neg.request_name }}</p>
+                <p class="mb-4">{{ neg.name }}</p>
             </div>
 
             <div class="d-inline-flex team mb-0">
                 <div class="mr-3 align-self-center">
                     Presupuesto :
-                    <p class="mb-4">{{ neg.presupuesto | number }}</p>
+                    <p class="mb-4">{{ neg.budget_value | number }}</p>
                 </div>
             </div>
         </div>
@@ -161,18 +161,18 @@
                         <div class="col-md-6">
                             <label class="custom-label" for="funcionario_id">Nombre de la solicitud</label>
                             <!--[ngbTypeahead]="search"  -->
-                            <input id="request_name" type="text" formControlName="request_name" name="solicitud" placeholder="Nombre de la solicitud" class="form-control form-control-sm" />
+                            <input id="request_name" type="text" formControlName="name" name="solicitud" placeholder="Nombre de la solicitud" class="form-control form-control-sm" />
                         </div>
-                        <div class="col-md-6 text-right">
-                            <label for="date">Fecha de entrega: <input type="date" [min]="today" name="plazo" id="date"
-                                class="form-control" formControlName="date" />
-                            </label>
+                        <div class="col-md-6">
+                            <label for="date">Fecha de entrega</label>
+                            <input type="date" [min]="today" name="plazo" id="date"
+                                class="form-control form-control-sm" formControlName="date" />
                         </div>
                     </div>
                     <div class="form-group mt-3">
                         <div class="col-12">
                             <label for="">Descripción</label>
-                            <textarea class="form-control form-control-sm" formControlName="request_description" id="descripcion" name="description" rows="3" placeholder="Descripción del negocio">
+                            <textarea class="form-control form-control-sm" formControlName="description" id="descripcion" name="description" rows="3" placeholder="Descripción del negocio">
               </textarea>
                         </div>
                     </div>
@@ -180,8 +180,7 @@
                     <div class="row ml-0 mr-0">
                         <div class="form-group col-md-6">
                             <label for="company">Compañia</label>
-
-                            <ng-select [items]="companies" [(ngModel)]="companySelected" formControlName="company_id" placeholder="Seleccione un tercero" (change)="getContacts($event); getBudgets($event)" bindValue="id" notFoundText="No hay registros">
+                            <ng-select [items]="companies" formControlName="third_party_id" placeholder="Seleccione un tercero" (change)="getContacts(); getBudgets()" bindValue="id" notFoundText="No hay registros">
                                 <ng-template ng-label-tmp let-item="item">
                                     <span>{{ item.first_name ? item.first_name + " " + item.first_surname : item.social_reason }}</span>
                                 </ng-template>
@@ -193,24 +192,28 @@
                         <div class="form-group col-md-6">
                             <!-- <div *ngIf="contacts"> -->
                             <label for="contact"> Contacto: </label>
-                            <ng-select [items]="contacts" [(ngModel)]="selectedContact" formControlName="contact_id" placeholder="Persona de contacto" bindLabel="name" bindValue="id" notFoundText="No hay registros">
+                            <ng-select [items]="contacts" formControlName="third_party_person_id" placeholder="Persona de contacto" bindLabel="name" bindValue="id" notFoundText="No hay registros">
                             </ng-select>
                             <!-- </div> -->
                         </div>
                     </div>
                     <div class="col">
-                        <div class="input-group mb-3 row ml-0 mr-0">
-                            <label for="country" class="col-md-6" style="padding-left: 0">Pais <ng-select
-                              [items]="countries" [(ngModel)]="selectedCountry" formControlName="country"
+                        <div class="mb-3 row">
+                          <div class="form-group col-6">
+                            <label for="country">Pais</label>
+                            <ng-select
+                              [items]="countries" formControlName="country_id"
                               placeholder="Seleccione un pais" (change)="getCities()" bindLabel="text" bindValue="value"
                               ngDefaultControl notFoundText="No hay registros"> </ng-select>
-                          </label>
-                            <label for="city" class="col-md-6" style="padding-left: 0"> Ciudad <ng-select
-                                [items]="cities" [(ngModel)]="city" formControlName="city" bindLabel="name"
+                          </div>
+                          <div class="form-group col-6">
+                            <label for="city"> Ciudad </label>
+                            <ng-select
+                                [items]="cities" formControlName="city_id" bindLabel="name"
                                 bindValue="id" ngDefaultControl placeholder="Seleccione una ciudad"
                                 notFoundText="No hay registros">
                               </ng-select>
-                            </label>
+                          </div>
                         </div>
                     </div>
                     <div class="col-12 ml-0" style="padding-left: 0">
@@ -234,7 +237,7 @@
                                 <tbody>
                                     <tr *ngFor="let item of budgets" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
                                         <td>
-                                            <input type="checkbox" [selected]="budgetsSelected.includes(item.id)" [select]=" guardarPresupuesto(item.id) " />
+                                            <input type="checkbox" (change)=" guardarPresupuesto($event, item) " [id]="item.id"/>
                                             <p class="ml-1 "> PRES {{ item.id }} </p>
                                         </td>
                                         <td> {{ item.created_at | date:'dd-MM-YYYY' }} </td>

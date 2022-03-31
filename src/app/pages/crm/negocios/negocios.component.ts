@@ -19,7 +19,7 @@ import { NegociosService } from './negocios.service';
 export class NegociosComponent implements OnInit {
   @ViewChild('modal') modal: any;
 
-  negocios: any[];
+  negocios: any[] = [];
 
   negocios_tercera_etapa: Negocio[];
   negocios_segunda_etapa: Negocio[];
@@ -56,36 +56,32 @@ export class NegociosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.createForm();
     this.getCompanies();
     this.getNegocios();
     this.getLists();
     this.calcularTotal();
-    this.createForm();
     this.getCountries();
   }
 
   getNegocios() {
-    this._negocios.getNeg().subscribe((resp: any) => {
-      this.negocios = resp;
+    this._negocios.getBusinesses().subscribe( (resp: any) => {
+      this.negocios = resp.data;
     });
-  }
-
-  selectContact() {
-    this.form.patchValue({
-      contact_id: this.selectedContact,
-    });
+    // this._negocios.getNeg().subscribe((resp: any) => {
+    //   this.negocios = resp;
+    // });
   }
 
   createForm() {
     this.form = this.fb.group({
-      request_name: ['', this._reactiveValid.required],
-      request_description: ['', Validators.required],
-      company_id: ['', this._reactiveValid.required],
-      contact_id: ['', this._reactiveValid.required],
-      country: ['', Validators.required],
-      city: ['', Validators.required],
+      name: ['', this._reactiveValid.required],
+      description: ['', Validators.required],
+      third_party_id: ['', this._reactiveValid.required],
+      third_party_person_id: ['', this._reactiveValid.required],
+      country_id: ['', Validators.required],
+      city_id: ['', Validators.required],
       date: ['', Validators.required],
-      presupuesto_id: [''],
       cotizacion_id: [''],
     });
   }
@@ -110,19 +106,23 @@ export class NegociosComponent implements OnInit {
         index = filteredList.length;
       }
       filteredList.splice(index, 0, event.data);
+      this._negocios.changeState({status: targetStatus}, event.data.id).subscribe();
     }
   }
 
   private getLists() {
-    this.negocios_segunda_etapa = this.negocios.filter(
-      (t) => t.status === 'second'
-    );
-    this.negocios_tercera_etapa = this.negocios.filter(
-      (t) => t.status === 'third'
-    );
-    this.negocios_primera_etapa = this.negocios.filter(
-      (t) => t.status === 'first'
-    );
+    setTimeout(() => {
+      this.negocios_segunda_etapa = this.negocios.filter(
+        (t) => t.status === 'second'
+      );
+      this.negocios_tercera_etapa = this.negocios.filter(
+        (t) => t.status === 'third'
+      );
+      this.negocios_primera_etapa = this.negocios.filter(
+        (t) => t.status === 'first'
+      );
+    }, 1000);
+
   }
 
   calcularTotal() {
@@ -131,15 +131,23 @@ export class NegociosComponent implements OnInit {
       second: 0,
       third: 0,
     };
-    this.negocios_tercera_etapa.forEach((neg: Negocio) => {
-      this.total.third += neg.presupuesto;
-    });
-    this.negocios_primera_etapa.forEach((neg: Negocio) => {
-      this.total.first += neg.presupuesto;
-    });
-    this.negocios_segunda_etapa.forEach((neg: Negocio) => {
-      this.total.second += neg.presupuesto;
-    });
+    setTimeout(() => {
+      this.negocios_tercera_etapa?.forEach((neg: Negocio) => {
+        neg.business_budget.forEach(el => {
+          this.total.third += el.budget.total_cop;
+        });
+      });
+      this.negocios_primera_etapa?.forEach((neg: Negocio) => {
+        neg.business_budget.forEach(el => {
+          this.total.first += el.budget.total_cop;
+        });
+      });
+      this.negocios_segunda_etapa?.forEach((neg: Negocio) => {
+        neg.business_budget.forEach(el => {
+          this.total.second += el.budget.total_cop;
+        });
+      });
+    }, 1000);
   }
 
   inputFormatBandListValue(value: any) {
@@ -154,7 +162,7 @@ export class NegociosComponent implements OnInit {
       },
       () => {},
       () => {
-        console.log(this.companies);
+        // console.log(this.companies);
       }
     );
   }
@@ -166,11 +174,7 @@ export class NegociosComponent implements OnInit {
   }
 
   getCities() {
-    this.city = null;
-    let params = {
-      country: this.form.value.country,
-    };
-    this._negocios.getCities(params).subscribe((data: any) => {
+    this._negocios.getCities(this.form.value.country_id).subscribe((data: any) => {
       this.cities = data.data;
     });
   }
@@ -194,51 +198,48 @@ export class NegociosComponent implements OnInit {
       )
     );
 
-  getContacts(event: any) {
-    this.selectedContact = null;
-    let params = {
-      third: event?.first_name,
-    };
-
-    this._negocios.getThirdPartyPerson(params).subscribe((resp: any) => {
+  getContacts() {
+    this._negocios.getThirdPartyPerson(this.form.value.third_party_id).subscribe((resp: any) => {
       this.contacts = resp.data.data;
     });
   }
 
-  getBudgets(event: any) {
-    console.log(event);
-
-    let params = {
-      customer_id: event?.id,
-    };
-    this._negocios.getBudgets(params).subscribe((resp: any) => {
+  getBudgets() {
+    this._negocios.getBudgets(this.form.value.third_party_id).subscribe((resp: any) => {
       this.budgets = resp.data.data;
-      console.log(this.budgets);
     });
   }
 
-  guardarPresupuesto(value) {
-    if (this.budgetsSelected.includes(value)) {
-      this.budgetsSelected = this.budgetsSelected.filter(
-        (data) => data !== value
-      );
-      console.log(this.budgetsSelected);
-
-      return;
+  guardarPresupuesto(event, item) {
+    if (event.target.checked) {
+      // Add the new value in the selected options
+      this.budgetsSelected.push((item));
+    } else {;
+      // removes the unselected option
+      this.budgetsSelected = this.budgetsSelected.filter((selected) => {
+        selected.id !== event.target.id
+      });
     }
-    console.log(this.budgetsSelected);
-    this.budgetsSelected.push(value);
-    return;
+    // if (this.budgetsSelected.includes(value)) {
+    //   this.budgetsSelected = this.budgetsSelected.filter(
+    //     (data) => data !== value
+    //     );
+    //     console.log(this.budgetsSelected);
+    //   return;
+    // }
+    // this.budgetsSelected.push(value);
+    // return;
   }
 
   createNeg() {
-    // TODO Backend & service
-    console.log('Guardado en local');
-    this.contacts = null;
-    console.log(this.form.value);
-
-    this._negocios.saveNeg(this.form.value).subscribe((data) => {
-      console.log(data);
+    this.form.addControl('budgets', this.fb.control(this.budgetsSelected));
+    this.budgetsSelected.reduce((a, b) => {
+      return this.form.addControl('budget_value', this.fb.control(a + b.total_cop))
+    }, 0)
+    this._negocios.saveNeg(this.form.value).subscribe(r => {
+      this.budgetsSelected = [];
+      this.budgets = [];
+      this.getNegocios();
     });
     this.addEventToHistory('Negocio Creado');
   }

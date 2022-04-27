@@ -1,0 +1,337 @@
+<div class="page-body">
+  <div class="row">
+      <div class="col-md-8">
+          <div class="row">
+              <div class="col-md-12 indicadores" id="contenedor-indicadores">
+                  <div class="row">
+                      <div class="col-md-3">
+                          <div class="card bg-c-blue order-card">
+                              <div class="card-block">
+                                  <h4 class="m-b-20 text-center">Llegadas Tarde</h4>
+                                  <div class="row">
+                                      <div class="col-md-4">
+                                          <i class="fa fa-clock-o"></i>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <h2 class="text-center">{{total_llegadas_tarde}}</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="card bg-c-yellow order-card">
+                              <div class="card-block">
+                                  <h4 class="m-b-20 text-center">Ausentismo Promedio</h4>
+                                  <div class="row">
+                                      <div class="col-md-4">
+                                          <i class="fa fa-calendar-times-o"></i>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <h2 class="text-center">0</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="card bg-c-pink order-card">
+                              <div class="card-block">
+                                  <h4 class="m-b-20 text-center">Índice de Rotación</h4>
+                                  <div class="row">
+                                      <div class="col-md-4">
+                                          <i class="fa fa-retweet"></i>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <h2 class="text-center">0</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="card bg-c-green order-card">
+                              <div class="card-block">
+                                  <h4 class="m-b-20 text-center">Permanencia en Cargo</h4>
+                                  <div class="row">
+                                      <div class="col-md-4">
+                                          <i class="fa fa-calendar"></i>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <h2 class="text-center">0</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-12" id="contenedor-grafica">
+                  <div class="card">
+                      <div class="card-header" style="padding-bottom:0px;">
+                          <h6>Top 6 llegadas tarde </h6>
+                      </div>
+
+                      <div id="llegadas-tarde-funcionario" style="margin-top:5px;">
+                          <div class="card-body" style=" padding-top: 5px;">
+                              <div class="row ">
+                                  <div *ngIf="funcionarios_tarde.length == 0" class=" text-center">
+                                      <p>No hay registros de llegadas tarde este mes!</p>
+                                  </div>
+
+                                  <div *ngFor="let item of funcionarios_tarde; let i = index" class="col-md-2">
+                                      <div class="feed-user-img" style="text-align:center;">
+                                          <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen" style="width:50px;">
+                                          <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen" style="width:70px;" class=" img-radius imagen">
+                                      </div>
+                                      <div style="text-align:center;">
+                                          <div><span style="font-size: 9px"> {{item.Nombre_Funcionario}} </span></div>
+                                          <div><span class="text-muted " style="font-size: 9px"> Llegadas: {{item.Cantidad_Llegadas}}
+                      </span></div>
+                                      </div>
+
+
+                                  </div>
+
+                              </div>
+                          </div>
+
+                      </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="card">
+                              <div class="card-header" style="padding-bottom:0px">
+                                  <h6>Llegadas tarde de los últimos 15 días </h6>
+                              </div>
+                              <div class="card-body ">
+                                  <div #studentChart>
+                                    <chart id="llegadas_tarde_chart" [type]="'line'" [data]="llegadasTardeChartData" [options]="llegadasTardeChartOption"></chart>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+
+                          <div class="card" style="min-height: 283px;">
+                              <div class="card-header" style="padding-bottom:0px">
+                                  <h6>Permisos Pendientes </h6>
+                              </div>
+                              <div class="card-block" style=" height:100px; overflow-y: auto;">
+                                  <div class="col-md-12">
+                                      <div *ngIf="Permisos.length==0" class="col-md-12 text-center">
+                                          <h6>No hay Permisos para mostrar </h6>
+                                      </div>
+                                      <div *ngIf="Permisos.length > 0">
+                                          <div *ngFor="let item of Permisos; let i = index" class="row" style="margin-bottom:10px;">
+                                              <!--Repetir esta linea de codigo para llenar el tablero de cumpleaños-->
+
+                                              <div class="col-md-2">
+                                                  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen2 ">
+                                                  <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen2" alt="">
+                                              </div>
+                                              <div class="col-md-10 fancy-text m-t-10" style="text-align:left;">
+                                                  <div><span>{{item.Funcionario}}</span> <i class="fa fa-check-square-o pull-right" style="color:seagreen" (click)="MostrarPermiso(i)"></i>
+                                                  </div>
+
+                                              </div>
+
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="card-block" style=" height:100px; overflow-y: auto; padding-top: 2px;    padding-left: 15px;">
+                                  <div class="col-md-12">
+                                      <h6>OtroSi Pendientes </h6>
+                                      <div *ngIf="OtroSi.length > 0">
+                                          <div *ngFor="let item of OtroSi; let i = index" class="row" style="margin-bottom:10px;">
+                                              <!--Repetir esta linea de codigo para llenar el tablero de cumpleaños-->
+
+                                              <div class="col-md-2">
+                                                  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen2 ">
+                                                  <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen2" alt="">
+                                              </div>
+                                              <div class="col-md-10 fancy-text m-t-10" style="text-align:left;">
+                                                  <div><span>{{item.Funcionario1}}</span> <i class="fa fa-check-square-o pull-right" style="color:seagreen" (click)="AbrirModal(item)"></i>
+                                                  </div>
+
+                                              </div>
+
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+
+                      </div>
+
+                  </div>
+
+              </div>
+          </div>
+      </div>
+      <div class="col-md-4" id="lateral-derecho">
+          <div class="row">
+
+              <div class="col-md-12 ">
+                  <div class="card  bg-info">
+                      <div style="text-align:center;">
+                          <img src="assets/images/cumples.png" alt="cumpleanos">
+                      </div>
+                      <div class="card-body" style="padding-top:0px;padding-bottom:0px; ">
+                          <div class="row">
+                              <div class="col-md-12">
+                                  <button class="btn btn-warning btn-sm pull-right btnFuncionarios m-t-10" [routerLink]="['/ajustes/informacion-base/funcionarios']" ><i class="fa fa-users"></i> Funcionarios</button>
+                                </div>
+
+                          </div>
+                      </div>
+
+                      <div class="card-body" style=" height:219px; overflow-y: auto;">
+                          <div class="row">
+                              <div *ngIf="cumpleanerosSiguientes.length==0" class="col-md-12 text-center">
+                                  <h6>No hay cumpleaños para mostrar </h6>
+                              </div>
+                              <div *ngIf="cumpleanerosSiguientes.length > 0">
+                                  <div *ngFor="let item of cumpleanerosSiguientes; let i = index" class="col-md-12" style="margin-bottom:10px;">
+                                      <!--Repetir esta linea de codigo para llenar el tablero de cumpleaños-->
+                                      <div class="row">
+                                          <div class="col-md-2">
+                                              <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen2 ">
+                                              <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen2" alt="">
+                                          </div>
+                                          <div class="col-md-10 fancy-text" style="text-align:left;">
+                                              <div><span>{{item.Nombre_Funcionario | uppercase}}</span></div>
+                                              <div><span>{{globales.ConvertToStringDate(item.Fecha_N)}}</span></div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="card">
+                      <div class="card-header" style="padding-bottom:0px">
+                          <h6>Contratos por vencer </h6>
+                      </div>
+                      <div class="card-body" style="overflow-y: auto;">
+                          <div class="col-md-12">
+                              <div *ngIf="Contratos.length==0" class="row">
+                                  <h6>No hay contratos para mostrar </h6>
+                              </div>
+                              <div *ngIf="Contratos.length > 0">
+                                  <div *ngFor="let item of Contratos; let i = index" class="row" style="margin-bottom:10px;">
+                                      <div class="col-md-2">
+                                          <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen2 ">
+                                          <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen2" alt="">
+                                      </div>
+                                      <div class="col-md-10 fancy-text" style="text-align:left;">
+                                          <div>
+                                              <span>{{item.Nombre_Funcionario | uppercase}}</span>
+                                              <a *ngIf="item.Estado == 'Activo'" class="pull-right" (click)="CapturarDatos(item.Id_Contrato_Funcionario)" title="Enviar Preaviso">
+                                                  <i class="fa fa-bell" style="color:#ff9f15; cursor: pointer;"></i>
+                                                  <span style="position: absolute; font-size: 54%;" *ngIf="item.Alertas!=0" class="badge bg-c-pink">{{item.Alertas}}</span>
+                                              </a>
+                                          </div>
+                                          <div>
+                                              <span>{{globales.ConvertToStringDate(item.Contrato)}}</span>
+                                              <span class="estado" *ngIf="item.Estado == 'Preliquidado'">({{item.Estado}})</span>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="card card-bg-red">
+                      <div class="card-header" style="padding-bottom:0px">
+                          <h6>Periodo de Prueba</h6>
+                      </div>
+                      <div class="card-body " style="overflow-y: auto;">
+                          <div *ngIf="ContratosPrueba.length==0" class="row">
+                              <h6>No hay contratos para mostrar </h6>
+                          </div>
+                          <div *ngFor="let item of ContratosPrueba; let i = index" class="row" style="margin-bottom:10px;">
+                              <div class="col-md-3">
+                                  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen2 ">
+                                  <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen2" alt="">
+                              </div>
+
+                              <div class="col-md-9 fancy-text" style="text-align:left;">
+                                  <div><span>{{item.NombreFuncionario | uppercase}}</span></div>
+                                  <div><span>{{globales.ConvertToStringDate(item.FinalPrueba)}}</span></div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- <app-modal-basic id="ModalCambioEstado" [dialogClass]="'modal-lg'" #ModalCambioEstado>
+  <div class="app-modal-header">
+      <h4 class="modal-title">Aprobar Permiso </h4>
+      <button type="button" class="close basic-close" (click)="ModalCambioEstado.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  </div>
+  <div class="app-modal-body">
+      <div class="row">
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label>Funcionario</label>
+                  <p>{{ActividadModel.Funcionario}}</p>
+              </div>
+          </div>
+
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label>Fechas Permiso </label>
+                  <p>{{ActividadModel.Fecha_Inicio }} <br> {{ActividadModel.Fecha_Fin }}</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label for="estado">Estado Actividad</label>
+                  <select name="Estado" id="estado" class="form-control form-control-sm" [(ngModel)]="ActividadModel.Estado" required>
+          <option value="Aprobado" selected>Aprobar</option>
+          <option value="Rechazado">Rechazar</option>
+        </select>
+              </div>
+          </div>
+          <div class="col-md-12">
+              <div class="form-group">
+                  <label>Observaciones</label>
+                  <p>{{ActividadModel.Observaciones}}</p>
+              </div>
+          </div>
+      </div>
+
+  </div>
+  <div class="app-modal-footer">
+      <div class="text-right">
+          <button class="btn btn-primary btn-sm" style="display:flex; align-items:center;" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este permiso' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Actualizar',cancelButtonText: 'No, Comprobar!'}"
+              (confirm)="CambiarEstadoActividad()"><i class="ti-save mr-2"></i> Actualizar Permiso
+    </button>
+      </div>
+  </div>
+</app-modal-basic>
+
+<swal #confirmacionSalir title="" text="" type=""></swal>
+<swal #confirmacionGuardar [options]="alertOption"></swal>
+
+<app-modalotrosi [AbrirModal]="AbrirModalOtrosi.asObservable()" (ActualizarDatos)="ListarOtroSi()"></app-modalotrosi> -->

@@ -11,24 +11,27 @@
     </div>
 </div> -->
 <div class="topnav">
-  <div class="container-fluid">
+  <div class="container px-0">
     <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
       <div class="collapse navbar-collapse" id="topnav-menu-content">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" >
           <ng-container *ngFor="let item of navItems">
+            <div *ngIf="item.name != 'Tablero'">
+              <hr>
+            </div>  
             <li class="nav-item dropdown">
               <a
-                class="nav-link dropdown-toggle arrow-none"
+                class="nav-link dropdown-toggle arrow-none px-2"
                 href="javascript: void(0);"
                 [routerLink]="item.name == 'Tablero' ? '/' : item.link"
                 id="topnav-components"
                 role="button"
                 (click)="onMenuClick($event)"
               >
-                <i class="ri-dashboard-line mr-2"></i>{{ item.name }}
+                <i class="{{item.icon}} mr-2"></i>{{ item.name }}
                 <div *ngIf="item.child.length > 0" class="arrow-down"></div>
               </a>
-
+              
               <div
                 class="dropdown-menu row"
                 aria-labelledby="topnav-dashboard"
@@ -42,7 +45,7 @@
                   [ngForOf]="item.child"
                 >
                   <a
-                    class="col dropdown-item side-nav-link-ref"
+                    class="col dropdown-item side-nav-link-ref dropdown-menu-right"
                     *ngIf="!hasItems(subitem)"
                     [routerLink]="subitem.link"
                     routerLinkActive="active"
@@ -99,6 +102,7 @@
                 </ng-template>
               </div>
             </li>
+                      
           </ng-container>
         </ul>
       </div>

@@ -44,6 +44,10 @@ export class NominaComponent implements OnInit {
     this.getPagoNomina();
     this.getPeople();
   }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
 
   getPagoNomina() {
 

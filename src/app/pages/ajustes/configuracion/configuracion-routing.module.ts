@@ -7,6 +7,7 @@ import { CiudadesComponent } from './paises-ciudades/ciudades/ciudades.component
 import { PaisesCiudadesComponent } from "./paises-ciudades/paises-ciudades.component";
 import { DepartamentosMunicipiosComponent } from './departamentos-municipios/departamentos-municipios.component';
 import { BaseCalculosComponent } from "./base-calculos/base-calculos.component";
+import { NominaComponent } from "./nomina/nomina.component";
 
 
 
@@ -15,7 +16,8 @@ const routes : Routes = [
     { path: 'campos-terceros', component: CamposTercerosComponent },
     { path: 'dep-mun', component: DepartamentosMunicipiosComponent },
     { path: 'pais-ciud', component: PaisesCiudadesComponent },
-    { path: 'base-calculos', component: BaseCalculosComponent }
+    { path: 'base-calculos', component: BaseCalculosComponent },
+    { path: 'configuracion-nomina', component: NominaComponent },
 ]
 
 

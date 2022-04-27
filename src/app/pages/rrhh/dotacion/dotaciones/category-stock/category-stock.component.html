@@ -1,36 +1,40 @@
-<ng-container *ngIf="loading; else notDataTable">
+<ng-container *ngIf="loading; else notDataTable" class="mt-2">
 
     <div class="row">
         <div class="col-md-7">
-            <div class="card mt-2">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <div class="">
-                            <h5>Stock por Categorías</h5>
+            <div class="card-body">
+                <div class="card-title">
+                    <h5 class="text-primary">Stock por Categorías</h5>
+                </div>
+                <hr class="line">
+                <div class="container">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-4">
+                            <input type="text" class="form-control form-control-sm" (change)="findName()"
+                                [(ngModel)]="nombre" name="funcionario" autocomplete="off" placeholder="Nombre" />
                         </div>
-                        <div class="">
-                            <input type="text" class="form-control" (change)="findName()" [(ngModel)]="nombre" name="funcionario" autocomplete="off" placeholder="Nombre" />
-                        </div>
-                        <div class="">
+                        <div class="col-4">
                             <button class="btn btn-sm btn-primary btn-block" (click)="DownloadInventoryDotation()">
-                              <i class="fas fa-file-download"></i>
+                                <i class="fas fa-file-download"></i>
 
-                              <span *ngIf="!donwloading; else status"> Descargar</span>
+                                <span *ngIf="!donwloading; else status"> Descargar</span>
                                 <ng-template #status>
-                                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                  Generando...
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                    Generando...
                                 </ng-template>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-pills">
+                <div class="container mt-4">
+                    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-pills">
                         <li [ngbNavItem]="1">
                             <a ngbNavLink>Dotación</a>
                             <ng-template ngbNavContent>
+                                <app-table-stock #tablestock [type]="'Dotacion'" [name]="nombre" [find]="true">
+                                </app-table-stock>
 
-                                <app-table-stock #tablestock [type]="'Dotacion'" [name]="nombre" [find]="true"></app-table-stock>
 
                             </ng-template>
                         </li>
@@ -38,16 +42,16 @@
                             <a ngbNavLink>Epp</a>
                             <ng-template ngbNavContent>
 
-                                <app-table-stock #tablestock [type]="'EPP'" [name]="nombre" [find]="true"></app-table-stock>
+                                <app-table-stock #tablestock [type]="'EPP'" [name]="nombre" [find]="true">
+                                </app-table-stock>
 
                             </ng-template>
                         </li>
                     </ul>
 
-                    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                    <div [ngbNavOutlet]="nav" class="mt-4"></div>
                 </div>
             </div>
-
         </div>
 
         <div class="col-md-5">
@@ -56,8 +60,9 @@
                     <h5>Dotación y Epp's x Categorías</h5>
                 </div>
                 <div class="card-block" #dotacion_chart>
-                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
-                </canvas>
+                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                        [legend]="barChartLegend" [chartType]="barChartType">
+                    </canvas>
                 </div>
             </div>
         </div>

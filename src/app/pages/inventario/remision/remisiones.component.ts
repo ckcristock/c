@@ -14,6 +14,7 @@ import { IMyDrpOptions } from 'mydaterangepicker';
 import swal, { SweetAlertOptions } from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
+import { MatAccordion } from '@angular/material/expansion';
 
 
 @Component({
@@ -22,7 +23,17 @@ import { functionsUtils } from 'src/app/core/utils/functionsUtils';
   styleUrls: ['./remisiones.component.scss']
 })
 export class RemisionesComponent implements OnInit {
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   public Mes = [];
   public Datos: any = [];
   public Remisiones = [];
@@ -39,6 +50,7 @@ export class RemisionesComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild('confirmaSwal') confirmaSwal: any;
   @ViewChild('anularSwal') anularSwal: any;
+  @ViewChild('inputC') inputC: ElementRef;
   public facturacionChartTag: CanvasRenderingContext2D;
   rowsFilter = [];
   tempFilter = [];
@@ -69,11 +81,11 @@ export class RemisionesComponent implements OnInit {
   public Puntos = [];
   public Clientes = [];
   myDateRangePickerOptions: IMyDrpOptions = {
-    width: '100px',
-    height: '21px',
+    width: '240px',
+    height: '27px',
     selectBeginDateTxt: 'Inicio',
     selectEndDateTxt: 'Fin',
-    selectionTxtFontSize: '10px',
+    selectionTxtFontSize: '12px',
     dateFormat: 'yyyy-mm-dd',
   };
 
@@ -88,8 +100,15 @@ export class RemisionesComponent implements OnInit {
   constructor(private http: HttpClient, private location: Location, private route: ActivatedRoute) {
     this.ListarRemisiones();
   }
+  ngAfterViewInit() {
+    var width = this.inputC.nativeElement.offsetWidth;
+    var height = this.inputC.nativeElement.offsetHeight; 
+    console.log('Width:' + width);
+    console.log('Height: ' + height);
+  }
 
   ngOnInit() {
+    
     console.clear();
     this.user = JSON.parse(localStorage.getItem("User"));
     this.http.get(environment.ruta + 'php/remision/grafica_remisiones.php').subscribe((data: any) => {
@@ -136,6 +155,11 @@ export class RemisionesComponent implements OnInit {
       // type: 'info'
     }
   }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
+
   ListarBorradores() {
     this.http.get(environment.ruta + 'php/remision/borradores_remision.php?func=' + environment.id_funcionario).subscribe((data: any) => {
       this.Borrador = data;

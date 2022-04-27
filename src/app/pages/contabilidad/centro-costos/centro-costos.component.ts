@@ -7,6 +7,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import Swal from 'sweetalert2';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-centro-costos',
@@ -14,6 +15,17 @@ import Swal from 'sweetalert2';
   styleUrls: ['./centro-costos.component.scss']
 })
 export class CentroCostosComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   @ViewChild('modalCentroCosto') modalCentroCosto: any;
   @ViewChild('modalVerCentroCosto') modalVerCentroCosto: any;
   @ViewChild('alertSwal') alertSwal: any;
@@ -106,6 +118,13 @@ export class CentroCostosComponent implements OnInit {
     this.enviromen = environment;
     // this.getCompanies();
   }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
+  openInNewTab() {
+    window.open(this.enviromen.ruta + 'php/centroscostos/exportar.php', '_blank').focus();
+   }
   ListarCostos(){
     /* this.http.get(environment.ruta + 'php/centroscostos/centro_costos_listar.php').subscribe((data: any) => {
       this.items = data;

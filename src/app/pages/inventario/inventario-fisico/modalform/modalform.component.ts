@@ -108,7 +108,7 @@ export class ModalformComponent implements OnInit {
       </button>
     </div>
     <div class="modal-body d-flex flex-row align-items-center">
-       <i class="fa  fa-5x" [ngClass]="{'text-danger fa-times-circle':!success, 'text-primary fa-check-circle':success}"></i>
+       <i class="fa  fa-5x" [ngClass]="{'text-danger font-weight-bold fa-times-circle':!success, 'text-primary fa-check-circle':success}"></i>
       <h5 class="ml-2 text-alert">{{texto}}</h5>
     </div>
     <div class="modal-footer">

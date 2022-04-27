@@ -1,11 +1,63 @@
-<app-modal-basic #modalGenerico [dialogClass]="'modal-xl'">
-  <div class="app-modal-header">
-    <h4 class="modal-title">Activo Fijo</h4>
-    <button type="button" class="close basic-close" (click)="closeModal()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+<div class="card-body px-0">
+  <div class="card-title d-flex justify-content-between">
+    <h4 class="text-primary">Activos Fijos</h4>
+    <div class="btn-group rounded">
+      <button class="btn btn-primary btn-sm" style="float: right;" (click)="openConfirm(add)">
+        <i class="fa fa-plus"></i> Agregar
+      </button>
+      <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+        <i class="fas fa-sliders-h"></i> Filtros
+      </button>
+    </div>
   </div>
-  <div class="app-modal-body">
+  <hr class="line">
+  <mat-accordion multi>
+    <mat-expansion-panel class="mat-elevation-z0">
+      No hay filtros aún
+    </mat-expansion-panel>
+  </mat-accordion>
+  <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;" *ngIf="actives.length && !loading; else notData">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Codigo de Barras</th>
+        <th>Referencia</th>
+        <th>Categoria</th>
+        <th>Subcategoría</th>
+        <th class="text-center col-1">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container >
+        <tr *ngFor="let active of actives">
+          <td>{{ active.Nombre }}</td>
+          <td>{{ active.Codigo_Barras }}</td>
+          <td>{{ active.Codigo_Barras }}</td>
+          <td>{{ active.Categoria }}</td>
+          <td>{{ active.Subcategoria }}</td>
+          <td class="text-center">
+            <i role="button" (click)="editGeneric(active); openConfirm(add)" class="fa fa-eye text-primary"></i>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+    [collectionSize]="pagination.collectionSize" (pageChange)="getActives($event)" [pageSize]="pagination.pageSize"
+    [(page)]="pagination.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+    boundaryLinks="true">
+  </ngb-pagination>
+</div>
+
+<ng-template #add let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">Activo Fijo</h4>
+      <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
+        (click)="modal.dismiss('Cross click');closeModal()"></button>
+    </div>
+  </div>
+  <div class="modal-body">
     <form [formGroup]="form">
       <!-- <input type="hidden" class="form-control"> -->
       <input type="hidden" class="form-control form-control-sm" formControlName="company_id">
@@ -15,37 +67,22 @@
         <div class="col-3">
           <div class="form-group">
             <label>Nombre</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="Nombre_Comercial"
-            />
+            <input type="text" class="form-control" formControlName="Nombre_Comercial" />
           </div>
         </div>
         <div class="col-3">
           <div class="form-group">
             <label>Codigo de Barras</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="Codigo_Barras"
-            />
+            <input type="text" class="form-control" formControlName="Codigo_Barras" />
           </div>
         </div>
         <div class="col-3">
           <div class="form-group">
             <label>Tipo Activo</label>
 
-            <select
-              class="form-control"
-              required
-              formControlName="Id_Tipo_Activo_Fijo"
-            >
+            <select class="form-control" required formControlName="Id_Tipo_Activo_Fijo">
               <option value="" selected>Seleccione tipo</option>
-              <option
-                *ngFor="let ta of TipoActivos"
-                [value]="ta.Id_Tipo_Activo_Fijo"
-              >
+              <option *ngFor="let ta of TipoActivos" [value]="ta.Id_Tipo_Activo_Fijo">
                 {{ ta.Nombre_Tipo_Activo }}
               </option>
             </select>
@@ -54,11 +91,7 @@
         <div class="col-3">
           <div class="form-group">
             <label>Referencia</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="Referencia"
-            />
+            <input type="text" class="form-control" formControlName="Referencia" />
           </div>
         </div>
       </div>
@@ -67,15 +100,8 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Categoria</label>
-            <ng-select
-              formControlName="Id_Categoria"
-              [items]="Categorias"
-              bindLabel="text"
-              (change)="getSubCategories($event.value)"
-              bindValue="value"
-              loadingText="loading"
-              ngDefaultControl
-            >
+            <ng-select formControlName="Id_Categoria" [items]="Categorias" bindLabel="text"
+              (change)="getSubCategories($event.value)" bindValue="value" loadingText="loading" ngDefaultControl>
             </ng-select>
           </div>
         </div>
@@ -83,32 +109,20 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Subcategoría</label>
-            <ng-select
-              formControlName="Id_Subcategoria"
-              [items]="SubCategorias"
-              bindLabel="text"
-              (change)="getDinamicField($event.value)"
-              bindValue="value"
-              loadingText="loading"
-              ngDefaultControl
-            >
+            <ng-select formControlName="Id_Subcategoria" [items]="SubCategorias" bindLabel="text"
+              (change)="getDinamicField($event.value)" bindValue="value" loadingText="loading" ngDefaultControl>
             </ng-select>
           </div>
         </div>
 
         <ng-container formArrayName="dynamic">
-          <ng-container
-            *ngFor="let item of fieldDinamic.controls; let i = index"
-          >
+          <ng-container *ngFor="let item of fieldDinamic.controls; let i = index">
             <div class="col-md-3" [formGroupName]="i">
               <label for="">{{
                 item["controls"]["label"]["value"] | titlecase
-              }}</label>
-              <input
-                class="form-control form-control-sm"
-                [type]="item['controls']['type']['value']"
-                formControlName="valor"
-              />
+                }}</label>
+              <input class="form-control form-control-sm" [type]="item['controls']['type']['value']"
+                formControlName="valor" />
             </div>
           </ng-container>
         </ng-container>
@@ -118,109 +132,29 @@
         <div class="col-md-12">
           <div class="form-group">
             <label>Descripcion</label>
-            <textarea
-              type="text"
-              class="form-control"
-              formControlName="Descripcion_ATC"
-            ></textarea>
+            <textarea type="text" class="form-control" formControlName="Descripcion_ATC"></textarea>
           </div>
         </div>
       </div>
     </form>
   </div>
-  <div class="app-modal-footer">
-    <div class="text-right">
-      <button
-        type="button"
-        class="btn btn-default btn-sm"
-        (click)="closeModal()"
-      >
-        Cancelar
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary btn-sm"
-        [swal]="{
-          title: '¿Está Seguro?',
-          text: 'Se dispone a Guardar este Generico',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Si, Guardar',
-          cancelButtonText: 'No,Dejame Comprobar!'
-        }"
-        (confirm)="saveGeneric()"
-      >
-        Guardar
-      </button>
-    </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click');closeModal()">
+      Cancelar
+    </button>
+    <button type="button" [swal]="{
+        title: '¿Está Seguro?',
+        text: 'Se dispone a Guardar este Generico',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Guardar',
+        cancelButtonText: 'No,Dejame Comprobar!'
+      }" (confirm)="saveGeneric()" class="btn btn-primary">
+      Guardar
+    </button>
   </div>
-</app-modal-basic>
-
-<div class="row mt-2">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header text-right">
-        <button
-          type="button"
-          class="pull-right btn btn-success btn-sm"
-          (click)="modalGenerico.show()"
-          style="margin-right: 5px !important"
-        >
-          <i class="fa fa-plus"></i> Agregar Activo Fijo
-        </button>
-      </div>
-      <div class="card-body">
-        <table class="table table-sm table-striped">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Codigo de Barras</th>
-              <th>Referencia</th>
-              <th>Categoria</th>
-              <th>Subcategoría</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngIf="actives.length && !loading; else notData">
-              <tr *ngFor="let active of actives">
-                <td>{{ active.Nombre }}</td>
-                <td>{{ active.Codigo_Barras }}</td>
-                <td>{{ active.Codigo_Barras }}</td>
-                <td>{{ active.Categoria }}</td>
-                <td>{{ active.Subcategoria }}</td>
-                <td>
-                  <i
-                    (click)="editGeneric(active)"
-                    class="fa fa-eye text-primary"
-                  ></i>
-                </td>
-              </tr>
-            </ng-container>
-          </tbody>
-        </table>
-        <ngb-pagination
-          class="d-flex justify-content-center pagination-rounded pagination-sm"
-          [collectionSize]="pagination.collectionSize"
-          (pageChange)="getActives($event)"
-          [pageSize]="pagination.pageSize"
-          [(page)]="pagination.page"
-          aria-label="Default pagination"
-          maxSize="5"
-          rotate="true"
-          ellipses="false"
-          boundaryLinks="true"
-        >
-        </ngb-pagination>
-      </div>
-    </div>
-  </div>
-</div>
+</ng-template>
 
 <ng-template #notData>
-  <tr>
-    <td colspan="100%">
-      <app-not-data [loading]="loading"></app-not-data>
-    </td>
-  </tr>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

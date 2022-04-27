@@ -20,6 +20,7 @@ export class MenuChildComponent implements OnInit {
   constructor( private _swal:SwalService ) { }
 
   ngOnInit(): void {
+    console.log(this.navItems)
   }
 
   setValues(item: any, position) {

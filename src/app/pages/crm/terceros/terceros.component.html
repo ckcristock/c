@@ -1,71 +1,97 @@
 <div class="card">
     <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-sm btn-primary" style="float: right;" [routerLink]="['/crm/crear-tercero']">
-                <i class="fa fa-plus"></i>
-                Agregar Tercero
-            </button>
-            <h5 class="text-primary">Terceros</h5>
-            <p>Todos los terceros registrados en nuestras bases de datos.</p>
-        </div>
-        <div class="form-row mt-4 ml-1">
-            <div class="form-group col-2">
-                <label for="">Filtro NIT</label>
-                <input type="text" class="form-control form-control-sm" name="nit" [(ngModel)]="filtros.nit" (change)="getThirdParties()">
-            </div>
-            <div class="form-group col-2">
-                <label for="">Filtro Nombre</label>
-                <input type="text" class="form-control form-control-sm" name="name" [(ngModel)]="filtros.name" (change)="getThirdParties()">
-            </div>
-            <div class="form-group col-2">
-                <label for="">Filtro Tipo Tercero</label>
-                <select class="form-control form-control-sm" name="third" [(ngModel)]="filtros.third_party_type" (change)="getThirdParties()">
-                    <option value="Todos" selected>Todos</option>
-                    <option value="Cliente">Cliente</option>
-                    <option value="Proveedor">Proveedor</option>
-                </select>
+        <div class="card-title d-flex justify-content-between">
+            <h4 class="text-primary">Terceros</h4>
+            <div class="btn-group rounded">
+                <button class="btn btn-primary btn-sm" style="float: right;" [routerLink]="['/crm/crear-tercero']">
+                    <i class="fa fa-plus"></i> Agregar
+                </button>
+                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                    <i class="fas fa-sliders-h"></i> Filtros
+                </button>
             </div>
         </div>
-        <table class="table table-borderless table-striped" *ngIf="!loading && thirdParties.length > 0; else notData">
-            <thead class="bg-light">
+        <hr class="line">
+        <div class="container">
+
+        </div>
+        <mat-accordion multi>
+            <mat-expansion-panel class="mat-elevation-z0">                              
+                <mat-form-field class="col-lg-2 col-md-3 col-sm-4 pl-0" appearance="outline">
+                    <mat-label>NIT</mat-label>
+                    <input type="text" matInput name="nit" [(ngModel)]="filtros.nit" autocomplete="off"
+                        placeholder="Busca por NIT" (input)="getThirdParties()">
+                </mat-form-field>
+                <mat-form-field class="col-md-2 pl-0" appearance="outline">
+                    <mat-label>Tipo de tercero</mat-label>
+                    <mat-select name="third" [(ngModel)]="filtros.third_party_type"
+                        (selectionChange)="getThirdParties()">
+                        <mat-option value="Todos">Todos</mat-option>
+                        <mat-option value="Cliente">Cliente</mat-option>
+                        <mat-option value="Proveedor">Proveedor</mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                <mat-form-field class="col-lg-3 col-md-3 col-sm-4 pl-0" appearance="outline">
+                    <mat-label>Nombre</mat-label>
+                    <input type="text" matInput name="name" [(ngModel)]="filtros.name" autocomplete="off"
+                        placeholder="Busca por nombre" (input)="getThirdParties()">
+                </mat-form-field>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
+            *ngIf="!loading && thirdParties.length > 0; else notData">
+            <thead>
                 <tr>
-                    <th></th>
+                    <th>Foto</th>
                     <th>NIT</th>
-                    <th>Nombre Terceros</th>
+                    <th>Nombre</th>
                     <th>Dirección</th>
                     <th>Municipio</th>
-                    <th>Telefono / Celular</th>
-                    <th>Tipo Tercero</th>
-                    <th>Estado</th>
-                    <th class="text-center">Acciones</th>
+                    <th>Teléfono</th>
+                    <th>Tipo</th>
+                    <th class="text-center col-1">Estado</th>
+                    <th class="text-center col-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let third of thirdParties" [ngClass]="{'bg-danger text-white': (third.state == 'Inactivo')}">
-                    <th>
-                        <img [src]="third.image | image" class="p-0 m-0">
-                    </th>
+                <tr *ngFor="let third of thirdParties"
+                    [ngClass]="{'text-danger font-weight-bold': (third.state == 'Inactivo')}">
+                    <td>
+                        <div>
+                            <img [src]="third.image | image" onerror="this.src='../../../../assets/images/nofound.png'"
+                                class="rounded-circle mx-auto img-fluid header-profile-user">
+                        </div>
+
+                    </td>
                     <td> {{ third.nit }} </td>
                     <td> {{ third.first_name }} {{ third.first_surname }} </td>
                     <td> {{ third.cod_dian_address }} </td>
                     <td> {{ third.municipality.name }} </td>
                     <td> {{ third.landline }} / {{ third.cell_phone }} </td>
                     <td> {{ third.third_party_type }} </td>
-                    <td>{{ third.state }}</td>
+                    <td class="text-center">
+                        <span [ngClass]="third.state == 'Inactivo' ? 'badge badge-danger': 'badge badge-primary'">
+                            {{ third.state }}
+                        </span>
+                    </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light"
+                                    type="button">
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/editar-tercero', third.id]">
-                                        <i class="far fa-edit"></i> editar
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones"
+                                        [routerLink]="['/crm/editar-tercero', third.id]">
+                                        <i class="far fa-edit"></i> Editar
                                     </a>
-                                    <a *ngIf="third.state == 'Activo'" (click)="changeState(third, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                    <a *ngIf="third.state == 'Activo'" (click)="changeState(third, 'Inactivo')"
+                                        class="dropdown-item waves-light text-danger waves-effect caja-botones">
                                         <i class="far fa-trash-alt"></i> Anular
                                     </a>
-                                    <a *ngIf="third.state == 'Inactivo'" (click)="changeState(third, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                    <a *ngIf="third.state == 'Inactivo'" (click)="changeState(third, 'Activo')"
+                                        class="dropdown-item waves-light text-success waves-effect caja-botones">
                                         <i class="fas fa-check"></i> Activar
                                     </a>
                                 </div>
@@ -76,8 +102,10 @@
             </tbody>
         </table>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getThirdParties($event)" aria-label="Default pagination"
-        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+        [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
+        (pageChange)="getThirdParties($event)" aria-label="Default pagination" maxSize="5" rotate="true"
+        ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
     </ngb-pagination>
 </div>
 <ng-template #notData>

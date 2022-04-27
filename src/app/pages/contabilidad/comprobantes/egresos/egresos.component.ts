@@ -11,6 +11,7 @@ import { debounceTime, map } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { CentroCostosService } from '../../centro-costos/centro-costos.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-egresos',
@@ -18,7 +19,17 @@ import { CentroCostosService } from '../../centro-costos/centro-costos.service';
   styleUrls: ['./egresos.component.scss']
 })
 export class EgresosComponent implements OnInit {
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   public fecha=new Date();
   public Proveedores:any[]=[];
   public Id_Proveedor: any = '';
@@ -30,8 +41,8 @@ export class EgresosComponent implements OnInit {
     @ViewChild('modalVerComprobante') modalVerComprobante: any;
     @ViewChild('alertSwal') alertSwal: any;
     myDateRangePickerOptions: IMyDrpOptions = {
-      width:'180px', 
-      height: '21px',
+      width:'155px', 
+      height: '28px',
       selectBeginDateTxt:'Inicio',
       selectEndDateTxt:'Fin',
       selectionTxtFontSize: '10px',
@@ -139,6 +150,10 @@ export class EgresosComponent implements OnInit {
       },
       allowOutsideClick: () => !swal.isLoading()
     }
+  }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
   }
   
   //BUSQUEDA CLIENTE

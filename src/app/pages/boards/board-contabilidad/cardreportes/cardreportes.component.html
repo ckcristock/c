@@ -1,0 +1,16 @@
+<div class="row">
+  <div *ngFor="let Configuracion of Reportes; let i = index " class="col-md-3" style="cursor: pointer" (click)="DescargasReporte(i)">
+    <div class="card bg-light" [ngClass]="Configuracion.Color">
+      <div class="card-body" >
+        <div class="row align-items-center">
+          <div class="col-3 notify-icon">
+            <i style="font-size: 24px;" [ngClass]="Configuracion.Icono"></i>
+          </div>
+          <div class="col-9 notify-cont" style="min-height: 68px;vertical-align:middle">
+            <p class="align-items-center" >{{Configuracion.Texto}} </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

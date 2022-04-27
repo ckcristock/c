@@ -1,81 +1,56 @@
 <div class="row">
     <ng-container *ngFor="let item of navItems; let x = index">
         <ng-container class="mb-4" *ngIf="!item.link && !navItems[x-1]?.link">
-            <ng-container *ngIf="item.child && item.child.length > 0 && item.child[0].permissions && !navItems[x-1]?.link && !item.parent_id">
-                <div class="col-12">
+            <ng-container
+                *ngIf="item.child && item.child.length > 0 && item.child[0].permissions && !navItems[x-1]?.link && !item.parent_id">
+                <div class="col-12 mx-3">
                     <div class="row">
                         <h5>{{ item.name }}</h5>
                         <div class="ml-2 custom-control custom-switch" dir="ltr">
-                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ item.name + '-' + item.id }}">
-                            <input
-                              type="checkbox"
-                              class="custom-control-input"
-                              checked
-                              (change)="changeAll(item)"
-                              id="{{ item.name + '-' + item.id }}"
-                            />
-                            <label
-                              class="custom-control-label"
-                              for="{{ item.name + '-' + item.id }}"
-                              ></label
-                            >
-                          </span>
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                title="{{ item.name + '-' + item.id }}">
+                                <input type="checkbox" class="custom-control-input" checked (change)="changeAll(item)"
+                                    id="{{ item.name + '-' + item.id }}" />
+                                <label class="custom-control-label" for="{{ item.name + '-' + item.id }}"></label>
+                            </span>
                         </div>
                     </div>
                 </div>
             </ng-container>
         </ng-container>
         <ng-container *ngIf="item.child.length > 0 && item.parent_id">
-            <div class="col-12">
+            <div class="col-12 mx-3">
                 <div class="row">
-                    <div class="col-12">
-                        <div class="row">
-                            <h5>{{ item.name }}</h5>
-                            <div class="ml-2 text-left custom-control custom-switch" dir="ltr">
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ item.name + '-' + item.id }}">
-                                <input
-                                  type="checkbox"
-                                  class="custom-control-input"
-                                  checked
-                                  (change)="changeAllChild(item)"
-                                  id="{{ item.name + '-' + item.id }}"
-                                />
-                                <label
-                                  class="custom-control-label"
-                                  for="{{ item.name + '-' + item.id }}"
-                                  ></label
-                                >
-                              </span>
-                            </div>
-                        </div>
+                    <h5> - {{ item.name }}</h5>
+                    <div class="ml-2 text-left custom-control custom-switch" dir="ltr">
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                            title="{{ item.name + '-' + item.id }}">
+                            <input type="checkbox" class="custom-control-input" checked (change)="changeAllChild(item)"
+                                id="{{ item.name + '-' + item.id }}" />
+                            <label class="custom-control-label" for="{{ item.name + '-' + item.id }}"></label>
+                        </span>
                     </div>
                 </div>
             </div>
         </ng-container>
         <ng-container *ngIf="item.link">
-            <div class="col-4">
-                <div class="card">
+            <div class="col-3">
+                <div class="card border">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <h4 class="card-title">{{ item.name }}</h4>
-                            </div>
-                            <div *ngFor="let permit of item.permissions; let i = index" class="col-6 custom-control custom-switch mb-2" dir="ltr ">
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ permit.description }}">
-                                <input
-                                  type="checkbox"
-                                  class="custom-control-input"
-                                  [checked]="permit.Activo"
-                                  (change)="permit.Activo = !permit.Activo"
-                                  id="{{ permit.menu_id + '-' + permit.permission_id }}"
-                                />
-                                <label
-                                  class="custom-control-label"
-                                  for="{{ permit.menu_id + '-' + permit.permission_id }}"
-                                  >{{ permit.public_name }}</label
-                                >
+                        <div class="card-title">
+                            <h4 class="card-title">{{ item.name }}</h4>
+                        </div>
+                        <div *ngFor="let permit of item.permissions; let i = index"
+                            class="col-6 custom-control custom-switch mb-2" dir="ltr ">
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                title="{{ permit.description }}">
+                                <input type="checkbox" class="custom-control-input" [checked]="permit.Activo"
+                                    (change)="permit.Activo = !permit.Activo"
+                                    id="{{ permit.menu_id + '-' + permit.permission_id }}" />
+                                <label class="custom-control-label"
+                                    for="{{ permit.menu_id + '-' + permit.permission_id }}">{{ permit.public_name
+                                    }}</label>
                             </span>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,7 +58,8 @@
         </ng-container>
         <ng-container *ngIf="item.child.length > 0">
             <div class="col-12">
-                <app-menu-child [ngClass]="{ 'ml-2 mb-4': (item.child[0].permissions )}" [navItems]="item.child"></app-menu-child>
+                <app-menu-child [ngClass]="{ 'ml-2 mb-4': (item.child[0].permissions )}" [navItems]="item.child">
+                </app-menu-child>
             </div>
         </ng-container>
     </ng-container>

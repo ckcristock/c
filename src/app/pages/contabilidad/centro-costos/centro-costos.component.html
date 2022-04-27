@@ -1,113 +1,130 @@
-<div class="page-body">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Centros de Costos </h5>
-                            <span>Centros de Costos de la Empresa</span>
+<div class="card">
+    <div class="card-body">
+        <div class="card-title d-flex justify-content-between">
+            <h4 class="text-primary">Centros de Costos</h4>
+            <div class="btn-group rounded">
+                <button style="float: right;" type="button" class="btn btn-primary btn-sm"
+                    (click)="AbrirModalNuevoCentro()">
+                    <i class="fa fa-plus"></i>
+                    Agregar
+                </button>
+                <button style="float: right;" class="btn btn-success btn-sm" (click)="openInNewTab()">
+                    <i class="fas fa-table"></i> Exportar
+                </button>
+                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                    <i class="fas fa-sliders-h"></i> Filtros
+                </button>
+            </div>
+        </div>
+        <hr class="line">
+        <div class="container">
+            <mat-accordion multi>
+                <mat-expansion-panel class="mat-elevation-z0">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-3 input-group-sm">
+                                <label for="">Código</label>
+                                <input type="text" placeholder="Filtro Código" (change)="filtrar('No')" [(ngModel)]="Filtros.Codigo"
+                                    class="form-control input-sm">
+                            </div>
+                            <div class="col-3 input-group-sm">
+                                <label for="">Nombre</label>
+                                <input type="text" placeholder="Filtro Nombre" (change)="filtrar('No')" [(ngModel)]="Filtros.Nombre"
+                                    class="form-control input-sm">
+                            </div>
+                            <!-- <div class="col-3 input-group-sm">
+                                <label for="">¿Centro Padre?</label>
+                                <select (change)="filtrar('No')" name="Id_Empresa" id="Id_Empresa" [(ngModel)]="Filtros.Id_Empresa" class="form-control input-sm" placeholder="Filtro Empresa" required>
+                                    <option *ngFor="let item of companies" [value]="item.value">
+                                        {{ item.text }}
+                                    </option>
+                                </select>
+                            </div> -->
                         </div>
-
-                        <div class="col-md-6">
-                            <div class="pull-right">
-                                <div class="card-header-left">
-                                    <a style="float: right;" href="{{enviromen.ruta}}php/centroscostos/exportar.php" target="_blank" class="btn btn-success btn-sm">
-                                        <i class="fas fa-table"></i> Exportar
-                                    </a>
-                                    <button style="float: right;" type="button" class="pull-left btn btn-primary btn-sm mr-2" (click)="AbrirModalNuevoCentro()">
-                                        <i class="fa fa-plus"></i>
-                                    Agregar Nuevo Centro de Costo
-                                    </button> &nbsp;
+                       <!--  <div class="row">
+                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
+                                <mat-label> </mat-label>
+                                <input matInput type="text" placeholder="">
+                            </mat-form-field>
+                            <mat-form-field class="col-md-2" appearance="outline">
+                                <mat-label> </mat-label>
+                                <mat-select>
+                                    <mat-option value=""> </mat-option>
+                                </mat-select>
+                            </mat-form-field>                                
+                        </div> -->
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+        <div class="container" style="font-size: small;">
+            <table class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Centro Padre</th>
+                        <th>Tipo Centro</th>
+                        <th>Asignado a</th>
+                        <th>Estado</th>
+                        <th class="text-center col-1">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of items" [ngClass]="{'text-danger font-weight-bold': ( item.Estado == 'Inactivo' )}">
+                        <td>{{ item.Codigo }}</td>
+                        <td>{{ item.Nombre }}</td>
+                        <!-- <td> {{ item.Empresa }} </td> -->
+                        <td>{{ item.PadreCentro }}</td>
+                        <td>{{ item.Tipo_Centro }}</td>
+                        <td>{{ item.ValorTipoCentro }}</td>
+                        <td>{{ item.Estado }}</td>
+                        <td>
+                            <div class="text-center">
+                                <div ngbDropdown class="dropdown-primary">
+                                    <button ngbDropdownToggle
+                                        class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                        <i class="mdi mdi-chevron-down"></i>
+                                    </button>
+                                    <div ngbDropdownMenu>
+                                        <a class="dropdown-item waves-light waves-effect caja-botones"
+                                            (click)="EditarCentroCosto(item.Id_Centro_Costo, modalEditarCentroCosto)">
+                                            <i class="far fa-edit"></i> Editar</a>
+                                        <a class="dropdown-item waves-light waves-effect caja-botones"
+                                            [swal]="{ title: 'Eliminar', text: 'Se dispone a eliminar el centro de costo.\n¿Está seguro(a)?', type: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                            (confirm)="Eliminar(item.Id_Centro_Costo)">
+                                            <i class="far fa-trash-alt"></i> Eliminar</a>
+                                        <a class="dropdown-item waves-light waves-effect caja-botones"
+                                            [swal]="{ title: 'Cambio de Estado', text: 'Se dispone a cambiar el estado de este centro de costo.\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                            (confirm)="CambiarEstado(item.Id_Centro_Costo)">
+                                            <i *ngIf="item.Estado == 'Activo'" class="fas fa-times"> Anular</i>
+                                            <i *ngIf="item.Estado == 'Inactivo'" class="fas fa-check"> Activar</i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-striped" style="font-size: 10px;">
-                                <thead>
-                                    <tr>
-                                        <th style="max-width: 100px; width: 100px !important;">Codigo</th>
-                                        <th style="max-width:250px;width:250px">Nombre</th>
-                                        <th style="max-width: 100px; width: 100px !important;">Centro Padre</th>
-                                        <th style="max-width: 100px; width: 100px !important;">Tipo Centro</th>
-                                        <th style="max-width: 130px; width: 130px !important;">Asignado a</th>
-                                        <th style="max-width: 80px; width: 80px !important;">Estado</th>
-                                        <th style="max-width: 80px; width: 80px !important;" class="text-center">Acciones</th>
-                                    </tr>
+                        </td>
 
-                                    <tr>
-                                        <th class="tabla-filtro">
-                                            <input type="text" placeholder="Filtro Código" (change)="filtrar('No')" [(ngModel)]="Filtros.Codigo" class="form-control input-sm">
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <input type="text" placeholder="Filtro Nombre" (change)="filtrar('No')" [(ngModel)]="Filtros.Nombre" class="form-control input-sm">
-                                        </th>
-                                        <!-- <th class="tabla-filtro">
-                                            <select (change)="filtrar('No')" name="Id_Empresa" id="Id_Empresa" [(ngModel)]="Filtros.Id_Empresa" class="form-control input-sm" placeholder="Filtro Empresa" required>
-                                                <option *ngFor="let item of companies" [value]="item.value">
-                                                    {{ item.text }}
-                                                </option>
-                                            </select>
-                                        </th> -->
-                                        <th class="tabla-filtro"></th>
-                                        <th class="tabla-filtro"></th>
-                                        <th class="tabla-filtro"></th>
-                                        <th class="tabla-filtro"></th>
-                                    </tr>
-
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let item of items" [ngClass]="{'bg-danger text-white': ( item.Estado == 'Inactivo' )}">
-                                        <td>{{ item.Codigo }}</td>
-                                        <td>{{ item.Nombre }}</td>
-                                        <!-- <td> {{ item.Empresa }} </td> -->
-                                        <td>{{ item.PadreCentro }}</td>
-                                        <td>{{ item.Tipo_Centro }}</td>
-                                        <td>{{ item.ValorTipoCentro }}</td>
-                                        <td>{{ item.Estado }}</td>
-                                        <td>
-                                            <div class="text-center">
-                                                <div ngbDropdown class="dropdown-primary">
-                                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">
-                                                        <i class="mdi mdi-chevron-down"></i>
-                                                    </button>
-                                                    <div ngbDropdownMenu>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" (click)="EditarCentroCosto(item.Id_Centro_Costo, modalEditarCentroCosto)">
-                                                            <i class="far fa-edit"></i> Editar</a>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title: 'Eliminar', text: 'Se dispone a eliminar el centro de costo.\n¿Está seguro(a)?', type: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                                            (confirm)="Eliminar(item.Id_Centro_Costo)">
-                                                            <i class="far fa-trash-alt"></i> Eliminar</a>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title: 'Cambio de Estado', text: 'Se dispone a cambiar el estado de este centro de costo.\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                                            (confirm)="CambiarEstado(item.Id_Centro_Costo)">
-                                                            <i *ngIf="item.Estado == 'Activo'" class="fas fa-times"> Inactivar</i>
-                                                            <i *ngIf="item.Estado == 'Inactivo'" class="fas fa-check"> Activar</i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <!-- PROCESO DE CARGA RECURVISA (SE COMENTA EL 09/02/2019 PORQUE POR AHORA NO SE VA A UTILIZAR) -->
-                                        <!-- <td colspan="7" style="padding:0px;"> 
+                        <!-- PROCESO DE CARGA RECURVISA (SE COMENTA EL 09/02/2019 PORQUE POR AHORA NO SE VA A UTILIZAR) -->
+                        <!-- <td colspan="7" style="padding:0px;"> 
                             <ng-container *ngTemplateOutlet="centrosRecursivos; context:{ $implicit: items }"></ng-container>
                           </td> -->
-                                    </tr>
-                                </tbody>
-                            </table>
-                            {{(page*maxSize)-maxSize+1}} al {{ TotalItems>page*maxSize ? (page*maxSize) : TotalItems }} de {{ TotalItems }}
-                            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="filtrar()" rotate="true" ellipses="false" boundaryLinks="true"
-                                [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
-                        </div>
-                    </div>
-                </div>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="text-center">
+                {{(page*maxSize)-maxSize+1}} al {{ TotalItems>page*maxSize ? (page*maxSize) : TotalItems }} de {{
+                    TotalItems }}
             </div>
+            
+            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+                [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm"
+                (pageChange)="filtrar()" rotate="true" ellipses="false" boundaryLinks="true" [rotate]="true"
+                [boundaryLinks]="true"></ngb-pagination>
         </div>
     </div>
 </div>
+
 
 <!--VISTA MODAL DEL FORMULARIO DE CENTRO DE COSTOS-->
 <app-modal-basic #modalCentroCosto [dialogClass]="'modal-lg'">
@@ -115,7 +132,7 @@
         <h4 class="modal-title">Nuevo Centro de Costo</h4>
         <button type="button" class="close basic-close" (click)="modalCentroCosto.hide()">
             <span aria-hidden="true">&times;</span>
-          </button>
+        </button>
     </div>
     <div style="overflow-x: unset !important;overflow-y: unset !important" class="app-modal-body">
         <form #FormCentroCosto="ngForm">
@@ -123,7 +140,8 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" name="Nombre" [(ngModel)]="CentroCostoModel.Nombre" id="Nombre_Centro" class="form-control f-9" placeholder="Ej: Administracion" required/>
+                        <input type="text" name="Nombre" [(ngModel)]="CentroCostoModel.Nombre" id="Nombre_Centro"
+                            class="form-control f-9" placeholder="Ej: Administracion" required />
                     </div>
                 </div>
                 <!-- <div class="col-md-3">
@@ -138,7 +156,8 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Codigo</label>
-                        <input name="Codigo" type="text" [(ngModel)]="CentroCostoModel.Codigo" [placeholder]="CodigoPlaceholder" class="form-control" required>
+                        <input name="Codigo" type="text" [(ngModel)]="CentroCostoModel.Codigo"
+                            [placeholder]="CodigoPlaceholder" class="form-control" required>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -149,30 +168,35 @@
                 <ng-container *ngTemplateOutlet="opcionesPadres; context:{ $implicit: items }"></ng-container>
               </select>-->
 
-                    <ng-select bindLabel="label" bindValue="value" loadingText="loading" id="Centro_Padre" class="f-10" name="Padre" [(ngModel)]="CentroCostoModel.Id_Centro_Padre" placeholder="Seleccione el centro costo" [items]="CentrosCostosPadre"></ng-select>
+                    <ng-select bindLabel="label" bindValue="value" loadingText="loading" id="Centro_Padre" class="f-10"
+                        name="Padre" [(ngModel)]="CentroCostoModel.Id_Centro_Padre"
+                        placeholder="Seleccione el centro costo" [items]="CentrosCostosPadre"></ng-select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <label>Tipo</label>
-                    <select name="Tipo" id="Tipo_Centro" class="form-control" (change)="ValorTipoCentro($event.target.value)" [(ngModel)]="CentroCostoModel.Id_Tipo_Centro">
-                <option value="" selected>Escoja el tipo de centro</option>
-                <option *ngFor="let t of TiposCentro" [value]="t.Id_Tipo_Centro">{{t.Nombre}}</option>
-              </select>
+                    <select name="Tipo" id="Tipo_Centro" class="form-control"
+                        (change)="ValorTipoCentro($event.target.value)" [(ngModel)]="CentroCostoModel.Id_Tipo_Centro">
+                        <option value="" selected>Escoja el tipo de centro</option>
+                        <option *ngFor="let t of TiposCentro" [value]="t.Id_Tipo_Centro">{{t.Nombre}}</option>
+                    </select>
                 </div>
                 <div class="col-md-4">
                     <label>{{ValorTipo}}</label>
-                    <select name="Valor_Centro_Costo" id="Valor_Centro" class="form-control" [disabled]="CentroCostoModel.Tipo==''" [(ngModel)]="CentroCostoModel.Valor_Tipo_Centro">
-                <option value="" selected>Escoja el {{ValorTipo}}</option>
-                <option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">{{vtc.Nombre}}</option>
-              </select>
+                    <select name="Valor_Centro_Costo" id="Valor_Centro" class="form-control"
+                        [disabled]="CentroCostoModel.Tipo==''" [(ngModel)]="CentroCostoModel.Valor_Tipo_Centro">
+                        <option value="" selected>Escoja el {{ValorTipo}}</option>
+                        <option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">{{vtc.Nombre}}</option>
+                    </select>
                 </div>
                 <div class="col-md-4">
                     <label>Movimiento</label>
-                    <select name="Movimiento" id="Movimiento" class="form-control" [(ngModel)]="CentroCostoModel.Movimiento">
-                <option value="Si" selected>Sí</option>
-                <option value="No" selected>No</option>
-              </select>
+                    <select name="Movimiento" id="Movimiento" class="form-control"
+                        [(ngModel)]="CentroCostoModel.Movimiento">
+                        <option value="Si" selected>Sí</option>
+                        <option value="No" selected>No</option>
+                    </select>
                 </div>
             </div>
         </form>
@@ -180,7 +204,9 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="button" class="btn btn-default btn-sm" (click)="modalCentroCosto.hide()">Cancelar</button>
-            <button type="button" [swal]="{ title: '¿Está Seguro?', text: 'Se dispone a guardar un centro de costo\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }" (confirm)="GuardarCentroCosto(FormCentroCosto,modalCentroCosto, 'guardar')"
+            <button type="button"
+                [swal]="{ title: '¿Está Seguro?', text: 'Se dispone a guardar un centro de costo\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                (confirm)="GuardarCentroCosto(FormCentroCosto,modalCentroCosto, 'guardar')"
                 [disabled]="!FormCentroCosto.valid" class="btn btn-primary btn-sm">Guardar</button>
         </div>
     </div>
@@ -191,7 +217,7 @@
         <h4 class="modal-title">Editar Centro</h4>
         <button type="button" class="close basic-close" (click)="modalEditarCentroCosto.hide()">
             <span aria-hidden="true">&times;</span>
-          </button>
+        </button>
     </div>
     <div style="overflow-x: unset !important;overflow-y: unset !important" class="app-modal-body">
         <form #FormEditarCentroCosto="ngForm">
@@ -199,13 +225,15 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" name="Nombre" [(ngModel)]="EditarCentroCostoModel.Nombre" id="NombreCentro" class="form-control f-9" placeholder="Ej: Administracion, Dispensacion" required/>
+                        <input type="text" name="Nombre" [(ngModel)]="EditarCentroCostoModel.Nombre" id="NombreCentro"
+                            class="form-control f-9" placeholder="Ej: Administracion, Dispensacion" required />
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Codigo</label>
-                        <input name="Codigo" type="text" [(ngModel)]="EditarCentroCostoModel.Codigo" [placeholder]="CodigoPlaceholder" class="form-control" required>
+                        <input name="Codigo" type="text" [(ngModel)]="EditarCentroCostoModel.Codigo"
+                            [placeholder]="CodigoPlaceholder" class="form-control" required>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -216,38 +244,48 @@
                 <ng-container *ngTemplateOutlet="opcionesPadres; context:{ $implicit: items }"></ng-container>
               </select>-->
 
-                    <ng-select bindLabel="label" bindValue="value" loadingText="loading" id="CentroPadre" class="f-10" name="Padre" [(ngModel)]="EditarCentroCostoModel.Id_Centro_Padre" placeholder="Seleccione el centro costo" [items]="CentrosCostosPadre"></ng-select>
+                    <ng-select bindLabel="label" bindValue="value" loadingText="loading" id="CentroPadre" class="f-10"
+                        name="Padre" [(ngModel)]="EditarCentroCostoModel.Id_Centro_Padre"
+                        placeholder="Seleccione el centro costo" [items]="CentrosCostosPadre"></ng-select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <label>Tipo</label>
-                    <select name="Tipo" id="TipoCentro" class="form-control" (change)="ValorTipoCentro($event.target.value)" [(ngModel)]="EditarCentroCostoModel.Id_Tipo_Centro">
-                <option value="" selected>Escoja el tipo de centro</option>
-                <option *ngFor="let t of TiposCentro" [value]="t.Id_Tipo_Centro">{{t.Nombre}}</option>
-              </select>
+                    <select name="Tipo" id="TipoCentro" class="form-control"
+                        (change)="ValorTipoCentro($event.target.value)"
+                        [(ngModel)]="EditarCentroCostoModel.Id_Tipo_Centro">
+                        <option value="" selected>Escoja el tipo de centro</option>
+                        <option *ngFor="let t of TiposCentro" [value]="t.Id_Tipo_Centro">{{t.Nombre}}</option>
+                    </select>
                 </div>
                 <div class="col-md-4">
                     <label>{{ValorTipo}}</label>
-                    <select name="Valor_Centro_Costo" id="ValorCentro" class="form-control" [disabled]="EditarCentroCostoModel.Tipo==''" [(ngModel)]="EditarCentroCostoModel.Valor_Tipo_Centro">
-                <option value="" selected>Escoja el {{ValorTipo}}</option>
-                <option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">{{vtc.Nombre}}</option>
-              </select>
+                    <select name="Valor_Centro_Costo" id="ValorCentro" class="form-control"
+                        [disabled]="EditarCentroCostoModel.Tipo==''"
+                        [(ngModel)]="EditarCentroCostoModel.Valor_Tipo_Centro">
+                        <option value="" selected>Escoja el {{ValorTipo}}</option>
+                        <option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">{{vtc.Nombre}}</option>
+                    </select>
                 </div>
                 <div class="col-md-4">
                     <label>Movimiento</label>
-                    <select name="Movimiento" id="Movimiento_Editar" class="form-control" [(ngModel)]="EditarCentroCostoModel.Movimiento">
-                <option value="Si" selected>Sí</option>
-                <option value="No" selected>No</option>
-              </select>
+                    <select name="Movimiento" id="Movimiento_Editar" class="form-control"
+                        [(ngModel)]="EditarCentroCostoModel.Movimiento">
+                        <option value="Si" selected>Sí</option>
+                        <option value="No" selected>No</option>
+                    </select>
                 </div>
             </div>
         </form>
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="button" class="btn btn-default btn-sm" (click)="modalEditarCentroCosto.hide()">Cancelar</button>
-            <button type="button" [swal]="{ title: '¿Está Seguro?', text: 'Se dispone a guardar un centro de costo\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }" (confirm)="GuardarCentroCosto(FormEditarCentroCosto,modalEditarCentroCosto, 'editar')"
+            <button type="button" class="btn btn-default btn-sm"
+                (click)="modalEditarCentroCosto.hide()">Cancelar</button>
+            <button type="button"
+                [swal]="{ title: '¿Está Seguro?', text: 'Se dispone a guardar un centro de costo\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                (confirm)="GuardarCentroCosto(FormEditarCentroCosto,modalEditarCentroCosto, 'editar')"
                 [disabled]="!FormEditarCentroCosto.valid" class="btn btn-primary btn-sm">Guardar</button>
         </div>
     </div>
@@ -270,13 +308,16 @@
             <td style="max-width: 80px; width: 80px !important;">
                 <div class="text-center">
                     <div ngbDropdown class="dropdown-primary">
-                        <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                        <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light "
+                            type="button">Acciones</button>
                         <div ngbDropdownMenu>
-                            <a class="dropdown-item waves-light waves-effect caja-botones" (click)="EditarCentroCosto(it.Id_Centro_Costo, modalEditarCentroCosto)">
+                            <a class="dropdown-item waves-light waves-effect caja-botones"
+                                (click)="EditarCentroCosto(it.Id_Centro_Costo, modalEditarCentroCosto)">
                                 <i class="ti-pencil"></i> Editar</a>
-                            <a class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title: 'Cambio de Estado', text: 'Se dispone a cambiar el estado de este centro de costo.\n¿Está seguro(a)?', type: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                            <a class="dropdown-item waves-light waves-effect caja-botones"
+                                [swal]="{ title: 'Cambio de Estado', text: 'Se dispone a cambiar el estado de este centro de costo.\n¿Está seguro(a)?', type: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
                                 (confirm)="CambiarEstado(it.Id_Centro_Costo)">
-                                <i *ngIf="it.Estado == 'Activo'" class="ti-trash"> Inactivar</i>
+                                <i *ngIf="it.Estado == 'Activo'" class="ti-trash"> Anular</i>
                                 <i *ngIf="it.Estado == 'Inactivo'" class="ti-reload"> Activar</i>
                             </a>
                         </div>

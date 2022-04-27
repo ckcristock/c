@@ -1,41 +1,63 @@
 <div class="card">
     <div class="card-body">
-        <div class="card-title">
-            <button type="button" class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
-                <i class="fa fa-plus"></i> Agregar
-            </button>
-            <h5 class="text-primary">Campos Terceros</h5>
-            <hr class="bg-primary">
+        <div class="card-title d-flex justify-content-between">
+            <h4 class="text-primary">Campos Terceros</h4>
+            <div class="btn-group rounded">
+                <button class="btn btn-primary btn-sm" style="float: right;" (click)="openConfirm(add)">
+                    <i class="fa fa-plus"></i> Agregar
+                </button>
+                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                    <i class="fas fa-sliders-h"></i> Filtros
+                </button>
+            </div>
         </div>
-        <table class="table table-borderless table-striped mt-5" *ngIf="!loading && fields.length > 0; else notData">
-            <thead class="bg-light">
+        <hr class="line">
+        <mat-accordion multi>
+            <mat-expansion-panel class="mat-elevation-z0">
+                <div class="alert alert-danger" role="alert">
+                    Aún no tenemos filtros para esta sección.
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
+            *ngIf="!loading && fields.length > 0; else notData">
+            <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Tipo</th>
                     <th>Requerido</th>
                     <th>Longitud</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
+                    <th class="text-center col-1">Estado</th>
+                    <th class="text-center col-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let field of fields" [ngClass]="{'bg-danger text-white': (field.state == 'Inactivo')}">
+                <tr *ngFor="let field of fields"
+                    [ngClass]="{'text-danger font-weight-bold': (field.state == 'Inactivo')}">
                     <td> {{ field.label | titlecase }} </td>
                     <td> {{ field.type | titlecase }} </td>
                     <td> {{ field.required }} </td>
                     <td> {{ field.length }} </td>
-                    <td> {{ field.state }} </td>
+                    <td class="text-center"> 
+                        <span [ngClass]="field.state == 'Inactivo' ? 'badge badge-danger': 'badge badge-primary'">
+                            {{ field.state }}
+                        </span>
+                    </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light "
+                                    type="button">
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a *ngIf="field.state == 'Activo'" (click)="changeState(field.id, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                    <a *ngIf="field.state == 'Activo'" (click)="changeState(field.id, 'Inactivo')"
+                                        class="dropdown-item waves-light text-danger waves-effect caja-botones">
                                         <i class="far fa-trash-alt"></i> Anular
                                     </a>
-                                    <a *ngIf="field.state == 'Inactivo'" (click)="changeState(field.id, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                    <a *ngIf="field.state == 'Inactivo'" (click)="changeState(field.id, 'Activo')"
+                                        class="dropdown-item waves-light text-success waves-effect caja-botones">
                                         <i class="fas fa-check"></i> Activar
                                     </a>
                                 </div>
@@ -47,16 +69,16 @@
         </table>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> Nuevo Campo </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide(); form.reset()"></i>
-            </span>
-        </button>
+
+<ng-template #add let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="text-primary modal-title">Nuevo Campo</h4>
+            <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
+                (click)="modal.dismiss('Cross click')"></button>
+        </div>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-6">
@@ -85,13 +107,16 @@
             </div>
         </form>
     </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="save()">Guardar</button>
-        </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
+            Cancelar
+        </button>
+        <button type="button" [disabled]="!form.valid" (click)="save()" class="btn btn-primary">
+            Guardar
+        </button>
     </div>
-</app-modal-basic>
+</ng-template>
+
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

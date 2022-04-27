@@ -8,6 +8,7 @@ import { environment } from '../../../../../environments/environment';
 import { DotacionService } from '../dotacion.service';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-inventario-dotacion',
@@ -15,7 +16,17 @@ import Swal from 'sweetalert2';
   styleUrls: ['./inventario-dotacion.component.scss']
 })
 export class InventarioDotacionComponent implements OnInit {
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   pagination = {
     pageSize: 15,
     page: 1,
@@ -50,6 +61,10 @@ export class InventarioDotacionComponent implements OnInit {
   ngOnInit() {
     this.ListaInventario(1);
     this.listarGrupo()
+  }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
   }
   ListaInventario(page) {
     this.pagination.page = page;

@@ -9,6 +9,7 @@ import { Permissions } from '../../../../core/interfaces/permissions-interface';
 import { PermissionService } from '../../../../core/services/permission.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
+import { MatAccordion } from '@angular/material/expansion';
 type Person = {value: number, text: string};
 @Component({
   selector: 'app-memorandos',
@@ -16,6 +17,17 @@ type Person = {value: number, text: string};
   styleUrls: ['./memorandos.component.scss']
 })
 export class MemorandosComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   @ViewChild('modalMotivo') modalMotivo:any;
   @ViewChild('modalMemorando') modalMemorando:any;
   @ViewChild('modalLlamada') modalLlamada:any;
@@ -81,6 +93,11 @@ export class MemorandosComponent implements OnInit {
     this.getTypeMemorandum();
     this.getMemorandumList();
     this.getList();
+  }
+
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
   }
 
   openMotivo(){

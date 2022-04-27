@@ -10,6 +10,7 @@ import { functionsUtils } from '../../../../core/utils/functionsUtils';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { PermissionService } from '../../../../core/services/permission.service';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { MatAccordion } from '@angular/material/expansion';
 type Person = { value: number, text: string };
 @Component({
   selector: 'app-disciplinarios',
@@ -17,6 +18,17 @@ type Person = { value: number, text: string };
   styleUrls: ['./disciplinarios.component.scss']
 })
 export class DisciplinariosComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   @ViewChild('modal') modal: any;
   @ViewChild('modalseguimiento') modalseguimiento: any;
   permission: Permissions = {
@@ -62,6 +74,10 @@ export class DisciplinariosComponent implements OnInit {
     this.createForm();
     this.getDisciplinaryProcess();
     this.getPeople();
+  }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
   }
 
   open() {

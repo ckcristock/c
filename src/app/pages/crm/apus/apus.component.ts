@@ -20,7 +20,10 @@ export class ApusComponent implements OnInit {
   ngOnInit(): void {
     this.getApus();
   }
-
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
   getApus(page = 1){
     this.pagination.page = page;
     this.loading = true;

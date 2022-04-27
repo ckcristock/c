@@ -1,23 +1,33 @@
 <div class="card">
     <div class="card-body">
-        <div class="card-title">
+        <div class="card-title d-flex justify-content-between">
             <h4 class="text-primary">Personas</h4>
-            <p>Todas las personas asociadas a un tercero.</p>
-        </div>
-        <div class="form-row mt-4">
-            <div class="form-group col-md-2">
-                <label for="">Filtro Tercero</label>
-                <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.third" (change)="getPerson()">
-            </div>
-            <div class="form-group col-md-2">
-                <label for="">Filtro Nombre</label>
-                <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.name" (change)="getPerson()">
+            <div class="btn-group rounded ">
+                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                    <i class="fas fa-sliders-h"></i> Filtros
+                </button>
             </div>
         </div>
-        <table class="table table-borderless table-striped" *ngIf="!loading && people.length > 0; else notData">
-            <thead class="bg-light">
+        <hr class="line">
+        <mat-accordion multi>
+            <mat-expansion-panel class="mat-elevation-z0">
+                <mat-form-field class="col-lg-3 col-md-3 col-sm-4 pl-0" appearance="outline">
+                    <mat-label>Tercero</mat-label>
+                    <input type="text" matInput placeholder="Busca por tercero" [(ngModel)]="filtros.third"
+                        (change)="getPerson()">
+                </mat-form-field>
+                <mat-form-field class="col-lg-3 col-md-3 col-sm-4 pl-0" appearance="outline">
+                    <mat-label>Nombre</mat-label>
+                    <input type="text" matInput placeholder="Busca por nombre" [(ngModel)]="filtros.name"
+                        (change)="getPerson()">
+                </mat-form-field>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
+            *ngIf="!loading && people.length > 0; else notData">
+            <thead>
                 <tr>
-                    <th>Persona</th>
+                    <th scope="col">Persona</th>
                     <th>Tercero</th>
                     <th>Tel. Celular</th>
                     <th>Email</th>
@@ -36,8 +46,11 @@
                 </tr>
             </tbody>
         </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getPerson($event)" aria-label="Default pagination"
-            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
+            (pageChange)="getPerson($event)" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
         </ngb-pagination>
     </div>
 </div>

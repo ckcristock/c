@@ -10,6 +10,7 @@ import { IMyDrpOptions } from 'mydaterangepicker';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-almuerzos',
@@ -17,6 +18,17 @@ import { PersonService } from '../../ajustes/informacion-base/persons/person.ser
   styleUrls: ['./almuerzos.component.scss']
 })
 export class AlmuerzosComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   @ViewChild('modal') modal:any;
   @ViewChild('modalVer') modalVer:any;
   @ViewChild('modalEdit') modalEdit:any;
@@ -72,6 +84,11 @@ export class AlmuerzosComponent implements OnInit {
     this.getLunches();
   }
 
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
+  
   getPeople(){
     this._almuerzo.getPeople().subscribe((data:any) => {
       this.peopleFill = data.data;

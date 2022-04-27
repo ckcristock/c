@@ -25,7 +25,10 @@ import { TiposRiesgoComponent } from './tipos-riesgo/tipos-riesgo.component';
 import { ProfesionesComponent } from './profesiones/profesiones.component';
 import { TiposVisaComponent } from './tipos-visa/tipos-visa.component';
 import { TiposActividadesComponent } from './tipos-actividades/tipos-actividades.component';
-
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations : [
@@ -57,7 +60,11 @@ import { TiposActividadesComponent } from './tipos-actividades/tipos-actividades
         PipesModule,
         NgbPaginationModule,
         NgSelectModule,
-        NgbTypeaheadModule
+        NgbTypeaheadModule,
+        MatExpansionModule,
+	MatFormFieldModule,
+	MatInputModule,
+	MatSelectModule,
     ]
 })
 

@@ -1,10 +1,10 @@
-<div class="row">
-  <div class="col-12 mb-2">
-    <h4>Turnos de la compañía</h4>
-  </div>
-
-  <div class="col-12">
-    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+<div class="card">
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Turnos de la compañía</h4>
+    </div>
+    <hr class="line">
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-pills nav-justified border border-primary rounded">
       <li [ngbNavItem]="1">
         <a ngbNavLink>Fijo</a>
         <ng-template ngbNavContent>
@@ -27,6 +27,6 @@
       </li>
     </ul>
 
-    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    <div [ngbNavOutlet]="nav"></div>
   </div>
 </div>

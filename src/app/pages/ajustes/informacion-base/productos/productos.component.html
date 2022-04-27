@@ -232,21 +232,21 @@
                       </button>
                       <div ngbDropdownMenu>
                         <a
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-info waves-light waves-effect caja-botones"
                           [routerLink]="['editar', producto.Id_Producto]"
                         >
                           <i class="ti-pencil"></i>Editar</a
                         >
 
                         <a
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-info  waves-light waves-effect caja-botones"
                           [routerLink]="['ver', producto.Id_Producto]"
                         >
                           <i class="ti-eye"></i>Ver</a
                         >
                         <a
                           *ngIf="producto.Estado == 'Activo'"
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-danger waves-light waves-effect caja-botones"
                           [swal]="{
                             title: '¿Está Seguro?',
                             text: 'Se dispone a Inactivar este Producto',
@@ -262,7 +262,7 @@
                             )
                           "
                         >
-                          <i class="ti-close"></i>Inactivar</a
+                          <i class="ti-close"></i>Anular</a
                         >
                         <a
                           *ngIf="producto.Estado == 'Inactivo'"
@@ -280,7 +280,7 @@
                               producto.Id_Producto
                             )
                           "
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-success waves-light waves-effect caja-botones"
                         >
                           <i class="ti-check"></i>Activar</a
                         >
@@ -307,7 +307,7 @@
                       </button>
                       <div ngbDropdownMenu>
                         <a
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-info  waves-light waves-effect caja-botones"
                           (click)="editGeneric(producto)"
                         >
                           <i class="ti-pencil"></i>Editar</a
@@ -335,7 +335,7 @@
                       </button>
                       <div ngbDropdownMenu>
                         <a
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-info  waves-light waves-effect caja-botones"
                           (click)="EditarProducto(producto.Id_Producto)"
                         >
                           <i class="ti-pencil"></i>Editar</a
@@ -349,7 +349,7 @@
                         >
                         <a
                           *ngIf="producto.Estado == 'Activo'"
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-danger  waves-light waves-effect caja-botones"
                           [swal]="{
                             title: '¿Está Seguro?',
                             text: 'Se dispone a Inactivar este Producto',
@@ -365,7 +365,7 @@
                             )
                           "
                         >
-                          <i class="ti-close"></i>Inactivar</a
+                          <i class="ti-close"></i>Anular</a
                         >
                         <a
                           *ngIf="producto.Estado == 'Inactivo'"
@@ -383,7 +383,7 @@
                               producto.Id_Producto
                             )
                           "
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-success waves-light waves-effect caja-botones"
                         >
                           <i class="ti-check"></i>Activar</a
                         >

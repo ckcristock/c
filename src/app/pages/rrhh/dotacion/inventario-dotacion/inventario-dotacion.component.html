@@ -2,71 +2,101 @@
     <div class="row">
         <div class="col-md-12 filter-bar">
             <div class="card">
-                <div class="card-header pb-0">
-                    <div class="d-flex justify-content-between">
-                        <h5>Inventario de Dotación y EPP</h5>
-                        <button type="button" class="activar pull-right btn btn-sm btn-primary" (click)="modalGrupo.show(); listarGrupo()">
-                                      <i class="fa fa-plus"></i>
-                                       Categorias
-                          </button>
-                    </div>
-                </div>
-
                 <div class="card-body">
-                    <div class="row" style="margin-top:25px;">
-                        <div class="col-md-12">
-
-                            <table class="table table-striped" *ngIf="Inventarios.length > 0 && !loading ;else notData">
-                                <thead>
-                                    <tr>
-                                        <th style="width:70px">Código</th>
-                                        <th>Nombre Elemento</th>
-                                        <th style="width:100px">Calidad</th>
-                                        <th style="width:100px">Tipo</th>
-                                        <th style="width:130px" class="text-right">Costo</th>
-                                        <th style="width:120px" class="text-right">Cantidad</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="tabla-filtro">
-                                            <input type="text" [(ngModel)]="filtro_codigo" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro codigo">
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <input type="text" [(ngModel)]="filtro_nombre" (blur)="filtros()" class="form-control form-control-sm" placeholder="Filtro nombre">
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <select [(ngModel)]="filtro_calidad" (change)="filtros()" class="form-control form-control-sm">
+                    <div class="card-title d-flex justify-content-between">
+                        <h4 class="text-primary">Inventario de Dotación y EPP</h4>
+                        <div class="btn-group rounded">
+                            <button type="button" class="activar pull-right btn btn-sm btn-primary"
+                                (click)="modalGrupo.show(); listarGrupo()">
+                                <i class="fa fa-plus"></i>
+                                Agregar Cat.
+                            </button>
+                            <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                                <i class="fas fa-sliders-h"></i> Filtros
+                            </button>
+                        </div>
+                    </div>
+                    <hr class="line">
+                    <div class="container">
+                        <mat-accordion multi>
+                            <mat-expansion-panel class="mat-elevation-z0">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-3 input-group-sm">
+                                            <label for="">Código</label>
+                                            <input type="text" [(ngModel)]="filtro_codigo" (blur)="filtros()"
+                                                class="form-control form-control-sm" placeholder="Filtro codigo">
+                                        </div>
+                                        <div class="col-3 input-group-sm">
+                                            <label for="">Nombre de Elemento</label>
+                                            <input type="text" [(ngModel)]="filtro_nombre" (blur)="filtros()"
+                                                class="form-control form-control-sm" placeholder="Filtro nombre">
+                                        </div>
+                                        <div class="col-3 input-group-sm">
+                                            <label for="">Calidad</label>
+                                            <select [(ngModel)]="filtro_calidad" (change)="filtros()"
+                                                class="form-control form-control-sm">
                                                 <option value="">Seleccione</option>
                                                 <option>Nuevo</option>
                                                 <option>Usado</option>
                                             </select>
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <select [(ngModel)]="filtro_tipo" (change)="filtros()" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="col-3 input-group-sm">
+                                            <label for="">Tipo</label>
+                                            <select [(ngModel)]="filtro_tipo" (change)="filtros()"
+                                                class="form-control form-control-sm">
                                                 <option value="">Seleccione</option>
                                                 <option>Dotacion</option>
                                                 <option>EPP</option>
                                             </select>
-                                        </th>
-                                        <th class="tabla-filtro"></th>
-                                        <th class="tabla-filtro"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <tr *ngFor="let inventario of Inventarios; let i=index">
-                                        <td><strong>{{ inventario.code }}</strong></td>
-                                        <td><strong>{{ inventario.name }}</strong></td>
-                                        <td><strong>{{ inventario.status }}</strong></td>
-                                        <td><strong>{{ inventario.type }}</strong></td>
-                                        <td class="text-right"><strong>$ {{ inventario.cost | number | puntos }}</strong></td>
-                                        <td class="text-right"><strong>{{ inventario.stock }}</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="row">
+                                        <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
+                                            <mat-label> </mat-label>
+                                            <input matInput type="text" placeholder="">
+                                        </mat-form-field>
+                                        <mat-form-field class="col-md-2" appearance="outline">
+                                            <mat-label> </mat-label>
+                                            <mat-select>
+                                                <mat-option value=""> </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>                                
+                                    </div> -->
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                    <div class="container" style="font-size: small;">
+                        <table class="table table-bordered table-striped table-sm" *ngIf="Inventarios.length > 0 && !loading ;else notData">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre Elemento</th>
+                                    <th>Calidad</th>
+                                    <th>Tipo</th>
+                                    <th class="text-right">Costo</th>
+                                    <th class="text-right">Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let inventario of Inventarios; let i=index">
+                                    <td><strong>{{ inventario.code }}</strong></td>
+                                    <td><strong>{{ inventario.name }}</strong></td>
+                                    <td><strong>{{ inventario.status }}</strong></td>
+                                    <td><strong>{{ inventario.type }}</strong></td>
+                                    <td class="text-right"><strong>$ {{ inventario.cost | number | puntos
+                                            }}</strong></td>
+                                    <td class="text-right"><strong>{{ inventario.stock }}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
-                    <ngb-pagination maxSize="5" [collectionSize]="pagination.collectionSize " (pageChange)="ListaInventario($event) " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination ">
+                    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+                        maxSize="5" [collectionSize]="pagination.collectionSize "
+                        (pageChange)="ListaInventario($event) " [pageSize]="pagination.pageSize "
+                        [(page)]="pagination.page " aria-label="Default pagination ">
                     </ngb-pagination>
                 </div>
             </div>
@@ -78,8 +108,8 @@
     <div class="app-modal-header">
         <h4 class="modal-title">Nueva Categoría</h4>
         <button type="button" class="close basic-close" (click)="modalGrupo.hide();">
-    <span aria-hidden="true">&times;</span>
-    </button>
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form #FormGrupo="ngForm">
@@ -90,12 +120,13 @@
                     <input type="text" name="name" ngModel id="grupo" class="form-control form-control-sm" required>
                 </div>
                 <div class="col-md-4 text-right ">
-                    <button class="btn btn-outline-primary text-center btn-sm rounded" [disabled]="(FormGrupo.invalid)" (click)="GuardarGrupo(FormGrupo);"><i class="ti-save mr-2" ></i>Guardar
+                    <button class="btn btn-outline-primary text-center btn-sm rounded" [disabled]="(FormGrupo.invalid)"
+                        (click)="GuardarGrupo(FormGrupo);"><i class="ti-save mr-2"></i>Guardar
                     </button>
                 </div>
 
             </div>
-            <hr/>
+            <hr />
         </form>
         <div class="form-row">
             <div class="col-md-12">

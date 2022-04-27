@@ -1,364 +1,276 @@
-<div class="row">
-  <div class="col-md-4">
-    <h4 class="font-weight-bold">Pago de Nómina</h4>
-  </div>
-  <div class="col-md-4 offset-4 text-right">
-    <span class="font-weight-bold">Periodo de pago</span>:
-    <i class="fas fa-calendar-week"></i>
-    <span class="font-weight-bold"> {{ inicioPeriodo }}</span>
-    -
-    <i class="fas fa-calendar-week"></i>
-    <span class="font-weight-bold">{{ finPeriodo }}</span>
-  </div>
-</div>
-
-<div class="alert alert-secondary" *ngIf="nomina?.nomina_paga">
-  <p class="font-weight-bold text-center">
-    Este periodo ya ha sido pagado, sin embargo, puede editar y volver a guardar
-    dando click en la siguiente opción:
-  </p>
-  <a
-    href="#"
-    id="editPayroll"
-    class="d-block text-center"
-    (click)="deletePagoNomina()"
-    >Volver a editar el pago</a
-  >
-</div>
-<!-- Conceptos CARDS -->
-<div class="row icon-cards">
+<div class="card">
   <div class="card-body">
     <div class="row">
-      <div class="col">
-        <app-card-concepto
-          [concepto]="nomina?.salarios"
-          [icon]="'fas fa-money-bill-wave '"
-          [label]="'Salarios (neto)'"
-        ></app-card-concepto>
+      <div class="col-md-4 card-title">
+        <h4 class="text-primary">Pago de Nómina</h4>
       </div>
-      <div class="col">
-        <app-card-concepto
-          [concepto]="nomina?.provisiones"
-          [icon]="'fas fa-coins'"
-          [label]="'Provisiones'"
-        ></app-card-concepto>
-      </div>
-      <div class="col">
-        <app-card-concepto
-          [concepto]="nomina?.seguridad_social"
-          [icon]="'fa fa-ambulance'"
-          [label]="'Seg. Social'"
-        ></app-card-concepto>
-      </div>
-      <div class="col">
-        <app-card-concepto
-          [concepto]="nomina?.retenciones"
-          [icon]="'fa fa-ambulance'"
-          [label]="'Retenciones'"
-        ></app-card-concepto>
-      </div>
-
-      <div class="col">
-        <app-card-concepto
-          [concepto]="nomina?.parafiscales"
-          [icon]="'fa fa-users'"
-          [label]="'Parafiscales'"
-        ></app-card-concepto>
-      </div>
-
-      <div class="col">
-        <app-card-concepto
-          [concepto]="nomina?.extras"
-          [icon]="'fas fa-user-clock'"
-          [label]="'Hor. Extras'"
-        ></app-card-concepto>
-      </div>
-      <div class="col">
-        <app-card-concepto
-          [concepto]="nomina?.ingresos"
-          [icon]="'fas fa-wallet'"
-          [label]="'Ing. Adicionales'"
-        ></app-card-concepto>
+      <div class="col-md-4 offset-4 text-right">
+        <span class="font-weight-bold">Periodo de pago</span>:
+        <i class="fas fa-calendar-week"></i>
+        <span class="font-weight-bold"> {{ inicioPeriodo }}</span>
+        -
+        <i class="fas fa-calendar-week"></i>
+        <span class="font-weight-bold"> {{ finPeriodo }}</span>
       </div>
     </div>
-  </div>
-</div>
-
-<div class="row d-flex justify-content-center">
-  <p>
-    Costo total empresa:
-    <span class="custom-label">
-      <!-- {{
-      nomina.costo_total_empresa | moneda
-      }} -->
-
-      $ {{ nomina.costo_total_empresa | currency: "":"" }}
-    </span>
-  </p>
-</div>
-
-<!-- Eventos Nomina paga  -->
-<div class="alert alert-light" *ngIf="nomina?.nomina_paga">
-  <div class="row">
-    <div class="col-3">
-      <a class="text-center font-weight-bold nomina-descargables">
-        <i class="iconsmind-File-Excel icono-descargables"></i> Resumen de
-        Nómina
-      </a>
+    <hr class="line">
+    <div class="alert alert-secondary" *ngIf="nomina?.nomina_paga">
+      <p class="font-weight-bold text-center">
+        Este periodo ya ha sido pagado, sin embargo, puede editar y volver a guardar
+        dando click en la siguiente opción:
+      </p>
+      <a href="#" id="editPayroll" class="d-block text-center" (click)="deletePagoNomina()">Volver a editar el pago</a>
     </div>
-    <div class="col-3">
-      <a class="text-center font-weight-bold nomina-descargables">
-        <i class="iconsmind-Bell icono-descargables"></i> Resumen de Novedades
-      </a>
-    </div>
-    <div class="col-3">
-      <a class="text-center font-weight-bold nomina-descargables">
-        <i class="iconsmind-Download-2 icono-descargables"></i> Descargar
-        Colillas de Pago
-      </a>
-    </div>
-    <div class="col-3">
-      <a class="text-center font-weight-bold nomina-descargables">
-        <i class="iconsmind-Mail icono-descargables"></i> Notificar via email y
-        SMS
-      </a>
-    </div>
-  </div>
-  <div class="row mt-2">
-    <div class="col-3">
-      <a class="text-center font-weight-bold nomina-descargables">
-        <i class="iconsmind-Umbrella-2 icono-descargables"></i> Archivo
-        Seguridad Social
-      </a>
-    </div>
-    <div class="col-3">
-      <a class="text-center font-weight-bold nomina-descargables">
-        <i class="iconsmind-Bank icono-descargables"></i> Archivo Pago Bancos
-      </a>
-    </div>
-    <div class="col-3">
-      <a class="text-center font-weight-bold nomina-descargables">
-        <i class="iconsmind-Suitcase icono-descargables"></i> Archivo Contable
-      </a>
-    </div>
-    <div class="col-3">
-      <a class="text-center font-weight-bold nomina-descargables">
-        <i class="iconsmind-Clock icono-descargables"></i> Archivo de Horarios
-      </a>
-    </div>
-
-    <div class="col-3">
-      <a
-        href="#"
-        class="text-center font-weight-bold nomina-descargables"
-        (click)="showInterfaceForGlobo('modalInterfaceForGlobo')"
-      >
-        <i class="iconsmind-Computer icono-descargables"></i> Interfaz Contable
-      </a>
-    </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-12">
-    <h3 class="font-weight-bold">Lista de Funcionarios</h3>
-    <!-- <div class="form-group row">
-      <label
-        for="centro_costos"
-        class="custom-label col-form-label col-md-2 offset-3"
-      >Filtro centro de costos</label>
-      <select name="centro_costos" class="form-control custom-control col-md-4">
-        <option value="seleccione">Seleccione</option>
-      </select>
-    </div>-->
-    <div class="card">
+    <!-- Conceptos CARDS -->
+    <div class="row icon-cards">
       <div class="card-body">
-        <table class="table table-striped tabla-funcionarios">
-          <thead>
-            <tr>
-              <th colspan="2">
-                <ng-select
-                  [items]="people"
-                  (change)="filter($event?.value)"
-                  bindLabel="text"
-                  bindValue="value"
-                  loadingText="loading "
-                  ngDefaultControl
-                >
-                </ng-select>
-              </th>
-              <th colspan="5"></th>
-            </tr>
-            <tr class="text-center">
-              <th colspan="2">Funcionario</th>
-              <th>Ingresos Prestacionales</th>
-              <th>Ingresos No Prestacionales</th>
-              <th>Deducciones</th>
-              <th>Pago a Empleado</th>
-              <th style="width: 60px">Acciones</th>
-            </tr>
-          </thead>
+        <div class="row">
+          <div class="col">
+            <app-card-concepto [concepto]="nomina?.salarios" [icon]="'fas fa-money-bill-wave '"
+              [label]="'Salarios (neto)'"></app-card-concepto>
+          </div>
+          <div class="col">
+            <app-card-concepto [concepto]="nomina?.provisiones" [icon]="'fas fa-coins'" [label]="'Provisiones'">
+            </app-card-concepto>
+          </div>
+          <div class="col">
+            <app-card-concepto [concepto]="nomina?.seguridad_social" [icon]="'fa fa-ambulance'" [label]="'Seg. Social'">
+            </app-card-concepto>
+          </div>
+          <div class="col">
+            <app-card-concepto [concepto]="nomina?.retenciones" [icon]="'fa fa-ambulance'" [label]="'Retenciones'">
+            </app-card-concepto>
+          </div>
 
-          <tbody>
-            <tr *ngIf="!funcionarios.length">
-              <td colspan="7">
-                <app-not-data [loading]="loadingPeople"></app-not-data>
-              </td>
-            </tr>
+          <div class="col">
+            <app-card-concepto [concepto]="nomina?.parafiscales" [icon]="'fa fa-users'" [label]="'Parafiscales'">
+            </app-card-concepto>
+          </div>
 
-            <tr *ngFor="let funcionario of funcionarios" class="text-center">
-              <td style="padding: 3px; width: 48px">
-                <img
-                  class="rounded-circle header-profile-user"
-                  [src]="funcionario.image | image:'users' " 
-                  alt="Header Avatar"
-                />
-              </td>
-              <td style="width: 200px" class="text-left">
-                {{ funcionario.name }}
-                {{ funcionario.surname }}
-              </td>
-              <td>
-                {{ funcionario.valor_ingresos_salariales | currency: "":"" }}
-              </td>
-              <td>
-                {{ funcionario.valor_ingresos_no_salariales | currency: "":"" }}
-              </td>
-              <td>{{ funcionario.valor_deducciones | currency: "":"" }}</td>
-              <td>
-                <p class="custom-label">
-                  {{ funcionario.salario_neto | currency: "":"" }} /
-                  {{ nomina.frecuencia_pago }}
-                </p>
-              </td>
-              <td style="padding: 5px">
-                <div ngbDropdown class="dropdown-primary">
-                  <button
-                    ngbDropdownToggle
-                    class="btn btn-primary btn-sm waves-effect waves-light"
-                    type="button"
-                  >
-                    <i class="mdi mdi-chevron-down"></i>
-                  </button>
-                  <div ngbDropdownMenu aria-labelledby="dropdownConfig">
-                    <a
-                      class="
-                        dropdown-item
-                        waves-light waves-effect
-                        caja-botones
-                      "
-                      (click)="modalExtras.show(funcionario)"
-                      >Extras y Recargos</a
-                    >
-                    <a
-                      class="
-                        dropdown-item
-                        waves-light waves-effect
-                        caja-botones
-                      "
-                      (click)="modalNovedades.show(funcionario)"
-                      >Vacac, Incap y Lic</a
-                    >
-                    <a
-                      class="
-                        dropdown-item
-                        waves-light waves-effect
-                        caja-botones
-                      "
-                      (click)="modalIngPrest.show(funcionario)"
-                      >Ingresos prestacionales</a
-                    >
-                    <a
-                      class="
-                        dropdown-item
-                        waves-light waves-effect
-                        caja-botones
-                      "
-                      (click)="modalIngNoPrest.show(funcionario)"
-                      >Ingresos no prestacionales</a
-                    >
+          <div class="col">
+            <app-card-concepto [concepto]="nomina?.extras" [icon]="'fas fa-user-clock'" [label]="'Hor. Extras'">
+            </app-card-concepto>
+          </div>
+          <div class="col">
+            <app-card-concepto [concepto]="nomina?.ingresos" [icon]="'fas fa-wallet'" [label]="'Ing. Adicionales'">
+            </app-card-concepto>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                    <a
-                      class="
-                        dropdown-item
-                        waves-light waves-effect
-                        caja-botones
-                      "
-                      (click)="modalDeducciones.show(funcionario)"
-                      >Deducciones</a
-                    >
-                    <div class="dropdown-divider"></div>
-                    <a
-                      class="
-                        dropdown-item
-                        waves-light waves-effect
-                        caja-botones
-                      "
-                      [routerLink]="[
-                        'colilla',
-                        funcionario.id,
-                        nomina.inicio_periodo,
-                        nomina.fin_periodo
-                      ]"
-                      >Ver Cálculos</a
-                    >
+    <div class="row d-flex justify-content-center">
+      <p>
+        Costo total empresa:
+        <span class="custom-label">
+          <!-- {{
+          nomina.costo_total_empresa | moneda
+          }} -->
+
+          $ {{ nomina.costo_total_empresa | currency: "":"" }}
+        </span>
+      </p>
+    </div>
+
+    <!-- Eventos Nomina paga  -->
+    <div class="alert alert-light" *ngIf="nomina?.nomina_paga">
+      <div class="row">
+        <div class="col-3">
+          <a class="text-center font-weight-bold nomina-descargables">
+            <i class="iconsmind-File-Excel icono-descargables"></i> Resumen de
+            Nómina
+          </a>
+        </div>
+        <div class="col-3">
+          <a class="text-center font-weight-bold nomina-descargables">
+            <i class="iconsmind-Bell icono-descargables"></i> Resumen de Novedades
+          </a>
+        </div>
+        <div class="col-3">
+          <a class="text-center font-weight-bold nomina-descargables">
+            <i class="iconsmind-Download-2 icono-descargables"></i> Descargar
+            Colillas de Pago
+          </a>
+        </div>
+        <div class="col-3">
+          <a class="text-center font-weight-bold nomina-descargables">
+            <i class="iconsmind-Mail icono-descargables"></i> Notificar via email y
+            SMS
+          </a>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-3">
+          <a class="text-center font-weight-bold nomina-descargables">
+            <i class="iconsmind-Umbrella-2 icono-descargables"></i> Archivo
+            Seguridad Social
+          </a>
+        </div>
+        <div class="col-3">
+          <a class="text-center font-weight-bold nomina-descargables">
+            <i class="iconsmind-Bank icono-descargables"></i> Archivo Pago Bancos
+          </a>
+        </div>
+        <div class="col-3">
+          <a class="text-center font-weight-bold nomina-descargables">
+            <i class="iconsmind-Suitcase icono-descargables"></i> Archivo Contable
+          </a>
+        </div>
+        <div class="col-3">
+          <a class="text-center font-weight-bold nomina-descargables">
+            <i class="iconsmind-Clock icono-descargables"></i> Archivo de Horarios
+          </a>
+        </div>
+
+        <div class="col-3">
+          <a href="#" class="text-center font-weight-bold nomina-descargables"
+            (click)="showInterfaceForGlobo('modalInterfaceForGlobo')">
+            <i class="iconsmind-Computer icono-descargables"></i> Interfaz Contable
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card-title d-flex justify-content-between">
+          <h4 class="text-primary">Lista de Funcionarios</h4>
+        </div>
+        <hr class="line">
+        <!-- <div class="form-group row">
+          <label
+            for="centro_costos"
+            class="custom-label col-form-label col-md-2 offset-3"
+          >Filtro centro de costos</label>
+          <select name="centro_costos" class="form-control custom-control col-md-4">
+            <option value="seleccione">Seleccione</option>
+          </select>
+        </div>-->
+        <div class="container">
+          <div class="row mt-4">
+            <div class="col-3">
+              <ng-select [items]="people" (change)="filter($event?.value)" bindLabel="text" bindValue="value"
+                loadingText="loading " ngDefaultControl>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+
+        <div class="container mt-4" style="font-size: small;">
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+              <tr class="text-center">
+                <th colspan="2">Funcionario</th>
+                <th>Ingresos Prestacionales</th>
+                <th>Ingresos No Prestacionales</th>
+                <th>Deducciones</th>
+                <th>Pago a Empleado</th>
+                <th style="width: 60px">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngIf="!funcionarios.length">
+                <td colspan="7">
+                  <app-not-data [loading]="loadingPeople"></app-not-data>
+                </td>
+              </tr>
+
+              <tr *ngFor="let funcionario of funcionarios" class="text-center">
+                <td style="padding: 3px; width: 48px">
+                  <img class="img-thumbnail rounded-circle header-profile-user mx-auto d-block" [src]="funcionario.image | image:'users' "
+                    alt="" />
+                </td>
+                <td style="width: 200px" class="text-left">
+                  {{ funcionario.name }}
+                  {{ funcionario.surname }}
+                </td>
+                <td>
+                  {{ funcionario.valor_ingresos_salariales | currency: "":"" }}
+                </td>
+                <td>
+                  {{ funcionario.valor_ingresos_no_salariales | currency: "":"" }}
+                </td>
+                <td>{{ funcionario.valor_deducciones | currency: "":"" }}</td>
+                <td>
+                  <p class="custom-label">
+                    {{ funcionario.salario_neto | currency: "":"" }} /
+                    {{ nomina.frecuencia_pago }}
+                  </p>
+                </td>
+                <td style="padding: 5px">
+                  <div ngbDropdown class="dropdown-primary">
+                    <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light" type="button">
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownConfig">
+                      <a class="
+                            dropdown-item
+                            waves-light waves-effect
+                            caja-botones
+                          " (click)="modalExtras.show(funcionario)">Extras y Recargos</a>
+                      <a class="
+                            dropdown-item
+                            waves-light waves-effect
+                            caja-botones
+                          " (click)="modalNovedades.show(funcionario)">Vacac, Incap y Lic</a>
+                      <a class="
+                            dropdown-item
+                            waves-light waves-effect
+                            caja-botones
+                          " (click)="modalIngPrest.show(funcionario)">Ingresos prestacionales</a>
+                      <a class="
+                            dropdown-item
+                            waves-light waves-effect
+                            caja-botones
+                          " (click)="modalIngNoPrest.show(funcionario)">Ingresos no prestacionales</a>
+
+                      <a class="
+                            dropdown-item
+                            waves-light waves-effect
+                            caja-botones
+                          " (click)="modalDeducciones.show(funcionario)">Deducciones</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="
+                            dropdown-item
+                            waves-light waves-effect
+                            caja-botones
+                          " [routerLink]="[
+                            'colilla',
+                            funcionario.id,
+                            nomina.inicio_periodo,
+                            nomina.fin_periodo
+                          ]">Ver Cálculos</a>
+                    </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <!-- Modal Extras y recargos-->
-        <div class="text-right" *ngIf="!nomina?.nomina_paga">
-          <button
-            type="button"
-            class="btn btn-secondary raised text-right"
-            (click)="postPagoNomina()"
-          >
-            <i class="far fa-save"></i>
-            Guardar
-          </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Modal Extras y recargos-->
+          <div class="text-right" *ngIf="!nomina?.nomina_paga">
+            <button type="button" class="btn btn-primary raised text-right" (click)="postPagoNomina()">
+              <i class="far fa-save"></i>
+              Guardar
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-
 <app-horas-extras #modalExtras></app-horas-extras>
 <app-modal-novedades #modalNovedades></app-modal-novedades>
 
-<app-modal-ingresos-prestacionales
-  #modalIngPrest
-  (updated)="getPagoNomina()"
-  [nominaPaga]="nomina?.nomina_paga"
-  [periodo]="nomina.frecuencia_pago"
->
+<app-modal-ingresos-prestacionales #modalIngPrest (updated)="getPagoNomina()" [nominaPaga]="nomina?.nomina_paga"
+  [periodo]="nomina.frecuencia_pago">
 </app-modal-ingresos-prestacionales>
 
-<app-modal-ingresos-no-prestacionales
-  #modalIngNoPrest
-  (updated)="getPagoNomina()"
-  [nominaPaga]="nomina?.nomina_paga"
-  [periodo]="nomina.frecuencia_pago"
->
+<app-modal-ingresos-no-prestacionales #modalIngNoPrest (updated)="getPagoNomina()" [nominaPaga]="nomina?.nomina_paga"
+  [periodo]="nomina.frecuencia_pago">
 </app-modal-ingresos-no-prestacionales>
 
-<app-modal-deducciones
-  #modalDeducciones
-  (updated)="getPagoNomina()"
-  [nominaPaga]="nomina?.nomina_paga"
-  [periodo]="nomina.frecuencia_pago"
->
+<app-modal-deducciones #modalDeducciones (updated)="getPagoNomina()" [nominaPaga]="nomina?.nomina_paga"
+  [periodo]="nomina.frecuencia_pago">
 </app-modal-deducciones>

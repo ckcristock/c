@@ -43,7 +43,7 @@
                         </tr>
 
                         <tr *ngFor="let Plan of Planes_Cuentas">
-                            <td class="text-center"> <i class="fa fa-2x" [ngClass]="{'text-danger fa-money fa-usd': Plan['Tipo_Cierre_'+tipoCierre] == 'Costos',
+                            <td class="text-center"> <i class="fa fa-2x" [ngClass]="{'text-danger font-weight-bold fa-money fa-usd': Plan['Tipo_Cierre_'+tipoCierre] == 'Costos',
                                 'text-warning fa-reply ': Plan['Tipo_Cierre_'+tipoCierre] == 'Gastos',
                                 'text-success fa-share' : Plan['Tipo_Cierre_'+tipoCierre] == 'Ingresos' } "></i></td>
                             <td>{{Plan.Codigo}}</td>

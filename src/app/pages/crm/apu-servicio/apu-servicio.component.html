@@ -20,11 +20,11 @@
                     <th>Linea</th>
                     <th>Quien elabora</th>
                     <th>F. Creación</th>
-                    <th class="text-center">Acciones</th>
+                    <th class="text-center col-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of apuService" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
+                <tr *ngFor="let item of apuService" [ngClass]="{'text-danger font-weight-bold': ( item.state == 'Inactivo' )}">
                     <td> {{ item.code }} </td>
                     <td> {{ item.name }} </td>
                     <td> {{ item.thirdparty.name }} </td>

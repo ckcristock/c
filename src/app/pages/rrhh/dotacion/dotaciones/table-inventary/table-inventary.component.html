@@ -278,7 +278,7 @@
             </thead>
             <tbody>
               <ng-container *ngIf="!loading && Lista_Dotaciones.length > 0; else notDataTable">
-                <tr *ngFor="let item of Lista_Dotaciones" [ngClass]="{'bg-danger text-white': item.state == 'Anulada'}">
+                <tr *ngFor="let item of Lista_Dotaciones" [ngClass]="{'text-danger font-weight-bold': item.state == 'Anulada'}">
                   <td>{{item.delivery_code}}</td>
                   <td>{{item.type}}</td>
                   <td>{{item.created_at | date:'dd/MM/yyyy'}}</td>

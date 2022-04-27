@@ -1,33 +1,35 @@
-<div class="card animate__animated animate__fadeIn">
+<div class="card">
     <div class="card-body">
-        <div class="card-title">
-            <h5>Liquidados</h5>
-            <p>Todos los funcionarios liquidados registrados en nuestra base de datos.</p>
+        <div class="card-title d-flex justify-content-between">
+            <h4 class="text-primary">Preliquidados</h4>
         </div>
-    </div>
-</div>
-<div class="row" *ngIf="!loading && preliquidados.length > 0; else notData">
-    <div class="col-md-2" *ngFor="let preliquidado of preliquidados">
-        <div class="card ">
-            <div class="card-body text-center">
-                <img [src]="preliquidado.image | image" class="card-img-top" alt="">
-                <div class="card-title">
-                    <p class="mt-3 names">
-                        <strong>
-                                {{ preliquidado.first_name }} {{ preliquidado.first_surname }}
-                            </strong>
-                        <br>
-                        <b>{{ preliquidado.position }}</b><br>
-                        <small> {{ preliquidado.updated_at.tiempo }} </small>
-                    </p>
-                </div>
-                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-outline-success btn-sm" placement="bottom" ngbTooltip="Liquidar" (click)="alert(preliquidado.id)">
-                            <i class="fas fa-id-card"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-danger btn-sm" placement="bottom" ngbTooltip="No liquidar" (click)="activate(preliquidado.id)">
-                            <i class="fas fa-times"></i>
-                    </button>
+        <hr class="line">
+        <div class="container mt-4">
+            <div class="row" *ngIf="!loading && preliquidados.length > 0; else notData">
+                <div class="col-md-2" *ngFor="let preliquidado of preliquidados">
+                    <div class="text-center">
+                        <img [src]="preliquidado.image | image" class="card-img-top" alt="">
+                        <div class="card-title">
+                            <p class="mt-3 names">
+                                <strong>
+                                    {{ preliquidado.first_name }} {{ preliquidado.first_surname }}
+                                </strong>
+                                <br>
+                                <b>{{ preliquidado.position }}</b><br>
+                                <small> {{ preliquidado.updated_at.tiempo }} </small>
+                            </p>
+                        </div>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-outline-success btn-sm" placement="bottom"
+                                ngbTooltip="Liquidar" (click)="alert(preliquidado.id)">
+                                <i class="fas fa-id-card"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" placement="bottom"
+                                ngbTooltip="No liquidar" (click)="activate(preliquidado.id)">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

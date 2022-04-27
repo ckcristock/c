@@ -17,5 +17,8 @@ export class DepreciacionComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
 }

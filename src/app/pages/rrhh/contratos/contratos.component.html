@@ -1,149 +1,185 @@
-<div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <h5>Contratos</h5>
-            <p>Todos los contratos registrados en nuestra base de datos.</p>
-        </div>
-        <div class="form-row mt-4">
-            <div class="form-group col-md-2" *ngIf="companies.length>1">
-                <label for="">Empresa</label>
-                <ng-select class="mr-1" [items]="companies" [(ngModel)]="filtros.company" (change)="getAllContracts()" name="empresa" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                </ng-select>
-            </div>
-            <div class="form-group col-md-2">
-                <label for="">Funcionario</label>
-                <input type="text" class="form-control" [(ngModel)]="filtros.person" (change)="getAllContracts()" name="funcionario" autocomplete="off" placeholder="Buscar" />
-            </div>
-            <div class="form-group col-md-3">
-                <label for="">Grupos</label>
-                <ng-select class="mr-1" [items]="groups" [(ngModel)]="filtros.group" (change)="getAllContracts()" name="group" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                </ng-select>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="">Dependencias</label>
-                <ng-select class="mr-1 mb-3" [items]="dependencies" [(ngModel)]="filtros.dependency" (change)="getAllContracts()" name="dependency" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                </ng-select>
-            </div>
-            <div class="form-group col-md-2">
-                <label for="">Cargo</label>
-                <ng-select class="mr-1 mb-3" [items]="positions" bindLabel="text" bindValue="value" [(ngModel)]="filtros.position" (change)="getAllContracts()" name="position" loadingText="loading" ngDefaultControl>
-                </ng-select>
-            </div>
-        </div>
-    </div>
-
-</div>
 <div class="row">
     <div class="col-10">
-        <div class="card card-body">
-            <div *ngIf="!loading && contracts.length > 0; else notData">
-                <table class="table w-100 table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Funcionario</th>
-                            <th>Documento</th>
-                            <!--  <th>Cargo</th> -->
-                            <th>Tipo</th>
-                            <th style="width: 110px">F. Inicio</th>
-                            <th style="width: 110px">F. Fin</th>
-                            <th style="width: 110px">F. Fin prueba</th>
-                            <th style="width: 110px">F. Notific.</th>
-                            <th>-</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr *ngFor="let contract of contracts">
-                            <td> {{ contract.code }} </td>
-                            <td>
-                                <strong>
-                  {{ contract.first_name | titlecase }}
-                  {{ contract.first_surname | titlecase }}
-                </strong>
-                            </td>
-                            <td>
-                                {{ contract.identifier }}
-
-                            </td>
-                            <!-- <td>
-                <img
-                  alt=""
-                  class="rounded-circle avatar-sm"
-                  src="{{ contract.image | image: 'users' }}"
-                  alt=""
-                />
-              </td> -->
-                            <!--  <td>{{ contract.position }}</td> -->
-                            <td>{{ contract.work_contract_type }}</td>
-                            <td>{{ contract.date_of_admission }}</td>
-                            <td>
-                                <span *ngIf="contract.date_end; else notConlcude">
-                  {{ contract.date_end }}
-                </span>
-                            </td>
-                            <td>
-                                <span *ngIf="contract.date_trial; else notConlcude">{{ contract.date_trial }}
-                </span>
-                            </td>
-                            <td>
-                                <span *ngIf="contract.date_of_notify; else notConlcude">
-                  {{ contract.date_of_notify }}
-                </span>
-                            </td>
-                            <td class="">
-
-                                <div ngbDropdown class="dropdown-primary">
-                                    <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light" type="button">
-                      <i class="mdi mdi-chevron-down"></i>
-                    </button>
-                                    <div ngbDropdownMenu>
-                                        <!--  <a
-                        [routerLink]="['/nomina/ver-viatico', item.id]"
-                        class="
-                          dropdown-item
-                          waves-light waves-effect
-                          caja-botones
-                        "
-                      >
-                        <i class="far fa-eye"></i> Ver</a
-                      > -->
-
-                                        <a type="button" class=" dropdown-item waves-light waves-effect" ngbTooltip="Descargar">
-                                            <i class="fas fa-download"></i> Descargar
-                                        </a>
-                                        <a type="button" class="dropdown-item waves-light waves-effect" [routerLink]="[
-                          '/ajustes/informacion-base/funcionario/',
-                          contract.id
-                        ]" ngbTooltip="Ver Perfil">
-                                            <i class="fas fa-address-card"></i> Ver perfil
-                                        </a>
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-between">
+                    <h4 class="text-primary">Contratos</h4>
+                    <div class="btn-group rounded">
+                        <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                            <i class="fas fa-sliders-h"></i> Filtros
+                        </button>
+                    </div>
+                </div>
+                <hr class="line">
+                <div class="container">
+                    <mat-accordion multi>
+                        <mat-expansion-panel class="mat-elevation-z0">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="input-group-sm col" *ngIf="companies.length>1">
+                                        <label for="">Empresa</label>
+                                        <ng-select class="mr-1" [items]="companies" [(ngModel)]="filtros.company"
+                                            (change)="getAllContracts()" name="empresa" bindLabel="text" bindValue="value"
+                                            loadingText="loading" ngDefaultControl>
+                                        </ng-select>
+                                    </div>
+                                    <div class="input-group-sm col">
+                                        <label for="">Funcionario</label>
+                                        <input type="text" class="form-control" [(ngModel)]="filtros.person" (change)="getAllContracts()"
+                                            name="funcionario" autocomplete="off" placeholder="Buscar" />
+                                    </div>
+                                    <div class="input-group-sm col">
+                                        <label for="">Grupos</label>
+                                        <ng-select class="mr-1" [items]="groups" [(ngModel)]="filtros.group" (change)="getAllContracts()"
+                                            name="group" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                                        </ng-select>
+                                    </div>
+                                    <div class="input-group-sm col">
+                                        <label for="">Dependencias</label>
+                                        <ng-select class="mr-1 mb-3" [items]="dependencies" [(ngModel)]="filtros.dependency"
+                                            (change)="getAllContracts()" name="dependency" bindLabel="text" bindValue="value"
+                                            loadingText="loading" ngDefaultControl>
+                                        </ng-select>
+                                    </div>
+                                    <div class="input-group-sm col">
+                                        <label for="">Cargo</label>
+                                        <ng-select class="mr-1 mb-3" [items]="positions" bindLabel="text" bindValue="value"
+                                            [(ngModel)]="filtros.position" (change)="getAllContracts()" name="position"
+                                            loadingText="loading" ngDefaultControl>
+                                        </ng-select>
                                     </div>
                                 </div>
-
-
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                <!-- <div class="row">
+                                    <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
+                                        <mat-label> </mat-label>
+                                        <input matInput type="text" placeholder="">
+                                    </mat-form-field>
+                                    <mat-form-field class="col-md-2" appearance="outline">
+                                        <mat-label> </mat-label>
+                                        <mat-select>
+                                            <mat-option value=""> </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>                                
+                                </div> -->
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+                <div class="container" style="font-size: small;">
+                    <div *ngIf="!loading && contracts.length > 0; else notData">
+                        <table class="table w-100 table-striped table-bordered" >
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Funcionario</th>
+                                    <th>Documento</th>
+                                    <!--  <th>Cargo</th> -->
+                                    <th>Tipo</th>
+                                    <th style="width: 110px">F. Inicio</th>
+                                    <th style="width: 110px">F. Fin</th>
+                                    <th style="width: 110px">F. Fin prueba</th>
+                                    <th style="width: 110px">F. Notific.</th>
+                                    <th>-</th>
+                                </tr>
+                            </thead>
+        
+                            <tbody>
+                                <tr *ngFor="let contract of contracts">
+                                    <td> {{ contract.code }} </td>
+                                    <td>
+                                        <strong>
+                                            {{ contract.first_name | titlecase }}
+                                            {{ contract.first_surname | titlecase }}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        {{ contract.identifier }}
+        
+                                    </td>
+                                    <!-- <td>
+                        <img
+                          alt=""
+                          class="rounded-circle avatar-sm"
+                          src="{{ contract.image | image: 'users' }}"
+                          alt=""
+                        />
+                      </td> -->
+                                    <!--  <td>{{ contract.position }}</td> -->
+                                    <td>{{ contract.work_contract_type }}</td>
+                                    <td>{{ contract.date_of_admission }}</td>
+                                    <td>
+                                        <span *ngIf="contract.date_end; else notConlcude">
+                                            {{ contract.date_end }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span *ngIf="contract.date_trial; else notConlcude">{{ contract.date_trial }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span *ngIf="contract.date_of_notify; else notConlcude">
+                                            {{ contract.date_of_notify }}
+                                        </span>
+                                    </td>
+                                    <td class="">
+        
+                                        <div ngbDropdown class="dropdown-primary">
+                                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light"
+                                                type="button">
+                                                <i class="mdi mdi-chevron-down"></i>
+                                            </button>
+                                            <div ngbDropdownMenu>
+                                                <!--  <a
+                                [routerLink]="['/nomina/ver-viatico', item.id]"
+                                class="
+                                  dropdown-item
+                                  waves-light waves-effect
+                                  caja-botones
+                                "
+                              >
+                                <i class="far fa-eye"></i> Ver</a
+                              > -->
+        
+                                                <a type="button" class=" dropdown-item waves-light waves-effect"
+                                                    ngbTooltip="Descargar">
+                                                    <i class="fas fa-download"></i> Descargar
+                                                </a>
+                                                <a type="button" class="dropdown-item waves-light waves-effect" [routerLink]="[
+                                  '/ajustes/informacion-base/funcionario/',
+                                  contract.id
+                                ]" ngbTooltip="Ver Perfil">
+                                                    <i class="fas fa-address-card"></i> Ver perfil
+                                                </a>
+                                            </div>
+                                        </div>
+        
+        
+        
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+                        [collectionSize]="pagination.collectionSize" (pageChange)="getAllContracts($event)"
+                        [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination" maxSize="5"
+                        rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+                    </ngb-pagination>
+                </div>
+            </div>        
         </div>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getAllContracts($event)" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination"
-            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-        </ngb-pagination>
     </div>
     <div class="col-2">
         <div class="card">
             <div class="card-body">
-                <h6 class="text-center">Contratos por vencer</h6>
+                <h5 class="text-center text-primary">Por vencer</h5>
                 <table *ngIf="!contractData && contractsToExpire.length > 0; else image">
                     <div class="row mt-3 mb-3">
                         <td class="mt-3 mb-3" *ngFor="let contractToExpire of contractsToExpire">
                             {{ contractToExpire.first_name }} {{ contractToExpire.first_surname }} <br />
                             <small>
-                {{ contractToExpire.date_end }}
-              </small>
+                                {{ contractToExpire.date_end }}
+                            </small>
                         </td>
                     </div>
                 </table>
@@ -153,8 +189,9 @@
           justify-content-center
           pagination-rounded pagination-sm
           ps
-        " [collectionSize]="paginationCV.collectionSize" (pageChange)="getContractsToExpire($event)" [pageSize]="paginationCV.pageSize" [(page)]="paginationCV.page" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="true" boundaryLinks="true"
-                rotate="true">
+        " [collectionSize]="paginationCV.collectionSize" (pageChange)="getContractsToExpire($event)"
+                [pageSize]="paginationCV.pageSize" [(page)]="paginationCV.page" aria-label="Default pagination"
+                maxSize="5" rotate="true" ellipses="true" boundaryLinks="true" rotate="true">
             </ngb-pagination>
             <ng-template #image>
                 <img width="100%" src="../../../../assets/images/contratos.png" alt="" />
@@ -184,6 +221,7 @@
     </div> -->
     </div>
 </div>
+
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

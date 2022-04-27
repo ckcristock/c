@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
+import { HttpClient } from '@angular/common/http';
 import {
   Router,
   NavigationEnd,
@@ -27,6 +28,7 @@ export class HorizontaltopbarComponent implements OnInit {
   flagvalue;
   countryName;
   valueset: string;
+  imageProfile: any;
 
   listLang = [
     { text: 'English', flag: 'assets/images/flags/us.jpg', lang: 'en' },
@@ -41,13 +43,25 @@ export class HorizontaltopbarComponent implements OnInit {
     @Inject(DOCUMENT) private document: any,
     private router: Router,
     private _user: UserService,
-    public cookiesService: CookieService
-  ) {}
+    public cookiesService: CookieService,
+    public http: HttpClient,
+  ) { }
 
   ngOnInit(): void {
-   // this.initSearch();
+    // this.initSearch();
     this.element = document.documentElement;
     this.user = this._user.user;
+    this.http.get(this.user.imagenUrl).subscribe(result => {
+      //console.log(result)
+    },
+      error => {
+        //console.log(error)
+        if(error.status == 500){
+          this.imageProfile = null
+        } else{
+          this.imageProfile = this.user.imagenUrl
+        }
+      });
     this.configData = {
       suppressScrollX: true,
       wheelSpeed: 0.3,
@@ -136,17 +150,17 @@ export class HorizontaltopbarComponent implements OnInit {
   logout() {
     this._user.logout();
   }
-/*
-  initSearch() {
-    const source = interval(10000); //output: 0,1,2,3,4,5....
-    this.alerts$ = source.subscribe((val) => {
-      let param = { person_id: this.user.person.id };
-
-      this._user.getAlerts(param).subscribe((r: any) => {
-        this.alerts = r.data;
+  /*
+    initSearch() {
+      const source = interval(10000); //output: 0,1,2,3,4,5....
+      this.alerts$ = source.subscribe((val) => {
+        let param = { person_id: this.user.person.id };
+  
+        this._user.getAlerts(param).subscribe((r: any) => {
+          this.alerts = r.data;
+        });
       });
-    });
-  }*/
+    }*/
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.

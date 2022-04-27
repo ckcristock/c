@@ -120,7 +120,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of presupuestos" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
+                <tr *ngFor="let item of presupuestos" [ngClass]="{'text-danger font-weight-bold': ( item.state == 'Inactivo' )}">
                     <td>
                         <input type="checkbox" (change)="guardarPresupuesto(item.id, item.total_cop)"/>
                         <label [for]=" item.id " class="ml-1 "> PRES {{ item.id }} </label>
@@ -170,7 +170,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of cotizaciones" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
+                <tr *ngFor="let item of cotizaciones" [ngClass]="{'text-danger font-weight-bold': ( item.state == 'Inactivo' )}">
                     <td>
                         <input type="checkbox" [selected]="cotizacionesSeleccionadas.includes(item.id)" [change]=" guardarCotizacion(item.id) ">
                         <label [for]=" item.id " class="ml-1 "> PRES {{ item.id }} </label>

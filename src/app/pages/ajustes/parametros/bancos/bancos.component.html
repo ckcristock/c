@@ -1,31 +1,36 @@
 <div class="card">
     <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Agregar Nuevo Banco</button>
-            <h5>Bancos</h5>
-            <p>Todos los Bancos Registrados</p>
-            <div class="form-row ml-0">
-                <div class="form-group">
-                    <label for="">Filtro nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getBanks()" name="name" autocomplete="off">
-                </div>
+        <div class="card-title d-flex justify-content-between">
+            <h4 class="text-primary">Bancos</h4>
+            <div class="btn-group rounded">
+                <button class="btn btn-primary btn-sm" style="float: right;" (click)="openConfirm(add, 'Nuevo Banco')">
+                    <i class="fa fa-plus"></i> Agregar
+                </button>
+                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                    <i class="fas fa-sliders-h"></i> Filtros
+                </button>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <table class="table table-bordered table-striped" *ngIf="!loading && banks.length > 0; else notData">
-            <thead class="bg-light">
+        <hr class="line">
+        <mat-accordion multi>
+            <mat-expansion-panel class="mat-elevation-z0">
+                <mat-form-field class="col-md-3 pl-0" appearance="outline">
+                    <mat-label>Nombre</mat-label>
+                    <input type="text" matInput [(ngModel)]="filtro.name" (input)="getBanks()" name="name"
+                        autocomplete="off" placeholder="Busca por nombre">
+                </mat-form-field>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;" *ngIf="!loading && banks.length > 0; else notData">
+            <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Código</th>
-                    <th class="text-center">Acciones</th>
+                    <th class="text-center col-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let bank of banks" [ngClass]="{'bg-danger text-white': ( bank.status == 'Inactivo' )}">
+                <tr *ngFor="let bank of banks" [ngClass]="{'text-danger font-weight-bold': ( bank.status == 'Inactivo' )}">
                     <td> {{ bank.name }} </td>
                     <td> {{ bank.code }} </td>
                     <td>
@@ -35,12 +40,12 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getBank(bank); modal.show()"><i
-                                            class="fa fa-file-pdf-o"></i>Editar</a>
-                                    <a *ngIf="bank.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(bank, 'Inactivo')">
-                                        <i class="fa fa-pencil"></i>Inactivar</a>
-                                    <a *ngIf="bank.status == 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(bank, 'Activo')">
-                                        <i class="fa fa-pencil"></i>Activar</a>
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" target="_blank" (click)="getBank(bank); openConfirm(add, 'Actualizar Banco')"><i
+                                            class="far fa-edit"></i> Editar</a>
+                                    <a *ngIf="bank.status == 'Activo'" class=" text-danger dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(bank, 'Inactivo')">
+                                        <i class="far fa-trash-alt"></i> Anular</a>
+                                    <a *ngIf="bank.status == 'Inactivo'" class="text-success dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(bank, 'Activo')">
+                                        <i class="fas fa-check"></i> Activar</a>
                                 </div>
                             </div>
                         </div>
@@ -53,16 +58,16 @@
         maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
     </ngb-pagination>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> {{ selected }} </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-        </button>
+
+<ng-template #add let-modal>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="text-primary modal-title">{{ selected }}</h4>
+        <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
+          (click)="modal.dismiss('Cross click')"></button>
+      </div>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-6">
@@ -76,13 +81,16 @@
             </div>
         </form>
     </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="createBank()">Guardar</button>
-        </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
+        Cancelar
+      </button>
+      <button type="button" [disabled]="!form.valid" (click)="createBank()" class="btn btn-primary">
+        Guardar
+      </button>
     </div>
-</app-modal-basic>
+  </ng-template>
+
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

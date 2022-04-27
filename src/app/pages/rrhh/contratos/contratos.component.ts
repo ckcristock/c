@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatAccordion } from '@angular/material/expansion';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { PositionService } from '../../ajustes/informacion-base/services/positions.service';
@@ -10,6 +11,17 @@ import { ContratosService } from './contratos.service';
   styleUrls: ['./contratos.component.scss']
 })
 export class ContratosComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   contractData:boolean = false;
   contracts:any[] = [];
   groups: any[];
@@ -51,6 +63,10 @@ export class ContratosComponent implements OnInit {
     this.getContractsToExpire();
     this.getContractByTrialPeriod();
     this.getAllContracts();
+  }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
   }
 
   getAllContracts( page = 1 ){

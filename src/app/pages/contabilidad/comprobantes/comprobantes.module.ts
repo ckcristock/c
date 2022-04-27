@@ -23,7 +23,10 @@ import { NotascreditoComponent } from './notascredito/notascredito.component';
 import { NotascreditocrearComponent } from './notascredito/notascreditocrear/notascreditocrear.component';
 import { NotascreditoverComponent } from './notascredito/notascreditover/notascreditover.component';
 import { Globales } from '../globales';
-
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -56,6 +59,10 @@ import { Globales } from '../globales';
     ComprobantesRoutingModule,
     NgbTypeaheadModule,
     MyDateRangePickerModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
     SweetAlert2Module.forRoot()
   ],
   providers: [

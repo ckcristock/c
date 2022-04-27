@@ -31,6 +31,11 @@ export class CierresContablesComponent implements OnInit {
     this.envirom = environment
   }
 
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
+
   abrirModalCierre(tipo) {
     this.modalCierre.next(tipo);
   }

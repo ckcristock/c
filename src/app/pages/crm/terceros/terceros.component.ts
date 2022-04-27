@@ -3,6 +3,7 @@ import { TercerosService } from './terceros.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-terceros',
@@ -10,13 +11,25 @@ import { SwalService } from '../../ajustes/informacion-base/services/swal.servic
   styleUrls: ['./terceros.component.scss']
 })
 export class TercerosComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
+  panelOpenState = false;
   form:FormGroup;
   parametro:string = '';
   loading:boolean = false;
   thirdParties:any[] = [];
   pagination:any = {
     page: 1,
-    pageSize: 5,
+    pageSize: 10,
     collectionSize: 0
   }
   filtros:any = {

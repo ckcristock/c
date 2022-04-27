@@ -5,8 +5,8 @@
             <h5>Zonas</h5>
             <p>Listados de las zonas de nuestra base de datos</p>
         </div>
-        <table class="table table-bordered table-striped" *ngIf="!loading && zones.length > 0; else notData">
-            <thead class="bg-light">
+        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"  *ngIf="!loading && zones.length > 0; else notData">
+            <thead>
                 <tr>
                     <th scope="col">Nombre</th>
                     <th scope="col" style="width: 50px;">Acciones</th>
@@ -14,7 +14,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let zone of zones">
-                    <td scope="row" [ngClass]="{'bg-danger text-white': (zone.status === 'Inactivo' )}"> {{ zone.name }} </td>
+                    <td scope="row" [ngClass]="{'text-danger font-weight-bold': (zone.status === 'Inactivo' )}"> {{ zone.name }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -23,11 +23,11 @@
                                 </button>
                                 <div ngbDropdownMenu>
                                     <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getZone(zone); modal.show()"><i
-                                            class="fa fa-file-pdf-o"></i>Editar</a>
+                                           class="far fa-edit"></i> Editar</a>
                                     <a *ngIf="zone.status === 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularOActivar(zone, 'Inactivo')">
-                                        <i class="fa fa-pencil"></i>Inactivar</a>
+                                        <i class="far fa-trash-alt"></i> Anular</a>
                                     <a *ngIf="zone.status === 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularOActivar(zone, 'Activo')">
-                                        <i class="fa fa-pencil"></i>Activar</a>
+                                        <i class="fas fa-check"></i> Activar</a>
                                 </div>
                             </div>
                         </div>

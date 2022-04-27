@@ -1,151 +1,123 @@
 <div class="card">
   <div class="card-body">
-    <div class="row mb-2">
-      <div class="col-md-12">
-        <h3 class="font-weight-bold">Reporte de Horarios</h3>
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Reporte de Horarios</h4>
+      <div class="btn-group rounded">
+        <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
       </div>
     </div>
-    <form [formGroup]="forma" (ngSubmit)="getDiaries()">
-      <div class="row">
-        <div class="col-12">
-          <div class="row">
-            <div class="col-md-2" *ngIf="companies.length > 2">
-              <div class="form-group">
-                <label class="custom-label" for="filtroCentroCosto"
-                  >Empresa</label
-                >
-                <ng-select
-                  [items]="companies"
-                  bindLabel="text"
-                  bindValue="value"
-                  formControlName="company_id"
-                  ngDefaultControl
-                >
-                </ng-select>
+    <hr class="line">
+    <div class="container">
+      <mat-accordion multi>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <div class="container">
+            <form [formGroup]="forma" (ngSubmit)="getDiaries()">
+              <div class="row">
+                <div class="col-12">
+                  <div class="row">
+                    <div class="col-md-4" *ngIf="companies.length > 2">
+                      <div class="form-group">
+                        <label class="custom-label" for="filtroCentroCosto">Empresa</label>
+                        <ng-select [items]="companies" bindLabel="text" bindValue="value" formControlName="company_id"
+                          ngDefaultControl>
+                        </ng-select>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="custom-label" for="filtroCentroCosto">Grupo</label>
+                        <ng-select [items]="groupList" bindLabel="text" bindValue="value" formControlName="group_id"
+                          ngDefaultControl>
+                        </ng-select>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="custom-label" for="filtroDependencia">Dependencia</label>
+                        <ng-select [items]="dependencyList" bindLabel="text" formControlName="dependency_id" bindValue="value"
+                          ngDefaultControl>
+                        </ng-select>
+                      </div>
+                    </div>
+      
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="custom-label">Fecha de inicio</label>
+                        <input type="date" formControlName="first_day" class="form-control" required />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="custom-label">Fecha de fin</label>
+                        <input type="date" formControlName="last_day" class="form-control" required />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="custom-label">Funcionario</label>
+                        <ng-select [items]="people" formControlName="person_id" bindLabel="text" bindValue="value"
+                          ngDefaultControl>
+                        </ng-select>
+                      </div>
+                    </div>
+      
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="custom-label" for="tipo_turno">Tipo de turno</label>
+                        <select name="tipo_turno" formControlName="turn_type" class="form-control custom-control">
+                          <option value="Rotativo">Turno Rotativo</option>
+                          <option value="Fijo">Turno Fijo</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group">
-                <label class="custom-label" for="filtroCentroCosto"
-                  >Grupo</label
-                >
-                <ng-select
-                  [items]="groupList"
-                  bindLabel="text"
-                  bindValue="value"
-                  formControlName="group_id"
-                  ngDefaultControl
-                >
-                </ng-select>
+              <div class="row mt-4">
+                <div class="col-md-6">
+                  <button type="submit" class="btn btn-info btn-sm btn-block">
+                    <i class="fa fa-search"></i> Filtrar
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-success btn-sm btn-block" (click)="download()">
+                    <i class="fas fa-file-download"></i>
+      
+                    <span *ngIf="!donwloading; else status"> Descargar</span>
+                    <ng-template #status>
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Generando...
+                    </ng-template>
+                  </button>
+                </div>
               </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group">
-                <label class="custom-label" for="filtroDependencia"
-                  >Dependencia</label
-                >
-                <ng-select
-                  [items]="dependencyList"
-                  bindLabel="text"
-                  formControlName="dependency_id"
-                  bindValue="value"
-                  ngDefaultControl
-                >
-                </ng-select>
-              </div>
-            </div>
-
-            <div class="col-md-2">
-              <div class="form-group">
-                <label class="custom-label">Fecha de inicio</label>
-                <input
-                  type="date"
-                  formControlName="first_day"
-                  class="form-control"
-                  required
-                />
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group">
-                <label class="custom-label">Fecha de fin</label>
-                <input
-                  type="date"
-                  formControlName="last_day"
-                  class="form-control"
-                  required
-                />
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group">
-                <label class="custom-label">Funcionario</label>
-                <ng-select
-                  [items]="people"
-                  formControlName="person_id"
-                  bindLabel="text"
-                  bindValue="value"
-                  ngDefaultControl
-                >
-                </ng-select>
-              </div>
-            </div>
-
-            <div class="col-md-2">
-              <div class="form-group">
-                <label class="custom-label" for="tipo_turno"
-                  >Tipo de turno</label
-                >
-                <select
-                  name="tipo_turno"
-                  formControlName="turn_type"
-                  class="form-control custom-control"
-                >
-                  <option value="Rotativo">Turno Rotativo</option>
-                  <option value="Fijo">Turno Fijo</option>
-                </select>
-              </div>
-            </div>
+            </form>
+            <!-- <div class="row">
+              <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
+                <mat-label> </mat-label>
+                <input matInput type="text" placeholder="">
+              </mat-form-field>
+              <mat-form-field class="col-md-2" appearance="outline">
+                <mat-label> </mat-label>
+                <mat-select>
+                  <mat-option value=""> </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div> -->
           </div>
-        </div>
-      </div>
-      <div class="row mt-4">
-        <div class="col-md-6">
-          <button type="submit" class="btn btn-info btn-sm btn-block">
-            <i class="fa fa-search"></i> Filtrar
-          </button>
-        </div>
-        <div class="col-md-6">
-          <button
-            type="button"
-            class="btn btn-success btn-sm btn-block"
-            (click)="download()"
-          >
-            <i class="fas fa-file-download"></i>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div class="container">
+      <app-detalle-reporte [type]="turn_type_value" [reporteHorarios]="reporteHorarios"
+        *ngIf="reporteHorarios.length && !loading; else notData">
+      </app-detalle-reporte>
+    </div>
 
-            <span *ngIf="!donwloading; else status"> Descargar</span>
-            <ng-template #status>
-              <span
-                class="spinner-border spinner-border-sm"
-                role="status"
-                aria-hidden="true"
-              ></span>
-              Generando...
-            </ng-template>
-          </button>
-        </div>
-      </div>
-    </form>
   </div>
 </div>
-
-<app-detalle-reporte
-  [type]="turn_type_value"
-  [reporteHorarios]="reporteHorarios"
-  *ngIf="reporteHorarios.length && !loading; else notData"
->
-</app-detalle-reporte>
-
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

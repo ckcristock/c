@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PerfilesApuService } from './perfiles-apu.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-perfiles-apu',
@@ -10,30 +11,31 @@ import { SwalService } from '../../../informacion-base/services/swal.service';
 })
 export class PerfilesApuComponent implements OnInit {
 
-  @ViewChild('modal') modal:any;
+  @ViewChild('modal') modal: any;
   form: FormGroup;
-  loading:boolean = false;
-  title:any = '';
-  profiles:any[] = [];
-  profile:any = {};
+  loading: boolean = false;
+  title: any = '';
+  profiles: any[] = [];
+  profile: any = {};
   pagination = {
     page: 1,
     pageSize: 10,
     collectionSize: 0
   }
 
-  constructor( 
-                private fb: FormBuilder,
-                private _profiles: PerfilesApuService,
-                private _swal: SwalService
-              ) { }
+  constructor(
+    private fb: FormBuilder,
+    private _profiles: PerfilesApuService,
+    private _swal: SwalService,
+    private modalService: NgbModal,
+  ) { }
 
   ngOnInit(): void {
     this.createform();
     this.getProfiles();
   }
 
-  createform(){
+  createform() {
     this.form = this.fb.group({
       id: [this.profile.id],
       profile: [''],
@@ -47,15 +49,33 @@ export class PerfilesApuComponent implements OnInit {
     this.subscribes(this.form);
   }
 
-  
-  openModal(){
-    this.modal.show();
-    this.title = 'Nuevo Perfil laboral';
+  closeResult = '';
+  public openConfirm(confirm, titulo) {
+    this.title = titulo;
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
-  
-  getProfile( profile ){
-    this.profile = {...profile};
-    this.title = 'Actualizar Perfil laboral';
+  private getDismissReason(reason: any): string {
+    this.form.reset();
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  openModal() {
+    this.modal.show();
+
+  }
+
+  getProfile(profile) {
+    this.profile = { ...profile };
     this.form.patchValue({
       id: this.profile.id,
       profile: this.profile.profile,
@@ -68,18 +88,18 @@ export class PerfilesApuComponent implements OnInit {
     })
     this.subscribes(this.form);
   }
-  
-  getProfiles( page = 1 ){
+
+  getProfiles(page = 1) {
     this.pagination.page = page;
     this.loading = true;
-    this._profiles.getProfiles(this.pagination).subscribe((r:any) => {
+    this._profiles.getProfiles(this.pagination).subscribe((r: any) => {
       this.profiles = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
   }
 
-  subscribes( form: FormGroup ){
+  subscribes(form: FormGroup) {
     form.get('value_time_daytime_displacement').valueChanges.subscribe(value => {
       let result = (value * 1.5);
       form.patchValue({ value_time_night_displacement: Math.round(result) });
@@ -104,25 +124,25 @@ export class PerfilesApuComponent implements OnInit {
       icon: 'question',
       showCancel: true
     })
-    .then((result) =>{
-      if (result.isConfirmed) {
-        this._profiles.save(data).subscribe( (r:any) =>{
-          this.getProfiles();
-        })
-        this._swal.show({
-          icon: 'success',
-          title: '¡Activado!',
-          text: (data.state == 'Activo' ? 'El perfil ha sido Activada con éxito.' : 'El perfil ha sido desactivada con éxito.'),
-          timer: 2500,
-          showCancel: false
-        })
-      }
-    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._profiles.save(data).subscribe((r: any) => {
+            this.getProfiles();
+          })
+          this._swal.show({
+            icon: 'success',
+            title: '¡Activado!',
+            text: (data.state == 'Activo' ? 'El perfil ha sido Activada con éxito.' : 'El perfil ha sido desactivada con éxito.'),
+            timer: 2500,
+            showCancel: false
+          })
+        }
+      })
   }
-  
-  save(){
-    this._profiles.save(this.form.value).subscribe((r:any) => {
-      this.modal.hide();
+
+  save() {
+    this._profiles.save(this.form.value).subscribe((r: any) => {
+      this.modalService.dismissAll(); 
       this.form.reset();
       this.getProfiles();
       this._swal.show({

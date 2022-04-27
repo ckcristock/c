@@ -9,12 +9,25 @@ import { CompanyService } from '../../ajustes/informacion-base/services/company.
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
+import { MatAccordion } from '@angular/material/expansion';
 @Component({
   selector: 'app-llegadas-tardes',
   templateUrl: './llegadas-tardes.component.html',
   styleUrls: ['./llegadas-tardes.component.scss'],
 })
 export class LlegadasTardesComponent implements OnInit {
+  
+@ViewChild(MatAccordion) accordion: MatAccordion;
+matPanel = false;
+openClose(){
+  if (this.matPanel == false){
+    this.accordion.openAll()
+    this.matPanel = true;
+  } else {
+    this.accordion.closeAll()
+    this.matPanel = false;
+  }    
+}
   donutChart = donutChart;
   group_id: any;
   people_id = '';
@@ -78,6 +91,11 @@ export class LlegadasTardesComponent implements OnInit {
     this.getGroup();
     this.getPeople();
     this.getCompanies();
+  }
+
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
   }
 
   ngOnInit() {

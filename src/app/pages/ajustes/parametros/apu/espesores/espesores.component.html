@@ -1,18 +1,18 @@
 <div class="card">
     <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+        <div class="card-title d-flex justify-content-between">
+            <h4 class="text-primary">Espesores</h4>
+            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openConfirm(add, 'Nuevo Espesor')">
                 <i class="fa fa-plus"></i> Agregar
-            </button>
-            <h5 class="text-primary">Espesores</h5>
+            </button>            
         </div>
-        <hr class="bg-primary">
-        <table class="table table-borderless table-striped" *ngIf="!loading && espesores.length > 0; else notData">
-            <thead class="bg-light">
+        <hr class="line">
+        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;" *ngIf="!loading && espesores.length > 0; else notData">
+            <thead>
                 <tr>
                     <th>Espesor</th>
                     <th>Fecha Creación</th>
-                    <th class="text-center">Acciones</th>
+                    <th class="text-center col-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,7 +26,7 @@
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getThickness(item); modal.show()">
+                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getThickness(item); openConfirm(add,'Actualizar Espesor')">
                                         <i class="far fa-edit"></i> Editar
                                     </a>
                                 </div>
@@ -38,16 +38,16 @@
         </table>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-sm'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">{{ title }}</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
-            <span aria-hidden="true">
-              <i class="fas fa-times"></i>
-            </span>
-        </button>
+
+<ng-template #add let-modal>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="text-primary modal-title">{{ title }}</h4>
+        <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
+          (click)="modal.dismiss('Cross click');form.reset()"></button>
+      </div>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <form [formGroup]="form">
             <div class="row">
                 <div class="col-12">
@@ -61,13 +61,16 @@
             </div>
         </form>
     </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="save()">Guardar</button>
-        </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click');form.reset()">
+        Cancelar
+      </button>
+      <button type="button" [disabled]="!form.valid" (click)="save()" class="btn btn-primary">
+        Guardar
+      </button>
     </div>
-</app-modal-basic>
+  </ng-template>
+
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

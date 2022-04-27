@@ -69,7 +69,7 @@ export class DetalleFuncionarioComponent implements OnInit {
           this._swal.show({
             icon: 'success',
             title: 'Proceso Satisfactorio',
-            text: 'El Funcionario ha sido liquidado con éxito.',
+            text: 'El Funcionario ha sido preliquidado con éxito.',
             showCancel: false
           });
         });

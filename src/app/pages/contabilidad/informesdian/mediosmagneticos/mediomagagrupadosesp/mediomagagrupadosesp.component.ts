@@ -42,6 +42,10 @@ export class MediomagagrupadosespComponent implements OnInit {
     this.listaFormatosAgrupados();
     this.enviromen = environment
   }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
 
   listaFormatosAgrupados() {
     this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/lista_medios_magneticos_agrupados.php').subscribe((data:any) => {

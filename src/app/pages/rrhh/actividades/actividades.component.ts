@@ -40,6 +40,7 @@ import Swal from 'sweetalert2';
 import * as moment from 'moment';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { consts } from 'src/app/core/utils/consts';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-actividades',
@@ -50,7 +51,23 @@ export class ActividadesComponent {
   @ViewChild('ModalActividad') ModalActividad: any;
   @ViewChild('ModalTipoActividad') ModalTipoActividad: any;
   @ViewChild('ModalCambioEstado') ModalCambioEstado: any;
-
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
   daysOfWeek = consts.diasSemana;
   Id_Dependencia = 1;
 
@@ -73,7 +90,7 @@ export class ActividadesComponent {
   cliente_seleccionado: any = '';
   funcionario_seleccionado: any = '';
   Funcionarios: any[] = [];
-  id_activity:any;
+  id_activity: any;
   alertOption: any = {};
   private eventoActividad: any;
   eventsModel: any;
@@ -115,7 +132,7 @@ export class ActividadesComponent {
   companies: any[] = [];
   groups: any[] = [];
   dependencies: any[] = [];
-  editar:boolean = false;
+  editar: boolean = false;
   constructor(
     private http: HttpClient,
     private _actividad: ActividadesService,
@@ -123,7 +140,8 @@ export class ActividadesComponent {
     private _group: GroupService,
     private _company: CompanyService,
     private _person: PersonService,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private modalService: NgbModal,
   ) {
     this.GetTiposActividad();
   }
@@ -135,13 +153,13 @@ export class ActividadesComponent {
     this.GetActividadesMes();
     //alert(`i'm here`);
     // console.log(this.ActividadModel);
-    
+
   }
   GetActividadesMes() {
     this._actividad.getActivities().subscribe((r: any) => {
       this.calendarEvents = r.data;
       console.log(this.calendarEvents);
-      
+
     });
     this.DataActivities = [];
     this.Actividades = [];
@@ -232,6 +250,7 @@ export class ActividadesComponent {
           text: 'Se ha guardado correctamente',
           icon: 'success',
         });
+        this.modalService.dismissAll(); 
       }
     });
   }
@@ -289,7 +308,7 @@ export class ActividadesComponent {
     this.ActividadModel.Fecha_Inicio = moment
       .utc(data.date_start)
       .format('YYYY-MM-DD');
-      //.format('YYYY-MM-DDTHH:mm:ss.SSS');
+    //.format('YYYY-MM-DDTHH:mm:ss.SSS');
     this.ActividadModel.Fecha_Fin = moment
       .utc(data.date_end)
       .format('YYYY-MM-DD');
@@ -331,12 +350,12 @@ export class ActividadesComponent {
       this.FuncionariosSele = r.data;
       console.log(this.FuncionariosSele);
       if (r.data) {
-         this.ActividadModel.Funcionario_Asignado =
+        this.ActividadModel.Funcionario_Asignado =
           this.FuncionariosSele.reduce((acc, el) => {
             return [...acc, el.person.id]
           }, [])
       } else {
-          this.ActividadModel.Funcionario_Asignado = ['0'];
+        this.ActividadModel.Funcionario_Asignado = ['0'];
       }
     });
   }
@@ -354,9 +373,9 @@ export class ActividadesComponent {
     });
   }
 
-  cancelCycle(){
+  cancelCycle() {
     let code = this.actividadObj.code;
-    this._actividad.cancelCycleActivity(code, {state: 'Anulada'}).subscribe((r:any) => {
+    this._actividad.cancelCycleActivity(code, { state: 'Anulada' }).subscribe((r: any) => {
       if (r.code == 200) {
         this._swal.show({
           text: 'Ciclo Anulado',
@@ -400,7 +419,7 @@ export class ActividadesComponent {
     }
   }
 
-  cancelOptions(){
+  cancelOptions() {
     Swal.fire({
       title: 'Eliminar la actividad',
       text: '¿Qué acción desea elegir?',
@@ -418,7 +437,7 @@ export class ActividadesComponent {
     }).then((result) => {
       if (result.value) {
         console.log(result.value);
-        result.value == 'cancelDay' ? this.anularDia() :  this.cancelCycle()
+        result.value == 'cancelDay' ? this.anularDia() : this.cancelCycle()
       }
     });
   }
@@ -426,7 +445,7 @@ export class ActividadesComponent {
 
   actividadObj: any = {};
   accionarEvento(event) {
-    if(event.event){
+    if (event.event) {
       let id = event.event._def.publicId;
       this.actividadObj = this.calendarEvents.find((x) => x.id == id);
       this.id_activity = id;
@@ -452,12 +471,12 @@ export class ActividadesComponent {
             this.accionEvento(result.value);
           }
         });
-          
+
         /*  accionEvento */
       }
     }
 
-    
+
   }
   Grupo_Dependencia(Grupo) {
     /* if (Grupo == "Todas") {

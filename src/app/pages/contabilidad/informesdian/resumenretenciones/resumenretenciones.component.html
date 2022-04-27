@@ -1,87 +1,63 @@
-<div class="page-body">
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
-
-            <div class="card">
-
-                <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
-
-                <div class="card-body">
-                    <form #FormFiltros="ngForm">
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <div>
-                                    <label for="" class="f-12">
-                      Fecha Inicial
-                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <input type="date" class="form-control form-control-sm" (change)="setQueryParams()" [(ngModel)]="model.Fecha_Inicio" name="Fecha_Inicial" id="Fecha_Inicial" required>
-                                </div>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <div>
-                                    <label for="" class="f-12">
-                        Fecha Fin
-                      </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <input type="date" class="form-control form-control-sm" (change)="setQueryParams()" [(ngModel)]="model.Fecha_Fin" name="Fecha_Corte" id="Fecha_Corte" required>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2 text-right">
-                                <div>
-                                    <label for="" class="f-12">
-                        Tipo Retención
-                      </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <select name="Tipo_Retencion" id="Tipo_Retencion" (change)="setQueryParams()" class="form-control form-control-sm" [(ngModel)]="model.Tipo_Retencion">
-                        <option value="Retefuente">Retefuente</option>
-                        <option value="Reteica">Reteica</option>
-                      </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2 text-right">
-                                <div>
-                                    <label for="" class="f-12">
-                        Tipo Reporte
-                      </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <select name="Tipo_Reporte" id="Tipo_Reporte" class="form-control form-control-sm" (change)="setQueryParams()" [(ngModel)]="model.Tipo_Reporte">
-                        <option value="Pcga">Pcga</option>
-                        <option value="Niif">Niif</option>
-                      </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 text-center">
-                                <button class="btn btn-info btn-sm" [disabled]="!FormFiltros.valid" (click)="generarResumen()"><i class="fa fa-eye"></i> Generar Resumen</button>
-                            </div>
-
-                        </div>
-                        <!-- FIN ROW-->
-                    </form>
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-between">
+                    <img src="assets/images/logo2.png" alt="" height="45" />
+                    <h4 class="text-primary">
+                        <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+                    </h4>
                 </div>
-
+                <hr class="line">
+                <div class="container mt-4">
+                    <div class="row">
+                        <div class="col-10 mx-auto">
+                            <form #FormFiltros="ngForm">
+                                <div class="form-group row">
+                                    <label for="Fecha_Inicial" class="col-sm-4 col-form-label">Fecha Inicial</label>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="form-control" (change)="setQueryParams()"
+                                                [(ngModel)]="model.Fecha_Inicio" name="Fecha_Inicial" id="Fecha_Inicial" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="Fecha_Corte" class="col-sm-4 col-form-label">Fecha Fin</label>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="form-control" (change)="setQueryParams()"
+                                                [(ngModel)]="model.Fecha_Fin" name="Fecha_Corte" id="Fecha_Corte" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="Tipo_Retencion" class="col-sm-4 col-form-label">Retención</label>
+                                    <div class="col-sm-8">
+                                        <select name="Tipo_Retencion" id="Tipo_Retencion" (change)="setQueryParams()"
+                                                class="form-control" [(ngModel)]="model.Tipo_Retencion">
+                                                <option value="Retefuente">Retefuente</option>
+                                                <option value="Reteica">Reteica</option>
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="Tipo_Reporte" class="col-sm-4 col-form-label">Tipo Reporte</label>
+                                    <div class="col-sm-8">
+                                        <select name="Tipo_Reporte" id="Tipo_Reporte" class="form-control"
+                                                (change)="setQueryParams()" [(ngModel)]="model.Tipo_Reporte">
+                                                <option value="Pcga">Pcga</option>
+                                                <option value="Niif">Niif</option>
+                                            </select>
+                                    </div>
+                                </div>                          
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 d-flex justify-content-center">
+                            <button class="btn btn-primary btn-lg" [disabled]="!FormFiltros.valid"
+                            (click)="generarResumen()"><i class="fa fa-eye"></i> Generar Resumen</button>
+                        </div>
+                    </div>
+                </div>            
             </div>
-
         </div>
-        <div class="col-md-1"></div>
     </div>
 </div>

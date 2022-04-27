@@ -22,6 +22,11 @@ export class AlertasComunComponent implements OnInit {
     this.getAlerts();
   }
 
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
+
   openModal() {
     this.modal.show();
   }

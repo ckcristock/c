@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 import { CatalogoService } from '../../catalogo.service';
 import { CategoryService } from '../../../services/category.service';
 import { User } from 'src/app/core/models/users.model';
+import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-dotacion-crear',
@@ -16,14 +18,26 @@ export class DotacionCrearComponent implements OnInit {
   @Input('type') type;
   @Input('user') user: User;
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
 
   form: FormGroup;
 
   constructor(
     private _category: CategoryService,
     private _catalogo: CatalogoService,
-    private fb: FormBuilder
-  ) {}
+    private fb: FormBuilder,
+    private modalService: NgbModal,
+  ) { }
   loading = false;
 
   pagination = {
@@ -50,6 +64,30 @@ export class DotacionCrearComponent implements OnInit {
     this.createForm();
     this.getData();
   }
+  title:any;
+  closeResult = '';
+  public openConfirm(confirm, titulo) {
+    this.title = titulo
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    this.fieldDinamic.clear();
+    this.fieldDinamic.reset();
+    this.Producto = {};
+    this.getData();
+    this.form.reset()
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
   createForm() {
     this.form = this.fb.group({
@@ -62,7 +100,7 @@ export class DotacionCrearComponent implements OnInit {
       Nombre_Comercial: [''],
       Embalaje: [''],
       Status: [''],
-      id_inventary_dotations:[''],
+      id_inventary_dotations: [''],
       Descripcion_ATC: [''],
       Codigo_Barras: [''],
       Codigo: [''],
@@ -75,8 +113,6 @@ export class DotacionCrearComponent implements OnInit {
   editDotationProduct(producto) {
     console.log("producto");
     console.log(producto);
-
-    this.modal.show();
     this.Producto = { ...producto };
     // this.title = 'Editar Producto';
     this.form.patchValue({
@@ -171,7 +207,7 @@ export class DotacionCrearComponent implements OnInit {
           title: 'Producto creado con éxito',
           text: '',
         });
-        this.modal.hide();
+        this.modalService.dismissAll();
         this.getData();
       });
     }
@@ -184,7 +220,7 @@ export class DotacionCrearComponent implements OnInit {
       ...this.pagination,
       ...this.filtro,
       tipo: 'Dotacion_EPP',
-     // company_id: this.user.person.company_worked.id,
+      // company_id: this.user.person.company_worked.id,
 
     };
     this._catalogo.getData(params).subscribe((data: any) => {
@@ -212,7 +248,7 @@ export class DotacionCrearComponent implements OnInit {
     this.fieldDinamic.reset();
     this.Producto = {};
     this.form.reset();
-    this.modal.hide();
+    this.modalService.dismissAll();
     this.getData();
   }
 }

@@ -1,0 +1,424 @@
+<div class="page-body">
+  <div class="row">
+      <div class="col-md-12">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="card">
+                      <div class="card-header">
+                          <h5>Notas Crédito Pendientes </h5>
+                          <span>Todas las Notas Crédito en espera de Aprobación</span>
+                      </div>
+                      <div class="card-block">
+                          <div class="row">
+                              <div class="col-md-12" style="max-height: 220px;height:220px;overflow: auto;">
+                                  <table class="table invoice-detail-table">
+                                      <thead>
+                                          <tr class="thead-default">
+                                              <th style="width:60px;max-width:60px;"></th>
+                                              <th style="width:80px;max-width:80px;">Cod. Nota</th>
+                                              <th style="width:80px;max-width:80px;">Fecha</th>
+                                              <th>Cliente</th>
+                                              <th style="width:40px;max-width:40px;">Items</th>
+                                              <th style="width:30px;max-width:30px;"></th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngIf="Notas.length==0">
+                                              <td colspan="6" class="text-center">
+                                                  <i class="fa fa-exclamation-circle fa-5x"></i>
+                                                  <h6>No Existen Notas Credito para mostrar</h6>
+                                              </td>
+                                          </tr>
+                                          <tr *ngFor="let item of Notas; let i = index" id="fila{{i}}">
+                                              <td>
+                                                  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
+                                                  <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
+                                              </td>
+                                              <td><strong>{{ item.Codigo }}</strong></td>
+                                              <td> {{ item.Fecha | date:'dd/MM/yyyy'}} </td>
+                                              <td class="text-left"> {{ item.Nombre }} </td>
+                                              <td> {{ item.Items }} </td>
+                                              <td>
+                                                  <button type="button" class="btn btn-info btn-mini waves-effect waves-light" href="" [routerLink]="['/notascreditover',item.Id_Nota_Credito]">
+                            <i class="ti-eye" style="margin:0;"></i>
+                          </button>
+                                              </td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="card">
+                      <div class="card-header">
+                          <h5>Movimientos de Inventario </h5>
+                          <span>Todos los movimientos a la espera de revisión</span>
+                      </div>
+                      <div class="card-block">
+                          <div class="row">
+                              <div class="col-md-12" style="max-height: 120px;height:120px;overflow-y: auto;">
+                                  <table class="table invoice-detail-table">
+                                      <thead>
+                                          <tr>
+                                              <th style="width:80px;max-width:80px;"> Origen</th>
+                                              <th style="width:80px;max-width:80px;">Fecha</th>
+                                              <th style="width:40px;max-width:40px;">Items</th>
+                                              <th style="width:30px;max-width:30px;"></th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngIf="Movimientos.length==0">
+                                              <td colspan="4" class="text-center">
+                                                  <i class="fa fa-exclamation-circle fa-5x"></i>
+                                                  <h6>No Existen Movimientos para Mostrar </h6>
+                                              </td>
+                                          </tr>
+                                          <tr *ngFor="let item of Movimientos; let i = index" id="fila{{i}}">
+
+                                              <td class="text-center"><strong>{{ item.Origen }}</strong></td>
+                                              <td class="text-center"> {{ item.Fecha | date:'dd/MM/yyyy'}} </td>
+                                              <td class="text-center"> {{ item.Items }} </td>
+                                              <td>
+
+                                                  <div class="text-left">
+                                                      <div ngbDropdown class="dropdown-primary">
+                                                          <button ngbDropdownToggle class="btn btn-info btn-mini waves-effect waves-light " type="button"><i class="fa fa-bars"></i></button>
+                                                          <div ngbDropdownMenu>
+                                                              <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}/php/tablero_jefe_bodega/movimiento_pdf.php?id={{item.Id_Movimiento_Vencimiento}}" target="_blank">
+                                                                  <i class="fa fa-eye"></i>Ver</a>
+                                                              <a class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?',
+                                         text : 'Se dispone marcar que se este movimiento se reviso y se realizo el traslado de todos los medicamentos a la bodega Vencimientos, Ingrese las observaciones '
+                                          , input: 'text', inputAttributes: {
+                                            maxlength: 10,
+                                            minlength: 100
+                                          }, showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }                                         
+                                            " (confirm)="AceptarMovimiento(i,$event)">
+                                                                  <i class="fa fa-server"></i>Aceptar</a>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="card">
+                      <div class="card-header">
+                          <span class="label label-danger pull-right">{{ListaNacional.length}} Compras</span> <br>
+                          <h5>Compras Pendientes </h5>
+                          <span>Todas las Compras en espera Recepción de Mercancía</span>
+                      </div>
+                      <div class="card-block">
+                          <div class="row">
+                              <div class="col-md-12" style="max-height: 300px;height:300px;overflow: auto;">
+                                  <table class="table invoice-detail-table">
+                                      <thead>
+                                          <tr class="thead-default">
+                                              <th style="width:60px;max-width:60px;"></th>
+                                              <th style="width:80px;max-width:80px;">Cod. Compra</th>
+                                              <th style="width:80px;max-width:80px;">Fecha</th>
+                                              <th>Proveedor</th>
+                                              <th style="width:40px;max-width:30px;">Items</th>
+                                              <th style="width:30px;max-width:25px;"></th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let item of ListaNacional; let i = index" id="fila{{i}}">
+                                              <td>
+                                                  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
+                                                  <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
+                                              </td>
+                                              <td><strong>{{ item.Codigo }}</strong></td>
+                                              <td> {{ item.Fecha | date:'dd/MM/yyyy'}} </td>
+                                              <td class="text-left"> {{ item.Nombre }} </td>
+                                              <td> {{ item.Items }} </td>
+                                              <td>
+                                                  <button type="button" class="btn btn-info btn-mini waves-effect waves-light" href="" [routerLink]="['/actarecepcioncrear',item.Codigo,'Nacional']">
+                            <i class="ti-eye" style="margin:0;"></i>
+                          </button>
+                                              </td>
+                                          </tr>
+                                          <!-- <tr *ngFor="let item of ListaIntrernacional; let i = index" id="fila{{i}}">
+                        <td>
+                          <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
+                          <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}"
+                            class="img-radius imagen">
+                        </td>
+                        <td> {{ item.Codigo }} </td>
+                        <td> {{ item.Fecha | date:'dd/MM/yyyy'}} </td>
+                        <td class="text-left"> {{ item.Nombre }} </td>
+                        <td> {{ item.Items }} </td>
+                        <td>
+                          <button type="button" class="btn btn-info btn-mini waves-effect waves-light" href=""
+                            [routerLink]="['/actarecepcioncrear',item.Codigo,'Internacional']">
+                            <i class="ti-eye"></i>
+                          </button>
+                        </td>
+                      </tr> -->
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+
+          <!--  APROBACIÓN AJUSTE INDIVIDUAL SALIDA   -->
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="card">
+                      <div class="card-header">
+                          <span class="label label-danger pull-right">{{ListaNacional.length}} AJUSTES DE SALIDA</span> <br>
+                          <h5>Ajustes de Salida </h5>
+                          <span>Todos los Ajustes en espera de aprobación para salir de inventario</span>
+                      </div>
+                      <div class="card-block">
+                          <div class="row">
+                              <div class="col-md-12" style="max-height: 300px;height:300px;overflow: auto;">
+
+                                  <table class="table invoice-detail-table">
+
+                                      <hr>
+
+                                      <thead>
+                                          <tr class="thead-default">
+                                              <th style="width:60px;max-width:60px;"></th>
+                                              <th style="width:80px;max-width:80px;">Cod. Compra</th>
+                                              <th style="width:80px;max-width:80px;">Fecha</th>
+                                              <th>Funcionario</th>
+                                              <th style="width:40px;max-width:30px;">Items</th>
+                                              <th style="width:30px;max-width:25px;"></th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let item of AjustesPendientesSalida; let i = index" id="fila{{i}}">
+                                              <td>
+                                                  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
+                                                  <img *ngIf="item.Imagen !=''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
+                                              </td>
+                                              <td><strong>{{ item.Codigo }}</strong></td>
+                                              <td> {{ item.Fecha | date:'dd/MM/yyyy'}} </td>
+                                              <td class="text-left"> {{ item.Nombre_Funcionario }} </td>
+                                              <td> {{ item.Items }} </td>
+                                              <td>
+                                                  <button type="button" class="btn btn-info btn-mini waves-effect waves-light" href="" (click)="ProductosAjustePendienteSalida( item.Id_Ajuste_Individual )">
+                                                    <i class="ti-eye " style="margin:0; "></i>
+                                                  </button>
+                                              </td>
+                                          </tr>
+
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+      </div>
+      <div class="col-md-8 ">
+          <div class="row ">
+              <div *ngFor="let item of Funcionarios; let i=index " class="col-md-3 ">
+                  <div class="card ">
+                      <div class="card-block user-radial-card ">
+                          <div data-label="50% " class="radial-bar radial-bar-90 radial-bar-lg radial-bar-danger ">
+                              <img *ngIf="item.Imagen=='' " src="assets/images/user.jpg " style="cursor: pointer " alt="User-Image " (click)="VerRemisiones(item.Identificacion_Funcionario) ">
+                              <img *ngIf="item.Imagen !='' " src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}} " alt="User-Image " style="cursor: pointer " (click)="VerRemisiones(item.Identificacion_Funcionario) ">
+                          </div>
+                          <p class="f-12 text-c-pink ">{{item.Funcionario}}
+                          </p>
+                          <p class="f-10 "> <strong>Tiempo Promedio: </strong> {{item.PromedioRemision}} Min. </p>
+                          <hr>
+                          <p class="f-12 text-c-green "> Fase 1</p>
+                          <p class="f-10 " style="text-align:left; "> <span class="text-c-blue ">Promedio Fase 1: </span> {{item.PromedioFase1 | number}} Min. </p>
+                          <p class="f-10 " style="text-align:left; "> <span class="text-c-blue ">Total Remisiones:</span> {{item.TotalFase1}} </p>
+                          <p class="f-10 " style="text-align:left; "> <span class="text-c-blue ">Items Fase 1:</span> {{item.Total_Fase1}} </p>
+                          <hr>
+                          <p class="f-12 text-c-yellow "> Fase 2</p>
+                          <p class="f-10 " style="text-align:left; "> <span class="text-c-blue ">Promedio Fase 2: </span> {{item.PromedioFase2 | number}} Min. </p>
+                          <p class="f-10 " style="text-align:left; "> <span class="text-c-blue ">Total Remisiones:</span> {{item.TotalFase2}} </p>
+                          <p class="f-10 " style="text-align:left; "> <span class="text-c-blue ">Items Fase 2:</span> {{item.Total_Fase2}} </p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+  </div>
+
+</div>
+
+
+<!-- <swal #confirmaSwal title="Borrador Eliminado " text="Su Borrador Fue Eliminado de Manera Correcta, Los productos seleccionados, liberaron sus cantidades " type="success ">
+</swal> -->
+
+
+<app-modal-basic #modalRemisionesFuncionario [dialogClass]=" 'modal-lg' ">
+  <div class="app-modal-header ">
+      <h4 class="modal-title ">Remisiones Asociadas</h4>
+      <button type="button " class="close basic-close " (click)="modalRemisionesFuncionario.hide() ">
+          <span aria-hidden="true ">&times;</span>
+      </button>
+  </div>
+  <div class="app-modal-body ">
+      <div class="row ">
+          <div class="col-md-12 ">
+              <table class="table invoice-detail-table ">
+                  <thead>
+                      <tr class="thead-default ">
+                          <th class="f-12 " style="width:80px; ">Codigo</th>
+                          <th class="f-12 " style="width:80px; ">Estado Alistamiento</th>
+                          <th class="f-12 " style="width:150px; ">Fecha Inicio</th>
+                          <th class="f-12 " style="width:80px; ">Acciones</th>
+
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngIf="Remisiones.length==0 ">
+                          <td colspan="4 " class="text-center ">
+                              <i class="fa fa-exclamation-circle fa-3x "></i>
+                              <h5>Este Funcionario no tiene Remisiones asociadas</h5>
+                          </td>
+                      </tr>
+                      <tr *ngFor="let item of Remisiones; let a=index " id="fila{{a}} ">
+
+                          <td>
+                              <a class="f-12 text-c-pink " [routerLink]="[ '/remision',item.Id_Remision] " style="cursor: pointer "> {{item.Codigo}}</a>
+                          </td>
+                          <td>
+                              <p class="f-12 " *ngIf="item.Estado_Alistamiento=='0' ">Fase 1</p>
+                              <p class="f-12 " *ngIf="item.Estado_Alistamiento=='1' ">Fase 2</p>
+                              <p class="f-12 " *ngIf="item.Estado_Alistamiento=='2' ">Alistada</p>
+                          </td>
+                          <td>
+                              <p class="f-10 " *ngIf="item.Inicio_Fase1!='' ">{{item.Inicio_Fase1}}</p>
+                              <p class="f-10 " *ngIf="item.Inicio_Fase2!='' ">{{item.Inicio_Fase2}}</p>
+                          </td>
+                          <td>
+                              <button class="btn btn-sm btn-danger boton " [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Liberar esta Remisión' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText
+                                                      : 'No, Dejame Comprobar!' } " (confirm)="LiberarRemision(item.Id_Remision, a) " type="button "><i class="fa fa-refresh "></i> Liberar</button>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+
+  </div>
+  <div class="app-modal-footer ">
+      <div class="text-right ">
+          <button type="button " class="btn btn-primary btn-sm " (click)="modalRemisionesFuncionario.hide() ">Salir </button>
+      </div>
+  </div>
+</app-modal-basic>
+
+
+<!-- APROBAR SALIDA AJUSTE-->
+<app-modal-basic #modalAjusteSalida [dialogClass]=" 'modal-lg' ">
+  <div class="app-modal-header ">
+      <h4 class="modal-title ">Ajuste de salida por aprobación</h4>
+      <button type="button " class="close basic-close " (click)="modalAjusteSalida.hide() ">
+        <span aria-hidden="true ">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body ">
+      <div class="row ">
+          <div class="col-md-12  ">
+              <div class="col-12 d-flex flex-column">
+                  <h5>Código : {{ Ajuste_Salida.Codigo }}</h5>
+                  <h5>Fecha : {{ Ajuste_Salida.Fecha | date }} </h5>
+                  <h5>Tipo : {{ Ajuste_Salida.Tipo }} <span class="text-danger" *ngIf="Ajuste_Salida.Cambio_Estiba == 1"> - Cambio Estiba </span> </h5>
+                  <h5>{{ Ajuste_Salida.Nombre_Funcionario }}</h5>
+
+              </div>
+              <br>
+              <table class="table invoice-detail-table ">
+                  <thead>
+                      <tr class="thead-default ">
+                          <th class="f-12 " style="width:180px; ">Producto</th>
+                          <th class="f-12 " style="width:60px; ">Estiba</th>
+                          <th class="f-12 " style="width:100px; ">Lote </th>
+                          <th class="f-12 " style="width:80px; ">Fecha V. </th>
+                          <th class="f-12 " style="width:80px; ">Cantidad</th>
+
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngIf="Ajuste_Salida.length == 0">
+                          <td colspan="4 " class="text-center ">
+                              <i class="fa fa-exclamation-circle fa-3x "></i>
+                              <h5>Este Funcionario no tiene Remisiones asociadas</h5>
+                          </td>
+                      </tr>
+                      <tr *ngFor="let item of Ajuste_Salida.Productos; let a=index " id="fila{{a}} ">
+
+                          <td>
+                              <a class="f-10"> {{ item.Nombre_Producto }} </a> <br>
+                              <hr>
+                              <a style="font-size: 9px;"> {{ item.Embalaje }} </a>
+                          </td>
+                          <td class="text-center">
+                              <a class="f-10"> {{ item.Nombre_Estiba }} </a>
+                          </td>
+                          <td class="text-center">
+                              <a class="f-10"> {{ item.Lote }} </a>
+                          </td>
+                          <td class="text-center">
+                              <a class="f-10"> {{ item.Fecha_Vencimiento }} </a>
+                          </td>
+                          <td class="text-center">
+                              <a class="f-10"> {{ item.Cantidad }} </a>
+                          </td>
+                          <!--  <td>
+                              <button class="btn btn-sm btn-danger boton " [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Liberar esta Remisión' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText
+                          : 'No, Dejame Comprobar!' } " type="button "><i class="fa fa-refresh "></i> Liberar</button>
+                          </td> -->
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+
+  </div>
+  <div class="app-modal-footer d-flex flex-grow ">
+      <div class="text-right pr-3 ">
+<!--           <button type="button " class="btn btn-danger btn-sm " (click)="modalAnularAjusteSalida.show()">Anular </button>
+ -->      </div>
+      <div class="text-right ">
+<!--           <button type="button btn-success " class="btn btn-primary btn-sm " (click)="modalAprobarAjusteSalida.show()">Aprobar </button>
+ -->      </div>
+  </div>
+</app-modal-basic>
+
+
+
+
+<!-- <swal #modalAnularAjusteSalida [options]="alertOptionAnular"></swal>
+<swal #modalAprobarAjusteSalida [options]="alertOptionAprobar"></swal>
+
+<swal #confirmacionSwal title=" " text=" " type=" "></swal> -->

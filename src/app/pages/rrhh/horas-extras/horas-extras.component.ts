@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { ExtraHoursService } from './extra-hours.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-horas-extras',
@@ -9,6 +10,17 @@ import { PersonService } from '../../ajustes/informacion-base/persons/person.ser
   styleUrls: ['./horas-extras.component.scss'],
 })
 export class HorasExtrasComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   primerDiaSemana = moment().startOf('week').format('YYYY-MM-DD');
   ultimoDiaSemana = moment().endOf('week').format('YYYY-MM-DD');
   semana = moment().format(moment.HTML5_FMT.WEEK);
@@ -29,6 +41,11 @@ export class HorasExtrasComponent implements OnInit {
     this.getPerson();
   }
 
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
+  
   getPerson() {
     this._people.getAll({}).subscribe((res: any) => {
       this.people = res.data;

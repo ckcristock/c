@@ -4,6 +4,8 @@ import { TiposRetencionesService } from './tipos-retenciones.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
 import { OperatorFunction, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-tipos-retenciones',
@@ -12,22 +14,34 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators'
 })
 export class TiposRetencionesComponent implements OnInit {
   form: FormGroup;
-  @ViewChild('modal') modal:any;
-  loading:boolean =  false;
-  accountPlan:any[] = [];
-  retentionTypes:any[] = [];
-  retention:any = {};
-  title:any = '';
+  @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
+  loading: boolean = false;
+  accountPlan: any[] = [];
+  retentionTypes: any[] = [];
+  retention: any = {};
+  title: any = '';
   pagination = {
     page: 1,
     pageSize: 5,
     collectionSize: 0
   }
   constructor(
-                private fb: FormBuilder,
-                private _retentionType: TiposRetencionesService,
-                private _swal: SwalService
-              ) { }
+    private fb: FormBuilder,
+    private _retentionType: TiposRetencionesService,
+    private _swal: SwalService,
+    private modalService: NgbModal,
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -35,14 +49,34 @@ export class TiposRetencionesComponent implements OnInit {
     this.getAccountPlan();
   }
 
-  openModal(){
+  openModal() {
     this.modal.show();
-    this.title = 'Nuevo tipo de retención';
+    
   }
 
-  closeModal(){
-    this.modal.hide();
-    this.form.reset();
+  closeModal() {
+    this.modalService.dismissAll(); 
+    
+  }
+
+  closeResult = '';
+public openConfirm(confirm, titulo){
+  this.title = titulo;
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+private getDismissReason(reason: any): string {
+  this.form.reset();
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   search: OperatorFunction<string, readonly { code }[]> = (
@@ -57,29 +91,29 @@ export class TiposRetencionesComponent implements OnInit {
           .filter((state) => new RegExp(term, 'mi').test(state.code))
           .slice(0, 10)
       )
-  );
+    );
 
   inputFormatBandListValue(value: any) {
     if (value.code)
-       return value.code
+      return value.code
     return value;
   }
 
-   resultFormatBandListValue(value: any) {
+  resultFormatBandListValue(value: any) {
     return value.code;
   }
 
-  getAccountPlan(){
-    this._retentionType.getAccountPlan().subscribe((r:any) => {
+  getAccountPlan() {
+    this._retentionType.getAccountPlan().subscribe((r: any) => {
       this.accountPlan = r.data;
     })
   }
 
-  getTipo(){
+  getTipo() {
     let data = this.form.get('account_plan_id').value;
   }
 
-  createForm(){
+  createForm() {
     this.form = this.fb.group({
       id: [this.retention.id],
       name: ['', Validators.required],
@@ -88,20 +122,19 @@ export class TiposRetencionesComponent implements OnInit {
       description: ['', Validators.required]
     });
   }
-  
-  getRetentionTypes(page = 1){
+
+  getRetentionTypes(page = 1) {
     this.pagination.page = page;
     this.loading = true;
-    this._retentionType.getRetentionType(this.pagination).subscribe((r:any) => {
+    this._retentionType.getRetentionType(this.pagination).subscribe((r: any) => {
       this.retentionTypes = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     });
   }
 
-  getRetention(retention){
-    this.retention = {...retention};
-    this.title = 'Editar tipo de retención';
+  getRetention(retention) {
+    this.retention = { ...retention };
     this.form.patchValue({
       id: this.retention.id,
       name: this.retention.name,
@@ -111,13 +144,13 @@ export class TiposRetencionesComponent implements OnInit {
     });
   }
 
-  save(){
+  save() {
     let account_plan_id = this.form.value.account_plan_id.id;
     this.form.patchValue({
       account_plan_id
     })
-    this._retentionType.updateOrCreateRetentionType(this.form.value).subscribe((r:any) => {
-      this.modal.hide();
+    this._retentionType.updateOrCreateRetentionType(this.form.value).subscribe((r: any) => {
+      this.modalService.dismissAll(); 
       this.form.reset();
       this.getRetentionTypes();
       this._swal.show({
@@ -129,7 +162,7 @@ export class TiposRetencionesComponent implements OnInit {
     })
   }
 
-  activateOrInactivate(retention, state){
+  activateOrInactivate(retention, state) {
     let data = {
       id: retention.id,
       state

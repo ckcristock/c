@@ -47,6 +47,12 @@ export class MediosmagneticosComponent implements OnInit {
     this.enviromen = environment
   }
 
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
+
+
   getListaMediosMag() {
     let p:any = {};
 

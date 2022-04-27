@@ -1,15 +1,18 @@
 <div class="card">
     <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
-                <i class="fas fa-money-bill"></i> Pago Prima
-            </button>
-            <h5 class="text-primary">Primas</h5>
+        <div class="card-title d-flex justify-content-between">
+            <h4 class="text-primary">Primas</h4>
+            <div class="btn-group rounded">
+                <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                    <i class="fas fa-money-bill"></i> Pagar prima
+                </button>
+            </div>           
         </div>
-        <hr class="bg-primary mt-4">
-        <div class="mt-4">
-            <table class="table table-borderless table-striped">
-                <thead class="bg-light">
+        <hr class="line">
+        <div class="container mt-4" style="font-size: small;">
+            <table class="table table-bordered table-striped table-sm"
+                *ngIf="!loading && premiums.length > 0; else notData">
+                <thead>
                     <tr>
                         <th>Prima</th>
                         <th>Fecha</th>
@@ -87,7 +90,7 @@
     </div>
     <div class="app-modal-body">
         <table class="table table-sm table-borderless table-striped">
-            <thead class="bg-light">
+            <thead>
                 <tr>
                     <th></th>
                     <th>Persona</th>

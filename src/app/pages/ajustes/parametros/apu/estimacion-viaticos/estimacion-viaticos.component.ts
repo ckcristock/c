@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { EstimacionViaticosService } from './estimacion-viaticos.service';
 
@@ -10,12 +11,12 @@ import { EstimacionViaticosService } from './estimacion-viaticos.service';
 })
 export class EstimacionViaticosComponent implements OnInit {
 
-  @ViewChild('modal') modal:any;
+  @ViewChild('modal') modal: any;
   form: FormGroup;
-  loading:boolean = false;
-  title:any = '';
-  estimations:any[] = [];
-  estimation:any = {};
+  loading: boolean = false;
+  title: any = 'Nueva Estimación Viáticos';
+  estimations: any[] = [];
+  estimation: any = {};
   variables = [
     { label: 'Cantidad', var: 'amount' },
     { label: 'Valor unitario', var: 'unit_value' },
@@ -34,37 +35,56 @@ export class EstimacionViaticosComponent implements OnInit {
     { label: 'Valor Total festiva', var: 'total_value_festive' }
   ]
 
-  constructor( 
-                private fb: FormBuilder,
-                private _estimations: EstimacionViaticosService,
-                private _swal: SwalService
-              ) { }
+  constructor(
+    private fb: FormBuilder,
+    private _estimations: EstimacionViaticosService,
+    private _swal: SwalService,
+    private modalService: NgbModal,
+  ) { }
 
   ngOnInit(): void {
     this.createform();
     this.getEstimations();
   }
 
-  createform(){
+  createform() {
     this.form = this.fb.group({
       id: [this.estimation.id],
       description: [''],
       unit: [''],
       amount: [0],
-      unit_value:[0],
+      unit_value: [0],
       formula_amount: [''],
       formula_total_value: ['']
     })
   }
-
-  openModal(){
-    this.modal.show();
-    this.title = 'Nueva Estimación Viáticos';
+  closeResult = '';
+  public openConfirm(confirm, titulo) {
+    this.title = titulo;
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    this.form.reset();
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
-  getEstimation( measure ){
-    this.estimation = {...measure};
-    this.title = 'Actualizar Estimación Viáticos';
+  openModal() {
+    this.modal.show();
+
+  }
+
+  getEstimation(measure) {
+    this.estimation = { ...measure };
     this.form.patchValue({
       id: this.estimation.id,
       unit: this.estimation.unit,
@@ -76,17 +96,17 @@ export class EstimacionViaticosComponent implements OnInit {
     })
   }
 
-  getEstimations(){
+  getEstimations() {
     this.loading = true;
-    this._estimations.getTravelExpensEstimations().subscribe((r:any) => {
+    this._estimations.getTravelExpensEstimations().subscribe((r: any) => {
       this.estimations = r.data;
       this.loading = false;
     })
   }
 
-  save(){
-    this._estimations.save(this.form.value).subscribe((r:any) => {
-      this.modal.hide();
+  save() {
+    this._estimations.save(this.form.value).subscribe((r: any) => {
+      this.modalService.dismissAll();
       this.form.reset();
       this.getEstimations();
       this._swal.show({

@@ -1,106 +1,90 @@
-<div class="row mb-3">
-  <div class="col-md-6">
-    <h5 class="text-secondary">Lista de turnos rotativos</h5>
-  </div>
-  <div class="col-md-6 text-right">
-    <a class="btn btn-link btn-sm mr-1" (click)="create()">
-      <i class="fa fa-plus"></i> Crear Nuevo turno rotativo
-    </a>
+<div class="card-title d-flex justify-content-between">
+  <h4 class="text-primary">Lista de turnos rotativos</h4>
+  <div class="btn-group rounded">
+    <button class="btn btn-primary btn-sm" (click)="create()">
+      <i class="fa fa-plus"></i> Agregar
+    </button>
+    <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+      <i class="fas fa-sliders-h"></i> Filtros
+    </button>
   </div>
 </div>
+<hr class="line">
+<mat-accordion multi>
+  <mat-expansion-panel class="mat-elevation-z0">
+    <mat-form-field class="col-3 pl-0" appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input type="text" matInput placeholder="Busca por nombre">
+    </mat-form-field>
+  </mat-expansion-panel>
+</mat-accordion>
+<div *ngIf="turnosRotativo.length && !loading; else notData">
 
-<div class="card" *ngIf="turnosRotativo.length && !loading; else notData">
-  <div class="card-body">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="mb-2">
-          <div class="collapse d-md-block" id="displayOptions ">
-            <div
-              class="search-sm d-inline-block float-md-left mr-1 mb-1 align-top"
-            >
-              <input
-                placeholder="Buscar... "
-                class="form-control form-control-sm"
-              />
+
+  <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Sábado</th>
+        <th>Domingo</th>
+        <th class="text-center col-1">Hora de entrada</th>
+        <th class="text-center col-1">Hora de salida</th>
+        <th class="text-center col-1">Lunch</th>
+        <th class="text-center col-1">Break</th>
+        <th class="text-center col-1">Estado</th>
+        <th class="text-center col-1">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let turno of turnosRotativo" [ngClass]="{'text-danger font-weight-bold': turno.state == 'Inactivo'}">
+        <td>{{ turno.text }}</td>
+        <td *ngIf="turno.saturday_id != 0;else descanso">{{turno.saturday.name}}</td>
+        <td *ngIf="turno.sunday_id != 0;else descanso">{{turno.sunday.name}}</td>
+        <ng-template #descanso>
+          <td>Descanso</td>
+        </ng-template>
+        <td class="text-center">{{ "01/01/2000 " + turno.entry_time | date:'hh:mm a' }} </td>
+        <td class="text-center"> {{ "01/01/2000 " + turno.leave_time | date:'hh:mm a' }} </td>
+        <td class="text-center" *ngIf="turno.launch == 1; else no"><span role="button" data-toggle="tooltip"
+            title="{{ '01/01/2000 ' + turno.launch_time | date: 'hh:mm a'}} - {{'01/01/2000 '+turno.launch_time_two | date:'hh:mm a'}}"><i
+              class="fas fa-check"></i></span></td>
+        <td class="text-center" *ngIf="turno.breack == 1; else no"><span role="button" data-toggle="tooltip"
+            title="{{ '01/01/2000 ' + turno.breack_time | date: 'hh:mm a'}} - {{'01/01/2000 '+turno.breack_time_two|date:'hh:mm a'}}"><i
+              class="fas fa-check"></i></span></td>
+        <ng-template #no>
+          <td class="text-center"><i class="fas fa-times"></i></td>
+        </ng-template>
+        <td class="text-center">
+          <span [ngClass]="turno.state == 'Inactivo' ? 'badge badge-danger': 'badge badge-primary'">
+            {{ turno.state }}
+          </span>
+        </td>
+        <td class="text-center">
+          <div ngbDropdown class="dropdown-primary">
+            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light" type="button">
+              <i class="mdi mdi-chevron-down"></i>
+            </button>
+            <div ngbDropdownMenu>
+              <a (click)="create(turno.value)" class="dropdown-item text-info waves-light waves-effect caja-botones">
+                <i class="far fa-edit"></i> Editar
+              </a>
+              <a class="dropdown-item waves-light waves-effect caja-botones"
+                [ngClass]="{'text-success': (turno.state == 'Inactivo'), 'text-danger': (turno.state == 'Activo')}"
+                (click)="changeState(turno.value)">
+                <i [ngClass]="{
+                  'far fa-trash-alt': (turno.state == 'Activo'),
+                  'fa fa-check': (turno.state == 'Inactivo')
+                  }">
+                </i> {{turno.state == 'Inactivo' ? 'Activar': 'Anular' }}
+              </a>
             </div>
           </div>
-        </div>
-        <div class="separator mb-5"></div>
-        <div class="row">
-          <div class="col-md-12">
-            <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr>
-                  <th>Nombre</th>
-		  <th class="text-center"><!--Horario Semana--></th>
-                  <th class="text-center" style="width: 30px">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="let turno of turnosRotativo"
-                  [ngClass]="{
-                    'bg-danger text-white': turno.state == 'Inactivo'
-                  }"
-                >
-                  <td class="custom-label">{{ turno.text }}</td>
-                  <td class="text-center">
-                    <button
-                      type="button "
-                      class="btn btn-link btn-xs"
-                      (click)="findHours(turno.value); hourModal.show()"
-                    >
-		    <!--<i class="fa fa-eye"></i>-->
-                    </button>
-                  </td>
-                  <td class="">
-                    <div ngbDropdown class="dropdown-primary">
-                      <button
-                        ngbDropdownToggle
-                        class="
-                          btn btn-secondary btn-sm
-                          waves-effect waves-light
-                        "
-                        type="button"
-                      >
-                        <i class="mdi mdi-chevron-down"></i>
-                      </button>
-                      <div ngbDropdownMenu>
-                        <a
-                          class="
-                            dropdown-item
-                            waves-light waves-effect
-                            caja-botones
-                          "
-			  (click)="create(turno.value)"
-                        >
-                          <i class="fa fa-pencil-alt"></i> Editar
-                        </a>
-                        <a
-                          class="
-                            dropdown-item
-                            waves-light waves-effect
-                            caja-botones
-                          "
-                          (click)="changeState(turno.value)"
-                        >
-                          <i class="fa fa-times"></i>
-                          {{
-                            turno.state == "Inactivo" ? "Activar" : "Inactivar"
-                          }}
-                        </a>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
+
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

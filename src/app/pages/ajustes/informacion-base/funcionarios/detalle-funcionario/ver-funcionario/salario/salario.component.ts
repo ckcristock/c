@@ -5,6 +5,7 @@ import { SalarioService } from './salario.service';
 import { consts } from 'src/app/core/utils/consts';
 import Swal from 'sweetalert2';
 import { DatosBasicosService } from '../datos-basicos/datos-basicos.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-salario',
@@ -12,22 +13,23 @@ import { DatosBasicosService } from '../datos-basicos/datos-basicos.service';
   styleUrls: ['./salario.component.scss']
 })
 export class SalarioComponent implements OnInit {
-  @ViewChild('modal') modal:any;
+  @ViewChild('modal') modal: any;
   form: FormGroup;
-  data:any;
-  id:any;
+  data: any;
+  id: any;
   contract_types = consts.contract_type;
-  salary_info:any = {
+  salary_info: any = {
     salary: '',
     contract_type: '',
     date_of_admission: '',
     date_end: ''
   };
-  constructor( 
-                private fb:FormBuilder, 
-                private salaryService: SalarioService, 
-                private activateRoute: ActivatedRoute,
-                private basicDataService: DatosBasicosService ) { }
+  constructor(
+    private fb: FormBuilder,
+    private salaryService: SalarioService,
+    private activateRoute: ActivatedRoute,
+    private basicDataService: DatosBasicosService,
+    private modalService: NgbModal,) { }
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params.id;
@@ -35,65 +37,83 @@ export class SalarioComponent implements OnInit {
     this.createForm();
   }
 
-  openModal(){
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  openModal() {
     this.modal.show();
   }
 
-  createForm(){
+  createForm() {
     this.form = this.fb.group({
       type_contract: ['', Validators.required],
       salary: ['', Validators.required],
       date_of_admission: ['', Validators.required],
       retirement_date: ['', Validators.required]
-    }); 
+    });
   }
-  
-  get type_contract_valid(){
+
+  get type_contract_valid() {
     return (
       this.form.get('type_contract').invalid && this.form.get('type_contract').touched
     );
   }
-    
-  get salary_valid(){
+
+  get salary_valid() {
     return (
       this.form.get('salary').invalid && this.form.get('salary').touched
     );
   }
-  
-  get date_of_admission_valid(){
+
+  get date_of_admission_valid() {
     return (
       this.form.get('date_of_admission').invalid && this.form.get('date_of_admission').touched
     );
   }
 
-  get retirement_date_valid(){
+  get retirement_date_valid() {
     return (
       this.form.get('retirement_date').invalid && this.form.get('retirement_date').touched
     );
   }
-      
-  
-  getSalaryInfo(){
-      this.salaryService.getSalaryInfo(this.id)
-      .subscribe( (res:any) => {
-      this.salary_info = res.data;
-    });
+
+
+  getSalaryInfo() {
+    this.salaryService.getSalaryInfo(this.id)
+      .subscribe((res: any) => {
+        this.salary_info = res.data;
+      });
   }
 
-  updateSalaryInfo(){
-     /*  this.form.markAllAsTouched();
-      if (this.form.invalid) { return false;} */
+  updateSalaryInfo() {
+    /*  this.form.markAllAsTouched();
+     if (this.form.invalid) { return false;} */
 
-      this.salaryService.updateSalaryInfo(this.salary_info)
-      .subscribe( res => {
-      this.modal.hide();
-      this.getSalaryInfo();
-      Swal.fire({
-        icon: 'success',
-        title: 'Actualizado correctamente'
+    this.salaryService.updateSalaryInfo(this.salary_info)
+      .subscribe(res => {
+        this.modalService.dismissAll(); 
+        this.getSalaryInfo();
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado correctamente'
         })
-      this.basicDataService.datos$.emit()
+        this.basicDataService.datos$.emit()
       });
-    }
+  }
 
 }

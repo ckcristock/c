@@ -15,6 +15,9 @@ import { NavItemsDynamicComponent } from './horizontalnavbar/nav-items-dynamic/n
 import { PipesModule } from '../../core/pipes/pipes.module';
 import { ModalAlertComponent } from './horizontaltopbar/modal-alert/modal-alert.component';
 import { ComponentsModule } from '../../components/components.module';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
@@ -27,7 +30,11 @@ import { ComponentsModule } from '../../components/components.module';
     ClickOutsideModule,
     RouterModule,
     PipesModule,
-    ComponentsModule
+    ComponentsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CKEditorModule,
+    NgSelectModule,
   ],
   exports: [ FooterComponent,  RightsidebarComponent, HorizontaltopbarComponent, HorizontalnavbarComponent],
   providers: []

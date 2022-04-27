@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { consts } from 'src/app/core/utils/consts';
 import Swal from 'sweetalert2';
@@ -37,7 +38,8 @@ export class DatosEmpresaComponent implements OnInit {
                 private activatedRoute: ActivatedRoute,  
                 private _positions: PositionService,
                 private _dependecies: DependenciesService,
-                private _group: GroupService
+                private _group: GroupService,
+                private modalService: NgbModal,
             ) {}
 
   ngOnInit(): void {
@@ -47,7 +49,23 @@ export class DatosEmpresaComponent implements OnInit {
     this.getGroups();
     this.createForm();
   }
-
+  closeResult = '';
+public openConfirm(confirm){
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
   openModal(){
     this.modal.show();
   }
@@ -113,7 +131,7 @@ export class DatosEmpresaComponent implements OnInit {
     this.enterpriseDataService.updateEnterpriseData(this.form.value)
     .subscribe( res => {
       this.getEnterpriseData();
-      this.modal.hide();
+      this.modalService.dismissAll(); 
       Swal.fire({
         icon: 'success',
         title: 'Actualizado correctamente',

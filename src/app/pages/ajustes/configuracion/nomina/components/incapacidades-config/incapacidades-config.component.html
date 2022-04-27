@@ -1,0 +1,22 @@
+<div class="w-100">
+    <table class="table table-striped table-sm w-100">
+      <tbody>
+        <tr *ngFor="let extra of datos">
+          <td class="custom-label">{{ extra.concept }}</td>
+          <td style="width: 200px;" class="text-center custom-label">
+            <input
+              class="form-control form-control-sm"
+              type="number"
+              [value]="extra.percentage"
+            />
+          </td>
+          <td class="text-center" style="width: 70px;">
+            <a href="#" class="item-edicion" (click)="actualiza(extra)">
+              <i class="fas fa-check"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

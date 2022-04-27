@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {IMyDrpOptions} from 'mydaterangepicker';
 import { SweetAlertOptions } from 'sweetalert2';
 import swal from 'sweetalert2';
@@ -8,6 +8,7 @@ import { SwalService } from '../../../ajustes/informacion-base/services/swal.ser
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { CentroCostosService } from '../../centro-costos/centro-costos.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-notas-contables',
@@ -15,6 +16,17 @@ import { CentroCostosService } from '../../centro-costos/centro-costos.service';
   styleUrls: ['./notas-contables.component.scss']
 })
 export class NotasContablesComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
 
   public NotasContables:any = [];
   public Cargando:boolean = true;
@@ -31,7 +43,7 @@ export class NotasContablesComponent implements OnInit {
 public filtro_fecha:any='';
 myDateRangePickerOptions: IMyDrpOptions = {
     width:'200px', 
-    height: '21px',
+    height: '28px',
     selectBeginDateTxt:'Inicio',
     selectEndDateTxt:'Fin',
     selectionTxtFontSize: '10px',
@@ -67,7 +79,10 @@ myDateRangePickerOptions: IMyDrpOptions = {
     this.envirom = environment;
     // this.listarEmpresas();
   }
-
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
   ListarNotasContables() {
 
     this.http.get(environment.ruta+'php/contabilidad/notascontables/lista_notas_contables.php').subscribe((data:any) => {

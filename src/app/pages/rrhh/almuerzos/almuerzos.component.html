@@ -1,96 +1,121 @@
 <div class="card">
     <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
-                <i class="fa fa-plus"></i> Agregar
-            </button>
+        <div class="card-title d-flex justify-content-between">
             <h5 class="text-primary">Almuerzos</h5>
+            <div class="btn-group rounded">
+                <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
+                    <i class="fa fa-plus"></i> Agregar
+                </button>
+                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                    <i class="fas fa-sliders-h"></i> Filtros
+                </button>
+            </div>           
         </div>
         <hr class="line">
-        <div class="row mt-4">
-            <div class="form-group col-3">
-                <label for="">Filtro Funcionario</label>
-                <ng-select [(ngModel)]="filtro.person" (change)="getLunches()" [items]="peopleFill" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
-                </ng-select>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="fecha_inicio" class="custom-label">Fecha de Inicio</label>
-                    <input type="date" [(ngModel)]="filtro.date_start" (change)="getLunches()" class="form-control custom-control" />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="fecha_fin" class="custom-label">Fecha de Fin</label>
-                    <input type="date" [(ngModel)]="filtro.date_end" class="form-control custom-control" (change)="getLunches()" />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <button class="btn btn-sm btn-primary btn-block mt-4" style="float: right;" (click)="Download()">
-                    <i class="fas fa-file-download"></i>
-                    <span *ngIf="!donwloading; else status"> Descargar</span>
-                      <ng-template #status>
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        Generando...
-                      </ng-template>
-                  </button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="card">
-    <div class="card-body">
-        <table class="table table-sm table-borderless table-striped mt-4" *ngIf="!loading && lunches.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th scope="col">Funcionario</th>
-                    <th scope="col">Func. Creó</th>
-                    <th scope="col">Valor</th>
-                    <th scope="col">¿Aplica?</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col" class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let lunch of lunches" [ngClass]="{'bg-danger text-white': (lunch.state == 'Inactivo')}">
-                    <td> {{ lunch.first_name | titlecase}} {{ lunch.first_surname | titlecase }} </td>
-                    <td> {{ lunch.user }} </td>
-                    <td> {{ lunch.value | currency }} </td>
-                    <ng-container *ngIf="lunch.apply == null; else elseTemplate">
-                        <td>Sin Validar</td>
-                    </ng-container>
-                    <ng-template #elseTemplate>
-                        <td> {{ lunch.apply }} </td>
-                    </ng-template>
-                    <td> {{ lunch.created_at | date: 'dd-MM-yyyy' }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a (click)="getLunchValu(lunch); modalEdit.show()" class="dropdown-item waves-light text-info waves-effect caja-botones">
-                                        <i class="far fa-edit"></i> Editar
-                                    </a>
-                                    <a *ngIf="lunch.state == 'Activo'" (click)="activateOrInactivate(lunch.id, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
-                                        <i class="far fa-trash-alt"></i> Anular
-                                    </a>
-                                    <a *ngIf="lunch.state == 'Inactivo'" (click)="activateOrInactivate(lunch.id, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
-                                        <i class="fas fa-check"></i> Activar
-                                    </a>
+        <div class="container">
+            <mat-accordion multi>
+                <mat-expansion-panel class="mat-elevation-z0">
+                    <div class="container">
+                        <div class="row">
+                            <div class="input-group-sm col-3">
+                                <label for="">Filtro Funcionario</label>
+                                <ng-select [(ngModel)]="filtro.person" (change)="getLunches()" [items]="peopleFill" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group-sm">
+                                    <label for="fecha_inicio" class="custom-label">Fecha de Inicio</label>
+                                    <input type="date" [(ngModel)]="filtro.date_start" (change)="getLunches()" class="form-control custom-control" />
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="input-group-sm">
+                                    <label for="fecha_fin" class="custom-label">Fecha de Fin</label>
+                                    <input type="date" [(ngModel)]="filtro.date_end" class="form-control custom-control" (change)="getLunches()" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-sm btn-outline-primary btn-block mt-4" style="float: right;" (click)="Download()">
+                                    <i class="fas fa-file-download"></i>
+                                    <span *ngIf="!donwloading; else status"> Descargar</span>
+                                      <ng-template #status>
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        Generando...
+                                      </ng-template>
+                                  </button>
+                            </div>
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        <!-- <div class="row">
+                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
+                                <mat-label> </mat-label>
+                                <input matInput type="text" placeholder="">
+                            </mat-form-field>
+                            <mat-form-field class="col-md-2" appearance="outline">
+                                <mat-label> </mat-label>
+                                <mat-select>
+                                    <mat-option value=""> </mat-option>
+                                </mat-select>
+                            </mat-form-field>                                
+                        </div> -->
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+        <div class="container" style="font-size: small;">
+            <table class="table table-bordered table-striped table-sm" *ngIf="!loading && lunches.length > 0; else notData">
+                <thead>
+                    <tr>
+                        <th scope="col">Funcionario</th>
+                        <th scope="col">Func. Creó</th>
+                        <th scope="col">Valor</th>
+                        <th scope="col">¿Aplica?</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let lunch of lunches" [ngClass]="{'text-danger font-weight-bold': (lunch.state == 'Inactivo')}">
+                        <td> {{ lunch.first_name | titlecase}} {{ lunch.first_surname | titlecase }} </td>
+                        <td> {{ lunch.user }} </td>
+                        <td> {{ lunch.value | currency }} </td>
+                        <ng-container *ngIf="lunch.apply == null; else elseTemplate">
+                            <td>Sin Validar</td>
+                        </ng-container>
+                        <ng-template #elseTemplate>
+                            <td> {{ lunch.apply }} </td>
+                        </ng-template>
+                        <td> {{ lunch.created_at | date: 'dd-MM-yyyy' }} </td>
+                        <td>
+                            <div class="text-center">
+                                <div ngbDropdown class="dropdown-primary">
+                                    <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                        <i class="mdi mdi-chevron-down"></i>
+                                    </button>
+                                    <div ngbDropdownMenu>
+                                        <a (click)="getLunchValu(lunch); modalEdit.show()" class="dropdown-item waves-light text-info waves-effect caja-botones">
+                                            <i class="far fa-edit"></i> Editar
+                                        </a>
+                                        <a *ngIf="lunch.state == 'Activo'" (click)="activateOrInactivate(lunch.id, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                            <i class="far fa-trash-alt"></i> Anular
+                                        </a>
+                                        <a *ngIf="lunch.state == 'Inactivo'" (click)="activateOrInactivate(lunch.id, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                            <i class="fas fa-check"></i> Activar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getLunches($event)" aria-label="Default pagination"
             maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
         </ngb-pagination>
     </div>
 </div>
+
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
         <h5 class="modal-title"> Nuevo Almuerzo </h5>

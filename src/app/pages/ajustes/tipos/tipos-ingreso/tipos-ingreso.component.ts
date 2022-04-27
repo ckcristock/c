@@ -4,6 +4,8 @@ import { ValidatorsService } from '../../informacion-base/services/reactive-vali
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { consts } from '../../../../core/utils/consts';
 import { TiposIngresoService } from './tipos-ingreso.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-tipos-ingreso',
@@ -13,6 +15,18 @@ import { TiposIngresoService } from './tipos-ingreso.service';
 export class TiposIngresoComponent implements OnInit {
 
   @ViewChild('modal') modal:any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
+
   loading:boolean = false;
   selected:any;
   ingresss:any[] = [];
@@ -30,22 +44,40 @@ export class TiposIngresoComponent implements OnInit {
   constructor( 
                 private _ingressTypeService: TiposIngresoService,
                 private _validators: ValidatorsService,
-                private fb: FormBuilder ) { }
+                private fb: FormBuilder,
+                private modalService: NgbModal, ) { }
 
   ngOnInit(): void {
     this.getIngressType();
     this.createForm();
   }
-
+  closeResult = '';
+  public openConfirm(confirm, titulo){
+    this.selected = titulo;
+      this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
+  private getDismissReason(reason: any): string {
+    this.form.reset();
+      if (reason === ModalDismissReasons.ESC) {
+        return 'by pressing ESC';
+      } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+        return 'by clicking on a backdrop';
+      } else {
+        return `with: ${reason}`;
+      }
+    }
   openModal() {
     this.modal.show();
-    this.form.reset();
-    this.selected = 'Nuevo Tipo de Ingreso';
+    
+    
   }
   
     getIngress(  egress ) {
       this.ingress = {...egress}
-      this.selected = 'Actualizar Tipo de Ingreso'
       this.form.patchValue({
         id: this.ingress.id,
         name: this.ingress.name,
@@ -80,7 +112,7 @@ export class TiposIngresoComponent implements OnInit {
   createIngressType() {
     this._ingressTypeService.createIngressType(this.form.value)
     .subscribe( (res:any) => {
-      this.modal.hide();
+      this.modalService.dismissAll(); 
       this.getIngressType();
       Swal.fire({
         icon: 'success',

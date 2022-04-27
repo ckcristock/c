@@ -1,0 +1,147 @@
+<div class="row" *ngIf="taskdata">
+  <div class="col-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Asignada por:</h5>
+        <p class="card-text">{{taskdata["first_name"]}} {{taskdata["second_name"]}} {{taskdata["first_surname"]}}</p>
+        <h5 class="card-title">Asignada a:</h5>
+        <p class="card-text">{{realizador["name"]}}</p>
+        <h5 class="card-title">Categoría:</h5>
+        <p class="card-text">{{taskdata["tipo"]}}</p>
+      </div>
+    </div>
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Otras tareas</h5>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="col-6">
+    <div class="card ">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <p style="font-size: xx-large;">{{taskdata["titulo"]}}</p>
+          <div style="color: white;">
+            <div *ngIf="taskdata.estado == 'Pendiente'">
+              <h5>
+                <span class="badge ml-2" style="background-color: #ef476f;">{{taskdata["estado"]}}</span>
+              </h5>
+            </div>
+            <div *ngIf="taskdata.estado == 'En ejecucion'">
+              <h5>
+                <span class="badge ml-2" style="background-color: #ffd166;">{{taskdata["estado"]}}</span>
+              </h5>
+
+            </div>
+            <div *ngIf="taskdata.estado == 'En espera'">
+              <h5>
+                <span class="badge ml-2" style="background-color: #118ab2;">{{taskdata["estado"]}}</span>
+              </h5>
+
+            </div>
+            <div *ngIf="taskdata.estado == 'Finalizado'">
+              <h5>
+                <span class="badge ml-2" style="background-color: #06d6a0;">{{taskdata["estado"]}}</span>
+              </h5>
+            </div>
+            <div *ngIf="taskdata.estado == 'Archivada'">
+              <h5>
+                <span class="badge ml-2" style="background-color: gray; color: white;">{{taskdata["estado"]}}</span>
+              </h5>
+            </div>
+          </div>
+        </div>
+        <div class="card bg-light">
+          <div class="card-body">
+            <p class="card-text" [innerHTML]="taskdata.descripcion"></p>
+          </div>
+        </div>
+
+
+        <div class="d-flex justify-content-between">
+          <div>
+            <div *ngIf="estado === 'Activa'">
+              <span class="badge badge-success">{{estado}}</span>
+            </div>
+            <div *ngIf="estado === 'Vencida'">
+              <span class="badge badge-danger">{{estado}}</span>
+            </div>
+          </div>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <a class="btn btn-primary" *ngIf="taskdata.link" [routerLink]="taskdata.link" role="button">Realizar
+              tarea</a>
+            <button type="button" *ngIf="taskdata.estado != 'Archivada'" class="btn btn-primary" (click)="updateArchivada()">Archivar tarea</button>
+            <button type="button" *ngIf="taskdata.id_asignador == _user.user.person.id " class="btn btn-primary" (click)="eliminarTarea()">Eliminar tarea</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header text-center" style="font-size: x-large;">Comentarios</div>
+      <div class="card-body">
+        <div class="card bg-light" *ngFor="let item of comments">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title">{{item.name}}</h5>
+              <div (click)="deleteComment(item.id)">
+                <button class="btn btn-outline-danger btn-sm rounded-2" type="button" data-toggle="tooltip"
+                data-placement="top" title="Delete" *ngIf="item.deleteItem" ><i
+                  class="fa fa-trash"></i></button>
+              </div>
+              
+            </div>
+
+            <p class="text-muted small mb-0">
+              Publicado el: {{item.fecha | date:'fullDate'}} a las {{item.fecha | date:'hh:mm a'}}
+            </p>
+            <p class="card-text" [innerHTML]="item.comentario"></p>
+          </div>
+          <div *ngIf="comments == null">Aún no se ha publicado ningún comentario</div>
+        </div>
+      </div>
+      <form [formGroup]="myComment">
+        <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+          <div class="card-title">Publicar un nuevo comentario:</div>
+
+          <div class="d-flex flex-start w-100">
+            <div class="form-outline w-100">
+              <ckeditor [editor]="_texteditor.Editor" (ready)="_texteditor.onReady($event)" [config]="_texteditor.configEditor" name="comentario" formControlName="comentario"></ckeditor>
+         </div>
+          </div>
+          <div class="float-end mt-2 pt-1">
+            <button type="button" (click)="saveComment()" class="btn btn-primary btn-sm">Publicar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="card text-uppercase text-center">
+      <div class="card-body">
+        <p class="card-text">{{taskdata.fecha | date:'EEEE'}}</p>
+        <hr>
+        <p style="font-size: xx-large;">{{taskdata.fecha | date:'d'}}</p>
+        <p class="card-text">{{taskdata.fecha | date:'LLLL'}}</p>
+        <p class="card-text">{{taskdata.fecha | date:'y'}}</p>
+        <hr>
+        <p class="card-text">{{taskdata.fecha + ' ' + taskdata.hora | date:'hh:mm a'}}</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Archivos adjuntos</h5>
+        <div class="list-group" *ngFor="let item of adjuntos">
+          <div class="list-group-item">
+            <p>{{item.nombre}}</p>
+            <button class="btn" (click)="abrirBlob(item.blob)"><i class="fa fa-download"></i> Ver o descargar</button>
+          </div>          
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

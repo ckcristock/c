@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatHorizontalStepper } from '@angular/material/stepper';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { LiquidadosService } from './liquidados.service';
@@ -9,6 +10,21 @@ import { LiquidadosService } from './liquidados.service';
   styleUrls: ['./liquidados.component.scss']
 })
 export class LiquidadosComponent implements OnInit {
+  @ViewChild('stepper') stepper: MatHorizontalStepper;
+  ngAfterViewInit() {
+    this.stepper._getIndicatorType = () => 'number';
+  }
+  goBack() {
+    this.stepper.previous();
+  }
+
+  goForward() {
+    this.stepper.next();
+  }
+  public datosCabecera:any = {
+    Titulo: 'Liquidación Funcionario',
+    Fecha: new Date()
+  }
   id:any;
   liquidado:any = {
     first_name: '',

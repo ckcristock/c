@@ -21,6 +21,10 @@ export class PresupuestosComponent implements OnInit {
   ngOnInit(): void {
     this.getBudgets()
   }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
 
   getBudgets(page = 1): void {
     this.loading = true;

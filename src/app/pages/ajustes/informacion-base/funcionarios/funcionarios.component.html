@@ -1,111 +1,75 @@
 <div class="row">
-    <div class="col-xl-3 col-lg-4">
-        <div class="card">
-            <div class="card-header bg-transparent border-bottom">
-                <h5 class="mb-0">Filtros</h5>
-            </div>
-            <div class="custom-accordion">
-                <div class="card-body border-top">
-                    <div>
-                        <h5 class="font-size-14 mb-0">
-                            <a class="text-dark d-block" (click)="collapsed = !collapsed" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">Estado <i class="mdi mdi-minus float-right accor-plus-icon"></i
-                            ></a>
-                        </h5>
-
-                        <div id="collapseExample2" [ngbCollapse]="collapsed">
-                            <div class="mt-4">
-                                <div class="custom-control custom-checkbox mt-2" *ngFor="let stat of status; let i = index">
-                                    <input type="checkbox" id="stat{{ i }}" name="status" (change)="stat.selected = !stat.selected ;getPeople()" [checked]="stat.selected" class="custom-control-input" />
-                                    <label class="custom-control-label" for="stat{{ i }}">{{stat.name}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body border-top">
-                    <div>
-                        <h5 class="font-size-14 mb-0">
-                            <a (click)="collapsed3 = !collapsed3" [attr.aria-expanded]="!collapsed3" class="text-dark d-block" aria-controls="collapseExample3">Dependencias
-                <i class="mdi mdi-minus float-right accor-plus-icon"></i
-              ></a>
-                        </h5>
-
-                        <div id="collapseExample3" [ngbCollapse]="collapsed3">
-                            <div class="mt-4">
-                                <div class="custom-control custom-checkbox mt-2" *ngFor="let dependency of dependencies; let i = index">
-                                    <input type="checkbox" id="dependencia{{ i }}" (change)="dependency.selected = !dependency.selected ;getPeople()" name="dependecy_id" [checked]="dependency.selected" class="custom-control-input" />
-                                    <label class="custom-control-label" for="dependencia{{ i }}">{{ dependency.text }}</label
-                  >
-                </div>
-              </div>
-            </div>
+  <div class="col-xl-3 col-lg-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <h5 class="mb-0">Filtros</h5>
+        </div>
+        <hr>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Busca por nombre"
+            (input)="getPeople(1, $event.target.value)" />
+          <div class="input-group-append">
+            <button class="btn btn-secondary" type="button">
+              <i class="fa fa-search"></i>
+            </button>
           </div>
         </div>
       </div>
+      <mat-accordion>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Estado
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="custom-control custom-checkbox mt-1" *ngFor="let stat of status; let i = index">
+            <input type="checkbox" id="stat{{ i }}" name="status" (change)="stat.selected = !stat.selected ;getPeople()"
+              [checked]="stat.selected" class="custom-control-input" />
+            <label class="custom-control-label" for="stat{{ i }}">{{stat.name}}</label>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <mat-accordion>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Dependencias
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="custom-control custom-checkbox mt-2" *ngFor="let dependency of dependencies; let i = index">
+            <input type="checkbox" id="dependencia{{ i }}"
+              (change)="dependency.selected = !dependency.selected ;getPeople()" name="dependecy_id"
+              [checked]="dependency.selected" class="custom-control-input" />
+            <label class="custom-control-label" for="dependencia{{ i }}">{{ dependency.text }}</label>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <div class="card-body"></div>
     </div>
   </div>
   <div class="col-xl-9 col-lg-8">
     <div class="card">
       <div class="card-body">
+        <div class="card-title d-flex justify-content-between">
+          <h4 class="text-primary">Funcionarios</h4>
+          <button [routerLink]="['crear']" class="btn btn-primary">
+            <i class="fa fa-user-plus"></i> Nuevo
+          </button>
+        </div>
+        <hr class="line">
         <div>
-          <div class="row mb-2">
-            <div class="col-md-6">
-              <h5>Funcionarios</h5>
-            </div>
-
-            <div class="col-md-6">
-              
-              <button [routerLink]="['crear']"
-                 class="btn btn-primary">
-                <i class="fa fa-user-plus"></i> Nuevo Funcionario
-              </button>
-              <div class="form-inline float-md-right">
-                <div class="search-box ml-2">
-                  <div class="position-relative">
-                    <input
-                      type="text"
-                      class="form-control rounded"
-                      placeholder="Filtros..."
-                      (change)="getPeople(1, $event.target.value)"
-                    />
-                    <i class="mdi mdi-magnify search-icon"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            *ngIf="!loading && people.length > 0; else notData"
-            class="row no-gutters text-center"
-          >
-            <div class="col-xl-3 p-2 col-sm-6" *ngFor="let person of people">
-              <div class="product-box">
-                <div class="product-img">
-                  <div class="product-ribbon badge badge-primary">
-                    {{ person.status }}
-                  </div>
-                  <a
-                    [routerLink]="[
-                      '/ajustes/informacion-base/funcionario',
-                      person.id
-                    ]"
-                  >
-                    <img
-                      src="{{ person.image | image: 'users' }}"
-                      alt=""
-                      class="img-fluid mx-auto d-block"
-                    />
-                  </a>
-                </div>
-
-                <div class="text-center">
-                  <p class="font-size-12 mb-0">{{ person.company }}</p>
-                  <h5 class="font-size-15 mb-0">
-                    <a href="javascript: void(0);" class="text-dark">
-                      {{person.first_name}} {{person.first_surname}}</a>
-                  </h5>
-                  <p class="mt-0 mb-0">{{ person.dependency }}</p>
+          <div *ngIf="!loading && people.length > 0; else notData" class="row no-gutters text-center">
+            <div class="col-xl-3 p-2 col-sm-6 d-flex align-items-stretch" *ngFor="let person of people">
+              <div role="button" class="card pointer border border-light" [routerLink]="['/ajustes/informacion-base/funcionario',person.id]">
+                <span class="badge badge-primary">{{ person.status }}</span>
+                <img class="card-img-top" src="{{ person.image | image: 'users' }}"
+                  onerror="this.src='../../../../../assets/images/nofound.png'" alt="Card image cap">
+                <div class="card-body">
+                  <p class="card-text">{{ person.company }}</p>
+                  <h6 class="card-title">{{person.first_name}} {{person.first_surname}}</h6> 
+                  <p class="card-text">{{ person.dependency }}</p>                 
                 </div>
               </div>
             </div>
@@ -113,17 +77,10 @@
 
           <div class="row mt-4">
             <div class="col-lg-12">
-              <ngb-pagination
-                class="pagination-rounded d-flex justify-content-center"
-                [collectionSize]="pagination.collectionSize"
-                (pageChange)="getPeople($event)"
-                [pageSize]="pagination.pageSize"
-                [(page)]="pagination.page"
-                maxSize="5"
-                rotate="true"
-                ellipses="false"
-                boundaryLinks="true"
-              ></ngb-pagination>
+              <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+                [collectionSize]="pagination.collectionSize" (pageChange)="getPeople($event)"
+                [pageSize]="pagination.pageSize" [(page)]="pagination.page" maxSize="5" rotate="true" ellipses="false"
+                boundaryLinks="true"></ngb-pagination>
             </div>
           </div>
         </div>

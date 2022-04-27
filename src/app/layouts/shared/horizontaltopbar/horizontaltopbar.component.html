@@ -130,11 +130,17 @@
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <img
+          <img *ngIf="imageProfile != null"
             class="rounded-circle header-profile-user"
-            [src]="user.imagenUrl"
+            [src]="imageProfile"
             alt="Header Avatar"
           />
+          <img *ngIf="imageProfile == null"
+            class="rounded-circle header-profile-user"
+            src="../../../../assets/images/noprofile.png"
+            alt="Header Avatar"
+          />
+              
           <span class="d-none d-xl-inline-block ml-1"
             >{{ user.person.first_name }} {{ user.person.first_surname }}</span
           >
@@ -154,11 +160,11 @@
         </div>
       </div>
 
-      <!-- <div class="dropdown d-inline-block">
+      <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect" (click)="onSettingsButtonClicked()">
-                  <i class="ri-settings-2-line"></i>
+                  <i class="ri-todo-line"></i>
                 </button>
-            </div> -->
+            </div>
     </div>
   </div>
 </header>

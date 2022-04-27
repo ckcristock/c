@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IMyDrpOptions } from 'mydaterangepicker';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../globales';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-notascredito',
@@ -12,7 +13,17 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./notascredito.component.scss']
 })
 export class NotascreditoComponent implements OnInit {
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   public perfilUsuario:string = '';
   public funcionario:any = {};
   public filtro_cod_nota:string = '';
@@ -28,8 +39,8 @@ export class NotascreditoComponent implements OnInit {
   public Notas:any = [];
   public Servicios:any=[];
   myDateRangePickerOptions1: IMyDrpOptions = {
-    width:'120px', 
-    height: '21px',
+    width:'240px', 
+    height: '28px',
     selectBeginDateTxt:'Inicio',
     selectEndDateTxt:'Fin',
     selectionTxtFontSize: '10px',
@@ -48,7 +59,10 @@ export class NotascreditoComponent implements OnInit {
   ngOnInit() {
     this.ListarDetallesFacturacion();
   }
-
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
   ListarDetallesFacturacion() {
     this.Cargando = true;
     let params = this.route.snapshot.queryParams;

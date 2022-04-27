@@ -1,22 +1,38 @@
-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 150px;
+
+hr.line {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, #f0f0f0, #95c11f, #95c11f, #f0f0f0);
 }
 
-.b {
-    margin-top: 50px;
+.mat-toolbar-single-row {
+    max-height: 12px !important;
+    background: transparent;
+    font-size: 12px;
+    padding: 0%;
+    color: currentColor;
 }
 
-.col-form-label-sm {
-    font-size: 11px;
-}
-
-.back {
+#uploadFile {
+    top: 0px;
+    left: 0px;
+    width: 100%;    
+    z-index: 9;
+    opacity: 0;
+    height: 100%;
     cursor: pointer;
+    position: absolute;
 }
+::ng-deep .mat-form-field-infix {
+    height: 45px;
+    font-size: small;
+    
+}
+::ng-deep .mat-form-field-no-padding .mat-form-field-infix{
+    margin-bottom: -1.25em;
+    height: 100px;
+ }
 
-input:disabled {
-    background-color: rgb(245, 245, 245);
-    cursor: not-allowed;
+::ng-deep .mat-step-header .mat-step-icon {
+    color: white !important;
 }

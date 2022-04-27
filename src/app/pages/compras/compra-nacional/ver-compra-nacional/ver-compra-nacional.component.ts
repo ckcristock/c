@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Directive, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./ver-compra-nacional.component.scss']
 })
 export class VerCompraNacionalComponent implements OnInit {
-
   public objeto:any = { 'Costo Incorrecto' : 'Costo Incorrecto', 'Proveedor Incorrecto' : 'Proveedor Incorrecto', 'Productos Incorrectos' : 'Productos Incorrectos'};
   public Compra:any = [];
   public Productos:any = [];
@@ -28,6 +27,7 @@ export class VerCompraNacionalComponent implements OnInit {
   @ViewChild('confirmacionSwal') confimracionSwal:any;
 
   constructor(private http: HttpClient, private router: ActivatedRoute) {
+ 
     this.id = this.router.snapshot.params["id"]; 
     this.http.get(environment.ruta + 'php/comprasnacionales/datos_compras_nacionales.php', {params: { id: this.id }}).subscribe((data: any) => {
       this.Compra = data;

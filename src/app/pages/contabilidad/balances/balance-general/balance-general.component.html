@@ -1,95 +1,80 @@
-<div class="page-body">
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
-
-            <div class="card">
-
-                <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
-
-                <div class="card-body">
-                    <form #FormFiltros="ngForm">
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <div>
-                                    <label for="" class="f-12">
-                      Fecha Corte
-                    </label>
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-between">
+                    <img src="assets/images/logo2.png" alt="" height="45" />
+                    <h4 class="text-primary">
+                        <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+                    </h4>
+                </div>
+                <hr class="line">
+                <div class="container mt-4">
+                    <div class="row">
+                        <div class="col-10 mx-auto">
+                            <form #FormFiltros="ngForm">
+                                <div class="form-group row">
+                                    <label for="Fecha_Corte" class="col-sm-4 col-form-label">Fecha Corte</label>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="form-control form-control"
+                                            [(ngModel)]="Parametros.Fecha_Corte" name="Fecha_Corte" id="Fecha_Corte"
+                                            (change)="getQueryParams()" required>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <input type="date" class="form-control form-control-sm" [(ngModel)]="Parametros.Fecha_Corte" name="Fecha_Corte" id="Fecha_Corte" (change)="getQueryParams()" required>
+                                <div class="form-group row">
+                                    <label for="Discriminado" class="col-sm-4 col-form-label">Tipo Reporte</label>
+                                    <div class="col-sm-8">
+                                        <select name="Discriminado" id="Discriminado"
+                                            [(ngModel)]="Parametros.Tipo_Reporte" class="form-control form-control"
+                                            (change)="getQueryParams()" required>
+                                            <option value="">Seleccione</option>
+                                            <option value="Pcga">Pcga</option>
+                                            <option value="Niif">Niif</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-6"></div>
-
-                            <div class="col-md-2 text-right">
-                                <div>
-                                    <label for="" class="f-12">
-                      Tipo Reporte
-                    </label>
+                                <div class="form-group row">
+                                    <label for="Nivel" class="col-sm-4 col-form-label">Nivel</label>
+                                    <div class="col-sm-8 py-0">
+                                        <select name="Nivel" id="Nivel" [(ngModel)]="Parametros.Nivel"
+                                            (change)="getQueryParams()" class="form-control form-control">
+                                            <option value="">Seleccione</option>
+                                            <option *ngFor="let Nivel of Niveles" [value]="Nivel">{{ Nivel }}</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <select name="Discriminado" id="Discriminado" [(ngModel)]="Parametros.Tipo_Reporte" class="form-control form-control-sm" (change)="getQueryParams()" required>
-                      <option value="">Seleccione</option>
-                      <option value="Pcga">Pcga</option>
-                      <option value="Niif">Niif</option>
-                    </select>
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-4 col-form-label">Centro Costo</label>
+                                    <div class="col-sm-8">
+                                        <ng-select class="custom" id="Centro_Costo" name="Centro_Costo"
+                                            [(ngModel)]="Parametros.Centro_Costo" (ngModelChange)="getQueryParams()"
+                                            placeholder="Seleccione el centro costo" [items]="Centro_Costos">
+                                        </ng-select>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-1 text-right">
-                                <div>
-                                    <label for="" class="f-12">
-                    Nivel
-                  </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-1">
-                                <div class="form-group">
-                                    <select name="Nivel" id="Nivel" [(ngModel)]="Parametros.Nivel" (change)="getQueryParams()" class="form-control form-control-sm">
-                    <option value="">Seleccione</option>
-                    <option *ngFor="let Nivel of Niveles" [value]="Nivel">{{ Nivel }}</option>
-                  </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3"></div>
-
-                            <div class="col-md-2 text-right">
-                                <div>
-                                    <label for="" class="f-12">
-                      Centro Costo
-                    </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <ng-select id="Centro_Costo" class="f-10" name="Centro_Costo" [(ngModel)]="Parametros.Centro_Costo" (ngModelChange)="getQueryParams()" placeholder="Seleccione el centro costo" [items]="Centro_Costos"></ng-select>
-                                </div>
-                            </div>
-
-
-
-                            <!--  <div class="col-md-12 text-center">
-                <button class="btn btn-info btn-sm" [disabled]="!FormFiltros.valid"><i class="fa fa-eye"></i> Ver Balance</button>
-              </div> -->
-
+                                <!-- <div class="col-md-12 text-center">
+                                    <button class="btn btn-info btn-sm" [disabled]="!FormFiltros.valid"><i
+                                            class="fa fa-eye"></i> Ver Balance</button>
+                                </div> -->
+                            </form>
                         </div>
-                        <!-- FIN ROW-->
-                    </form>
-
-                    <div class="row m-t-20">
-                        <div class="col-md-12">
-                            <!--
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 d-flex justify-content-center">
+                            <div class="btn-group" role="group" aria-label="Vertical button group">
+                                <a name="" id="" class="btn btn-danger btn-lg"
+                                    href="{{envirom.ruta}}php/contabilidad/balancegeneral/descarga_pdf.php?{{queryParams}}"
+                                    role="button" target="_blank"><i class="fas fa-file-pdf"></i> PDF</a>
+                                <a name="" id="" class="btn btn-primary btn-lg"
+                                    href="{{envirom.ruta}}php/contabilidad/balancegeneral/descarga_excel.php?{{queryParams}}"
+                                    role="button" target="_blank"><i class="fas fa-file-excel"></i> EXCEL</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-t-20">
+                    <div class="col-md-12">
+                        <!--
                             <div style="max-height: 400px;overflow:auto">
 
                                 <h4>ACTIVO</h4>
@@ -163,24 +148,11 @@
                                 </table>
 
                             </div> -->
-                            <!-- FIN DEL CONTENEDOR -->
-
-                            <div class="m-t-10 text-center">
-                                <a href="{{envirom.ruta}}php/contabilidad/balancegeneral/descarga_pdf.php?{{queryParams}}" class="btn btn-inverse btn-sm" target="_blank"><i class="fa fa-file-text"></i> PDF</a>
-                                <a href="{{envirom.ruta}}php/contabilidad/balancegeneral/descarga_excel.php?{{queryParams}}" target="_blank" class="btn btn-inverse btn-sm"><i class="fa fa-table"></i> EXCEL</a>
-                            </div>
-
-
-
-
-                        </div>
+                        <!-- FIN DEL CONTENEDOR -->
                     </div>
                 </div>
-
             </div>
-
         </div>
-        <div class="col-md-1"></div>
     </div>
 </div>
 

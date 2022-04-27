@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-crear-compra-nacional',
@@ -16,6 +17,23 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./crear-compra-nacional.component.scss'],
 })
 export class CrearCompraNacionalComponent implements OnInit {
+  closeResult = '';
+  public openConfirm(confirm){
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
   tipoMaterial = ['Activo_Fijo', 'Medicamento', 'Material', 'Dotacion_EPP'];
   public reducer = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Cantidad);
@@ -97,7 +115,8 @@ export class CrearCompraNacionalComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router,
-    private _user: UserService
+    private _user: UserService,
+    private modalService: NgbModal,
   ) {
     this.alertOption = {
       title: '¿Está Seguro?',
@@ -328,6 +347,7 @@ export class CrearCompraNacionalComponent implements OnInit {
         });
     }
   }
+  
 
   searchProduct(pos, editar) {
     this.ListaProducto = [];
@@ -559,7 +579,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       });
     }
 
-    this.modalProductos.hide();
+    this.modalService.dismissAll(); 
     this.Productos = [];
   }
 

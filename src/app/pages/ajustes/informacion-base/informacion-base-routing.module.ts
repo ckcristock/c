@@ -18,6 +18,7 @@ import { CatalogoComponent } from './catalogo/catalogo.component';
 import { CrearProductoComponent } from './productos/crear-producto/crear-producto.component';
 import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
 import { ProductoComponent } from './productos/producto/producto.component';
+import { SedesComponent } from './sedes/sedes.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
@@ -46,6 +47,8 @@ const routes: Routes = [
    { path: 'catalogo/editar/:id', component: EditarProductoComponent },
    { path: 'catalogo/ver/:id', component: ProductoComponent },
 
+   //sedes
+   { path: 'sedes', component: SedesComponent },
 ];
 
 @NgModule({

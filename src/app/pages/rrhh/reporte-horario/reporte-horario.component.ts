@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { ReporteHorarioService } from './reporte-horario.service';
 import { CompanyService } from '../../ajustes/informacion-base/services/company.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-reporte-horario',
@@ -14,6 +15,17 @@ import { PersonService } from '../../ajustes/informacion-base/persons/person.ser
   styleUrls: ['./reporte-horario.component.scss'],
 })
 export class ReporteHorarioComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   loading = false;
   reporteHorarios: any[] = [];
   groupList: any[] = [];
@@ -38,7 +50,10 @@ export class ReporteHorarioComponent implements OnInit {
     this.getDiaries();
     this.getPeople();
   }
-
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
   getPeople() {
     this._people.getAll({}).subscribe((res: any) => {
       this.people = res.data;

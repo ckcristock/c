@@ -1,16 +1,10 @@
-<div class="card">
+<div class="card border border-light">
     <div class="card-body">
-        <div class="card-title">
-            <div class="row">
-                <div class="col-6">
-                    <h5>Datos de Pago</h5>
-                </div>
-                <div class="col-6">
-                    <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModal()">
-                        <i class="fas fa-pencil-alt"></i>
-                    </button>
-                </div>
-            </div>
+        <div class="card-title d-flex justify-content-between">
+            <h5 class="text-primary">Datos de Pago</h5>
+            <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
+                <i class="fas fa-pencil-alt"></i>
+            </button>
         </div>
         <div class="row">
             <p class="col-6 font-weight-bold text-mute item-subtitle">
@@ -46,16 +40,16 @@
         </div>
     </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Datos De Pago</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-          </button>
+
+<ng-template #add let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="text-primary modal-title">Datos De Pago</h4>
+            <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
+                (click)="modal.dismiss('Cross click')"></button>
+        </div>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <form [formGroup]="form">
             <div class="row">
                 <div class="col-12">
@@ -63,7 +57,8 @@
                         <div class="form-group col-6">
                             <label for="">Frecuencia De Pago</label>
                             <select class="form-control form-control-sm" formControlName="payment_frequency">
-                                <option *ngFor="let payment_frequency of payment_frequencys" [value]="payment_frequency.valor">
+                                <option *ngFor="let payment_frequency of payment_frequencys"
+                                    [value]="payment_frequency.valor">
                                     {{ payment_frequency.clave }}
                                 </option>
                             </select>
@@ -101,10 +96,12 @@
             </div>
         </form>
     </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="savePaymentData()">Guardar</button>
-        </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
+            Cancelar
+        </button>
+        <button type="button" (click)="savePaymentData()" class="btn btn-primary">
+            Guardar
+        </button>
     </div>
-</app-modal-basic>
+</ng-template>

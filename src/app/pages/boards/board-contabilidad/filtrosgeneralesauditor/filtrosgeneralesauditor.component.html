@@ -1,0 +1,35 @@
+
+<div  class="">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Fecha Inicio</label>
+          <input class="form-control form-control-sm" (change)="ValidarFecha()" [(ngModel)]="Filtros.Fecha_Inicio" type="date">
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Fecha Fin</label>
+          <input class="form-control form-control-sm" (change)="ValidarFecha()"  [(ngModel)]="Filtros.Fecha_Fin" type="date">
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="MostrarFiltrosAdicionales">
+        <div class="form-group">
+          <label>Nit Tercero</label>
+          <input class="form-control form-control-sm" (change)="AsignarTercero()"  [(ngModel)]="TerceroSeleccionado" type="text" placeholder="Nombre o DI"
+          [ngbTypeahead]="search_tercero" [resultTemplate]="rt_tercero" [inputFormatter]="formatter_tercero">
+        </div>
+      </div>
+      <div class="container mt-2" style="font-size: small;">
+        <p>Estos son los filtros generales para generar los reportes </p>   
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #rt_tercero let-r="result" let-t="term">
+  <span class="f-9">
+      {{r.Nombre_Tercero}}
+  </span>
+</ng-template>

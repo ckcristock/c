@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 interface NavItem {
   name: string;
   link: boolean;
+  icon: string,
   id: string;
   child: NavItem[];
 }

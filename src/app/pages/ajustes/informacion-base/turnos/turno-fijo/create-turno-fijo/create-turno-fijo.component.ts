@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../services/reactive-validation/validators.service';
 import { SwalService } from '../../../services/swal.service';
 import { FixedTurnService } from '../turno-fijo.service';
@@ -20,8 +21,26 @@ export class CreateTurnoFijoComponent implements OnInit {
     private _fixedTurn: FixedTurnService,
     private _swal: SwalService,
     private router: Router,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private modalService: NgbModal,
+  ) { }
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
   week = [
     'Lunes',
@@ -140,7 +159,7 @@ export class CreateTurnoFijoComponent implements OnInit {
     });
   }
 
-  bulds() {}
+  bulds() { }
   createItem(d): FormGroup {
     const required = d == 'Sabado' || d == 'Domingo' ? false : true;
     let controls: any = this.getBasicControl(required);
@@ -175,7 +194,7 @@ export class CreateTurnoFijoComponent implements OnInit {
       }
     });
 
-    this.modal.hide();
+    this.modalService.dismissAll(); 
 
     /*  this.dayList. */
   }

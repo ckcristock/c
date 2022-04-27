@@ -1,179 +1,221 @@
 <div class="page-body">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Activos Fijos</h5>
-                            <span>Todos los Activos Fijos de la Compañía</span>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="pull-right">
-                                <div class="card-header-left">
-                                    <!-- <button type="button" class="pull-left btn btn-primary btn-sm" (click)="CrearActivoFijo()"><i
-                        class="fa fa-plus"></i>
-                      Agregar Nuevo Activo Fijo
-                    </button> -->
-                                    <button type="button" style="float: right;" class="pull-left btn btn-primary btn-sm" [routerLink]="['/contabilidad/activos-fijos-crear']"><i
-                                        class="fa fa-plus"></i>
-                                    Agregar Nuevo Activo Fijo
-                                    </button>
-                                </div>
-                            </div>
+                <div class="card-block card-body">
+                    <div class="card-title d-flex justify-content-between">
+                        <h4 class="text-primary">Activos Fijos</h4>
+                        <div class="btn-group rounded">
+                            <button type="button" style="float: right;" class="btn btn-primary btn-sm"
+                                [routerLink]="['/contabilidad/activos-fijos-crear']"><i class="fa fa-plus"></i> Agregar
+                            </button>
+                            <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                                <i class="fas fa-sliders-h"></i> Filtros
+                            </button>
                         </div>
                     </div>
-                </div>
-                <div class="card-block">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-striped" style="font-size: 10px;">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="width: 110px !important;">Documento</th>
-                                        <th class="text-center" style="width: 150px !important;">Nombre</th>
-                                        <th class="text-center">Tipo de Activo</th>
-                                        <th class="text-center" style="width: 150px !important;">Centro Costo</th>
-                                        <th class="text-right">Costo PCGA(Local)</th>
-                                        <th class="text-right">Costo NIIF</th>
-                                        <th class="text-center" style="max-width: 70px; width: 70px !important;">Acciones</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="tabla-filtro" style="max-width: 110px; width: 110px !important;">
-                                            <input type="text" class="form-control input-sm " placeholder="Filtro Codigo" [(ngModel)]="Filtros.codigo" (change)="ConsultaFiltrada()">
-                                        </th>
-                                        <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                            <input type="text" class="form-control input-sm " placeholder="Filtro Nombre" [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()">
-                                        </th>
+                    <hr class="line">
+                    <div class="container">
+                        <mat-accordion multi>
+                            <mat-expansion-panel class="mat-elevation-z0">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-2 input-group-sm">
+                                            <label for="">Documento</label>
+                                            <input type="text" class="form-control input-sm " placeholder="Filtro Codigo"
+                                                [(ngModel)]="Filtros.codigo" (change)="ConsultaFiltrada()">
+                                        </div>
+                                        <div class="col-3 input-group-sm">
+                                            <label for="">Nombre</label>
+                                            <input type="text" class="form-control input-sm " placeholder="Filtro Nombre"
+                                                [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()">
+                                        </div>
+                                        <div class="col-3 input-group-sm">
+                                            <label for="">Tipo de activo</label>
+                                            <select name="Id_Tipo_Activo_Fijo" id="tipo_activo"
+                                                class="form-control form-control-sm custom-select" [(ngModel)]="Filtros.tipo"
+                                                (change)="ConsultaFiltrada()">
+                                                <option value="" selected>Seleccione tipo</option>
+                                                <option *ngFor="let ta of TipoActivos" [value]="ta.Id_Tipo_Activo_Fijo">
+                                                    {{ta.Nombre_Tipo_Activo}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-2 input-group-sm">
+                                            <label for="">Costo PCGA</label>
+                                            <input type="text" class="form-control input-sm" placeholder="Filtro costo pcga"
+                                                [(ngModel)]="Filtros.costo_pcga" (change)="ConsultaFiltrada()">
+                                        </div>
+                                        <div class="col-2 input-group-sm">
+                                            <label for="">Costo NIIF</label>
+                                            <input type="text" class="form-control input-sm" placeholder="Filtro costo niif"
+                                                [(ngModel)]="Filtros.costo_niif" (change)="ConsultaFiltrada()">
+                                        </div>
                                         <!-- <th>
-                                            <select (change)="ConsultaFiltrada()" name="Id_Empresa" id="Id_Empresa" [(ngModel)]="Filtros.Id_Empresa" class="form-control input-sm" placeholder="Filtro Empresa" required>
+                                            <select (change)="ConsultaFiltrada()" name="Id_Empresa" id="Id_Empresa"
+                                                [(ngModel)]="Filtros.Id_Empresa" class="form-control input-sm"
+                                                placeholder="Filtro Empresa" required>
                                                 <option *ngFor="let item of companies" [value]="item.value">
                                                     {{ item.text }}
                                                 </option>
                                             </select>
                                         </th> -->
-                                        <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                            <select name="Id_Tipo_Activo_Fijo" id="tipo_activo" class="form-control form-control-sm custom-select" [(ngModel)]="Filtros.tipo" (change)="ConsultaFiltrada()">
-                                <option value="" selected>Seleccione tipo</option>
-                                <option *ngFor="let ta of TipoActivos" [value]="ta.Id_Tipo_Activo_Fijo">{{ta.Nombre_Tipo_Activo}}</option>
-                            </select>
-                                        </th>
-                                        <th class="tabla-filtro"></th>
-                                        <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                            <input type="text" class="form-control input-sm" placeholder="Filtro costo pcga" [(ngModel)]="Filtros.costo_pcga" (change)="ConsultaFiltrada()">
-                                        </th>
-                                        <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                                            <input type="text" class="form-control input-sm" placeholder="Filtro costo niif" [(ngModel)]="Filtros.costo_niif" (change)="ConsultaFiltrada()">
-                                        </th>
-                                        <th class="tabla-filtro" style="max-width: 50px; width: 50px !important;"></th>
-                                    </tr>
-                                    <tr *ngIf="Cargando">
-                                        <td colspan="6" class="text-center">
-                                            <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-                                            <span class="sr-only">Cargando...</span>
-                                            <h4>Cargando activos fijos...</h4>
-                                        </td>
-                                    </tr>
-                                    <tr *ngIf="ActivosFijos.length == 0 && !Cargando">
-                                        <td colspan="6" class="text-center">
-                                            <i class="fa fa-exclamation-circle fa-5x"></i>
-                                            <h4>No hay datos para mostrar</h4>
-                                        </td>
-                                    </tr>
-                                </thead>
-                                <tbody *ngIf="!Cargando">
-                                    <tr *ngFor="let af of ActivosFijos" [ngClass]="{'bg-danger': af.Estado == 'Anulada'}">
-                                        <td>{{af.Codigo}}</td>
-                                        <td>{{af.Nombre}}</td>
-                                        <td>{{af.Tipo_Activo}}</td>
-                                        <td class="text-center">{{af.Centro_Costo}}</td>
-                                        <td class="text-right">$ {{af.Costo_PCGA | number | puntos}}</td>
-                                        <td class="text-right">$ {{af.Costo_NIIF | number | puntos}}</td>
-                                        <td style="max-width: 70px !important; width: 70px !important;">
-                                            <div class="text-center">
-                                                <div ngbDropdown class="dropdown-primary">
-                                                    <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">
-                                                        <i class="mdi mdi-chevron-down"></i>
-                                                    </button>
-                                                    <div ngbDropdownMenu>
-                                                        <!-- <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}"
+                                    </div>
+                                    <!-- <div class="row">
+                                        <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
+                                            <mat-label> </mat-label>
+                                            <input matInput type="text" placeholder="">
+                                        </mat-form-field>
+                                        <mat-form-field class="col-md-2" appearance="outline">
+                                            <mat-label> </mat-label>
+                                            <mat-select>
+                                                <mat-option value=""> </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>                                
+                                    </div> -->
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                    <div class="container" style="font-size: small;">
+                        <table class="table table-bordered table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Documento</th>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Tipo de Activo</th>
+                                    <th class="text-center">Centro Costo</th>
+                                    <th class="text-right">Costo PCGA(Local)</th>
+                                    <th class="text-right">Costo NIIF</th>
+                                    <th class="text-center col-1">Acciones</th>
+                                </tr>
+                                <tr *ngIf="Cargando">
+                                    <td colspan="6" class="text-center">
+                                        <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                                        <span class="sr-only">Cargando...</span>
+                                        <h4>Cargando activos fijos...</h4>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="ActivosFijos.length == 0 && !Cargando">
+                                    <td colspan="6" class="text-center">
+                                        <i class="fa fa-exclamation-circle fa-5x"></i>
+                                        <h4>No hay datos para mostrar</h4>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="!Cargando">
+                                <tr *ngFor="let af of ActivosFijos" [ngClass]="{'bg-danger': af.Estado == 'Anulada'}">
+                                    <td>{{af.Codigo}}</td>
+                                    <td>{{af.Nombre}}</td>
+                                    <td>{{af.Tipo_Activo}}</td>
+                                    <td class="text-center">{{af.Centro_Costo}}</td>
+                                    <td class="text-right">$ {{af.Costo_PCGA | number | puntos}}</td>
+                                    <td class="text-right">$ {{af.Costo_NIIF | number | puntos}}</td>
+                                    <td style="max-width: 70px !important; width: 70px !important;">
+                                        <div class="text-center">
+                                            <div ngbDropdown class="dropdown-primary">
+                                                <button ngbDropdownToggle
+                                                    class="btn btn-primary btn-sm waves-effect waves-light "
+                                                    type="button">
+                                                    <i class="mdi mdi-chevron-down"></i>
+                                                </button>
+                                                <div ngbDropdownMenu>
+                                                    <!-- <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}"
                                                                 target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion PCGA</a>
 
                                                             <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}&tipo=Niif"
                                                                 target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion NIIF</a> -->
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/contabilidad/activos-fijos-crear']" [queryParams]="{Tipo: 'Adicion', AF: af.Id_Activo_Fijo}">
-                                                            <i class="fa fa-plus"></i> Adición</a>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/contabilidad/activo-fijo-ver',af.Id_Activo_Fijo]">
-                                                            <i class="fa fa-eye"></i> Ver</a>
-                                                        <a *ngIf="af.Estado != 'Anulada' && perfilUsuario == '27'" class="dropdown-item waves-light waves-effect caja-botones bg-danger" href="javascript:;" [swal]="confirmacionAnular" (click)="IdDocumento = af.Id_Activo_Fijo">
-                                                            <i class="fa fa-close"></i> Anular</a>
-                                                    </div>
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones"
+                                                        [routerLink]="['/contabilidad/activos-fijos-crear']"
+                                                        [queryParams]="{Tipo: 'Adicion', AF: af.Id_Activo_Fijo}">
+                                                        <i class="fa fa-plus"></i> Adición</a>
+                                                    <a class="dropdown-item waves-light waves-effect caja-botones"
+                                                        [routerLink]="['/contabilidad/activo-fijo-ver',af.Id_Activo_Fijo]">
+                                                        <i class="fa fa-eye"></i> Ver</a>
+                                                    <a *ngIf="af.Estado != 'Anulada' && perfilUsuario == '27'"
+                                                        class="dropdown-item waves-light waves-effect caja-botones bg-danger"
+                                                        href="javascript:;" [swal]="confirmacionAnular"
+                                                        (click)="IdDocumento = af.Id_Activo_Fijo">
+                                                        <i class="fa fa-close"></i> Anular</a>
                                                 </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div id="paginacion-container" *ngIf="ActivosFijos.length > 0">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
-                                    </div>
-                                </div>
-                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="paginacion-container" class="text-center" *ngIf="ActivosFijos.length > 0">
+                            <p><b>Mostrando del {{InformacionPaginacion.desde}} al
+                                    {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b>
+                            </p>
+
                         </div>
+
+                        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+                            [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize"
+                            size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
+                        </ngb-pagination>
+
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-header-left">
-                        <h5>Reportes</h5>
+                    <div class="card-title">
+                        <h4 class="text-primary">Reportes</h4>
                     </div>
+                    <hr class="line">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tipo_reporte">
+                                    Tipo Reporte
+                                </label>
+                                <select name="tipo_reporte" id="tipo_reporte" [(ngModel)]="ReporteModel.Tipo_Reporte"
+                                    class="form-control form-control-sm">
+                                    <option value="Compras">Compras de un Periodo</option>
+                                    <option value="Movimientos">Movimientos de un Periodo</option>
+                                    <option value="Relacion">Relacion de Activos</option>
+                                    <option value="Adiciones">Adiciones de Activos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="fechas">
+                                    Fechas
+                                </label>
+                                <div>
+                                    <my-date-range-picker *ngIf="ReporteModel.Tipo_Reporte != 'Relacion'"
+                                        name="mydaterange" [options]="myDateRangePickerOptions"
+                                        (dateRangeChanged)="dateRangeChanged2($event)" placeholder="Rango Fechas">
+                                    </my-date-range-picker>
+                                    <input *ngIf="ReporteModel.Tipo_Reporte == 'Relacion'" type="date" name="fechas"
+                                        id="fechas" [(ngModel)]="ReporteModel.Fechas"
+                                        class="form-control form-control-sm">
+                                </div>
 
-                    <div class="card-body">
-                        <div class="row f-10">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="tipo_reporte">
-                      Tipo Reporte
-                    </label>
-                                    <select name="tipo_reporte" id="tipo_reporte" [(ngModel)]="ReporteModel.Tipo_Reporte" class="form-control form-control-sm">
-                      <option value="Compras">Compras de un Periodo</option>
-                      <option value="Movimientos">Movimientos de un Periodo</option>
-                      <option value="Relacion">Relacion de Activos</option>
-                      <option value="Adiciones">Adiciones de Activos</option>
-                    </select>
-                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="fechas">
-                      Fechas
-                    </label>
-                                    <my-date-range-picker *ngIf="ReporteModel.Tipo_Reporte != 'Relacion'" name="mydaterange" [options]="myDateRangePickerOptions" (dateRangeChanged)="dateRangeChanged2($event)" placeholder="Rango Fechas"></my-date-range-picker>
-                                    <input *ngIf="ReporteModel.Tipo_Reporte == 'Relacion'" type="date" name="fechas" id="fechas" [(ngModel)]="ReporteModel.Fechas" class="form-control form-control-sm">
-                                </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tipo_activo">Tipo Activo</label>
+                                <ng-select id="tipo_activo" class="f-10" name="tipo_activo"
+                                    [(ngModel)]="ReporteModel.Tipo_Activo" placeholder="Filtrar por Tipo de Activo"
+                                    [items]="listaTipoActivo"></ng-select>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="tipo_activo">Tipo Activo</label>
-                                    <ng-select id="tipo_activo" class="f-10" name="tipo_activo" [(ngModel)]="ReporteModel.Tipo_Activo" placeholder="Filtrar por Tipo de Activo" [items]="listaTipoActivo"></ng-select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="centro_costo">Centro Costo</label>
-                                <ng-select id="centro_costo" class="f-10" name="centro_costo" [(ngModel)]="ReporteModel.Centro_Costo" placeholder="Filtrar por Centro de Costo" [items]="listaCentroCosto"></ng-select>
-                            </div>
-                            <div *ngIf="ReporteModel.Fechas != ''" class="col-md-12">
-                                <button class="btn btn-sm btn-success btn-block" (click)="verReporte()"><i class="fa fa-table"></i> Descargar</button>
-                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="centro_costo">Centro Costo</label>
+                            <ng-select id="centro_costo" class="f-10" name="centro_costo"
+                                [(ngModel)]="ReporteModel.Centro_Costo" placeholder="Filtrar por Centro de Costo"
+                                [items]="listaCentroCosto"></ng-select>
+                        </div>
+                        <div *ngIf="ReporteModel.Fechas != ''" class="col-md-12">
+                            <button class="btn btn-sm btn-success btn-block" (click)="verReporte()"><i
+                                    class="fa fa-table"></i> Descargar</button>
                         </div>
                     </div>
                 </div>

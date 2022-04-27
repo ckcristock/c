@@ -1,9 +1,10 @@
 <div *ngIf="renderizar">
     <div class="card">
-        <div class="card-header">
-            <h1 class="font-weight-bold">Historial de pagos</h1>
-        </div>
         <div class="card-body">
+            <div class="card-title d-flex justify-content-between">
+                <h4 class="text-primary">Historial de pagos</h4>
+            </div>
+            <hr class="line">
             <div class="row" *ngIf="!historialPagos.length; else data">
                 <div class="col-12">
                     <div class="alert alert-secondary">
@@ -14,10 +15,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-
 </div>
 <!-- 
     { "id": 1, "user_id": null, 
@@ -37,9 +36,8 @@
  -->
 
 <ng-template #data>
-
-    <div class="col-md-12">
-        <table class="table table-bordered table-striped">
+    <div class="container mt-4" style="font-size: small;">
+        <table class="table table-bordered table-striped table-sm">
             <thead>
                 <tr>
                     <th>Periodo</th>

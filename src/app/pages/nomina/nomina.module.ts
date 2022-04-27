@@ -29,6 +29,10 @@ import { PrimasComponent } from './primas/primas.component';
 import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-funcionario.component';
 import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
 import { HistorialPagosComponent } from './historial-pagos/historial-pagos.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -46,7 +50,11 @@ import { HistorialPagosComponent } from './historial-pagos/historial-pagos.compo
     HttpClientModule,
     NgSelectModule,
     NgbTypeaheadModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
   ],
   declarations: [
     PrestamosLibranzasComponent,

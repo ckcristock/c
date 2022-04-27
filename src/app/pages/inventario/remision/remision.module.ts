@@ -17,9 +17,15 @@ import { ModalcambiarproductossimilarnuevoComponent } from './modalcambiarproduc
 //import { TruncateModule } from 'ng2-truncate';
 import { RemisioneditarComponent } from './remisioneditar/remisioneditar.component';
 import { RemisionComponent } from './remision/remision.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
+    NgbModule,
     CommonModule,
     RemisionRoutes,
     HttpClientModule,
@@ -33,6 +39,10 @@ import { RemisionComponent } from './remision/remision.component';
     NgSelectModule,
     PipesModule,
     SweetAlert2Module.forRoot(),
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
     //TruncateModule
   ],
   declarations: [

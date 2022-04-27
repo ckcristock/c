@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MedidasService } from './medidas.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-medidas',
@@ -24,7 +25,8 @@ export class MedidasComponent implements OnInit {
   constructor( 
                 private fb: FormBuilder,
                 private _medidas: MedidasService,
-                private _swal: SwalService
+                private _swal: SwalService,
+                private modalService: NgbModal,
               ) { }
 
   ngOnInit(): void {
@@ -39,15 +41,35 @@ export class MedidasComponent implements OnInit {
       measure: ['']
     })
   }
+  closeResult = '';
+public openConfirm(confirm, titulo){
+  this.title = titulo;
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+private getDismissReason(reason: any): string {
+  this.form.reset();
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
 
   openModal(){
     this.modal.show();
-    this.title = 'Nueva Medida';
+    
   }
 
   getMeasure( measure ){
     this.measure = {...measure};
-    this.title = 'Actualizar medida';
+    //this.title = 'Actualizar medida';
     this.form.patchValue({
       id: this.measure.id,
       name: this.measure.name,
@@ -67,7 +89,7 @@ export class MedidasComponent implements OnInit {
 
   save(){
     this._medidas.save(this.form.value).subscribe((r:any) => {
-      this.modal.hide();
+      this.modalService.dismissAll(); 
       this.form.reset();
       this.getMeasures();
       this._swal.show({

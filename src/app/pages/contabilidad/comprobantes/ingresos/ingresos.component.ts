@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 import { environment } from 'src/environments/environment';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-ingresos',
@@ -17,80 +18,90 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./ingresos.component.scss']
 })
 export class IngresosComponent implements OnInit {
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   @ViewChild('modalNuevoComprobante') modalNuevoComprobante: any;
   @ViewChild('modalVerComprobante') modalVerComprobante: any;
   @ViewChild('alertSwal') alertSwal: any;
   envirom: any;
   myDateRangePickerOptions: IMyDrpOptions = {
-    width:'180px', 
-    height: '21px',
-    selectBeginDateTxt:'Inicio',
-    selectEndDateTxt:'Fin',
+    width: '240px',
+    height: '28px',
+    selectBeginDateTxt: 'Inicio',
+    selectEndDateTxt: 'Fin',
     selectionTxtFontSize: '10px',
     dateFormat: 'yyyy-mm-dd',
   };
 
   public Archivos: any[] = [];
-  public Clientes:any = [
-    {Id_Cliente: 1, Nombre_Cliente:'Kendry Ortiz'},
-    {Id_Cliente: 2, Nombre_Cliente:'Pedro Castillo'},
-    {Id_Cliente: 3, Nombre_Cliente:'Franklin Guerra'},
-    {Id_Cliente: 4, Nombre_Cliente:'Augusto Carrillo'}
+  public Clientes: any = [
+    { Id_Cliente: 1, Nombre_Cliente: 'Kendry Ortiz' },
+    { Id_Cliente: 2, Nombre_Cliente: 'Pedro Castillo' },
+    { Id_Cliente: 3, Nombre_Cliente: 'Franklin Guerra' },
+    { Id_Cliente: 4, Nombre_Cliente: 'Augusto Carrillo' }
   ];
 
-  public Bancos:any = [];
+  public Bancos: any = [];
 
-  public FormaPago:any = [ ];
+  public FormaPago: any = [];
 
-  public Comprobantes:any = [
+  public Comprobantes: any = [
   ];
 
-  public CuentasContables:any = [
-    {id_Cuenta: 1, Nro_Cuenta: '12546328'},
-    {id_Cuenta: 2, Nro_Cuenta: '6591316'},
-    {id_Cuenta: 3, Nro_Cuenta: '516135468'}
+  public CuentasContables: any = [
+    { id_Cuenta: 1, Nro_Cuenta: '12546328' },
+    { id_Cuenta: 2, Nro_Cuenta: '6591316' },
+    { id_Cuenta: 3, Nro_Cuenta: '516135468' }
   ];
 
-  public ComprobanteModel:any = {
-    Codigo: '', 
-    Concepto: '', 
-    Fecha: '', 
-    Cliente: '', 
-    Forma_Pago:'', 
-    Valor:'', 
-    Banco:'',
-    Soporte:'CuentasContables'
+  public ComprobanteModel: any = {
+    Codigo: '',
+    Concepto: '',
+    Fecha: '',
+    Cliente: '',
+    Forma_Pago: '',
+    Valor: '',
+    Banco: '',
+    Soporte: 'CuentasContables'
   };
   public Cliente = [];
-  public Cuenta=[];
-  public Cuenta_Pasivos=[];
+  public Cuenta = [];
+  public Cuenta_Pasivos = [];
   public Id_Cliente = '';
   public Nom_Cliente = '';
-  public Cuenta_Deb='';
-  public Cuenta_Acred='';
-  public Id_Cuenta_Acredita='';
-  public Id_Cuenta_Debita='';
-  public Tipo='Ingreso';
-  public boolVal:boolean = false;
-  public Funcionario=JSON.parse(localStorage.getItem("User"));
+  public Cuenta_Deb = '';
+  public Cuenta_Acred = '';
+  public Id_Cuenta_Acredita = '';
+  public Id_Cuenta_Debita = '';
+  public Tipo = 'Ingreso';
+  public boolVal: boolean = false;
+  public Funcionario = JSON.parse(localStorage.getItem("User"));
   public perfilUsuario = localStorage.getItem('miPerfil');
-  public Comprobante:any={};
+  public Comprobante: any = {};
 
-  public filtro_cod:string='';
-  public filtro_cli:string='';
-  public filtro_tipo:string='';
-  public filtro_fecha:any='';
+  public filtro_cod: string = '';
+  public filtro_cli: string = '';
+  public filtro_tipo: string = '';
+  public filtro_fecha: any = '';
   public page = 1;
   public maxSize = 10;
-  public TotalItems:number;
+  public TotalItems: number;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   Soporte: any;
   IdDocumento: string = '';
   // id_funcionario: any = JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario;
   alertOption: SweetAlertOptions;
 
-  public filtro:any = {
+  public filtro: any = {
     codigo: '',
     fechas: '',
     cliente: '',
@@ -116,7 +127,7 @@ export class IngresosComponent implements OnInit {
       },
       allowOutsideClick: () => !swal.isLoading()
     }
-   }
+  }
   search = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
@@ -130,6 +141,10 @@ export class IngresosComponent implements OnInit {
       map(term => term.length < 4 ? []
         : this.Cuenta.filter(v => v.Codigo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
     );
+  estadoFiltros = false;
+  mostrarFiltros() {
+    this.estadoFiltros = !this.estadoFiltros
+  }
   formatter1 = (x: { Codigo: string }) => x.Codigo;
   search2 = (text$: Observable<string>) =>
     text$.pipe(
@@ -145,9 +160,9 @@ export class IngresosComponent implements OnInit {
     });
     this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.Cuenta = data.Activo;
-      this.Cuenta_Pasivos=data.Pasivo;
+      this.Cuenta_Pasivos = data.Pasivo;
     });
-   
+
     this.http.get(environment.ruta + 'php/comprobantes/lista_bancos.php').subscribe((data: any) => {
       this.Bancos = data;
     });
@@ -155,67 +170,67 @@ export class IngresosComponent implements OnInit {
       this.FormaPago = data;
     });
   }
-ListarComprobantes(){
-  this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php',{params:{tipo_comprobante:'ingreso'}}).subscribe((data: any) => {
-    this.Comprobantes = data.Lista;
-    this.TotalItems = data.numReg;
-  });
-}
-dateRangeChanged(event) {
-    
-  if (event.formatted != "") {
-    this.filtro.fechas = event.formatted;
-  } else {
-    this.filtro.fechas = '';
+  ListarComprobantes() {
+    this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php', { params: { tipo_comprobante: 'ingreso' } }).subscribe((data: any) => {
+      this.Comprobantes = data.Lista;
+      this.TotalItems = data.numReg;
+    });
+  }
+  dateRangeChanged(event) {
+
+    if (event.formatted != "") {
+      this.filtro.fechas = event.formatted;
+    } else {
+      this.filtro.fechas = '';
+    }
+
+    setTimeout(() => {
+      this.filtros();
+    }, 100);
   }
 
-  setTimeout(() => {
-    this.filtros();
-  }, 100);
-}
+  pagination() {
+    let queryString = this.getQueryString(true);
 
-pagination() {
-  let queryString = this.getQueryString(true);
+    this.location.replaceState('/comprobante/ingresos', queryString);
 
-  this.location.replaceState('/comprobante/ingresos', queryString);
 
-  
-  this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php'+queryString).subscribe((data: any) => {
-    this.Comprobantes = data.Lista;
-    this.TotalItems = data.numReg;
-  });
-}
-AbrirModalNuevoComprobante(){
+    this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php' + queryString).subscribe((data: any) => {
+      this.Comprobantes = data.Lista;
+      this.TotalItems = data.numReg;
+    });
+  }
+  AbrirModalNuevoComprobante() {
     this.modalNuevoComprobante.show();
   }
 
-  filtros(pagination:boolean = false){
+  filtros(pagination: boolean = false) {
 
     let queryString = this.getQueryString(pagination);
 
     this.location.replaceState('/comprobantes/ingresos', queryString);
 
-    
-    this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php'+queryString).subscribe((data: any) => {
+
+    this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php' + queryString).subscribe((data: any) => {
       this.Comprobantes = data.Lista;
       this.TotalItems = data.numReg;
 
     });
-    
-  }
-  getQueryString(pagination:boolean = false) {
 
-    let params:any = {
+  }
+  getQueryString(pagination: boolean = false) {
+
+    let params: any = {
       tipo_comprobante: 'ingreso'
     };
     let queryString = '';
 
     if (!pagination) {
       this.page = 1;
-    } 
-    
+    }
+
     params.pag = this.page;
-    
+
     if (this.filtro.cliente != "") {
       params.cli = this.filtro.cliente;
     }
@@ -229,42 +244,42 @@ AbrirModalNuevoComprobante(){
       params.est = this.filtro.estado;
     }
 
-    queryString = '?'+ Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     return queryString;
-    
-    }
 
-    Archivo(event){
-      if (event.target.files.length === 1) {
-        this.Soporte = event.target.files[0];
-      } 
-    }
+  }
 
-  GuardarComprobante(formulario: NgForm, modal:any) {
-    
+  Archivo(event) {
+    if (event.target.files.length === 1) {
+      this.Soporte = event.target.files[0];
+    }
+  }
+
+  GuardarComprobante(formulario: NgForm, modal: any) {
+
     let datos = new FormData();
-    let info=this.normalize(JSON.stringify(formulario.value))
+    let info = this.normalize(JSON.stringify(formulario.value))
     datos.append("Datos", info);
     datos.append("Archivo", this.Soporte);
     this.http.post(environment.ruta + 'php/comprobantes/guardar_comprobante.php', datos).subscribe((data: any) => {
       this.confirmacionSwal.title = 'Operación Exitosa';
       this.confirmacionSwal.html = data.mensaje;
       this.confirmacionSwal.type = data.tipo;
-      this.confirmacionSwal.show();   
+      this.confirmacionSwal.show();
       formulario.reset();
 
       this.ListarComprobantes();
- 
+
     });
 
-  
+
   }
 
-  ShowSwal(tipo:string, titulo:string, msg:string){
-      this.alertSwal.type = tipo;
-      this.alertSwal.title = titulo;
-      this.alertSwal.text = msg;
-      this.alertSwal.show();
+  ShowSwal(tipo: string, titulo: string, msg: string) {
+    this.alertSwal.type = tipo;
+    this.alertSwal.title = titulo;
+    this.alertSwal.text = msg;
+    this.alertSwal.show();
   }
 
   normalize = (function () {
@@ -289,40 +304,40 @@ AbrirModalNuevoComprobante(){
 
   })();
 
-  ArmarComprobante(comprobanteObject:any){
+  ArmarComprobante(comprobanteObject: any) {
     let comprobante = {
-      Codigo: comprobanteObject.Codigo, 
-      Concepto: comprobanteObject.Concepto, 
-      Fecha: comprobanteObject.Fecha, 
-      Cliente: comprobanteObject.Cliente, 
-      Forma_Pago: comprobanteObject.Forma_Pago, 
-      Valor: comprobanteObject.Valor, 
+      Codigo: comprobanteObject.Codigo,
+      Concepto: comprobanteObject.Concepto,
+      Fecha: comprobanteObject.Fecha,
+      Cliente: comprobanteObject.Cliente,
+      Forma_Pago: comprobanteObject.Forma_Pago,
+      Valor: comprobanteObject.Valor,
       Banco: comprobanteObject.Banco
     };
 
     return comprobante;
   }
 
-  LimpiarModelo(){
+  LimpiarModelo() {
     this.ComprobanteModel = {
-      Codigo: '', 
-      Concepto: '', 
-      Fecha: '', 
-      Cliente: '', 
-      Forma_Pago:'', 
-      Valor:'', 
-      Banco:'',
+      Codigo: '',
+      Concepto: '',
+      Fecha: '',
+      Cliente: '',
+      Forma_Pago: '',
+      Valor: '',
+      Banco: '',
       Cuenta_Debita: '',
       Cuenta_Acredita: ''
     };
   }
 
-  MostrarBanco(){
+  MostrarBanco() {
     // console.log(this.ComprobanteModel.Forma_Pago);
-    
-    if(this.ComprobanteModel.Forma_Pago == '4' || this.ComprobanteModel.Forma_Pago == ''){
+
+    if (this.ComprobanteModel.Forma_Pago == '4' || this.ComprobanteModel.Forma_Pago == '') {
       this.boolVal = false;
-    }else{
+    } else {
       this.boolVal = true;
     }
   }
@@ -340,38 +355,38 @@ AbrirModalNuevoComprobante(){
   }
 
   BuscarDatosCliente(cliente) {
-    this.Id_Cliente=cliente.Id_Cliente;
+    this.Id_Cliente = cliente.Id_Cliente;
   }
 
-  BuscarCuenta(cuenta,tipo){
+  BuscarCuenta(cuenta, tipo) {
     switch (tipo) {
       case 'Credita':
-        this.Id_Cuenta_Acredita=cuenta.Id_Plan_Cuentas;
+        this.Id_Cuenta_Acredita = cuenta.Id_Plan_Cuentas;
         break;
       case 'Debita':
-        this.Id_Cuenta_Debita=cuenta.Id_Plan_Cuentas;
+        this.Id_Cuenta_Debita = cuenta.Id_Plan_Cuentas;
         break;
-    
-      
+
+
     }
   }
-  VerComprobante(id){
+  VerComprobante(id) {
     this.http.get(environment.ruta + 'php/comprobantes/detalle_comprobante.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      this.Comprobante=data;
+      this.Comprobante = data;
       this.modalVerComprobante.show();
     });
   }
 
   anularDocumento() {
-    let datos:any = {
+    let datos: any = {
       Id_Registro: this.IdDocumento,
       Tipo: 'Recibos_Caja',
       // Identificacion_Funcionario: this.id_funcionario
     }
 
-    this.AnularDocumentoContable(datos).subscribe((data:any) => {
+    this.AnularDocumentoContable(datos).subscribe((data: any) => {
       let swal = {
         codigo: data.tipo,
         titulo: data.titulo,
@@ -388,7 +403,7 @@ AbrirModalNuevoComprobante(){
       };
       this.swalService.ShowMessage(swal);
     });
-    
+
   }
 
   public AnularDocumentoContable(datos) {
@@ -397,7 +412,7 @@ AbrirModalNuevoComprobante(){
     let data = new FormData();
     data.append('datos', info);
 
-    return this.http.post(environment.ruta+'php/contabilidad/anular_documento.php', data);
+    return this.http.post(environment.ruta + 'php/contabilidad/anular_documento.php', data);
   }
 
 }

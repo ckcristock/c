@@ -1,9 +1,12 @@
 <div class="row" *ngIf="reporteHorarios.length">
   <div class="col-12 mt-1">
-    <h3 class="font-weight-bold">Lista de Funcionarios</h3>
+    
 
-    <div class="card" *ngFor="let company of reporteHorarios">
+    <div class="card bg-light" *ngFor="let company of reporteHorarios">
       <div class="card-body ml-4 mt-1">
+        <div class="card-title d-flex justify-content-between">
+          <h4 class="text-primary">Lista de Funcionarios</h4>
+        </div>
         <div class="row">
           <h4
             class="centro-nombre text-primary m-0 p-0"
@@ -13,17 +16,17 @@
           </h4>
         </div>
         <div *ngFor="let group of company.groups">
-          <div class="row mb-2">
-            <p class="mb-1 centro-nombre text-primary">
+          <div class="row mb-2 mx-3">
+            <p class="card-text centro-nombre text-primary">
               Grupo: {{ group.name }}
             </p>
 
             <div
-              class="col-12 pl-0 dependency"
+              class="col-12 dependency mx-3"
               *ngFor="let dependency of group.dependencies"
             >
               <strong>
-                <p class="font-weight-bold mt-3">{{ dependency.name }}</p>
+                <p class="font-weight-bold card-text">{{ dependency.name }}</p>
               </strong>
 
               <div

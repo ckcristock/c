@@ -1,70 +1,76 @@
 <!-- <div class="col-md-12 "> -->
-<div class="card p-3">
-  <div class="card-header">
-    <div class="row">
-      <div class="col-md-9">
-        <h5>Remisiones </h5>
-        <span>Todas las Remisiones registradas en nuestras bases de datos</span>
-      </div>
-      <div class="col-md-3">
-        <button type="button" class="pull-right btn btn-primary btn-sm" [routerLink]="['remisioncrearnuevo']">
-          <i class="fa fa-plus"></i>
-          Crear Nueva Remisión
+<div class="card">
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Remisiones</h4>
+      <div class="btn-group rounded">
+        <button type="button" class="btn btn-primary btn-sm" [routerLink]="['remisioncrearnuevo']">
+          <i class="fa fa-plus"></i> Agregar
+        </button>
+        <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+          <i class="fas fa-sliders-h"></i> Filtros
         </button>
       </div>
     </div>
+    <hr class="line">
+    <div class="container">
+      <mat-accordion multi>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <div class="container">
+            <div class="row">
+              <!-- <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
+                          <mat-label> </mat-label>
+                          <input matInput type="text" placeholder="">
+                      </mat-form-field>
 
-  </div>
-  <div class="card-block">
-
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table table-striped" style="font-size: 10px;">
-          <thead>
-            <tr>
-              <th style="max-width: 100px; width: 100px !important;">Fecha</th>
-              <th style="max-width: 70px; width: 70px !important;">Código</th>
-              <th style="max-width: 50px; width: 50px !important;">Tipo</th>
-              <th style="max-width: 120px; width: 120px !important;">Origen</th>
-              <th style="max-width: 70px; width: 70px !important;">Grupo</th>
-              <th style="max-width: 130px; width: 130px !important;">Destino</th>
-              <th style="max-width: 130px; width: 60px !important;"></th>
-              <th style="max-width: 40px; width: 40px !important;">Items</th>
-              <th style="max-width: 70px; width: 70px !important;">Estado</th>
-              <th style="max-width: 50px; width: 50px !important;">Fase</th>
-              <th style="max-width: 70px; width: 70px !important;">Acciones</th>
-            </tr>
-            <tr>
-              <th class="tabla-filtro" style="max-width: 100px; width: 100px !important;">
-                <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha"
-                  (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
-              </th>
-              <th class="tabla-filtro" style="max-width: 70px; width: 70px !important;">
-                <input type="text" [(ngModel)]="filtro_cod" (blur)="filtros()" class="form-control input-sm"
+                      <mat-form-field class="col-md-2" appearance="outline">
+                          <mat-label> </mat-label>
+                          <mat-select>
+                              <mat-option value=""> </mat-option>
+                          </mat-select>
+                      </mat-form-field> -->
+            </div>
+            <div class="row">
+              <div class="col-3 input-group-sm">
+                <label for="">Fecha</label>
+                <div>
+                  <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions"
+                    [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)"
+                    placeholder="Filtro Fechas"></my-date-range-picker>
+                </div>
+              </div>
+              <div class="col-3 input-group-sm">
+                <label for="">Código</label>
+                <input #inputC type="text" [(ngModel)]="filtro_cod" (blur)="filtros()" class="form-control input-sm"
                   placeholder="Filtro Cod.">
-              </th>
-              <th class="tabla-filtro" style="max-width: 50px; width: 50px !important;">
+              </div>
+              <div class="col-3 input-group-sm">
+                <label for="">Tipo</label>
                 <select [(ngModel)]="filtro_tipo" (change)="filtros()" class="form-control input-sm">
                   <option value="">Todos</option>
                   <option value="Cliente">Cliente</option>
                   <option value="Interna">Interna</option>
                 </select>
-              </th>
-              <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
+              </div>
+              <div class="col-3 input-group-sm">
+                <label for="">Origen</label>
                 <input type="text" [(ngModel)]="filtro_origen" (blur)="filtros()" class="form-control input-sm"
                   placeholder="Filtro Origen">
-              </th>
-              <th class="tabla-filtro" style="max-width: 130px; width: 130px !important;">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3 input-group-sm">
+                <label for="">Grupo</label>
                 <input type="text" [(ngModel)]="filtro_grupo" (blur)="filtros()" class="form-control input-sm"
                   placeholder="Filtro Grupo">
-              </th>
-              <th class="tabla-filtro" style="max-width: 130px; width: 130px !important;">
+              </div>
+              <div class="col-3 input-group-sm">
+                <label for="">Destino</label>
                 <input type="text" [(ngModel)]="filtro_destino" (blur)="filtros()" class="form-control input-sm"
                   placeholder="Filtro Dest.">
-              </th>
-              <th></th>
-              <th></th>
-              <th class="tabla-filtro" style="max-width: 70px; width: 70px !important;">
+              </div>
+              <div class="col-3 input-group-sm">
+                <label for="">Estado</label>
                 <select [(ngModel)]="filtro_est" (change)="filtros()" class="form-control input-sm">
                   <option value="">Todos</option>
                   <option value="Pendiente">Pendiente</option>
@@ -75,145 +81,166 @@
                   <option value="Anulada">Anulada</option>
                   <option value="Facturada">Facturada</option>
                 </select>
-              </th>
-              <th class="tabla-filtro" style="max-width: 50px; width: 50px !important;">
+              </div>
+              <div class="col-3 input-group-sm">
+                <label for="">Fase</label>
                 <select [(ngModel)]="filtro_fase" (change)="filtros()" class="form-control input-sm">
                   <option value="">Todas</option>
                   <option value="0">Fase 1</option>
                   <option value="1">Fase 2</option>
                   <option value="2">Listo</option>
                 </select>
-              </th>
-              <th class="tabla-filtro" style="max-width: 50px; width: 50px !important;"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="Cargando">
-              <td colspan="10" class="text-center">
-                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-                <span class="sr-only">Cargando...</span>
-                <h4>Cargando remisiones...</h4>
-              </td>
-            </tr>
-            <tr *ngIf="Lista_Remisiones.length == 0 && !Cargando">
-              <td colspan="10" class="text-center">
-                <i class="fa fa-exclamation-circle fa-5x"></i>
-                <h4>No Existen Remisiones para mostrar</h4>
-                <a [routerLink]="['remisioncrearnuevo']" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i>
-                  Cree Una Acá</a>
-              </td>
-            </tr>
-            <tr *ngFor="let remision of Lista_Remisiones" class="{{remision.Estado=='Anulada' ? 'bg-danger' : ''}}">
-              <td style="max-width: 100px; width: 100px !important;">
-                {{remision.Fecha_Remision}}
-              </td>
-              <td style="max-width: 70px; width: 70px !important;">
-                {{remision.Codigo}}
-              </td>
-              <td style="max-width: 50px; width: 50px !important;">
-                <div class="text-center">
-                  <span class="label {{remision.Tipo=='Cliente' ? 'label-success' : 'label-primary'}}">{{remision.Tipo}}
-                  </span>
-                </div>
-              </td>
-              <td style="max-width: 120px !important; width: 120px !important">
-                {{remision.Punto_Origen}}
-                <!--  <i *ngIf="remision.Tipo_Bodega=='MEDICAMENTOS'" class="fa fa-medkit"></i>
-                                          <i *ngIf="remision.Tipo_Bodega=='MATERIALES'" class="fa fa-archive"></i>
-                                          <i *ngIf="remision.Tipo_Bodega=='REFRIGERADOS'" class="fa fa-asterisk"></i> -->
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
 
-              </td>
-              <td style="max-width: 120px !important; width: 120px !important">
-                {{remision.Grupo}}
-              </td>
-              <td style="max-width: 120px !important; width: 120px !important">
-                {{remision.Punto_Destino}}
-              </td>
-              <td> <span class="mytooltip tooltip-effect-2"><span class="tooltip-item2">
-                    <p style="font-size:11px">
-                      <i class="fa fa-info-circle"></i> Observaciones
-                    </p>
-                  </span><span class="tooltip-content4 clearfix"><span
-                      class="tooltip-text2">{{remision.Observaciones=='' ? "No tiene Observaciones!" :
-                      remision.Observaciones }}</span></span>
+    <div class="container">
+      <table class="table table-bordered table-striped table-sm" style="font-size: small;">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Código</th>
+            <th>Tipo</th>
+            <th>Origen</th>
+            <th>Grupo</th>
+            <th>Destino</th>
+            <th></th>
+            <th>Items</th>
+            <th>Estado</th>
+            <th>Fase</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="Cargando">
+            <td colspan="11" class="text-center">
+              <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+              <span class="sr-only">Cargando...</span>
+              <h4>Cargando remisiones...</h4>
+            </td>
+          </tr>
+          <tr *ngIf="Lista_Remisiones.length == 0 && !Cargando">
+            <td colspan="11" class="text-center">
+              <i class="fa fa-exclamation-circle fa-5x"></i>
+              <h4>No Existen Remisiones para mostrar</h4>
+              <a [routerLink]="['remisioncrearnuevo']" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i>
+                Cree Una Acá</a>
+            </td>
+          </tr>
+          <tr *ngFor="let remision of Lista_Remisiones" class="{{remision.Estado=='Anulada' ? 'bg-danger' : ''}}">
+            <td>
+              {{remision.Fecha_Remision}}
+            </td>
+            <td>
+              {{remision.Codigo}}
+            </td>
+            <td>
+              <div class="text-center">
+                <span class="label {{remision.Tipo=='Cliente' ? 'label-success' : 'label-primary'}}">{{remision.Tipo}}
                 </span>
+              </div>
+            </td>
+            <td>
+              {{remision.Punto_Origen}}
+              <!--  <i *ngIf="remision.Tipo_Bodega=='MEDICAMENTOS'" class="fa fa-medkit"></i>
+                                        <i *ngIf="remision.Tipo_Bodega=='MATERIALES'" class="fa fa-archive"></i>
+                                        <i *ngIf="remision.Tipo_Bodega=='REFRIGERADOS'" class="fa fa-asterisk"></i> -->
 
-              </td>
-              <td>{{remision.Items}}</td>
-              <td style="max-width: 70px !important;width: 70px !important;">
-                <div class="text-center">
-                  <span *ngIf="remision.Estado!='Facturada'"
-                    class="label {{remision.Estado=='Anulada' ? '' : ''}} {{remision.Estado=='Alistada' ? 'label-inverse' : ''}} {{remision.Estado=='Enviada' ? 'label-info' : ''}}{{remision.Estado=='Recibida' ? 'label-success' : ''}} {{remision.Estado=='Pendiente'&&remision.Fase==1 ? 'label-danger' : ''}} {{remision.Estado=='Pendiente'&&remision.Fase==2 ? 'label-danger' : ''}}">{{remision.Estado}}
-                  </span>
-                  <a *ngIf="remision.Estado=='Facturada'" class="label label-success"
-                    [routerLink]="['/facturasventasver', remision.Id_Factura]">Facturada</a>
-                </div>
-              </td>
-              <td><strong>{{remision.Fase}}</strong></td>
-              <td style="max-width: 70px !important; width: 70px !important;">
-                <div class="text-center">
-                  <div ngbDropdown class="dropdown-primary">
-                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light "
-                      type="button">Acciones</button>
-                    <div ngbDropdownMenu>
-                      <!--<a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 &&remision.Fase_1==0" class="dropdown-item waves-light waves-effect caja-botones"
-                                href="" [routerLink]="['/remisioneditar',remision.Id_Remision]">
-                                <i class="ti-pencil"></i> Editar</a>-->
-                      <a class="dropdown-item waves-light waves-effect caja-botones" href=""
-                        [routerLink]="['/inventario/remisiones/remision',remision.Id_Remision]">
-                        <i class="ti-eye"></i> Ver</a>
+            </td>
+            <td>
+              {{remision.Grupo}}
+            </td>
+            <td>
+              {{remision.Punto_Destino}}
+            </td>
+            <td>
+              <button type="button" class="btn btn-outline-secondary me-2" placement="bottom" ngbTooltip="{{remision.Observaciones==''
+                ? 'No tiene Observaciones!' :
+                remision.Observaciones}}">
+                <i class="fa fa-info-circle"></i> Observaciones
+              </button>
+            </td>
+            <td>{{remision.Items}}</td>
+            <td>
+              <div class="text-center">
+                <span *ngIf="remision.Estado!='Facturada'"
+                  class="label {{remision.Estado=='Anulada' ? '' : ''}} {{remision.Estado=='Alistada' ? 'label-inverse' : ''}} {{remision.Estado=='Enviada' ? 'label-info' : ''}}{{remision.Estado=='Recibida' ? 'label-success' : ''}} {{remision.Estado=='Pendiente'&&remision.Fase==1 ? 'label-danger' : ''}} {{remision.Estado=='Pendiente'&&remision.Fase==2 ? 'label-danger' : ''}}">{{remision.Estado}}
+                </span>
+                <a *ngIf="remision.Estado=='Facturada'" class="label label-success"
+                  [routerLink]="['/facturasventasver', remision.Id_Factura]">Facturada</a>
+              </div>
+            </td>
+            <td><strong>{{remision.Fase}}</strong></td>
+            <td>
+              <div class="text-center">
+                <div ngbDropdown class="dropdown-primary">
+                  <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light" type="button">
+                    <i class="mdi mdi-chevron-down"></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <!--<a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 &&remision.Fase_1==0" class="dropdown-item waves-light waves-effect caja-botones"
+                              href="" [routerLink]="['/remisioneditar',remision.Id_Remision]">
+                              <i class="ti-pencil"></i> Editar</a>-->
+                    <a class="dropdown-item waves-light waves-effect caja-botones" href=""
+                      [routerLink]="['/inventario/remisiones/remision',remision.Id_Remision]">
+                      <i class="ti-eye"></i> Ver</a>
 
-                      <a *ngIf="remision.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{env.ruta}}/php/archivos/descarga_pdf.php?tipo=Remision&id={{remision.Id_Remision}}"
-                        target="_blank">
-                        <i class="fa fa-print"></i> Archivo</a>
-                      <a *ngIf="remision.Estado!='Anulada'&&remision.Tipo=='Cliente'"
-                        class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{env.ruta}}/php/archivos/descarga_pdf_price.php?tipo=Remision&id={{remision.Id_Remision}}"
-                        target="_blank">
-                        <i class="fa fa-print"></i> Archivo con Costos</a>
+                    <a *ngIf="remision.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones"
+                      href="{{env.ruta}}/php/archivos/descarga_pdf.php?tipo=Remision&id={{remision.Id_Remision}}"
+                      target="_blank">
+                      <i class="fa fa-print"></i> Archivo</a>
+                    <a *ngIf="remision.Estado!='Anulada'&&remision.Tipo=='Cliente'"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      href="{{env.ruta}}/php/archivos/descarga_pdf_price.php?tipo=Remision&id={{remision.Id_Remision}}"
+                      target="_blank">
+                      <i class="fa fa-print"></i> Archivo con Costos</a>
 
-                      <a *ngIf="remision.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{env.ruta}}/php/archivos/descarga_zebra.php?id={{remision.Id_Remision}}" target="_blank">
-                        <i class="fa fa-ticket"></i> Imprimir Etiqueta</a>
+                    <a *ngIf="remision.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones"
+                      href="{{env.ruta}}/php/archivos/descarga_zebra.php?id={{remision.Id_Remision}}" target="_blank">
+                      <i class="fa fa-ticket"></i> Imprimir Etiqueta</a>
 
-                      <a *ngIf="remision.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{env.ruta}}/php/archivos/descarga_excel.php?id={{remision.Id_Remision}}" target="_blank">
-                        <i class="fa fa-file-excel-o"></i> Descargar Plano</a>
+                    <a *ngIf="remision.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones"
+                      href="{{env.ruta}}/php/archivos/descarga_excel.php?id={{remision.Id_Remision}}" target="_blank">
+                      <i class="fa fa-file-excel-o"></i> Descargar Plano</a>
 
-                      <!--   <a *ngIf="!perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 && remision.Fase_1==0" class="dropdown-item waves-light waves-effect caja-botones" (click)="SuspenderRemision(remision.Id_Remision)">
-                                                          <i class="fa fa-times"></i> Anular</a> -->
-
-
-                      <a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado!='Recibida' && remision.Estado!='Facturada' && remision.Estado!='Enviada'"
-                        class="dropdown-item waves-light waves-effect caja-botones"
-                        (click)="SuspenderRemision(remision.Id_Remision,remision.Id_Contrato)">
-                        <i class="fa fa-times"></i> Anular</a>
+                    <!--   <a *ngIf="!perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 && remision.Fase_1==0" class="dropdown-item waves-light waves-effect caja-botones" (click)="SuspenderRemision(remision.Id_Remision)">
+                                                        <i class="fa fa-times"></i> Anular</a> -->
 
 
-                      <a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado!='Recibida' && remision.Estado!='Enviada'"
-                        class="dropdown-item waves-light waves-effect caja-botones" href=""
-                        [routerLink]="['/cambiarlote',remision.Id_Remision]">
-                        <i class="fa fa-times"></i> Cambiar Lote</a>
+                    <a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado!='Recibida' && remision.Estado!='Facturada' && remision.Estado!='Enviada'"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      (click)="SuspenderRemision(remision.Id_Remision,remision.Id_Contrato)">
+                      <i class="fa fa-times"></i> Anular</a>
 
-                      <a *ngIf="remision.Estado!='Anulada' && remision.Entrega_Pendientes=='Si'"
-                        class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{env.ruta}}/php/remision/entrega_pendientes_pdf.php?id={{remision.Id_Remision}}"
-                        target="_blank">
-                        <i class="fa fa-print"></i> Documento Disp.</a>
-                    </div>
+
+                    <a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado!='Recibida' && remision.Estado!='Enviada'"
+                      class="dropdown-item waves-light waves-effect caja-botones" href=""
+                      [routerLink]="['/cambiarlote',remision.Id_Remision]">
+                      <i class="fa fa-times"></i> Cambiar Lote</a>
+
+                    <a *ngIf="remision.Estado!='Anulada' && remision.Entrega_Pendientes=='Si'"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      href="{{env.ruta}}/php/remision/entrega_pendientes_pdf.php?id={{remision.Id_Remision}}"
+                      target="_blank">
+                      <i class="fa fa-print"></i> Documento Disp.</a>
                   </div>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
+  <div class="text-center">
     {{(page*maxSize)-maxSize+1}} al {{((page*maxSize) > TotalItems ? TotalItems : (page*maxSize))}} de {{ TotalItems
     }}
-    <ngb-pagination class="pull-right" [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="10"
-      [pageSize]="maxSize" size="sm" (pageChange)="paginacion()" [rotate]="true" [boundaryLinks]="true">
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="10" [pageSize]="maxSize" size="sm"
+      (pageChange)="paginacion()" [rotate]="true" [boundaryLinks]="true">
     </ngb-pagination>
   </div>
 </div>

@@ -1,5 +1,6 @@
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -28,6 +29,7 @@ registerLocaleData(localeEs, 'es');
   declarations: [AppComponent],
   imports: [
     ArchwizardModule,
+    BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
     AuthModule,
@@ -47,5 +49,6 @@ registerLocaleData(localeEs, 'es');
     { provide: LOCALE_ID, useValue: 'es' },
   ],
   bootstrap: [AppComponent],
+  exports: [BrowserModule, BrowserAnimationsModule]
 })
 export class AppModule {}

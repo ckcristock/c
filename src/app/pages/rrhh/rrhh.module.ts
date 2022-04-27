@@ -22,6 +22,13 @@ import { NovedadesComponent } from './novedades/novedades.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { VacantesVerComponent } from './vacantes/vacantes-ver/vacantes-ver.component';
 import { CrearNovedadComponent } from './novedades/crear-novedad/crear-novedad.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
@@ -63,8 +70,6 @@ import { RotativoComponent } from './horas-extras/lista-fijos/rotativo/rotativo.
 import { EditDiarioFixedComponent } from './horas-extras/lista-fijos/edit-diario-fixed/edit-diario-fixed.component';
 import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
 import { TableInventaryEppComponent } from './dotacion/dotaciones/table-inventary-epp/table-inventary-epp.component';
-
-
 import { TableStockComponent } from './dotacion/dotaciones/table-stock/table-stock.component';
 import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/category-stock.component';
 import { DescargoComponent } from './procesos/disciplinarios/descargo/descargo.component';
@@ -141,9 +146,16 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     FullCalendarModule,
     PerfectScrollbarModule,
     NgbNavModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatStepperModule
   ],
-  providers:[{provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' }],
+  providers: [{ provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' }],
   exports: [],
 })
-export class RrhhModule {}
+export class RrhhModule { }

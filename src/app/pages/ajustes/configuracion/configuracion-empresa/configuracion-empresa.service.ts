@@ -21,6 +21,9 @@ export class ConfiguracionEmpresaService {
   getCompanyData() {
     return this.http.get(`${environment.base_url}/companyData`);
   }
+  getCompanyAll() {
+    return this.http.get(`${environment.base_url}/companyAll`);
+  }
 
   saveCompanyData(data:any) {
     return this.http.post(`${environment.base_url}/saveCompanyData`, data);

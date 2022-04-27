@@ -1,33 +1,33 @@
 <div class="card-title">
     <div class="row invoice-contact" style="align-items:flex-start !important;">
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <div class="invoice-box row">
                 <div class="col-sm-12">
                     <table class="table table-responsive invoice-table table-borderless">
                         <tbody>
                             <tr>
-                                <!-- TODO datos empresa -->
+                                TODO datos empresa 
                                 <td style="width:100px;">
-                                    <!--  <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="Pro-H Software"> -->
+                                    <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="Pro-H Software">
                                 </td>
                                 <td>
-                                    <!--    {{globales.Nombre}}
+                                        {{globales.Nombre}}
                     <br> {{globales.Nit}}
                     <br> {{globales.Direccion}}
-                    <br> {{globales.Telefono}} -->
+                    <br> {{globales.Telefono}}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
+        </div> -->
+        <div class="col-md-12">
             <div class="row text-right" style="margin-right: 5px;">
                 <div class="col-sm-12">
-                    <h4>{{ datosCabecera.Titulo || 'Sin Titulo' }}</h4>
+                    <h4 class="text-primary">{{ datosCabecera.Titulo || 'Sin Titulo' }}</h4>
                     <h4 *ngIf="datosCabecera.Codigo != undefined && datosCabecera.Codigo != ''">{{ datosCabecera.Codigo }}</h4>
-                    <h6>{{ datosCabecera.Fecha | date: 'dd/MM/yyyy'}}</h6>
+                    <h6>{{ datosCabecera.Fecha | date: 'longDate'}}</h6>
                     <div class="clearfix"></div>
 
                 </div>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatAccordion } from '@angular/material/expansion';
 import { TercerosService } from '../terceros.service';
 
 @Component({
@@ -7,6 +8,17 @@ import { TercerosService } from '../terceros.service';
   styleUrls: ['./personas.component.scss']
 })
 export class PersonasComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   people:any[] = [];
   loading:boolean = false;
   pagination = {
@@ -23,7 +35,10 @@ export class PersonasComponent implements OnInit {
   ngOnInit(): void {
     this.getPerson();
   }
-
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
   getPerson(page = 1){
     this.pagination.page = page;
     let params = {

@@ -28,7 +28,7 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
+    //console.log(this.navItems)
     this.initialize();
 
     this.configData = {

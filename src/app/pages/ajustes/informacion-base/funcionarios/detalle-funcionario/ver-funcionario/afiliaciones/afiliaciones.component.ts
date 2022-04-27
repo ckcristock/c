@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { AfiliacionesService } from './afiliaciones.service';
 
@@ -10,25 +11,26 @@ import { AfiliacionesService } from './afiliaciones.service';
   styleUrls: ['./afiliaciones.component.scss']
 })
 export class AfiliacionesComponent implements OnInit {
-  @ViewChild('modal') modal:any;
+  @ViewChild('modal') modal: any;
   form: FormGroup;
-  data:any;
-  eps:any;
-  compensations:any;
-  pensions:any;
-  severances:any;
-  arls:any;
-  afiliations:any = {
+  data: any;
+  eps: any;
+  compensations: any;
+  pensions: any;
+  severances: any;
+  arls: any;
+  afiliations: any = {
     eps_name: '',
     pension_fund_name: '',
     severance_fund_name: '',
     compensation_fund_name: ''
   };
-  id:any;
-  constructor( 
-              private fb:FormBuilder, 
-              private afiliationService: AfiliacionesService,
-              private activatedRoute: ActivatedRoute ) { }
+  id: any;
+  constructor(
+    private fb: FormBuilder,
+    private afiliationService: AfiliacionesService,
+    private activatedRoute: ActivatedRoute,
+    private modalService: NgbModal,) { }
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
@@ -40,109 +42,127 @@ export class AfiliacionesComponent implements OnInit {
     this.getSeverance_funds();
     this.getArls();
   }
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
-  openModal(){
+
+  openModal() {
     this.modal.show();
   }
 
-  createForm(){
+  createForm() {
     this.form = this.fb.group({
       eps_id: ['', Validators.required],
       pension_fund_id: ['', Validators.required],
       severance_fund_id: ['', Validators.required],
       compensation_fund_id: ['', Validators.required],
       arl_id: ['', Validators.required]
-    }); 
-  }
-
-  getAfiliationInfo(){
-    this.afiliationService.getAfiliationInfo(this.id)
-    .subscribe( (res:any) => {
-      this.afiliations = res.data;
-      this.form.patchValue({
-        eps_id: this.afiliations.eps_id,
-        pension_fund_id: this.afiliations.pension_fund_id,
-        severance_fund_id: this.afiliations.severance_fund_id,
-        compensation_fund_id: this.afiliations.compensation_fund_id,
-        arl_id: this.afiliations.arl_id
-      })
     });
   }
 
-  updateAfiliation(){
+  getAfiliationInfo() {
+    this.afiliationService.getAfiliationInfo(this.id)
+      .subscribe((res: any) => {
+        this.afiliations = res.data;
+        this.form.patchValue({
+          eps_id: this.afiliations.eps_id,
+          pension_fund_id: this.afiliations.pension_fund_id,
+          severance_fund_id: this.afiliations.severance_fund_id,
+          compensation_fund_id: this.afiliations.compensation_fund_id,
+          arl_id: this.afiliations.arl_id
+        })
+      });
+  }
+
+  updateAfiliation() {
     /* this.form.markAllAsTouched();
     if (this.form.invalid) { return false;} */
     this.afiliationService.updateAfiliation(this.form.value, this.id)
-    .subscribe( res => {
-      this.getAfiliationInfo();
-      this.modal.hide();
-      Swal.fire({
-        icon: 'success',
-        title: 'Actualizado correctamente'
-      })
-    });
+      .subscribe(res => {
+        this.getAfiliationInfo();
+        this.modalService.dismissAll();
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado correctamente'
+        })
+      });
   }
 
-  getEpss(){
+  getEpss() {
     this.afiliationService.getEpss()
-    .subscribe( (res:any) => {
-      this.eps = res.data;
-    });
+      .subscribe((res: any) => {
+        this.eps = res.data;
+      });
   }
 
-  getCompensations_funds(){
+  getCompensations_funds() {
     this.afiliationService.getCompensationFund()
-    .subscribe( (res:any) => {
-      this.compensations = res.data;
-    });
+      .subscribe((res: any) => {
+        this.compensations = res.data;
+      });
   }
 
-  getPension_funds(){
+  getPension_funds() {
     this.afiliationService.getPension_funds()
-    .subscribe( (res:any) =>{
-      this.pensions = res.data;
-    });
+      .subscribe((res: any) => {
+        this.pensions = res.data;
+      });
   }
 
-  getSeverance_funds(){
+  getSeverance_funds() {
     this.afiliationService.getSeverance_funds()
-    .subscribe( (res:any) =>{
-      this.severances = res.data;
-    });
+      .subscribe((res: any) => {
+        this.severances = res.data;
+      });
   }
 
-  getArls(){
+  getArls() {
     this.afiliationService.getArls()
-    .subscribe( (res:any) => {
-      this.arls = res.data;
-    });
+      .subscribe((res: any) => {
+        this.arls = res.data;
+      });
   }
 
-  get eps_valid(){
+  get eps_valid() {
     return (
       this.form.get('eps_id').invalid && this.form.get('eps_id').touched
     );
   }
 
-  get arl_valid(){
+  get arl_valid() {
     return (
       this.form.get('arl_id').invalid && this.form.get('arl_id').touched
     );
   }
 
-  get pension_found_valid(){
+  get pension_found_valid() {
     return (
       this.form.get('pension_fund_id').invalid && this.form.get('pension_fund_id').touched
     );
   }
 
-  get severance_found_valid(){
+  get severance_found_valid() {
     return (
       this.form.get('severance_fund_id').invalid && this.form.get('severance_fund_id').touched
     );
   }
 
-  get compensation_valid(){
+  get compensation_valid() {
     return (
       this.form.get('compensation_fund_id').invalid && this.form.get('compensation_fund_id').touched
     );

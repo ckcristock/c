@@ -6,6 +6,8 @@ import { SwalService } from '../../../../informacion-base/services/swal.service'
 import { CategoryService } from '../../../services/category.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { throwIfEmpty } from 'rxjs/operators';
+import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -16,6 +18,17 @@ import { throwIfEmpty } from 'rxjs/operators';
 export class MaterialesComponent implements OnInit {
   @ViewChild('modalVer') modalVer: any;
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
   loading: boolean = false;
   form: FormGroup;
   title: any = '';
@@ -42,7 +55,8 @@ export class MaterialesComponent implements OnInit {
     private _user: UserService,
     private _validators: ValidatorsService,
     private _materials: MaterialesService,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private modalService: NgbModal,
   ) { }
 
   ngOnInit(): void {
@@ -109,18 +123,42 @@ export class MaterialesComponent implements OnInit {
     return this.form.get('dynamic') as FormArray;
   }
 
+  closeResult = '';
+  
+  public openConfirm(confirm, titulo) {
+    this.title = titulo;
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    this.fieldList.clear();
+    this.form.reset();
+    this.thicknessList.clear();
+    this.fieldList.clear();
+    this.getThicknesses();
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
   openModal() {
     this.modal.show();
-    this.title = 'Nuevo Material';
   }
 
   closeModalVer() {
-    this.modalVer.hide();
+    this.modalService.dismissAll(); 
     this.fieldList.clear();
   }
 
   closeModal() {
-    this.modal.hide();
+    this.modalService.dismissAll(); 
     this.form.reset();
     this.thicknessList.clear();
     this.fieldList.clear();
@@ -173,7 +211,6 @@ export class MaterialesComponent implements OnInit {
 
   getMaterial(material) {
     this.material = { ...material };
-    this.title = 'Editar Material';
     this.form.patchValue({
       id: this.material.id,
       product_id: this.material.product_id,
@@ -289,7 +326,7 @@ export class MaterialesComponent implements OnInit {
     if (this.form.get('id').value) {
       this._materials.update(this.form.value, this.material.id).subscribe((r: any) => {
         this.form.reset();
-        this.modal.hide();
+        this.modalService.dismissAll(); 
         this.thicknessList.clear();
         this.fieldList.clear();
         this.getMaterials();
@@ -303,7 +340,7 @@ export class MaterialesComponent implements OnInit {
     } else {
       this._materials.save(this.form.value).subscribe((r: any) => {
         this.form.reset();
-        this.modal.hide();
+        this.modalService.dismissAll(); 
         this.thicknessList.clear();
         this.fieldList.clear();
         this.getMaterials();

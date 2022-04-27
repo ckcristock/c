@@ -6,6 +6,8 @@ import { environment } from '../../../../../../../environments/environment';
 import { SwalService } from '../../../services/swal.service';
 import { User } from 'src/app/core/models/users.model';
 import { UserService } from 'src/app/core/services/user.service';
+import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -17,6 +19,17 @@ export class ActivoFijoCatalogoComponent implements OnInit {
   @Input('user') user: User;
 
   @ViewChild('modalGenerico') modal;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
 
   loading = false;
   form: FormGroup;
@@ -37,8 +50,10 @@ export class ActivoFijoCatalogoComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private _user: UserService,
-    private swal: SwalService
-  ) {}
+    private swal: SwalService,
+    private modalService: NgbModal,
+
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -95,7 +110,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
       Id_Producto: [''],
       Id_Categoria: [''],
       Id_Subcategoria: [''],
-      company_id: [ this._user.user.person.company_worked.id],
+      company_id: [this._user.user.person.company_worked.id],
       Nombre_Comercial: [''],
       Descripcion_ATC: [''],
       Codigo_Barras: [''],
@@ -125,10 +140,27 @@ export class ActivoFijoCatalogoComponent implements OnInit {
   }
 
   closeModal() {
-    this.modal.hide();
+    this.modalService.dismissAll(); 
+  }
+
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
     this.form.reset();
     this.fieldDinamic.clear();
-
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   saveGeneric() {
@@ -144,7 +176,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
             showCancel: false,
           });
           this.getActives();
-          this.modal.hide();
+          this.modalService.dismissAll(); 
         });
     } else {
       this._category.save(this.form.value).subscribe((r: any) => {
@@ -155,7 +187,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
           showCancel: false,
         });
         this.getActives();
-        this.modal.hide();
+        this.modalService.dismissAll(); 
       });
     }
 
@@ -179,7 +211,6 @@ export class ActivoFijoCatalogoComponent implements OnInit {
   }
 
   editGeneric(producto) {
-    this.modal.show();
     /*    this.Producto = {...producto};
     this.title = 'Editar Producto'; */
     this.form.patchValue({

@@ -1,48 +1,62 @@
 <div class="card">
     <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Nuevo Tipo de Novedad</button>
-            <h5>Tipos de Novedades</h5>
-            <p>Tipos de Novedades que utilizamos en el Sistema</p>
-            <div class="form-row mt-4">
-                <div class="form-group col-2">
-                    <label for="">Filtro Novedad</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.novelty" (change)="getNovelties()" name="name" autocomplete="off">
-                </div>
+        <div class="card-title d-flex justify-content-between">
+            <h4 class="text-primary">Tipos de Novedades</h4>
+            <div class="btn-group rounded">
+                <button class="btn btn-primary btn-sm" style="float: right;" (click)="openConfirm(add, 'Nuevo Tipo de Novedad')">
+                    <i class="fa fa-plus"></i> Agregar
+                </button>
+                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                    <i class="fas fa-sliders-h"></i> Filtros
+                </button>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <table class="table table-bordered table-striped" *ngIf="!loading && novelties.length > 0; else notData">
-            <thead class="bg-light">
+        <hr class="line">
+        <mat-accordion multi>
+            <mat-expansion-panel class="mat-elevation-z0">
+                <mat-form-field class="col-md-3 pl-0" appearance="outline">
+                    <mat-label>Novedad</mat-label>
+                    <input type="text" matInput [(ngModel)]="filtros.novelty" (input)="getNovelties()"
+                    name="name" autocomplete="off" placeholder="Busca por nombre">
+                </mat-form-field>
+                
+            </mat-expansion-panel>
+        </mat-accordion>
+        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
+            *ngIf="!loading && novelties.length > 0; else notData">
+            <thead>
                 <tr>
                     <th>Tipo de la Novedad</th>
                     <th>Modalidad de Novedad</th>
                     <th>Novedad</th>
-                    <th class="text-center">Acciones</th>
+                    <th class="text-center col-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let novelty of novelties" [ngClass]="{'bg-danger text-white': (novelty.status === 'Inactivo' )}">
+                <tr *ngFor="let novelty of novelties"
+                    [ngClass]="{'text-danger font-weight-bold': (novelty.status === 'Inactivo' )}">
                     <td> {{ novelty.concept }} </td>
                     <td> {{ novelty.modality }} </td>
                     <td> {{ novelty.novelty }} </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light "
+                                    type="button">
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getData(novelty); modal.show()" (change)="createForm()"><i
-                                            class="fa fa-file-pdf-o"></i>Editar</a>
-                                    <a *ngIf="novelty.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(novelty, 'Inactivo')">
-                                        <i class="fa fa-pencil"></i>Inactivar</a>
-                                    <a *ngIf="novelty.status == 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(novelty, 'Activo')">
-                                        <i class="fa fa-pencil"></i>Activar</a>
+                                    <a class="dropdown-item text-info waves-light waves-effect caja-botones" target="_blank"
+                                        (click)="getData(novelty); openConfirm(add, 'Actualizar Tipo de Novedad')" (change)="createForm()"><i
+                                            class="far fa-edit"></i> Editar</a>
+                                    <a *ngIf="novelty.status == 'Activo'"
+                                        class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                                        (click)="activateOrInactivate(novelty, 'Inactivo')">
+                                        <i class="far fa-trash-alt"></i> Anular</a>
+                                    <a *ngIf="novelty.status == 'Inactivo'"
+                                        class="dropdown-item text-success waves-light waves-effect caja-botones"
+                                        (click)="activateOrInactivate(novelty, 'Activo')">
+                                        <i class="fas fa-check"></i> Activar</a>
                                 </div>
                             </div>
                         </div>
@@ -51,25 +65,28 @@
             </tbody>
         </table>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getNovelties($event)" aria-label="Default pagination"
-        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+        [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
+        (pageChange)="getNovelties($event)" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+        boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
     </ngb-pagination>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> {{ selected }} </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-        </button>
+
+<ng-template #add let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="text-primary modal-title">{{ selected }}</h4>
+            <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
+                (click)="modal.dismiss('Cross click')"></button>
+        </div>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="custom-label" for="tipo_novedad">Tipo de Novedad</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="concept" id="tipo_novedad" required>
+                    <input type="text" class="form-control form-control-sm" formControlName="concept" id="tipo_novedad"
+                        required>
                     <!-- <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
                         </small>
@@ -77,7 +94,8 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label class="custom-label" for="modalidad">Modalidad</label>
-                    <select class="form-control form-control-sm" name="modalidad" formControlName="modality" id="modalidad">
+                    <select class="form-control form-control-sm" name="modalidad" formControlName="modality"
+                        id="modalidad">
                         <option *ngFor="let modality of modalities" [value]="modality.valor">
                             {{ modality.clave }}
                         </option>
@@ -89,7 +107,8 @@
                 </div>
                 <div class="form-group col-md-12">
                     <label class="custom-label" for="nombre_novedad">Nombre de la novedad</label>
-                    <input type="text" class="form-control form-control-sm" id="nombre_novedad" formControlName="novelty" required>
+                    <input type="text" class="form-control form-control-sm" id="nombre_novedad"
+                        formControlName="novelty" required>
                     <!-- <div class="col-md-7 offset-4">
                         <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
                         </small>
@@ -98,13 +117,16 @@
             </div>
         </form>
     </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createNovelty()">Guardar</button>
-        </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
+            Cancelar
+        </button>
+        <button type="button" (click)="createNovelty()" class="btn btn-primary">
+            Agregar
+        </button>
     </div>
-</app-modal-basic>
+</ng-template>
+
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

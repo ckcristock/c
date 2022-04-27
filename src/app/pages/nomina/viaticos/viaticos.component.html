@@ -1,133 +1,165 @@
 <div class="card">
     <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-info btn-sm" style="float: right" [routerLink]="['/nomina/crear-viatico']">
-        Crear Viatico
-      </button>
-            <h5 class="text-primary">Viaticos</h5>
-            <p>Listado de todos los viaticos creados</p>
-            <div class="form-row mt-2">
-                <div class="form-group col-md-2">
-                    <label for="">Funcionario</label>
-                    <ng-select [items]="people" (change)="getAll()" [(ngModel)]="filtros.person_id" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
-                    </ng-select>
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="">F. Creación</label>
-                    <input type="date" class="form-control" [(ngModel)]="filtros.creation_date" (change)="getAll()" />
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="">F. Salida</label>
-                    <input type="date" class="form-control" [(ngModel)]="filtros.departure_date" (change)="getAll()" />
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="">Estado</label>
-                    <select class="form-control" [(ngModel)]="filtros.state" (change)="getAll()">
-            <option *ngFor="let state of states" [value]="state.clave">
-              {{ state.clave }}
-            </option>
-          </select>
-                </div>
+        <div class="card-title d-flex justify-content-between">
+            <h4 class="text-primary">Viaticos</h4>
+            <div class="btn-group rounded">
+                <button class="btn btn-primary btn-sm" style="float: right" [routerLink]="['/nomina/crear-viatico']">
+                    Agregar
+                </button>
+                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                    <i class="fas fa-sliders-h"></i> Filtros
+                </button>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <table class="table table-borderless table-striped" *ngIf="!loading && data.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th>Funcionario</th>
-                    <th>Func. Creó</th>
-                    <th>F. Creación</th>
-                    <th>F. Salida</th>
-                    <th># Días</th>
-                    <th>Total COP</th>
-                    <th>Total USD</th>
-                    <th>Estado</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of data" [ngClass]="{
-            'bg-success text-dark': item.state == 'Aprobado',
-            'bg-danger text-white': item.state == 'Inactivo'
-          }">
-                    <td class="d-flex">
-                        <img class="rounded-circle avatar-sm" src="{{ item.person.image | image: 'users' }}" />
-                        <span class="ml-2">
-              {{ item.person.first_name | titlecase }}
-              {{ item.person.first_surname | titlecase }}
-            </span>
-                    </td>
-                    <td>
-                        {{ item.user.person.first_name | titlecase }} {{ item.user.person.first_surname | titlecase }}
-                    </td>
-                    <td>{{ item.created_at | date: "dd/MM/yyyy" }}</td>
-                    <td>{{ item.departure_date | date: "dd/MM/yyyy" }}</td>
-                    <td>{{ item.n_nights }}</td>
-                    <td>{{ item.total_cop | currency:'':'' }}</td>
-                    <td>{{ item.total_usd | currency:'':'' }}</td>
-                    <td>{{ item.state }}</td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light" type="button">
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                                <div ngbDropdownMenu>
-                                    <a [routerLink]="['/nomina/ver-viatico', item.id]" class="dropdown-item waves-light waves-effect caja-botones">
-                                        <i class="far fa-eye"></i> Ver</a>
-                                    <a [routerLink]="['/nomina/editar-viatico', item.id]" class="
-                      dropdown-item
-                      waves-light
-                      text-info
-                      waves-effect
-                      caja-botones
-                    ">
-                                        <i class="far fa-edit"></i> Editar</a>
-                                    <a *ngIf="
-                      permission.permissions.approve && item.state != 'Aprobado'
-                    " (click)="changeState(item, 'Aprobado')" class="
-                      dropdown-item
-                      waves-light
-                      text-success
-                      waves-effect
-                      caja-botones
-                    ">
-                                        <i class="far fa-thumbs-up"></i> Aprobar</a>
-                                    <a *ngIf="
-                      permission.permissions.approve &&
-                      item.state == 'Aprobado'
-                    " [routerLink]="['legalizar', item.id]" routerLinkActive="router-link-active" class="
-                      dropdown-item
-                      waves-light
-                      text-success
-                      waves-effect
-                      caja-botones
-                    ">
-                                        <i class="far fa-thumbs-up"></i> Legalizar</a>
-                                    <a *ngIf="!item.state == ''" (click)="changeState(item, 'Inactivo')" class="
-                      dropdown-item
-                      waves-light
-                      text-danger
-                      waves-effect
-                      caja-botones
-                    ">
-                                        <i class="far fa-trash-alt"></i> Anular</a>
-                                </div>
+        <hr class="line">
+        <div class="container">
+            <mat-accordion multi>
+                <mat-expansion-panel class="mat-elevation-z0">
+                    <div class="container">
+                        <div class="row">
+                            <div class="input-group-sm col-md-3">
+                                <label for="">Funcionario</label>
+                                <ng-select [items]="people" (change)="getAll()" [(ngModel)]="filtros.person_id" bindLabel="text"
+                                    bindValue="value" loadingText="loading " ngDefaultControl>
+                                </ng-select>
+                            </div>
+                            <div class="input-group-sm col-md-3">
+                                <label for="">F. Creación</label>
+                                <input type="date" class="form-control" [(ngModel)]="filtros.creation_date" (change)="getAll()" />
+                            </div>
+                            <div class="input-group-sm col-md-3">
+                                <label for="">F. Salida</label>
+                                <input type="date" class="form-control" [(ngModel)]="filtros.departure_date" (change)="getAll()" />
+                            </div>
+                            <div class="input-group-sm col-md-3">
+                                <label for="">Estado</label>
+                                <select class="form-control" [(ngModel)]="filtros.state" (change)="getAll()">
+                                    <option *ngFor="let state of states" [value]="state.clave">
+                                        {{ state.clave }}
+                                    </option>
+                                </select>
                             </div>
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getAll($event)" aria-label="Default pagination"
-            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+                        <!-- <div class="row">
+                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
+                                <mat-label> </mat-label>
+                                <input matInput type="text" placeholder="">
+                            </mat-form-field>
+                            <mat-form-field class="col-md-2" appearance="outline">
+                                <mat-label> </mat-label>
+                                <mat-select>
+                                    <mat-option value=""> </mat-option>
+                                </mat-select>
+                            </mat-form-field>                                
+                        </div> -->
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+        <div class="container" style="font-size: small;">
+            <table class="table table-bordered table-striped table-sm" *ngIf="!loading && data.length > 0; else notData">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Funcionario</th>
+                        <th>Func. Creó</th>
+                        <th>F. Creación</th>
+                        <th>F. Salida</th>
+                        <th># Días</th>
+                        <th>Total COP</th>
+                        <th>Total USD</th>
+                        <th>Estado</th>
+                        <th class="text-center col-1">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of data" [ngClass]="{
+                'text-primary': item.state == 'Aprobado',
+                'text-danger': item.state == 'Inactivo'
+              }">       <td>
+                <img class="img-thumbnail rounded-circle header-profile-user mx-auto d-block" src="{{ item.person.image | image: 'users' }}" />
+              </td>
+                        <td>
+                            
+                            
+                                {{ item.person.first_name | titlecase }}
+                                {{ item.person.first_surname | titlecase }}
+                         
+                        </td>
+                        <td>
+                            {{ item.user.person.first_name | titlecase }} {{ item.user.person.first_surname | titlecase
+                            }}
+                        </td>
+                        <td>{{ item.created_at | date: "dd/MM/yyyy" }}</td>
+                        <td>{{ item.departure_date | date: "dd/MM/yyyy" }}</td>
+                        <td>{{ item.n_nights }}</td>
+                        <td>{{ item.total_cop | currency:'':'' }}</td>
+                        <td>{{ item.total_usd | currency:'':'' }}</td>
+                        <td>{{ item.state }}</td>
+                        <td>
+                            <div class="text-center">
+                                <div ngbDropdown class="dropdown-primary">
+                                    <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light"
+                                        type="button">
+                                        <i class="mdi mdi-chevron-down"></i>
+                                    </button>
+                                    <div ngbDropdownMenu>
+                                        <a [routerLink]="['/nomina/ver-viatico', item.id]"
+                                            class="dropdown-item waves-light waves-effect caja-botones">
+                                            <i class="far fa-eye"></i> Ver</a>
+                                        <a [routerLink]="['/nomina/editar-viatico', item.id]" class="
+                          dropdown-item
+                          waves-light
+                          text-info
+                          waves-effect
+                          caja-botones
+                        ">
+                                            <i class="far fa-edit"></i> Editar</a>
+                                        <a *ngIf="
+                          permission.permissions.approve && item.state != 'Aprobado'
+                        " (click)="changeState(item, 'Aprobado')" class="
+                          dropdown-item
+                          waves-light
+                          text-success
+                          waves-effect
+                          caja-botones
+                        ">
+                                            <i class="far fa-thumbs-up"></i> Aprobar</a>
+                                        <a *ngIf="
+                          permission.permissions.approve &&
+                          item.state == 'Aprobado'
+                        " [routerLink]="['legalizar', item.id]" routerLinkActive="router-link-active" class="
+                          dropdown-item
+                          waves-light
+                          text-success
+                          waves-effect
+                          caja-botones
+                        ">
+                                            <i class="far fa-thumbs-up"></i> Legalizar</a>
+                                        <a *ngIf="!item.state == ''" (click)="changeState(item, 'Inactivo')" class="
+                          dropdown-item
+                          waves-light
+                          text-danger
+                          waves-effect
+                          caja-botones
+                        ">
+                                            <i class="far fa-trash-alt"></i> Anular</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
+            (pageChange)="getAll($event)" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
+            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
         </ngb-pagination>
     </div>
 </div>
+
 <ng-template #notData>
     <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

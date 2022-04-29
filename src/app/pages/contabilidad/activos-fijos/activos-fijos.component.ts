@@ -530,13 +530,27 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
   }
 
   dateRangeChanged2(event){
-    this.ReporteModel.Fechas = event.formatted;
+    this.ReporteModel.Fechas = event.target.value;
   }
-
+  fechita:any;
+  fechitaF(event){    
+    this.fechita = event.target.value;  
+    if(this.fechita2 !=null){
+      this.ReporteModel.Fechas = this.fechita + ' - ' + this.fechita2;
+    }  
+  }
+  fechita2:any;
+  fechitaF2(event){
+    this.fechita2 = event.target.value;
+    if(this.fechita !=null){
+      this.ReporteModel.Fechas = this.fechita + ' - ' + this.fechita2;
+    }  
+  }
   loadListasDatosReporte() {
     this.http.get(environment.ruta+'php/activofijo/datos_reporte.php').subscribe((data:any) => {
       this.listaTipoActivo = data.Tipos_Activos;
       this.listaCentroCosto = data.Centro_Costos;
+      console.warn(this.listaCentroCosto)
     })
   }
 

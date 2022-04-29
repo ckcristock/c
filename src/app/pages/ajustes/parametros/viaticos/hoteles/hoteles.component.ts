@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HotelesService } from './hoteles.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
+import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-hoteles',
@@ -9,13 +11,24 @@ import { SwalService } from '../../../informacion-base/services/swal.service';
   styleUrls: ['./hoteles.component.scss']
 })
 export class HotelesComponent implements OnInit {
-  @ViewChild('modal') modal:any;
-  loading:boolean = false;
+  @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
+  loading: boolean = false;
   form: FormGroup;
-  cities:any[] = [];
-  hotels:any[] = [];
-  hotel:any = {};
-  title:any = '';
+  cities: any[] = [];
+  hotels: any[] = [];
+  hotel: any = {};
+  title: any = '';
   pagination = {
     page: 1,
     pageSize: 5,
@@ -24,24 +37,44 @@ export class HotelesComponent implements OnInit {
   filtro = {
     tipo: ''
   }
-  constructor( 
-                private fb:FormBuilder,
-                private _hoteles: HotelesService,
-                private _swal: SwalService
-              ) { }
+  constructor(
+    private fb: FormBuilder,
+    private _hoteles: HotelesService,
+    private _swal: SwalService,
+    private modalService: NgbModal,
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
     this.getCities();
     this.getHotels();
   }
-  
-  openModal(){
+
+  openModal() {
     this.modal.show();
-    this.title = 'Nuevo hotel';
   }
 
-  createForm(){
+  closeResult = '';
+  public openConfirm(confirm, titulo) {
+    this.title = titulo
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    this.form.reset();
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  createForm() {
     this.form = this.fb.group({
       id: [this.hotel.id],
       type: ['', Validators.required],
@@ -57,28 +90,27 @@ export class HotelesComponent implements OnInit {
     })
   }
 
-  getCities(){
-    this._hoteles.getCities().subscribe((r:any) => {
+  getCities() {
+    this._hoteles.getCities().subscribe((r: any) => {
       this.cities = r.data;
     });
   }
 
-  getHotels( page = 1 ){
+  getHotels(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtro
     }
     this.loading = true;
-    this._hoteles.getHotels(params).subscribe((r:any) => {
+    this._hoteles.getHotels(params).subscribe((r: any) => {
       this.hotels = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     });
   }
 
-  getHotel(hotel){
-    this.hotel = {...hotel};
-    this.title = 'Editar Hotel';
+  getHotel(hotel) {
+    this.hotel = { ...hotel };
     this.form.patchValue({
       id: this.hotel.id,
       type: this.hotel.type,
@@ -94,8 +126,8 @@ export class HotelesComponent implements OnInit {
     })
   }
 
-  save(){
-    this._hoteles.createHotel(this.form.value).subscribe((r:any) => {
+  save() {
+    this._hoteles.createHotel(this.form.value).subscribe((r: any) => {
       this.modal.hide();
       this.getHotels();
       this.form.reset();

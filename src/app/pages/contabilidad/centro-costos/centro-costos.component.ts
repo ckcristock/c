@@ -30,7 +30,7 @@ export class CentroCostosComponent implements OnInit {
   @ViewChild('modalVerCentroCosto') modalVerCentroCosto: any;
   @ViewChild('alertSwal') alertSwal: any;
   enviromen:any;
-  public Cargando: boolean=false;
+  public Cargando: boolean=true;
   public Costos:any = [];
   public maxSize = 15; 
   public pageSize = 20; 
@@ -133,6 +133,7 @@ export class CentroCostosComponent implements OnInit {
     let queryString = this.getQueryParams();
     
     this.http.get(environment.ruta + 'php/centroscostos/lista_centros_costos.php'+queryString).subscribe((data: any) => {
+      this.Cargando = false;
       this.items = data.Centros;
       this.TotalItems = data.numReg;
     });
@@ -185,7 +186,7 @@ export class CentroCostosComponent implements OnInit {
   }
 
   filtrar(paginacion?) {
-
+    this.Cargando = true;
     if (paginacion != undefined && paginacion == 'No') {
       this.page = 1;
     }
@@ -195,7 +196,7 @@ export class CentroCostosComponent implements OnInit {
     this.http.get(environment.ruta + '/php/centroscostos/lista_centros_costos.php?'+queryString).subscribe((data: any) => {
       this.items = data.Centros;
       this.TotalItems = data.numReg;
-      
+      this.Cargando = false;
     });
     
   }

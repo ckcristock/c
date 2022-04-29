@@ -144,14 +144,31 @@ export class TabladepreciacionesComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  public OnDateRangeChanged( event:any){
-       
+  fechita:any;
+  fechitaF(event){    
+    this.fechita = event.target.value;  
+    if(this.fechita2 !=null){
+      this.Filtros.fechas_acta = this.fechita + ' - ' + this.fechita2;
+      this.ConsultaFiltrada();
+    }  
+  }
+  fechita2:any;
+  fechitaF2(event){
+    this.fechita2 = event.target.value;
+    if(this.fechita !=null){
+      this.Filtros.fechas_acta = this.fechita + ' - ' + this.fechita2;
+      this.ConsultaFiltrada();
+    }  
+  }
+
+/*   public OnDateRangeChanged( event:any){
+    console.log(event.targetElement.value)
     if (event.formatted != "") {
       this.Filtros.fechas_acta = event.formatted;
     } else {
       this.Filtros.fechas_acta = '';
     }
-      this.ConsultaFiltrada();
+      this.ConsultaFiltrada(); 
     
-  }
+  } */
 }

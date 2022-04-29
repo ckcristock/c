@@ -23,8 +23,8 @@
                         </td>
                         <td style="vertical-align: middle;"> {{ vacation.name | titlecase }} </td>
                         <td style="vertical-align: middle;"> {{ vacation.dependency }} </td>
-                        <td style="vertical-align: middle;"> {{ vacation.date_start | date:'dd-MM-yyyy' }} </td>
-                        <td style="vertical-align: middle;"> {{ vacation.date_end | date:'dd-MM-yyyy' }} </td>
+                        <td style="vertical-align: middle;"> {{ vacation.date_start | date:'longDate' }} </td>
+                        <td style="vertical-align: middle;"> {{ vacation.date_end | date:'longDate' }} </td>
                         <td class="text-center">
                             <button class="btn btn-sm" (click)="openModal(); vacationData(vacation)" placement="right" ngbTooltip="Ver">
                                 <span aria-hidden="true">

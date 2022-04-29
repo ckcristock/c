@@ -18,6 +18,7 @@ export class MediosmagneticosComponent implements OnInit {
   public alertOption: SweetAlertOptions;
   public IdMedioMag = '';
   public url:string = this.router.url;
+  public Cargando: boolean=true;
   public formatoEspecial:boolean = false;
   enviromen:any;
 
@@ -61,6 +62,7 @@ export class MediosmagneticosComponent implements OnInit {
     }
 
     this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/lista_medios_magneticos.php',{params: p}).subscribe((data:any)=> {
+      this.Cargando = false
       this.listaMediosMag = data;
     })
   }

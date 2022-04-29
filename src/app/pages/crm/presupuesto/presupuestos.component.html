@@ -26,7 +26,7 @@
                 <tbody>
                     <tr *ngFor="let item of budgets" [ngClass]="{'text-danger font-weight-bold': ( item.state == 'Inactivo' )}">
                         <td> PRES{{ item.id }} </td>
-                        <td> {{ item.created_at | date:'dd-MM-YYYY' }} </td>
+                        <td> {{ item.created_at | date:'longDate' }} </td>
     
                         <td> {{ item.customer.name }} </td> 
                         <td> {{ item.destiny.name }} </td>

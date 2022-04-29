@@ -45,7 +45,7 @@ export class NegociosComponent implements OnInit {
   today = new Date().toISOString().slice(0, 10);
   companies: any[];
   companySelected: any;
-
+  loading:boolean = true;
   cities: any;
   city: any;
 
@@ -65,7 +65,9 @@ export class NegociosComponent implements OnInit {
   }
 
   getNegocios() {
+    this.loading = true;
     this._negocios.getBusinesses().subscribe( (resp: any) => {
+      this.loading = false;
       this.negocios = resp.data;
     });
     // this._negocios.getNeg().subscribe((resp: any) => {

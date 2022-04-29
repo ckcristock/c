@@ -109,6 +109,22 @@ myDateRangePickerOptions: IMyDrpOptions = {
     
     this.filtrar(); 
   }
+  fechita:any;
+  fechitaF(event){    
+    this.fechita = event.target.value;  
+    if(this.fechita2 !=null){
+      this.filtros.fechas = this.fechita + ' - ' + this.fechita2;
+      this.filtrar();
+    }  
+  }
+  fechita2:any;
+  fechitaF2(event){
+    this.fechita2 = event.target.value;
+    if(this.fechita !=null){
+      this.filtros.fechas = this.fechita + ' - ' + this.fechita2;
+      this.filtrar();
+    }  
+  }
 
   getStrConditions(pagination = false) {
     let params:any = {};

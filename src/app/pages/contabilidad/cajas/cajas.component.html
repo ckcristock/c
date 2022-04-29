@@ -6,39 +6,48 @@
                 <button (click)="newPrettyCash.emit(true)" class="btn btn-sm btn-primary">
                     <i class="fa fa-plus"></i>Agregar
                 </button>
+                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+                    <i class="fas fa-sliders-h"></i> Filtros
+                </button>
             </div>
         </div>
         <hr class="line">
-        <div class="container mt-4" style="font-size: small;">
-            <table class="table table-bordered table-striped table-sm" *ngIf="!loading && prettyCashList.length; else notData">
-                <thead>
-                    <tr>
-                        <th>Caja</th>
-                        <th>Plan Cuenta</th>
-                        <th>Responsable</th>
-                        <th>Fun. Creó</th>
-                        <th>Saldo Inicial</th>
-                        <th>Saldo Actual</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of prettyCashList">
-                        <td>{{ item.description }}</td>
-                        <td>
-                            {{ item.account_plan.name }} - {{ item.account_plan.code }}
-                        </td>
-                        <td>
-                            {{ item.person.first_name }} {{ item.person.first_surname }}
-                        </td>
-                        <td>
-                            {{ item.user.person.first_name }} {{ item.user.person.first_surname }}
-                        </td>
-                        <td>{{ item.initial_balance }}</td>
-                        <td>{{ item.account_plan.balance.balance }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <mat-accordion multi>
+            <mat-expansion-panel class="mat-elevation-z0">
+                <div class="alert alert-danger" role="alert">
+                    Aún no tenemos filtros para esta sección.
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <table class="table table-bordered table-striped table-sm" style="font-size: small;"
+            *ngIf="!loading && prettyCashList.length; else notData">
+            <thead>
+                <tr>
+                    <th>Caja</th>
+                    <th>Plan Cuenta</th>
+                    <th>Responsable</th>
+                    <th>Fun. Creó</th>
+                    <th>Saldo Inicial</th>
+                    <th>Saldo Actual</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of prettyCashList">
+                    <td>{{ item.description }}</td>
+                    <td>
+                        {{ item.account_plan.name }} - {{ item.account_plan.code }}
+                    </td>
+                    <td>
+                        {{ item.person.first_name }} {{ item.person.first_surname }}
+                    </td>
+                    <td>
+                        {{ item.user.person.first_name }} {{ item.user.person.first_surname }}
+                    </td>
+                    <td>{{ item.initial_balance }}</td>
+                    <td>{{ item.account_plan.balance.balance }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <app-crear-caja (saved)="getPrettyCash()" [openModal]="newPrettyCash"></app-crear-caja>
 </div>

@@ -125,7 +125,7 @@
                         <input type="checkbox" (change)="guardarPresupuesto(item.id, item.total_cop)"/>
                         <label [for]=" item.id " class="ml-1 "> PRES {{ item.id }} </label>
                     </td>
-                    <td> {{ item.created_at | date:'dd-MM-YYYY' }} </td>
+                    <td> {{ item.created_at | date:'longDate' }} </td>
                     <td> {{ item.customer.name }} </td>
                     <td> {{ item.destiny.name }} </td>
                     <td> {{ item.line }} </td>
@@ -175,7 +175,7 @@
                         <input type="checkbox" [selected]="cotizacionesSeleccionadas.includes(item.id)" [change]=" guardarCotizacion(item.id) ">
                         <label [for]=" item.id " class="ml-1 "> PRES {{ item.id }} </label>
                     </td>
-                    <td> {{ item.created_at | date:'dd-MM-YYYY' }} </td>
+                    <td> {{ item.created_at | date:'longDate' }} </td>
                     <td> {{ item.customer.name }} </td>
                     <td> {{ item.destiny.name }} </td>
                     <td> {{ item.line }} </td>

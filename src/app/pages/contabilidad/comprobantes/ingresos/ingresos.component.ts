@@ -20,18 +20,19 @@ import { MatAccordion } from '@angular/material/expansion';
 export class IngresosComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   @ViewChild('modalNuevoComprobante') modalNuevoComprobante: any;
   @ViewChild('modalVerComprobante') modalVerComprobante: any;
   @ViewChild('alertSwal') alertSwal: any;
+  public Cargando: boolean = true;
   envirom: any;
   myDateRangePickerOptions: IMyDrpOptions = {
     width: '240px',
@@ -172,6 +173,7 @@ export class IngresosComponent implements OnInit {
   }
   ListarComprobantes() {
     this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php', { params: { tipo_comprobante: 'ingreso' } }).subscribe((data: any) => {
+      this.Cargando = false
       this.Comprobantes = data.Lista;
       this.TotalItems = data.numReg;
     });
@@ -187,6 +189,22 @@ export class IngresosComponent implements OnInit {
     setTimeout(() => {
       this.filtros();
     }, 100);
+  }
+  fechita: any;
+  fechitaF(event) {
+    this.fechita = event.target.value;
+    if (this.fechita2 != null) {
+      this.filtro.fechas = this.fechita + ' - ' + this.fechita2;
+      this.filtros();
+    }
+  }
+  fechita2: any;
+  fechitaF2(event) {
+    this.fechita2 = event.target.value;
+    if (this.fechita != null) {
+      this.filtro.fechas = this.fechita + ' - ' + this.fechita2;
+      this.filtros();
+    }
   }
 
   pagination() {
@@ -205,13 +223,14 @@ export class IngresosComponent implements OnInit {
   }
 
   filtros(pagination: boolean = false) {
-
+    this.Cargando = true
     let queryString = this.getQueryString(pagination);
 
     this.location.replaceState('/comprobantes/ingresos', queryString);
 
 
     this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php' + queryString).subscribe((data: any) => {
+      this.Cargando = false
       this.Comprobantes = data.Lista;
       this.TotalItems = data.numReg;
 

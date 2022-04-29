@@ -1,29 +1,26 @@
-<div class="card">
-    <div class="card-header">
+<table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
+    *ngIf="!loading && negocios.length > 0; else notData">
+    <thead>
+        <tr>
+            <th scope="col">Código</th>
+            <th scope="col">Empresa</th>
+            <th scope="col">Desripcion</th>
+            <th scope="col">Presupuesto</th>
+            <th scope="col">Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let neg of negocios">
+            <th scope="row"> <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{neg.code}}</a> </th>
+            <td>{{neg.third_party.first_name ? neg.third_party.first_name + " " + neg.third_party.first_surname :
+                neg.third_party.social_reason}}</td>
+            <td>{{neg.name}}</td>
+            <td>$ {{neg.budget_value |number}}</td>
+            <td>{{neg.date | date}}</td>
+        </tr>
 
-    </div>
-    <div class="card-body">
-
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">Código</th>
-                    <th scope="col">Empresa</th>
-                    <th scope="col">Desripcion</th>
-                    <th scope="col">Presupuesto</th>
-                    <th scope="col">Fecha</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let neg of negocios">
-                    <th scope="row"> <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{neg.code}}</a> </th>
-                    <td>{{neg.third_party.first_name ? neg.third_party.first_name + " " + neg.third_party.first_surname : neg.third_party.social_reason}}</td>
-                    <td>{{neg.name}}</td>
-                    <td>$ {{neg.budget_value |number}}</td>
-                    <td>{{neg.date | date}}</td>
-                </tr>
-
-            </tbody>
-        </table>
-    </div>
-</div>
+    </tbody>
+</table>
+<ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

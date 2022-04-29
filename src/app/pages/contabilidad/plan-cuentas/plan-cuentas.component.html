@@ -47,8 +47,8 @@
                         <mat-option value="Inactiva">Inactiva</mat-option>
                     </mat-select>
                 </mat-form-field>
-                    
-                    <!-- <div class="row">
+
+                <!-- <div class="row">
                             <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
                                 <mat-label> </mat-label>
                                 <input matInput type="text" placeholder="">
@@ -62,7 +62,7 @@
                         </div> -->
             </mat-expansion-panel>
         </mat-accordion>
-        <table class="table table-bordered table-striped table-sm" style="font-size: small;"
+        <table class="table table-bordered table-striped table-responsive-sm table-sm" style="font-size: small;"
             *ngIf="!Cargando && Planes.length > 0; else notData">
             <thead>
                 <tr>
@@ -70,7 +70,7 @@
                     <th>Nombre Cuenta</th>
                     <th>Codigo Cuenta NIIF</th>
                     <th>Nombre Cuenta NIIF</th>
-                    <th>Estado</th>
+                    <th class="text-center col-1">Estado</th>
                     <th class="text-center col-1">Acciones</th>
                 </tr>
             </thead>
@@ -94,7 +94,11 @@
                     <!-- <td> {{ item.Empresa }} </td> -->
                     <td>{{ item.Codigo_Niif }}</td>
                     <td>{{ item.Nombre_Niif }}</td>
-                    <td>{{ item.Estado }}</td>
+                    <td class="text-center">
+                        <span [ngClass]="item.Estado == 'INACTIVO' ? 'badge badge-danger': 'badge badge-primary'">
+                            {{ item.Estado }}
+                        </span>
+                    </td>
                     <td>
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
@@ -137,111 +141,111 @@
                             </div> -->
         <!-- {{(page*maxSize)-maxSize+1}} al {{ TotalItems>page*maxSize ? (page*maxSize) : TotalItems }} de {{ TotalItems }} <ngb-pagination class="pull-right" [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="10" [pageSize]="maxSize" size="sm" (pageChange)="paginacion()" [rotate]="true" [boundaryLinks]="true"></ngb-pagination> -->
     </div>
+</div>
 
+<app-modal-basic #modalCrearCuenta [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">Nueva cuenta contable</h4>
+        <button type="button" class="close basic-close" (click)="modalCrearCuenta.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body" style="font-size: 11px;">
 
-    <app-modal-basic #modalCrearCuenta [dialogClass]="'modal-lg'">
-        <div class="app-modal-header">
-            <h4 class="modal-title">Nueva cuenta contable</h4>
-            <button type="button" class="close basic-close" (click)="modalCrearCuenta.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="app-modal-body" style="font-size: 11px;">
-
-            <form #FormPlan="ngForm">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div style="max-height:420px;overflow-x:hidden;overflow-y:auto">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h6 class="m-l-10">Plan Unico de Cuentas - PUC</h6>
-                                        </div>
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Tipo P
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <select ngModel required name="Tipo_P" id="Tipo_P"
-                                                class="form-control form-control-sm">
-                                                <option value="CLASE">CLASE</option>
-                                                <option value="GRUPO">GRUPO</option>
-                                                <option value="CUENTA">CUENTA</option>
-                                                <option value="SUBCUENTA">SUBCUENTA</option>
-                                                <option value="AUXILIAR">AUXILIAR</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Código
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <input type="text" ngModel required name="Codigo" id="Codigo"
-                                                class="form-control form-control-sm" (blur)="validarPUC($event,'pcga')">
-                                        </div>
-
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Cuenta
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <input type="text" ngModel required name="Nombre"
-                                                class="form-control form-control-sm">
-                                        </div>
-
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            NIIF
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <select ngModel required name="Niif" id="Niif"
-                                                class="form-control form-control-sm">
-                                                <option value="NIFF">NIFF</option>
-                                                <option value="PGCA">PGCA</option>
-                                                <option value="NIIF">NIIF - PGCA</option>
-                                            </select>
-                                        </div>
+        <form #FormPlan="ngForm">
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="max-height:420px;overflow-x:hidden;overflow-y:auto">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h6 class="m-l-10">Plan Unico de Cuentas - PUC</h6>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h6 class="m-l-10">Normas Internacionales - NIIF</h6>
-                                        </div>
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Tipo P
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <select ngModel required name="Tipo_P" id="Tipo_P"
+                                            class="form-control form-control-sm">
+                                            <option value="CLASE">CLASE</option>
+                                            <option value="GRUPO">GRUPO</option>
+                                            <option value="CUENTA">CUENTA</option>
+                                            <option value="SUBCUENTA">SUBCUENTA</option>
+                                            <option value="AUXILIAR">AUXILIAR</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Código
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <input type="text" ngModel required name="Codigo" id="Codigo"
+                                            class="form-control form-control-sm" (blur)="validarPUC($event,'pcga')">
+                                    </div>
 
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Tipo NIFF
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <select ngModel required name="Tipo_Niif" id="Tipo_Niif"
-                                                class="form-control form-control-sm">
-                                                <option value="CLASE">CLASE</option>
-                                                <option value="GRUPO">GRUPO</option>
-                                                <option value="CUENTA">CUENTA</option>
-                                                <option value="SUBCUENTA">SUBCUENTA</option>
-                                                <option value="AUXILIAR">AUXILIAR</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Código NIIF
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <input type="text" ngModel required name="Codigo_Niif" id="Codigo_Niif"
-                                                class="form-control form-control-sm" (blur)="validarPUC($event,'niif')">
-                                        </div>
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Cuenta
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <input type="text" ngModel required name="Nombre"
+                                            class="form-control form-control-sm">
+                                    </div>
 
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Nombre NIFF
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <input type="text" ngModel required name="Nombre_Niif"
-                                                class="form-control form-control-sm">
-                                        </div>
-
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        NIIF
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <select ngModel required name="Niif" id="Niif"
+                                            class="form-control form-control-sm">
+                                            <option value="NIFF">NIFF</option>
+                                            <option value="PGCA">PGCA</option>
+                                            <option value="NIIF">NIIF - PGCA</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h6 class="m-l-10">Normas Internacionales - NIIF</h6>
+                                    </div>
 
-                            <hr>
-                            <div class="row">
-                                <!-- <div class="col-md-6">
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Tipo NIFF
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <select ngModel required name="Tipo_Niif" id="Tipo_Niif"
+                                            class="form-control form-control-sm">
+                                            <option value="CLASE">CLASE</option>
+                                            <option value="GRUPO">GRUPO</option>
+                                            <option value="CUENTA">CUENTA</option>
+                                            <option value="SUBCUENTA">SUBCUENTA</option>
+                                            <option value="AUXILIAR">AUXILIAR</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Código NIIF
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <input type="text" ngModel required name="Codigo_Niif" id="Codigo_Niif"
+                                            class="form-control form-control-sm" (blur)="validarPUC($event,'niif')">
+                                    </div>
+
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Nombre NIFF
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <input type="text" ngModel required name="Nombre_Niif"
+                                            class="form-control form-control-sm">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="row">
+                            <!-- <div class="col-md-6">
                                 <label for="company_id">Empresa</label>
                                 <select ngModel name="Id_Empresa" id="Id_Empresa" class="form-control form-control-sm" required>
                                 <option *ngFor="let item of companies" [value]="item.value">
@@ -249,635 +253,631 @@
                                 </option>
                                 </select>
                             </div> -->
-                                <div class="col-md-6">
-                                    <label for="">Cuenta es Movimiento?</label>
-                                    <select [ngModel]="'N'" name="Movimiento" id="Movimiento"
-                                        class="form-control form-control-sm" (change)="habCampos($event.target.value)">
-                                        <option value="S">Si</option>
-                                        <option value="N" selected>No</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-6">
+                                <label for="">Cuenta es Movimiento?</label>
+                                <select [ngModel]="'N'" name="Movimiento" id="Movimiento"
+                                    class="form-control form-control-sm" (change)="habCampos($event.target.value)">
+                                    <option value="S">Si</option>
+                                    <option value="N" selected>No</option>
+                                </select>
                             </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label for="">Base</label>
-                                    <select [ngModel]="'N'" name="Base" id="Base"
-                                        class="form-control form-control-sm input form" disabled
-                                        (change)="habInfoValue($event.target.value)">
-                                        <option value="S">Si</option>
-                                        <option value="N" selected>No</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Valor</label>
-                                    <input type="text" ngModel name="Valor" id="Valor" value="0,00"
-                                        class="form-control form-control-sm input form" disabled disabled>
-                                    <label for="">Porcentaje</label>
-                                    <input type="text" class="form-control form-control-sm input" disabled
-                                        value="0,00000" ngModel name="Porcentaje" id="Porcentaje" disabled>
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="">Base</label>
+                                <select [ngModel]="'N'" name="Base" id="Base"
+                                    class="form-control form-control-sm input form" disabled
+                                    (change)="habInfoValue($event.target.value)">
+                                    <option value="S">Si</option>
+                                    <option value="N" selected>No</option>
+                                </select>
                             </div>
 
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Ajuste Contable</label>
-                                    <select [ngModel]="'N'" name="Ajuste_Contable" id="Ajuste_Contable"
-                                        class="form-control form-control-sm input form" disabled>
-                                        <option value="S">Si</option>
-                                        <option value="N" selected>No</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label for="">Valor</label>
+                                <input type="text" ngModel name="Valor" id="Valor" value="0,00"
+                                    class="form-control form-control-sm input form" disabled disabled>
+                                <label for="">Porcentaje</label>
+                                <input type="text" class="form-control form-control-sm input" disabled value="0,00000"
+                                    ngModel name="Porcentaje" id="Porcentaje" disabled>
+                            </div>
+                        </div>
 
-                                <div class="col-md-4">
-                                    <label for="">Naturaleza</label>
-                                    <select ngModel name="Naturaleza" id="Naturaleza"
-                                        class="form-control form-control-sm ">
-                                        <option value="D">Debito</option>
-                                        <option value="C" selected>Credito</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Cta Comprobante Cie Anual</label>
-                                    <select [ngModel]="'N'" name="Cie_Anual" id="Cie_Anual"
-                                        class="form-control form-control-sm input form" disabled>
-                                        <option value="S">Si</option>
-                                        <option value="N" selected>No</option>
-                                    </select>
-                                </div>
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Ajuste Contable</label>
+                                <select [ngModel]="'N'" name="Ajuste_Contable" id="Ajuste_Contable"
+                                    class="form-control form-control-sm input form" disabled>
+                                    <option value="S">Si</option>
+                                    <option value="N" selected>No</option>
+                                </select>
                             </div>
 
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Cierra Terceros</label>
-                                    <select [ngModel]="'N'" name="Cierra_Terceros" id="Cierra_Terceros"
-                                        class="form-control form-control-sm input form" disabled>
-                                        <option value="S">Si</option>
-                                        <option value="N" selected>No</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Nit Cierre</label>
-                                    <input type="text" ngModel name="Nit_Cierre" id="Nit_Cierre"
-                                        class="form-control form-control-sm input form" disabled>
-                                </div>
+                            <div class="col-md-4">
+                                <label for="">Naturaleza</label>
+                                <select ngModel name="Naturaleza" id="Naturaleza" class="form-control form-control-sm ">
+                                    <option value="D">Debito</option>
+                                    <option value="C" selected>Credito</option>
+                                </select>
                             </div>
 
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Banco</label>
-                                    <select [ngModel]="'N'" name="Banco" id="Banco"
-                                        (change)="habBancos($event.target.value)"
-                                        class="form-control form-control-sm input form" disabled>
-                                        <option value="S">Si</option>
-                                        <option value="N" selected>No</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label for="">Cta Comprobante Cie Anual</label>
+                                <select [ngModel]="'N'" name="Cie_Anual" id="Cie_Anual"
+                                    class="form-control form-control-sm input form" disabled>
+                                    <option value="S">Si</option>
+                                    <option value="N" selected>No</option>
+                                </select>
+                            </div>
+                        </div>
 
-                                <div class="col-md-4">
-                                    <label for="">&nbsp;</label>
-                                    <select ngModel name="Cod_Banco" id="Cod_Banco"
-                                        class="form-control form-control-sm input form" disabled>
-                                        <option value="">Seleccione</option>
-                                        <option *ngFor="let item of Bancos" [value]="item.id">{{ item.name }}</option>
-                                    </select>
-                                </div>
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Cierra Terceros</label>
+                                <select [ngModel]="'N'" name="Cierra_Terceros" id="Cierra_Terceros"
+                                    class="form-control form-control-sm input form" disabled>
+                                    <option value="S">Si</option>
+                                    <option value="N" selected>No</option>
+                                </select>
                             </div>
 
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Nit</label>
-                                    <select [ngModel]="'N'" name="Nit" id="Nit"
-                                        class="form-control form-control-sm input form" disabled>
-                                        <option value="S">Si</option>
-                                        <option value="N" selected>No</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label for="">Nit Cierre</label>
+                                <input type="text" ngModel name="Nit_Cierre" id="Nit_Cierre"
+                                    class="form-control form-control-sm input form" disabled>
+                            </div>
+                        </div>
 
-                                <div class="col-md-4">
-                                    <label for="">Clase Cuenta</label>
-                                    <select ngModel name="Clase_Cta" id="Clase_Cta"
-                                        class="form-control form-control-sm input form" disabled>
-                                        <option value="1">Corriente</option>
-                                        <option value="2">Ahorros</option>
-                                    </select>
-                                </div>
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Banco</label>
+                                <select [ngModel]="'N'" name="Banco" id="Banco"
+                                    (change)="habBancos($event.target.value)"
+                                    class="form-control form-control-sm input form" disabled>
+                                    <option value="S">Si</option>
+                                    <option value="N" selected>No</option>
+                                </select>
                             </div>
 
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Documento</label>
-                                    <select [ngModel]="'N'" name="Documento" id="Documento"
-                                        class="form-control form-control-sm input form" disabled>
-                                        <option value="S">Si</option>
-                                        <option value="N" selected>No</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label for="">&nbsp;</label>
+                                <select ngModel name="Cod_Banco" id="Cod_Banco"
+                                    class="form-control form-control-sm input form" disabled>
+                                    <option value="">Seleccione</option>
+                                    <option *ngFor="let item of Bancos" [value]="item.id">{{ item.name }}</option>
+                                </select>
+                            </div>
+                        </div>
 
-                                <div class="col-md-4">
-                                    <label for="">Estado</label>
-                                    <select ngModel name="Estado" id="Estado" class="form-control form-control-sm ">
-                                        <option value="ACTIVO">ACTIVO</option>
-                                        <option value="INACTIVO">INACTIVO</option>
-                                        <option value="PENDIENTE">PENDIENTE</option>
-                                        <option value="CANCELADO">CANCELADO</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Cuenta Numero</label>
-                                    <input type="text" class="form-control form-control-sm input form" disabled ngModel
-                                        name="Cta_Numero" id="Cta_Numero">
-                                </div>
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Nit</label>
+                                <select [ngModel]="'N'" name="Nit" id="Nit"
+                                    class="form-control form-control-sm input form" disabled>
+                                    <option value="S">Si</option>
+                                    <option value="N" selected>No</option>
+                                </select>
                             </div>
 
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Centro de Costos</label>
-                                    <select [ngModel]="'N'" name="Centro_Costo" id="Centro_Costos"
-                                        class="form-control form-control-sm input form" disabled>
-                                        <option value="S">Si</option>
-                                        <option value="N" selected>No</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label for="">Clase Cuenta</label>
+                                <select ngModel name="Clase_Cta" id="Clase_Cta"
+                                    class="form-control form-control-sm input form" disabled>
+                                    <option value="1">Corriente</option>
+                                    <option value="2">Ahorros</option>
+                                </select>
+                            </div>
+                        </div>
 
-                                <div class="col-md-4">
-                                    <label for="">Reporte</label>
-                                    <input type="text" class="form-control form-control-sm input" disabled ngModel
-                                        name="Reporte" id="Reporte">
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Documento</label>
+                                <select [ngModel]="'N'" name="Documento" id="Documento"
+                                    class="form-control form-control-sm input form" disabled>
+                                    <option value="S">Si</option>
+                                    <option value="N" selected>No</option>
+                                </select>
+                            </div>
 
-                                    <label for="">Exogena</label>
-                                    <select [ngModel]="'N'" name="Exogeno" id="Exogena"
-                                        class="form-control form-control-sm input form" disabled>
-                                        <option value="S">Si</option>
-                                        <option value="N" selected>No</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label for="">Estado</label>
+                                <select ngModel name="Estado" id="Estado" class="form-control form-control-sm ">
+                                    <option value="ACTIVO">ACTIVO</option>
+                                    <option value="INACTIVO">INACTIVO</option>
+                                    <option value="PENDIENTE">PENDIENTE</option>
+                                    <option value="CANCELADO">CANCELADO</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">Cuenta Numero</label>
+                                <input type="text" class="form-control form-control-sm input form" disabled ngModel
+                                    name="Cta_Numero" id="Cta_Numero">
+                            </div>
+                        </div>
+
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Centro de Costos</label>
+                                <select [ngModel]="'N'" name="Centro_Costo" id="Centro_Costos"
+                                    class="form-control form-control-sm input form" disabled>
+                                    <option value="S">Si</option>
+                                    <option value="N" selected>No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">Reporte</label>
+                                <input type="text" class="form-control form-control-sm input" disabled ngModel
+                                    name="Reporte" id="Reporte">
+
+                                <label for="">Exogena</label>
+                                <select [ngModel]="'N'" name="Exogeno" id="Exogena"
+                                    class="form-control form-control-sm input form" disabled>
+                                    <option value="S">Si</option>
+                                    <option value="N" selected>No</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
-
-        </div>
-        <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="button" class="btn btn-default btn-sm" (click)="modalCrearCuenta.hide()">Cancelar</button>
-                <button type="button" class="btn btn-primary btn-sm"
-                    [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                    (confirm)="guardarPlan(FormPlan, 'guardar')" [disabled]="!FormPlan.valid">Guardar</button>
             </div>
+        </form>
+
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-default btn-sm" (click)="modalCrearCuenta.hide()">Cancelar</button>
+            <button type="button" class="btn btn-primary btn-sm"
+                [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                (confirm)="guardarPlan(FormPlan, 'guardar')" [disabled]="!FormPlan.valid">Guardar</button>
         </div>
+    </div>
 
-    </app-modal-basic>
+</app-modal-basic>
 
-    <app-modal-basic #modalEditarCuenta [dialogClass]="'modal-lg'">
-        <div class="app-modal-header">
-            <h4 class="modal-title">Editar cuenta contable</h4>
-            <button type="button" class="close basic-close" (click)="modalEditarCuenta.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="app-modal-body" style="font-size: 11px;">
+<app-modal-basic #modalEditarCuenta [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">Editar cuenta contable</h4>
+        <button type="button" class="close basic-close" (click)="modalEditarCuenta.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body" style="font-size: 11px;">
 
-            <form #FormEditarPlan="ngForm">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div style="max-height:420px;overflow-x:hidden;overflow-y:auto">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h6 class="m-l-10">Plan Unico de Cuentas - PUC</h6>
-                                        </div>
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Tipo P
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <select [(ngModel)]="PlanCuentaModel.Tipo_P" required name="Tipo_P"
-                                                id="Tipo_P_Editar" class="form-control form-control-sm">
-                                                <option value="CLASE">CLASE</option>
-                                                <option value="GRUPO">GRUPO</option>
-                                                <option value="CUENTA">CUENTA</option>
-                                                <option value="SUBCUENTA">SUBCUENTA</option>
-                                                <option value="AUXILIAR">AUXILIAR</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Código
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <input type="text" [(ngModel)]="PlanCuentaModel.Codigo" required
-                                                name="Codigo" id="Codigo_Editar" class="form-control form-control-sm"
-                                                (blur)="validarPUC($event,'pcga',true)">
-                                        </div>
-
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Cuenta
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <input type="text" [(ngModel)]="PlanCuentaModel.Nombre" required
-                                                name="Nombre" class="form-control form-control-sm">
-                                        </div>
-
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            NIIF
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <select ngModel required name="Codigo_Niif" id="Codigo_Niif"
-                                                class="form-control form-control-sm">
-                                                <option value="NIFF">NIFF</option>
-                                                <option value="PGCA">PGCA</option>
-                                                <option value="NIIF">NIIF - PGCA</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h6 class="m-l-10">Normas Internacionales - NIIF</h6>
-                                        </div>
-
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Tipo NIFF
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <select [(ngModel)]="PlanCuentaModel.Tipo_Niif" required name="Tipo_Niif"
-                                                id="Tipo_Niif_Editar" class="form-control form-control-sm">
-                                                <option value="CLASE">CLASE</option>
-                                                <option value="GRUPO">GRUPO</option>
-                                                <option value="CUENTA">CUENTA</option>
-                                                <option value="SUBCUENTA">SUBCUENTA</option>
-                                                <option value="AUXILIAR">AUXILIAR</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Código NIIF
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <input type="text" [(ngModel)]="PlanCuentaModel.Codigo_Niif" required
-                                                name="Codigo_Niif" id="Codigo_Niif_Editar"
-                                                class="form-control form-control-sm"
-                                                (blur)="validarPUC($event,'niif',true)">
-                                        </div>
-
-                                        <div class="col-md-6 mt-2" style="text-align: left">
-                                            Nombre NIFF
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <input type="text" [(ngModel)]="PlanCuentaModel.Nombre_Niif" required
-                                                name="Nombre_Niif" class="form-control form-control-sm">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="">Cuenta es Movimiento?</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Movimiento" name="Movimiento"
-                                        id="Movimiento_Editar" class="form-control form-control-sm"
-                                        (change)="habCampos($event.target.value)">
-                                        <option value="S">Si</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-
-                                <div class="col-md-4">
-                                    <label for="">Base</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Base" name="Base" id="Base_Editar"
-                                        class="form-control form-control-sm input form"
-                                        (change)="habInfoValue($event.target.value)">
-                                        <option value="S">Si</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Valor</label>
-                                    <input type="text" [disabled]="PlanCuentaModel.Base == 'N'"
-                                        [(ngModel)]="PlanCuentaModel.Valor" name="Valor" id="Valor_Editar" value="0,00"
-                                        class="form-control form-control-sm input form">
-                                    <label for="">Porcentaje</label>
-                                    <input type="text"
-                                        [disabled]="PlanCuentaModel.Valor == '' || PlanCuentaModel.Movimiento == 'N'"
-                                        class="form-control form-control-sm input form" value="0,00000"
-                                        [(ngModel)]="PlanCuentaModel.Porcentaje" name="Porcentaje"
-                                        id="Porcentaje_Editar">
-                                </div>
-                            </div>
-
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Ajuste Contable</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Ajuste_Contable" name="Ajuste_Contable"
-                                        id="Ajuste_Contable_Editar" class="form-control form-control-sm input form">
-                                        <option value="S">Si</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Naturaleza</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Naturaleza" name="Naturaleza"
-                                        id="Naturaleza_Editar" class="form-control form-control-sm ">
-                                        <option value="D">Debito</option>
-                                        <option value="C">Credito</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Cta Comprobante Cie Anual</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Cie_Anual" name="Cie_Anual"
-                                        id="Cie_Anual_Editar" class="form-control form-control-sm input form">
-                                        <option value="S">Si</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Cierra Terceros</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Cierra_Terceros" name="Cierra_Terceros"
-                                        id="Cierra_Terceros_Editar" class="form-control form-control-sm input form">
-                                        <option value="S">Si</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Nit Cierre</label>
-                                    <input type="text" [(ngModel)]="PlanCuentaModel.Nit_Cierre" name="Nit_Cierre"
-                                        id="Nit_Cierre" class="form-control form-control-sm input form">
-                                </div>
-                            </div>
-
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Banco</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Banco" name="Banco" id="Banco_Editar"
-                                        (change)="habBancos($event.target.value)"
-                                        class="form-control form-control-sm input form">
-                                        <option value="S">Si</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">&nbsp;</label>
-                                    <select [disabled]="PlanCuentaModel.Banco == 'N'"
-                                        [(ngModel)]="PlanCuentaModel.Cod_Banco" name="Cod_Banco" id="Cod_Banco_Editar"
-                                        class="form-control form-control-sm input form">
-                                        <option value="">Seleccione</option>
-                                        <option *ngFor="let item of Bancos" [value]="item.Id_Banco">{{ item.Nombre }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Nit</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Nit" name="Nit" id="Nit_Editar"
-                                        class="form-control form-control-sm input form">
-                                        <option value="S">Si</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Clase Cuenta</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Clase_Cta" name="Clase_Cta"
-                                        id="Clase_Cta_Editar" class="form-control form-control-sm input form">
-                                        <option value="">Seleccione</option>
-                                        <option value="Corriente">Corriente</option>
-                                        <option value="Ahorros">Ahorros</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Documento</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Documento" name="Documento"
-                                        id="Documento_Editar" class="form-control form-control-sm input form">
-                                        <option value="S">Si</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Estado</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Estado" name="Estado" id="Estado_Editar"
-                                        class="form-control form-control-sm">
-                                        <option value="ACTIVO">ACTIVO</option>
-                                        <option value="INACTIVO">INACTIVO</option>
-                                        <option value="PENDIENTE">PENDIENTE</option>
-                                        <option value="CANCELADO">CANCELADO</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Cuenta Numero</label>
-                                    <input type="text" class="form-control form-control-sm input form"
-                                        [(ngModel)]="PlanCuentaModel.Cta_Numero" name="Cta_Numero"
-                                        id="Cta_Numero_Editar">
-                                </div>
-                            </div>
-
-                            <div class="row m-t-10">
-                                <div class="col-md-4">
-                                    <label for="">Centro de Costos</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Centro_Costo" name="Centro_Costo"
-                                        id="Centro_Costos_Editar" class="form-control form-control-sm input form">
-                                        <option value="S">Si</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Reporte</label>
-                                    <input type="text" class="form-control form-control-sm input form"
-                                        [(ngModel)]="PlanCuentaModel.Reporte" name="Reporte" id="Reporte_Editar">
-
-                                    <label for="">Exogena</label>
-                                    <select [(ngModel)]="PlanCuentaModel.Exogeno" name="Exogeno" id="Exogena_Editar"
-                                        class="form-control form-control-sm input form">
-                                        <option value="S">Si</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-        <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="button" class="btn btn-default btn-sm"
-                    (click)="modalEditarCuenta.hide()">Cancelar</button>
-                <button type="button" class="btn btn-primary btn-sm"
-                    [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                    (confirm)="guardarPlan(FormEditarPlan, 'editar')">Guardar</button>
-            </div>
-        </div>
-
-    </app-modal-basic>
-
-    <app-modal-basic #modalVerCuenta [dialogClass]="'modal-lg'">
-        <div class="app-modal-header">
-            <h4 class="modal-title">CUENTA: {{PlanCuentaModel.Nombre}}</h4>
-            <button type="button" class="close basic-close" (click)="modalVerCuenta.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="app-modal-body" style="font-size: 11px;">
+        <form #FormEditarPlan="ngForm">
             <div class="row">
                 <div class="col-md-12">
                     <div style="max-height:420px;overflow-x:hidden;overflow-y:auto">
                         <div class="row">
                             <div class="col-md-6">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="2">
-                                                <h6 class="m-l-10">Plan Unico de Cuentas - PUC</h6>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="width:40%;">Tipo P</td>
-                                            <td style="width:60%;">{{PlanCuentaModel.Tipo_P}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width:40%;">Codigo</td>
-                                            <td style="width:60%;">{{PlanCuentaModel.Codigo}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width:40%;">Cuenta</td>
-                                            <td style="width:60%;">{{PlanCuentaModel.Nombre}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h6 class="m-l-10">Plan Unico de Cuentas - PUC</h6>
+                                    </div>
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Tipo P
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <select [(ngModel)]="PlanCuentaModel.Tipo_P" required name="Tipo_P"
+                                            id="Tipo_P_Editar" class="form-control form-control-sm">
+                                            <option value="CLASE">CLASE</option>
+                                            <option value="GRUPO">GRUPO</option>
+                                            <option value="CUENTA">CUENTA</option>
+                                            <option value="SUBCUENTA">SUBCUENTA</option>
+                                            <option value="AUXILIAR">AUXILIAR</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Código
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <input type="text" [(ngModel)]="PlanCuentaModel.Codigo" required name="Codigo"
+                                            id="Codigo_Editar" class="form-control form-control-sm"
+                                            (blur)="validarPUC($event,'pcga',true)">
+                                    </div>
+
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Cuenta
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <input type="text" [(ngModel)]="PlanCuentaModel.Nombre" required name="Nombre"
+                                            class="form-control form-control-sm">
+                                    </div>
+
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        NIIF
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <select ngModel required name="Codigo_Niif" id="Codigo_Niif"
+                                            class="form-control form-control-sm">
+                                            <option value="NIFF">NIFF</option>
+                                            <option value="PGCA">PGCA</option>
+                                            <option value="NIIF">NIIF - PGCA</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="2">
-                                                <h6 class="m-l-10">Normas Internacionales - NIIF</h6>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="width:40%;">Tipo NIFF</td>
-                                            <td style="width:60%;">{{PlanCuentaModel.Tipo_Niif}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width:40%;">Código NIIF</td>
-                                            <td style="width:60%;">{{PlanCuentaModel.Codigo_Niif}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width:40%;">Nombre NIFF</td>
-                                            <td style="width:60%;">{{PlanCuentaModel.Nombre_Niif}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h6 class="m-l-10">Normas Internacionales - NIIF</h6>
+                                    </div>
+
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Tipo NIFF
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <select [(ngModel)]="PlanCuentaModel.Tipo_Niif" required name="Tipo_Niif"
+                                            id="Tipo_Niif_Editar" class="form-control form-control-sm">
+                                            <option value="CLASE">CLASE</option>
+                                            <option value="GRUPO">GRUPO</option>
+                                            <option value="CUENTA">CUENTA</option>
+                                            <option value="SUBCUENTA">SUBCUENTA</option>
+                                            <option value="AUXILIAR">AUXILIAR</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Código NIIF
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <input type="text" [(ngModel)]="PlanCuentaModel.Codigo_Niif" required
+                                            name="Codigo_Niif" id="Codigo_Niif_Editar"
+                                            class="form-control form-control-sm"
+                                            (blur)="validarPUC($event,'niif',true)">
+                                    </div>
+
+                                    <div class="col-md-6 mt-2" style="text-align: left">
+                                        Nombre NIFF
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <input type="text" [(ngModel)]="PlanCuentaModel.Nombre_Niif" required
+                                            name="Nombre_Niif" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="">Cuenta es Movimiento?</label>
+                                <select [(ngModel)]="PlanCuentaModel.Movimiento" name="Movimiento"
+                                    id="Movimiento_Editar" class="form-control form-control-sm"
+                                    (change)="habCampos($event.target.value)">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-striped">
-                                    <tbody>
-                                        <tr>
-                                            <td style="font-weight: bold; font-size: .8rem">¿Cuenta es Movimiento?</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Base</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Valor</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Porcentaje</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{TransformarValor(PlanCuentaModel.Movimiento)}}</td>
-                                            <td>{{TransformarValor(PlanCuentaModel.Base)}}</td>
-                                            <td>{{PlanCuentaModel.Valor}}</td>
-                                            <td>{{PlanCuentaModel.Porcentaje}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="font-weight: bold; font-size: .8rem">Ajuste Contable</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Naturaleza</td>
-                                            <td style="font-weight: bold; font-size: .8rem" colspan="2">Cta. Comprobante
-                                                Cie
-                                                Anual</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{TransformarValor(PlanCuentaModel.Ajuste_Contable)}}</td>
-                                            <td>{{PlanCuentaModel.Naturaleza}}</td>
-                                            <td colspan="2">{{TransformarValor(PlanCuentaModel.Cie_Anual)}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="font-weight: bold; font-size: .8rem">¿Cierra Terceros?</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Nit Cierre</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Banco</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Nombre Banco</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{TransformarValor(PlanCuentaModel.Cierra_Terceros)}}</td>
-                                            <td>{{PlanCuentaModel.Nit_Cierre}}</td>
-                                            <td>{{TransformarValor(PlanCuentaModel.Banco)}}</td>
-                                            <td>{{ PlanCuentaModel.Nombre_Banco }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="font-weight: bold; font-size: .8rem">Nit</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Clase Cuenta</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Documento</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Estado</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{TransformarValor(PlanCuentaModel.Nit)}}</td>
-                                            <td>{{PlanCuentaModel.Clase_Cta}}</td>
-                                            <td>{{TransformarValor(PlanCuentaModel.Documento)}}</td>
-                                            <td>{{PlanCuentaModel.Estado}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="font-weight: bold; font-size: .8rem">Numero Cuenta</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Centro de Costo</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Reporte</td>
-                                            <td style="font-weight: bold; font-size: .8rem">Exogena</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ PlanCuentaModel.Cta_Numero }}</td>
-                                            <td>{{TransformarValor(PlanCuentaModel.Centro_Costo)}}</td>
-                                            <td>{{TransformarValor(PlanCuentaModel.Reporte)}}</td>
-                                            <td>{{TransformarValor(PlanCuentaModel.Exogeno)}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+
+                            <div class="col-md-4">
+                                <label for="">Base</label>
+                                <select [(ngModel)]="PlanCuentaModel.Base" name="Base" id="Base_Editar"
+                                    class="form-control form-control-sm input form"
+                                    (change)="habInfoValue($event.target.value)">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">Valor</label>
+                                <input type="text" [disabled]="PlanCuentaModel.Base == 'N'"
+                                    [(ngModel)]="PlanCuentaModel.Valor" name="Valor" id="Valor_Editar" value="0,00"
+                                    class="form-control form-control-sm input form">
+                                <label for="">Porcentaje</label>
+                                <input type="text"
+                                    [disabled]="PlanCuentaModel.Valor == '' || PlanCuentaModel.Movimiento == 'N'"
+                                    class="form-control form-control-sm input form" value="0,00000"
+                                    [(ngModel)]="PlanCuentaModel.Porcentaje" name="Porcentaje" id="Porcentaje_Editar">
+                            </div>
+                        </div>
+
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Ajuste Contable</label>
+                                <select [(ngModel)]="PlanCuentaModel.Ajuste_Contable" name="Ajuste_Contable"
+                                    id="Ajuste_Contable_Editar" class="form-control form-control-sm input form">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">Naturaleza</label>
+                                <select [(ngModel)]="PlanCuentaModel.Naturaleza" name="Naturaleza"
+                                    id="Naturaleza_Editar" class="form-control form-control-sm ">
+                                    <option value="D">Debito</option>
+                                    <option value="C">Credito</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">Cta Comprobante Cie Anual</label>
+                                <select [(ngModel)]="PlanCuentaModel.Cie_Anual" name="Cie_Anual" id="Cie_Anual_Editar"
+                                    class="form-control form-control-sm input form">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Cierra Terceros</label>
+                                <select [(ngModel)]="PlanCuentaModel.Cierra_Terceros" name="Cierra_Terceros"
+                                    id="Cierra_Terceros_Editar" class="form-control form-control-sm input form">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">Nit Cierre</label>
+                                <input type="text" [(ngModel)]="PlanCuentaModel.Nit_Cierre" name="Nit_Cierre"
+                                    id="Nit_Cierre" class="form-control form-control-sm input form">
+                            </div>
+                        </div>
+
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Banco</label>
+                                <select [(ngModel)]="PlanCuentaModel.Banco" name="Banco" id="Banco_Editar"
+                                    (change)="habBancos($event.target.value)"
+                                    class="form-control form-control-sm input form">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">&nbsp;</label>
+                                <select [disabled]="PlanCuentaModel.Banco == 'N'"
+                                    [(ngModel)]="PlanCuentaModel.Cod_Banco" name="Cod_Banco" id="Cod_Banco_Editar"
+                                    class="form-control form-control-sm input form">
+                                    <option value="">Seleccione</option>
+                                    <option *ngFor="let item of Bancos" [value]="item.Id_Banco">{{ item.Nombre }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Nit</label>
+                                <select [(ngModel)]="PlanCuentaModel.Nit" name="Nit" id="Nit_Editar"
+                                    class="form-control form-control-sm input form">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">Clase Cuenta</label>
+                                <select [(ngModel)]="PlanCuentaModel.Clase_Cta" name="Clase_Cta" id="Clase_Cta_Editar"
+                                    class="form-control form-control-sm input form">
+                                    <option value="">Seleccione</option>
+                                    <option value="Corriente">Corriente</option>
+                                    <option value="Ahorros">Ahorros</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Documento</label>
+                                <select [(ngModel)]="PlanCuentaModel.Documento" name="Documento" id="Documento_Editar"
+                                    class="form-control form-control-sm input form">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">Estado</label>
+                                <select [(ngModel)]="PlanCuentaModel.Estado" name="Estado" id="Estado_Editar"
+                                    class="form-control form-control-sm">
+                                    <option value="ACTIVO">ACTIVO</option>
+                                    <option value="INACTIVO">INACTIVO</option>
+                                    <option value="PENDIENTE">PENDIENTE</option>
+                                    <option value="CANCELADO">CANCELADO</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">Cuenta Numero</label>
+                                <input type="text" class="form-control form-control-sm input form"
+                                    [(ngModel)]="PlanCuentaModel.Cta_Numero" name="Cta_Numero" id="Cta_Numero_Editar">
+                            </div>
+                        </div>
+
+                        <div class="row m-t-10">
+                            <div class="col-md-4">
+                                <label for="">Centro de Costos</label>
+                                <select [(ngModel)]="PlanCuentaModel.Centro_Costo" name="Centro_Costo"
+                                    id="Centro_Costos_Editar" class="form-control form-control-sm input form">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="">Reporte</label>
+                                <input type="text" class="form-control form-control-sm input form"
+                                    [(ngModel)]="PlanCuentaModel.Reporte" name="Reporte" id="Reporte_Editar">
+
+                                <label for="">Exogena</label>
+                                <select [(ngModel)]="PlanCuentaModel.Exogeno" name="Exogeno" id="Exogena_Editar"
+                                    class="form-control form-control-sm input form">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </form>
+
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-default btn-sm" (click)="modalEditarCuenta.hide()">Cancelar</button>
+            <button type="button" class="btn btn-primary btn-sm"
+                [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                (confirm)="guardarPlan(FormEditarPlan, 'editar')">Guardar</button>
         </div>
-        <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="button" class="btn btn-default btn-sm" (click)="modalVerCuenta.hide()">Cerrar</button>
+    </div>
+
+</app-modal-basic>
+
+<app-modal-basic #modalVerCuenta [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">CUENTA: {{PlanCuentaModel.Nombre}}</h4>
+        <button type="button" class="close basic-close" (click)="modalVerCuenta.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body" style="font-size: 11px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div style="max-height:420px;overflow-x:hidden;overflow-y:auto">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <h6 class="m-l-10">Plan Unico de Cuentas - PUC</h6>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="width:40%;">Tipo P</td>
+                                        <td style="width:60%;">{{PlanCuentaModel.Tipo_P}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:40%;">Codigo</td>
+                                        <td style="width:60%;">{{PlanCuentaModel.Codigo}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:40%;">Cuenta</td>
+                                        <td style="width:60%;">{{PlanCuentaModel.Nombre}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <h6 class="m-l-10">Normas Internacionales - NIIF</h6>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="width:40%;">Tipo NIFF</td>
+                                        <td style="width:60%;">{{PlanCuentaModel.Tipo_Niif}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:40%;">Código NIIF</td>
+                                        <td style="width:60%;">{{PlanCuentaModel.Codigo_Niif}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:40%;">Nombre NIFF</td>
+                                        <td style="width:60%;">{{PlanCuentaModel.Nombre_Niif}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: bold; font-size: .8rem">¿Cuenta es Movimiento?</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Base</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Valor</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Porcentaje</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{TransformarValor(PlanCuentaModel.Movimiento)}}</td>
+                                        <td>{{TransformarValor(PlanCuentaModel.Base)}}</td>
+                                        <td>{{PlanCuentaModel.Valor}}</td>
+                                        <td>{{PlanCuentaModel.Porcentaje}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; font-size: .8rem">Ajuste Contable</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Naturaleza</td>
+                                        <td style="font-weight: bold; font-size: .8rem" colspan="2">Cta. Comprobante
+                                            Cie
+                                            Anual</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{TransformarValor(PlanCuentaModel.Ajuste_Contable)}}</td>
+                                        <td>{{PlanCuentaModel.Naturaleza}}</td>
+                                        <td colspan="2">{{TransformarValor(PlanCuentaModel.Cie_Anual)}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; font-size: .8rem">¿Cierra Terceros?</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Nit Cierre</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Banco</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Nombre Banco</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{TransformarValor(PlanCuentaModel.Cierra_Terceros)}}</td>
+                                        <td>{{PlanCuentaModel.Nit_Cierre}}</td>
+                                        <td>{{TransformarValor(PlanCuentaModel.Banco)}}</td>
+                                        <td>{{ PlanCuentaModel.Nombre_Banco }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; font-size: .8rem">Nit</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Clase Cuenta</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Documento</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Estado</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{TransformarValor(PlanCuentaModel.Nit)}}</td>
+                                        <td>{{PlanCuentaModel.Clase_Cta}}</td>
+                                        <td>{{TransformarValor(PlanCuentaModel.Documento)}}</td>
+                                        <td>{{PlanCuentaModel.Estado}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; font-size: .8rem">Numero Cuenta</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Centro de Costo</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Reporte</td>
+                                        <td style="font-weight: bold; font-size: .8rem">Exogena</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ PlanCuentaModel.Cta_Numero }}</td>
+                                        <td>{{TransformarValor(PlanCuentaModel.Centro_Costo)}}</td>
+                                        <td>{{TransformarValor(PlanCuentaModel.Reporte)}}</td>
+                                        <td>{{TransformarValor(PlanCuentaModel.Exogeno)}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </app-modal-basic>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-default btn-sm" (click)="modalVerCuenta.hide()">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
 
-    <ng-template #notData>
-        <app-not-data [loading]="Cargando"></app-not-data>
-    </ng-template>
+<ng-template #notData>
+    <app-not-data [loading]="Cargando"></app-not-data>
+</ng-template>
 
-    <swal #alertSwal title="" text="" icon="">
-    </swal>
+<swal #alertSwal title="" text="" icon="">
+</swal>

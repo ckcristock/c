@@ -12,8 +12,9 @@
         </div>
         <hr class="line">
 
-        <div class="container mt-4" style="font-size: small;">
-            <table class="table table-bordered table-striped table-sm">
+        
+            <table class="table table-bordered table-striped table-sm" style="font-size: small;"
+                *ngIf="!Cargando && listaMediosMag.length > 0; else notData">
                 <thead>
                     <tr>
                         <th>Codigo</th>
@@ -22,22 +23,14 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    <tr class="text-center" *ngIf="listaMediosMag.length == 0">
-                        <td colspan="3" class="text-center">
-                            <i class="fa fa-exclamation-circle fa-5x"></i>
-                            <h4>No existen medios magnéticos agrupados para mostrar.</h4>
-                        </td>
-                    </tr>
-
                     <tr *ngFor="let item of listaMediosMag">
                         <td>{{ item.Codigo_Formato }}</td>
                         <td>{{ item.Nombre_Formato }}</td>
                         <td style="width: 60px">
                             <div class="text-center">
                                 <div ngbDropdown class="dropdown-primary">
-                                    <button ngbDropdownToggle
-                                        class="btn btn-primary btn-mini waves-effect waves-light " type="button">
+                                    <button ngbDropdownToggle class="btn btn-primary btn-mini waves-effect waves-light "
+                                        type="button">
                                         <i class="mdi mdi-chevron-down"></i>
                                     </button>
                                     <div ngbDropdownMenu>
@@ -61,9 +54,12 @@
             </table>
             <!-- {{(page*maxSize)-maxSize+1}} al {{((page*maxSize) > TotalItems ? TotalItems : (page*maxSize))}} de {{ TotalItems }} -->
             <!-- <ngb-pagination class="pull-right" [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="10" [pageSize]="20"  size="sm" (pageChange)="filtrar(true)" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>  -->
-        </div>
+   
     </div>
 </div>
 
 
 <swal #confirmacionEliminar [swalOptions]="alertOption"></swal>
+<ng-template #notData>
+    <app-not-data [loading]="Cargando"></app-not-data>
+</ng-template>

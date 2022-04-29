@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 export class CierresContablesComponent implements OnInit {
   public abrirPlanesCuenta: EventEmitter<string> = new EventEmitter();
   public modalCierre: Subject<any> = new Subject();
+  public Cargando: boolean=true;
   envirom: any = {}
   public Cierres:any = {
     Mes: [],
@@ -49,6 +50,7 @@ export class CierresContablesComponent implements OnInit {
     this.http.get(environment.ruta + 'php/contabilidad/cierres/lista_cierre.php').subscribe((data:any) => {
       this.Cierres.Mes = data.Mes;
       this.Cierres.Anio = data.Anio;
+      this.Cargando = false
     });
   }
 

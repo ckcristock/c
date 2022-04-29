@@ -45,6 +45,7 @@ export class UserService {
     localStorage.removeItem('token');
 
     this.router.navigateByUrl('/login');
+    window.location.reload();
   }
 
   login(formData: LoginForm) {

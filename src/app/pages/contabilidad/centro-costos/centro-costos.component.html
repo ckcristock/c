@@ -17,22 +17,20 @@
             </div>
         </div>
         <hr class="line">
-        <div class="container">
-            <mat-accordion multi>
-                <mat-expansion-panel class="mat-elevation-z0">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-3 input-group-sm">
-                                <label for="">Código</label>
-                                <input type="text" placeholder="Filtro Código" (change)="filtrar('No')" [(ngModel)]="Filtros.Codigo"
-                                    class="form-control input-sm">
-                            </div>
-                            <div class="col-3 input-group-sm">
-                                <label for="">Nombre</label>
-                                <input type="text" placeholder="Filtro Nombre" (change)="filtrar('No')" [(ngModel)]="Filtros.Nombre"
-                                    class="form-control input-sm">
-                            </div>
-                            <!-- <div class="col-3 input-group-sm">
+
+        <mat-accordion multi>
+            <mat-expansion-panel class="mat-elevation-z0">
+                <mat-form-field class="col-lg-3 col-md-3 col-sm-4 pl-0" appearance="outline">
+                    <mat-label>Código</mat-label>
+                    <input matInput type="text" placeholder="Busca por código" (input)="filtrar('No')"
+                        [(ngModel)]="Filtros.Codigo">
+                </mat-form-field>
+                <mat-form-field class="col-lg-3 col-md-3 col-sm-4 pl-0" appearance="outline">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput type="text" placeholder="Busca por nombre" (input)="filtrar('No')"
+                        [(ngModel)]="Filtros.Nombre">
+                </mat-form-field>
+                <!-- <div class="col-3 input-group-sm">
                                 <label for="">¿Centro Padre?</label>
                                 <select (change)="filtrar('No')" name="Id_Empresa" id="Id_Empresa" [(ngModel)]="Filtros.Id_Empresa" class="form-control input-sm" placeholder="Filtro Empresa" required>
                                     <option *ngFor="let item of companies" [value]="item.value">
@@ -40,87 +38,101 @@
                                     </option>
                                 </select>
                             </div> -->
+                <!-- <div class="container">
+                    <div class="row">
+                        <div class="col-3 input-group-sm">
+                            <label for="">Código</label>
+                            <input type="text" placeholder="Filtro Código" (change)="filtrar('No')"
+                                [(ngModel)]="Filtros.Codigo" class="form-control input-sm">
                         </div>
-                       <!--  <div class="row">
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label> </mat-label>
-                                <input matInput type="text" placeholder="">
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label> </mat-label>
-                                <mat-select>
-                                    <mat-option value=""> </mat-option>
-                                </mat-select>
-                            </mat-form-field>                                
-                        </div> -->
+                        <div class="col-3 input-group-sm">
+                            <label for="">Nombre</label>
+                            <input type="text" placeholder="Filtro Nombre" (change)="filtrar('No')"
+                                [(ngModel)]="Filtros.Nombre" class="form-control input-sm">
+                        </div>
+                       
                     </div>
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>
-        <div class="container" style="font-size: small;">
-            <table class="table table-bordered table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th>Codigo</th>
-                        <th>Nombre</th>
-                        <th>Centro Padre</th>
-                        <th>Tipo Centro</th>
-                        <th>Asignado a</th>
-                        <th>Estado</th>
-                        <th class="text-center col-1">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of items" [ngClass]="{'text-danger font-weight-bold': ( item.Estado == 'Inactivo' )}">
-                        <td>{{ item.Codigo }}</td>
-                        <td>{{ item.Nombre }}</td>
-                        <!-- <td> {{ item.Empresa }} </td> -->
-                        <td>{{ item.PadreCentro }}</td>
-                        <td>{{ item.Tipo_Centro }}</td>
-                        <td>{{ item.ValorTipoCentro }}</td>
-                        <td>{{ item.Estado }}</td>
-                        <td>
-                            <div class="text-center">
-                                <div ngbDropdown class="dropdown-primary">
-                                    <button ngbDropdownToggle
-                                        class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                        <i class="mdi mdi-chevron-down"></i>
-                                    </button>
-                                    <div ngbDropdownMenu>
-                                        <a class="dropdown-item waves-light waves-effect caja-botones"
-                                            (click)="EditarCentroCosto(item.Id_Centro_Costo, modalEditarCentroCosto)">
-                                            <i class="far fa-edit"></i> Editar</a>
-                                        <a class="dropdown-item waves-light waves-effect caja-botones"
-                                            [swal]="{ title: 'Eliminar', text: 'Se dispone a eliminar el centro de costo.\n¿Está seguro(a)?', type: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                            (confirm)="Eliminar(item.Id_Centro_Costo)">
-                                            <i class="far fa-trash-alt"></i> Eliminar</a>
-                                        <a class="dropdown-item waves-light waves-effect caja-botones"
-                                            [swal]="{ title: 'Cambio de Estado', text: 'Se dispone a cambiar el estado de este centro de costo.\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                            (confirm)="CambiarEstado(item.Id_Centro_Costo)">
-                                            <i *ngIf="item.Estado == 'Activo'" class="fas fa-times"> Anular</i>
-                                            <i *ngIf="item.Estado == 'Inactivo'" class="fas fa-check"> Activar</i>
-                                        </a>
-                                    </div>
+                   
+                </div> -->
+            </mat-expansion-panel>
+        </mat-accordion>
+
+
+        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
+            *ngIf="!Cargando && items.length > 0; else notData">
+            <thead>
+                <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Centro Padre</th>
+                    <th>Tipo Centro</th>
+                    <th>Asignado a</th>
+                    <th class="text-center col-1">Estado</th>
+                    <th class="text-center col-1">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of items"
+                    [ngClass]="{'text-danger font-weight-bold': ( item.Estado == 'Inactivo' )}">
+                    <td>{{ item.Codigo }}</td>
+                    <td>{{ item.Nombre }}</td>
+                    <!-- <td> {{ item.Empresa }} </td> -->
+                    <td>{{ item.PadreCentro }}</td>
+                    <td>{{ item.Tipo_Centro }}</td>
+                    <td>{{ item.ValorTipoCentro }}</td>
+                    <td class="text-center">
+                        <span [ngClass]="item.Estado == 'Inactivo' ? 'badge badge-danger': 'badge badge-primary'">
+                            {{ item.Estado }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light "
+                                    type="button">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a class="dropdown-item text-info waves-light waves-effect caja-botones"
+                                        (click)="EditarCentroCosto(item.Id_Centro_Costo, modalEditarCentroCosto)">
+                                        <i class="far fa-edit"></i> Editar</a>
+                                    <a class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                                        [swal]="{ title: 'Eliminar', text: 'Se dispone a eliminar el centro de costo.\n¿Está seguro(a)?', type: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                        (confirm)="Eliminar(item.Id_Centro_Costo)">
+                                        <i class="far fa-trash-alt"></i> Eliminar</a>
+
+                                    <a class="dropdown-item waves-light waves-effect caja-botones"
+                                        [ngClass]="{'text-success': (item.Estado == 'Inactivo'), 'text-danger': (item.Estado == 'Activo')}"
+                                        [swal]="{ title: 'Cambio de Estado', text: 'Se dispone a cambiar el estado de este centro de costo.\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                        (confirm)="CambiarEstado(item.Id_Centro_Costo)">
+                                        <i [ngClass]="{
+                                            'fas fa-times': (item.Estado == 'Activo'),
+                                            'fa fa-check': (item.Estado == 'Inactivo')
+                                        }"></i> 
+                                        {{item.Estado == 'Inactivo' ? 'Activar':'Anular' }}
+                                    </a>
                                 </div>
                             </div>
-                        </td>
+                        </div>
+                    </td>
 
-                        <!-- PROCESO DE CARGA RECURVISA (SE COMENTA EL 09/02/2019 PORQUE POR AHORA NO SE VA A UTILIZAR) -->
-                        <!-- <td colspan="7" style="padding:0px;"> 
+                    <!-- PROCESO DE CARGA RECURVISA (SE COMENTA EL 09/02/2019 PORQUE POR AHORA NO SE VA A UTILIZAR) -->
+                    <!-- <td colspan="7" style="padding:0px;"> 
                             <ng-container *ngTemplateOutlet="centrosRecursivos; context:{ $implicit: items }"></ng-container>
                           </td> -->
-                    </tr>
-                </tbody>
-            </table>
-            <div class="text-center">
-                {{(page*maxSize)-maxSize+1}} al {{ TotalItems>page*maxSize ? (page*maxSize) : TotalItems }} de {{
-                    TotalItems }}
-            </div>
-            
-            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-                [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm"
-                (pageChange)="filtrar()" rotate="true" ellipses="false" boundaryLinks="true" [rotate]="true"
-                [boundaryLinks]="true"></ngb-pagination>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm"
+            (pageChange)="filtrar()" rotate="true" ellipses="false" boundaryLinks="true" [rotate]="true"
+            [boundaryLinks]="true">
+        </ngb-pagination>
+        <div class="d-flex justify-content-center">
+            <small>
+                {{(page*maxSize)-maxSize+1}} - {{ TotalItems>page*maxSize ? (page*maxSize+1) : TotalItems }} de {{
+                TotalItems }}
+            </small>
         </div>
     </div>
 </div>
@@ -331,6 +343,10 @@
             </td>
         </tr>
     </table>
+</ng-template>
+
+<ng-template #notData>
+    <app-not-data [loading]="Cargando"></app-not-data>
 </ng-template>
 
 <!--<ng-template #opcionesPadres let-list>

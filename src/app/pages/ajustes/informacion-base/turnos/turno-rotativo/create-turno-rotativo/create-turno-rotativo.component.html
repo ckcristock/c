@@ -8,7 +8,7 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="forma" *ngIf="show">
-      <mat-form-field class="col-md-4" appearance="outline">
+      <mat-form-field class="col-md-4 pl-0" appearance="outline">
         <mat-label>Nombre</mat-label>
         <input matInput type="text" formControlName="name" [class.is-invalid]="invalid_name"
           placeholder="Ingrese el nombre del turno">
@@ -37,14 +37,14 @@
           </small>
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="col-md-2" appearance="outline">
+      <mat-form-field class="col-md-2 pr-0" appearance="outline">
         <mat-label>Horas extra</mat-label>
         <mat-select name="extras" value="0">
           <mat-option value="0">No</mat-option>
           <mat-option value="1">Sí</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="col-md-3" appearance="outline">
+      <mat-form-field class="col-md-3 pl-0" appearance="outline">
         <mat-label>Hora de entrada</mat-label>
         <input matInput type="time" formControlName="entry_time" [class.is-invalid]="invalid_entry_time">
         <mat-error *ngIf="invalid_entry_time">
@@ -68,15 +68,17 @@
           <mat-option *ngFor="let item of turns" [value]="item.value">{{item.text}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="col-md-3" appearance="outline">
+      <mat-form-field class="col-md-3 pr-0" appearance="outline">
         <mat-label>Domingo</mat-label>
         <mat-select name="extras" formControlName="sunday_id">
           <mat-option *ngFor="let item of turns" [value]="item.value">{{item.text}}</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-checkbox class="col-md-6" formControlName="launch">Aplica lunch</mat-checkbox>
-      <mat-checkbox class="col-md-6" formControlName="breack">Aplica break</mat-checkbox>
+      <div class="row">
+        <mat-checkbox class="col-md-6" formControlName="launch" color="primary">Aplica lunch</mat-checkbox>
+        <mat-checkbox class="col-md-6" formControlName="breack" color="primary">Aplica break</mat-checkbox>
+      </div>
 
       <div class="form-row">
         <div class="form-group col-md-3">

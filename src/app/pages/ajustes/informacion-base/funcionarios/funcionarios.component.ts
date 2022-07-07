@@ -15,12 +15,22 @@ import { MatAccordion } from '@angular/material/expansion';
 
 export class FuncionariosComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   pagination = {
     pageSize: 12,
     page: 1,
     collectionSize: 0,
   }
-  loading = false;
+  loading = true;
   breadCrumbItems: Array<{}>;
   people: Person[] = [];
 
@@ -74,6 +84,7 @@ export class FuncionariosComponent implements OnInit {
       .subscribe(d => {
         this.loading = false;
         this.people = d['data']['data']
+        console.log(this.people)
         this.pagination.collectionSize = d['data']['total']
       })
   }

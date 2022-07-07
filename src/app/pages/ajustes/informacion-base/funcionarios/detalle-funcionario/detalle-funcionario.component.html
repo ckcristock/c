@@ -1,93 +1,139 @@
 <div class="col-12 mb-5">
-    <div class="card">
-        <div class="card-body">
-            <!-- <button type="button" class="btn btn-outline-primary btn-sm backButton" (click)="regresar()">
+  <div class="card">
+    <div class="card-body">
+      <!-- <button type="button" class="btn btn-outline-primary btn-sm backButton" (click)="regresar()">
                 <i class="fas fa-arrow-left"></i>
             </button> -->
-            <div class="card-title d-flex justify-content-between">
-                <div class="">
-                    <div class="card-horizontal">
-                        <div class="img-square-wrapper">
-                            <img [src]="funcionario.image | image" class="img-rounded" alt=""
-                                onerror="this.src='../../../../../../../assets/images/nofound.png'">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ funcionario.first_name }} {{ funcionario.second_name }}
-                                <br> {{ funcionario.first_surname }} {{ funcionario.second_surname }}
-                            </h5>
-                            <strong *ngIf="funcionario.title != 'null'">
-                                {{ funcionario.title }}
-                            </strong>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        <strong>
-                            {{ funcionario.signature }}
-                        </strong>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="card-horizontal">
-                        <div class="img-square-wrapper">
-                            <img src="../../../../../../../assets/images/coin-icon.svg" height="80" alt="">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Salario base</h5>
-                            <p>{{ funcionario.salary }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="card-horizontal">
-                        <div class="img-square-wrapper">
-                            <img height="80" src="../../../../../../../assets/images/vacations-icon.svg" alt="">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Vaciones acumuladas</h5>
-                            <p>22</p>
-                        </div>
-                    </div>
-                </div>
+      <div class="card-title d-flex justify-content-between">
+        <div class="">
+          <div class="card-horizontal">
+            <div class="img-square-wrapper">
+              <img
+                [src]="funcionario.image | image"
+                class="img-rounded d-block img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
+                alt=""
+                onerror="this.src='../../../../../../../assets/images/nofound.png'"
+              />
             </div>
-            <hr class="line">
-            <div class="d-flex justify-content-end">
-                <div class="btn-group rounded">
-                    <button type="button" style="float: right;" class="btn btn-danger btn-sm"
-                        (click)="liquidar('PreLiquidado')">
-                        Preliquidar
-                    </button>
-                    <button style="float: right;" *ngIf="user?.state == 'Activo'" type="button"
-                        class="btn btn-secondary btn-sm" (click)="bloquear('Inactivo')">
-                        <i class="fas fa-ban"></i> Bloquear
-                    </button>
-                    <button style="float: right;" *ngIf="user?.state == 'Inactivo'" type="button"
-                        class="btn btn-success btn-sm" (click)="bloquear('Activo')">
-                        <i class="fas fa-check"></i> Activar
-                    </button>
-                    <div ngbDropdown class="dropdown-primary">
-                        <button style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;" ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light "
-                            type="button">
-                            Más opciones
-                            <i class="mdi mdi-chevron-down"></i>
-                        </button>
-                        <div ngbDropdownMenu>
-                            <a class="dropdown-item waves-light waves-effect caja-botones"
-                                (click)="verComponent('informacion')">
-                                <i class="fa fa-file-pdf-o"></i>Información Personal</a>
-                            <a class="dropdown-item waves-light waves-effect caja-botones"
-                                (click)="verComponent('documentos')">
-                                <i class="fa fa-pencil"></i>Documentos</a>
-                            <a class="dropdown-item waves-light waves-effect caja-botones"
-                                (click)="verComponent('privilegios')">
-                                <i class="fa fa-pencil"></i>Privilegios</a>
-                        </div>
-                    </div>
-                </div>
+            <div class="card-body">
+              <h5 class="card-title">
+                {{ funcionario.first_name }} {{ funcionario.second_name }}
+                <br />
+                {{ funcionario.first_surname }} {{ funcionario.second_surname }}
+              </h5>
+              <strong *ngIf="funcionario.title != 'null'">
+                {{ funcionario.title }}
+              </strong>
             </div>
-            <div class="mt-4">
-                <app-ver-funcionario *ngIf="components === 'informacion'"></app-ver-funcionario>
-                <app-permissions *ngIf="components === 'privilegios'"></app-permissions>
-            </div>
+          </div>
+          <div class="card-footer bg-transparent">
+            <strong>
+              {{ funcionario.signature }}
+            </strong>
+          </div>
         </div>
+        <div class="">
+          <div class="card-horizontal">
+            <div class="img-square-wrapper">
+              <img
+                src="../../../../../../../assets/images/coin-icon.svg"
+                height="80"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Salario base</h5>
+              <p>{{ funcionario.salary }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="">
+          <div class="card-horizontal">
+            <div class="img-square-wrapper">
+              <img
+                height="80"
+                src="../../../../../../../assets/images/vacations-icon.svg"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Vaciones acumuladas</h5>
+              <p>22</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="line" />
+      <div class="d-flex justify-content-end">
+        <div class="btn-group rounded">
+          <button
+            type="button"
+            style="float: right"
+            class="btn btn-danger btn-sm"
+            (click)="liquidar('PreLiquidado')"
+          >
+            Preliquidar
+          </button>
+          <button
+            style="float: right"
+            *ngIf="user?.state == 'Activo'"
+            type="button"
+            class="btn btn-secondary btn-sm"
+            (click)="bloquear('Inactivo')"
+          >
+            <i class="fas fa-ban"></i> Bloquear
+          </button>
+          <button
+            style="float: right"
+            *ngIf="user?.state == 'Inactivo'"
+            type="button"
+            class="btn btn-success btn-sm"
+            (click)="bloquear('Activo')"
+          >
+            <i class="fas fa-check"></i> Activar
+          </button>
+          <div ngbDropdown class="dropdown-primary">
+            <button
+              style="
+                border-top-left-radius: 0px;
+                border-bottom-left-radius: 0px;
+              "
+              ngbDropdownToggle
+              class="btn btn-primary btn-sm waves-effect waves-light"
+              type="button"
+            >
+              Más opciones
+              <i class="mdi mdi-chevron-down"></i>
+            </button>
+            <div ngbDropdownMenu>
+              <a
+                class="dropdown-item waves-light waves-effect caja-botones"
+                (click)="verComponent('informacion')"
+              >
+                <i class="fa fa-file-pdf-o"></i>Información Personal</a
+              >
+              <a
+                class="dropdown-item waves-light waves-effect caja-botones"
+                (click)="verComponent('documentos')"
+              >
+                <i class="fa fa-pencil"></i>Documentos</a
+              >
+              <a
+                class="dropdown-item waves-light waves-effect caja-botones"
+                (click)="verComponent('privilegios')"
+              >
+                <i class="fa fa-pencil"></i>Privilegios</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <app-ver-funcionario
+          *ngIf="components === 'informacion'"
+        ></app-ver-funcionario>
+        <app-permissions *ngIf="components === 'privilegios'"></app-permissions>
+      </div>
     </div>
+  </div>
 </div>

@@ -1,141 +1,130 @@
 <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-        <h5>Datos de empresa</h5>
-        <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openConfirm(add)">
-            <i class="fas fa-pencil-alt"></i>
-        </button>
-    </div>
-    <div class="row">
-        <p class="col-6 font-weight-bold text-mute item-subtitle">
-            Empresa
-        </p>
-        <p class="col-6 font-weight-bold">
-            {{ empresa.company_name }}
-        </p>
-        <p class="col-6 font-weight-bold text-mute item-subtitle">
-            Grupo
-        </p>
-        <p class="col-6 font-weight-bold">
-            {{ empresa.group_name }}
-        </p>
-        <p class="col-6 font-weight-bold text-mute item-subtitle">
-            Dependencia
-        </p>
-        <p class="col-6 font-weight-bold">
-            {{ empresa.dependency_name }}
-        </p>
-        <p class="col-6 font-weight-bold text-mute item-subtitle">
-            Cargo
-        </p>
-        <p class="col-6 font-weight-bold">
-            {{ empresa.position_name }}
-        </p>
-        <p class="col-6 font-weight-bold text-mute item-subtitle">
-            Tipo de turno
-        </p>
-        <p class="col-6 font-weight-bold">
-            {{ empresa.turn_type }}
-        </p>
-        <p class="col-6 font-weight-bold text-mute item-subtitle">
-            Turno asignado
-        </p>
-        <p class="col-6 font-weight-bold">
-            {{ empresa.fixed_turn_name }}
-        </p>
-    </div>
+  <div class="card-title d-flex justify-content-between">
+    <h5>Datos de empresa</h5>
+    <button
+      class="btn btn-link pt-0 edit"
+      style="float: right"
+      (click)="openConfirm(add)"
+    >
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+  <div class="row">
+    <p class="col-6 font-weight-bold text-mute item-subtitle">Empresa</p>
+    <p class="col-6 font-weight-bold">
+      {{ empresa.company_name }}
+    </p>
+    <p class="col-6 font-weight-bold text-mute item-subtitle">Grupo</p>
+    <p class="col-6 font-weight-bold">
+      {{ empresa.group_name }}
+    </p>
+    <p class="col-6 font-weight-bold text-mute item-subtitle">Dependencia</p>
+    <p class="col-6 font-weight-bold">
+      {{ empresa.dependency_name }}
+    </p>
+    <p class="col-6 font-weight-bold text-mute item-subtitle">Cargo</p>
+    <p class="col-6 font-weight-bold">
+      {{ empresa.position_name }}
+    </p>
+    <p class="col-6 font-weight-bold text-mute item-subtitle">Tipo de turno</p>
+    <p class="col-6 font-weight-bold">
+      {{ empresa.turn_type }}
+    </p>
+    <p class="col-6 font-weight-bold text-mute item-subtitle">Turno asignado</p>
+    <p class="col-6 font-weight-bold">
+      {{ empresa.fixed_turn_name }}
+    </p>
+  </div>
 </div>
 
 <ng-template #add let-modal>
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="text-primary modal-title">Edición datos empresa</h4>
-            <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-                (click)="modal.dismiss('Cross click')"></button>
-        </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">Editar empresa del funcionario</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
     </div>
-    <div class="modal-body">
-        <div class="row mt-3">
-            <div class="col-12">
-                <form [formGroup]="form">
-                    <div class="form-row mt-3">
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <label class="col-md-4 custom-label col-form-label text-right"
-                                    for="dependencia">Grupo</label>
-                                <ng-select class="col-md-7 p-0" formControlName="group_id"
-                                    (change)="getDependencies($event.value)" [items]="groups" bindLabel="text"
-                                    bindValue="value" loadingText="loading" ngDefaultControl>
-                                </ng-select>
-                                <div class="col-md-7 offset-4">
-                                    <small class="invalid text-danger" *ngIf="dependency_valid"> Es necesario el tipo de
-                                        grupo
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-4 custom-label col-form-label text-right" for="cargo">Cargo</label>
-                                <ng-select class="col-md-7 p-0" formControlName="position_id" [items]="positions"
-                                    bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                                </ng-select>
-                                <div class="col-md-7 offset-4">
-                                    <small class="invalid text-danger" *ngIf="position_valid"> Es necesario el tipo
-                                        cargo
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="form-group row" *ngIf="turnSelected == 'Fijo'">
-                                <label class="col-md-4 col-form-label text-right" for="turno_asignado">
-                                    Turno
-                                    asignado
-                                </label>
-                                <ng-select class="col-md-7 p-0" formControlName="fixed_turn_id" [items]="fixed_turns"
-                                    bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                                </ng-select>
-                                <div class="col-md-7 offset-4">
-                                    <small class="invalid text-danger" *ngIf="fixed_turn_valid"> Es necesario el tipo
-                                        turno asignado
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <label class="col-md-4 custom-label col-form-label text-right"
-                                    for="dependencia">Dependencia</label>
-                                <ng-select class="col-md-7 p-0" formControlName="dependency_id"
-                                    (change)="getPositions($event.value)" [items]="dependencies" bindLabel="text"
-                                    bindValue="value" loadingText="loading" ngDefaultControl>
-                                </ng-select>
-                                <div class="col-md-7 offset-4">
-                                    <small class="invalid text-danger" *ngIf="dependency_valid"> Es necesario el tipo de
-                                        dependencia
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-4 custom-label col-form-label text-right" for="turno">Turno</label>
-                                <select formControlName="turn_type" class="form-control custom-control col-md-7">
-                                    <option *ngFor="let turn of turnos" [value]="turn.value">
-                                        {{ turn.text }}
-                                    </option>
-                                </select>
-                                <div class="col-md-7 offset-4">
-                                    <small class="invalid text-danger" *ngIf="turn_valid"> Es necesario el tipo cargo
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
-            Cancelar
-        </button>
-        <button type="button" (click)="updateEnterpriseData()" class="btn btn-primary">
-            Actualizar
-        </button>
-    </div>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <mat-form-field class="col-md-6 pl-0" appearance="outline">
+        <mat-label>Grupo</mat-label>
+        <mat-select
+          formControlName="group_id"
+          (selectionChange)="getDependencies($event.value)"
+        >
+          <mat-option *ngFor="let item of groups" [value]="item.value">{{
+            item.text
+          }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="group_valid"> Campo obligatorio </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-md-6 pr-0" appearance="outline">
+        <mat-label>Dependencia</mat-label>
+        <mat-select
+          formControlName="dependency_id"
+          (selectionChange)="getPositions($event.value)"
+        >
+          <mat-option *ngFor="let item of dependencies" [value]="item.value">{{
+            item.text
+          }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="dependency_valid"> Campo obligatorio </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-md-6 pl-0" appearance="outline">
+        <mat-label>Cargo</mat-label>
+        <mat-select
+          formControlName="position_id"
+        >
+          <mat-option *ngFor="let item of positions" [value]="item.value">{{
+            item.text
+          }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="position_valid"> Campo obligatorio </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field class="col-md-6 pr-0" appearance="outline">
+        <mat-label>Turno</mat-label>
+        <mat-select
+          formControlName="turn_type"
+        >
+          <mat-option *ngFor="let item of turnos" [value]="item.value">{{
+            item.text
+          }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="turn_valid"> Campo obligatorio </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-md-12 px-0" appearance="outline" *ngIf="turnSelected == 'Fijo'">
+        <mat-label>Turno asignado</mat-label>
+        <mat-select
+          formControlName="fixed_turn_id"
+        >
+          <mat-option *ngFor="let item of fixed_turns" [value]="item.value">{{
+            item.text
+          }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="fixed_turn_valid"> Campo obligatorio </mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="updateEnterpriseData()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
 </ng-template>

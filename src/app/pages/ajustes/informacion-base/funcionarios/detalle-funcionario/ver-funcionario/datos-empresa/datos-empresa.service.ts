@@ -25,7 +25,7 @@ export class DatosEmpresaService {
   }
 
   updateEnterpriseData(data){
-    return this.http.post(`${environment.base_url}/company`, data);
+    return this.http.post(`${environment.base_url}/enterpriseData`, data);
   }
 
 }

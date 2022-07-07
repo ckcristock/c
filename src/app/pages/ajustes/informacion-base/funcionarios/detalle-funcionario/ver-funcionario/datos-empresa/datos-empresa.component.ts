@@ -154,6 +154,11 @@ private getDismissReason(reason: any): string {
       this.form.get('dependency_id').invalid && this.form.get('dependency_id').touched
     );
   }
+  get group_valid(){
+    return (
+      this.form.get('group_id').invalid && this.form.get('group_id').touched
+    );
+  }
   
   get turnSelected() {
     return this.form.get('turn_type').value;

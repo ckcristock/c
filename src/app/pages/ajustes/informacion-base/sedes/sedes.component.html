@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Listado de Sedes</h4>
+      <h4 class="text-primary">Listado de sedes</h4>
       <div class="btn-group rounded">
         <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
           <i class="fas fa-sliders-h"></i> Filtros
@@ -17,32 +17,30 @@
         </mat-form-field>
       </mat-expansion-panel>
     </mat-accordion>
-    <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
-      *ngFor="let item of sedes ">
-      <thead>
-        <tr>
+    <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;">
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
           <th>Empresa</th>
           <th>Nombre</th>
           <th>Código</th>
-          <th class="text-center col-1">Acciones</th>
+          <th class="col-md-1">Acciones</th>
 
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>
-            <p class="font-size-14 mb-0 ">{{item.enterprise}}</p>
+        <tr *ngFor="let item of sedes" class="text-center">
+          <td class="align-middle">
+            {{item.enterprise}}
           </td>
-          <td>
-            <p class="font-size-14 mb-0 ">{{item.name}}</p>
+          <td class="align-middle">
+            {{item.name}}
           </td>
-          <td>
-            <p class="font-size-14 mb-0 ">{{item.code}}</p>
+          <td class="align-middle">
+            {{item.code}}
           </td>
-
-          <td class="text-center">
-
-            <div class="btn-group " role="group " ngbDropdown>
+          <td class="align-middle">
+            <i class="fas fa-ban"></i>
+            <!-- <div class="btn-group " role="group " ngbDropdown>
               <button id="btnGroupVerticalDrop1 " type="button " class="btn btn-primary dropdown-toggle btn-sm"
                 ngbDropdownToggle>
                 <i class="mdi mdi-chevron-down "></i>
@@ -53,7 +51,7 @@
                 <a class="dropdown-item "> <i class="fa fa-edit mr-2 "></i>Editar </a>
                 <a class="dropdown-item "> <i class="fa fa-ban mr-2 "></i>Suspender </a>
               </div>
-            </div>
+            </div> -->
           </td>
         </tr>
 

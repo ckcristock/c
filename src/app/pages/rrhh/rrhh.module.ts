@@ -29,6 +29,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
@@ -153,7 +154,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatStepperModule
+    MatStepperModule,
+    MatCheckboxModule
   ],
   providers: [{ provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' }],
   exports: [],

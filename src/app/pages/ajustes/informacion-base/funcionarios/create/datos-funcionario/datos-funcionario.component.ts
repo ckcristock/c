@@ -53,10 +53,10 @@ export class DatosFuncionarioComponent implements OnInit {
       date_of_birth: ['', this._valid.required],
       place_of_birth: ['', this._valid.required],
       direction: ['', this._valid.required],
-      phone: ['', [this._valid.required, this._valid.minLength(10), this._valid.maxLength(10)]],
+      phone: ['', [this._valid.required, this._valid.minLength(7), this._valid.maxLength(10)]],
       gener: ['', this._valid.required],
       blood_type: ['', this._valid.required],
-      cell_phone: ['', [this._valid.required, this._valid.minLength(7), this._valid.maxLength(7)]],
+      cell_phone: ['', [this._valid.required, this._valid.minLength(10), this._valid.maxLength(10)]],
       marital_status: ['', this._valid.required],
       number_of_children: ['', this._valid.required],
       degree: ['', this._valid.required],
@@ -151,7 +151,7 @@ export class DatosFuncionarioComponent implements OnInit {
 
   save() {
     this.form.markAllAsTouched();
-    if (this.form.invalid) { return false;}
+    //if (this.form.invalid) { return false;}
 
     this.person = { ...this.person,...this.form.value };
     this.person.image = this.file;

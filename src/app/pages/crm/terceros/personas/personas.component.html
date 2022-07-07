@@ -6,10 +6,13 @@
                 <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
                     <i class="fas fa-sliders-h"></i> Filtros
                 </button>
+                <button class="btn btn-secondary btn-sm" style="float: right;" (click)="openClose2()">
+                    <i class="fas fa-eye"></i>
+                </button>
             </div>
         </div>
         <hr class="line">
-        <mat-accordion multi>
+        <mat-accordion multi #firstAccordion="matAccordion">
             <mat-expansion-panel class="mat-elevation-z0">
                 <mat-form-field class="col-lg-3 col-md-3 col-sm-4 pl-0" appearance="outline">
                     <mat-label>Tercero</mat-label>
@@ -23,26 +26,38 @@
                 </mat-form-field>
             </mat-expansion-panel>
         </mat-accordion>
+        <mat-accordion multi #secondAccordion="matAccordion">
+            <mat-expansion-panel class="mat-elevation-z0">
+                <section class="d-flex justify-content-between mx-1">
+                    <mat-checkbox color="primary" [(ngModel)]="checkPersona">Persona</mat-checkbox> 
+                    <mat-checkbox color="primary" [(ngModel)]="checkTercero">Tercero</mat-checkbox> 
+                    <mat-checkbox color="primary" [(ngModel)]="checkTelefono">Telefono</mat-checkbox> 
+                    <mat-checkbox color="primary" [(ngModel)]="checkEmail">Email</mat-checkbox> 
+                    <mat-checkbox color="primary" [(ngModel)]="checkCargo">Cargo</mat-checkbox> 
+                    <mat-checkbox color="primary" [(ngModel)]="checkObservacion">Observacón</mat-checkbox> 
+                </section>
+            </mat-expansion-panel>
+        </mat-accordion>
         <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
             *ngIf="!loading && people.length > 0; else notData">
             <thead>
-                <tr>
-                    <th scope="col">Persona</th>
-                    <th>Tercero</th>
-                    <th>Tel. Celular</th>
-                    <th>Email</th>
-                    <th>Cargo</th>
-                    <th>Observación</th>
+                <tr class="text-center text-uppercase">
+                    <th *ngIf="checkPersona">Persona</th>
+                    <th *ngIf="checkTercero">Tercero</th>
+                    <th *ngIf="checkTelefono">Tel. Celular</th>
+                    <th *ngIf="checkEmail">Email</th>
+                    <th *ngIf="checkCargo">Cargo</th>
+                    <th *ngIf="checkObservacion">Observación</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let person of people">
-                    <td> {{ person.name }} </td>
-                    <td> {{ person.third_party }} </td>
-                    <td> {{ person.cell_phone }} </td>
-                    <td> {{ person.email }} </td>
-                    <td> {{ person.position }} </td>
-                    <td> {{ person.observation }} </td>
+                <tr *ngFor="let person of people" class="text-center">
+                    <td *ngIf="checkPersona"> {{ person.name }} </td>
+                    <td *ngIf="checkTercero"> {{ person.third_party }} </td>
+                    <td *ngIf="checkTelefono"> {{ person.cell_phone }} </td>
+                    <td *ngIf="checkEmail"> {{ person.email }} </td>
+                    <td *ngIf="checkCargo"> {{ person.position }} </td>
+                    <td *ngIf="checkObservacion"> {{ person.observation }} </td>
                 </tr>
             </tbody>
         </table>

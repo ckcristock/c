@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import Swal from 'sweetalert2';
 import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-centro-costos',
@@ -17,34 +18,34 @@ import { MatAccordion } from '@angular/material/expansion';
 export class CentroCostosComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   @ViewChild('modalCentroCosto') modalCentroCosto: any;
   @ViewChild('modalVerCentroCosto') modalVerCentroCosto: any;
   @ViewChild('alertSwal') alertSwal: any;
-  enviromen:any;
-  public Cargando: boolean=true;
-  public Costos:any = [];
-  public maxSize = 15; 
-  public pageSize = 20; 
-  public TotalItems:0;
-  public page:number;
+  enviromen: any;
+  public Cargando: boolean = true;
+  public Costos: any = [];
+  public maxSize = 15;
+  public pageSize = 20;
+  public TotalItems: 0;
+  public page: number;
   public filtro_nombre = '';
   public filtro_codigo = '';
   public filtro_cuenta = '';
   public CentrosCostosPadre: Array<NgSelectOption>;
 
-  public items:any = [];
-  public ValorTipo:any = 'Escoja tipo';
+  public items: any = [];
+  public ValorTipo: any = 'Escoja tipo';
 
-  public CentroCostoModel:any = {
+  public CentroCostoModel: any = {
     Nombre: '',
     Codigo: '',
     //EsCentroPadre: false,
@@ -56,18 +57,18 @@ export class CentroCostosComponent implements OnInit {
     //Nivel: 0
   };
 
-  public EditarCentroCostoModel:any = {
+  public EditarCentroCostoModel: any = {
     Nombre: '',
     Codigo: '',
     Id_Centro_Padre: '',
     Id_Tipo_Centro: '',
     Valor_Tipo_Centro: '',
     Id_Centro_Costo: '',
-    Movimiento : '',
+    Movimiento: '',
     Id_Empresa: ''
   };
 
-  public VerCentroCostoModel:any = {
+  public VerCentroCostoModel: any = {
     NombreCentro: '',
     CodigoCentro: '',
     PadreCentro: '',
@@ -76,40 +77,59 @@ export class CentroCostosComponent implements OnInit {
     Empresa: ''
   };
 
-  public TiposCentro1:Array<string> = [
+  public TiposCentro1: Array<string> = [
     "Tercero", "Departamento"
   ];
 
-  public TiposCentro:any = [];
+  public TiposCentro: any = [];
 
-  public Niveles:Array<number> = [
-    1,2,3,4,5
+  public Niveles: Array<number> = [
+    1, 2, 3, 4, 5
   ];
 
-  public Filtros:any = {
+  public Filtros: any = {
     Codigo: '',
     Nombre: '',
     Id_Empresa: ''
   }
 
-  public CentrosPadre:Array<string> = [
+  public CentrosPadre: Array<string> = [
     'Administracion',
     'Contabilidad'
   ];
 
-  public ValoresTipoCentro:any = [];
-  public CentrosCostos:any = [];
-  public CentrosCostosEditar:any = [];
+  public ValoresTipoCentro: any = [];
+  public CentrosCostos: any = [];
+  public CentrosCostosEditar: any = [];
 
-  public CodigoPlaceholder:string = 'Codigo';
-  companies:any[] = [];
-  constructor(  
-              public globales: Globales, 
-              private http: HttpClient, 
-              private location: Location, 
-              private route: ActivatedRoute,
-              private _centroCosto: CentroCostosService
-              ) { }
+  public CodigoPlaceholder: string = 'Codigo';
+  companies: any[] = [];
+  constructor(
+    public globales: Globales,
+    private http: HttpClient,
+    private location: Location,
+    private route: ActivatedRoute,
+    private _centroCosto: CentroCostosService,
+    private modalService: NgbModal,
+  ) { }
+
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
   ngOnInit() {
     this.ListarCostos();
@@ -119,32 +139,32 @@ export class CentroCostosComponent implements OnInit {
     // this.getCompanies();
   }
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
   openInNewTab() {
     window.open(this.enviromen.ruta + 'php/centroscostos/exportar.php', '_blank').focus();
-   }
-  ListarCostos(){
+  }
+  ListarCostos() {
     /* this.http.get(environment.ruta + 'php/centroscostos/centro_costos_listar.php').subscribe((data: any) => {
       this.items = data;
     }); */
 
     let queryString = this.getQueryParams();
-    
-    this.http.get(environment.ruta + 'php/centroscostos/lista_centros_costos.php'+queryString).subscribe((data: any) => {
+
+    this.http.get(environment.ruta + 'php/centroscostos/lista_centros_costos.php' + queryString).subscribe((data: any) => {
       this.Cargando = false;
       this.items = data.Centros;
       this.TotalItems = data.numReg;
     });
   }
 
-/*   getCompanies(){
-    this._centroCosto.getCompanies().subscribe((data:any) => {
-      this.companies = data.data;
-    })
-  }
- */
+  /*   getCompanies(){
+      this._centroCosto.getCompanies().subscribe((data:any) => {
+        this.companies = data.data;
+      })
+    }
+   */
   getQueryParams() {
 
     let queryParams = this.route.snapshot.queryParams;
@@ -153,22 +173,22 @@ export class CentroCostosComponent implements OnInit {
     this.Filtros.Nombre = queryParams.nom ? queryParams.nom : '';
     this.page = queryParams.pag ? queryParams.pag : 1;
 
-    let queryString = '?'+ Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&');
+    let queryString = '?' + Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&');
 
     return queryString;
-    
+
   }
 
   getQueryStringFiltro() {
 
-    let params:any = {
+    let params: any = {
       pag: this.page
     };
 
     if (this.Filtros.Codigo != '') {
       params.cod = this.Filtros.Codigo;
     }
-    
+
     if (this.Filtros.Nombre != '') {
       params.nom = this.Filtros.Nombre;
     }
@@ -182,7 +202,7 @@ export class CentroCostosComponent implements OnInit {
     this.location.replaceState('/contabilidad/centro-costos', queryString); // actualizando URL
 
     return queryString;
-    
+
   }
 
   filtrar(paginacion?) {
@@ -193,41 +213,41 @@ export class CentroCostosComponent implements OnInit {
 
     let queryString = this.getQueryStringFiltro();
 
-    this.http.get(environment.ruta + '/php/centroscostos/lista_centros_costos.php?'+queryString).subscribe((data: any) => {
+    this.http.get(environment.ruta + '/php/centroscostos/lista_centros_costos.php?' + queryString).subscribe((data: any) => {
       this.items = data.Centros;
       this.TotalItems = data.numReg;
       this.Cargando = false;
     });
-    
+
   }
 
-  QueryCentrosCostos(idCentro:string=''){
+  QueryCentrosCostos(idCentro: string = '') {
 
     if (idCentro === '') {
       this.http.get(environment.ruta + 'php/centroscostos/lista_centros_costos.php').subscribe((data: any) => {
         this.CentrosCostos = data.Centros;
         this.CentrosCostosPadre = data.CentrosCostosPadre;
       });
-    }else{
-      this.http.get(environment.ruta + 'php/centroscostos/lista_centros_costos.php', {params: {id_centro:idCentro}}).subscribe((data: any) => {
+    } else {
+      this.http.get(environment.ruta + 'php/centroscostos/lista_centros_costos.php', { params: { id_centro: idCentro } }).subscribe((data: any) => {
         this.CentrosCostosEditar = data.Centros;
         this.CentrosCostosPadre = data.CentrosCostosPadre;
 
       });
     }
-    
+
   }
 
-  QueryTipoCentros(){
+  QueryTipoCentros() {
     this.http.get(environment.ruta + 'php/centroscostos/lista_tipo_centro.php').subscribe((data: any) => {
       this.TiposCentro = data;
     });
   }
 
-  QueryCentroCosto(id:number){
+  QueryCentroCosto(id: number) {
     let idStr = id.toString();
 
-    this.http.get(environment.ruta + 'php/centroscostos/consultar_centro.php', {params: {nivel:idStr}}).subscribe((data: any) => {
+    this.http.get(environment.ruta + 'php/centroscostos/consultar_centro.php', { params: { nivel: idStr } }).subscribe((data: any) => {
       this.CentroCostoModel.Nombre = data.Nombre;
       this.CentroCostoModel.Codigo = data.Codigo;
       this.CentroCostoModel.EsCentroPadre = data.Es_Padre;
@@ -238,57 +258,57 @@ export class CentroCostosComponent implements OnInit {
     });
   }
 
-  GuardarCentroCosto(FormCentroCosto:NgForm, modalCentroCosto:any, funcion:string){
-    
-    if(funcion == 'guardar'){
-    
+  GuardarCentroCosto(FormCentroCosto: NgForm, funcion: string) {
+
+    if (funcion == 'guardar') {
+
       let datos = new FormData();
       let data = this.normalize(JSON.stringify(this.CentroCostoModel));
       datos.append("Datos", data);
       datos.append("accion", funcion);
       this.PeticionGuardarCentro(datos);
-      modalCentroCosto.hide();
+      this.modalService.dismissAll(); 
       this.LimpiarModelo();
 
-      setTimeout(()=>{
+      setTimeout(() => {
         this.ListarCostos();
       }, 1000);
 
-    }else if(funcion == 'editar'){
-    
+    } else if (funcion == 'editar') {
+
       let datos = new FormData();
       let data = this.normalize(JSON.stringify(this.EditarCentroCostoModel));
       datos.append("Datos", data);
       datos.append("accion", funcion);
-      
+
       this.PeticionGuardarCentro(datos);
-      modalCentroCosto.hide();
+      this.modalService.dismissAll(); 
       this.LimpiarModelo();
 
-      setTimeout(()=>{
+      setTimeout(() => {
         this.ListarCostos();
       }, 1000);
     }
-    
+
   }
 
-  AbrirModalNuevoCentro(){
+  AbrirModalNuevoCentro() {
     this.modalCentroCosto.show();
   }
 
-  AbrirModalVerCentro(){
+  AbrirModalVerCentro() {
     this.modalVerCentroCosto.show();
   }
 
-  ValorTipoCentro(value:string){
+  ValorTipoCentro(value: string) {
 
-    switch(value){
+    switch (value) {
       case '1':
         this.CentroCostoModel.ValorTipo = 'Tercero';
         this.ValorTipo = 'Tercero';
 
-        this.http.get(environment.ruta + 'php/centroscostos/listar_valores_tipo_centro.php', {params: {id_tipo:value, tipo:'Tercero'}}).subscribe((data: any) => {
-          
+        this.http.get(environment.ruta + 'php/centroscostos/listar_valores_tipo_centro.php', { params: { id_tipo: value, tipo: 'Tercero' } }).subscribe((data: any) => {
+
           this.ValoresTipoCentro = data;
         });
         break;
@@ -297,28 +317,28 @@ export class CentroCostosComponent implements OnInit {
         this.CentroCostoModel.ValorTipo = 'Departamento';
         this.ValorTipo = 'Departamento';
 
-        this.http.get(environment.ruta + 'php/centroscostos/listar_valores_tipo_centro.php', {params: {id_tipo:value, tipo:'Departamento'}}).subscribe((data: any) => {
-          
+        this.http.get(environment.ruta + 'php/centroscostos/listar_valores_tipo_centro.php', { params: { id_tipo: value, tipo: 'Departamento' } }).subscribe((data: any) => {
+
           this.ValoresTipoCentro = data;
         });
         break;
-      
+
       case '4':
         this.CentroCostoModel.ValorTipo = 'Municipio';
         this.ValorTipo = 'Municipio';
 
-        this.http.get(environment.ruta + 'php/centroscostos/listar_valores_tipo_centro.php', {params: {id_tipo:value, tipo:'Municipio'}}).subscribe((data: any) => {
-          
+        this.http.get(environment.ruta + 'php/centroscostos/listar_valores_tipo_centro.php', { params: { id_tipo: value, tipo: 'Municipio' } }).subscribe((data: any) => {
+
           this.ValoresTipoCentro = data;
         });
         break;
-      
+
       case '5':
         this.CentroCostoModel.ValorTipo = 'Zona';
         this.ValorTipo = 'Zona';
 
-        this.http.get(environment.ruta + 'php/centroscostos/listar_valores_tipo_centro.php', {params: {id_tipo:value, tipo:'Zonas'}}).subscribe((data: any) => {
-          
+        this.http.get(environment.ruta + 'php/centroscostos/listar_valores_tipo_centro.php', { params: { id_tipo: value, tipo: 'Zonas' } }).subscribe((data: any) => {
+
           this.ValoresTipoCentro = data;
         });
         break;
@@ -331,20 +351,20 @@ export class CentroCostosComponent implements OnInit {
     }
   }
 
-  checkValue(event:any){
+  checkValue(event: any) {
     // console.log(event);
-    if(event){
+    if (event) {
       this.CodigoPlaceholder = 'Ej: 001';
       this.CentroCostoModel.Nivel = '';
       this.CentroCostoModel.Padre = '';
-    }else{
+    } else {
       this.CodigoPlaceholder = 'Ej: 01';
     }
   }
 
-  Validaciones(){
-    if(this.CentroCostoModel.EsCentroPadre){
-      if(this.CentroCostoModel.Codigo.length < 3){
+  Validaciones() {
+    if (this.CentroCostoModel.EsCentroPadre) {
+      if (this.CentroCostoModel.Codigo.length < 3) {
         Swal.fire({
           icon: 'warning',
           title: 'Alerta',
@@ -355,10 +375,10 @@ export class CentroCostosComponent implements OnInit {
     }
   }
 
-  VerCentroCosto(idCentroCosto){
+  VerCentroCosto(idCentroCosto) {
 
-    this.http.get(environment.ruta + 'php/centroscostos/consultar_centro_costo.php', { params: {id_centro:idCentroCosto.toString()} }).subscribe((data: any) => {
-      
+    this.http.get(environment.ruta + 'php/centroscostos/consultar_centro_costo.php', { params: { id_centro: idCentroCosto.toString() } }).subscribe((data: any) => {
+
       this.VerCentroCostoModel = {
         NombreCentro: '',
         CodigoCentro: '',
@@ -369,9 +389,9 @@ export class CentroCostosComponent implements OnInit {
     });
   }
 
-  EditarCentroCosto(idCentroCosto, modal:any){
+  EditarCentroCosto(idCentroCosto) {
 
-    this.http.get(environment.ruta + 'php/centroscostos/consultar_centro_costo.php', { params: {id_centro:idCentroCosto.toString(), opcion:'editar'} }).subscribe((data: any) => {      
+    this.http.get(environment.ruta + 'php/centroscostos/consultar_centro_costo.php', { params: { id_centro: idCentroCosto.toString(), opcion: 'editar' } }).subscribe((data: any) => {
       console.log(data);
       this.ValorTipoCentro(data.Id_Tipo_Centro);
 
@@ -380,8 +400,7 @@ export class CentroCostosComponent implements OnInit {
       setTimeout(() => {
         this.EditarCentroCostoModel = data;
       }, 300);
-      
-      modal.show();
+
     });
   }
 
@@ -407,7 +426,7 @@ export class CentroCostosComponent implements OnInit {
 
   })();
 
-  PeticionGuardarCentro(data){
+  PeticionGuardarCentro(data) {
     this.http.post(environment.ruta + 'php/centroscostos/guardar_centros_costos.php', data).subscribe((data: any) => {
       if (data.codigo == 'success') {
         Swal.fire({
@@ -416,19 +435,19 @@ export class CentroCostosComponent implements OnInit {
           text: data.mensaje
         })
         // this.ShowSwal('success', 'Registro Exitoso', data.mensaje);
-        this.QueryCentrosCostos(); 
-      }else {
+        this.QueryCentrosCostos();
+      } else {
         Swal.fire({
-           icon: 'error',
-           title: 'Error!',
-           text: data.mensaje
+          icon: 'error',
+          title: 'Error!',
+          text: data.mensaje
         })
         // this.ShowSwal('error', 'Error!', data.mensaje);
       }
     });
   }
 
-  LimpiarModelo(){
+  LimpiarModelo() {
     this.CentroCostoModel = {
       Nombre: '',
       Codigo: '',
@@ -439,8 +458,8 @@ export class CentroCostosComponent implements OnInit {
     };
   }
 
-  CambiarEstado(id_centro){
-    this.http.get(environment.ruta + 'php/centroscostos/cambiar_estado_centro_costo.php', { params: {id_centro:id_centro.toString()} }).subscribe((data: any) => {      
+  CambiarEstado(id_centro) {
+    this.http.get(environment.ruta + 'php/centroscostos/cambiar_estado_centro_costo.php', { params: { id_centro: id_centro.toString() } }).subscribe((data: any) => {
       if (data.codigo == 'success') {
         Swal.fire({
           icon: 'success',
@@ -448,14 +467,14 @@ export class CentroCostosComponent implements OnInit {
           text: data.msg
         })
         // this.ShowSwal('success', 'Cambio Exitoso', data.msg);  
-      }else if(data.codigo == 'error'){
+      } else if (data.codigo == 'error') {
         Swal.fire({
           icon: 'error',
           title: 'Error Inesperado',
           text: data.msg
         })
         // this.ShowSwal('error', 'Error Inesperado', data.msg);
-      }else if(data.codigo == 'warning'){
+      } else if (data.codigo == 'warning') {
         Swal.fire({
           icon: 'warning',
           title: 'Alerta',
@@ -464,14 +483,14 @@ export class CentroCostosComponent implements OnInit {
         // this.ShowSwal('warning', 'Alerta', data.msg);
       }
 
-      setTimeout(()=>{
+      setTimeout(() => {
         this.ListarCostos();
       }, 1000);
     });
   }
 
-  Eliminar(id_centro){
-    this.http.get(environment.ruta + 'php/centroscostos/eliminar_centro_costo.php', { params: {id:id_centro} }).subscribe((data: any) => {      
+  Eliminar(id_centro) {
+    this.http.get(environment.ruta + 'php/centroscostos/eliminar_centro_costo.php', { params: { id: id_centro } }).subscribe((data: any) => {
       if (data.tipo == 'success') {
         Swal.fire({
           icon: 'success',
@@ -479,7 +498,7 @@ export class CentroCostosComponent implements OnInit {
           text: data.mensaje
         })
         // this.ShowSwal('success', 'Cambio Exitoso', data.mensaje);  
-      }else if(data.tipo == 'error'){
+      } else if (data.tipo == 'error') {
         Swal.fire({
           icon: 'error',
           title: 'Error Inesperado',
@@ -487,7 +506,7 @@ export class CentroCostosComponent implements OnInit {
         })
         // this.ShowSwal('error', 'Error Inesperado', data.mensaje);
       }
-      setTimeout(()=>{
+      setTimeout(() => {
         this.ListarCostos();
       }, 500);
     });
@@ -495,7 +514,7 @@ export class CentroCostosComponent implements OnInit {
 
   Test() {
     console.log(this.EditarCentroCostoModel);
-    
+
   }
 
 }

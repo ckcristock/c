@@ -19,17 +19,19 @@
                         <div class="row">
                             <div class="input-group-sm col-md-3">
                                 <label for="">Funcionario</label>
-                                <ng-select [items]="people" (change)="getAll()" [(ngModel)]="filtros.person_id" bindLabel="text"
-                                    bindValue="value" loadingText="loading " ngDefaultControl>
+                                <ng-select [items]="people" (change)="getAll()" [(ngModel)]="filtros.person_id"
+                                    bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
                                 </ng-select>
                             </div>
                             <div class="input-group-sm col-md-3">
                                 <label for="">F. Creación</label>
-                                <input type="date" class="form-control" [(ngModel)]="filtros.creation_date" (change)="getAll()" />
+                                <input type="date" class="form-control" [(ngModel)]="filtros.creation_date"
+                                    (change)="getAll()" />
                             </div>
                             <div class="input-group-sm col-md-3">
                                 <label for="">F. Salida</label>
-                                <input type="date" class="form-control" [(ngModel)]="filtros.departure_date" (change)="getAll()" />
+                                <input type="date" class="form-control" [(ngModel)]="filtros.departure_date"
+                                    (change)="getAll()" />
                             </div>
                             <div class="input-group-sm col-md-3">
                                 <label for="">Estado</label>
@@ -56,8 +58,9 @@
                 </mat-expansion-panel>
             </mat-accordion>
         </div>
-        <div class="container" style="font-size: small;">
-            <table class="table table-bordered table-striped table-sm" *ngIf="!loading && data.length > 0; else notData">
+        <div class="container">
+            <table class="table table-bordered table-striped table-sm" style="font-size: small;"
+                *ngIf="!loading && data.length > 0; else notData">
                 <thead>
                     <tr>
                         <th></th>
@@ -76,15 +79,17 @@
                     <tr *ngFor="let item of data" [ngClass]="{
                 'text-primary': item.state == 'Aprobado',
                 'text-danger': item.state == 'Inactivo'
-              }">       <td>
-                <img class="img-thumbnail rounded-circle header-profile-user mx-auto d-block" src="{{ item.person.image | image: 'users' }}" />
-              </td>
+              }">
                         <td>
-                            
-                            
-                                {{ item.person.first_name | titlecase }}
-                                {{ item.person.first_surname | titlecase }}
-                         
+                            <img class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
+                                src="{{ item.person.image | image: 'users' }}" />
+                        </td>
+                        <td>
+
+
+                            {{ item.person.first_name | titlecase }}
+                            {{ item.person.first_surname | titlecase }}
+
                         </td>
                         <td>
                             {{ item.user.person.first_name | titlecase }} {{ item.user.person.first_surname | titlecase

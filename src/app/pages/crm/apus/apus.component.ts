@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatAccordion } from '@angular/material/expansion';
 import { ApusService } from './apus.service';
 
 @Component({
@@ -7,6 +8,13 @@ import { ApusService } from './apus.service';
   styleUrls: ['./apus.component.scss']
 })
 export class ApusComponent implements OnInit {
+  checkTipo: boolean = true 
+  checkNombre: boolean = true 
+  checkCliente: boolean = true 
+  checkDestino: boolean = true 
+  checkLinea: boolean = true 
+  checkQuien: boolean = true 
+  checkFecha: boolean = true 
   apus:any[] = [];
   loading:boolean = false;
   pagination = {
@@ -23,6 +31,17 @@ export class ApusComponent implements OnInit {
   estadoFiltros = false;
   mostrarFiltros(){
     this.estadoFiltros = !this.estadoFiltros
+  }
+  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.firstAccordion.openAll();
+      this.matPanel = true;
+    } else {
+      this.firstAccordion.closeAll();
+      this.matPanel = false;
+    }    
   }
   getApus(page = 1){
     this.pagination.page = page;

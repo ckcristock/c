@@ -14,15 +14,37 @@ import { MatAccordion } from '@angular/material/expansion';
 })
 
 export class VacantesComponent implements OnInit {
-  @ViewChild(MatAccordion) accordion: MatAccordion;
+  checkCodigo: boolean = true
+  checkPublicacion: boolean = true
+  checkInicio: boolean = true
+  checkFin: boolean = true
+  checkTitulo: boolean = true
+  checkDependencia: boolean = true
+  checkCargo: boolean = true
+  checkDepartamento: boolean = true
+  checkMunicipio: boolean = true
+  checkEstado: boolean = true
+
+  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
+  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
   matPanel = false;
   openClose(){
     if (this.matPanel == false){
-      this.accordion.openAll()
+      this.firstAccordion.openAll();
       this.matPanel = true;
     } else {
-      this.accordion.closeAll()
+      this.firstAccordion.closeAll();
       this.matPanel = false;
+    }    
+  }
+  matPanel2 = false;
+  openClose2(){
+    if (this.matPanel2 == false){
+      this.secondAccordion.openAll();
+      this.matPanel2 = true;
+    } else {
+      this.secondAccordion.closeAll();
+      this.matPanel2 = false;
     }    
   }
   pagination = {

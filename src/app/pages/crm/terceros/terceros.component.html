@@ -9,14 +9,14 @@
                 <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
                     <i class="fas fa-sliders-h"></i> Filtros
                 </button>
+                <button class="btn btn-secondary btn-sm" style="float: right;" (click)="openClose2()">
+                    <i class="fas fa-eye"></i>
+                </button>
             </div>
         </div>
-        <hr class="line">
-        <div class="container">
-
-        </div>
-        <mat-accordion multi>
-            <mat-expansion-panel class="mat-elevation-z0">                              
+        <hr class="line">       
+        <mat-accordion multi #firstAccordion="matAccordion">
+            <mat-expansion-panel class="mat-elevation-z0">
                 <mat-form-field class="col-lg-2 col-md-3 col-sm-4 pl-0" appearance="outline">
                     <mat-label>NIT</mat-label>
                     <input type="text" matInput name="nit" [(ngModel)]="filtros.nit" autocomplete="off"
@@ -30,7 +30,7 @@
                         <mat-option value="Cliente">Cliente</mat-option>
                         <mat-option value="Proveedor">Proveedor</mat-option>
                     </mat-select>
-                </mat-form-field> 
+                </mat-form-field>
                 <mat-form-field class="col-lg-3 col-md-3 col-sm-4 pl-0" appearance="outline">
                     <mat-label>Nombre</mat-label>
                     <input type="text" matInput name="name" [(ngModel)]="filtros.name" autocomplete="off"
@@ -38,43 +38,60 @@
                 </mat-form-field>
             </mat-expansion-panel>
         </mat-accordion>
+        <mat-accordion multi #secondAccordion="matAccordion">
+            <mat-expansion-panel class="mat-elevation-z0">
+                <section class="d-flex justify-content-between mx-1">                    
+                    <mat-checkbox color="primary" [(ngModel)]="checkFoto">Foto</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkNIT">NIT</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkNombre">Nombre</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkDireccion">Dirección</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkMunicipio">Municipio</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkTelefono">Teléfono</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkTipo">Tipo</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkEmail">Correo electrónico</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkEstado">Estado</mat-checkbox>
+                </section>
+            </mat-expansion-panel>
+        </mat-accordion>
         <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
             *ngIf="!loading && thirdParties.length > 0; else notData">
             <thead>
-                <tr>
-                    <th>Foto</th>
-                    <th>NIT</th>
-                    <th>Nombre</th>
-                    <th>Dirección</th>
-                    <th>Municipio</th>
-                    <th>Teléfono</th>
-                    <th>Tipo</th>
-                    <th class="text-center col-1">Estado</th>
-                    <th class="text-center col-1">Acciones</th>
+                <tr class="text-center text-uppercase">
+                    <th *ngIf="checkFoto">Foto</th>
+                    <th *ngIf="checkNIT">NIT</th>
+                    <th *ngIf="checkNombre">Nombre</th>
+                    <th *ngIf="checkDireccion">Dirección</th>
+                    <th *ngIf="checkMunicipio">Municipio</th>
+                    <th *ngIf="checkTelefono">Teléfono</th>
+                    <th *ngIf="checkTipo">Tipo</th>
+                    <th *ngIf="checkEmail">Correo electrónico</th>
+                    <th *ngIf="checkEstado" class="col-md-1">Estado</th>
+                    <th class="col-md-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let third of thirdParties"
+                <tr *ngFor="let third of thirdParties" class="text-center"
                     [ngClass]="{'text-danger font-weight-bold': (third.state == 'Inactivo')}">
-                    <td>
+                    <td *ngIf="checkFoto">
                         <div>
                             <img [src]="third.image | image" onerror="this.src='../../../../assets/images/nofound.png'"
                                 class="rounded-circle mx-auto img-fluid header-profile-user">
                         </div>
 
                     </td>
-                    <td> {{ third.nit }} </td>
-                    <td> {{ third.first_name }} {{ third.first_surname }} </td>
-                    <td> {{ third.cod_dian_address }} </td>
-                    <td> {{ third.municipality.name }} </td>
-                    <td> {{ third.landline }} / {{ third.cell_phone }} </td>
-                    <td> {{ third.third_party_type }} </td>
-                    <td class="text-center">
-                        <span [ngClass]="third.state == 'Inactivo' ? 'badge badge-danger': 'badge badge-primary'">
+                    <td class="align-middle" *ngIf="checkNIT"> {{ third.nit }} </td>
+                    <td class="align-middle" *ngIf="checkNombre"> {{ third.first_name }} {{ third.first_surname }} </td>
+                    <td class="align-middle" *ngIf="checkDireccion"> {{ third.cod_dian_address }} </td>
+                    <td class="align-middle" *ngIf="checkMunicipio"> {{ third.municipality.name }} </td>
+                    <td class="align-middle" *ngIf="checkTelefono"> {{ third.landline }} / {{ third.cell_phone }} </td>
+                    <td class="align-middle" *ngIf="checkTipo"> {{ third.third_party_type }} </td>
+                    <td class="align-middle" *ngIf="checkEmail"> {{ third.email }} </td>
+                    <td class="align-middle" *ngIf="checkEstado">
+                        <span [ngClass]="third.state == 'Inactivo' ? 'badge badge-danger': 'badge badge-success'">
                             {{ third.state }}
                         </span>
                     </td>
-                    <td>
+                    <td class="align-middle">
                         <div class="text-center">
                             <div ngbDropdown class="dropdown-primary">
                                 <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light"

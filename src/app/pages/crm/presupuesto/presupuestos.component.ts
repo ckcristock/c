@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatAccordion } from '@angular/material/expansion';
 import { BudgetService } from './budget.service';
 
 @Component({
@@ -7,6 +8,25 @@ import { BudgetService } from './budget.service';
   styleUrls: ['./presupuestos.component.scss']
 })
 export class PresupuestosComponent implements OnInit {
+  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.firstAccordion.openAll();
+      this.matPanel = true;
+    } else {
+      this.firstAccordion.closeAll();
+      this.matPanel = false;
+    }    
+  }
+  checkItem: boolean = true
+  checkFecha: boolean = true
+  checkCliente: boolean = true
+  checkDestino: boolean = true
+  checkLinea: boolean = true
+  checkQuien: boolean = true
+  checkTCop: boolean = true
+  checkTUsd: boolean = true
   loading = false
   pagination = {
     page: 1,

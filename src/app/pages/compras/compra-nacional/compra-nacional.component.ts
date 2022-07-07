@@ -13,6 +13,13 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./compra-nacional.component.scss'],
 })
 export class CompraNacionalComponent implements OnInit {
+  checkFoto: boolean = true;
+  checkFuncionario: boolean = true;
+  checkFecha: boolean = true;
+  checkCodigo: boolean = true;
+  checkProveedor: boolean = true;
+  checkEstado: boolean = true;
+  checkAprobacion: boolean = true;
   panelOpenState = false;
   public comprasnacionales: any[] = [];
   @ViewChild('Formcomprasnacionacrear') Formcomprasnaciona: any;
@@ -23,15 +30,26 @@ export class CompraNacionalComponent implements OnInit {
   @ViewChild('PlantillaValor') PlantillaValor: TemplateRef<any>;
 
   @ViewChild('infoSwal') infoSwal: any;
-  @ViewChild(MatAccordion) accordion: MatAccordion;
+  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
+  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
   matPanel = false;
   openClose(){
     if (this.matPanel == false){
-      this.accordion.openAll()
+      this.firstAccordion.openAll();
       this.matPanel = true;
     } else {
-      this.accordion.closeAll()
+      this.firstAccordion.closeAll();
       this.matPanel = false;
+    }    
+  }
+  matPanel2 = false;
+  openClose2(){
+    if (this.matPanel2 == false){
+      this.secondAccordion.openAll();
+      this.matPanel2 = true;
+    } else {
+      this.secondAccordion.closeAll();
+      this.matPanel2 = false;
     }    
   }
 

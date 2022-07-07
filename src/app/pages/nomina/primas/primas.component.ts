@@ -10,7 +10,7 @@ import { PrimasService } from './primas.service';
 })
 export class PrimasComponent implements OnInit {
   form: FormGroup;
-  loading:boolean;
+  loading:boolean = false;
   @ViewChild('modal') modal:any;
   @ViewChild('modalFuncionario') modalFuncionario:any;
   years:any[] = [];
@@ -53,7 +53,9 @@ export class PrimasComponent implements OnInit {
   }
 
   getPrimasList(){
+    this.loading = true
     this._primas.getPremiumList().subscribe((r:any) => {
+      this.loading = false
       this.premiums = r.data;
     })
   }

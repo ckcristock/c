@@ -8,15 +8,32 @@ import { TercerosService } from '../terceros.service';
   styleUrls: ['./personas.component.scss']
 })
 export class PersonasComponent implements OnInit {
-  @ViewChild(MatAccordion) accordion: MatAccordion;
+  checkPersona: boolean = true
+  checkTercero: boolean = true
+  checkTelefono: boolean = true
+  checkEmail: boolean = true
+  checkCargo: boolean = true
+  checkObservacion: boolean = true
+  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
+  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
   matPanel = false;
   openClose(){
     if (this.matPanel == false){
-      this.accordion.openAll()
+      this.firstAccordion.openAll();
       this.matPanel = true;
     } else {
-      this.accordion.closeAll()
+      this.firstAccordion.closeAll();
       this.matPanel = false;
+    }    
+  }
+  matPanel2 = false;
+  openClose2(){
+    if (this.matPanel2 == false){
+      this.secondAccordion.openAll();
+      this.matPanel2 = true;
+    } else {
+      this.secondAccordion.closeAll();
+      this.matPanel2 = false;
     }    
   }
   people:any[] = [];

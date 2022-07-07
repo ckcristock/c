@@ -11,15 +11,35 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./terceros.component.scss']
 })
 export class TercerosComponent implements OnInit {
-  @ViewChild(MatAccordion) accordion: MatAccordion;
+  checkFoto: boolean = true;
+  checkNIT: boolean = true;
+  checkNombre: boolean = true;
+  checkDireccion: boolean = true;
+  checkMunicipio: boolean = true;
+  checkTelefono: boolean = true;
+  checkTipo: boolean = true;
+  checkEstado: boolean = true;
+  checkEmail: boolean = false;
+  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
+  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
   matPanel = false;
   openClose(){
     if (this.matPanel == false){
-      this.accordion.openAll()
+      this.firstAccordion.openAll();
       this.matPanel = true;
     } else {
-      this.accordion.closeAll()
+      this.firstAccordion.closeAll();
       this.matPanel = false;
+    }    
+  }
+  matPanel2 = false;
+  openClose2(){
+    if (this.matPanel2 == false){
+      this.secondAccordion.openAll();
+      this.matPanel2 = true;
+    } else {
+      this.secondAccordion.closeAll();
+      this.matPanel2 = false;
     }    
   }
   panelOpenState = false;
@@ -55,6 +75,7 @@ export class TercerosComponent implements OnInit {
     this.loading = true;
     this._tercerosService.getThirdParties(params).subscribe((r:any) => {
       this.thirdParties = r.data.data;
+      console.log(this.thirdParties)
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     });

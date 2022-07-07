@@ -57,12 +57,12 @@ export class InformacionEmpresaComponent implements OnInit {
   getGroups() {
     this._group.getGroup().subscribe((r: any) => {
       this.groups = r.data
-      this.groups.unshift({ text: 'Seleccione uno', value: '' });
     })
   }
   getCompanies() {
     this._company.getCompanies().subscribe((d: any) => {
       this.companies = d.data;
+      console.log(this.companies)
       d.data[0]
         ? this.formCompany.patchValue({ company_id: d.data[0].value })
         : '';

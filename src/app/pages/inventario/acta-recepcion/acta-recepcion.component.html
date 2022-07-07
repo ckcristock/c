@@ -1,344 +1,601 @@
-<div class="page-body">
-    <div class="row">
-        <div class="col-md-5">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="label label-danger pull-right">{{ListaNacional.length}} Compras</span>
-                            <h5>Compras Pendientes </h5>
-                            <span>Todas las Compras en espera Recepción de Mercancía</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12" style="max-height: 300px;height:300px;overflow: auto;">
-                                    <table class="table invoice-detail-table">
-                                        <thead>
-                                            <tr class="thead-default">
-                                                <th style="width:60px;max-width:60px;"></th>
-                                                <th style="width:80px;max-width:80px;">Cod. Compra</th>
-                                                <th style="width:80px;max-width:80px;">Fecha</th>
-                                                <th>Proveedor</th>
-                                                <th style="width:40px;max-width:40px;">Items</th>
-                                                <th style="width:70px;max-width:100px;"></th>
-                                            </tr>
-                                            <tr>
-                                                <th style="width:60px;max-width:60px;"></th>
-                                                <th class="tabla-filtro">
-                                                    <input type="text" [(ngModel)]="filtro_Codigo" (blur)="filtros2()" class="form-control input-sm" placeholder="Filtro Orden"></th>
-                                                <th class="tabla-filtro"></th>
-                                                <th class="tabla-filtro">
-                                                    <input type="text" [(ngModel)]="filtro_Proveedor" (blur)="filtros2()" class="form-control input-sm" placeholder="Filtro Proveedor">
-                                                </th>
-                                                <th class="tabla-filtro"></th>
-                                                <th class="tabla-filtro"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let item of ListaNacional; let i = index" id="fila{{i}}">
-                                                <td>
-                                                    <!-- TODO IMAGEN FUNC -->
-                                                    <img  class="img-radius imagen">
-                                                </td>
-                                                <td><strong>{{ item.Codigo }}</strong></td>
-                                                <td> {{ item.Fecha | date:'dd/MM/yyyy'}} </td>
-                                                <td class="text-left"> {{ item.Nombre }} </td>
-                                                <td> {{ item.Items }} </td>
-                                                <td>
-                                                    <div class="text-left">
-                                                        <div ngbDropdown class="dropdown-primary">
-                                                            <button ngbDropdownToggle class="btn btn-info btn-sm waves-effect waves-light " type="button"><i class="fa fa-bars"></i></button>
-                                                            <div ngbDropdownMenu>
-                                                                <a class="dropdown-item waves-light waves-effect caja-botones" href="" [routerLink]="['crear',item.Codigo,'Nacional']">
-                                                                    <i class="fa fa-server"></i>Realizar</a>
-                                                                <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/compras/ver-nacional',item.Id_Orden_Compra_Nacional]">
-                                                                    <i class="ti-eye"></i>Ver Ord.</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr *ngFor="let item of ListaIntrernacional; let i = index" id="fila{{i}}">
-                                                <td>
-                                                    <!-- TODO IMAGEN -->
-                                                   <!--  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
-                                                    <img *ngIf="item.Imagen !=''" src="{{environment.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen"> -->
-                                                </td>
-                                                <td> {{ item.Codigo }} </td>
-                                                <td> {{ item.Fecha | date:'dd/MM/yyyy'}} </td>
-                                                <td class="text-left"> {{ item.Nombre }} </td>
-                                                <td> {{ item.Items }} </td>
-                                                <td>
-                                                    <div class="text-center">
-                                                        <div ngbDropdown class="dropdown-info">
-                                                            <button ngbDropdownToggle class="btn btn-info btn-sm waves-effect waves-light " type="button"><i class="fa fa-bars"></i></button>
-                                                            <div ngbDropdownMenu>
-                                                                <a class="dropdown-item waves-light waves-effect caja-botones" href="" [routerLink]="['/actarecepcionnuevocrear',item.Codigo,'Internacional']">
-                                                                    <i class="fa fa-server"></i>Realizar</a>
-                                                                <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="['/compranacional',item.Id_Orden_Compra_Nacional]">
-                                                                    <i class="ti-eye"></i> Ver Ord.</a>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header text-center bg-dark text-white">
+          {{ ListaNacional.length }} compras
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <span class="label label-warning pull-right">{{actas_pendientes.length}} Actas</span>
-                    <h5>Actas de Recepción Pendientes</h5>
-                    <span>Actas en Espera de Aprobación de Compras</span>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12" style="max-height: 300px;height:300px;overflow: auto;">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Código</th>
-                                        <th>Fecha</th>
-                                        <th>Orden Compra</th>
-                                        <th>Facturas</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let item of actas_pendientes">
-                                        <td>
-                                            <!-- TODO image user -->
-                                           <!--  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen">
-                                            <img *ngIf="item.Imagen !=''" src="{{envi.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen"> -->
-                                        </td>
-                                        <td><strong>{{ item.Codigo }}</strong></td>
-                                        <td>{{ item.Fecha_Creacion | date: 'dd/MM/yyyy' }}</td>
-                                        <td>
-                                            <strong>{{ item.Codigo_Compra_N!='' ? item.Codigo_Compra_N : item.Codigo_Compra_I }}</strong>
-                                        </td>
-                                        <td>{{ item.Facturas }}</td>
-
-                                        <td>
-                                            <div class="text-center">
-                                                <div ngbDropdown class="dropdown-primary">
-                                                    <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">Acciones</button>
-                                                    <div ngbDropdownMenu>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="" [routerLink]="['/inventario/acta-recepcion/ver',item.Id_Acta_Recepcion]">
-                                                            <i class="ti-eye"></i> Ver</a>
-                                                        <!-- <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="[ '/actarecepcioneditar', item.Id_Acta_Recepcion ]"><i class="fa fa-pencil"></i> Editar</a> -->
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/actarecepcion/descarga_pdf.php?tipo=Acta_Recepcion&id={{item.Id_Acta_Recepcion}}" target="_blank">
-                                                            <i class="ti-printer"></i> Imprimir</a>
-
-                                                        <a *ngIf="perfilAdministrador() && item.Estado!='Anulada' " class="dropdown-item waves-light waves-effect caja-botones" (click)="AsignarDatos(item.Id_Acta_Recepcion)">
-                                                            <i class="ti-close"></i> Anular </a>
-                                                        <!--
+        <div class="card-body">
+          <div class="card-title d-flex justify-content-between">
+            <h5 class="text-primary">Compras Pendientes</h5>
+            <button
+              class="btn btn-info btn-sm"
+              style="float: right"
+              (click)="openClose()"
+            >
+              <i class="fas fa-sliders-h"></i> Filtros
+            </button>
+          </div>
+          <hr class="line" />
+          <mat-accordion multi #firstAccordion="matAccordion">
+            <mat-expansion-panel class="mat-elevation-z0">
+              <mat-form-field class="col-md-6 pl-0" appearance="outline">
+                <mat-label>Código</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por código"
+                  [(ngModel)]="filtro_Codigo"
+                  (input)="filtros2()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col-md-6 pl-0" appearance="outline">
+                <mat-label>Proveedor</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por proveedor"
+                  [(ngModel)]="filtro_Proveedor"
+                  (input)="filtros2()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <table
+            class="table table-bordered table-striped table-sm table-responsive-sm"
+            style="font-size: small"
+            *ngIf="!Cargando2 && ListaNacional.length > 0; else notData1"
+          >
+            <thead>
+              <tr>
+                <!-- <th></th> -->
+                <th>Código</th>
+                <th>Fecha</th>
+                <th>Proveedor</th>
+                <th>Items</th>
+                <th>Acc</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of ListaNacional; let i = index"
+                id="fila{{ i }}"
+              >
+                <!-- <td>
+                  <img class="img-radius imagen" />
+                </td> -->
+                <td>
+                  <strong>{{ item.Codigo }}</strong>
+                </td>
+                <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+                <td class="text-left">{{ item.Nombre }}</td>
+                <td>{{ item.Items }}</td>
+                <td>
+                  <div class="text-left">
+                    <div ngbDropdown class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm waves-effect waves-light"
+                        type="button"
+                      >
+                      <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item waves-light waves-effect caja-botones"
+                          href=""
+                          [routerLink]="['crear', item.Codigo, 'Nacional']"
+                        >
+                          <i class="fa fa-server"></i>Realizar</a
+                        >
+                        <a
+                          class="dropdown-item waves-light waves-effect caja-botones"
+                          [routerLink]="[
+                            '/compras/ver-nacional',
+                            item.Id_Orden_Compra_Nacional
+                          ]"
+                        >
+                          <i class="ti-eye"></i>Ver Ord.</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr
+                *ngFor="let item of ListaIntrernacional; let i = index"
+                id="fila{{ i }}"
+              >
+                <td>
+                  <!-- TODO IMAGEN -->
+                  <!--  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
+                                                    <img *ngIf="item.Imagen !=''" src="{{environment.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen"> -->
+                </td>
+                <td>{{ item.Codigo }}</td>
+                <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+                <td class="text-left">{{ item.Nombre }}</td>
+                <td>{{ item.Items }}</td>
+                <td>
+                  <div class="text-center">
+                    <div ngbDropdown class="dropdown-info">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-info btn-sm waves-effect waves-light"
+                        type="button"
+                      >
+                        <i class="fa fa-bars"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item waves-light waves-effect caja-botones"
+                          href=""
+                          [routerLink]="[
+                            '/actarecepcionnuevocrear',
+                            item.Codigo,
+                            'Internacional'
+                          ]"
+                        >
+                          <i class="fa fa-server"></i>Realizar</a
+                        >
+                        <a
+                          class="dropdown-item waves-light waves-effect caja-botones"
+                          [routerLink]="[
+                            '/compranacional',
+                            item.Id_Orden_Compra_Nacional
+                          ]"
+                        >
+                          <i class="ti-eye"></i> Ver Ord.</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header text-center bg-dark text-white">
+          {{ actas_pendientes.length }} actas
+        </div>
+        <div class="card-body">
+          <div class="card-title d-flex justify-content-between">
+            <h5 class="text-primary">Actas Pendientes</h5>
+          </div>
+          <hr class="line" />
+          <table
+            class="table table-bordered table-striped table-sm table-responsive-sm"
+            style="font-size: small"
+            *ngIf="!Cargando3 && actas_pendientes.length > 0; else notData2"
+          >
+            <thead>
+              <tr>
+               <!--  <th></th> -->
+                <th>Código</th>
+                <th>Fecha</th>
+                <th>Orden</th>
+                <th>Facturas</th>
+                <th>Acc</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of actas_pendientes">
+                <!-- <td>
+                   <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen">
+                                            <img *ngIf="item.Imagen !=''" src="{{envi.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
+                </td> -->
+                <td>
+                  <strong>{{ item.Codigo }}</strong>
+                </td>
+                <td>{{ item.Fecha_Creacion | date: "dd/MM/yyyy" }}</td>
+                <td>
+                  <strong>{{
+                    item.Codigo_Compra_N != ""
+                      ? item.Codigo_Compra_N
+                      : item.Codigo_Compra_I
+                  }}</strong>
+                </td>
+                <td>{{ item.Facturas }}</td>
+  
+                <td>
+                  <div class="text-center">
+                    <div ngbDropdown class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm waves-effect waves-light"
+                        type="button"
+                      >
+                      <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item waves-light waves-effect caja-botones"
+                          href=""
+                          [routerLink]="[
+                            '/inventario/acta-recepcion/ver',
+                            item.Id_Acta_Recepcion
+                          ]"
+                        >
+                          <i class="ti-eye"></i> Ver</a
+                        >
+                        <!-- <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="[ '/actarecepcioneditar', item.Id_Acta_Recepcion ]"><i class="fa fa-pencil"></i> Editar</a> -->
+                        <a
+                          class="dropdown-item waves-light waves-effect caja-botones"
+                          href="{{
+                            envi.ruta
+                          }}php/actarecepcion/descarga_pdf.php?tipo=Acta_Recepcion&id={{
+                            item.Id_Acta_Recepcion
+                          }}"
+                          target="_blank"
+                        >
+                          <i class="ti-printer"></i> Imprimir</a
+                        >
+  
+                        <a
+                          *ngIf="
+                            perfilAdministrador() && item.Estado != 'Anulada'
+                          "
+                          class="dropdown-item waves-light waves-effect caja-botones"
+                          (click)="AsignarDatos(item.Id_Acta_Recepcion)"
+                        >
+                          <i class="ti-close"></i> Anular
+                        </a>
+                        <!--
                               <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{item.Tipo}}&id={{item.Id_Orden_Compra}}"
                                 target="_blank">
                                 <i class="ti-printer"></i> Imprimir OC {{item.Tipo}}</a>
                               <a class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/archivos/descarga_etiqueta_zebra.php?id={{item.Id_Acta_Recepcion}}"
                                 target="_blank">
                                 <i class="fa fa-tag"></i> Descargar Etiquetas</a> -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                      </div>
                     </div>
-                </div>
-            </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-header">
-                    <span class="label label-danger pull-right">{{ActasAnuladas.length}} Actas</span>
-                    <h5>Actas de Recepción Anuladas</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row m-t-15">
-                        <div class="col-md-12" style="max-height: 300px;height:300px;overflow: auto; ">
-                            <table class="table table-striped" style="font-size: 8px !important">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 70px">Código</th>
-                                        <th style="width: 70px">Orden</th>
-                                        <th>Proveedor</th>
-                                        <th></th>
-                                    </tr>
-                                    <tr>
-                                        <th class="tabla-filtro">
-                                            <input type="text" class="form-control input-sm" placeholder="Filtro Acta" [(ngModel)]="Filtros.codigo_acta" (change)="ConsultaFiltrada()">
-                                        </th>
-                                        <th class="tabla-filtro">
-                                        </th>
-                                        <th class="tabla-filtro">
-                                        </th>
-                                        <th class="tabla-filtro">
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let item of ActasAnuladas">
-
-                                        <td><strong>{{ item.Codigo }}</strong></td>
-                                        <td>
-                                            <strong>{{ item.Codigo_Orden }}</strong>
-                                        </td>
-                                        <td> {{item.Proveedor}}</td>
-                                        <td>
-                                            <a class="text-info" href="" [routerLink]="['/inventario/acta-recepcion/ver',item.Id_Acta_Recepcion]">
-                                                <i class="fa fa-eye"></i> </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div id="paginacion-container" *ngIf="ActasAnuladas.length > 0">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <p style="font-size: 9px !important"><b>Mostrando del {{InformacionPaginacion.desde}} al
-                        {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <ngb-pagination class="pull-right" [collectionSize]="TotalItems1" [(page)]="page1" [maxSize]="maxSize1" [pageSize]="pageSize1" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Actas de Recepción Ingresadas</h5>
-                    <span>Actas de Recepción que se han ingresado a Inventario</span>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width:60px;"></th>
-                                        <th style="width:100px;">Código Acta</th>
-                                        <th style="width:120px;">Fecha Acta</th>
-                                        <th style="width:100px;">Orden Compra</th>
-                                        <th style="width:120px;">Fecha Compra</th>
-                                        <th style="width:100px;">Facturas</th>
-                                        <th>Proveedor</th>
-                                        <th style="width:60px;">Acciones</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="tabla-filtro"></th>
-                                        <th class="tabla-filtro">
-                                            <input type="text" [(ngModel)]="filtro_cod" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Acta">
-                                        </th>
-                                        <th class="tabla-filtro" style="text-align:left">
-                                            <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <input type="text" [(ngModel)]="filtro_compra" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Compra">
-                                        </th>
-                                        <th class="tabla-filtro" style="text-align:left">
-                                            <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha2" (dateRangeChanged)="dateRangeChanged2($event)" placeholder="Filtro Fecha Compra"></my-date-range-picker>
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <input type="text" [(ngModel)]="filtro_fact" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Facturas">
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <input type="text" [(ngModel)]="filtro_proveedor" (blur)="filtros()" class="form-control input-sm" placeholder="Filtro Proveedor">
-                                        </th>
-                                        <th class="tabla-filtro"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngIf="Cargando">
-                                        <td colspan="8" class="text-center">
-                                            <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-                                            <span class="sr-only">Cargando...</span>
-                                            <h4>Cargando Actas Acomodadas...</h4>
-                                        </td>
-                                    </tr>
-                                    <tr *ngFor="let item of actarecepciones">
-                                        <td>
-                                            <img
-                                             *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen">
-                                             <!-- TODO imagen func -->
-                                           <!--  <img *ngIf="item.Imagen !=''" src="{{envi.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen"> -->
-                                        </td>
-                                        <td><strong>{{ item.Codigo }}</strong></td>
-                                        <td>{{ item.Fecha_Creacion | date: 'dd/MM/yyyy' }}</td>
-                                        <td><strong>{{ item.Codigo_Compra_N!='' ? item.Codigo_Compra_N : item.Codigo_Compra_I }}</strong>
-                                        </td>
-                                        <td>
-                                            {{ item.Fecha_Compra_N!='' ? (item.Fecha_Compra_N | date: 'dd/MM/yyyy') : (item.Fecha_Compra_I | date: 'dd/MM/yyyy') }}
-                                        </td>
-                                        <!--  <td *ngIf=" item.Tipo_Acomodar == 'Ajuste_Individual' ">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header text-center bg-dark text-white">
+          {{ ActasAnuladas.length }} actas
+        </div>
+        <div class="card-body">
+          <div class="card-title d-flex justify-content-between">
+            <h5 class="text-primary">Actas Anuladas</h5>
+            <button
+              class="btn btn-info btn-sm"
+              style="float: right"
+              (click)="openClose2()"
+            >
+              <i class="fas fa-sliders-h"></i> Filtros
+            </button>
+          </div>
+          <hr class="line" />
+          <mat-accordion multi #secondAccordion="matAccordion">
+            <mat-expansion-panel class="mat-elevation-z0">
+              <mat-form-field class="col-md-6 pl-0" appearance="outline">
+                <mat-label>Código</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por código"
+                  [(ngModel)]="Filtros.codigo_acta"
+                  (input)="ConsultaFiltrada()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <table
+            class="table table-bordered table-striped table-sm table-responsive-sm"
+            style="font-size: small"
+            *ngIf="!Cargando4 && ActasAnuladas.length > 0; else notData3"
+          >
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Orden</th>
+                <th>Proveedor</th>
+                <th>Acc</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of ActasAnuladas" class="text-center">
+                <td>
+                  <strong>{{ item.Codigo }}</strong>
+                </td>
+                <td>
+                  <strong>{{ item.Codigo_Orden }}</strong>
+                </td>
+                <td>{{ item.Proveedor }}</td>
+                <td>
+                  <a
+                    class="text-primary"
+                    href=""
+                    [routerLink]="[
+                      '/inventario/acta-recepcion/ver',
+                      item.Id_Acta_Recepcion
+                    ]"
+                  >
+                    <i class="fa fa-eye"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ngb-pagination
+            *ngIf="ActasAnuladas.length > 0"
+            class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="TotalItems1"
+            [(page)]="page1"
+            [maxSize]="maxSize1"
+            [pageSize]="pageSize1"
+            size="sm"
+            (pageChange)="ConsultaFiltrada(true)"
+            [boundaryLinks]="true"
+          ></ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title d-flex justify-content-between">
+        <h4 class="text-primary">Actas Ingresadas</h4>
+        <div class="btn-group rounded">
+          <button
+            class="btn btn-info btn-sm"
+            style="float: right"
+            (click)="openClose3()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
+      </div>
+      <hr class="line" />
+      <mat-accordion multi #thirdAccordion="matAccordion">
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Código</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por código"
+              [(ngModel)]="filtro_cod"
+              (input)="filtros()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-md-2 pl-0">
+            <mat-label>Fecha de acta</mat-label>
+            <input
+              matInput
+              [satDatepicker]="picker"
+              [value]="date"
+              (dateChange)="selectedDate($event)"
+              (dateInput)="selectedDate($event)"
+              name="daterange"
+              autocomplete="off"
+              required
+            />
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></sat-datepicker-toggle>
+          </mat-form-field>
+  
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Órden de compra</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por órden de compra"
+              [(ngModel)]="filtro_compra"
+              (input)="filtros()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-md-2 pl-0">
+            <mat-label>Fecha de compra</mat-label>
+            <input
+              matInput
+              [satDatepicker]="picker2"
+              [value]="date2"
+              (dateChange)="selectedDate2($event)"
+              (dateInput)="selectedDate2($event)"
+              name="daterange2"
+              autocomplete="off"
+              required
+            />
+            <sat-datepicker #picker2 [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle
+              matSuffix
+              [for]="picker2"
+            ></sat-datepicker-toggle>
+          </mat-form-field>
+  
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Facturas</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por órden de compra"
+              [(ngModel)]="filtro_fact"
+              (input)="filtros()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Proveedor</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por órden de compra"
+              [(ngModel)]="filtro_proveedor"
+              (input)="filtros()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <table
+        class="table table-bordered table-striped table-sm table-responsive-sm"
+        style="font-size: small"
+        *ngIf="!Cargando && actarecepciones.length > 0; else notData4"
+      >
+        <thead>
+          <tr>
+            <th></th>
+            <th>Código Acta</th>
+            <th>Fecha Acta</th>
+            <th>Orden Compra</th>
+            <th>Fecha Compra</th>
+            <th>Facturas</th>
+            <th>Proveedor</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of actarecepciones">
+            <td>
+              <img
+                *ngIf="item.Imagen == ''"
+                src="assets/images/user.jpg"
+                class="img-radius imagen"
+              />
+              <!-- TODO imagen func -->
+              <!--  <img *ngIf="item.Imagen !=''" src="{{envi.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen"> -->
+            </td>
+            <td>
+              <strong>{{ item.Codigo }}</strong>
+            </td>
+            <td>{{ item.Fecha_Creacion | date: "dd/MM/yyyy" }}</td>
+            <td>
+              <strong>{{
+                item.Codigo_Compra_N != ""
+                  ? item.Codigo_Compra_N
+                  : item.Codigo_Compra_I
+              }}</strong>
+            </td>
+            <td>
+              {{
+                item.Fecha_Compra_N != ""
+                  ? (item.Fecha_Compra_N | date: "dd/MM/yyyy")
+                  : (item.Fecha_Compra_I | date: "dd/MM/yyyy")
+              }}
+            </td>
+            <!--  <td *ngIf=" item.Tipo_Acomodar == 'Ajuste_Individual' ">
                                             {{ Item.Fecha_Compra_N }}
                                         </td> -->
-                                        <td>{{ item.Facturas }}</td>
-                                        <td class="text-left"><strong>{{ item.Proveedor }}</strong></td>
-                                        <td>
-                                            <div class="text-center">
-                                                <div ngbDropdown class="dropdown-primary">
-                                                    <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light " type="button">
-                                                        <i class="text-primary fas fa-chevron-down"></i>
-                                                    </button>
-                                                    <div ngbDropdownMenu>
-                                                        <a class="dropdown-item waves-light waves-effect caja-botones" (click)="verActa(item)">
+            <td>{{ item.Facturas }}</td>
+            <td class="text-left">
+              <strong>{{ item.Proveedor }}</strong>
+            </td>
+            <td>
+              <div class="text-center">
+                <div ngbDropdown class="dropdown-primary">
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-secondary btn-sm waves-effect waves-light"
+                    type="button"
+                  >
+                    <i class="text-primary fas fa-chevron-down"></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <a
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      (click)="verActa(item)"
+                    >
+                      <i class="ti-eye"></i> Ver</a
+                    >
+  
+                    <!--                                          <a *ngIf="item.Tipo_Acomodar == 'Ajuste_Individual' " class="dropdown-item waves-light waves-effect caja-botones" href="" [routerLink]="['/ajustesinventariover',item.Id_Acta]">
                                                             <i class="ti-eye"></i> Ver</a>
-
-                                                        <!--                                          <a *ngIf="item.Tipo_Acomodar == 'Ajuste_Individual' " class="dropdown-item waves-light waves-effect caja-botones" href="" [routerLink]="['/ajustesinventariover',item.Id_Acta]">
-                                                            <i class="ti-eye"></i> Ver</a>
-
+  
                                                         <a *ngIf="item.Tipo_Acomodar == 'Nota_Credito' " class="dropdown-item waves-light waves-effect caja-botones" href="" [routerLink]="['/notascreditover',item.Id_Acta]">
                                                             <i class="ti-eye"></i> Ver</a> -->
-
-
-
-                                                        <!--IMPRIMIR-->
-                                                        <!--ACTA RECEPCION-->
-                                                        <a *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'" class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/actarecepcion/descarga_pdf.php?tipo=Acta_Recepcion&id={{item.Id_Acta}}" target="_blank">
-                                                            <i class="ti-printer"></i> Imprimir</a>
-                                                        <a *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion' " class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{item.Tipo}}&id={{item.Id_Orden_Compra}}" target="_blank">
-                                                            <i class="ti-printer"></i> Imprimir OC {{item.Tipo}}</a>
-
-                                                        <!--Nota_Credito-->
-                                                        <a *ngIf="item.Tipo_Acomodar == 'Nota_Credito' " class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/notascredito/descarga_pdf.php?tipo=Nota_Credito&id={{item.Id_Acta}}" target="_blank">
-                                                            <i class="ti-printer"></i> Imprimir</a>
-
-
-                                                        <a *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion' " class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/archivos/descarga_etiqueta_zebra.php?id={{item.Id_Acta}}" target="_blank">
-                                                            <i class="fa fa-tag"></i> Descargar Etiquetas</a>
-
-
-
-                                                        <a *ngIf="( perfilUsuario == '27' || perfilUsuario == '16' ) " class="dropdown-item waves-light waves-effect caja-botones" (click)="verContabilidad(item,'PGCA')">
-                                                            <i class="fa fa-book"></i> Contab. PCGA
-                                                        </a>
-
-                                                        <a *ngIf="( perfilUsuario == '27' || perfilUsuario == '16' ) " class="dropdown-item waves-light waves-effect caja-botones" (click)="verContabilidad(item,'NIF')">
-                                                            <i class="fa fa-book"></i> Contab. NIIF
-                                                        </a>
-
-
-                                                        <!--      -->
-
-                                                        <!--
+  
+                    <!--IMPRIMIR-->
+                    <!--ACTA RECEPCION-->
+                    <a
+                      *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      href="{{
+                        envi.ruta
+                      }}php/actarecepcion/descarga_pdf.php?tipo=Acta_Recepcion&id={{
+                        item.Id_Acta
+                      }}"
+                      target="_blank"
+                    >
+                      <i class="ti-printer"></i> Imprimir</a
+                    >
+                    <a
+                      *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      href="{{
+                        envi.ruta
+                      }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{
+                        item.Tipo
+                      }}&id={{ item.Id_Orden_Compra }}"
+                      target="_blank"
+                    >
+                      <i class="ti-printer"></i> Imprimir OC {{ item.Tipo }}</a
+                    >
+  
+                    <!--Nota_Credito-->
+                    <a
+                      *ngIf="item.Tipo_Acomodar == 'Nota_Credito'"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      href="{{
+                        envi.ruta
+                      }}php/notascredito/descarga_pdf.php?tipo=Nota_Credito&id={{
+                        item.Id_Acta
+                      }}"
+                      target="_blank"
+                    >
+                      <i class="ti-printer"></i> Imprimir</a
+                    >
+  
+                    <a
+                      *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      href="{{
+                        envi.ruta
+                      }}php/archivos/descarga_etiqueta_zebra.php?id={{
+                        item.Id_Acta
+                      }}"
+                      target="_blank"
+                    >
+                      <i class="fa fa-tag"></i> Descargar Etiquetas</a
+                    >
+  
+                    <a
+                      *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      (click)="verContabilidad(item, 'PGCA')"
+                    >
+                      <i class="fa fa-book"></i> Contab. PCGA
+                    </a>
+  
+                    <a
+                      *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      (click)="verContabilidad(item, 'NIF')"
+                    >
+                      <i class="fa fa-book"></i> Contab. NIIF
+                    </a>
+  
+                    <!--      -->
+  
+                    <!--
                                                         <a *ngIf="( perfilUsuario == '27' || perfilUsuario == '16' ) && item.Tipo_Acomodar == 'Acta_Recepcion'" class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/contabilidad/movimientoscontables/movimientos_acta_recepcion_pdf.php?id_registro={{item.Id_Acta}}&id_funcionario_elabora={{funcionario.Identificacion_Funcionario}}"
                                                             target="_blank">
                                                             <i class="fa fa-book"></i> Contab. PCGA
@@ -347,89 +604,132 @@
                                                             target="_blank">
                                                             <i class="fa fa-book"></i> Contab. NIIF
                                                         </a> -->
-
-
-                                                        <!-- Ajuste individual cont -->
-                                                        <!--       <a *ngIf="( perfilUsuario == '27' || perfilUsuario == '16' ) && item.Tipo_Acomodar == 'Ajuste_Individual' " class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/contabilidad/movimientoscontables/movimientos_ajuste_individual_pdf.php?id_registro={{item.Id_Acta}}&id_funcionario_elabora={{funcionario.Identificacion_Funcionario}}"
+  
+                    <!-- Ajuste individual cont -->
+                    <!--       <a *ngIf="( perfilUsuario == '27' || perfilUsuario == '16' ) && item.Tipo_Acomodar == 'Ajuste_Individual' " class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/contabilidad/movimientoscontables/movimientos_ajuste_individual_pdf.php?id_registro={{item.Id_Acta}}&id_funcionario_elabora={{funcionario.Identificacion_Funcionario}}"
                                                             target="_blank ">
                                                             <i class="fa fa-book "></i> Contab. PCGA
                                                         </a>
-
+  
                                                         <a *ngIf="(perfilUsuario=='27' || perfilUsuario=='16' ) && item.Tipo_Acomodar=='Ajuste_Individual' " class="dropdown-item waves-light waves-effect caja-botones " href="{{envi.ruta}}php/contabilidad/movimientoscontables/movimientos_ajuste_individual_pdf.php?id_registro={{item.Id_Acta}}&id_funcionario_elabora={{funcionario.Identificacion_Funcionario}}&tipo_valor=Niif "
                                                             target="_blank ">
                                                             <i class="fa fa-book "></i> Contab. NIIF
                                                         </a> -->
-                                                        <!-- **************************  -->
-
-                                                        <!-- Nota Credito cont -->
-                                                        <!--      <a *ngIf="( perfilUsuario == '27' || perfilUsuario == '16' ) && item.Tipo_Acomodar == 'Nota_Credito' " class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/contabilidad/movimientoscontables/movimientos_nota_credito_pdf.php?id_registro={{item.Id_Acta}}&id_funcionario_elabora={{funcionario.Identificacion_Funcionario}}"
+                    <!-- **************************  -->
+  
+                    <!-- Nota Credito cont -->
+                    <!--      <a *ngIf="( perfilUsuario == '27' || perfilUsuario == '16' ) && item.Tipo_Acomodar == 'Nota_Credito' " class="dropdown-item waves-light waves-effect caja-botones" href="{{envi.ruta}}php/contabilidad/movimientoscontables/movimientos_nota_credito_pdf.php?id_registro={{item.Id_Acta}}&id_funcionario_elabora={{funcionario.Identificacion_Funcionario}}"
                                                             target="_blank ">
                                                             <i class="fa fa-book "></i> Contab. PCGA
                                                         </a>
-
+  
                                                         <a *ngIf="(perfilUsuario=='27' || perfilUsuario=='16' ) && item.Tipo_Acomodar == 'Nota_Credito' " class="dropdown-item waves-light waves-effect caja-botones " href="{{envi.ruta}}php/contabilidad/movimientoscontables/movimientos_nota_credito_pdf.php?id_registro={{item.Id_Acta}}&id_funcionario_elabora={{funcionario.Identificacion_Funcionario}}&tipo_valor=Niif "
                                                             target="_blank ">
                                                             <i class="fa fa-book "></i> Contab. NIIF
                                                         </a> -->
-                                                        <!-- **************************  -->
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <ngb-pagination style="margin-top:20px;" class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" size="sm" (pageChange)="paginacion()" [pageSize]="10" [boundaryLinks]="true">
-                    </ngb-pagination>
-
-
+                    <!-- **************************  -->
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ngb-pagination
+        class="d-flex justify-content-center pagination-rounded pagination-sm"
+        [collectionSize]="TotalItems"
+        [(page)]="page"
+        [maxSize]="maxSize"
+        size="sm"
+        (pageChange)="paginacion()"
+        [pageSize]="10"
+        [boundaryLinks]="true"
+      >
+      </ngb-pagination>
     </div>
-</div>
-
-<app-modal-basic #modalAnularActa>
+  </div>
+  
+  <app-modal-basic #modalAnularActa>
     <div class="app-modal-header">
-        <h4 class="modal-title">Anular Acta Recepción</h4>
-        <button type="button" class="close basic-close" (click)="modalAnularActa.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <h4 class="modal-title">Anular Acta Recepción</h4>
+      <button
+        type="button"
+        class="close basic-close"
+        (click)="modalAnularActa.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
     <div class="app-modal-body">
-        <form #FormAnularFactura="ngForm">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Causal Anulación </label>
-                        <select class="form-control form-control-sm " name="Causal" [(ngModel)]="Model.Id_Causal_Anulacion" required>
-              <option *ngFor="let item of Causales" [value]="item.Id_Causal_Anulacion">{{item.Nombre}}</option>
-            </select>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Observaciones </label>
-                        <textarea name="Observaciones" rows="4" [(ngModel)]="Model.Observaciones" class="form-control " required></textarea>
-                    </div>
-                </div>
-
+      <form #FormAnularFactura="ngForm">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Causal Anulación </label>
+              <select
+                class="form-control form-control-sm"
+                name="Causal"
+                [(ngModel)]="Model.Id_Causal_Anulacion"
+                required
+              >
+                <option
+                  *ngFor="let item of Causales"
+                  [value]="item.Id_Causal_Anulacion"
+                >
+                  {{ item.Nombre }}
+                </option>
+              </select>
             </div>
-
-        </form>
-    </div>
-
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="button" class="btn btn-default btn-sm" (click)="modalAnularActa.hide()">Cancelar</button>
-            <button type="button" class="btn btn-primary btn-sm" (click)="confirmacionGuardar.fire()" [disabled]="!FormAnularFactura.valid">Anular</button>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Observaciones </label>
+              <textarea
+                name="Observaciones"
+                rows="4"
+                [(ngModel)]="Model.Observaciones"
+                class="form-control"
+                required
+              ></textarea>
+            </div>
+          </div>
         </div>
+      </form>
     </div>
-
-</app-modal-basic>
-
-<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
+  
+    <div class="app-modal-footer">
+      <div class="text-right">
+        <button
+          type="button"
+          class="btn btn-default btn-sm"
+          (click)="modalAnularActa.hide()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          (click)="confirmacionGuardar.fire()"
+          [disabled]="!FormAnularFactura.valid"
+        >
+          Anular
+        </button>
+      </div>
+    </div>
+  </app-modal-basic>
+  
+  <swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
+  
+  <ng-template #notData1>
+    <app-not-data [loading]="Cargando2"></app-not-data>
+  </ng-template>
+  <ng-template #notData2>
+    <app-not-data [loading]="Cargando3"></app-not-data>
+  </ng-template>
+  <ng-template #notData3>
+    <app-not-data [loading]="Cargando4"></app-not-data>
+  </ng-template>
+  <ng-template #notData4>
+    <app-not-data [loading]="Cargando"></app-not-data>
+  </ng-template>
+  

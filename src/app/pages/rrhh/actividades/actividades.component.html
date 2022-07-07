@@ -144,130 +144,93 @@
   </div>
   <div class="modal-body">
     <form #FormActividad="ngForm">
-      <div class="form-row">
-        <div class="col-md-8">
-          <div class="form-group">
-            <label for="actividad">Nombre Actividad</label>
-            <input type="text" name="name" id="actividad" [readonly]="ver == 1" required minlength="0" maxlength="30"
-              class="form-control form-control-sm" [(ngModel)]="ActividadModel.Actividad_Recursos_Humanos" />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="tipo_actividad">Tipo Actividad</label>
-            <select class="otra form-control form-control-sm" name="rrhh_activity_type_id" id="tipo_actividad"
-              [disabled]="ver == 1" [(ngModel)]="ActividadModel.Id_Tipo_Actividad_Recursos_Humanos" required>
-              <option value="" selected>Seleccione tipo</option>
-              <option *ngFor="let ta of TiposActividad" [value]="ta.value">
-                {{ ta.text }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="fechai">Fecha Inicio</label>
-            <input type="date" class="otra form-control form-control-sm" [readonly]="ver ? 1 : ''" required
-              name="date_start" id="fechai" [(ngModel)]="ActividadModel.Fecha_Inicio" />
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="fechaf">Fecha Fin</label>
-            <input type="date" class="otra form-control form-control-sm" [readonly]="ver ? 1 : ''" required
-              name="date_end" id="fechaf" [(ngModel)]="ActividadModel.Fecha_Fin" />
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="fechaf">Hora 1</label>
-            <input type="time" class="otra form-control form-control-sm" [readonly]="ver ? 1 : ''" required
-              name="hour_start" id="fechaf" [(ngModel)]="ActividadModel.Hora_Inicio" />
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="fechaf">Hora 2</label>
-            <input type="time" class="otra form-control form-control-sm" [readonly]="ver ? 1 : ''" required
-              name="hour_end" id="fechaf" [(ngModel)]="ActividadModel.Hora_Fin" />
-          </div>
-        </div>
-
-        <div class="col-12" *ngIf="!ver && !editar">
-          <div class="form-group">
-            <label>Dias (*)</label>
-            <ng-select [ngClass]="'ng-select'" name="days" [items]="daysOfWeek" bindLabel="text" bindValue="value"
-              required [multiple]="true" [(ngModel)]="ActividadModel.Days">
-            </ng-select>
-          </div>
-        </div>
-
-        <div class="col-md-12">
-          <div class="form-group">
-            <label for="fechaf">Detalles</label>
-            <input type="text" class="otra form-control form-control-sm" [readonly]="ver ? 1 : ''" required
-              name="description" id="Detalles" [(ngModel)]="ActividadModel.Detalles" />
-          </div>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Grupo (*)</label>
-            <ng-select [(ngModel)]="ActividadModel.Id_Grupo" [readonly]="ver ? 1 : ''" name="group_id"
-              (change)="getDependencies($event.value)" [items]="groups" bindLabel="text" required bindValue="value"
-              loadingText="loading" ngDefaultControl>
-            </ng-select>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Dependencia (*)</label>
-            <ng-select required name="dependency_id" [(ngModel)]="ActividadModel.Id_Dependencia"
-              [(ngModel)]="ActividadModel.Id_Dependencia" (change)="Dependencia_Cargo($event.value)"
-              [items]="dependencies" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-            </ng-select>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group col-md-12" *ngIf="!ver">
-          <label>Funcionarios (*)</label>
-          <ng-select [ngClass]="'ng-select'" name="people_id" [items]="Funcionarios" bindLabel="text" bindValue="value"
-            required [multiple]="true" [(ngModel)]="ActividadModel.Funcionario_Asignado">
-          </ng-select>
-          <input type="hidden" name="id" [(ngModel)]="ActividadModel.id">
-        </div>
-        <div class="form-group col-md-5 ml-1 rounded">
-          <table class="table table-striped table-hover" *ngIf="ver == 1">
-            <thead>
-              <tr>
-                <th class="text-left">Funcionarios Asignados</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let fun of FuncionariosSele">
-                <td>
-                  {{ fun.person.text }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <mat-form-field class="col-md-6 pl-0" appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput type="text" placeholder="Ingresa el nombre"
+          [(ngModel)]="ActividadModel.Actividad_Recursos_Humanos" name="name" id="actividad" autocomplete="off"
+          [readonly]="ver == 1" required minlength="0" maxlength="30">
+      </mat-form-field>
+      <mat-form-field class="col-md-3 pl-0" appearance="outline">
+        <mat-label>Tipo</mat-label>
+        <mat-select name="rrhh_activity_type_id" id="tipo_actividad" [disabled]="ver == 1"
+          [(ngModel)]="ActividadModel.Id_Tipo_Actividad_Recursos_Humanos" required>
+          <mat-option *ngFor="let item of TiposActividad" [value]="item.value">
+            {{ item.text }} </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="col-md-3 pl-0" appearance="outline" *ngIf="!ver && !editar">
+        <mat-label>Días</mat-label>
+        <mat-select name="days" required [multiple]="true" [(ngModel)]="ActividadModel.Days">
+          <mat-option *ngFor="let item of daysOfWeek" [value]="item.value">
+            {{ item.text }} </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="col-md-3 pl-0" appearance="outline">
+        <mat-label>Fecha de inicio</mat-label>
+        <input matInput type="date" [(ngModel)]="ActividadModel.Fecha_Inicio" name="date_start" id="fechai" required>
+      </mat-form-field>
+      <mat-form-field class="col-md-3 pl-0" appearance="outline">
+        <mat-label>Fecha de fin</mat-label>
+        <input matInput type="date" [(ngModel)]="ActividadModel.Fecha_Fin" name="date_end" id="fechaf" required>
+      </mat-form-field>
+      <mat-form-field class="col-md-3 pl-0" appearance="outline">
+        <mat-label>Hora de inicio</mat-label>
+        <input matInput type="time" [(ngModel)]="ActividadModel.Hora_Inicio" name="hour_start" id="fechaf" required>
+      </mat-form-field>
+      <mat-form-field class="col-md-3 pl-0" appearance="outline">
+        <mat-label>Hora de fin</mat-label>
+        <input matInput type="time" [(ngModel)]="ActividadModel.Hora_Fin" name="hour_end" id="fechaf" required>
+      </mat-form-field>
+      <mat-form-field class="col-md-3 pl-0" appearance="outline">
+        <mat-label>Detalles</mat-label>
+        <input matInput type="text" [(ngModel)]="ActividadModel.Detalles" name="description" id="Detalles"
+          placeholder="Ingresa los detalles" required>
+      </mat-form-field>
+      <mat-form-field class="col-md-3 pl-0" appearance="outline">
+        <mat-label>Grupo</mat-label>
+        <mat-select name="group_id" required [(ngModel)]="ActividadModel.Id_Grupo"
+          (selectionChange)="getDependencies($event.value)">
+          <mat-option *ngFor="let item of groups" [value]="item.value">
+            {{ item.text }} </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="col-md-3 pl-0" appearance="outline">
+        <mat-label>Dependencia</mat-label>
+        <mat-select name="dependency_id" required [(ngModel)]="ActividadModel.Id_Dependencia"
+          (selectionChange)="Dependencia_Cargo($event.value)">
+          <mat-option *ngFor="let item of dependencies" [value]="item.value">
+            {{ item.text }} </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="col-md-3 pl-0" appearance="outline">
+        <mat-label>Funcionarios</mat-label>
+        <mat-select name="people_id" required [(ngModel)]="ActividadModel.Funcionario_Asignado" [multiple]="true">
+          <mat-option *ngFor="let item of Funcionarios" [value]="item.value">
+            {{ item.text }} </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <table class="table table-striped table-hover" *ngIf="ver == 1">
+        <thead>
+          <tr>
+            <th class="text-left">Funcionarios Asignados</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let fun of FuncionariosSele">
+            <td>
+              {{ fun.person.text }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </form>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
       Cancelar
     </button>
-    <button *ngIf="!ver" type="button" [disabled]="!FormActividad.valid" (click)="GuardarActividad(FormActividad)" class="btn btn-primary">
+    <button *ngIf="!ver" type="button" [disabled]="!FormActividad.valid" (click)="GuardarActividad(FormActividad)"
+      class="btn btn-primary">
       <i class="fa fa-save mr-2"></i> Guardar
     </button>
   </div>

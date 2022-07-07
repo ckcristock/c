@@ -1,830 +1,784 @@
 <!-- <div class="page-body"> -->
 <!-- <div class="row"> -->
 <!-- <div class="col-md-12 filter-bar p-3"> -->
-<div class="card p-3">
-  <!-- <div class="card-header"> -->
-  <div class="row">
-    <div class="col-md-12">
-      <h5>Inventario</h5>
-      <br />
-      <div class="row" style="margin-top: 10px; margin-bottom: 10px">
-        <div class="col-md-12">
-          <div class="row">
-            <div class="col-md-3">
-              <select
-                class="form-control form-control-sm"
-                [(ngModel)]="bodega_selected"
-                (change)="buscar_categorias($event.target.value)"
-              >
-                <option value="0" selected>Todas</option>
-                <option
-                  *ngFor="let item of bodegas_nuevo"
-                  [value]="item.Id_Bodega_Nuevo"
-                >
-                  {{ item.Nombre }}
-                </option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <select
-                class="form-control form-control-sm"
-                id="subtipo"
-                [(ngModel)]="subtipo_punto"
-              >
-                <option value="0" selected>Todas</option>
-                <option
-                  *ngFor="let item of categorias_nuevas"
-                  [value]="item.Id_Categoria_Nueva"
-                >
-                  {{ item.Nombre }}
-                </option>
-              </select>
-            </div>
-            <div class="col-md-2" style="padding-left: 0">
-              <button
-                class="btn btn-primary btn-sm"
-                style="line-height: 0 !important; margin-top: 0 !important"
-                (click)="buscar_productos()"
-              >
-                <i class="fa fa-search"></i> Buscar
-              </button>
-            </div>
-            <div class="col-md-2 columna1">
-              <select
-                class="form-control form-control-sm"
-                id="lista"
-                [(ngModel)]="lista_informe"
-                (change)="filtro()"
-              >
-                <option value="" selected>Productos Sin Lista</option>
-                <option
-                  *ngFor="let item of listas"
-                  [value]="item.Id_Lista_Ganancia"
-                >
-                  {{ item.Nombre }}
-                </option>
-              </select>
-            </div>
-            <div class="col-md-2 columna2">
-              <!-- <! TODO Descar lista inventario -->
-              <!-- <a href="{{globales.ruta}}php/archivos/descarga_lista_nuevo.php?id={{lista_informe}}" target="_blank" class="btn btn-success btn-sm btn-block" style="line-height: 0 !important; margin-top: 0 !important">
-                                                <i class="fa fa-download"></i> Descarga Lista
-                                            </a> -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- </div> -->
-  <div class="card-body">
-    <div class="form-row filtros" style="margin-top: 10px">
-      <div class="col-12 m-b-">
-        <h5 style="font-size: 14px; margin-bottom: 10px">Filtros</h5>
-      </div>
-
-      <div class="form-group col-md-2">
-        <input
-          type="text"
-          class="form-control input-sm"
-          [(ngModel)]="filtro_nom"
-          placeholder="Nombre Producto"
-          (change)="filtro()"
-        />
-      </div>
-      <div class="form-group col-md-2">
-        <input
-          type="text"
-          class="form-control input-sm"
-          [(ngModel)]="filtro_grupo"
-          placeholder="Grupo Estiba"
-          (change)="filtro()"
-        />
-      </div>
-      <div class="form-group col-md-2">
-        <input
-          type="text"
-          class="form-control input-sm"
-          [(ngModel)]="filtro_lab"
-          placeholder="Lab. Comercial"
-          (change)="filtro()"
-        />
-      </div>
-      <div class="form-group col-md-2">
-        <input
-          type="text"
-          class="form-control input-sm"
-          [(ngModel)]="filtro_lab_gen"
-          placeholder="Lab. Genérico"
-          (change)="filtro()"
-        />
-      </div>
-      <div class="form-group col-md-2">
-        <input
-          type="text"
-          class="form-control input-sm"
-          [(ngModel)]="filtro_invima"
-          placeholder="Invima"
-          (change)="filtro()"
-        />
-      </div>
-      <div class="form-group col-md-2">
-        <input
-          type="text"
-          class="form-control input-sm"
-          [(ngModel)]="filtro_cum"
-          placeholder="Cod. CUM"
-          (change)="filtro()"
-        />
-      </div>
-
-      <div class="form-group col-md-2">
-        <input
-          type="text"
-          class="form-control input-sm"
-          [(ngModel)]="filtro_lote"
-          placeholder=" Lote"
-          (change)="filtro()"
-        />
-      </div>
-
-      <div class="form-group col-md-2">
-        <input
-          type="number"
-          class="form-control input-sm"
-          min="0"
-          [(ngModel)]="filtro_cant"
-          placeholder="Cantidad Disponible"
-          (change)="filtro()"
-        />
-      </div>
-
-      <div class="form-group col-md-2">
-        <input
-          type="number"
-          class="form-control input-sm"
-          min="0"
-          [(ngModel)]="filtro_cant_apar"
-          placeholder="Cantidad Apartada"
-          (change)="filtro()"
-        />
-      </div>
-      <div class="form-group col-md-2">
-        <input
-          type="number"
-          class="form-control input-sm"
-          min="0"
-          [(ngModel)]="filtro_cant_sel"
-          placeholder="Cantidad Seleccionada"
-          (change)="filtro()"
-        />
-      </div>
-      <div class="form-group col-md-2 d-flex flex-row">
-        <label for="Iva" class="mr-2">Iva</label>
-        <select
-          name="Iva"
-          id="Iva"
-          class="form-control form-control-sm"
-          [(ngModel)]="filtro_iva"
-          (change)="filtro()"
-        >
-          <option value="">Todos</option>
-          <option value="Si">Si</option>
-          <option value="No">No</option>
-        </select>
-      </div>
-      <div class="form-group col-md-2 d-flex flex-row">
-        <my-date-range-picker
-          name="mydaterange"
-          [options]="myDateRangePickerOptions"
-          [(ngModel)]="filtro_fecha"
-          (dateRangeChanged)="dateRangeChanged($event)"
-          placeholder="Fechas Vencimiento"
-        >
-        </my-date-range-picker>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12 p-b-10 p-t-10">
-        <div>
-          <input
-            type="checkbox"
-            checked
-            name="sin-inventario"
-            id="sin-inventario"
-            (change)="filtro()"
-          />
-          Sin Inventario--
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title d-flex justify-content-between">
+        <h4 class="text-primary">Inventario</h4>
+        <div class="btn-group rounded">
           <button
-            class="pull-right btn btn-primary btn-sm"
-            style="line-height: 0 !important; margin-top: 0 !important"
-            (click)="DescargaExcel()"
+            class="btn btn-info btn-sm"
+            style="float: right"
+            (click)="openClose()"
           >
-            <i class="fa fa-download"></i> Descargar
+            <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
       </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th style="width: 70px">Categoría</th>
-              <th style="width: 250px">N. Producto</th>
-              <th style="width: 80"></th>
-              <th style="width: 75">Estiba</th>
-              <th style="width: 60">Grupo</th>
-              <th style="width: 80px">Invima</th>
-              <th style="width: 140px">Laboratorios</th>
-              <th style="width: 90px">Cum</th>
-              <th>Lote</th>
-              <th style="width: 110px">F. Venc</th>
-              <th *ngIf="permiso" style="width: 70px; text-align: center">
-                Costo
-              </th>
-              <th
-                *ngIf="!permiso && lista_informe != 0"
-                style="width: 60px; text-align: center"
-              >
-                Precio Venta
-              </th>
-              <th style="max-width: 80px">Cant. Disp</th>
-              <th style="max-width: 80px">Cant. Apar</th>
-              <th style="max-width: 80px">Cant. Selecc</th>
-              <th style="max-width: 80px">Cant. Contra</th>
-              <th style="max-width: 80px">Borradores</th>
-              <th style="max-width: 30px">Iva</th>
-              <th style="max-width: 100px"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="Cargando_Tabla">
-              <td colspan="17" class="text-center">
-                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-                <span class="sr-only">Cargando...</span>
-                <h4>Cargando inventario...</h4>
-              </td>
-            </tr>
-            <tr
-              *ngIf="Inventarios.length == 0 && !Cargando_Tabla && !filtrando"
+      <hr class="line" />
+      <mat-accordion multi>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Nombre del producto</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por nombre del producto"
+              [(ngModel)]="filtro_nom"
+              (input)="filtro()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Grupo estiba</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por grupo estiba"
+              [(ngModel)]="filtro_grupo"
+              (input)="filtro()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Laboratorio comercial</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por laboratorio comercial"
+              [(ngModel)]="filtro_lab"
+              (input)="filtro()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Laboratorio genérico</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por laboratorio genérico"
+              [(ngModel)]="filtro_lab_gen"
+              (input)="filtro()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Invima</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por invima"
+              [(ngModel)]="filtro_invima"
+              (input)="filtro()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Código CUM</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por código CUM"
+              [(ngModel)]="filtro_cum"
+              (input)="filtro()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Lote</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por lote"
+              [(ngModel)]="filtro_lote"
+              (input)="filtro()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Cantidad disponisble</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por cantidad disponible"
+              [(ngModel)]="filtro_cant"
+              (input)="filtro()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Cantidad apartada</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por cantidad apartada"
+              [(ngModel)]="filtro_cant_apar"
+              (input)="filtro()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Cantidad seleccionada</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por cantidad apartada"
+              [(ngModel)]="filtro_cant_sel"
+              (input)="filtro()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>IVA</mat-label>
+            <mat-select
+              name="Iva"
+              id="Iva"
+              [(ngModel)]="filtro_iva"
+              (selectionChange)="filtro()"
             >
-              <td colspan="17" class="text-center">
-                <i class="fa fa-exclamation-circle fa-5x"></i>
-                <h4>Seleccione la Bodega a consultar</h4>
-              </td>
-            </tr>
-            <tr *ngIf="Inventarios.length == 0 && !Cargando_Tabla && filtrando">
-              <td colspan="14" class="text-center">
-                <i class="fa fa-exclamation-circle fa-5x"></i>
-                <h4>No existen productos en esta bodega</h4>
-              </td>
-            </tr>
-            <tr *ngFor="let inventario of Inventarios; let i = index">
-              <input
-                type="hidden"
-                id="NombreProducto{{ i }}"
-                [value]="inventario.Nombre_Comercial"
-              />
-              <input
-                type="hidden"
-                id="LoteProducto{{ i }}"
-                [value]="inventario.Lote"
-              />
-              <input
-                type="hidden"
-                id="Fecha_Venc{{ i }}"
-                [value]="inventario.Fecha_Vencimiento"
-              />
-              <td style="font-size: 7px">
-                <strong>{{ inventario.Nombre_Categoria }}</strong>
-              </td>
-              <td>
-                <strong>{{ inventario.Nombre_Comercial }}</strong
-                ><br /><span style="font-size: 9px" class="text-muted">{{
-                  inventario.Nombre_Producto
-                }}</span>
-              </td>
-              <td>
-                <span class="mytooltip tooltip-effect-2"
-                  ><span class="tooltip-item2">
-                    <p style="font-size: 20px">
-                      <i class="fa fa-archive"></i>
-                    </p> </span
-                  ><span class="tooltip-content4 clearfix"
-                    ><span class="tooltip-text2">{{
-                      inventario.Embalaje
-                    }}</span></span
-                  >
-                </span>
-              </td>
-              <td>
-                <span class="mytooltip tooltip-effect-2"
-                  ><span class="tooltip-item2">
-                    <p style="font-size: 20px">
-                      <i class="fa fa-th"></i>
-                    </p> </span
-                  ><span class="tooltip-content4 clearfix"
-                    ><span class="tooltip-text2">{{
-                      inventario.Nombre_Estiba
-                    }}</span></span
-                  >
-                </span>
-              </td>
-              <td>{{ inventario.Nombre_Grupo }}</td>
-              <td>{{ inventario.Invima }}</td>
-              <td>
-                <strong>Comercial: </strong
-                ><span>{{ inventario.Laboratorio_Comercial }} </span> <br />
-                <strong>Genérico: </strong
-                ><span>{{ inventario.Laboratorio_Generico }} </span>
-              </td>
-
-              <td>{{ inventario.Codigo_CUM }}</td>
-              <td>{{ inventario.Lote }}</td>
-              <td>{{ inventario.Fecha_Vencimiento | date: "dd/MM/yyyy" }}</td>
-              <td class="text-right" *ngIf="permiso">
-                <a
-                  style="font-size: 9px; color: red"
-                  href="javascript:void(0)"
-                  (click)="verCompras(inventario.Id_Producto, i)"
-                  >{{ inventario.Costo | currency }}</a
-                >
-                <br /><a
-                  style="font-size: 9px; color: rgb(17, 43, 129)"
-                  href="javascript:void(0)"
-                  >{{ inventario.Precio_Lista | currency }}</a
-                >
-              </td>
-              <td class="text-right" *ngIf="!permiso && lista_informe != 0">
-                <a
-                  style="font-size: 9px; color: rgb(17, 43, 129)"
-                  href="javascript:void(0)"
-                  >{{ inventario.Precio_Lista | currency }}</a
-                >
-              </td>
-              <td
-                class="text-center"
-                style="max-width: 60px; font-weight: bold"
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Si">Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-md-2 pl-0">
+            <mat-label>Fechas de vencimiento</mat-label>
+            <input
+              matInput
+              [satDatepicker]="picker"
+              [value]="date"
+              (dateChange)="selectedDate($event)"
+              (dateInput)="selectedDate($event)"
+              name="daterange"
+              autocomplete="off"
+              required
+            />
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></sat-datepicker-toggle>
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Bodega</mat-label>
+            <mat-select
+              [(ngModel)]="bodega_selected"
+              (selectionChange)="buscar_categorias($event.target.value)"
+            >
+              <mat-option value="">Todas</mat-option>
+              <mat-option
+                *ngFor="let item of bodegas_nuevo"
+                [value]="item.Id_Bodega_Nuevo"
+                >{{ item.Nombre }}</mat-option
               >
-                {{
-                  inventario.Cantidad_Disponible - inventario.cantidadContrato
-                    | number: "1.0-0"
-                }}
-              </td>
-              <td style="max-width: 60px">
-                {{ inventario.Cantidad_Apartada | number: "1.0-0" }}
-              </td>
-              <td style="max-width: 60px">
-                {{ inventario.Cantidad_Seleccionada | number: "1.0-0" }}
-              </td>
-
-              <td
-                class="text-center"
-                [ngClass]="{
-                  'text-danger': inventario.cantidadContrato > 0,
-                  'text-dark': inventario.cantidadContrato <= 0
-                }"
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Categoría</mat-label>
+            <mat-select [(ngModel)]="subtipo_punto">
+              <mat-option value="">Todas</mat-option>
+              <mat-option
+                *ngFor="let item of categorias_nuevas"
+                [value]="item.Id_Categoria_Nueva"
+                >{{ item.Nombre }}</mat-option
               >
-                {{ inventario.cantidadContrato }}
-              </td>
-              <td
-                style="max-width: 30px"
-                [ngClass]="{
-                  'text-danger': inventario.Gravado == 'Si',
-                  'text-success': inventario.Gravado == 'No'
-                }"
+            </mat-select>
+            <button
+              matSuffix
+              mat-icon-button
+              color="primary"
+              (click)="buscar_productos()"
+            >
+              <mat-icon aria-label="Example icon-button with a heart icon"
+                >search</mat-icon
               >
-                {{ inventario.Gravado }}
-              </td>
-              <!-- <td style="max-width: 100px">{{ inventario.Nombre_Bodega }}</td> -->
-              <td>
-                <div class="text-center">
-                  <div ngbDropdown class="dropdown-primary">
-                    <button
-                      ngbDropdownToggle
-                      class="
-                        btn btn-secondary
-                        nav-link
-                        dropdown-toggle
-                        waves-light
-                      "
-                      type="button"
-                    ></button>
-                    <div ngbDropdownMenu class="fix">
-                      <!-- TODO Imprimir etiqueta -->
-                      <a
-                        class="
-                          dropdown-item
-                          waves-light waves-effect
-                          caja-botones
-                        "
-                        target="_blank"
-                      >
-                        <i class="fa fa-print"></i> Imprimir Etiqueta</a
-                      >
-                      <a
-                        *ngIf="inventario.Cantidad_Apartada > 0"
-                        class="
-                          dropdown-item
-                          waves-light waves-effect
-                          caja-botones
-                        "
-                        href="javascript:void(0)"
-                        (click)="
-                          verApartadas(inventario.Id_Inventario_Nuevo, i)
-                        "
-                      >
-                        <i class="fa fa-cart-arrow-down"></i> Ver Apartadas</a
-                      >
-                      <a
-                        *ngIf="inventario.Cantidad_Seleccionada > 0"
-                        class="
-                          dropdown-item
-                          waves-light waves-effect
-                          caja-botones
-                        "
-                        href="javascript:void(0)"
-                        (click)="verSeleccionadas(inventario, i)"
-                      >
-                        <i class="fa fa-cart-arrow-down"></i> Ver
-                        Seleccionadas</a
-                      >
-                      <a
-                        *ngIf="inventario.cantidadContrato > 0"
-                        class="
-                          dropdown-item
-                          waves-light waves-effect
-                          caja-botones
-                        "
-                        href="javascript:void(0)"
-                        (click)="verContrato(inventario.Id_Inventario_Nuevo, i)"
-                      >
-                        <i class="fa fa-eye" style="color: red"></i> Ver
-                        Contrato</a
-                      >
-                    </div>
+            </button>
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Lista de informe</mat-label>
+            <mat-select [(ngModel)]="lista_informe" (selectionChange)="filtro()">
+              <mat-option value="">Productos sin lista</mat-option>
+              <mat-option
+                *ngFor="let item of listas"
+                [value]="item.Id_Lista_Ganancia"
+                >{{ item.Nombre }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-checkbox
+            checked="true"
+            name="sin-inventario"
+            id="sin-inventario"
+            (change)="filtro()"
+          >
+            Sin inventario
+          </mat-checkbox>
+          <button
+            mat-raised-button
+            color="primary"
+            class="mx-2 float-right"
+            (click)="DescargaExcel()"
+          >
+            <mat-icon>file_download</mat-icon>
+            Descargar
+          </button>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <!-- <! TODO Descar lista inventario -->
+      <!-- <a href="{{globales.ruta}}php/archivos/descarga_lista_nuevo.php?id={{lista_informe}}" target="_blank" class="btn btn-success btn-sm btn-block" style="line-height: 0 !important; margin-top: 0 !important">
+                                              <i class="fa fa-download"></i> Descarga Lista
+                                          </a> -->
+      <table
+        class="table table-bordered table-striped table-sm table-responsive-sm"
+        style="font-size: small"
+        *ngIf="!Cargando_Tabla && Inventarios.length > 0; else notData"
+      ><!--  -->
+        <thead>
+          <tr>
+            <th>Categoría</th>
+            <th>N. Producto</th>
+            <th></th>
+            <th>Estiba</th>
+            <th>Grupo</th>
+            <th>Invima</th>
+            <th>Laboratorios</th>
+            <th>Cum</th>
+            <th>Lote</th>
+            <th>F. Venc</th>
+            <th *ngIf="permiso">Costo</th>
+            <th *ngIf="!permiso && lista_informe != 0">
+              Precio Venta
+            </th>
+            <th>Cant. Disp</th>
+            <th>Cant. Apar</th>
+            <th>Cant. Selecc</th>
+            <th>Cant. Contra</th>
+            <th>Borradores</th>
+            <th>Iva</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr *ngIf="Inventarios.length == 0 && !Cargando_Tabla && !filtrando">
+            <td colspan="17" class="text-center">
+              <i class="fa fa-exclamation-circle fa-5x"></i>
+              <h4>Seleccione la Bodega a consultar</h4>
+            </td>
+          </tr>
+          
+          <tr *ngFor="let inventario of Inventarios; let i = index">
+            <input
+              type="hidden"
+              id="NombreProducto{{ i }}"
+              [value]="inventario.Nombre_Comercial"
+            />
+            <input
+              type="hidden"
+              id="LoteProducto{{ i }}"
+              [value]="inventario.Lote"
+            />
+            <input
+              type="hidden"
+              id="Fecha_Venc{{ i }}"
+              [value]="inventario.Fecha_Vencimiento"
+            />
+            <td style="font-size: 7px">
+              <strong>{{ inventario.Nombre_Categoria }}</strong>
+            </td>
+            <td>
+              <strong>{{ inventario.Nombre_Comercial }}</strong
+              ><br /><span style="font-size: 9px" class="text-muted">{{
+                inventario.Nombre_Producto
+              }}</span>
+            </td>
+            <td>
+              <span class="mytooltip tooltip-effect-2"
+                ><span class="tooltip-item2">
+                  <p style="font-size: 20px">
+                    <i class="fa fa-archive"></i>
+                  </p> </span
+                ><span class="tooltip-content4 clearfix"
+                  ><span class="tooltip-text2">{{
+                    inventario.Embalaje
+                  }}</span></span
+                >
+              </span>
+            </td>
+            <td>
+              <span class="mytooltip tooltip-effect-2"
+                ><span class="tooltip-item2">
+                  <p style="font-size: 20px">
+                    <i class="fa fa-th"></i>
+                  </p> </span
+                ><span class="tooltip-content4 clearfix"
+                  ><span class="tooltip-text2">{{
+                    inventario.Nombre_Estiba
+                  }}</span></span
+                >
+              </span>
+            </td>
+            <td>{{ inventario.Nombre_Grupo }}</td>
+            <td>{{ inventario.Invima }}</td>
+            <td>
+              <strong>Comercial: </strong
+              ><span>{{ inventario.Laboratorio_Comercial }} </span> <br />
+              <strong>Genérico: </strong
+              ><span>{{ inventario.Laboratorio_Generico }} </span>
+            </td>
+  
+            <td>{{ inventario.Codigo_CUM }}</td>
+            <td>{{ inventario.Lote }}</td>
+            <td>{{ inventario.Fecha_Vencimiento | date: "dd/MM/yyyy" }}</td>
+            <td class="text-right" *ngIf="permiso">
+              <a
+                style="font-size: 9px; color: red"
+                href="javascript:void(0)"
+                (click)="verCompras(inventario.Id_Producto, i)"
+                >{{ inventario.Costo | currency }}</a
+              >
+              <br /><a
+                style="font-size: 9px; color: rgb(17, 43, 129)"
+                href="javascript:void(0)"
+                >{{ inventario.Precio_Lista | currency }}</a
+              >
+            </td>
+            <td class="text-right" *ngIf="!permiso && lista_informe != 0">
+              <a
+                style="font-size: 9px; color: rgb(17, 43, 129)"
+                href="javascript:void(0)"
+                >{{ inventario.Precio_Lista | currency }}</a
+              >
+            </td>
+            <td class="text-center" style="max-width: 60px; font-weight: bold">
+              {{
+                inventario.Cantidad_Disponible - inventario.cantidadContrato
+                  | number: "1.0-0"
+              }}
+            </td>
+            <td style="max-width: 60px">
+              {{ inventario.Cantidad_Apartada | number: "1.0-0" }}
+            </td>
+            <td style="max-width: 60px">
+              {{ inventario.Cantidad_Seleccionada | number: "1.0-0" }}
+            </td>
+  
+            <td
+              class="text-center"
+              [ngClass]="{
+                'text-danger': inventario.cantidadContrato > 0,
+                'text-dark': inventario.cantidadContrato <= 0
+              }"
+            >
+              {{ inventario.cantidadContrato }}
+            </td>
+            <td
+              style="max-width: 30px"
+              [ngClass]="{
+                'text-danger': inventario.Gravado == 'Si',
+                'text-success': inventario.Gravado == 'No'
+              }"
+            >
+              {{ inventario.Gravado }}
+            </td>
+            <!-- <td style="max-width: 100px">{{ inventario.Nombre_Bodega }}</td> -->
+            <td>
+              <div class="text-center">
+                <div ngbDropdown class="dropdown-primary">
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-secondary nav-link dropdown-toggle waves-light"
+                    type="button"
+                  ></button>
+                  <div ngbDropdownMenu class="fix">
+                    <!-- TODO Imprimir etiqueta -->
+                    <a
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      target="_blank"
+                    >
+                      <i class="fa fa-print"></i> Imprimir Etiqueta</a
+                    >
+                    <a
+                      *ngIf="inventario.Cantidad_Apartada > 0"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      href="javascript:void(0)"
+                      (click)="verApartadas(inventario.Id_Inventario_Nuevo, i)"
+                    >
+                      <i class="fa fa-cart-arrow-down"></i> Ver Apartadas</a
+                    >
+                    <a
+                      *ngIf="inventario.Cantidad_Seleccionada > 0"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      href="javascript:void(0)"
+                      (click)="verSeleccionadas(inventario, i)"
+                    >
+                      <i class="fa fa-cart-arrow-down"></i> Ver Seleccionadas</a
+                    >
+                    <a
+                      *ngIf="inventario.cantidadContrato > 0"
+                      class="dropdown-item waves-light waves-effect caja-botones"
+                      href="javascript:void(0)"
+                      (click)="verContrato(inventario.Id_Inventario_Nuevo, i)"
+                    >
+                      <i class="fa fa-eye" style="color: red"></i> Ver Contrato</a
+                    >
                   </div>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <p class="pull-left"><strong>Total: </strong> {{ TotalItems }}</p>
-    <ngb-pagination
-      class="pull-right"
-      [collectionSize]="TotalItems"
-      [(page)]="page"
-      [pageSize]="pageSize"
-      [maxSize]="maxSize"
-      size="sm"
-      (pageChange)="paginacion()"
-      [boundaryLinks]="true"
-    ></ngb-pagination>
-  </div>
-</div>
-<!-- </div> -->
-<!-- </div> -->
-<!-- </div> -->
-
-<app-modal-basic #modalContrato [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">Cantidad Contrato</h5>
-    <button
-      type="button"
-      class="close basic-close"
-      (click)="modalContrato.hide(); limpiarContrato()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="app-modal-body">
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Nombre Contrato</th>
-              <th>Tipo Contrato</th>
-              <th>Cantidad</th>
-              <th>Cantidad Apartada</th>
-              <th>Cantidad Selccionada</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="CargandoDetalleContrato">
-              <td colspan="6" class="text-center">
-                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-                <span class="sr-only">Cargando...</span>
-                <h4>Cargando...</h4>
-              </td>
-            </tr>
-            <tr *ngFor="let item of DetalleContrato">
-              <td>{{ item.Nombre_Contrato }}</td>
-              <td>{{ item.Tipo_Contrato }}</td>
-              <td>{{ item.cantidadContrato }}</td>
-              <td>{{ item.Cantidad_Apartada }}</td>
-              <td>{{ item.Cantidad_Seleccionada }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ngb-pagination
+        class="d-flex justify-content-center pagination-rounded pagination-sm"
+        [collectionSize]="TotalItems"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [maxSize]="maxSize"
+        size="sm"
+        (pageChange)="paginacion()"
+        [boundaryLinks]="true"
+      ></ngb-pagination>
     </div>
   </div>
-
-  <div class="app-modal-footer">
-    <div class="text-right">
+  
+  <ng-template #notData>
+    <app-not-data [loading]="Cargando_Tabla"></app-not-data>
+  </ng-template>
+  
+  <app-modal-basic #modalContrato [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+      <h5 class="modal-title">Cantidad Contrato</h5>
       <button
         type="button"
-        class="btn btn-danger btn-sm"
+        class="close basic-close"
         (click)="modalContrato.hide(); limpiarContrato()"
       >
-        Cerrar
+        <span aria-hidden="true">&times;</span>
       </button>
     </div>
-  </div>
-</app-modal-basic>
-
-<app-modal-basic #modalApartadas [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">Remisiones que apartaron el producto</h5>
-    <button
-      type="button"
-      class="close basic-close"
-      (click)="modalApartadas.hide()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="app-modal-body">
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table">
-          <tr>
-            <td style="background: #d3d3d3; text-align: left; width: 150px">
-              <b>Nombre Producto: </b>
-            </td>
-            <td>
-              {{ nombre_producto }}
-            </td>
-          </tr>
-          <tr>
-            <td style="background: #d3d3d3; text-align: left"><b>Lote: </b></td>
-            <td>{{ lote_producto }}</td>
-          </tr>
-          <tr>
-            <td style="background: #d3d3d3; text-align: left">
-              <b>Fecha Vencimiento: </b>
-            </td>
-            <td>{{ fecha_venc_producto | date: "dd/MM/yyyy" }}</td>
-          </tr>
-        </table>
-      </div>
-      <div class="col-md-12" style="max-height: 350px; overflow: scroll">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Fecha</th>
-              <th>Identificación Funcionario</th>
-              <th>Destino</th>
-              <th>Cantidad</th>
-              <th>Fase</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="Cargando_Apartadas">
-              <td colspan="6" class="text-center">
-                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-                <span class="sr-only">Cargando...</span>
-                <h4>Cargando...</h4>
-              </td>
-            </tr>
-            <tr *ngFor="let item of Apartadas">
-              <td>
-                <a
-                  [routerLink]="['/remision', item.Id_Remision]"
-                  style="font-size: 9px"
-                  >{{ item.Codigo }}</a
-                >
-              </td>
-              <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
-              <td>{{ item.Identificacion_Funcionario }}</td>
-              <td>{{ item.Destino }}</td>
-              <td>{{ item.Cantidad }}</td>
-              <td>{{ item.Fase }}</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="app-modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Nombre Contrato</th>
+                <th>Tipo Contrato</th>
+                <th>Cantidad</th>
+                <th>Cantidad Apartada</th>
+                <th>Cantidad Selccionada</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="CargandoDetalleContrato">
+                <td colspan="6" class="text-center">
+                  <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                  <span class="sr-only">Cargando...</span>
+                  <h4>Cargando...</h4>
+                </td>
+              </tr>
+              <tr *ngFor="let item of DetalleContrato">
+                <td>{{ item.Nombre_Contrato }}</td>
+                <td>{{ item.Tipo_Contrato }}</td>
+                <td>{{ item.cantidadContrato }}</td>
+                <td>{{ item.Cantidad_Apartada }}</td>
+                <td>{{ item.Cantidad_Seleccionada }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="app-modal-footer">
-    <div class="text-right">
+  
+    <div class="app-modal-footer">
+      <div class="text-right">
+        <button
+          type="button"
+          class="btn btn-danger btn-sm"
+          (click)="modalContrato.hide(); limpiarContrato()"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </app-modal-basic>
+  
+  <app-modal-basic #modalApartadas [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+      <h5 class="modal-title">Remisiones que apartaron el producto</h5>
       <button
         type="button"
-        class="btn btn-danger btn-sm"
+        class="close basic-close"
         (click)="modalApartadas.hide()"
       >
-        Cerrar
+        <span aria-hidden="true">&times;</span>
       </button>
     </div>
-  </div>
-</app-modal-basic>
-
-<app-modal-basic #modalSeleccionadas [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">Borradores que seleccionaron el producto</h5>
-    <button
-      type="button"
-      class="close basic-close"
-      (click)="modalSeleccionadas.hide()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="app-modal-body">
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table">
-          <tr>
-            <td style="background: #d3d3d3; text-align: left; width: 150px">
-              <b>Nombre Producto: </b>
-            </td>
-            <td>
-              {{ nombre_producto }}
-            </td>
-          </tr>
-          <tr>
-            <td style="background: #d3d3d3; text-align: left"><b>Lote: </b></td>
-            <td>{{ lote_producto }}</td>
-          </tr>
-          <tr>
-            <td style="background: #d3d3d3; text-align: left">
-              <b>Fecha Vencimiento: </b>
-            </td>
-            <td>{{ fecha_venc_producto | date: "dd/MM/yyyy" }}</td>
-          </tr>
-        </table>
-      </div>
-      <div class="col-md-12" style="max-height: 350px; overflow: scroll">
-        <table class="table table-striped">
-          <thead>
+    <div class="app-modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table">
             <tr>
-              <th>Código</th>
-              <th>Fecha</th>
-              <th>Identificación Funcionario</th>
-              <th>Origen</th>
-              <th>Destino</th>
-              <th>Cantidad</th>
-              <th>Lote</th>
-              <th>Tipo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="Cargando_Seleccionados">
-              <td colspan="6" class="text-center">
-                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-                <span class="sr-only">Cargando...</span>
-                <h4>Cargando...</h4>
+              <td style="background: #d3d3d3; text-align: left; width: 150px">
+                <b>Nombre Producto: </b>
               </td>
-            </tr>
-
-            <tr *ngFor="let item of Seleccionados">
               <td>
-                {{ item.Codigo }}
+                {{ nombre_producto }}
               </td>
-              <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
-              <td>{{ item.Identificacion_Funcionario }}</td>
-              <td>{{ item.Nombre_Origen }}</td>
-              <td>{{ item.Nombre_Destino }}</td>
-              <td>{{ item.Cantidad_Seleccionada }}</td>
-              <td>{{ item.Lote }}</td>
-              <td>{{ item.Tipo }}</td>
             </tr>
-          </tbody>
-        </table>
+            <tr>
+              <td style="background: #d3d3d3; text-align: left"><b>Lote: </b></td>
+              <td>{{ lote_producto }}</td>
+            </tr>
+            <tr>
+              <td style="background: #d3d3d3; text-align: left">
+                <b>Fecha Vencimiento: </b>
+              </td>
+              <td>{{ fecha_venc_producto | date: "dd/MM/yyyy" }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-12" style="max-height: 350px; overflow: scroll">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Fecha</th>
+                <th>Identificación Funcionario</th>
+                <th>Destino</th>
+                <th>Cantidad</th>
+                <th>Fase</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="Cargando_Apartadas">
+                <td colspan="6" class="text-center">
+                  <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                  <span class="sr-only">Cargando...</span>
+                  <h4>Cargando...</h4>
+                </td>
+              </tr>
+              <tr *ngFor="let item of Apartadas">
+                <td>
+                  <a
+                    [routerLink]="['/remision', item.Id_Remision]"
+                    style="font-size: 9px"
+                    >{{ item.Codigo }}</a
+                  >
+                </td>
+                <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+                <td>{{ item.Identificacion_Funcionario }}</td>
+                <td>{{ item.Destino }}</td>
+                <td>{{ item.Cantidad }}</td>
+                <td>{{ item.Fase }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="app-modal-footer">
-    <div class="text-right">
+  
+    <div class="app-modal-footer">
+      <div class="text-right">
+        <button
+          type="button"
+          class="btn btn-danger btn-sm"
+          (click)="modalApartadas.hide()"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </app-modal-basic>
+  
+  <app-modal-basic #modalSeleccionadas [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+      <h5 class="modal-title">Borradores que seleccionaron el producto</h5>
       <button
         type="button"
-        class="btn btn-danger btn-sm"
+        class="close basic-close"
         (click)="modalSeleccionadas.hide()"
       >
-        Cerrar
+        <span aria-hidden="true">&times;</span>
       </button>
     </div>
-  </div>
-</app-modal-basic>
-
-<app-modal-basic #modalCompras [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">Compras Realizadas del Producto</h5>
-    <button
-      type="button"
-      class="close basic-close"
-      (click)="modalCompras.hide()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="app-modal-body">
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table">
-          <tr>
-            <td style="background: #d3d3d3; text-align: left; width: 150px">
-              <b>Nombre Producto: </b>
-            </td>
-            <td>
-              {{ nombre_producto }}
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="col-md-12" style="max-height: 350px; overflow: auto">
-        <table class="table table-striped">
-          <thead>
+    <div class="app-modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table">
             <tr>
-              <th>Compra</th>
-              <th>Acta Recepcion</th>
-              <th>Fecha</th>
-              <th>Funcionario Recibió</th>
-              <th>Proveedor</th>
-              <th>Cantidad</th>
-              <th>Costo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="Cargando_Compras">
-              <td colspan="7" class="text-center">
-                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-                <span class="sr-only">Cargando...</span>
-                <h4>Cargando...</h4>
-              </td>
-            </tr>
-            <tr *ngFor="let item of Compras">
-              <td>
-                <a
-                  *ngIf="item.Id_Compra_N != ''"
-                  [routerLink]="['/compras/nacional', item.Id_Compra_N]"
-                  style="font-size: 9px"
-                  >{{ item.Codigo_Compra_N }}</a
-                >
-                <a
-                  *ngIf="item.Id_Compra_I != ''"
-                  [routerLink]="['/comprainternacional', item.Id_Compra_I]"
-                  style="font-size: 9px"
-                  >{{ item.Codigo_Compra_I }}</a
-                >
+              <td style="background: #d3d3d3; text-align: left; width: 150px">
+                <b>Nombre Producto: </b>
               </td>
               <td>
-                <a
-                  [routerLink]="['/actarecepcionver', item.Id_Acta]"
-                  style="font-size: 9px"
-                  >{{ item.Codigo_Acta }}</a
-                >
+                {{ nombre_producto }}
               </td>
-              <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
-              <td>{{ item.Funcionario }}</td>
-              <td>{{ item.Proveedor }}</td>
-              <td>{{ item.Cantidad }}</td>
-              <td class="text-right">{{ item.Precio | currency }}</td>
             </tr>
-          </tbody>
-        </table>
+            <tr>
+              <td style="background: #d3d3d3; text-align: left"><b>Lote: </b></td>
+              <td>{{ lote_producto }}</td>
+            </tr>
+            <tr>
+              <td style="background: #d3d3d3; text-align: left">
+                <b>Fecha Vencimiento: </b>
+              </td>
+              <td>{{ fecha_venc_producto | date: "dd/MM/yyyy" }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-12" style="max-height: 350px; overflow: scroll">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Fecha</th>
+                <th>Identificación Funcionario</th>
+                <th>Origen</th>
+                <th>Destino</th>
+                <th>Cantidad</th>
+                <th>Lote</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="Cargando_Seleccionados">
+                <td colspan="6" class="text-center">
+                  <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                  <span class="sr-only">Cargando...</span>
+                  <h4>Cargando...</h4>
+                </td>
+              </tr>
+  
+              <tr *ngFor="let item of Seleccionados">
+                <td>
+                  {{ item.Codigo }}
+                </td>
+                <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+                <td>{{ item.Identificacion_Funcionario }}</td>
+                <td>{{ item.Nombre_Origen }}</td>
+                <td>{{ item.Nombre_Destino }}</td>
+                <td>{{ item.Cantidad_Seleccionada }}</td>
+                <td>{{ item.Lote }}</td>
+                <td>{{ item.Tipo }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="app-modal-footer">
-    <div class="text-right">
+  
+    <div class="app-modal-footer">
+      <div class="text-right">
+        <button
+          type="button"
+          class="btn btn-danger btn-sm"
+          (click)="modalSeleccionadas.hide()"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </app-modal-basic>
+  
+  <app-modal-basic #modalCompras [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+      <h5 class="modal-title">Compras Realizadas del Producto</h5>
       <button
         type="button"
-        class="btn btn-danger btn-sm"
+        class="close basic-close"
         (click)="modalCompras.hide()"
       >
-        Cerrar
+        <span aria-hidden="true">&times;</span>
       </button>
     </div>
-  </div>
-</app-modal-basic>
-
-<swal
-  #confirmacionSwal
-  title="Seleccione Opción"
-  text="Debes seleccionar la Bodega"
-  html=""
-  icon="warning"
-></swal>
+    <div class="app-modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table">
+            <tr>
+              <td style="background: #d3d3d3; text-align: left; width: 150px">
+                <b>Nombre Producto: </b>
+              </td>
+              <td>
+                {{ nombre_producto }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-12" style="max-height: 350px; overflow: auto">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Compra</th>
+                <th>Acta Recepcion</th>
+                <th>Fecha</th>
+                <th>Funcionario Recibió</th>
+                <th>Proveedor</th>
+                <th>Cantidad</th>
+                <th>Costo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="Cargando_Compras">
+                <td colspan="7" class="text-center">
+                  <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+                  <span class="sr-only">Cargando...</span>
+                  <h4>Cargando...</h4>
+                </td>
+              </tr>
+              <tr *ngFor="let item of Compras">
+                <td>
+                  <a
+                    *ngIf="item.Id_Compra_N != ''"
+                    [routerLink]="['/compras/nacional', item.Id_Compra_N]"
+                    style="font-size: 9px"
+                    >{{ item.Codigo_Compra_N }}</a
+                  >
+                  <a
+                    *ngIf="item.Id_Compra_I != ''"
+                    [routerLink]="['/comprainternacional', item.Id_Compra_I]"
+                    style="font-size: 9px"
+                    >{{ item.Codigo_Compra_I }}</a
+                  >
+                </td>
+                <td>
+                  <a
+                    [routerLink]="['/actarecepcionver', item.Id_Acta]"
+                    style="font-size: 9px"
+                    >{{ item.Codigo_Acta }}</a
+                  >
+                </td>
+                <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+                <td>{{ item.Funcionario }}</td>
+                <td>{{ item.Proveedor }}</td>
+                <td>{{ item.Cantidad }}</td>
+                <td class="text-right">{{ item.Precio | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  
+    <div class="app-modal-footer">
+      <div class="text-right">
+        <button
+          type="button"
+          class="btn btn-danger btn-sm"
+          (click)="modalCompras.hide()"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </app-modal-basic>
+  
+  <swal
+    #confirmacionSwal
+    title="Seleccione Opción"
+    text="Debes seleccionar la Bodega"
+    html=""
+    icon="warning"
+  ></swal>
+  

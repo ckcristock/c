@@ -1,30 +1,32 @@
 <form [formGroup]="formCompany" (ngSubmit)="save()">
-  <div class="form-row mt-4">
-    <div class="col-md-5 offset-1">
-      <div class="form-group row">
-        <label for="dependency_id" class="col-md-4 col-form-label text-right">Empresa</label>
+  <div class="row">
+    <div class="col-md-4">
+        <mat-form-field appearance="outline" class="col-12">
+        <mat-label>Empresa</mat-label>        
+        <mat-select formControlName="company_id">
+          <mat-option *ngFor="let item of companies" [value]="item.value">
+            {{item.text}}
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>store</mat-icon>
+        <mat-error *ngIf="company_id_invalid">
+          Empresa es obligatorio
+        </mat-error>
+      </mat-form-field>
 
-        <ng-select class="col-md-7 p-0" formControlName="company_id" [items]="companies" bindLabel="text"
-          bindValue="value" loadingText="loading " ngDefaultControl>
-        </ng-select>
+      <mat-form-field appearance="outline" class="col-12">
+        <mat-label>Grupo</mat-label>
+        <mat-select formControlName="group_id" (selectionChange)="getDependencies($event.value)">
+          <mat-option *ngFor="let item of groups" [value]="item.value">{{item.text}}</mat-option>
+        </mat-select>
+        <mat-icon matSuffix>groups</mat-icon>
+        <mat-hint>Seleccione después de elegir empresa</mat-hint>
+        <mat-error *ngIf="group_id_invalid">
+          Grupo es obligatorio
+        </mat-error>
+      </mat-form-field>
 
-        <div class="col-md-7 offset-4">
-          <small class="invalid text-danger" *ngIf="company_id_invalid"> Es nesaria la empresa
-          </small>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="dependency_id" class="col-md-4 col-form-label text-right">Grupo</label>
-        <ng-select class="col-md-7 p-0" formControlName="group_id" (change)="getDependencies($event.value)"
-          [items]="groups" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-        </ng-select>
-
-        <div class="col-md-7 offset-4" *ngIf="group_id_invalid">
-          <small class="invalid text-danger"> Es nesario el grupo
-          </small>
-        </div>
-
-      </div>
+      
       <div class="form-group row">
         <label for="dependency_id " class="col-md-4 col-form-label custom-label text-right">Dependencia</label>
 
@@ -37,7 +39,8 @@
           </small>
         </div>
       </div>
-
+    </div>
+    <div class="col-md-4">
       <div class="form-group row">
         <label for="cargo_id" class="col-md-4 col-form-label custom-label text-right">Cargo</label>
         <ng-select class="col-md-7 p-0" formControlName="position_id" [items]="positions" bindLabel="text"
@@ -58,9 +61,6 @@
           </small>
         </div>
       </div>
-    </div>
-
-    <div class="col-md-5">
       <div class="form-group row">
         <label for="fecha_ingreso" class="col-md-4 col-form-label custom-label text-right">Fecha de Ingreso</label>
         <input type="date" formControlName="date_of_admission" class="form-control custom-control col-md-7" />
@@ -70,7 +70,8 @@
         </div>
 
       </div>
-
+    </div>
+    <div class="col-md-4">
       <div class="form-group row">
         <label for="work_contract_type_id" class="col-md-4 col-form-label text-right">Tipo de Contrato</label>
         <ng-select class="col-md-7 p-0" formControlName="work_contract_type_id" [items]="workContractTypes"
@@ -118,7 +119,14 @@
           </small>
         </div>
       </div>
-      <!--
+    </div>
+  </div>
+  <div class="col-12 d-flex justify-content-between">
+    <button type="button" class="btn btn-lg btn-primary ml-3" (click)="previus()">Anterior</button>
+    <button type="submit" class="btn btn-lg btn-primary mr-3">Siguiente</button>
+  </div>
+</form>
+<!--
       <div class="form-group row">
         <label
           for="jefe "
@@ -141,10 +149,3 @@
           <small class="invalid"></small>
         </div>
       </div>-->
-    </div>
-    <div class="col-12 d-flex justify-content-between">
-      <button type="button" class="btn btn-sm btn-primary" (click)="previus()">Anterior</button>
-      <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
-    </div>
-  </div>
-</form>

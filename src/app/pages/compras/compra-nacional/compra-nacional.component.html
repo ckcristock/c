@@ -9,10 +9,13 @@
         <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
           <i class="fas fa-sliders-h"></i> Filtros
         </button>
+        <button class="btn btn-secondary btn-sm" style="float: right;" (click)="openClose2()">
+          <i class="fas fa-eye"></i>
+        </button>
       </div>
     </div>
     <hr class="line">
-    <mat-accordion multi>
+    <mat-accordion multi #firstAccordion="matAccordion">
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="container">
           <div class="row">
@@ -56,17 +59,30 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
+    <mat-accordion multi #secondAccordion="matAccordion">
+      <mat-expansion-panel class="mat-elevation-z0">
+        <section class="d-flex justify-content-between mx-1">
+          <mat-checkbox color="primary" [(ngModel)]="checkFoto">Foto</mat-checkbox>
+          <mat-checkbox color="primary" [(ngModel)]="checkFuncionario">Funcionario</mat-checkbox>
+          <mat-checkbox color="primary" [(ngModel)]="checkFecha">Fecha</mat-checkbox>
+          <mat-checkbox color="primary" [(ngModel)]="checkCodigo">Código</mat-checkbox>
+          <mat-checkbox color="primary" [(ngModel)]="checkProveedor">Proveedor</mat-checkbox>
+          <mat-checkbox color="primary" [(ngModel)]="checkEstado">Estado</mat-checkbox>
+          <mat-checkbox color="primary" [(ngModel)]="checkAprobacion">Aprobación</mat-checkbox>
+        </section>
+      </mat-expansion-panel>
+    </mat-accordion>
     <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
       *ngIf="comprasnacionales.length > 0; else notData">
       <thead>
-        <tr>
-          <th>Foto</th>
-          <th>Funcionario</th>
-          <th>Fecha</th>
-          <th>Código</th>
-          <th>Proveedor</th>
-          <th>Estado</th>
-          <th>Aprobación</th>
+        <tr class="text-center text-uppercase">
+          <th *ngIf="checkFoto">Foto</th>
+          <th *ngIf="checkFuncionario">Funcionario</th>
+          <th *ngIf="checkFecha">Fecha</th>
+          <th *ngIf="checkCodigo">Código</th>
+          <th *ngIf="checkProveedor">Proveedor</th>
+          <th *ngIf="checkEstado">Estado</th>
+          <th *ngIf="checkAprobacion">Aprobación</th>
           <th class="col-sm-1">Acciones</th>
         </tr>
       </thead>
@@ -87,35 +103,28 @@
 
 
           </tr> -->
-        <tr *ngFor="let compra of comprasnacionales">
-          <td>
+        <tr *ngFor="let compra of comprasnacionales" class="text-center">
+          <td *ngIf="checkFoto">
             <img *ngIf="imageProfile != null" class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
               [src]="imageProfile" alt="Header Avatar" />
             <img *ngIf="imageProfile == null" class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
               src="../../../../assets/images/noprofile.png" alt="Header Avatar" />
           </td>
-          <td>{{ compra.Funcionario }}</td>
-          <td>{{ compra.Fecha | date: "dd/MM/yyyy" }}</td>
-          <td>{{ compra.Codigo }}</td>
-
-          <td>
-            <div class="text-center">
-              {{ compra.Proveedor }}
-            </div>
+          <td class="align-middle" *ngIf="checkFuncionario">{{ compra.Funcionario }}</td>
+          <td class="align-middle" *ngIf="checkFecha">{{ compra.Fecha | date: 'longDate' }}</td>
+          <td class="align-middle" *ngIf="checkCodigo">{{ compra.Codigo }}</td>
+          <td class="align-middle" *ngIf="checkProveedor">{{ compra.Proveedor }}</td>
+          <td class="align-middle" *ngIf="checkEstado">
+            <span class="label {{
+              compra.Estado == 'Anulada' ? 'label-danger' : ''
+            }} {{
+              compra.Estado == 'Recibida' ? 'label-inverse' : ''
+            }} {{
+              compra.Estado == 'Pendiente' ? 'label-warning' : ''
+            }}">{{ compra.Estado }}
+            </span>
           </td>
-          <td>
-            <div class="text-center">
-              <span class="label {{
-                            compra.Estado == 'Anulada' ? 'label-danger' : ''
-                          }} {{
-                            compra.Estado == 'Recibida' ? 'label-inverse' : ''
-                          }} {{
-                            compra.Estado == 'Pendiente' ? 'label-warning' : ''
-                          }}">{{ compra.Estado }}
-              </span>
-            </div>
-          </td>
-          <td>
+          <td class="align-middle" *ngIf="checkAprobacion">
             <div class="text-center">
               <span class="label label-success">{{
                 compra.Aprobacion
@@ -250,6 +259,7 @@
     </button>
   </div>
 </app-modal-basic>
+
 <ng-template #notData>
   <app-not-data></app-not-data>
 </ng-template>

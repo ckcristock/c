@@ -10,168 +10,163 @@
                 <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
                     <i class="fas fa-sliders-h"></i> Filtros
                 </button>
+                <button class="btn btn-secondary btn-sm" style="float: right;" (click)="openClose2()">
+                    <i class="fas fa-eye"></i>
+                </button>
             </div>
         </div>
         <hr class="line">
-        <div class="container">
-            <mat-accordion multi>
-                <mat-expansion-panel class="mat-elevation-z0">
-                    <div class="container">
-                        <div class="row">
-                            <div class="input-group-sm col-md-3">
-                                <label for="">Publicación</label>
-                                <input type="date" [(ngModel)]="filtros.fecha" class="form-control input-sm" (change)="getJobs()"
-                                    placeholder="Filtro Fecha Publicación">
-                            </div>
-                            <div class="input-group-sm col-md-3">
-                                <label for="">Fecha de inicio</label>
-                                <input type="date" [(ngModel)]="filtros.fecha_Inicio" class="form-control input-sm"
-                                    (change)="getJobs()" placeholder="Filtro Fecha Inicio">
-                            </div>
-                            <div class="input-group-sm col-md-3">
-                                <label for="">Fecha de fin</label>
-                                <input type="date" [(ngModel)]="filtros.fecha_Fin" class="form-control input-sm"
-                                    (change)="getJobs()" placeholder="Filtro Fecha Fin">
-                            </div>
-                            <div class="input-group-sm col-md-3">
-                                <label for="">Título</label>
-                                <input type="text" [(ngModel)]="filtros.titulo" class="form-control input-sm" (change)="getJobs()"
-                                    placeholder="Filtro Título">
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-sm-3">
-                                <label for="">Dependencia</label>
-                                <ng-select [(ngModel)]="filtros.dependencia" [items]="dependencies" (change)="getJobs()"
-                                    bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
-                                </ng-select>
-                            </div>
-                            <div class="input-group-sm col-md-3">
-                                <label for="">Cargo</label>
-                                <ng-select [(ngModel)]="filtros.cargo" [items]="positions" (change)="getJobs()" bindLabel="text"
-                                    bindValue="value" loadingText="loading " ngDefaultControl>
-                                </ng-select>
-                            </div>
-                            <div class="input-group-sm col-md-3">
-                                <label for="">Departamento</label>
-                                <ng-select [(ngModel)]="filtros.departamento" [items]="department" (change)="getJobs()"
-                                    bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
-                                </ng-select>
-                            </div>
-                            <div class="input-group-sm col-md-3">
-                                <label for="">Municipio</label>
-                                <ng-select [(ngModel)]="filtros.municipio" [items]="municipalities" (change)="getJobs()"
-                                    bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
-                                </ng-select>
-                            </div>
-                        </div>
-                        <!-- <div class="row">
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label> </mat-label>
-                                <input matInput type="text" placeholder="">
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label> </mat-label>
-                                <mat-select>
-                                    <mat-option value=""> </mat-option>
-                                </mat-select>
-                            </mat-form-field>                                
-                        </div> -->
-                    </div>
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>
+        <mat-accordion multi #firstAccordion="matAccordion">
+            <mat-expansion-panel class="mat-elevation-z0">
+                <mat-form-field class="col-md-2 pl-0" appearance="outline">
+                    <mat-label>Publicación</mat-label>
+                    <input matInput type="date" [(ngModel)]="filtros.fecha" (change)="getJobs()">
+                </mat-form-field>
+                <mat-form-field class="col-md-2 pl-0" appearance="outline">
+                    <mat-label>Fecha de inicio</mat-label>
+                    <input matInput type="date" [(ngModel)]="filtros.fecha_Inicio" (change)="getJobs()">
+                </mat-form-field>
+                <mat-form-field class="col-md-2 pl-0" appearance="outline">
+                    <mat-label>Fecha de fin</mat-label>
+                    <input matInput type="date" [(ngModel)]="filtros.fecha_Fin" (change)="getJobs()">
+                </mat-form-field>
+                <mat-form-field class="col-md-2 pl-0" appearance="outline">
+                    <mat-label>Título</mat-label>
+                    <input matInput type="text" [(ngModel)]="filtros.titulo" (input)="getJobs()"
+                        placeholder="Busca por título">
+                </mat-form-field>
+                <mat-form-field class="col-md-2 pl-0" appearance="outline">
+                    <mat-label>Dependencia</mat-label>
+                    <mat-select [(ngModel)]="filtros.dependencia" (selectionChange)="getJobs()">
+                        <mat-option *ngFor="let item of dependencies" [value]="item.value">{{item.text}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 pl-0" appearance="outline">
+                    <mat-label>Cargo</mat-label>
+                    <mat-select [(ngModel)]="filtros.cargo" (selectionChange)="getJobs()">
+                        <mat-option *ngFor="let item of positions" [value]="item.value">{{item.text}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 pl-0" appearance="outline">
+                    <mat-label>Departamento</mat-label>
+                    <mat-select [(ngModel)]="filtros.departamento" (selectionChange)="getJobs()">
+                        <mat-option *ngFor="let item of department" [value]="item.value">{{item.text}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 pl-0" appearance="outline">
+                    <mat-label>Municipio</mat-label>
+                    <mat-select [(ngModel)]="filtros.municipio" (selectionChange)="getJobs()">
+                        <mat-option *ngFor="let item of municipalities" [value]="item.value">{{item.text}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion multi #secondAccordion="matAccordion">
+            <mat-expansion-panel class="mat-elevation-z0">
+                <section class="d-flex justify-content-between mx-1">
+                    <mat-checkbox color="primary" [(ngModel)]="checkCodigo">Código</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkPublicacion">Publicación</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkInicio">Inicio</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkFin">Fin</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkTitulo">Título</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkDependencia">Dependencia</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkCargo">Cargo</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkDepartamento">Departamento</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkMunicipio">Municipio</mat-checkbox>
+                    <mat-checkbox color="primary" [(ngModel)]="checkEstado">Estado</mat-checkbox>
+                </section>
+            </mat-expansion-panel>
+        </mat-accordion>
         <div>
             <!-- <select [(ngModel)]="filtros.estado" class="form-control input-sm">
                 <option value="">Todos</option>
                 <option value="Activo">Activo</option>
                 <option value="Anulada">Anulada</option>
             </select> -->
-          
+
         </div>
-        <div class="container">
-            <table class="table table-bordered table-striped table-sm" style="font-size: small;" *ngIf="!loading && jobs.length > 0; else notData">
-                <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Publicación</th>
-                        <th>Inicio</th>
-                        <th>Fin</th>
-                        <th>Título</th>
-                        <th>Dependencia</th>
-                        <th>Cargo</th>
-                        <th>Departamento</th>
-                        <th>Municipio</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let job of jobs " class="{{job.state=='Cancelada' ? 'bg-danger text-white' : ''}}">
-                        <td> {{ job.code }} </td>
-                        <td>
-                            {{job.created_at | date: 'dd/M/yyyy'}}
-                        </td>
-                        <td>
-                            {{job.date_start | date: 'dd/M/yyyy'}}
-                        </td>
-                        <td>
-                            {{job.date_end | date: 'dd/M/yyyy'}}
-                        </td>
-                        <td>
-                            {{job.title}}
-                        </td>
-                        <td>
-                            {{job.position.dependency.name}}
-                        </td>
-                        <td>
-                            {{job.position.name}}
-                        </td>
-                        <td>
-                            {{job.municipality.department.name}}
-                        </td>
-                        <td>
-                            {{job.municipality.name}}
-                        </td>
-                        <td>
-                            <div class="text-center">
-                                <span
-                                    class="label {{job.status=='Activo' ? 'label-success' : 'label-primary'}}">{{job.state}}
-                                </span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="text-center">
-                                <div ngbDropdown class="dropdown-primary">
-                                    <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light "
-                                        type="button">
-                                        <i class="mdi mdi-chevron-down "></i>
-                                    </button>
-                                    <div ngbDropdownMenu>
-                                        <!--  <a *ngIf="job.state!='Cancelada'"
+        <table class="table table-bordered table-striped table-sm" style="font-size: small;"
+            *ngIf="!loading && jobs.length > 0; else notData">
+            <thead>
+                <tr class="text-center text-uppercase">
+                    <th *ngIf="checkCodigo">Código</th>
+                    <th *ngIf="checkPublicacion">Publicación</th>
+                    <th *ngIf="checkInicio">Inicio</th>
+                    <th *ngIf="checkFin">Fin</th>
+                    <th *ngIf="checkTitulo">Título</th>
+                    <th *ngIf="checkDependencia">Dependencia</th>
+                    <th *ngIf="checkCargo">Cargo</th>
+                    <th *ngIf="checkDepartamento">Departamento</th>
+                    <th *ngIf="checkMunicipio">Municipio</th>
+                    <th *ngIf="checkEstado">Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let job of jobs " class="{{job.state=='Cancelada' ? 'bg-danger text-white' : ''}}">
+                    <td *ngIf="checkCodigo"> {{ job.code }} </td>
+                    <td *ngIf="checkPublicacion">
+                        {{job.created_at | date: 'dd/M/yyyy'}}
+                    </td>
+                    <td *ngIf="checkInicio">
+                        {{job.date_start | date: 'dd/M/yyyy'}}
+                    </td>
+                    <td *ngIf="checkFin">
+                        {{job.date_end | date: 'dd/M/yyyy'}}
+                    </td>
+                    <td *ngIf="checkTitulo">
+                        {{job.title}}
+                    </td>
+                    <td *ngIf="checkDependencia">
+                        {{job.position.dependency.name}}
+                    </td>
+                    <td *ngIf="checkCargo">
+                        {{job.position.name}}
+                    </td>
+                    <td *ngIf="checkDependencia">
+                        {{job.municipality.department.name}}
+                    </td>
+                    <td *ngIf="checkMunicipio">
+                        {{job.municipality.name}}
+                    </td>
+                    <td *ngIf="checkEstado">
+                        <div class="text-center">
+                            <span
+                                class="label {{job.status=='Activo' ? 'label-success' : 'label-primary'}}">{{job.state}}
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <div ngbDropdown class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light "
+                                    type="button">
+                                    <i class="mdi mdi-chevron-down "></i>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <!--  <a *ngIf="job.state!='Cancelada'"
                                             class="dropdown-item waves-light waves-effect caja-botones" href=""
                                             [routerLink]="['/vacanteseditar',job.id]">
                                             <i class="ti-pencil"></i> Editar</a> -->
-                                        <a class="dropdown-item text-info  waves-light waves-effect caja-botones"
-                                            [routerLink]="['/rrhh/vacantes-ver',job.id]">
-                                            <i class="ti-eye"></i> Ver</a>
-                                        <a *ngIf="job.state!='Cancelada'"
-                                            class="dropdown-item text-danger  waves-light waves-effect caja-botones"
-                                            (click)="cancelar(job.id)">
-                                            <i class="fa fa-times"></i> Anular</a>
-                                    </div>
+                                    <a class="dropdown-item text-info  waves-light waves-effect caja-botones"
+                                        [routerLink]="['/rrhh/vacantes-ver',job.id]">
+                                        <i class="ti-eye"></i> Ver</a>
+                                    <a *ngIf="job.state!='Cancelada'"
+                                        class="dropdown-item text-danger  waves-light waves-effect caja-botones"
+                                        (click)="cancelar(job.id)">
+                                        <i class="fa fa-times"></i> Anular</a>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" maxSize="5"
-                [collectionSize]="pagination.collectionSize " (pageChange)="getJobs($event) "
-                [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination"
-                rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-            </ngb-pagination>
-        </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" maxSize="5"
+            [collectionSize]="pagination.collectionSize " (pageChange)="getJobs($event) "
+            [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination" rotate="true"
+            ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+        </ngb-pagination>
     </div>
 </div>
 

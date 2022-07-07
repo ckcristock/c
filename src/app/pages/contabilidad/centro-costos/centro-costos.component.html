@@ -4,7 +4,7 @@
             <h4 class="text-primary">Centros de Costos</h4>
             <div class="btn-group rounded">
                 <button style="float: right;" type="button" class="btn btn-primary btn-sm"
-                    (click)="AbrirModalNuevoCentro()">
+                    (click)="openConfirm(add)">
                     <i class="fa fa-plus"></i>
                     Agregar
                 </button>
@@ -94,7 +94,7 @@
                                 </button>
                                 <div ngbDropdownMenu>
                                     <a class="dropdown-item text-info waves-light waves-effect caja-botones"
-                                        (click)="EditarCentroCosto(item.Id_Centro_Costo, modalEditarCentroCosto)">
+                                        (click)="EditarCentroCosto(item.Id_Centro_Costo); openConfirm(edit)">
                                         <i class="far fa-edit"></i> Editar</a>
                                     <a class="dropdown-item text-danger waves-light waves-effect caja-botones"
                                         [swal]="{ title: 'Eliminar', text: 'Se dispone a eliminar el centro de costo.\n¿Está seguro(a)?', type: 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
@@ -139,14 +139,15 @@
 
 
 <!--VISTA MODAL DEL FORMULARIO DE CENTRO DE COSTOS-->
-<app-modal-basic #modalCentroCosto [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h4 class="modal-title">Nuevo Centro de Costo</h4>
-        <button type="button" class="close basic-close" (click)="modalCentroCosto.hide()">
-            <span aria-hidden="true">&times;</span>
-        </button>
+<ng-template #add let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="text-primary modal-title">Nuevo Centro de Costo</h4>
+            <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
+                (click)="modal.dismiss('Cross click')"></button>
+        </div>
     </div>
-    <div style="overflow-x: unset !important;overflow-y: unset !important" class="app-modal-body">
+    <div class="modal-body">
         <form #FormCentroCosto="ngForm">
             <div class="row">
                 <div class="col-md-4">
@@ -213,25 +214,26 @@
             </div>
         </form>
     </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="button" class="btn btn-default btn-sm" (click)="modalCentroCosto.hide()">Cancelar</button>
-            <button type="button"
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
+            Cancelar
+        </button>
+        <button type="button"
                 [swal]="{ title: '¿Está Seguro?', text: 'Se dispone a guardar un centro de costo\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                (confirm)="GuardarCentroCosto(FormCentroCosto,modalCentroCosto, 'guardar')"
-                [disabled]="!FormCentroCosto.valid" class="btn btn-primary btn-sm">Guardar</button>
+                (confirm)="GuardarCentroCosto(FormCentroCosto, 'guardar')"
+                [disabled]="!FormCentroCosto.valid" class="btn btn-primary">Guardar</button>
+    </div>
+</ng-template>
+
+<ng-template #edit let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="text-primary modal-title">Editar Centro de Costo</h4>
+            <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
+                (click)="modal.dismiss('Cross click')"></button>
         </div>
     </div>
-</app-modal-basic>
-
-<app-modal-basic #modalEditarCentroCosto [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h4 class="modal-title">Editar Centro</h4>
-        <button type="button" class="close basic-close" (click)="modalEditarCentroCosto.hide()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div style="overflow-x: unset !important;overflow-y: unset !important" class="app-modal-body">
+    <div class="modal-body">
         <form #FormEditarCentroCosto="ngForm">
             <div class="row">
                 <div class="col-md-4">
@@ -291,17 +293,16 @@
             </div>
         </form>
     </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="button" class="btn btn-default btn-sm"
-                (click)="modalEditarCentroCosto.hide()">Cancelar</button>
-            <button type="button"
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
+            Cancelar
+        </button>
+        <button type="button"
                 [swal]="{ title: '¿Está Seguro?', text: 'Se dispone a guardar un centro de costo\n¿Está seguro(a)?', icon: 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                (confirm)="GuardarCentroCosto(FormEditarCentroCosto,modalEditarCentroCosto, 'editar')"
-                [disabled]="!FormEditarCentroCosto.valid" class="btn btn-primary btn-sm">Guardar</button>
-        </div>
+                (confirm)="GuardarCentroCosto(FormEditarCentroCosto, 'editar')"
+                [disabled]="!FormEditarCentroCosto.valid" class="btn btn-primary">Guardar</button>
     </div>
-</app-modal-basic>
+</ng-template>
 
 <swal #alertSwal title="" text="" type=""></swal>
 

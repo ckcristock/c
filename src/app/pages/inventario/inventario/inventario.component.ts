@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IMyDrpOptions } from 'mydaterangepicker';
-import { Location } from "@angular/common";
+import { DatePipe, Location } from "@angular/common";
 import { ActivatedRoute } from '@angular/router';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
+import { MatAccordion } from '@angular/material';
+import { DateAdapter } from 'saturn-datepicker';
 
 @Component({
   selector: 'app-inventario',
@@ -21,6 +23,18 @@ export class InventarioComponent implements OnInit {
   @ViewChild("modalSeleccionadas") modalSeleccionadas: any;
   @ViewChild("modalCompras") modalCompras: any;
   @ViewChild("modalContrato") modalContrato: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
+  datePipe = new DatePipe('es-CO');
   Bodegadefecto;
   IdPuntoDispensacion;
   rowsFilter = [];
@@ -77,7 +91,7 @@ export class InventarioComponent implements OnInit {
 
   public listas = [];
   public lista_informe = 1;
-
+  date: { year: number; month: number };
   public tipo_punto: string = "Bodega";
   public subtipo_punto: any = 0;
   public filtrando: boolean = false;
@@ -99,10 +113,12 @@ export class InventarioComponent implements OnInit {
     private http: HttpClient,
     private location: Location,
     private route: ActivatedRoute,
-    public dropConfig :NgbDropdownConfig
+    public dropConfig :NgbDropdownConfig,
+    private dateAdapter: DateAdapter<any>
   ) {
     // configuraciones de boton desplegable ngboostrap
     dropConfig.placement = 'left-top';
+    this.dateAdapter.setLocale('es');
     /* dropConfig.autoClose = false; */
   }
 
@@ -130,7 +146,15 @@ export class InventarioComponent implements OnInit {
         if (data.Tipo == "success") this.bodegas_nuevo = data.Bodegas;
       });
   }
-
+  selectedDate(fecha) {
+    //console.log(fecha);
+    this.filtro_fecha =
+      this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
+      ' - ' +
+      this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
+   console.log(this.filtro_fecha);
+   this.filtro();
+  }
   ListarInventario(primeraVez=false) {
     let params = Object.assign({},this.route.snapshot.queryParams);
 
@@ -326,7 +350,7 @@ export class InventarioComponent implements OnInit {
       params.cant_sel = this.filtro_cant_sel;
     }
     if (this.filtro_fecha != "" && this.filtro_fecha != null) {
-      params.fecha = this.filtro_fecha.formatted;
+      params.fecha = this.filtro_fecha;
     }
     if (this.filtro_iva != "" && this.filtro_iva != null) {
       params.iva = this.filtro_iva;
@@ -359,7 +383,7 @@ export class InventarioComponent implements OnInit {
     } else {
       this.filtro_fecha = "";
     }
-
+    console.log(this.filtro_fecha.formatted)
     this.filtro();
   }
   filtro() {
@@ -429,7 +453,7 @@ export class InventarioComponent implements OnInit {
         params.cant_sel = this.filtro_cant_sel;
       }
       if (this.filtro_fecha != "" && this.filtro_fecha != null) {
-        params.fecha = this.filtro_fecha.formatted;
+        params.fecha = this.filtro_fecha;
       }
       if (this.lista_informe != 0) {
         params.lista = this.lista_informe;

@@ -62,7 +62,7 @@ export class DetalleFuncionarioComponent implements OnInit {
     this._swal.show({
       icon: 'question',
       title: '¿Estas Seguro?',
-      text: 'Se dispone a liquidar el empleado'
+      text: 'Se dispone a preliquidar el empleado'
     }).then((result) => {
       if (result.isConfirmed) {
         this.detalleService.liquidar(data, this.id).subscribe((r:any) => {

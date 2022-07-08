@@ -55,7 +55,10 @@ export class TercerosComponent implements OnInit {
   filtros:any = {
     nit: '',
     name: '',
-    third_party_type: ''
+    third_party_type: '',
+    email: '',
+    cod_dian_address: '',
+    municipio: ''
   }
   constructor( 
                 private _tercerosService: TercerosService, private fb: FormBuilder,

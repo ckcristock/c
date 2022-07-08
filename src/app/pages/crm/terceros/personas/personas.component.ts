@@ -45,7 +45,12 @@ export class PersonasComponent implements OnInit {
   }
   filtros = {
     name: '',
-    third: ''
+    third: '',
+    phone: '',
+    email: '',
+    cargo: '',
+    observacion: '',
+    documento: ''
   }
   constructor( private _terceros: TercerosService ) { }
 
@@ -64,6 +69,7 @@ export class PersonasComponent implements OnInit {
     this.loading = true;
     this._terceros.getThirdPartyPerson(params).subscribe((r:any) => {
       this.people = r.data.data;
+      console.log(this.people)
       this.loading = false;
       this.pagination.collectionSize = r.data.total;
     })

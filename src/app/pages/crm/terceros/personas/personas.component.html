@@ -14,16 +14,43 @@
         <hr class="line">
         <mat-accordion multi #firstAccordion="matAccordion">
             <mat-expansion-panel class="mat-elevation-z0">
-                <mat-form-field class="col-lg-3 col-md-3 col-sm-4 pl-0" appearance="outline">
-                    <mat-label>Tercero</mat-label>
-                    <input type="text" matInput placeholder="Busca por tercero" [(ngModel)]="filtros.third"
-                        (change)="getPerson()">
-                </mat-form-field>
-                <mat-form-field class="col-lg-3 col-md-3 col-sm-4 pl-0" appearance="outline">
-                    <mat-label>Nombre</mat-label>
-                    <input type="text" matInput placeholder="Busca por nombre" [(ngModel)]="filtros.name"
-                        (change)="getPerson()">
-                </mat-form-field>
+                <div class="row">
+                    <mat-form-field class="col" appearance="outline">
+                        <mat-label>Documento</mat-label>
+                        <input type="text" matInput placeholder="Busca por documento" [(ngModel)]="filtros.documento"
+                            (input)="getPerson()">
+                    </mat-form-field>
+                    <mat-form-field class="col" appearance="outline">
+                        <mat-label>Nombre</mat-label>
+                        <input type="text" matInput placeholder="Busca por nombre" [(ngModel)]="filtros.name"
+                            (input)="getPerson()">
+                    </mat-form-field>
+                    <mat-form-field class="col" appearance="outline">
+                        <mat-label>Tercero</mat-label>
+                        <input type="text" matInput placeholder="Busca por tercero" [(ngModel)]="filtros.third"
+                            (input)="getPerson()">
+                    </mat-form-field>
+                    <mat-form-field class="col" appearance="outline">
+                        <mat-label>Celular</mat-label>
+                        <input type="text" matInput placeholder="Busca por celular" [(ngModel)]="filtros.phone"
+                            (input)="getPerson()">
+                    </mat-form-field>
+                    <mat-form-field class="col" appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input type="email" matInput placeholder="Busca por email" [(ngModel)]="filtros.email"
+                            (input)="getPerson()">
+                    </mat-form-field>
+                    <mat-form-field class="col" appearance="outline">
+                        <mat-label>Cargo</mat-label>
+                        <input type="text" matInput placeholder="Busca por cargo" [(ngModel)]="filtros.cargo"
+                            (input)="getPerson()">
+                    </mat-form-field>
+                    <mat-form-field class="col" appearance="outline">
+                        <mat-label>Observación</mat-label>
+                        <input type="text" matInput placeholder="Busca por observación" [(ngModel)]="filtros.observacion"
+                            (input)="getPerson()">
+                    </mat-form-field>
+                </div>               
             </mat-expansion-panel>
         </mat-accordion>
         <mat-accordion multi #secondAccordion="matAccordion">
@@ -40,8 +67,9 @@
         </mat-accordion>
         <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
             *ngIf="!loading && people.length > 0; else notData">
-            <thead>
+            <thead class="bg-light">
                 <tr class="text-center text-uppercase">
+                    <th *ngIf="checkPersona">Documento</th>
                     <th *ngIf="checkPersona">Persona</th>
                     <th *ngIf="checkTercero">Tercero</th>
                     <th *ngIf="checkTelefono">Tel. Celular</th>
@@ -52,12 +80,13 @@
             </thead>
             <tbody>
                 <tr *ngFor="let person of people" class="text-center">
-                    <td *ngIf="checkPersona"> {{ person.name }} </td>
-                    <td *ngIf="checkTercero"> {{ person.third_party }} </td>
-                    <td *ngIf="checkTelefono"> {{ person.cell_phone }} </td>
-                    <td *ngIf="checkEmail"> {{ person.email }} </td>
-                    <td *ngIf="checkCargo"> {{ person.position }} </td>
-                    <td *ngIf="checkObservacion"> {{ person.observation }} </td>
+                    <td class="align-middle"> {{ person.n_document }} </td>
+                    <td class="align-middle" *ngIf="checkPersona"> {{ person.name }} </td>
+                    <td class="align-middle" *ngIf="checkTercero"> {{ person.third_party }} </td>
+                    <td class="align-middle" *ngIf="checkTelefono"> {{ person.cell_phone }} </td>
+                    <td class="align-middle" *ngIf="checkEmail"> {{ person.email }} </td>
+                    <td class="align-middle" *ngIf="checkCargo"> {{ person.position }} </td>
+                    <td class="align-middle" *ngIf="checkObservacion"> {{ person.observation }} </td>
                 </tr>
             </tbody>
         </table>

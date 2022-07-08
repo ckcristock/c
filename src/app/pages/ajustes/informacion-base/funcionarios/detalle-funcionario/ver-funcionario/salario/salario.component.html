@@ -1,121 +1,150 @@
 <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-        <h5>Salario</h5>
-        <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openConfirm(add)">
-            <i class="fas fa-pencil-alt"></i>
-        </button>
-    </div>
-    <p id="employee-salary">
-        $ {{ salary_info.salary | number }}
+  <div class="card-title d-flex justify-content-between">
+    <h5>Salario</h5>
+    <button
+      class="btn btn-link pt-0 edit"
+      style="float: right"
+      (click)="openConfirm(add)"
+    >
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+  <div class="row">
+    <p class="col-md-6 text-right font-weight-bold text-mute item-subtitle">
+      Cantidad
     </p>
-
-    <p class="text-mute font-weight-bold item-subtitle2">
-        Tipo de Contrato
+    <p class="col-md-6 text font-weight-bold" id="employee-salary">
+      $ {{ salary_info.salary | number }}
     </p>
-
-    <p class="font-weight-bold">
-        {{ salary_info.contract_type }}
+    <p class="col-md-6 text-mute font-weight-bold item-subtitle">
+      Tipo de Contrato
     </p>
-
-    <p class="text-mute font-weight-bold item-subtitle2">
-        Fecha de ingreso
+    <p class="col-md-6 font-weight-bold">
+      {{ salary_info.contract_type }}
     </p>
-
-    <p class="font-weight-bold">
-        {{ salary_info.date_of_admission | date: 'longDate' }}
+    <p class="col-md-6 text-mute font-weight-bold item-subtitle">
+      Fecha de ingreso
     </p>
-    <span *ngIf="salary_info.work_contract_type_id == 2">
-        <p class="text-mute font-weight-bold item-subtitle2">
-            Fecha de retiro
-        </p>
-        <p class="font-weight-bold">
-            {{ salary_info.date_end | date: 'longDate' }}
-        </p>
-    </span>
-    <hr>
-    <app-bono *ngIf="salary_info.id" [id]="salary_info.id"></app-bono>
+    <p class="col-md-6 font-weight-bold">
+      {{ salary_info.date_of_admission | date: "longDate" }}
+    </p>
+    <p
+      class="col-md-6 text-mute font-weight-bold item-subtitle"
+      *ngIf="salary_info.work_contract_type_id == 2"
+    >
+      Fecha de retiro
+    </p>
+    <p
+      class="col-md-6 font-weight-bold"
+      *ngIf="salary_info.work_contract_type_id == 2"
+    >
+      {{ salary_info.date_end | date: "longDate" }}
+    </p>
+  </div>
+  <hr />
+  <app-bono *ngIf="salary_info.id" [id]="salary_info.id"></app-bono>
 </div>
 
 <ng-template #add let-modal>
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="text-primary modal-title">Edición Salario</h4>
-            <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-                (click)="modal.dismiss('Cross click')"></button>
-        </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">Editar salario</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
     </div>
-    <div class="modal-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="type_contract">Tipo de contrato</label>
-                    <select [class.is-invalid]="type_contract_valid" [(ngModel)]="salary_info.work_contract_type_id"
-                        formControlName="type_contract" class="form-select form-control custom-control"
-                        id="type_contract">
-                        <option *ngFor="let contract_type of contract_types" [value]="contract_type.valor">
-                            {{ contract_type.clave }}
-                        </option>
-                    </select>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="type_contract_valid"> Es necesario el Tipo de contrato
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="funcionario_id">Salario</label>
-                    <input pattern="([0-9]{1,3}).([0-9]{1,3})" type="number" [class.is-invalid]="salary_valid" [(ngModel)]="salary_info.salary"
-                        formControlName="salary" class="form-control" id="funcionario_id" required>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="salary_valid"> Es necesario el salario
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="fecha_ingreso">Fecha de ingreso</label>
-                    <input type="date" [class.is-invalid]="date_of_admission_valid"
-                        [(ngModel)]="salary_info.date_of_admission" formControlName="date_of_admission"
-                        class="form-control" id="fecha_ingreso" required>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="date_of_admission_valid"> Es necesario la fecha de
-                            ingreso
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row" *ngIf="salary_info.work_contract_type_id == 2">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="fecha_retiro">Fecha de retiro</label>
-                    <input type="date" [class.is-invalid]="retirement_date_valid" [(ngModel)]="salary_info.date_end"
-                        formControlName="retirement_date" class="form-control form-control-sm" id="fecha_retiro"
-                        required>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="retirement_date_valid"> Es necesario la fecha de
-                            retiro
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group form-check" style="margin-left: 5px;">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        ¿Pagar auxilio?
-                    </label>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
-            Cancelar
-        </button>
-        <button type="button" (click)="updateSalaryInfo()"
-            [disabled]="form.untouched" class="btn btn-primary">
-            Actualizar
-        </button>
-    </div>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <mat-form-field class="col-md-6 pl-0" appearance="outline">
+        <mat-label>Tipo de contrato</mat-label>
+        <mat-select
+          [class.is-invalid]="type_contract_valid"
+          [(ngModel)]="salary_info.work_contract_type_id"
+          formControlName="type_contract"
+          id="type_contract"
+          required
+        >
+          <mat-option
+            *ngFor="let contract_type of contract_types"
+            [value]="contract_type.value"
+          >
+            {{ contract_type.text }}</mat-option
+          >
+        </mat-select>
+        <mat-error *ngIf="type_contract_valid"> Campo obligatorio </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-md-6 pr-0" appearance="outline">
+        <mat-label>Salario</mat-label>
+        <input
+          matInput
+          type="number"
+          pattern="([0-9]{1,3}).([0-9]{1,3})"
+          placeholder="Ingresa el salario"
+          [class.is-invalid]="salary_valid"
+          [(ngModel)]="salary_info.salary"
+          formControlName="salary"
+          id="funcionario_id"
+          required
+          autocomplete="off"
+        />
+        <mat-error *ngIf="salary_valid"> Campo obligatorio </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-md-6 pl-0" appearance="outline">
+        <mat-label>Fecha de ingreso</mat-label>
+        <input
+          matInput
+          type="date"
+          [class.is-invalid]="date_of_admission_valid"
+          [(ngModel)]="salary_info.date_of_admission"
+          formControlName="date_of_admission"
+          id="fecha_ingreso"
+          required
+        />
+        <mat-error *ngIf="date_of_admission_valid">
+          Campo obligatorio
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field
+        class="col-md-6 pr-0"
+        appearance="outline"
+        *ngIf="salary_info.work_contract_type_id == 2"
+      >
+        <mat-label>Fecha de retiro</mat-label>
+        <input
+          matInput
+          type="date"
+          [class.is-invalid]="retirement_date_valid"
+          [(ngModel)]="salary_info.date_end"
+          formControlName="retirement_date"
+          id="fecha_retiro"
+          required
+        />
+        <mat-error *ngIf="retirement_date_valid"> Campo obligatorio </mat-error>
+      </mat-form-field>
+      <mat-checkbox id="flexCheckDefault" color="primary"
+        >¿Pagar auxilio?</mat-checkbox
+      >
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="updateSalaryInfo()"
+      [disabled]="form.untouched"
+      class="btn btn-primary"
+    >
+      Actualizar
+    </button>
+  </div>
 </ng-template>

@@ -1,130 +1,277 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Terceros</h4>
-            <div class="btn-group rounded">
-                <button class="btn btn-primary btn-sm" style="float: right;" [routerLink]="['/crm/crear-tercero']">
-                    <i class="fa fa-plus"></i> Agregar
-                </button>
-                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
-                    <i class="fas fa-sliders-h"></i> Filtros
-                </button>
-                <button class="btn btn-secondary btn-sm" style="float: right;" (click)="openClose2()">
-                    <i class="fas fa-eye"></i>
-                </button>
-            </div>
-        </div>
-        <hr class="line">       
-        <mat-accordion multi #firstAccordion="matAccordion">
-            <mat-expansion-panel class="mat-elevation-z0">
-                <mat-form-field class="col-lg-2 col-md-3 col-sm-4 pl-0" appearance="outline">
-                    <mat-label>NIT</mat-label>
-                    <input type="text" matInput name="nit" [(ngModel)]="filtros.nit" autocomplete="off"
-                        placeholder="Busca por NIT" (input)="getThirdParties()">
-                </mat-form-field>
-                <mat-form-field class="col-md-2 pl-0" appearance="outline">
-                    <mat-label>Tipo de tercero</mat-label>
-                    <mat-select name="third" [(ngModel)]="filtros.third_party_type"
-                        (selectionChange)="getThirdParties()">
-                        <mat-option value="Todos">Todos</mat-option>
-                        <mat-option value="Cliente">Cliente</mat-option>
-                        <mat-option value="Proveedor">Proveedor</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field class="col-lg-3 col-md-3 col-sm-4 pl-0" appearance="outline">
-                    <mat-label>Nombre</mat-label>
-                    <input type="text" matInput name="name" [(ngModel)]="filtros.name" autocomplete="off"
-                        placeholder="Busca por nombre" (input)="getThirdParties()">
-                </mat-form-field>
-            </mat-expansion-panel>
-        </mat-accordion>
-        <mat-accordion multi #secondAccordion="matAccordion">
-            <mat-expansion-panel class="mat-elevation-z0">
-                <section class="d-flex justify-content-between mx-1">                    
-                    <mat-checkbox color="primary" [(ngModel)]="checkFoto">Foto</mat-checkbox>
-                    <mat-checkbox color="primary" [(ngModel)]="checkNIT">NIT</mat-checkbox>
-                    <mat-checkbox color="primary" [(ngModel)]="checkNombre">Nombre</mat-checkbox>
-                    <mat-checkbox color="primary" [(ngModel)]="checkDireccion">Dirección</mat-checkbox>
-                    <mat-checkbox color="primary" [(ngModel)]="checkMunicipio">Municipio</mat-checkbox>
-                    <mat-checkbox color="primary" [(ngModel)]="checkTelefono">Teléfono</mat-checkbox>
-                    <mat-checkbox color="primary" [(ngModel)]="checkTipo">Tipo</mat-checkbox>
-                    <mat-checkbox color="primary" [(ngModel)]="checkEmail">Correo electrónico</mat-checkbox>
-                    <mat-checkbox color="primary" [(ngModel)]="checkEstado">Estado</mat-checkbox>
-                </section>
-            </mat-expansion-panel>
-        </mat-accordion>
-        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
-            *ngIf="!loading && thirdParties.length > 0; else notData">
-            <thead>
-                <tr class="text-center text-uppercase">
-                    <th *ngIf="checkFoto">Foto</th>
-                    <th *ngIf="checkNIT">NIT</th>
-                    <th *ngIf="checkNombre">Nombre</th>
-                    <th *ngIf="checkDireccion">Dirección</th>
-                    <th *ngIf="checkMunicipio">Municipio</th>
-                    <th *ngIf="checkTelefono">Teléfono</th>
-                    <th *ngIf="checkTipo">Tipo</th>
-                    <th *ngIf="checkEmail">Correo electrónico</th>
-                    <th *ngIf="checkEstado" class="col-md-1">Estado</th>
-                    <th class="col-md-1">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let third of thirdParties" class="text-center"
-                    [ngClass]="{'text-danger font-weight-bold': (third.state == 'Inactivo')}">
-                    <td *ngIf="checkFoto">
-                        <div>
-                            <img [src]="third.image | image" onerror="this.src='../../../../assets/images/nofound.png'"
-                                class="rounded-circle mx-auto img-fluid header-profile-user">
-                        </div>
-
-                    </td>
-                    <td class="align-middle" *ngIf="checkNIT"> {{ third.nit }} </td>
-                    <td class="align-middle" *ngIf="checkNombre"> {{ third.first_name }} {{ third.first_surname }} </td>
-                    <td class="align-middle" *ngIf="checkDireccion"> {{ third.cod_dian_address }} </td>
-                    <td class="align-middle" *ngIf="checkMunicipio"> {{ third.municipality.name }} </td>
-                    <td class="align-middle" *ngIf="checkTelefono"> {{ third.landline }} / {{ third.cell_phone }} </td>
-                    <td class="align-middle" *ngIf="checkTipo"> {{ third.third_party_type }} </td>
-                    <td class="align-middle" *ngIf="checkEmail"> {{ third.email }} </td>
-                    <td class="align-middle" *ngIf="checkEstado">
-                        <span [ngClass]="third.state == 'Inactivo' ? 'badge badge-danger': 'badge badge-success'">
-                            {{ third.state }}
-                        </span>
-                    </td>
-                    <td class="align-middle">
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light"
-                                    type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones"
-                                        [routerLink]="['/crm/editar-tercero', third.id]">
-                                        <i class="far fa-edit"></i> Editar
-                                    </a>
-                                    <a *ngIf="third.state == 'Activo'" (click)="changeState(third, 'Inactivo')"
-                                        class="dropdown-item waves-light text-danger waves-effect caja-botones">
-                                        <i class="far fa-trash-alt"></i> Anular
-                                    </a>
-                                    <a *ngIf="third.state == 'Inactivo'" (click)="changeState(third, 'Activo')"
-                                        class="dropdown-item waves-light text-success waves-effect caja-botones">
-                                        <i class="fas fa-check"></i> Activar
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Terceros</h4>
+      <div class="btn-group rounded">
+        <button
+          class="btn btn-primary btn-sm"
+          style="float: right"
+          [routerLink]="['/crm/crear-tercero']"
+        >
+          <i class="fa fa-plus"></i> Agregar
+        </button>
+        <button
+          class="btn btn-info btn-sm"
+          style="float: right"
+          (click)="openClose()"
+        >
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
+        <button
+          class="btn btn-secondary btn-sm"
+          style="float: right"
+          (click)="openClose2()"
+        >
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-        [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
-        (pageChange)="getThirdParties($event)" aria-label="Default pagination" maxSize="5" rotate="true"
-        ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-    </ngb-pagination>
+    <hr class="line" />
+    <mat-accordion multi #firstAccordion="matAccordion">
+      <mat-expansion-panel class="mat-elevation-z0">
+        <mat-form-field
+          class="col-md-2 pl-0"
+          appearance="outline"
+        >
+          <mat-label>NIT</mat-label>
+          <input
+            type="text"
+            matInput
+            name="nit"
+            [(ngModel)]="filtros.nit"
+            autocomplete="off"
+            placeholder="Busca por NIT"
+            (input)="getThirdParties()"
+          />
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-2 pl-0"
+          appearance="outline"
+        >
+          <mat-label>Nombre</mat-label>
+          <input
+            type="text"
+            matInput
+            name="name"
+            [(ngModel)]="filtros.name"
+            autocomplete="off"
+            placeholder="Busca por nombre"
+            (input)="getThirdParties()"
+          />
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-2 pl-0"
+          appearance="outline"
+        >
+          <mat-label>Dirección</mat-label>
+          <input
+            type="text"
+            matInput
+            name="cod_dian_address"
+            [(ngModel)]="filtros.cod_dian_address"
+            autocomplete="off"
+            placeholder="Busca por dirección"
+            (input)="getThirdParties()"
+          />
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-2 pl-0"
+          appearance="outline"
+        >
+          <mat-label>Ciudad</mat-label>
+          <input
+            type="text"
+            matInput
+            name="municipio"
+            [(ngModel)]="filtros.municipio"
+            autocomplete="off"
+            placeholder="Busca por id de ciudad"
+            (input)="getThirdParties()"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Tipo de tercero</mat-label>
+          <mat-select
+            name="third"
+            [(ngModel)]="filtros.third_party_type"
+            (selectionChange)="getThirdParties()"
+          >
+            <mat-option value="Todos">Todos</mat-option>
+            <mat-option value="Cliente">Cliente</mat-option>
+            <mat-option value="Proveedor">Proveedor</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field
+          class="col-md-2 pl-0"
+          appearance="outline"
+        >
+          <mat-label>Email</mat-label>
+          <input
+            type="email"
+            matInput
+            name="email"
+            [(ngModel)]="filtros.email"
+            autocomplete="off"
+            placeholder="Busca por email"
+            (input)="getThirdParties()"
+          />
+        </mat-form-field>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion multi #secondAccordion="matAccordion">
+      <mat-expansion-panel class="mat-elevation-z0">
+        <section class="d-flex justify-content-between mx-1">
+          <mat-checkbox color="primary" [(ngModel)]="checkFoto"
+            >Foto</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkNIT"
+            >NIT</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkNombre"
+            >Nombre</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkDireccion"
+            >Dirección</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkMunicipio"
+            >Ciudad</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkTelefono"
+            >Teléfono</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkTipo"
+            >Tipo</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkEmail"
+            >Correo electrónico</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkEstado"
+            >Estado</mat-checkbox
+          >
+        </section>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && thirdParties.length > 0; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th *ngIf="checkFoto">Foto</th>
+          <th *ngIf="checkNIT">NIT</th>
+          <th *ngIf="checkNombre">Nombre</th>
+          <th *ngIf="checkDireccion">Dirección</th>
+          <th *ngIf="checkMunicipio">Ciudad</th>
+          <th *ngIf="checkTelefono">Teléfono</th>
+          <th *ngIf="checkTipo">Tipo</th>
+          <th *ngIf="checkEmail">Correo electrónico</th>
+          <th *ngIf="checkEstado" class="col-md-1">Estado</th>
+          <th class="col-md-1">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let third of thirdParties"
+          class="text-center"
+          [ngClass]="{
+            'text-danger font-weight-bold': third.state == 'Inactivo'
+          }"
+        >
+          <td *ngIf="checkFoto">
+            <div>
+              <img
+                [src]="third.image | image"
+                onerror="this.src='../../../../assets/images/noprofile.png'"
+                class="rounded-circle mx-auto img-fluid header-profile-user"
+              />
+            </div>
+          </td>
+          <td class="align-middle" *ngIf="checkNIT">{{ third.nit }}</td>
+          <td class="align-middle" *ngIf="checkNombre">
+            {{ third.first_name }} {{ third.first_surname }}
+          </td>
+          <td class="align-middle" *ngIf="checkDireccion">
+            {{ third.cod_dian_address }}
+          </td>
+          <td class="align-middle" *ngIf="checkMunicipio">
+            {{ third.municipality.name }}
+          </td>
+          <td class="align-middle" *ngIf="checkTelefono">
+            {{ third.landline }} / {{ third.cell_phone }}
+          </td>
+          <td class="align-middle" *ngIf="checkTipo">
+            {{ third.third_party_type }}
+          </td>
+          <td class="align-middle" *ngIf="checkEmail">{{ third.email }}</td>
+          <td class="align-middle" *ngIf="checkEstado">
+            <span
+              [ngClass]="
+                third.state == 'Inactivo'
+                  ? 'badge badge-danger'
+                  : 'badge badge-success'
+              "
+            >
+              {{ third.state }}
+            </span>
+          </td>
+          <td class="align-middle">
+            <div class="text-center">
+              <div ngbDropdown class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-effect waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info waves-effect caja-botones"
+                    [routerLink]="['/crm/editar-tercero', third.id]"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="third.state == 'Activo'"
+                    (click)="changeState(third, 'Inactivo')"
+                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
+                  <a
+                    *ngIf="third.state == 'Inactivo'"
+                    (click)="changeState(third, 'Activo')"
+                    class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ngb-pagination
+    class="d-flex justify-content-center pagination-rounded pagination-sm"
+    [collectionSize]="pagination.collectionSize"
+    [pageSize]="pagination.pageSize"
+    [(page)]="pagination.page"
+    (pageChange)="getThirdParties($event)"
+    aria-label="Default pagination"
+    maxSize="5"
+    rotate="true"
+    ellipses="false"
+    boundaryLinks="true"
+    rotate="true"
+    ellipses="false"
+    boundaryLinks="true"
+  >
+  </ngb-pagination>
 </div>
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

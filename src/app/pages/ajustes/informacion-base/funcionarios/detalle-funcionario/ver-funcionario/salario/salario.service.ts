@@ -17,4 +17,7 @@ export class SalarioService {
     return this.http.post(`${environment.base_url}/salary`, data);
   }
 
+  getWorkContractType(){
+    return this.http.get(`${environment.base_url}/work-contract-type`);
+  }
 }

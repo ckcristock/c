@@ -5,41 +5,43 @@
             <i class="fas fa-pencil-alt"></i>
         </button>
     </div>
-    <p class="text-mute font-weight-bold item-subtitle2">
-        EPS
-    </p>
-
-    <p class="font-weight-bold">
-        {{ afiliations.eps_name }}
-    </p>
-    <p class="text-mute font-weight-bold item-subtitle2">
-        Fondo de pensiones
-    </p>
-
-    <p class="font-weight-bold">
-        {{ afiliations.pension_fund_name }}
-    </p>
-    <p class="text-mute font-weight-bold item-subtitle2">
-        Fondo de cesantias
-    </p>
-
-    <p class="font-weight-bold">
-        {{ afiliations.severance_fund_name }}
-    </p>
-    <p class="text-mute font-weight-bold item-subtitle2">
-        Caja de compensación
-    </p>
-
-    <p class="font-weight-bold">
-        {{ afiliations.compensation_fund_name }}
-    </p>
-    <p class="text-mute font-weight-bold item-subtitle2">
-        ARL
-    </p>
-
-    <p class="font-weight-bold">
-        {{ afiliations.arl_name }}
-    </p>
+    <div class="row">
+        <p class="col-md-6 text-mute font-weight-bold item-subtitle">
+            EPS
+        </p>
+    
+        <p class="col-md-6 font-weight-bold">
+            {{ afiliations.eps_name }}
+        </p>
+        <p class="col-md-6 text-mute font-weight-bold item-subtitle">
+            Fondo de pensiones
+        </p>
+    
+        <p class="col-md-6 font-weight-bold">
+            {{ afiliations.pension_fund_name }}
+        </p>
+        <p class="col-md-6 text-mute font-weight-bold item-subtitle">
+            Fondo de cesantias
+        </p>
+    
+        <p class="col-md-6 font-weight-bold">
+            {{ afiliations.severance_fund_name }}
+        </p>
+        <p class="col-md-6 text-mute font-weight-bold item-subtitle">
+            Caja de compensación
+        </p>
+    
+        <p class="col-md-6 font-weight-bold">
+            {{ afiliations.compensation_fund_name }}
+        </p>
+        <p class="col-md-6 text-mute font-weight-bold item-subtitle">
+            ARL
+        </p>
+    
+        <p class="col-md-6 font-weight-bold">
+            {{ afiliations.arl_name }}
+        </p>
+    </div>    
 </div>
 
 <ng-template #add let-modal>
@@ -53,7 +55,7 @@
     <div class="modal-body">
         <form [formGroup]="form">
             <div class="form-row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label class="custom-label" for="esps">EPS</label>
                     <ng-select [items]="eps" id="esps" [class.is-invalid]="eps_valid" formControlName="eps_id"
                         bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
@@ -63,7 +65,7 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label class="custom-label" for="pension_fund">Fondo de pensiones</label>
                     <ng-select [items]="pensions" id="pension_fund" [class.is-invalid]="pension_found_valid"
                         formControlName="pension_fund_id" bindLabel="text" bindValue="value" loadingText="loading "
@@ -74,7 +76,7 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label class="custom-label" for="cesantias_fund">Fondo de cesantias</label>
                     <ng-select [items]="severances" id="pension_fund" [class.is-invalid]="severance_found_valid"
                         formControlName="severance_fund_id" bindLabel="text" bindValue="value" loadingText="loading "
@@ -86,7 +88,7 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label class="custom-label" for="compesation">C. Compensación</label>
                     <ng-select [items]="compensations" id="compensation" [class.is-invalid]="compensation_valid"
                         formControlName="compensation_fund_id" bindLabel="text" bindValue="value" loadingText="loading "
@@ -97,7 +99,7 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label class="custom-label" for="arl">Arl</label>
                     <ng-select [items]="arls" id="arl" [class.is-invalid]="arl_valid" formControlName="arl_id"
                         bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>

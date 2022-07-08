@@ -1,107 +1,167 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Tipos de Visa</h4>
-            <div class="btn-group rounded">
-                <button class="btn btn-primary btn-sm" style="float: right;" (click)="openConfirm(add, 'Nuevo tipo de visa')">
-                    <i class="fa fa-plus"></i> Agregar
-                </button>
-                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
-                    <i class="fas fa-sliders-h"></i> Filtros
-                </button>
-            </div>
-        </div>
-        <hr class="line">
-        <mat-accordion multi>
-            <mat-expansion-panel class="mat-elevation-z0">
-                <div class="alert alert-danger" role="alert">
-                    Aún no tenemos filtros para esta sección.
-                </div>
-            </mat-expansion-panel>
-        </mat-accordion>
-
-        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
-            *ngIf="!loading && visas.length > 0; else notData">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Proposito</th>
-                    <th class="text-center col-1">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of visas" [ngClass]="{'text-danger font-weight-bold': (item.state == 'Inactivo')}">
-                    <td> {{ item.name }} </td>
-                    <td> {{ item.purpose }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light "
-                                    type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones"
-                                        (click)="getVisaType(item); openConfirm(add, 'Editar Tipo de Visa')">
-                                        <i class="far fa-edit"></i> Editar
-                                    </a>
-                                    <a *ngIf="item.state == 'Inactivo'"
-                                        class="dropdown-item waves-light text-success waves-effect"
-                                        (click)="activateOrInactivate(item, 'Activo')">
-                                        <i class="fas fa-check"></i> Activar
-                                    </a>
-                                    <a *ngIf="item.state == 'Activo'"
-                                        class="dropdown-item waves-light text-danger waves-effect"
-                                        (click)="activateOrInactivate(item, 'Inactivo')">
-                                        <i class="fas fa-trash-alt"></i> Anular
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-            [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
-            (pageChange)="getVisaTypes($event)" aria-label="Default pagination" maxSize="5" rotate="true"
-            ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-        </ngb-pagination>
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Tipos de Visa</h4>
+      <div class="btn-group rounded">
+        <button
+          class="btn btn-primary btn-sm"
+          style="float: right"
+          (click)="openConfirm(add, 'Nuevo tipo de visa')"
+        >
+          <i class="fa fa-plus"></i> Agregar
+        </button>
+        <button
+          class="btn btn-info btn-sm"
+          style="float: right"
+          (click)="openClose()"
+        >
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
+      </div>
     </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="alert alert-danger" role="alert">
+          Aún no tenemos filtros para esta sección.
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && visas.length > 0; else notData"
+    >
+    <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Nombre</th>
+          <th>Proposito</th>
+          <th class="col-md-1">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of visas"
+          class="text-center"
+          [ngClass]="{
+            'text-danger font-weight-bold': item.state == 'Inactivo'
+          }"
+        >
+          <td class="align-middle">{{ item.name }}</td>
+          <td class="align-middle">{{ item.purpose }}</td>
+          <td class="align-middle">
+            <div class="text-center">
+              <div ngbDropdown class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-effect waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info waves-effect caja-botones"
+                    (click)="
+                      getVisaType(item); openConfirm(add, 'Editar Tipo de Visa')
+                    "
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Inactivo'"
+                    class="dropdown-item waves-light text-success waves-effect"
+                    (click)="activateOrInactivate(item, 'Activo')"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Activo'"
+                    class="dropdown-item waves-light text-danger waves-effect"
+                    (click)="activateOrInactivate(item, 'Inactivo')"
+                  >
+                    <i class="fas fa-trash-alt"></i> Anular
+                  </a>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      (pageChange)="getVisaTypes($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
 </div>
 
 <ng-template #add let-modal>
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="text-primary modal-title">{{ title }}</h4>
-            <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-                (click)="modal.dismiss('Cross click')"></button>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">{{ title }}</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label class="custom-label" for="">Nombre</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="name"
+          />
         </div>
-    </div>
-    <div class="modal-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label class="custom-label" for="">Nombre</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="name">
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="custom-label" for="">Proposito</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="purpose">
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
-            Cancelar
-        </button>
-        <button type="button" [disabled]="!form.valid" (click)="save()" class="btn btn-primary">
-            Guardar
-        </button>
-    </div>
+        <div class="form-group col-md-6">
+          <label class="custom-label" for="">Proposito</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="purpose"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
 </ng-template>
 
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

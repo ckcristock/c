@@ -17,7 +17,7 @@ export class SalarioComponent implements OnInit {
   form: FormGroup;
   data: any;
   id: any;
-  contract_types = consts.contract_type;
+  contract_types:any;
   salary_info: any = {
     salary: '',
     contract_type: '',
@@ -32,6 +32,10 @@ export class SalarioComponent implements OnInit {
     private modalService: NgbModal,) { }
 
   ngOnInit(): void {
+    this.salaryService.getWorkContractType().subscribe((d: any) => {
+      this.contract_types = d.data;
+    });;
+    console.log(this.contract_types)
     this.id = this.activateRoute.snapshot.params.id;
     this.getSalaryInfo();
     this.createForm();

@@ -1,7 +1,11 @@
 <div class="card-body">
   <div class="card-title d-flex justify-content-between">
     <h5>Datos Básicos</h5>
-    <button class="btn btn-link pt-0 edit" style="float: right" (click)="openConfirm(add)">
+    <button
+      class="btn btn-link pt-0 edit"
+      style="float: right"
+      (click)="openConfirm(add)"
+    >
       <i class="fas fa-pencil-alt"></i>
     </button>
   </div>
@@ -10,8 +14,8 @@
       Nombre completo
     </p>
     <p class="col-6 text font-weight-bold">
-      {{ funcionario.first_name }} {{ funcionario.second_name }} {{ funcionario.first_surname }} {{
-      funcionario.second_surname }}
+      {{ funcionario.first_name }} {{ funcionario.second_name }}
+      {{ funcionario.first_surname }} {{ funcionario.second_surname }}
     </p>
     <p class="col-6 font-weight-bold text-mute item-subtitle">
       Documento de identidad
@@ -37,7 +41,7 @@
       Fecha de nacimiento
     </p>
     <p class="col-6 font-weight-bold">
-      {{ funcionario.date_of_birth | date: 'longDate' }}
+      {{ funcionario.date_of_birth | date: "longDate" }}
     </p>
     <p class="col-6 font-weight-bold text-mute item-subtitle">Género</p>
     <p class="col-6 font-weight-bold">
@@ -65,172 +69,219 @@
   <div class="modal-content">
     <div class="modal-header">
       <h4 class="text-primary modal-title">Actualizar funcionario</h4>
-      <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-        (click)="modal.dismiss('Cross click')"></button>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
     </div>
   </div>
   <div class="modal-body">
-    <div class="row mt-3">
-      <div class="col-12">
-        <form [formGroup]="form">
-          <div class="form-row mt-3">
-            <div class="form-group col-md-2 text-center">
-              <img [src]="fileString" class="img-rounded d-block m-auto" alt="" />
-              <label for="image" class="subir-archivo mt-3">Cargar imagen</label>
-              <input type="file" name="image" class="form-control-file" id="image" (change)="onFileChanged($event)"
-                [class.is-invalid]="image_valid" placeholder="Imagen" />
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group text-center">
+            <img
+              [src]="fileString"
+              class="img-rounded d-block m-auto img-rounded d-block img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
+              alt=""
+              onerror="this.src='../../../../../../../assets/images/noprofile.png'"
+            />
+            <label for="image" class="subir-archivo mt-3">Cargar imagen</label>
+            <input
+              type="file"
+              name="image"
+              class="form-control-file"
+              id="image"
+              (change)="onFileChanged($event)"
+              [class.is-invalid]="image_valid"
+              placeholder="Imagen"
+            />
 
-              <div class="text-center text-danger" *ngIf="image_valid">
-                <small class="invalid">La imagen es necesaria</small>
-              </div>
-            </div>
-            <div class="col-md-6 text-left">
-              <div class="form-group row">
-                <label for="first_name" class="col-md-4 col-form-label custom-label text-right">Primer nombre</label>
-                <input type="text" placeholder="" id="first_name" [class.is-invalid]="first_name_valid"
-                  formControlName="first_name" class="form-control custom-control col-md-7" />
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="first_name_valid">
-                    Los nombres son necesarios
-                  </small>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="second_name" class="col-md-4 col-form-label custom-label text-right">Segundo nombre</label>
-                <input type="text" placeholder="" id="second_name" [class.is-invalid]="second_name_valid"
-                  formControlName="second_name" class="form-control custom-control col-md-7" />
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="second_name_valid">
-                    Los nombres son necesarios
-                  </small>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="first_surname" class="col-md-4 col-form-label custom-label text-right">Primer
-                  apellido</label>
-                <input type="text" placeholder="" id="first_surname" [class.is-invalid]="first_surname_valid"
-                  formControlName="first_surname" class="form-control custom-control col-md-7" />
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="first_surname_valid">
-                    Los nombres son necesarios
-                  </small>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="second_surname" class="col-md-4 col-form-label custom-label text-right">Segundo
-                  apellido</label>
-                <input type="text" placeholder="" id="second_surname" [class.is-invalid]="second_surname_valid"
-                  formControlName="second_surname" class="form-control custom-control col-md-7" />
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="second_surname_valid">
-                    Los apellidos son necesarios
-                  </small>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="identifier" class="col-md-4 col-form-label custom-label text-right">Documento de
-                  identidad</label>
-                <input type="number" placeholder="" [class.is-invalid]="identifier_valid" formControlName="identifier"
-                  name="identifier" id="identifier" class="form-control custom-control col-md-7" />
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="identifier_valid">
-                    Es necesario el documento
-                  </small>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="address" class="col-md-4 col-form-label custom-label text-right">Dirección de
-                  residencia</label>
-                <input type="text" [class.is-invalid]="address_valid" id="address" formControlName="address"
-                  class="form-control custom-control col-md-7" />
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="address_valid">
-                    Es necesario la dirección
-                  </small>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group row">
-                <label for="date_of_birth" class="col-md-4 col-form-label custom-label text-right">Fecha de
-                  nacimiento</label>
-                <input type="date" [class.is-invalid]="date_of_birth_valid" id="date_of_birth"
-                  formControlName="date_of_birth" class="form-control custom-control col-md-7" />
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="date_of_birth_valid">
-                    Es necesario la fecha de nacimiento
-                  </small>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="degree" class="col-md-4 col-form-label custom-label text-right">Titulo de estudio</label>
-                <select [class.is-invalid]="degree_valid" id="degree" formControlName="degree"
-                  class="form-select form-control custom-control col-md-7">
-                  <option *ngFor="let degree of degrees" [value]="degree.valor">
-                    {{ degree.clave }}
-                  </option>
-                </select>
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="degree_valid">
-                    Es necesario el titulo de estudio
-                  </small>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="email" class="col-md-4 col-form-label custom-label text-right">Email</label>
-                <input type="email" placeholder="" id="email" [class.is-invalid]="email_valid" formControlName="email"
-                  class="form-control custom-control col-md-7" />
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="email_valid">
-                    Es necesario el email
-                  </small>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-4 custom-label col-form-label text-right" for="gener">Género</label>
-                <select [class.is-invalid]="gener_valid" id="gener" formControlName="gener"
-                  class="form-select form-control custom-control col-md-7">
-                  <option selected value="Masculino">Masculino</option>
-                  <option value="Femenino">Femenino</option>
-                </select>
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="gener_valid">
-                    Es necesario el género
-                  </small>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-4 custom-label col-form-label text-right" for="marital_status">Estado civil</label>
-                <select [class.is-invalid]="marital_status_valid" id="marital_status" formControlName="marital_status"
-                  class="form-select form-control custom-control col-md-7">
-                  <option *ngFor="let estado of estados" [value]="estado.valor">
-                    {{ estado.clave }}
-                  </option>
-                </select>
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="marital_status_valid">
-                    Es necesario el estado civil
-                  </small>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="cell_phone" class="col-md-4 col-form-label custom-label text-right">Celular</label>
-                <input type="number" id="cell_phone" [class.is-invalid]="cell_phone_valid" formControlName="cell_phone"
-                  class="form-control custom-control col-md-7" />
-                <div class="col-md-7 offset-4">
-                  <small class="invalid text-danger" *ngIf="cell_phone_valid">
-                    Es necesario el número de celular
-                  </small>
-                </div>
-              </div>
+            <div class="text-center text-danger" *ngIf="image_valid">
+              <small class="invalid">La imagen es necesaria</small>
             </div>
           </div>
-        </form>
+        </div>
+        <div class="col-md-5">
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Primer nombre</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa el primer nombre"
+              id="first_name"
+              [class.is-invalid]="first_name_valid"
+              formControlName="first_name"
+              autocomplete="off"
+              required
+            />
+            <mat-error *ngIf="first_name_valid">Campo necesario</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Segundo nombre</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa el segundo nombre"
+              id="second_name"
+              [class.is-invalid]="second_name_valid"
+              formControlName="second_name"
+              autocomplete="off"
+              required
+            />
+            <mat-error *ngIf="second_name_valid">Campo necesario</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Primer apellido</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa el primer apellido"
+              id="first_surname"
+              [class.is-invalid]="first_surname_valid"
+              formControlName="first_surname"
+              autocomplete="off"
+              required
+            />
+            <mat-error *ngIf="first_surname_valid">Campo necesario</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Segundo apellido</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa el segundo apellido"
+              id="second_surname"
+              [class.is-invalid]="second_surname_valid"
+              formControlName="second_surname"
+              autocomplete="off"
+              required
+            />
+            <mat-error *ngIf="second_surname_valid">Campo necesario</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Documento de identidad</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa el número de documento"
+              name="identifier"
+              id="identifier"
+              [class.is-invalid]="identifier_valid"
+              formControlName="identifier"
+              autocomplete="off"
+              required
+            />
+            <mat-error *ngIf="identifier_valid">Campo necesario</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Dirección de residencia</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa la dirección de residencia"
+              id="address"
+              [class.is-invalid]="address_valid"
+              formControlName="address"
+              autocomplete="off"
+              required
+            />
+            <mat-error *ngIf="address_valid">Campo necesario</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-5">
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Fecha de nacimiento</mat-label>
+            <input
+              matInput
+              type="date"
+              placeholder=""
+              id="date_of_birth"
+              [class.is-invalid]="date_of_birth_valid"
+              formControlName="date_of_birth"
+              autocomplete="off"
+              required
+            />
+            <mat-error *ngIf="date_of_birth_valid">Campo necesario</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Título de estudio</mat-label>
+            <mat-select
+              [class.is-invalid]="degree_valid"
+              id="degree"
+              formControlName="degree"
+            >
+              <mat-option *ngFor="let degree of degrees" [value]="degree.valor">
+                {{ degree.clave }}</mat-option
+              >
+            </mat-select>
+            <mat-error *ngIf="degree_valid">Campo necesario</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Correo electrónico</mat-label>
+            <input
+              matInput
+              type="email"
+              placeholder="Ingresa el correo electrónico"
+              id="email"
+              [class.is-invalid]="email_valid"
+              formControlName="email"
+              autocomplete="off"
+              required
+            />
+            <mat-error *ngIf="email_valid">Campo necesario</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Género</mat-label>
+            <mat-select
+              [class.is-invalid]="gener_valid"
+              id="gener"
+              formControlName="gener"
+            >
+              <mat-option value="Masculino">Masculino</mat-option>
+              <mat-option value="Femenino">Femenino</mat-option>
+            </mat-select>
+            <mat-error *ngIf="gener_valid">Campo necesario</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Estado civil</mat-label>
+            <mat-select
+              [class.is-invalid]="marital_status_valid"
+              id="marital_status"
+              formControlName="marital_status"
+            >
+              <mat-option *ngFor="let estado of estados" [value]="estado.valor">
+                {{ estado.clave }}</mat-option
+              >
+            </mat-select>
+            <mat-error *ngIf="marital_status_valid">Campo necesario</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Teléfono celular</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa el número de celular"
+              id="cell_phone"
+              [class.is-invalid]="cell_phone_valid"
+              formControlName="cell_phone"
+              autocomplete="off"
+              required
+            />
+            <mat-error *ngIf="cell_phone_valid">Campo necesario</mat-error>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click');hideModal()">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click'); hideModal()"
+    >
       Cancelar
     </button>
     <button type="button" (click)="guardar()" class="btn btn-primary">
@@ -240,13 +291,16 @@
 </ng-template>
 
 <app-modal-basic #modal [dialogClass]="'modal-xl'">
-
   <div class="app-modal-footer">
     <div class="form-group text-right">
-      <button (click)="hideModal()" type="button" class="btn btn-danger raised mr-2 btn-sm">
+      <button
+        (click)="hideModal()"
+        type="button"
+        class="btn btn-danger raised mr-2 btn-sm"
+      >
         Cerrar
       </button>
-      <button type="submit" class="btn btn-primary btn-sm raised" >
+      <button type="submit" class="btn btn-primary btn-sm raised">
         Actualizar
       </button>
     </div>

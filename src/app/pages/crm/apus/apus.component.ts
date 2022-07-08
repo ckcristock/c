@@ -22,7 +22,16 @@ export class ApusComponent implements OnInit {
     pageSize: 10,
     collectionSize: 0
   }
-
+  filtros:any = {
+    date: '',
+    code: '',
+    name: '',
+    city: '',
+    client: '',
+    line: '',
+    tipe: '',
+    description: ''
+  }
   constructor( private _apus: ApusService ) { }
 
   ngOnInit(): void {
@@ -33,6 +42,7 @@ export class ApusComponent implements OnInit {
     this.estadoFiltros = !this.estadoFiltros
   }
   @ViewChild('firstAccordion') firstAccordion: MatAccordion;
+  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
   matPanel = false;
   openClose(){
     if (this.matPanel == false){
@@ -43,11 +53,25 @@ export class ApusComponent implements OnInit {
       this.matPanel = false;
     }    
   }
+  matPanel2 = false;
+  openClose2(){
+    if (this.matPanel2 == false){
+      this.secondAccordion.openAll();
+      this.matPanel2 = true;
+    } else {
+      this.secondAccordion.closeAll();
+      this.matPanel2 = false;
+    }    
+  }
   getApus(page = 1){
     this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtros
+    }
     this.loading = true;
-    this._apus.getApus(this.pagination).subscribe((r:any) => {
+    this._apus.getApus(params).subscribe((r:any) => {
       this.apus = r.data.data;
+      console.log(this.apus)
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })

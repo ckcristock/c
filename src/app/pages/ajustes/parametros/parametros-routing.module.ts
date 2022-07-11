@@ -27,6 +27,7 @@ import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-val
 import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.component';
 import { CategoriasComponent } from './categorias/categorias.component';
 import { SubcategoriasComponent } from './subcategorias/subcategorias.component';
+import { MaterialesComponent } from "../informacion-base/catalogo/components/materiales/materiales.component";
 
 
 const routes : Routes = [
@@ -46,7 +47,7 @@ const routes : Routes = [
     { path: 'apu/editar-geometria/:id', component: CrearGeometriaComponent },
     { path: 'apu/ver-geometria/:id', component: VerGeometriaComponent },
 
-    //{ path: 'apu/materiales', component: MaterialesComponent },
+    { path: 'apu/materiales', component: MaterialesComponent },
 
     { path: 'apu/unidades-medidas', component: UnidadesMedidasComponent },
     { path: 'apu/variables-apu', component: MaquinasHerramientasComponent },

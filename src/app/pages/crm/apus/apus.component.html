@@ -122,14 +122,14 @@
           <mat-form-field class="col" appearance="outline">
             <mat-label>Tipo</mat-label>
             <mat-select
-              name="tipe"
-              [(ngModel)]="filtros.tipe"
+              name="type"
+              [(ngModel)]="filtros.type"
               (selectionChange)="getApus()"
             >
               <mat-option value="">Todos</mat-option>
-              <mat-option value="pieza">Pieza</mat-option>
-              <mat-option value="conjunto">Conjunto</mat-option>
-              <mat-option value="servicio">Servicio</mat-option>
+              <mat-option value="Pieza">Pieza</mat-option>
+              <mat-option value="Conjunto">Conjunto</mat-option>
+              <mat-option value="Servicio">Servicio</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
@@ -195,7 +195,7 @@
       <tbody>
         <tr *ngFor="let item of apus" class="text-center">
           <td class="align-middle" *ngIf="checkFecha">
-            {{ item.created_at | date: "longDate" }}
+            {{ item.created_at | date: "shortDate" }}
           </td>
           <td class="align-middle">{{ item.code }}</td>
           <td class="align-middle" *ngIf="checkNombre">{{ item.name }}</td>
@@ -217,21 +217,21 @@
                 <div ngbDropdownMenu>
                   <a
                     *ngIf="item.type == 'S'"
-                    class="dropdown-item waves-light text-dark waves-effect caja-botones"
+                    class="dropdown-item waves-light text-success waves-effect caja-botones"
                     [routerLink]="['/crm/apu/ver-apu-servicio', item.apu_id]"
                   >
                     <i class="far fa-eye"></i> Ver
                   </a>
                   <a
                     *ngIf="item.type == 'P'"
-                    class="dropdown-item waves-light text-dark waves-effect caja-botones"
+                    class="dropdown-item waves-light text-success waves-effect caja-botones"
                     [routerLink]="['/crm/apu/ver-apu-pieza', item.apu_id]"
                   >
                     <i class="far fa-eye"></i> Ver
                   </a>
                   <a
                     *ngIf="item.type == 'C'"
-                    class="dropdown-item waves-light text-dark waves-effect caja-botones"
+                    class="dropdown-item waves-light text-success waves-effect caja-botones"
                     [routerLink]="['/crm/apu/ver-apu-conjunto', item.apu_id]"
                   >
                     <i class="far fa-eye"></i> Ver

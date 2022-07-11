@@ -1,51 +1,76 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Geometrías</h4>
-            <button class="btn btn-sm btn-primary" style="float: right;" [routerLink]="['/ajustes/parametros/apu/crear-geometria']">
-                <i class="fa fa-plus"></i> Agregar
-            </button>           
-        </div>
-        <hr class="line">
-        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;" *ngIf="!loading && geometries.length > 0; else notData">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Imagen</th>
-                    <th>Formula Peso</th>
-                    <th class="text-center col-1">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of geometries">
-                    <td> {{ item.name }} </td>
-                    <td class="text-center">
-                        <img [src]="item.image | image" class="img-fluid"
-                            onerror="this.src='../../../../../../assets/images/nofound.png'">
-                    </td>
-                    <td> {{ item.weight_formula }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/ajustes/parametros/apu/ver-geometria', item.id]">
-                                        <i class="far fa-eye"></i> Ver
-                                    </a>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/ajustes/parametros/apu/editar-geometria', item.id]">
-                                        <i class="far fa-edit"></i> Editar
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Geometrías</h4>
+      <button
+        class="btn btn-sm btn-primary"
+        style="float: right"
+        [routerLink]="['/ajustes/parametros/apu/crear-geometria']"
+      >
+        <i class="fa fa-plus"></i> Agregar
+      </button>
     </div>
+    <hr class="line" />
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && geometries.length > 0; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Nombre</th>
+          <th>Imagen</th>
+          <th>Formula Peso</th>
+          <th class="col-md-1">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of geometries" class="text-center">
+          <td class="align-middle">{{ item.name }}</td>
+          <td class="align-middle">
+            <img
+              [src]="item.image | image"
+              class="img-fluid"
+              onerror="this.src='../../../../../../assets/images/nofound.png'"
+            />
+          </td>
+          <td class="align-middle">{{ item.weight_formula }}</td>
+          <td class="align-middle">
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  [routerLink]="[
+                    '/ajustes/parametros/apu/ver-geometria',
+                    item.id
+                  ]"
+                >
+                  <i class="far fa-eye"></i> Ver
+                </a>
+                <a
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  [routerLink]="[
+                    '/ajustes/parametros/apu/editar-geometria',
+                    item.id
+                  ]"
+                >
+                  <i class="far fa-edit"></i> Editar
+                </a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

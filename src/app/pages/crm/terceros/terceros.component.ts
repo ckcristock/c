@@ -58,7 +58,8 @@ export class TercerosComponent implements OnInit {
     third_party_type: '',
     email: '',
     cod_dian_address: '',
-    municipio: ''
+    municipio: '',
+    phone: ''
   }
   constructor( 
                 private _tercerosService: TercerosService, private fb: FormBuilder,

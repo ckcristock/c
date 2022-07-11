@@ -29,7 +29,7 @@ export class ApusComponent implements OnInit {
     city: '',
     client: '',
     line: '',
-    tipe: '',
+    type: '',
     description: ''
   }
   constructor( private _apus: ApusService ) { }

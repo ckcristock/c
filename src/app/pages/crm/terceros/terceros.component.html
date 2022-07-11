@@ -33,6 +33,21 @@
           class="col-md-2 pl-0"
           appearance="outline"
         >
+          <mat-label>Razón social</mat-label>
+          <input
+            type="text"
+            matInput
+            name="name"
+            [(ngModel)]="filtros.name"
+            autocomplete="off"
+            placeholder="Busca por razón social"
+            (input)="getThirdParties()"
+          />
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-1 pl-0"
+          appearance="outline"
+        >
           <mat-label>NIT</mat-label>
           <input
             type="text"
@@ -43,22 +58,7 @@
             placeholder="Busca por NIT"
             (input)="getThirdParties()"
           />
-        </mat-form-field>
-        <mat-form-field
-          class="col-md-2 pl-0"
-          appearance="outline"
-        >
-          <mat-label>Nombre</mat-label>
-          <input
-            type="text"
-            matInput
-            name="name"
-            [(ngModel)]="filtros.name"
-            autocomplete="off"
-            placeholder="Busca por nombre"
-            (input)="getThirdParties()"
-          />
-        </mat-form-field>
+        </mat-form-field>        
         <mat-form-field
           class="col-md-2 pl-0"
           appearance="outline"
@@ -85,7 +85,22 @@
             name="municipio"
             [(ngModel)]="filtros.municipio"
             autocomplete="off"
-            placeholder="Busca por id de ciudad"
+            placeholder="Busca por ciudad"
+            (input)="getThirdParties()"
+          />
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-1 pl-0"
+          appearance="outline"
+        >
+          <mat-label>Tel</mat-label>
+          <input
+            type="text"
+            matInput
+            name="phone"
+            [(ngModel)]="filtros.phone"
+            autocomplete="off"
+            placeholder="Busca por teléfono"
             (input)="getThirdParties()"
           />
         </mat-form-field>
@@ -125,12 +140,12 @@
           <mat-checkbox color="primary" [(ngModel)]="checkFoto"
             >Foto</mat-checkbox
           >
+          <mat-checkbox color="primary" [(ngModel)]="checkNombre"
+            >Razón social</mat-checkbox
+          >
           <mat-checkbox color="primary" [(ngModel)]="checkNIT"
             >NIT</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkNombre"
-            >Nombre</mat-checkbox
-          >
+          >          
           <mat-checkbox color="primary" [(ngModel)]="checkDireccion"
             >Dirección</mat-checkbox
           >
@@ -160,8 +175,8 @@
       <thead class="bg-light">
         <tr class="text-center text-uppercase">
           <th *ngIf="checkFoto">Foto</th>
-          <th *ngIf="checkNIT">NIT</th>
-          <th *ngIf="checkNombre">Nombre</th>
+          <th *ngIf="checkNombre">Razón social</th>
+          <th *ngIf="checkNIT">NIT</th>          
           <th *ngIf="checkDireccion">Dirección</th>
           <th *ngIf="checkMunicipio">Ciudad</th>
           <th *ngIf="checkTelefono">Teléfono</th>
@@ -188,10 +203,10 @@
               />
             </div>
           </td>
-          <td class="align-middle" *ngIf="checkNIT">{{ third.nit }}</td>
           <td class="align-middle" *ngIf="checkNombre">
-            {{ third.first_name }} {{ third.first_surname }}
+            {{third.social_reason}}
           </td>
+          <td class="align-middle" *ngIf="checkNIT">{{ third.nit }}</td>          
           <td class="align-middle" *ngIf="checkDireccion">
             {{ third.cod_dian_address }}
           </td>

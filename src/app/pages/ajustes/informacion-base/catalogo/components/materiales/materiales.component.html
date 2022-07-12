@@ -3,70 +3,106 @@
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Materiales</h4>
       <div class="btn-group rounded">
-        <button class="btn btn-primary btn-sm" style="float: right;" (click)="openConfirm(add, 'Nuevo Material')">
+        <button
+          class="btn btn-primary btn-sm"
+          style="float: right"
+          (click)="openConfirm(add, 'Nuevo Material')"
+        >
           <i class="fa fa-plus"></i> Agregar
         </button>
-        <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+        <button
+          class="btn btn-info btn-sm"
+          style="float: right"
+          (click)="openClose()"
+        >
           <i class="fas fa-sliders-h"></i> Filtros
         </button>
       </div>
     </div>
-    <hr class="line">
+    <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="form-group col-2">
           <label for="">Filtro nombre</label>
-          <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getMaterials()"
-            name="name" autocomplete="off">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            [(ngModel)]="filtro.name"
+            (change)="getMaterials()"
+            name="name"
+            autocomplete="off"
+          />
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-  
-    <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;"
-      *ngIf="!loading && materials.length > 0; else notData">
-      <thead>
-        <tr>
+
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && materials.length > 0; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
           <th>Nombre</th>
           <th>Unidad</th>
           <th>Tipo</th>
           <th>Valor KG</th>
           <th>F. Creación</th>
-          <th class="text-center col-1">Acciones</th>
+          <th class="col-md-1">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of materials">
-          <td> {{ item.name | uppercase }} </td>
-          <td> {{ item.unit | titlecase }} </td>
-          <td> {{ item.type }} </td>
-          <td> {{ item.kg_value }} </td>
-          <td> {{ item.created_at | date: 'longDate' }} </td>
-          <td>
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a class="dropdown-item waves-light text-dark waves-effect caja-botones"
-                    (click)="getMaterial(item);openConfirm(view,'')">
-                    <i class="far fa-eye"></i> Ver
-                  </a>
-                  <a class="dropdown-item waves-light text-info waves-effect caja-botones"
-                    (click)="getMaterial(item); openConfirm(add, 'Editar Material')">
-                    <i class="far fa-edit"></i> Editar
-                  </a>
-                </div>
+        <tr *ngFor="let item of materials" class="text-center">
+          <td class="align-middle">{{ item.name | uppercase }}</td>
+          <td class="align-middle">{{ item.unit | titlecase }}</td>
+          <td class="align-middle">{{ item.type }}</td>
+          <td class="align-middle">{{ item.kg_value }}</td>
+          <td class="align-middle">{{ item.created_at | date: "longDate" }}</td>
+          <td class="align-middle">
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  (click)="getMaterial(item); openConfirm(view, '')"
+                >
+                  <i class="far fa-eye"></i> Ver
+                </a>
+                <a
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  (click)="
+                    getMaterial(item); openConfirm(add, 'Editar Material')
+                  "
+                >
+                  <i class="far fa-edit"></i> Editar
+                </a>
               </div>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
-      (pageChange)="getMaterials($event)" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-      boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      (pageChange)="getMaterials($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
     </ngb-pagination>
   </div>
 </div>
@@ -75,24 +111,40 @@
   <div class="modal-content">
     <div class="modal-header">
       <h4 class="text-primary modal-title">{{ title }}</h4>
-      <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-        (click)="modal.dismiss('Cross click');closeModal()"></button>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click'); closeModal()"
+      ></button>
     </div>
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <input type="hidden" class="form-control form-control-sm" formControlName="product_id">
+        <input
+          type="hidden"
+          class="form-control form-control-sm"
+          formControlName="product_id"
+        />
 
         <div class="col-12">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="">Nombre</label>
-              <input type="text" class="form-control form-control-sm" formControlName="name">
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="name"
+              />
             </div>
             <div class="form-group col-md-6">
               <label for="">Unidad</label>
-              <select class="form-control form-control-sm" name="color" formControlName="unit">
+              <select
+                class="form-control form-control-sm"
+                name="color"
+                formControlName="unit"
+              >
                 <option value="milimetros">Milimetros</option>
                 <option value="unidad">Unidad</option>
               </select>
@@ -100,23 +152,39 @@
 
             <div class="form-group col-md-6">
               <label for="tipo">Tipo</label>
-              <select class="form-control form-control-sm" name="color" formControlName="type">
+              <select
+                class="form-control form-control-sm"
+                name="color"
+                formControlName="type"
+              >
                 <option value="Interno">Interno</option>
                 <option value="Comercial">Comercial</option>
               </select>
             </div>
             <div class="form-group col-md-6">
               <label for="tipo">Valor KG</label>
-              <input type="number" class="form-control form-control-sm" formControlName="kg_value">
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                formControlName="kg_value"
+              />
             </div>
 
             <div class="form-group col-md-6">
               <label for="">Código Barras</label>
-              <input type="text" class="form-control form-control-sm" formControlName="Codigo_Barras">
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="Codigo_Barras"
+              />
             </div>
             <div class="form-group col-md-6">
               <label for="tipo">Tipo Catalogo</label>
-              <select class="form-control form-control-sm" name="color" formControlName="Tipo_Catalogo">
+              <select
+                class="form-control form-control-sm"
+                name="color"
+                formControlName="Tipo_Catalogo"
+              >
                 <option value="Material">Material</option>
                 <!--<option value="Epp">Epp</option>-->
               </select>
@@ -125,8 +193,15 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label>Categoria</label>
-                <ng-select formControlName="Id_Categoria" [items]="Categorias" bindLabel="text"
-                  (change)="getSubCategories($event.value)" bindValue="value" loadingText="loading" ngDefaultControl>
+                <ng-select
+                  formControlName="Id_Categoria"
+                  [items]="Categorias"
+                  bindLabel="text"
+                  (change)="getSubCategories($event.value)"
+                  bindValue="value"
+                  loadingText="loading"
+                  ngDefaultControl
+                >
                 </ng-select>
               </div>
             </div>
@@ -134,38 +209,56 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label>Subcategoría</label>
-                <ng-select formControlName="Id_Subcategoria" [items]="SubCategorias" bindLabel="text"
-                  (change)="getDinamicField($event.value)" bindValue="value" loadingText="loading" ngDefaultControl>
+                <ng-select
+                  formControlName="Id_Subcategoria"
+                  [items]="SubCategorias"
+                  bindLabel="text"
+                  (change)="getDinamicField($event.value)"
+                  bindValue="value"
+                  loadingText="loading"
+                  ngDefaultControl
+                >
                 </ng-select>
               </div>
             </div>
 
             <ng-container formArrayName="dynamic">
-              <ng-container *ngFor="let item of fieldDinamic.controls; let i = index">
+              <ng-container
+                *ngFor="let item of fieldDinamic.controls; let i = index"
+              >
                 <div class="col-md-3" [formGroupName]="i">
                   <label for="">{{
                     item["controls"]["label"]["value"] | titlecase
-                    }}</label>
-                  <input class="form-control form-control-sm" [type]="item['controls']['type']['value']"
-                    formControlName="valor" />
+                  }}</label>
+                  <input
+                    class="form-control form-control-sm"
+                    [type]="item['controls']['type']['value']"
+                    formControlName="valor"
+                  />
                 </div>
               </ng-container>
             </ng-container>
 
-
             <div class="col-12 mt-4">
-              <label for="" style="font-size: 18px;">Espesores</label>
+              <label for="" style="font-size: 18px">Espesores</label>
             </div>
             <ng-container formArrayName="thicknesses">
-              <div class="form-group col-1" *ngFor="let item of thicknessList.controls; let i = index">
+              <div
+                class="form-group col-1"
+                *ngFor="let item of thicknessList.controls; let i = index"
+              >
                 <ng-container [formGroupName]="i">
                   <label for=""> {{ item.controls.thickness.value }} </label>
-                  <input type="number" class="form-control form-control-sm" formControlName="value">
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    formControlName="value"
+                  />
                 </ng-container>
               </div>
             </ng-container>
             <ng-container>
-              <perfect-scrollbar style="height: 250px;">
+              <perfect-scrollbar style="height: 250px">
                 <table class="table table-sm">
                   <thead>
                     <tr>
@@ -181,14 +274,26 @@
                     </tr>
                   </thead>
                   <tbody formArrayName="fields">
-                    <ng-container *ngIf="fieldList.controls.length; else sinDatos">
-                      <ng-container *ngFor="let item of fieldList.controls; let i = index">
+                    <ng-container
+                      *ngIf="fieldList.controls.length; else sinDatos"
+                    >
+                      <ng-container
+                        *ngFor="let item of fieldList.controls; let i = index"
+                      >
                         <tr [formGroupName]="i">
                           <td>
-                            <input type="text" class="form-control form-control-sm" formControlName="property">
+                            <input
+                              type="text"
+                              class="form-control form-control-sm"
+                              formControlName="property"
+                            />
                           </td>
                           <td>
-                            <select class="form-control form-control-sm" name="color" formControlName="type">
+                            <select
+                              class="form-control form-control-sm"
+                              name="color"
+                              formControlName="type"
+                            >
                               <option value="number">Number</option>
                               <option value="text">Text</option>
                               <option value="date">Date</option>
@@ -196,12 +301,21 @@
                             </select>
                           </td>
                           <td>
-                            <input [type]="item['controls']['type']['value']" class="form-control form-control-sm"
-                              formControlName="value">
+                            <input
+                              [type]="item['controls']['type']['value']"
+                              class="form-control form-control-sm"
+                              formControlName="value"
+                            />
                           </td>
                           <td>
-                            <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button"
-                              ngbTooltip="Borrar" (click)="deleteField(i)">
+                            <button
+                              style="float: right"
+                              class="btn btn-danger btn-sm"
+                              placement="bottom"
+                              type="button"
+                              ngbTooltip="Borrar"
+                              (click)="deleteField(i)"
+                            >
                               <i class="fas fa-trash-alt"></i>
                             </button>
                           </td>
@@ -211,8 +325,13 @@
                     <tr>
                       <td colspan="4">
                         <div class="btn-group" style="float: right">
-                          <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar"
-                            (click)="newField()">
+                          <button
+                            class="btn btn-info btn-sm"
+                            placement="bottom"
+                            type="button"
+                            ngbTooltip="Agregar"
+                            (click)="newField()"
+                          >
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -228,10 +347,19 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click');closeModal()">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click'); closeModal()"
+    >
       Cancelar
     </button>
-    <button type="button" [disabled]="!form.valid" (click)="save()" class="btn btn-primary">
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="save()"
+      class="btn btn-primary"
+    >
       Guardar
     </button>
   </div>
@@ -239,17 +367,23 @@
 
 <ng-template #view let-modal>
   <div class="modal-content">
-      <div class="modal-header">
-          <h4 class="text-primary modal-title">Ver Material</h4>
-          <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-              (click)="modal.dismiss('Cross click');closeModalVer()"></button>
-      </div>
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">Ver Material</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click'); closeModalVer()"
+      ></button>
+    </div>
   </div>
   <div class="modal-body">
     <div class="row">
       <div class="col-6">
-        <strong class="text-title"> PROPIEDADES ({{ material.name | titlecase }}) </strong>
-        <perfect-scrollbar style="height: 300px;">
+        <strong class="text-title">
+          PROPIEDADES ({{ material.name | titlecase }})
+        </strong>
+        <perfect-scrollbar style="height: 300px">
           <table class="table table-sm table-striped">
             <thead>
               <tr class="bg-light stay">
@@ -260,17 +394,19 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of material.material_field">
-                <td> {{ item.property }} </td>
-                <td> {{ item.type }} </td>
-                <td> {{ item.value }} </td>
+                <td>{{ item.property }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.value }}</td>
               </tr>
             </tbody>
           </table>
         </perfect-scrollbar>
       </div>
       <div class="col-6">
-        <strong class="text-title"> ESPESORES ({{ material.name | titlecase }}) </strong>
-        <perfect-scrollbar style="height: 400px;">
+        <strong class="text-title">
+          ESPESORES ({{ material.name | titlecase }})
+        </strong>
+        <perfect-scrollbar style="height: 400px">
           <table class="table table-sm table-striped">
             <thead>
               <tr class="bg-light stay">
@@ -280,8 +416,8 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of material.material_thickness">
-                <td> {{ item.thickness.thickness }} </td>
-                <td> {{ item.value }} </td>
+                <td>{{ item.thickness.thickness }}</td>
+                <td>{{ item.value }}</td>
               </tr>
             </tbody>
           </table>
@@ -290,12 +426,15 @@
     </div>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click');closeModalVer()">
-          Cerrar
-      </button>
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click'); closeModalVer()"
+    >
+      Cerrar
+    </button>
   </div>
 </ng-template>
-
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

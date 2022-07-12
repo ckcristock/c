@@ -14,7 +14,7 @@ export class CostosIndirectosComponent implements OnInit {
   @ViewChild('modal') modal: any;
   form: FormGroup;
   loading: boolean = false;
-  title: string = 'Nuevo Costo indirecto';
+  title: string = 'Nuevo costo indirecto';
   indirects: any[] = [];
   indirect: any = {};
   pagination = {

@@ -14,7 +14,7 @@ export class GeometriasService {
   }
 
   getMesuare() {
-    return this.http.get(`${environment.base_url}/measure`).pipe(
+    return this.http.get(`${environment.base_url}/measure-active`).pipe(
       map((r: any) => {
         r.data = r.data.map((d) => {
           d.checked = false;

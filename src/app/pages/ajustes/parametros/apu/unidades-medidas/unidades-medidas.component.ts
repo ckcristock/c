@@ -57,7 +57,8 @@ export class UnidadesMedidasComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [this.unit.id],
-      name: ['', this._validators.required]
+      name: ['', this._validators.required],
+      unit: ['', this._validators.required],
     })
   }
 
@@ -66,7 +67,8 @@ export class UnidadesMedidasComponent implements OnInit {
     //this.title = 'Actualizar unidad de medida';
     this.form.patchValue({
       id: this.unit.id,
-      name: this.unit.name
+      name: this.unit.name,
+      unit: this.unit.unit,
     })
   }
 
@@ -74,6 +76,7 @@ export class UnidadesMedidasComponent implements OnInit {
     this.loading = true;
     this._units.getUnits().subscribe((r: any) => {
       this.units = r.data;
+      console.log(this.units)
       this.loading = false;
     })
   }

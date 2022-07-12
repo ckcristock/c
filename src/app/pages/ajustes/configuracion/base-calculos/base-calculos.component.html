@@ -1,94 +1,123 @@
-<div class="card">
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Base Cálculos</h4>
-        </div>
-        <hr class="line">
+<div class="card col-md-4 mx-auto">
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Base Cálculos</h4>
     </div>
-    <div class="row mx-2">
-        <div class="col-6" style="font-weight: bold;">
-            Porcentajes
-        </div>
-    </div>
-    <hr class="mx-3">
-    <form #formP="ngForm" (submit)="guardar(formP)" >
-        <div class="row mx-2 my-2">
-            <div class="col-8">
-                Administración    %
-            </div>
-            <div class="col-4">
-                <input 
+    <hr class="line" />
 
-                [(ngModel)]="data.administration_percentage"
-
-                #admin="ngModel"
-                name="administration_percentage"
-                placeholder="0" class="form-control form-control-sm" type="number" required>
-            </div>
-         
+    <form #formP="ngForm" (submit)="guardar(formP)">
+      <h6><b>Porcentajes</b></h6>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend col-md-7 px-0">
+          <span class="input-group-text col-md-12">Administración</span>
         </div>
-        <div class="row mx-2 my-2">
-            <div class="col-8">
-                Imprevistos %
-            </div>
-            <div class="col-4">
-                <input placeholder="0" class="form-control form-control-sm" type="number"
-                [ngModel]="data.unforeseen_percentage" name="unforeseen_percentage" required>
-            </div>
+        <input
+          style="text-align: right"
+          class="form-control"
+          [(ngModel)]="data.administration_percentage"
+          #admin="ngModel"
+          name="administration_percentage"
+          placeholder="0"
+          type="number"
+          required
+        />
+        <div class="input-group-append">
+          <span class="input-group-text">%</span>
         </div>
-        <div class="row mx-2 my-2">
-            <div class="col-8">
-                Utilidad  %
-            </div>
-            <div class="col-4">
-                <input placeholder="0" class="form-control form-control-sm" type="number"
-                name="utility_percentage" [ngModel]="data.utility_percentage"
-                required>
-            </div>
+      </div>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend col-md-7 px-0">
+          <span class="input-group-text col-md-12">Imprevistos</span>
         </div>
-
-        <div class="row mx-2">
-            <div class="col-6" style="font-weight: bold;">
-                Valores
-            </div>
+        <input
+          style="text-align: right"
+          class="form-control"
+          [(ngModel)]="data.unforeseen_percentage"
+          name="unforeseen_percentage"
+          placeholder="0"
+          type="number"
+          required
+        />
+        <div class="input-group-append">
+          <span class="input-group-text">%</span>
         </div>
-    
-        <hr class="mx-3">
-
-        <div class="row mx-2 my-2">
-            <div class="col-8">
-                TRM
-            </div>
-            <div class="col-4">
-                <input placeholder="0" class="form-control form-control-sm" type="number"
-                name="trm" [ngModel]="data.trm"  required>
-            </div>
+      </div>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend col-md-7 px-0">
+          <span class="input-group-text col-md-12">Utilidad</span>
         </div>
-
-        <div class="row mx-2 my-2">
-            <div class="col-8">
-                Valor Minuto Corte Laser
-            </div>
-            <div class="col-4">
-                <input placeholder="0" class="form-control form-control-sm" type="number"
-                [ngModel]="data.laser_cut_minute_value" name="laser_cut_minute_value" required>
-            </div>
+        <input
+          style="text-align: right"
+          class="form-control"
+          [(ngModel)]="data.utility_percentage"
+          name="utility_percentage"
+          placeholder="0"
+          type="number"
+          required
+        />
+        <div class="input-group-append">
+          <span class="input-group-text">%</span>
         </div>
-
-        <div class="row mx-2 my-2">
-            <div class="col-8">
-                Valor Minuto Corte Agua
-            </div>
-            <div class="col-4">
-                <input placeholder="0" class="form-control form-control-sm" type="number"
-                [ngModel]="data.warer_cut_minute_value" name="warer_cut_minute_value" required>
-            </div>
+      </div>
+      <h6 class="mt-3"><b>Valores</b></h6>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend col-md-7 px-0">
+          <span class="input-group-text col-md-12">TRM</span>
         </div>
-        <div class="p-3 col-12">
-            <button 
-            [disabled]="formP.invalid"
-            class="btn btn-primary btn-block" 
-            type="submit">Guardar</button>
+        <input
+          style="text-align: right"
+          class="form-control"
+          [(ngModel)]="data.trm"
+          name="trm"
+          placeholder="0"
+          type="number"
+          required
+        />
+        <div class="input-group-append">
+          <span class="input-group-text">$</span>
         </div>
+      </div>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend col-md-7 px-0">
+          <span class="input-group-text col-md-12">Minuto de corte láser</span>
+        </div>
+        <input
+          style="text-align: right"
+          class="form-control"
+          [(ngModel)]="data.laser_cut_minute_value"
+          name="laser_cut_minute_value"
+          placeholder="0"
+          type="number"
+          required
+        />
+        <div class="input-group-append">
+          <span class="input-group-text">$</span>
+        </div>
+      </div>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend col-md-7 px-0">
+          <span class="input-group-text col-md-12">Minuto de corte agua</span>
+        </div>
+        <input
+          style="text-align: right"
+          class="form-control"
+          [(ngModel)]="data.warer_cut_minute_value"
+          name="warer_cut_minute_value"
+          placeholder="0"
+          type="number"
+          required
+        />
+        <div class="input-group-append">
+          <span class="input-group-text">$</span>
+        </div>
+      </div>
+      <button
+        [disabled]="formP.invalid"
+        class="mt-3 btn btn-primary btn-block"
+        type="submit"
+      >
+        Guardar
+      </button>
     </form>
+  </div>
 </div>

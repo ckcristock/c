@@ -10,31 +10,31 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./medidas.component.scss']
 })
 export class MedidasComponent implements OnInit {
-  @ViewChild('modal') modal:any;
+  @ViewChild('modal') modal: any;
   form: FormGroup;
-  loading:boolean = false;
-  title:any = '';
-  measures:any[] = [];
-  measure:any = {};
+  loading: boolean = false;
+  title: any = '';
+  measures: any[] = [];
+  measure: any = {};
   pagination = {
     page: 1,
     pageSize: 10,
     collectionSize: 0
   }
 
-  constructor( 
-                private fb: FormBuilder,
-                private _medidas: MedidasService,
-                private _swal: SwalService,
-                private modalService: NgbModal,
-              ) { }
+  constructor(
+    private fb: FormBuilder,
+    private _medidas: MedidasService,
+    private _swal: SwalService,
+    private modalService: NgbModal,
+  ) { }
 
   ngOnInit(): void {
     this.createform();
     this.getMeasures();
   }
 
-  createform(){
+  createform() {
     this.form = this.fb.group({
       id: [this.measure.id],
       name: [''],
@@ -42,16 +42,16 @@ export class MedidasComponent implements OnInit {
     })
   }
   closeResult = '';
-public openConfirm(confirm, titulo){
-  this.title = titulo;
+  public openConfirm(confirm, titulo) {
+    this.title = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-private getDismissReason(reason: any): string {
-  this.form.reset();
+  private getDismissReason(reason: any): string {
+    this.form.reset();
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -62,13 +62,13 @@ private getDismissReason(reason: any): string {
   }
 
 
-  openModal(){
+  openModal() {
     this.modal.show();
-    
+
   }
 
-  getMeasure( measure ){
-    this.measure = {...measure};
+  getMeasure(measure) {
+    this.measure = { ...measure };
     //this.title = 'Actualizar medida';
     this.form.patchValue({
       id: this.measure.id,
@@ -77,19 +77,43 @@ private getDismissReason(reason: any): string {
     })
   }
 
-  getMeasures( page = 1 ){
+  getMeasures(page = 1) {
     this.pagination.page = page;
     this.loading = true;
-    this._medidas.getMeasures(this.pagination).subscribe((r:any) => {
+    this._medidas.getMeasures(this.pagination).subscribe((r: any) => {
       this.measures = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
   }
 
-  save(){
-    this._medidas.save(this.form.value).subscribe((r:any) => {
-      this.modalService.dismissAll(); 
+  changeState(measure, state){
+    let data = {
+      id: measure.id,
+      state
+    }
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      text: (data.state == 'Inactivo' ? '¡La medida se anulará!': '¡La medida se activará!')
+    }).then((r) =>{
+      if (r.isConfirmed) {
+        this._medidas.changeState(data).subscribe((r:any) =>{
+        this.getMeasures();
+        this._swal.show({
+            icon: 'success',
+            title: 'Proceso satisfactio',
+            text: (data.state == 'Inactivo' ? 'La medida ha sido anulada.' : 'La medida ha sido activada.'),
+            showCancel: false
+        }); 
+        });
+      }
+    });
+  }
+
+  save() {
+    this._medidas.save(this.form.value).subscribe((r: any) => {
+      this.modalService.dismissAll();
       this.form.reset();
       this.getMeasures();
       this._swal.show({

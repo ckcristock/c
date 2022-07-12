@@ -1,85 +1,156 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Medidas</h4>
-            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openConfirm(add,'Nueva Medida')">
-                <i class="fa fa-plus"></i> Agregar
-            </button>            
-        </div>
-        <hr class="line">
-        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;" *ngIf="!loading && measures.length > 0; else notData">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Variable</th>
-                    <th>Fecha Creación</th>
-                    <th class="text-center col-1">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of measures">
-                    <td> {{ item.name }} </td>
-                    <td> {{ item.measure }} </td>
-                    <td> {{ item.created_at | date: 'longDate' }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getMeasure(item); openConfirm(add,'Actualizar medida')">
-                                        <i class="far fa-edit"></i> Editar
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getMeasures($event)" aria-label="Default pagination"
-            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-        </ngb-pagination>
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Medidas</h4>
+      <button
+        class="btn btn-sm btn-primary"
+        style="float: right"
+        (click)="openConfirm(add, 'Nueva Medida')"
+      >
+        <i class="fa fa-plus"></i> Agregar
+      </button>
     </div>
+    <hr class="line" />
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && measures.length > 0; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Nombre</th>
+          <th>Variable</th>
+          <th class="col-md-1">Estado</th>
+          <th class="col-md-1">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of measures" class="text-center">
+          <td class="align-middle">{{ item.name }}</td>
+          <td class="align-middle">{{ item.measure }}</td>
+          <td class="align-middle">
+            <span
+              [ngClass]="
+                item.state == 'Inactivo'
+                  ? 'badge badge-danger'
+                  : 'badge badge-success'
+              "
+            >
+              {{ item.state }}
+            </span>
+          </td>
+          <td class="align-middle">
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  (click)="
+                    getMeasure(item); openConfirm(add, 'Actualizar medida')
+                  "
+                >
+                  <i class="far fa-edit"></i> Editar
+                </a>
+                <a
+                    *ngIf="item.state == 'Activo'"
+                    (click)="changeState(item, 'Inactivo')"
+                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Inactivo'"
+                    (click)="changeState(item, 'Activo')"
+                    class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      (pageChange)="getMeasures($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
 </div>
 
 <ng-template #add let-modal>
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="text-primary modal-title">{{ title }}</h4>
-        <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-          (click)="modal.dismiss('Cross click');form.reset()"></button>
-      </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">{{ title }}</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click'); form.reset()"
+      ></button>
     </div>
-    <div class="modal-body">
-        <form [formGroup]="form">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="">Nombre</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="name">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Variable</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="measure">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click');form.reset()">
-        Cancelar
-      </button>
-      <button type="button" [disabled]="!form.valid" (click)="save()" class="btn btn-primary">
-        Guardar
-      </button>
-    </div>
-  </ng-template>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <mat-form-field class="col-md-6 pl-0" appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Ingresa el nombre"
+          formControlName="name"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field class="col-md-6 pr-0" appearance="outline">
+        <mat-label>Variable</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Ingresa el variable"
+          formControlName="measure"
+          required
+        />
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click'); form.reset()"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
 
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

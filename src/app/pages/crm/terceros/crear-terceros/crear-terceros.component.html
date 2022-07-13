@@ -1,464 +1,774 @@
 <div class="card">
-    <!-- <div class="row mb-4">
+  <!-- <div class="row mb-4">
         <div class="col text-left">
             <a class="text-primary back" (click)="regresar()">Regresar</a>
         </div>
     </div> -->
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-
-            <img src="../../../../../assets/images/logo2.png" class="img-fluid">
-            <div>
-                <h4 class="text-primary"> {{ title }} </h4>
-                <strong> {{ date | date:'longDate' }} </strong>
-            </div>
-        </div>
-        <hr class="line">
-        <form [formGroup]="form">
-            <mat-horizontal-stepper #stepper [linear]="false">
-                <mat-step>
-                    <ng-template matStepLabel>Datos básicos</ng-template>
-                    <div class="row">
-                        <mat-form-field class="col-md-2" appearance="outline">
-                            <mat-label>NIT</mat-label>
-                            <input type="number" matInput formControlName="nit" autocomplete="off"
-                                placeholder="Ingrese el NIT">
-                            <mat-error *ngIf="nit_valid">
-                                NIT es <strong>obligatorio</strong>
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-2" appearance="outline">
-                            <mat-label>Tipo de persona</mat-label>
-                            <mat-select formControlName="person_type" (change)="personType()">
-                                <mat-option value="natural">Natural</mat-option>
-                                <mat-option value="juridico">Jurídico</mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="person_type_valid">
-                                T. persona es <strong>obligatorio</strong>
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-2" appearance="outline">
-                            <mat-label>Tipo de tercero</mat-label>
-                            <mat-select formControlName="third_party_type" (change)="personType()">
-                                <mat-option value="Cliente">Cliente</mat-option>
-                                <mat-option value="Proveedor">Proveedor</mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="third_party_type_valid">
-                                T. tercero es <strong>obligatorio</strong>
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Primer nombre</mat-label>
-                            <input type="text" matInput formControlName="first_name" autocomplete="off"
-                                placeholder="Ingrese el primer nombre">
-                            <mat-error *ngIf="first_name_valid">
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <img src="../../../../../assets/images/logo2.png" class="img-fluid" />
+      <div>
+        <h4 class="text-primary">{{ title }}</h4>
+        <strong> {{ date | date: "longDate" }} </strong>
+      </div>
+    </div>
+    <hr class="line" />
+    <form [formGroup]="form">
+      <mat-horizontal-stepper #stepper [linear]="false">
+        <mat-step>
+          <ng-template matStepLabel>Datos básicos</ng-template>
+          <div class="row">
+            <mat-form-field class="col-md-2" appearance="outline">
+              <mat-label>NIT</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="nit"
+                autocomplete="off"
+                placeholder="Ingrese el NIT"
+              />
+              <mat-error *ngIf="nit_valid">
+                NIT es <strong>obligatorio</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-2" appearance="outline">
+              <mat-label>Tipo de persona</mat-label>
+              <mat-select formControlName="person_type" (change)="personType()">
+                <mat-option value="natural">Natural</mat-option>
+                <mat-option value="juridico">Jurídico</mat-option>
+              </mat-select>
+              <mat-error *ngIf="person_type_valid">
+                T. persona es <strong>obligatorio</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-2" appearance="outline">
+              <mat-label>Tipo de tercero</mat-label>
+              <mat-select
+                formControlName="third_party_type"
+                (change)="personType()"
+              >
+                <mat-option value="Cliente">Cliente</mat-option>
+                <mat-option value="Proveedor">Proveedor</mat-option>
+              </mat-select>
+              <mat-error *ngIf="third_party_type_valid">
+                T. tercero es <strong>obligatorio</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Primer nombre</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="first_name"
+                autocomplete="off"
+                placeholder="Ingrese el primer nombre"
+              />
+              <!-- <mat-error *ngIf="first_name_valid">
                                 Primer nombre es <strong>obligatorio</strong>
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Segundo nombre</mat-label>
-                            <input type="text" matInput formControlName="second_name" autocomplete="off"
-                                placeholder="Ingrese el segundo nombre">
-                        </mat-form-field>
-                    </div>
-                    <div class="row">
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Primer apellido</mat-label>
-                            <input type="text" matInput formControlName="first_surname" autocomplete="off"
-                                placeholder="Ingrese el primer apellido">
-                            <mat-error *ngIf="first_surname_valid">
+                            </mat-error> -->
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Segundo nombre</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="second_name"
+                autocomplete="off"
+                placeholder="Ingrese el segundo nombre"
+              />
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Primer apellido</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="first_surname"
+                autocomplete="off"
+                placeholder="Ingrese el primer apellido"
+              />
+              <!-- <mat-error *ngIf="first_surname_valid">
                                 Primer apellido es <strong>obligatorio</strong>
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Segundo apellido</mat-label>
-                            <input type="text" matInput formControlName="second_surname" autocomplete="off"
-                                placeholder="Ingrese el primer apellido">
-                        </mat-form-field>
+                            </mat-error> -->
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Segundo apellido</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="second_surname"
+                autocomplete="off"
+                placeholder="Ingrese el primer apellido"
+              />
+            </mat-form-field>
 
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <div>
-                                <mat-toolbar>
-                                    <input matInput readonly name="name" value="{{fileAttr}}" />
-                                    <button hidden mat-flat-button class="btn-link btn-xsm">Elegir</button>
-                                </mat-toolbar>
-                                <input type="file" #fileInput id="uploadFile" (change)="onFileChanged($event)"
-                                    name="uploadFile" accept="image/*" />
-                            </div>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Razón social</mat-label>
-                            <input type="text" matInput formControlName="social_reason" autocomplete="off"
-                                placeholder="Ingrese la razón social">
-                            <mat-error *ngIf="social_reason_valid">
-                                Razón social es <strong>obligatoria</strong>
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div class="row">
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Nombre comercial</mat-label>
-                            <input type="text" matInput formControlName="tradename" autocomplete="off"
-                                placeholder="Ingrese el nombre comercial">
-                        </mat-form-field>
-                        <mat-form-field class="col-md-2" appearance="outline">
-                            <mat-label>Teléfono fijo</mat-label>
-                            <input type="tel" matInput formControlName="landline" autocomplete="off"
-                                placeholder="Ingrese el teléfono fijo">
-                            <mat-error *ngIf="landline_valid">
-                                Fijo es <strong>obligatorio</strong>
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-2" appearance="outline">
-                            <mat-label>Teléfono celular</mat-label>
-                            <input type="tel" matInput formControlName="cell_phone" autocomplete="off"
-                                placeholder="Ingrese el teléfono celular">
-                            <mat-error *ngIf="cell_phone_valid">
+            <mat-form-field class="col-md-3" appearance="outline">
+              <div>
+                <mat-toolbar>
+                  <input matInput readonly name="name" value="{{ fileAttr }}" />
+                  <button hidden mat-flat-button class="btn-link btn-xsm">
+                    Elegir
+                  </button>
+                </mat-toolbar>
+                <input
+                  type="file"
+                  #fileInput
+                  id="uploadFile"
+                  (change)="onFileChanged($event)"
+                  name="uploadFile"
+                  accept="image/*"
+                />
+              </div>
+              <small *ngIf="previsualizacionFoto" class="text-success">Imagen cargada</small>
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Razón social</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="social_reason"
+                autocomplete="off"
+                placeholder="Ingrese la razón social"
+              />
+              <mat-error *ngIf="social_reason_valid">
+                Razón social es <strong>obligatoria</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Nombre comercial</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="tradename"
+                autocomplete="off"
+                placeholder="Ingrese el nombre comercial"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-2" appearance="outline">
+              <mat-label>Teléfono fijo</mat-label>
+              <input
+                type="tel"
+                matInput
+                formControlName="landline"
+                autocomplete="off"
+                placeholder="Ingrese el teléfono fijo"
+              />
+              <mat-error *ngIf="landline_valid">
+                Fijo es <strong>obligatorio</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-2" appearance="outline">
+              <mat-label>Teléfono celular</mat-label>
+              <input
+                type="tel"
+                matInput
+                formControlName="cell_phone"
+                autocomplete="off"
+                placeholder="Ingrese el teléfono celular"
+              />
+              <!-- <mat-error *ngIf="cell_phone_valid">
                                 Celular es <strong>obligatorio</strong>
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Correo electrónico</mat-label>
-                            <input type="email" matInput formControlName="email" autocomplete="off"
-                                placeholder="Ingrese el correo">
-                            <mat-error *ngIf="email_valid">
-                                Correo es <strong>obligatorio</strong>
-                            </mat-error>
-                            <mat-error *ngIf="form.get('email').errors?.email">
-                                El correo es incorrecto
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-2" appearance="outline">
-                            <mat-label>Zona</mat-label>
-                            <mat-select formControlName="zone_id">
-                                <mat-option *ngFor="let zone of zones" [value]="zone.value">{{ zone.text | uppercase }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="row">
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Dirección</mat-label>
-                            <mat-select formControlName="dian_address">
-                                <mat-option *ngFor="let addre of address" [value]="addre.code">{{ addre.description }}
-                                </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="dian_address_valid">
-                                Dirección es <strong>obligatorio</strong>
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-1" appearance="outline">
-                            <mat-label></mat-label>
-                            <input type="text" matInput formControlName="address_one" autocomplete="off"
-                                placeholder="Ingrese el número">
-                        </mat-form-field>
-                        <mat-form-field class="col-md-1" appearance="outline">
-                            <mat-label>#</mat-label>
-                            <input type="text" matInput formControlName="address_two" autocomplete="off"
-                                placeholder="Ingrese el número">
-                        </mat-form-field>
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Dirección</mat-label>
-                            <mat-select formControlName="address_three">
-                                <mat-option *ngFor="let item of address" [value]="item.description">{{ item.description
-                                    }}</mat-option>
-                            </mat-select>
-
-                        </mat-form-field>
-                        <mat-form-field class="col-md-1" appearance="outline">
-                            <mat-label></mat-label>
-                            <input type="text" matInput formControlName="address_four" autocomplete="off"
-                                placeholder="Ingrese el número">
-                        </mat-form-field>
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Dirección cod. DIAN</mat-label>
-                            <input type="text" matInput formControlName="cod_dian_address" autocomplete="off"
-                                placeholder="Ingrese el número">
-                            <mat-error *ngIf="cod_dian_address_valid">
-                                Dirección no válida
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div class="row">
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Departamento</mat-label>
-                            <mat-select formControlName="department_id">
-                                <mat-option *ngFor="let department of departments" [value]="department.value">{{
-                                    department.text }}</mat-option>
-                            </mat-select>
-                            <!-- <mat-error>
+                            </mat-error> -->
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Correo electrónico</mat-label>
+              <input
+                type="email"
+                matInput
+                formControlName="email"
+                autocomplete="off"
+                placeholder="Ingrese el correo"
+              />
+              <mat-error *ngIf="email_valid">
+                Correo es <strong>obligatorio</strong>
+              </mat-error>
+              <mat-error *ngIf="form.get('email').errors?.email">
+                El correo es incorrecto
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-2" appearance="outline">
+              <mat-label>Zona</mat-label>
+              <mat-select formControlName="zone_id">
+                <mat-option *ngFor="let zone of zones" [value]="zone.value"
+                  >{{ zone.text | uppercase }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Dirección</mat-label>
+              <mat-select formControlName="dian_address">
+                <mat-option *ngFor="let addre of address" [value]="addre.code"
+                  >{{ addre.description }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="dian_address_valid">
+                Dirección es <strong>obligatorio</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-1" appearance="outline">
+              <mat-label></mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="address_one"
+                autocomplete="off"
+                placeholder="Ingrese el número"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-1" appearance="outline">
+              <mat-label>#</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="address_two"
+                autocomplete="off"
+                placeholder="Ingrese el número"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Dirección</mat-label>
+              <mat-select formControlName="address_three">
+                <mat-option
+                  *ngFor="let item of address"
+                  [value]="item.description"
+                  >{{ item.description }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-1" appearance="outline">
+              <mat-label></mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="address_four"
+                autocomplete="off"
+                placeholder="Ingrese el número"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Dirección cod. DIAN</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="cod_dian_address"
+                autocomplete="off"
+                placeholder="Ingrese el número"
+              />
+              <mat-error *ngIf="cod_dian_address_valid">
+                Dirección no válida
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Departamento</mat-label>
+              <mat-select formControlName="department_id">
+                <mat-option
+                  *ngFor="let department of departments"
+                  [value]="department.value"
+                  >{{ department.text }}</mat-option
+                >
+              </mat-select>
+              <!-- <mat-error>
                                 El correo es incorrecto
                             </mat-error>      -->
-                        </mat-form-field>
-                        <mat-form-field class="col-md-3" appearance="outline">
-                            <mat-label>Municipio</mat-label>
-                            <mat-select formControlName="municipality_id">
-                                <mat-option *ngFor="let municipality of municipalities" [value]="municipality.value">{{
-                                    municipality.text }}</mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="municipality_valid">
-                                Municipio es <strong>obligatorio</strong>
-                            </mat-error>
-                        </mat-form-field>
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Municipio</mat-label>
+              <mat-select formControlName="municipality_id">
+                <mat-option
+                  *ngFor="let municipality of municipalities"
+                  [value]="municipality.value"
+                  >{{ municipality.text }}</mat-option
+                >
+              </mat-select>
+              <mat-error *ngIf="municipality_valid">
+                Municipio es <strong>obligatorio</strong>
+              </mat-error>
+            </mat-form-field>
 
-                        <mat-form-field class="col-md-3" appearance="outline" *ngFor="let item of fields">
-                            <mat-label>{{ item.label | titlecase }}</mat-label>
-                            <input [type]="item.type" matInput [formControlName]="item.name" autocomplete="off">
-                        </mat-form-field>
-                    </div>
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-primary btn-lg" (click)="goForward()" type="button">Siguiente</button>
-                    </div>
-                </mat-step>
+            <mat-form-field
+              class="col-md-3"
+              appearance="outline"
+              *ngFor="let item of fields"
+            >
+              <mat-label>{{ item.label | titlecase }}</mat-label>
+              <input
+                [type]="item.type"
+                matInput
+                [formControlName]="item.name"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button
+              class="btn btn-primary btn-lg"
+              (click)="goForward()"
+              type="button"
+            >
+              Siguiente
+            </button>
+          </div>
+        </mat-step>
 
+        <mat-step>
+          <ng-template matStepLabel>Datos financieros</ng-template>
+          <div class="example-container">
+            <div class="row">
+              <mat-form-field class="col-md-2" appearance="outline">
+                <mat-label>Lista Ganancia</mat-label>
+                <mat-select formControlName="winning_list_id">
+                  <mat-option *ngFor="let item of winnigLists" [value]="item.id"
+                    >{{ item.name }} - {{ item.percentage }}%</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col-md-2" appearance="outline">
+                <mat-label>¿Aplica IVA?</mat-label>
+                <mat-select formControlName="apply_iva">
+                  <mat-option value="Si">Sí</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-2 col-md-3 col-sm-4"
+                appearance="outline"
+              >
+                <mat-label>Contacto pagos</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  placeholder="Ingrese contacto pagos"
+                  formControlName="contact_payments"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-2 col-md-3 col-sm-4"
+                appearance="outline"
+              >
+                <mat-label>Teléfono pagos</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  placeholder="Ingrese teléfono pagos"
+                  formControlName="phone_payments"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-2 col-md-3 col-sm-4"
+                appearance="outline"
+              >
+                <mat-label>Correo pagos</mat-label>
+                <input
+                  matInput
+                  type="email"
+                  placeholder="Ingrese correo pagos"
+                  formControlName="email_payments"
+                />
+                <mat-error *ngIf="form.get('email_payments').errors?.email">
+                  Correo es <strong>inválido</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="col-md-2" appearance="outline">
+                <mat-label>Tipo regimen</mat-label>
+                <mat-select formControlName="regime">
+                  <mat-option value="comun">Común</mat-option>
+                  <mat-option value="simplificado">Simplificado</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col-md-2" appearance="outline">
+                <mat-label>Animo lucro</mat-label>
+                <mat-select formControlName="encourage_profit">
+                  <mat-option value="Si">Sí</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col-md-4" appearance="outline">
+                <mat-label>Actividad económica</mat-label>
+                <mat-select formControlName="ciiu_code_id">
+                  <mat-option *ngFor="let item of ciiuCodes" [value]="item.id"
+                    >{{ item.code }} - {{ item.description }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col-md-2" appearance="outline">
+                <mat-label>Agente de retención</mat-label>
+                <mat-select formControlName="withholding_agent">
+                  <mat-option value="Si">Sí</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col-md-2" appearance="outline">
+                <mat-label>¿Retención en factura?</mat-label>
+                <mat-select formControlName="withholding_oninvoice">
+                  <mat-option value="Si">Sí</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col-md-2" appearance="outline">
+                <mat-label>Tipo reteica</mat-label>
+                <mat-select formControlName="withholding_oninvoice">
+                  <mat-option value="No">No</mat-option>
+                  <mat-option value="Supera Base">Supera Base</mat-option>
+                  <mat-option value="Permanente">Permanente</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-2 col-md-3 col-sm-4"
+                appearance="outline"
+              >
+                <mat-label>Cuenta reteica</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Ingrese cuenta reteica"
+                  [ngbTypeahead]="search"
+                  [inputFormatter]="inputFormatListValue"
+                  [resultFormatter]="resultFormatListValue"
+                  (change)="searchAccount('Reteica')"
+                  formControlName="reteica_account_id"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-1 col-md-2 col-sm-3"
+                appearance="outline"
+              >
+                <mat-label>%</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  placeholder="Ingrese %"
+                  [ngModelOptions]="{ standalone: true }"
+                  name="reteica"
+                  [(ngModel)]="retePercentage.reteica"
+                  readonly
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-2 col-md-3 col-sm-4"
+                appearance="outline"
+              >
+                <mat-label>Cuenta retefuente</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Ingrese cuenta retefuente"
+                  [ngbTypeahead]="search"
+                  [inputFormatter]="inputFormatListValue"
+                  [resultFormatter]="resultFormatListValue"
+                  (change)="searchAccount('Retefuente')"
+                  formControlName="retefuente_account_id"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-1 col-md-2 col-sm-3"
+                appearance="outline"
+              >
+                <mat-label>%</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  placeholder="Ingrese %"
+                  [ngModelOptions]="{ standalone: true }"
+                  name="retefuente"
+                  [(ngModel)]="retePercentage.retefuente"
+                  readonly
+                />
+              </mat-form-field>
+              <mat-form-field class="col-md-1" appearance="outline">
+                <mat-label>G. Contrib.</mat-label>
+                <mat-select formControlName="g_contribut">
+                  <mat-option value="Si">Sí</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-2 col-md-3 col-sm-4"
+                appearance="outline"
+              >
+                <mat-label>Cuenta reteiva</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Ingrese cuenta reteica"
+                  [ngbTypeahead]="search"
+                  [inputFormatter]="inputFormatListValue"
+                  [resultFormatter]="resultFormatListValue"
+                  (change)="searchAccount('Reteica')"
+                  formControlName="reteica_account_id"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-1 col-md-2 col-sm-3"
+                appearance="outline"
+              >
+                <mat-label>%</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  placeholder="Ingrese %"
+                  [ngModelOptions]="{ standalone: true }"
+                  name="reteiva"
+                  [(ngModel)]="retePercentage.reteiva"
+                  readonly
+                />
+              </mat-form-field>
+              <mat-form-field class="col-md-2" appearance="outline">
+                <mat-label>Condición de pago</mat-label>
+                <mat-select formControlName="condition_payment">
+                  <mat-option *ngFor="let item of pagos" [value]="item.valor"
+                    >{{ item.clave }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-2 col-md-3 col-sm-4"
+                appearance="outline"
+              >
+                <mat-label>Cupo asignado</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Ingrese el cupo"
+                  formControlName="assigned_space"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-2 col-md-3 col-sm-4"
+                appearance="outline"
+              >
+                <mat-label>Descuento pronto pago</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  placeholder="Ingrese el desc."
+                  formControlName="discount_prompt_payment"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-lg-2 col-md-3 col-sm-4"
+                appearance="outline"
+              >
+                <mat-label>Descuento en días</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  placeholder="Ingrese el desc."
+                  formControlName="discount_days"
+                />
+              </mat-form-field>
+              <mat-form-field class="col-md-3" appearance="outline">
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="state">
+                  <mat-option value="Activo">Activo</mat-option>
+                  <mat-option value="Inactivo">Inactivo</mat-option>
+                </mat-select>
+                <mat-error *ngIf="state_valid">
+                  Estado es <strong>obligatorio</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="col-md-3" appearance="outline">
+                <mat-toolbar>
+                  <input
+                    matInput
+                    readonly
+                    name="name"
+                    value="{{ fileAttr2 }}"
+                  />
 
-                <mat-step>
-                    <ng-template matStepLabel>Datos financieros</ng-template>
-                    <div class="example-container">
-                        <div class="row">
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label>Lista Ganancia</mat-label>
-                                <mat-select formControlName="winning_list_id">
-                                    <mat-option *ngFor="let item of winnigLists" [value]="item.id">{{ item.name }} - {{
-                                        item.percentage }}%</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label>¿Aplica IVA?</mat-label>
-                                <mat-select formControlName="apply_iva">
-                                    <mat-option value="Si">Sí</mat-option>
-                                    <mat-option value="No">No</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label>Contacto pagos</mat-label>
-                                <input matInput type="number" placeholder="Ingrese contacto pagos"
-                                    formControlName="contact_payments">
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label>Teléfono pagos</mat-label>
-                                <input matInput type="number" placeholder="Ingrese teléfono pagos"
-                                    formControlName="phone_payments">
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label>Correo pagos</mat-label>
-                                <input matInput type="email" placeholder="Ingrese correo pagos"
-                                    formControlName="email_payments">
-                                <mat-error *ngIf="form.get('email_payments').errors?.email">
-                                    Correo es <strong>inválido</strong>
-                                </mat-error>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label>Tipo regimen</mat-label>
-                                <mat-select formControlName="regime">
-                                    <mat-option value="comun">Común</mat-option>
-                                    <mat-option value="simplificado">Simplificado</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label>Animo lucro</mat-label>
-                                <mat-select formControlName="encourage_profit">
-                                    <mat-option value="Si">Sí</mat-option>
-                                    <mat-option value="No">No</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-4" appearance="outline">
-                                <mat-label>Actividad económica</mat-label>
-                                <mat-select formControlName="ciiu_code_id">
-                                    <mat-option *ngFor="let item of ciiuCodes" [value]="item.id">{{ item.code }} - {{
-                                        item.description }}</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label>Agente de retención</mat-label>
-                                <mat-select formControlName="withholding_agent">
-                                    <mat-option value="Si">Sí</mat-option>
-                                    <mat-option value="No">No</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label>¿Retención en factura?</mat-label>
-                                <mat-select formControlName="withholding_oninvoice">
-                                    <mat-option value="Si">Sí</mat-option>
-                                    <mat-option value="No">No</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label>Tipo reteica</mat-label>
-                                <mat-select formControlName="withholding_oninvoice">
-                                    <mat-option value="No">No</mat-option>
-                                    <mat-option value="Supera Base">Supera Base</mat-option>
-                                    <mat-option value="Permanente">Permanente</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label>Cuenta reteica</mat-label>
-                                <input matInput type="text" placeholder="Ingrese cuenta reteica" [ngbTypeahead]="search"
-                                    [inputFormatter]="inputFormatListValue" [resultFormatter]="resultFormatListValue"
-                                    (change)="searchAccount('Reteica')" formControlName="reteica_account_id">
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-1 col-md-2 col-sm-3" appearance="outline">
-                                <mat-label>%</mat-label>
-                                <input matInput type="number" placeholder="Ingrese %"
-                                    [ngModelOptions]="{standalone: true}" name="reteica"
-                                    [(ngModel)]="retePercentage.reteica" readonly>
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label>Cuenta retefuente</mat-label>
-                                <input matInput type="text" placeholder="Ingrese cuenta retefuente"
-                                    [ngbTypeahead]="search" [inputFormatter]="inputFormatListValue"
-                                    [resultFormatter]="resultFormatListValue" (change)="searchAccount('Retefuente')"
-                                    formControlName="retefuente_account_id">
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-1 col-md-2 col-sm-3" appearance="outline">
-                                <mat-label>%</mat-label>
-                                <input matInput type="number" placeholder="Ingrese %"
-                                    [ngModelOptions]="{standalone: true}" name="retefuente"
-                                    [(ngModel)]="retePercentage.retefuente" readonly>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-1" appearance="outline">
-                                <mat-label>G. Contrib.</mat-label>
-                                <mat-select formControlName="g_contribut">
-                                    <mat-option value="Si">Sí</mat-option>
-                                    <mat-option value="No">No</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label>Cuenta reteiva</mat-label>
-                                <input matInput type="text" placeholder="Ingrese cuenta reteica" [ngbTypeahead]="search"
-                                    [inputFormatter]="inputFormatListValue" [resultFormatter]="resultFormatListValue"
-                                    (change)="searchAccount('Reteica')" formControlName="reteica_account_id">
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-1 col-md-2 col-sm-3" appearance="outline">
-                                <mat-label>%</mat-label>
-                                <input matInput type="number" placeholder="Ingrese %"
-                                    [ngModelOptions]="{standalone: true}" name="reteiva"
-                                    [(ngModel)]="retePercentage.reteiva" readonly>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label>Condición de pago</mat-label>
-                                <mat-select formControlName="condition_payment">
-                                    <mat-option *ngFor="let item of pagos" [value]="item.valor">{{ item.clave }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label>Cupo asignado</mat-label>
-                                <input matInput type="text" placeholder="Ingrese el cupo"
-                                    formControlName="assigned_space">
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label>Descuento pronto pago</mat-label>
-                                <input matInput type="number" placeholder="Ingrese el desc."
-                                    formControlName="discount_prompt_payment">
-                            </mat-form-field>
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label>Descuento en días</mat-label>
-                                <input matInput type="number" placeholder="Ingrese el desc."
-                                    formControlName="discount_days">
-                            </mat-form-field>
-                            <mat-form-field class="col-md-3" appearance="outline">
-                                <mat-label>Estado</mat-label>
-                                <mat-select formControlName="state">
-                                    <mat-option value="Activo">Activo</mat-option>
-                                    <mat-option value="Inactivo">Inactivo</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-3" appearance="outline">
-                                <div>
-                                    <mat-toolbar>
-                                        <input matInput readonly name="name" value="{{fileAttr2}}" />
-                                        <button hidden mat-flat-button class="btn-link btn-xsm">Elegir RUT</button>
-                                    </mat-toolbar>
-                                    <input type="file" #fileInput id="uploadFile" (change)="rutChange($event)" />
-                                </div>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-primary btn-lg" (click)="goBack()" type="button">Anterior</button>
-                        <button class="btn btn-primary btn-lg" (click)="goForward()" type="button">Siguiente</button>
-                    </div>
-                </mat-step>
+                  <button hidden mat-flat-button class="btn-link btn-xsm">
+                    Elegir RUT
+                  </button>
+                </mat-toolbar>
+                <input
+                  type="file"
+                  #fileInput
+                  id="uploadFile"
+                  (change)="rutChange($event)"
+                />
+                <small *ngIf="previsualizacionRut" class="text-success">RUT cargado</small>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button
+              class="btn btn-primary btn-lg"
+              (click)="goBack()"
+              type="button"
+            >
+              Anterior
+            </button>
+            <button
+              class="btn btn-primary btn-lg"
+              (click)="goForward()"
+              type="button"
+            >
+              Siguiente
+            </button>
+          </div>
+        </mat-step>
 
-                <mat-step>
-                    <ng-template matStepLabel>Personas</ng-template>
-                    <div class="mx-0" *ngIf="personList.controls.length; else notData">
-                        <div class="mx-0" formArrayName="person" *ngFor="let item of personList.controls; let i = index">                            
-                            <mat-form-field class="col-lg-3 col-md-4 col-sm-5" appearance="outline" [formGroupName]="i">
-                                <mat-label>Nombre</mat-label>
-                                <input matInput type="text" placeholder="Ingrese el nombre" formControlName="name">
-                            </mat-form-field>
-                            <!-- <div class="form-group col-md-3" [formGroupName]="i">
+        <mat-step>
+          <ng-template matStepLabel>Personas</ng-template>
+          <div class="mx-0" *ngIf="personList.controls.length; else notData">
+            <div
+              class="mx-0"
+              formArrayName="person"
+              *ngFor="let item of personList.controls; let i = index"
+            >
+              <mat-form-field
+                class="col-md-2"
+                appearance="outline"
+                [formGroupName]="i"
+              >
+                <mat-label>Nombre</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Ingrese el nombre"
+                  formControlName="name"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-md-2"
+                appearance="outline"
+                [formGroupName]="i"
+              >
+                <mat-label>Documento</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Ingrese el nombre"
+                  formControlName="n_document"
+                />
+              </mat-form-field>
+              <!-- <div class="form-group col-md-3" [formGroupName]="i">
                                 <label for=""># Documento</label>
                                 <input type="text" class="form-control form-control-sm" formControlName="n_document">
                             </div> -->
-                            <mat-form-field class="col-md-2" appearance="outline" [formGroupName]="i">
-                                <mat-label>Tel. Fijo</mat-label>
-                                <input matInput type="number" placeholder="Ingrese el teléfono"
-                                    formControlName="landline">
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline" [formGroupName]="i">
-                                <mat-label>Tel. Celular</mat-label>
-                                <input matInput type="number" placeholder="Ingrese el teléfono"
-                                    formControlName="cell_phone">
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline" [formGroupName]="i">
-                                <mat-label>Email</mat-label>
-                                <input matInput type="email" placeholder="Ingrese el email" formControlName="email">
-                            </mat-form-field>
-                            <mat-form-field class="col-md-3" appearance="outline" [formGroupName]="i">
-                                <mat-label>Cargo</mat-label>
-                                <input matInput type="text" placeholder="Ingrese el cargo" formControlName="position">
-                            </mat-form-field>
-                            <mat-form-field class="col-md-12 mat-form-field-no-padding" appearance="outline"
-                                [formGroupName]="i">
-                                <mat-label>Observación</mat-label>
-                                <textarea matInput placeholder="Ingrese las observaciones" formControlName="observation"
-                                    [cdkTextareaAutosize]="true"></textarea>
-                            </mat-form-field>
-                            <div class="form-group d-flex justify-content-center" [formGroupName]="i">
-                                <button class="col-md-1 btn btn-sm btn-outline-danger" placement="top"
-                                    ngbTooltip="Borrar Persona" (click)="deletePerson(i)">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                            <hr class="line">
-                        </div>
-                        
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <button class="col-md-1 btn btn-sm btn-outline-primary" placement="top"
-                            ngbTooltip="Añadir persona" (click)="createPerson()"><i class="fa fa-plus"></i></button>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-primary btn-lg" (click)="goBack()" type="button">Anterior</button>
-                        <button class="btn btn-lg btn-primary" (click)="saveInformation()">
-                            Guardar
-                        </button>
-                    </div>
-                    
-                </mat-step>
-
-            </mat-horizontal-stepper>
-        </form>
-    </div>
+              <mat-form-field
+                class="col-md-2"
+                appearance="outline"
+                [formGroupName]="i"
+              >
+                <mat-label>Tel. Fijo</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  placeholder="Ingrese el teléfono"
+                  formControlName="landline"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-md-2"
+                appearance="outline"
+                [formGroupName]="i"
+              >
+                <mat-label>Tel. Celular</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  placeholder="Ingrese el teléfono"
+                  formControlName="cell_phone"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-md-2"
+                appearance="outline"
+                [formGroupName]="i"
+              >
+                <mat-label>Email</mat-label>
+                <input
+                  matInput
+                  type="email"
+                  placeholder="Ingrese el email"
+                  formControlName="email"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-md-2"
+                appearance="outline"
+                [formGroupName]="i"
+              >
+                <mat-label>Cargo</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Ingrese el cargo"
+                  formControlName="position"
+                />
+              </mat-form-field>
+              <mat-form-field
+                class="col-md-12 mat-form-field-no-padding"
+                appearance="outline"
+                [formGroupName]="i"
+              >
+                <mat-label>Observación</mat-label>
+                <textarea
+                  matInput
+                  placeholder="Ingrese las observaciones"
+                  formControlName="observation"
+                  [cdkTextareaAutosize]="true"
+                ></textarea>
+              </mat-form-field>
+              <div
+                class="form-group d-flex justify-content-center"
+                [formGroupName]="i"
+              >
+                <button
+                  class="col-md-1 btn btn-sm btn-outline-danger"
+                  placement="top"
+                  ngbTooltip="Borrar Persona"
+                  (click)="deletePerson(i)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+              <hr class="line" />
+            </div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <button
+              class="col-md-1 btn btn-sm btn-outline-primary"
+              placement="top"
+              ngbTooltip="Añadir persona"
+              (click)="createPerson()"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button
+              class="btn btn-primary btn-lg"
+              (click)="goBack()"
+              type="button"
+            >
+              Anterior
+            </button>
+            <button class="btn btn-lg btn-primary" (click)="saveInformation()">
+              Guardar
+            </button>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </form>
+  </div>
 </div>
 <ng-template #notData>
-    <div class="text-center">
-        <h4 class="text-primary">Sin datos agregados</h4>
-    </div>
+  <div class="text-center">
+    <h4 class="text-primary">Sin datos agregados</h4>
+  </div>
 </ng-template>
 
-
-
-
-
-
-
 <div class="row">
-    <div class="col-12">
-        <!-- <div class="row">
+  <div class="col-12">
+    <!-- <div class="row">
             <div class="col-md-12 text-center mt-2 mb-4">
                 <h4>Datos Básicos</h4>
             </div>
@@ -665,5 +975,5 @@
                     [formControlName]="item.name">
             </div>
         </div> -->
-    </div>
+  </div>
 </div>

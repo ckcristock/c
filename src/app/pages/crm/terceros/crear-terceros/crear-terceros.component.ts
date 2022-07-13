@@ -9,6 +9,7 @@ import { SwalService } from '../../../ajustes/informacion-base/services/swal.ser
 import { functionsUtils } from '../../../../core/utils/functionsUtils';
 import { ValidatorsService } from '../../../ajustes/informacion-base/services/reactive-validation/validators.service';
 import { MatHorizontalStepper } from '@angular/material/stepper';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-crear-terceros',
@@ -46,6 +47,8 @@ export class CrearTercerosComponent implements OnInit {
   newField: any = '';
   selected: any;
   parametro: any;
+  previsualizacionFoto: any;
+  previsualizacionRut: any;
   retePercentage: any = {
     reteica: 0,
     reteiva: 0,
@@ -72,7 +75,8 @@ export class CrearTercerosComponent implements OnInit {
     public router: Router,
     private _swal: SwalService,
     private actRoute: ActivatedRoute,
-    private _validators: ValidatorsService
+    private _validators: ValidatorsService,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -100,9 +104,9 @@ export class CrearTercerosComponent implements OnInit {
       nit: ['', this._validators.required],
       person_type: ['', this._validators.required],
       third_party_type: ['', this._validators.required],
-      first_name: ['', this._validators.required],
+      first_name: [''],
       second_name: [''],
-      first_surname: ['', this._validators.required],
+      first_surname: [''],
       second_surname: [''],
       social_reason: ['', this._validators.required],
       tradename: [''],
@@ -113,7 +117,7 @@ export class CrearTercerosComponent implements OnInit {
       address_four: [''],
       cod_dian_address: ['', this._validators.required],
       landline: ['', this._validators.required],
-      cell_phone: ['', this._validators.required],
+      cell_phone: [''],
       email: ['', [this._validators.required, Validators.email]],
       zone_id: [''],
       department_id: [''],
@@ -143,7 +147,7 @@ export class CrearTercerosComponent implements OnInit {
       assigned_space: [''],
       discount_prompt_payment: [''],
       discount_days: [''],
-      state: [''],
+      state: ['', this._validators.required],
       rut: [''],
       typeRut: [''],
       typeImage: [''],
@@ -404,6 +408,10 @@ export class CrearTercerosComponent implements OnInit {
         image: this.third.image,
         rut: this.third.rut
       });
+      this.previsualizacionFoto = this.third.image;
+      this.previsualizacionRut = this.third.rut;
+      this.fileString = this.third.image
+      this.rutString = this.third.rut
       this.retePercentage.retefuente = this.third.retefuente_percentage;
       this.retePercentage.reteiva = this.third.reteiva_percentage;
       this.retePercentage.reteica = this.third.reteica_percentage;
@@ -435,6 +443,9 @@ export class CrearTercerosComponent implements OnInit {
   //fin subir archivos
   onFileChanged(event) {    
     if (event.target.files[0]) {
+      this.previsualizacionFoto = this.sanitizer.bypassSecurityTrustUrl(
+        window.URL.createObjectURL(event.target.files[0])
+      );
       this.fileAttr = event.target.files[0].name;
       let file = event.target.files[0];
       var reader = new FileReader();
@@ -452,6 +463,9 @@ export class CrearTercerosComponent implements OnInit {
   fileAttr2 = 'Selecciona RUT'
   rutChange(event) {
     if (event.target.files[0]) {
+      this.previsualizacionRut = this.sanitizer.bypassSecurityTrustUrl(
+        window.URL.createObjectURL(event.target.files[0])
+      );
       this.fileAttr2 = event.target.files[0].name;
       let file = event.target.files[0];
       var reader = new FileReader();
@@ -556,16 +570,20 @@ export class CrearTercerosComponent implements OnInit {
     return this.form.get('third_party_type').invalid && this.form.get('third_party_type').touched
   }
 
-  get first_name_valid() {
+  /* get first_name_valid() {
     return this.form.get('first_name').invalid && this.form.get('first_name').touched
   }
 
   get first_surname_valid() {
     return this.form.get('first_surname').invalid && this.form.get('first_surname').touched
-  }
+  } */
 
   get social_reason_valid() {
     return this.form.get('social_reason').invalid && this.form.get('social_reason').touched
+  }
+
+  get state_valid() {
+    return this.form.get('state').invalid && this.form.get('state').touched
   }
 
   get cod_dian_address_valid() {
@@ -576,9 +594,9 @@ export class CrearTercerosComponent implements OnInit {
     return this.form.get('dian_address').invalid && this.form.get('dian_address').touched
   }
 
-  get cell_phone_valid() {
+ /*  get cell_phone_valid() {
     return this.form.get('cell_phone').invalid && this.form.get('cell_phone').touched
-  }
+  } */
 
   get landline_valid() {
     return this.form.get('landline').invalid && this.form.get('landline').touched

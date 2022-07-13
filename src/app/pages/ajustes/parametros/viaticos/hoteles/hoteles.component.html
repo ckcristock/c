@@ -1,157 +1,234 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Hoteles</h4>
-            <div class="btn-group rounded">
-                <button class="btn btn-sm btn-primary" style="float: right;" (click)="openConfirm(add,'Nuevo hotel')">
-                    <i class="fa fa-plus"></i> Agregar
-                </button>
-                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
-                    <i class="fas fa-sliders-h"></i> Filtros
-                </button>
-            </div>           
-        </div>
-        <hr class="line">
-        <mat-accordion multi>
-            <mat-expansion-panel class="mat-elevation-z0">             
-                <mat-form-field class="col-md-2 pl-0" appearance="outline">
-                    <mat-label>Tipo</mat-label>
-                    <mat-select name="third" [(ngModel)]="filtro.tipo"
-                        (selectionChange)="getHotels()">
-                        <mat-option value="Nacional">Nacional</mat-option>
-                        <mat-option value="Internacional">Internacional</mat-option>
-                    </mat-select>
-                </mat-form-field> 
-            </mat-expansion-panel>
-        </mat-accordion>
-        <table class="table table-bordered table-striped table-sm table-responsive-sm" style="font-size: small;" *ngIf="!loading && hotels.length > 0; else notData">
-            <thead>
-                <tr>
-                    <th>Tipo</th>
-                    <th>Hotel</th>
-                    <th>Dirección</th>
-                    <th>Tel. Contacto</th>
-                    <th>Tel. Fijo</th>
-                    <th>Acomodación</th>
-                    <th>T. Sencilla</th>
-                    <th>T. Doble</th>
-                    <th class="text-center col-1">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let hotel of hotels">
-                    <td> {{ hotel.type }} </td>
-                    <td> {{ hotel.name }} </td>
-                    <td> {{ hotel.address }} </td>
-                    <td> {{ hotel.phone }} </td>
-                    <td> {{ hotel.landline }} </td>
-                    <td> {{ hotel.accommodation }} </td>
-                    <td> {{ hotel.simple_rate | currency }} </td>
-                    <td> {{ hotel.double_rate | currency }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getHotel(hotel);openConfirm(add, 'Editar Hotel')">
-                                        <i class="far fa-edit"></i> Editar
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getHotels($event)" aria-label="Default pagination"
-            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-        </ngb-pagination>
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Hoteles</h4>
+      <div class="btn-group rounded">
+        <button
+          class="btn btn-sm btn-primary"
+          style="float: right"
+          (click)="openConfirm(add, 'Nuevo hotel')"
+        >
+          <i class="fa fa-plus"></i> Agregar
+        </button>
+        <button
+          class="btn btn-info btn-sm"
+          style="float: right"
+          (click)="openClose()"
+        >
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
+      </div>
     </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select
+            name="third"
+            [(ngModel)]="filtro.tipo"
+            (selectionChange)="getHotels()"
+          >
+            <mat-option value="Nacional">Nacional</mat-option>
+            <mat-option value="Internacional">Internacional</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && hotels.length > 0; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Tipo</th>
+          <th>Hotel</th>
+          <th>Dirección</th>
+          <th>Teléfono</th>
+          <th>Tel. Fijo</th>
+          <th>Acomodación</th>
+          <th>T. Sencilla</th>
+          <th>T. Doble</th>
+          <th class="col-md-1">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let hotel of hotels" class="text-center">
+          <td class="text-center">{{ hotel.type }}</td>
+          <td class="text-center">{{ hotel.name }}</td>
+          <td class="text-center">{{ hotel.address }}</td>
+          <td class="text-center">{{ hotel.phone }}</td>
+          <td class="text-center">{{ hotel.landline }}</td>
+          <td class="text-center">{{ hotel.accommodation }}</td>
+          <td class="text-center">{{ hotel.simple_rate | currency: 'COP' }}</td>
+          <td class="text-center">{{ hotel.double_rate | currency: 'COP' }}</td>
+          <td class="text-center">
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  (click)="getHotel(hotel); openConfirm(add, 'Editar Hotel')"
+                >
+                  <i class="far fa-edit"></i> Editar
+                </a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      (pageChange)="getHotels($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
 </div>
 
 <ng-template #add let-modal>
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="text-primary modal-title">{{ title }}</h4>
-            <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-                (click)="modal.dismiss('Cross click')"></button>
-        </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">{{ title }}</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
     </div>
-    <div class="modal-body">
-        <form [formGroup]="form">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-row">
-                        <div class="form-group col-4">
-                            <label for="">Tipo</label>
-                            <select class="form-control form-control-sm" formControlName="type">
-                                <option value="Nacional">Nacional</option>
-                                <option value="Internacional">Internacional</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="">Nombre</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="name">
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="">Ciudad</label>
-                            <select class="form-control form-control-sm" formControlName="city_id">
-                                <option *ngFor="let item of cities" [value]="item.value">
-                                    {{ item.text }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="">Tel. Fijo</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="landline">
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="">Tel. Contacto</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="phone">
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="">Dirección</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="address">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">¿Incluye Desayuno?</label>
-                            <select class="form-control form-control-sm" formControlName="breakfast">
-                                <option value="Si">Si</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Tipo de Acomodación</label>
-                            <select class="form-control form-control-sm" formControlName="accommodation">
-                                <option value="Sencilla">Sencilla</option>
-                                <option value="Doble">Doble</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Tasa Simple</label>
-                            <input type="number" class="form-control form-control-sm" formControlName="simple_rate">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Tasa Doble</label>
-                            <input type="number" class="form-control form-control-sm" formControlName="double_rate">
-                        </div>
-                    </div>
-                </div>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label for="">Tipo</label>
+              <select
+                class="form-control form-control-sm"
+                formControlName="type"
+              >
+                <option value="Nacional">Nacional</option>
+                <option value="Internacional">Internacional</option>
+              </select>
             </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
-            Cancelar
-        </button>
-        <button type="button" (click)="save()" class="btn btn-primary">
-            Guardar
-        </button>
-    </div>
+            <div class="form-group col-4">
+              <label for="">Nombre</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="name"
+              />
+            </div>
+            <div class="form-group col-4">
+              <label for="">Ciudad</label>
+              <select
+                class="form-control form-control-sm"
+                formControlName="city_id"
+              >
+                <option *ngFor="let item of cities" [value]="item.value">
+                  {{ item.text }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-4">
+              <label for="">Tel. Fijo</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="landline"
+              />
+            </div>
+            <div class="form-group col-4">
+              <label for="">Tel. Contacto</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="phone"
+              />
+            </div>
+            <div class="form-group col-4">
+              <label for="">Dirección</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="address"
+              />
+            </div>
+            <div class="form-group col-6">
+              <label for="">¿Incluye Desayuno?</label>
+              <select
+                class="form-control form-control-sm"
+                formControlName="breakfast"
+              >
+                <option value="Si">Si</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div class="form-group col-6">
+              <label for="">Tipo de Acomodación</label>
+              <select
+                class="form-control form-control-sm"
+                formControlName="accommodation"
+              >
+                <option value="Sencilla">Sencilla</option>
+                <option value="Doble">Doble</option>
+              </select>
+            </div>
+            <div class="form-group col-6">
+              <label for="">Tasa Simple</label>
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                formControlName="simple_rate"
+              />
+            </div>
+            <div class="form-group col-6">
+              <label for="">Tasa Doble</label>
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                formControlName="double_rate"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button type="button" (click)="save()" class="btn btn-primary">
+      Guardar
+    </button>
+  </div>
 </ng-template>
 
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

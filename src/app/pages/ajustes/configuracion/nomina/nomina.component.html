@@ -1,23 +1,17 @@
 <div class="card">
-  
   <div class="card-body">
     <div class="card-title">
       <h4 class="text-primary">Configuración de Nómina</h4>
     </div>
-    <hr class="line">
-    <div class="row">
-      <div class="col-md-12">
-        <p class="alert alert-secondary font-weight-bold">
-          Recordar que los cambios de estos valores modificáran los cálculos
-          correspondientes al momento del pago de nómina
-        </p>
-      </div>
+    <hr class="line" />
+    <div class="alert alert-warning text-center" role="alert">
+      Recuerda que los cambios de estos valores modificáran los cálculos
+      correspondientes al momento del pago de la nómina.
     </div>
-
-    <div *ngIf="renderizarNomina;else notData">
-      <div class="row mb-2">
+    <div *ngIf="renderizarNomina; else notData">
+      <div class="row mt-3">
         <div class="col-md-12">
-          <h2 class="font-weight-bold titulo">Horas extras y Recargos</h2>
+          <h6 class="font-weight-bold">Horas extras y Recargos</h6>
           <app-horas-extras-config
             [datos]="extrasDatos"
             (notificacion)="(mostrarMensaje)"
@@ -27,9 +21,9 @@
 
       <div class="row mt-3">
         <div class="col-md-12">
-          <h3 class="font-weight-bold titulo">
+          <h6 class="font-weight-bold">
             Aportes Seguridad social - Funcionario
-          </h3>
+          </h6>
           <app-s-social-funcionario-config
             (notificacion)="(mostrarMensaje)"
             [datos]="seguridadFuncionarioDatos"
@@ -39,9 +33,9 @@
 
       <div class="row mt-3">
         <div class="col-md-12">
-          <h4 class="font-weight-bold titulo">
+          <h6 class="font-weight-bold">
             Aportes Seguridad social - Empresa
-          </h4>
+          </h6>
           <app-s-social-empresa-config
             (notificacion)="(mostrarMensaje)"
             [datos]="seguridadEmpresaDatos"
@@ -51,7 +45,7 @@
 
       <div class="row mt-3">
         <div class="col-md-12">
-          <h5 class="font-weight-bold titulo">Riesgos ARL</h5>
+          <h6 class="font-weight-bold">Riesgos ARL</h6>
           <app-riesgo-arl-config
             (notificacion)="(mostrarMensaje)"
             [datos]="riesgosArlDatos"
@@ -61,7 +55,7 @@
 
       <div class="row mt-3">
         <div class="col-md-12">
-          <h5 class="font-weight-bold titulo">Parafiscales</h5>
+          <h6 class="font-weight-bold">Parafiscales</h6>
           <app-parafiscales-config
             (notificacion)="(mostrarMensaje)"
             [datos]="parafiscalesDatos"
@@ -71,7 +65,7 @@
 
       <div class="row mt-3">
         <div class="col-md-12">
-          <h5 class="font-weight-bold titulo">Incapacidades</h5>
+          <h6 class="font-weight-bold">Incapacidades</h6>
           <app-incapacidades-config
             (notificacion)="(mostrarMensaje)"
             [datos]="incapacidadesDatos"
@@ -93,8 +87,6 @@
   </div>
 </div>
 
-
-
 <ng-template #notData>
-    <app-not-data [loading]="!renderizarNomina"></app-not-data>
+  <app-not-data [loading]="!renderizarNomina"></app-not-data>
 </ng-template>

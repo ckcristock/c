@@ -1,79 +1,81 @@
-<app-modal-basic #modal [dialogClass]="'modal-xl'">
-    <div class="app-modal-header">
-        <div class="row">
-            <h4 class=" text text-center justify-content-center modal-title   p-1">Lista de <strong>APU</strong> registrados
-            </h4>
-            <button type="button" class="close basic-close" (click)="modal.hide()">
-                <span aria-hidden="true">
-                    <i class="fas fa-times" (click)="modal.hide()"></i>
-                </span>
-            </button>
-        </div>
+<ng-template #modal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">
+        Lista de <strong>APU</strong> registrados
+      </h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
     </div>
-    <div class="app-modal-body">
-        <table class="table table-sm table-striped">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Tipo</th>
-                    <th>F. Creación</th>
-                    <th>Nombre</th>
-                    <th>Cliente</th>
-                    <th>Destino</th>
-                    <th>Linea</th>
-                    <th>Costo unitario</th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <ng-container *ngIf="apus.length && !loading; else notData">
-                    <tr *ngFor="let apu of apus">
-                        <td><input type="checkbox"  [checked]="apu.selected" (change)="setState(apu)" ></td>
-                        <td> {{apu.type_name }} </td>
-                        <td> {{apu.created_at | date }} </td>
-                        <td> {{apu.name }} </td>
-                        <td> {{apu.custumer }} </td>
-                        <td> {{apu.city }} </td>
-                        <td> {{apu.line }} </td>
-                        <td> {{apu.unit_cost }} </td>
-                        <td>
-                            <span>
-                                <a (click)="openNewTab(apu.type,apu.apu_id)">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </span>
-
-                        </td>
-                    </tr>
-                </ng-container>
-
-            </tbody>
-        </table>
-
-    </div>
-    <div class="app-modal-footer ">
-        <div class="text-right ">
-            <button type="button" class="btn btn-danger btn-sm mr-2" (click)="modal.hide() ">Cancelar</button>
-            <button type="button" (click)="send()" class="btn btn-success btn-sm ">Agregar items</button>
-        </div>
-    </div>
-</app-modal-basic>
+  </div>
+  <div class="modal-body">
+    <ng-container *ngIf="apus.length && !loading; else notData">
+      <table
+        class="table table-bordered table-striped table-sm table-responsive-sm"
+        style="font-size: small"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th><i class="fas fa-check"></i></th>
+            <th>Tipo</th>
+            <th>F. Creación</th>
+            <th>Nombre</th>
+            <th>Cliente</th>
+            <th>Destino</th>
+            <th>Linea</th>
+            <th>Costo unitario</th>
+            <th><i class="fas fa-eye"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let apu of apus" class="text-center">
+            <td class="align-middle">
+              <input
+                type="checkbox"
+                [checked]="apu.selected"
+                (change)="setState(apu)"
+              />
+            </td>
+            <td class="align-middle">{{ apu.type_name }}</td>
+            <td class="align-middle">{{ apu.created_at | date }}</td>
+            <td class="align-middle">{{ apu.name }}</td>
+            <td class="align-middle">{{ apu.custumer }}</td>
+            <td class="align-middle">{{ apu.city }}</td>
+            <td class="align-middle">{{ apu.line }}</td>
+            <td class="align-middle">{{ apu.unit_cost | currency: 'COP' }}</td>
+            <td class="align-middle">
+              <span>
+                <a role="button" class="text-info" (click)="openNewTab(apu.type, apu.apu_id)">
+                  <i class="fas fa-eye"></i>
+                </a>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button type="button" (click)="send()" class="btn btn-primary">
+      Agregar
+    </button>
+  </div>
+</ng-template>
 
 <ng-template #notData>
-    <tr>
-        <td colspan="100%">
-            <app-not-data [loading]="false" [text]="'Sin Apus enccontrados'"></app-not-data>
-
-        </td>
-    </tr>
+  <app-not-data
+    [loading]="loading"
+    [text]="'No hay resultados de APU'"
+  ></app-not-data>
 </ng-template>

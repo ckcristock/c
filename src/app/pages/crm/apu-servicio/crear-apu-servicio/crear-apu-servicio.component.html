@@ -70,7 +70,7 @@
         <h5 class="mt-2 text-center">Validación Dimensional</h5>
         <hr class="line" />
         <div class="card-title d-flex justify-content-between">
-          <h5>Calculo de mano de obra</h5>
+          <h6>Cálculo de mano de obra</h6>
           <div class="btn-group">
             <button
               class="btn btn-primary btn-sm"
@@ -81,527 +81,429 @@
             </button>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <div class="title mt-3"></div>
-            <div class="row">
-              <perfect-scrollbar>
-                <div
-                  class="col"
-                  style="overflow-x: auto"
-                  class="items table-responsive"
-                >
-                  <table class="table table-bordered table-sm table-items">
-                    <thead class="titles">
-                      <th colspan="4"></th>
-                      <th colspan="5" class="text-center">Desplazamiento</th>
-                      <th colspan="5" class="text-center">Ordinarias</th>
-                      <th colspan="6" class="text-center">Festivas</th>
-                    </thead>
-                    <thead>
-                      <tr>
-                        <th>
-                          <label class="col-form-label col-form-label-sm">
-                            Item
-                          </label>
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm">
-                            Perfil
-                          </label>
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Tipo Desplaza</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >N. Persona</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >N. Días</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Jornada</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Horas</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Valor Horas</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Valor Total</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >N. Días</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Jornada</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Horas</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Valor Hora</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Valor Total</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >N. Días</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Jornada</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Horas</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Valor Hora</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Valor Total</label
-                          >
-                        </th>
-                        <th>
-                          <label class="col-form-label col-form-label-sm"
-                            >Valor Salarial</label
-                          >
-                        </th>
-                      </tr>
-                    </thead>
-                    <ng-container formArrayName="calculate_labor">
-                      <ng-container
-                        *ngFor="let item of cmoList.controls; let i = index"
-                      >
-                        <ng-container
-                          *ngIf="cmoList.controls.length; else notData"
-                        >
-                          <ng-container [formGroupName]="i">
-                            <tbody>
-                              <tr>
-                                <td>
-                                  {{ i + 1 }}
-                                </td>
-                                <td>
-                                  <select
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="apu_profile_id"
-                                  >
-                                    <option
-                                      *ngFor="let item of profiles"
-                                      [value]="item.id"
+        <perfect-scrollbar>
+          <div
+            class="col"
+            style="overflow-x: auto"
+            class="items table-responsive"
+          >
+            <ng-container *ngIf="cmoList.controls.length; else notData">
+              <table
+                class="table table-bordered table-responsive-sm table-striped table-sm"
+                style="font-size: small"
+              >
+                <thead class="thead-dark">
+                  <th class="text-center" colspan="4"></th>
+                  <th class="text-center" colspan="5" class="text-center">
+                    Desplazamiento
+                  </th>
+                  <th class="text-center" colspan="5" class="text-center">
+                    Ordinarias
+                  </th>
+                  <th class="text-center" colspan="6" class="text-center">
+                    Festivas
+                  </th>
+                  <th></th>
+                </thead>
+                <thead class="bg-light">
+                  <tr class="text-center text-uppercase">
+                    <th class="align-middle">Item</th>
+                    <th class="align-middle">Perfil</th>
+                    <th class="align-middle">Tipo Desplaza</th>
+                    <th class="align-middle">N. Persona</th>
+                    <th class="align-middle">N. Días</th>
+                    <th class="align-middle">Jornada</th>
+                    <th class="align-middle">Horas</th>
+                    <th class="align-middle">Valor Horas</th>
+                    <th class="align-middle">Valor Total</th>
+                    <th class="align-middle">N. Días</th>
+                    <th class="align-middle">Jornada</th>
+                    <th class="align-middle">Horas</th>
+                    <th class="align-middle">Valor Hora</th>
+                    <th class="align-middle">Valor Total</th>
+                    <th class="align-middle">N. Días</th>
+                    <th class="align-middle">Jornada</th>
+                    <th class="align-middle">Horas</th>
+                    <th class="align-middle">Valor Hora</th>
+                    <th class="align-middle">Valor Total</th>
+                    <th class="align-middle">Valor Salarial</th>
+                    <th class="align-middle">Acc.</th>
+                  </tr>
+                </thead>
+                <ng-container formArrayName="calculate_labor">
+                  <ng-container
+                    *ngFor="let item of cmoList.controls; let i = index"
+                  >
+                    <ng-container [formGroupName]="i">
+                      <tbody>
+                        <tr class="text-center">
+                          <td>
+                            {{ i + 1 }}
+                          </td>
+                          <td>
+                            <select
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="apu_profile_id"
+                            >
+                              <option
+                                *ngFor="let item of profiles"
+                                [value]="item.id"
+                              >
+                                {{ item.profile }}
+                              </option>
+                            </select>
+                          </td>
+                          <td>
+                            <select
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="displacement_type"
+                            >
+                              <option
+                                *ngFor="let item of desplazamientos"
+                                [value]="item.value"
+                              >
+                                {{ item.text }}
+                              </option>
+                            </select>
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="people_number"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="days_number_displacement"
+                            />
+                          </td>
+                          <td>
+                            <select
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="workind_day_displacement"
+                            >
+                              <option
+                                *ngFor="let item of jornadas"
+                                [value]="item.value"
+                              >
+                                {{ item.text }}
+                              </option>
+                            </select>
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="hours_displacement"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="hours_value_displacement"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="total_value_displacement"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="days_number_ordinary"
+                            />
+                          </td>
+                          <td>
+                            <select
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="working_day_ordinary"
+                            >
+                              <option
+                                *ngFor="let item of jornadas"
+                                [value]="item.value"
+                              >
+                                {{ item.text }}
+                              </option>
+                            </select>
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="hours_ordinary"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="hours_value_ordinary"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="total_value_ordinary"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="days_number_festive"
+                            />
+                          </td>
+                          <td>
+                            <select
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="working_day_festive"
+                            >
+                              <option
+                                *ngFor="let item of jornadas"
+                                [value]="item.value"
+                              >
+                                {{ item.text }}
+                              </option>
+                            </select>
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="hours_festive"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="hours_value_festive"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="total_value_festive"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              style="width: 100px"
+                              formControlName="salary_value"
+                            />
+                          </td>
+                          <td>
+                            <div class="btn-group">
+                              <button
+                                class="btn btn-outline-success btn-sm"
+                                placement="top"
+                                type="button"
+                                ngbTooltip="Est. Viáticos"
+                                (click)="collapsed[i] = !collapsed[i]"
+                                [attr.aria-expanded]="!collapsed"
+                                aria-controls="collapseExample2"
+                              >
+                                <i class="fas fa-eye"></i>
+                              </button>
+                              <button
+                                class="btn btn-outline-danger btn-sm"
+                                type="button"
+                                (click)="deleteCmoList(i)"
+                              >
+                                <i class="fas fa-trash-alt"></i>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="20">
+                            <table
+                              [ngbCollapse]="!collapsed[i]"
+                              class="table table-sm table-bordered table-viat"
+                              style="width: 50%"
+                            >
+                              <thead>
+                                <tr>
+                                  <th class="text-center">Perfil</th>
+                                  <th colspan="4" class="text-center">
+                                    Viáticos
+                                  </th>
+                                </tr>
+                              </thead>
+                              <thead>
+                                <tr>
+                                  <th colspan="2">Descripción</th>
+                                  <th>Unidad</th>
+                                  <th>Cantidad</th>
+                                  <th>Valor Unitario</th>
+                                  <th>Valor Total</th>
+                                </tr>
+                              </thead>
+                              <tbody formArrayName="viatic_estimation">
+                                <ng-container
+                                  *ngFor="
+                                    let item of item['controls'][
+                                      'viatic_estimation'
+                                    ]['controls'];
+                                    let j = index
+                                  "
+                                >
+                                  <tr [formGroupName]="j">
+                                    <td colspan="2">
+                                      <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        formControlName="description"
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        formControlName="unit"
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="number"
+                                        class="form-control form-control-sm"
+                                        formControlName="amount"
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="number"
+                                        readonly
+                                        class="form-control form-control-sm"
+                                        formControlName="unit_value"
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="number"
+                                        class="form-control form-control-sm"
+                                        formControlName="total_value"
+                                      />
+                                    </td>
+                                  </tr>
+                                </ng-container>
+                              </tbody>
+                              <tfoot>
+                                <tr>
+                                  <td colspan="5">
+                                    <label
+                                      style="width: 19%; float: right"
+                                      class="text-right text-info mt-1"
+                                      >Subtotal</label
                                     >
-                                      {{ item.profile }}
-                                    </option>
-                                  </select>
-                                </td>
-                                <td>
-                                  <select
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="displacement_type"
-                                  >
-                                    <option
-                                      *ngFor="let item of desplazamientos"
-                                      [value]="item.value"
-                                    >
-                                      {{ item.text }}
-                                    </option>
-                                  </select>
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="people_number"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="days_number_displacement"
-                                  />
-                                </td>
-                                <td>
-                                  <select
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="workind_day_displacement"
-                                  >
-                                    <option
-                                      *ngFor="let item of jornadas"
-                                      [value]="item.value"
-                                    >
-                                      {{ item.text }}
-                                    </option>
-                                  </select>
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="hours_displacement"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="hours_value_displacement"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="total_value_displacement"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="days_number_ordinary"
-                                  />
-                                </td>
-                                <td>
-                                  <select
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="working_day_ordinary"
-                                  >
-                                    <option
-                                      *ngFor="let item of jornadas"
-                                      [value]="item.value"
-                                    >
-                                      {{ item.text }}
-                                    </option>
-                                  </select>
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="hours_ordinary"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="hours_value_ordinary"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="total_value_ordinary"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="days_number_festive"
-                                  />
-                                </td>
-                                <td>
-                                  <select
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="working_day_festive"
-                                  >
-                                    <option
-                                      *ngFor="let item of jornadas"
-                                      [value]="item.value"
-                                    >
-                                      {{ item.text }}
-                                    </option>
-                                  </select>
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="hours_festive"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="hours_value_festive"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="total_value_festive"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    style="width: 100px"
-                                    formControlName="salary_value"
-                                  />
-                                </td>
-                                <td>
-                                  <div class="btn-group">
-                                    <button
-                                      class="btn btn-outline-success btn-sm"
-                                      placement="top"
-                                      type="button"
-                                      ngbTooltip="Est. Viáticos"
-                                      (click)="collapsed[i] = !collapsed[i]"
-                                      [attr.aria-expanded]="!collapsed"
-                                      aria-controls="collapseExample2"
-                                    >
-                                      <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button
-                                      class="btn btn-outline-danger btn-sm"
-                                      type="button"
-                                      (click)="deleteCmoList(i)"
-                                    >
-                                      <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td colspan="20">
-                                  <table
-                                    [ngbCollapse]="!collapsed[i]"
-                                    class="table table-sm table-bordered table-viat"
-                                    style="width: 50%"
-                                  >
-                                    <thead>
-                                      <tr>
-                                        <th class="text-center">Perfil</th>
-                                        <th colspan="4" class="text-center">
-                                          Viáticos
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                    <thead>
-                                      <tr>
-                                        <th colspan="2">Descripción</th>
-                                        <th>Unidad</th>
-                                        <th>Cantidad</th>
-                                        <th>Valor Unitario</th>
-                                        <th>Valor Total</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody formArrayName="viatic_estimation">
-                                      <ng-container
-                                        *ngFor="
-                                          let item of item['controls'][
-                                            'viatic_estimation'
-                                          ]['controls'];
-                                          let j = index
-                                        "
-                                      >
-                                        <tr [formGroupName]="j">
-                                          <td colspan="2">
-                                            <input
-                                              type="text"
-                                              class="form-control form-control-sm"
-                                              formControlName="description"
-                                            />
-                                          </td>
-                                          <td>
-                                            <input
-                                              type="text"
-                                              class="form-control form-control-sm"
-                                              formControlName="unit"
-                                            />
-                                          </td>
-                                          <td>
-                                            <input
-                                              type="number"
-                                              class="form-control form-control-sm"
-                                              formControlName="amount"
-                                            />
-                                          </td>
-                                          <td>
-                                            <input
-                                              type="number"
-                                              readonly
-                                              class="form-control form-control-sm"
-                                              formControlName="unit_value"
-                                            />
-                                          </td>
-                                          <td>
-                                            <input
-                                              type="number"
-                                              class="form-control form-control-sm"
-                                              formControlName="total_value"
-                                            />
-                                          </td>
-                                        </tr>
-                                      </ng-container>
-                                    </tbody>
-                                    <tfoot>
-                                      <tr>
-                                        <td colspan="5">
-                                          <label
-                                            style="width: 19%; float: right"
-                                            class="text-right text-info mt-1"
-                                            >Subtotal</label
-                                          >
-                                        </td>
-                                        <td colspan="6">
-                                          <input
-                                            type="number"
-                                            class="form-control form-control-sm"
-                                            formControlName="subtotal"
-                                          />
-                                        </td>
-                                      </tr>
-                                    </tfoot>
-                                  </table>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </ng-container>
-                        </ng-container>
-                      </ng-container>
+                                  </td>
+                                  <td colspan="6">
+                                    <input
+                                      type="number"
+                                      class="form-control form-control-sm"
+                                      formControlName="subtotal"
+                                    />
+                                  </td>
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </td>
+                        </tr>
+                      </tbody>
                     </ng-container>
-                    <!-- <tfoot>
-                                              <tr>
-                                                  <td colspan="3"></td>
-                                                  <td>
-                                                      <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                                  </td>
-                                                  <td>
-                                                      <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                                  </td>
-                                                  <td colspan="3"></td>
-                                                  <td>
-                                                      <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                                  </td>
-                                                  <td>
-                                                      <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                                  </td>
-                                                  <td colspan="3"></td>
-                                                  <td>
-                                                      <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                                  </td>
-                                                  <td>
-                                                      <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                                  </td>
-                                                  <td colspan="3"></td>
-                                                  <td>
-                                                      <input type="number" class="form-control form-control-sm" style="width: 100px;">
-                                                  </td>
-                                              </tr>
-                                          </tfoot> -->
-                  </table>
-                </div>
-              </perfect-scrollbar>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <div class="col-4">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td>Subtotal mano de obra</td>
-                    <td>
-                      <input
-                        type="number"
-                        style="float: left"
-                        class="form-control form-control-sm"
-                        formControlName="subtotal_labor"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>SubTotal Viáticos</td>
-                    <td>
-                      <input
-                        type="text"
-                        style="float: left"
-                        class="form-control form-control-sm"
-                        formControlName="subtotal_travel_expense"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Subtotal Valid. Dimensional</td>
-                    <td>
-                      <input
-                        type="text"
-                        style="float: left"
-                        class="form-control form-control-sm"
-                        formControlName="subtotal_dimensional_validation"
-                      />
-                    </td>
-                  </tr>
-                </tbody>
+                  </ng-container>
+                </ng-container>
+                <!-- <tfoot>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td colspan="3"></td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td colspan="3"></td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                            <td colspan="3"></td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm" style="width: 100px;">
+                                            </td>
+                                        </tr>
+                                    </tfoot> -->
               </table>
+            </ng-container>
+          </div>
+        </perfect-scrollbar>
+        <ng-container *ngIf="cmoList.controls.length">
+          <div class="row d-flex justify-content-end">
+            <div class="col-md-3">
+              <div class="d-flex justify-content-between">
+                <label>Subtotal mano de obra:</label>
+                <span>{{ this.form.get("subtotal_labor").value }}</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <label>Subtotal Viáticos:</label>
+                <span>{{
+                  this.form.get("subtotal_travel_expense").value
+                }}</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <label>Subtotal Valid. Dimensional:</label>
+                <span>{{
+                  this.form.get("subtotal_dimensional_validation").value
+                }}</span>
+              </div>
             </div>
           </div>
-        </div>
+        </ng-container>
+
         <hr />
         <h5 class="text-center">Montaje y Puesta en Marcha</h5>
         <hr class="line" />
         <div class="card-title d-flex justify-content-between">
-          <h5>Calculo de mano de obra</h5>
+          <h6>Cálculo de mano de obra</h6>
           <div class="btn-group">
             <button
               class="btn btn-primary btn-sm"
@@ -612,449 +514,442 @@
             </button>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <div class="row">
-              <div
-                class="col"
-                style="overflow-x: auto"
-                class="items table-responsive"
-              >
-                <table class="table table-bordered table-sm table-items">
-                  <thead class="titles">
-                    <th colspan="4"></th>
-                    <th colspan="5" class="text-center">Desplazamiento</th>
-                    <th colspan="5" class="text-center">Ordinarias</th>
-                    <th colspan="5" class="text-center">Festivas</th>
-                  </thead>
-                  <thead>
-                    <tr>
-                      <th>
-                        <label class="col-form-label col-form-label-sm">
-                          Item
-                        </label>
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm">
-                          Perfil
-                        </label>
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Tipo Desplaza</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >N. Persona</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >N. Días</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Jornada</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Horas</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Valor Horas</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Valor Total</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >N. Días</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Jornada</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Horas</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Valor Hora</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Valor Total</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >N. Días</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Jornada</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Horas</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Valor Hora</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Valor Total</label
-                        >
-                      </th>
-                      <th>
-                        <label class="col-form-label col-form-label-sm"
-                          >Valor Salarial</label
-                        >
-                      </th>
-                    </tr>
-                  </thead>
-                  <ng-container formArrayName="mpm_calculate_labor">
-                    <ng-container
-                      *ngFor="
-                        let item of mpMCalculateLaborList.controls;
-                        let i = index
-                      "
+        <div
+          class="col"
+          style="overflow-x: auto"
+          class="items table-responsive"
+        >
+          <ng-container
+            *ngIf="mpMCalculateLaborList.controls.length; else notData"
+          >
+            <table class="table table-bordered table-sm table-items">
+              <thead class="titles">
+                <th colspan="4"></th>
+                <th colspan="5" class="text-center">Desplazamiento</th>
+                <th colspan="5" class="text-center">Ordinarias</th>
+                <th colspan="5" class="text-center">Festivas</th>
+              </thead>
+              <thead>
+                <tr>
+                  <th>
+                    <label class="col-form-label col-form-label-sm">
+                      Item
+                    </label>
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm">
+                      Perfil
+                    </label>
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Tipo Desplaza</label
                     >
-                      <ng-container
-                        *ngIf="
-                          mpMCalculateLaborList.controls.length;
-                          else notData
-                        "
-                      >
-                        <ng-container [formGroupName]="i">
-                          <tbody>
-                            <tr>
-                              <td>
-                                {{ i + 1 }}
-                              </td>
-                              <td>
-                                <select
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="apu_profile_id"
-                                >
-                                  <option
-                                    *ngFor="let item of profiles"
-                                    [value]="item.id"
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >N. Persona</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >N. Días</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Jornada</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Horas</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Valor Horas</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Valor Total</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >N. Días</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Jornada</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Horas</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Valor Hora</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Valor Total</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >N. Días</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Jornada</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Horas</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Valor Hora</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Valor Total</label
+                    >
+                  </th>
+                  <th>
+                    <label class="col-form-label col-form-label-sm"
+                      >Valor Salarial</label
+                    >
+                  </th>
+                </tr>
+              </thead>
+              <ng-container formArrayName="mpm_calculate_labor">
+                <ng-container
+                  *ngFor="
+                    let item of mpMCalculateLaborList.controls;
+                    let i = index
+                  "
+                >
+                  <ng-container [formGroupName]="i">
+                    <tbody>
+                      <tr>
+                        <td>
+                          {{ i + 1 }}
+                        </td>
+                        <td>
+                          <select
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="apu_profile_id"
+                          >
+                            <option
+                              *ngFor="let item of profiles"
+                              [value]="item.id"
+                            >
+                              {{ item.profile }}
+                            </option>
+                          </select>
+                        </td>
+                        <td>
+                          <select
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="displacement_type"
+                          >
+                            <option
+                              *ngFor="let item of desplazamientos"
+                              [value]="item.value"
+                            >
+                              {{ item.text }}
+                            </option>
+                          </select>
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="people_number"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="days_number_displacement"
+                          />
+                        </td>
+                        <td>
+                          <select
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="workind_day_displacement"
+                          >
+                            <option
+                              *ngFor="let item of jornadas"
+                              [value]="item.value"
+                            >
+                              {{ item.text }}
+                            </option>
+                          </select>
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="hours_displacement"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="hours_value_displacement"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="total_value_displacement"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="days_number_ordinary"
+                          />
+                        </td>
+                        <td>
+                          <select
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="working_day_ordinary"
+                          >
+                            <option
+                              *ngFor="let item of jornadas"
+                              [value]="item.value"
+                            >
+                              {{ item.text }}
+                            </option>
+                          </select>
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="hours_ordinary"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="hours_value_ordinary"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="total_value_ordinary"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="days_number_festive"
+                          />
+                        </td>
+                        <td>
+                          <select
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="working_day_festive"
+                          >
+                            <option
+                              *ngFor="let item of jornadas"
+                              [value]="item.value"
+                            >
+                              {{ item.text }}
+                            </option>
+                          </select>
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="hours_festive"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="hours_value_festive"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="total_value_festive"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            style="width: 100px"
+                            formControlName="salary_value"
+                          />
+                        </td>
+                        <td>
+                          <div class="btn-group">
+                            <button
+                              class="btn btn-outline-success btn-sm"
+                              placement="top"
+                              type="button"
+                              ngbTooltip="Est. Viáticos"
+                              (click)="mpMcollapsed[i] = !mpMcollapsed[i]"
+                              [attr.aria-expanded]="!collapsed"
+                              aria-controls="collapseExample2"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-outline-danger btn-sm"
+                              type="button"
+                              (click)="deletempMCalculateLaborList(i)"
+                            >
+                              <i class="fas fa-trash-alt"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="20">
+                          <table
+                            [ngbCollapse]="!mpMcollapsed[i]"
+                            class="table table-sm table-bordered table-viat"
+                            style="width: 50%"
+                          >
+                            <thead>
+                              <tr>
+                                <th class="text-center">Perfil</th>
+                                <th colspan="4" class="text-center">
+                                  Viáticos
+                                </th>
+                              </tr>
+                            </thead>
+                            <thead>
+                              <tr>
+                                <th colspan="2">Descripción</th>
+                                <th>Unidad</th>
+                                <th>Cantidad</th>
+                                <th>Valor Unitario</th>
+                                <th>Valor Total</th>
+                              </tr>
+                            </thead>
+                            <tbody formArrayName="viatic_estimation">
+                              <ng-container
+                                *ngFor="
+                                  let item of item['controls'][
+                                    'viatic_estimation'
+                                  ]['controls'];
+                                  let j = index
+                                "
+                              >
+                                <tr [formGroupName]="j">
+                                  <td colspan="2">
+                                    <input
+                                      type="text"
+                                      class="form-control form-control-sm"
+                                      formControlName="description"
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      class="form-control form-control-sm"
+                                      formControlName="unit"
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="number"
+                                      class="form-control form-control-sm"
+                                      formControlName="amount"
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      class="form-control form-control-sm"
+                                      formControlName="unit_value"
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      class="form-control form-control-sm"
+                                      formControlName="total_value"
+                                    />
+                                  </td>
+                                </tr>
+                              </ng-container>
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <td colspan="5">
+                                  <label
+                                    style="width: 19%; float: right"
+                                    class="text-right text-info mt-1"
+                                    >Subtotal</label
                                   >
-                                    {{ item.profile }}
-                                  </option>
-                                </select>
-                              </td>
-                              <td>
-                                <select
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="displacement_type"
-                                >
-                                  <option
-                                    *ngFor="let item of desplazamientos"
-                                    [value]="item.value"
-                                  >
-                                    {{ item.text }}
-                                  </option>
-                                </select>
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="people_number"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="days_number_displacement"
-                                />
-                              </td>
-                              <td>
-                                <select
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="workind_day_displacement"
-                                >
-                                  <option
-                                    *ngFor="let item of jornadas"
-                                    [value]="item.value"
-                                  >
-                                    {{ item.text }}
-                                  </option>
-                                </select>
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="hours_displacement"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="hours_value_displacement"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="total_value_displacement"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="days_number_ordinary"
-                                />
-                              </td>
-                              <td>
-                                <select
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="working_day_ordinary"
-                                >
-                                  <option
-                                    *ngFor="let item of jornadas"
-                                    [value]="item.value"
-                                  >
-                                    {{ item.text }}
-                                  </option>
-                                </select>
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="hours_ordinary"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="hours_value_ordinary"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="total_value_ordinary"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="days_number_festive"
-                                />
-                              </td>
-                              <td>
-                                <select
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="working_day_festive"
-                                >
-                                  <option
-                                    *ngFor="let item of jornadas"
-                                    [value]="item.value"
-                                  >
-                                    {{ item.text }}
-                                  </option>
-                                </select>
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="hours_festive"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="hours_value_festive"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="total_value_festive"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  style="width: 100px"
-                                  formControlName="salary_value"
-                                />
-                              </td>
-                              <td>
-                                <div class="btn-group">
-                                  <button
-                                    class="btn btn-outline-success btn-sm"
-                                    placement="top"
-                                    type="button"
-                                    ngbTooltip="Est. Viáticos"
-                                    (click)="mpMcollapsed[i] = !mpMcollapsed[i]"
-                                    [attr.aria-expanded]="!collapsed"
-                                    aria-controls="collapseExample2"
-                                  >
-                                    <i class="fas fa-eye"></i>
-                                  </button>
-                                  <button
-                                    class="btn btn-outline-danger btn-sm"
-                                    type="button"
-                                    (click)="deletempMCalculateLaborList(i)"
-                                  >
-                                    <i class="fas fa-trash-alt"></i>
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td colspan="20">
-                                <table
-                                  [ngbCollapse]="!mpMcollapsed[i]"
-                                  class="table table-sm table-bordered table-viat"
-                                  style="width: 50%"
-                                >
-                                  <thead>
-                                    <tr>
-                                      <th class="text-center">Perfil</th>
-                                      <th colspan="4" class="text-center">
-                                        Viáticos
-                                      </th>
-                                    </tr>
-                                  </thead>
-                                  <thead>
-                                    <tr>
-                                      <th colspan="2">Descripción</th>
-                                      <th>Unidad</th>
-                                      <th>Cantidad</th>
-                                      <th>Valor Unitario</th>
-                                      <th>Valor Total</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody formArrayName="viatic_estimation">
-                                    <ng-container
-                                      *ngFor="
-                                        let item of item['controls'][
-                                          'viatic_estimation'
-                                        ]['controls'];
-                                        let j = index
-                                      "
-                                    >
-                                      <tr [formGroupName]="j">
-                                        <td colspan="2">
-                                          <input
-                                            type="text"
-                                            class="form-control form-control-sm"
-                                            formControlName="description"
-                                          />
-                                        </td>
-                                        <td>
-                                          <input
-                                            type="text"
-                                            class="form-control form-control-sm"
-                                            formControlName="unit"
-                                          />
-                                        </td>
-                                        <td>
-                                          <input
-                                            type="number"
-                                            class="form-control form-control-sm"
-                                            formControlName="amount"
-                                          />
-                                        </td>
-                                        <td>
-                                          <input
-                                            type="text"
-                                            class="form-control form-control-sm"
-                                            formControlName="unit_value"
-                                          />
-                                        </td>
-                                        <td>
-                                          <input
-                                            type="text"
-                                            class="form-control form-control-sm"
-                                            formControlName="total_value"
-                                          />
-                                        </td>
-                                      </tr>
-                                    </ng-container>
-                                  </tbody>
-                                  <tfoot>
-                                    <tr>
-                                      <td colspan="5">
-                                        <label
-                                          style="width: 19%; float: right"
-                                          class="text-right text-info mt-1"
-                                          >Subtotal</label
-                                        >
-                                      </td>
-                                      <td colspan="6">
-                                        <input
-                                          type="number"
-                                          class="form-control form-control-sm"
-                                          formControlName="subtotal"
-                                        />
-                                      </td>
-                                    </tr>
-                                  </tfoot>
-                                </table>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </ng-container>
-                      </ng-container>
-                    </ng-container>
+                                </td>
+                                <td colspan="6">
+                                  <input
+                                    type="number"
+                                    class="form-control form-control-sm"
+                                    formControlName="subtotal"
+                                  />
+                                </td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
                   </ng-container>
+                </ng-container>
+              </ng-container>
 
-                  <!-- <tfoot>
+              <!-- <tfoot>
                                           <tr>
                                               <td colspan="3"></td>
                                               <td>
@@ -1083,81 +978,84 @@
                                               </td>
                                           </tr>
                                       </tfoot> -->
+            </table>
+          </ng-container>
+        </div>
+        <ng-container
+          *ngIf="mpMCalculateLaborList.controls.length"
+        >
+          <div class="row">
+            <div class="col">
+              <div class="col-4">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <label class="col-form-label col-form-label-sm"
+                          >SubTotal Mano de Obra</label
+                        >
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          style="float: left"
+                          class="form-control form-control-sm"
+                          formControlName="subtotal_labor_mpm"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label class="col-form-label col-form-label-sm"
+                          >SubTotal Viáticos</label
+                        >
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          style="float: left"
+                          class="form-control form-control-sm"
+                          formControlName="subtotal_travel_expense_mpm"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label class="col-form-label col-form-label-sm"
+                          >Subtotal Montaje y Puesta en marcha</label
+                        >
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          style="float: left"
+                          class="form-control form-control-sm"
+                          formControlName="subtotal_assembly_commissioning"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label class="col-form-label col-form-label-sm"
+                          >Subtotal general Viáticos + Mano de obra</label
+                        >
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          style="float: left"
+                          class="form-control form-control-sm"
+                          formControlName="general_subtotal_travel_expense_labor"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <div class="col-4">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td>
-                      <label class="col-form-label col-form-label-sm"
-                        >SubTotal Mano de Obra</label
-                      >
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        style="float: left"
-                        class="form-control form-control-sm"
-                        formControlName="subtotal_labor_mpm"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label class="col-form-label col-form-label-sm"
-                        >SubTotal Viáticos</label
-                      >
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        style="float: left"
-                        class="form-control form-control-sm"
-                        formControlName="subtotal_travel_expense_mpm"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label class="col-form-label col-form-label-sm"
-                        >Subtotal Montaje y Puesta en marcha</label
-                      >
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        style="float: left"
-                        class="form-control form-control-sm"
-                        formControlName="subtotal_assembly_commissioning"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label class="col-form-label col-form-label-sm"
-                        >Subtotal general Viáticos + Mano de obra</label
-                      >
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        style="float: left"
-                        class="form-control form-control-sm"
-                        formControlName="general_subtotal_travel_expense_labor"
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        </ng-container>
+
         <hr />
         <h5 class="text-center">AIU</h5>
         <hr class="line" />
@@ -1321,11 +1219,9 @@
   </div>
 </ng-container>
 <ng-template #notData>
-  <tr class="bg-light">
-    <td colspan="100%" class="text-center">
-      <p class="text-dark">Sin datos agregados</p>
-    </td>
-  </tr>
+  <div class="alert alert-warning text-center" role="alert">
+    ¡No hay datos aquí!
+  </div>
 </ng-template>
 <ng-template #notDataL>
   <app-not-data [loading]="loading"></app-not-data>

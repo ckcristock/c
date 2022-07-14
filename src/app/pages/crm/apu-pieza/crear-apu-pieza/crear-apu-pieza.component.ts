@@ -125,6 +125,7 @@ export class CrearApuPiezaComponent implements OnInit {
   getGeometries(){
     this._apuPieza.getGeometries().subscribe((r:any) => {
       this.geometries = r.data;
+      console.log(this.geometries)
     })
   }
   

@@ -1,342 +1,363 @@
 <div class="card">
+  <div *ngIf="!loading; else notData">
     <div class="card-body">
-        <div class="card-title">
-            <div class="row">
-                <div class="col-6 mt-3">
-                    <h4 class="t">
-                        Formato de analisis de precios unitarios maquinados y montajes
-                    </h4>
-                </div>
-                <div class="col-6">
-                    <div class="row mt-3 mb-3 mr-4" style="float: right">
-                        <div class="ml-4" *ngIf="isData">
-                            <p class="text-right"> {{ data.created_at | date:'EEEE, MMMM d, y' | titlecase }} </p>
-                            <p>Bucaramanga - Colombia</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="card-title d-flex justify-content-between">
+        <h4 class="text-primary">APU Pieza - {{ data.name }}</h4>
+        <span>
+          {{ data.created_at | date: "EEEE, MMMM d, y" | titlecase }} -
+          Bucaramanga - Colombia
+        </span>
+      </div>
+      <hr class="line" />
+      <div class="row">
+        <div class="col-md-6">
+          <table class="table table-borderless">
+            <tbody>
+              <tr>
+                <th scope="row">Nombre</th>
+                <td>{{ data.name }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Destino</th>
+                <td>{{ data.city.name }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Quién elabora</th>
+                <td>
+                  {{ data.person.first_name }} {{ data.person.first_surname }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-    </div>
-</div>
-<div class="card">
-    <!-- <div class="card-title mt-3 mr-3">
-        <strong style="float: right;">
-            
-        </strong>
-    </div> -->
-    <div class="card-body" *ngIf="isData">
-        <div class="row">
-            <div class="col-6">
-                <div class="mb-3 row">
-                    <label for="funcionario" class="col-sm-3 col-form-label col-form-label-sm">Nombre</label>
-                    <div class="col-sm-9">
-                        {{ data.name }}
-
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="cc" class="col-sm-3 col-form-label col-form-label-sm">Destino</label>
-                    <div class="col-sm-9">
-                        {{ data.city.name }}
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="cargo" class="col-sm-3 col-form-label col-form-label-sm">Quien elabora</label>
-                    <div class="col-sm-9">
-                        {{ data.person.first_name }} {{ data.person.first_surname }}
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="mb-3 row">
-                    <label for="funcionario" class="col-sm-3 col-form-label col-form-label-sm">Cliente</label>
-                    <div class="col-sm-9">
-                        {{ data.thirdparty.first_name }} {{ data.thirdparty.first_surname }}
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="cc" class="col-sm-3 col-form-label col-form-label-sm">Linea</label>
-                    <div class="col-sm-9">
-                        {{ data.line }}
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="cargo" class="col-sm-3 col-form-label col-form-label-sm">Cantidad</label>
-                    <div class="col-sm-9">
-                        {{ data.amount }}
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-6">
+          <table class="table table-borderless">
+            <tbody>
+              <tr>
+                <th scope="row">Cliente</th>
+                <td>
+                  {{ data.thirdparty.first_name }}
+                  {{ data.thirdparty.first_surname }}
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Línea</th>
+                <td>{{ data.line }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Cantidad</th>
+                <td>
+                  {{ data.amount }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
+      <div>
         <div class="row">
-            <div class="col mt-2">
-                <h4 class="text-primary text-center">Costos Directos</h4>
-                <hr class="bg-primary">
-            </div>
+          <div class="col mt-2">
+            <h4 class="text-primary text-center">Costos Directos</h4>
+            <hr class="bg-primary" />
+          </div>
         </div>
         <div class="row mb-3">
-            <div class="col-12 mt-3">
-                <strong>Observaciones: </strong> {{ data.observation }}
-            </div>
+          <div class="col-12 mt-3">
+            <strong>Observaciones: </strong> {{ data.observation }}
+          </div>
         </div>
-        <hr class="bg-secondary">
-        <app-materia-prima *ngIf="data.rawmaterial.length" [data]="data.rawmaterial" [subtotal_raw_material]="data.subtotal_raw_material"></app-materia-prima>
-        <app-materiales-comerciales *ngIf="data.commercial.length" [data]="data.commercial" [commercial_materials_subtotal]="data.commercial_materials_subtotal"></app-materiales-comerciales>
-        <app-corte-agua *ngIf="data.cutwater.length" [data]="data.cutwater" [cut_water_total_amount]="data.cut_water_total_amount" [cut_water_unit_subtotal]="data.cut_water_unit_subtotal" [cut_water_subtotal]="data.cut_water_subtotal"></app-corte-agua>
-        <app-corte-laser *ngIf="data.cutlaser.length" [data]="data.cutlaser" [cut_laser_total_amount]="data.cut_laser_total_amount" [cut_laser_unit_subtotal]="data.cut_laser_unit_subtotal" [cut_laser_subtotal]="data.cut_laser_subtotal"></app-corte-laser>
-        <app-maquinas-herramientas *ngIf="data.machine.length" [data]="data.machine" [machine_tools_subtotal]="data.machine_tools_subtotal"></app-maquinas-herramientas>
-        <app-procesos-internos *ngIf="data.internal.length" [data]="data.internal" [internal_proccesses_subtotal]="data.internal_proccesses_subtotal"></app-procesos-internos>
-        <app-procesos-externos *ngIf="data.external.length" [data]="data.external" [external_proccesses_subtotal]="data.external_proccesses_subtotal"></app-procesos-externos>
-        <app-otros *ngIf="data.other.length" [data]="data.other" [others_subtotal]="data.others_subtotal"></app-otros>
+        <hr class="bg-secondary" />
+        <app-materia-prima
+          *ngIf="data.rawmaterial.length"
+          [data]="data.rawmaterial"
+          [subtotal_raw_material]="data.subtotal_raw_material"
+        ></app-materia-prima>
+        <app-materiales-comerciales
+          *ngIf="data.commercial.length"
+          [data]="data.commercial"
+          [commercial_materials_subtotal]="data.commercial_materials_subtotal"
+        ></app-materiales-comerciales>
+        <app-corte-agua
+          *ngIf="data.cutwater.length"
+          [data]="data.cutwater"
+          [cut_water_total_amount]="data.cut_water_total_amount"
+          [cut_water_unit_subtotal]="data.cut_water_unit_subtotal"
+          [cut_water_subtotal]="data.cut_water_subtotal"
+        ></app-corte-agua>
+        <app-corte-laser
+          *ngIf="data.cutlaser.length"
+          [data]="data.cutlaser"
+          [cut_laser_total_amount]="data.cut_laser_total_amount"
+          [cut_laser_unit_subtotal]="data.cut_laser_unit_subtotal"
+          [cut_laser_subtotal]="data.cut_laser_subtotal"
+        ></app-corte-laser>
+        <app-maquinas-herramientas
+          *ngIf="data.machine.length"
+          [data]="data.machine"
+          [machine_tools_subtotal]="data.machine_tools_subtotal"
+        ></app-maquinas-herramientas>
+        <app-procesos-internos
+          *ngIf="data.internal.length"
+          [data]="data.internal"
+          [internal_proccesses_subtotal]="data.internal_proccesses_subtotal"
+        ></app-procesos-internos>
+        <app-procesos-externos
+          *ngIf="data.external.length"
+          [data]="data.external"
+          [external_proccesses_subtotal]="data.external_proccesses_subtotal"
+        ></app-procesos-externos>
+        <app-otros
+          *ngIf="data.other.length"
+          [data]="data.other"
+          [others_subtotal]="data.others_subtotal"
+        ></app-otros>
         <div class="row">
-            <div class="col-8"></div>
-            <div class="col-4" style="float: right;">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <!-- <td class="text-right"></td> -->
-                            <td>
-                                <div class="row">
-                                    <div class="col-9">
-                                        <p class="text-right">Costo directo total:</p>
-                                    </div>
-                                    <div class="col-3">
-                                        {{ data.total_direct_cost }}
-                                    </div>
-                                </div>
-                                <!-- <div style="float: right;">
-                                </div> -->
-                            </td>
-                        </tr>
-                        <tr>
-                            <!-- <td class="text-center"></td> -->
-                            <td>
-                                <div class="row">
-                                    <div class="col-9">
-                                        <p class="text-right">Costo directo unitario:</p>
-                                    </div>
-                                    <div class="col-3">
-                                        {{ data.unit_direct_cost }}
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+          <div class="col-8"></div>
+          <div class="col-4" style="float: right">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <!-- <td class="text-right"></td> -->
+                  <td>
+                    <div class="row">
+                      <div class="col-9">
+                        <p class="text-right">Costo directo total:</p>
+                      </div>
+                      <div class="col-3">
+                        {{ data.total_direct_cost }}
+                      </div>
+                    </div>
+                    <!-- <div style="float: right;">
+                                        </div> -->
+                  </td>
+                </tr>
+                <tr>
+                  <!-- <td class="text-center"></td> -->
+                  <td>
+                    <div class="row">
+                      <div class="col-9">
+                        <p class="text-right">Costo directo unitario:</p>
+                      </div>
+                      <div class="col-3">
+                        {{ data.unit_direct_cost }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class="row">
-            <div class="col-6">
-                <h4 class="text-primary text-center">Costos Indirectos</h4>
-                <hr class="bg-primary">
-                <table class="table table-striped">
-                    <tbody class="bg-light">
-                        <ng-container *ngFor="let item of data.indirect; let i = index">
-                            <tr>
-                                <td> {{ item.name }} </td>
-                                <td> {{ item.percentage }} </td>
-                                <td>
-                                    <p class="text-right">
-                                        {{ item.value }}
-                                    </p>
-                                </td>
-                            </tr>
-                        </ng-container>
-                        <tr>
-                            <td class="text-center">Costos Indirectos</td>
-                            <td>
-                            </td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.indirect_cost_total }}
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <hr class="bg-dark">
-                <table class="table table-striped">
-                    <tbody class="bg-light">
-                        <tr>
-                            <td>Costos Directos + Costos Indirectos Totales</td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.direct_costs_indirect_costs_total }}
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Costos Directos + Costos Indirectos Unitario</td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.direct_costs_indirect_costs_unit }}
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-6">
-                <h4 class="text-primary text-center">AUI</h4>
-                <hr class="bg-primary">
-                <table class="table table-striped">
-                    <tbody class="bg-light">
-                        <tr>
-                            <td>Administrativos</td>
-                            <td>
-                                <p class="text-center">
-                                    {{ data.administrative_percentage }}
-                                </p>
-                            </td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.administrative_value }}
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Imprevistos</td>
-                            <td>
-                                <p class="text-center">
-                                    {{ data.unforeseen_percentage }}
-                                </p>
-                            </td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.unforeseen_value }}
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>SubTotal + Administrativos + Imprevistos</td>
-                            <td></td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.administrative_unforeseen_subtotal }}
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>SubTotal + Administrativos + Imprevistos Unitario</td>
-                            <td></td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.administrative_unforeseen_unit }}
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <hr class="bg-dark">
-                <table class="table table-striped">
-                    <tbody class="bg-light">
-                        <tr>
-                            <td class="text-center">Utilidad</td>
-                            <td></td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.utility_percentage }}
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>SubTotal + Admin + Imprevisto + Utilidad</td>
-                            <td>
-                            </td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.admin_unforeseen_utility_subtotal }}
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>SubTotal + Admin + Imprevisto + Utilidad Unitario</td>
-                            <td>
-                            </td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.admin_unforeseen_utility_unit }}
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <hr class="bg-dark">
-                <table class="table table-striped">
-                    <tbody class="bg-light">
-                        <tr>
-                            <td>Precio Venta Total COP + Retención</td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.sale_price_cop_withholding_total }}
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Valor de Venta Unitario COP</td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.sale_value_cop_unit }}
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <hr class="bg-dark">
-                <table class="table table-striped">
-                    <tbody>
-                        <tr>
-                            <td>TRM</td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.trm }}
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <hr class="bg-dark">
-                <table class="table table-striped">
-                    <tbody class="bg-light">
-                        <tr>
-                            <td>Precio Venta Total USD + Retención</td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.sale_price_usd_withholding_total }}
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Valor de Venta Unitario USD</td>
-                            <td>
-                                <p class="text-right">
-                                    {{ data.sale_value_usd_unit }}
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+          <div class="col-6">
+            <h4 class="text-primary text-center">Costos Indirectos</h4>
+            <hr class="bg-primary" />
+            <table class="table table-striped">
+              <tbody class="bg-light">
+                <ng-container *ngFor="let item of data.indirect; let i = index">
+                  <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.percentage }}</td>
+                    <td>
+                      <p class="text-right">
+                        {{ item.value }}
+                      </p>
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr>
+                  <td class="text-center">Costos Indirectos</td>
+                  <td></td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.indirect_cost_total }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr class="bg-dark" />
+            <table class="table table-striped">
+              <tbody class="bg-light">
+                <tr>
+                  <td>Costos Directos + Costos Indirectos Totales</td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.direct_costs_indirect_costs_total }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Costos Directos + Costos Indirectos Unitario</td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.direct_costs_indirect_costs_unit }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-6">
+            <h4 class="text-primary text-center">AUI</h4>
+            <hr class="bg-primary" />
+            <table class="table table-striped">
+              <tbody class="bg-light">
+                <tr>
+                  <td>Administrativos</td>
+                  <td>
+                    <p class="text-center">
+                      {{ data.administrative_percentage }}
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.administrative_value }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Imprevistos</td>
+                  <td>
+                    <p class="text-center">
+                      {{ data.unforeseen_percentage }}
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.unforeseen_value }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>SubTotal + Administrativos + Imprevistos</td>
+                  <td></td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.administrative_unforeseen_subtotal }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>SubTotal + Administrativos + Imprevistos Unitario</td>
+                  <td></td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.administrative_unforeseen_unit }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr class="bg-dark" />
+            <table class="table table-striped">
+              <tbody class="bg-light">
+                <tr>
+                  <td class="text-center">Utilidad</td>
+                  <td></td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.utility_percentage }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>SubTotal + Admin + Imprevisto + Utilidad</td>
+                  <td></td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.admin_unforeseen_utility_subtotal }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>SubTotal + Admin + Imprevisto + Utilidad Unitario</td>
+                  <td></td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.admin_unforeseen_utility_unit }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr class="bg-dark" />
+            <table class="table table-striped">
+              <tbody class="bg-light">
+                <tr>
+                  <td>Precio Venta Total COP + Retención</td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.sale_price_cop_withholding_total }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Valor de Venta Unitario COP</td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.sale_value_cop_unit }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr class="bg-dark" />
+            <table class="table table-striped">
+              <tbody>
+                <tr>
+                  <td>TRM</td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.trm }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr class="bg-dark" />
+            <table class="table table-striped">
+              <tbody class="bg-light">
+                <tr>
+                  <td>Precio Venta Total USD + Retención</td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.sale_price_usd_withholding_total }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Valor de Venta Unitario USD</td>
+                  <td>
+                    <p class="text-right">
+                      {{ data.sale_value_usd_unit }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class="row mb-2">
-            <div class="col-12">
-                <button (click)="download()" class="btn btn-primary btn-sm btn-block">
-                    <i class="fas fa-file-download"></i>
-                    <span *ngIf="!donwloading; else status"> Descargar</span>
-                    <ng-template #status>
-                    <span
-                        class="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                    ></span>
-                    Generando...
-                    </ng-template>
-              </button>
-            </div>
+          <div class="col-12">
+            <button (click)="download()" class="btn btn-primary btn-sm btn-block">
+              <i class="fas fa-file-download"></i>
+              <span *ngIf="!donwloading; else status"> Descargar</span>
+              <ng-template #status>
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Generando...
+              </ng-template>
+            </button>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

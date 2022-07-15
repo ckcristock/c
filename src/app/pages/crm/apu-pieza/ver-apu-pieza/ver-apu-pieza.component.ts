@@ -10,23 +10,26 @@ import { ApuPart, Data } from '../apu-pieza';
 })
 export class VerApuPiezaComponent implements OnInit {
   date: Date = new Date();
-  id:any;
-  data:Data;
-  isData:boolean = false;
-  constructor( 
-                private _apuParts: ApuPiezaService,
-                private actRoute: ActivatedRoute
-             ) { }
+  id: any;
+  data: Data;
+  isData: boolean = false;
+  loading: boolean = false;
+  constructor(
+    private _apuParts: ApuPiezaService,
+    private actRoute: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.params.id;
     this.getApuPart();
   }
 
-  getApuPart(){
-    this._apuParts.getApuPart(this.id).subscribe((r:ApuPart) => {
+  getApuPart() {
+    this.loading = true
+    this._apuParts.getApuPart(this.id).subscribe((r: ApuPart) => {
       this.data = r.data;
       this.isData = true;
+      this.loading = false
     })
   }
 

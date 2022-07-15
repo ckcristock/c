@@ -98,6 +98,7 @@ export class DatosBasicosComponent implements OnInit {
           marital_status: this.funcionario.marital_status,
           gener: this.funcionario.gener
         })
+        this.file = this.funcionario.image
         this.fileString = this.funcionario.image
       })
   }
@@ -106,9 +107,9 @@ export class DatosBasicosComponent implements OnInit {
     this.form = this.fb.group({
       image: [''],
       first_name: ['', Validators.required],
-      second_name: ['', Validators.required],
+      second_name: [''],
       first_surname: ['', Validators.required],
-      second_surname: ['', Validators.required],
+      second_surname: [''],
       identifier: ['', Validators.required],
       date_of_birth: ['', Validators.required],
       address: ['', Validators.required],
@@ -135,18 +136,6 @@ export class DatosBasicosComponent implements OnInit {
   get first_surname_valid() {
     return (
       this.form.get('first_surname').invalid && this.form.get('first_surname').touched
-    );
-  }
-
-  get second_name_valid() {
-    return (
-      this.form.get('second_name').invalid && this.form.get('second_name').touched
-    );
-  }
-
-  get second_surname_valid() {
-    return (
-      this.form.get('second_surname').invalid && this.form.get('second_surname').touched
     );
   }
 
@@ -224,7 +213,7 @@ export class DatosBasicosComponent implements OnInit {
     })
     this.basicDataService.updateBasicData(this.form.value, this.id)
       .subscribe(res => {
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.getBasicsData();
         Swal.fire({
           icon: 'success',

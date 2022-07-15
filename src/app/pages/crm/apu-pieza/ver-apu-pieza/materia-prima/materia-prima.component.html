@@ -1,98 +1,130 @@
 <div class="row">
-    <div class="col">
-        <div class="title mt-3">
-            <h5>Calculo de materia prima</h5>
-        </div>
-        <div class="row">
-            <div class="col">
-                <table class="table table-striped">
-                    <ng-container *ngIf="rawMateria.length">
-                        <ng-container *ngFor="let item of rawMateria; let i = index">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <label class="col-form-label col-form-label-sm" for="">Item</label>
-                                    </th>
-                                    <th>
-                                        <label class="col-form-label col-form-label-sm" for="geometria_calculo">Geometria</label>
-                                    </th>
-                                    <th>
-                                        <label for=""></label>
-                                    </th>
-                                    <th>
-                                        <label class="col-form-label col-form-label-sm" for="material_calculo">Material</label>
-                                    </th>
-                                    <th *ngFor="let measure of item.measures">
-                                        <label class="col-form-label col-form-label-sm" for="">{{ measure.name }}</label>
-                                    </th>
-                                    <th>
-                                        <label class="col-form-label col-form-label-sm" for="peso_kg_calculo">Peso KG</label>
-                                    </th>
-                                    <th>
-                                        <label class="col-form-label col-form-label-sm" for="q_calculo">Cantidad</label>
-                                    </th>
-                                    <th>
-                                        <label class="col-form-label col-form-label-sm" for="peso_total_calculo">Peso Total</label>
-                                    </th>
-                                    <th>
-                                        <label class="col-form-label col-form-label-sm" for="valor_kg_calculo">Valor KG</label>
-                                    </th>
-                                    <th>
-                                        <label class="col-form-label col-form-label-sm" for="valor_total_calculo">Valor Total</label>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        {{ i + 1 }}
-                                    </td>
-                                    <td>
-                                        {{ item.geometry.name }}
-                                    </td>
-                                    <td>
-                                        <img [src]="item.geometry.image | image">
-                                    </td>
-                                    <td>
-                                        {{ item.material.name }}
-                                    </td>
-                                    <td *ngFor="let measure of item.measures; let j = index">
-                                        {{ measure.value }}
-                                    </td>
-                                    <td>
-                                        {{ item.weight_kg }}
-                                    </td>
-                                    <td>
-                                        {{ item.q }}
-                                    </td>
-                                    <td>
-                                        {{ item.weight_total }}
-                                    </td>
-                                    <td>
-                                        {{ item.value_kg }}
-                                    </td>
-                                    <td>
-                                        {{ item.total_value }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </ng-container>
-                    </ng-container>
-                </table>
-                <table style="float: right;">
-                    <tr>
-                        <td>
-                            <label for="">SubTotal: </label>
-                        </td>
-                        <td>
-                            <p class="text-right mt-2">
-                                {{ subtotal_raw_material }}
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+  <div class="col">
+    <div class="title mt-3">
+      <h5>Calculo de materia prima</h5>
     </div>
+    <div class="row">
+      <div class="col">
+        <table class="table table-striped">
+          <ng-container *ngIf="rawMateria.length">
+            <ng-container *ngFor="let item of rawMateria; let i = index">
+              <thead>
+                <tr>
+                  <th>
+                    <label class="col-form-label col-form-label-sm" for=""
+                      >Item</label
+                    >
+                  </th>
+                  <th>
+                    <label
+                      class="col-form-label col-form-label-sm"
+                      for="geometria_calculo"
+                      >Geometria</label
+                    >
+                  </th>
+                  <th>
+                    <label for=""></label>
+                  </th>
+                  <th>
+                    <label
+                      class="col-form-label col-form-label-sm"
+                      for="material_calculo"
+                      >Material</label
+                    >
+                  </th>
+                  <th *ngFor="let measure of item.measures">
+                    <label class="col-form-label col-form-label-sm" for="">{{
+                      measure.name
+                    }}</label>
+                  </th>
+                  <th>
+                    <label
+                      class="col-form-label col-form-label-sm"
+                      for="peso_kg_calculo"
+                      >Peso KG</label
+                    >
+                  </th>
+                  <th>
+                    <label
+                      class="col-form-label col-form-label-sm"
+                      for="q_calculo"
+                      >Cantidad</label
+                    >
+                  </th>
+                  <th>
+                    <label
+                      class="col-form-label col-form-label-sm"
+                      for="peso_total_calculo"
+                      >Peso Total</label
+                    >
+                  </th>
+                  <th>
+                    <label
+                      class="col-form-label col-form-label-sm"
+                      for="valor_kg_calculo"
+                      >Valor KG</label
+                    >
+                  </th>
+                  <th>
+                    <label
+                      class="col-form-label col-form-label-sm"
+                      for="valor_total_calculo"
+                      >Valor Total</label
+                    >
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {{ i + 1 }}
+                  </td>
+                  <td>
+                    {{ item.geometry.name }}
+                  </td>
+                  <td>
+                    <img [src]="item.geometry.image" />
+                  </td>
+                  <td>
+                    {{ item.material.name }}
+                  </td>
+                  <td *ngFor="let measure of item.measures; let j = index">
+                    {{ measure.value }}
+                  </td>
+                  <td>
+                    {{ item.weight_kg }}
+                  </td>
+                  <td>
+                    {{ item.q }}
+                  </td>
+                  <td>
+                    {{ item.weight_total }}
+                  </td>
+                  <td>
+                    {{ item.value_kg }}
+                  </td>
+                  <td>
+                    {{ item.total_value }}
+                  </td>
+                </tr>
+              </tbody>
+            </ng-container>
+          </ng-container>
+        </table>
+        <table style="float: right">
+          <tr>
+            <td>
+              <label for="">SubTotal: </label>
+            </td>
+            <td>
+              <p class="text-right mt-2">
+                {{ subtotal_raw_material }}
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
-<hr class="bg-secondary">
+<hr class="bg-secondary" />

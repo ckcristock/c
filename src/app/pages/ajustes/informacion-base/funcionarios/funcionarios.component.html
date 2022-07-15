@@ -17,19 +17,7 @@
     </div>
     <hr class="line" />
     <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field class="col-md-3 pl-0" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Busca por nombre"
-            (input)="getPeople(1, $event.target.value)"
-            name="name"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
+      <mat-expansion-panel class="mat-elevation-z0">        
         <section>
           <h6>Estado</h6>
           <mat-checkbox
@@ -54,8 +42,22 @@
         </section>
       </mat-expansion-panel>
     </mat-accordion>
+    <div class="d-flex justify-content-end">
+      <mat-form-field class="" appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Busca por nombre"
+          (input)="getPeople(1, $event.target.value)"
+          name="name"
+          autocomplete="off"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
     <table
-      class="table table-bordered table-striped table-sm table-responsive-sm"
+      class="table table-bordered table-striped table-sm table-responsive-sm mt-2"
       style="font-size: small"
       *ngIf="!loading && people.length > 0; else notData"
     >

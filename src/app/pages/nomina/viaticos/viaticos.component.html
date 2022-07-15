@@ -1,48 +1,75 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Viaticos</h4>
-            <div class="btn-group rounded">
-                <button class="btn btn-primary btn-sm" style="float: right" [routerLink]="['/nomina/crear-viatico']">
-                    Agregar
-                </button>
-                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
-                    <i class="fas fa-sliders-h"></i> Filtros
-                </button>
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Viaticos</h4>
+      <div class="btn-group rounded">
+        <button
+          class="btn btn-primary btn-sm"
+          style="float: right"
+          [routerLink]="['/nomina/crear-viatico']"
+        >
+          Agregar
+        </button>
+        <button
+          class="btn btn-info btn-sm"
+          style="float: right"
+          (click)="openClose()"
+        >
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
+      </div>
+    </div>
+    <hr class="line" />
+    <div class="container">
+      <mat-accordion multi>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <div class="container">
+            <div class="row">
+              <div class="input-group-sm col-md-3">
+                <label for="">Funcionario</label>
+                <ng-select
+                  [items]="people"
+                  (change)="getAll()"
+                  [(ngModel)]="filtros.person_id"
+                  bindLabel="text"
+                  bindValue="value"
+                  loadingText="loading "
+                  ngDefaultControl
+                >
+                </ng-select>
+              </div>
+              <div class="input-group-sm col-md-3">
+                <label for="">F. Creación</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="filtros.creation_date"
+                  (change)="getAll()"
+                />
+              </div>
+              <div class="input-group-sm col-md-3">
+                <label for="">F. Salida</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="filtros.departure_date"
+                  (change)="getAll()"
+                />
+              </div>
+              <div class="input-group-sm col-md-3">
+                <label for="">Estado</label>
+                <select
+                  class="form-control"
+                  [(ngModel)]="filtros.state"
+                  (change)="getAll()"
+                >
+                  <option *ngFor="let state of states" [value]="state.clave">
+                    {{ state.clave }}
+                  </option>
+                </select>
+              </div>
             </div>
-        </div>
-        <hr class="line">
-        <div class="container">
-            <mat-accordion multi>
-                <mat-expansion-panel class="mat-elevation-z0">
-                    <div class="container">
-                        <div class="row">
-                            <div class="input-group-sm col-md-3">
-                                <label for="">Funcionario</label>
-                                <ng-select [items]="people" (change)="getAll()" [(ngModel)]="filtros.person_id"
-                                    bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
-                                </ng-select>
-                            </div>
-                            <div class="input-group-sm col-md-3">
-                                <label for="">F. Creación</label>
-                                <input type="date" class="form-control" [(ngModel)]="filtros.creation_date"
-                                    (change)="getAll()" />
-                            </div>
-                            <div class="input-group-sm col-md-3">
-                                <label for="">F. Salida</label>
-                                <input type="date" class="form-control" [(ngModel)]="filtros.departure_date"
-                                    (change)="getAll()" />
-                            </div>
-                            <div class="input-group-sm col-md-3">
-                                <label for="">Estado</label>
-                                <select class="form-control" [(ngModel)]="filtros.state" (change)="getAll()">
-                                    <option *ngFor="let state of states" [value]="state.clave">
-                                        {{ state.clave }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- <div class="row">
+            <!-- <div class="row">
                             <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
                                 <mat-label> </mat-label>
                                 <input matInput type="text" placeholder="">
@@ -54,117 +81,134 @@
                                 </mat-select>
                             </mat-form-field>                                
                         </div> -->
-                    </div>
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>
-        <div class="container">
-            <table class="table table-bordered table-striped table-sm" style="font-size: small;"
-                *ngIf="!loading && data.length > 0; else notData">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Funcionario</th>
-                        <th>Func. Creó</th>
-                        <th>F. Creación</th>
-                        <th>F. Salida</th>
-                        <th># Días</th>
-                        <th>Total COP</th>
-                        <th>Total USD</th>
-                        <th>Estado</th>
-                        <th class="text-center col-1">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of data" [ngClass]="{
-                'text-primary': item.state == 'Aprobado',
-                'text-danger': item.state == 'Inactivo'
-              }">
-                        <td>
-                            <img class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
-                                src="{{ item.person.image | image: 'users' }}" />
-                        </td>
-                        <td>
-
-
-                            {{ item.person.first_name | titlecase }}
-                            {{ item.person.first_surname | titlecase }}
-
-                        </td>
-                        <td>
-                            {{ item.user.person.first_name | titlecase }} {{ item.user.person.first_surname | titlecase
-                            }}
-                        </td>
-                        <td>{{ item.created_at | date: "dd/MM/yyyy" }}</td>
-                        <td>{{ item.departure_date | date: "dd/MM/yyyy" }}</td>
-                        <td>{{ item.n_nights }}</td>
-                        <td>{{ item.total_cop | currency:'':'' }}</td>
-                        <td>{{ item.total_usd | currency:'':'' }}</td>
-                        <td>{{ item.state }}</td>
-                        <td>
-                            <div class="text-center">
-                                <div ngbDropdown class="dropdown-primary">
-                                    <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light"
-                                        type="button">
-                                        <i class="mdi mdi-chevron-down"></i>
-                                    </button>
-                                    <div ngbDropdownMenu>
-                                        <a [routerLink]="['/nomina/ver-viatico', item.id]"
-                                            class="dropdown-item waves-light waves-effect caja-botones">
-                                            <i class="far fa-eye"></i> Ver</a>
-                                        <a [routerLink]="['/nomina/editar-viatico', item.id]" class="
-                          dropdown-item
-                          waves-light
-                          text-info
-                          waves-effect
-                          caja-botones
-                        ">
-                                            <i class="far fa-edit"></i> Editar</a>
-                                        <a *ngIf="
-                          permission.permissions.approve && item.state != 'Aprobado'
-                        " (click)="changeState(item, 'Aprobado')" class="
-                          dropdown-item
-                          waves-light
-                          text-success
-                          waves-effect
-                          caja-botones
-                        ">
-                                            <i class="far fa-thumbs-up"></i> Aprobar</a>
-                                        <a *ngIf="
-                          permission.permissions.approve &&
-                          item.state == 'Aprobado'
-                        " [routerLink]="['legalizar', item.id]" routerLinkActive="router-link-active" class="
-                          dropdown-item
-                          waves-light
-                          text-success
-                          waves-effect
-                          caja-botones
-                        ">
-                                            <i class="far fa-thumbs-up"></i> Legalizar</a>
-                                        <a *ngIf="!item.state == ''" (click)="changeState(item, 'Inactivo')" class="
-                          dropdown-item
-                          waves-light
-                          text-danger
-                          waves-effect
-                          caja-botones
-                        ">
-                                            <i class="far fa-trash-alt"></i> Anular</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-            [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
-            (pageChange)="getAll($event)" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-            boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-        </ngb-pagination>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && data.length > 0; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Foto</th>
+          <th>Funcionario</th>
+          <th>Func. Creó</th>
+          <th>F. Creación</th>
+          <th>F. Salida</th>
+          <th># Días</th>
+          <th>Total COP</th>
+          <th>Total USD</th>
+          <th>Estado</th>
+          <th class="col-md-1">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of data"
+          class="text-center"
+          [ngClass]="{
+            'text-primary': item.state == 'Aprobado',
+            'text-danger': item.state == 'Inactivo'
+          }"
+        >
+          <td class="align-middle">
+            <img
+              onerror="this.src='../../../../assets/images/noprofile.png'"
+              class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
+              src="{{ item.person.image | image: 'users' }}"
+            />
+          </td>
+          <td class="align-middle">
+            {{ item.person.first_name | titlecase }}
+            {{ item.person.first_surname | titlecase }}
+          </td>
+          <td class="align-middle">
+            {{ item.user.person.first_name | titlecase }}
+            {{ item.user.person.first_surname | titlecase }}
+          </td>
+          <td class="align-middle">{{ item.created_at | date: "dd/MM/yyyy" }}</td>
+          <td class="align-middle">{{ item.departure_date | date: "dd/MM/yyyy" }}</td>
+          <td class="align-middle">{{ item.n_nights }}</td>
+          <td class="align-middle">{{ item.total_cop | currency: "":"" }}</td>
+          <td class="align-middle">{{ item.total_usd | currency: "":"" }}</td>
+          <td class="align-middle">{{ item.state }}</td>
+          <td class="align-middle">
+            <div class="text-center">
+              <div ngbDropdown class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-effect waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    [routerLink]="['/nomina/ver-viatico', item.id]"
+                    class="dropdown-item waves-light waves-effect caja-botones"
+                  >
+                    <i class="far fa-eye"></i> Ver</a
+                  >
+                  <a
+                    [routerLink]="['/nomina/editar-viatico', item.id]"
+                    class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  >
+                    <i class="far fa-edit"></i> Editar</a
+                  >
+                  <a
+                    *ngIf="
+                      permission.permissions.approve && item.state != 'Aprobado'
+                    "
+                    (click)="changeState(item, 'Aprobado')"
+                    class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  >
+                    <i class="far fa-thumbs-up"></i> Aprobar</a
+                  >
+                  <a
+                    *ngIf="
+                      permission.permissions.approve && item.state == 'Aprobado'
+                    "
+                    [routerLink]="['legalizar', item.id]"
+                    routerLinkActive="router-link-active"
+                    class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  >
+                    <i class="far fa-thumbs-up"></i> Legalizar</a
+                  >
+                  <a
+                    *ngIf="!item.state == ''"
+                    (click)="changeState(item, 'Inactivo')"
+                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular</a
+                  >
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      (pageChange)="getAll($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
 </div>
 
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

@@ -153,7 +153,7 @@ export class EpsComponent implements OnInit {
         err => {
           Swal.fire({
             title: 'Ooops!',
-            html: err.error.errors.code + '<br>' + err.error.errors.nit,
+            html: 'El NIT o el código ya existen',
             icon: 'error',
             allowOutsideClick: false,
             allowEscapeKey: false

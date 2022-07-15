@@ -1,22 +1,18 @@
 <div *ngIf="renderizar">
-    <div class="card">
-        <div class="card-body">
-            <div class="card-title d-flex justify-content-between">
-                <h4 class="text-primary">Historial de pagos</h4>
-            </div>
-            <hr class="line">
-            <div class="row" *ngIf="!historialPagos.length; else data">
-                <div class="col-12">
-                    <div class="alert alert-secondary">
-                        <p class="font-weight-bold">Aún no se ha realizado el primer pago de nómina, una vez hecho el
-                            pago
-                            podrá
-                            visualizar y filtrar el historial de pagos por periodo.</p>
-                    </div>
-                </div>
-            </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title d-flex justify-content-between">
+        <h4 class="text-primary">Historial de pagos</h4>
+      </div>
+      <hr class="line" />
+      <div *ngIf="!historialPagos.length; else data">
+        <div class="alert alert-warning" role="alert">
+          Aún no se ha realizado el primer pago de nómina, una vez hecho el pago
+          podrá visualizar y filtrar el historial de pagos por periodo.
         </div>
+      </div>
     </div>
+  </div>
 </div>
 <!-- 
     { "id": 1, "user_id": null, 
@@ -36,40 +32,55 @@
  -->
 
 <ng-template #data>
-    <div class="container mt-4" style="font-size: small;">
-        <table class="table table-bordered table-striped table-sm">
-            <thead>
-                <tr>
-                    <th>Periodo</th>
-                    <th>Salarios</th>
-                    <th>Retenciones</th>
-                    <th>Provisiones</th>
-                    <th>Seguridad social</th>
-                    <th>Parafiscales</th>
-                    <th>Costo total empresa</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let pago of historialPagos">
-                    <!--  {{ pago | json }} -->
-                    <td class="custom-label">
-                        <a [routerLink]="['/nomina/nomina']" [queryParams]="{
-                            inicio: pago.start_period,
-                            fin:    pago.end_period    
-                        }" class="btn btn-link p-0" (click)="redirectToNomina(pago)">
-                            {{ pago.start_period }} -
-                            {{ pago.end_period }}
-
-                        </a>
-                    </td>
-                    <td class="custom-label">{{pago.total_salaries | currency:'':''}}</td>
-                    <td class="custom-label">{{pago.total_retentions | currency:'':''}}</td>
-                    <td class="custom-label">{{pago.total_provisions | currency:'':''}}</td>
-                    <td class="custom-label">{{pago.total_social_secturity | currency:'':''}}</td>
-                    <td class="custom-label">{{pago.total_parafiscals | currency:'':''}}</td>
-                    <td class="custom-label">{{pago.total_cost | currency:'':''}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <table
+    class="table table-bordered table-striped table-sm table-responsive-sm"
+    style="font-size: small"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Periodo</th>
+        <th>Salarios</th>
+        <th>Retenciones</th>
+        <th>Provisiones</th>
+        <th>Seguridad social</th>
+        <th>Parafiscales</th>
+        <th>Costo total empresa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pago of historialPagos" class="text-center">
+        <!--  {{ pago | json }} -->
+        <td class="align-middle">
+          <a
+            [routerLink]="['/nomina/nomina']"
+            [queryParams]="{
+              inicio: pago.start_period,
+              fin: pago.end_period
+            }"
+            class="btn btn-link p-0"
+            (click)="redirectToNomina(pago)"
+          >
+            {{ pago.start_period }} -
+            {{ pago.end_period }}
+          </a>
+        </td>
+        <td class="align-middle">
+          {{ pago.total_salaries | currency: "":"" }}
+        </td>
+        <td class="align-middle">
+          {{ pago.total_retentions | currency: "":"" }}
+        </td>
+        <td class="align-middle">
+          {{ pago.total_provisions | currency: "":"" }}
+        </td>
+        <td class="align-middle">
+          {{ pago.total_social_secturity | currency: "":"" }}
+        </td>
+        <td class="align-middle">
+          {{ pago.total_parafiscals | currency: "":"" }}
+        </td>
+        <td class="align-middle">{{ pago.total_cost | currency: "":"" }}</td>
+      </tr>
+    </tbody>
+  </table>
 </ng-template>

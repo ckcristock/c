@@ -10,23 +10,23 @@ import { ActivatedRoute } from '@angular/router';
 export class VerApuServicioComponent implements OnInit {
 
   date: Date = new Date();
-  id:any;
-  data:any;
-  loading:boolean = false;
+  id: any;
+  data: any;
+  loading: boolean = false;
 
-  constructor( 
-                private _apuServicio: ApuServicioService,
-                private actRoute: ActivatedRoute
-             ) { }
+  constructor(
+    private _apuServicio: ApuServicioService,
+    private actRoute: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.params.id;
     this.getApuService();
   }
-  
-  getApuService(){
+
+  getApuService() {
     this.loading = true;
-    this._apuServicio.getApuService(this.id).subscribe((r:any) => {
+    this._apuServicio.getApuService(this.id).subscribe((r: any) => {
       this.data = r.data;
       this.loading = false;
     })

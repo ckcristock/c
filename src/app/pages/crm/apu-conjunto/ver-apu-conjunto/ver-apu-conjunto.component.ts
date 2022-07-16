@@ -10,23 +10,26 @@ import { ApuConjuntoService } from '../apu-conjunto.service';
 })
 export class VerApuConjuntoComponent implements OnInit {
   date: Date = new Date();
-  id:any;
-  data:any;
-  isData:boolean = false;
+  id: any;
+  data: any;
+  isData: boolean = false;
+  loading: boolean = false;
   constructor(
-              private _apuConjunto: ApuConjuntoService,
-              private actRoute: ActivatedRoute
-              ) { }
+    private _apuConjunto: ApuConjuntoService,
+    private actRoute: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.params.id;
     this.getApuPart();
   }
 
-  getApuPart(){
-    this._apuConjunto.getApuSet(this.id).subscribe((r:any) => {
+  getApuPart() {
+    this.loading = true;
+    this._apuConjunto.getApuSet(this.id).subscribe((r: any) => {
       this.data = r.data;
       this.isData = true;
+      this.loading = false;
     })
   }
 

@@ -81,7 +81,8 @@ export class TiposDocumentoComponent implements OnInit {
     this.form.patchValue({
       id: this.document.id,
       name: this.document.name,
-      code: this.document.code
+      code: this.document.code,
+      abbreviation: this.document.abbreviation
     });
   }
 
@@ -89,7 +90,8 @@ export class TiposDocumentoComponent implements OnInit {
     this.form = this.fb.group({
       id: [this.document.id],
       name: ['', this._reactiveValid.required],
-      code: ['', this._reactiveValid.required]
+      code: ['', this._reactiveValid.required],
+      abbreviation: ['', this._reactiveValid.required]
     })
   }
 
@@ -132,6 +134,7 @@ export class TiposDocumentoComponent implements OnInit {
     this._typesDocumentService.getDocuments(params)
       .subscribe((res: any) => {
         this.documents = res.data.data;
+        console.log(this.documents)
         this.pagination.collectionSize = res.data.total;
         this.loading = false;
       })
@@ -156,6 +159,10 @@ export class TiposDocumentoComponent implements OnInit {
 
   get code_invalid() {
     return this.form.get('code').invalid && this.form.get('code').touched;
+  }
+
+  get abbreviation_invalid() {
+    return this.form.get('abbreviation').invalid && this.form.get('abbreviation').touched;
   }
 
 }

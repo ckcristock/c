@@ -1,21 +1,17 @@
-<div class="mb-4" *ngIf="!loading">
-
+<div *ngIf="!loading">
   <div class="card">
     <div class="card-body">
       <div class="card-title">
-        <h4 class="t">PRESUPUESTO DE PROYECTO MAQUINADOS Y MONTAJES</h4>
+        <h4 class="text-primary">Nuevo Presupuesto</h4>
       </div>
-    </div>
-  </div>
-
-  <form [formGroup]="forma" (submit)="save()">
-    <div class="card">
-      <div class="card-body">
-        <!-- HEADER -->
+      <hr class="line" />
+      <form [formGroup]="forma" (submit)="save()">
         <div class="row">
           <div class="col-6">
             <div class="form-group row">
-              <label for="staticEmail" class="col-sm-2 col-form-label">Cliente</label>
+              <label for="staticEmail" class="col-sm-2 col-form-label"
+                >Cliente</label
+              >
               <!-- <div class="col-sm-10">
                 <ng-select [items]="custumer$ | async" bindLabel="text" bindValue="value" 
                 [loading]="custumerLoading" [typeahead]="custumerInput$" formControlName="customer_id"
@@ -23,39 +19,72 @@
                 ></ng-select>
               </div> -->
               <div class="col-sm-10">
-                <ng-select class="" bindLabel="text" [items]="clients" bindValue="value" loadingText="loading " ngDefaultControl formControlName="customer_id"></ng-select>
-            </div>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form-group row">
-              <label for="staticEmail" class="col-sm-2 col-form-label">Destino</label>
-              <div class="col-sm-10">
-                <ng-select [items]="cities" bindLabel="text" bindValue="value" formControlName="destinity_id"  ></ng-select>
+                <ng-select
+                  class=""
+                  bindLabel="text"
+                  [items]="clients"
+                  bindValue="value"
+                  loadingText="loading "
+                  ngDefaultControl
+                  formControlName="customer_id"
+                ></ng-select>
               </div>
             </div>
           </div>
           <div class="col-6">
             <div class="form-group row">
-              <label for="staticEmail" class="col-sm-2 col-form-label">Linea</label>
+              <label for="staticEmail" class="col-sm-2 col-form-label"
+                >Destino</label
+              >
               <div class="col-sm-10">
-                <input formControlName="line" type="text" class="form-control" />
+                <ng-select
+                  [items]="cities"
+                  bindLabel="text"
+                  bindValue="value"
+                  formControlName="destinity_id"
+                ></ng-select>
               </div>
             </div>
           </div>
           <div class="col-6">
             <div class="form-group row">
-              <label for="staticEmail" class="col-sm-2 col-form-label">TRM</label>
+              <label for="staticEmail" class="col-sm-2 col-form-label"
+                >Linea</label
+              >
               <div class="col-sm-10">
-                <input formControlName="trm" type="number" class="form-control" />
+                <input
+                  formControlName="line"
+                  type="text"
+                  class="form-control"
+                />
               </div>
             </div>
           </div>
           <div class="col-6">
             <div class="form-group row">
-              <label for="staticEmail" class="col-sm-2 col-form-label">Proyecto</label>
+              <label for="staticEmail" class="col-sm-2 col-form-label"
+                >TRM</label
+              >
               <div class="col-sm-10">
-                <input formControlName="project" type="text" class="form-control" />
+                <input
+                  formControlName="trm"
+                  type="number"
+                  class="form-control"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group row">
+              <label for="staticEmail" class="col-sm-2 col-form-label"
+                >Proyecto</label
+              >
+              <div class="col-sm-10">
+                <input
+                  formControlName="project"
+                  type="text"
+                  class="form-control"
+                />
               </div>
             </div>
           </div>
@@ -75,12 +104,17 @@
               </thead>
               <tbody class="bg-light">
                 <ng-container formArrayName="indirect_costs">
-                  <ng-container *ngFor="let item of indirecCostList.controls; let i = index">
+                  <ng-container
+                    *ngFor="let item of indirecCostList.controls; let i = index"
+                  >
                     <tr [formGroupName]="i">
                       <td>{{ item.controls.name.value }}</td>
                       <td>
-                        <input type="number" 
-                          class="form-control form-control-sm" formControlName="percentage" />
+                        <input
+                          type="number"
+                          class="form-control form-control-sm"
+                          formControlName="percentage"
+                        />
                       </td>
                     </tr>
                   </ng-container>
@@ -95,67 +129,77 @@
           <div class="col-12">
             <div class="form-group">
               <label for="staticEmail">Observaciones</label>
-              <textarea formControlName="observation" class="form-control" cols="100%" rows="3"></textarea>
+              <textarea
+                formControlName="observation"
+                class="form-control"
+                cols="100%"
+                rows="3"
+              ></textarea>
             </div>
           </div>
         </div>
-      </div>
+        <!-- ITEMS -->
+
+        <app-items
+          [forma]="forma"
+          [dataEdit]="dataEdit"
+          [indirectCosts]="indirectCosts"
+          [calculationBase]="calculationBase"
+        >
+        </app-items>
+
+        <div *ngIf="hasItems" class="col-12 card card-body">
+          <table class="table table-sm table-striped">
+            <thead>
+              <tr>
+                <th colspan="2" class="text-center">TOTAL PRESUPUESTO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>TOTAL COP $</td>
+                <td class="text-right" style="width: 90px">
+                  {{ total_cop | currency: "":"" }}
+                </td>
+              </tr>
+              <tr>
+                <td>TOTAL USD $</td>
+                <td class="text-right" style="width: 90px">
+                  {{ total_usd | currency: "":"" }}
+                </td>
+              </tr>
+              <tr>
+                <td>V/U VENTA PRORRATEADO COP $</td>
+                <td class="text-right" style="width: 90px">
+                  {{ unit_value_prorrateado_cop | currency: "":"" }}
+                </td>
+              </tr>
+              <tr>
+                <td>V/U VENTA PRORRATEADO USD $</td>
+                <td class="text-right" style="width: 90px">
+                  {{ unit_value_prorrateado_usd | currency: "":"" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- END ITEMS -->
+        <!--  -->
+        <div class="row">
+          <div class="col-12">
+            <button class="btn btn-block btn-sm btn-primary" type="submit">
+              Guardar
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
-    <!-- ITEMS -->
-
-    <app-items [forma]="forma" [dataEdit]="dataEdit" [indirectCosts]="indirectCosts" [calculationBase]="calculationBase">
-
-    </app-items>
-
-    <div *ngIf="hasItems" class="col-12 card card-body">
-      <table class="table table-sm table-striped">
-
-        <thead>
-          <tr>
-            <th colspan="2" class="text-center">TOTAL PRESUPUESTO</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>TOTAL COP $ </td>
-            <td class="text-right" style="width:90px"> {{total_cop | currency:'':''}}</td>
-          </tr>
-          <tr>
-            <td>TOTAL USD $ </td>
-            <td class="text-right" style="width:90px"> {{total_usd | currency:'':''}}</td>
-          </tr>
-          <tr>
-            <td>V/U VENTA PRORRATEADO COP $ </td>
-            <td class="text-right" style="width:90px"> {{unit_value_prorrateado_cop | currency:'':''}}</td>
-          </tr>
-          <tr>
-            <td>V/U VENTA PRORRATEADO USD $ </td>
-            <td class="text-right" style="width:90px"> {{unit_value_prorrateado_usd | currency:'':''}}</td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
-
-
-    <!-- END ITEMS -->
-    <!--  -->
-    <div class="row">
-      <div class="col-12">
-        <button class="btn btn-block btn-sm btn-primary" type="submit" >Guardar</button>
-      </div>
-    </div>
-  </form>
-
+  </div>
 </div>
 
-
 <ng-template #notData>
-  <div class="card col-12">
-    <div class="card-body">
-      <div class=" p-2  text-center">
-        <h5 class="text-dark">Sin datos agregados</h5>
-      </div>
-    </div>
+  <div class="alert alert-warning" role="alert">
+    ¡Aquí no hay datos!
   </div>
 </ng-template>

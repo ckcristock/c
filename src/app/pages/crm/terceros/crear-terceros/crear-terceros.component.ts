@@ -43,6 +43,7 @@ export class CrearTercerosComponent implements OnInit {
   show: boolean;
   address: any[] = [];
   accountPlan: any[] = [];
+  documentTypes: any[] = [];
   fields: any[] = [];
   newField: any = '';
   selected: any;
@@ -89,6 +90,7 @@ export class CrearTercerosComponent implements OnInit {
     this.getCiiuCodeLists();
     this.getDianAddress();
     this.getAccountPlan();
+    this.getTypeDocuments();
     this.getTitle();
     this.getFields();
   }
@@ -101,12 +103,13 @@ export class CrearTercerosComponent implements OnInit {
     this.form = this.fb.group({
       /* Inicia Datos Básicos */
       id: [''],
+      document_type: ['', this._validators.required],
       nit: ['', this._validators.required],
       person_type: ['', this._validators.required],
       third_party_type: ['', this._validators.required],
-      first_name: [''],
+      first_name: ['', this._validators.required],
       second_name: [''],
-      first_surname: [''],
+      first_surname: ['', this._validators.required],
       second_surname: [''],
       social_reason: ['', this._validators.required],
       tradename: [''],
@@ -216,12 +219,20 @@ export class CrearTercerosComponent implements OnInit {
       this.form.get('second_name').enable();
       this.form.get('first_surname').enable();
       this.form.get('second_surname').enable();
+      this.form.get('document_type').enable();
+      this.form.patchValue({
+        document_type: ''
+      })
     } else if (tipo == 'juridico') {
       this.form.get('first_name').disable();
       this.form.get('second_name').disable();
       this.form.get('first_surname').disable();
       this.form.get('second_surname').disable();
       this.form.get('social_reason').enable();
+      this.form.get('document_type').disable();
+      this.form.patchValue({
+        document_type: this.nitSelected
+      })
     }
   }
 
@@ -290,6 +301,28 @@ export class CrearTercerosComponent implements OnInit {
     this._terceros.getAccountPlan().subscribe((r: any) => {
       this.accountPlan = r.data;
     })
+  }
+  nitSelected: any;
+  getTypeDocuments() {
+    this._terceros.getTypeDocuments().subscribe((r: any) => {
+      this.documentTypes = r.data;
+      for(let i in this.documentTypes){
+        if(this.documentTypes[i].code == 31){
+          this.nitSelected = this.documentTypes[i].value
+        }
+      }
+    })
+  }
+
+  validarDV(){
+    if (this.nitSelected == this.form.get('document_type').value){
+      console.log(this.form.get('nit').value.length)
+      console.log('Validar dígito de verificación')
+      let valors = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71]
+      /* this.form.patchValue({
+        nit: this.form.get('nit').value + '-2'
+      }) */
+    }
   }
 
   searchAccount(tipo) {
@@ -364,6 +397,7 @@ export class CrearTercerosComponent implements OnInit {
       this.third = r.data;
       this.form.patchValue({
         id: this.third.id,
+        document_type: this.third.document_type,
         nit: this.third.nit,
         person_type: this.third.person_type,
         first_name: this.third.first_name,
@@ -434,6 +468,7 @@ export class CrearTercerosComponent implements OnInit {
           observation: third.observation
         }));
       });
+      this.personType();
     })
   }
 
@@ -562,6 +597,10 @@ export class CrearTercerosComponent implements OnInit {
     return this.form.get('nit').invalid && this.form.get('nit').touched
   }
 
+  get document_type_valid() {
+    return this.form.get('document_type').invalid && this.form.get('document_type').touched
+  }
+
   get person_type_valid() {
     return this.form.get('person_type').invalid && this.form.get('person_type').touched
   }
@@ -570,13 +609,13 @@ export class CrearTercerosComponent implements OnInit {
     return this.form.get('third_party_type').invalid && this.form.get('third_party_type').touched
   }
 
-  /* get first_name_valid() {
+  get first_name_valid() {
     return this.form.get('first_name').invalid && this.form.get('first_name').touched
   }
 
   get first_surname_valid() {
     return this.form.get('first_surname').invalid && this.form.get('first_surname').touched
-  } */
+  }
 
   get social_reason_valid() {
     return this.form.get('social_reason').invalid && this.form.get('social_reason').touched

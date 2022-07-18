@@ -69,4 +69,8 @@ export class TercerosService {
     return this.http.get(`${environment.base_url}/fields-third`);
   }
 
+  getTypeDocuments(){
+    return this.http.get(`${environment.base_url}/documentTypes`);
+  }
+
 }

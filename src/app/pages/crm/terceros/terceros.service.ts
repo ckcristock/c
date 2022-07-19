@@ -73,4 +73,16 @@ export class TercerosService {
     return this.http.get(`${environment.base_url}/documentTypes`);
   }
 
+  getRegimeType(){
+    return this.http.get(`${environment.base_url}/regime-type`);
+  }
+
+  getFiscalResponsibility(){
+    return this.http.get(`${environment.base_url}/fiscal-responsibility`);
+  }
+
+  getCiiuCodes(){
+    return this.http.get("assets/json/ciiu_codes.json")
+  }
+  
 }

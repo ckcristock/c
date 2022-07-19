@@ -329,19 +329,18 @@
           <ng-template matStepLabel>Datos financieros</ng-template>
           <div class="example-container">
             <div class="row">
-              <mat-form-field class="col-md-2" appearance="outline">
+              <!-- <mat-form-field class="col-md-2" appearance="outline">
                 <mat-label>Lista Ganancia</mat-label>
                 <mat-select formControlName="winning_list_id">
                   <mat-option *ngFor="let item of winnigLists" [value]="item.id"
                     >{{ item.name }} - {{ item.percentage }}%</mat-option
                   >
                 </mat-select>
-              </mat-form-field>
+              </mat-form-field> -->
               <mat-form-field class="col-md-2" appearance="outline">
-                <mat-label>¿Aplica IVA?</mat-label>
-                <mat-select formControlName="apply_iva">
-                  <mat-option value="Si">Sí</mat-option>
-                  <mat-option value="No">No</mat-option>
+                <mat-label>Tipo de régimen</mat-label>
+                <mat-select formControlName="regime">
+                  <mat-option *ngFor="let item of regimes" [value]="item.value">{{item.text}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field
@@ -383,11 +382,17 @@
                   Correo es <strong>inválido</strong>
                 </mat-error>
               </mat-form-field>
-              <mat-form-field class="col-md-2" appearance="outline">
+              <!-- <mat-form-field class="col-md-2" appearance="outline">
                 <mat-label>Tipo regimen</mat-label>
-                <mat-select formControlName="regime">
+                <mat-select formControlName="apply_iva">
                   <mat-option value="comun">Común</mat-option>
                   <mat-option value="simplificado">Simplificado</mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <mat-form-field class="col-md-2" appearance="outline">
+                <mat-label>Responsabilidad fiscal</mat-label>
+                <mat-select formControlName="fiscal_responsibility">
+                  <mat-option *ngFor="let item of fiscalResponsibility" [value]="item.value">{{item.code}} - {{item.text}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="col-md-2" appearance="outline">
@@ -489,13 +494,13 @@
                   readonly
                 />
               </mat-form-field>
-              <mat-form-field class="col-md-1" appearance="outline">
+              <!-- <mat-form-field class="col-md-1" appearance="outline">
                 <mat-label>G. Contrib.</mat-label>
                 <mat-select formControlName="g_contribut">
                   <mat-option value="Si">Sí</mat-option>
                   <mat-option value="No">No</mat-option>
                 </mat-select>
-              </mat-form-field>
+              </mat-form-field> -->
               <mat-form-field
                 class="col-lg-2 col-md-3 col-sm-4"
                 appearance="outline"
@@ -504,12 +509,12 @@
                 <input
                   matInput
                   type="text"
-                  placeholder="Ingrese cuenta reteica"
+                  placeholder="Ingrese cuenta reteiva"
                   [ngbTypeahead]="search"
                   [inputFormatter]="inputFormatListValue"
                   [resultFormatter]="resultFormatListValue"
-                  (change)="searchAccount('Reteica')"
-                  formControlName="reteica_account_id"
+                  (change)="searchAccount('Reteiva')"
+                  formControlName="reteiva_account_id"
                 />
               </mat-form-field>
               <mat-form-field

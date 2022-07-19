@@ -29,6 +29,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { TiposRegimenComponent } from "./tipos-regimen/tipos-regimen.component";
+import { ResponsabilidadesFiscalesComponent } from "./responsabilidades-fiscales/responsabilidades-fiscales.component";
 
 @NgModule({
     declarations : [
@@ -40,6 +42,8 @@ import { MatSelectModule } from '@angular/material/select';
         TiposNovedadesComponent, 
         TiposGlosaComponent, 
         TiposRetencionesComponent, 
+        TiposRegimenComponent, 
+        ResponsabilidadesFiscalesComponent,
         TiposEgresoComponent, 
         TiposIngresoComponent, 
         TiposEstadoFinancieroComponent,

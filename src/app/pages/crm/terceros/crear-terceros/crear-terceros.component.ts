@@ -40,10 +40,13 @@ export class CrearTercerosComponent implements OnInit {
   departments: any[] = [];
   winnigLists: any[] = [];
   ciiuCodes: any[] = [];
+  ciiuCodesJson: any[] = [];
   show: boolean;
   address: any[] = [];
   accountPlan: any[] = [];
   documentTypes: any[] = [];
+  regimes: any[] = [];
+  fiscalResponsibility: any[] = [];
   fields: any[] = [];
   newField: any = '';
   selected: any;
@@ -80,7 +83,9 @@ export class CrearTercerosComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) { }
 
-  ngOnInit(): void {
+  ciiu: any[] = [];
+  ngOnInit(): void {  
+    this.getCiiu();
     this.createForm();
     this.getZones();
     this.getDepartments();
@@ -93,7 +98,11 @@ export class CrearTercerosComponent implements OnInit {
     this.getTypeDocuments();
     this.getTitle();
     this.getFields();
+    this.getRegimeType();
+    this.getFiscalResponsibility();
   }
+
+  
 
   regresar() {
     this.location.back();
@@ -128,8 +137,8 @@ export class CrearTercerosComponent implements OnInit {
       image: [''],
       /* Termina Datos Básicos */
       /* Inicia Datos Comerciales */
-      winning_list_id: [''],
-      apply_iva: [''],
+      //winning_list_id: [''],
+      //apply_iva: [''],
       contact_payments: [''],
       phone_payments: [''],
       email_payments: ['', Validators.email],
@@ -143,11 +152,12 @@ export class CrearTercerosComponent implements OnInit {
       reteica_percentage: [0],
       retefuente_account_id: [''],
       retefuente_percentage: [0],
-      g_contribut: [''],
+      //g_contribut: [''],
       reteiva_account_id: [''],
       reteiva_percentage: [0],
       condition_payment: [''],
       assigned_space: [''],
+      fiscal_responsibility: [''],
       discount_prompt_payment: [''],
       discount_days: [''],
       state: ['', this._validators.required],
@@ -168,6 +178,18 @@ export class CrearTercerosComponent implements OnInit {
 
   resultFormatListValue(value: any) {
     return value.code;
+  }
+
+  getRegimeType(){
+    this._terceros.getRegimeType().subscribe((r: any) => {
+      this.regimes = r.data;
+    })
+  }
+
+  getFiscalResponsibility(){
+    this._terceros.getFiscalResponsibility().subscribe((r: any) => {
+      this.fiscalResponsibility = r.data;
+    })
   }
 
   search: OperatorFunction<string, readonly { code }[]> = (
@@ -220,9 +242,6 @@ export class CrearTercerosComponent implements OnInit {
       this.form.get('first_surname').enable();
       this.form.get('second_surname').enable();
       this.form.get('document_type').enable();
-      this.form.patchValue({
-        document_type: ''
-      })
     } else if (tipo == 'juridico') {
       this.form.get('first_name').disable();
       this.form.get('second_name').disable();
@@ -291,6 +310,27 @@ export class CrearTercerosComponent implements OnInit {
     })
   }
 
+  getCiiu() {
+    this._terceros.getCiiuCodes().subscribe((data:any) =>{
+      this.ciiuCodesJson = Object.keys(data).map(key => {
+        data[key]
+      });
+      console.log(this.ciiuCodesJson)
+      /* this.ciiuCodesJson = Object.entries(data);
+      for (let i = 0; i < this.ciiuCodesJson.length; i++){        
+        this.ciiu.push({
+          section: this.ciiuCodesJson[i][0] + ' - ' + this.ciiuCodesJson[i][1].titulo,          
+        })
+        for(let j = 0; j < this.ciiuCodesJson[i][1].divisiones; j++){
+          
+        }
+        //console.log(this.ciiu)
+      }
+      console.log(this.ciiu);
+      console.log(this.ciiuCodesJson);
+    }); */
+  })}
+
   getDianAddress() {
     this._terceros.getDianAddress().subscribe((r: any) => {
       this.address = r.data;
@@ -313,12 +353,22 @@ export class CrearTercerosComponent implements OnInit {
       }
     })
   }
-
-  validarDV(){
-    if (this.nitSelected == this.form.get('document_type').value){
-      console.log(this.form.get('nit').value.length)
-      console.log('Validar dígito de verificación')
-      let valors = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71]
+  dv:any;
+  validarDV(){    
+    if (this.nitSelected == this.form.get('document_type').value){      
+      let lengthNit = this.form.get('nit').value.length
+      const arrayOfDigits = Array.from(String(this.form.get('nit').value), Number);
+      console.log(arrayOfDigits)
+      let valors:Array<number> = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71]
+      let y: any;
+      let x = 0;
+      for (let i = 0; i < lengthNit; i++){
+        y = valors[i+1]
+        x += ( y * valors [lengthNit-i] ) ;
+      }
+      y = x % 11 ;
+      this.dv = ( y > 1 ) ? 11 - y : 1
+      //console.log(this.dv)
       /* this.form.patchValue({
         nit: this.form.get('nit').value + '-2'
       }) */
@@ -352,13 +402,13 @@ export class CrearTercerosComponent implements OnInit {
         this.form.get('retefuente_account_id').enable();
       }
     });
-    this.form.get('g_contribut').valueChanges.subscribe(value => {
+    /* this.form.get('g_contribut').valueChanges.subscribe(value => {
       if (value == 'Si') {
         this.form.get('reteiva_account_id').disable();
       } else {
         this.form.get('reteiva_account_id').enable();
       }
-    });
+    }); */
     this.form.get('dian_address').valueChanges.subscribe(value => {
       this.addressConcat();
     });
@@ -418,8 +468,8 @@ export class CrearTercerosComponent implements OnInit {
         zone_id: this.third.zone_id,
         department_id: this.third.department_id,
         municipality_id: this.third.municipality_id,
-        winning_list_id: this.third.winning_list_id,
-        apply_iva: this.third.apply_iva,
+        //winning_list_id: this.third.winning_list_id,
+        //apply_iva: this.third.apply_iva,
         contact_payments: this.third.contact_payments,
         phone_payments: this.third.phone_payments,
         email_payments: this.third.email_payments,
@@ -431,10 +481,11 @@ export class CrearTercerosComponent implements OnInit {
         reteica_type: this.third.reteica_type,
         reteica_account_id: this.third.reteica_account_id,
         retefuente_account_id: this.third.retefuente_account_id,
-        g_contribut: this.third.g_contribut,
+        //g_contribut: this.third.g_contribut,
         reteiva_account_id: this.third.reteiva_account_id,
         condition_payment: this.third.condition_payment,
         assigned_space: this.third.assigned_space,
+        fiscal_responsibility: this.third.fiscal_responsibility,
         discount_prompt_payment: this.third.discount_prompt_payment,
         discount_days: this.third.discount_days,
         state: this.third.state,

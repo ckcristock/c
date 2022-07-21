@@ -1,3 +1,4 @@
+
 <div class="card">
   <!-- <div class="row mb-4">
         <div class="col text-left">
@@ -19,7 +20,10 @@
           <ng-template matStepLabel>Datos básicos</ng-template>
           <mat-form-field class="col-md-2" appearance="outline">
             <mat-label>Tipo de persona</mat-label>
-            <mat-select formControlName="person_type" (selectionChange)="personType()">
+            <mat-select
+              formControlName="person_type"
+              (selectionChange)="personType()"
+            >
               <mat-option value="natural">Natural</mat-option>
               <mat-option value="juridico">Jurídico</mat-option>
             </mat-select>
@@ -29,24 +33,28 @@
           </mat-form-field>
           <mat-form-field class="col-md-2" appearance="outline">
             <mat-label>Tipo de documento</mat-label>
-            <mat-select formControlName="document_type" (selectionChange)="personType()">
-              <mat-option *ngFor="let item of documentTypes" [value]="item.value">{{item.code}} - {{item.text}}</mat-option>
+            <mat-select
+              formControlName="document_type"
+              (selectionChange)="personType()"
+            >
+              <mat-option
+                *ngFor="let item of documentTypes"
+                [value]="item.value"
+                >{{ item.code }} - {{ item.text }}</mat-option
+              >
             </mat-select>
             <mat-error *ngIf="document_type_valid">
               Campo <strong>obligatorio</strong>
             </mat-error>
           </mat-form-field>
-          <mat-form-field
-            class="col-md-2"
-            appearance="outline"
-          >
+          <mat-form-field class="col-md-2" appearance="outline">
             <mat-label>Identificación</mat-label>
             <input
               type="text"
               matInput
               formControlName="nit"
               autocomplete="off"
-              (change)="validarDV()"
+              (change)="validarDV($event.target.value)"
               placeholder="Ingresa el número de identificación"
             />
             <mat-error *ngIf="nit_valid">
@@ -149,7 +157,7 @@
               >Imagen cargada</small
             >
           </mat-form-field>
-          
+
           <mat-form-field class="col-md-3" appearance="outline">
             <mat-label>Nombre comercial</mat-label>
             <input
@@ -340,7 +348,11 @@
               <mat-form-field class="col-md-2" appearance="outline">
                 <mat-label>Tipo de régimen</mat-label>
                 <mat-select formControlName="regime">
-                  <mat-option *ngFor="let item of regimes" [value]="item.value">{{item.text}}</mat-option>
+                  <mat-option
+                    *ngFor="let item of regimes"
+                    [value]="item.value"
+                    >{{ item.text }}</mat-option
+                  >
                 </mat-select>
               </mat-form-field>
               <mat-form-field
@@ -392,7 +404,11 @@
               <mat-form-field class="col-md-2" appearance="outline">
                 <mat-label>Responsabilidad fiscal</mat-label>
                 <mat-select formControlName="fiscal_responsibility">
-                  <mat-option *ngFor="let item of fiscalResponsibility" [value]="item.value">{{item.code}} - {{item.text}}</mat-option>
+                  <mat-option
+                    *ngFor="let item of fiscalResponsibility"
+                    [value]="item.value"
+                    >{{ item.code }} - {{ item.text }}</mat-option
+                  >
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="col-md-2" appearance="outline">
@@ -402,14 +418,30 @@
                   <mat-option value="No">No</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field class="col-md-4" appearance="outline">
+              <div class="col-md-4">
+                <ng-select
+                  [items]="ciiuCodes"
+                  bindLabel="text"
+                  bindValue="value"
+                  groupBy="title"
+                  placeholder="Actividad económica"
+                  formControlName="ciiu_code_id"
+                  class="mt-1"
+                  [appendTo]="'body'"
+                >
+                </ng-select>
+                <small>Actividad económica</small>
+              </div>
+              <!-- <mat-form-field class="col-md-4" appearance="outline">
                 <mat-label>Actividad económica</mat-label>
                 <mat-select formControlName="ciiu_code_id">
-                  <mat-option *ngFor="let item of ciiuCodes" [value]="item.id"
-                    >{{ item.code }} - {{ item.description }}</mat-option
+                  <mat-option
+                    *ngFor="let item of jsonCiiu"
+                    [value]="item.value"
+                    >{{ item.text }}</mat-option
                   >
                 </mat-select>
-              </mat-form-field>
+              </mat-form-field> -->
               <mat-form-field class="col-md-2" appearance="outline">
                 <mat-label>Agente de retención</mat-label>
                 <mat-select formControlName="withholding_agent">

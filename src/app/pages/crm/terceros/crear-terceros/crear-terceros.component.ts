@@ -29,7 +29,7 @@ export class CrearTercerosComponent implements OnInit {
   goForward() {
     this.stepper.next();
   }
-  
+
   form: FormGroup;
   date: Date = new Date();
   id: number;
@@ -72,6 +72,7 @@ export class CrearTercerosComponent implements OnInit {
   typeRut: any = '';
   typeImage: any = '';
   field: any;
+  searchActividad: any
   constructor(
     private location: Location,
     private fb: FormBuilder,
@@ -84,8 +85,8 @@ export class CrearTercerosComponent implements OnInit {
   ) { }
 
   ciiu: any[] = [];
-  ngOnInit(): void {  
-    this.getCiiu();
+  ngOnInit(): void {
+    //this.getCiiu();
     this.createForm();
     this.getZones();
     this.getDepartments();
@@ -102,7 +103,7 @@ export class CrearTercerosComponent implements OnInit {
     this.getFiscalResponsibility();
   }
 
-  
+
 
   regresar() {
     this.location.back();
@@ -180,13 +181,13 @@ export class CrearTercerosComponent implements OnInit {
     return value.code;
   }
 
-  getRegimeType(){
+  getRegimeType() {
     this._terceros.getRegimeType().subscribe((r: any) => {
       this.regimes = r.data;
     })
   }
 
-  getFiscalResponsibility(){
+  getFiscalResponsibility() {
     this._terceros.getFiscalResponsibility().subscribe((r: any) => {
       this.fiscalResponsibility = r.data;
     })
@@ -307,29 +308,33 @@ export class CrearTercerosComponent implements OnInit {
   getCiiuCodeLists() {
     this._terceros.getCiiuCodesList().subscribe((r: any) => {
       this.ciiuCodes = r.data;
+      console.log(this.ciiuCodes)
     })
   }
-
+  jsonCiiu: any[] = []
   getCiiu() {
-    this._terceros.getCiiuCodes().subscribe((data:any) =>{
-      this.ciiuCodesJson = Object.keys(data).map(key => {
-        data[key]
-      });
-      console.log(this.ciiuCodesJson)
-      /* this.ciiuCodesJson = Object.entries(data);
-      for (let i = 0; i < this.ciiuCodesJson.length; i++){        
-        this.ciiu.push({
-          section: this.ciiuCodesJson[i][0] + ' - ' + this.ciiuCodesJson[i][1].titulo,          
-        })
-        for(let j = 0; j < this.ciiuCodesJson[i][1].divisiones; j++){
-          
+    this._terceros.getCiiuCodes().subscribe((data: any) => {
+      this.ciiuCodesJson = Object.entries(data);
+      for (let i in this.ciiuCodesJson) {
+        let aux: any[] = Object.entries(this.ciiuCodesJson[i][1].divisiones)
+        for (let j in aux) {
+          let aux2: any[] = Object.entries(aux[j][1].subdivisiones)
+          for (let k in aux2) {
+            let aux3: any[] = Object.entries(aux2[k][1].actividades)
+            for (let l in aux3) {
+              this.jsonCiiu.push({
+                title: aux[j][1].titulo,
+                subtitle: aux2[k][1].titulo,
+                value: Number(aux3[l][0]),
+                text: aux3[l][0] + ' - ' + aux3[l][1]
+              })
+            }
+          }
         }
-        //console.log(this.ciiu)
       }
-      console.log(this.ciiu);
-      console.log(this.ciiuCodesJson);
-    }); */
-  })}
+      //console.log(this.jsonCiiu)
+    })
+  }
 
   getDianAddress() {
     this._terceros.getDianAddress().subscribe((r: any) => {
@@ -346,32 +351,50 @@ export class CrearTercerosComponent implements OnInit {
   getTypeDocuments() {
     this._terceros.getTypeDocuments().subscribe((r: any) => {
       this.documentTypes = r.data;
-      for(let i in this.documentTypes){
-        if(this.documentTypes[i].code == 31){
+      for (let i in this.documentTypes) {
+        if (this.documentTypes[i].code == 31) {
           this.nitSelected = this.documentTypes[i].value
         }
       }
     })
   }
-  dv:any;
-  validarDV(){    
-    if (this.nitSelected == this.form.get('document_type').value){      
-      let lengthNit = this.form.get('nit').value.length
-      const arrayOfDigits = Array.from(String(this.form.get('nit').value), Number);
-      console.log(arrayOfDigits)
-      let valors:Array<number> = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71]
-      let y: any;
-      let x = 0;
-      for (let i = 0; i < lengthNit; i++){
-        y = valors[i+1]
-        x += ( y * valors [lengthNit-i] ) ;
+  dv: any;
+  validarDV(myNit) {
+    if (this.nitSelected == this.form.get('document_type').value) {
+      var vpri, x, y, z;
+      myNit = myNit.replace(/\s/g, ""); 
+      myNit = myNit.replace(/,/g, "");
+      myNit = myNit.replace(/\./g, "");
+      myNit = myNit.replace(/-/g, "");
+      vpri = new Array(16);
+      z = myNit.length;
+      vpri[1] = 3;
+      vpri[2] = 7;
+      vpri[3] = 13;
+      vpri[4] = 17;
+      vpri[5] = 19;
+      vpri[6] = 23;
+      vpri[7] = 29;
+      vpri[8] = 37;
+      vpri[9] = 41;
+      vpri[10] = 43;
+      vpri[11] = 47;
+      vpri[12] = 53;
+      vpri[13] = 59;
+      vpri[14] = 67;
+      vpri[15] = 71;
+      x = 0;
+      y = 0;
+      for (var i = 0; i < z; i++) {
+        y = (myNit.substr(i, 1));
+        x += (y * vpri[z - i]);
       }
-      y = x % 11 ;
-      this.dv = ( y > 1 ) ? 11 - y : 1
-      //console.log(this.dv)
-      /* this.form.patchValue({
-        nit: this.form.get('nit').value + '-2'
-      }) */
+      y = x % 11;
+      console.log((y > 1) ? 11 - y : y);
+      this.dv = (y > 1) ? 11 - y : y;
+      this.form.patchValue({
+        nit: this.form.get('nit').value + '-' + this.dv
+      }) 
     }
   }
 
@@ -524,10 +547,10 @@ export class CrearTercerosComponent implements OnInit {
   }
 
   //subir archivos
-  
+
   fileAttr = 'Selecciona foto';
   //fin subir archivos
-  onFileChanged(event) {    
+  onFileChanged(event) {
     if (event.target.files[0]) {
       this.previsualizacionFoto = this.sanitizer.bypassSecurityTrustUrl(
         window.URL.createObjectURL(event.target.files[0])
@@ -684,9 +707,9 @@ export class CrearTercerosComponent implements OnInit {
     return this.form.get('dian_address').invalid && this.form.get('dian_address').touched
   }
 
- /*  get cell_phone_valid() {
-    return this.form.get('cell_phone').invalid && this.form.get('cell_phone').touched
-  } */
+  /*  get cell_phone_valid() {
+     return this.form.get('cell_phone').invalid && this.form.get('cell_phone').touched
+   } */
 
   get landline_valid() {
     return this.form.get('landline').invalid && this.form.get('landline').touched

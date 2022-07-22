@@ -33,14 +33,14 @@
           class="col-md-2 pl-0"
           appearance="outline"
         >
-          <mat-label>Razón social</mat-label>
+          <mat-label>R.S/Nombre</mat-label>
           <input
             type="text"
             matInput
             name="name"
             [(ngModel)]="filtros.name"
             autocomplete="off"
-            placeholder="Busca por razón social"
+            placeholder="Busca por R.S/Nombre"
             (input)="getThirdParties()"
           />
         </mat-form-field>
@@ -48,14 +48,14 @@
           class="col-md-1 pl-0"
           appearance="outline"
         >
-          <mat-label>NIT</mat-label>
+          <mat-label>Documento</mat-label>
           <input
             type="text"
             matInput
             name="nit"
             [(ngModel)]="filtros.nit"
             autocomplete="off"
-            placeholder="Busca por NIT"
+            placeholder="Busca por documento"
             (input)="getThirdParties()"
           />
         </mat-form-field>        
@@ -141,10 +141,10 @@
             >Foto</mat-checkbox
           >
           <mat-checkbox color="primary" [(ngModel)]="checkNombre"
-            >Razón social</mat-checkbox
+            >R.S/Nombre</mat-checkbox
           >
           <mat-checkbox color="primary" [(ngModel)]="checkNIT"
-            >NIT</mat-checkbox
+            >Documento</mat-checkbox
           >          
           <mat-checkbox color="primary" [(ngModel)]="checkDireccion"
             >Dirección</mat-checkbox
@@ -175,8 +175,8 @@
       <thead class="bg-light">
         <tr class="text-center text-uppercase">
           <th *ngIf="checkFoto">Foto</th>
-          <th *ngIf="checkNombre">Razón social</th>
-          <th *ngIf="checkNIT">NIT</th>          
+          <th *ngIf="checkNombre">R.S/Nombre</th>
+          <th *ngIf="checkNIT">Documento</th>          
           <th *ngIf="checkDireccion">Dirección</th>
           <th *ngIf="checkMunicipio">Ciudad</th>
           <th *ngIf="checkTelefono">Teléfono</th>
@@ -204,7 +204,7 @@
             </div>
           </td>
           <td class="align-middle" *ngIf="checkNombre">
-            {{third.social_reason}}
+            {{third.name}}
           </td>
           <td class="align-middle" *ngIf="checkNIT">{{ third.nit }}</td>          
           <td class="align-middle" *ngIf="checkDireccion">

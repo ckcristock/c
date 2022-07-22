@@ -23,36 +23,36 @@ export class TercerosComponent implements OnInit {
   @ViewChild('firstAccordion') firstAccordion: MatAccordion;
   @ViewChild('secondAccordion') secondAccordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.firstAccordion.openAll();
       this.matPanel = true;
     } else {
       this.firstAccordion.closeAll();
       this.matPanel = false;
-    }    
+    }
   }
   matPanel2 = false;
-  openClose2(){
-    if (this.matPanel2 == false){
+  openClose2() {
+    if (this.matPanel2 == false) {
       this.secondAccordion.openAll();
       this.matPanel2 = true;
     } else {
       this.secondAccordion.closeAll();
       this.matPanel2 = false;
-    }    
+    }
   }
   panelOpenState = false;
-  form:FormGroup;
-  parametro:string = '';
-  loading:boolean = false;
-  thirdParties:any[] = [];
-  pagination:any = {
+  form: FormGroup;
+  parametro: string = '';
+  loading: boolean = false;
+  thirdParties: any[] = [];
+  pagination: any = {
     page: 1,
     pageSize: 10,
     collectionSize: 0
   }
-  filtros:any = {
+  filtros: any = {
     nit: '',
     name: '',
     third_party_type: '',
@@ -61,23 +61,23 @@ export class TercerosComponent implements OnInit {
     municipio: '',
     phone: ''
   }
-  constructor( 
-                private _tercerosService: TercerosService, private fb: FormBuilder,
-                public router: Router,
-                private _swal: SwalService
-              ) { }
+  constructor(
+    private _tercerosService: TercerosService, private fb: FormBuilder,
+    public router: Router,
+    private _swal: SwalService
+  ) { }
 
   ngOnInit(): void {
     this.getThirdParties();
   }
 
-  getThirdParties(page = 1){
+  getThirdParties(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtros
     }
     this.loading = true;
-    this._tercerosService.getThirdParties(params).subscribe((r:any) => {
+    this._tercerosService.getThirdParties(params).subscribe((r: any) => {
       this.thirdParties = r.data.data;
       console.log(this.thirdParties)
       this.pagination.collectionSize = r.data.total;
@@ -85,7 +85,7 @@ export class TercerosComponent implements OnInit {
     });
   }
 
-  changeState(third, state){
+  changeState(third, state) {
     let data = {
       id: third.id,
       state
@@ -93,17 +93,17 @@ export class TercerosComponent implements OnInit {
     this._swal.show({
       icon: 'question',
       title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? '¡El Tercero se Anulará!': '¡El Tercero se Activará!')
-    }).then((r) =>{
+      text: (data.state == 'Inactivo' ? '¡El Tercero se Anulará!' : '¡El Tercero se Activará!')
+    }).then((r) => {
       if (r.isConfirmed) {
-        this._tercerosService.changeState(data).subscribe((r:any) =>{
-        this.getThirdParties();
-        this._swal.show({
+        this._tercerosService.changeState(data).subscribe((r: any) => {
+          this.getThirdParties();
+          this._swal.show({
             icon: 'success',
             title: 'Proceso Satisfactio',
             text: (data.state == 'Inactivo' ? 'El tercero ha sido Anulado.' : 'El tercero ha sido Activado.'),
             showCancel: false
-        }); 
+          });
         });
       }
     });

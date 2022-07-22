@@ -80,8 +80,8 @@ export class CiudadesComponent implements OnInit {
       id: [this.city.id],
       name: ['', Validators.required],
       country_id: ['', Validators.required],
-      percentage_product: [''],
-      percentage_service: ['']
+      percentage_product: ['', Validators.required],
+      percentage_service: ['', Validators.required]
     });
   }
 

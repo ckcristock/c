@@ -1,31 +1,60 @@
-//
-// Select 2
-//
-@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~@ng-select/ng-select/themes/material.theme.css";
+
 .ng-select.ng-select-single .ng-select-container {
-    height: $input-height-sm !important;
-}
-.ng-select.custom {
-    min-height: $input-height !important;
-}
-.ng-select.custom .ng-select-container  {            
-    min-height: $input-height !important;
+    height: 40px !important;
+    font-size: 0.8em;
 }
 
-.ng-select .ng-select-container {
-    border: $input-border-width solid $input-border-color !important;
+.ng-select .ng-select-container.ng-appearance-outline {
+    padding: 0 0.5em;
+    min-height: 40px;
 }
+
+.ng-select.ng-select-single .ng-select-container.ng-appearance-outline .ng-arrow-wrapper {
+    bottom: 9px;
+}
+
+.ng-select.ng-select-single .ng-select-container.ng-appearance-outline .ng-clear-wrapper {
+    bottom: 7px;
+}
+
+.ng-select {
+    font-family: inherit;
+        /* padding-bottom: 1.3em !important;
+  padding-left: 0.9em !important;
+  padding-right: 0.9em !important; */
+        display: inline !important;
+}
+
+/* .ng-select {
+    height:5px;
+    font-size: 0.8em;
+}
+
+.ng-select .ng-select-container  {
+    height:5px;
+} */
+
+/* .ng-select .ng-select-container {
+  border: $input-border-width solid $input-border-color !important;
+} */
+
+/* .ng-dropdown-panel {
+  box-shadow: $box-shadow;
+  border: none !important;
+  z-index: 99 !important;
+} */
 
 .ng-dropdown-panel {
-    box-shadow: $box-shadow;
-    border: none !important;
-    z-index: 99 !important;
+    padding: 0;
+    top: top -35px;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked,
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
-    background-color: $gray-200 !important;
+    background-color: $gray-200  !important;
+
 }
 
 .ng-select {
@@ -41,22 +70,53 @@
     color: $white;
 }
 
+.ng-select {
+    .ng-select-container {
+        background-color: $input-bg  !important;
+        color: $input-color  !important;
+
+        input {
+            color: $input-color  !important;
+        }
+    }
+
+    .ng-dropdown-panel {
+        .ng-option {
+            background-color: $input-bg  !important;
+            color: $input-color  !important;
+
+            &.ng-option-marked {
+                background-color: $primary  !important;
+                color: $white  !important;
+            }
+        }
+    }
+}
+
+
+
+
 .select2-container {
+
     .select2-selection--single {
         background-color: $input-bg;
         border: 1px solid $input-border-color;
         height: 38px;
+
         &:focus {
             outline: none;
         }
+
         .select2-selection__rendered {
             line-height: 36px;
             padding-left: 12px;
         }
+
         .select2-selection__arrow {
             height: 34px;
             width: 34px;
             right: 3px;
+
             b {
                 border-color: $gray-500 transparent transparent transparent;
                 border-width: 6px 6px 0 6px;
@@ -67,7 +127,9 @@
 
 .select2-container--open {
     .select2-selection--single {
+
         .select2-selection__arrow {
+
             b {
                 border-color: transparent transparent $gray-500 transparent !important;
                 border-width: 0 6px 6px 6px !important;
@@ -80,6 +142,7 @@
     .select2-search--dropdown {
         padding: 10px;
         background-color: $dropdown-bg;
+
         .select2-search__field {
             border: 1px solid $input-border-color;
             background-color: $input-bg;
@@ -87,12 +150,15 @@
             outline: none;
         }
     }
+
     .select2-results__option--highlighted[aria-selected] {
         background-color: $primary;
     }
+
     .select2-results__option[aria-selected=true] {
         background-color: $dropdown-link-active-bg;
         color: $dropdown-link-active-color;
+
         &:hover {
             background-color: $primary;
             color: $white;
@@ -120,14 +186,17 @@
     .select2-selection--multiple {
         min-height: 38px;
         background-color: $input-bg;
-        border: 1px solid $input-border-color !important;
+        border: 1px solid $input-border-color  !important;
+
         .select2-selection__rendered {
             padding: 2px 10px;
         }
+
         .select2-search__field {
             margin-top: 7px;
             border: 0;
         }
+
         .select2-selection__choice {
             background-color: $gray-200;
             border: 1px solid $gray-300;
@@ -141,26 +210,6 @@
     &.select2-container--focus {
         .select2-selection--multiple {
             border-color: $gray-400;
-        }
-    }
-}
-
-.ng-select {
-    .ng-select-container {
-        background-color: $input-bg !important;
-        color: $input-color !important;
-        input {
-            color: $input-color !important;
-        }
-    }
-    .ng-dropdown-panel {
-        .ng-option {
-            background-color: $input-bg !important;
-            color: $input-color !important;
-            &.ng-option-marked {
-                background-color: $primary !important;
-                color: $white !important;
-            }
         }
     }
 }

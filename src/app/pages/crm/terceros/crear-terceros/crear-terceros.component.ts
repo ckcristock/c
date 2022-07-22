@@ -31,12 +31,14 @@ export class CrearTercerosComponent implements OnInit {
   }
 
   form: FormGroup;
+  //floatLabelControl = new FormControl('nacional');
   date: Date = new Date();
   id: number;
   third: any;
   zones: any[] = [];
   title: string = '';
   municipalities: any[] = [];
+  countries: any[] = [];
   departments: any[] = [];
   winnigLists: any[] = [];
   ciiuCodes: any[] = [];
@@ -90,7 +92,8 @@ export class CrearTercerosComponent implements OnInit {
     this.createForm();
     this.getZones();
     this.getDepartments();
-    this.getMunicipalitites();
+    //this.getMunicipalitites();
+    this.getCountries();
     this.id = this.actRoute.snapshot.params.id;
     this.getWinningLists();
     this.getCiiuCodeLists();
@@ -101,6 +104,7 @@ export class CrearTercerosComponent implements OnInit {
     this.getFields();
     this.getRegimeType();
     this.getFiscalResponsibility();
+    
   }
 
 
@@ -113,6 +117,7 @@ export class CrearTercerosComponent implements OnInit {
     this.form = this.fb.group({
       /* Inicia Datos Básicos */
       id: [''],
+      location: ['', this._validators.required],
       document_type: ['', this._validators.required],
       nit: ['', this._validators.required],
       person_type: ['', this._validators.required],
@@ -135,6 +140,8 @@ export class CrearTercerosComponent implements OnInit {
       zone_id: [''],
       department_id: [''],
       municipality_id: ['', this._validators.required],
+      country_id: ['', this._validators.required],
+      city_id: ['', this._validators.required],
       image: [''],
       /* Termina Datos Básicos */
       /* Inicia Datos Comerciales */
@@ -145,7 +152,7 @@ export class CrearTercerosComponent implements OnInit {
       email_payments: ['', Validators.email],
       regime: [''],
       encourage_profit: [''],
-      ciiu_code_id: [''],
+      ciiu_code_id: [],
       withholding_agent: [''],
       withholding_oninvoice: [''],
       reteica_type: [''],
@@ -234,6 +241,41 @@ export class CrearTercerosComponent implements OnInit {
     person.removeAt(i);
   }
 
+  locationCountry(){
+    if (this.form.get('country_id').value == this.getColombia){
+      this.form.patchValue({
+        location: 'nacional'
+      })
+      this.form.get('municipality_id').enable();
+      this.form.get('department_id').enable();
+      this.form.get('city_id').disable();
+    } else {
+      this.form.patchValue({
+        location: 'internacional'
+      })
+      this.form.get('municipality_id').disable();
+      this.form.get('department_id').disable();
+      this.form.get('city_id').enable();
+    }
+  }
+  cities: any;
+  getCities(){
+    this._terceros.getCities(this.form.value.country_id).subscribe((r: any) => {
+      this.cities = r.data;
+    })
+  }
+  
+  locationThird(){
+    if (this.form.get('location').value == 'nacional') {
+      this.form.patchValue({
+        country_id: this.getColombia
+      })
+      this.form.get('country_id').disable();
+    } else {
+      this.form.get('country_id').enable();
+    }    
+  }
+
   personType() {
     let tipo = this.form.get('person_type').value;
     if (tipo == 'natural') {
@@ -242,14 +284,12 @@ export class CrearTercerosComponent implements OnInit {
       this.form.get('second_name').enable();
       this.form.get('first_surname').enable();
       this.form.get('second_surname').enable();
-      this.form.get('document_type').enable();
     } else if (tipo == 'juridico') {
       this.form.get('first_name').disable();
       this.form.get('second_name').disable();
       this.form.get('first_surname').disable();
       this.form.get('second_surname').disable();
       this.form.get('social_reason').enable();
-      this.form.get('document_type').disable();
       this.form.patchValue({
         document_type: this.nitSelected
       })
@@ -292,9 +332,25 @@ export class CrearTercerosComponent implements OnInit {
       this.departments = r.data;
     })
   }
+  getColombia: any
+  getCountries() {
+    this._terceros.getCountries().subscribe((r: any) => {
+      this.countries = r.data;
+      for (let i in this.countries) {
+        if (this.countries[i].text == 'Colombia') {
+          this.getColombia = this.countries[i].value
+        }
+      }
+      this.form.patchValue({
+        country_id: this.getColombia
+      });
+      this.locationCountry()      
+      //console.log(this.getColombia)
+    })
+  }
 
   getMunicipalitites() {
-    this._terceros.getMunicipalities().subscribe((r: any) => {
+    this._terceros.getMunicipalities(this.form.get('department_id').value).subscribe((r: any) => {
       this.municipalities = r.data;
     })
   }
@@ -470,6 +526,7 @@ export class CrearTercerosComponent implements OnInit {
       this.third = r.data;
       this.form.patchValue({
         id: this.third.id,
+        location: this.third.location,
         document_type: this.third.document_type,
         nit: this.third.nit,
         person_type: this.third.person_type,
@@ -491,6 +548,8 @@ export class CrearTercerosComponent implements OnInit {
         zone_id: this.third.zone_id,
         department_id: this.third.department_id,
         municipality_id: this.third.municipality_id,
+        country_id: this.third.country_id,
+        city_id: this.third.city_id,
         //winning_list_id: this.third.winning_list_id,
         //apply_iva: this.third.apply_iva,
         contact_payments: this.third.contact_payments,
@@ -543,6 +602,9 @@ export class CrearTercerosComponent implements OnInit {
         }));
       });
       this.personType();
+      this.locationCountry();
+      this.getCities();
+      this.getMunicipalitites();
     })
   }
 
@@ -671,8 +733,20 @@ export class CrearTercerosComponent implements OnInit {
     return this.form.get('nit').invalid && this.form.get('nit').touched
   }
 
+  get location_valid() {
+    return this.form.get('location').invalid && this.form.get('location').touched
+  }
+
   get document_type_valid() {
     return this.form.get('document_type').invalid && this.form.get('document_type').touched
+  }
+
+  get country_valid() {
+    return this.form.get('country_id').invalid && this.form.get('country_id').touched
+  }
+  
+  get city_valid() {
+    return this.form.get('city_id').invalid && this.form.get('city_id').touched
   }
 
   get person_type_valid() {

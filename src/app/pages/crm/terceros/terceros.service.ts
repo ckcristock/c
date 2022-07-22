@@ -17,8 +17,8 @@ export class TercerosService {
     return this.http.get(`${environment.base_url}/departments`);
   }
 
-  getMunicipalities(){
-    return this.http.get(`${environment.base_url}/all-municipalities`);
+  getMunicipalities( id ){
+    return this.http.get(`${environment.base_url}/municipalities-for-dep/${id}`);
   }
 
   saveInformation( data:any ){
@@ -79,6 +79,14 @@ export class TercerosService {
 
   getFiscalResponsibility(){
     return this.http.get(`${environment.base_url}/fiscal-responsibility`);
+  }
+
+  getCountries(){
+    return this.http.get(`${environment.base_url}/countries`);
+  }
+
+  getCities(idCountry){
+    return this.http.get(`${environment.base_url}/citiesCountry/${idCountry}`);
   }
 
   getCiiuCodes(){

@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class TableNegociosComponent implements OnInit {
 
   @Input("negocios") negocios:any[]
-  @Input("loagind") loading:any
+  @Input("loading") loading:any
   
 
   constructor() { }

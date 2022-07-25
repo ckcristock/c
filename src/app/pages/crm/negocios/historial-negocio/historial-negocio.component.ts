@@ -16,8 +16,10 @@ export class HistorialNegocioComponent implements OnInit {
   }
 
   getHistorial() {
+    console.log('Prueba de ejecución')
     this._negocio.getHistory().subscribe((data: any) => {
       this.historial = data;
+      console.log(this.historial)
     });
   }
 

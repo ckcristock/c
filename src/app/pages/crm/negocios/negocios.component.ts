@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, OperatorFunction } from 'rxjs';
 import {
   debounceTime,
@@ -45,15 +46,16 @@ export class NegociosComponent implements OnInit {
   today = new Date().toISOString().slice(0, 10);
   companies: any[];
   companySelected: any;
-  loading:boolean = true;
+  loading: boolean = true;
   cities: any;
   city: any;
 
   constructor(
     private _reactiveValid: ValidatorsService,
     private fb: FormBuilder,
-    private _negocios: NegociosService
-  ) {}
+    private _negocios: NegociosService,
+    private modalService: NgbModal,
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -64,11 +66,31 @@ export class NegociosComponent implements OnInit {
     this.getCountries();
   }
 
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    this.form.reset()
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
   getNegocios() {
     this.loading = true;
-    this._negocios.getBusinesses().subscribe( (resp: any) => {
+    this._negocios.getBusinesses().subscribe((resp: any) => {
       this.loading = false;
       this.negocios = resp.data;
+      this.getLists()
     });
     // this._negocios.getNeg().subscribe((resp: any) => {
     //   this.negocios = resp;
@@ -108,7 +130,7 @@ export class NegociosComponent implements OnInit {
         index = filteredList.length;
       }
       filteredList.splice(index, 0, event.data);
-      this._negocios.changeState({status: targetStatus}, event.data.id).subscribe();
+      this._negocios.changeState({ status: targetStatus }, event.data.id).subscribe();
     }
   }
 
@@ -162,7 +184,7 @@ export class NegociosComponent implements OnInit {
       (resp: any) => {
         this.companies = resp.data.data;
       },
-      () => {},
+      () => { },
       () => {
         // console.log(this.companies);
       }
@@ -216,7 +238,8 @@ export class NegociosComponent implements OnInit {
     if (event.target.checked) {
       // Add the new value in the selected options
       this.budgetsSelected.push((item));
-    } else {;
+    } else {
+      ;
       // removes the unselected option
       this.budgetsSelected = this.budgetsSelected.filter((selected) => {
         selected.id !== event.target.id
@@ -239,6 +262,7 @@ export class NegociosComponent implements OnInit {
       return this.form.addControl('budget_value', this.fb.control(a + b.total_cop))
     }, 0)
     this._negocios.saveNeg(this.form.value).subscribe(r => {
+      this.modalService.dismissAll(); 
       this.budgetsSelected = [];
       this.budgets = [];
       this.getNegocios();

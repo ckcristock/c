@@ -1,21 +1,27 @@
-<app-modal-basic #modal [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <div class="row">
-      <h5 class="text text-center justify-content-center modal-title p-1">
-        Crear/Editar Novedad
-      </h5>
+<ng-template #modal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">Crear/Editar Novedad</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
     </div>
   </div>
-  <div class="app-modal-body">
-    <form [formGroup]="form" (ngSubmit)="save()">
-      <div class="form-row">
-        <div class="form-group col">
-          <label class="custom-label" for="funcionario_id">Funcionario</label>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-4">
           <ng-select
             formControlName="person_id"
             [items]="people"
             bindLabel="text"
             bindValue="value"
+            placeholder="Funcionario"
+            appearance="outline"
+            [appendTo]="'body'"
             loadingText="loading"
             ngDefaultControl
           >
@@ -24,109 +30,95 @@
             Es nesario el funcionario
           </small>
         </div>
-
-        <div class="form-group col">
-          <label class="custom-label" for="contable_licencia_incapacidad_id"
-            >Novedad</label
-          >
+        <div class="col-md-4">
           <ng-select
             formControlName="disability_leave_id"
             [items]="disabilityLeaves"
             bindLabel="text"
             (change)="obtenerTipoNovedad($event.value)"
             bindValue="value"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Novedad"
             loadingText="loading"
             ngDefaultControl
           >
           </ng-select>
-          <div class="col-md-7 offset-4">
-            <small
-              class="invalid text-danger"
-              *ngIf="disability_leave_id_invalid"
-            >
-              Es nesaria la novedad
-            </small>
-          </div>
+          <small
+            class="invalid text-danger"
+            *ngIf="disability_leave_id_invalid"
+          >
+            Es nesaria la novedad
+          </small>
         </div>
-        <div class="form-group col">
-            <label class="custom-label" for="tipo">Tipo de Novedad </label>
-            <input type="text" name="tipo" formControlName="disability_type" class="form-control custom-control" />
-        </div>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Tipo de novedad</mat-label>
+          <input
+            matInput
+            type="text"
+            name="tipo"
+            placeholder="Ingresa el tipo de novedad"
+            formControlName="disability_type"
+            autocomplete="off"
+          />
+        </mat-form-field>
       </div>
-
-      <div class="form-row"></div>
-
-      <div class="form-row">
-        <div class="form-group col">
-          <label class="custom-label" for="fecha_inicio">Fecha de Inicio</label>
+      <div class="row">
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Fecha de inicio</mat-label>
+          <input matInput type="date" formControlName="date_start" />
+          <mat-error *ngIf="date_start_invalid">Campo obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-2" appearance="outline">
+          <mat-label># días</mat-label>
+          <input matInput type="number" formControlName="number_days" />
+          <mat-error *ngIf="number_days_invalid">Campo obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Fecha de fin</mat-label>
+          <input matInput type="date" formControlName="date_end" readonly />
+          <mat-error *ngIf="date_end_invalid">Campo obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-3"
+          appearance="outline"
+          *ngIf="vacationSelected == true"
+        >
+          <mat-label>Fecha de reintegro</mat-label>
           <input
-            type="date"
-            formControlName="date_start"
-            class="form-control custom-control"
-          />
-          <small class="invalid text-danger" *ngIf="date_start_invalid">
-            Es nesaria la fecha de inicio
-          </small>
-        </div>
-        <div class="form-group col-2">
-          <label class="custom-label" for="fecha_inicio">N. Días</label>
-          <input
-            type="number"
-            formControlName="number_days"
-            class="form-control custom-control"
-          />
-          <small class="invalid text-danger" *ngIf="number_days_invalid">
-            Es nesaria la fecha de inicio
-          </small>
-        </div>
-        <div class="form-group col">
-          <label class="custom-label" for="fecha_fin">Fecha de Fin</label>
-          <input
-            type="date"
-            readonly
-            formControlName="date_end"
-            class="form-control custom-control"
-          />
-          <small class="invalid text-danger" *ngIf="date_end_invalid">
-            Es nesaria la fecha de fin
-          </small>
-        </div>
-        <div class="form-group col" *ngIf="vacationSelected == true">
-          <label for="fecha_reintegro">Fecha Reintegro</label>
-          <input
+            matInput
             type="date"
             name="fecha_reintegro"
             formControlName="payback_date"
-            class="form-control custom-control"
           />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <label class="custom-label" for="observacion">Observación</label>
-          <textarea
-            name="observación"
-            formControlName="observation"
-            rows="5"
-            class="form-control custom-control"
-          ></textarea>
-          <small class="invalid text-danger" *ngIf="observation_invalid">
-            Es nesaria la observación
-          </small>
-        </div>
-      </div>
-      <div class="form-group text-right">
-        <button
-          (click)="modal.hide()"
-          type="button"
-          class="btn btn-danger raised mr-2"
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding"
+          appearance="outline"
         >
-          Cerrar
-        </button>
-        <button type="submit" class="btn btn-primary raised">
-          Guardar Novedad
-        </button>
+          <mat-label>Observación</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingrese la observación"
+            rows="5"
+            formControlName="observation"
+            name="observación"
+            required
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+          <mat-error *ngIf="observation_invalid">Campo obligatorio</mat-error>
+        </mat-form-field>
       </div>
-    </form>
-  </div>
-</app-modal-basic>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-default"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+</ng-template>

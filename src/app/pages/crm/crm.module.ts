@@ -64,6 +64,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
+import { HistorialNegocioComponent } from './negocios/historial-negocio/historial-negocio.component';
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import { MatRadioModule } from '@angular/material/radio';
     NegociosComponent,
     VerNegocioComponent,
     TareasNegocioComponent,
+    HistorialNegocioComponent,
     TableNegociosComponent,
   ],
   imports: [

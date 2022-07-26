@@ -3,119 +3,119 @@
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Reporte de Horarios</h4>
       <div class="btn-group rounded">
-        <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+        <button
+          class="btn btn-info btn-sm"
+          style="float: right"
+          (click)="openClose()"
+        >
           <i class="fas fa-sliders-h"></i> Filtros
         </button>
       </div>
     </div>
-    <hr class="line">
-    <div class="container">
-      <mat-accordion multi>
-        <mat-expansion-panel class="mat-elevation-z0">
-          <div class="container">
-            <form [formGroup]="forma" (ngSubmit)="getDiaries()">
-              <div class="row">
-                <div class="col-12">
-                  <div class="row">
-                    <div class="col-md-4" *ngIf="companies.length > 2">
-                      <div class="form-group">
-                        <label class="custom-label" for="filtroCentroCosto">Empresa</label>
-                        <ng-select [items]="companies" bindLabel="text" bindValue="value" formControlName="company_id"
-                          ngDefaultControl>
-                        </ng-select>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="custom-label" for="filtroCentroCosto">Grupo</label>
-                        <ng-select [items]="groupList" bindLabel="text" bindValue="value" formControlName="group_id"
-                          ngDefaultControl>
-                        </ng-select>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="custom-label" for="filtroDependencia">Dependencia</label>
-                        <ng-select [items]="dependencyList" bindLabel="text" formControlName="dependency_id" bindValue="value"
-                          ngDefaultControl>
-                        </ng-select>
-                      </div>
-                    </div>
-      
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="custom-label">Fecha de inicio</label>
-                        <input type="date" formControlName="first_day" class="form-control" required />
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="custom-label">Fecha de fin</label>
-                        <input type="date" formControlName="last_day" class="form-control" required />
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="custom-label">Funcionario</label>
-                        <ng-select [items]="people" formControlName="person_id" bindLabel="text" bindValue="value"
-                          ngDefaultControl>
-                        </ng-select>
-                      </div>
-                    </div>
-      
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="custom-label" for="tipo_turno">Tipo de turno</label>
-                        <select name="tipo_turno" formControlName="turn_type" class="form-control custom-control">
-                          <option value="Rotativo">Turno Rotativo</option>
-                          <option value="Fijo">Turno Fijo</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row mt-4">
-                <div class="col-md-6">
-                  <button type="submit" class="btn btn-info btn-sm btn-block">
-                    <i class="fa fa-search"></i> Filtrar
-                  </button>
-                </div>
-                <div class="col-md-6">
-                  <button type="button" class="btn btn-success btn-sm btn-block" (click)="download()">
-                    <i class="fas fa-file-download"></i>
-      
-                    <span *ngIf="!donwloading; else status"> Descargar</span>
-                    <ng-template #status>
-                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                      Generando...
-                    </ng-template>
-                  </button>
-                </div>
-              </div>
-            </form>
-            <!-- <div class="row">
-              <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                <mat-label> </mat-label>
-                <input matInput type="text" placeholder="">
-              </mat-form-field>
-              <mat-form-field class="col-md-2" appearance="outline">
-                <mat-label> </mat-label>
-                <mat-select>
-                  <mat-option value=""> </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div> -->
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
-    <div class="container">
-      <app-detalle-reporte [type]="turn_type_value" [reporteHorarios]="reporteHorarios"
-        *ngIf="reporteHorarios.length && !loading; else notData">
-      </app-detalle-reporte>
-    </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <form [formGroup]="forma" (ngSubmit)="getDiaries()">
+          <mat-form-field
+            class="col-md-2 pl-0"
+            appearance="outline"
+            *ngIf="companies.length > 2"
+          >
+            <mat-label>Empresa</mat-label>
+            <mat-select formControlName="company_id">
+              <mat-option *ngFor="let item of companies" [value]="item.value">{{
+                item.text
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Grupo</mat-label>
+            <mat-select formControlName="group_id">
+              <mat-option *ngFor="let item of groupList" [value]="item.value">{{
+                item.text
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Dependencia</mat-label>
+            <mat-select formControlName="dependency_id">
+              <mat-option
+                *ngFor="let item of dependencyList"
+                [value]="item.value"
+                >{{ item.text }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Fecha de inicio</mat-label>
+            <input
+              matInput
+              type="date"
+              formControlName="first_day"
+              required
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Fecha de fin</mat-label>
+            <input
+              matInput
+              type="date"
+              formControlName="last_day"
+              required
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Funcionario</mat-label>
+            <mat-select formControlName="person_id">
+              <mat-option *ngFor="let item of people" [value]="item.value">{{
+                item.text
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+            <mat-label>Tipo de turno</mat-label>
+            <mat-select formControlName="turn_type" name="tipo_turno">
+              <mat-option value="Rotativo">Turno Rotativo</mat-option>
+              <mat-option value="Fijo">Turno Fijo</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <button type="submit" class="btn btn-info btn-sm btn-block">
+                <i class="fa fa-search"></i> Filtrar
+              </button>
+            </div>
+            <div class="col-md-6">
+              <button
+                type="button"
+                class="btn btn-success btn-sm btn-block"
+                (click)="download()"
+              >
+                <i class="fas fa-file-download"></i>
 
+                <span *ngIf="!donwloading; else status"> Descargar</span>
+                <ng-template #status>
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Generando...
+                </ng-template>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <app-detalle-reporte
+      [type]="turn_type_value"
+      [reporteHorarios]="reporteHorarios"
+      *ngIf="reporteHorarios.length && !loading; else notData"
+    >
+    </app-detalle-reporte>
   </div>
 </div>
 <ng-template #notData>

@@ -1,227 +1,245 @@
-<app-crear-novedad [open]="openModal" (saving)="cargarNovedades()"></app-crear-novedad>
+<app-crear-novedad
+  [open]="openModal"
+  (saving)="cargarNovedades()"
+></app-crear-novedad>
 
 <div class="row">
-    <div class="col-8">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title d-flex justify-content-between">
-                    <h4 class="text-primary">Listado de Novedades </h4>
-                    <div class="btn-group rounded">
-                        <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal.emit()">
-                            <i class="fa fa-plus"></i> Agregar
-                        </button>
-                        <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
-                            <i class="fas fa-sliders-h"></i> Filtros
-                        </button>
-                    </div>
+  <div class="col-8">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title d-flex justify-content-between">
+          <h4 class="text-primary">Listado de Novedades</h4>
+          <div class="btn-group rounded">
+            <button
+              class="btn btn-primary btn-sm"
+              style="float: right"
+              (click)="openModal.emit()"
+            >
+              <i class="fa fa-plus"></i> Agregar
+            </button>
+            <button
+              class="btn btn-info btn-sm"
+              style="float: right"
+              (click)="openClose()"
+            >
+              <i class="fas fa-sliders-h"></i> Filtros
+            </button>
+          </div>
+        </div>
+        <hr class="line" />
+        <mat-accordion multi>
+          <mat-expansion-panel class="mat-elevation-z0">
+            <form [formGroup]="form" (ngSubmit)="cargarNovedades()">
+              <div class="row">
+                <div class="col-md-4">
+                  <ng-select
+                    formControlName="personfill"
+                    [items]="peopleSelects"
+                    bindLabel="text"
+                    bindValue="value"
+                    loadingText="loading"
+                    appearance="outline"
+                    [appendTo]="'body'"
+                    placeholder="Funcionario"
+                    (change)="cargarNovedades()"
+                    ngDefaultControl
+                  >
+                  </ng-select>
                 </div>
-                <hr class="line">
-                <div class="container">
-                    <mat-accordion multi>
-                        <mat-expansion-panel class="mat-elevation-z0">
-                            <div class="container">
-                                <form [formGroup]="form" (ngSubmit)="cargarNovedades()">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="fecha_inicio" class="custom-label">Funcionario</label>
-                                                <ng-select formControlName="personfill" [items]="peopleSelects" bindLabel="text"
-                                                    bindValue="value" loadingText="loading" (change)="
-                                                cargarNovedades()" ngDefaultControl>
-                                                </ng-select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="fecha_inicio" class="custom-label">Fecha de Inicio</label>
-                                                <input type="date" formControlName="date_start"
-                                                    class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="fecha_fin" class="custom-label">Fecha de Fin</label>
-                                                <input type="date" formControlName="date_end" class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class="col-12 text-center">
-                                            <button type="submit" class="btn btn-outline-primary default btn-sm mt-2 w-100">
-                                                <i class="iconsmind-Search-People"></i> Filtrar por fecha
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                                <!-- <div class="row">
-                                    <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                        <mat-label> </mat-label>
-                                        <input matInput type="text" placeholder="">
-                                    </mat-form-field>
-                                    <mat-form-field class="col-md-2" appearance="outline">
-                                        <mat-label> </mat-label>
-                                        <mat-select>
-                                            <mat-option value=""> </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>                                
-                                </div> -->
+                <mat-form-field class="col-md-4" appearance="outline">
+                  <mat-label>Fecha de inicio</mat-label>
+                  <input matInput type="date" formControlName="date_start"/>
+                </mat-form-field>
+                <mat-form-field class="col-md-4" appearance="outline">
+                  <mat-label>Fecha de fin</mat-label>
+                  <input matInput type="date" formControlName="date_end"/>
+                </mat-form-field>
+                <div class="col-md-12 text-center mb-2">
+                  <button
+                    type="submit"
+                    class="btn btn-outline-primary btn-sm btn-block"
+                  >
+                    <i class="fas fa search"></i> Filtrar por fecha
+                  </button>
+                </div>
+              </div>
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <table
+          class="table table-bordered table-striped table-sm table-responsive-sm"
+          style="font-size: small"
+          *ngIf="!loading && people.length > 0; else notData"
+        >
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th>Foto</th>
+              <th>Funcionarios</th>
+              <th>Dependencia</th>
+              <th class="text-center col-1">
+                <i class="fas fa-angle-down"></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let person of people">
+              <tr class="text-center">
+                <td class="align-middle">
+                  <img
+                    src="{{ person?.image | image }}"
+                    onerror="this.src='../../../../assets/images/noprofile.png'"
+                    class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
+                  />
+                </td>
+                <td class="align-middle">
+                  {{ person.first_name }} {{ person.first_surname }}
+                </td>
+                <td class="align-middle">
+                  {{ person.contractultimate.position.dependency.name }}
+                </td>
+                <td class="align-middle">
+                  <i
+                    class="fas fa-angle-down text-primary"
+                    role="button"
+                    (click)="person.selected = !person.selected"
+                  ></i>
+                </td>
+              </tr>
+              <ng-container *ngIf="this.person.selected">
+                <tr class="p-0">
+                  <td colspan="4">
+                    <table class="table table-hover">
+                      <thead class="bg-light">
+                        <tr class="text-center text-uppercase">
+                          <th>Fecha</th>
+                          <th>Novedad</th>
+                          <th>Descripción</th>
+                          <th>Inicio</th>
+                          <th>Fin</th>
+                          <th class="col-md-1">ACC.</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          *ngFor="let fact of person.payroll_factors"
+                          class="text-center"
+                        >
+                          <td class="align-middle">
+                            {{ fact.created_at | date }}
+                          </td>
+                          <td class="align-middle">
+                            {{ fact.disability_leave.concept }}
+                          </td>
+                          <td class="align-middle">
+                            {{ fact.observation }}
+                          </td>
+                          <td class="align-middle">
+                            {{ fact.date_start | date }}
+                          </td>
+                          <td class="align-middle">
+                            {{ fact.date_end | date }}
+                          </td>
+                          <td class="align-middle">
+                            <div ngbDropdown class="dropdown-primary">
+                              <button
+                                ngbDropdownToggle
+                                class="btn btn-primary btn-sm waves-effect waves-light"
+                                type="button"
+                              >
+                                <i class="fas fa-sort-down"></i>
+                              </button>
+                              <div ngbDropdownMenu>
+                                <a
+                                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                                  (click)="editarNovedad(fact)"
+                                >
+                                  <i class="fas fa-edit"></i> Editar</a
+                                >
+                                <!-- <a class="dropdown-item waves-light waves-effect caja-botones" href="" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a eliminar la novedad' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'Dejame verificar'}"
+                                                                  (confirm)="EliminarNovedad(novedad.Id_Novedad)">
+                                                                  <i class="fa fa-times"></i> Elim.</a> -->
+                              </div>
                             </div>
-                        </mat-expansion-panel>
-                    </mat-accordion>
-                </div>
-                <div class="container" style="font-size: small;">
-                    <table class="table table-bordered table-striped table-sm"
-                        *ngIf="!loading && people.length > 0; else notData">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Funcionarios</th>
-                                <th>¿Cargo?</th>
-                                <th class="text-center col-1">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-
-                            </tr>
-                            <tr *ngFor="let person of people">
-                                <td>
-                                    <img src="{{person?.image| image:'users' }}" alt=""
-                                        class="img-thumbnail rounded-circle header-profile-user mx-auto d-block">
-                                </td>
-                                <td>{{ person.first_name }} {{ person.first_surname }}</td>
-                                <td>{{ person.contractultimate.position.dependency.name }}</td>
-                                <td>
-                                    <div class="text-center">
-                                        <button class="btn btn-primary btn-sm" (click)="person.selected = !person.selected">
-                                            <i class="fas fa-sort-down"></i>
-                                        </button>
-                                    </div>
-                                    
-                                </td>
-                            </tr>
-                        </tbody>
+                          </td>
+                        </tr>
+                      </tbody>
                     </table>
-                    <div class="row mt-2" *ngIf="!loading && people.length > 0; else notData">
-                        <div class="col-12 mb-4 fila-novedad" *ngFor="let person of people">                            
-                            <div class="mt-3">
-                                <div [ngClass]="{  'display-none': (!person.selected ) } " colspan="6"
-                                    class="text-center">
-                                    <table class="table table-hover table-bordered detalles">
-                                        <tr>
-                                            <td class="text-center"><strong>Fecha</strong></td>
-                                            <td class="text-center"><strong>Novedad</strong></td>
-                                            <td class="text-center"><strong>Descripción</strong></td>
-                                            <td class="text-center"><strong>Inicio</strong></td>
-                                            <td class="text-center"><strong>Fin</strong></td>
-                                            <td style="width:80px;"></td>
-                                        </tr>
-                                        <tr *ngFor="let fact of person.payroll_factors">
-                                            <td class="text-center"><strong>{{fact.created_at | date }}</strong>
-                                            </td>
-                                            <td class="text-center">
-                                                <strong>{{fact.disability_leave.concept}}</strong>
-                                            </td>
-                                            <td class="text-center"><strong>{{fact.observation }}</strong></td>
-                                            <td class="text-center"><strong>{{fact.date_start | date }}</strong></td>
-                                            <td class="text-center"><strong>{{fact.date_end | date}}</strong></td>
-                                            <td style="width:80px;">
-                                                <div class="text-center">
-                                                    <div ngbDropdown class="dropdown-primary">
-                                                        <button ngbDropdownToggle
-                                                            class="btn btn-secondary btn-sm waves-effect waves-light "
-                                                            type="button">
-                                                            <i class="fa fa-search "></i>
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
 
-                                                        </button>
-                                                        <div ngbDropdownMenu>
-                                                            <a class="dropdown-item text-info waves-light waves-effect caja-botones"
-                                                                (click)="editarNovedad(fact)">
-                                                                <i class="ti-pencil"></i> Edi.</a>
-                                                            <!-- <a class="dropdown-item waves-light waves-effect caja-botones" href="" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a eliminar la novedad' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'Dejame verificar'}"
-                                                        (confirm)="EliminarNovedad(novedad.Id_Novedad)">
-                                                        <i class="fa fa-times"></i> Elim.</a> -->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <ng-template #notData>
+        <app-not-data [loading]="loading"></app-not-data>
+      </ng-template>
+    </div>
+  </div>
 
-                </div>
-            </div>
-
-            <ng-template #notData>
-                <app-not-data [loading]="loading"></app-not-data>
-            </ng-template>
+  <div class="col-4">
+    <div class="row">
+      <div class="col-6">
+        <div class="card mb-4">
+          <div class="card-body text-center incapacidades">
+            <i class="ri-suitcase-3-fill"></i>
+            <p class="card-text mb-0">Vacaciones</p>
+            <p class="lead text-center">{{ totalVacaciones }}</p>
+          </div>
         </div>
-
+      </div>
+      <div class="col-6">
+        <div class="card mb-4">
+          <div class="card-body text-center incapacidades">
+            <i class="fas fa-heartbeat"></i>
+            <p class="card-text mb-0">Incapacidades</p>
+            <p class="lead text-center">{{ totalIncapacidades }}</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="col-4">
-        <div class="row">
-            <div class="col-6">
-                <div class="card mb-4">
-                    <div class="card-body text-center incapacidades">
-                        <i class="ri-suitcase-3-fill "></i>
-                        <p class="card-text mb-0">Vacaciones</p>
-                        <p class="lead text-center">{{ totalVacaciones }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="card mb-4">
-                    <div class="card-body text-center incapacidades">
-                        <i class="fas fa-heartbeat"></i>
-                        <p class="card-text mb-0">Incapacidades</p>
-                        <p class="lead text-center">{{ totalIncapacidades }}</p>
-                    </div>
-                </div>
-            </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="card mb-4">
+          <div class="card-body text-center incapacidades">
+            <i class="fas fa-baby"></i>
+            <p class="card-text mb-0">Licencias</p>
+            <p class="lead text-center">{{ totalLicencias }}</p>
+          </div>
         </div>
-
-        <div class="row">
-            <div class="col-6">
-                <div class="card mb-4">
-                    <div class="card-body text-center incapacidades">
-                        <i class="fas fa-baby"></i>
-                        <p class="card-text mb-0">Licencias</p>
-                        <p class="lead text-center">{{ totalLicencias }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="card mb-4">
-                    <div class="card-body text-center incapacidades">
-                        <i class="ri-calendar-check-line"></i>
-                        <p class="card-text mb-0">Permisos</p>
-                        <p class="lead text-center">{{ totalPermisos }}</p>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="col-6">
+        <div class="card mb-4">
+          <div class="card-body text-center incapacidades">
+            <i class="ri-calendar-check-line"></i>
+            <p class="card-text mb-0">Permisos</p>
+            <p class="lead text-center">{{ totalPermisos }}</p>
+          </div>
         </div>
-
-        <div class="row">
-            <div class="col-6">
-                <div class="card mb-4">
-                    <div class="card-body text-center incapacidades">
-                        <i class="fas fa-door-open"></i>
-                        <p class="card-text mb-0">Abandonos</p>
-                        <p class="lead text-center">{{ totalAbandonos }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="card mb-4">
-                    <div class="card-body text-center incapacidades">
-                        <i class="ri-user-unfollow-line"></i>
-                        <p class="card-text mb-0">Suspensiones</p>
-                        <p class="lead text-center">{{ totalSuspensiones }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="col-6">
+        <div class="card mb-4">
+          <div class="card-body text-center incapacidades">
+            <i class="fas fa-door-open"></i>
+            <p class="card-text mb-0">Abandonos</p>
+            <p class="lead text-center">{{ totalAbandonos }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card mb-4">
+          <div class="card-body text-center incapacidades">
+            <i class="ri-user-unfollow-line"></i>
+            <p class="card-text mb-0">Suspensiones</p>
+            <p class="lead text-center">{{ totalSuspensiones }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,23 +1,18 @@
 <div
   class="card mt-3"
   *ngFor="let task of historial; let i = index"
-  style="box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 8%); background-color: #95c11f"
+  style="box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 8%); border-color: #95c11f"
 >
-  <div class="row">
-    <label class="col-2 mb-0" style="align-self: center">{{
-      task.date | date: "dd MMM"
-    }}</label>
-    <!-- <i*ngIf="task.completed" class="col-2 fa fa-check-circle" style="align-self: center"></i> -->
-    <div class="col">
-      <h5 class="card-title">{{ task.autor | slice: 0:20 }}</h5>
+  <div class="card-body py-1">
+    <div class="row">
+      <label class="col-md-2">{{ task.date | date: "dd MMM" }}</label>
 
-      <div class="card-body m-0 p-0">
-        <p class="card-text">{{ task.action }}</p>
+      <div class="col-md-10">
+        <h5 class="card-title">{{ task.autor | slice: 0:20 }}</h5>
+        <div class="card-text">{{ task.action }}</div>
       </div>
     </div>
   </div>
 </div>
-<div class="ngbNavContent text-center">
-    Prueba 2
-</div>
 
+<!-- <i*ngIf="task.completed" class="col-2 fa fa-check-circle" style="align-self: center"></i> -->

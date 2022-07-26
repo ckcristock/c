@@ -88,7 +88,7 @@
           <button
             type="button"
             class="btn btn-sm btn-primary"
-            (click)="addPresupuesto()"
+            (click)="openConfirm(add)"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -152,23 +152,27 @@
   </div>
 </div>
 
-<app-modal-basic #modalPresupuestos [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">Seleccionar Presupuestos disponibles</h5>
-    <button
-      type="button"
-      class="close basic-close"
-      (click)="modalPresupuestos.hide()"
-    >
-      <span aria-hidden="true">
-        <i class="fas fa-times" (click)="modalPresupuestos.hide()"></i>
-      </span>
-    </button>
+<ng-template #add let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">
+        Seleccionar presupuestos disponibles
+      </h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
   </div>
-  <div class="app-modal-body">
-    <table class="mt-2 table table-borderless table-striped">
-      <thead>
-        <tr>
+  <div class="modal-body">
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
           <th>Item</th>
           <th>Fecha</th>
           <th>Cliente</th>
@@ -182,52 +186,55 @@
       <tbody>
         <tr
           *ngFor="let item of presupuestos"
+          class="text-center"
           [ngClass]="{
             'text-danger font-weight-bold': item.state == 'Inactivo'
           }"
         >
-          <td>
-            <input
-              type="checkbox"
-              (change)="guardarPresupuesto(item.id, item.total_cop)"
-            />
-            <label [for]="item.id" class="ml-1"> PRES {{ item.id }} </label>
+          <td class="align-middle">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                (change)="guardarPresupuesto(item.id, item.total_cop)"
+                [id]="item.id"
+              />
+              <label class="form-check-label" [for]="item.id">
+                PRES {{ item.id }}
+              </label>
+            </div>
           </td>
-          <td>{{ item.created_at | date: "longDate" }}</td>
-          <td>{{ item.customer.name }}</td>
-          <td>{{ item.destiny.name }}</td>
-          <td>{{ item.line }}</td>
-          <td>
+          <td class="align-middle">{{ item.created_at | date: "longDate" }}</td>
+          <td class="align-middle">{{ item.customer.name }}</td>
+          <td class="align-middle">{{ item.destiny.name }}</td>
+          <td class="align-middle">{{ item.line }}</td>
+          <td class="align-middle">
             {{ item.user.person.first_name }}
             {{ item.user.person.first_surname }}
           </td>
-          <td>${{ item.total_cop | currency: "":"" }}</td>
-          <td>${{ item.total_usd | currency: "":"" }}</td>
+          <td class="align-middle">${{ item.total_cop | currency: "":"" }}</td>
+          <td class="align-middle">${{ item.total_usd | currency: "":"" }}</td>
         </tr>
       </tbody>
     </table>
     <!-- <ng-select [items]="dataModal " bindLabel="descripcion " [multiple]="true " [closeOnSelect]="false " [selectableGroup]="true " [selectableGroupAsModel]="false " [(ngModel)]="seleccionadas ">
         </ng-select> -->
   </div>
-  <div class="app-modal-footer">
-    <div class="form-group text-right">
-      <button
-        (click)="modalPresupuestos.hide()"
-        type="reset "
-        class="btn btn-danger raised mr-2 btn-sm"
-      >
-        Cerrar
-      </button>
-      <button
-        type="submit "
-        class="btn btn-primary btn-sm raised"
-        (click)="saveBudget()"
-      >
-        Guardar
-      </button>
-    </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+
+    <button type="submit " class="btn btn-primary" (click)="saveBudget()">
+      Guardar
+    </button>
   </div>
-</app-modal-basic>
+</ng-template>
+
 <!-- <app-modal-basic #modalCotizaciones [dialogClass]="'modal-lg'">
     <div class="app-modal-header">
         <h5 class="modal-title">Seleccionar cotizaciones disponibles</h5>

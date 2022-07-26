@@ -13,6 +13,7 @@ import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/pe
 import { PayrollFactorService } from '../payroll-factor.service';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-crear-novedad',
@@ -31,8 +32,9 @@ export class CrearNovedadComponent implements OnInit {
     private fb: FormBuilder,
     private _disabilityLeaves: DisabilityLeavesService,
     private _people: PersonService,
-    private _payrollFactor: PayrollFactorService
-  ) {}
+    private _payrollFactor: PayrollFactorService,
+    private modalService: NgbModal,
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -55,8 +57,26 @@ export class CrearNovedadComponent implements OnInit {
       } else {
         this.createForm();
       }
-      this.modal.show();
+      this.openConfirm(this.modal);
     });
+  }
+
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   getPeople() {
@@ -101,27 +121,28 @@ export class CrearNovedadComponent implements OnInit {
   sendData() {
     this.form.get('disability_type').enable();
     this._payrollFactor.savePayrollFactor(this.form.value).subscribe((r: any) => {
-        if (r.code == 200) {
-          Swal.fire({
-            title: 'Opersación exitosa',
-            text: 'Felicidades, se han actualizado las novedades',
-            icon: 'success',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-          });
-          this.createForm();
-          this.saving.next();
-          this.modal.hide();
-        } else {
-          Swal.fire({
-            title: 'Operación denegada',
-            text: r.err,
-            icon: 'error',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-          });
-        }
-      });
+      if (r.code == 200) {
+        Swal.fire({
+          title: 'Opersación exitosa',
+          text: 'Felicidades, se han actualizado las novedades',
+          icon: 'success',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
+        this.createForm();
+        this.saving.next();
+        this.modalService.dismissAll(); 
+        //this.modal.hide();
+      } else {
+        Swal.fire({
+          title: 'Operación denegada',
+          text: r.err,
+          icon: 'error',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
+      }
+    });
   }
   createForm() {
     this.form = this.fb.group({

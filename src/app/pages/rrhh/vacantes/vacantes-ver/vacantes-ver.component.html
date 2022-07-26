@@ -1,91 +1,114 @@
-<div class="page-body">
-    <div class="row">
-        <div class="col-lg-5 col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h6>Postulados</h6>
-                    <div *ngIf="!loading && applicants.length > 0; else notData">
-
-                        <table class="table table-striped"> 
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Experiencia</th>
-                                    <th>-</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let applicant of applicants">
-                                    <td>{{applicant.name}} {{applicant.sur_name}}</td>
-                                    <td>{{applicant.experience_year}} / Años</td>
-                                    <td>
-                                        <a (click)="applicantModal.show(applicant);" class="text-primary" >
-                                            <i class="fas fa-eye"></i> Ver
-                                        </a>
-                                       <!--  <a  >
-                                            <i class="fas fa-eye"></i> Ver
-                                        </a> -->
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card-block">
-
-                </div>
-            </div>
+<div class="row">
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-primary">Postulados</h5>
+        <div *ngIf="!loading && applicants.length > 0; else notData">
+          <table
+            class="table table-bordered table-striped table-sm table-responsive-sm"
+            style="font-size: small"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Nombre</th>
+                <th>Experiencia</th>
+                <th>-</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let applicant of applicants" class="text-center">
+                <td>{{ applicant.name }} {{ applicant.sur_name }}</td>
+                <td>{{ applicant.experience_year }} / Años</td>
+                <td>
+                  <a
+                    (click)="applicantModal.show(applicant)"
+                    class="text-primary"
+                  >
+                    <i class="fas fa-eye"></i> Ver
+                  </a>
+                  <!--  <a  >
+                                          <i class="fas fa-eye"></i> Ver
+                                      </a> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="col-lg-7 col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="content-vacante" *ngIf="job">
-                        <h4 class="mb-2">{{ job.title }}</h4>
-                        <small class="mb-2" >  {{job.municipality.name}} - {{job.municipality.department.name}} | {{ job.date_start | date: 'dd/M/yyyy'}}  - {{ job.date_end | date: 'dd/M/yyyy'}} </small>
-                        <div class="row mb-4"  >
-                            <div class="col-md-12">
-                                <span style="margin-right: 7px;"><i class="ti-briefcase label label-primary"></i> Dependencia: {{job.position.dependency.name}} </span>
-                            </div>
-                            <div class="col-md-12">
-                                <span style="margin-right: 7px;"><i class="ti-briefcase label label-primary"></i> Cargo: {{job.position.name}} </span>
-                            </div>
-                            <div class="col-md-12">
-                                <span style="margin-right: 7px;"><i class="ti-money label label-primary"></i> Salario: {{ job.min_salary  }} - {{ job.max_salary  }}</span>
-                            </div>
-                            <div class="col-md-12">
-                                <span style="margin-right: 7px;"><i class="ti-time label label-primary"></i> Turno: {{ job.turn_type }}</span>
-                            </div>
-                           
-                        </div>
-
-                        <div class="descripcion-vacante">
-                            <h6 class="mb-2">Descripción:</h6>
-
-                            <p>{{ job.description }}</p>
-                        </div>
-
-                        <div class="descripcion-vacante">
-                            <h6 class="mb-2" >Requisitos:</h6>
-                            <br/>
-                            <ul class="requisitos-list">
-                                <li><b>Educación mínima:</b> {{ job.education }}</li>
-                                <li><b>Edad:</b> entre ({{ job.min_age }} - {{ job.max_age }}) </li>
-                                <li><b>Disponibilidad de viajar:</b> {{ job.can_trip == 1 ? 'Si' : 'No' }}</li>
-                                <li><b>Disponibilidad de cambio de residencia:</b> {{ job.change_residence == 1 ? 'Si' : 'No' }}</li>
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-body" *ngIf="job">
+        <div class="card-title d-flex justify-content-between">
+          <h4>
+            {{ job.title }}
+          </h4>
+          <small>
+            {{ job.municipality.name }} -
+            {{ job.municipality.department.name }} |
+            {{ job.date_start | date: "dd/M/yyyy" }} -
+            {{ job.date_end | date: "dd/M/yyyy" }}
+          </small>
+        </div>
+        <hr class="line" />
+        <div class="row">
+          <div class="col-md-6 mt-2">
+            <div>
+              <h6 class="text-center">Información básica</h6>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <b>Depedencia:</b> {{ job.position.dependency.name }}
+                </li>
+                <li class="list-group-item">
+                  <b>Cargo:</b> {{ job.position.name }}
+                </li>
+                <li class="list-group-item">
+                  <b>Salario:</b>
+                  {{ job.min_salary | currency }} -
+                  {{ job.max_salary | currency }}
+                </li>
+                <li class="list-group-item">
+                  <b>Turno:</b>
+                  {{ job.turn_type }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-6 mt-2">
+            <div>
+              <h6 class="text-center">Requisitos</h6>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <b>Educación mínima:</b> {{ job.education }}
+                </li>
+                <li class="list-group-item">
+                  <b>Edad:</b> entre {{ job.min_age }} y {{ job.max_age }}
+                </li>
+                <li class="list-group-item">
+                  <b>Viajar:</b>
+                  {{ job.can_trip == 1 ? "Sí" : "No" }}
+                </li>
+                <li class="list-group-item">
+                  <b>Cambio de residencia:</b>
+                  {{ job.change_residence == 1 ? "Sí" : "No" }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-12 text-center">
+            <hr />
+            <h6>Descripción:</h6>
+            <p>{{ job.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
-
-<app-applicant #applicantModal ></app-applicant>
+<app-applicant #applicantModal></app-applicant>

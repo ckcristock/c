@@ -9,6 +9,7 @@ import { DotacionService } from '../dotacion.service';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-inventario-dotacion',
@@ -18,14 +19,14 @@ import { MatAccordion } from '@angular/material/expansion';
 export class InventarioDotacionComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   pagination = {
     pageSize: 15,
@@ -55,15 +56,33 @@ export class InventarioDotacionComponent implements OnInit {
     private http: HttpClient,
     private location: Location,
     private route: ActivatedRoute,
-    private _dotation: DotacionService
+    private _dotation: DotacionService,
+    private modalService: NgbModal,
   ) { }
 
   ngOnInit() {
     this.ListaInventario(1);
     this.listarGrupo()
   }
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'sm' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
   ListaInventario(page) {
@@ -118,6 +137,7 @@ export class InventarioDotacionComponent implements OnInit {
         })
         this.listarGrupo()
         form.reset()
+        this.modalService.dismissAll(); 
       } else {
         Swal.fire({
           title: 'Operación denegada',

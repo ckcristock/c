@@ -1,67 +1,64 @@
 <div class="card">
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Horas Extras Reportadas</h4>
+      <h4 class="text-primary">Horas extra reportadas</h4>
       <div class="btn-group rounded">
-        <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
+        <button class="btn btn-info btn-sm" (click)="openClose()">
           <i class="fas fa-sliders-h"></i> Filtros
         </button>
       </div>
     </div>
-    <hr class="line">
-    <div class="container">
-      <mat-accordion multi>
-        <mat-expansion-panel class="mat-elevation-z0">
-          <div class="container">
-            <div class="row">
-              <div class="col-4">
-                <div class="input-group-sm">
-                  <label class="custom-label">Tipo de turno actual</label>
-                  <select class="form-control " name="turn_type" [(ngModel)]="turnType" (change)="getPeople()">
-                    <option value="rotativo">Rotativo</option>
-                    <option value="fijo">Fijo</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="input-group-sm">
-                  <label class="custom-label" for="filtroDependencia">Funcionario</label>
-                  <ng-select [items]="people" [(ngModel)]="people_id" (change)="getPeople()" s bindLabel="text"
-                    bindValue="value" ngDefaultControl>
-                  </ng-select>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="input-group-sm">
-                  <label class="custom-label">Del {{ primerDiaSemanaFormato }} al
-                    {{ ultimoDiaSemanaFormato }}</label>
-      
-                  <input type="week" name="semana" [(ngModel)]="semana" class="form-control form-control-sm"
-                    (change)="cambiarSemana()" required />
-                </div>
-              </div>
-            </div>
-            <!-- <div class="row">
-              <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                <mat-label> </mat-label>
-                <input matInput type="text" placeholder="">
-              </mat-form-field>
-              <mat-form-field class="col-md-2" appearance="outline">
-                <mat-label> </mat-label>
-                <mat-select>
-                  <mat-option value=""> </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div> -->
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col-md-4" appearance="outline">
+            <mat-label>Tipo de turno actual</mat-label>
+            <mat-select
+              name="turn_type"
+              [(ngModel)]="turnType"
+              (selectionChange)="getPeople()"
+            >
+              <mat-option value="rotativo">Rotativo</mat-option>
+              <mat-option value="fijo">Fijo</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="col-md-4">
+            <ng-select
+              [items]="people"
+              [(ngModel)]="people_id"
+              (change)="getPeople()"
+              appearance="outline"
+              [appendTo]="'body'"
+              placeholder="Funcionario"
+              bindLabel="text"
+              bindValue="value"
+              ngDefaultControl
+            >
+            </ng-select>
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
+          <mat-form-field class="col-md-4" appearance="outline">
+            <mat-label>Rango de fechas</mat-label>
+            <input
+              matInput
+              type="week"
+              name="semana"
+              [(ngModel)]="semana"
+              (change)="cambiarSemana()"
+              required
+            />
+            <mat-hint align="end"
+              >Del {{ primerDiaSemanaFormato }} al
+              {{ ultimoDiaSemanaFormato }}</mat-hint
+            >
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
 
     <ng-container *ngIf="horasExtras.length && !loading; else notData">
       <div class="row">
         <div class="col-12">
-          <h2 class="font-weight-bold">Lista de funcionarios</h2>
           <div class="card">
             <div class="card-body">
               <div class="row">
@@ -72,69 +69,110 @@
                       <p class="font-weight-bold mt-1">
                         {{ group.name }}
                       </p>
-                      <div *ngFor="let dependency of group.dependencies" class="mb-3">
+                      <div
+                        *ngFor="let dependency of group.dependencies"
+                        class="mb-3"
+                      >
                         <div class="row">
                           <div class="mt-2 col-12">
                             {{ dependency.name }}
                           </div>
 
-                          <div class="col-12 row pl-2 mt-2 mr-4 pr-3" *ngFor="let person of dependency.people">
+                          <div
+                            class="col-12 row pl-2 mt-2 mr-4 pr-3"
+                            *ngFor="let person of dependency.people"
+                          >
                             <div class="col-md-3">
                               <div>
-                                <img [src]="person.image" alt="foto_person" width="20px" />
+                                <img
+                                  [src]="person.image"
+                                  alt="foto_person"
+                                  width="20px"
+                                />
                                 <span class="custom-label">
                                   {{ person.first_name }}
                                   {{ person.fist_surname }}
                                 </span>
-                                <span class="turno text-center font-weight-bold">F</span>
+                                <span class="turno text-center font-weight-bold"
+                                  >F</span
+                                >
                               </div>
                             </div>
 
                             <div class="col-md-1">
-                              <button class="btn btn-link btn-sm" (click)="person.show = !person.show">
+                              <button
+                                class="btn btn-link btn-sm"
+                                (click)="person.show = !person.show"
+                              >
                                 <i class="fa fa-search font-weight-bold"></i>
                               </button>
                             </div>
 
                             <div class="col-md-1">
-                              <p class="text-center item-hora" title="Horas Trabajadas">
+                              <p
+                                class="text-center item-hora"
+                                title="Horas Trabajadas"
+                              >
                                 HT
                               </p>
                             </div>
 
                             <div class="col-md-1">
-                              <p class="text-center item-hora" title="Horas Extras Diurnas">
+                              <p
+                                class="text-center item-hora"
+                                title="Horas Extras Diurnas"
+                              >
                                 HED
                               </p>
                             </div>
                             <div class="col-md-1">
-                              <p class="text-center item-hora" title="Horas Extras Nocturnas">
+                              <p
+                                class="text-center item-hora"
+                                title="Horas Extras Nocturnas"
+                              >
                                 HEN
                               </p>
                             </div>
                             <div class="col-md-1">
-                              <p class="text-center item-hora" title="Horas Extras Diurnas Festivas/Dominicales">
+                              <p
+                                class="text-center item-hora"
+                                title="Horas Extras Diurnas Festivas/Dominicales"
+                              >
                                 HEDFD
                               </p>
                             </div>
                             <div class="col-md-1">
-                              <p class="text-center item-hora" title="Horas Extras Nocturnas Festivas/Dominicales">
+                              <p
+                                class="text-center item-hora"
+                                title="Horas Extras Nocturnas Festivas/Dominicales"
+                              >
                                 HEDFN
                               </p>
                             </div>
                             <div class="col-md-1">
-                              <p class="text-center item-hora" title="Recargos Nocturnos">
+                              <p
+                                class="text-center item-hora"
+                                title="Recargos Nocturnos"
+                              >
                                 RN
                               </p>
                             </div>
                             <div class="col-md-1">
-                              <p class="text-center item-hora" title="Recargos Festivos">
+                              <p
+                                class="text-center item-hora"
+                                title="Recargos Festivos"
+                              >
                                 RF
                               </p>
                             </div>
                             <div class="col-12">
-                              <app-lista-fijos *ngIf="person.show == true" [turnType]="turnType" [person]="person"
-                                [primerDia]="primerDiaSemana" [ultimodiaDia]="ultimoDiaSemana"></app-lista-fijos>
+                              <app-lista-fijos
+                                *ngIf="person.show == true"
+                                [turnType]="turnType"
+                                [person]="person"
+                                [primerDia]="primerDiaSemana"
+                                [ultimodiaDia]="ultimoDiaSemana"
+                              ></app-lista-fijos>
                             </div>
                           </div>
                         </div>
@@ -152,7 +190,9 @@
   </div>
 </div>
 
-
 <ng-template #notData>
-  <app-not-data [loading]="loading" [text]="'No existen horas extras reportadas en este periodo.'"></app-not-data>
+  <app-not-data
+    [loading]="loading"
+    [text]="'No existen horas extras reportadas en este periodo.'"
+  ></app-not-data>
 </ng-template>

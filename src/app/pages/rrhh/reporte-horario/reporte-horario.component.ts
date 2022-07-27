@@ -69,7 +69,7 @@ export class ReporteHorarioComponent implements OnInit {
       .getFixedTurnsDiaries(d1, d2, this.getForm() )
       .subscribe((r) => {
         this.reporteHorarios = r.data;
-        console.log(this.reporteHorarios)
+        //console.log(this.reporteHorarios)
         this.loading = false;
       });
   }

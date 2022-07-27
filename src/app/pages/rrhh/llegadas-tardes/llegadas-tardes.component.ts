@@ -16,18 +16,18 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./llegadas-tardes.component.scss'],
 })
 export class LlegadasTardesComponent implements OnInit {
-  
-@ViewChild(MatAccordion) accordion: MatAccordion;
-matPanel = false;
-openClose(){
-  if (this.matPanel == false){
-    this.accordion.openAll()
-    this.matPanel = true;
-  } else {
-    this.accordion.closeAll()
-    this.matPanel = false;
-  }    
-}
+
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
   donutChart = donutChart;
   group_id: any;
   people_id = '';
@@ -94,7 +94,7 @@ openClose(){
   }
 
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
 
@@ -109,7 +109,7 @@ openClose(){
     this.getLinearDataset();
     this.getStatisticsByDays();
   }
-  getData() {}
+  getData() { }
   getLateArrivals() {
     let params = this.getParams();
     this.loading = true;
@@ -129,13 +129,13 @@ openClose(){
 
       let blob = new Blob([response], { type: 'application/excel' });
 
-        let link = document.createElement('a');
-        const filename = 'reporte_llegadas_tarde';
-        link.href = window.URL.createObjectURL(blob);
-        link.download = `${filename}.xlsx`;
-        link.click();
-        this.donwloading = false;
-      }),
+      let link = document.createElement('a');
+      const filename = 'reporte_llegadas_tarde';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.xlsx`;
+      link.click();
+      this.donwloading = false;
+    }),
       (error) => {
         console.log('Error downloading the file');
         this.donwloading = false;
@@ -226,8 +226,11 @@ openClose(){
     this._lateArrivals
       .getStatistcs(this.firstDay, this.lastDay, params)
       .subscribe((r: any) => {
+        console.log(r.data)
         this.dataDiary.total = r.data.lates.total;
-        this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
+        if (r.data.lates.time_diff_total != null) {
+          this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
+        }
         this.dataDiary.percentage = r.data.percentage;
 
         let d = r.data.allByDependency.reduce(

@@ -8,6 +8,7 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators'
 import Swal from 'sweetalert2';
 import { functionsUtils } from '../../../../../core/utils/functionsUtils';
 import { Route, Router } from '@angular/router';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-crear-proceso',
@@ -15,8 +16,9 @@ import { Route, Router } from '@angular/router';
   styleUrls: ['./crear-proceso.component.scss']
 })
 export class CrearProcesoComponent implements OnInit {
-  @ViewChild('modal') modal:any;
-  @ViewChild('myInputFile') myInputFile:any;
+  @ViewChild('modal') modal: any;
+  @ViewChild('myInputFile') myInputFile: any;
+  @ViewChild('fileInvolved') fileInvolved: any;
   form: FormGroup;
   formInvolved: FormGroup;
   loading = false;
@@ -27,20 +29,21 @@ export class CrearProcesoComponent implements OnInit {
   processs: any[] = [];
   fileString: any = '';
   file: any = '';
-  filename:any = '';
+  filename: any = '';
   type: any = '';
   selected: any[] = [];
-  collapsed:boolean[] = [];
-  check:boolean = true;
+  collapsed: boolean[] = [];
+  check: boolean = true;
   seleccionadas: any[] = [];
 
-  constructor( 
-              private fb:FormBuilder,
-              private _reactiveValid: ValidatorsService,
-              private disciplinarioService: DisciplinariosService,
-              private _swal: SwalService,
-              private router: Router
-              ) { }
+  constructor(
+    private fb: FormBuilder,
+    private _reactiveValid: ValidatorsService,
+    private disciplinarioService: DisciplinariosService,
+    private _swal: SwalService,
+    private modalService: NgbModal,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.getPeople();
@@ -48,11 +51,31 @@ export class CrearProcesoComponent implements OnInit {
     this.createFormInvolved();
   }
 
-  openModal(){
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    this.fileInvolved.value = ''
+    this.closeModal()
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  openModal() {
     this.modal.show();
   }
-  closeModal(){
-    this.modal.hide();
+  closeModal() {
+    //this.modal.hide();
     this.historyInfo = [];
     this.formInvolved.reset();
   }
@@ -70,14 +93,14 @@ export class CrearProcesoComponent implements OnInit {
   }
 
   // this form is to fill out the first form of values involved
-  createFormInvolved(){
+  createFormInvolved() {
     this.formInvolved = this.fb.group({
       person_id: [''],
       person: ['', this._reactiveValid.required],
       file: [''],
-      filename:[''],
+      filename: [''],
       type: [''],
-      observation:['']
+      observation: ['']
       // memorandums: this.fb.array([]),
     })
   }
@@ -130,7 +153,7 @@ export class CrearProcesoComponent implements OnInit {
     this.disciplinarioService.getHistory(this.formInvolved.value.person.value)
       .subscribe((res: any) => {
         this.historyInfo = res.data;
-        
+
       });
   }
 
@@ -148,9 +171,9 @@ export class CrearProcesoComponent implements OnInit {
       });
   }
 
-  InvolvedControl(data){
+  InvolvedControl(data) {
     let group = this.fb.group({
-      person_id : [data.person_id],
+      person_id: [data.person_id],
       person: [data.person],
       file: [data.file],
       filename: [data.filename],
@@ -170,30 +193,31 @@ export class CrearProcesoComponent implements OnInit {
     });
     return group;
   }
-  
-  get involvedList(){
+
+  get involvedList() {
     return this.form.get('involved') as FormArray;
   }
 
-  deletedInvolved(i){
-  this.involvedList.removeAt(i);
+  deletedInvolved(i) {
+    this.involvedList.removeAt(i);
   }
 
-  newInvolved(){
-    this.formInvolved.patchValue({file: this.file, filename: this.filename, type: this.type})
+  newInvolved() {
+    this.formInvolved.patchValue({ file: this.file, filename: this.filename, type: this.type })
     this.formInvolved.addControl('memorandums', this.fb.control(this.seleccionadas))
     let forma = this.formInvolved.value;
     forma.memorandums = this.seleccionadas;
     this.involvedList.push(this.InvolvedControl(forma))
-    this.modal.hide();
+    //this.modal.hide();
+    this.modalService.dismissAll(); 
     this.formInvolved.reset();
     this.historyInfo = [];
     this.seleccionadas = []
   }
 
-  validateInvolved(){
-    let arr:Array<any> = this.form.get('involved').value;
-    this.formInvolved.patchValue({person_id: this.formInvolved.value.person.value})
+  validateInvolved() {
+    let arr: Array<any> = this.form.get('involved').value;
+    this.formInvolved.patchValue({ person_id: this.formInvolved.value.person.value })
     let valid = arr.some(r => r.person_id == this.formInvolved.value.person_id)
     if (valid) {
       this._swal.show({
@@ -205,26 +229,26 @@ export class CrearProcesoComponent implements OnInit {
     }
   }
 
-  memorandumsGroup(event){
-    let group = this.fb.group({ 
-      value: event.target.value, 
-      id: event.target.id, 
+  memorandumsGroup(event) {
+    let group = this.fb.group({
+      value: event.target.value,
+      id: event.target.id,
       name: event.target.name,
-      date: event.target.date 
+      date: event.target.date
     });
     return group;
   }
 
-  get memorandumsList(){
+  get memorandumsList() {
     return this.formInvolved.get('memorandums') as FormArray;
   }
 
-  deletedMemorandum(i){
-  this.memorandumsList.removeAt(i);
+  deletedMemorandum(i) {
+    this.memorandumsList.removeAt(i);
   }
 
   onSelectOption(event): void {
-    let seleccionada = { value: event.target.value, id: event.target.id, name: event.target.name, date: event.target.date  }
+    let seleccionada = { value: event.target.value, id: event.target.id, name: event.target.name, date: event.target.date }
     if (event.target.checked) {
       // Add the new value in the selected options
       this.seleccionadas.push((seleccionada));
@@ -236,7 +260,7 @@ export class CrearProcesoComponent implements OnInit {
     }
   }
 
-  save(){
+  save() {
     Swal.fire({
       title: '¿Estas seguro?',
       text: "Se iniciará nuevo proceso disciplinario!",
@@ -253,15 +277,15 @@ export class CrearProcesoComponent implements OnInit {
           person_id: this.form.value.person_id.value
         })
         this.disciplinarioService.createNewProcess(this.form.value)
-        .subscribe((res: any) => {
-          Swal.fire({
-            icon: 'success',
-            title: res.data,
-            text: 'Proceso creado satisfactoriamente'
+          .subscribe((res: any) => {
+            Swal.fire({
+              icon: 'success',
+              title: res.data,
+              text: 'Proceso creado satisfactoriamente'
+            });
+            this.router.navigate(['/rrhh/procesos/disciplinarios']);
+            this.form.reset();
           });
-          this.router.navigate(['/rrhh/procesos/disciplinarios']);
-          this.form.reset();
-        });
       }
     })
   }

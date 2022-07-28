@@ -10,7 +10,8 @@ import { PermissionService } from '../../../../core/services/permission.service'
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { MatAccordion } from '@angular/material/expansion';
-type Person = {value: number, text: string};
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+type Person = { value: number, text: string };
 @Component({
   selector: 'app-memorandos',
   templateUrl: './memorandos.component.html',
@@ -19,28 +20,28 @@ type Person = {value: number, text: string};
 export class MemorandosComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
-  @ViewChild('modalMotivo') modalMotivo:any;
-  @ViewChild('modalMemorando') modalMemorando:any;
-  @ViewChild('modalLlamada') modalLlamada:any;
-  formMotivo:FormGroup;
-  formMemorando:FormGroup;
-  formLlamada:FormGroup;
-  memorandums:any[] = [];
-  person_selected:any;
+  @ViewChild('modalMotivo') modalMotivo: any;
+  @ViewChild('modalMemorando') modalMemorando: any;
+  @ViewChild('modalLlamada') modalLlamada: any;
+  formMotivo: FormGroup;
+  formMemorando: FormGroup;
+  formLlamada: FormGroup;
+  memorandums: any[] = [];
+  person_selected: any;
   loading = false;
-  types:any;
-  typesLimitated:any;
-  call:any = {};
-  filtros:any = {
+  types: any;
+  typesLimitated: any;
+  call: any = {};
+  filtros: any = {
     person: '',
     date: '',
     state: ''
@@ -61,7 +62,7 @@ export class MemorandosComponent implements OnInit {
       approve: false
     }
   };
-  states:any = [
+  states: any = [
     { clave: 'Todos' },
     { clave: 'Pendiente' },
     { clave: 'Aprobado' },
@@ -73,17 +74,18 @@ export class MemorandosComponent implements OnInit {
   file: any = '';
   fileLocalstorage: String = '' //Eliminar al introducir backend
 
-  people:any[] = [];
+  people: any[] = [];
   public model: Person;
-  constructor( 
-              private fb: FormBuilder,  
-              private _reactiveValid: ValidatorsService,
-              private memorandosService: MemorandosService,
-              private _permission: PermissionService,
-              private _swal: SwalService
-              ) {
-              this.permission = this._permission.validatePermissions(this.permission)
-              }
+  constructor(
+    private fb: FormBuilder,
+    private _reactiveValid: ValidatorsService,
+    private memorandosService: MemorandosService,
+    private _permission: PermissionService,
+    private modalService: NgbModal,
+    private _swal: SwalService
+  ) {
+    this.permission = this._permission.validatePermissions(this.permission)
+  }
 
   ngOnInit(): void {
     this.createFormMotivo();
@@ -96,85 +98,109 @@ export class MemorandosComponent implements OnInit {
   }
 
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
 
-  openMotivo(){
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    this.formLlamada.reset()
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  openMotivo() {
     this.modalMotivo.show();
   }
-  
-  createFormMotivo(){
+
+  createFormMotivo() {
     this.formMotivo = this.fb.group({
       name: ['', this._reactiveValid.required],
-    }); 
+    });
   }
 
   saveReason() {
-    this.memorandosService.createNewMemorandumType( this.formMotivo.value )
-    .subscribe( (res:any) => {
-       this.getTypeMemorandum();
-       this.formMotivo.reset();
-    });
+    this.memorandosService.createNewMemorandumType(this.formMotivo.value)
+      .subscribe((res: any) => {
+        Swal.fire({
+          title: ('Guardado'),
+          text: ('El nuevo motivo ha sido guardado con éxito.'),
+          icon: 'success'
+        })
+        this.getTypeMemorandum();
+        this.formMotivo.reset();
+      });
   }
 
-  activateOrCancel( type, status ) {
-    let data:any = {
-      id:type.value,
+  activateOrCancel(type, status) {
+    let data: any = {
+      id: type.value,
       status
     }
     this.memorandosService.createNewMemorandumType(data)
-    .subscribe( res => {
-      Swal.fire({
-        title: '¿Estas Seguro?',
-        text: (status === 'Inactivo' ? 'El Motivo se anulará' : 'El Motivo se Activará'),
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: (status === 'Inactivo' ? 'Si, Anular' : 'Si, Activar')
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: (status === 'Inactivo' ? 'Motivo Anulado!' : 'Motivo Activado' ) ,
-            text: (status === 'Inactivo' ? 'El Motivo ha sido anulado con éxito.' : 'El Motivo ha sido activado con éxito.'),
-            icon: 'success'
-          })
-          this.getTypeMemorandum();
-          this.getList();
-        }
+      .subscribe(res => {
+        Swal.fire({
+          title: '¿Estas Seguro?',
+          text: (status === 'Inactivo' ? 'El Motivo se anulará' : 'El Motivo se Activará'),
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Cancelar',
+          confirmButtonText: (status === 'Inactivo' ? 'Si, Anular' : 'Si, Activar')
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: (status === 'Inactivo' ? 'Motivo Anulado!' : 'Motivo Activado'),
+              text: (status === 'Inactivo' ? 'El Motivo ha sido anulado con éxito.' : 'El Motivo ha sido activado con éxito.'),
+              icon: 'success'
+            })
+            this.getTypeMemorandum();
+            this.getList();
+          }
+        })
       })
-    })
   }
 
-  getTypeMemorandum( page = 1 ) {
+  getTypeMemorandum(page = 1) {
     this.paginationMotivo.page = page;
     this.memorandosService.getTypesOfMemorandum(this.paginationMotivo)
-    .subscribe( (res:any) => {
-      this.types = res.data.data;
-      this.paginationMotivo.collectionSize = res.data.total;
-    });
+      .subscribe((res: any) => {
+        this.types = res.data.data;
+        this.paginationMotivo.collectionSize = res.data.total;
+      });
   }
-  
+
   /* Memorando base */
 
-  createFormMemorando(){
+  createFormMemorando() {
     this.formMemorando = this.fb.group({
       person_id: ['', this._reactiveValid.required],
       memorandum_type_id: ['', this._reactiveValid.required],
       details: ['', this._reactiveValid.required],
-      file:[''],
+      file: [''],
       level: ['Seleccione', this._reactiveValid.required]
-    }); 
+    });
   }
 
-  openMemorando(){
+  openMemorando() {
     this.modalMemorando.show();
   }
-  
+
   formatter = (state: Person) => state.text;
-  search: OperatorFunction<string, readonly {value, text}[]> = (text$: Observable<string>) => text$.pipe(
+  search: OperatorFunction<string, readonly { value, text }[]> = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     filter(term => term.length >= 3),
@@ -183,39 +209,40 @@ export class MemorandosComponent implements OnInit {
 
   getPeople() {
     this.memorandosService.getPeople()
-    .subscribe( (res:any) => {
-      this.people = res.data;
-    });
+      .subscribe((res: any) => {
+        this.people = res.data;
+      });
   }
 
   getList() {
     this.memorandosService.getMemorandumLimitated()
-    .subscribe( (res:any) => {
-      this.typesLimitated = res.data;
-    });
+      .subscribe((res: any) => {
+        this.typesLimitated = res.data;
+        console.log(this.typesLimitated)
+      });
   }
 
-  getMemorandumList( page = 1 ) {
+  getMemorandumList(page = 1) {
     this.loading = true;
     let params = {
       ...this.paginationMemorando, ...this.filtros
     }
     this.paginationMemorando.page = page;
-    this.memorandosService.getMemorandumList( params )
-    .subscribe( (res:any) => {
-      this.memorandums = res.data.data;
-      console.log(res.data);
-      
-      this.paginationMemorando.collectionSize = res.data.total;
-      this.loading = false;
-    })
+    this.memorandosService.getMemorandumList(params)
+      .subscribe((res: any) => {
+        this.memorandums = res.data.data;
+        console.log(res.data);
+
+        this.paginationMemorando.collectionSize = res.data.total;
+        this.loading = false;
+      })
   }
 
   saveMemorandum() {
     let person_id = this.formMemorando.value.person_id.value;
-    let file= this.formMemorando.value.file;
+    let file = this.formMemorando.value.file;
     file = this.fileString;
-    this.fileLocalstorage=file;
+    this.fileLocalstorage = file;
     let type = this.type;
     this.formMemorando.patchValue({
       person_id,
@@ -224,18 +251,19 @@ export class MemorandosComponent implements OnInit {
     });
 
     ///this.memorandosService.saveFile(file);
-    this.memorandosService.createNewMemorandum( this.formMemorando.value )
-    .subscribe( (res:any) => {
-      this.modalMemorando.hide();
-      this.formMemorando.reset();
-      this.person_selected = '';
-      this.getMemorandumList();
-      Swal.fire({
-        icon: 'success',
-        //title: res.data,
-        text: 'Felicidades, Creado Satisfactiamente'
-      })
-    });
+    this.memorandosService.createNewMemorandum(this.formMemorando.value)
+      .subscribe((res: any) => {
+        //this.modalMemorando.hide();
+        this.modalService.dismissAll(); 
+        this.formMemorando.reset();
+        this.person_selected = '';
+        this.getMemorandumList();
+        Swal.fire({
+          icon: 'success',
+          //title: res.data,
+          text: 'Felicidades, Creado Satisfactiamente'
+        })
+      });
   }
 
   /**
@@ -257,7 +285,7 @@ export class MemorandosComponent implements OnInit {
       () => { console.info('File downloaded successfully'); this.loading = false };
   }
 
-  aprobarMemorando( memorando, state ) {
+  aprobarMemorando(memorando, state) {
     let data = {
       id: memorando.id,
       state
@@ -268,21 +296,21 @@ export class MemorandosComponent implements OnInit {
       icon: 'question',
       showCancel: true
     })
-    .then((result) =>{
-      if (result.isConfirmed) {
-        this.memorandosService.createNewMemorandum(data).subscribe( (r:any) =>{
-          
-          this._swal.show({
-            icon: 'success',
-            title: 'El Memorando Ha sido Aprobado!',
-            text: '¡Aprobado!',
-            timer: 2500,
-            showCancel: false
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.memorandosService.createNewMemorandum(data).subscribe((r: any) => {
+
+            this._swal.show({
+              icon: 'success',
+              title: 'El Memorando Ha sido Aprobado!',
+              text: '¡Aprobado!',
+              timer: 2500,
+              showCancel: false
+            })
+            this.getMemorandumList();
           })
-          this.getMemorandumList();
-        })
-      }
-    })
+        }
+      })
   }
 
   get funcionario_invalid() {
@@ -306,7 +334,7 @@ export class MemorandosComponent implements OnInit {
   openModalLlamada() {
     this.modalLlamada.show();
   }
- 
+
 
   onFileChanged(event) {
     if (event.target.files[0]) {
@@ -345,12 +373,12 @@ export class MemorandosComponent implements OnInit {
       user_id: ['']
     })
   }
-  
+
   createNewAttentionCall() {
     let person_id = this.formLlamada.value.person_id.value;
-    this.memorandosService.attentionCalls(person_id).subscribe((r:any) => {
+    this.memorandosService.attentionCalls(person_id).subscribe((r: any) => {
       this.call = r;
-      if (this.call?.person_id == person_id && this.call?.cantidad == 2 ) {
+      if (this.call?.person_id == person_id && this.call?.cantidad == 2) {
         Swal.fire({
           icon: 'warning',
           title: '¡ALERTA!',
@@ -358,44 +386,46 @@ export class MemorandosComponent implements OnInit {
           showCancelButton: true,
           cancelButtonColor: '#d33',
           confirmButtonColor: '#3085d6',
-           cancelButtonText: 'No, ¡Dejame comprobar!',
-           confirmButtonText: 'Si. ¡Hazlo!',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.modalLlamada.hide();
-              let details = this.formLlamada.value.reason;
-              let level = 'Leve';
-              let memorandum_type_id = 2;
-              let data = {
-                person_id,
-                details,
-                level,
-                memorandum_type_id
-              }
-             this.memorandosService.createNewMemorandum(data)
-             .subscribe((r:any) => {
-               this.formLlamada.reset();
-               this.getMemorandumList();
-              })
+          cancelButtonText: 'No, ¡Dejame comprobar!',
+          confirmButtonText: 'Si. ¡Hazlo!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.modalService.dismissAll(); 
+            //this.modalLlamada.hide();
+            let details = this.formLlamada.value.reason;
+            let level = 'Leve';
+            let memorandum_type_id = 2;
+            let data = {
+              person_id,
+              details,
+              level,
+              memorandum_type_id
             }
-         }) 
+            this.memorandosService.createNewMemorandum(data)
+              .subscribe((r: any) => {
+                this.formLlamada.reset();
+                this.getMemorandumList();
+              })
+          }
+        })
       } else {
         this.formLlamada.patchValue({
           person_id
         })
         this.memorandosService.createNewAttentionCall(this.formLlamada.value)
-        .subscribe( (res:any) =>{
-          this.modalLlamada.hide();
-          this.getMemorandumList();
-          this.formLlamada.reset();
-          Swal.fire({
-            icon: 'success',
-            title: res.data,
-            text: '¡Llamada de Atención creada con éxito!'
-          });
-        })
+          .subscribe((res: any) => {
+            //this.modalLlamada.hide();
+            this.modalService.dismissAll(); 
+            this.getMemorandumList();
+            this.formLlamada.reset();
+            Swal.fire({
+              icon: 'success',
+              title: res.data,
+              text: '¡Llamada de Atención creada con éxito!'
+            });
+          })
       };
     })
-}
+  }
 
 }

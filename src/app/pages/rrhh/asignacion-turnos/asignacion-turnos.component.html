@@ -1,106 +1,88 @@
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-          <h4 class="text-primary">Asignación de Horarios</h4>
-          <div class="btn-group rounded">
-            <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
-              <i class="fas fa-sliders-h"></i> Filtros
-            </button>
-          </div>
-        </div>
-        <hr class="line">
-
-        <div class="container">
-          <mat-accordion multi>
-              <mat-expansion-panel class="mat-elevation-z0">
-                  <div class="container">
-                    <form [formGroup]="forma" (ngSubmit)="makeRequestBySemana();getData()">
-                      <div class="row">
-                        <div class="col-md-3">
-                          <label for="group" class="custom-label">Filtrar por grupos</label>
-                          <select formControlName="group_id" class="form-control form-control-sm">
-                            <option *ngFor="let group of groupList" [value]="group.value">
-                              {{ group.text }}
-                            </option>
-                          </select>
-                        </div>
-            
-                        <div class="col-md-3">
-                          <label for="dependencia" class="custom-label">Filtrar por dependencia</label>
-                          <select formControlName="dependency_id" class="form-control form-control-sm">
-                            <option *ngFor="let dependency of dependencyList" [value]="dependency.value">
-                              {{ dependency.text }}
-                            </option>
-                          </select>
-                        </div>
-            
-                        <div class="col-md-3">
-                          <label for="centroCosto" class="custom-label">Nombre funcionario</label>
-                          <input [readonly]="false" placeholder="Buscar..." formControlName="person"
-                            class="form-control form-control-sm" />
-                        </div>
-                        <div class="col-md-3">
-                          <label for="dependencia" class="custom-label">Filtrar por semana</label>
-                          <input type="week" formControlName="week" class="form-control form-control-sm text-center" required />
-                        </div>    
-                        <div class="col-12">
-                          <button class="btn btn-outline-primary default btn-sm mt-2 w-100">
-                            <i class="fas fa-search"></i> Filtrar
-                          </button>
-                          <!-- <button
-                            *ngIf="datosGenerales.length"
-                            title="descargar"
-                            class="btn btn-info btn-sm ml-2"
-                            (click)="descargarInformeTurnos(group.id)"
-                          >
-                            <i class="fa fa-download"></i> Descargar
-                          </button> -->
-                        </div>
-                      </div>        
-                        
-                    </form>
-                      <!-- <div class="row">
-                          <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                              <mat-label> </mat-label>
-                              <input matInput type="text" placeholder="">
-                          </mat-form-field>
-                          <mat-form-field class="col-md-2" appearance="outline">
-                              <mat-label> </mat-label>
-                              <mat-select>
-                                  <mat-option value=""> </mat-option>
-                              </mat-select>
-                          </mat-form-field>                                
-                      </div> -->
-                  </div>
-              </mat-expansion-panel>
-          </mat-accordion>
+<div class="card">
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Asignación de Horarios</h4>
+      <div class="btn-group rounded">
+        <button class="btn btn-info btn-sm" (click)="openClose()">
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
       </div>
-
-        <div *ngIf="datosGenerales.length && !loading; else notData">
-          <div class="container" *ngFor="let company of datosGenerales">
-              <h5 class="text-primary">
-                <strong> {{ company.name }} </strong>
-              </h5>        
-            <div class="card-body depen">
-              <div *ngFor="let group of company.groups">        
-                <div *ngFor="let dependency of group.dependencies">
-                  <h6 class="custom-label">{{ group.name }} - {{ dependency.name }}</h6>
-                  <app-semana-turno [people]="dependency.people" [turnosRotativos]="turns" [diaInicial]="diaInicialSemana"
-                    [changeWeek]="changeWeek" [diaFinal]="diaFinalSemana"></app-semana-turno>
-                </div>
-              </div>
+    </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <form [formGroup]="forma" (ngSubmit)="makeRequestBySemana(); getData()">
+          <div class="row">
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Grupo</mat-label>
+              <mat-select formControlName="group_id">
+                <mat-option
+                  *ngFor="let group of groupList"
+                  [value]="group.value"
+                >
+                  {{ group.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Dependencia</mat-label>
+              <mat-select formControlName="dependency_id">
+                <mat-option
+                  *ngFor="let dependency of dependencyList"
+                  [value]="dependency.value"
+                >
+                  {{ dependency.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Funcionario</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por funcionario"
+                formControlName="person"
+                [readonly]="false"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+              <mat-label>Semana</mat-label>
+              <input matInput type="week" formControlName="week" required />
+            </mat-form-field>
+            <div class="col-md-12 mb-3">
+              <button class="btn btn-outline-primary btn-sm btn-block">
+                <i class="fas fa-search"></i> Filtrar
+              </button>
             </div>
           </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div *ngIf="datosGenerales.length && !loading; else notData">
+      <div *ngFor="let company of datosGenerales">
+        <div *ngFor="let group of company.groups">
+          <div *ngFor="let dependency of group.dependencies">
+            <h6 class="text-center text-uppercase text-primary">
+              {{ group.name }} - {{ dependency.name }}
+            </h6>
+            <app-semana-turno
+              [people]="dependency.people"
+              [turnosRotativos]="turns"
+              [diaInicial]="diaInicialSemana"
+              [changeWeek]="changeWeek"
+              [diaFinal]="diaFinalSemana"
+            ></app-semana-turno>
+          </div>
         </div>
-        
       </div>
     </div>
   </div>
 </div>
 
-
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
 <!-- 
 <div class="alert alert-secondary" >
   <p class="font-weight-bold text-center">
@@ -108,7 +90,11 @@
     "Configuración"
   </p>
 </div> -->
-
-<ng-template #notData>
-  <app-not-data [loading]="loading"></app-not-data>
-</ng-template>
+<!-- <button
+                *ngIf="datosGenerales.length"
+                title="descargar"
+                class="btn btn-info btn-sm ml-2"
+                (click)="descargarInformeTurnos(group.id)"
+              >
+                <i class="fa fa-download"></i> Descargar
+              </button> -->

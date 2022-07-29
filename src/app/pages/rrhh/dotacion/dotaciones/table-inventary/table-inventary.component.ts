@@ -6,6 +6,8 @@ import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
+import { MatAccordion } from '@angular/material';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -18,10 +20,20 @@ export class TableInventaryComponent implements OnInit {
 
   @ViewChild('tablestock') private tablestock;
   @ViewChild('modalEntrega') modalEntrega: any;
-
-  public flagDotacionApp:  string = '';
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
+  public flagDotacionApp: string = '';
   selectedMes: string;
-  nombre:string = '';
+  nombre: string = '';
 
   public TotalesMes = 0
   public Totales = 0
@@ -46,7 +58,7 @@ export class TableInventaryComponent implements OnInit {
   public Empleados: any[] = [];
   public Lista_Dotaciones: any = [];
 
-  filtros:any = {
+  filtros: any = {
     cod: '',
     type: '',
     recibe: '',
@@ -75,9 +87,9 @@ export class TableInventaryComponent implements OnInit {
   };
 
 
-  constructor(private _dotation: DotacionService,private _person: PersonService){
+  constructor(private _dotation: DotacionService, private modalService: NgbModal, private _person: PersonService) {
 
-   }
+  }
 
   ngOnInit(): void {
     this.loading = false;
@@ -95,34 +107,54 @@ export class TableInventaryComponent implements OnInit {
 
   }
 
+  closeResult = '';
+  public openConfirm(confirm, value: string) {
+    //this.tablestock.search(value);
+    this.configEntrega(value)
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
   listarTotales(cantMes) {
     // this._dotation.getCuantityDispatched({ cantMes }).subscribe((r: any) => {
     this._dotation.getCuantityDispatched(
-       {
+      {
 
-         firstDay: this.firstDay,
-         lastDay: this.lastDay,
-         person: this.people_id,
-         persontwo: this.people_id_two,
-         cod: this.cod,
-         type: this.type,
-         delivery: this.delivery,
-         art: this.art,
+        firstDay: this.firstDay,
+        lastDay: this.lastDay,
+        person: this.people_id,
+        persontwo: this.people_id_two,
+        cod: this.cod,
+        type: this.type,
+        delivery: this.delivery,
+        art: this.art,
 
-       }).subscribe((r: any) => {
-      this.TotalesMes = r.data.month.totalMes;
-      this.SumaMes = r.data.month.totalCostoMes;
+      }).subscribe((r: any) => {
+        this.TotalesMes = r.data.month.totalMes;
+        this.SumaMes = r.data.month.totalCostoMes;
 
-      this.CantidadTotal = r.data.year.totalAnual
-      this.Totales = r.data.year.totalCostoAnual
+        this.CantidadTotal = r.data.year.totalAnual
+        this.Totales = r.data.year.totalCostoAnual
 
-      this.TotalesDotaciones = r.data.td.totalDotacion
-      this.totalEpp = r.data.te.totalEpp
-    });
+        this.TotalesDotaciones = r.data.td.totalDotacion
+        this.totalEpp = r.data.te.totalEpp
+      });
 
   }
 
-  closeModal(){
+  closeModal() {
     this.modalEntrega.hide();
     this.ListarDotaciones();
     // this.flagDotacionApp = ''
@@ -143,8 +175,8 @@ export class TableInventaryComponent implements OnInit {
   public barChartLabels: Label[] = ['Categorías'];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
-  public barChartData : ChartDataSets[] = [];
-  graphicData:any = {}
+  public barChartData: ChartDataSets[] = [];
+  graphicData: any = {}
 
   Graficar() {
 
@@ -154,23 +186,23 @@ export class TableInventaryComponent implements OnInit {
         firstDay: this.firstDay,
         lastDay: this.lastDay,
         person: this.people_id,
-         persontwo: this.people_id_two,
-         cod: this.cod,
-         type: this.type,
-         delivery: this.delivery,
-         art: this.art,
+        persontwo: this.people_id_two,
+        cod: this.cod,
+        type: this.type,
+        delivery: this.delivery,
+        art: this.art,
 
       }).subscribe((d: any) => {
 
-    let totals: any[] = d.data;
+        let totals: any[] = d.data;
 
-    if (totals) {
-      this.barChartData = totals.reduce((acc, el) => {
-        let daSet = {data: [ el.value], label: [el.name]}
-        return [ ...acc,daSet]
-      }, [])
-    }
-    })
+        if (totals) {
+          this.barChartData = totals.reduce((acc, el) => {
+            let daSet = { data: [el.value], label: [el.name] }
+            return [...acc, daSet]
+          }, [])
+        }
+      })
 
   }
 
@@ -183,14 +215,14 @@ export class TableInventaryComponent implements OnInit {
     console.log(this.lastDay);
 
     this._dotation.downloadDeliveries(this.firstDay, this.lastDay, params).subscribe((response: BlobPart) => {
-        let blob = new Blob([response], { type: 'application/excel' });
-        let link = document.createElement('a');
-        const filename = 'reporte_inventario';
-        link.href = window.URL.createObjectURL(blob);
-        link.download = `${filename}.xlsx`;
-        link.click();
-        this.donwloading = false;
-      }),
+      let blob = new Blob([response], { type: 'application/excel' });
+      let link = document.createElement('a');
+      const filename = 'reporte_inventario';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.xlsx`;
+      link.click();
+      this.donwloading = false;
+    }),
       (error) => {
         console.log('Error downloading the file');
         this.donwloading = false;
@@ -201,7 +233,7 @@ export class TableInventaryComponent implements OnInit {
       };
   }
 
-  ListarDotaciones(page = 1){
+  ListarDotaciones(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtros,
@@ -215,7 +247,7 @@ export class TableInventaryComponent implements OnInit {
       art: this.art,
     }
     this.loading = true;
-    this._dotation.getDotations(params).subscribe((r:any) => {
+    this._dotation.getDotations(params).subscribe((r: any) => {
       this.Lista_Dotaciones = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;

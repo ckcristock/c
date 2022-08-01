@@ -1,54 +1,66 @@
-<app-modal-basic #modal [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Entregas</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide();limpiar()">
-          <span aria-hidden="true">
-            <i class="fas fa-times"></i>
-          </span>
-      </button>
+<ng-template #addEntregas let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">Entregas</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
     </div>
-    <div class="app-modal-body">
-        <div class="row">
-            <div class="col-12">
-                <!-- <strong class="text-title"> {{ material.name | titlecase }} </strong> -->
-                <strong class="text-title">  </strong>
-                <table class="table table-sm table-striped">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Fun.Entrega</th>
-                            <th>Fecha Recibe</th>
-                            <th>Articulo</th>
-                            <th>Cantidad</th>
-                            <th>Fecha</th>
-                        </tr>
-                    </thead>
+  </div>
+  <div class="modal-body">
+    <!-- <strong class="text-title"> {{ material.name | titlecase }} </strong> -->
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && Lista_Entrega_Dotacion.length > 0; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Código</th>
+          <th>Fun.Entrega</th>
+          <th>Fecha Recibe</th>
+          <th>Articulo</th>
+          <th>Cantidad</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
 
-                    <tbody>
-                        <tr *ngFor="let item of Lista_Entrega_Dotacion">
-                            <td> {{ item.delivery_code }} </td>
-                            <td> {{ item.entrega }} </td>
-                            <td> {{ item.recibe }} </td>
-                            <td> {{ item.product_name }} </td>
-                            <td> {{ item.quantity }} </td>
-                            <td> {{ item.created_at }} </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="app-modal-footer">
-        <!-- <div class="form-group text-right">
-            <button (click)="modal.hide();limpiar()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-        </div> -->
-        <div>
-            <ngb-pagination maxSize="5" [collectionSize]="pagination.collectionSize" (pageChange)="getDotationsProduct($event) " [pageSize]="pagination.pageSize " [(page)]="pagination.page " aria-label="Default pagination ">
-            </ngb-pagination>
-        </div>
-    </div>
-</app-modal-basic>
+      <tbody>
+        <tr *ngFor="let item of Lista_Entrega_Dotacion">
+          <td>{{ item.delivery_code }}</td>
+          <td>{{ item.entrega }}</td>
+          <td>{{ item.recibe }}</td>
+          <td>{{ item.product_name }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.created_at }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      maxSize="5"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="getDotationsProduct($event)"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      aria-label="Default pagination "
+    >
+    </ngb-pagination>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+  </div>
+</ng-template>
 
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

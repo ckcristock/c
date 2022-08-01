@@ -10,6 +10,7 @@ import { AcomodarActaComponent } from './acta-recepion-aprobados/acomodar-acta/a
 import { InventarioVencerComponent } from './inventario-vencer/inventario-vencer.component';
 import { AlistamientoComponent } from './alistamiento/alistamiento.component';
 import { AlistamientoCrearComponent } from './alistamiento/alistamiento-crear/alistamiento-crear.component';
+import { InventarioEstibasComponent } from './inventario-fisico/inventario-estibas/inventario-estibas.component';
 
 const routes: Routes = [
   { path: 'inventario', component: InventarioComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
     path : 'acta-recepcion-acomodar/:tipo/:id/:lugar/:idLugar', component : AcomodarActaComponent,
   },
   { path: 'vencer', component: InventarioVencerComponent },
+  { path: 'inventario-estibas/:id', component: InventarioEstibasComponent },
   { path: 'alistamiento', component: AlistamientoComponent },
   { path: 'alistamiento/crear/:id/:tipo/:idc', component: AlistamientoCrearComponent},
   { path: 'remisiones', loadChildren: () => import('./remision/remision.module').then(m => m.RemisionModule) },

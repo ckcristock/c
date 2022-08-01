@@ -113,8 +113,8 @@ export class AlistamientoComponent implements OnInit {
   public Alistadas: any;
   date: { year: number; month: number };
 
-  public ValidaFase1 = false;
-  public ValidaFase2 = false;
+  public ValidaFase1: boolean;
+  public ValidaFase2: boolean;
   alive: any;
   envi: any = { ruta: '' };
 
@@ -146,6 +146,8 @@ export class AlistamientoComponent implements OnInit {
   }
   loading = true
   ngOnInit() {
+    this.ValidaFase1 = true;
+    this.ValidaFase2 = true;
     this.envi = environment;
     /* TODO auth user */
     this.user = {
@@ -157,7 +159,7 @@ export class AlistamientoComponent implements OnInit {
       })
       .subscribe((data: any) => {
         this.FaseI = data;
-        this.ValidaFase1 = true;
+        this.ValidaFase1 = false;
       });
     this.http
       .get(environment.ruta + 'php/alistamiento_nuevo/detalle_fase2.php', {
@@ -165,7 +167,7 @@ export class AlistamientoComponent implements OnInit {
       })
       .subscribe((data: any) => {
         this.FaseII = data;
-        this.ValidaFase2 = true;
+        this.ValidaFase2 = false;
       });
     let params = this.route.snapshot.queryParams;
     if (Object.keys(params).length > 0) {
@@ -531,7 +533,7 @@ export class AlistamientoComponent implements OnInit {
         this.filtro_Codigo1;
 
       this.location.replaceState('/alistamientosnuevo', queryString);
-
+      this.ValidaFase1 = true
       this.http
         .get(
           environment.ruta +
@@ -542,6 +544,7 @@ export class AlistamientoComponent implements OnInit {
         )
         .subscribe((data: any) => {
           this.FaseI = data;
+          this.ValidaFase1 = false
         });
     } else {
       this.location.replaceState('/alistamientosnuevo', '');
@@ -558,12 +561,13 @@ export class AlistamientoComponent implements OnInit {
         )
         .subscribe((data: any) => {
           this.FaseI = data;
+          this.ValidaFase1 = true
         });
     }
   }
   filtrosFase2() {
     let params: any = {};
-
+    this.ValidaFase2 = true
     if (
       this.filtro_Codigo2 != '' ||
       this.filtro_Origen2 != '' ||
@@ -598,6 +602,7 @@ export class AlistamientoComponent implements OnInit {
         )
         .subscribe((data: any) => {
           this.FaseII = data;
+          this.ValidaFase2 = false
         });
     } else {
       this.location.replaceState('/alistamientosnuevo', '');
@@ -614,6 +619,7 @@ export class AlistamientoComponent implements OnInit {
         )
         .subscribe((data: any) => {
           this.FaseII = data;
+          this.ValidaFase2 = false
         });
     }
   }

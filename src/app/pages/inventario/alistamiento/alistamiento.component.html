@@ -1,588 +1,580 @@
-<div class="row">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Fase I</h4>
-            <div class="btn-group rounded">
-              <button
-                class="btn btn-info btn-sm"
-                style="float: right"
-                (click)="openClose()"
-              >
-                <i class="fas fa-sliders-h"></i> Filtros
-              </button>
-            </div>
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="card-title d-flex justify-content-between">
+          <h4 class="text-primary">Fase I</h4>
+          <div class="btn-group rounded">
+            <button class="btn btn-info btn-sm" (click)="openClose()">
+              <i class="fas fa-sliders-h"></i> Filtros
+            </button>
           </div>
-          <hr class="line" />
-          <mat-accordion multi #firstAccordion="matAccordion">
-            <mat-expansion-panel class="mat-elevation-z0">
-              <mat-form-field class="col-md-4 pl-md-0" appearance="outline">
-                <mat-label>Código</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Busca por nombre"
-                  [(ngModel)]="filtro_Codigo1"
-                  (change)="filtrosFase1()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col-md-4 pl-md-0" appearance="outline">
-                <mat-label>Origen</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Busca por origen"
-                  [(ngModel)]="filtro_Origen1"
-                  (change)="filtrosFase1()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col-md-4 px-md-0" appearance="outline">
-                <mat-label>Destino</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Busca por destino"
-                  [(ngModel)]="filtro_Destino1"
-                  (change)="filtrosFase1()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-            </mat-expansion-panel>
-          </mat-accordion>
-          <table
-            class="table table-bordered table-striped table-sm table-responsive-sm"
-            style="font-size: small"
-            
-          >
-            <tr *ngFor="let item of FaseI; let i = index" id="fila{{ i }}">
-              <td style="width: 50px">
-                <div class="feed-user-img">
-                  <img
-                    [src]="item.Imagen | image: 'users'"
-                    style="width: 50px"
-                    class="rounded-circle avatar-sm"
-                    alt=""
-                  />
-                </div>
-              </td>
-              <td style="padding: 8px !important">
-                <h6>{{ item.Tipo }} {{ item.Codigo }}</h6>
-                <p class="text-muted">
-                  <strong>Origen: </strong> {{ item.Nombre_Origen }}
-                </p>
-                <p class="destino">
-                  <strong>Destino: </strong> {{ item.Nombre_Destino }}
-                </p>
-              </td>
-              <td style="width: 30px; text-align: center">
-                <i
-                  *ngIf="item.Tipo_Bodega == 'MEDICAMENTOS'"
-                  class="fa fa-medkit fa-2x"
-                  style="color: green"
-                ></i>
-                <i
-                  *ngIf="item.Tipo_Bodega == 'MATERIALES'"
-                  class="fa fa-th-large fa-2x"
-                  style="color: rgb(87, 87, 67)"
-                ></i>
-                <i
-                  *ngIf="item.Tipo_Bodega == 'REFRIGERADOS'"
-                  class="fas fa-snowflake fa-2x"
-                  style="color: #2569e8"
-                ></i>
-              </td>
-              <td style="width: 90px">
-                <p class="text-muted">Prioridad {{ item.Prioridad }}</p>
-              </td>
-              <td style="width: 75px">
-                <button
-                  class="btn btn-warning btn-sm"
-                  (click)="
-                    Bandera_Fase1(item.Id_Remision, item.Tipo, item.Id_Contrato)
-                  "
-                >
-                  Iniciar Fase I
-                </button>
-              </td>
-            </tr>
-          </table>
         </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Fase II</h4>
-            <div class="btn-group rounded">
-              <button class="btn btn-info btn-sm" (click)="openClose2()">
-                <i class="fas fa-sliders-h"></i> Filtros
-              </button>
-            </div>
-          </div>
-          <hr class="line" />
-          <mat-accordion multi #secondAccordion="matAccordion">
-            <mat-expansion-panel class="mat-elevation-z0">
-              <mat-form-field class="col-md-4 pl-md-0" appearance="outline">
-                <mat-label>Código</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Busca por nombre"
-                  [(ngModel)]="filtro_Codigo2"
-                  (change)="filtrosFase2()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col-md-4 pl-md-0" appearance="outline">
-                <mat-label>Origen</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Busca por origen"
-                  [(ngModel)]="filtro_Origen2"
-                  (change)="filtrosFase2()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col-md-4 px-md-0" appearance="outline">
-                <mat-label>Destino</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Busca por destino"
-                  [(ngModel)]="filtro_Destino2"
-                  (change)="filtrosFase2()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-            </mat-expansion-panel>
-          </mat-accordion>
-          <table
-            class="table table-bordered table-striped table-sm table-responsive-sm"
-            style="font-size: small"
-            *ngIf="!ValidaFase2 && FaseII.length > 0; else notData2"
-          >
-            <tr *ngFor="let item of FaseII; let i = index" id="fila{{ i }}">
-              <td style="width: 50px">
-                <div class="feed-user-img">
-                  <img
-                    [src]="item.Imagen | image: 'users'"
-                    style="width: 50px"
-                    class="rounded-circle avatar-sm"
-                    alt=""
-                  />
-                </div>
-              </td>
-              <td style="padding: 8px !important">
-                <h6>{{ item.Tipo }} {{ item.Codigo }}</h6>
-                <p class="text-muted">
-                  <strong>Origen: </strong> {{ item.Nombre_Origen }}
-                </p>
-                <p class="text-muted">
-                  <strong>Destino: </strong> {{ item.Nombre_Destino }}
-                </p>
-              </td>
-  
-              <td style="width: 30px; text-align: center">
-                <i
-                  *ngIf="item.Tipo_Bodega == 'MEDICAMENTOS'"
-                  class="fa fa-medkit fa-2x"
-                  style="color: green"
-                ></i>
-                <i
-                  *ngIf="item.Tipo_Bodega == 'MATERIALES'"
-                  class="fa fa-th-large fa-2x"
-                  style="color: rgb(87, 87, 67)"
-                ></i>
-                <i
-                  *ngIf="item.Tipo_Bodega == 'REFRIGERADOS'"
-                  class="fas fa-snowflake fa-2x"
-                  style="color: #2569e8"
-                ></i>
-              </td>
-              <td style="width: 90px">
-                <p class="text-muted">Prioridad {{ item.Prioridad }}</p>
-              </td>
-              <td style="width: 75px">
-                <button
-                  class="btn btn-success btn-sm"
-                  (click)="
-                    Bandera_Fase2(item.Id_Remision, item.Tipo, item.Id_Contrato)
-                  "
-                >
-                  Iniciar Fase II
-                </button>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-body">
-      <div class="card-title d-flex justify-content-between">
-        <h4 class="text-primary">Alistamiento</h4>
-        <div class="btn-group rounded">
-          <button
-            class="btn btn-info btn-sm"
-            style="float: right"
-            (click)="openClose3()"
-          >
-            <i class="fas fa-sliders-h"></i> Filtros
-          </button>
-        </div>
-      </div>
-      <hr class="line" />
-      <mat-accordion multi #thirdAccordion="matAccordion">
-        <mat-expansion-panel class="mat-elevation-z0">
-          <mat-form-field appearance="outline" class="col-md-2 pl-0">
-            <mat-label>Fecha</mat-label>
-            <input
-              matInput
-              [satDatepicker]="picker"
-              [value]="date"
-              (dateChange)="selectedDate($event)"
-              (dateInput)="selectedDate($event)"
-              name="daterange"
-              autocomplete="off"
-              required
-            />
-            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
-            <sat-datepicker-toggle
-              matSuffix
-              [for]="picker"
-            ></sat-datepicker-toggle>
-          </mat-form-field>
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
-            <mat-label>Código</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por código"
-              [(ngModel)]="filtro_cod"
-              (input)="filtros()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
-            <mat-label>Tipo</mat-label>
-            <mat-select [(ngModel)]="filtro_tipo" (selectionChange)="filtros()">
-              <mat-option value="">Todos</mat-option>
-              <mat-option value="Interna">Interna</mat-option>
-              <mat-option value="Cliente">Cliente</mat-option>
-              <mat-option value="Devolucion">Devolución</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
-            <mat-label>Origen</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por origen"
-              [(ngModel)]="filtro_origen"
-              (input)="filtros()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
-            <mat-label>Destino</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por destino"
-              [(ngModel)]="filtro_destino"
-              (input)="filtros()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
-            <mat-label>Estado</mat-label>
-            <mat-select [(ngModel)]="filtro_est" (selectionChange)="filtros()">
-              <mat-option value="">Todos</mat-option>
-              <mat-option value="Pendiente">Pendiente</mat-option>
-              <mat-option value="Activa">Activa - Dev</mat-option>
-              <mat-option value="Alistada">Alistada</mat-option>
-              <mat-option value="Enviada">Enviada</mat-option>
-              <mat-option value="Recibida">Recibida</mat-option>
-              <mat-option value="No conforme">No conforme</mat-option>
-              <mat-option value="Anulada">Anulada</mat-option>
-              <mat-option value="Facturada">Facturada</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-expansion-panel>
-      </mat-accordion>
-      <table
-        class="table table-bordered table-striped table-sm table-responsive-sm"
-        style="font-size: small"
-        *ngIf="!loading && Alistamientos.length > 0; else notData3"
-      >
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Codigo</th>
-            <th>Tipo</th>
-            <th>Origen</th>
-            <th>Destino</th>
-            <th>Guía</th>
-            <th>Items</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let alistamiento of Alistamientos; let i = index">
-            <td class="text-center">
-              {{ alistamiento.Fecha | date: "dd/MM/yyyy" }}
-            </td>
-            <td class="text-center">{{ alistamiento.Codigo }}</td>
-            <td>
-              <div class="text-center">
-                <span
-                  class="label {{
-                    alistamiento.Tipo == 'Cliente'
-                      ? 'label-success'
-                      : 'label-warning'
-                  }} {{
-                    alistamiento.Tipo == 'Devolucion' ? 'label-danger' : ''
-                  }}"
-                  >{{ alistamiento.Tipo }}
-                </span>
-              </div>
-            </td>
-            <td class="text-center">
-              {{ alistamiento.NombreOrigen }}
-              <i
-                *ngIf="alistamiento.Tipo_Bodega == 'MEDICAMENTOS'"
-                class="fa fa-medkit"
-              ></i>
-              <i
-                *ngIf="alistamiento.Tipo_Bodega == 'MATERIALES'"
-                class="fa fa-archive"
-              ></i>
-              <i
-                *ngIf="alistamiento.Tipo_Bodega == 'REFRIGERADOS'"
-                class="fa fa-asterisk"
-              ></i>
-            </td>
-            <td>{{ alistamiento.NombreDestino }}</td>
-            <td>
-              <div *ngIf="alistamiento.Guia != ''">
-                <i class="fa fa-barcode"></i> {{ alistamiento.Guia }}<br />
-                <i class="fa fa-truck"></i>
-                {{ alistamiento.Empresa_Envio }}
-              </div>
-            </td>
-            <td class="text-center">{{ alistamiento.Items }}</td>
-            <td>
-              <div class="text-center">
-                <span
-                  *ngIf="alistamiento.Estado != 'Facturada'"
-                  class="label {{ alistamiento.Estado == 'Anulada' ? '' : '' }} {{
-                    alistamiento.Estado == 'Alistada' ? 'label-inverse' : ''
-                  }} {{ alistamiento.Estado == 'Enviada' ? 'label-info' : '' }} {{
-                    alistamiento.Estado == 'Pendiente' && alistamiento.Fase == 1
-                      ? 'label-danger'
-                      : ''
-                  }} {{
-                    alistamiento.Estado == 'Pendiente' && alistamiento.Fase == 2
-                      ? 'label-danger'
-                      : ''
-                  }}
-                        {{
-                    alistamiento.Estado == 'Recibida' ? 'label-success' : ''
-                  }}      {{
-                    alistamiento.Estado == 'Anulada' ? 'label-danger' : ''
-                  }}  {{
-                    alistamiento.Estado == 'Activa' ? 'label-warning' : ''
-                  }}"
-                  >{{ alistamiento.Estado }}
-                </span>
-  
-                <a
-                  *ngIf="alistamiento.Estado == 'Facturada'"
-                  class="label label-success"
-                  [routerLink]="['/facturasventasver', alistamiento.Id_Factura]"
-                  >Facturada</a
-                >
-              </div>
-            </td>
-            <td>
-              <div class="text-center">
-                <div ngbDropdown class="dropdown-primary">
-                  <button
-                    ngbDropdownToggle
-                    class="btn btn-secondary btn-mini waves-effect waves-light"
-                    type="button"
-                  >
-                    Acciones
-                  </button>
-                  <div ngbDropdownMenu>
-                    <a
-                      class="dropdown-item waves-light waves-effect caja-botones"
-                      *ngIf="alistamiento.Tipo != 'Devolucion'"
-                      href=""
-                      [routerLink]="[
-                        '/inventario/remisiones/remision',
-                        alistamiento.Id_Remision
-                      ]"
-                    >
-                      <i class="fa fa-eye"></i>Ver!</a
-                    >
-                    <a
-                      class="dropdown-item waves-light waves-effect caja-botones"
-                      *ngIf="alistamiento.Tipo == 'Devolucion'"
-                      href=""
-                      [routerLink]="[
-                        '/verdetalledevolucion',
-                        alistamiento.Id_Remision
-                      ]"
-                    >
-                      <i class="fa fa-eye"></i>Ver.</a
-                    >
-                    <a
-                      class="dropdown-item waves-light waves-effect caja-botones"
-                      href="{{
-                        envi.ruta
-                      }}/php/archivos/descarga_pdf.php?tipo=Remision&id={{
-                        alistamiento.Id_Remision
-                      }}"
-                      target="_blank"
-                    >
-                      <i class="fa fa-print"></i> Imprimir Archivo</a
-                    >
-                    <a
-                      class="dropdown-item waves-light waves-effect caja-botones"
-                      href="{{ envi.ruta }}/php/archivos/descarga_zebra.php?id={{
-                        alistamiento.Id_Remision
-                      }}"
-                      target="_blank"
-                    >
-                      <i class="fa fa-ticket-alt"></i> Imprimir Etiqueta</a
-                    >
-                    <a
-                      *ngIf="
-                        alistamiento.Estado_Alistamiento == 2 &&
-                        alistamiento.Estado == 'Alistada'
-                      "
-                      class="dropdown-item waves-light waves-effect caja-botones"
-                      (click)="
-                        CapturarId(alistamiento.Id_Remision, alistamiento.Tipo)
-                      "
-                      ><i class="fa fa-plus"></i>Agregar Guía</a
-                    >
-                    <a
-                      *ngIf="
-                        alistamiento.Guia != '' &&
-                        alistamiento.Estado != 'Recibida' &&
-                        alistamiento.Estado != 'Anulada'
-                      "
-                      class="dropdown-item waves-light waves-effect caja-botones"
-                      (click)="
-                        EditarGuia(alistamiento.Id_Remision, i, alistamiento.Tipo)
-                      "
-                      ><i class="fa fa-truck"></i>Editar Guía</a
-                    >
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <ngb-pagination
-        class="d-flex justify-content-center pagination-rounded pagination-sm"
-        [collectionSize]="TotalItems"
-        [(page)]="page"
-        [maxSize]="maxSize"
-        size="sm"
-        (pageChange)="paginacion()"
-        [pageSize]="20"
-        [boundaryLinks]="true"
-      ></ngb-pagination>
-    </div>
-  </div>
-  
-  <app-modal-basic #modalGuiaRemisionEditar [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-      <h4 class="modal-title">Datos de Envío de la Remisión</h4>
-      <button
-        type="button"
-        class="close basic-close"
-        (click)="modalGuiaRemisionEditar.hide()"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="app-modal-body">
-      <form #FormGuiaRemision="ngForm">
-        <div class="row">
-          <div class="col-md-5">
-            <div class="form-group">
-              <label>Número de Guía</label>
+        <hr class="line" />
+        <mat-accordion multi #firstAccordion="matAccordion">
+          <mat-expansion-panel class="mat-elevation-z0">
+            <mat-form-field class="col-md-4 pl-md-0" appearance="outline">
+              <mat-label>Código</mat-label>
               <input
-                name="Numero_Guia"
+                matInput
                 type="text"
-                placeholder="Número de Guía"
-                class="form-control form-control-sm"
-                [(ngModel)]="Editar.Numero_Guia"
-                required
+                placeholder="Busca por nombre"
+                [(ngModel)]="filtro_Codigo1"
+                (change)="filtrosFase1()"
+                autocomplete="off"
               />
-            </div>
-          </div>
-          <div class="col-md-7">
-            <div class="form-group">
-              <label>Empresa de Envio</label>
+            </mat-form-field>
+            <mat-form-field class="col-md-4 pl-md-0" appearance="outline">
+              <mat-label>Origen</mat-label>
               <input
-                name="Empresa_Envio"
+                matInput
                 type="text"
-                placeholder="Empresa de Envio"
-                class="form-control form-control-sm"
-                [(ngModel)]="Editar.Empresa_Envio"
-                required
+                placeholder="Busca por origen"
+                [(ngModel)]="filtro_Origen1"
+                (change)="filtrosFase1()"
+                autocomplete="off"
               />
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="app-modal-footer">
-      <div class="text-right">
-        <button
-          type="button"
-          class="btn btn-primary btn-sm btn-block"
-          [disabled]="!FormGuiaRemision.valid"
-          (click)="showAlert($event)"
+            </mat-form-field>
+            <mat-form-field class="col-md-4 px-md-0" appearance="outline">
+              <mat-label>Destino</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por destino"
+                [(ngModel)]="filtro_Destino1"
+                (change)="filtrosFase1()"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <table
+          class="table table-bordered table-striped table-sm table-responsive-sm"
+          style="font-size: small"
+          *ngIf="!ValidaFase1 && FaseI.length > 0; else notData1"
         >
-          Guardar Información
+          <tr *ngFor="let item of FaseI; let i = index" id="fila{{ i }}">
+            <td class="text-center align-middle">
+              <img
+                class="img-thumbnail rounded-circle header-profile-user img-fluid"
+                [src]="item.Imagen | image: 'users'"
+                onerror="this.src='../../../../assets/images/noprofile.png'"
+                alt=""
+              />
+            </td>
+            <td class="align-middle text-center">
+              <h6>{{ item.Tipo }} {{ item.Codigo }}</h6>
+              <span class="text-muted">
+                <strong>Origen: </strong> {{ item.Nombre_Origen }}
+              </span>
+              <br />
+              <span class="destino">
+                <strong>Destino: </strong> {{ item.Nombre_Destino }}
+              </span>
+            </td>
+            <td *ngIf="item.Tipo_Bodega" class="text-center align-middle">
+              <i
+                *ngIf="item.Tipo_Bodega == 'MEDICAMENTOS'"
+                class="fa fa-medkit fa-2x"
+                style="color: green"
+              ></i>
+              <i
+                *ngIf="item.Tipo_Bodega == 'MATERIALES'"
+                class="fa fa-th-large fa-2x"
+                style="color: rgb(87, 87, 67)"
+              ></i>
+              <i
+                *ngIf="item.Tipo_Bodega == 'REFRIGERADOS'"
+                class="fas fa-snowflake fa-2x"
+                style="color: #2569e8"
+              ></i>
+            </td>
+            <td class="text-center align-middle">
+              <span class="text-muted">Prioridad {{ item.Prioridad }}</span>
+            </td>
+            <td class="text-center align-middle">
+              <button
+                class="btn btn-warning btn-sm"
+                (click)="
+                  Bandera_Fase1(item.Id_Remision, item.Tipo, item.Id_Contrato)
+                "
+              >
+                Iniciar
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="card-title d-flex justify-content-between">
+          <h4 class="text-primary">Fase II</h4>
+          <div class="btn-group rounded">
+            <button class="btn btn-info btn-sm" (click)="openClose2()">
+              <i class="fas fa-sliders-h"></i> Filtros
+            </button>
+          </div>
+        </div>
+        <hr class="line" />
+        <mat-accordion multi #secondAccordion="matAccordion">
+          <mat-expansion-panel class="mat-elevation-z0">
+            <mat-form-field class="col-md-4 pl-md-0" appearance="outline">
+              <mat-label>Código</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por nombre"
+                [(ngModel)]="filtro_Codigo2"
+                (change)="filtrosFase2()"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-4 pl-md-0" appearance="outline">
+              <mat-label>Origen</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por origen"
+                [(ngModel)]="filtro_Origen2"
+                (change)="filtrosFase2()"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-4 px-md-0" appearance="outline">
+              <mat-label>Destino</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por destino"
+                [(ngModel)]="filtro_Destino2"
+                (change)="filtrosFase2()"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <table
+          class="table table-bordered table-striped table-sm table-responsive-sm"
+          style="font-size: small"
+          *ngIf="!ValidaFase2 && FaseII.length > 0; else notData2"
+        >
+          <tr *ngFor="let item of FaseII; let i = index" id="fila{{ i }}">
+            <td class="text-center align-middle">
+              <img
+                class="img-thumbnail rounded-circle header-profile-user img-fluid"
+                [src]="item.Imagen | image: 'users'"
+                onerror="this.src='../../../../assets/images/noprofile.png'"
+                alt=""
+              />
+            </td>
+            <td class="align-middle text-center">
+              <h6>{{ item.Tipo }} {{ item.Codigo }}</h6>
+              <span class="text-muted">
+                <strong>Origen: </strong> {{ item.Nombre_Origen }}
+              </span>
+              <br />
+              <span class="destino">
+                <strong>Destino: </strong> {{ item.Nombre_Destino }}
+              </span>
+            </td>
+            <td *ngIf="item.Tipo_Bodega" class="text-center align-middle">
+              <i
+                *ngIf="item.Tipo_Bodega == 'MEDICAMENTOS'"
+                class="fa fa-medkit fa-2x"
+                style="color: green"
+              ></i>
+              <i
+                *ngIf="item.Tipo_Bodega == 'MATERIALES'"
+                class="fa fa-th-large fa-2x"
+                style="color: rgb(87, 87, 67)"
+              ></i>
+              <i
+                *ngIf="item.Tipo_Bodega == 'REFRIGERADOS'"
+                class="fas fa-snowflake fa-2x"
+                style="color: #2569e8"
+              ></i>
+            </td>
+            <td class="text-center align-middle">
+              <span class="text-muted">Prioridad {{ item.Prioridad }}</span>
+            </td>
+            <td class="text-center align-middle">
+              <button
+                class="btn btn-success btn-sm"
+                (click)="
+                  Bandera_Fase2(item.Id_Remision, item.Tipo, item.Id_Contrato)
+                "
+              >
+                Iniciar
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Alistamiento</h4>
+      <div class="btn-group rounded">
+        <button class="btn btn-info btn-sm" (click)="openClose3()">
+          <i class="fas fa-sliders-h"></i> Filtros
         </button>
       </div>
     </div>
-  </app-modal-basic>
-  <swal #confirmacionSwal title="" text="" icon=""></swal>
-  <swal
-    #confirmacionSalir
-    title=""
-    html=""
-    icon=""
-    (confirm)="ListarAlistamientos()"
-  ></swal>
-  <swal
-    #confirmacionGuardar
-    (confirm)="save()"
-    [swalOptions]="alertOption"
-  ></swal>
-  <ng-template #notData1>
-    <app-not-data [loading]="ValidaFase1"></app-not-data>
-  </ng-template>
-  <ng-template #notData2>
-    <app-not-data [loading]="ValidaFase2"></app-not-data>
-  </ng-template>
-  <ng-template #notData3>
-    <app-not-data [loading]="Cargando_Tabla"></app-not-data>
-  </ng-template>
-  
+    <hr class="line" />
+    <mat-accordion multi #thirdAccordion="matAccordion">
+      <mat-expansion-panel class="mat-elevation-z0">
+        <mat-form-field appearance="outline" class="col-md-2 pl-0">
+          <mat-label>Fecha</mat-label>
+          <input
+            matInput
+            [satDatepicker]="picker"
+            [value]="date"
+            (dateChange)="selectedDate($event)"
+            (dateInput)="selectedDate($event)"
+            name="daterange"
+            autocomplete="off"
+            required
+          />
+          <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+          <sat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></sat-datepicker-toggle>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Busca por código"
+            [(ngModel)]="filtro_cod"
+            (input)="filtros()"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select [(ngModel)]="filtro_tipo" (selectionChange)="filtros()">
+            <mat-option value="">Todos</mat-option>
+            <mat-option value="Interna">Interna</mat-option>
+            <mat-option value="Cliente">Cliente</mat-option>
+            <mat-option value="Devolucion">Devolución</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Origen</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Busca por origen"
+            [(ngModel)]="filtro_origen"
+            (input)="filtros()"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Destino</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Busca por destino"
+            [(ngModel)]="filtro_destino"
+            (input)="filtros()"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select [(ngModel)]="filtro_est" (selectionChange)="filtros()">
+            <mat-option value="">Todos</mat-option>
+            <mat-option value="Pendiente">Pendiente</mat-option>
+            <mat-option value="Activa">Activa - Dev</mat-option>
+            <mat-option value="Alistada">Alistada</mat-option>
+            <mat-option value="Enviada">Enviada</mat-option>
+            <mat-option value="Recibida">Recibida</mat-option>
+            <mat-option value="No conforme">No conforme</mat-option>
+            <mat-option value="Anulada">Anulada</mat-option>
+            <mat-option value="Facturada">Facturada</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && Alistamientos.length > 0; else notData3"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Fecha</th>
+          <th>Codigo</th>
+          <th>Tipo</th>
+          <th>Origen</th>
+          <th>Destino</th>
+          <th>Guía</th>
+          <th>Items</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let alistamiento of Alistamientos; let i = index"
+          class="text-center"
+        >
+          <td class="align-middle">
+            {{ alistamiento.Fecha | date: "dd/MM/yyyy" }}
+          </td>
+          <td class="align-middle">{{ alistamiento.Codigo }}</td>
+          <td class="align-middle">
+            <span
+              class="badge {{
+                alistamiento.Tipo == 'Cliente'
+                  ? 'badge-success'
+                  : 'badge-warning'
+              }} {{ alistamiento.Tipo == 'Devolucion' ? 'badge-danger' : '' }}"
+              >{{ alistamiento.Tipo }}
+            </span>
+          </td>
+          <td class="align-middle">
+            {{ alistamiento.NombreOrigen }}
+            <i
+              *ngIf="alistamiento.Tipo_Bodega == 'MEDICAMENTOS'"
+              class="fa fa-medkit"
+            ></i>
+            <i
+              *ngIf="alistamiento.Tipo_Bodega == 'MATERIALES'"
+              class="fa fa-archive"
+            ></i>
+            <i
+              *ngIf="alistamiento.Tipo_Bodega == 'REFRIGERADOS'"
+              class="fa fa-asterisk"
+            ></i>
+          </td>
+          <td class="align-middle">{{ alistamiento.NombreDestino }}</td>
+          <td class="align-middle">
+            <div *ngIf="alistamiento.Guia != ''">
+              <i class="fa fa-barcode"></i> {{ alistamiento.Guia }}<br />
+              <i class="fa fa-truck"></i>
+              {{ alistamiento.Empresa_Envio }}
+            </div>
+          </td>
+          <td class="align-middle">{{ alistamiento.Items }}</td>
+          <td class="align-middle">
+            <span
+              *ngIf="alistamiento.Estado != 'Facturada'"
+              class="badge {{ alistamiento.Estado == 'Anulada' ? '' : '' }} {{
+                alistamiento.Estado == 'Alistada' ? 'badge-dark' : ''
+              }} {{ alistamiento.Estado == 'Enviada' ? 'badge-info' : '' }} {{
+                alistamiento.Estado == 'Pendiente' && alistamiento.Fase == 1
+                  ? 'label-danger'
+                  : ''
+              }} {{
+                alistamiento.Estado == 'Pendiente' && alistamiento.Fase == 2
+                  ? 'badge-danger'
+                  : ''
+              }}
+                    {{
+                alistamiento.Estado == 'Recibida' ? 'badge-success' : ''
+              }}      {{
+                alistamiento.Estado == 'Anulada' ? 'badge-danger' : ''
+              }}  {{ alistamiento.Estado == 'Activa' ? 'badge-warning' : '' }}"
+              >{{ alistamiento.Estado }}
+            </span>
+
+            <a
+              *ngIf="alistamiento.Estado == 'Facturada'"
+              class="badge badge-success"
+              [routerLink]="['/facturasventasver', alistamiento.Id_Factura]"
+              >Facturada</a
+            >
+          </td>
+          <td class="align-middle">
+            <div class="text-center">
+              <div ngbDropdown class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-effect waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light waves-effect caja-botones"
+                    *ngIf="alistamiento.Tipo != 'Devolucion'"
+                    href=""
+                    [routerLink]="[
+                      '/inventario/remisiones/remision',
+                      alistamiento.Id_Remision
+                    ]"
+                  >
+                    <i class="fa fa-eye"></i> Ver</a
+                  >
+                  <a
+                    class="dropdown-item waves-light waves-effect caja-botones"
+                    *ngIf="alistamiento.Tipo == 'Devolucion'"
+                    href=""
+                    [routerLink]="[
+                      '/verdetalledevolucion',
+                      alistamiento.Id_Remision
+                    ]"
+                  >
+                    <i class="fa fa-eye"></i> Ver</a
+                  >
+                  <a
+                    class="dropdown-item waves-light waves-effect caja-botones"
+                    href="{{
+                      envi.ruta
+                    }}/php/archivos/descarga_pdf.php?tipo=Remision&id={{
+                      alistamiento.Id_Remision
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="fa fa-print"></i> Imprimir Archivo</a
+                  >
+                  <a
+                    class="dropdown-item waves-light waves-effect caja-botones"
+                    href="{{ envi.ruta }}/php/archivos/descarga_zebra.php?id={{
+                      alistamiento.Id_Remision
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="fa fa-ticket-alt"></i> Imprimir Etiqueta</a
+                  >
+                  <a
+                    *ngIf="
+                      alistamiento.Estado_Alistamiento == 2 &&
+                      alistamiento.Estado == 'Alistada'
+                    "
+                    class="dropdown-item waves-light waves-effect caja-botones"
+                    (click)="
+                      CapturarId(
+                        alistamiento.Id_Remision,
+                        alistamiento.Tipo,
+                        add
+                      )
+                    "
+                    ><i class="fa fa-plus"></i> Agregar Guía</a
+                  >
+                  <a
+                    *ngIf="
+                      alistamiento.Guia != '' &&
+                      alistamiento.Estado != 'Recibida' &&
+                      alistamiento.Estado != 'Anulada'
+                    "
+                    class="dropdown-item waves-light waves-effect caja-botones"
+                    (click)="
+                      EditarGuia(
+                        alistamiento.Id_Remision,
+                        i,
+                        alistamiento.Tipo,
+                        add
+                      )
+                    "
+                    ><i class="fa fa-truck"></i> Editar Guía</a
+                  >
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="TotalItems"
+      [(page)]="page"
+      [maxSize]="maxSize"
+      size="sm"
+      (pageChange)="paginacion()"
+      [pageSize]="20"
+      [boundaryLinks]="true"
+    ></ngb-pagination>
+  </div>
+</div>
+
+<app-modal-basic #modalGuiaRemisionEditar [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">Datos de Envío de la Remisión</h4>
+    <button
+      type="button"
+      class="close basic-close"
+      (click)="modalGuiaRemisionEditar.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form #FormGuiaRemision="ngForm">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="form-group">
+            <label>Número de Guía</label>
+            <input
+              name="Numero_Guia"
+              type="text"
+              placeholder="Número de Guía"
+              class="form-control form-control-sm"
+              [(ngModel)]="Editar.Numero_Guia"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="form-group">
+            <label>Empresa de Envio</label>
+            <input
+              name="Empresa_Envio"
+              type="text"
+              placeholder="Empresa de Envio"
+              class="form-control form-control-sm"
+              [(ngModel)]="Editar.Empresa_Envio"
+              required
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button
+        type="button"
+        class="btn btn-primary btn-sm btn-block"
+        [disabled]="!FormGuiaRemision.valid"
+        (click)="showAlert($event)"
+      >
+        Guardar Información
+      </button>
+    </div>
+  </div>
+</app-modal-basic>
+<swal #confirmacionSwal title="" text="" icon=""></swal>
+<swal
+  #confirmacionSalir
+  title=""
+  html=""
+  icon=""
+  (confirm)="ListarAlistamientos()"
+></swal>
+<swal
+  #confirmacionGuardar
+  (confirm)="save()"
+  [swalOptions]="alertOption"
+></swal>
+<ng-template #notData1>
+  <app-not-data [loading]="ValidaFase1"></app-not-data>
+</ng-template>
+<ng-template #notData2>
+  <app-not-data [loading]="ValidaFase2"></app-not-data>
+</ng-template>
+<ng-template #notData3>
+  <app-not-data [loading]="Cargando_Tabla"></app-not-data>
+</ng-template>

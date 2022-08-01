@@ -52,6 +52,8 @@ import {
   MomentDateAdapter,
 } from '@angular/material-moment-adapter';
 import { SharedModule } from 'src/app/shared/shared.module';
+//import { InventarioEstibaComponent } from './inventario-fisico/inventario-estiba/inventario-estiba.component';
+import { InventarioEstibasComponent } from './inventario-fisico/inventario-estibas/inventario-estibas.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -79,6 +81,8 @@ export const MY_FORMATS = {
     InventarioVencerComponent,
     AlistamientoComponent,
     AlistamientoCrearComponent,
+    //InventarioEstibaComponent,
+    InventarioEstibasComponent
   ],
   imports: [
     CommonModule,

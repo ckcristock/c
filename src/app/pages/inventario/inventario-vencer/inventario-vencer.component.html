@@ -1,21 +1,18 @@
 <div class="card">
-    <div class="card-body">
-      <div class="card-title d-flex justify-content-between">
-        <h4 class="text-primary">Productos a Vencer</h4>
-        <div class="btn-group rounded">
-          <button
-            class="btn btn-info btn-sm"
-            style="float: right"
-            (click)="openClose()"
-          >
-            <i class="fas fa-sliders-h"></i> Filtros
-          </button>
-        </div>
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Productos a Vencer</h4>
+      <div class="btn-group rounded">
+        <button class="btn btn-info btn-sm" (click)="openClose()">
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
       </div>
-      <hr class="line" />
-      <mat-accordion multi>
-        <mat-expansion-panel class="mat-elevation-z0">
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+    </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col-md-2 " appearance="outline">
             <mat-label>Producto</mat-label>
             <input
               matInput
@@ -26,7 +23,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-form-field class="col-md-2 " appearance="outline">
             <mat-label>Lote</mat-label>
             <input
               matInput
@@ -37,7 +34,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-form-field class="col-md-2 " appearance="outline">
             <mat-label>Cantidades</mat-label>
             <input
               matInput
@@ -46,7 +43,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-form-field class="col-md-2 " appearance="outline">
             <mat-label>Fecha de entrega</mat-label>
             <input
               matInput
@@ -55,7 +52,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-form-field class="col-md-2 " appearance="outline">
             <mat-label>Meses devolución</mat-label>
             <input
               matInput
@@ -64,7 +61,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-form-field class="col-md-2 " appearance="outline">
             <mat-label>Proveedor</mat-label>
             <input
               matInput
@@ -75,50 +72,50 @@
               (input)="filtros()"
             />
           </mat-form-field>
-        </mat-expansion-panel>
-      </mat-accordion>
-      <table
-        class="table table-bordered table-striped table-sm table-responsive-sm"
-        style="font-size: small"
-        *ngIf="!Cargando && Vencidos.length > 0; else notData"
-      >
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Lote</th>
-            <th>Cantidades</th>
-            <th>Fecha Entrega</th>
-            <th>Fecha Vencimiento</th>
-            <th>Meses Devolución</th>
-            <th>Proveedor</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let vencido of Vencidos">
-            <td>{{ vencido.NomProducto }}</td>
-            <td>{{ vencido.Lote }}</td>
-            <td>{{ vencido.Cantidades }}</td>
-            <td>{{ vencido.FechaEntrega }}</td>
-            <td>{{ vencido.Fecha_Vencimiento }}</td>
-            <td>{{ vencido.Meses_Devolucion }}</td>
-            <td>{{ vencido.NomProveedor }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <ngb-pagination
-        class="d-flex justify-content-center pagination-rounded pagination-sm"
-        [collectionSize]="TotalItems"
-        [(page)]="page"
-        [maxSize]="maxSize"
-        [pageSize]="10"
-        [rotate]="true"
-        size="sm"
-        (pageChange)="paginacion()"
-        [boundaryLinks]="true"
-      ></ngb-pagination>
-    </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!Cargando && Vencidos.length > 0; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Producto</th>
+          <th>Lote</th>
+          <th>Cantidades</th>
+          <th>Fecha Entrega</th>
+          <th>Fecha Vencimiento</th>
+          <th>Meses Devolución</th>
+          <th>Proveedor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vencido of Vencidos" class="text-center">
+          <td class="align-middle">{{ vencido.NomProducto }}</td>
+          <td class="align-middle">{{ vencido.Lote }}</td>
+          <td class="align-middle">{{ vencido.Cantidades }}</td>
+          <td class="align-middle">{{ vencido.FechaEntrega }}</td>
+          <td class="align-middle">{{ vencido.Fecha_Vencimiento }}</td>
+          <td class="align-middle">{{ vencido.Meses_Devolucion }}</td>
+          <td class="align-middle">{{ vencido.NomProveedor }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="TotalItems"
+      [(page)]="page"
+      [maxSize]="maxSize"
+      [pageSize]="10"
+      [rotate]="true"
+      size="sm"
+      (pageChange)="paginacion()"
+      [boundaryLinks]="true"
+    ></ngb-pagination>
   </div>
-  <ng-template #notData>
-    <app-not-data [loading]="Cargando2"></app-not-data>
-  </ng-template>
-  
+</div>
+<ng-template #notData>
+  <app-not-data [loading]="Cargando2"></app-not-data>
+</ng-template>

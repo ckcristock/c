@@ -14,7 +14,7 @@
       <div class="col-md-6">
         <ng-select
           [(ngModel)]="Entrega.person_id"
-          [ngModelOptions]="{standalone: true}"
+          [ngModelOptions]="{ standalone: true }"
           name="Empleado_Entrega"
           [items]="Empleados"
           appearance="outline"
@@ -33,7 +33,7 @@
           matInput
           type="date"
           [(ngModel)]="Entrega.dispatched_at"
-          [ngModelOptions]="{standalone: true}"
+          [ngModelOptions]="{ standalone: true }"
           name="dispatched_at"
           required
           autocomplete="off"
@@ -113,7 +113,7 @@
                 </a>
                 <a
                   class="dropdown-item waves-light waves-effect caja-botones"
-                  (click)="getApartadas(l)"
+                  (click)="getApartadas(l, addApartadas)"
                 >
                   <i class="fas fa-clipboard"></i> Apartadas
                 </a>
@@ -145,7 +145,7 @@
               max="{{ l.stock }}"
               (blur)="cambio(l)"
               [(ngModel)]="l.quantity"
-              [ngModelOptions]="{standalone: true}"
+              [ngModelOptions]="{ standalone: true }"
               placeholder="0"
               required
             />
@@ -221,7 +221,7 @@
             placeholder="Ingrese los detalles"
             rows="5"
             [(ngModel)]="Entrega.description"
-            [ngModelOptions]="{standalone: true}"
+            [ngModelOptions]="{ standalone: true }"
             required
             [cdkTextareaAutosize]="true"
           ></textarea>
@@ -245,70 +245,61 @@
 <app-dotacion-entradas [open]="openModal"></app-dotacion-entradas>
 <app-dotacion-salidas [openSalida]="openModalSalidas"></app-dotacion-salidas>
 
-<app-modal-basic #modalApartadas [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">Apartadas</h5>
+<ng-template #addApartadas let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">Apartadas</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+  </div>
+  <div class="modal-body">
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && Apartadas.length > 0; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Fecha</th>
+          <th>Funcionario</th>
+          <th>Funcionario</th>
+          <th>Tipo</th>
+          <th>Cantidad</th>
+          <th>Estado</th>
+          <!-- <th>Tipo</th>
+          <th>Valor</th>
+          <th>Cantidad</th>
+          <th>Total</th> -->
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of Apartadas; else: notData" class="text-center">
+          <td>{{ item.created_at | date }}</td>
+          <td>{{ item.delivery_code }}</td>
+          <td>{{ item.nameF }}</td>
+          <td>{{ item.type }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.delivery_state }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
     <button
       type="button"
-      class="close basic-close"
-      (click)="modalApartadas.hide()"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
     >
-      <span aria-hidden="true">
-        <i class="fas fa-times"></i>
-      </span>
+      Cancelar
     </button>
   </div>
-  <div class="app-modal-body">
-    <div class="row">
-      <div class="col-12">
-        <div
-          class="col-md-12 text-center"
-          *ngIf="!loading && Apartadas.length > 0; else notData"
-        >
-          <strong class="text-title"> </strong>
-          <table class="table table-sm table-striped">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Funcionario</th>
-                <th>Funcionario</th>
-                <th>Tipo</th>
-                <th>Cantidad</th>
-                <th>Estado</th>
-                <!--<th>Tipo</th>
-                            <th>Valor</th>
-                            <th>Cantidad</th>
-                            <th>Total</th> -->
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr *ngFor="let item of Apartadas; else: notData">
-                <td>{{ item.created_at | date }}</td>
-                <td>{{ item.delivery_code }}</td>
-                <td>{{ item.nameF }}</td>
-                <td>{{ item.type }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.delivery_state }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="app-modal-footer">
-    <div class="form-group text-right">
-      <button
-        (click)="modalApartadas.hide()"
-        type="button"
-        class="btn btn-danger raised mr-2 btn-sm"
-      >
-        Cerrar
-      </button>
-    </div>
-  </div>
-</app-modal-basic>
+</ng-template>
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

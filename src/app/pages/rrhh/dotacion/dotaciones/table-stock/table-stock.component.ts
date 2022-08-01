@@ -4,6 +4,7 @@ import { debounceTime, map } from 'rxjs/operators';
 import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 import { DotacionService } from '../../dotacion.service';
 import Swal from 'sweetalert2';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-table-stock',
@@ -59,7 +60,7 @@ export class TableStockComponent implements OnInit {
 
   }
 
-  constructor(private _dotation: DotacionService, private _person: PersonService) { }
+  constructor(private _dotation: DotacionService, private _person: PersonService, private modalService: NgbModal,) { }
 
   formatter4 = (x: { Nombres: string }) => x.Nombres;
   search4 = (text$: Observable<string>) =>
@@ -72,6 +73,25 @@ export class TableStockComponent implements OnInit {
   ngOnInit(): void {
     if (this.find) {
       this.search()
+    }
+  }
+
+
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
     }
   }
 
@@ -131,7 +151,7 @@ export class TableStockComponent implements OnInit {
 
   }
 
-  getApartadas({ id }) {
+  getApartadas({ id }, modal) {
     let params = {
       ...this.pagination, ...this.filtros,
       id: id
@@ -143,7 +163,8 @@ export class TableStockComponent implements OnInit {
       this.loading = false;
 
     })
-    this.modalApartadas.show();
+    //this.modalApartadas.show();
+    this.openConfirm(modal)
   }
 
 

@@ -31,6 +31,7 @@ export class VerCompraNacionalComponent implements OnInit {
     this.id = this.router.snapshot.params["id"]; 
     this.http.get(environment.ruta + 'php/comprasnacionales/datos_compras_nacionales.php', {params: { id: this.id }}).subscribe((data: any) => {
       this.Compra = data;
+      console.log(this.Compra)
     });
     this.http.get(environment.ruta + 'php/comprasnacionales/detalles_compras_nacionales.php', {params: { id: this.id }}).subscribe((data: any) => {
       this.Productos = data.Productos;
@@ -66,6 +67,7 @@ export class VerCompraNacionalComponent implements OnInit {
 
     this.http.get(environment.ruta+'php/comprasnacionales/detalle_perfil.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data:any) => {
       this.permiso = data.status;
+      console.log(data)
     })
     this.http.get(environment.ruta+'php/comprasnacionales/detalle_rechazo.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data:any) => {
       for (let i = 0; i < data.length; i++) {

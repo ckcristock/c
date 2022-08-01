@@ -1,36 +1,29 @@
 <div class="card">
-  <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Catálogo</h4>
-    </div>
-    <hr class="line">
-    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-pills nav-justified">
-
+  <div class="card-header p-0">
+    <ul
+      ngbNav
+      #nav="ngbNav"
+      [(activeId)]="active"
+      class="nav nav-pills nav-justified border border-primary rounded"
+    >
       <li [ngbNavItem]="1">
         <a ngbNavLink>Materiales</a>
         <ng-template ngbNavContent>
-
-         <!-- <app-productos [user]="_user.user" [type]="'Material'"></app-productos>-->
-         <app-materiales></app-materiales>
-
-
-
+          <!-- <app-productos [user]="_user.user" [type]="'Material'"></app-productos>-->
+          <app-materiales></app-materiales>
         </ng-template>
       </li>
       <li [ngbNavItem]="2">
-        <a ngbNavLink>Activos Fijos</a>
+        <a ngbNavLink>Activos fijos</a>
         <ng-template ngbNavContent>
-
-          <app-activo-fijo-catalogo [user]="_user.user"> </app-activo-fijo-catalogo>
-
+          <app-activo-fijo-catalogo [user]="_user.user">
+          </app-activo-fijo-catalogo>
         </ng-template>
       </li>
       <li [ngbNavItem]="3">
         <a ngbNavLink>Dotacion EPP</a>
         <ng-template ngbNavContent>
-
           <app-dotacion-crear [user]="_user.user"></app-dotacion-crear>
-
         </ng-template>
       </li>
       <!-- <li [ngbNavItem]="4">
@@ -50,8 +43,8 @@
         </ng-template>
       </li> -->
     </ul>
-    <div [ngbNavOutlet]="nav" class="mx-0"></div>
   </div>
+  <div [ngbNavOutlet]="nav" class="mx-0"></div>
 </div>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

@@ -13,7 +13,8 @@ import { PrestamoModel } from './PrestamoModel';
 import { PersonService } from '../../../ajustes/informacion-base/persons/person.service';
 import { LoanService } from '../loan.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
-import {error} from '@angular/compiler/src/util';
+import { error } from '@angular/compiler/src/util';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-modalprestamoylibranzacrear',
@@ -22,6 +23,7 @@ import {error} from '@angular/compiler/src/util';
 })
 export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
   @ViewChild('modalPrestamoylibranza') modalPrestamoylibranza: any;
+  @ViewChild('addPrestamoylibranza') addPrestamoylibranza: any;
   @Input() abrirModal: Observable<any> = new Observable();
   @Output() recargarLista: EventEmitter<any> = new EventEmitter();
 
@@ -40,16 +42,38 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
   constructor(
     private _person: PersonService,
     private _loan: LoanService,
+    private modalService: NgbModal,
     private _swal: SwalService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this._suscription = this.abrirModal.subscribe((data: any) =>
-      this.modalPrestamoylibranza.show()
+      //this.modalPrestamoylibranza.show()
+      this.openConfirm(this.addPrestamoylibranza)
     );
     this.getPlains();
     this.getEmpleados();
     this.getProximasQuincenas();
+    
+  }
+
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.limpiarCampos()
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   getPlains() {
@@ -58,7 +82,7 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
     });
   }
 
-  changePerson() {}
+  changePerson() { }
 
   formatter4 = (x: { text: string }) => x.text;
   search4 = (text$: Observable<string>) =>
@@ -68,8 +92,8 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
         term.length < 3
           ? []
           : this.Empleados.filter(
-              (v) => v.text.toLowerCase().indexOf(term.toLowerCase()) > -1
-            ).slice(0, 100)
+            (v) => v.text.toLowerCase().indexOf(term.toLowerCase()) > -1
+          ).slice(0, 100)
       )
     );
 
@@ -80,8 +104,8 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
         term.length < 3
           ? []
           : this.PlanesCuenta.filter(
-              (v) => v.code.toLowerCase().indexOf(term.toLowerCase()) > -1
-            ).slice(0, 100)
+            (v) => v.code.toLowerCase().indexOf(term.toLowerCase()) > -1
+          ).slice(0, 100)
       )
     );
 
@@ -124,7 +148,7 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
     if (this.modelo.person.id) {
       /* this.modelo.type = tipo; */
       if (tipo == 'Libranza') {
-      /*   this._loan.getBankList().subscribe((r: any) => (this.Bancos = r.data)); */
+        /*   this._loan.getBankList().subscribe((r: any) => (this.Bancos = r.data)); */
       }
     } else {
       this._swal.show({
@@ -139,7 +163,7 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
     if (this.modelo.person.id) {
       this.modelo.interest_type = interes;
       if (interes == 'Capital') {
-       /*   this._loan.getBankList().subscribe((r: any) => (this.Bancos = r.data)); */
+        /*   this._loan.getBankList().subscribe((r: any) => (this.Bancos = r.data)); */
       }
     } else {
       this._swal.show({
@@ -159,20 +183,26 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
   save() {
     this.modelo.person_id = this.modelo.person.id;
     this.modelo.account_plain_id = this.modelo.account_plain_id.id;
-   // let info = JSON.stringify(this.modelo);
+    // let info = JSON.stringify(this.modelo);
 
     this._loan.save(this.modelo).subscribe((r: any) => {
-      
+
       this._swal.show(
-	  {title:'Operación exitosa',
-	    text:'Prestamo/Libranza Creado con éxito',
-	    icon:'success',showCancel:false})  
-	    this.modalPrestamoylibranza.hide();
-    },err=>{
-	this._swal.show(
-	  {title:'Ha ocurrido un error',
-	    text:'Comuniquese con el Dpt. de Sistemas',
-	    icon:'error',showCancel:false})  
+        {
+          title: 'Operación exitosa',
+          text: 'Prestamo/Libranza Creado con éxito',
+          icon: 'success', showCancel: false
+        })
+      //this.modalPrestamoylibranza.hide();
+      this.modalService.dismissAll();
+      this.recargarLista.next()
+    }, err => {
+      this._swal.show(
+        {
+          title: 'Ha ocurrido un error',
+          text: 'Comuniquese con el Dpt. de Sistemas',
+          icon: 'error', showCancel: false
+        })
     });
 
   }

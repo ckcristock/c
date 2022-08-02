@@ -89,6 +89,7 @@ export class ViaticosComponent implements OnInit {
   getPeople(){
     this._viaticos.getPeopleXSelect().subscribe( (r:any) =>{
       this.people = r.data;
+      this.people.unshift({ text: 'Todos', value: '' });
     })
   }
 

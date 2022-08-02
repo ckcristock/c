@@ -15,7 +15,7 @@ export class RemisioncrearnuevoComponent implements OnInit {
 
   public RutaPrincipal: string = environment.ruta;
   public Datos: any = {
-    Titulo: "Nueva Remisión",
+    Titulo: "Nueva remisión",
     Fecha: new Date(),
     Origen: "",
     Origen_Grupo: "",

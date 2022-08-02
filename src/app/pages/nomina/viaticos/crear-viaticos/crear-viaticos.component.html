@@ -1,45 +1,51 @@
 <div class="row ml-0 mb-4">
-    <div class="col text-left">
-        <a class="text-primary back" style="cursor: pointer;" (click)="regresar()">Regresar</a>
-    </div>
+  <div class="col text-left">
+    <a class="text-primary back" style="cursor: pointer" (click)="regresar()"
+      >Regresar</a
+    >
+  </div>
 </div>
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <div class="row">
-                <!-- <div class="col-3 mt-2">
+  <div class="card-body">
+    <div class="card-title">
+      <div class="row">
+        <!-- <div class="col-3 mt-2">
           <img class="w-100" src="../../../../assets/images/logo.png" alt="" />
        </div>-->
-                <div class="col-6 mt-3">
-                    <h5 class="t">
-                        Formato de Estimación de Viaticos <br /> Maquinados y Montajes SAS
-                    </h5>
-                </div>
-                <div class="col-6">
-                    <div class="row mt-3 mb-3 mr-4" style="float: right">
-                        <div class="ml-4">
-                            <label for="ot">Orden de Trabajo</label>
-                            <select id="ot" class="form-control form-control-sm">
+        <div class="col-6 mt-3">
+          <h5 class="t">
+            Formato de Estimación de Viaticos <br />
+            Maquinados y Montajes SAS
+          </h5>
+        </div>
+        <div class="col-6">
+          <div class="row mt-3 mb-3 mr-4" style="float: right">
+            <div class="ml-4">
+              <label for="ot">Orden de Trabajo</label>
+              <select id="ot" class="form-control form-control-sm">
                 <option>Pendiente</option>
               </select>
-                        </div>
-                    </div>
-                </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 <div class="card">
-    <div class="card-body">
-        <!-- Inicia Informacion de viaje --->
-        <form action="" [formGroup]="form">
-            <div class="title">
-                <h5>INFORMACIÓN DEL VIAJE</h5>
-            </div>
-            <div class="row mt-4">
-                <div class="col-6">
-                    <div class="mb-3 row" formGroupName="travel">
-                        <label for="funcionario" class="col-sm-3 col-form-label col-form-label-sm">Funcionario</label
+  <div class="card-body">
+    <!-- Inicia Informacion de viaje --->
+    <form action="" [formGroup]="form">
+      <div class="title">
+        <h5>INFORMACIÓN DEL VIAJE</h5>
+      </div>
+      <div class="row mt-4">
+        <div class="col-6">
+          <div class="mb-3 row" formGroupName="travel">
+            <label
+              for="funcionario"
+              class="col-sm-3 col-form-label col-form-label-sm"
+              >Funcionario</label
             >
             <div class="col-sm-9">
               <ng-select
@@ -49,6 +55,8 @@
                 bindLabel="text"
                 bindValue="value"
                 loadingText="loading "
+                appearance="outline"
+                [appendTo]="'body'"
                 ngDefaultControl
               ></ng-select>
             </div>
@@ -140,7 +148,7 @@
             >
             <div class="col-sm-10">
               <ng-select
-              formControlName="origin_id"
+                formControlName="origin_id"
                 [items]="city"
                 bindLabel="text"
                 bindValue="value"
@@ -158,7 +166,7 @@
             >
             <div class="col-sm-10">
               <ng-select
-              formControlName="destinity_id"
+                formControlName="destinity_id"
                 [items]="city"
                 bindLabel="text"
                 bindValue="value"
@@ -175,9 +183,13 @@
               >Tipo de Viaje</label
             >
             <div class="col-sm-10">
-              <select  formControlName="travel_type" class="form-control form-control-sm" id="tipo_viaje">
+              <select
+                formControlName="travel_type"
+                class="form-control form-control-sm"
+                id="tipo_viaje"
+              >
                 <option *ngFor="let o of origen" [value]="o">
-                  {{ o}}
+                  {{ o }}
                 </option>
               </select>
             </div>
@@ -191,15 +203,14 @@
             <div class="col-sm-10">
               <input
                 type="date"
-              formControlName="departure_date"
-
+                formControlName="departure_date"
                 class="form-control form-control-sm"
                 id="fecha_salida"
                 value="test"
               />
             </div>
           </div>
-          <div class="mb-3 row" formGroupName="travel"> 
+          <div class="mb-3 row" formGroupName="travel">
             <label
               for="fecha_llegada"
               class="col-sm-2 col-form-label col-form-label-sm"
@@ -305,9 +316,12 @@
                     class="col-form-label col-form-label-sm"
                     >Resp. Pago
                   </label>
-                        </th>
-                        <th>
-                            <label for="total_hospedaje" class="col-form-label col-form-label-sm">total</label
+                </th>
+                <th>
+                  <label
+                    for="total_hospedaje"
+                    class="col-form-label col-form-label-sm"
+                    >total</label
                   >
                 </th>
               </tr>
@@ -533,9 +547,8 @@
                       id="empresa_transporte"
                     />
                   </td>
-                 
-                  <td [formGroupName]="i">
 
+                  <td [formGroupName]="i">
                     <select
                       formControlName="ticket_payment"
                       class="form-control form-control-sm"
@@ -602,29 +615,33 @@
               <tr>
                 <th>
                   <label for="trayecto_taxi">Trayecto</label>
-                        </th>
-                        <th>
-                            <label for="ciudad_taxi">Ciudad</label>
-                        </th>
-                        <th>
-                            <label for="tipo_taxi">Tipo</label>
-                        </th>
-                        <th>
-                            <label for="tarifa_taxi">Tarifa</label>
-                        </th>
-                        <th>
-                            <label for="trayectos_taxi">Trayectos</label>
-                        </th>
-                        <th>
-                            <label for="total_taxi">Total</label>
-                        </th>
-                        </tr>
-                        </thead>
-                        <tbody formArrayName="taxi">
-                            <ng-container *ngIf="taxiList.controls.length; else notData">
-                                <tr *ngFor="let item of taxiList.controls; let i = index">
-                                    <td [formGroupName]="i">
-                                        <select formControlName="journey_id" class="form-control form-control-sm" id="trayecto_taxi">
+                </th>
+                <th>
+                  <label for="ciudad_taxi">Ciudad</label>
+                </th>
+                <th>
+                  <label for="tipo_taxi">Tipo</label>
+                </th>
+                <th>
+                  <label for="tarifa_taxi">Tarifa</label>
+                </th>
+                <th>
+                  <label for="trayectos_taxi">Trayectos</label>
+                </th>
+                <th>
+                  <label for="total_taxi">Total</label>
+                </th>
+              </tr>
+            </thead>
+            <tbody formArrayName="taxi">
+              <ng-container *ngIf="taxiList.controls.length; else notData">
+                <tr *ngFor="let item of taxiList.controls; let i = index">
+                  <td [formGroupName]="i">
+                    <select
+                      formControlName="journey_id"
+                      class="form-control form-control-sm"
+                      id="trayecto_taxi"
+                    >
                       <option
                         *ngFor="let route of item['value']['journey']"
                         [value]="route.id"
@@ -632,9 +649,13 @@
                         {{ route.route }}
                       </option>
                     </select>
-                                    </td>
-                                    <td [formGroupName]="i">
-                                        <select formControlName="taxi_city_id" class="form-control form-control-sm" id="ciudad_taxi">
+                  </td>
+                  <td [formGroupName]="i">
+                    <select
+                      formControlName="taxi_city_id"
+                      class="form-control form-control-sm"
+                      id="ciudad_taxi"
+                    >
                       <option
                         *ngFor="let taxi_city of item['value']['taxi_cities']"
                         [value]="taxi_city.id"
@@ -642,226 +663,377 @@
                         {{ taxi_city.city.name }}
                       </option>
                     </select>
-                                    </td>
-                                    <td [formGroupName]="i">
-                                        <input type="text" readonly [value]="item['value']['city_selected']?.type" class="form-control form-control-sm" id="tarifa_taxi" />
-                                    </td>
-                                    <td [formGroupName]="i">
-                                        <input type="number" formControlName="rate" class="form-control form-control-sm" id="tarifa_taxi" />
-                                    </td>
-                                    <td [formGroupName]="i">
-                                        <input type="number" formControlName="journeys" class="form-control form-control-sm" id="trayectos_taxi" />
-                                    </td>
-                                    <td [formGroupName]="i">
-                                        <input type="number" readonly formControlName="total" class="form-control form-control-sm" id="total_taxi" />
-                                    </td>
-                                </tr>
-                            </ng-container>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="6">
-                                    <div class="btn-group" style="float: right">
-                                        <button class="btn btn-danger btn-sm" placement="bottom" ngbTooltip="Borrar" (click)="deleteTaxi($event.target.value)">
+                  </td>
+                  <td [formGroupName]="i">
+                    <input
+                      type="text"
+                      readonly
+                      [value]="item['value']['city_selected']?.type"
+                      class="form-control form-control-sm"
+                      id="tarifa_taxi"
+                    />
+                  </td>
+                  <td [formGroupName]="i">
+                    <input
+                      type="number"
+                      formControlName="rate"
+                      class="form-control form-control-sm"
+                      id="tarifa_taxi"
+                    />
+                  </td>
+                  <td [formGroupName]="i">
+                    <input
+                      type="number"
+                      formControlName="journeys"
+                      class="form-control form-control-sm"
+                      id="trayectos_taxi"
+                    />
+                  </td>
+                  <td [formGroupName]="i">
+                    <input
+                      type="number"
+                      readonly
+                      formControlName="total"
+                      class="form-control form-control-sm"
+                      id="total_taxi"
+                    />
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6">
+                  <div class="btn-group" style="float: right">
+                    <button
+                      class="btn btn-danger btn-sm"
+                      placement="bottom"
+                      ngbTooltip="Borrar"
+                      (click)="deleteTaxi($event.target.value)"
+                    >
                       <i class="fas fa-trash-alt"></i>
                     </button>
-                                        <button class="btn btn-info btn-sm" placement="bottom" ngbTooltip="Agregar" (click)="newTaxi()">
+                    <button
+                      class="btn btn-info btn-sm"
+                      placement="bottom"
+                      ngbTooltip="Agregar"
+                      (click)="newTaxi()"
+                    >
                       <i class="fas fa-plus"></i>
                     </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tfoot>
-                        </table>
-                    </div>
-                    <div class="col-12">
-                        <hr style="background-color: rgb(180, 248, 79)" />
-                        <div class="title">
-                            <h5>ALIMENTACIÓN</h5>
-                        </div>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <label for="alimentacion">Estadia</label>
-                                    </th>
-                                    <th>
-                                        <label for="alojamiento_desayuno">¿incluye desayuno?</label>
-                                    </th>
-                                    <th>
-                                        <label for="tarifa_estadia">Tarifa</label>
-                                    </th>
-                                    <th>
-                                        <label for="n_estadia">N° dias Estadia</label>
-                                    </th>
-                                    <th>
-                                        <label for="total_estadia">Total</label>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody formArrayName="feeding">
-                                <ng-container *ngIf="FeedingList.controls.length; else notData">
-                                    <tr *ngFor="let item of FeedingList.controls; let i = index">
-                                        <td [formGroupName]="i">
-                                            <select name="" formControlName="type" class="form-control form-control-sm" id="alimentacion">
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="col-12">
+          <hr style="background-color: rgb(180, 248, 79)" />
+          <div class="title">
+            <h5>ALIMENTACIÓN</h5>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>
+                  <label for="alimentacion">Estadia</label>
+                </th>
+                <th>
+                  <label for="alojamiento_desayuno">¿incluye desayuno?</label>
+                </th>
+                <th>
+                  <label for="tarifa_estadia">Tarifa</label>
+                </th>
+                <th>
+                  <label for="n_estadia">N° dias Estadia</label>
+                </th>
+                <th>
+                  <label for="total_estadia">Total</label>
+                </th>
+              </tr>
+            </thead>
+            <tbody formArrayName="feeding">
+              <ng-container *ngIf="FeedingList.controls.length; else notData">
+                <tr *ngFor="let item of FeedingList.controls; let i = index">
+                  <td [formGroupName]="i">
+                    <select
+                      name=""
+                      formControlName="type"
+                      class="form-control form-control-sm"
+                      id="alimentacion"
+                    >
                       <option *ngFor="let item of tipo" [value]="item">
                         {{ item }}
                       </option>
                     </select>
-                                        </td>
-                                        <td [formGroupName]="i">
-                                            <select formControlName="breakfast" class="form-control form-control-sm" id="alojamiento_desayuno" value="test">
+                  </td>
+                  <td [formGroupName]="i">
+                    <select
+                      formControlName="breakfast"
+                      class="form-control form-control-sm"
+                      id="alojamiento_desayuno"
+                      value="test"
+                    >
                       <option value="Si">Si</option>
                       <option value="No">No</option>
                     </select>
-                                        </td>
-                                        <td [formGroupName]="i">
-                                            <input type="number" formControlName="rate" class="form-control form-control-sm" id="tarifa_estadia" value="test" />
-                                        </td>
-                                        <td [formGroupName]="i">
-                                            <input type="number" formControlName="stay" class="form-control form-control-sm" id="n_estadia" value="test" />
-                                        </td>
-                                        <td [formGroupName]="i">
-                                            <input type="number" readonly formControlName="total" class="form-control form-control-sm" id="total_estadia" value="test" />
-                                        </td>
-                                    </tr>
-                                </ng-container>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="6">
-                                        <div class="btn-group" style="float: right">
-                                            <button class="btn btn-danger btn-sm" placement="bottom" ngbTooltip="Borrar" (click)="deleteFeeding($event.target.value)">
+                  </td>
+                  <td [formGroupName]="i">
+                    <input
+                      type="number"
+                      formControlName="rate"
+                      class="form-control form-control-sm"
+                      id="tarifa_estadia"
+                      value="test"
+                    />
+                  </td>
+                  <td [formGroupName]="i">
+                    <input
+                      type="number"
+                      formControlName="stay"
+                      class="form-control form-control-sm"
+                      id="n_estadia"
+                      value="test"
+                    />
+                  </td>
+                  <td [formGroupName]="i">
+                    <input
+                      type="number"
+                      readonly
+                      formControlName="total"
+                      class="form-control form-control-sm"
+                      id="total_estadia"
+                      value="test"
+                    />
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6">
+                  <div class="btn-group" style="float: right">
+                    <button
+                      class="btn btn-danger btn-sm"
+                      placement="bottom"
+                      ngbTooltip="Borrar"
+                      (click)="deleteFeeding($event.target.value)"
+                    >
                       <i class="fas fa-trash-alt"></i>
                     </button>
-                                            <button class="btn btn-info btn-sm" placement="bottom" ngbTooltip="Agregar" (click)="newFeeding()">
+                    <button
+                      class="btn btn-info btn-sm"
+                      placement="bottom"
+                      ngbTooltip="Agregar"
+                      (click)="newFeeding()"
+                    >
                       <i class="fas fa-plus"></i>
                     </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <hr style="background-color: rgb(167, 226, 78)" />
-                    </div>
-                    <div class="col-6">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <div class="title">
-                                        <h5>Observaciones</h5>
-                                    </div>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <textarea class="form-control form-control-sm" cols="100%" formControlName="observation" rows="10"></textarea>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-6">
-                        <div class="title">
-                            <h5>TOTAL VIATICOS</h5>
-                        </div>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Dolares</th>
-                                    <th>Pesos</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Hospedaje</td>
-                                    <td>
-                                        <input type="number" formControlName="total_hotels_usd" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" />
-                                    </td>
-                                    <td>
-                                        <input type="number" formControlName="total_hotels_cop" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Transporte Terrestre</td>
-                                    <td></td>
-                                    <td>
-                                        <input type="number" formControlName="total_transports_cop" readonly class="form-control form-control-plaintext form-control-sm" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Taxis</td>
-                                    <td>
-                                        <input type="number" formControlName="total_taxis_usd" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" />
-                                    </td>
-                                    <td>
-                                        <input type="number" formControlName="total_taxis_cop" readonly class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Alimentación</td>
-                                    <td>
-                                        <input type="number" formControlName="total_feedings_usd" readonly class="form-control form-control-plaintext form-control-sm" />
-                                    </td>
-                                    <td>
-                                        <input type="number" formControlName="total_feedings_cop" readonly class="form-control form-control-plaintext form-control-sm" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Lavanderia</td>
-                                    <td>
-                                        <input type="number" formControlName="total_laundry_usd" class="form-control form-control-sm" />
-                                    </td>
-                                    <td>
-                                        <input type="number" formControlName="total_laundry_cop" class="form-control form-control-sm" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Sobre Equipaje</td>
-                                    <td>
-                                        <input type="number" formControlName="baggage_usd" class="form-control form-control-sm" />
-                                    </td>
-                                    <td>
-                                        <input type="number" formControlName="baggage_cop" class="form-control form-control-sm" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Otros Gastos</td>
-                                    <td>
-                                        <input type="number" formControlName="other_expenses_usd" class="form-control form-control-sm" />
-                                    </td>
-                                    <td>
-                                        <input type="number" formControlName="other_expenses_cop" class="form-control form-control-sm" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Total</td>
-                                    <td>
-                                        <input type="number" formControlName="total_usd" style="background-color: transparent" readonly class="form-control form-control-plaintext form-control-sm" />
-                                    </td>
-                                    <td>
-                                        <input type="number" formControlName="total_cop" style="background-color: transparent" readonly class="form-control form-control-plaintext form-control-sm" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+          <hr style="background-color: rgb(167, 226, 78)" />
+        </div>
+        <div class="col-6">
+          <table>
+            <thead>
+              <tr>
+                <div class="title">
+                  <h5>Observaciones</h5>
                 </div>
-                <div class="row">
-                    <button class="col-12 btn btn-info btn-sm" (click)="crearViatico()">
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <textarea
+                    class="form-control form-control-sm"
+                    cols="100%"
+                    formControlName="observation"
+                    rows="10"
+                  ></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-6">
+          <div class="title">
+            <h5>TOTAL VIATICOS</h5>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Dolares</th>
+                <th>Pesos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Hospedaje</td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_hotels_usd"
+                    readonly
+                    class="form-control form-control-plaintext form-control-sm"
+                    style="background-color: transparent"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_hotels_cop"
+                    readonly
+                    class="form-control form-control-plaintext form-control-sm"
+                    style="background-color: transparent"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Transporte Terrestre</td>
+                <td></td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_transports_cop"
+                    readonly
+                    class="form-control form-control-plaintext form-control-sm"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Taxis</td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_taxis_usd"
+                    readonly
+                    class="form-control form-control-plaintext form-control-sm"
+                    style="background-color: transparent"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_taxis_cop"
+                    readonly
+                    class="form-control form-control-plaintext form-control-sm"
+                    style="background-color: transparent"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Alimentación</td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_feedings_usd"
+                    readonly
+                    class="form-control form-control-plaintext form-control-sm"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_feedings_cop"
+                    readonly
+                    class="form-control form-control-plaintext form-control-sm"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Lavanderia</td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_laundry_usd"
+                    class="form-control form-control-sm"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_laundry_cop"
+                    class="form-control form-control-sm"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Sobre Equipaje</td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="baggage_usd"
+                    class="form-control form-control-sm"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="baggage_cop"
+                    class="form-control form-control-sm"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Otros Gastos</td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="other_expenses_usd"
+                    class="form-control form-control-sm"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="other_expenses_cop"
+                    class="form-control form-control-sm"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_usd"
+                    style="background-color: transparent"
+                    readonly
+                    class="form-control form-control-plaintext form-control-sm"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="total_cop"
+                    style="background-color: transparent"
+                    readonly
+                    class="form-control form-control-plaintext form-control-sm"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <button class="col-12 btn btn-info btn-sm" (click)="crearViatico()">
           Guardar Viatico
         </button>
-                </div>
-        </form>
-        </div>
-    </div>
+      </div>
+    </form>
+  </div>
+</div>
 
-    <ng-template #notData>
-        <tr>
-            <td colspan="100%" class="text-center">
-                <p class="">Sin datos agregados</p>
-            </td>
-        </tr>
-    </ng-template>
+<ng-template #notData>
+  <tr>
+    <td colspan="100%" class="text-center">
+      <p class="">Sin datos agregados</p>
+    </td>
+  </tr>
+</ng-template>

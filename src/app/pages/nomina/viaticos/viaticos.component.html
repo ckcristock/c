@@ -5,86 +5,66 @@
       <div class="btn-group rounded">
         <button
           class="btn btn-primary btn-sm"
-          style="float: right"
           [routerLink]="['/nomina/crear-viatico']"
         >
           Agregar
         </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
+        <button class="btn btn-info btn-sm" (click)="openClose()">
           <i class="fas fa-sliders-h"></i> Filtros
         </button>
       </div>
     </div>
     <hr class="line" />
-    <div class="container">
-      <mat-accordion multi>
-        <mat-expansion-panel class="mat-elevation-z0">
-          <div class="container">
-            <div class="row">
-              <div class="input-group-sm col-md-3">
-                <label for="">Funcionario</label>
-                <ng-select
-                  [items]="people"
-                  (change)="getAll()"
-                  [(ngModel)]="filtros.person_id"
-                  bindLabel="text"
-                  bindValue="value"
-                  loadingText="loading "
-                  ngDefaultControl
-                >
-                </ng-select>
-              </div>
-              <div class="input-group-sm col-md-3">
-                <label for="">F. Creación</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  [(ngModel)]="filtros.creation_date"
-                  (change)="getAll()"
-                />
-              </div>
-              <div class="input-group-sm col-md-3">
-                <label for="">F. Salida</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  [(ngModel)]="filtros.departure_date"
-                  (change)="getAll()"
-                />
-              </div>
-              <div class="input-group-sm col-md-3">
-                <label for="">Estado</label>
-                <select
-                  class="form-control"
-                  [(ngModel)]="filtros.state"
-                  (change)="getAll()"
-                >
-                  <option *ngFor="let state of states" [value]="state.clave">
-                    {{ state.clave }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <!-- <div class="row">
-                            <mat-form-field class="col-lg-2 col-md-3 col-sm-4" appearance="outline">
-                                <mat-label> </mat-label>
-                                <input matInput type="text" placeholder="">
-                            </mat-form-field>
-                            <mat-form-field class="col-md-2" appearance="outline">
-                                <mat-label> </mat-label>
-                                <mat-select>
-                                    <mat-option value=""> </mat-option>
-                                </mat-select>
-                            </mat-form-field>                                
-                        </div> -->
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <div class="col-md-3">
+            <ng-select
+              [items]="people"
+              (change)="getAll()"
+              [(ngModel)]="filtros.person_id"
+              bindLabel="text"
+              bindValue="value"
+              loadingText="loading"
+              appearance="outline"
+              [appendTo]="'body'"
+              placeholder="Funcionario"
+              ngDefaultControl
+            >
+            </ng-select>
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
+          <mat-form-field class="col-md-3" appearance="outline">
+            <mat-label>Fecha de creación</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="filtros.creation_date"
+              (input)="getAll()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-3" appearance="outline">
+            <mat-label>Fecha de salida</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="filtros.departure_date"
+              (input)="getAll()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-3" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select
+              [(ngModel)]="filtros.state"
+              (selectionChange)="getAll()"
+            >
+              <mat-option *ngFor="let state of states" [value]="state.clave">
+                {{ state.clave }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
     <table
       class="table table-bordered table-striped table-sm table-responsive-sm"
       style="font-size: small"
@@ -128,8 +108,12 @@
             {{ item.user.person.first_name | titlecase }}
             {{ item.user.person.first_surname | titlecase }}
           </td>
-          <td class="align-middle">{{ item.created_at | date: "dd/MM/yyyy" }}</td>
-          <td class="align-middle">{{ item.departure_date | date: "dd/MM/yyyy" }}</td>
+          <td class="align-middle">
+            {{ item.created_at | date: "dd/MM/yyyy" }}
+          </td>
+          <td class="align-middle">
+            {{ item.departure_date | date: "dd/MM/yyyy" }}
+          </td>
           <td class="align-middle">{{ item.n_nights }}</td>
           <td class="align-middle">{{ item.total_cop | currency: "":"" }}</td>
           <td class="align-middle">{{ item.total_usd | currency: "":"" }}</td>
@@ -147,7 +131,7 @@
                 <div ngbDropdownMenu>
                   <a
                     [routerLink]="['/nomina/ver-viatico', item.id]"
-                    class="dropdown-item waves-light waves-effect caja-botones"
+                    class="dropdown-item text-success waves-light waves-effect caja-botones"
                   >
                     <i class="far fa-eye"></i> Ver</a
                   >

@@ -96,7 +96,7 @@
                         item.Id_Orden_Compra_Nacional
                       ]"
                     >
-                      <i class="ti-eye"></i> Ver Ord.</a
+                      <i class="fas fa-eye"></i> Ver orden</a
                     >
                   </div>
                 </div>
@@ -146,7 +146,7 @@
                         item.Id_Orden_Compra_Nacional
                       ]"
                     >
-                      <i class="ti-eye"></i> Ver Ord.</a
+                      <i class="fas fa-eye"></i> Ver Ord.</a
                     >
                   </div>
                 </div>
@@ -216,18 +216,18 @@
                   </button>
                   <div ngbDropdownMenu>
                     <a
-                      class="dropdown-item waves-light waves-effect caja-botones"
+                      class="dropdown-item text-success waves-light waves-effect caja-botones"
                       href=""
                       [routerLink]="[
                         '/inventario/acta-recepcion/ver',
                         item.Id_Acta_Recepcion
                       ]"
                     >
-                      <i class="ti-eye"></i> Ver</a
+                      <i class="fas fa-eye"></i> Ver</a
                     >
                     <!-- <a class="dropdown-item waves-light waves-effect caja-botones" [routerLink]="[ '/actarecepcioneditar', item.Id_Acta_Recepcion ]"><i class="fa fa-pencil"></i> Editar</a> -->
                     <a
-                      class="dropdown-item waves-light waves-effect caja-botones"
+                      class="dropdown-item text-primary waves-light waves-effect caja-botones"
                       href="{{
                         envi.ruta
                       }}php/actarecepcion/descarga_pdf.php?tipo=Acta_Recepcion&id={{
@@ -235,7 +235,7 @@
                       }}"
                       target="_blank"
                     >
-                      <i class="ti-printer"></i> Imprimir</a
+                      <i class="fas fa-print"></i> Imprimir</a
                     >
 
                     <a
@@ -506,10 +506,10 @@
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item text-success waves-light waves-effect caja-botones"
                   (click)="verActa(item)"
                 >
-                  <i class="ti-eye"></i> Ver</a
+                  <i class="fas fa-eye"></i> Ver</a
                 >
 
                 <!-- <a
@@ -534,7 +534,7 @@
                 <!--ACTA RECEPCION-->
                 <a
                   *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info waves-light waves-effect caja-botones"
                   href="{{
                     envi.ruta
                   }}php/actarecepcion/descarga_pdf.php?tipo=Acta_Recepcion&id={{
@@ -542,11 +542,11 @@
                   }}"
                   target="_blank"
                 >
-                  <i class="ti-printer"></i> Imprimir</a
+                  <i class="fas fa-print"></i> Imprimir</a
                 >
                 <a
                   *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info waves-light waves-effect caja-botones"
                   href="{{
                     envi.ruta
                   }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{
@@ -554,13 +554,13 @@
                   }}&id={{ item.Id_Orden_Compra }}"
                   target="_blank"
                 >
-                  <i class="ti-printer"></i> Imprimir OC {{ item.Tipo }}</a
+                  <i class="fas fa-print"></i> Imprimir OC {{ item.Tipo }}</a
                 >
 
                 <!--Nota_Credito-->
                 <a
                   *ngIf="item.Tipo_Acomodar == 'Nota_Credito'"
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info waves-light waves-effect caja-botones"
                   href="{{
                     envi.ruta
                   }}php/notascredito/descarga_pdf.php?tipo=Nota_Credito&id={{
@@ -568,12 +568,12 @@
                   }}"
                   target="_blank"
                 >
-                  <i class="ti-printer"></i> Imprimir</a
+                  <i class="fas fa-print"></i> Imprimir</a
                 >
 
                 <a
                   *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item text-primary waves-light waves-effect caja-botones"
                   href="{{
                     envi.ruta
                   }}php/archivos/descarga_etiqueta_zebra.php?id={{
@@ -581,7 +581,7 @@
                   }}"
                   target="_blank"
                 >
-                  <i class="fa fa-tag"></i> Descargar Etiquetas</a
+                  <i class="fa fa-tag"></i> Descargar etiquetas</a
                 >
 
                 <a

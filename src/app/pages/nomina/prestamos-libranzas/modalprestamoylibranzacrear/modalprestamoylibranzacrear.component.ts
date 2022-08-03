@@ -145,6 +145,7 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
     }); */
   }
   changeTipo(tipo) {
+    console.log(tipo)
     if (this.modelo.person.id) {
       /* this.modelo.type = tipo; */
       if (tipo == 'Libranza') {

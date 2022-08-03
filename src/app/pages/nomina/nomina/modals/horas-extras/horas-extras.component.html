@@ -1,26 +1,30 @@
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">Horas extras/recargo</h5>
-    <button type="button" class="close basic-close" (click)="modal.hide()">
-      <span aria-hidden="true">
-        <i class="fas fa-times" (click)="modal.hide()"></i>
-      </span>
-    </button>
+<ng-template #add let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">Horas extras/recargos</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
   </div>
-  <div class="app-modal-body">
-    <table class="table table-bordered table-sm">
-      <thead>
-        <tr>
-          <th class="custom-label text-center">Tipo</th>
-          <th class="custom-label text-center" style="width: 120px">
-            Cantidad
-          </th>
+  <div class="modal-body">
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Tipo</th>
+          <th>Cantidad</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of  horasExtras | ObjToArrayKeysPipe ">
-          <td class="custom-label text-left">{{ item }}</td>
-          <td class="custom-label text-center">{{ horasExtras[item] }} h</td>
+        <tr *ngFor="let item of horasExtras | ObjToArrayKeysPipe" class="text-center">
+          <td>{{ item }}</td>
+          <td>{{ horasExtras[item] }} h</td>
         </tr>
         <!-- <tr v-for="(extra, index) in horasExtras" :key="index">
           <td class="custom-label text-left">{{ NombresExtras[index] }}</td>
@@ -29,16 +33,14 @@
       </tbody>
     </table>
   </div>
-  <div class="app-modal-footer">
-    <div class="form-group text-right">
-      <button
-        (click)="modal.hide()"
-        type="button"
-        class="btn btn-danger raised mr-2 btn-sm"
-      >
-        Cerrar
-      </button>
-    
-    </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cerrar
+    </button>
   </div>
-</app-modal-basic>
+</ng-template>
+

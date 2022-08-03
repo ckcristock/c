@@ -56,6 +56,7 @@ export class NominaComponent implements OnInit {
       {
         date1: this.inicioParemeter, date2: this.finParemeter,
       } : {}
+      
     this._payroll.getPayrollPays(params).subscribe((r: any) => {
       this.nomina = r.data;
       console.log(this.nomina)

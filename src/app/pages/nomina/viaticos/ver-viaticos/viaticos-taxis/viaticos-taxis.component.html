@@ -1,96 +1,68 @@
 <ng-container *ngIf="taxi.length">
-  <hr style="background-color: rgb(180, 248, 79)" />
-  <div class="title">
-    <h5>TAXIS</h5>
+  <hr />
+  <div class="text-center">
+    <h5>Taxis</h5>
   </div>
-  <div class="row">
-    <div class="col-12">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>
-              <label for="trayecto_taxi">Trayecto</label>
-            </th>
-            <th>
-              <label for="ciudad_taxi">Ciudad</label>
-            </th>
-            <th>
-              <label for="tipo_taxi">Tipo</label>
-            </th>
-            <th>
-              <label for="tarifa_taxi">Tarifa</label>
-            </th>
-            <th>
-              <label for="trayectos_taxi">Trayectos</label>
-            </th>
-            <th>
-              <label for="total_taxi">Total</label>
-            </th>
-            <th *ngIf="legal">
-              <label
-                for="total_hospedaje"
-                class="col-form-label col-form-label-sm"
-                >Legalizar</label
-              >
-            </th>
-            <th *ngIf="legal">
-              <label
-                for="total_hospedaje"
-                class="col-form-label col-form-label-sm"
-                >Archivo</label
-              >
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          
-          <tr *ngFor="let item of taxi; let i = index">
-            <td>
-              {{ item.taxi_city.taxi.route }}
-            </td>
-
-            <td>
-              {{ item.taxi_city.city.name }}
-            </td>
-            <td>
-              {{ item.taxi_city.type }}
-            </td>
-            <td>
-              {{ item.rate }}
-            </td>
-            <td>
-              {{ item.journeys }}
-            </td>
-            <td class="text-right">
-              {{ item.total }}
-            </td>
-            <td *ngIf="legal">
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                placeholder="valor reportado"
-                name=""
-                [(ngModel)]="item.reported"
-                id=""
-              />
-            </td>
-            <td *ngIf="legal">
-              <div class="image-upload">
-                <label for="file-input-tax{{ i }}" class="text-right">
-                  <i class="fas fa-cloud-upload-alt text-primary"></i>
-                </label>
-                <input
-                  #file
-                  (change)="onFileChanged($event, i, item)"
-                  id="file-input-tax{{ i }}"
-                  type="file"
-                />
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    
-  </div>
+  <table
+    class="table table-bordered table-striped table-sm table-responsive-sm"
+    style="font-size: small"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Trayecto</th>
+        <th>Ciudad</th>
+        <th>Tipo</th>
+        <th>Tarifa</th>
+        <th>Trayectos</th>
+        <th>Total</th>
+        <th *ngIf="legal">Legalizar</th>
+        <th *ngIf="legal">Archivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of taxi; let i = index" class="text-center">
+        <td>
+          {{ item.taxi_city.taxi.route }}
+        </td>
+        <td>
+          {{ item.taxi_city.city.name }}
+        </td>
+        <td>
+          {{ item.taxi_city.type }}
+        </td>
+        <td>
+          {{ item.rate }}
+        </td>
+        <td>
+          {{ item.journeys }}
+        </td>
+        <td class="text-right">
+          {{ item.total }}
+        </td>
+        <td *ngIf="legal">
+          <input
+            type="number"
+            class="form-control form-control-sm"
+            placeholder="valor reportado"
+            name=""
+            [(ngModel)]="item.reported"
+            id=""
+          />
+        </td>
+        <td *ngIf="legal">
+          <div class="image-upload">
+            <label for="file-input-tax{{ i }}" class="text-right">
+              <i class="fas fa-cloud-upload-alt text-primary"></i>
+            </label>
+            <input
+              #file
+              (change)="onFileChanged($event, i, item)"
+              id="file-input-tax{{ i }}"
+              type="file"
+            />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </ng-container>

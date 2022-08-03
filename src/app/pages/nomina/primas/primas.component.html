@@ -1,116 +1,140 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Primas</h4>
-            <div class="btn-group rounded">
-                <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
-                    <i class="fas fa-money-bill"></i> Pagar prima
-                </button>
-            </div>           
-        </div>
-        <hr class="line">
-        <div class="container mt-4" style="font-size: small;">
-            <table class="table table-bordered table-striped table-sm"
-                *ngIf="!loading && premiums.length > 0; else notData">
-                <thead>
-                    <tr>
-                        <th>Prima</th>
-                        <th>Fecha</th>
-                        <th>Total Prima</th>
-                        <th>Total Empleados</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of premiums">
-                        <td> {{ item.premium }} </td>
-                        <td> {{ item.created_at }} </td>
-                        <td> {{ item.total_premium }} </td>
-                        <td> {{ item.total_employees }} </td>
-                        <td>
-                            <button class="btn btn-lg" (click)="VerPrimaFuncionarios(item.id);" placement="right" ngbTooltip="Ver">
-                                <span aria-hidden="true">
-                                    <i class="far fa-eye fa-lg"></i>
-                                </span>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Primas</h4>
+      <div class="btn-group rounded">
+        <button class="btn btn-sm btn-primary" (click)="openConfirm(add)">
+          <i class="fas fa-money-bill"></i> Pagar prima
+        </button>
+      </div>
     </div>
+    <hr class="line" />
+    <table
+      class="table table-bordered table-striped table-sm table-responsive-sm"
+      style="font-size: small"
+      *ngIf="!loading && premiums.length > 0; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Prima</th>
+          <th>Fecha</th>
+          <th>Total Prima</th>
+          <th>Total Empleados</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of premiums" class="text-center">
+          <td>{{ item.premium }}</td>
+          <td>{{ item.created_at }}</td>
+          <td>{{ item.total_premium }}</td>
+          <td>{{ item.total_employees }}</td>
+          <td>
+            <button
+              class="btn btn-lg"
+              (click)="VerPrimaFuncionarios(item.id)"
+              placement="right"
+              ngbTooltip="Ver"
+            >
+              <span aria-hidden="true">
+                <i class="far fa-eye fa-lg"></i>
+              </span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Ingrese Datos</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-        </button>
+
+<ng-template #add let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">Ingrese datos</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
     </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label for="">Año</label>
-                            <select class="form-control form-control-sm custom-select" formControlName="year">
-                                <option value="" *ngFor="let y of years" [value]="y">{{y}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Perido a Pagar</label>
-                            <select class="form-control form-control-sm custom-select" formControlName="periodo">
-                                <option value="12">Diciembre</option>
-                                <option value="6">Junio</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-success btn-sm raised" (click)="irAPago()" [disabled]="!form.valid">Pagar</button>
-        </div>
-    </div>
-</app-modal-basic>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Año</mat-label>
+          <mat-select formControlName="year">
+            <mat-option *ngFor="let y of years" [value]="y">
+              {{ y }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Periodo a pagar</mat-label>
+          <mat-select formControlName="periodo">
+            <mat-option value="12">Diciembre</mat-option>
+            <mat-option value="6">Junio</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="irAPago()"
+      [disabled]="!form.valid"
+    >
+      Pagar
+    </button>
+  </div>
+</ng-template>
+
 <app-modal-basic #modalFuncionario [dialogClass]="'modal-xl'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Todos los funcionarios</h5>
-        <button type="button" class="close basic-close" (click)="modalFuncionario.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modalFuncionario.hide()"></i>
-            </span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <table class="table table-sm table-borderless table-striped">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Persona</th>
-                    <th>Salario</th>
-                    <th>Dias Trabajados</th>
-                    <th>Total Prima</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <div class="app-modal-header">
+    <h5 class="modal-title">Todos los funcionarios</h5>
+    <button
+      type="button"
+      class="close basic-close"
+      (click)="modalFuncionario.hide()"
+    >
+      <span aria-hidden="true">
+        <i class="fas fa-times" (click)="modalFuncionario.hide()"></i>
+      </span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <table class="table table-sm table-borderless table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Persona</th>
+          <th>Salario</th>
+          <th>Dias Trabajados</th>
+          <th>Total Prima</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </app-modal-basic>
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbDropdownModule, NgbPaginationModule, NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbNavModule, NgbPaginationModule, NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -40,6 +40,7 @@ import { ProvisionesComponent } from './calculos/provisiones/provisiones.compone
 import { BaseCalculoComponent } from './calculos/provisiones/base-calculo/base-calculo.component';
 import { DiasVacacionesComponent } from './calculos/provisiones/dias-vacaciones/dias-vacaciones.component';
 import { ResumenProvisionesComponent } from './calculos/provisiones/resumen-provisiones/resumen-provisiones.component';
+import { NominaModule } from '../nomina.module';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { ResumenProvisionesComponent } from './calculos/provisiones/resumen-prov
     NgSelectModule,
     NgbTypeaheadModule,
     NgbTooltipModule,
+    NgbNavModule
   ],
   exports: [],
 })

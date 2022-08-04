@@ -9,11 +9,7 @@
         >
           <i class="fa fa-plus"></i>Agregar
         </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
+        <button class="btn btn-info btn-sm" (click)="openClose()">
           <i class="fas fa-sliders-h"></i> Filtros
         </button>
       </div>
@@ -21,13 +17,13 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger text-center" role="alert">
           Aún no tenemos filtros para esta sección.
         </div>
       </mat-expansion-panel>
     </mat-accordion>
     <table
-      class="table table-bordered table-striped table-sm"
+      class="table table-bordered table-striped table-sm table-responsive-sm"
       style="font-size: small"
       *ngIf="!loading && prettyCashList.length; else notData"
     >
@@ -44,8 +40,12 @@
       <tbody>
         <tr *ngFor="let item of prettyCashList" class="text-center">
           <td class="align-middle">{{ item.description }}</td>
-          <td class="align-middle">{{ item.account_plan.name }} - {{ item.account_plan.code }}</td>
-          <td class="align-middle">{{ item.person.first_name }} {{ item.person.first_surname }}</td>
+          <td class="align-middle">
+            {{ item.account_plan.name }} - {{ item.account_plan.code }}
+          </td>
+          <td class="align-middle">
+            {{ item.person.first_name }} {{ item.person.first_surname }}
+          </td>
           <td class="align-middle">
             {{ item.user.person.first_name }}
             {{ item.user.person.first_surname }}

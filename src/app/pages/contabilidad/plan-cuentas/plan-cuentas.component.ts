@@ -11,6 +11,7 @@ import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import swal from 'sweetalert2';
 import * as $ from "jquery";
 import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-plan-cuentas',
@@ -50,7 +51,7 @@ export class PlanCuentasComponent implements OnInit, AfterViewInit {
   @ViewChild('modalEditarCuenta') modalEditarCuenta: any;
   @ViewChild('modalVerCuenta') modalVerCuenta: any;
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     if (this.activeFiltros != '?pag=1') {
       this.openClose()
       /* setTimeout(() =>{
@@ -111,6 +112,7 @@ export class PlanCuentasComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     private swalService: SwalService,
+    private modalService: NgbModal,
     private _planCuentas: PlanCuentasService) { }
 
 
@@ -124,6 +126,24 @@ export class PlanCuentasComponent implements OnInit, AfterViewInit {
     this.envirom = environment;
     this.filtros();
     // this.ListasEmpresas();
+  }
+
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
   estadoFiltros = false;
   mostrarFiltros() {
@@ -198,7 +218,7 @@ export class PlanCuentasComponent implements OnInit, AfterViewInit {
     let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     return queryString;
   }
-  activeFiltros:any;
+  activeFiltros: any;
   //Aplicar filtros en la tabla
   filtros(paginacion: boolean = false) {
     this.Cargando = true;
@@ -213,7 +233,7 @@ export class PlanCuentasComponent implements OnInit, AfterViewInit {
       this.SetInformacionPaginacion();
       this.Cargando = false;
     });
-    
+
   }
 
   AsignarParametrosUrl(urlParams: any) {
@@ -295,9 +315,13 @@ export class PlanCuentasComponent implements OnInit, AfterViewInit {
       let title = (data.tipo == 'error' ? 'Error' : 'Exito');
       this.ShowSwal(data.tipo, title, data.mensaje);
       if (accion == 'guardar') {
-        this.modalCrearCuenta.hide();
+        //this.modalCrearCuenta.hide();
+        this.modalService.dismissAll(); 
+
       } else if (accion == 'editar') {
-        this.modalEditarCuenta.hide();
+        //this.modalEditarCuenta.hide();
+        this.modalService.dismissAll(); 
+
       }
 
       setTimeout(() => {

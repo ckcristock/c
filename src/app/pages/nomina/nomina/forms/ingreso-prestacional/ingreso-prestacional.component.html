@@ -1,31 +1,21 @@
-<div class="container"  *ngIf="person">
+<div *ngIf="person">
   <form #form="ngForm" (ngSubmit)="save(form)">
-    <div class="form-group row">
-      <label for="ingreso" class="col-md-4 col-form-label custom-label"
-        >Ingreso</label
-      >
-      <div class="col-md-8">
-        <select
-          name="ingresosPDatos"
-          required
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="ingreso">Ingreso</label>
+        <select 
+          name="ingresosPDatos" 
+          required 
           name="countable_income_id"
-          ngModel
-          class="form-control custom-control"
-        >
+          ngModel 
+          class="form-control custom-control">
           <option [value]="item.value" *ngFor="let item of ingresosPDatos">
             {{ item.text }}
           </option>
         </select>
       </div>
-    </div>
-    <div class="form-group row">
-      <label
-        for="valor"
- 
-        class="col-md-4 col-form-label custom-label"
-        >Valor</label
-      >
-      <div class="col-md-8">
+      <div class="form-group col-md-6">
+        <label for="valor">Valor</label>
         <input
           type="number"
           min="0"
@@ -36,7 +26,6 @@
           placeholder="0"
         />
         <input
-
           type="hidden"
           min="0"
           name="person_id"
@@ -46,22 +35,24 @@
         />
       </div>
     </div>
-    <div class="form-group">
-      <p class="invalid" *ngIf="nominaPaga">
-        No puede agregar mas ingresos, porque la nómina ya ha sido pagada.
-      </p>
-      <button type="submit" [disabled]="form.invalid" class="btn btn-secondary raised">
-        Agregar
-      </button>
+    <div
+      class="alert alert-warning text-center"
+      *ngIf="nominaPaga"
+      role="alert"
+    >
+      No puede agregar mas ingresos porque la nómina ya ha sido pagada.
     </div>
+    <button
+      type="submit"
+      [disabled]="form.invalid"
+      class="btn btn-primary btn-block"
+    >
+      Agregar
+    </button>
   </form>
   <ng-container *ngIf="ingresos.length && !loading; else notData">
-    <div class="row mb-3 mt-2">
-      <div class="col-md-12">
-        <h6>Ingresos actuales para {{ person.name }}</h6>
-      </div>
-    </div>
-    <div class="row" *ngFor="let ingresoP of ingresos">
+    <h6 class="text-center mt-2">Ingresos actuales para {{ person.name }}</h6>
+    <div class="row mt-2" *ngFor="let ingresoP of ingresos">
       <div class="col-md-6">
         <p>{{ ingresoP.ingreso.concept }}</p>
       </div>
@@ -70,20 +61,21 @@
       </div>
       <div class="col-md-3">
         <p class="text-right">
-          <a title="eliminar"  (click)="delete(ingresoP.id)" class="trash ml-1 text-danger" >
+          <a
+            title="eliminar"
+            (click)="delete(ingresoP.id)"
+            class="trash ml-1 text-danger"
+          >
             <i class="fas fa-trash-alt"></i>
           </a>
         </p>
       </div>
     </div>
   </ng-container>
-
-  <p class="alert alert-secondary mt-3">
-    <small class="font-weight-bold"
-      >Si se desea crear más ingresos constitutivos, puede ir al apartado de
-      parametrización "ingresos constitutivos"</small
-    >
-  </p>
+  <div class="alert alert-success text-center" role="alert">
+    Si se desea crear más ingresos constitutivos puede ir al apartado de
+    parametrización "ingresos constitutivos".
+  </div>
 </div>
 
 <!-- <div class="container text-center" v-else>
@@ -92,5 +84,8 @@
 </div> -->
 
 <ng-template #notData>
-    <app-not-data  [loading]="loading" [text]="'No se encontraron ingresos constitutivos para este funcionario'" ></app-not-data>
+  <app-not-data
+    [loading]="loading"
+    [text]="'No se encontraron ingresos constitutivos para este funcionario'"
+  ></app-not-data>
 </ng-template>

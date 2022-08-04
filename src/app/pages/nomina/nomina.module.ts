@@ -75,6 +75,6 @@ import { MatSelectModule } from '@angular/material/select';
     LegalizarComponent,
     HistorialPagosComponent,
     
-  ],
+  ]  
 })
 export class NominaModule {}

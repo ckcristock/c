@@ -1,10 +1,9 @@
 <div class="card">
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Centros de Costos</h4>
+      <h4 class="text-primary">Centros de costos</h4>
       <div class="btn-group rounded">
         <button
-          style="float: right"
           type="button"
           class="btn btn-primary btn-sm"
           (click)="openConfirm(add)"
@@ -12,11 +11,7 @@
           <i class="fa fa-plus"></i>
           Agregar
         </button>
-        <button
-          style="float: right"
-          class="btn btn-success btn-sm"
-          (click)="openInNewTab()"
-        >
+        <button class="btn btn-success btn-sm" (click)="openInNewTab()">
           <i class="fas fa-table"></i> Exportar
         </button>
         <button
@@ -237,106 +232,125 @@
   <div class="modal-body">
     <form #FormCentroCosto="ngForm">
       <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Nombre</label>
-            <input
-              type="text"
-              name="Nombre"
-              [(ngModel)]="CentroCostoModel.Nombre"
-              id="Nombre_Centro"
-              class="form-control f-9"
-              placeholder="Ej: Administracion"
-              required
-            />
-          </div>
-        </div>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            [(ngModel)]="CentroCostoModel.Nombre"
+            name="Nombre"
+            id="Nombre_Centro"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
         <!-- <div class="col-md-3">
-                    <label>Empresa</label>
-                    <ng-select bindLabel="text" bindValue="value" loadingText="loading " id="Id_Empresa" class="f-10" name="Id_Empresa" [(ngModel)]="CentroCostoModel.Id_Empresa" placeholder="Seleccione la empresa" [items]="companies"></ng-select>
-                    <select name="Id_Empresa" id="Id_Empresa" [(ngModel)]="CentroCostoModel.Id_Empresa" class="form-control" required>
-                        <option *ngFor="let item of companies" [value]="item.value">
-                            {{ item.text }}
-                        </option>
-                    </select>
-                </div> -->
+          <label>Empresa</label>
+          <ng-select
+            bindLabel="text"
+            bindValue="value"
+            loadingText="loading "
+            id="Id_Empresa"
+            class="f-10"
+            name="Id_Empresa"
+            [(ngModel)]="CentroCostoModel.Id_Empresa"
+            placeholder="Seleccione la empresa"
+            [items]="companies"
+          ></ng-select>
+          <select
+            name="Id_Empresa"
+            id="Id_Empresa"
+            [(ngModel)]="CentroCostoModel.Id_Empresa"
+            class="form-control"
+            required
+          >
+            <option *ngFor="let item of companies" [value]="item.value">
+              {{ item.text }}
+            </option>
+          </select>
+        </div> -->
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Codigo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el código"
+            [(ngModel)]="CentroCostoModel.Codigo"
+            name="Codigo"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
         <div class="col-md-4">
-          <div class="form-group">
-            <label>Codigo</label>
-            <input
-              name="Codigo"
-              type="text"
-              [(ngModel)]="CentroCostoModel.Codigo"
-              [placeholder]="CodigoPlaceholder"
-              class="form-control"
-              required
-            />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label for="Padre">Padre</label>
-          <!--<select name="Padre" id="Centro_Padre" class="form-control" [disabled]="CentroCostoModel.EsCentroPadre" [(ngModel)]="CentroCostoModel.Id_Centro_Padre">
-                <option value="" selected>Escoja el centro padre</option>
-                <option *ngFor="let p of CentrosCostos" [value]="p.Id_Centro_Costo">{{p.Nombre}}</option>
-                <ng-container *ngTemplateOutlet="opcionesPadres; context:{ $implicit: items }"></ng-container>
-              </select>-->
-
           <ng-select
             bindLabel="label"
             bindValue="value"
             loadingText="loading"
             id="Centro_Padre"
-            class="f-10"
+            appearance="outline"
+            [appendTo]="'body'"
             name="Padre"
             [(ngModel)]="CentroCostoModel.Id_Centro_Padre"
-            placeholder="Seleccione el centro costo"
+            placeholder="Padre"
             [items]="CentrosCostosPadre"
           ></ng-select>
+          <!-- <select
+            name="Padre"
+            id="Centro_Padre"
+            class="form-control"
+            [disabled]="CentroCostoModel.EsCentroPadre"
+            [(ngModel)]="CentroCostoModel.Id_Centro_Padre"
+          >
+            <option value="" selected>Escoja el centro padre</option>
+            <option *ngFor="let p of CentrosCostos" [value]="p.Id_Centro_Costo">
+              {{ p.Nombre }}
+            </option>
+            <ng-container
+              *ngTemplateOutlet="opcionesPadres; context: { $implicit: items }"
+            ></ng-container>
+          </select> -->
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <label>Tipo</label>
-          <select
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select
             name="Tipo"
             id="Tipo_Centro"
-            class="form-control"
-            (change)="ValorTipoCentro($event.target.value)"
+            (selectionChange)="ValorTipoCentro($event.value)"
             [(ngModel)]="CentroCostoModel.Id_Tipo_Centro"
           >
-            <option value="" selected>Escoja el tipo de centro</option>
-            <option *ngFor="let t of TiposCentro" [value]="t.Id_Tipo_Centro">
-              {{ t.Nombre }}
-            </option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label>{{ ValorTipo }}</label>
-          <select
+            <mat-option
+              *ngFor="let t of TiposCentro"
+              [value]="t.Id_Tipo_Centro"
+            >
+              {{ t.Nombre }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>{{ ValorTipo }}</mat-label>
+          <mat-select
             name="Valor_Centro_Costo"
             id="Valor_Centro"
-            class="form-control"
             [disabled]="CentroCostoModel.Tipo == ''"
             [(ngModel)]="CentroCostoModel.Valor_Tipo_Centro"
           >
-            <option value="" selected>Escoja el {{ ValorTipo }}</option>
-            <option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">
-              {{ vtc.Nombre }}
-            </option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label>Movimiento</label>
-          <select
+            <mat-option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">
+              {{ vtc.Nombre }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Movimiento</mat-label>
+          <mat-select
             name="Movimiento"
             id="Movimiento"
-            class="form-control"
             [(ngModel)]="CentroCostoModel.Movimiento"
           >
-            <option value="Si" selected>Sí</option>
-            <option value="No" selected>No</option>
-          </select>
-        </div>
+            <mat-option value="Si" selected>Sí</mat-option>
+            <mat-option value="No" selected>No</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </form>
   </div>
@@ -382,97 +396,90 @@
   <div class="modal-body">
     <form #FormEditarCentroCosto="ngForm">
       <div class="row">
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            [(ngModel)]="EditarCentroCostoModel.Nombre"
+            name="Nombre"
+            id="NombreCentro"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Codigo</mat-label>
+          <input
+            matInput
+            type="text"
+            [placeholder]="CodigoPlaceholder"
+            [(ngModel)]="EditarCentroCostoModel.Codigo"
+            name="Codigo"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
         <div class="col-md-4">
-          <div class="form-group">
-            <label>Nombre</label>
-            <input
-              type="text"
-              name="Nombre"
-              [(ngModel)]="EditarCentroCostoModel.Nombre"
-              id="NombreCentro"
-              class="form-control f-9"
-              placeholder="Ej: Administracion, Dispensacion"
-              required
-            />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Codigo</label>
-            <input
-              name="Codigo"
-              type="text"
-              [(ngModel)]="EditarCentroCostoModel.Codigo"
-              [placeholder]="CodigoPlaceholder"
-              class="form-control"
-              required
-            />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label for="Padre">Padre</label>
           <!--<select name="Padre" id="CentroPadre" class="form-control" [disabled]="EditarCentroCostoModel.EsCentroPadre" [(ngModel)]="EditarCentroCostoModel.Id_Centro_Padre">
                 <option value="" selected>Escoja el centro padre</option>
                 <option *ngFor="let p of CentrosCostosEditar" [value]="p.Id_Centro_Costo">{{p.Nombre}}</option>
                 <ng-container *ngTemplateOutlet="opcionesPadres; context:{ $implicit: items }"></ng-container>
               </select>-->
-
           <ng-select
             bindLabel="label"
             bindValue="value"
             loadingText="loading"
             id="CentroPadre"
-            class="f-10"
+            appearance="outline"
+            [appendTo]="'body'"
             name="Padre"
             [(ngModel)]="EditarCentroCostoModel.Id_Centro_Padre"
-            placeholder="Seleccione el centro costo"
+            placeholder="Padre"
             [items]="CentrosCostosPadre"
           ></ng-select>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <label>Tipo</label>
-          <select
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select
             name="Tipo"
             id="TipoCentro"
-            class="form-control"
-            (change)="ValorTipoCentro($event.target.value)"
+            (selectionChange)="ValorTipoCentro($event.value)"
             [(ngModel)]="EditarCentroCostoModel.Id_Tipo_Centro"
           >
-            <option value="" selected>Escoja el tipo de centro</option>
-            <option *ngFor="let t of TiposCentro" [value]="t.Id_Tipo_Centro">
-              {{ t.Nombre }}
-            </option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label>{{ ValorTipo }}</label>
-          <select
+            <mat-option
+              *ngFor="let t of TiposCentro"
+              [value]="t.Id_Tipo_Centro"
+            >
+              {{ t.Nombre }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>{{ ValorTipo }}</mat-label>
+          <mat-select
             name="Valor_Centro_Costo"
             id="ValorCentro"
-            class="form-control"
             [disabled]="EditarCentroCostoModel.Tipo == ''"
             [(ngModel)]="EditarCentroCostoModel.Valor_Tipo_Centro"
           >
-            <option value="" selected>Escoja el {{ ValorTipo }}</option>
-            <option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">
-              {{ vtc.Nombre }}
-            </option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label>Movimiento</label>
-          <select
+            <mat-option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">
+              {{ vtc.Nombre }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Movimiento</mat-label>
+          <mat-select
             name="Movimiento"
             id="Movimiento_Editar"
-            class="form-control"
             [(ngModel)]="EditarCentroCostoModel.Movimiento"
           >
-            <option value="Si" selected>Sí</option>
-            <option value="No" selected>No</option>
-          </select>
-        </div>
+            <mat-option value="Si" selected>Sí</mat-option>
+            <mat-option value="No" selected>No</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </form>
   </div>

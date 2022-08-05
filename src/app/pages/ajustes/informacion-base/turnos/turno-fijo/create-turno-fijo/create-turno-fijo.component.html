@@ -4,58 +4,88 @@
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Agregar/Editar Turno Fijo</h4>
     </div>
-    <hr class="line">
+    <hr class="line" />
     <form [formGroup]="forma" (ngSubmit)="save()">
       <div class="form-row">
         <div class="form-group col-md-3">
           <label class="custom-label" for="nombre">Nombre</label>
-          <input type="text" class="form-control form-control-sm" formControlName="name"
-            [class.is-invalid]="invalid_name" placeholder="Nombre del Turno" />
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="name"
+            [class.is-invalid]="invalid_name"
+            placeholder="Nombre del Turno"
+          />
           <ng-container *ngIf="invalid_name">
-            <small *ngFor="let item of forma.get('name').errors | ObjToArrayPipe" class="text-danger">
+            <small
+              *ngFor="let item of forma.get('name').errors | ObjToArrayPipe"
+              class="text-danger"
+            >
               {{ item?.msj }}
             </small>
           </ng-container>
         </div>
         <div class="form-group col-md-3">
           <label class="custom-label">Tolerancia de Entrada (Min)</label>
-          <input type="number" formControlName="entry_tolerance" [class.is-invalid]="invalid_entry_tolerance"
-            class="form-control form-control-sm" />
+          <input
+            type="number"
+            formControlName="entry_tolerance"
+            [class.is-invalid]="invalid_entry_tolerance"
+            class="form-control form-control-sm"
+          />
           <ng-container *ngIf="invalid_entry_tolerance">
-            <small *ngFor="
+            <small
+              *ngFor="
                 let item of forma.get('entry_tolerance').errors | ObjToArrayPipe
-              " class="text-danger">
+              "
+              class="text-danger"
+            >
               {{ item?.msj }}
             </small>
           </ng-container>
         </div>
         <div class="form-group col-md-3">
           <label class="custom-label">Tolerancia de Salida (Min)</label>
-          <input type="number" formControlName="leave_tolerance" [class.is-invalid]="invalid_leave_tolerance"
-            class="form-control form-control-sm" />
+          <input
+            type="number"
+            formControlName="leave_tolerance"
+            [class.is-invalid]="invalid_leave_tolerance"
+            class="form-control form-control-sm"
+          />
           <ng-container *ngIf="invalid_leave_tolerance">
-            <small *ngFor="
+            <small
+              *ngFor="
                 let item of forma.get('leave_tolerance').errors | ObjToArrayPipe
-              " class="text-danger">
+              "
+              class="text-danger"
+            >
               {{ item?.msj }}
             </small>
           </ng-container>
         </div>
         <div class="form-group col-md-3">
           <label class="custom-label" for="extras">Horas Extras</label>
-          <select name="extras" class="form-control form-control-sm" v-model="lista.extras">
+          <select
+            name="extras"
+            class="form-control form-control-sm"
+            v-model="lista.extras"
+          >
             <option value="0">No</option>
             <option value="1">Si</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-outline-primary btn-sm" (click)="openConfirm(add)" type="button">
+        <button
+          class="btn btn-outline-primary btn-sm"
+          (click)="openConfirm(add)"
+          type="button"
+        >
           Asignación masiva
         </button>
       </div>
       <div class="form-row">
-        <ng-container >
+        <ng-container>
           <table class="table table-light">
             <thead>
               <tr>
@@ -66,27 +96,45 @@
                 <th>Hora de salida #1</th>
               </tr>
             </thead>
-            <tbody formArrayName="days" *ngFor="let item of dayList.controls; let i = index">
+            <tbody
+              formArrayName="days"
+              *ngFor="let item of dayList.controls; let i = index"
+            >
               <tr>
                 <td scope="row">
                   <div class="form-group" [formGroupName]="i">
-                    <input type="text" class="form-control form-control-sm" disabled formControlName="day" />
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      disabled
+                      formControlName="day"
+                    />
                   </div>
                 </td>
                 <td>
                   <div class="form-group" [formGroupName]="i">
-                    <input type="time" class="form-control form-control-sm" [class.is-invalid]="
+                    <input
+                      type="time"
+                      class="form-control form-control-sm"
+                      [class.is-invalid]="
                         item.controls.entry_time_one.invalid &&
                         item.controls.entry_time_one.touched
-                      " formControlName="entry_time_one" />
-                    <ng-container *ngIf="
+                      "
+                      formControlName="entry_time_one"
+                    />
+                    <ng-container
+                      *ngIf="
                         item.controls.entry_time_one.invalid &&
                         item.controls.entry_time_one.touched
-                      ">
-                      <small *ngFor="
+                      "
+                    >
+                      <small
+                        *ngFor="
                           let item of item.controls.entry_time_one.errors
                             | ObjToArrayPipe
-                        " class="text-danger">
+                        "
+                        class="text-danger"
+                      >
                         {{ item?.msj }}
                       </small>
                     </ng-container>
@@ -94,18 +142,28 @@
                 </td>
                 <td>
                   <div class="form-group" [formGroupName]="i">
-                    <input type="time" class="form-control form-control-sm" [class.is-invalid]="
+                    <input
+                      type="time"
+                      class="form-control form-control-sm"
+                      [class.is-invalid]="
                         item.controls.leave_time_one.invalid &&
                         item.controls.leave_time_one.touched
-                      " formControlName="leave_time_one" />
-                    <ng-container *ngIf="
+                      "
+                      formControlName="leave_time_one"
+                    />
+                    <ng-container
+                      *ngIf="
                         item.controls.leave_time_one.invalid &&
                         item.controls.leave_time_one.touched
-                      ">
-                      <small *ngFor="
+                      "
+                    >
+                      <small
+                        *ngFor="
                           let item of item.controls.leave_time_one.errors
                             | ObjToArrayPipe
-                        " class="text-danger">
+                        "
+                        class="text-danger"
+                      >
                         {{ item?.msj }}
                       </small>
                     </ng-container>
@@ -113,18 +171,28 @@
                 </td>
                 <td>
                   <div class="form-group" [formGroupName]="i">
-                    <input type="time" class="form-control form-control-sm" [class.is-invalid]="
+                    <input
+                      type="time"
+                      class="form-control form-control-sm"
+                      [class.is-invalid]="
                         item.controls.entry_time_two.invalid &&
                         item.controls.entry_time_two.touched
-                      " formControlName="entry_time_two" />
-                    <ng-container *ngIf="
+                      "
+                      formControlName="entry_time_two"
+                    />
+                    <ng-container
+                      *ngIf="
                         item.controls.entry_time_two.invalid &&
                         item.controls.entry_time_two.touched
-                      ">
-                      <small *ngFor="
+                      "
+                    >
+                      <small
+                        *ngFor="
                           let item of item.controls.entry_time_two.errors
                             | ObjToArrayPipe
-                        " class="text-danger">
+                        "
+                        class="text-danger"
+                      >
                         {{ item?.msj }}
                       </small>
                     </ng-container>
@@ -132,18 +200,28 @@
                 </td>
                 <td>
                   <div class="form-group" [formGroupName]="i">
-                    <input type="time" class="form-control form-control-sm" [class.is-invalid]="
+                    <input
+                      type="time"
+                      class="form-control form-control-sm"
+                      [class.is-invalid]="
                         item.controls.leave_time_two.invalid &&
                         item.controls.leave_time_two.touched
-                      " formControlName="leave_time_two" />
-                    <ng-container *ngIf="
+                      "
+                      formControlName="leave_time_two"
+                    />
+                    <ng-container
+                      *ngIf="
                         item.controls.leave_time_two.invalid &&
                         item.controls.leave_time_two.touched
-                      ">
-                      <small *ngFor="
+                      "
+                    >
+                      <small
+                        *ngFor="
                           let item of item.controls.leave_time_two.errors
                             | ObjToArrayPipe
-                        " class="text-danger">
+                        "
+                        class="text-danger"
+                      >
                         {{ item?.msj }}
                       </small>
                     </ng-container>
@@ -155,7 +233,12 @@
         </ng-container>
       </div>
       <div class="form-group">
-        <button type="submit" [disabled]="forma.pristine" (click)="save()" class="btn btn-primary btn-block">
+        <button
+          type="submit"
+          [disabled]="forma.pristine"
+          (click)="save()"
+          class="btn btn-primary btn-block"
+        >
           Guardar
         </button>
       </div>
@@ -164,84 +247,126 @@
 </div>
 
 <ng-template #add let-modal>
-  <div class="modal-content">
-    <div class="modal-header">
-      <h4 class="text-primary modal-title">Asignar horas masivamente</h4>
-      <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-        (click)="modal.dismiss('Cross click')"></button>
-    </div>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Asignar horas masivamente</h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body">
     <form [formGroup]="miniForm">
       <div class="row">
         <div class="form-group col-md-6">
           <label class="custom-label" for="dia">HORA DE ENTRADA 1 </label>
-          <input type="time" class="form-control" [class.is-invalid]="
+          <input
+            type="time"
+            class="form-control"
+            [class.is-invalid]="
               miniForm.get('entry_time_one').invalid &&
               miniForm.get('entry_time_one').touched
-            " formControlName="entry_time_one" />
-          <ng-container *ngIf="
+            "
+            formControlName="entry_time_one"
+          />
+          <ng-container
+            *ngIf="
               miniForm.get('entry_time_one').invalid &&
               miniForm.get('entry_time_one').touched
-            ">
-            <small *ngFor="
+            "
+          >
+            <small
+              *ngFor="
                 let item of miniForm.get('entry_time_one').errors
                   | ObjToArrayPipe
-              " class="text-danger">
+              "
+              class="text-danger"
+            >
               {{ item?.msj }}
             </small>
           </ng-container>
         </div>
         <div class="form-group col-md-6">
           <label class="custom-label" for="dia">HORA DE SALIDA 1 </label>
-          <input type="time" class="form-control" [class.is-invalid]="
+          <input
+            type="time"
+            class="form-control"
+            [class.is-invalid]="
               miniForm.get('leave_time_one').invalid &&
               miniForm.get('leave_time_one').touched
-            " formControlName="leave_time_one" />
-          <ng-container *ngIf="
+            "
+            formControlName="leave_time_one"
+          />
+          <ng-container
+            *ngIf="
               miniForm.get('leave_time_one').invalid &&
               miniForm.get('leave_time_one').touched
-            ">
-            <small *ngFor="
+            "
+          >
+            <small
+              *ngFor="
                 let item of miniForm.get('leave_time_one').errors
                   | ObjToArrayPipe
-              " class="text-danger">
+              "
+              class="text-danger"
+            >
               {{ item?.msj }}
             </small>
           </ng-container>
         </div>
         <div class="form-group col-md-6">
           <label class="custom-label" for="dia">HORA DE ENTRADA 2 </label>
-          <input type="time" class="form-control" [class.is-invalid]="
+          <input
+            type="time"
+            class="form-control"
+            [class.is-invalid]="
               miniForm.get('entry_time_two').invalid &&
               miniForm.get('entry_time_two').touched
-            " formControlName="entry_time_two" />
-          <ng-container *ngIf="
+            "
+            formControlName="entry_time_two"
+          />
+          <ng-container
+            *ngIf="
               miniForm.get('entry_time_two').invalid &&
               miniForm.get('entry_time_two').touched
-            ">
-            <small *ngFor="
+            "
+          >
+            <small
+              *ngFor="
                 let item of miniForm.get('entry_time_two').errors
                   | ObjToArrayPipe
-              " class="text-danger">
+              "
+              class="text-danger"
+            >
               {{ item?.msj }}
             </small>
           </ng-container>
         </div>
         <div class="form-group col-md-6">
           <label class="custom-label" for="dia">HORA DE SALIDA 2 </label>
-          <input type="time" class="form-control" [class.is-invalid]="
+          <input
+            type="time"
+            class="form-control"
+            [class.is-invalid]="
               miniForm.get('leave_time_two').invalid &&
               miniForm.get('leave_time_two').touched
-            " formControlName="leave_time_two" />
-          <ng-container *ngIf="
+            "
+            formControlName="leave_time_two"
+          />
+          <ng-container
+            *ngIf="
               miniForm.get('leave_time_two').invalid &&
               miniForm.get('leave_time_two').touched
-            ">
-            <small *ngFor="
+            "
+          >
+            <small
+              *ngFor="
                 let item of miniForm.get('leave_time_two').errors
                   | ObjToArrayPipe
-              " class="text-danger">
+              "
+              class="text-danger"
+            >
               {{ item?.msj }}
             </small>
           </ng-container>
@@ -250,10 +375,18 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" (click)="modal.dismiss('Cross click')">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
       Cancelar
     </button>
-    <button type="button" (click)="asignarMasivamente()" class="btn btn-primary">
+    <button
+      type="button"
+      (click)="asignarMasivamente()"
+      class="btn btn-primary"
+    >
       Generar Horario
     </button>
   </div>

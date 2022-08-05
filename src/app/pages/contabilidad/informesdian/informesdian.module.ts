@@ -15,7 +15,11 @@ import { NgbTypeaheadModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstra
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CertificadoingresoyretencionComponent } from './certificadoingresoyretencion/certificadoingresoyretencion.component';
 import { ResumenretencionesComponent } from './resumenretenciones/resumenretenciones.component';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -32,6 +36,11 @@ import { ResumenretencionesComponent } from './resumenretenciones/resumenretenci
     ComponentsModule,
     NgbTypeaheadModule,
     NgSelectModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     NgbDropdownModule
   ],
   providers: [

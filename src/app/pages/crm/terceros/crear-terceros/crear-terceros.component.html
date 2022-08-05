@@ -1,8 +1,10 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <img src="../../../../../assets/images/logo2.png" class="img-fluid" />
-      <div>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <img src="../../../../../assets/images/logo2.png" class="img-fluid" />
+      </div>
+      <div class="col-md-6 px-0 text-right">
         <h4 class="text-primary">{{ title }}</h4>
         <strong> {{ date | date: "longDate" }} </strong>
       </div>
@@ -45,8 +47,15 @@
               </mat-radio-group> -->
               <mat-form-field class="col-md-12 px-0" appearance="outline">
                 <mat-label>Pais</mat-label>
-                <mat-select formControlName="country_id" (selectionChange)="locationCountry(); getCities()">
-                  <mat-option *ngFor="let item of countries" [value]="item.value">{{item.text}}</mat-option>
+                <mat-select
+                  formControlName="country_id"
+                  (selectionChange)="locationCountry(); getCities()"
+                >
+                  <mat-option
+                    *ngFor="let item of countries"
+                    [value]="item.value"
+                    >{{ item.text }}</mat-option
+                  >
                 </mat-select>
                 <mat-icon matSuffix>flag</mat-icon>
                 <mat-error *ngIf="country_valid">
@@ -321,9 +330,16 @@
                       Dirección no válida
                     </mat-error>
                   </mat-form-field>
-                  <mat-form-field class="col-md-6" appearance="outline" *ngIf="form.get('department_id').enabled">
+                  <mat-form-field
+                    class="col-md-6"
+                    appearance="outline"
+                    *ngIf="form.get('department_id').enabled"
+                  >
                     <mat-label>Departamento</mat-label>
-                    <mat-select formControlName="department_id" (selectionChange)="getMunicipalitites()">
+                    <mat-select
+                      formControlName="department_id"
+                      (selectionChange)="getMunicipalitites()"
+                    >
                       <mat-option
                         *ngFor="let department of departments"
                         [value]="department.value"
@@ -331,7 +347,11 @@
                       >
                     </mat-select>
                   </mat-form-field>
-                  <mat-form-field class="col-md-6" appearance="outline" *ngIf="form.get('municipality_id').enabled">
+                  <mat-form-field
+                    class="col-md-6"
+                    appearance="outline"
+                    *ngIf="form.get('municipality_id').enabled"
+                  >
                     <mat-label>Municipio</mat-label>
                     <mat-select formControlName="municipality_id">
                       <mat-option
@@ -344,10 +364,18 @@
                       Municipio es <strong>obligatorio</strong>
                     </mat-error>
                   </mat-form-field>
-                  <mat-form-field class="col-md-6" appearance="outline" *ngIf="form.get('city_id').enabled">
+                  <mat-form-field
+                    class="col-md-6"
+                    appearance="outline"
+                    *ngIf="form.get('city_id').enabled"
+                  >
                     <mat-label>Ciudad</mat-label>
                     <mat-select formControlName="city_id">
-                      <mat-option *ngFor="let item of cities" [value]="item.value">{{item.text}}</mat-option>
+                      <mat-option
+                        *ngFor="let item of cities"
+                        [value]="item.value"
+                        >{{ item.text }}</mat-option
+                      >
                     </mat-select>
                     <mat-error *ngIf="city_valid">
                       Campo <strong>obligatorio</strong>

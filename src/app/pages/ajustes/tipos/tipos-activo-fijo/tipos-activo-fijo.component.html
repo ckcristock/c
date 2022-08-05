@@ -101,13 +101,23 @@
           <td class="align-middle">{{ item.name }}</td>
           <td class="align-middle">{{ item.category }}</td>
           <td class="align-middle">{{ item.useful_life_niif }} mes(es)</td>
-          <td class="align-middle">{{ item.annual_depreciation_percentage_niif }} %</td>
-          <td class="align-middle">{{ item.niif_account_plan_debit_depreciation }}</td>
-          <td class="align-middle">{{ item.pcga_account_plan_debit_depreciation }}</td>
+          <td class="align-middle">
+            {{ item.annual_depreciation_percentage_niif }} %
+          </td>
+          <td class="align-middle">
+            {{ item.niif_account_plan_debit_depreciation }}
+          </td>
+          <td class="align-middle">
+            {{ item.pcga_account_plan_debit_depreciation }}
+          </td>
           <td class="align-middle">{{ item.niif_account_plan }}</td>
           <td class="align-middle">{{ item.pcga_account_plan }}</td>
-          <td class="align-middle">{{ item.niif_account_plan_credit_depreciation }}</td>
-          <td class="align-middle">{{ item.pcga_account_plan_credit_depreciation }}</td>
+          <td class="align-middle">
+            {{ item.niif_account_plan_credit_depreciation }}
+          </td>
+          <td class="align-middle">
+            {{ item.pcga_account_plan_credit_depreciation }}
+          </td>
           <td class="align-middle">
             <div class="text-center">
               <div ngbDropdown class="dropdown-primary">
@@ -169,16 +179,14 @@
 </div>
 
 <ng-template #add let-modal>
-  <div class="modal-content">
-    <div class="modal-header">
-      <h4 class="text-primary modal-title">{{ title }}</h4>
-      <button
-        type="button"
-        class="btn btn-sm btn-flash-border-primary ri-close-fill"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      ></button>
-    </div>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">{{ title }}</h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body">
     <form [formGroup]="form">

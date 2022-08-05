@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-modalplancuentas',
@@ -8,68 +9,85 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./modalplancuentas.component.scss']
 })
 export class ModalplancuentasComponent implements OnInit {
-  
-  @Input('abrirPlanesCuenta') abrirPlanesCuenta : EventEmitter<string>;
+
+  @Input('abrirPlanesCuenta') abrirPlanesCuenta: EventEmitter<string>;
   @ViewChild('ModalPlanes') ModalPlanes;
   public tipoCierre = '';
   public Planes_Cuentas = [];
   public loading = false;
   public filtros = {
-    nombre:'',
-    codigo:'',
-    tipoCierre:''
+    nombre: '',
+    codigo: '',
+    tipoCierre: ''
   }
-  constructor(public http : HttpClient) { }
+  constructor(private modalService: NgbModal, public http: HttpClient) { }
 
   ngOnInit() {
-
-    this.abrirPlanesCuenta.subscribe(data=>{
+    this.abrirPlanesCuenta.subscribe(data => {
       console.log(data);
       this.tipoCierre = data;
       this.loading = true;
-      this.ModalPlanes.show();
+      //this.ModalPlanes.show();
+      this.openConfirm(this.ModalPlanes)
       setTimeout(() => {
         this.buscarPlanes();
       }, 300);
-     
-    
     });
-
   }
 
-  buscarPlanes(){
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    this.ocultar()
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  buscarPlanes() {
     this.loading = true;
     let filtros = JSON.stringify(this.filtros);
-    this.http.get(environment.ruta+'/php/plancuentas/get_planes_cuentas.php?filtros='+filtros+'&tipoCierre='+this.tipoCierre).subscribe(planes=>{
+    this.http.get(environment.ruta + '/php/plancuentas/get_planes_cuentas.php?filtros=' + filtros + '&tipoCierre=' + this.tipoCierre).subscribe(planes => {
       this.Planes_Cuentas = planes['query_result'];
-      this.loading = false;     
-   
+      this.loading = false;
+
     })
 
   }
 
-  setTipoPlan(plan){
+  setTipoPlan(plan) {
     console.log(plan);
-    
+
     let data = new FormData();
-    data.append('tipo_cierre',this.tipoCierre);
-    data.append('id_plan_cuenta',plan.Id_Plan_Cuentas);
-    data.append('valor_actualizar',plan['Tipo_Cierre_'+this.tipoCierre]);
-    
-    this.http.post(environment.ruta +'/php/plancuentas/set_plan_cuentas_tipo_cierre.php',data)
-    .toPromise( ).catch(err=>{
-      console.error(err);
-    })
+    data.append('tipo_cierre', this.tipoCierre);
+    data.append('id_plan_cuenta', plan.Id_Plan_Cuentas);
+    data.append('valor_actualizar', plan['Tipo_Cierre_' + this.tipoCierre]);
 
-  }  
+    this.http.post(environment.ruta + '/php/plancuentas/set_plan_cuentas_tipo_cierre.php', data)
+      .toPromise().catch(err => {
+        console.error(err);
+      })
+
+  }
 
 
-    OnDestroy(){
-      this.abrirPlanesCuenta.unsubscribe();
-    }
+  OnDestroy() {
+    this.abrirPlanesCuenta.unsubscribe();
+  }
 
-    ocultar(){
-      this.Planes_Cuentas = [];
-      this.ModalPlanes.hide();
-    }
+  ocultar() {
+    this.Planes_Cuentas = [];
+    //this.ModalPlanes.hide();
+    this.modalService.dismissAll(); 
+  }
 }

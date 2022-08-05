@@ -1,369 +1,530 @@
 <div class="d-flex justify-content-between">
   <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-tabs mx-3">
-      <li [ngbNavItem]="1">
-          <a ngbNavLink>Administrador de tareas</a>
-          <ng-template ngbNavContent>
-              <div class="container mt-4">
-                  <div class="row" cdkDropListGroup >
-                      <div class="col-3">
-                          <div class="card">
-                              <div class="card-header text-center">
-                                  <h4 class="card-title">Pendientes</h4>
-                                  <hr style="border-color: #ef476f;">
-                              </div>
-                              <div #list class="m-2 example-list" cdkDropList [cdkDropListData]="pendientes"
-                                  cdkDropListSortingDisabled 
-                                  [cdkDropListConnectedTo]="['list-ejecucion','list-espera','list-finalizado']"
-                                  (cdkDropListDropped)="drop($event)" id="list-pendientes"
-                                  [cdkDropListAutoScrollDisabled]="true" >
-
-                                  <div class="card bg-light" *ngFor="let item of pendientes" cdkDrag
-                                      [routerLink]="['/task', item.id]">
-                                      <div class="p-3">
-                                          <div class="d-flex justify-content-start align-items-center">
-                                              <marquee behavior="" direction=""><i class="mdi mdi-account-alert"></i>
-                                                  <span class="quote2 pl-2">Asignada
-                                                      por: {{item["first_name"]}} {{item["second_name"]}}
-                                                      {{item["first_surname"]}}
-                                                  </span>
-                                              </marquee>
-                                          </div>
-                                      </div>
-                                      <div class="px-3">
-                                          <h4 class="name">{{item["titulo"]}}</h4>
-                                          <!-- <div class="truncate-module">
+    <li [ngbNavItem]="1">
+      <a ngbNavLink>Administrador de tareas</a>
+      <ng-template ngbNavContent>
+        <div class="container mt-4">
+          <div class="row" cdkDropListGroup>
+            <div class="col-3">
+              <div class="card">
+                <div class="card-header text-center">
+                  <h4 class="card-title">Pendientes</h4>
+                  <hr style="border-color: #ef476f" />
+                </div>
+                <div
+                  #list
+                  class="m-2 example-list"
+                  cdkDropList
+                  [cdkDropListData]="pendientes"
+                  cdkDropListSortingDisabled
+                  [cdkDropListConnectedTo]="[
+                    'list-ejecucion',
+                    'list-espera',
+                    'list-finalizado'
+                  ]"
+                  (cdkDropListDropped)="drop($event)"
+                  id="list-pendientes"
+                  [cdkDropListAutoScrollDisabled]="true"
+                >
+                  <div
+                    class="card bg-light"
+                    *ngFor="let item of pendientes"
+                    cdkDrag
+                    [routerLink]="['/task', item.id]"
+                  >
+                    <div class="p-3">
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <marquee behavior="" direction=""
+                          ><i class="mdi mdi-account-alert"></i>
+                          <span class="quote2 pl-2"
+                            >Asignada por: {{ item["first_name"] }}
+                            {{ item["second_name"] }}
+                            {{ item["first_surname"] }}
+                          </span>
+                        </marquee>
+                      </div>
+                    </div>
+                    <div class="px-3">
+                      <h4 class="name">{{ item["titulo"] }}</h4>
+                      <!-- <div class="truncate-module">
                                               <p class="quote2" [innerHTML]="item.descripcion"></p>
                                           </div> -->
-                                      </div>
-                                      <div class="d-flex justify-content-start px-3 align-items-center"> <i
-                                              class="mdi mdi-view-comfy task"></i> <span
-                                              class="quote2 pl-2">Categoría:
-                                              {{item["tipo"]}}</span>
-                                      </div>
-                                      <div class="d-flex justify-content-between px-3 align-items-center pb-3">
-                                          <div class="d-flex justify-content-start align-items-center"> <i
-                                                  class="mdi mdi-calendar-clock date"></i> <span
-                                                  class="quote2 pl-2">Fecha: {{item["fecha"] | date }}
-                                              </span> </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
+                    </div>
+                    <div
+                      class="d-flex justify-content-start px-3 align-items-center"
+                    >
+                      <i class="mdi mdi-view-comfy task"></i>
+                      <span class="quote2 pl-2"
+                        >Categoría: {{ item["tipo"] }}</span
+                      >
+                    </div>
+                    <div
+                      class="d-flex justify-content-between px-3 align-items-center pb-3"
+                    >
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <i class="mdi mdi-calendar-clock date"></i>
+                        <span class="quote2 pl-2"
+                          >Fecha: {{ item["fecha"] | date }}
+                        </span>
                       </div>
-                      <div class="col-3">
-                          <div class="card">
-                              <div class="card-header text-center">
-                                  <h5 class="card-title">En ejecución</h5>
-                                  <hr style="border-color: #ffd166;">
-                              </div>
-                              <div class="m-2 example-list" cdkDropList [cdkDropListData]="ejecucion"
-                                  [cdkDropListConnectedTo]="['list-pendientes','list-espera','list-finalizado']"
-                                  (cdkDropListDropped)="drop($event)" id="list-ejecucion">
-                                  <div class="card bg-light" *ngFor="let item of ejecucion" cdkDrag
-                                      [routerLink]="['/task', item.id]">
-                                      <div class="p-3">
-                                          <div class="d-flex justify-content-start align-items-center">
-                                              <marquee behavior="" direction=""><i class="mdi mdi-account-alert"></i>
-                                                  <span class="quote2 pl-2">Asignada
-                                                      por: {{item["first_name"]}} {{item["second_name"]}}
-                                                      {{item["first_surname"]}}
-                                                  </span>
-                                              </marquee>
-                                          </div>
-                                      </div>
-                                      <div class="px-3">
-                                          <h4 class="name">{{item["titulo"]}}</h4>
-                                          <!-- <div class="truncate-module">
-                                              <p class="quote2" [innerHTML]="item.descripcion"></p>
-                                          </div> -->
-                                      </div>
-                                      <div class="d-flex justify-content-start px-3 align-items-center"> <i
-                                              class="mdi mdi-view-comfy task"></i> <span
-                                              class="quote2 pl-2">Categoría:
-                                              {{item["tipo"]}}</span>
-                                      </div>
-                                      <div class="d-flex justify-content-between px-3 align-items-center pb-3">
-                                          <div class="d-flex justify-content-start align-items-center"> <i
-                                                  class="mdi mdi-calendar-clock date"></i> <span
-                                                  class="quote2 pl-2">Fecha: {{item["fecha"] | date }}
-                                              </span> </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-3">
-                          <div class="card">
-                              <div class="card-header text-center">
-                                  <h5 class="card-title">En espera</h5>
-                                  <hr style="border-color: #118ab2;">
-                              </div>
-                              <div class="m-2 example-list" cdkDropList [cdkDropListData]="espera"
-                                  [cdkDropListConnectedTo]="['list-ejecucion','list-pendientes','list-finalizado']"
-                                  (cdkDropListDropped)="drop($event)" id="list-espera">
-                                  <div class="card bg-light" *ngFor="let item of espera" cdkDrag
-                                      [routerLink]="['/task', item.id]">
-                                      <div class="p-3">
-                                          <div class="d-flex justify-content-start align-items-center">
-                                              <marquee behavior="" direction=""><i class="mdi mdi-account-alert"></i>
-                                                  <span class="quote2 pl-2">Asignada
-                                                      por: {{item["first_name"]}} {{item["second_name"]}}
-                                                      {{item["first_surname"]}}
-                                                  </span>
-                                              </marquee>
-                                          </div>
-                                      </div>
-                                      <div class="px-3">
-                                          <h4 class="name">{{item["titulo"]}}</h4>
-                                          <!-- <div class="truncate-module">
-                                              <p class="quote2" [innerHTML]="item.descripcion"></p>
-                                          </div> -->
-                                      </div>
-                                      <div class="d-flex justify-content-start px-3 align-items-center"> <i
-                                              class="mdi mdi-view-comfy task"></i> <span
-                                              class="quote2 pl-2">Categoría:
-                                              {{item["tipo"]}}</span>
-                                      </div>
-                                      <div class="d-flex justify-content-between px-3 align-items-center pb-3">
-                                          <div class="d-flex justify-content-start align-items-center"> <i
-                                                  class="mdi mdi-calendar-clock date"></i> <span
-                                                  class="quote2 pl-2">Fecha: {{item["fecha"] | date }}
-                                              </span> </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-3">
-                          <div class="card">
-                              <div class="card-header">
-                                  <h5 class="card-title text-center">Finalizado</h5>
-                                  <hr style="border-color: #06d6a0;">
-                              </div>
-                              <div class="m-2 example-list" cdkDropList [cdkDropListData]="finalizado"
-                                  [cdkDropListConnectedTo]="['list-ejecucion','list-espera','list-pendientes']"
-                                  (cdkDropListDropped)="drop($event)" id="list-finalizado">
-                                  <div class="card bg-light" *ngFor="let item of finalizado" cdkDrag
-                                      [routerLink]="['/task', item.id]">
-                                      <div class="p-3">
-                                          <div class="d-flex justify-content-start align-items-center">
-                                              <marquee behavior="" direction=""><i class="mdi mdi-account-alert"></i>
-                                                  <span class="quote2 pl-2">Asignada
-                                                      por: {{item["first_name"]}} {{item["second_name"]}}
-                                                      {{item["first_surname"]}}
-                                                  </span>
-                                              </marquee>
-                                          </div>
-                                      </div>
-                                      <div class="px-3">
-                                          <h4 class="name">{{item["titulo"]}}</h4>
-                                          <!-- <div class="truncate-module">
-                                              <p class="quote2" [innerHTML]="item.descripcion"></p>
-                                          </div> -->
-                                      </div>
-                                      <div class="d-flex justify-content-start px-3 align-items-center"> <i
-                                              class="mdi mdi-view-comfy task"></i> <span
-                                              class="quote2 pl-2">Categoría:
-                                              {{item["tipo"]}}</span>
-                                      </div>
-                                      <div class="d-flex justify-content-between px-3 align-items-center pb-3">
-                                          <div class="d-flex justify-content-start align-items-center"> <i
-                                                  class="mdi mdi-calendar-clock date"></i> <span
-                                                  class="quote2 pl-2">Fecha: {{item["fecha"] | date }}
-                                              </span> </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+                    </div>
                   </div>
-
+                </div>
               </div>
-          </ng-template>
-      </li>
-      <li [ngbNavItem]="2">
-          <a ngbNavLink>Calendario</a>
-          <ng-template ngbNavContent>
-              <div class="container mt-4">
-
-                  <!--  -->
-              </div>
-
-              <div class="col-8 mx-auto">
-                  <div class="card">
-                      <div class="card-body">
-                          <div class="row">
-                              <div class="col-3 d-flex justify-content-center">
-                                  <div class="row">
-                                      <h6 style="color: #ef476f">●</h6>
-                                      <p> Pendientes</p>
-                                  </div>
-                              </div>
-                              <div class="col-3 d-flex justify-content-center">
-                                  <div class="row">
-                                      <h6 style="color: #ffd166">●</h6>
-                                      <p> En ejecución</p>
-                                  </div>
-                              </div>
-                              <div class="col-3 d-flex justify-content-center">
-                                  <div class="row">
-                                      <h6 style="color: #118ab2">●</h6>
-                                      <p> En espera</p>
-                                  </div>
-                              </div>
-                              <div class="col-3 d-flex justify-content-center">
-                                  <div class="row">
-                                      <h6 style="color: #06d6a0">●</h6>
-                                      <p> Finalizado</p>
-                                  </div>
-                              </div>
-
-
-                          </div>
-                          <div class="app-calendar">
-                              <full-calendar #calendar defaultView="dayGridMonth" [header]="{
-                                      left: 'prevYear,prev,next,nextYear today',
-                                      center: 'title',
-                                      right: 'dayGridMonth,dayGridWeek,dayGridDay'
-                                  }" [plugins]="calendarPlugins" [events]="events"
-                                  (eventClick)="onEventClick($event)" [eventResizableFromStart]="'true'"
-                                  [eventLimit]="false" themeSystem="bootstrap" [bootstrapFontAwesome]="true"
-                                  deepChangeDetection="true" locale="es" [eventTimeFormat]="{
-                                      hour: '2-digit',
-                                      minute: '2-digit',
-                                      meridiem: false,
-                                      hour12: true 
-                                  }">
-                              </full-calendar>
-                          </div>
+            </div>
+            <div class="col-3">
+              <div class="card">
+                <div class="card-header text-center">
+                  <h5 class="card-title">En ejecución</h5>
+                  <hr style="border-color: #ffd166" />
+                </div>
+                <div
+                  class="m-2 example-list"
+                  cdkDropList
+                  [cdkDropListData]="ejecucion"
+                  [cdkDropListConnectedTo]="[
+                    'list-pendientes',
+                    'list-espera',
+                    'list-finalizado'
+                  ]"
+                  (cdkDropListDropped)="drop($event)"
+                  id="list-ejecucion"
+                >
+                  <div
+                    class="card bg-light"
+                    *ngFor="let item of ejecucion"
+                    cdkDrag
+                    [routerLink]="['/task', item.id]"
+                  >
+                    <div class="p-3">
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <marquee behavior="" direction=""
+                          ><i class="mdi mdi-account-alert"></i>
+                          <span class="quote2 pl-2"
+                            >Asignada por: {{ item["first_name"] }}
+                            {{ item["second_name"] }}
+                            {{ item["first_surname"] }}
+                          </span>
+                        </marquee>
                       </div>
-                  </div>
-              </div>
-          </ng-template>
-      </li>
-      <li [ngbNavItem]="3">
-          <a ngbNavLink>Tareas asignadas por mí</a>
-          <ng-template ngbNavContent>
-              <div class="container mt-4">
-                  <div class="card">
-                      <div class="card-body">
-                          <div class="row">
-                              <div class="col-3" *ngFor="let item of task3" [routerLink]="['/task', item.id]">
-                                  <div class="card bg-light" role="button">
-                                      <div class="p-3 col-12">
-                                          <div class="d-flex justify-content-start align-items-center">
-                                              <marquee behavior="" direction=""><i class="mdi mdi-account-alert"></i>
-                                                  <span class="quote2 pl-2">Asignada
-                                                      a: {{item["first_name"]}} {{item["second_name"]}}
-                                                      {{item["first_surname"]}}
-                                                  </span>
-                                              </marquee>
-                                              <div style="color: black;">
-                                                  <div *ngIf="item.estado == 'Pendiente'">
-                                                      <div class="badge ml-2" style="background-color: #ef476f;">
-                                                          {{item["estado"]}}</div>
-                                                  </div>
-                                                  <div *ngIf="item.estado == 'En ejecucion'">
-                                                      <div class="badge ml-2" style="background-color: #ffd166;">
-                                                          {{item["estado"]}}</div>
-                                                  </div>
-                                                  <div *ngIf="item.estado == 'En espera'">
-                                                      <div class="badge ml-2" style="background-color: #118ab2;">
-                                                          {{item["estado"]}}</div>
-                                                  </div>
-                                                  <div *ngIf="item.estado == 'Finalizado'">
-                                                      <div class="badge ml-2" style="background-color: #06d6a0;">
-                                                          {{item["estado"]}}</div>
-                                                  </div>
-                                                  <div *ngIf="item.estado == 'Archivada'">
-                                                      <div class="badge ml-2" style="background-color: gray;">
-                                                          {{item["estado"]}}</div>
-                                                  </div>
-                                              </div>
-
-                                          </div>
-                                      </div>
-                                      <div class="px-3">
-                                          <h4 class="name">{{item["titulo"]}}</h4>
-                                          <!-- <div class="truncate-module">
+                    </div>
+                    <div class="px-3">
+                      <h4 class="name">{{ item["titulo"] }}</h4>
+                      <!-- <div class="truncate-module">
                                               <p class="quote2" [innerHTML]="item.descripcion"></p>
                                           </div> -->
-                                      </div>
-                                      <div class="d-flex justify-content-start px-3 align-items-center"> <i
-                                              class="mdi mdi-view-comfy task"></i> <span
-                                              class="quote2 pl-2">Categoría:
-                                              {{item["tipo"]}}</span>
-                                      </div>
-                                      <div class="d-flex justify-content-between px-3 align-items-center pb-3">
-                                          <div class="d-flex justify-content-start align-items-center"> <i
-                                                  class="mdi mdi-calendar-clock date"></i> <span
-                                                  class="quote2 pl-2">Fecha:
-                                                  {{item["fecha"] |
-                                                  date }}
-                                              </span> </div>
-                                      </div>
-                                  </div>
-
-                              </div>
-
-                          </div>
+                    </div>
+                    <div
+                      class="d-flex justify-content-start px-3 align-items-center"
+                    >
+                      <i class="mdi mdi-view-comfy task"></i>
+                      <span class="quote2 pl-2"
+                        >Categoría: {{ item["tipo"] }}</span
+                      >
+                    </div>
+                    <div
+                      class="d-flex justify-content-between px-3 align-items-center pb-3"
+                    >
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <i class="mdi mdi-calendar-clock date"></i>
+                        <span class="quote2 pl-2"
+                          >Fecha: {{ item["fecha"] | date }}
+                        </span>
                       </div>
-
+                    </div>
                   </div>
-
-
+                </div>
               </div>
-
-          </ng-template>
-      </li>
-      <li [ngbNavItem]="4">
-          <a ngbNavLink>Mis tareas archivadas</a>
-          <ng-template ngbNavContent>
-              <div class="container mt-4">
-                  <div class="card">
-                      <div class="card-body">
-                          <div class="row">
-                              <div class="col-3" *ngFor="let item of archivadas" [routerLink]="['/task', item.id]">
-                                  <div class="card bg-light" role="button">
-                                      <div class="p-3 col-12">
-                                          <div class="d-flex justify-content-start align-items-center">
-                                              <marquee behavior="" direction=""><i class="mdi mdi-account-alert"></i>
-                                                  <span class="quote2 pl-2">Asignada
-                                                      por: {{item["first_name"]}} {{item["second_name"]}}
-                                                      {{item["first_surname"]}}
-                                                  </span>
-                                              </marquee>
-                                          </div>
-                                      </div>
-                                      <div class="px-3">
-                                          <h4 class="name">{{item["titulo"]}}</h4>
-                                          <!-- <div class="truncate-module">
+            </div>
+            <div class="col-3">
+              <div class="card">
+                <div class="card-header text-center">
+                  <h5 class="card-title">En espera</h5>
+                  <hr style="border-color: #118ab2" />
+                </div>
+                <div
+                  class="m-2 example-list"
+                  cdkDropList
+                  [cdkDropListData]="espera"
+                  [cdkDropListConnectedTo]="[
+                    'list-ejecucion',
+                    'list-pendientes',
+                    'list-finalizado'
+                  ]"
+                  (cdkDropListDropped)="drop($event)"
+                  id="list-espera"
+                >
+                  <div
+                    class="card bg-light"
+                    *ngFor="let item of espera"
+                    cdkDrag
+                    [routerLink]="['/task', item.id]"
+                  >
+                    <div class="p-3">
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <marquee behavior="" direction=""
+                          ><i class="mdi mdi-account-alert"></i>
+                          <span class="quote2 pl-2"
+                            >Asignada por: {{ item["first_name"] }}
+                            {{ item["second_name"] }}
+                            {{ item["first_surname"] }}
+                          </span>
+                        </marquee>
+                      </div>
+                    </div>
+                    <div class="px-3">
+                      <h4 class="name">{{ item["titulo"] }}</h4>
+                      <!-- <div class="truncate-module">
                                               <p class="quote2" [innerHTML]="item.descripcion"></p>
                                           </div> -->
-                                      </div>
-                                      <div class="d-flex justify-content-start px-3 align-items-center"> <i
-                                              class="mdi mdi-view-comfy task"></i> <span
-                                              class="quote2 pl-2">Categoría:
-                                              {{item["tipo"]}}</span>
-                                      </div>
-                                      <div class="d-flex justify-content-between px-3 align-items-center pb-3">
-                                          <div class="d-flex justify-content-start align-items-center"> <i
-                                                  class="mdi mdi-calendar-clock date"></i> <span
-                                                  class="quote2 pl-2">Fecha:
-                                                  {{item["fecha"] |
-                                                  date }}
-                                              </span> </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
+                    </div>
+                    <div
+                      class="d-flex justify-content-start px-3 align-items-center"
+                    >
+                      <i class="mdi mdi-view-comfy task"></i>
+                      <span class="quote2 pl-2"
+                        >Categoría: {{ item["tipo"] }}</span
+                      >
+                    </div>
+                    <div
+                      class="d-flex justify-content-between px-3 align-items-center pb-3"
+                    >
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <i class="mdi mdi-calendar-clock date"></i>
+                        <span class="quote2 pl-2"
+                          >Fecha: {{ item["fecha"] | date }}
+                        </span>
                       </div>
+                    </div>
                   </div>
+                </div>
               </div>
-          </ng-template>
-      </li>
+            </div>
+            <div class="col-3">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title text-center">Finalizado</h5>
+                  <hr style="border-color: #06d6a0" />
+                </div>
+                <div
+                  class="m-2 example-list"
+                  cdkDropList
+                  [cdkDropListData]="finalizado"
+                  [cdkDropListConnectedTo]="[
+                    'list-ejecucion',
+                    'list-espera',
+                    'list-pendientes'
+                  ]"
+                  (cdkDropListDropped)="drop($event)"
+                  id="list-finalizado"
+                >
+                  <div
+                    class="card bg-light"
+                    *ngFor="let item of finalizado"
+                    cdkDrag
+                    [routerLink]="['/task', item.id]"
+                  >
+                    <div class="p-3">
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <marquee behavior="" direction=""
+                          ><i class="mdi mdi-account-alert"></i>
+                          <span class="quote2 pl-2"
+                            >Asignada por: {{ item["first_name"] }}
+                            {{ item["second_name"] }}
+                            {{ item["first_surname"] }}
+                          </span>
+                        </marquee>
+                      </div>
+                    </div>
+                    <div class="px-3">
+                      <h4 class="name">{{ item["titulo"] }}</h4>
+                      <!-- <div class="truncate-module">
+                                              <p class="quote2" [innerHTML]="item.descripcion"></p>
+                                          </div> -->
+                    </div>
+                    <div
+                      class="d-flex justify-content-start px-3 align-items-center"
+                    >
+                      <i class="mdi mdi-view-comfy task"></i>
+                      <span class="quote2 pl-2"
+                        >Categoría: {{ item["tipo"] }}</span
+                      >
+                    </div>
+                    <div
+                      class="d-flex justify-content-between px-3 align-items-center pb-3"
+                    >
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <i class="mdi mdi-calendar-clock date"></i>
+                        <span class="quote2 pl-2"
+                          >Fecha: {{ item["fecha"] | date }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="2">
+      <a ngbNavLink>Calendario</a>
+      <ng-template ngbNavContent>
+        <div class="container mt-4">
+          <!--  -->
+        </div>
+
+        <div class="col-8 mx-auto">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-3 d-flex justify-content-center">
+                  <div class="row">
+                    <h6 style="color: #ef476f">●</h6>
+                    <p>Pendientes</p>
+                  </div>
+                </div>
+                <div class="col-3 d-flex justify-content-center">
+                  <div class="row">
+                    <h6 style="color: #ffd166">●</h6>
+                    <p>En ejecución</p>
+                  </div>
+                </div>
+                <div class="col-3 d-flex justify-content-center">
+                  <div class="row">
+                    <h6 style="color: #118ab2">●</h6>
+                    <p>En espera</p>
+                  </div>
+                </div>
+                <div class="col-3 d-flex justify-content-center">
+                  <div class="row">
+                    <h6 style="color: #06d6a0">●</h6>
+                    <p>Finalizado</p>
+                  </div>
+                </div>
+              </div>
+              <div class="app-calendar">
+                <full-calendar
+                  #calendar
+                  defaultView="dayGridMonth"
+                  [header]="{
+                    left: 'prevYear,prev,next,nextYear today',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek,dayGridDay'
+                  }"
+                  [plugins]="calendarPlugins"
+                  [events]="events"
+                  (eventClick)="onEventClick($event)"
+                  [eventResizableFromStart]="'true'"
+                  [eventLimit]="false"
+                  themeSystem="bootstrap"
+                  [bootstrapFontAwesome]="true"
+                  deepChangeDetection="true"
+                  locale="es"
+                  [eventTimeFormat]="{
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    meridiem: false,
+                    hour12: true
+                  }"
+                >
+                </full-calendar>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="3">
+      <a ngbNavLink>Tareas asignadas por mí</a>
+      <ng-template ngbNavContent>
+        <div class="container mt-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div
+                  class="col-3"
+                  *ngFor="let item of task3"
+                  [routerLink]="['/task', item.id]"
+                >
+                  <div class="card bg-light" role="button">
+                    <div class="p-3 col-12">
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <marquee behavior="" direction=""
+                          ><i class="mdi mdi-account-alert"></i>
+                          <span class="quote2 pl-2"
+                            >Asignada a: {{ item["first_name"] }}
+                            {{ item["second_name"] }}
+                            {{ item["first_surname"] }}
+                          </span>
+                        </marquee>
+                        <div style="color: black">
+                          <div *ngIf="item.estado == 'Pendiente'">
+                            <div
+                              class="badge ml-2"
+                              style="background-color: #ef476f"
+                            >
+                              {{ item["estado"] }}
+                            </div>
+                          </div>
+                          <div *ngIf="item.estado == 'En ejecucion'">
+                            <div
+                              class="badge ml-2"
+                              style="background-color: #ffd166"
+                            >
+                              {{ item["estado"] }}
+                            </div>
+                          </div>
+                          <div *ngIf="item.estado == 'En espera'">
+                            <div
+                              class="badge ml-2"
+                              style="background-color: #118ab2"
+                            >
+                              {{ item["estado"] }}
+                            </div>
+                          </div>
+                          <div *ngIf="item.estado == 'Finalizado'">
+                            <div
+                              class="badge ml-2"
+                              style="background-color: #06d6a0"
+                            >
+                              {{ item["estado"] }}
+                            </div>
+                          </div>
+                          <div *ngIf="item.estado == 'Archivada'">
+                            <div
+                              class="badge ml-2"
+                              style="background-color: gray"
+                            >
+                              {{ item["estado"] }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-3">
+                      <h4 class="name">{{ item["titulo"] }}</h4>
+                      <!-- <div class="truncate-module">
+                                              <p class="quote2" [innerHTML]="item.descripcion"></p>
+                                          </div> -->
+                    </div>
+                    <div
+                      class="d-flex justify-content-start px-3 align-items-center"
+                    >
+                      <i class="mdi mdi-view-comfy task"></i>
+                      <span class="quote2 pl-2"
+                        >Categoría: {{ item["tipo"] }}</span
+                      >
+                    </div>
+                    <div
+                      class="d-flex justify-content-between px-3 align-items-center pb-3"
+                    >
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <i class="mdi mdi-calendar-clock date"></i>
+                        <span class="quote2 pl-2"
+                          >Fecha:
+                          {{ item["fecha"] | date }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="4">
+      <a ngbNavLink>Mis tareas archivadas</a>
+      <ng-template ngbNavContent>
+        <div class="container mt-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div
+                  class="col-3"
+                  *ngFor="let item of archivadas"
+                  [routerLink]="['/task', item.id]"
+                >
+                  <div class="card bg-light" role="button">
+                    <div class="p-3 col-12">
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <marquee behavior="" direction=""
+                          ><i class="mdi mdi-account-alert"></i>
+                          <span class="quote2 pl-2"
+                            >Asignada por: {{ item["first_name"] }}
+                            {{ item["second_name"] }}
+                            {{ item["first_surname"] }}
+                          </span>
+                        </marquee>
+                      </div>
+                    </div>
+                    <div class="px-3">
+                      <h4 class="name">{{ item["titulo"] }}</h4>
+                      <!-- <div class="truncate-module">
+                                              <p class="quote2" [innerHTML]="item.descripcion"></p>
+                                          </div> -->
+                    </div>
+                    <div
+                      class="d-flex justify-content-start px-3 align-items-center"
+                    >
+                      <i class="mdi mdi-view-comfy task"></i>
+                      <span class="quote2 pl-2"
+                        >Categoría: {{ item["tipo"] }}</span
+                      >
+                    </div>
+                    <div
+                      class="d-flex justify-content-between px-3 align-items-center pb-3"
+                    >
+                      <div
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <i class="mdi mdi-calendar-clock date"></i>
+                        <span class="quote2 pl-2"
+                          >Fecha:
+                          {{ item["fecha"] | date }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </li>
   </ul>
-  <button type="button" class="btn btn-primary mx-3" (click)="_task.open(content)">Agregar nueva tarea
+  <button
+    type="button"
+    class="btn btn-primary mx-3"
+    (click)="_task.open(content)"
+  >
+    Agregar nueva tarea
   </button>
 </div>
 
@@ -371,135 +532,212 @@
 
 <ng-template #content let-modal>
   <form [formGroup]="_task.myGroup" class="needs-validation" novalidate>
-      <div class="modal-header">
-          <h4 class="modal-title" id="modal-basic-title">Agregar nueva tarea</h4>
-          <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-              (click)="modal.dismiss('Cross click')"></button>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Agregar nueva tarea</h4>
+      <button
+        type="button"
+        class="btn btn-sm btn-flash-border-primary ri-close-fill"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+
+    <div class="modal-body">
+      <div class="row p-1">
+        <div class="col-md-6 form-group">
+          <label>Nombre de la tarea</label>
+          <input
+            type="text"
+            class="form-control"
+            name="nombre"
+            required
+            placeholder="Nombre de la tarea"
+            formControlName="nombre"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="col-md-6 form-group">
+          <label>Tipo de tarea</label>
+          <ng-select
+            [items]="_task.tipo"
+            name="tipo"
+            bindLabel="name"
+            bindValue="{{ _task.tipo.name }}"
+            placeholder="Seleccione"
+            formControlName="tipo"
+          >
+          </ng-select>
+        </div>
       </div>
 
-      <div class="modal-body">
+      <div class="row p-1">
+        <div class="col-md-6 form-group">
+          <label>Asignar tarea a:</label>
+          <ng-select
+            [items]="_task.person"
+            required
+            bindLabel="name"
+            bindValue="{{ _task.person.id }}"
+            [placeholder]="_task.person == 0 ? 'Seleccione' : 'Select'"
+            name="id_asignador"
+            loadingText="loading"
+            formControlName="id_asignador"
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
 
-          <div class="row p-1">
+        <div class="col-md-3 form-group">
+          <label for="validationServerUsername">Fecha</label>
+          <input
+            type="date"
+            class="form-control"
+            id="validationServerUsername"
+            name="fecha"
+            placeholder="Ingrese la fecha"
+            required
+            formControlName="fecha"
+          />
+        </div>
 
-              <div class="col-md-6 form-group">
-                  <label>Nombre de la tarea</label>
-                  <input type="text" class="form-control" name="nombre" required placeholder="Nombre de la tarea"
-                      formControlName="nombre" autocomplete="off">
-              </div>
+        <div class="col-md-3 form-group">
+          <label for="exampleInput">Hora</label>
+          <input
+            type="time"
+            class="form-control"
+            id="exampleInput"
+            name="hora"
+            placeholder="HH:mm:ss"
+            required
+            formControlName="hora"
+          />
+        </div>
+      </div>
 
+      <div class="row p-1">
+        <div class="col-md-12 form-group">
+          <label for="exampleFormControlTextarea1">Descripción</label>
+          <ckeditor
+            [editor]="_texteditor.Editor"
+            (ready)="_texteditor.onReady($event)"
+            [config]="_texteditor.configEditor"
+            name="descripcion"
+            formControlName="descripcion"
+          ></ckeditor>
+        </div>
+      </div>
 
-              <div class="col-md-6 form-group">
-                  <label>Tipo de tarea</label>
-                  <ng-select [items]="_task.tipo" name="tipo" bindLabel="name" bindValue="{{_task.tipo.name}}"
-                      placeholder="Seleccione" formControlName="tipo">
-                  </ng-select>
-              </div>
-
+      <div class="row p-1">
+        <div class="col-md-6">
+          <label>Adjuntar archivos</label>
+          <div class="custom-file">
+            <input
+              multiple
+              type="file"
+              class="custom-file-input"
+              id="customFileLang"
+              value="Elegir"
+              (change)="_task.onChange($event)"
+            />
+            <label class="custom-file-label" for="customFileLang"
+              >Seleccionar Archivo</label
+            >
           </div>
 
-          <div class="row p-1">
-
-              <div class="col-md-6 form-group">
-                  <label>Asignar tarea a:</label>
-                  <ng-select [items]="_task.person" required bindLabel="name" bindValue="{{_task.person.id}}"
-                      [placeholder]="(_task.person == 0) ? 'Seleccione' : 'Select' " name="id_asignador"
-                      loadingText="loading" formControlName="id_asignador" ngDefaultControl>
-                  </ng-select>
-              </div>
-
-              <div class="col-md-3 form-group">
-                  <label for="validationServerUsername">Fecha</label>
-                  <input type="date" class="form-control" id="validationServerUsername" name="fecha"
-                      placeholder="Ingrese la fecha" required formControlName="fecha">
-
-              </div>
-
-              <div class="col-md-3 form-group">
-                  <label for="exampleInput">Hora</label>
-                  <input type="time" class="form-control" id="exampleInput" name="hora" placeholder="HH:mm:ss"
-                      required formControlName="hora">
-              </div>
-
-          </div>
-
-          <div class="row p-1">
-
-              <div class="col-md-12 form-group">
-                  <label for="exampleFormControlTextarea1">Descripción</label>
-                  <ckeditor [editor]="_texteditor.Editor" (ready)="_texteditor.onReady($event)"
-                      [config]="_texteditor.configEditor" name="descripcion" formControlName="descripcion"></ckeditor>
-              </div>
-          </div>
-
-          <div class="row p-1">
-              <div class="col-md-6">
-                  <label>Adjuntar archivos</label>
-                  <div class="custom-file">
-                      <input multiple type="file" class="custom-file-input" id="customFileLang" value="Elegir"
-                          (change)="_task.onChange($event)">
-                      <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
-                  </div>
-
-                  <!-- <button (click)="onUpload()" class="btn btn-success">
+          <!-- <button (click)="onUpload()" class="btn btn-success">
                       Upload
                   </button> -->
+        </div>
+        <div class="col-md-6">
+          <ul class="list-group" *ngFor="let item of _task.file">
+            <li class="list-group-item">
+              <div class="d-flex justify-content-between">
+                <p>{{ item.name }}</p>
+                <div (click)="_task.eliminarAdjunto(item.id)">
+                  <button
+                    class="btn btn-outline-danger btn-sm rounded-2"
+                    type="button"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Delete"
+                  >
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </div>
               </div>
-              <div class="col-md-6">
-                  <ul class="list-group" *ngFor="let item of _task.file">
-                      <li class="list-group-item">
-                          <div class="d-flex justify-content-between">
-                              <p>{{item.name}}</p>
-                              <div (click)="_task.eliminarAdjunto(item.id)">
-                                  <button class="btn btn-outline-danger btn-sm rounded-2" type="button"
-                                      data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"
-                                          ></i></button>
-                              </div>
-
-                          </div>
-                      </li>
-                  </ul>
-              </div>
-          </div>
+            </li>
+          </ul>
+        </div>
       </div>
+    </div>
 
-      <div class="modal-footer">
-          <div class="alert alert-danger" role="alert" *ngIf="_task.errorSubida">
-              Faltan datos
-          </div>
-          <div class="row p-1">
-              <div class="col-md-12">
-                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="link"
-                      formControlName="link">
-                  <label class="form-check-label" for="flexCheckDefault">
-                      ¿Adjuntar link actual?
-                  </label>
-              </div>
-          </div>
-          <button type="button" class="btn btn-outline-dark"
-              [disabled]="_task.myGroup.value.nombre === '' || _task.myGroup.value.fecha === ''"
-              (click)="_task.saveTask(); _task.openConfirm(confirm)">Guardar</button>
+    <div class="modal-footer">
+      <div class="alert alert-danger" role="alert" *ngIf="_task.errorSubida">
+        Faltan datos
       </div>
+      <div class="row p-1">
+        <div class="col-md-12">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            name="link"
+            formControlName="link"
+          />
+          <label class="form-check-label" for="flexCheckDefault">
+            ¿Adjuntar link actual?
+          </label>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        [disabled]="
+          _task.myGroup.value.nombre === '' || _task.myGroup.value.fecha === ''
+        "
+        (click)="_task.saveTask(); _task.openConfirm(confirm)"
+      >
+        Guardar
+      </button>
+    </div>
   </form>
-
 </ng-template>
 
 <ng-template #confirm let-modal>
   <div *ngIf="_task.taskRedirect != null">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title">Tarea agregada con éxito</h5>
-              <button type="button" class="btn btn-sm btn-flash-border-primary ri-close-fill" aria-label="Close"
-                  (click)="modal.dismiss('Cross click')"></button>
-          </div>
-          <div class="modal-body">
-              <p>¿Desea ser redirigido a la tarea que acaba de crear?</p>
-          </div>
-          <div class="modal-footer">
-              <button type="button" [routerLink]="['/task', _task.taskRedirect]" class="btn btn-primary" (click)="modal.dismiss('Cross click')">¡Sí,
-                  redirigir!</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.dismiss('Cross click')">No</button>
-          </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Tarea agregada con éxito</h5>
+        <button
+          type="button"
+          class="btn btn-sm btn-flash-border-primary ri-close-fill"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
       </div>
+      <div class="modal-body">
+        <p>¿Desea ser redirigido a la tarea que acaba de crear?</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          [routerLink]="['/task', _task.taskRedirect]"
+          class="btn btn-primary"
+          (click)="modal.dismiss('Cross click')"
+        >
+          ¡Sí, redirigir!
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+          (click)="modal.dismiss('Cross click')"
+        >
+          No
+        </button>
+      </div>
+    </div>
   </div>
-
 </ng-template>

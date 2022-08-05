@@ -41,6 +41,7 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
    * On menu click
    */
   onMenuClick(event: any) {
+    console.log(event)
     const nextEl = event.target.nextSibling;
     const parent = event.target.parentNode;
     if (nextEl.id !== 'navmenu') {

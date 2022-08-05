@@ -1,137 +1,121 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Terceros</h4>
-      <div class="btn-group rounded">
-        <button
-          class="btn btn-primary btn-sm"
-          style="float: right"
-          [routerLink]="['/crm/crear-tercero']"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
-        <button
-          class="btn btn-secondary btn-sm"
-          style="float: right"
-          (click)="openClose2()"
-        >
-          <i class="fas fa-eye"></i>
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Terceros</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded">
+          <button
+            class="btn btn-primary btn-sm"
+            [routerLink]="['/crm/crear-tercero']"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button
+            class="btn btn-info btn-sm"
+            (click)="openClose()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+          <button
+            class="btn btn-secondary btn-sm"
+            (click)="openClose2()"
+          >
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi #firstAccordion="matAccordion">
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field
-          class="col-md-2 pl-0"
-          appearance="outline"
-        >
-          <mat-label>R.S/Nombre</mat-label>
-          <input
-            type="text"
-            matInput
-            name="name"
-            [(ngModel)]="filtros.name"
-            autocomplete="off"
-            placeholder="Busca por R.S/Nombre"
-            (input)="getThirdParties()"
-          />
-        </mat-form-field>
-        <mat-form-field
-          class="col-md-1 pl-0"
-          appearance="outline"
-        >
-          <mat-label>Documento</mat-label>
-          <input
-            type="text"
-            matInput
-            name="nit"
-            [(ngModel)]="filtros.nit"
-            autocomplete="off"
-            placeholder="Busca por documento"
-            (input)="getThirdParties()"
-          />
-        </mat-form-field>        
-        <mat-form-field
-          class="col-md-2 pl-0"
-          appearance="outline"
-        >
-          <mat-label>Dirección</mat-label>
-          <input
-            type="text"
-            matInput
-            name="cod_dian_address"
-            [(ngModel)]="filtros.cod_dian_address"
-            autocomplete="off"
-            placeholder="Busca por dirección"
-            (input)="getThirdParties()"
-          />
-        </mat-form-field>
-        <mat-form-field
-          class="col-md-2 pl-0"
-          appearance="outline"
-        >
-          <mat-label>Ciudad</mat-label>
-          <input
-            type="text"
-            matInput
-            name="municipio"
-            [(ngModel)]="filtros.municipio"
-            autocomplete="off"
-            placeholder="Busca por ciudad"
-            (input)="getThirdParties()"
-          />
-        </mat-form-field>
-        <mat-form-field
-          class="col-md-1 pl-0"
-          appearance="outline"
-        >
-          <mat-label>Tel</mat-label>
-          <input
-            type="text"
-            matInput
-            name="phone"
-            [(ngModel)]="filtros.phone"
-            autocomplete="off"
-            placeholder="Busca por teléfono"
-            (input)="getThirdParties()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Tipo de tercero</mat-label>
-          <mat-select
-            name="third"
-            [(ngModel)]="filtros.third_party_type"
-            (selectionChange)="getThirdParties()"
-          >
-            <mat-option value="Todos">Todos</mat-option>
-            <mat-option value="Cliente">Cliente</mat-option>
-            <mat-option value="Proveedor">Proveedor</mat-option>
-          </mat-select>
-        </mat-form-field>
-        
-        <mat-form-field
-          class="col-md-2 pl-0"
-          appearance="outline"
-        >
-          <mat-label>Email</mat-label>
-          <input
-            type="email"
-            matInput
-            name="email"
-            [(ngModel)]="filtros.email"
-            autocomplete="off"
-            placeholder="Busca por email"
-            (input)="getThirdParties()"
-          />
-        </mat-form-field>
+        <div class="row">
+          <mat-form-field class="col-md-2" appearance="outline">
+            <mat-label>R.S/Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              name="name"
+              [(ngModel)]="filtros.name"
+              autocomplete="off"
+              placeholder="Busca por R.S/Nombre"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-1" appearance="outline">
+            <mat-label>Documento</mat-label>
+            <input
+              type="text"
+              matInput
+              name="nit"
+              [(ngModel)]="filtros.nit"
+              autocomplete="off"
+              placeholder="Busca por documento"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2" appearance="outline">
+            <mat-label>Dirección</mat-label>
+            <input
+              type="text"
+              matInput
+              name="cod_dian_address"
+              [(ngModel)]="filtros.cod_dian_address"
+              autocomplete="off"
+              placeholder="Busca por dirección"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2" appearance="outline">
+            <mat-label>Ciudad</mat-label>
+            <input
+              type="text"
+              matInput
+              name="municipio"
+              [(ngModel)]="filtros.municipio"
+              autocomplete="off"
+              placeholder="Busca por ciudad"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-1" appearance="outline">
+            <mat-label>Tel</mat-label>
+            <input
+              type="text"
+              matInput
+              name="phone"
+              [(ngModel)]="filtros.phone"
+              autocomplete="off"
+              placeholder="Busca por teléfono"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-2" appearance="outline">
+            <mat-label>Tipo de tercero</mat-label>
+            <mat-select
+              name="third"
+              [(ngModel)]="filtros.third_party_type"
+              (selectionChange)="getThirdParties()"
+            >
+              <mat-option value="Todos">Todos</mat-option>
+              <mat-option value="Cliente">Cliente</mat-option>
+              <mat-option value="Proveedor">Proveedor</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-md-2" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input
+              type="email"
+              matInput
+              name="email"
+              [(ngModel)]="filtros.email"
+              autocomplete="off"
+              placeholder="Busca por email"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
     <mat-accordion multi #secondAccordion="matAccordion">
@@ -145,7 +129,7 @@
           >
           <mat-checkbox color="primary" [(ngModel)]="checkNIT"
             >Documento</mat-checkbox
-          >          
+          >
           <mat-checkbox color="primary" [(ngModel)]="checkDireccion"
             >Dirección</mat-checkbox
           >
@@ -176,7 +160,7 @@
         <tr class="text-center text-uppercase">
           <th *ngIf="checkFoto">Foto</th>
           <th *ngIf="checkNombre">R.S/Nombre</th>
-          <th *ngIf="checkNIT">Documento</th>          
+          <th *ngIf="checkNIT">Documento</th>
           <th *ngIf="checkDireccion">Dirección</th>
           <th *ngIf="checkMunicipio">Ciudad</th>
           <th *ngIf="checkTelefono">Teléfono</th>
@@ -204,9 +188,9 @@
             </div>
           </td>
           <td class="align-middle" *ngIf="checkNombre">
-            {{third.name}}
+            {{ third.name }}
           </td>
-          <td class="align-middle" *ngIf="checkNIT">{{ third.nit }}</td>          
+          <td class="align-middle" *ngIf="checkNIT">{{ third.nit }}</td>
           <td class="align-middle" *ngIf="checkDireccion">
             {{ third.cod_dian_address }}
           </td>

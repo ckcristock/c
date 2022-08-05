@@ -11,7 +11,7 @@ import { DatePipe } from '@angular/common';
 export class BalanceGeneralComponent implements OnInit {
 
   public datosCabecera:any = {
-    Titulo: 'Balance General',
+    Titulo: 'Balance general',
     Fecha: new Date()
   }
 

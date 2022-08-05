@@ -1,14 +1,12 @@
 <ng-template #modal let-modal>
-  <div class="modal-content">
-    <div class="modal-header">
-      <h4 class="text-primary modal-title">Crear/Editar Novedad</h4>
-      <button
-        type="button"
-        class="btn btn-sm btn-flash-border-primary ri-close-fill"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      ></button>
-    </div>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Crear/Editar Novedad</h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <form [formGroup]="form" (ngSubmit)="save()">
     <div class="modal-body">

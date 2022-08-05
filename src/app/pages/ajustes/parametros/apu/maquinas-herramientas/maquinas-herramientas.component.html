@@ -59,16 +59,14 @@
 </div>
 
 <ng-template #add let-modal>
-  <div class="modal-content">
-    <div class="modal-header">
-      <h4 class="text-primary modal-title">{{ title }}</h4>
-      <button
-        type="button"
-        class="btn btn-sm btn-flash-border-primary ri-close-fill"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      ></button>
-    </div>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">{{ title }}</h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
@@ -85,7 +83,9 @@
       <mat-form-field class="col-md-6 pr-0" appearance="outline">
         <mat-label>Unidad</mat-label>
         <mat-select formControlName="unit_id">
-          <mat-option *ngFor="let item of units" [value]="item.id">{{item.name}}</mat-option>
+          <mat-option *ngFor="let item of units" [value]="item.id">{{
+            item.name
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field class="col-md-6 pl-0" appearance="outline">

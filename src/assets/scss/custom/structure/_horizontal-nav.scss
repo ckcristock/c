@@ -11,14 +11,14 @@
     left: 0;
     right: 0;
     z-index: 100;
-    
+
     .topnav-menu {
         margin: 0;
         padding: 0;
     }
 
     .navbar-nav {
-        
+
         .nav-link {
             font-size: small;
             position: relative;
@@ -26,34 +26,38 @@
             color: $menu-item-color;
             font-family: $font-family-secondary;
 
-            i{
+            i {
                 font-size: 13px;
                 vertical-align: middle;
-                display: inline-block;                
+                display: inline-block;
             }
-            &:focus, &:hover{
+
+            &:focus,
+            &:hover {
                 color: $menu-item-active-color;
                 background-color: transparent;
             }
         }
-        
-        .dropdown-item{
+
+        .dropdown-item {
             color: $menu-item-color;
-            &.active, &:hover{
-                color: $menu-item-active-color;
-            }
-        }
-        
-        .nav-item{
-            
-            .nav-link.active{
+
+            &.active,
+            &:hover {
                 color: $menu-item-active-color;
             }
         }
 
-        .dropdown{
-            &.active{
-              >a {
+        .nav-item {
+
+            .nav-link.active {
+                color: $menu-item-active-color;
+            }
+        }
+
+        .dropdown {
+            &.active {
+                >a {
                     color: $menu-item-active-color;
                     background-color: transparent;
                 }
@@ -65,6 +69,7 @@
 @include media-breakpoint-up(xl) {
 
     body[data-layout="horizontal"] {
+
         .container-fluid,
         .navbar-header {
             max-width: 85%;
@@ -90,13 +95,15 @@
         }
 
         .dropdown {
-            &.mega-dropdown{
+            &.mega-dropdown {
+
                 // position: static;
-                .mega-dropdown-menu{
+                .mega-dropdown-menu {
                     left: 0px;
                     right: auto;
                 }
             }
+
             .dropdown-menu {
                 margin-top: 0;
                 border-radius: 0 0 $dropdown-border-radius $dropdown-border-radius;
@@ -176,39 +183,48 @@
 
 @include media-breakpoint-down(md) {
 
-    .navbar-brand-box{
+    hr {
+        display: none;
+    }
+
+    .navbar-brand-box {
         .logo-dark {
             display: $display-block;
-            span.logo-sm{
+
+            span.logo-sm {
                 display: $display-block;
             }
         }
-    
+
         .logo-light {
             display: $display-none;
         }
     }
-    
+
     .topnav {
         max-height: 360px;
         overflow-y: auto;
-        padding: 0;
+        padding: 10px;
+
         .navbar-nav {
             .nav-link {
                 padding: 0.75rem 1.1rem;
             }
         }
-
+        .dropdown-backdrop{
+            position: static;
+        }
         .dropdown {
             .dropdown-menu {
                 background-color: transparent;
                 border: none;
                 box-shadow: none;
                 padding-left: 15px;
-                &.dropdown-mega-menu-xl{
+
+                &.dropdown-mega-menu-xl {
                     width: auto;
-    
-                    .row{
+
+                    .row {
                         margin: 0px;
                     }
                 }
@@ -238,31 +254,33 @@
 @include media-breakpoint-up(lg) {
 
     body[data-layout="horizontal"][data-topbar="light"] {
-        .navbar-brand-box{
+        .navbar-brand-box {
             .logo-dark {
                 display: $display-block;
             }
-        
+
             .logo-light {
                 display: $display-none;
             }
         }
 
-        .topnav{
+        .topnav {
             background-color: $header-dark-bg;
+
             .navbar-nav {
-        
+
                 .nav-link {
                     color: rgba($white, 0.6);
-                    
-                    &:focus, &:hover{
+
+                    &:focus,
+                    &:hover {
                         color: rgba($white, 0.9);
                     }
                 }
-        
-                > .dropdown{
-                    &.active{
-                    >a {
+
+                >.dropdown {
+                    &.active {
+                        >a {
                             color: rgba($white, 0.9) !important;
                         }
                     }

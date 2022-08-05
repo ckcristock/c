@@ -1,16 +1,14 @@
 <ng-template #modal let-modal>
-  <div class="modal-content">
-    <div class="modal-header">
-      <h4 class="text-primary modal-title">
-        Lista de <strong>APU</strong> registrados
-      </h4>
-      <button
-        type="button"
-        class="btn btn-sm btn-flash-border-primary ri-close-fill"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      ></button>
-    </div>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">
+      Lista de <strong>APU</strong> registrados
+    </h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body">
     <ng-container *ngIf="apus.length && !loading; else notData">
@@ -46,10 +44,14 @@
             <td class="align-middle">{{ apu.custumer }}</td>
             <td class="align-middle">{{ apu.city }}</td>
             <td class="align-middle">{{ apu.line }}</td>
-            <td class="align-middle">{{ apu.unit_cost | currency: 'COP' }}</td>
+            <td class="align-middle">{{ apu.unit_cost | currency: "COP" }}</td>
             <td class="align-middle">
               <span>
-                <a role="button" class="text-info" (click)="openNewTab(apu.type, apu.apu_id)">
+                <a
+                  role="button"
+                  class="text-info"
+                  (click)="openNewTab(apu.type, apu.apu_id)"
+                >
                   <i class="fas fa-eye"></i>
                 </a>
               </span>

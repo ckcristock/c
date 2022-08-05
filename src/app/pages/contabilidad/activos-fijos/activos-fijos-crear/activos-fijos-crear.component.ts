@@ -24,7 +24,7 @@ export class ActivosFijosCrearComponent implements OnInit {
   @ViewChild('alertSwal') alertSwal:any;
 
   public datosCabecera:any = {
-    Titulo: 'Nuevo Activo Fijo',
+    Titulo: 'Nuevo activo fijo',
     Fecha: new Date(),
     Codigo: ''
   }

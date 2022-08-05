@@ -1,15 +1,27 @@
-<div class="form-group col-5 pl-0">
-  <label>Tablero permitido</label>
-  <div class="row">
-    <div class="col-10">
-      <ng-select [items]="boards" bindLabel="name_board" [(ngModel)]="boardsSelected" ngDefaultControl
-        name="boardsSelected" placeholder={{boardsSelected}}>
-      </ng-select>
-    </div>
-    <div class="col-2">
-      <button class="btn btn-primary btn-sm" (click)="save()">
-        <i class="fa" [ngClass]="{ 'fa-save':!saving, 'fa-sync fa-spin':saving==true}"></i>
-      </button>
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-row align-items-center">
+      <div class="col-md-10">
+        <ng-select
+          [items]="boards"
+          bindLabel="name_board"
+          [(ngModel)]="boardsSelected"
+          appearance="outline"
+          [appendTo]="'body'"
+          ngDefaultControl
+          name="boardsSelected"
+          placeholder="Tablero permitido"
+        >
+        </ng-select>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary btn-sm mt-1" (click)="save()">
+          <i
+            class="fa"
+            [ngClass]="{ 'fa-save': !saving, 'fa-sync fa-spin': saving == true }"
+          ></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>

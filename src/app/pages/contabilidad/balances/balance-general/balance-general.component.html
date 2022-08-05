@@ -1,60 +1,107 @@
 <div class="row">
-    <div class="col-md-6 mx-auto">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title d-flex justify-content-between">
-                    <img src="assets/images/logo2.png" alt="" height="45" />
-                    <h4 class="text-primary">
-                        <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
-                    </h4>
-                </div>
-                <hr class="line">
-                <mat-form-field class="col-md-12 pl-0" appearance="outline">
-                    <mat-label>Fecha de corte</mat-label>
-                    <input matInput [matDatepicker]="picker" [(ngModel)]="Parametros.Fecha_Corte"
-                        (dateInput)="getQueryParams()" autocomplete="off" placeholder="Elije una fecha">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-                <mat-form-field class="col-md-12 pl-0" appearance="outline">
-                    <mat-label>Tipo de reporte</mat-label>
-                    <mat-select [(ngModel)]="Parametros.Tipo_Reporte" value="" (selectionChange)="getQueryParams()">
-                        <mat-option value="">Seleccione tipo</mat-option>
-                        <mat-option value="Pcga">PCGA</mat-option>
-                        <mat-option value="Niif">NIIF</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field class="col-md-12 pl-0" appearance="outline">
-                    <mat-label>Nivel</mat-label>
-                    <mat-select [(ngModel)]="Parametros.Nivel" value="seleccione" (selectionChange)="getQueryParams()">
-                        <mat-option value="seleccione">Seleccione nivel</mat-option>
-                        <mat-option *ngFor="let Nivel of Niveles" [value]="Nivel">{{ Nivel }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field class="col-md-12 pl-0" appearance="outline">
-                    <mat-label>Centro costo</mat-label>
-                    <mat-select [(ngModel)]="Parametros.Centro_Costo" value="" (selectionChange)="getQueryParams()">
-                        <mat-option value="">Seleccione centro costo</mat-option>
-                        <mat-option *ngFor="let item of Centro_Costos" [value]="item.value">{{ item.label }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <div class="container mt-4">                    
-                    <div class="row mt-4">
-                        <div class="col-12 d-flex justify-content-center">
-                            <div class="btn-group" role="group" aria-label="Vertical button group">
-                                <a name="" id="" class="btn btn-danger btn-lg"
-                                    href="{{envirom.ruta}}php/contabilidad/balancegeneral/descarga_pdf.php?{{queryParams}}"
-                                    role="button" target="_blank"><i class="fas fa-file-pdf"></i> PDF</a>
-                                <a name="" id="" class="btn btn-primary btn-lg"
-                                    href="{{envirom.ruta}}php/contabilidad/balancegeneral/descarga_excel.php?{{queryParams}}"
-                                    role="button" target="_blank"><i class="fas fa-file-excel"></i> EXCEL</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row m-t-20">
-                    <div class="col-md-12">
-                        <!--
+  <div class="col-md-6 mx-auto">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title d-flex justify-content-between">
+          <img src="assets/images/logo2.png" alt="" height="45" />
+          <h4 class="text-primary">
+            <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+          </h4>
+        </div>
+        <hr class="line" />
+        <div class="row">
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Fecha de corte</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [(ngModel)]="Parametros.Fecha_Corte"
+              (dateInput)="getQueryParams()"
+              autocomplete="off"
+              placeholder="Elije una fecha"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Tipo de reporte</mat-label>
+            <mat-select
+              [(ngModel)]="Parametros.Tipo_Reporte"
+              value=""
+              (selectionChange)="getQueryParams()"
+            >
+              <mat-option value="">Seleccione tipo</mat-option>
+              <mat-option value="Pcga">PCGA</mat-option>
+              <mat-option value="Niif">NIIF</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Nivel</mat-label>
+            <mat-select
+              [(ngModel)]="Parametros.Nivel"
+              value="seleccione"
+              (selectionChange)="getQueryParams()"
+            >
+              <mat-option value="seleccione">Seleccione nivel</mat-option>
+              <mat-option *ngFor="let Nivel of Niveles" [value]="Nivel">{{
+                Nivel
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Centro costo</mat-label>
+            <mat-select
+              [(ngModel)]="Parametros.Centro_Costo"
+              value=""
+              (selectionChange)="getQueryParams()"
+            >
+              <mat-option value="">Seleccione centro costo</mat-option>
+              <mat-option
+                *ngFor="let item of Centro_Costos"
+                [value]="item.value"
+                >{{ item.label }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div
+          class="btn-group btn-block mt-1"
+          role="group"
+          aria-label="Vertical button group"
+        >
+          <a
+            name=""
+            id=""
+            class="btn btn-danger btn-lg"
+            href="{{
+              envirom.ruta
+            }}php/contabilidad/balancegeneral/descarga_pdf.php?{{
+              queryParams
+            }}"
+            role="button"
+            target="_blank"
+            ><i class="fas fa-file-pdf"></i> PDF</a
+          >
+          <a
+            name=""
+            id=""
+            class="btn btn-primary btn-lg"
+            href="{{
+              envirom.ruta
+            }}php/contabilidad/balancegeneral/descarga_excel.php?{{
+              queryParams
+            }}"
+            role="button"
+            target="_blank"
+            ><i class="fas fa-file-excel"></i> EXCEL</a
+          >
+        </div>
+        <div class="row m-t-20">
+          <div class="col-md-12">
+            <!--
                             <div style="max-height: 400px;overflow:auto">
 
                                 <h4>ACTIVO</h4>
@@ -128,14 +175,14 @@
                                 </table>
 
                             </div> -->
-                        <!-- FIN DEL CONTENEDOR -->
-                    </div>
-                </div>
-            </div>
+            <!-- FIN DEL CONTENEDOR -->
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <ng-template #rt1 let-r="result" let-t="term">
-    <span class="f-9">{{ r.Codigo }} </span>
+  <span class="f-9">{{ r.Codigo }} </span>
 </ng-template>

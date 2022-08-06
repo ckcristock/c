@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="card-title d-flex justify-content-between">
             <h4 class="text-primary">Comprobantes de Ingresos</h4>
-            <div class="btn-group rounded">
+            <div class="btn-group rounded w-sm-100">
                 <button type="button" class="btn btn-primary btn-sm" style="float: right;"
                     [routerLink]="['/contabilidad/comprobantes/comprobanteingresocrear']"><i class="fa fa-plus"></i>
                     Agregar
@@ -57,7 +57,7 @@
             </mat-expansion-panel>
         </mat-accordion>
 
-        <table class="table table-bordered table-striped table-responsive-sm table-sm" style="font-size: small;"
+        <table class="table table-bordered table-striped table-responsive-lg table-sm" style="font-size: small;"
             *ngIf="!Cargando && Comprobantes.length > 0; else notData">
             <thead>
                 <tr>

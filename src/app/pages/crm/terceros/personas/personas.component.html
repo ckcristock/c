@@ -1,104 +1,107 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Personas</h4>
-      <div class="btn-group rounded">
-        <button
-          class="btn btn-primary btn-sm"
-          style="float: right"
-          (click)="openConfirm(add)"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
-        <button
-          class="btn btn-secondary btn-sm"
-          style="float: right"
-          (click)="openClose2()"
-        >
-          <i class="fas fa-eye"></i>
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Personas</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(add)"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button
+            class="btn btn-info btn-sm"
+            (click)="openClose()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+          <button
+            class="btn btn-secondary btn-sm"
+            (click)="openClose2()"
+          >
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi #firstAccordion="matAccordion">
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field class="col-md-3 pl-lg-0" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input
-            type="text"
-            matInput
-            placeholder="Busca por nombre"
-            [(ngModel)]="filtros.name"
-            (input)="getPerson()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-3 pl-lg-0" appearance="outline">
-          <mat-label>Documento</mat-label>
-          <input
-            type="text"
-            matInput
-            placeholder="Busca por documento"
-            [(ngModel)]="filtros.documento"
-            (input)="getPerson()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-3 pl-lg-0" appearance="outline">
-          <mat-label>Tercero</mat-label>
-          <input
-            type="text"
-            matInput
-            placeholder="Busca por tercero"
-            [(ngModel)]="filtros.third"
-            (input)="getPerson()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-3 pl-lg-0" appearance="outline">
-          <mat-label>Celular</mat-label>
-          <input
-            type="text"
-            matInput
-            placeholder="Busca por celular"
-            [(ngModel)]="filtros.phone"
-            (input)="getPerson()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-4 pl-lg-0" appearance="outline">
-          <mat-label>Email</mat-label>
-          <input
-            type="email"
-            matInput
-            placeholder="Busca por email"
-            [(ngModel)]="filtros.email"
-            (input)="getPerson()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-4 pl-lg-0" appearance="outline">
-          <mat-label>Cargo</mat-label>
-          <input
-            type="text"
-            matInput
-            placeholder="Busca por cargo"
-            [(ngModel)]="filtros.cargo"
-            (input)="getPerson()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-4 pl-lg-0" appearance="outline">
-          <mat-label>Observación</mat-label>
-          <input
-            type="text"
-            matInput
-            placeholder="Busca por observación"
-            [(ngModel)]="filtros.observacion"
-            (input)="getPerson()"
-          />
-        </mat-form-field>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por nombre"
+              [(ngModel)]="filtros.name"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Documento</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por documento"
+              [(ngModel)]="filtros.documento"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Tercero</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por tercero"
+              [(ngModel)]="filtros.third"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Celular</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por celular"
+              [(ngModel)]="filtros.phone"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input
+              type="email"
+              matInput
+              placeholder="Busca por email"
+              [(ngModel)]="filtros.email"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cargo</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por cargo"
+              [(ngModel)]="filtros.cargo"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Observación</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por observación"
+              [(ngModel)]="filtros.observacion"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
     <mat-accordion multi #secondAccordion="matAccordion">
@@ -126,7 +129,7 @@
       </mat-expansion-panel>
     </mat-accordion>
     <table
-      class="table table-bordered table-striped table-sm table-responsive-sm"
+      class="table table-bordered table-striped table-sm table-responsive-lg"
       style="font-size: small"
       *ngIf="!loading && people.length > 0; else notData"
     >
@@ -203,74 +206,76 @@
         </b>
       </small>
       <br />
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="name"
-          placeholder="Ingresa el nombre"
-          required
-        />
-        <mat-error *ngIf="name_valid">Campo obligatorio</mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>Número de documento</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="n_document"
-          placeholder="Ingresa el número de documento"
-          required
-        />
-        <mat-error *ngIf="n_document_valid">Campo obligatorio</mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Teléfono</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="landline"
-          placeholder="Ingresa el número de teléfono"
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>Celular</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="cell_phone"
-          placeholder="Ingresa el número de celular"
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Correo electrónico</mat-label>
-        <input
-          type="email"
-          matInput
-          formControlName="email"
-          placeholder="Ingresa el correo electrónico"
-        />
-        <mat-error *ngIf="email_valid">Correo inválido</mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>Cargo</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="position"
-          placeholder="Ingresa el cargo"
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-12 px-0" appearance="outline">
-        <mat-label>Observaciones</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="observation"
-          placeholder="Ingresa las observaciones"
-        />
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="name"
+            placeholder="Ingresa el nombre"
+            required
+          />
+          <mat-error *ngIf="name_valid">Campo obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Número de documento</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="n_document"
+            placeholder="Ingresa el número de documento"
+            required
+          />
+          <mat-error *ngIf="n_document_valid">Campo obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="landline"
+            placeholder="Ingresa el número de teléfono"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Celular</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="cell_phone"
+            placeholder="Ingresa el número de celular"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Correo electrónico</mat-label>
+          <input
+            type="email"
+            matInput
+            formControlName="email"
+            placeholder="Ingresa el correo electrónico"
+          />
+          <mat-error *ngIf="email_valid">Correo inválido</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Cargo</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="position"
+            placeholder="Ingresa el cargo"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Observaciones</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="observation"
+            placeholder="Ingresa las observaciones"
+          />
+        </mat-form-field>
+      </div>
     </div>
     <div class="modal-footer">
       <button

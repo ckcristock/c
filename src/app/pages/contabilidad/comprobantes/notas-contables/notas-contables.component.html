@@ -2,7 +2,7 @@
   <div class="card-block card-body">
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Notas contables</h4>
-      <div class="btn-group rounded">
+      <div class="btn-group rounded w-sm-100">
         <button
           type="button"
           class="btn btn-primary btn-sm"
@@ -10,10 +10,7 @@
         >
           <i class="fa fa-plus"></i> Agregar
         </button>
-        <button
-          class="btn btn-info btn-sm"
-          (click)="openClose()"
-        >
+        <button class="btn btn-info btn-sm" (click)="openClose()">
           <i class="fas fa-sliders-h"></i> Filtros
         </button>
       </div>
@@ -95,7 +92,7 @@
       </mat-expansion-panel>
     </mat-accordion>
     <table
-      class="table table-bordered table-striped table-responsive-sm table-sm"
+      class="table table-bordered table-striped table-responsive-lg table-sm"
       style="font-size: small"
       *ngIf="!Cargando && NotasContables.length > 0; else notData"
     >
@@ -138,48 +135,46 @@
             >
           </td>
           <td>
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light waves-effect caja-botones"
+                  href="{{
+                    envirom.ruta
+                  }}php/contabilidad/notascontables/descarga_pdf.php?id={{
+                    item.Id_Documento_Contable
+                  }}"
+                  target="_blank"
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                    href="{{
-                      envirom.ruta
-                    }}php/contabilidad/notascontables/descarga_pdf.php?id={{
-                      item.Id_Documento_Contable
-                    }}"
-                    target="_blank"
-                  >
-                    <i class="fa fa-print"></i> Ver PCGA</a
-                  >
-                  <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                    href="{{
-                      envirom.ruta
-                    }}php/contabilidad/notascontables/descarga_pdf.php?id={{
-                      item.Id_Documento_Contable
-                    }}&tipo=Niif"
-                    target="_blank"
-                  >
-                    <i class="fa fa-print"></i> Ver NIIF</a
-                  >
-                  <a
-                    *ngIf="item.Estado != 'Anulada' && perfilUsuario == '27'"
-                    class="dropdown-item waves-light waves-effect caja-botones bg-danger"
-                    href="javascript:;"
-                    [swal]="confirmacionAnular"
-                    (click)="IdDocumento = item.Id_Documento_Contable"
-                  >
-                    <i class="fa fa-close"></i> Anular</a
-                  >
-                </div>
+                  <i class="fa fa-print"></i> Ver PCGA</a
+                >
+                <a
+                  class="dropdown-item waves-light waves-effect caja-botones"
+                  href="{{
+                    envirom.ruta
+                  }}php/contabilidad/notascontables/descarga_pdf.php?id={{
+                    item.Id_Documento_Contable
+                  }}&tipo=Niif"
+                  target="_blank"
+                >
+                  <i class="fa fa-print"></i> Ver NIIF</a
+                >
+                <a
+                  *ngIf="item.Estado != 'Anulada' && perfilUsuario == '27'"
+                  class="dropdown-item waves-light waves-effect caja-botones bg-danger"
+                  href="javascript:;"
+                  [swal]="confirmacionAnular"
+                  (click)="IdDocumento = item.Id_Documento_Contable"
+                >
+                  <i class="fa fa-close"></i> Anular</a
+                >
               </div>
             </div>
           </td>

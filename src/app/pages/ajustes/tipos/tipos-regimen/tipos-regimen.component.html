@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Tipos de Régimen</h4>
-      <div class="btn-group rounded">
+      <div class="btn-group rounded w-sm-100">
         <button
           class="btn btn-primary btn-sm"
           style="float: right"
@@ -29,7 +29,7 @@
     </mat-accordion>
 
     <table
-      class="table table-bordered table-striped table-sm table-responsive-sm"
+      class="table table-bordered table-striped table-sm table-responsive-lg"
       style="font-size: small"
       *ngIf="!loading && regimeTypes.length > 0; else notData"
     >
@@ -51,40 +51,37 @@
           <td class="align-middle">{{ item.name }}</td>
           <td class="align-middle">{{ item.state }}</td>
           <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  (click)="
+                    getRegime(item); openConfirm(add, 'Editar tipo de régimen')
+                  "
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    (click)="
-                      getRegime(item);
-                      openConfirm(add, 'Editar tipo de régimen')
-                    "
-                    class="dropdown-item waves-light text-info waves-effect caja-botones"
-                  >
-                    <i class="far fa-edit"></i> Editar</a
-                  >
-                  <a
-                    *ngIf="item.state == 'Inactivo'"
-                    (click)="activateOrInactivate(item, 'Activo')"
-                    class="dropdown-item waves-light text-success waves-effect caja-botones"
-                  >
-                    <i class="fa fa-check"></i> Activar</a
-                  >
-                  <a
-                    *ngIf="item.state == 'Activo'"
-                    (click)="activateOrInactivate(item, 'Inactivo')"
-                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
-                  >
-                    <i class="far fa-trash-alt"></i> Anular</a
-                  >
-                </div>
+                  <i class="far fa-edit"></i> Editar</a
+                >
+                <a
+                  *ngIf="item.state == 'Inactivo'"
+                  (click)="activateOrInactivate(item, 'Activo')"
+                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                >
+                  <i class="fa fa-check"></i> Activar</a
+                >
+                <a
+                  *ngIf="item.state == 'Activo'"
+                  (click)="activateOrInactivate(item, 'Inactivo')"
+                  class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                >
+                  <i class="far fa-trash-alt"></i> Anular</a
+                >
               </div>
             </div>
           </td>

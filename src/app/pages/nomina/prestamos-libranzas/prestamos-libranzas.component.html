@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Prestamos y Libranzas</h4>
-      <div class="btn-group rounded">
+      <div class="btn-group rounded w-sm-100">
         <button
           class="btn btn-primary btn-sm pull-right"
           (click)="abrirModalPrestamo()"
@@ -13,7 +13,7 @@
     </div>
     <hr class="line" />
     <table
-      class="table table-bordered table-striped table-responsive-sm table-sm"
+      class="table table-bordered table-striped table-responsive-lg table-sm"
       style="font-size: small"
       *ngIf="!loading && Prestamos.length > 0; else notData"
     >
@@ -57,43 +57,41 @@
           <td class="align-middle">{{ item.interest }}%</td>
           <td class="align-middle">{{ item.value | currency: "COP" }}</td>
           <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  (click)="download(item.id)"
+                  target="_blank"
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
-                    (click)="download(item.id)"
-                    target="_blank"
-                  >
-                    <i class="fa fa-file-pdf"></i> Descargar proyeccion PDF</a
-                  >
-                  <a
-                    class="dropdown-item text-success waves-light waves-effect caja-botones"
-                    target="_blank"
-                  >
-                    <i class="fa fa-table"></i> Descargar proyeccion EXCEL</a
-                  >
-                  <a
-                    *ngIf="item.value == 0"
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                    href="{{
-                      globales.ruta
-                    }}/php/prestamoylibranza/pazysalvo.php?id={{
-                      item.Id_Prestamo
-                    }}"
-                    target="_blank"
-                  >
-                    <i class="fa fa-file-pdf-o text-success"></i>
-                    Descargar Paz y Salvo
-                  </a>
-                </div>
+                  <i class="fa fa-file-pdf"></i> Descargar proyeccion PDF</a
+                >
+                <a
+                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  target="_blank"
+                >
+                  <i class="fa fa-table"></i> Descargar proyeccion EXCEL</a
+                >
+                <a
+                  *ngIf="item.value == 0"
+                  class="dropdown-item waves-light waves-effect caja-botones"
+                  href="{{
+                    globales.ruta
+                  }}/php/prestamoylibranza/pazysalvo.php?id={{
+                    item.Id_Prestamo
+                  }}"
+                  target="_blank"
+                >
+                  <i class="fa fa-file-pdf-o text-success"></i>
+                  Descargar Paz y Salvo
+                </a>
               </div>
             </div>
           </td>

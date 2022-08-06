@@ -10,7 +10,7 @@
         </nav>
     </div>
 </div> -->
-<div class="topnav">
+<div class="topnav">  
   <div class="container px-0">
     <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
       <div class="collapse navbar-collapse" id="topnav-menu-content">
@@ -25,8 +25,7 @@
                 href="javascript: void(0);"
                 [routerLink]="item.name == 'Tablero' ? '/' : item.link"
                 id="topnav-components"
-                role="button"
-                (click)="onMenuClick($event)"
+                role="button"                
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
@@ -55,12 +54,22 @@
                     >{{ subitem.name }}</a
                   >
 
-                  <div class="dropdown" *ngIf="hasItems(subitem)">
-                    <a class="dropdown-item" (click)="onMenuClick($event)"
+                  <div class="nav-item dropdown" *ngIf="hasItems(subitem)">
+                    <a
+                      class="dropdown-item dropdown-toggle"
+                      (click)="onMenuClick($event)"
+                      id="topnav-components2"
+                      role="button"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
                       >{{ subitem.name }}
                       <div class="arrow-down"></div>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right">
+                    <div
+                      class="dropdown-menu dropdown-menu-right"
+                      aria-labelledby="topnav-components2"
+                    >
                       <ng-template
                         ngFor
                         let-subSubitem

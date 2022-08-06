@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="card-title d-flex justify-content-between">
           <h4 class="text-primary">Fase I</h4>
-          <div class="btn-group rounded">
+          <div class="btn-group rounded w-sm-100">
             <button class="btn btn-info btn-sm" (click)="openClose()">
               <i class="fas fa-sliders-h"></i> Filtros
             </button>
@@ -49,7 +49,7 @@
           </mat-expansion-panel>
         </mat-accordion>
         <table
-          class="table table-bordered table-striped table-sm table-responsive-sm"
+          class="table table-bordered table-striped table-sm table-responsive-lg"
           style="font-size: small"
           *ngIf="!ValidaFase1 && FaseI.length > 0; else notData1"
         >
@@ -112,7 +112,7 @@
       <div class="card-body">
         <div class="card-title d-flex justify-content-between">
           <h4 class="text-primary">Fase II</h4>
-          <div class="btn-group rounded">
+          <div class="btn-group rounded w-sm-100">
             <button class="btn btn-info btn-sm" (click)="openClose2()">
               <i class="fas fa-sliders-h"></i> Filtros
             </button>
@@ -157,7 +157,7 @@
           </mat-expansion-panel>
         </mat-accordion>
         <table
-          class="table table-bordered table-striped table-sm table-responsive-sm"
+          class="table table-bordered table-striped table-sm table-responsive-lg"
           style="font-size: small"
           *ngIf="!ValidaFase2 && FaseII.length > 0; else notData2"
         >
@@ -220,7 +220,7 @@
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Alistamiento</h4>
-      <div class="btn-group rounded">
+      <div class="btn-group rounded w-sm-100">
         <button class="btn btn-info btn-sm" (click)="openClose3()">
           <i class="fas fa-sliders-h"></i> Filtros
         </button>
@@ -306,7 +306,7 @@
       </mat-expansion-panel>
     </mat-accordion>
     <table
-      class="table table-bordered table-striped table-sm table-responsive-sm"
+      class="table table-bordered table-striped table-sm table-responsive-lg"
       style="font-size: small"
       *ngIf="!loading && Alistamientos.length > 0; else notData3"
     >
@@ -396,91 +396,85 @@
             >
           </td>
           <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light waves-effect caja-botones"
+                  *ngIf="alistamiento.Tipo != 'Devolucion'"
+                  href=""
+                  [routerLink]="[
+                    '/inventario/remisiones/remision',
+                    alistamiento.Id_Remision
+                  ]"
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                    *ngIf="alistamiento.Tipo != 'Devolucion'"
-                    href=""
-                    [routerLink]="[
-                      '/inventario/remisiones/remision',
-                      alistamiento.Id_Remision
-                    ]"
-                  >
-                    <i class="fa fa-eye"></i> Ver</a
-                  >
-                  <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                    *ngIf="alistamiento.Tipo == 'Devolucion'"
-                    href=""
-                    [routerLink]="[
-                      '/verdetalledevolucion',
-                      alistamiento.Id_Remision
-                    ]"
-                  >
-                    <i class="fa fa-eye"></i> Ver</a
-                  >
-                  <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                    href="{{
-                      envi.ruta
-                    }}/php/archivos/descarga_pdf.php?tipo=Remision&id={{
-                      alistamiento.Id_Remision
-                    }}"
-                    target="_blank"
-                  >
-                    <i class="fa fa-print"></i> Imprimir Archivo</a
-                  >
-                  <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                    href="{{ envi.ruta }}/php/archivos/descarga_zebra.php?id={{
-                      alistamiento.Id_Remision
-                    }}"
-                    target="_blank"
-                  >
-                    <i class="fa fa-ticket-alt"></i> Imprimir Etiqueta</a
-                  >
-                  <a
-                    *ngIf="
-                      alistamiento.Estado_Alistamiento == 2 &&
-                      alistamiento.Estado == 'Alistada'
-                    "
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                    (click)="
-                      CapturarId(
-                        alistamiento.Id_Remision,
-                        alistamiento.Tipo,
-                        add
-                      )
-                    "
-                    ><i class="fa fa-plus"></i> Agregar Guía</a
-                  >
-                  <a
-                    *ngIf="
-                      alistamiento.Guia != '' &&
-                      alistamiento.Estado != 'Recibida' &&
-                      alistamiento.Estado != 'Anulada'
-                    "
-                    class="dropdown-item waves-light waves-effect caja-botones"
-                    (click)="
-                      EditarGuia(
-                        alistamiento.Id_Remision,
-                        i,
-                        alistamiento.Tipo,
-                        add
-                      )
-                    "
-                    ><i class="fa fa-truck"></i> Editar Guía</a
-                  >
-                </div>
+                  <i class="fa fa-eye"></i> Ver</a
+                >
+                <a
+                  class="dropdown-item waves-light waves-effect caja-botones"
+                  *ngIf="alistamiento.Tipo == 'Devolucion'"
+                  href=""
+                  [routerLink]="[
+                    '/verdetalledevolucion',
+                    alistamiento.Id_Remision
+                  ]"
+                >
+                  <i class="fa fa-eye"></i> Ver</a
+                >
+                <a
+                  class="dropdown-item waves-light waves-effect caja-botones"
+                  href="{{
+                    envi.ruta
+                  }}/php/archivos/descarga_pdf.php?tipo=Remision&id={{
+                    alistamiento.Id_Remision
+                  }}"
+                  target="_blank"
+                >
+                  <i class="fa fa-print"></i> Imprimir Archivo</a
+                >
+                <a
+                  class="dropdown-item waves-light waves-effect caja-botones"
+                  href="{{ envi.ruta }}/php/archivos/descarga_zebra.php?id={{
+                    alistamiento.Id_Remision
+                  }}"
+                  target="_blank"
+                >
+                  <i class="fa fa-ticket-alt"></i> Imprimir Etiqueta</a
+                >
+                <a
+                  *ngIf="
+                    alistamiento.Estado_Alistamiento == 2 &&
+                    alistamiento.Estado == 'Alistada'
+                  "
+                  class="dropdown-item waves-light waves-effect caja-botones"
+                  (click)="
+                    CapturarId(alistamiento.Id_Remision, alistamiento.Tipo, add)
+                  "
+                  ><i class="fa fa-plus"></i> Agregar Guía</a
+                >
+                <a
+                  *ngIf="
+                    alistamiento.Guia != '' &&
+                    alistamiento.Estado != 'Recibida' &&
+                    alistamiento.Estado != 'Anulada'
+                  "
+                  class="dropdown-item waves-light waves-effect caja-botones"
+                  (click)="
+                    EditarGuia(
+                      alistamiento.Id_Remision,
+                      i,
+                      alistamiento.Tipo,
+                      add
+                    )
+                  "
+                  ><i class="fa fa-truck"></i> Editar Guía</a
+                >
               </div>
             </div>
           </td>

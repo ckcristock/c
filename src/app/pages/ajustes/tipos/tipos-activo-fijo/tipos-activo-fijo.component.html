@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Tipos de Activos Fijos</h4>
-      <div class="btn-group rounded">
+      <div class="btn-group rounded w-sm-100">
         <button
           class="btn btn-primary btn-sm"
           style="float: right"
@@ -71,7 +71,7 @@
       </mat-expansion-panel>
     </mat-accordion>
     <table
-      class="table table-bordered table-striped table-sm table-responsive-sm"
+      class="table table-bordered table-striped table-sm table-responsive-lg"
       style="font-size: small"
       *ngIf="!loading && fixedAssets.length > 0; else notData"
     >
@@ -119,40 +119,38 @@
             {{ item.pcga_account_plan_credit_depreciation }}
           </td>
           <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  (click)="
+                    getFixedAsset(item);
+                    openConfirm(add, 'Editar tipo de activo fijo')
+                  "
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item waves-light text-info waves-effect caja-botones"
-                    (click)="
-                      getFixedAsset(item);
-                      openConfirm(add, 'Editar tipo de activo fijo')
-                    "
-                  >
-                    <i class="far fa-edit"></i> Editar</a
-                  >
-                  <a
-                    *ngIf="item.state == 'Activo'"
-                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
-                    (click)="activateOrInactivate(item, 'Inactivo')"
-                  >
-                    <i class="far fa-trash-alt"></i> Anular</a
-                  >
-                  <a
-                    *ngIf="item.state == 'Inactivo'"
-                    class="dropdown-item waves-light text-success waves-effect caja-botones"
-                    (click)="activateOrInactivate(item, 'Activo')"
-                  >
-                    <i class="fa fa-check"></i> Activar</a
-                  >
-                </div>
+                  <i class="far fa-edit"></i> Editar</a
+                >
+                <a
+                  *ngIf="item.state == 'Activo'"
+                  class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  (click)="activateOrInactivate(item, 'Inactivo')"
+                >
+                  <i class="far fa-trash-alt"></i> Anular</a
+                >
+                <a
+                  *ngIf="item.state == 'Inactivo'"
+                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  (click)="activateOrInactivate(item, 'Activo')"
+                >
+                  <i class="fa fa-check"></i> Activar</a
+                >
               </div>
             </div>
           </td>

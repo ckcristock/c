@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Tipos de Contrato</h4>
-      <div class="btn-group rounded">
+      <div class="btn-group rounded w-sm-100">
         <button
           class="btn btn-primary btn-sm"
           style="float: right"
@@ -37,7 +37,7 @@
       </mat-expansion-panel>
     </mat-accordion>
     <table
-      class="table table-bordered table-striped table-sm table-responsive-sm"
+      class="table table-bordered table-striped table-sm table-responsive-lg"
       style="font-size: small"
       *ngIf="!loading && contracts.length > 0; else notData"
     >
@@ -59,40 +59,38 @@
           <td class="align-middle">{{ contract.name }}</td>
           <td class="align-middle">{{ contract.description }}</td>
           <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  target="_blank"
+                  (click)="
+                    getData(contract);
+                    openConfirm(add, 'Actualizar Tipo de Contrato')
+                  "
+                  ><i class="far fa-edit"></i> Editar</a
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item waves-light text-info waves-effect caja-botones"
-                    target="_blank"
-                    (click)="
-                      getData(contract);
-                      openConfirm(add, 'Actualizar Tipo de Contrato')
-                    "
-                    ><i class="far fa-edit"></i> Editar</a
-                  >
-                  <a
-                    *ngIf="contract.status == 'Activo'"
-                    class="dropdown-item text-danger waves-light waves-effect caja-botones"
-                    (click)="activateOrInactivate(contract, 'Inactivo')"
-                  >
-                    <i class="far fa-trash-alt"></i> Anular</a
-                  >
-                  <a
-                    *ngIf="contract.status == 'Inactivo'"
-                    class="dropdown-item text-success waves-light waves-effect caja-botones"
-                    (click)="activateOrInactivate(contract, 'Activo')"
-                  >
-                    <i class="fas fa-check"></i> Activar</a
-                  >
-                </div>
+                <a
+                  *ngIf="contract.status == 'Activo'"
+                  class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                  (click)="activateOrInactivate(contract, 'Inactivo')"
+                >
+                  <i class="far fa-trash-alt"></i> Anular</a
+                >
+                <a
+                  *ngIf="contract.status == 'Inactivo'"
+                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  (click)="activateOrInactivate(contract, 'Activo')"
+                >
+                  <i class="fas fa-check"></i> Activar</a
+                >
               </div>
             </div>
           </td>

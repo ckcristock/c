@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Tipos de de Ingreso</h4>
-      <div class="btn-group rounded">
+      <div class="btn-group rounded w-sm-100">
         <button
           class="btn btn-primary btn-sm"
           style="float: right"
@@ -28,7 +28,7 @@
       </mat-expansion-panel>
     </mat-accordion>
     <table
-      class="table table-bordered table-striped table-sm table-responsive-sm"
+      class="table table-bordered table-striped table-sm table-responsive-lg"
       style="font-size: small"
       *ngIf="!loading && ingresss.length > 0; else notData"
     >
@@ -52,40 +52,38 @@
           <td class="align-middle">{{ ingress.associated_account }}</td>
           <td class="align-middle">{{ ingress.type }}</td>
           <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  target="_blank"
+                  (click)="
+                    getIngress(ingress);
+                    openConfirm(add, 'Actualizar Tipo de Ingreso')
+                  "
+                  ><i class="far fa-edit"></i> Editar</a
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item waves-light text-info waves-effect caja-botones"
-                    target="_blank"
-                    (click)="
-                      getIngress(ingress);
-                      openConfirm(add, 'Actualizar Tipo de Ingreso')
-                    "
-                    ><i class="far fa-edit"></i> Editar</a
-                  >
-                  <a
-                    *ngIf="ingress.status == 'Activo'"
-                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
-                    (click)="activateOrInactivate(ingress, 'Inactivo')"
-                  >
-                    <i class="far fa-trash-alt"></i> Anular</a
-                  >
-                  <a
-                    *ngIf="ingress.status == 'Inactivo'"
-                    class="dropdown-item waves-light text-success waves-effect caja-botones"
-                    (click)="activateOrInactivate(ingress, 'Activo')"
-                  >
-                    <i class="fas fa-check"></i> Activar</a
-                  >
-                </div>
+                <a
+                  *ngIf="ingress.status == 'Activo'"
+                  class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  (click)="activateOrInactivate(ingress, 'Inactivo')"
+                >
+                  <i class="far fa-trash-alt"></i> Anular</a
+                >
+                <a
+                  *ngIf="ingress.status == 'Inactivo'"
+                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  (click)="activateOrInactivate(ingress, 'Activo')"
+                >
+                  <i class="fas fa-check"></i> Activar</a
+                >
               </div>
             </div>
           </td>

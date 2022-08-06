@@ -12,6 +12,7 @@ import { MenuItem } from './menu.model';
   styleUrls: ['./horizontalnavbar.component.scss']
 })
 export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
+  
   configData;
   menuItems = [];
   navItems = []
@@ -19,7 +20,7 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line: max-line-length
   constructor(private router: Router, private eventService: EventService, private userService: UserService) {
     this.navItems = userService.user.menu;
-    
+
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.activateMenu();
@@ -36,6 +37,7 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
       wheelSpeed: 0.3
     };
   }
+
 
   /**
    * On menu click

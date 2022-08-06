@@ -5,23 +5,17 @@
         <h4 class="text-primary">Terceros</h4>
       </div>
       <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded">
+        <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
             [routerLink]="['/crm/crear-tercero']"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
-          <button
-            class="btn btn-secondary btn-sm"
-            (click)="openClose2()"
-          >
+          <button class="btn btn-secondary btn-sm" (click)="openClose2()">
             <i class="fas fa-eye"></i>
           </button>
         </div>
@@ -31,7 +25,7 @@
     <mat-accordion multi #firstAccordion="matAccordion">
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>R.S/Nombre</mat-label>
             <input
               type="text"
@@ -43,7 +37,7 @@
               (input)="getThirdParties()"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-1" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Documento</mat-label>
             <input
               type="text"
@@ -55,7 +49,7 @@
               (input)="getThirdParties()"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Dirección</mat-label>
             <input
               type="text"
@@ -67,7 +61,7 @@
               (input)="getThirdParties()"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Ciudad</mat-label>
             <input
               type="text"
@@ -79,7 +73,7 @@
               (input)="getThirdParties()"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-1" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Tel</mat-label>
             <input
               type="text"
@@ -91,7 +85,7 @@
               (input)="getThirdParties()"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Tipo de tercero</mat-label>
             <mat-select
               name="third"
@@ -103,7 +97,7 @@
               <mat-option value="Proveedor">Proveedor</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Email</mat-label>
             <input
               type="email"
@@ -152,7 +146,7 @@
       </mat-expansion-panel>
     </mat-accordion>
     <table
-      class="table table-bordered table-striped table-sm table-responsive-sm"
+      class="table table-bordered table-striped table-sm table-responsive-lg"
       style="font-size: small"
       *ngIf="!loading && thirdParties.length > 0; else notData"
     >
@@ -216,37 +210,35 @@
             </span>
           </td>
           <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown container="body" class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  [routerLink]="['/crm/editar-tercero', third.id]"
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item waves-light text-info waves-effect caja-botones"
-                    [routerLink]="['/crm/editar-tercero', third.id]"
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
-                  <a
-                    *ngIf="third.state == 'Activo'"
-                    (click)="changeState(third, 'Inactivo')"
-                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
-                  >
-                    <i class="far fa-trash-alt"></i> Anular
-                  </a>
-                  <a
-                    *ngIf="third.state == 'Inactivo'"
-                    (click)="changeState(third, 'Activo')"
-                    class="dropdown-item waves-light text-success waves-effect caja-botones"
-                  >
-                    <i class="fas fa-check"></i> Activar
-                  </a>
-                </div>
+                  <i class="far fa-edit"></i> Editar
+                </a>
+                <a
+                  *ngIf="third.state == 'Activo'"
+                  (click)="changeState(third, 'Inactivo')"
+                  class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                >
+                  <i class="far fa-trash-alt"></i> Anular
+                </a>
+                <a
+                  *ngIf="third.state == 'Inactivo'"
+                  (click)="changeState(third, 'Activo')"
+                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                >
+                  <i class="fas fa-check"></i> Activar
+                </a>
               </div>
             </div>
           </td>

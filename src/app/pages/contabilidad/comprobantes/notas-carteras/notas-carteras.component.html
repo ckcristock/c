@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="card-title d-flex justify-content-between">
             <h4 class="text-primary">Notas Cartera</h4>
-            <div class="btn-group rounded">
+            <div class="btn-group rounded w-sm-100">
                 <button style="float: right;" type="button" class="pull-left btn btn-primary btn-sm"
                     [routerLink]="['/contabilidad/comprobantes/notas-cartera-crear']"><i class="fa fa-plus"></i>
                     Agregar
@@ -50,7 +50,7 @@
             </mat-expansion-panel>
         </mat-accordion>
 
-        <table class="table table-bordered table-striped table-responsive-sm table-sm" style="font-size: small;"
+        <table class="table table-bordered table-striped table-responsive-lg table-sm" style="font-size: small;"
             *ngIf="!Cargando && NotasCarteras.length > 0; else notData">
             <thead>
                 <tr>

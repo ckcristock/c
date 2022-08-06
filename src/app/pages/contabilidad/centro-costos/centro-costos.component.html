@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Centros de costos</h4>
-      <div class="btn-group rounded">
+      <div class="btn-group rounded w-sm-100">
         <button
           type="button"
           class="btn btn-primary btn-sm"
@@ -81,7 +81,7 @@
     </mat-accordion>
 
     <table
-      class="table table-bordered table-striped table-sm table-responsive-sm"
+      class="table table-bordered table-striped table-sm table-responsive-lg"
       style="font-size: small"
       *ngIf="!Cargando && items.length > 0; else notData"
     >
@@ -122,64 +122,62 @@
             </span>
           </td>
           <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  (click)="
+                    EditarCentroCosto(item.Id_Centro_Costo); openConfirm(edit)
+                  "
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item text-info waves-light waves-effect caja-botones"
-                    (click)="
-                      EditarCentroCosto(item.Id_Centro_Costo); openConfirm(edit)
-                    "
-                  >
-                    <i class="far fa-edit"></i> Editar</a
-                  >
-                  <a
-                    class="dropdown-item text-danger waves-light waves-effect caja-botones"
-                    [swal]="{
-                      title: 'Eliminar',
-                      text: 'Se dispone a eliminar el centro de costo.\n¿Está seguro(a)?',
-                      type: 'warning',
-                      showCancelButton: true,
-                      confirmButtonText: 'Si, Cambiar',
-                      cancelButtonText: 'No, Dejame Comprobar!'
-                    }"
-                    (confirm)="Eliminar(item.Id_Centro_Costo)"
-                  >
-                    <i class="far fa-trash-alt"></i> Eliminar</a
-                  >
+                  <i class="far fa-edit"></i> Editar</a
+                >
+                <a
+                  class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                  [swal]="{
+                    title: 'Eliminar',
+                    text: 'Se dispone a eliminar el centro de costo.\n¿Está seguro(a)?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, Cambiar',
+                    cancelButtonText: 'No, Dejame Comprobar!'
+                  }"
+                  (confirm)="Eliminar(item.Id_Centro_Costo)"
+                >
+                  <i class="far fa-trash-alt"></i> Eliminar</a
+                >
 
-                  <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
+                <a
+                  class="dropdown-item waves-light waves-effect caja-botones"
+                  [ngClass]="{
+                    'text-success': item.Estado == 'Inactivo',
+                    'text-danger': item.Estado == 'Activo'
+                  }"
+                  [swal]="{
+                    title: 'Cambio de Estado',
+                    text: 'Se dispone a cambiar el estado de este centro de costo.\n¿Está seguro(a)?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, Cambiar',
+                    cancelButtonText: 'No, Dejame Comprobar!'
+                  }"
+                  (confirm)="CambiarEstado(item.Id_Centro_Costo)"
+                >
+                  <i
                     [ngClass]="{
-                      'text-success': item.Estado == 'Inactivo',
-                      'text-danger': item.Estado == 'Activo'
+                      'fas fa-times': item.Estado == 'Activo',
+                      'fa fa-check': item.Estado == 'Inactivo'
                     }"
-                    [swal]="{
-                      title: 'Cambio de Estado',
-                      text: 'Se dispone a cambiar el estado de este centro de costo.\n¿Está seguro(a)?',
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonText: 'Si, Cambiar',
-                      cancelButtonText: 'No, Dejame Comprobar!'
-                    }"
-                    (confirm)="CambiarEstado(item.Id_Centro_Costo)"
-                  >
-                    <i
-                      [ngClass]="{
-                        'fas fa-times': item.Estado == 'Activo',
-                        'fa fa-check': item.Estado == 'Inactivo'
-                      }"
-                    ></i>
-                    {{ item.Estado == "Inactivo" ? "Activar" : "Anular" }}
-                  </a>
-                </div>
+                  ></i>
+                  {{ item.Estado == "Inactivo" ? "Activar" : "Anular" }}
+                </a>
               </div>
             </div>
           </td>

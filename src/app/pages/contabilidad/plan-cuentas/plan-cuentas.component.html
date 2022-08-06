@@ -5,23 +5,17 @@
         <h4 class="text-primary">Plan único de cuentas</h4>
       </div>
       <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded">
+        <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
             (click)="openConfirm(crearCuenta); habCampos('N')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-success btn-sm"
-            (click)="openInNewTab()"
-          >
+          <button class="btn btn-success btn-sm" (click)="openInNewTab()">
             <i class="fas fa-table"></i> Imprimir Excel
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -94,7 +88,7 @@
       </mat-expansion-panel>
     </mat-accordion>
     <table
-      class="table table-bordered table-striped table-responsive-sm table-sm"
+      class="table table-bordered table-striped table-responsive-lg table-sm"
       style="font-size: small"
       *ngIf="!Cargando && Planes.length > 0; else notData"
     >
@@ -127,33 +121,31 @@
             </span>
           </td>
           <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  (click)="VerPlanCuenta(item.Id_Plan_Cuentas)"
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item text-success waves-light waves-effect caja-botones"
-                    (click)="VerPlanCuenta(item.Id_Plan_Cuentas)"
-                  >
-                    <i class="far fa-eye"></i> Ver</a
-                  >
-                  <a
-                    *ngIf="item.Estado != 'Anulada'"
-                    class="dropdown-item text-info waves-light waves-effect caja-botones"
-                    (click)="EditarPlanCuenta(item.Id_Plan_Cuentas)"
-                  >
-                    <i class="far fa-edit"></i> Editar</a
-                  >
-                  <!-- <a *ngIf="item.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a cambiar el estado de este plan de cuenta' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                  <i class="far fa-eye"></i> Ver</a
+                >
+                <a
+                  *ngIf="item.Estado != 'Anulada'"
+                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  (click)="EditarPlanCuenta(item.Id_Plan_Cuentas)"
+                >
+                  <i class="far fa-edit"></i> Editar</a
+                >
+                <!-- <a *ngIf="item.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a cambiar el estado de este plan de cuenta' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
                                                             (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)">
                                                             <i class="far fa-trash-alt"></i> Anular</a> -->
-                </div>
               </div>
             </div>
           </td>
@@ -206,7 +198,7 @@
         <div class="row">
           <div class="col-md-6">
             <h6 class="text-center">Plan Unico de Cuentas - PUC</h6>
-            
+
             <mat-form-field class="col-md-6 pl-md-0" appearance="outline">
               <mat-label>Tipo P</mat-label>
               <mat-select required name="Tipo_P" id="Tipo_P" ngModel>

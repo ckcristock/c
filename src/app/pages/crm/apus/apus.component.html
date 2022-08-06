@@ -1,12 +1,11 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
+    <div class="row card-title d-flex justify-content-between">
       <h4 class="text-primary">APU</h4>
-      <div class="btn-group rounded">
+      <div class="btn-group rounded w-sm-100">
         <button
           class="btn btn-primary btn-sm"
           type="button"
-          style="float: right"
           [routerLink]="['/crm/apu/crear-apu-pieza']"
         >
           <i class="fa fa-plus"></i> Pieza
@@ -14,7 +13,6 @@
         <button
           class="btn btn-primary btn-sm"
           type="button"
-          style="float: right"
           [routerLink]="['/crm/apu/crear-apu-conjunto']"
         >
           <i class="fa fa-plus"></i> Conjunto
@@ -22,23 +20,14 @@
         <button
           class="btn btn-primary btn-sm"
           type="button"
-          style="float: right"
           [routerLink]="['/crm/apu/crear-apu-servicio']"
         >
           <i class="fa fa-plus"></i> Servicio
         </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose2()"
-        >
+        <button class="btn btn-info btn-sm" (click)="openClose2()">
           <i class="fas fa-sliders-h"></i> Filtros
         </button>
-        <button
-          class="btn btn-secondary btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
+        <button class="btn btn-secondary btn-sm" (click)="openClose()">
           <i class="fas fa-eye"></i>
         </button>
       </div>
@@ -175,7 +164,7 @@
       </mat-expansion-panel>
     </mat-accordion>
     <table
-      class="table table-bordered table-striped table-sm"
+      class="table table-bordered table-striped table-sm table-responsive-lg"
       style="font-size: small"
       *ngIf="!loading && apus.length > 0; else notData"
     >
@@ -205,59 +194,57 @@
           <td class="align-middle" *ngIf="checkTipo">{{ item.type_name }}</td>
           <td class="align-middle">{{ item.observation }}</td>
           <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
+            <div ngbDropdown container="body" class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-effect waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  *ngIf="item.type == 'S'"
+                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  [routerLink]="['/crm/apu/ver-apu-servicio', item.apu_id]"
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    *ngIf="item.type == 'S'"
-                    class="dropdown-item waves-light text-success waves-effect caja-botones"
-                    [routerLink]="['/crm/apu/ver-apu-servicio', item.apu_id]"
-                  >
-                    <i class="far fa-eye"></i> Ver
-                  </a>
-                  <a
-                    *ngIf="item.type == 'P'"
-                    class="dropdown-item waves-light text-success waves-effect caja-botones"
-                    [routerLink]="['/crm/apu/ver-apu-pieza', item.apu_id]"
-                  >
-                    <i class="far fa-eye"></i> Ver
-                  </a>
-                  <a
-                    *ngIf="item.type == 'C'"
-                    class="dropdown-item waves-light text-success waves-effect caja-botones"
-                    [routerLink]="['/crm/apu/ver-apu-conjunto', item.apu_id]"
-                  >
-                    <i class="far fa-eye"></i> Ver
-                  </a>
-                  <a
-                    *ngIf="item.type == 'S'"
-                    class="dropdown-item waves-light text-info waves-effect caja-botones"
-                    [routerLink]="['/crm/apu/editar-apu-servicio', item.apu_id]"
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
-                  <a
-                    *ngIf="item.type == 'P'"
-                    class="dropdown-item waves-light text-info waves-effect caja-botones"
-                    [routerLink]="['/crm/apu/editar-apu-pieza', item.apu_id]"
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
-                  <a
-                    *ngIf="item.type == 'C'"
-                    class="dropdown-item waves-light text-info waves-effect caja-botones"
-                    [routerLink]="['/crm/apu/editar-apu-conjunto', item.apu_id]"
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
-                </div>
+                  <i class="far fa-eye"></i> Ver
+                </a>
+                <a
+                  *ngIf="item.type == 'P'"
+                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  [routerLink]="['/crm/apu/ver-apu-pieza', item.apu_id]"
+                >
+                  <i class="far fa-eye"></i> Ver
+                </a>
+                <a
+                  *ngIf="item.type == 'C'"
+                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  [routerLink]="['/crm/apu/ver-apu-conjunto', item.apu_id]"
+                >
+                  <i class="far fa-eye"></i> Ver
+                </a>
+                <a
+                  *ngIf="item.type == 'S'"
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  [routerLink]="['/crm/apu/editar-apu-servicio', item.apu_id]"
+                >
+                  <i class="far fa-edit"></i> Editar
+                </a>
+                <a
+                  *ngIf="item.type == 'P'"
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  [routerLink]="['/crm/apu/editar-apu-pieza', item.apu_id]"
+                >
+                  <i class="far fa-edit"></i> Editar
+                </a>
+                <a
+                  *ngIf="item.type == 'C'"
+                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  [routerLink]="['/crm/apu/editar-apu-conjunto', item.apu_id]"
+                >
+                  <i class="far fa-edit"></i> Editar
+                </a>
               </div>
             </div>
           </td>

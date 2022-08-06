@@ -5,20 +5,15 @@
         <div class="card-body">
           <div class="card-title d-flex justify-content-between">
             <h4 class="text-primary">Activos fijos</h4>
-            <div class="btn-group rounded">
+            <div class="btn-group rounded w-sm-100">
               <button
                 type="button"
-                style="float: right"
                 class="btn btn-primary btn-sm"
                 [routerLink]="['/contabilidad/activos-fijos-crear']"
               >
                 <i class="fa fa-plus"></i> Agregar
               </button>
-              <button
-                class="btn btn-info btn-sm"
-                style="float: right"
-                (click)="openClose()"
-              >
+              <button class="btn btn-info btn-sm" (click)="openClose()">
                 <i class="fas fa-sliders-h"></i> Filtros
               </button>
             </div>
@@ -96,7 +91,7 @@
             </mat-expansion-panel>
           </mat-accordion>
           <table
-            class="table table-bordered table-striped table-sm table-responsive-sm"
+            class="table table-bordered table-striped table-sm table-responsive-lg"
             style="font-size: small"
             *ngIf="!Cargando && ActivosFijos.length > 0; else notData"
           >

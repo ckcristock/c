@@ -1,4 +1,5 @@
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { style } from '@angular/animations';
+import { Component, OnInit, AfterViewInit, Input, HostListener, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
 
@@ -12,11 +13,11 @@ import { MenuItem } from './menu.model';
   styleUrls: ['./horizontalnavbar.component.scss']
 })
 export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
-  
+  @ViewChild('subMenu') subMenu: any; 
   configData;
   menuItems = [];
   navItems = []
-
+  public innerWidth: any;
   // tslint:disable-next-line: max-line-length
   constructor(private router: Router, private eventService: EventService, private userService: UserService) {
     this.navItems = userService.user.menu;
@@ -27,15 +28,19 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
+  }
   ngOnInit(): void {
     //console.log(this.navItems)
     this.initialize();
-
+    this.innerWidth = window.innerWidth;
     this.configData = {
       suppressScrollX: true,
       wheelSpeed: 0.3
     };
+
   }
 
 
@@ -43,16 +48,51 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
    * On menu click
    */
   onMenuClick(event: any) {
-    console.log(event)
+
     const nextEl = event.target.nextSibling;
     const parent = event.target.parentNode;
-    if (nextEl.id !== 'navmenu') {
+
+    if (this.innerWidth < 990) {
+      if (event.target.nextSibling.id != 'navmenu') {
+        /* var myDropdown = document.getElementsByClassName('dropdown-toggle')
+        for (let i = 0; i < myDropdown.length; i++) {
+          console.log(myDropdown[i])
+          myDropdown[i].addEventListener('click', function () {
+            var el = this.nextElementSibling;
+            el.style.display = el.style.display == 'block' ? 'none' : 'block';
+          });
+        } */
+        let p = event.target.nextSibling.style.display
+        if (p == null || p == '' || p == 'none'){
+          event.target.nextSibling.style.display = 'block'
+          event.target.parentElement.style.display = 'block'
+          event.target.parentElement.parentElement.style.display = 'block'
+        } else {
+          event.target.nextSibling.style.display = 'none'
+        }       
+      } else if (event.target.nextSibling.id == 'navmenu') {
+        console.log(event)
+        let p2 = event.target.parentNode
+        if (p2.display == null || p2.display == '' || p2.display == 'none'){
+          event.target.parentNode.style.display = 'block'
+        } else {
+          event.target.parentNode.style.display = 'none'
+        }
+        
+      }
+
+    } else if (nextEl.id !== 'navmenu') {
+      console.log(parent)
     } else if (nextEl && nextEl.classList.contains('show')) {
       const parentEl = event.target.parentNode;
       if (parentEl) { parentEl.classList.remove('show'); }
       nextEl.classList.toggle('show');
     }
     return false;
+
+
+    /* console.log(event)
+     */
   }
 
   ngAfterViewInit() {

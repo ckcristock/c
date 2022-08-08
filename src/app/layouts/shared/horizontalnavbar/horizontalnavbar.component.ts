@@ -13,7 +13,7 @@ import { MenuItem } from './menu.model';
   styleUrls: ['./horizontalnavbar.component.scss']
 })
 export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
-  @ViewChild('subMenu') subMenu: any; 
+  @ViewChild('subMenu') subMenu: any;
   configData;
   menuItems = [];
   navItems = []
@@ -54,31 +54,21 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
 
     if (this.innerWidth < 990) {
       if (event.target.nextSibling.id != 'navmenu') {
-        /* var myDropdown = document.getElementsByClassName('dropdown-toggle')
-        for (let i = 0; i < myDropdown.length; i++) {
-          console.log(myDropdown[i])
-          myDropdown[i].addEventListener('click', function () {
-            var el = this.nextElementSibling;
-            el.style.display = el.style.display == 'block' ? 'none' : 'block';
-          });
-        } */
         let p = event.target.nextSibling.style.display
-        if (p == null || p == '' || p == 'none'){
+        if (p == null || p == '' || p == 'none') {
           event.target.nextSibling.style.display = 'block'
-          event.target.parentElement.style.display = 'block'
+          //event.target.parentElement.style.display = 'block'
           event.target.parentElement.parentElement.style.display = 'block'
         } else {
           event.target.nextSibling.style.display = 'none'
-        }       
-      } else if (event.target.nextSibling.id == 'navmenu') {
-        console.log(event)
-        let p2 = event.target.parentNode
-        if (p2.display == null || p2.display == '' || p2.display == 'none'){
-          event.target.parentNode.style.display = 'block'
-        } else {
-          event.target.parentNode.style.display = 'none'
+
         }
-        
+      } else {
+        if (event.target.nextSibling.style.display == "block") {
+          event.target.nextSibling.style.display = 'none'
+        } else {
+          event.target.nextSibling.style.display = 'block'
+        }
       }
 
     } else if (nextEl.id !== 'navmenu') {

@@ -93,11 +93,14 @@ export class TercerosComponent implements OnInit {
     this.route.queryParamMap
       .subscribe((params) => {
         this.orderObj = { ...params.keys, ...params };
-        let keys = JSON.stringify(Object.keys(this.orderObj.params))
+        console.log(Object.keys(this.orderObj).length)
         for (let i in this.orderObj.params){
-          if (this.orderObj.params[i]){
-            this.filtrosActivos = true                     
+          if (this.orderObj.params[i]){      
+            if (Object.keys(this.orderObj).length > 2){
+              this.filtrosActivos = true
+            }                          
             this.filtros[i] = this.orderObj.params[i]
+            
           }
         }
         
@@ -115,6 +118,7 @@ export class TercerosComponent implements OnInit {
     for(let i in this.filtros){
       this.filtros[i] = ''
     }
+    this.filtrosActivos = false
     this.getThirdParties()
   }
 

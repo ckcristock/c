@@ -61,10 +61,11 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
 import { HistorialNegocioComponent } from './negocios/historial-negocio/historial-negocio.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -136,6 +137,7 @@ import { HistorialNegocioComponent } from './negocios/historial-negocio/historia
     MatCheckboxModule,
     MatAutocompleteModule,
     MatRadioModule,
+    MatPaginatorModule
   ]
 })
 export class CrmModule { }

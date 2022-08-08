@@ -145,8 +145,9 @@
         </section>
       </mat-expansion-panel>
     </mat-accordion>
+    <small *ngIf="filtrosActivos">*Hay campos de búsqueda llenos, para limpiar haga click <a role="button" (click)="resetFiltros()">aquí</a></small>
     <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
+      class="table table-bordered table-striped table-sm table-responsive-lg mb-0"
       style="font-size: small"
       *ngIf="!loading && thirdParties.length > 0; else notData"
     >
@@ -245,8 +246,17 @@
         </tr>
       </tbody>
     </table>
+    <mat-paginator
+      *ngIf="paginacion"
+      [length]="paginacion.total"
+      [pageSize]="paginacion.per_page"
+      [pageIndex]="paginacion.current_page - 1"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
   </div>
-  <ngb-pagination
+  <!-- <ngb-pagination
     class="d-flex justify-content-center pagination-rounded pagination-sm"
     [collectionSize]="pagination.collectionSize"
     [pageSize]="pagination.pageSize"
@@ -261,7 +271,7 @@
     ellipses="false"
     boundaryLinks="true"
   >
-  </ngb-pagination>
+  </ngb-pagination> -->
 </div>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

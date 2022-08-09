@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { BudgetService } from './budget.service';
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-presupuestos',
@@ -10,14 +13,14 @@ import { BudgetService } from './budget.service';
 export class PresupuestosComponent implements OnInit {
   @ViewChild('firstAccordion') firstAccordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.firstAccordion.openAll();
       this.matPanel = true;
     } else {
       this.firstAccordion.closeAll();
       this.matPanel = false;
-    }    
+    }
   }
   checkItem: boolean = true
   checkFecha: boolean = true
@@ -34,15 +37,69 @@ export class PresupuestosComponent implements OnInit {
     collectionSize: 0
   }
   filtros: any = {}
-
+  orderObj: any
+  filtrosActivos: boolean = false
+  paginacion: any
   budgets: any[] = []
-  constructor(private _budget: BudgetService) { }
+  constructor(
+    private paginator: MatPaginatorIntl,
+    private route: ActivatedRoute,
+    private location: Location,
+    private _budget: BudgetService
+  ) {
+    this.paginator.itemsPerPageLabel = "Items por página:";
+  }
 
   ngOnInit(): void {
+    this.route.queryParamMap
+      .subscribe((params) => {
+        this.orderObj = { ...params.keys, ...params };
+        for (let i in this.orderObj.params) {
+          if (this.orderObj.params[i]) {
+            if (Object.keys(this.orderObj).length > 2) {
+              this.filtrosActivos = true
+            }
+            this.filtros[i] = this.orderObj.params[i]
+
+          }
+        }
+
+        if (this.orderObj.params.pag) {
+          this.getBudgets(this.orderObj.params.pag);
+        } else {
+          this.getBudgets()
+        }
+
+      }
+      );
+  }
+  resetFiltros() {
+    for (let i in this.filtros) {
+      this.filtros[i] = ''
+    }
+    this.filtrosActivos = false
     this.getBudgets()
   }
+
+  handlePageEvent(event: PageEvent) {
+    console.log(event)
+    this.getBudgets(event.pageIndex + 1)
+  }
+
+  SetFiltros(paginacion) {
+    let params: any = {};
+
+    params.pag = paginacion;
+    for (let i in this.filtros) {
+      if (this.filtros[i] != "") {
+        params[i] = this.filtros[i];
+      }
+    }
+    let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    return queryString;
+  }
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
 
@@ -53,11 +110,13 @@ export class PresupuestosComponent implements OnInit {
     let params = {
       ...this.pagination, ...this.filtros
     }
+    var paramsurl = this.SetFiltros(this.pagination.page);
+    this.location.replaceState('/crm/presupuesto', paramsurl);
     this._budget.getAllPaginate(params).subscribe((r: any) => {
       this.budgets = r.data.data
-      console.log( this.budgets);
-      
       this.pagination.collectionSize = r.data.total;
+      console.log(r)
+      this.paginacion = r.data
       this.loading = false;
 
     })

@@ -1,49 +1,28 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TercerosService } from './terceros.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { Location } from '@angular/common';
-import 'rxjs/add/operator/filter';
 import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+
+
 @Component({
   selector: 'app-terceros',
   templateUrl: './terceros.component.html',
   styleUrls: ['./terceros.component.scss']
 })
 export class TercerosComponent implements OnInit {
-  checkFoto: boolean = true;
-  checkNIT: boolean = true;
-  checkNombre: boolean = true;
-  checkDireccion: boolean = true;
-  checkMunicipio: boolean = true;
-  checkTelefono: boolean = true;
-  checkTipo: boolean = true;
-  checkEstado: boolean = true;
-  checkEmail: boolean = false;
   @ViewChild('firstAccordion') firstAccordion: MatAccordion;
-  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
+  selectedCampos = [];
+  camposForm = new FormControl(this.selectedCampos);
+  orderObj: any
+  filtrosActivos: boolean = false
+  
+  checkFoto: boolean = true;
+  campos: any[] = []
   matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.firstAccordion.openAll();
-      this.matPanel = true;
-    } else {
-      this.firstAccordion.closeAll();
-      this.matPanel = false;
-    }
-  }
-  matPanel2 = false;
-  openClose2() {
-    if (this.matPanel2 == false) {
-      this.secondAccordion.openAll();
-      this.matPanel2 = true;
-    } else {
-      this.secondAccordion.closeAll();
-      this.matPanel2 = false;
-    }
-  }
   panelOpenState = false;
   form: FormGroup;
   parametro: string = '';
@@ -63,6 +42,19 @@ export class TercerosComponent implements OnInit {
     municipio: '',
     phone: ''
   }
+  listaCampos: any[] = [
+    { value: 0, text: 'Foto', selected: true },
+    { value: 2, text: 'Nombre', selected: true },
+    { value: 1, text: 'Documento', selected: true },    
+    { value: 3, text: 'Dirección', selected: true },
+    { value: 4, text: 'Municipio', selected: true },
+    { value: 5, text: 'Teléfono', selected: true },
+    { value: 6, text: 'Tipo', selected: true },
+    { value: 8, text: 'Correo electrónico', selected: false },
+    { value: 7, text: 'Estado', selected: true },
+    
+  ]
+
   constructor(
     private _tercerosService: TercerosService,
     private fb: FormBuilder,
@@ -71,15 +63,51 @@ export class TercerosComponent implements OnInit {
     private route: ActivatedRoute,
     private paginator: MatPaginatorIntl,
     private _swal: SwalService
-  ) { 
+  ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
+  }
+
+
+
+  ngOnInit(): void {
+    for (let i in this.listaCampos){
+      if (this.listaCampos[i].selected){
+        this.selectedCampos.push(this.listaCampos[i].value)
+      }
+    }
+    this.route.queryParamMap
+      .subscribe((params) => {
+        this.orderObj = { ...params.keys, ...params };
+        for (let i in this.orderObj.params) {
+          if (this.orderObj.params[i]) {
+            if (Object.keys(this.orderObj).length > 2) {
+              this.filtrosActivos = true
+            }
+            this.filtros[i] = this.orderObj.params[i]
+
+          }
+        }
+
+        if (this.orderObj.params.pag) {
+          this.getThirdParties(this.orderObj.params.pag);
+        } else {
+          this.getThirdParties()
+        }
+
+      }
+      );
+  }
+
+  cambiarCampo(event){
+    let position = event.source._keyManager._activeItemIndex
+    this.listaCampos[position].selected ? this.listaCampos[position].selected = false : this.listaCampos[position].selected = true
   }
 
   SetFiltros(paginacion) {
     let params: any = {};
 
     params.pag = paginacion;
-    for (let i in this.filtros){
+    for (let i in this.filtros) {
       if (this.filtros[i] != "") {
         params[i] = this.filtros[i];
       }
@@ -87,35 +115,18 @@ export class TercerosComponent implements OnInit {
     let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     return queryString;
   }
-  orderObj: any
-  filtrosActivos: boolean = false
-  ngOnInit(): void {    
-    this.route.queryParamMap
-      .subscribe((params) => {
-        this.orderObj = { ...params.keys, ...params };
-        console.log(Object.keys(this.orderObj).length)
-        for (let i in this.orderObj.params){
-          if (this.orderObj.params[i]){      
-            if (Object.keys(this.orderObj).length > 2){
-              this.filtrosActivos = true
-            }                          
-            this.filtros[i] = this.orderObj.params[i]
-            
-          }
-        }
-        
-        if (this.orderObj.params.pag){
-          this.getThirdParties(this.orderObj.params.pag);
-        } else {
-          this.getThirdParties()
-        }
-        
-      }
-      );
+  openClose() {
+    if (this.matPanel == false) {
+      this.firstAccordion.openAll();
+      this.matPanel = true;
+    } else {
+      this.firstAccordion.closeAll();
+      this.matPanel = false;
+    }
   }
 
-  resetFiltros(){
-    for(let i in this.filtros){
+  resetFiltros() {
+    for (let i in this.filtros) {
       this.filtros[i] = ''
     }
     this.filtrosActivos = false
@@ -124,7 +135,7 @@ export class TercerosComponent implements OnInit {
 
   paginacion: any
   handlePageEvent(event: PageEvent) {
-    console.log(event)    
+    console.log(event)
     this.getThirdParties(event.pageIndex + 1)
   }
 
@@ -139,8 +150,6 @@ export class TercerosComponent implements OnInit {
     this._tercerosService.getThirdParties(params).subscribe((r: any) => {
       this.thirdParties = r.data.data;
       this.paginacion = r.data
-      console.log(this.paginacion)
-      
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     });

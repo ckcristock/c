@@ -1,21 +1,22 @@
-<!-- <div class="page-body"> -->
-<!-- <div class="row"> -->
-<!-- <div class="col-md-12 filter-bar p-3"> -->
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Inventario</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button class="btn btn-info btn-sm" (click)="openClose()">
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Inventario</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre del producto</mat-label>
             <input
               matInput
@@ -26,7 +27,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Grupo estiba</mat-label>
             <input
               matInput
@@ -37,7 +38,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Laboratorio comercial</mat-label>
             <input
               matInput
@@ -48,7 +49,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Laboratorio genérico</mat-label>
             <input
               matInput
@@ -59,7 +60,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Invima</mat-label>
             <input
               matInput
@@ -70,7 +71,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Código CUM</mat-label>
             <input
               matInput
@@ -81,7 +82,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Lote</mat-label>
             <input
               matInput
@@ -92,7 +93,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Cantidad disponisble</mat-label>
             <input
               matInput
@@ -103,7 +104,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Cantidad apartada</mat-label>
             <input
               matInput
@@ -114,7 +115,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Cantidad seleccionada</mat-label>
             <input
               matInput
@@ -125,7 +126,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>IVA</mat-label>
             <mat-select
               name="Iva"
@@ -138,7 +139,7 @@
               <mat-option value="No">No</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="outline" class="col-md-2">
+          <mat-form-field appearance="outline" class="col">
             <mat-label>Fechas de vencimiento</mat-label>
             <input
               matInput
@@ -156,7 +157,7 @@
               [for]="picker"
             ></sat-datepicker-toggle>
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Bodega</mat-label>
             <mat-select
               [(ngModel)]="bodega_selected"
@@ -170,7 +171,7 @@
               >
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Categoría</mat-label>
             <mat-select [(ngModel)]="subtipo_punto">
               <mat-option value="">Todas</mat-option>
@@ -191,7 +192,7 @@
               >
             </button>
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Lista de informe</mat-label>
             <mat-select
               [(ngModel)]="lista_informe"
@@ -205,18 +206,18 @@
               >
             </mat-select>
           </mat-form-field>
-          <div class="col-md-2 mt-2">
-            <mat-checkbox
-              checked="true"
-              name="sin-inventario"
+          <div class="col mt-3">
+            <input
+              type="checkbox"
+              checked
               color="primary"
+              name="sin-inventario"
               id="sin-inventario"
               (change)="filtro()"
-            >
-              Sin inventario
-            </mat-checkbox>
+            />
+            Sin inventario
           </div>
-          <div class="col-md-2">
+          <div class="col">
             <button
               mat-raised-button
               color="primary"
@@ -374,7 +375,7 @@
 
           <!-- <td style="max-width: 100px">{{ inventario.Nombre_Bodega }}</td> -->
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
                 class="btn btn-primary btn-sm waves-effect waves-light"

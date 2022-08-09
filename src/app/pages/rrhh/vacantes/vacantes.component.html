@@ -1,117 +1,129 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Vacantes</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button
-          type="button"
-          class="btn btn-primary btn-sm"
-          style="float: right"
-          [routerLink]="['/rrhh/vacantes-crear']"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
-        <button
-          class="btn btn-secondary btn-sm"
-          style="float: right"
-          (click)="openClose2()"
-        >
-          <i class="fas fa-eye"></i>
-        </button>
+    <div
+      class="row card-title d-flex justify-content-between"
+      *ngIf="paginacion"
+    >
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">
+          Vacantes
+          <span style="font-size: smaller">
+            <small class="pb-2 text-secondary text-muted">
+              pág. {{ paginacion.current_page }}
+            </small>
+          </span>
+        </h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            [routerLink]="['/rrhh/vacantes-crear']"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+          <button class="btn btn-secondary btn-sm" (click)="openClose2()">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi #firstAccordion="matAccordion">
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Publicación</mat-label>
-          <input
-            matInput
-            type="date"
-            [(ngModel)]="filtros.fecha"
-            (change)="getJobs()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Fecha de inicio</mat-label>
-          <input
-            matInput
-            type="date"
-            [(ngModel)]="filtros.fecha_Inicio"
-            (change)="getJobs()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Fecha de fin</mat-label>
-          <input
-            matInput
-            type="date"
-            [(ngModel)]="filtros.fecha_Fin"
-            (change)="getJobs()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Título</mat-label>
-          <input
-            matInput
-            type="text"
-            [(ngModel)]="filtros.titulo"
-            (input)="getJobs()"
-            placeholder="Busca por título"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Dependencia</mat-label>
-          <mat-select
-            [(ngModel)]="filtros.dependencia"
-            (selectionChange)="getJobs()"
-          >
-            <mat-option
-              *ngFor="let item of dependencies"
-              [value]="item.value"
-              >{{ item.text }}</mat-option
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Publicación</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="filtros.fecha"
+              (change)="getJobs()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de inicio</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="filtros.fecha_Inicio"
+              (change)="getJobs()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de fin</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="filtros.fecha_Fin"
+              (change)="getJobs()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Título</mat-label>
+            <input
+              matInput
+              type="text"
+              [(ngModel)]="filtros.titulo"
+              (input)="getJobs()"
+              placeholder="Busca por título"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Dependencia</mat-label>
+            <mat-select
+              [(ngModel)]="filtros.dependencia"
+              (selectionChange)="getJobs()"
             >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Cargo</mat-label>
-          <mat-select [(ngModel)]="filtros.cargo" (selectionChange)="getJobs()">
-            <mat-option *ngFor="let item of positions" [value]="item.value">{{
-              item.text
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Departamento</mat-label>
-          <mat-select
-            [(ngModel)]="filtros.departamento"
-            (selectionChange)="getJobs()"
-          >
-            <mat-option *ngFor="let item of department" [value]="item.value">{{
-              item.text
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Municipio</mat-label>
-          <mat-select
-            [(ngModel)]="filtros.municipio"
-            (selectionChange)="getJobs()"
-          >
-            <mat-option
-              *ngFor="let item of municipalities"
-              [value]="item.value"
-              >{{ item.text }}</mat-option
+              <mat-option
+                *ngFor="let item of dependencies"
+                [value]="item.value"
+                >{{ item.text }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cargo</mat-label>
+            <mat-select
+              [(ngModel)]="filtros.cargo"
+              (selectionChange)="getJobs()"
             >
-          </mat-select>
-        </mat-form-field>
+              <mat-option *ngFor="let item of positions" [value]="item.value">{{
+                item.text
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Departamento</mat-label>
+            <mat-select
+              [(ngModel)]="filtros.departamento"
+              (selectionChange)="getJobs()"
+            >
+              <mat-option
+                *ngFor="let item of department"
+                [value]="item.value"
+                >{{ item.text }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Municipio</mat-label>
+            <mat-select
+              [(ngModel)]="filtros.municipio"
+              (selectionChange)="getJobs()"
+            >
+              <mat-option
+                *ngFor="let item of municipalities"
+                [value]="item.value"
+                >{{ item.text }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
     <mat-accordion multi #secondAccordion="matAccordion">
@@ -157,8 +169,17 @@
                 <option value="Anulada">Anulada</option>
             </select> -->
     </div>
+    <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
+      <strong>
+        Hay filtros de búsqueda activos, para mostrar todos los resultados haz
+        click
+      </strong>
+      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link">
+        aquí
+      </a>
+    </div>
     <table
-      class="table table-bordered table-striped table-sm"
+      class="table table-bordered table-striped table-sm table-responsive-lg mb-0"
       style="font-size: small"
       *ngIf="!loading && jobs.length > 0; else notData"
     >
@@ -219,7 +240,7 @@
             </div>
           </td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
                 class="btn btn-primary btn-sm waves-effect waves-light"
@@ -251,22 +272,15 @@
         </tr>
       </tbody>
     </table>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      maxSize="5"
-      [collectionSize]="pagination.collectionSize"
-      (pageChange)="getJobs($event)"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      aria-label="Default pagination"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
+    <mat-paginator
+      *ngIf="paginacion"
+      [length]="paginacion.total"
+      [pageSize]="paginacion.per_page"
+      [pageIndex]="paginacion.current_page - 1"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
     >
-    </ngb-pagination>
+    </mat-paginator>
   </div>
 </div>
 

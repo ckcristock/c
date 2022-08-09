@@ -128,6 +128,7 @@ export class InventarioComponent implements OnInit {
     this.http
       .get(environment.ruta + "php/lista_generales.php", { params: { modulo: "Lista_Ganancia" }, }).subscribe((data: any) => {
         this.listas = data;
+        console.log(data)
       });
 
     this.ListarInventario(true);

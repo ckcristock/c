@@ -66,6 +66,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
 import { HistorialNegocioComponent } from './negocios/historial-negocio/historial-negocio.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -137,7 +138,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatCheckboxModule,
     MatAutocompleteModule,
     MatRadioModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTableModule
   ]
 })
 export class CrmModule { }

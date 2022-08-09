@@ -5,6 +5,9 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from 'src/app/pages/ajustes/informacion-base/services/reactive-validation/validators.service';
 import { TercerosService } from '../terceros.service';
 import swal from 'sweetalert2';
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-personas',
@@ -80,15 +83,53 @@ export class PersonasComponent implements OnInit {
   constructor(
     private _terceros: TercerosService,
     private modalService: NgbModal,
+    private location: Location,
     private fb: FormBuilder,
     private _validators: ValidatorsService,
-  ) { }
-
+    private route: ActivatedRoute,
+    private paginator: MatPaginatorIntl,
+  ) {
+    this.paginator.itemsPerPageLabel = "Items por página:";
+  }
+  orderObj: any
+  filtrosActivos: boolean = false
   ngOnInit(): void {
+    this.route.queryParamMap
+      .subscribe((params) => {
+        this.orderObj = { ...params.keys, ...params };
+        for (let i in this.orderObj.params) {
+          if (this.orderObj.params[i]) {
+            if (Object.keys(this.orderObj).length > 2) {
+              this.filtrosActivos = true
+            }
+            this.filtros[i] = this.orderObj.params[i]
+
+          }
+        }
+
+        if (this.orderObj.params.pag) {
+          this.getPerson(this.orderObj.params.pag);
+        } else {
+          this.getPerson()
+        }
+
+      }
+      );
     this.createForm();
-    this.getPerson();
+  }
+  resetFiltros() {
+    for (let i in this.filtros) {
+      this.filtros[i] = ''
+    }
+    this.filtrosActivos = false
+    this.getPerson()
   }
 
+  paginacion: any
+  handlePageEvent(event: PageEvent) {
+    console.log(event)
+    this.getPerson(event.pageIndex + 1)
+  }
   estadoFiltros = false;
 
   createForm() {
@@ -107,15 +148,31 @@ export class PersonasComponent implements OnInit {
   mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
+
+  SetFiltros(paginacion) {
+    let params: any = {};
+
+    params.pag = paginacion;
+    for (let i in this.filtros){
+      if (this.filtros[i] != "") {
+        params[i] = this.filtros[i];
+      }
+    }
+    let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    return queryString;
+  }
+  
   getPerson(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtros
     }
     this.loading = true;
+    var paramsurl = this.SetFiltros(this.pagination.page);
+    this.location.replaceState('/crm/personas', paramsurl);
     this._terceros.getThirdPartyPerson(params).subscribe((r: any) => {
       this.people = r.data.data;
-      console.log(this.people)
+      this.paginacion = r.data
       this.loading = false;
       this.pagination.collectionSize = r.data.total;
     })

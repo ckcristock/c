@@ -77,6 +77,7 @@ import { DescargoComponent } from './procesos/disciplinarios/descargo/descargo.c
 import { CerrarProcesoComponent } from './procesos/disciplinarios/cerrar-proceso/cerrar-proceso.component';
 import { CrearProcesoComponent } from './procesos/disciplinarios/crear-proceso/crear-proceso.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -155,7 +156,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     MatButtonModule,
     MatIconModule,
     MatStepperModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatPaginatorModule
   ],
   providers: [{ provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' }],
   exports: [],

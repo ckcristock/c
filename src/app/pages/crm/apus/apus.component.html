@@ -1,8 +1,14 @@
 <div class="card">
   <div class="card-body">
-    <div class="row card-title d-flex justify-content-between">
+    <div class="row card-title d-flex justify-content-between" *ngIf="paginacion">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">APU</h4>
+        <h4 class="text-primary">
+          APU<span style="font-size: smaller">
+            <small class="pb-2 text-secondary text-muted">
+              pág. {{ paginacion.current_page }}
+            </small>
+          </span>
+        </h4>
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
@@ -167,8 +173,17 @@
         </section>
       </mat-expansion-panel>
     </mat-accordion>
+    <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
+      <strong
+        >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
+        click
+      </strong>
+      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
+        >aquí</a
+      >
+    </div>
     <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
+      class="table table-bordered table-striped table-sm table-responsive-lg mb-0"
       style="font-size: small"
       *ngIf="!loading && apus.length > 0; else notData"
     >
@@ -255,19 +270,15 @@
         </tr>
       </tbody>
     </table>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      (pageChange)="getApus($event)"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      aria-label="Default pagination"
+    <mat-paginator
+      *ngIf="paginacion"
+      [length]="paginacion.total"
+      [pageSize]="paginacion.per_page"
+      [pageIndex]="paginacion.current_page - 1"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
     >
-    </ngb-pagination>
+    </mat-paginator>
   </div>
 </div>
 <ng-template #notData>

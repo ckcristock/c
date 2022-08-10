@@ -1,129 +1,178 @@
 <form [formGroup]="formCompany" (ngSubmit)="save()">
   <div class="row">
     <div class="col-md-4">
+      <div class="row">
         <mat-form-field appearance="outline" class="col-12">
-        <mat-label>Empresa</mat-label>        
-        <mat-select formControlName="company_id">
-          <mat-option *ngFor="let item of companies" [value]="item.value">
-            {{item.text}}
-          </mat-option>
-        </mat-select>
-        <mat-icon matSuffix>store</mat-icon>
-        <mat-error *ngIf="company_id_invalid">
-          Empresa es obligatorio
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="col-12">
-        <mat-label>Grupo</mat-label>
-        <mat-select formControlName="group_id" (selectionChange)="getDependencies($event.value)">
-          <mat-option *ngFor="let item of groups" [value]="item.value">{{item.text}}</mat-option>
-        </mat-select>
-        <mat-icon matSuffix>groups</mat-icon>
-        <mat-hint>Seleccione después de elegir empresa</mat-hint>
-        <mat-error *ngIf="group_id_invalid">
-          Grupo es obligatorio
-        </mat-error>
-      </mat-form-field>
-
-      
-      <div class="form-group row">
-        <label for="dependency_id " class="col-md-4 col-form-label custom-label text-right">Dependencia</label>
-
-        <ng-select class="col-md-7 p-0" formControlName="dependency_id" (change)="getPositions($event.value)"
-          [items]="dependencies" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-        </ng-select>
-
-        <div class="col-md-7 offset-4" *ngIf="dependency_id_invalid">
-          <small class="invalid text-danger"> Es nesaria la dependencia
-          </small>
+          <mat-label>Empresa</mat-label>
+          <mat-select formControlName="company_id">
+            <mat-option *ngFor="let item of companies" [value]="item.value">
+              {{ item.text }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>store</mat-icon>
+          <mat-error *ngIf="company_id_invalid">
+            Empresa es obligatorio
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+          <mat-label>Grupo</mat-label>
+          <mat-select
+            formControlName="group_id"
+            (selectionChange)="getDependencies($event.value)"
+          >
+            <mat-option *ngFor="let item of groups" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-icon matSuffix>groups</mat-icon>
+          <mat-error *ngIf="group_id_invalid"> Grupo es obligatorio </mat-error>
+        </mat-form-field>
+        <div class="col-12" [ngClass]="dependency_id_invalid ? 'mb-0' : 'mb-4'">
+          <ng-select
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Dependencia"
+            formControlName="dependency_id"
+            (change)="getPositions($event.value)"
+            [items]="dependencies"
+            bindLabel="text"
+            bindValue="value"
+            loadingText="loading"
+            ngDefaultControl
+          >
+          </ng-select>
+          <span class="ml-2" *ngIf="dependency_id_invalid">
+            <small class="text-danger"
+              ><b> Es nesaria la dependencia </b></small
+            >
+          </span>
         </div>
       </div>
     </div>
     <div class="col-md-4">
-      <div class="form-group row">
-        <label for="cargo_id" class="col-md-4 col-form-label custom-label text-right">Cargo</label>
-        <ng-select class="col-md-7 p-0" formControlName="position_id" [items]="positions" bindLabel="text"
-          bindValue="value" loadingText="loading" ngDefaultControl>
-        </ng-select>
-
-        <div class="col-md-7 offset-4" *ngIf="position_id_invalid">
-          <small class="invalid text-danger"> Es nesario el cargo
-          </small>
+      <div class="row">
+        <div class="col-12" [ngClass]="dependency_id_invalid ? 'mb-0' : 'mb-4'">
+          <ng-select
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Cargo"
+            formControlName="position_id"
+            [items]="positions"
+            bindLabel="text"
+            bindValue="value"
+            loadingText="loading"
+            ngDefaultControl
+          >
+          </ng-select>
+          <span class="ml-2" *ngIf="position_id_invalid">
+            <small class="text-danger"> <b> Es nesario el cargo</b> </small>
+          </span>
         </div>
-      </div>
-
-      <div class="form-group row">
-        <label for="salario" class="col-md-4 col-form-label custom-label text-right">Salario</label>
-        <input type="number" name="salario" formControlName="salary" class="form-control custom-control col-md-7" />
-        <div class="col-md-7 offset-4">
-          <small class="invalid text-danger" *ngIf="salary_invalid"> Es nesario el salario
-          </small>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="fecha_ingreso" class="col-md-4 col-form-label custom-label text-right">Fecha de Ingreso</label>
-        <input type="date" formControlName="date_of_admission" class="form-control custom-control col-md-7" />
-        <div class="col-md-7 offset-4">
-          <small class="invalid text-danger" *ngIf="date_of_admission_invalid"> Es nesaria la fecha de ingreso
-          </small>
-        </div>
-
+        <mat-form-field class="col-12" appearance="outline">
+          <mat-label>Salario</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el salario"
+            formControlName="salary"
+            autocomplete="off"
+          />
+          <mat-error *ngIf="salary_invalid"> Salario obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-12" appearance="outline">
+          <mat-label>Fecha de ingreso</mat-label>
+          <input matInput type="date" formControlName="date_of_admission" />
+          <mat-error *ngIf="date_of_admission_invalid">
+            Fecha obligatoria
+          </mat-error>
+        </mat-form-field>
       </div>
     </div>
     <div class="col-md-4">
-      <div class="form-group row">
-        <label for="work_contract_type_id" class="col-md-4 col-form-label text-right">Tipo de Contrato</label>
-        <ng-select class="col-md-7 p-0" formControlName="work_contract_type_id" [items]="workContractTypes"
-          bindLabel="text" bindValue="value" loadingText="loading" (change)="workContractTypesChanged($event.conclude)"
-          ngDefaultControl>
-        </ng-select>
-        <div class="col-md-7 offset-4">
-          <small class="invalid text-danger" *ngIf="work_contract_type_id_invalid"> Es nesario el tipo de contrato
-          </small>
+      <div class="row">
+        <div
+          class="col-12"
+          [ngClass]="work_contract_type_id_invalid ? 'mb-0' : 'mb-0'"
+        >
+          <ng-select
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Tipo de contrato"
+            formControlName="work_contract_type_id"
+            [items]="workContractTypes"
+            bindLabel="text"
+            bindValue="value"
+            loadingText="loading"
+            (change)="workContractTypesChanged($event.conclude)"
+            ngDefaultControl
+          >
+          </ng-select>
+          <span class="ml-2">
+            <small class="text-danger" *ngIf="work_contract_type_id_invalid">
+              <b>Es nesario el tipo de contrato</b>
+            </small>
+          </span>
         </div>
-      </div>
-
-      <div class="form-group row" *ngIf="conludeContract">
-        <label for="fecha_retiro" class="col-md-4 col-form-label custom-label text-right">Fecha de retiro</label>
-        <input type="date" formControlName="date_end" class="form-control custom-control col-md-7" id="" />
-        <div class="col-md-7 offset-4">
-          <small class="invalid text-danger" *ngIf="date_end_invalid"> Es nesaria la fecha de retiro
-          </small>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label for="tipo_turno" class="col-md-4 col-form-label custom-label text-right">Tipo de Turno</label>
-        <select formControlName="turn_type" class="form-control custom-control col-md-7"
-          (change)="turnChanged($event.target.value)">
-          <option [value]="turn.value" *ngFor="let turn of turnos">
-            {{ turn.text }}
-          </option>
-        </select>
-        <div class="col-md-7 offset-4">
-          <small class="invalid text-danger" *ngIf="turn_type_invalid"> Es nesario el tipo de turno
-          </small>
-        </div>
-
-      </div>
-      <div class="form-group row" *ngIf="turnSelected == 'Fijo'">
-        <label for="turno_fijo_id " class="col-md-4 col-form-label custom-label text-right">Turno Asignado</label>
-        <ng-select class="col-md-7 p-0" formControlName="fixed_turn_id" [items]="fixedTurns" bindLabel="text"
-          bindValue="value" loadingText="loading" ngDefaultControl>
-        </ng-select>
-
-
-        <div class="col-md-7 offset-4">
-          <small class="invalid text-danger" *ngIf="fixed_turn_id_invalid"> Es nesario el turno
-          </small>
+        <mat-form-field
+          class="col-12"
+          appearance="outline"
+          *ngIf="conludeContract"
+        >
+          <mat-label>Fecha de retiro</mat-label>
+          <input matInput type="date" formControlName="date_end" />
+          <mat-error *ngIf="date_end_invalid"> Fecha obligatoria </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-12" appearance="outline">
+          <mat-label>Tipo de turno</mat-label>
+          <mat-select
+            formControlName="turn_type"
+            (selectionChange)="turnChanged($event.target.value)"
+          >
+            <mat-option [value]="turn.value" *ngFor="let turn of turnos">
+              {{ turn.text }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="turn_type_invalid"> Tipo obligatorio </mat-error>
+        </mat-form-field>
+        <div
+          class="col-12"
+          [ngClass]="fixed_turn_id_invalid ? 'mb-0' : 'mb-4'"
+          *ngIf="turnSelected == 'Fijo'"
+        >
+          <ng-select
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Turno asignado"
+            formControlName="fixed_turn_id"
+            [items]="fixedTurns"
+            bindLabel="text"
+            bindValue="value"
+            loadingText="loading"
+            ngDefaultControl
+          >
+          </ng-select>
+          <span class="ml-2">
+            <small class="text-danger" *ngIf="fixed_turn_id_invalid">
+              <b> Es nesario el turno</b>
+            </small>
+          </span>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-12 d-flex justify-content-between">
-    <button type="button" class="btn btn-lg btn-primary ml-3" (click)="previus()">Anterior</button>
-    <button type="submit" class="btn btn-lg btn-primary mr-3">Siguiente</button>
+    <div class="col-12">
+      <div class="d-flex justify-content-between">
+        <button
+          type="button"
+          class="btn btn-lg btn-primary"
+          (click)="previus()"
+        >
+          Anterior
+        </button>
+        <button type="submit" class="btn btn-lg btn-primary">
+          Siguiente
+        </button>
+      </div>
+    </div>
   </div>
 </form>
 <!--

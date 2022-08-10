@@ -119,10 +119,10 @@
           <td class="align-middle">{{ item.total_usd | currency: "":"" }}</td>
           <td class="align-middle">{{ item.state }}</td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
@@ -130,13 +130,13 @@
               <div ngbDropdownMenu>
                 <a
                   [routerLink]="['/nomina/ver-viatico', item.id]"
-                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  class="dropdown-item text-success waves-light  caja-botones"
                 >
                   <i class="far fa-eye"></i> Ver</a
                 >
                 <a
                   [routerLink]="['/nomina/editar-viatico', item.id]"
-                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  class="dropdown-item waves-light text-info  caja-botones"
                 >
                   <i class="far fa-edit"></i> Editar</a
                 >
@@ -145,7 +145,7 @@
                     permission.permissions.approve && item.state != 'Aprobado'
                   "
                   (click)="changeState(item, 'Aprobado')"
-                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  class="dropdown-item waves-light text-success  caja-botones"
                 >
                   <i class="far fa-thumbs-up"></i> Aprobar</a
                 >
@@ -155,14 +155,14 @@
                   "
                   [routerLink]="['legalizar', item.id]"
                   routerLinkActive="router-link-active"
-                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  class="dropdown-item waves-light text-success  caja-botones"
                 >
                   <i class="far fa-thumbs-up"></i> Legalizar</a
                 >
                 <a
                   *ngIf="!item.state == ''"
                   (click)="changeState(item, 'Inactivo')"
-                  class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  class="dropdown-item waves-light text-danger  caja-botones"
                 >
                   <i class="far fa-trash-alt"></i> Anular</a
                 >

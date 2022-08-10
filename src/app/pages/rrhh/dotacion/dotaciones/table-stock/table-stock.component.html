@@ -90,29 +90,29 @@
 
         <td class="align-middle">
           <ng-container *ngIf="!entrega; else input">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="fas fa-sort-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   (click)="listarSalidas(l)"
                 >
                   <i class="fas fa-truck-loading"></i> Entregas
                 </a>
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   (click)="listarEntradas(l)"
                 >
                   <i class="fas fa-truck"></i> Salidas
                 </a>
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   (click)="getApartadas(l, addApartadas)"
                 >
                   <i class="fas fa-clipboard"></i> Apartadas

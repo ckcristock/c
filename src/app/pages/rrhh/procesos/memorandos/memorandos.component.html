@@ -118,10 +118,10 @@
           </td>
           <td class="align-middle">{{ memorandum.state }}</td>
           <td class="align-middle" *ngIf="permission.permissions.approve">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
@@ -133,13 +133,13 @@
                     permission.permissions.approve &&
                     memorandum.state == 'Pendiente'
                   "
-                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  class="dropdown-item waves-light text-success  caja-botones"
                 >
                   <i class="far fa-thumbs-up"></i> Aprobar
                 </a>
                 <a
                   *ngIf="memorandum.type == 'Memorando'"
-                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  class="dropdown-item waves-light text-success  caja-botones"
                   (click)="download(memorandum.file)"
                 >
                   Descargar archivo

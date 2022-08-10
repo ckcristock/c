@@ -128,17 +128,17 @@
             {{ nota.Codigo_Factura }}
           </td>
           <td>
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-mini waves-effect waves-light"
+                class="btn btn-primary btn-mini  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   href=""
                   [routerLink]="[
                     '/contabilidad/notas-credito/ver',
@@ -148,7 +148,7 @@
                   <i class="ti-eye"></i>Ver Nota</a
                 >
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   href="{{
                     enviromen.ruta
                   }}php/notas_credito_nuevo/descarga_pdf.php?tipo=Nota_Credito&id={{
@@ -160,7 +160,7 @@
                 >
                 <a
                   *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   href="{{
                     enviromen.ruta
                   }}php/contabilidad/movimientoscontables/movimientos_nota_credito_global_pdf.php?id_registro={{
@@ -172,7 +172,7 @@
                 </a>
                 <a
                   *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   href="{{
                     enviromen.ruta
                   }}php/contabilidad/movimientoscontables/movimientos_nota_credito_global_pdf.php?id_registro={{
@@ -183,7 +183,7 @@
                   <i class="fa fa-book"></i> Contab. NIIF
                 </a>
 
-                <!--        <a class="dropdown-item waves-light waves-effect caja-botones" href="{{enviromen.ruta}}php/facturasventas/factura_dis_pdf.php?id={{factura.Id_Factura_Administrativa}}" target="_blank">
+                <!--        <a class="dropdown-item waves-light  caja-botones" href="{{enviromen.ruta}}php/facturasventas/factura_dis_pdf.php?id={{factura.Id_Factura_Administrativa}}" target="_blank">
                                                 <i class="ti-printer"></i>Imprimir Factura</a> -->
               </div>
             </div>

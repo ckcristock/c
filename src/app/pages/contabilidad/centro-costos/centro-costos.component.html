@@ -122,17 +122,17 @@
             </span>
           </td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info waves-light  caja-botones"
                   (click)="
                     EditarCentroCosto(item.Id_Centro_Costo); openConfirm(edit)
                   "
@@ -140,7 +140,7 @@
                   <i class="far fa-edit"></i> Editar</a
                 >
                 <a
-                  class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                  class="dropdown-item text-danger waves-light  caja-botones"
                   [swal]="{
                     title: 'Eliminar',
                     text: 'Se dispone a eliminar el centro de costo.\n¿Está seguro(a)?',
@@ -155,7 +155,7 @@
                 >
 
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   [ngClass]="{
                     'text-success': item.Estado == 'Inactivo',
                     'text-danger': item.Estado == 'Activo'
@@ -531,17 +531,17 @@
       <td style="max-width: 80px; width: 80px !important">{{ it.Estado }}</td>
       <td style="max-width: 80px; width: 80px !important">
         <div class="text-center">
-          <div ngbDropdown class="dropdown-primary">
+          <div ngbDropdown container="body" class="dropdown-primary">
             <button
               ngbDropdownToggle
-              class="btn btn-secondary btn-mini waves-effect waves-light"
+              class="btn btn-secondary btn-mini  waves-light"
               type="button"
             >
               Acciones
             </button>
             <div ngbDropdownMenu>
               <a
-                class="dropdown-item waves-light waves-effect caja-botones"
+                class="dropdown-item waves-light  caja-botones"
                 (click)="
                   EditarCentroCosto(it.Id_Centro_Costo, modalEditarCentroCosto)
                 "
@@ -549,7 +549,7 @@
                 <i class="ti-pencil"></i> Editar</a
               >
               <a
-                class="dropdown-item waves-light waves-effect caja-botones"
+                class="dropdown-item waves-light  caja-botones"
                 [swal]="{
                   title: 'Cambio de Estado',
                   text: 'Se dispone a cambiar el estado de este centro de costo.\n¿Está seguro(a)?',

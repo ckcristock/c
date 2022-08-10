@@ -1,95 +1,147 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">NUEVO FUNCIONARIO</h4>
-        </div>
-        <hr class="line">
-        <aw-wizard [navBarLayout]="'large-empty-symbols'">
-            <aw-wizard-step stepTitle="Datos Funcionario">
-                <ng-template awWizardStepSymbol>1</ng-template>
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <app-datos-funcionario (siguiente)="pressed(next1)"></app-datos-funcionario>
-                    </div>
-                </div>
-                <ul class="list-inline wizard mb-0">
-                    <li class="next list-inline-item float-right">
-                        <button style="display: none;" #next1 class="btn btn-primary" awNextStep>Next</button>
-                    </li>
-                </ul>
-            </aw-wizard-step>
-
-            <aw-wizard-step stepTitle="Información Empresa">
-                <ng-template awWizardStepSymbol>2</ng-template>
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <app-informacion-empresa (siguiente)="pressed(next2)" (anterior)="pressed(prev2)">
-                        </app-informacion-empresa>
-                    </div>
-                </div>
-                <ul class="list-inline wizard mb-0">
-                    <li class="previous list-inline-item">
-                        <button class="btn btn-primary" style="visibility: hidden" #prev2
-                            awPreviousStep>Previous</button>
-                    </li>
-                    <li style="visibility: hidden" class="next list-inline-item float-right">
-                        <button #next2 class="btn btn-primary" awNextStep>Next</button>
-                    </li>
-                </ul>
-            </aw-wizard-step>
-
-            <aw-wizard-step stepTitle="Prestaciones Sociales">
-                <ng-template awWizardStepSymbol>3</ng-template>
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <app-prestaciones-sociales (siguiente)="pressed(next3)" (anterior)="pressed(prev3)">
-                        </app-prestaciones-sociales>
-                    </div>
-                </div>
-                <li class="previous list-inline-item">
-                    <button class="btn btn-primary" style="visibility: hidden" #prev3 awPreviousStep>Previous</button>
-                </li>
-                <li class="next list-inline-item float-right">
-                    <button style="visibility: hidden" #next3 class="btn btn-primary" awNextStep>Next</button>
-                </li>
-            </aw-wizard-step>
-            <aw-wizard-step stepTitle="Dotación">
-                <ng-template awWizardStepSymbol>4</ng-template>
-
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <app-dotacion-tallas (siguiente)="pressed(next4)" (anterior)="pressed(prev4)">
-                        </app-dotacion-tallas>
-                    </div>
-                </div>
-                <ul class="list-inline wizard mb-0">
-                    <li class="previous list-inline-item">
-                        <button class="btn btn-primary" style="visibility: hidden" #prev4
-                            awPreviousStep>Previous</button>
-                    </li>
-                    <li style="visibility: hidden" class="next list-inline-item float-right">
-                        <button #next4 awNextStep class="btn btn-primary">Next</button>
-                    </li>
-                </ul>
-            </aw-wizard-step>
-            <aw-wizard-step stepTitle="Permisos">
-                <ng-template awWizardStepSymbol>5</ng-template>
-
-                <div class="row mt-3">
-                    <div class="col-12" *ngIf="person.id">
-                        <app-permissions [person_id]="person.id"></app-permissions>
-                    </div>
-                </div>
-                <ul class="list-inline wizard mb-0">
-                    <li class="previous list-inline-item">
-                        <button class="btn btn-primary" style="visibility: hidden" #prev5
-                            awPreviousStep>Previous</button>
-                    </li>
-                    <li style="visibility: hidden" class="next list-inline-item float-right">
-                        <button #next5 class="btn btn-primary">Next</button>
-                    </li>
-                </ul>
-            </aw-wizard-step>
-        </aw-wizard>
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Nuevo funcionario</h4>
     </div>
+    <hr class="line" />
+    <aw-wizard [navBarLayout]="'large-empty-symbols'">
+      <aw-wizard-step stepTitle="Datos Funcionario">
+        <ng-template awWizardStepSymbol>1</ng-template>
+        <div class="row mt-3">
+          <div class="col-12">
+            <app-datos-funcionario
+              (siguiente)="pressed(next1)"
+            ></app-datos-funcionario>
+          </div>
+        </div>
+        <ul class="list-inline wizard mb-0">
+          <li class="next list-inline-item float-right">
+            <button
+              style="display: none"
+              #next1
+              class="btn btn-primary"
+              awNextStep
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </aw-wizard-step>
+
+      <aw-wizard-step stepTitle="Información Empresa">
+        <ng-template awWizardStepSymbol>2</ng-template>
+        <div class="row mt-3">
+          <div class="col-12">
+            <app-informacion-empresa
+              (siguiente)="pressed(next2)"
+              (anterior)="pressed(prev2)"
+            >
+            </app-informacion-empresa>
+          </div>
+        </div>
+        <ul class="list-inline wizard mb-0" style="display: none">
+          <li class="previous list-inline-item">
+            <button
+              class="btn btn-primary"
+              style="display: none"
+              #prev2
+              awPreviousStep
+            >
+              Previous
+            </button>
+          </li>
+          <li style="display: none" class="next list-inline-item float-right">
+            <button #next2 class="btn btn-primary" awNextStep>Next</button>
+          </li>
+        </ul>
+      </aw-wizard-step>
+
+      <aw-wizard-step stepTitle="Prestaciones Sociales">
+        <ng-template awWizardStepSymbol>3</ng-template>
+        <div class="row mt-3">
+          <div class="col-12">
+            <app-prestaciones-sociales
+              (siguiente)="pressed(next3)"
+              (anterior)="pressed(prev3)"
+            >
+            </app-prestaciones-sociales>
+          </div>
+        </div>
+        <ul class="list-inline wizard mb-0" style="display: none">
+          <li class="previous list-inline-item">
+            <button
+              class="btn btn-primary"
+              style="display: none"
+              #prev3
+              awPreviousStep
+            >
+              Previous
+            </button>
+          </li>
+          <li class="next list-inline-item float-right">
+            <button
+              style="display: none"
+              #next3
+              class="btn btn-primary"
+              awNextStep
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </aw-wizard-step>
+      <aw-wizard-step stepTitle="Dotación">
+        <ng-template awWizardStepSymbol>4</ng-template>
+
+        <div class="row mt-3">
+          <div class="col-12">
+            <app-dotacion-tallas
+              (siguiente)="pressed(next4)"
+              (anterior)="pressed(prev4)"
+            >
+            </app-dotacion-tallas>
+          </div>
+        </div>
+        <ul class="list-inline wizard mb-0" style="display: none;">
+          <li class="previous list-inline-item">
+            <button
+              class="btn btn-primary"
+              style="display: none"
+              #prev4
+              awPreviousStep
+            >
+              Previous
+            </button>
+          </li>
+          <li style="display: none" class="next list-inline-item float-right">
+            <button #next4 awNextStep class="btn btn-primary">Next</button>
+          </li>
+        </ul>
+      </aw-wizard-step>
+      <aw-wizard-step stepTitle="Permisos">
+        <ng-template awWizardStepSymbol>5</ng-template>
+
+        <div class="row mt-3">
+          <div class="col-12" *ngIf="person.id">
+            <app-permissions [person_id]="person.id"></app-permissions>
+          </div>
+        </div>
+        <ul class="list-inline wizard mb-0" style="display: none;">
+          <li class="previous list-inline-item">
+            <button
+              class="btn btn-primary"
+              style="display: none"
+              #prev5
+              awPreviousStep
+            >
+              Previous
+            </button>
+          </li>
+          <li style="display: none" class="next list-inline-item float-right">
+            <button #next5 class="btn btn-primary">Next</button>
+          </li>
+        </ul>
+      </aw-wizard-step>
+    </aw-wizard>
+  </div>
 </div>

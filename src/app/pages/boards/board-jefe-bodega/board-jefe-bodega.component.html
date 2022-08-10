@@ -39,7 +39,7 @@
                                               <td class="text-left"> {{ item.Nombre }} </td>
                                               <td> {{ item.Items }} </td>
                                               <td>
-                                                  <button type="button" class="btn btn-info btn-mini waves-effect waves-light" href="" [routerLink]="['/notascreditover',item.Id_Nota_Credito]">
+                                                  <button type="button" class="btn btn-info btn-mini  waves-light" href="" [routerLink]="['/notascreditover',item.Id_Nota_Credito]">
                             <i class="ti-eye" style="margin:0;"></i>
                           </button>
                                               </td>
@@ -89,12 +89,12 @@
                                               <td>
 
                                                   <div class="text-left">
-                                                      <div ngbDropdown class="dropdown-primary">
-                                                          <button ngbDropdownToggle class="btn btn-info btn-mini waves-effect waves-light " type="button"><i class="fa fa-bars"></i></button>
+                                                      <div ngbDropdown container="body" class="dropdown-primary">
+                                                          <button ngbDropdownToggle class="btn btn-info btn-mini  waves-light " type="button"><i class="fa fa-bars"></i></button>
                                                           <div ngbDropdownMenu>
-                                                              <a class="dropdown-item waves-light waves-effect caja-botones" href="{{globales.ruta}}/php/tablero_jefe_bodega/movimiento_pdf.php?id={{item.Id_Movimiento_Vencimiento}}" target="_blank">
+                                                              <a class="dropdown-item waves-light  caja-botones" href="{{globales.ruta}}/php/tablero_jefe_bodega/movimiento_pdf.php?id={{item.Id_Movimiento_Vencimiento}}" target="_blank">
                                                                   <i class="fa fa-eye"></i>Ver</a>
-                                                              <a class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?',
+                                                              <a class="dropdown-item waves-light  caja-botones" [swal]="{ title : '¿Está Seguro?',
                                          text : 'Se dispone marcar que se este movimiento se reviso y se realizo el traslado de todos los medicamentos a la bodega Vencimientos, Ingrese las observaciones '
                                           , input: 'text', inputAttributes: {
                                             maxlength: 10,
@@ -151,7 +151,7 @@
                                               <td class="text-left"> {{ item.Nombre }} </td>
                                               <td> {{ item.Items }} </td>
                                               <td>
-                                                  <button type="button" class="btn btn-info btn-mini waves-effect waves-light" href="" [routerLink]="['/actarecepcioncrear',item.Codigo,'Nacional']">
+                                                  <button type="button" class="btn btn-info btn-mini  waves-light" href="" [routerLink]="['/actarecepcioncrear',item.Codigo,'Nacional']">
                             <i class="ti-eye" style="margin:0;"></i>
                           </button>
                                               </td>
@@ -167,7 +167,7 @@
                         <td class="text-left"> {{ item.Nombre }} </td>
                         <td> {{ item.Items }} </td>
                         <td>
-                          <button type="button" class="btn btn-info btn-mini waves-effect waves-light" href=""
+                          <button type="button" class="btn btn-info btn-mini  waves-light" href=""
                             [routerLink]="['/actarecepcioncrear',item.Codigo,'Internacional']">
                             <i class="ti-eye"></i>
                           </button>
@@ -223,7 +223,7 @@
                                               <td class="text-left"> {{ item.Nombre_Funcionario }} </td>
                                               <td> {{ item.Items }} </td>
                                               <td>
-                                                  <button type="button" class="btn btn-info btn-mini waves-effect waves-light" href="" (click)="ProductosAjustePendienteSalida( item.Id_Ajuste_Individual )">
+                                                  <button type="button" class="btn btn-info btn-mini  waves-light" href="" (click)="ProductosAjustePendienteSalida( item.Id_Ajuste_Individual )">
                                                     <i class="ti-eye " style="margin:0; "></i>
                                                   </button>
                                               </td>

@@ -48,10 +48,10 @@
         >
           <td class="align-middle">{{ profession.name }}</td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
@@ -59,7 +59,7 @@
               <div ngbDropdownMenu>
                 <a
                   *ngIf="profession.state == 'Inactivo'"
-                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  class="dropdown-item waves-light text-success  caja-botones"
                   target="_blank"
                   (click)="activateOrInactivate(profession, 'Activo')"
                 >
@@ -67,7 +67,7 @@
                 </a>
                 <a
                   *ngIf="profession.state == 'Activo'"
-                  class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  class="dropdown-item waves-light text-danger  caja-botones"
                   target="_blank"
                   (click)="activateOrInactivate(profession, 'Inactivo')"
                 >

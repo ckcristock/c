@@ -88,7 +88,7 @@ export class AlmuerzosComponent implements OnInit {
 
   closeResult = '';
   public openConfirm(confirm, size) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: size }).result.then((result) => {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: size, scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

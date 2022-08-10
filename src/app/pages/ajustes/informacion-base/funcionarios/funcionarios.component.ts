@@ -16,14 +16,14 @@ import { MatAccordion } from '@angular/material/expansion';
 export class FuncionariosComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   pagination = {
     pageSize: 12,
@@ -33,7 +33,8 @@ export class FuncionariosComponent implements OnInit {
   loading = true;
   breadCrumbItems: Array<{}>;
   people: Person[] = [];
-
+  selectedStatus: any[] = [1, 2, 3]
+  selectedDependencies: any[] = []
   status: any[] = [
     { id: 1, name: 'Activo', selected: true },
     { id: 2, name: 'Suspendido', selected: true },
@@ -62,6 +63,9 @@ export class FuncionariosComponent implements OnInit {
   getDependencies() {
     this._dependencies.getDependencies().subscribe((r: any) => {
       this.dependencies = r.data
+      for (let i in this.dependencies){
+        this.selectedDependencies.push(this.dependencies[i].value)
+      }
       this.dependencies = this.dependencies.map(r => {
         r.selected = true;
         return r
@@ -77,14 +81,14 @@ export class FuncionariosComponent implements OnInit {
     params.status = this.statusFilter();
     params.dependencies = this.dependenciesFilter();
     params.name = name ? name : ''
-  
+
     this.loading = true;
-    
-    this._person.getPeople({data:JSON.stringify( params )})
+
+    this._person.getPeople({ data: JSON.stringify(params) })
       .subscribe(d => {
         this.loading = false;
         this.people = d['data']['data']
-        console.log(this.people)
+        //console.log(this.people)
         this.pagination.collectionSize = d['data']['total']
       })
   }

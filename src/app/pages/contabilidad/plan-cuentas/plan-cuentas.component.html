@@ -121,29 +121,29 @@
             </span>
           </td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  class="dropdown-item text-success waves-light  caja-botones"
                   (click)="VerPlanCuenta(item.Id_Plan_Cuentas)"
                 >
                   <i class="far fa-eye"></i> Ver</a
                 >
                 <a
                   *ngIf="item.Estado != 'Anulada'"
-                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info waves-light  caja-botones"
                   (click)="EditarPlanCuenta(item.Id_Plan_Cuentas)"
                 >
                   <i class="far fa-edit"></i> Editar</a
                 >
-                <!-- <a *ngIf="item.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a cambiar el estado de este plan de cuenta' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                <!-- <a *ngIf="item.Estado!='Anulada'" class="dropdown-item waves-light  caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a cambiar el estado de este plan de cuenta' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
                                                             (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)">
                                                             <i class="far fa-trash-alt"></i> Anular</a> -->
               </div>

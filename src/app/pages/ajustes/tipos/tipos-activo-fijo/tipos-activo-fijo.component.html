@@ -119,17 +119,17 @@
             {{ item.pcga_account_plan_credit_depreciation }}
           </td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  class="dropdown-item waves-light text-info  caja-botones"
                   (click)="
                     getFixedAsset(item);
                     openConfirm(add, 'Editar tipo de activo fijo')
@@ -139,14 +139,14 @@
                 >
                 <a
                   *ngIf="item.state == 'Activo'"
-                  class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  class="dropdown-item waves-light text-danger  caja-botones"
                   (click)="activateOrInactivate(item, 'Inactivo')"
                 >
                   <i class="far fa-trash-alt"></i> Anular</a
                 >
                 <a
                   *ngIf="item.state == 'Inactivo'"
-                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  class="dropdown-item waves-light text-success  caja-botones"
                   (click)="activateOrInactivate(item, 'Activo')"
                 >
                   <i class="fa fa-check"></i> Activar</a

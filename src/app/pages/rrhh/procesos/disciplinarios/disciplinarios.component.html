@@ -125,10 +125,10 @@
               </p>
             </td>
             <td>
-              <div ngbDropdown class="dropdown-primary">
+              <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
+                  class="btn btn-primary btn-sm  waves-light"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -136,18 +136,18 @@
                 <div ngbDropdownMenu>
                   <a
                     *ngIf="proces.file != null"
-                    class="dropdown-item text-info waves-light waves-effect caja-botones"
+                    class="dropdown-item text-info waves-light  caja-botones"
                     (click)="download(proces.file)"
                   >
                     <i class="fa fa-file"></i> Ver Evidencia
                   </a>
                   <a
-                    class="dropdown-item text-success waves-light waves-effect caja-botones"
+                    class="dropdown-item text-success waves-light  caja-botones"
                     [routerLink]="['/rrhh/procesos/disciplinarios/', proces.id]"
                   >
                     <i class="fa fa-eye"></i> Seguimiento
                   </a>
-                  <!-- <a *ngIf="proces.status=='Abierto' || proces.status=='Aprobado'" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]" class="dropdown-item waves-light waves-effect caja-botones">
+                  <!-- <a *ngIf="proces.status=='Abierto' || proces.status=='Aprobado'" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]" class="dropdown-item waves-light  caja-botones">
                                                   <i class="fa fa-times-circle"></i> Cerrar proceso
                                               </a> -->
                   <a
@@ -156,7 +156,7 @@
                       proces.status != 'Aprobado'
                     "
                     (click)="aprobar(proces.id)"
-                    class="dropdown-item text-success waves-light waves-effect caja-botones"
+                    class="dropdown-item text-success waves-light  caja-botones"
                   >
                     <i class="far fa-thumbs-up"></i> Aprobar
                   </a>

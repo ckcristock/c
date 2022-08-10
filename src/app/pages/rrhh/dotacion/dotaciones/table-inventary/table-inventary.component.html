@@ -170,10 +170,10 @@
           <span>{{ item.delivery_state }}</span>
         </td>
         <td class="align-middle">
-          <div ngbDropdown class="dropdown-primary">
+          <div ngbDropdown container="body" class="dropdown-primary">
             <button
               ngbDropdownToggle
-              class="btn btn-primary btn-sm waves-effect waves-light"
+              class="btn btn-primary btn-sm  waves-light"
               type="button"
             >
               <i class="mdi mdi-chevron-down"></i>
@@ -181,14 +181,14 @@
             <div ngbDropdownMenu>
               <a
                 *ngIf="item.state != 'Anulada'"
-                class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                class="dropdown-item text-danger waves-light  caja-botones"
                 (click)="anularDotacion(item.id)"
               >
                 <i class="fa fa-times"></i> Anular
               </a>
               <a
                 *ngIf="item.delivery_state == 'Pendiente'"
-                class="dropdown-item text-success waves-light waves-effect caja-botones"
+                class="dropdown-item text-success waves-light  caja-botones"
                 (click)="aprobarDotacion(item.id)"
               >
                 <i class="far fa-thumbs-up"></i> Aprobar

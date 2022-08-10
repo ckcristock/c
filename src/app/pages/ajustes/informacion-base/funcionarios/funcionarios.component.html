@@ -1,24 +1,48 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Funcionarios</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button [routerLink]="['crear']" class="btn btn-primary btn-sm">
-          <i class="fa fa-user-plus"></i> Nuevo
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Funcionarios</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button [routerLink]="['crear']" class="btn btn-primary btn-sm">
+            <i class="fa fa-user-plus"></i> Nuevo
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">        
-        <section>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select [(ngModel)]="selectedStatus" multiple>
+              <mat-option
+                (click)="stat.selected = !stat.selected; getPeople()"
+                *ngFor="let stat of status; let i = index"
+                [value]="stat.id"
+                >{{ stat.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Dependencias</mat-label>
+            <mat-select [(ngModel)]="selectedDependencies" multiple>
+              <mat-option
+                (click)="dependency.selected = !dependency.selected; getPeople()"
+                *ngFor="let dependency of dependencies; let i = index"
+                [value]="dependency.value"
+                >{{ dependency.text }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- <section>
           <h6>Estado</h6>
           <mat-checkbox
             color="primary"
@@ -28,8 +52,8 @@
             class="mx-2"
             >{{ stat.name }}</mat-checkbox
           >
-        </section>
-        <section>
+        </section> -->
+        <!-- <section>
           <h6>Dependencias</h6>
           <mat-checkbox
             color="primary"
@@ -39,11 +63,11 @@
             class="mx-2"
             >{{ dependency.text }}</mat-checkbox
           >
-        </section>
+        </section> -->
       </mat-expansion-panel>
     </mat-accordion>
-    <div class="d-flex justify-content-end">
-      <mat-form-field class="" appearance="outline">
+    <div class="row">
+      <mat-form-field class="col pb-0" appearance="outline">
         <mat-label>Nombre</mat-label>
         <input
           matInput
@@ -56,53 +80,57 @@
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
     </div>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg mt-2"
-      style="font-size: small"
-      *ngIf="!loading && people.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Foto</th>
-          <th>Nombre</th>
-          <th>N. identificación</th>          
-          <th>Dependencia</th>
-          <th>Cargo</th>
-          <th>Estado</th>
-          <th>Ver</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of people" class="text-center text-uppercase">
-          <td class="align-middle">
-            <div>
-              <img
-                style="width: 50px; height: 50px"
-                [src]="item.image | image"
-                onerror="this.src='../../../../assets/images/noprofile.png'"
-                class="d-block img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
-              />
-            </div>
-          </td>
-          <td class="align-middle">
-            {{ item.first_name }} {{ item.first_surname }}
-          </td>
-          <td class="align-middle">{{ item.identifier }}</td>          
-          <td class="align-middle">{{ item.dependency }}</td>
-          <td class="align-middle">{{ item.position }}</td>
-          <td class="align-middle">{{ item.status }}</td>
-          <td class="align-middle">
-            <button
-              type="button"
-              class="btn btn-primary btn-sm"
-              [routerLink]="['/ajustes/informacion-base/funcionario', item.id]"
-            >
-              <i class="fas fa-eye"></i> Ver
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && people.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Foto</th>
+            <th>Nombre</th>
+            <th>N. identificación</th>
+            <th>Dependencia</th>
+            <th>Cargo</th>
+            <th>Estado</th>
+            <th>Ver</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of people" class="text-center text-uppercase">
+            <td class="align-middle">
+              <div>
+                <img
+                  [src]="item.image | image"
+                  onerror="this.src='../../../../assets/images/noprofile.png'"
+                  class="rounded-circle mx-auto img-fluid header-profile-user"
+                />
+              </div>
+            </td>
+            <td class="align-middle">
+              {{ item.first_name }} {{ item.first_surname }}
+            </td>
+            <td class="align-middle">{{ item.identifier }}</td>
+            <td class="align-middle">{{ item.dependency }}</td>
+            <td class="align-middle">{{ item.position }}</td>
+            <td class="align-middle">{{ item.status }}</td>
+            <td class="align-middle">
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                [routerLink]="[
+                  '/ajustes/informacion-base/funcionario',
+                  item.id
+                ]"
+              >
+                <i class="fas fa-eye"></i> Ver
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"

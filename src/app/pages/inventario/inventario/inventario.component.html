@@ -378,7 +378,7 @@
             <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
@@ -386,14 +386,15 @@
               <div ngbDropdownMenu>
                 <!-- TODO Imprimir etiqueta -->
                 <a
-                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  class="dropdown-item text-success"
                   target="_blank"
+                  role="button"
                 >
                   <i class="fa fa-print"></i> Imprimir etiqueta</a
                 >
                 <a
                   *ngIf="inventario.Cantidad_Apartada > 0"
-                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info"
                   href="javascript:void(0)"
                   (click)="
                     verApartadas(
@@ -407,7 +408,7 @@
                 >
                 <a
                   *ngIf="inventario.Cantidad_Seleccionada > 0"
-                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info"
                   href="javascript:void(0)"
                   (click)="verSeleccionadas(inventario, i, addSeleccionadas)"
                 >
@@ -415,7 +416,7 @@
                 >
                 <a
                   *ngIf="inventario.cantidadContrato > 0"
-                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info"
                   href="javascript:void(0)"
                   (click)="
                     verContrato(inventario.Id_Inventario_Nuevo, i, addContrato)

@@ -19,7 +19,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class CrearCompraNacionalComponent implements OnInit {
   closeResult = '';
   public openConfirm(confirm){
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl' }).result.then((result) => {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

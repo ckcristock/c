@@ -1,13 +1,17 @@
 <div class="card-body">
-  <div class="card-title d-flex justify-content-between">
-    <h4 class="text-primary">Activos fijos</h4>
-    <div class="btn-group rounded w-sm-100">
-      <button class="btn btn-primary btn-sm" (click)="openConfirm(add)">
-        <i class="fa fa-plus"></i> Agregar
-      </button>
-      <button class="btn btn-info btn-sm" (click)="openClose()">
-        <i class="fas fa-sliders-h"></i> Filtros
-      </button>
+  <div class="row card-title d-flex justify-content-between">
+    <div class="col-md-6 px-0">
+      <h4 class="text-primary">Activos fijos</h4>
+    </div>
+    <div class="col-md-6 px-0 text-right">
+      <div class="btn-group rounded w-sm-100">
+        <button class="btn btn-primary btn-sm" (click)="openConfirm(add)">
+          <i class="fa fa-plus"></i> Agregar
+        </button>
+        <button class="btn btn-info btn-sm" (click)="openClose()">
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
+      </div>
     </div>
   </div>
   <hr class="line" />
@@ -18,40 +22,42 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
-  <table
-    class="table table-bordered table-striped table-sm table-responsive-lg"
-    style="font-size: small"
-    *ngIf="actives.length && !loading; else notData"
-  >
-    <thead class="bg-light">
-      <tr class="text-center text-uppercase">
-        <th>Nombre</th>
-        <th>Codigo de Barras</th>
-        <th>Referencia</th>
-        <th>Categoria</th>
-        <th>Subcategoría</th>
-        <th class="col-md-1">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-container>
-        <tr *ngFor="let active of actives" class="text-center">
-          <td>{{ active.Nombre }}</td>
-          <td>{{ active.Codigo_Barras }}</td>
-          <td>{{ active.Codigo_Barras }}</td>
-          <td>{{ active.Categoria }}</td>
-          <td>{{ active.Subcategoria }}</td>
-          <td>
-            <i
-              role="button"
-              (click)="editGeneric(active); openConfirm(add)"
-              class="fa fa-eye text-primary"
-            ></i>
-          </td>
+  <div class="table-responsive">
+    <table
+      class="table table-bordered table-striped table-sm"
+      style="font-size: small"
+      *ngIf="actives.length && !loading; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Nombre</th>
+          <th>Codigo de Barras</th>
+          <th>Referencia</th>
+          <th>Categoria</th>
+          <th>Subcategoría</th>
+          <th class="col-md-1">Acciones</th>
         </tr>
-      </ng-container>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <ng-container>
+          <tr *ngFor="let active of actives" class="text-center">
+            <td>{{ active.Nombre }}</td>
+            <td>{{ active.Codigo_Barras }}</td>
+            <td>{{ active.Codigo_Barras }}</td>
+            <td>{{ active.Categoria }}</td>
+            <td>{{ active.Subcategoria }}</td>
+            <td>
+              <i
+                role="button"
+                (click)="editGeneric(active); openConfirm(add)"
+                class="fa fa-eye text-primary"
+              ></i>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
   <ngb-pagination
     class="d-flex justify-content-center pagination-rounded pagination-sm"
     [collectionSize]="pagination.collectionSize"

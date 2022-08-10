@@ -92,22 +92,22 @@
                             class="label label-success">{{comprobante.Estado }}</span></td>
                     <td>
                         <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-mini waves-effect waves-light "
+                            <div ngbDropdown container="body" class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-mini  waves-light "
                                     type="button">
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones"
+                                    <a class="dropdown-item waves-light  caja-botones"
                                         href="{{enviromen.ruta}}/php/comprobantes/egreso_descarga_pdf.php?id={{comprobante.Id_Documento_Contable}}"
                                         target="_blank">
                                         <i class="fa fa-print"></i> Ver PCGA</a>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones"
+                                    <a class="dropdown-item waves-light  caja-botones"
                                         href="{{enviromen.ruta}}/php/comprobantes/egreso_descarga_pdf.php?id={{comprobante.Id_Documento_Contable}}&tipo=Niif"
                                         target="_blank">
                                         <i class="fa fa-print"></i> Ver NIIF</a>
                                     <a *ngIf="comprobante.Estado != 'Anulada' && perfilUsuario == '27'"
-                                        class="dropdown-item waves-light waves-effect caja-botones bg-danger"
+                                        class="dropdown-item waves-light  caja-botones bg-danger"
                                         href="javascript:;" [swal]="confirmacionAnular"
                                         (click)="IdDocumento = comprobante.Id_Documento_Contable">
                                         <i class="fa fa-close"></i> Anular</a>

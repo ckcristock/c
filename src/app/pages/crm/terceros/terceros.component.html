@@ -212,14 +212,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
+                  class="btn btn-primary btn-sm  waves-light"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info waves-effect caja-botones"
+                    class="dropdown-item waves-light text-info caja-botones"
                     [routerLink]="['/crm/editar-tercero', third.id]"
                   >
                     <i class="far fa-edit"></i> Editar
@@ -227,14 +227,16 @@
                   <a
                     *ngIf="third.state == 'Activo'"
                     (click)="changeState(third, 'Inactivo')"
-                    class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                    href="javascript:void(0)"
+                    class="dropdown-item waves-light text-danger caja-botones"
                   >
                     <i class="far fa-trash-alt"></i> Anular
                   </a>
                   <a
                     *ngIf="third.state == 'Inactivo'"
+                    href="javascript:void(0)"
                     (click)="changeState(third, 'Activo')"
-                    class="dropdown-item waves-light text-success waves-effect caja-botones"
+                    class="dropdown-item waves-light text-success caja-botones"
                   >
                     <i class="fas fa-check"></i> Activar
                   </a>

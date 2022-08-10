@@ -7,21 +7,21 @@
       class="nav nav-pills nav-justified border border-primary rounded"
     >
       <li [ngbNavItem]="1">
-        <a ngbNavLink>Materiales</a>
+        <a ngbNavLink class="h-100">Materiales</a>
         <ng-template ngbNavContent>
           <!-- <app-productos [user]="_user.user" [type]="'Material'"></app-productos>-->
-          <app-materiales></app-materiales>
+          <app-materiales [cardBorder]="true"></app-materiales>
         </ng-template>
       </li>
       <li [ngbNavItem]="2">
-        <a ngbNavLink>Activos fijos</a>
+        <a ngbNavLink class="h-100">Activos fijos</a>
         <ng-template ngbNavContent>
           <app-activo-fijo-catalogo [user]="_user.user">
           </app-activo-fijo-catalogo>
         </ng-template>
       </li>
       <li [ngbNavItem]="3">
-        <a ngbNavLink>Dotacion EPP</a>
+        <a ngbNavLink class="h-100">Dotacion EPP</a>
         <ng-template ngbNavContent>
           <app-dotacion-crear [user]="_user.user"></app-dotacion-crear>
         </ng-template>

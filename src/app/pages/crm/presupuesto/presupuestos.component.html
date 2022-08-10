@@ -131,15 +131,15 @@
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button
-                  ngbDropdownItem
-                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                <a
+                  
+                  class="dropdown-item waves-light text-success  caja-botones"
                   [routerLink]="['/crm/presupuesto/ver', item.id]"
                 >
                   <i class="far fa-eye"></i> Ver
-                </button>
+                </a>
                 <a
-                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  class="dropdown-item waves-light text-info  caja-botones"
                   [routerLink]="['/crm/presupuesto/editar', item.id]"
                 >
                   <i class="far fa-edit"></i> Editar
@@ -147,14 +147,14 @@
                 <a
                   *ngIf="item.state == 'Activo'"
                   (click)="activateOrInactive('Inactivo', item.id)"
-                  class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  class="dropdown-item waves-light text-danger  caja-botones"
                 >
                   <i class="far fa-trash-alt"></i> Anular
                 </a>
                 <a
                   *ngIf="item.state == 'Inactivo'"
                   (click)="activateOrInactive('Activo', item.id)"
-                  class="dropdown-item waves-light text-primary waves-effect caja-botones"
+                  class="dropdown-item waves-light text-primary  caja-botones"
                 >
                   <i class="fas fa-check"></i> Activar
                 </a>

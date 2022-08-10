@@ -61,17 +61,17 @@
           <td class="align-middle">{{ novelty.modality }}</td>
           <td class="align-middle">{{ novelty.novelty }}</td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info waves-light  caja-botones"
                   target="_blank"
                   (click)="
                     getData(novelty);
@@ -82,14 +82,14 @@
                 >
                 <a
                   *ngIf="novelty.status == 'Activo'"
-                  class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                  class="dropdown-item text-danger waves-light  caja-botones"
                   (click)="activateOrInactivate(novelty, 'Inactivo')"
                 >
                   <i class="far fa-trash-alt"></i> Anular</a
                 >
                 <a
                   *ngIf="novelty.status == 'Inactivo'"
-                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  class="dropdown-item text-success waves-light  caja-botones"
                   (click)="activateOrInactivate(novelty, 'Activo')"
                 >
                   <i class="fas fa-check"></i> Activar</a

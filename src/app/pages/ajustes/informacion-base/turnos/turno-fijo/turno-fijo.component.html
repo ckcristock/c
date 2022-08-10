@@ -67,10 +67,10 @@
         </button>
       </td>
       <td class="align-middle">
-        <div ngbDropdown class="dropdown-primary">
+        <div ngbDropdown container="body" class="dropdown-primary">
           <button
             ngbDropdownToggle
-            class="btn btn-primary btn-sm waves-effect waves-light"
+            class="btn btn-primary btn-sm  waves-light"
             type="button"
           >
             <i class="mdi mdi-chevron-down"></i>
@@ -78,12 +78,12 @@
           <div ngbDropdownMenu>
             <a
               [routerLink]="['crear', turnoFijo.value]"
-              class="dropdown-item text-info waves-light waves-effect caja-botones"
+              class="dropdown-item text-info waves-light  caja-botones"
             >
               <i class="far fa-edit"></i> Editar
             </a>
             <a
-              class="dropdown-item waves-light waves-effect caja-botones"
+              class="dropdown-item waves-light  caja-botones"
               [ngClass]="{
                 'text-success': turnoFijo.state == 'Inactivo',
                 'text-danger': turnoFijo.state == 'Activo'

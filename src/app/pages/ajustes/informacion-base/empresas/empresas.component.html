@@ -1,54 +1,67 @@
 <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title d-flex justify-content-between">
-                    <h4 class="text-primary">Datos de la empresa</h4>
-                    <!-- <form class="form-inline">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title d-flex justify-content-between">
+          <h4 class="text-primary">Datos de la empresa</h4>
+          <!-- <form class="form-inline">
                         <div class="form-group">
                             <label for="">Buscar:</label>
                             <input type="text" placeholder="Busca por empresa" class="form-control form-control-sm">
                         </div>
                     </form> -->
-                </div>
-                <hr class="line">
-                <table class="table table-bordered table-striped table-sm table-responsive-lg" style="font-size: small;">
-                    <thead class="bg-light">
-                        <tr class="text-center text-uppercase">
-                            <th>Nombre</th>
-                            <th>Correo electrónico</th>
-                            <th>NIT</th>
-                            <th class="col-md-1">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of enterprises" class="text-center">
-                            <td class="align-middle">{{item.name}}</td>
-                            <td class="align-middle">{{item.email_contact}}</td>
-                            <td class="align-middle">{{item.document_number}}</td>
-                            <td class="align-middle">
-                                <div class="text-center">
-                                    <div ngbDropdown class="dropdown-primary">
-                                        <button ngbDropdownToggle
-                                            class="btn btn-primary btn-sm waves-effect waves-light" type="button">
-                                            <i class="mdi mdi-chevron-down"></i>
-                                        </button>
-                                        <div ngbDropdownMenu>
-                                            <a class="dropdown-item text-info waves-light waves-effect caja-botones"
-                                                [routerLink]='"/ajustes/configuracion/configuracion-empresa"'> <i
-                                                    class="fas fa-search-plus text-info"></i> Ver y editar</a>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-                    [collectionSize]="pagination.collectionSize " [pageSize]="pagination.pageSize "
-                    [(page)]="pagination.page " aria-label="Default pagination "></ngb-pagination>
-            </div>
         </div>
+        <hr class="line" />
+        <table
+          class="table table-bordered table-striped table-sm table-responsive-lg"
+          style="font-size: small"
+        >
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th>Nombre</th>
+              <th>Correo electrónico</th>
+              <th>NIT</th>
+              <th class="col-md-1">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of enterprises" class="text-center">
+              <td class="align-middle">{{ item.name }}</td>
+              <td class="align-middle">{{ item.email_contact }}</td>
+              <td class="align-middle">{{ item.document_number }}</td>
+              <td class="align-middle">
+                <div ngbDropdown container="body" class="dropdown-primary">
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-primary btn-sm waves-light"
+                    type="button"
+                  >
+                    <i class="mdi mdi-chevron-down"></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <a
+                      class="dropdown-item text-info waves-light caja-botones"
+                      [routerLink]="
+                        '/ajustes/configuracion/configuracion-empresa'
+                      "
+                    >
+                      <i class="fas fa-search-plus text-info"></i> Ver y
+                      editar</a
+                    >
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ngb-pagination
+          class="d-flex justify-content-center pagination-rounded pagination-sm"
+          [collectionSize]="pagination.collectionSize"
+          [pageSize]="pagination.pageSize"
+          [(page)]="pagination.page"
+          aria-label="Default pagination "
+        ></ngb-pagination>
+      </div>
     </div>
+  </div>
 </div>

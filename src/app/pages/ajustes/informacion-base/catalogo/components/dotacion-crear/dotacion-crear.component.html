@@ -1,16 +1,20 @@
 <div class="card-body">
-  <div class="card-title d-flex justify-content-between">
-    <h4 class="text-primary">Productos</h4>
-    <div class="btn-group rounded w-sm-100">
-      <button
-        class="btn btn-primary btn-sm"
-        (click)="openConfirm(add, 'Crear Producto')"
-      >
-        <i class="fa fa-plus"></i> Agregar
-      </button>
-      <button class="btn btn-info btn-sm" (click)="openClose()">
-        <i class="fas fa-sliders-h"></i> Filtros
-      </button>
+  <div class="row card-title d-flex justify-content-between">
+    <div class="col-md-6 px-0">
+      <h4 class="text-primary">Productos</h4>
+    </div>
+    <div class="col-md-6 px-0 text-right">
+      <div class="btn-group rounded w-sm-100">
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="openConfirm(add, 'Crear Producto')"
+        >
+          <i class="fa fa-plus"></i> Agregar
+        </button>
+        <button class="btn btn-info btn-sm" (click)="openClose()">
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
+      </div>
     </div>
   </div>
   <hr class="line" />
@@ -22,86 +26,89 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <table
-    class="table table-bordered table-striped table-sm table-responsive-lg"
-    style="font-size: small"
-    *ngIf="Productos.length && !loading; else notData"
-  >
-    <thead class="bg-light">
-      <tr class="text-center text-uppercase">
-        <th>Nombre</th>
-        <th>Embalaje</th>
-        <th>Descripción</th>
-        <th>Codigo Barras</th>
-        <th>Categoria</th>
-        <th class="col-md-1">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-container>
-        <tr
-          *ngFor="let producto of Productos"
-          class="text-center"
-          [ngClass]="{
-            'text-danger font-weight-bold': producto.Estado == 'Inactivo'
-          }"
-        >
-          <td class="align-middle">
-            {{ producto.Nombre_Comercial }}
-          </td>
-          <td class="align-middle">
-            {{ producto.Embalaje }}
-          </td>
-          <td class="align-middle">
-            {{ producto.Descripcion_ATC }}
-          </td>
-
-          <td class="align-middle">
-            {{ producto.Codigo_Barras }}
-          </td>
-          <td class="align-middle">
-            {{ producto.type }}
-          </td>
-          <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item text-info waves-light waves-effect"
-                  (click)="
-                    editDotationProduct(producto);
-                    openConfirm(add, 'Editar Producto')
-                  "
-                >
-                  <i class="far fa-edit"></i>Editar
-                </a>
-                <a
-                  class="dropdown-item text-danger waves-light waves-effect"
-                  [swal]="{
-                    title: '¿Está Seguro?',
-                    text: 'Se dispone a Eliminar esta Subcategoria, esta acción no se puede revertir',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si, Eliminar',
-                    cancelButtonText: 'No, Dejame Comprobar!'
-                  }"
-                  (confirm)="deleteSubcategory(item.Id_subcategoria)"
-                >
-                  <i class="far fa-trash-alt mr-1"></i>Eliminar</a
-                >
-              </div>
-            </div>
-          </td>
+  <div class="table-responsive">
+    <table
+      class="table table-bordered table-striped table-sm"
+      style="font-size: small"
+      *ngIf="Productos.length && !loading; else notData"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Nombre</th>
+          <th>Embalaje</th>
+          <th>Descripción</th>
+          <th>Codigo Barras</th>
+          <th>Categoria</th>
+          <th class="col-md-1">Acciones</th>
         </tr>
-      </ng-container>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <ng-container>
+          <tr
+            *ngFor="let producto of Productos"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': producto.Estado == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">
+              {{ producto.Nombre_Comercial }}
+            </td>
+            <td class="align-middle">
+              {{ producto.Embalaje }}
+            </td>
+            <td class="align-middle">
+              {{ producto.Descripcion_ATC }}
+            </td>
+            <td class="align-middle">
+              {{ producto.Codigo_Barras }}
+            </td>
+            <td class="align-middle">
+              {{ producto.type }}
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    href="javascript:void(0)"
+                    class="dropdown-item text-info waves-light"
+                    (click)="
+                      editDotationProduct(producto);
+                      openConfirm(add, 'Editar Producto')
+                    "
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    href="javascript:void(0)"
+                    class="dropdown-item text-danger waves-light"
+                    [swal]="{
+                      title: '¿Está Seguro?',
+                      text: 'Se dispone a Eliminar esta Subcategoria, esta acción no se puede revertir',
+                      type: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Si, Eliminar',
+                      cancelButtonText: 'No, Dejame Comprobar!'
+                    }"
+                    (confirm)="deleteSubcategory(item.Id_subcategoria)"
+                  >
+                    <i class="far fa-trash-alt mr-1"></i> Eliminar</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
 
   <ngb-pagination
     class="d-flex justify-content-center pagination-rounded pagination-sm"

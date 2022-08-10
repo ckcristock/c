@@ -38,17 +38,17 @@
           </td>
           <td class="align-middle">{{ value.created_at | date }}</td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  class="dropdown-item waves-light text-info  caja-botones"
                   target="_blank"
                   (click)="getValue(value); openConfirm(add, 'Editar Valor')"
                 >
@@ -56,14 +56,14 @@
                 >
                 <a
                   *ngIf="value.state === 'Activo'"
-                  class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                  class="dropdown-item text-danger waves-light  caja-botones"
                   (click)="anularOActivar(value, 'Inactivo')"
                 >
                   <i class="far fa-trash-alt"></i> Anular</a
                 >
                 <a
                   *ngIf="value.state === 'Inactivo'"
-                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  class="dropdown-item text-success waves-light  caja-botones"
                   (click)="anularOActivar(value, 'Activo')"
                 >
                   <i class="fas fa-check"></i> Activar</a

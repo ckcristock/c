@@ -17,16 +17,16 @@
                     <td scope="row" [ngClass]="{'text-danger font-weight-bold': (zone.status === 'Inactivo' )}"> {{ zone.name }} </td>
                     <td>
                         <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                            <div ngbDropdown container="body" class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm  waves-light " type="button">
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getZone(zone); modal.show()"><i
+                                    <a class="dropdown-item waves-light  caja-botones" target="_blank" (click)="getZone(zone); modal.show()"><i
                                            class="far fa-edit"></i> Editar</a>
-                                    <a *ngIf="zone.status === 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularOActivar(zone, 'Inactivo')">
+                                    <a *ngIf="zone.status === 'Activo'" class="dropdown-item waves-light  caja-botones" (click)="anularOActivar(zone, 'Inactivo')">
                                         <i class="far fa-trash-alt"></i> Anular</a>
-                                    <a *ngIf="zone.status === 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="anularOActivar(zone, 'Activo')">
+                                    <a *ngIf="zone.status === 'Inactivo'" class="dropdown-item waves-light  caja-botones" (click)="anularOActivar(zone, 'Activo')">
                                         <i class="fas fa-check"></i> Activar</a>
                                 </div>
                             </div>

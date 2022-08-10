@@ -28,17 +28,17 @@
           <td class="align-middle">{{ item.name }}</td>
           <td class="align-middle">{{ item.unit }}</td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  class="dropdown-item waves-light text-info  caja-botones"
                   (click)="
                     getUnit(item);
                     openConfirm(add, 'Actualizar unidad de medida')

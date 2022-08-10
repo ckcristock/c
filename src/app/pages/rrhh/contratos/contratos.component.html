@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-lg-10">
+  <div class="col-lg-9">
     <div class="card">
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
@@ -90,105 +90,105 @@
             </div>
           </mat-expansion-panel>
         </mat-accordion>
-        <table
-          class="table table-bordered table-striped table-sm table-responsive-lg"
-          style="font-size: small"
-          *ngIf="!loading && contracts.length > 0; else notData"
-        >
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th>Código</th>
-              <th>Funcionario</th>
-              <th>Documento</th>
-              <!--  <th>Cargo</th> -->
-              <th>Tipo</th>
-              <th>F. Inicio</th>
-              <th>F. Fin</th>
-              <th>F. Fin prueba</th>
-              <th>F. Notific.</th>
-              <th>Acc.</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr *ngFor="let contract of contracts" class="text-center">
-              <td class="align-middle">{{ contract.code }}</td>
-              <td class="align-middle">
-                <strong>
-                  {{ contract.first_name | titlecase }}
-                  {{ contract.first_surname | titlecase }}
-                </strong>
-              </td>
-              <td class="align-middle">
-                {{ contract.identifier }}
-              </td>
-              <!-- <td>
-                                <img alt="" class="rounded-circle avatar-sm" src="{{ contract.image | image: 'users' }}"
-                                    alt="" />
-                            </td> -->
-              <!--  <td>{{ contract.position }}</td> -->
-              <td class="align-middle">{{ contract.work_contract_type }}</td>
-              <td class="align-middle">{{ contract.date_of_admission }}</td>
-              <td class="align-middle">
-                <span *ngIf="contract.date_end; else notConlcude">
-                  {{ contract.date_end }}
-                </span>
-              </td>
-              <td class="align-middle">
-                <span *ngIf="contract.date_trial; else notConlcude"
-                  >{{ contract.date_trial }}
-                </span>
-              </td>
-              <td class="align-middle">
-                <span *ngIf="contract.date_of_notify; else notConlcude">
-                  {{ contract.date_of_notify }}
-                </span>
-              </td>
-              <td class="align-middle">
-                <div ngbDropdown container="body" class="dropdown-primary">
-                  <button
-                    ngbDropdownToggle
-                    class="btn btn-primary btn-sm waves-effect waves-light"
-                    type="button"
-                  >
-                    <i class="mdi mdi-chevron-down"></i>
-                  </button>
-                  <div ngbDropdownMenu>
-                    <!--  <a
-                        [routerLink]="['/nomina/ver-viatico', item.id]"
-                        class="
-                          dropdown-item
-                          waves-light waves-effect
-                          caja-botones
-                        "
+        <div class="table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            style="font-size: smaller"
+            *ngIf="!loading && contracts.length > 0; else notData"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Código</th>
+                <th>Funcionario</th>
+                <th>Documento</th>
+                <!--  <th>Cargo</th> -->
+                <th>Tipo</th>
+                <th>F. Inicio</th>
+                <th>F. Fin</th>
+                <th>F. Fin prueba</th>
+                <th>F. Notific.</th>
+                <th>Acc.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let contract of contracts" class="text-center">
+                <td class="align-middle">{{ contract.code }}</td>
+                <td class="align-middle">
+                  <strong>
+                    {{ contract.first_name | titlecase }}
+                    {{ contract.first_surname | titlecase }}
+                  </strong>
+                </td>
+                <td class="align-middle">
+                  {{ contract.identifier }}
+                </td>
+                <!-- <td>
+                                  <img alt="" class="rounded-circle avatar-sm" src="{{ contract.image | image: 'users' }}"
+                                      alt="" />
+                              </td> -->
+                <!--  <td>{{ contract.position }}</td> -->
+                <td class="align-middle">{{ contract.work_contract_type }}</td>
+                <td class="align-middle">{{ contract.date_of_admission }}</td>
+                <td class="align-middle">
+                  <span *ngIf="contract.date_end; else notConlcude">
+                    {{ contract.date_end }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <span *ngIf="contract.date_trial; else notConlcude"
+                    >{{ contract.date_trial }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <span *ngIf="contract.date_of_notify; else notConlcude">
+                    {{ contract.date_of_notify }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <div ngbDropdown container="body" class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm  waves-light"
+                      type="button"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <!--  <a
+                          [routerLink]="['/nomina/ver-viatico', item.id]"
+                          class="
+                            dropdown-item
+                            waves-light
+                            caja-botones
+                          "
+                        >
+                          <i class="far fa-eye"></i> Ver</a
+                        > -->
+                      <a
+                        type="button"
+                        class="dropdown-item text-success waves-light "
+                        ngbTooltip="Descargar"
                       >
-                        <i class="far fa-eye"></i> Ver</a
-                      > -->
-
-                    <a
-                      type="button"
-                      class="dropdown-item text-success waves-light waves-effect"
-                      ngbTooltip="Descargar"
-                    >
-                      <i class="fas fa-download"></i> Descargar
-                    </a>
-                    <a
-                      type="button"
-                      class="dropdown-item text-info waves-light waves-effect"
-                      [routerLink]="[
-                        '/ajustes/informacion-base/funcionario/',
-                        contract.id
-                      ]"
-                      ngbTooltip="Ver Perfil"
-                    >
-                      <i class="fas fa-address-card"></i> Ver perfil
-                    </a>
+                        <i class="fas fa-download"></i> Descargar
+                      </a>
+                      <a
+                        type="button"
+                        class="dropdown-item text-info waves-light "
+                        [routerLink]="[
+                          '/ajustes/informacion-base/funcionario/',
+                          contract.id
+                        ]"
+                        ngbTooltip="Ver Perfil"
+                      >
+                        <i class="fas fa-address-card"></i> Ver perfil
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <ngb-pagination
           class="d-flex justify-content-center pagination-rounded pagination-sm"
           [collectionSize]="pagination.collectionSize"
@@ -208,7 +208,7 @@
       </div>
     </div>
   </div>
-  <div class="col-lg-2">
+  <div class="col-lg-3">
     <div class="card">
       <div class="card-body">
         <h5 class="text-center text-primary">Por vencer</h5>

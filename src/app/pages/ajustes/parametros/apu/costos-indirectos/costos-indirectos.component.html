@@ -36,17 +36,17 @@
           <td class="align-middle">{{ item.percentage }}</td>
           <td class="align-middle">{{ item.created_at | date: "longDate" }}</td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  class="dropdown-item waves-light text-info  caja-botones"
                   (click)="
                     getIndirect(item);
                     openConfirm(add, 'Actualizar costo indirecto')
@@ -57,14 +57,14 @@
                 <a
                   *ngIf="item.state == 'Inactivo'"
                   (click)="activateOrInactivate(item, 'Activo')"
-                  class="dropdown-item waves-light text-success waves-effect"
+                  class="dropdown-item waves-light text-success "
                 >
                   <i class="fas fa-check"></i> Activar
                 </a>
                 <a
                   *ngIf="item.state == 'Activo'"
                   (click)="activateOrInactivate(item, 'Inactivo')"
-                  class="dropdown-item waves-light text-danger waves-effect"
+                  class="dropdown-item waves-light text-danger "
                 >
                   <i class="fas fa-trash-alt"></i> Anular
                 </a>

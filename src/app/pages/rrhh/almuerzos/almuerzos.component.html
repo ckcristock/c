@@ -108,10 +108,10 @@
             {{ lunch.created_at | date: "longDate" }}
           </td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
@@ -119,21 +119,21 @@
               <div ngbDropdownMenu>
                 <a
                   (click)="getLunchValu(lunch); openConfirm(edit, 'sm')"
-                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  class="dropdown-item waves-light text-info  caja-botones"
                 >
                   <i class="far fa-edit"></i> Editar
                 </a>
                 <a
                   *ngIf="lunch.state == 'Activo'"
                   (click)="activateOrInactivate(lunch.id, 'Inactivo')"
-                  class="dropdown-item waves-light text-danger waves-effect caja-botones"
+                  class="dropdown-item waves-light text-danger  caja-botones"
                 >
                   <i class="far fa-trash-alt"></i> Anular
                 </a>
                 <a
                   *ngIf="lunch.state == 'Inactivo'"
                   (click)="activateOrInactivate(lunch.id, 'Activo')"
-                  class="dropdown-item waves-light text-success waves-effect caja-botones"
+                  class="dropdown-item waves-light text-success  caja-botones"
                 >
                   <i class="fas fa-check"></i> Activar
                 </a>

@@ -187,20 +187,20 @@
                     </td>
                     <td>
                       <div class="text-center">
-                        <div ngbDropdown class="dropdown-primary">
+                        <div ngbDropdown container="body" class="dropdown-primary">
                           <button
                             ngbDropdownToggle
-                            class="btn btn-secondary btn-mini waves-effect waves-light"
+                            class="btn btn-secondary btn-mini  waves-light"
                             type="button"
                           >
                             Acciones
                           </button>
                           <div ngbDropdownMenu>
-                            <!-- <a *ngIf="factura.Tipo == 'Evento' || factura.Tipo == 'NoPos'" class="dropdown-item waves-light waves-effect caja-botones" href="javascript:;" (click)="Id_Factura = factura.Id_Factura;modalInfoExtra.show()">
+                            <!-- <a *ngIf="factura.Tipo == 'Evento' || factura.Tipo == 'NoPos'" class="dropdown-item waves-light  caja-botones" href="javascript:;" (click)="Id_Factura = factura.Id_Factura;modalInfoExtra.show()">
                                 <i class="fa fa-plus-circle"></i>Añadir Info Extra</a> -->
                             <a
                               *ngIf="factura.Tipo != 'Pos-Capita'"
-                              class="dropdown-item waves-light waves-effect caja-botones"
+                              class="dropdown-item waves-light  caja-botones"
                               href=""
                               [routerLink]="[
                                 '/cmfacturaver',
@@ -213,7 +213,7 @@
                             >
                             <a
                               *ngIf="factura.Tipo == 'Pos-Capita'"
-                              class="dropdown-item waves-light waves-effect caja-botones"
+                              class="dropdown-item waves-light  caja-botones"
                               href=""
                               [routerLink]="[
                                 '/cmfacturacapitaver',
@@ -225,7 +225,7 @@
                             <!-- Ver de Factura Capita -->
                             <a
                               *ngIf="factura.Tipo != 'Pos-Capita'"
-                              class="dropdown-item waves-light waves-effect caja-botones"
+                              class="dropdown-item waves-light  caja-botones"
                               href="{{
                                 globales.ruta
                               }}php/facturasventas/factura_dis_pdf.php?id={{
@@ -237,7 +237,7 @@
                             >
                             <a
                               *ngIf="factura.Tipo == 'Pos-Capita'"
-                              class="dropdown-item waves-light waves-effect caja-botones"
+                              class="dropdown-item waves-light  caja-botones"
                               href="{{
                                 globales.ruta
                               }}php/factura_capita/factura_capita_pdf.php?id={{

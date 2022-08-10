@@ -135,17 +135,17 @@
             >
           </td>
           <td>
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   href="{{
                     envirom.ruta
                   }}php/contabilidad/notascontables/descarga_pdf.php?id={{
@@ -156,7 +156,7 @@
                   <i class="fa fa-print"></i> Ver PCGA</a
                 >
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   href="{{
                     envirom.ruta
                   }}php/contabilidad/notascontables/descarga_pdf.php?id={{
@@ -168,7 +168,7 @@
                 >
                 <a
                   *ngIf="item.Estado != 'Anulada' && perfilUsuario == '27'"
-                  class="dropdown-item waves-light waves-effect caja-botones bg-danger"
+                  class="dropdown-item waves-light  caja-botones bg-danger"
                   href="javascript:;"
                   [swal]="confirmacionAnular"
                   (click)="IdDocumento = item.Id_Documento_Contable"

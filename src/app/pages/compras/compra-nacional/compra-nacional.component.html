@@ -176,7 +176,7 @@
             <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
@@ -188,7 +188,7 @@
                     compra.Estado != 'Recibida' &&
                     compra.Estado_Aprobacion == 'Rechazada'
                   "
-                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info waves-light  caja-botones"
                   href=""
                   [routerLink]="[
                     '/comprasnacionaleseditar',
@@ -198,7 +198,7 @@
                   <i class="fas fa-edit"></i> Editar</a
                 >
                 <a
-                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  class="dropdown-item text-success waves-light  caja-botones"
                   href=""
                   [routerLink]="[
                     '/compras/ver-nacional',
@@ -211,7 +211,7 @@
                 <!--  <a
                               class="
                                 dropdown-item
-                                waves-light waves-effect
+                                waves-light 
                                 caja-botones
                               "
                               href="{{
@@ -225,7 +225,7 @@
                             > -->
                 <a
                   *ngIf="compra.Estado != 'Anulada'"
-                  class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                  class="dropdown-item text-danger waves-light  caja-botones"
                   href=""
                   [swal]="anulacion"
                   (confirm)="

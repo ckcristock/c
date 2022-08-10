@@ -35,7 +35,7 @@ export class GetApusComponent implements OnInit {
     this.state = []
     //  this.modal.show();
     this.getApus()
-    this.modalService.open(this.modal, { ariaLabelledBy: 'modal-basic-title', size: 'xl' }).result.then((result) => {
+    this.modalService.open(this.modal, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

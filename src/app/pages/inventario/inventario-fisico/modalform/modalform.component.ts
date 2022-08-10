@@ -73,13 +73,13 @@ export class ModalformComponent implements OnInit {
           this.router.navigate(['/inventario/inventario-estiba',data.Id_Doc_Inventario_Fisico]);
           this.activeModal.close('Close click')
 
-          const modalAlertReference = this.modalService.open(ModalAlert, { size: 'lg', centered: true, backdrop:'static'});
+          const modalAlertReference = this.modalService.open(ModalAlert, { size: 'lg', centered: true, backdrop:'static', scrollable: true});
           modalAlertReference.componentInstance.tipo = data.Tipo
           modalAlertReference.componentInstance.title = data.Title
           modalAlertReference.componentInstance.texto = data.Text
 
         } else{
-          const modalAlertReference = this.modalService.open(ModalAlert, { size: 'lg', centered: true, backdrop:'static'});
+          const modalAlertReference = this.modalService.open(ModalAlert, { size: 'lg', centered: true, backdrop:'static', scrollable: true});
           modalAlertReference.componentInstance.tipo = data.Tipo
           modalAlertReference.componentInstance.title = data.Title
           modalAlertReference.componentInstance.texto = data.Text

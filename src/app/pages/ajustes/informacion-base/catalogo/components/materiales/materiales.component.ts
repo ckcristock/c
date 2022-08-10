@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ValidatorsService } from '../../../../informacion-base/services/reactive-validation/validators.service';
 import { MaterialesService } from './materiales.service';
@@ -19,6 +19,7 @@ export class MaterialesComponent implements OnInit {
   @ViewChild('modalVer') modalVer: any;
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  @Input() cardBorder: any;
   matPanel = false;
   openClose() {
     if (this.matPanel == false) {
@@ -60,6 +61,7 @@ export class MaterialesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.cardBorder)
     this.createForm();
     this.getMaterials();
     this.getThicknesses();
@@ -127,7 +129,7 @@ export class MaterialesComponent implements OnInit {
   
   public openConfirm(confirm, titulo) {
     this.title = titulo;
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

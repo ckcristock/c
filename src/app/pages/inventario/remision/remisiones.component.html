@@ -1,117 +1,123 @@
 <!-- <div class="col-md-12 "> -->
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Remisiones</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button
-          type="button"
-          class="btn btn-primary btn-sm"
-          [routerLink]="['remisioncrearnuevo']"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Remisiones</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            [routerLink]="['remisioncrearnuevo']"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button
+            class="btn btn-info btn-sm"
+            style="float: right"
+            (click)="openClose()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field appearance="outline" class="col-md-2 pl-0">
-          <mat-label>Rango de fechas</mat-label>
-          <input
-            matInput
-            [satDatepicker]="picker"
-            [value]="date"
-            (dateChange)="selectedDate($event)"
-            (dateInput)="selectedDate($event)"
-            name="daterange"
-            autocomplete="off"
-            required
-          />
-          <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
-          <sat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></sat-datepicker-toggle>
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Código</mat-label>
-          <input
-            #inputC
-            matInput
-            type="text"
-            placeholder="Busca por código"
-            [(ngModel)]="filtro_cod"
-            (input)="filtros()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Tipo</mat-label>
-          <mat-select [(ngModel)]="filtro_tipo" (selectionChange)="filtros()">
-            <mat-option value="">Todos</mat-option>
-            <mat-option value="Cliente">Cliente</mat-option>
-            <mat-option value="Interna">Interna</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Origen</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Busca por origen"
-            [(ngModel)]="filtro_origen"
-            (input)="filtros()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Grupo</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Busca por grupo"
-            [(ngModel)]="filtro_grupo"
-            (input)="filtros()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Destino</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Busca por grupo"
-            [(ngModel)]="filtro_destino"
-            (input)="filtros()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Estado</mat-label>
-          <mat-select [(ngModel)]="filtro_est" (selectionChange)="filtros()">
-            <mat-option value="">Todos</mat-option>
-            <mat-option value="Pendiente">Pendiente</mat-option>
-            <mat-option value="Alistada">Alistada</mat-option>
-            <mat-option value="Enviada">Enviada</mat-option>
-            <mat-option value="Recibida">Recibida</mat-option>
-            <mat-option value="No conforme">No conforme</mat-option>
-            <mat-option value="Anulada">Anulada</mat-option>
-            <mat-option value="Facturada">Facturada</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Fase</mat-label>
-          <mat-select [(ngModel)]="filtro_fase" (selectionChange)="filtros()">
-            <mat-option value="">Todas</mat-option>
-            <mat-option value="0">Fase 1</mat-option>
-            <mat-option value="1">Fase 2</mat-option>
-            <mat-option value="2">Listo</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div class="row">
+          <mat-form-field appearance="outline" class="col">
+            <mat-label>Rango de fechas</mat-label>
+            <input
+              matInput
+              [satDatepicker]="picker"
+              [value]="date"
+              (dateChange)="selectedDate($event)"
+              (dateInput)="selectedDate($event)"
+              name="daterange"
+              autocomplete="off"
+              required
+            />
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></sat-datepicker-toggle>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Código</mat-label>
+            <input
+              #inputC
+              matInput
+              type="text"
+              placeholder="Busca por código"
+              [(ngModel)]="filtro_cod"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select [(ngModel)]="filtro_tipo" (selectionChange)="filtros()">
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Cliente">Cliente</mat-option>
+              <mat-option value="Interna">Interna</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Origen</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por origen"
+              [(ngModel)]="filtro_origen"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Grupo</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por grupo"
+              [(ngModel)]="filtro_grupo"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Destino</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por grupo"
+              [(ngModel)]="filtro_destino"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select [(ngModel)]="filtro_est" (selectionChange)="filtros()">
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Pendiente">Pendiente</mat-option>
+              <mat-option value="Alistada">Alistada</mat-option>
+              <mat-option value="Enviada">Enviada</mat-option>
+              <mat-option value="Recibida">Recibida</mat-option>
+              <mat-option value="No conforme">No conforme</mat-option>
+              <mat-option value="Anulada">Anulada</mat-option>
+              <mat-option value="Facturada">Facturada</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fase</mat-label>
+            <mat-select [(ngModel)]="filtro_fase" (selectionChange)="filtros()">
+              <mat-option value="">Todas</mat-option>
+              <mat-option value="0">Fase 1</mat-option>
+              <mat-option value="1">Fase 2</mat-option>
+              <mat-option value="2">Listo</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
     <table
@@ -207,21 +213,21 @@
           <td class="align-middle">
             <strong>{{ remision.Fase }}</strong>
           </td>
-          <td>
-            <div ngbDropdown class="dropdown-primary">
+          <td class="overflow-hidden">
+            <div ngbDropdown container="body">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
-                <!--<a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 &&remision.Fase_1==0" class="dropdown-item waves-light waves-effect caja-botones"
+                <!--<a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 &&remision.Fase_1==0" class="dropdown-item waves-light  caja-botones"
                               href="" [routerLink]="['/remisioneditar',remision.Id_Remision]">
                               <i class="ti-pencil"></i> Editar</a>-->
                 <a
-                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  class="dropdown-item text-success waves-light  caja-botones"
                   href=""
                   [routerLink]="[
                     '/inventario/remisiones/remision',
@@ -233,7 +239,7 @@
 
                 <a
                   *ngIf="remision.Estado != 'Anulada'"
-                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info waves-light  caja-botones"
                   href="{{
                     env.ruta
                   }}/php/archivos/descarga_pdf.php?tipo=Remision&id={{
@@ -247,7 +253,7 @@
                   *ngIf="
                     remision.Estado != 'Anulada' && remision.Tipo == 'Cliente'
                   "
-                  class="dropdown-item text-info waves-light waves-effect caja-botones"
+                  class="dropdown-item text-info waves-light  caja-botones"
                   href="{{
                     env.ruta
                   }}/php/archivos/descarga_pdf_price.php?tipo=Remision&id={{
@@ -260,7 +266,7 @@
 
                 <a
                   *ngIf="remision.Estado != 'Anulada'"
-                  class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                  class="dropdown-item text-danger waves-light  caja-botones"
                   href="{{ env.ruta }}/php/archivos/descarga_zebra.php?id={{
                     remision.Id_Remision
                   }}"
@@ -271,7 +277,7 @@
 
                 <a
                   *ngIf="remision.Estado != 'Anulada'"
-                  class="dropdown-item text-primary waves-light waves-effect caja-botones"
+                  class="dropdown-item text-primary waves-light  caja-botones"
                   href="{{ env.ruta }}/php/archivos/descarga_excel.php?id={{
                     remision.Id_Remision
                   }}"
@@ -280,7 +286,7 @@
                   <i class="fas fa-file-excel"></i> Descargar plano</a
                 >
 
-                <!--   <a *ngIf="!perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 && remision.Fase_1==0" class="dropdown-item waves-light waves-effect caja-botones" (click)="SuspenderRemision(remision.Id_Remision)">
+                <!--   <a *ngIf="!perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 && remision.Fase_1==0" class="dropdown-item waves-light  caja-botones" (click)="SuspenderRemision(remision.Id_Remision)">
                                                         <i class="fa fa-times"></i> Anular</a> -->
 
                 <a
@@ -291,7 +297,7 @@
                     remision.Estado != 'Facturada' &&
                     remision.Estado != 'Enviada'
                   "
-                  class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                  class="dropdown-item text-danger waves-light  caja-botones"
                   (click)="
                     SuspenderRemision(
                       remision.Id_Remision,
@@ -309,7 +315,7 @@
                     remision.Estado != 'Recibida' &&
                     remision.Estado != 'Enviada'
                   "
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   href=""
                   [routerLink]="['/cambiarlote', remision.Id_Remision]"
                 >
@@ -321,7 +327,7 @@
                     remision.Estado != 'Anulada' &&
                     remision.Entrega_Pendientes == 'Si'
                   "
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light  caja-botones"
                   href="{{
                     env.ruta
                   }}/php/remision/entrega_pendientes_pdf.php?id={{

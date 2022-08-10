@@ -124,22 +124,22 @@
                 </td>
                 <td class="align-middle">
                   <div class="text-center">
-                    <div ngbDropdown class="dropdown-primary">
+                    <div ngbDropdown container="body" class="dropdown-primary">
                       <button
                         ngbDropdownToggle
-                        class="btn btn-primary btn-sm waves-effect waves-light"
+                        class="btn btn-primary btn-sm  waves-light"
                         type="button"
                       >
                         <i class="mdi mdi-chevron-down"></i>
                       </button>
                       <div ngbDropdownMenu>
-                        <!-- <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}"
+                        <!-- <a class="dropdown-item waves-light  caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}"
                                                                 target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion PCGA</a>
 
-                                                            <a class="dropdown-item waves-light waves-effect caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}&tipo=Niif"
+                                                            <a class="dropdown-item waves-light  caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}&tipo=Niif"
                                                                 target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion NIIF</a> -->
                         <a
-                          class="dropdown-item text-primary waves-light waves-effect caja-botones"
+                          class="dropdown-item text-primary waves-light  caja-botones"
                           [routerLink]="['/contabilidad/activos-fijos-crear']"
                           [queryParams]="{
                             Tipo: 'Adicion',
@@ -149,7 +149,7 @@
                           <i class="fa fa-plus"></i> Adición</a
                         >
                         <a
-                          class="dropdown-item text-info waves-light waves-effect caja-botones"
+                          class="dropdown-item text-info waves-light  caja-botones"
                           [routerLink]="[
                             '/contabilidad/activo-fijo-ver',
                             af.Id_Activo_Fijo
@@ -161,7 +161,7 @@
                           *ngIf="
                             af.Estado != 'Anulada' && perfilUsuario == '27'
                           "
-                          class="dropdown-item waves-light waves-effect caja-botones bg-danger"
+                          class="dropdown-item waves-light  caja-botones bg-danger"
                           href="javascript:;"
                           [swal]="confirmacionAnular"
                           (click)="IdDocumento = af.Id_Activo_Fijo"

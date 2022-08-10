@@ -215,44 +215,44 @@
               {{ nomina.frecuencia_pago }}
             </td>
             <td class="align-middle">
-              <div ngbDropdown class="dropdown-primary">
+              <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
+                  class="btn btn-primary btn-sm  waves-light"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu aria-labelledby="dropdownConfig">
                   <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
+                    class="dropdown-item waves-light  caja-botones"
                     (click)="modalExtras.show(funcionario)"
                     >Extras y recargos</a
                   >
                   <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
+                    class="dropdown-item waves-light  caja-botones"
                     (click)="modalNovedades.show(funcionario)"
                     >Vacaciones, incapacidades <br />
                     y licencias</a
                   >
                   <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
+                    class="dropdown-item waves-light  caja-botones"
                     (click)="modalIngPrest.show(funcionario)"
                     >Ingresos prestacionales</a
                   >
                   <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
+                    class="dropdown-item waves-light  caja-botones"
                     (click)="modalIngNoPrest.show(funcionario)"
                     >Ingresos no prestacionales</a
                   >
                   <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
+                    class="dropdown-item waves-light  caja-botones"
                     (click)="modalDeducciones.show(funcionario)"
                     >Deducciones</a
                   >
                   <div class="dropdown-divider"></div>
                   <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
+                    class="dropdown-item waves-light  caja-botones"
                     [routerLink]="[
                       'colilla',
                       funcionario.id,

@@ -1,17 +1,23 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Documentos iniciados</h4>
-      <button
-        class="btn btn-primary btn-sm"
-        (click)="iniciar_inventario_fisico()"
-      >
-        <i class="fa fa-plus"></i> Agregar
-      </button>
-      <!-- <button class="btn btn-primary btn-sm" (click)="inventario_auditor()">
-                <i class="fa fa-plus"></i>
-                Inventario Auditor
-              </button> -->
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Documentos iniciados</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="iniciar_inventario_fisico()"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <!-- <button class="btn btn-primary btn-sm" (click)="inventario_auditor()">
+            <i class="fa fa-plus"></i>
+            Inventario Auditor
+          </button> -->
+        </div>
+      </div>
     </div>
     <hr class="line" />
     <table
@@ -51,10 +57,10 @@
           <td class="align-middle">{{ documento.Bodega }}</td>
           <td class="align-middle">{{ documento.Estiba }}</td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm waves-light"
                 *ngIf="
                   documento.Estado == 'Primer Conteo' ||
                   documento.Estado == 'Pendiente Primer Conteo' ||
@@ -67,7 +73,7 @@
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light caja-botones"
                   *ngIf="
                     documento.Estado == 'Pendiente Primer Conteo' &&
                     documento.Tipo == 'General'
@@ -81,7 +87,7 @@
                 </a>
 
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light caja-botones"
                   *ngIf="
                     documento.Estado == 'Segundo Conteo' &&
                     documento.Tipo == 'General'
@@ -106,7 +112,7 @@
                 </a>
 
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light caja-botones"
                   *ngIf="
                     documento.Estado == 'Primer Conteo' &&
                     documento.Tipo == 'General'
@@ -133,7 +139,7 @@
                 <!-- cambiar estados -->
 
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light caja-botones"
                   *ngIf="
                     documento.Estado == 'Haciendo Primer Conteo' &&
                     miPerfil == '16' &&
@@ -156,7 +162,7 @@
                 <!-- cambiar estados -->
 
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light caja-botones"
                   *ngIf="
                     documento.Estado == 'Haciendo Segundo Conteo' &&
                     miPerfil == '16' &&
@@ -182,7 +188,7 @@
                       */ -->
 
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light caja-botones"
                   *ngIf="
                     documento.Estado == 'Pendiente Primer Conteo' &&
                     documento.Tipo == 'Auditoria'
@@ -193,7 +199,7 @@
                 </a>
 
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light caja-botones"
                   *ngIf="
                     documento.Estado == 'Segundo Conteo' &&
                     documento.Tipo == 'Auditoria'
@@ -219,7 +225,7 @@
                 </a>
 
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light caja-botones"
                   *ngIf="
                     documento.Estado == 'Primer Conteo' &&
                     documento.Tipo == 'Auditoria'
@@ -244,7 +250,7 @@
                 </a>
 
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light caja-botones"
                   *ngIf="
                     documento.Estado == 'Haciendo Primer Conteo' &&
                     miPerfil == '16' &&
@@ -265,7 +271,7 @@
                 </a>
 
                 <a
-                  class="dropdown-item waves-light waves-effect caja-botones"
+                  class="dropdown-item waves-light caja-botones"
                   *ngIf="
                     documento.Estado == 'Haciendo Segundo Conteo' &&
                     miPerfil == '16' &&
@@ -296,71 +302,77 @@
 
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Inventarios realizados y ajustados</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button class="btn btn-info btn-sm" (click)="openClose()">
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Inventarios realizados y ajustados</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field appearance="outline" class="col-md-3 pl-0">
-          <mat-label>Rango de fechas</mat-label>
-          <input
-            matInput
-            [satDatepicker]="picker"
-            [value]="date"
-            (dateChange)="selectedDate($event)"
-            (dateInput)="selectedDate($event)"
-            name="daterange"
-            autocomplete="off"
-            required
-          />
-          <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
-          <sat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></sat-datepicker-toggle>
-        </mat-form-field>
-        <mat-form-field
-          class="col-md-3 pl-0"
-          appearance="outline"
-          *ngIf="listaBodegas.length > 0"
-        >
-          <mat-label>Bodegas</mat-label>
-          <mat-select
-            [(ngModel)]="FiltrosTabla.Bodega"
-            (selectionChange)="ConsultaFiltrada()"
+        <div class="row">
+          <mat-form-field appearance="outline" class="col">
+            <mat-label>Rango de fechas</mat-label>
+            <input
+              matInput
+              [satDatepicker]="picker"
+              [value]="date"
+              (dateChange)="selectedDate($event)"
+              (dateInput)="selectedDate($event)"
+              name="daterange"
+              autocomplete="off"
+              required
+            />
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></sat-datepicker-toggle>
+          </mat-form-field>
+          <mat-form-field
+            class="col"
+            appearance="outline"
+            *ngIf="listaBodegas.length > 0"
           >
-            <mat-option value="">Todos</mat-option>
-            <mat-option
-              *ngFor="let item of listaBodegas"
-              [value]="item.Id_Bodega_Nuevo"
-              >{{ item.Nombre }}</mat-option
+            <mat-label>Bodegas</mat-label>
+            <mat-select
+              [(ngModel)]="FiltrosTabla.Bodega"
+              (selectionChange)="ConsultaFiltrada()"
             >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field
-          class="col-md-3 pl-0"
-          appearance="outline"
-          *ngIf="listaGrupoEstibas.length > 0"
-        >
-          <mat-label>Estibas</mat-label>
-          <mat-select
-            [(ngModel)]="FiltrosTabla.Grupo"
-            (selectionChange)="ConsultaFiltrada()"
+              <mat-option value="">Todos</mat-option>
+              <mat-option
+                *ngFor="let item of listaBodegas"
+                [value]="item.Id_Bodega_Nuevo"
+                >{{ item.Nombre }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field
+            class="col"
+            appearance="outline"
+            *ngIf="listaGrupoEstibas.length > 0"
           >
-            <mat-option value="">Todos</mat-option>
-            <mat-option
-              *ngFor="let item of listaGrupoEstibas"
-              [value]="item.Id_Grupo_Estiba"
-              >{{ item.Nombre }}</mat-option
+            <mat-label>Estibas</mat-label>
+            <mat-select
+              [(ngModel)]="FiltrosTabla.Grupo"
+              (selectionChange)="ConsultaFiltrada()"
             >
-          </mat-select>
-        </mat-form-field>
+              <mat-option value="">Todos</mat-option>
+              <mat-option
+                *ngFor="let item of listaGrupoEstibas"
+                [value]="item.Id_Grupo_Estiba"
+                >{{ item.Nombre }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
     <table
@@ -400,20 +412,20 @@
           <td class="align-middle">{{ item.Nombre_Grupo }}</td>
 
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm waves-light"
                 type="button"
               >
-              <i class="mdi mdi-chevron-down"></i>
+                <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <ng-container
                   *ngIf="item.Tipo != 'Auditoria'; else elseTemplate"
                 >
                   <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
+                    class="dropdown-item waves-light caja-botones"
                     [routerLink]="[
                       '/inventario/inventariofisicoestibas',
                       item.Id_Inventario_Fisico_Nuevo
@@ -425,7 +437,7 @@
 
                 <ng-template #elseTemplate>
                   <a
-                    class="dropdown-item waves-light waves-effect caja-botones"
+                    class="dropdown-item waves-light caja-botones"
                     [routerLink]="[
                       '/inventarioauditor',
                       item.Id_Inventario_Fisico_Nuevo

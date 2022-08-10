@@ -62,31 +62,31 @@
           <td class="align-middle">{{ arl.accounting_account }}</td>
           <td class="align-middle">{{ arl.nit }}</td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  class="dropdown-item waves-light text-info  caja-botones"
                   target="_blank"
                   (click)="getData(arl); openConfirm(add, 'Actualizar ARL')"
                   ><i class="far fa-edit"></i> Editar</a
                 >
                 <a
                   *ngIf="arl.status == 'Activo'"
-                  class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                  class="dropdown-item text-danger waves-light  caja-botones"
                   (click)="activateOrInactivate(arl, 'Inactivo')"
                 >
                   <i class="far fa-trash-alt"></i> Anular</a
                 >
                 <a
                   *ngIf="arl.status == 'Inactivo'"
-                  class="dropdown-item text-success waves-light waves-effect caja-botones"
+                  class="dropdown-item text-success waves-light  caja-botones"
                   (click)="activateOrInactivate(arl, 'Activo')"
                 >
                   <i class="far fa-trash-alt"></i> Activar</a

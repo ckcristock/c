@@ -95,24 +95,24 @@
                             class="label label-success">{{comprobante.Estado }}</span></td>
                     <td>
                         <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-mini waves-effect waves-light "
+                            <div ngbDropdown container="body" class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-mini  waves-light "
                                     type="button">Acciones</button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones"
+                                    <a class="dropdown-item waves-light  caja-botones"
                                         href="{{envirom.ruta}}php/comprobantes/comprobantes_pdf.php?id={{comprobante.Id_Comprobante}}"
                                         target="_blank">
                                         <i class="fa fa-eye"></i> Ver</a>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones"
+                                    <a class="dropdown-item waves-light  caja-botones"
                                         href="{{envirom.ruta}}php/contabilidad/movimientoscontables/movimientos_comprobante_pdf.php?id_registro={{comprobante.Id_Comprobante}}&id_funcionario_elabora={{1}}&tipo=Ingreso"
                                         target="_blank">
                                         <i class="fa fa-book"></i> Contab. PCGA</a>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones"
+                                    <a class="dropdown-item waves-light  caja-botones"
                                         href="{{envirom.ruta}}php/contabilidad/movimientoscontables/movimientos_comprobante_pdf.php?id_registro={{comprobante.Id_Comprobante}}&id_funcionario_elabora={{1}}&tipo=Ingreso&tipo_valor=Niif"
                                         target="_blank">
                                         <i class="fa fa-book"></i> Contab. NIIF</a>
                                     <a *ngIf="comprobante.Estado != 'Anulada' && perfilUsuario == '27'"
-                                        class="dropdown-item waves-light waves-effect caja-botones bg-danger"
+                                        class="dropdown-item waves-light  caja-botones bg-danger"
                                         href="javascript:;" [swal]="confirmacionAnular"
                                         (click)="IdDocumento = comprobante.Id_Comprobante">
                                         <i class="fa fa-close"></i> Anular</a>

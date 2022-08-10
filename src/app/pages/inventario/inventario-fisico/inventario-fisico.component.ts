@@ -210,6 +210,7 @@ export class InventarioFisicoComponent implements OnInit {
       size: 'lg',
       centered: true,
       backdrop: 'static',
+      scrollable: true
     });
   }
 

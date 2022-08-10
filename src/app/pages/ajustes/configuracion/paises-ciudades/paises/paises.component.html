@@ -63,17 +63,17 @@
         >
           <td class="align-middle">{{ pais.name | titlecase }}</td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  class="dropdown-item waves-light text-info  caja-botones"
                   target="_blank"
                   (click)="getData(pais); openConfirm(add, 'Editar País')"
                 >
@@ -81,14 +81,14 @@
                 </a>
                 <a
                   *ngIf="pais.state == 'Inactivo'"
-                  class="dropdown-item waves-light text-success waves-effect"
+                  class="dropdown-item waves-light text-success "
                   (click)="activateOrInactivate(pais, 'Activo')"
                 >
                   <i class="fas fa-check"></i> Activar
                 </a>
                 <a
                   *ngIf="pais.state == 'Activo'"
-                  class="dropdown-item waves-light text-danger waves-effect"
+                  class="dropdown-item waves-light text-danger "
                   (click)="activateOrInactivate(pais, 'Inactivo')"
                 >
                   <i class="fas fa-trash-alt"></i> Anular

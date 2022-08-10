@@ -43,7 +43,7 @@ export class TareasNegocioComponent implements OnInit {
     this.indexSelected = index;
     this.indexSelected ? this.createForm(data) : this.createForm();
     this.modal.show()*/
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'sm' }).result.then((result) => {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'sm', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

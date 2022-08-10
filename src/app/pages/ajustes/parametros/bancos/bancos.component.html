@@ -59,31 +59,31 @@
           <td class="align-middle">{{ bank.name }}</td>
           <td class="align-middle">{{ bank.code }}</td>
           <td class="align-middle">
-            <div ngbDropdown class="dropdown-primary">
+            <div ngbDropdown container="body" class="dropdown-primary">
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-effect waves-light"
+                class="btn btn-primary btn-sm  waves-light"
                 type="button"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
               <div ngbDropdownMenu>
                 <a
-                  class="dropdown-item waves-light text-info waves-effect caja-botones"
+                  class="dropdown-item waves-light text-info  caja-botones"
                   target="_blank"
                   (click)="getBank(bank); openConfirm(add, 'Actualizar Banco')"
                   ><i class="far fa-edit"></i> Editar</a
                 >
                 <a
                   *ngIf="bank.status == 'Activo'"
-                  class="text-danger dropdown-item waves-light waves-effect caja-botones"
+                  class="text-danger dropdown-item waves-light  caja-botones"
                   (click)="activateOrInactivate(bank, 'Inactivo')"
                 >
                   <i class="far fa-trash-alt"></i> Anular</a
                 >
                 <a
                   *ngIf="bank.status == 'Inactivo'"
-                  class="text-success dropdown-item waves-light waves-effect caja-botones"
+                  class="text-success dropdown-item waves-light  caja-botones"
                   (click)="activateOrInactivate(bank, 'Activo')"
                 >
                   <i class="fas fa-check"></i> Activar</a

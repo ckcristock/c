@@ -1,45 +1,33 @@
 <div class="card-body">
   <div class="card-title d-flex justify-content-between">
     <h5>Salario</h5>
-    <button
-      class="btn btn-link pt-0 edit"
-      style="float: right"
-      (click)="openConfirm(add)"
-    >
+    <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
       <i class="fas fa-pencil-alt"></i>
     </button>
   </div>
-  <div class="row">
-    <p class="col-md-6 text-right font-weight-bold text-mute item-subtitle">
-      Cantidad
-    </p>
-    <p class="col-md-6 text font-weight-bold" id="employee-salary">
-      $ {{ salary_info.salary | number }}
-    </p>
-    <p class="col-md-6 text-mute font-weight-bold item-subtitle">
-      Tipo de Contrato
-    </p>
-    <p class="col-md-6 font-weight-bold">
-      {{ salary_info.contract_type }}
-    </p>
-    <p class="col-md-6 text-mute font-weight-bold item-subtitle">
-      Fecha de ingreso
-    </p>
-    <p class="col-md-6 font-weight-bold">
-      {{ salary_info.date_of_admission | date: "longDate" }}
-    </p>
-    <p
-      class="col-md-6 text-mute font-weight-bold item-subtitle"
-      *ngIf="salary_info.work_contract_type_id == 2"
-    >
-      Fecha de retiro
-    </p>
-    <p
-      class="col-md-6 font-weight-bold"
-      *ngIf="salary_info.work_contract_type_id == 2"
-    >
-      {{ salary_info.date_end | date: "longDate" }}
-    </p>
+  <div class="table-responsive">
+    <table class="table table-sm" style="font-size: small">
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Cantidad</th>
+          <th>Tipo de Contrato</th>
+          <th>Fecha de ingreso</th>
+          <th *ngIf="salary_info.work_contract_type_id == 2">
+            Fecha de retiro
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-center">
+          <td>${{ salary_info.salary | number }}</td>
+          <td>{{ salary_info.contract_type }}</td>
+          <td>{{ salary_info.date_of_admission | date: "longDate" }}</td>
+          <td *ngIf="salary_info.work_contract_type_id == 2">
+            {{ salary_info.date_end | date: "longDate" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <hr />
   <app-bono *ngIf="salary_info.id" [id]="salary_info.id"></app-bono>

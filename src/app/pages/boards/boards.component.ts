@@ -8,7 +8,7 @@ import { BoardsService } from '../ajustes/informacion-base/services/boards.servi
   styleUrls: ['./boards.component.scss']
 })
 export class BoardsComponent implements OnInit {
-
+  loading: boolean
   constructor(
     private _board: BoardsService,
     private _user: UserService
@@ -20,18 +20,13 @@ export class BoardsComponent implements OnInit {
   personId = this._user.user.person.id;
   board: any;
   getBoardsWorked() {
+    this.loading = true
     this._board
       .getPersonBoards(this.personId)
       .subscribe(
         (d: any) => {
-          //console.log(d)
-          if (d.data.length == 0){
-            this.board = 0
-          } else {
-            for (let i in d.data){
-              this.board = d.data[i].id
-            }
-          }          
+          this.loading = false
+          this.board = d.data[0].board_id                   
           //console.log(this.board)
         });
   }

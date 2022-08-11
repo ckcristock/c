@@ -1,104 +1,110 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Tipos de Documento</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button
-          class="btn btn-primary btn-sm"
-          style="float: right"
-          (click)="openConfirm(add, 'Nuevo Tipo de Documento')"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Tipos de documento</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(add, 'Nuevo Tipo de Documento')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button
+            class="btn btn-info btn-sm"
+            (click)="openClose()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field class="col-md-3 pl-0" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="filtro.name"
-            (input)="getDocumentTypes()"
-            name="name"
-            autocomplete="off"
-            placeholder="Busca por nombre"
-          />
-        </mat-form-field>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filtro.name"
+              (input)="getDocumentTypes()"
+              name="name"
+              autocomplete="off"
+              placeholder="Busca por nombre"
+            />
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && documents.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Abreviatura</th>
-          <th>Nombre</th>
-          <th>Código DIAN</th>
-          <th class="col-md-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let document of documents"
-          class="text-center"
-          [ngClass]="{
-            'text-danger font-weight-bold': document.status === 'Inactivo'
-          }"
-        >
-          <td class="align-middle">{{ document.abbreviation }}</td>
-          <td class="align-middle">{{ document.name }}</td>
-          <td class="align-middle">{{ document.code }}</td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item waves-light text-info  caja-botones"
-                  target="_blank"
-                  (click)="
-                    getData(document);
-                    openConfirm(add, 'Actualizar Tipo de Documento')
-                  "
-                  ><i class="far fa-edit"></i> Editar</a
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && documents.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Abreviatura</th>
+            <th>Nombre</th>
+            <th>Código DIAN</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let document of documents"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': document.status === 'Inactivo'
+            }"
+          >
+            <td class="align-middle">{{ document.abbreviation }}</td>
+            <td class="align-middle">{{ document.name }}</td>
+            <td class="align-middle">{{ document.code }}</td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
                 >
-                <a
-                  *ngIf="document.status == 'Activo'"
-                  class="dropdown-item text-danger waves-light  caja-botones"
-                  (click)="activateOrInactivate(document, 'Inactivo')"
-                >
-                  <i class="far fa-trash-alt"></i> Anular</a
-                >
-                <a
-                  *ngIf="document.status == 'Inactivo'"
-                  class="dropdown-item text-success waves-light  caja-botones"
-                  (click)="activateOrInactivate(document, 'Activo')"
-                >
-                  <i class="fas fa-check"></i> Activar</a
-                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    target="_blank"
+                    (click)="
+                      getData(document);
+                      openConfirm(add, 'Actualizar Tipo de Documento')
+                    "
+                    ><i class="far fa-edit"></i> Editar</a
+                  >
+                  <a
+                    *ngIf="document.status == 'Activo'"
+                    class="dropdown-item text-danger waves-light caja-botones"
+                    (click)="activateOrInactivate(document, 'Inactivo')"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular</a
+                  >
+                  <a
+                    *ngIf="document.status == 'Inactivo'"
+                    class="dropdown-item text-success waves-light caja-botones"
+                    (click)="activateOrInactivate(document, 'Activo')"
+                  >
+                    <i class="fas fa-check"></i> Activar</a
+                  >
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <ngb-pagination
     class="d-flex justify-content-center pagination-rounded pagination-sm"

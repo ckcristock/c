@@ -1,162 +1,168 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Tipos de Activos Fijos</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button
-          class="btn btn-primary btn-sm"
-          style="float: right"
-          (click)="openConfirm(add, 'Nuevo tipo de activo fijo')"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Tipos de activos fijos</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(add, 'Nuevo tipo de activo fijo')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button
+            class="btn btn-info btn-sm"
+            (click)="openClose()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field class="col-md-3 pl-0" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="filtros.name"
-            (input)="getFixedAssetTypes()"
-            name="name"
-            autocomplete="off"
-            placeholder="Busca por nombre"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-3 pl-0" appearance="outline">
-          <mat-label>Categorías</mat-label>
-          <mat-select
-            [(ngModel)]="filtros.category"
-            (selectionChange)="getFixedAssetTypes()"
-          >
-            <mat-option value="Tangible">Tangible</mat-option>
-            <mat-option value="Intangible">Intangible</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-md-3 pl-0" appearance="outline">
-          <mat-label>Vida útil</mat-label>
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="filtros.useful_life_niif"
-            (input)="getFixedAssetTypes()"
-            name="useful_life_niif"
-            autocomplete="off"
-            placeholder="Busca por vida útil"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-3 pl-0" appearance="outline">
-          <mat-label>Depreciación</mat-label>
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="filtros.depreciation"
-            (input)="getFixedAssetTypes()"
-            name="depreciation"
-            autocomplete="off"
-            placeholder="Busca por depreciación"
-          />
-        </mat-form-field>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filtros.name"
+              (input)="getFixedAssetTypes()"
+              name="name"
+              autocomplete="off"
+              placeholder="Busca por nombre"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Categorías</mat-label>
+            <mat-select
+              [(ngModel)]="filtros.category"
+              (selectionChange)="getFixedAssetTypes()"
+            >
+              <mat-option value="Tangible">Tangible</mat-option>
+              <mat-option value="Intangible">Intangible</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Vida útil</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filtros.useful_life_niif"
+              (input)="getFixedAssetTypes()"
+              name="useful_life_niif"
+              autocomplete="off"
+              placeholder="Busca por vida útil"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Depreciación</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filtros.depreciation"
+              (input)="getFixedAssetTypes()"
+              name="depreciation"
+              autocomplete="off"
+              placeholder="Busca por depreciación"
+            />
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && fixedAssets.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th class="align-middle">Tipo Activo</th>
-          <th class="align-middle">Categoría</th>
-          <th class="align-middle">Vida Util</th>
-          <th class="align-middle">% Depreciación</th>
-          <th class="align-middle">Cuenta Depreciación NIIF</th>
-          <th class="align-middle">Cuenta Depreciación PCGA</th>
-          <th class="align-middle">Cuenta NIIF</th>
-          <th class="align-middle">Cuenta PCGA</th>
-          <th class="align-middle">Cuenta Credito NIIF</th>
-          <th class="align-middle">Cuenta Credito PCGA</th>
-          <th class="align-middle">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let item of fixedAssets"
-          class="text-center"
-          [ngClass]="{
-            'text-danger font-weight-bold': item.state == 'Inactivo'
-          }"
-        >
-          <td class="align-middle">{{ item.name }}</td>
-          <td class="align-middle">{{ item.category }}</td>
-          <td class="align-middle">{{ item.useful_life_niif }} mes(es)</td>
-          <td class="align-middle">
-            {{ item.annual_depreciation_percentage_niif }} %
-          </td>
-          <td class="align-middle">
-            {{ item.niif_account_plan_debit_depreciation }}
-          </td>
-          <td class="align-middle">
-            {{ item.pcga_account_plan_debit_depreciation }}
-          </td>
-          <td class="align-middle">{{ item.niif_account_plan }}</td>
-          <td class="align-middle">{{ item.pcga_account_plan }}</td>
-          <td class="align-middle">
-            {{ item.niif_account_plan_credit_depreciation }}
-          </td>
-          <td class="align-middle">
-            {{ item.pcga_account_plan_credit_depreciation }}
-          </td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item waves-light text-info  caja-botones"
-                  (click)="
-                    getFixedAsset(item);
-                    openConfirm(add, 'Editar tipo de activo fijo')
-                  "
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && fixedAssets.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th class="align-middle">Tipo Activo</th>
+            <th class="align-middle">Categoría</th>
+            <th class="align-middle">Vida Util</th>
+            <th class="align-middle">% Depreciación</th>
+            <th class="align-middle">Cuenta Depreciación NIIF</th>
+            <th class="align-middle">Cuenta Depreciación PCGA</th>
+            <th class="align-middle">Cuenta NIIF</th>
+            <th class="align-middle">Cuenta PCGA</th>
+            <th class="align-middle">Cuenta Credito NIIF</th>
+            <th class="align-middle">Cuenta Credito PCGA</th>
+            <th class="align-middle col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of fixedAssets"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': item.state == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">{{ item.name }}</td>
+            <td class="align-middle">{{ item.category }}</td>
+            <td class="align-middle">{{ item.useful_life_niif }} mes(es)</td>
+            <td class="align-middle">
+              {{ item.annual_depreciation_percentage_niif }} %
+            </td>
+            <td class="align-middle">
+              {{ item.niif_account_plan_debit_depreciation }}
+            </td>
+            <td class="align-middle">
+              {{ item.pcga_account_plan_debit_depreciation }}
+            </td>
+            <td class="align-middle">{{ item.niif_account_plan }}</td>
+            <td class="align-middle">{{ item.pcga_account_plan }}</td>
+            <td class="align-middle">
+              {{ item.niif_account_plan_credit_depreciation }}
+            </td>
+            <td class="align-middle">
+              {{ item.pcga_account_plan_credit_depreciation }}
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
                 >
-                  <i class="far fa-edit"></i> Editar</a
-                >
-                <a
-                  *ngIf="item.state == 'Activo'"
-                  class="dropdown-item waves-light text-danger  caja-botones"
-                  (click)="activateOrInactivate(item, 'Inactivo')"
-                >
-                  <i class="far fa-trash-alt"></i> Anular</a
-                >
-                <a
-                  *ngIf="item.state == 'Inactivo'"
-                  class="dropdown-item waves-light text-success  caja-botones"
-                  (click)="activateOrInactivate(item, 'Activo')"
-                >
-                  <i class="fa fa-check"></i> Activar</a
-                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    (click)="
+                      getFixedAsset(item);
+                      openConfirm(add, 'Editar tipo de activo fijo')
+                    "
+                  >
+                    <i class="far fa-edit"></i> Editar</a
+                  >
+                  <a
+                    *ngIf="item.state == 'Activo'"
+                    class="dropdown-item waves-light text-danger caja-botones"
+                    (click)="activateOrInactivate(item, 'Inactivo')"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular</a
+                  >
+                  <a
+                    *ngIf="item.state == 'Inactivo'"
+                    class="dropdown-item waves-light text-success caja-botones"
+                    (click)="activateOrInactivate(item, 'Activo')"
+                  >
+                    <i class="fa fa-check"></i> Activar</a
+                  >
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"

@@ -1,22 +1,24 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Tipos de Actividades</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button
-          class="btn btn-primary btn-sm"
-          style="float: right"
-          (click)="openConfirm(add, 'Nuevo tipo de actividades')"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Tipos de actividades</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(add, 'Nuevo tipo de actividades')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button
+            class="btn btn-info btn-sm"
+            (click)="openClose()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
@@ -28,65 +30,67 @@
       </mat-expansion-panel>
     </mat-accordion>
 
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && activityTypes.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Nombre</th>
-          <th class="col-md-1">Color</th>
-          <th class="col-md-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of activityTypes" class="text-center">
-          <td class="align-middle">{{ item.name }}</td>
-          <td class="align-middle">
-            <span
-              class="badge"
-              [ngStyle]="{ 'background-color': item.color, color: item.color }"
-              >________</span
-            >
-          </td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && activityTypes.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Nombre</th>
+            <th class="col-1">Color</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of activityTypes" class="text-center">
+            <td class="align-middle">{{ item.name }}</td>
+            <td class="align-middle">
+              <span
+                class="badge"
+                [ngStyle]="{ 'background-color': item.color, color: item.color }"
+                >________</span
               >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item waves-light text-info  caja-botones"
-                  (click)="
-                    getActivity(item);
-                    openConfirm(add, 'Editar Tipo de Actividad')
-                  "
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
                 >
-                  <i class="far fa-edit"></i> Editar</a
-                >
-                <a
-                  *ngIf="item.state == 'Activo'"
-                  class="dropdown-item waves-light text-danger  caja-botones"
-                >
-                  <i class="far fa-trash-alt"></i> Anular</a
-                >
-                <a
-                  *ngIf="item.state == 'Cancelado'"
-                  class="dropdown-item waves-light text-success  caja-botones"
-                >
-                  <i class="fa fa-check"></i> Activar</a
-                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    (click)="
+                      getActivity(item);
+                      openConfirm(add, 'Editar Tipo de Actividad')
+                    "
+                  >
+                    <i class="far fa-edit"></i> Editar</a
+                  >
+                  <a
+                    *ngIf="item.state == 'Activo'"
+                    class="dropdown-item waves-light text-danger caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular</a
+                  >
+                  <a
+                    *ngIf="item.state == 'Cancelado'"
+                    class="dropdown-item waves-light text-success caja-botones"
+                  >
+                    <i class="fa fa-check"></i> Activar</a
+                  >
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"

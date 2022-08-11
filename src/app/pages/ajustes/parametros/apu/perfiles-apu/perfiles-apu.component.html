@@ -1,101 +1,108 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Perfiles laborales</h4>
-      <button
-        class="btn btn-sm btn-primary"
-        style="float: right"
-        (click)="openConfirm(add, 'Nuevo perfil laboral')"
-      >
-        <i class="fa fa-plus"></i> Agregar
-      </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Perfiles laborales</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-sm btn-primary"
+            (click)="openConfirm(add, 'Nuevo perfil laboral')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+        </div>
+      </div>
     </div>
     <hr class="line" />
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && profiles.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th class="align-middle">Item</th>
-          <th class="align-middle">Perfil</th>
-          <th class="align-middle">$/Hora Desplazamiento Diurna</th>
-          <th class="align-middle">$/Hora Desplazamiento Nocturna</th>
-          <th class="align-middle">$/Hora Ordinaria Diurna</th>
-          <th class="align-middle">$/Hora Ordinaria Nocturna</th>
-          <th class="align-middle">$/Hora Dominical Diurna</th>
-          <th class="align-middle">$/Hora Dominical Nocturna</th>
-          <th class="align-middle col-md-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let item of profiles"
-          class="text-center"
-          [ngClass]="{
-            'text-danger font-weight-bold': item.state == 'Inactivo'
-          }"
-        >
-          <td class="align-middle">{{ "P" + item.id }}</td>
-          <td class="align-middle">{{ item.profile }}</td>
-          <td class="align-middle">
-            {{ item.value_time_daytime_displacement | currency: "COP" }}
-          </td>
-          <td class="align-middle">
-            {{ item.value_time_night_displacement | currency: "COP" }}
-          </td>
-          <td class="align-middle">
-            {{ item.daytime_ordinary_hour_value | currency: "COP" }}
-          </td>
-          <td class="align-middle">
-            {{ item.night_ordinary_hour_value | currency: "COP" }}
-          </td>
-          <td class="align-middle">
-            {{ item.sunday_daytime_value | currency: "COP" }}
-          </td>
-          <td class="align-middle">
-            {{ item.sunday_night_time_value | currency: "COP" }}
-          </td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item waves-light text-info  caja-botones"
-                  (click)="
-                    getProfile(item);
-                    openConfirm(add, 'Actualizar perfil laboral')
-                  "
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && profiles.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th class="align-middle">Item</th>
+            <th class="align-middle">Perfil</th>
+            <th class="align-middle">$/Hora Desplazamiento Diurna</th>
+            <th class="align-middle">$/Hora Desplazamiento Nocturna</th>
+            <th class="align-middle">$/Hora Ordinaria Diurna</th>
+            <th class="align-middle">$/Hora Ordinaria Nocturna</th>
+            <th class="align-middle">$/Hora Dominical Diurna</th>
+            <th class="align-middle">$/Hora Dominical Nocturna</th>
+            <th class="align-middle col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of profiles"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': item.state == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">{{ "P" + item.id }}</td>
+            <td class="align-middle">{{ item.profile }}</td>
+            <td class="align-middle">
+              {{ item.value_time_daytime_displacement | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.value_time_night_displacement | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.daytime_ordinary_hour_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.night_ordinary_hour_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.sunday_daytime_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.sunday_night_time_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
                 >
-                  <i class="far fa-edit"></i> Editar
-                </a>
-                <a
-                  *ngIf="item.state == 'Inactivo'"
-                  class="dropdown-item waves-light text-success  caja-botones"
-                  (click)="activateOrInactivate(item, 'Activo')"
-                >
-                  <i class="far fa-thumbs-up"></i> Activar
-                </a>
-                <a
-                  *ngIf="item.state == 'Activo'"
-                  class="dropdown-item waves-light text-danger  caja-botones"
-                  (click)="activateOrInactivate(item, 'Inactivo')"
-                >
-                  <i class="far fa-trash-alt"></i> Anular
-                </a>
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    (click)="
+                      getProfile(item);
+                      openConfirm(add, 'Actualizar perfil laboral')
+                    "
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Inactivo'"
+                    class="dropdown-item waves-light text-success caja-botones"
+                    (click)="activateOrInactivate(item, 'Activo')"
+                  >
+                    <i class="far fa-thumbs-up"></i> Activar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Activo'"
+                    class="dropdown-item waves-light text-danger caja-botones"
+                    (click)="activateOrInactivate(item, 'Inactivo')"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"

@@ -1,82 +1,89 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Medidas</h4>
-      <button
-        class="btn btn-sm btn-primary"
-        style="float: right"
-        (click)="openConfirm(add, 'Nueva Medida')"
-      >
-        <i class="fa fa-plus"></i> Agregar
-      </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Medidas</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-sm btn-primary"
+            (click)="openConfirm(add, 'Nueva Medida')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+        </div>
+      </div>
     </div>
     <hr class="line" />
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && measures.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Nombre</th>
-          <th>Variable</th>
-          <th class="col-md-1">Estado</th>
-          <th class="col-md-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of measures" class="text-center">
-          <td class="align-middle">{{ item.name }}</td>
-          <td class="align-middle">{{ item.measure }}</td>
-          <td class="align-middle">
-            <span
-              [ngClass]="
-                item.state == 'Inactivo'
-                  ? 'badge badge-danger'
-                  : 'badge badge-success'
-              "
-            >
-              {{ item.state }}
-            </span>
-          </td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && measures.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Nombre</th>
+            <th>Variable</th>
+            <th class="col-md-1">Estado</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of measures" class="text-center">
+            <td class="align-middle">{{ item.name }}</td>
+            <td class="align-middle">{{ item.measure }}</td>
+            <td class="align-middle">
+              <span
+                [ngClass]="
+                  item.state == 'Inactivo'
+                    ? 'badge badge-danger'
+                    : 'badge badge-success'
+                "
               >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item waves-light text-info  caja-botones"
-                  (click)="
-                    getMeasure(item); openConfirm(add, 'Actualizar medida')
-                  "
+                {{ item.state }}
+              </span>
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
                 >
-                  <i class="far fa-edit"></i> Editar
-                </a>
-                <a
-                  *ngIf="item.state == 'Activo'"
-                  (click)="changeState(item, 'Inactivo')"
-                  class="dropdown-item waves-light text-danger  caja-botones"
-                >
-                  <i class="far fa-trash-alt"></i> Anular
-                </a>
-                <a
-                  *ngIf="item.state == 'Inactivo'"
-                  (click)="changeState(item, 'Activo')"
-                  class="dropdown-item waves-light text-success  caja-botones"
-                >
-                  <i class="fas fa-check"></i> Activar
-                </a>
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    (click)="
+                      getMeasure(item); openConfirm(add, 'Actualizar medida')
+                    "
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Activo'"
+                    (click)="changeState(item, 'Inactivo')"
+                    class="dropdown-item waves-light text-danger caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Inactivo'"
+                    (click)="changeState(item, 'Activo')"
+                    class="dropdown-item waves-light text-success caja-botones"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"

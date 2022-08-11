@@ -1,67 +1,83 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Listado de sedes</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Sedes</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
-    <hr class="line">
+    <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field class="col-md-3 pl-0" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input type="text" matInput name="nombre" autocomplete="off" placeholder="Busca por nombre">
-        </mat-form-field>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              name="nombre"
+              autocomplete="off"
+              placeholder="Busca por nombre"
+            />
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <table class="table table-bordered table-striped table-sm table-responsive-lg" style="font-size: small;">
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Empresa</th>
-          <th>Nombre</th>
-          <th>Código</th>
-          <th class="col-md-1">Acciones</th>
-
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of sedes" class="text-center">
-          <td class="align-middle">
-            {{item.enterprise}}
-          </td>
-          <td class="align-middle">
-            {{item.name}}
-          </td>
-          <td class="align-middle">
-            {{item.code}}
-          </td>
-          <td class="align-middle">
-            <i class="fas fa-ban"></i>
-            <!-- <div class="btn-group " role="group " ngbDropdown>
-              <button id="btnGroupVerticalDrop1 " type="button " class="btn btn-primary dropdown-toggle btn-sm"
-                ngbDropdownToggle>
-                <i class="mdi mdi-chevron-down "></i>
-              </button>
-              <div style="cursor: pointer; " class="dropdown-menu font-weight-bolder "
-                aria-labelledby="btnGroupVerticalDrop1 " ngbDropdownMenu>
-                <a class="dropdown-item "> <i class="fa fa-search mr-2 "></i>Ver más</a>
-                <a class="dropdown-item "> <i class="fa fa-edit mr-2 "></i>Editar </a>
-                <a class="dropdown-item "> <i class="fa fa-ban mr-2 "></i>Suspender </a>
-              </div>
-            </div> -->
-          </td>
-        </tr>
-
-      </tbody>
-    </table>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize " [pageSize]="pagination.pageSize " [(page)]="pagination.page "
-      aria-label="Default pagination "></ngb-pagination>
-
-
-
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Empresa</th>
+            <th>Nombre</th>
+            <th>Código</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of sedes" class="text-center">
+            <td class="align-middle">
+              {{ item.enterprise }}
+            </td>
+            <td class="align-middle">
+              {{ item.name }}
+            </td>
+            <td class="align-middle">
+              {{ item.code }}
+            </td>
+            <td class="align-middle">
+              <i class="fas fa-ban"></i>
+              <!-- <div class="btn-group " role="group " ngbDropdown>
+                <button id="btnGroupVerticalDrop1 " type="button " class="btn btn-primary dropdown-toggle btn-sm"
+                  ngbDropdownToggle>
+                  <i class="mdi mdi-chevron-down "></i>
+                </button>
+                <div style="cursor: pointer; " class="dropdown-menu font-weight-bolder "
+                  aria-labelledby="btnGroupVerticalDrop1 " ngbDropdownMenu>
+                  <a class="dropdown-item "> <i class="fa fa-search mr-2 "></i>Ver más</a>
+                  <a class="dropdown-item "> <i class="fa fa-edit mr-2 "></i>Editar </a>
+                  <a class="dropdown-item "> <i class="fa fa-ban mr-2 "></i>Suspender </a>
+                </div>
+              </div> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      aria-label="Default pagination "
+    ></ngb-pagination>
   </div>
 </div>

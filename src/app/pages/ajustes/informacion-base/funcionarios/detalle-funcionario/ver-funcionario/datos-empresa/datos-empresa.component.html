@@ -1,39 +1,33 @@
-<div class="card-body">
+<div class="card-body pb-0">
   <div class="card-title d-flex justify-content-between">
     <h5>Datos de empresa</h5>
-    <button
-      class="btn btn-link pt-0 edit"
-      style="float: right"
-      (click)="openConfirm(add)"
-    >
+    <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
       <i class="fas fa-pencil-alt"></i>
     </button>
   </div>
-  <div class="row">
-    <p class="col-6 font-weight-bold text-mute item-subtitle">Empresa</p>
-    <p class="col-6 font-weight-bold">
-      {{ empresa.company_name }}
-    </p>
-    <p class="col-6 font-weight-bold text-mute item-subtitle">Grupo</p>
-    <p class="col-6 font-weight-bold">
-      {{ empresa.group_name }}
-    </p>
-    <p class="col-6 font-weight-bold text-mute item-subtitle">Dependencia</p>
-    <p class="col-6 font-weight-bold">
-      {{ empresa.dependency_name }}
-    </p>
-    <p class="col-6 font-weight-bold text-mute item-subtitle">Cargo</p>
-    <p class="col-6 font-weight-bold">
-      {{ empresa.position_name }}
-    </p>
-    <p class="col-6 font-weight-bold text-mute item-subtitle">Tipo de turno</p>
-    <p class="col-6 font-weight-bold">
-      {{ empresa.turn_type }}
-    </p>
-    <p class="col-6 font-weight-bold text-mute item-subtitle">Turno asignado</p>
-    <p class="col-6 font-weight-bold">
-      {{ empresa.fixed_turn_name }}
-    </p>
+  <div class="table-responsive">
+    <table class="table table-sm" style="font-size: small">
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Empresa</th>
+          <th>Grupo</th>
+          <th>Dependencia</th>
+          <th>Cargo</th>
+          <th>Turno</th>
+          <th>Asignado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-center">
+          <td class="align-middle">{{ empresa.company_name }}</td>
+          <td class="align-middle">{{ empresa.group_name }}</td>
+          <td class="align-middle">{{ empresa.dependency_name }}</td>
+          <td class="align-middle">{{ empresa.position_name }}</td>
+          <td class="align-middle">{{ empresa.turn_type }}</td>
+          <td class="align-middle">{{ empresa.fixed_turn_name }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 

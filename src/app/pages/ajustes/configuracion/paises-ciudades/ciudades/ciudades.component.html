@@ -1,115 +1,121 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Ciudades</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button
-          class="btn btn-primary btn-sm"
-          style="float: right"
-          (click)="openConfirm(add, 'Nueva Ciudad')"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Ciudades</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(add, 'Nueva Ciudad')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button
+            class="btn btn-info btn-sm"
+            (click)="openClose()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field class="col-md-6 pl-0" appearance="outline">
-          <mat-label>Ciudad</mat-label>
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="filtro.name"
-            (input)="getCities()"
-            name="name"
-            autocomplete="off"
-            placeholder="Busca por ciudad"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-6 pl-0" appearance="outline">
-          <mat-label>País</mat-label>
-          <mat-select
-            [(ngModel)]="filtro.country"
-            (selectionChange)="getCities()"
-          >
-            <mat-option *ngFor="let item of countries" [value]="item.value">{{
-              item.text
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Ciudad</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filtro.name"
+              (input)="getCities()"
+              name="name"
+              autocomplete="off"
+              placeholder="Busca por ciudad"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>País</mat-label>
+            <mat-select
+              [(ngModel)]="filtro.country"
+              (selectionChange)="getCities()"
+            >
+              <mat-option *ngFor="let item of countries" [value]="item.value">{{
+                item.text
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
 
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && cities.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th class="align-middle">Ciudad</th>
-          <th class="align-middle">País</th>
-          <td class="align-middle">% Retención Productos</td>
-          <td class="align-middle">% Retención Servicios</td>
-          <th class="align-middle col-md-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let item of cities"
-          class="text-center"
-          [ngClass]="{
-            'text-danger font-weight-bold': item.state == 'Inactivo'
-          }"
-        >
-          <td class="align-middle">{{ item.name }}</td>
-          <td class="align-middle">{{ item.country }}</td>
-          <td class="align-middle">{{ item.percentage_product }}</td>
-          <td class="align-middle">{{ item.percentage_service }}</td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item waves-light text-info "
-                  (click)="getCity(item); openConfirm(add, 'Editar Ciudad')"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && cities.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th class="align-middle">Ciudad</th>
+            <th class="align-middle">País</th>
+            <th class="align-middle">% Retención Productos</th>
+            <th class="align-middle">% Retención Servicios</th>
+            <th class="align-middle col-md-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of cities"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': item.state == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">{{ item.name }}</td>
+            <td class="align-middle">{{ item.country }}</td>
+            <td class="align-middle">{{ item.percentage_product }}</td>
+            <td class="align-middle">{{ item.percentage_service }}</td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
                 >
-                  <i class="far fa-edit"></i> Editar
-                </a>
-                <a
-                  *ngIf="item.state == 'Inactivo'"
-                  class="dropdown-item waves-light text-success "
-                  (click)="activateOrInactivate(item, 'Activo')"
-                >
-                  <i class="fas fa-check"></i> Activar
-                </a>
-                <a
-                  *ngIf="item.state == 'Activo'"
-                  class="dropdown-item waves-light text-danger "
-                  (click)="activateOrInactivate(item, 'Inactivo')"
-                >
-                  <i class="fas fa-trash-alt"></i> Anular
-                </a>
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info"
+                    (click)="getCity(item); openConfirm(add, 'Editar Ciudad')"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Inactivo'"
+                    class="dropdown-item waves-light text-success"
+                    (click)="activateOrInactivate(item, 'Activo')"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Activo'"
+                    class="dropdown-item waves-light text-danger"
+                    (click)="activateOrInactivate(item, 'Inactivo')"
+                  >
+                    <i class="fas fa-trash-alt"></i> Anular
+                  </a>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"

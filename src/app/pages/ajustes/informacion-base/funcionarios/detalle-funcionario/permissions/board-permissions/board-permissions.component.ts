@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UserService } from 'src/app/core/services/user.service';
 import { BoardsService } from '../../../../services/boards.service';
+import { SwalService } from '../../../../services/swal.service';
 
 @Component({
   selector: 'app-board-permissions',
@@ -11,12 +12,12 @@ export class BoardPermissionsComponent implements OnInit {
   @Input('personId') personId: string = ''
 
   boards: any;
-  boardsSelected: any;
-  
+  boardsSelected: any;  
   saving: boolean
 
   constructor(
     private _board: BoardsService,
+    private _swal: SwalService,
     private _user: UserService) { }
 
   ngOnInit() {
@@ -29,6 +30,7 @@ export class BoardPermissionsComponent implements OnInit {
       .toPromise()
       .then((b: any) => {
         this.boards = b.data;
+        console.log(this.boards)
       });
   }
 
@@ -37,22 +39,23 @@ export class BoardPermissionsComponent implements OnInit {
       .getPersonBoards(this.personId)
       .subscribe(
         (d: any) => {
-          if (d.data.length != 0) {
-            this.boardsSelected =
-              d.data.reduce((acc, el) => [...acc, el.name_board]);
-          } else if (d.data.length == 0) {
-            this.boardsSelected = 'USUARIO SIN TABLETO ASIGNADO'
-          }
+          this.boardsSelected = d.data[0].board_id
         });
   }
 
   save() {
     this.saving = true;
     this._board
-      .setBoards(this.personId, this.boardsSelected.id)
+      .setBoards(this.personId, this.boardsSelected)
       .subscribe(r => {
         this.saving = false;
-        this._user.user.person.id == this.personId ? location.reload() : null
+        this._swal.show({
+          icon: 'success',
+          title: 'Correcto',
+          text: ('Tablero asignado con éxito'),
+          showCancel: false
+        });
+        //this._user.user.person.id == this.personId ? location.reload() : null
       })
   }
 }

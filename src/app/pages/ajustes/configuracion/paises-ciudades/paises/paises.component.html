@@ -1,104 +1,102 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Paises</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button
-          class="btn btn-primary btn-sm"
-          style="float: right"
-          (click)="openConfirm(add, 'Nuevo País')"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Paises</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(add, 'Nuevo País')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field class="col-md-6 pl-0" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="filtro.name"
-            (input)="getCountries()"
-            name="name"
-            autocomplete="off"
-            placeholder="Busca por nombre"
-          />
-        </mat-form-field>
-        <!-- <div class="form-group col-4">
-                    <label for="">Filtro nombre</label>
-                    <input type="text" class="form-control" [(ngModel)]="filtro.name" (change)="getCountries()"
-                        name="name" autocomplete="off">
-                </div> -->
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filtro.name"
+              (input)="getCountries()"
+              name="name"
+              autocomplete="off"
+              placeholder="Busca por nombre"
+            />
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
 
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && paises.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Paises</th>
-          <th class="col-md-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let pais of paises"
-          class="text-center"
-          [ngClass]="{
-            'text-danger font-weight-bold': pais.state == 'Inactivo'
-          }"
-        >
-          <td class="align-middle">{{ pais.name | titlecase }}</td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item waves-light text-info  caja-botones"
-                  target="_blank"
-                  (click)="getData(pais); openConfirm(add, 'Editar País')"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && paises.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Paises</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let pais of paises"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': pais.state == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">{{ pais.name | titlecase }}</td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
                 >
-                  <i class="far fa-edit"></i> Editar
-                </a>
-                <a
-                  *ngIf="pais.state == 'Inactivo'"
-                  class="dropdown-item waves-light text-success "
-                  (click)="activateOrInactivate(pais, 'Activo')"
-                >
-                  <i class="fas fa-check"></i> Activar
-                </a>
-                <a
-                  *ngIf="pais.state == 'Activo'"
-                  class="dropdown-item waves-light text-danger "
-                  (click)="activateOrInactivate(pais, 'Inactivo')"
-                >
-                  <i class="fas fa-trash-alt"></i> Anular
-                </a>
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    target="_blank"
+                    (click)="getData(pais); openConfirm(add, 'Editar País')"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="pais.state == 'Inactivo'"
+                    class="dropdown-item waves-light text-success"
+                    (click)="activateOrInactivate(pais, 'Activo')"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                  <a
+                    *ngIf="pais.state == 'Activo'"
+                    class="dropdown-item waves-light text-danger"
+                    (click)="activateOrInactivate(pais, 'Inactivo')"
+                  >
+                    <i class="fas fa-trash-alt"></i> Anular
+                  </a>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"

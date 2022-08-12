@@ -94,61 +94,63 @@
             </div>
           </div>
         </div>
-        <table
-          class="table table-bordered table-responsive-lg table-sm"
-          style="font-size: small"
-        >
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th colspan="2">Origen</th>
-              <th colspan="2">Destino</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="align-middle">
-                <strong *ngIf="origen; else noData">{{ origen.Nombre }}</strong>
-              </td>
-              <td class="align-middle">
-                <span *ngIf="origen; else noData">
-                  <strong> Dirección: </strong> {{ origen.Direccion }}
-                </span>
-              </td>
-              <td class="align-middle">
-                <strong *ngIf="destino; else noData">
-                  {{ destino.Nombre }}</strong
-                >
-              </td>
-              <td class="align-middle">
-                <span *ngIf="destino; else noData">
-                  <strong> Dirección: </strong>{{ destino.Direccion }}
-                </span>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                <span *ngIf="origen; else noData">
-                  <strong>Teléfono: </strong> {{ origen.Telefono }}
-                </span>
-              </td>
-              <td class="align-middle">
-                <span *ngIf="origen; else noData">
-                  <strong> Correo: </strong> {{ origen.Correo }}
-                </span>
-              </td>
-              <td class="align-middle">
-                <span *ngIf="destino; else noData">
-                  <strong> Teléfono: </strong>{{ destino.Celular }}
-                </span>
-              </td>
-              <td class="align-middle">
-                <span *ngIf="destino; else noData">
-                  <strong> Correo: </strong>{{ destino.Correo }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table
+            class="table table-bordered table-sm"
+            style="font-size: small"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th colspan="2">Origen</th>
+                <th colspan="2">Destino</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="align-middle">
+                  <strong *ngIf="origen; else noData">{{ origen.Nombre }}</strong>
+                </td>
+                <td class="align-middle">
+                  <span *ngIf="origen; else noData">
+                    <strong> Dirección: </strong> {{ origen.Direccion }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <strong *ngIf="destino; else noData">
+                    {{ destino.Nombre }}</strong
+                  >
+                </td>
+                <td class="align-middle">
+                  <span *ngIf="destino; else noData">
+                    <strong> Dirección: </strong>{{ destino.Direccion }}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="align-middle">
+                  <span *ngIf="origen; else noData">
+                    <strong>Teléfono: </strong> {{ origen.Telefono }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <span *ngIf="origen; else noData">
+                    <strong> Correo: </strong> {{ origen.Correo }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <span *ngIf="destino; else noData">
+                    <strong> Teléfono: </strong>{{ destino.Celular }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <span *ngIf="destino; else noData">
+                    <strong> Correo: </strong>{{ destino.Correo }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <hr />
         <div class="card bg-light">
           <div class="card-body">
@@ -156,63 +158,65 @@
             <p>{{ remision.Observaciones }}</p>
           </div>
         </div>
-        <table
-          class="table table-bordered table-responsive-lg table-sm"
-          style="font-size: small"
-        >
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th class="align-middle">Producto</th>
-              <th class="align-middle">Cat</th>
-              <th class="align-middle">Lote</th>
-              <th class="align-middle">Fecha Vencimiento</th>
-              <th class="align-middle">Cantidad</th>
-              <th *ngIf="remision.Tipo == 'Cliente'" class="align-middle">
-                Precio
-              </th>
-              <th *ngIf="remision.Tipo == 'Cliente'" class="align-middle">
-                Descuento
-              </th>
-              <th *ngIf="remision.Tipo == 'Cliente'" class="align-middle">
-                IVA
-              </th>
-              <th *ngIf="remision.Tipo == 'Cliente'" class="align-middle">
-                Total
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let item of productos; let i = index"
-              id="fila{{ i }}"
-              class="text-center"
-            >
-              <td class="align-middle">{{ item.Nombre_Producto }}</td>
-              <td>
-                <i *ngIf="item.Id_Categoria == 9" class="fa fa-registered"></i>
-              </td>
-              <td class="align-middle">{{ item.Lote }}</td>
-              <td class="align-middle">{{ item.Fecha_Vencimiento }}</td>
-              <td class="align-middle">{{ item.Cantidad }}</td>
-              <td class="align-middle" *ngIf="remision.Tipo == 'Cliente'">
-                {{ item.Precio }}
-              </td>
-              <td class="align-middle" *ngIf="remision.Tipo == 'Cliente'">
-                {{ item.Descuento }}
-              </td>
-              <td class="align-middle" *ngIf="remision.Tipo == 'Cliente'">
-                {{ item.Impuesto }}
-              </td>
-              <td class="align-middle" *ngIf="remision.Tipo == 'Cliente'">
-                {{ item.Subtotal }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table
+            class="table table-bordered table-sm"
+            style="font-size: small"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th class="align-middle">Producto</th>
+                <th class="align-middle">Cat</th>
+                <th class="align-middle">Lote</th>
+                <th class="align-middle">Fecha Vencimiento</th>
+                <th class="align-middle">Cantidad</th>
+                <th *ngIf="remision.Tipo == 'Cliente'" class="align-middle">
+                  Precio
+                </th>
+                <th *ngIf="remision.Tipo == 'Cliente'" class="align-middle">
+                  Descuento
+                </th>
+                <th *ngIf="remision.Tipo == 'Cliente'" class="align-middle">
+                  IVA
+                </th>
+                <th *ngIf="remision.Tipo == 'Cliente'" class="align-middle">
+                  Total
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of productos; let i = index"
+                id="fila{{ i }}"
+                class="text-center"
+              >
+                <td class="align-middle">{{ item.Nombre_Producto }}</td>
+                <td>
+                  <i *ngIf="item.Id_Categoria == 9" class="fa fa-registered"></i>
+                </td>
+                <td class="align-middle">{{ item.Lote }}</td>
+                <td class="align-middle">{{ item.Fecha_Vencimiento }}</td>
+                <td class="align-middle">{{ item.Cantidad }}</td>
+                <td class="align-middle" *ngIf="remision.Tipo == 'Cliente'">
+                  {{ item.Precio }}
+                </td>
+                <td class="align-middle" *ngIf="remision.Tipo == 'Cliente'">
+                  {{ item.Descuento }}
+                </td>
+                <td class="align-middle" *ngIf="remision.Tipo == 'Cliente'">
+                  {{ item.Impuesto }}
+                </td>
+                <td class="align-middle" *ngIf="remision.Tipo == 'Cliente'">
+                  {{ item.Subtotal }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div>
           <!--<div *ngIf="remision.Tipo==Cliente" class="row">
             <div class="col-sm-12">
-              <table class="table table-responsive invoice-table invoice-total">
+              <table class="table invoice-table invoice-total">
                 <tbody>
                   <tr>
                     <th>Productos Solicitados :</th>

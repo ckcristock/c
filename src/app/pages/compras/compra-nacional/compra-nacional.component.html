@@ -123,123 +123,125 @@
         </section>
       </mat-expansion-panel>
     </mat-accordion>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg mb-0"
-      style="font-size: small"
-      *ngIf="comprasnacionales.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th *ngIf="checkFoto">Foto</th>
-          <th *ngIf="checkFuncionario">Funcionario</th>
-          <th *ngIf="checkFecha">Fecha</th>
-          <th *ngIf="checkCodigo">Código</th>
-          <th *ngIf="checkProveedor">Proveedor</th>
-          <th *ngIf="checkEstado">Estado</th>
-          <th *ngIf="checkAprobacion">Aprobación</th>
-          <th class="col-sm-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let compra of comprasnacionales" class="text-center">
-          <td *ngIf="checkFoto">
-            <img
-              class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
-              [src]="imageProfile"
-              onerror="this.src='../../../../assets/images/noprofile.png'"
-            />
-          </td>
-          <td class="align-middle" *ngIf="checkFuncionario">
-            {{ compra.Funcionario }}
-          </td>
-          <td class="align-middle" *ngIf="checkFecha">
-            {{ compra.Fecha | date: "longDate" }}
-          </td>
-          <td class="align-middle" *ngIf="checkCodigo">{{ compra.Codigo }}</td>
-          <td class="align-middle" *ngIf="checkProveedor">
-            {{ compra.Proveedor }}
-          </td>
-          <td class="align-middle" *ngIf="checkEstado">
-            <span
-              class="badge {{
-                compra.Estado == 'Anulada' ? 'badge-danger' : ''
-              }} {{ compra.Estado == 'Recibida' ? 'badge-success' : '' }} {{
-                compra.Estado == 'Pendiente' ? 'badge-warning' : ''
-              }}"
-              >{{ compra.Estado }}
-            </span>
-          </td>
-          <td class="align-middle" *ngIf="checkAprobacion">
-            <span class="badge badge-success">{{ compra.Aprobacion }}</span>
-          </td>
-          <td>
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  *ngIf="
-                    compra.Estado != 'Anulada' &&
-                    compra.Estado != 'Recibida' &&
-                    compra.Estado_Aprobacion == 'Rechazada'
-                  "
-                  class="dropdown-item text-info waves-light  caja-botones"
-                  href=""
-                  [routerLink]="[
-                    '/comprasnacionaleseditar',
-                    compra.Id_Orden_Compra_Nacional
-                  ]"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm mb-0"
+        style="font-size: small"
+        *ngIf="comprasnacionales.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th *ngIf="checkFoto">Foto</th>
+            <th *ngIf="checkFuncionario">Funcionario</th>
+            <th *ngIf="checkFecha">Fecha</th>
+            <th *ngIf="checkCodigo">Código</th>
+            <th *ngIf="checkProveedor">Proveedor</th>
+            <th *ngIf="checkEstado">Estado</th>
+            <th *ngIf="checkAprobacion">Aprobación</th>
+            <th class="col-sm-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let compra of comprasnacionales" class="text-center">
+            <td *ngIf="checkFoto">
+              <img
+                class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
+                [src]="imageProfile"
+                onerror="this.src='../../../../assets/images/noprofile.png'"
+              />
+            </td>
+            <td class="align-middle" *ngIf="checkFuncionario">
+              {{ compra.Funcionario }}
+            </td>
+            <td class="align-middle" *ngIf="checkFecha">
+              {{ compra.Fecha | date: "longDate" }}
+            </td>
+            <td class="align-middle" *ngIf="checkCodigo">{{ compra.Codigo }}</td>
+            <td class="align-middle" *ngIf="checkProveedor">
+              {{ compra.Proveedor }}
+            </td>
+            <td class="align-middle" *ngIf="checkEstado">
+              <span
+                class="badge {{
+                  compra.Estado == 'Anulada' ? 'badge-danger' : ''
+                }} {{ compra.Estado == 'Recibida' ? 'badge-success' : '' }} {{
+                  compra.Estado == 'Pendiente' ? 'badge-warning' : ''
+                }}"
+                >{{ compra.Estado }}
+              </span>
+            </td>
+            <td class="align-middle" *ngIf="checkAprobacion">
+              <span class="badge badge-success">{{ compra.Aprobacion }}</span>
+            </td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm  waves-light"
+                  type="button"
                 >
-                  <i class="fas fa-edit"></i> Editar</a
-                >
-                <a
-                  class="dropdown-item text-success waves-light  caja-botones"
-                  href=""
-                  [routerLink]="[
-                    '/compras/ver-nacional',
-                    compra.Id_Orden_Compra_Nacional
-                  ]"
-                >
-                  <i class="fas fa-eye"></i> Ver</a
-                >
-                <!-- TODO Imprimir Orden Compra -->
-                <!--  <a
-                              class="
-                                dropdown-item
-                                waves-light 
-                                caja-botones
-                              "
-                              href="{{
-                                environment.ruta
-                              }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_Nacional&id={{
-                                compra.Id_Orden_Compra_Nacional
-                              }}"
-                              target="_blank"
-                            >
-                              <i class="ti-printer"></i>Imprimir</a
-                            > -->
-                <a
-                  *ngIf="compra.Estado != 'Anulada'"
-                  class="dropdown-item text-danger waves-light  caja-botones"
-                  href=""
-                  [swal]="anulacion"
-                  (confirm)="
-                    anularCompra(compra.Id_Orden_Compra_Nacional, $event)
-                  "
-                >
-                  <i class="fa fa-times"></i> Anular</a
-                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    *ngIf="
+                      compra.Estado != 'Anulada' &&
+                      compra.Estado != 'Recibida' &&
+                      compra.Estado_Aprobacion == 'Rechazada'
+                    "
+                    class="dropdown-item text-info waves-light  caja-botones"
+                    href=""
+                    [routerLink]="[
+                      '/comprasnacionaleseditar',
+                      compra.Id_Orden_Compra_Nacional
+                    ]"
+                  >
+                    <i class="fas fa-edit"></i> Editar</a
+                  >
+                  <a
+                    class="dropdown-item text-success waves-light  caja-botones"
+                    href=""
+                    [routerLink]="[
+                      '/compras/ver-nacional',
+                      compra.Id_Orden_Compra_Nacional
+                    ]"
+                  >
+                    <i class="fas fa-eye"></i> Ver</a
+                  >
+                  <!-- TODO Imprimir Orden Compra -->
+                  <!--  <a
+                                class="
+                                  dropdown-item
+                                  waves-light
+                                  caja-botones
+                                "
+                                href="{{
+                                  environment.ruta
+                                }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_Nacional&id={{
+                                  compra.Id_Orden_Compra_Nacional
+                                }}"
+                                target="_blank"
+                              >
+                                <i class="ti-printer"></i>Imprimir</a
+                              > -->
+                  <a
+                    *ngIf="compra.Estado != 'Anulada'"
+                    class="dropdown-item text-danger waves-light  caja-botones"
+                    href=""
+                    [swal]="anulacion"
+                    (confirm)="
+                      anularCompra(compra.Id_Orden_Compra_Nacional, $event)
+                    "
+                  >
+                    <i class="fa fa-times"></i> Anular</a
+                  >
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       *ngIf="comprasnacionales.length > 0"
       class="pull-right"

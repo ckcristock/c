@@ -2,67 +2,69 @@
 <div class="text-center">
   <h5>Transporte terrestre</h5>
 </div>
-<table
-  class="table table-bordered table-striped table-sm table-responsive-lg"
-  style="font-size: small"
->
-  <thead class="bg-light">
-    <tr class="text-center text-uppercase">
-      <th>Tipo</th>
-      <th>Trayecto</th>
-      <th>Empresa</th>
-      <th>Pago Tiquete</th>
-      <th>Hora Salida</th>
-      <th>Valor Tiquete</th>
-      <th *ngIf="legal">Legalizar</th>
-      <th *ngIf="legal">Archivo</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of transports; let i = index" class="text-center">
-      <td>
-        {{ item.type }}
-      </td>
-      <td>
-        {{ item.journey }}
-      </td>
-
-      <td>
-        {{ item.company }}
-      </td>
-
-      <td>
-        {{ item.ticket_payment }}
-      </td>
-      <td>
-        {{ item.departure_date }}
-      </td>
-      <td class="text-right">
-        {{ item.ticket_value }}
-      </td>
-      <td *ngIf="legal">
-        <input
-          type="number"
-          class="form-control form-control-sm"
-          placeholder="valor reportado"
-          name=""
-          [(ngModel)]="item.reported"
-          id=""
-        />
-      </td>
-      <td *ngIf="legal">
-        <div class="image-upload">
-          <label for="file-input-tr{{ i }}" class="text-right">
-            <i class="fas fa-cloud-upload-alt text-primary"></i>
-          </label>
+<div class="table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    style="font-size: small"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Tipo</th>
+        <th>Trayecto</th>
+        <th>Empresa</th>
+        <th>Pago Tiquete</th>
+        <th>Hora Salida</th>
+        <th>Valor Tiquete</th>
+        <th *ngIf="legal">Legalizar</th>
+        <th *ngIf="legal">Archivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of transports; let i = index" class="text-center">
+        <td>
+          {{ item.type }}
+        </td>
+        <td>
+          {{ item.journey }}
+        </td>
+  
+        <td>
+          {{ item.company }}
+        </td>
+  
+        <td>
+          {{ item.ticket_payment }}
+        </td>
+        <td>
+          {{ item.departure_date }}
+        </td>
+        <td class="text-right">
+          {{ item.ticket_value }}
+        </td>
+        <td *ngIf="legal">
           <input
-            #file
-            (change)="onFileChanged($event, i, item)"
-            id="file-input-tr{{ i }}"
-            type="file"
+            type="number"
+            class="form-control form-control-sm"
+            placeholder="valor reportado"
+            name=""
+            [(ngModel)]="item.reported"
+            id=""
           />
-        </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        </td>
+        <td *ngIf="legal">
+          <div class="image-upload">
+            <label for="file-input-tr{{ i }}" class="text-right">
+              <i class="fas fa-cloud-upload-alt text-primary"></i>
+            </label>
+            <input
+              #file
+              (change)="onFileChanged($event, i, item)"
+              id="file-input-tr{{ i }}"
+              type="file"
+            />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

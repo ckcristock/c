@@ -1,13 +1,18 @@
-<div class="row">
-  <div *ngFor="let Configuracion of Reportes; let i = index " class="col-md-3" style="cursor: pointer" (click)="DescargasReporte(i)">
-    <div class="card bg-light" [ngClass]="Configuracion.Color">
-      <div class="card-body" >
-        <div class="row align-items-center">
-          <div class="col-3 notify-icon">
-            <i style="font-size: 24px;" [ngClass]="Configuracion.Icono"></i>
+<div class="row d-flex align-items-stretch">
+  <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6 d-flex align-items-stretch" *ngFor="let Configuracion of Reportes; let i = index">
+    <div
+      (click)="DescargasReporte(i)"
+      role="button"
+      class="card border border-3 border-light w-100"
+      [ngClass]="Configuracion.Color"
+    >
+      <div class="card-body d-flex align-items-center">
+        <div class="row d-flex align-items-center">
+          <div class="col-1">
+            <i class="fa-2x" [ngClass]="Configuracion.Icono"></i>
           </div>
-          <div class="col-9 notify-cont" style="min-height: 68px;vertical-align:middle">
-            <p class="align-items-center" >{{Configuracion.Texto}} </p>
+          <div class="col ml-2">
+            <span class="align-items-center">{{ Configuracion.Texto }}</span>
           </div>
         </div>
       </div>

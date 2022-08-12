@@ -131,7 +131,7 @@
             </div>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-md-6">
           <div class="form-group">
             <label for="">Observaciones</label>
             <textarea
@@ -149,187 +149,194 @@
         >*Nota: Para hacer más efectiva la busqueda, por favor digite el nombre
         completo del producto.</small
       >
-      <table
-        class="table table-bordered table-striped table-sm table-responsive-lg"
-      >
-        <thead>
-          <tr>
-            <th class="col-sm-4">Producto</th>
-            <th></th>
-            <th class="col-sm-1">Presentación</th>
-            <th class="col-sm-1" *ngIf="Rotativo">Rotativo</th>
-            <th class="col-sm-1">Cantidad</th>
-            <th class="col-sm-2">Costo</th>
-            <th class="col-sm-1">IVA</th>
-            <th class="col-sm-2">Subtotal</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let item of Lista_Productos; let i = index"
-            id="fila{{ i }}"
-          >
-            <td>
-              <input
-                type="hidden"
-                name="productoModel{{ i }}"
-                [ngModel]="item.producto"
-              />
-              <input
-                *ngIf="item.Id_Producto == ''"
-                type="text"
-                name="producto{{ i }}"
-                id="Producto{{ i }}"
-                class="form-control form-control-sm"
-                autocomplete="off"
-                [value]="item.producto"
-                [readonly]="item.producto != ''"
-              />
-              <label *ngIf="item.Id_Producto != ''">{{ item.producto }}</label>
-              <!-- <input type="text" name="producto{{i}}" id="Producto{{i}}" class="form-control form-control-sm f-9 input-product" [ngModel]="item.producto"
-                      [ngbTypeahead]="search1" [resultTemplate]="rt" [inputFormatter]="formatter1" (ngModelChange)="BuscarLote(item.producto, i)"
-                    /> -->
-            </td>
-            <td class="text-center">
-              <button
-                *ngIf="item.producto == ''"
-                class="btn btn-primary btn-sm"
-                (click)="searchProduct(i, item.editar); openConfirm(add)"
-                title="Buscar Producto"
-              >
-                <i class="fa fa-search"></i>
-              </button>
-              <span
-                *ngIf="item.producto != ''"
-                class="mytooltip tooltip-effect-2"
-                ><span class="tooltip-item2">Embalaje</span
-                ><span class="tooltip-content4 clearfix"
-                  ><span class="tooltip-text2">{{ item.Embalaje }}</span></span
+      <div class="table-responsive">
+        <table
+          class="table table-bordered table-striped table-sm"
+          style="font-size: small"
+        >
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th class="col-sm-4">Producto</th>
+              <th></th>
+              <th class="col-sm-1">Presentación</th>
+              <th class="col-sm-1" *ngIf="Rotativo">Rotativo</th>
+              <th class="col-sm-1">Cantidad</th>
+              <th class="col-sm-2">Costo</th>
+              <th class="col-sm-1">IVA</th>
+              <th class="col-sm-2">Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of Lista_Productos; let i = index"
+              id="fila{{ i }}"
+            >
+              <td>
+                <input
+                  type="hidden"
+                  name="productoModel{{ i }}"
+                  [ngModel]="item.producto"
+                />
+                <input
+                  *ngIf="item.Id_Producto == ''"
+                  type="text"
+                  name="producto{{ i }}"
+                  id="Producto{{ i }}"
+                  class="form-control form-control-sm"
+                  autocomplete="off"
+                  [value]="item.producto"
+                  [readonly]="item.producto != ''"
+                />
+                <label *ngIf="item.Id_Producto != ''">{{
+                  item.producto
+                }}</label>
+                <!-- <input type="text" name="producto{{i}}" id="Producto{{i}}" class="form-control form-control-sm f-9 input-product" [ngModel]="item.producto"
+                        [ngbTypeahead]="search1" [resultTemplate]="rt" [inputFormatter]="formatter1" (ngModelChange)="BuscarLote(item.producto, i)"
+                      /> -->
+              </td>
+              <td class="text-center">
+                <button
+                  *ngIf="item.producto == ''"
+                  class="btn btn-primary btn-sm"
+                  (click)="searchProduct(i, item.editar); openConfirm(add)"
+                  title="Buscar Producto"
                 >
-              </span>
-              <!-- <button *ngIf="item.delete" class="btn btn-danger btn-xs btn-search" (click)="deleteProduct(i);" title="Eliminar producto" style="display: inline-block;">
-                      &nbsp;<i class="fa fa-trash"></i>
-                    </button> -->
-            </td>
-            <td class="text-center">
-              <input
-                type="hidden"
-                name="PresentacionModel{{ i }}"
-                [ngModel]="item.Presentacion"
-              />
-              <p id="Presentacion{{ i }}" name="Presentacion{{ i }}">
-                {{ item.Presentacion }}
-              </p>
-            </td>
-            <td *ngIf="Rotativo">
-              <input
-                readonly
-                id="Rotativo{{ i }}"
-                name="Rotativo{{ i }}"
-                [ngModel]="item.Rotativo"
-                type="number"
-                min="1"
-                class="form-control form-control-sm text-right f-9"
-              />
-            </td>
-            <td>
-              <!--<input id="Cantidad{{i}}" name="Cantidad{{i}}" [ngModel]="item.Cantidad" type="number" min="1" class="form-control form-control-sm text-right f-9"
-                      (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
-              <input
-                type="hidden"
-                name="CantidadModel{{ i }}"
-                [ngModel]="item.Cantidad"
-              />
-              <input
-                id="Cantidad{{ i }}"
-                name="Cantidad{{ i }}"
-                [value]="item.Cantidad"
-                type="number"
-                min="1"
-                class="form-control form-control-sm text-right f-9"
-                (change)="
-                  CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                "
-                (keyup)="ActualizaValores(); CapturarDigitacion(i)"
-              />
-            </td>
-            <td>
-              <input
-                type="hidden"
-                name="CostoModel{{ i }}"
-                [ngModel]="item.Costo"
-              />
-              <input
-                id="Costo{{ i }}"
-                name="Costo{{ i }}"
-                [value]="item.Costo"
-                type="text"
-                min="1"
-                class="form-control form-control-sm text-right f-9"
-                (change)="
-                  CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                "
-                (keyup)="ActualizaValores(); CapturarDigitacion(i)"
-                pattern="[0-9\.]*"
-              />
-            </td>
-            <td>
-              <!--<input id="Iva{{i}}" name="Iva{{i}}" [ngModel]="item.Iva" type="number" min="1" class="form-control form-control-sm text-right f-9"
-                      (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
-              <input
-                type="hidden"
-                name="IvaModel{{ i }}"
-                [ngModel]="item.Iva"
-              />
-              <select
-                [ngModel]="item.Iva"
-                id="Iva{{ i }}"
-                name="Iva{{ i }}"
-                class="form-control form-control-sm"
-                (change)="
-                  CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                "
-              >
-                <option
-                  *ngFor="let Impuesto of Impuestos; let i = index"
-                  [value]="Impuesto.Valor"
+                  <i class="fa fa-search"></i>
+                </button>
+                <span
+                  *ngIf="item.producto != ''"
+                  class="mytooltip tooltip-effect-2"
+                  ><span class="tooltip-item2">Embalaje</span
+                  ><span class="tooltip-content4 clearfix"
+                    ><span class="tooltip-text2">{{
+                      item.Embalaje
+                    }}</span></span
+                  >
+                </span>
+                <!-- <button *ngIf="item.delete" class="btn btn-danger btn-xs btn-search" (click)="deleteProduct(i);" title="Eliminar producto" style="display: inline-block;">
+                        &nbsp;<i class="fa fa-trash"></i>
+                      </button> -->
+              </td>
+              <td class="text-center">
+                <input
+                  type="hidden"
+                  name="PresentacionModel{{ i }}"
+                  [ngModel]="item.Presentacion"
+                />
+                <p id="Presentacion{{ i }}" name="Presentacion{{ i }}">
+                  {{ item.Presentacion }}
+                </p>
+              </td>
+              <td *ngIf="Rotativo">
+                <input
+                  readonly
+                  id="Rotativo{{ i }}"
+                  name="Rotativo{{ i }}"
+                  [ngModel]="item.Rotativo"
+                  type="number"
+                  min="1"
+                  class="form-control form-control-sm text-right f-9"
+                />
+              </td>
+              <td>
+                <!--<input id="Cantidad{{i}}" name="Cantidad{{i}}" [ngModel]="item.Cantidad" type="number" min="1" class="form-control form-control-sm text-right f-9"
+                        (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
+                <input
+                  type="hidden"
+                  name="CantidadModel{{ i }}"
+                  [ngModel]="item.Cantidad"
+                />
+                <input
+                  id="Cantidad{{ i }}"
+                  name="Cantidad{{ i }}"
+                  [value]="item.Cantidad"
+                  type="number"
+                  min="1"
+                  class="form-control form-control-sm text-right f-9"
+                  (change)="
+                    CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
+                  "
+                  (keyup)="ActualizaValores(); CapturarDigitacion(i)"
+                />
+              </td>
+              <td>
+                <input
+                  type="hidden"
+                  name="CostoModel{{ i }}"
+                  [ngModel]="item.Costo"
+                />
+                <input
+                  id="Costo{{ i }}"
+                  name="Costo{{ i }}"
+                  [value]="item.Costo"
+                  type="text"
+                  min="1"
+                  class="form-control form-control-sm text-right f-9"
+                  (change)="
+                    CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
+                  "
+                  (keyup)="ActualizaValores(); CapturarDigitacion(i)"
+                  pattern="[0-9\.]*"
+                />
+              </td>
+              <td>
+                <!--<input id="Iva{{i}}" name="Iva{{i}}" [ngModel]="item.Iva" type="number" min="1" class="form-control form-control-sm text-right f-9"
+                        (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
+                <input
+                  type="hidden"
+                  name="IvaModel{{ i }}"
+                  [ngModel]="item.Iva"
+                />
+                <select
+                  [ngModel]="item.Iva"
+                  id="Iva{{ i }}"
+                  name="Iva{{ i }}"
+                  class="form-control form-control-sm"
+                  (change)="
+                    CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
+                  "
                 >
-                  {{ Impuesto.Valor }}
-                </option>
-              </select>
-            </td>
-            <td class="text-center">
-              <input
-                type="hidden"
-                name="TotalModel{{ i }}"
-                [ngModel]="item.Total"
-              />
-              <p
-                name="Total{{ i }}"
-                id="Total{{ i }}"
-                type="text"
-                min="1"
-                (change)="
-                  CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                "
-                readonly
-              >
-                $ {{ item.Total | currency: "COP":"symbol" }}
-              </p>
-            </td>
-            <td>
-              <button
-                class="btn btn-danger btn-sm"
-                (click)="deleteProduct(i, $event)"
-                *ngIf="item.producto != ''"
-              >
-                <i class="fa fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                  <option
+                    *ngFor="let Impuesto of Impuestos; let i = index"
+                    [value]="Impuesto.Valor"
+                  >
+                    {{ Impuesto.Valor }}
+                  </option>
+                </select>
+              </td>
+              <td class="text-center">
+                <input
+                  type="hidden"
+                  name="TotalModel{{ i }}"
+                  [ngModel]="item.Total"
+                />
+                <p
+                  name="Total{{ i }}"
+                  id="Total{{ i }}"
+                  type="text"
+                  min="1"
+                  (change)="
+                    CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
+                  "
+                  readonly
+                >
+                  $ {{ item.Total | currency: "COP":"symbol" }}
+                </p>
+              </td>
+              <td>
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="deleteProduct(i, $event)"
+                  *ngIf="item.producto != ''"
+                >
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="row d-flex justify-content-end">
         <div class="col-sm-5">
           <table class="table table-hover">
@@ -545,7 +552,7 @@
     <div class="invoice-box row">
       <div class="col-sm-12">
         <table
-          class="table table-responsive invoice-table table-borderless"
+          class="table invoice-table table-borderless"
           style="text-align: left; font-size: 12px"
         >
           <tbody>

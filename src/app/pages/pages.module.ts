@@ -28,17 +28,22 @@ import { ResolucionesxvencerComponent } from './boards/board-contabilidad/resolu
 import { CardreportesComponent } from './boards/board-contabilidad/cardreportes/cardreportes.component';
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 //import { AngularFileUploaderModule } from "angular-file-uploader";
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+
 registerLocaleData(localeEs, 'es');
 
 
 @NgModule({
     declarations: [
-        DashboardComponent, 
-        TasksComponent, 
-        TaskViewComponent, 
-        BoardsComponent, 
+        DashboardComponent,
+        TasksComponent,
+        TaskViewComponent,
+        BoardsComponent,
         BoardRrhhComponent,
-        BoardContabilidadComponent,  
+        BoardContabilidadComponent,
         BoardJefeBodegaComponent,
         BoardNominaComponent,
         FiltrosgeneralesauditorComponent,
@@ -58,7 +63,11 @@ registerLocaleData(localeEs, 'es');
         NgSelectModule,
         CKEditorModule,
         ChartModule,
-        MyDateRangePickerModule
+        MyDateRangePickerModule,
+        MatExpansionModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
         //AngularFileUploaderModule,
     ],
     exports: [],

@@ -47,7 +47,7 @@ export class BoardRrhhComponent implements OnInit {
   @ViewChild('ModalCambioEstado') ModalCambioEstado: any;
   mes_actual: string;
   public meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-  globales = {ruta: 'https://sigespro.com.co/'}
+  globales = {ruta: 'https://inventario.sigmaqmo.com/'}
   constructor(private http: HttpClient, private location: Location, private route: ActivatedRoute) {
     
     this.LlegadasTardeMes();

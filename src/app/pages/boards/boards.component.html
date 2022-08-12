@@ -1,45 +1,37 @@
-<div *ngIf="!loading; else notData">  
+<div *ngIf="!loading; else notData">
   <ng-container *ngIf="board == 0 || !board">
     <app-building></app-building>
   </ng-container>
-  
+
   <ng-container *ngIf="board == 1">
-    <div class="container">
-        <div class="card">
-            <div class="card-body">
-              <app-board-rrhh></app-board-rrhh>
-            </div>
-        </div>
+    <div class="card">
+      <div class="card-body">
+        <app-board-rrhh></app-board-rrhh>
+      </div>
     </div>
   </ng-container>
   <ng-container *ngIf="board == 2">
-    <div class="container">
-        <div class="card">
-            <div class="card-body">
-                <app-board-nomina></app-board-nomina>
-            </div>
-        </div>
+    <div class="card">
+      <div class="card-body">
+        <app-board-nomina></app-board-nomina>
+      </div>
     </div>
   </ng-container>
   <ng-container *ngIf="board == 3">
-    <div class="container">
-        <div class="card">
-            <div class="card-body">
-                <app-board-contabilidad></app-board-contabilidad>
-            </div>
-        </div>
+    <div class="card">
+      <div class="card-body">
+        <app-board-contabilidad></app-board-contabilidad>
+      </div>
     </div>
   </ng-container>
   <ng-container *ngIf="board == 4">
     <app-building></app-building>
   </ng-container>
   <ng-container *ngIf="board == 5">
-    <div class="container">
-        <div class="card">
-            <div class="card-body">
-                <app-board-jefe-bodega></app-board-jefe-bodega>
-            </div>
-        </div>
+    <div class="card">
+      <div class="card-body">
+        <app-board-jefe-bodega></app-board-jefe-bodega>
+      </div>
     </div>
   </ng-container>
 </div>
@@ -47,9 +39,7 @@
 <ng-template #notData>
   <div class="card">
     <div class="card-body">
-      <app-not-data
-      [loading]="loading"
-    ></app-not-data>
+      <app-not-data [loading]="loading"></app-not-data>
     </div>
   </div>
 </ng-template>

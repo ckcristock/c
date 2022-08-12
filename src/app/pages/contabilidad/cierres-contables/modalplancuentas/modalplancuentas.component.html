@@ -47,54 +47,56 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && Planes_Cuentas.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th></th>
-          <th>Codigo</th>
-          <th>Nombre</th>
-          <th class="col-md-3">Tipo de cierre</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let Plan of Planes_Cuentas" class="text-center">
-          <td class="align-middle">
-            <i
-              class="fas fa-2x"
-              [ngClass]="{
-                'text-danger fa-money-bill':
-                  Plan['Tipo_Cierre_' + tipoCierre] == 'Costos',
-                'text-warning fa-reply ':
-                  Plan['Tipo_Cierre_' + tipoCierre] == 'Gastos',
-                'text-success fa-share':
-                  Plan['Tipo_Cierre_' + tipoCierre] == 'Ingresos',
-                'text-danger fa-ban':
-                  Plan['Tipo_Cierre_' + tipoCierre] == 'Sin Asignar'
-              }"
-            ></i>
-          </td>
-          <td class="align-middle">{{ Plan.Codigo }}</td>
-          <td class="align-middle">{{ Plan.Nombre }}</td>
-          <td class="align-middle">
-            <select
-              class="form-control input-sm"
-              name="Tipo"
-              [(ngModel)]="Plan['Tipo_Cierre_' + tipoCierre]"
-              (ngModelChange)="setTipoPlan(Plan)"
-            >
-              <option value="Sin Asignar">Sin Asignar</option>
-              <option value="Costos">Costos</option>
-              <option value="Gastos">Gastos</option>
-              <option value="Ingresos">Ingresos</option>
-            </select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && Planes_Cuentas.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th></th>
+            <th>Codigo</th>
+            <th>Nombre</th>
+            <th class="col-md-3">Tipo de cierre</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let Plan of Planes_Cuentas" class="text-center">
+            <td class="align-middle">
+              <i
+                class="fas fa-2x"
+                [ngClass]="{
+                  'text-danger fa-money-bill':
+                    Plan['Tipo_Cierre_' + tipoCierre] == 'Costos',
+                  'text-warning fa-reply ':
+                    Plan['Tipo_Cierre_' + tipoCierre] == 'Gastos',
+                  'text-success fa-share':
+                    Plan['Tipo_Cierre_' + tipoCierre] == 'Ingresos',
+                  'text-danger fa-ban':
+                    Plan['Tipo_Cierre_' + tipoCierre] == 'Sin Asignar'
+                }"
+              ></i>
+            </td>
+            <td class="align-middle">{{ Plan.Codigo }}</td>
+            <td class="align-middle">{{ Plan.Nombre }}</td>
+            <td class="align-middle">
+              <select
+                class="form-control input-sm"
+                name="Tipo"
+                [(ngModel)]="Plan['Tipo_Cierre_' + tipoCierre]"
+                (ngModelChange)="setTipoPlan(Plan)"
+              >
+                <option value="Sin Asignar">Sin Asignar</option>
+                <option value="Costos">Costos</option>
+                <option value="Gastos">Gastos</option>
+                <option value="Ingresos">Ingresos</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="modal-footer">
     <button

@@ -1,10 +1,12 @@
-<div class="page-body">
-  <div class="row">
-    <div class="col-md-9">
-      <div class="card">
-        <div class="card-body">
-          <div class="card-title d-flex justify-content-between">
+<div class="row">
+  <div class="col-lg-9">
+    <div class="card">
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
             <h4 class="text-primary">Activos fijos</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
             <div class="btn-group rounded w-sm-100">
               <button
                 type="button"
@@ -18,10 +20,12 @@
               </button>
             </div>
           </div>
-          <hr class="line" />
-          <mat-accordion multi>
-            <mat-expansion-panel class="mat-elevation-z0">
-              <mat-form-field class="col-md-2 pl-0" appearance="outline">
+        </div>
+        <hr class="line" />
+        <mat-accordion multi>
+          <mat-expansion-panel class="mat-elevation-z0">
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
                 <mat-label>Documento</mat-label>
                 <input
                   matInput
@@ -32,7 +36,7 @@
                   autocomplete="off"
                 />
               </mat-form-field>
-              <mat-form-field class="col-md-3 pl-0" appearance="outline">
+              <mat-form-field class="col" appearance="outline">
                 <mat-label>Nombre</mat-label>
                 <input
                   matInput
@@ -43,7 +47,7 @@
                   autocomplete="off"
                 />
               </mat-form-field>
-              <mat-form-field class="col-md-3 pl-0" appearance="outline">
+              <mat-form-field class="col" appearance="outline">
                 <mat-label>Tipo de activo</mat-label>
                 <mat-select
                   [(ngModel)]="Filtros.tipo"
@@ -57,7 +61,7 @@
                   >
                 </mat-select>
               </mat-form-field>
-              <mat-form-field class="col-md-2 pl-0" appearance="outline">
+              <mat-form-field class="col" appearance="outline">
                 <mat-label>Costo PCGA</mat-label>
                 <input
                   matInput
@@ -68,7 +72,7 @@
                   autocomplete="off"
                 />
               </mat-form-field>
-              <mat-form-field class="col-md-2 pl-0" appearance="outline">
+              <mat-form-field class="col" appearance="outline">
                 <mat-label>Costo NIIF</mat-label>
                 <input
                   matInput
@@ -79,19 +83,12 @@
                   autocomplete="off"
                 />
               </mat-form-field>
-              <!-- <th>
-                                            <select (change)="ConsultaFiltrada()" name="Id_Empresa" id="Id_Empresa"
-                                                [(ngModel)]="Filtros.Id_Empresa" class="form-control input-sm"
-                                                placeholder="Filtro Empresa" required>
-                                                <option *ngFor="let item of companies" [value]="item.value">
-                                                    {{ item.text }}
-                                                </option>
-                                            </select>
-                                        </th> -->
-            </mat-expansion-panel>
-          </mat-accordion>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <div class="table-responsive">
           <table
-            class="table table-bordered table-striped table-sm table-responsive-lg"
+            class="table table-bordered table-striped table-sm"
             style="font-size: small"
             *ngIf="!Cargando && ActivosFijos.length > 0; else notData"
           >
@@ -127,19 +124,18 @@
                     <div ngbDropdown container="body" class="dropdown-primary">
                       <button
                         ngbDropdownToggle
-                        class="btn btn-primary btn-sm  waves-light"
+                        class="btn btn-primary btn-sm waves-light"
                         type="button"
                       >
                         <i class="mdi mdi-chevron-down"></i>
                       </button>
                       <div ngbDropdownMenu>
                         <!-- <a class="dropdown-item waves-light  caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}"
-                                                                target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion PCGA</a>
-
-                                                            <a class="dropdown-item waves-light  caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}&tipo=Niif"
-                                                                target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion NIIF</a> -->
+                                                                  target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion PCGA</a>
+                                                              <a class="dropdown-item waves-light  caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}&tipo=Niif"
+                                                                  target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion NIIF</a> -->
                         <a
-                          class="dropdown-item text-primary waves-light  caja-botones"
+                          class="dropdown-item text-primary waves-light caja-botones"
                           [routerLink]="['/contabilidad/activos-fijos-crear']"
                           [queryParams]="{
                             Tipo: 'Adicion',
@@ -149,7 +145,7 @@
                           <i class="fa fa-plus"></i> Adición</a
                         >
                         <a
-                          class="dropdown-item text-info waves-light  caja-botones"
+                          class="dropdown-item text-info waves-light caja-botones"
                           [routerLink]="[
                             '/contabilidad/activo-fijo-ver',
                             af.Id_Activo_Fijo
@@ -158,10 +154,8 @@
                           <i class="fa fa-eye"></i> Ver</a
                         >
                         <a
-                          *ngIf="
-                            af.Estado != 'Anulada' && perfilUsuario == '27'
-                          "
-                          class="dropdown-item waves-light  caja-botones bg-danger"
+                          *ngIf="af.Estado != 'Anulada' && perfilUsuario == '27'"
+                          class="dropdown-item waves-light caja-botones bg-danger"
                           href="javascript:;"
                           [swal]="confirmacionAnular"
                           (click)="IdDocumento = af.Id_Activo_Fijo"
@@ -175,18 +169,19 @@
               </tr>
             </tbody>
           </table>
-          <ngb-pagination
-            class="d-flex justify-content-center pagination-rounded pagination-sm"
-            [collectionSize]="TotalItems"
-            [(page)]="page"
-            [maxSize]="maxSize"
-            [pageSize]="pageSize"
-            size="sm"
-            (pageChange)="ConsultaFiltrada(true)"
-            [boundaryLinks]="true"
-          >
-          </ngb-pagination>
-          <!-- <div
+        </div>
+        <ngb-pagination
+          class="d-flex justify-content-center pagination-rounded pagination-sm"
+          [collectionSize]="TotalItems"
+          [(page)]="page"
+          [maxSize]="maxSize"
+          [pageSize]="pageSize"
+          size="sm"
+          (pageChange)="ConsultaFiltrada(true)"
+          [boundaryLinks]="true"
+        >
+        </ngb-pagination>
+        <!-- <div
             id="paginacion-container"
             class="d-flex justify-content-center"
             *ngIf="ActivosFijos.length > 0"
@@ -197,18 +192,19 @@
               {{ InformacionPaginacion.total }}
             </small>
           </div> -->
-        </div>
       </div>
     </div>
+  </div>
 
-    <div class="col-md-3">
-      <div class="card">
-        <div class="card-body">
-          <div class="card-title">
-            <h4 class="text-primary">Reportes</h4>
-          </div>
-          <hr class="line" />
-          <mat-form-field class="col-md-12 px-0" appearance="outline">
+  <div class="col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <h4 class="text-primary">Reportes</h4>
+        </div>
+        <hr class="line" />
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Tipo de reporte</mat-label>
             <mat-select
               name="tipo_reporte"
@@ -224,7 +220,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field
-            class="col-md-12 px-0"
+            class="col"
             appearance="outline"
             *ngIf="ReporteModel.Tipo_Reporte != 'Relacion'"
           >
@@ -244,7 +240,7 @@
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
           <mat-form-field
-            class="col-md-12 px-0"
+            class="col"
             appearance="outline"
             *ngIf="ReporteModel.Tipo_Reporte != 'Relacion'"
           >
@@ -264,7 +260,7 @@
             <mat-datepicker #picker2></mat-datepicker>
           </mat-form-field>
           <mat-form-field
-            class="col-md-12 px-0"
+            class="col"
             appearance="outline"
             *ngIf="ReporteModel.Tipo_Reporte == 'Relacion'"
           >
@@ -284,8 +280,7 @@
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-
-          <mat-form-field class="col-md-12 px-0" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Tipo de activo</mat-label>
             <mat-select
               name="tipo_activo"
@@ -299,7 +294,7 @@
               >
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="col-md-12 px-0" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Centro de costo</mat-label>
             <mat-select
               name="centro_costo"
@@ -313,9 +308,9 @@
               >
             </mat-select>
           </mat-form-field>
-          <div *ngIf="ReporteModel.Fechas != ''" class="col-md-12 px-0">
+          <div *ngIf="ReporteModel.Fechas != ''" class="col">
             <button
-              class="btn btn-sm btn-success btn-block"
+              class="btn btn-success btn-block"
               (click)="verReporte()"
             >
               <i class="fa fa-table"></i> Descargar

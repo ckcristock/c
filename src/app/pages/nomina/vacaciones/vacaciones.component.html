@@ -4,62 +4,64 @@
       <h4 class="text-primary">Vacaciones</h4>
     </div>
     <hr class="line" />
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      *ngIf="!loading && vacations.length > 0; else notData"
-      style="font-size: small"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Foto</th>
-          <th>Funcionario</th>
-          <th>Dependencia</th>
-          <th>Fecha Inicio</th>
-          <th>Fecha Fin</th>
-          <th class="col-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let vacation of vacations" class="text-center">
-          <td class="align-middle" class="text-center">
-            <img
-              src="{{ vacation.image | image: 'users' }}"
-              onerror="this.src='../../../../assets/images/noprofile.png'"
-              class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
-            />
-          </td>
-          <td class="align-middle">
-            {{ vacation.name | titlecase }}
-          </td>
-          <td class="align-middle">{{ vacation.dependency }}</td>
-          <td class="align-middle">
-            {{ vacation.date_start | date: "longDate" }}
-          </td>
-          <td class="align-middle">
-            {{ vacation.date_end | date: "longDate" }}
-          </td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && vacations.length > 0; else notData"
+        style="font-size: small"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Foto</th>
+            <th>Funcionario</th>
+            <th>Dependencia</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let vacation of vacations" class="text-center">
+            <td class="align-middle" class="text-center">
+              <img
+                src="{{ vacation.image | image: 'users' }}"
+                onerror="this.src='../../../../assets/images/noprofile.png'"
+                class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
+              />
+            </td>
+            <td class="align-middle">
+              {{ vacation.name | titlecase }}
+            </td>
+            <td class="align-middle">{{ vacation.dependency }}</td>
+            <td class="align-middle">
+              {{ vacation.date_start | date: "longDate" }}
+            </td>
+            <td class="align-middle">
+              {{ vacation.date_end | date: "longDate" }}
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
                 <button
-                  class="dropdown-item text-info waves-light  caja-botones"
-                  (click)="openConfirm(add); vacationData(vacation)"
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm  waves-light"
+                  type="button"
                 >
-                  <i class="far fa-eye"></i> Ver
+                  <i class="mdi mdi-chevron-down"></i>
                 </button>
+                <div ngbDropdownMenu>
+                  <button
+                    class="dropdown-item text-info waves-light  caja-botones"
+                    (click)="openConfirm(add); vacationData(vacation)"
+                  >
+                    <i class="far fa-eye"></i> Ver
+                  </button>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"
@@ -90,27 +92,29 @@
     ></button>
   </div>
   <div class="modal-body">
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Salario</th>
-          <th>Días</th>
-          <th>Formula = Salario Promedio * Días / 30 Días</th>
-          <th>Valor</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="text-center">
-          <td>{{ vacation.salary | currency: "COP" }}</td>
-          <td>{{ daysDiference }}</td>
-          <td>{{ vacation.salary }} * {{ daysDiference }} / 30</td>
-          <td>{{ valor | currency: "COP" }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Salario</th>
+            <th>Días</th>
+            <th>Formula = Salario Promedio * Días / 30 Días</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td>{{ vacation.salary | currency: "COP" }}</td>
+            <td>{{ daysDiference }}</td>
+            <td>{{ vacation.salary }} * {{ daysDiference }} / 30</td>
+            <td>{{ valor | currency: "COP" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="modal-footer">
     <button

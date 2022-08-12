@@ -1,39 +1,43 @@
 <ng-container *ngIf="!loading; else notData">
-  <div class="card-title d-flex justify-content-between">
-    <h5 class="text-primary">Listado de entregas de dotación y EPP</h5>
-    <div class="btn-group rounded w-sm-100">
-      <button
-        class="btn btn-primary btn-sm"
-        (click)="configEntrega('Dotacion')" 
-      >
-      <!-- ;openConfirm(add, 'Dotacion') ;openConfirm(add,'EPP')-->
-        <i class="fa fa-plus"></i> Dotación
-      </button>
-      <button class="btn btn-primary btn-sm" (click)="configEntrega('EPP')">
-        <i class="fa fa-plus"></i> EPP
-      </button>
-      <button class="btn btn-sm btn-primary" (click)="downloadDeliveries()">
-        <i class="fas fa-file-download"></i>
-        <span *ngIf="!donwloading; else status"> Descargar</span>
-        <ng-template #status>
-          <span
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          Generando...
-        </ng-template>
-      </button>
-      <button class="btn btn-info btn-sm" (click)="openClose()">
-        <i class="fas fa-sliders-h"></i> Filtros
-      </button>
+  <div class="row card-title d-flex justify-content-between">
+    <div class="col-md-6 px-0">
+      <h5 class="text-primary">Listado de entregas de dotación y EPP</h5>
+    </div>
+    <div class="col-md-6 px-0 text-right">
+      <div class="btn-group rounded w-sm-100">
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="configEntrega('Dotacion')"
+        >
+          <!-- ;openConfirm(add, 'Dotacion') ;openConfirm(add,'EPP')-->
+          <i class="fa fa-plus"></i> Dotación
+        </button>
+        <button class="btn btn-primary btn-sm" (click)="configEntrega('EPP')">
+          <i class="fa fa-plus"></i> EPP
+        </button>
+        <button class="btn btn-sm btn-primary" (click)="downloadDeliveries()">
+          <i class="fas fa-file-download"></i>
+          <span *ngIf="!donwloading; else status"> Descargar</span>
+          <ng-template #status>
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            Generando...
+          </ng-template>
+        </button>
+        <button class="btn btn-info btn-sm" (click)="openClose()">
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
+      </div>
     </div>
   </div>
   <hr class="line" />
   <mat-accordion multi>
     <mat-expansion-panel class="mat-elevation-z0">
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 mb-4">
           <ng-select
             [items]="people"
             [(ngModel)]="people_id"
@@ -48,7 +52,7 @@
           >
           </ng-select>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 mb-4">
           <ng-select
             [items]="people"
             [(ngModel)]="people_id_two"
@@ -63,7 +67,7 @@
           >
           </ng-select>
         </div>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Código</mat-label>
           <input
             matInput
@@ -73,7 +77,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo</mat-label>
           <mat-select name="Tipo" id="tipo" [(ngModel)]="type" required>
             <mat-option value="">Todos</mat-option>
@@ -81,7 +85,7 @@
             <mat-option value="EPP">EPP</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Estado</mat-label>
           <mat-select name="Estado" id="estado" [(ngModel)]="delivery" required>
             <mat-option value="">Todos</mat-option>
@@ -91,7 +95,7 @@
             <mat-option value="Entregado">Entregado</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha de inicio</mat-label>
           <input
             matInput
@@ -101,7 +105,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha de fin</mat-label>
           <input
             matInput
@@ -123,82 +127,84 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
-  <table
-    class="table table-bordered table-striped table-sm table-responsive-lg"
-    style="font-size: small"
-    *ngIf="!loading && Lista_Dotaciones.length > 0; else notDataTable"
-  >
-    <thead class="bg-light">
-      <tr class="text-center text-uppercase">
-        <th class="align-middle">Código</th>
-        <th class="align-middle">Tipo</th>
-        <th class="align-middle">Fecha</th>
-        <th class="align-middle">Funcionario Entrega</th>
-        <th class="align-middle">Funcionario Recibe</th>
-        <th class="align-middle">Detalles</th>
-        <th class="align-middle">Artículos</th>
-        <th class="align-middle">Valor</th>
-        <th class="align-middle">Estado</th>
-        <th class="align-middle">Estado Entrega</th>
-        <th class="align-middle">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let item of Lista_Dotaciones"
-        class="text-center"
-        [ngClass]="{
-          'text-danger font-weight-bold': item.state == 'Anulada'
-        }"
-      >
-        <td class="align-middle">{{ item.delivery_code }}</td>
-        <td class="align-middle">{{ item.type }}</td>
-        <td class="align-middle">{{ item.created_at | date: "dd/MM/yyyy" }}</td>
-        <td class="align-middle">{{ item.entrega }}</td>
-        <td class="align-middle">{{ item.recibe }}</td>
-        <td class="align-middle">{{ item.description }}</td>
-        <td class="align-middle">
-          <div class="articulos-table">
-            {{ item.product_name }}
-          </div>
-        </td>
-        <td class="align-middle">${{ item.total | number | puntos }}</td>
-        <td class="align-middle">
-          <span>{{ item.state }}</span>
-        </td>
-        <td class="align-middle">
-          <span>{{ item.delivery_state }}</span>
-        </td>
-        <td class="align-middle">
-          <div ngbDropdown container="body" class="dropdown-primary">
-            <button
-              ngbDropdownToggle
-              class="btn btn-primary btn-sm  waves-light"
-              type="button"
-            >
-              <i class="mdi mdi-chevron-down"></i>
-            </button>
-            <div ngbDropdownMenu>
-              <a
-                *ngIf="item.state != 'Anulada'"
-                class="dropdown-item text-danger waves-light  caja-botones"
-                (click)="anularDotacion(item.id)"
-              >
-                <i class="fa fa-times"></i> Anular
-              </a>
-              <a
-                *ngIf="item.delivery_state == 'Pendiente'"
-                class="dropdown-item text-success waves-light  caja-botones"
-                (click)="aprobarDotacion(item.id)"
-              >
-                <i class="far fa-thumbs-up"></i> Aprobar
-              </a>
+  <div class="table-responsive">
+    <table
+      class="table table-bordered table-striped table-sm"
+      style="font-size: small"
+      *ngIf="!loading && Lista_Dotaciones.length > 0; else notDataTable"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th class="align-middle">Código</th>
+          <th class="align-middle">Tipo</th>
+          <th class="align-middle">Fecha</th>
+          <th class="align-middle">Funcionario Entrega</th>
+          <th class="align-middle">Funcionario Recibe</th>
+          <th class="align-middle">Detalles</th>
+          <th class="align-middle">Artículos</th>
+          <th class="align-middle">Valor</th>
+          <th class="align-middle">Estado</th>
+          <th class="align-middle">Estado Entrega</th>
+          <th class="align-middle">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of Lista_Dotaciones"
+          class="text-center"
+          [ngClass]="{
+            'text-danger font-weight-bold': item.state == 'Anulada'
+          }"
+        >
+          <td class="align-middle">{{ item.delivery_code }}</td>
+          <td class="align-middle">{{ item.type }}</td>
+          <td class="align-middle">{{ item.created_at | date: "dd/MM/yyyy" }}</td>
+          <td class="align-middle">{{ item.entrega }}</td>
+          <td class="align-middle">{{ item.recibe }}</td>
+          <td class="align-middle">{{ item.description }}</td>
+          <td class="align-middle">
+            <div class="articulos-table">
+              {{ item.product_name }}
             </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+          <td class="align-middle">${{ item.total | number | puntos }}</td>
+          <td class="align-middle">
+            <span>{{ item.state }}</span>
+          </td>
+          <td class="align-middle">
+            <span>{{ item.delivery_state }}</span>
+          </td>
+          <td class="align-middle">
+            <div ngbDropdown container="body" class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  *ngIf="item.state != 'Anulada'"
+                  class="dropdown-item text-danger waves-light caja-botones"
+                  (click)="anularDotacion(item.id)"
+                >
+                  <i class="fa fa-times"></i> Anular
+                </a>
+                <a
+                  *ngIf="item.delivery_state == 'Pendiente'"
+                  class="dropdown-item text-success waves-light caja-botones"
+                  (click)="aprobarDotacion(item.id)"
+                >
+                  <i class="far fa-thumbs-up"></i> Aprobar
+                </a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <ngb-pagination
     maxSize="5"
     [collectionSize]="pagination.collectionSize"

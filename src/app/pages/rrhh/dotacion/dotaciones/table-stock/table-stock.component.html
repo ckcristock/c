@@ -48,156 +48,153 @@
     </div>
   </ng-container>
 
-  <table
-    *ngIf="!loading && Lista_Grupos_Inventario1.length > 0; else notData"
-    class="table table-bordered table-striped table-sm table-responsive-lg"
-    style="font-size: smaller"
-  >
-    <thead class="bg-light">
-      <tr class="text-center text-uppercase">
-        <th>Cod.</th>
-        <th>Nombre</th>
-        <th>Talla</th>
-        <th>Calidad</th>
-        <ng-container *ngIf="!entrega">
-          <th>Tipo</th>
-          <th>Costo</th>
-          <th>Total</th>
-          <th>Apartada</th>
-        </ng-container>
-        <th>Disponible</th>
-        <th>Acc</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let l of Lista_Grupos_Inventario1; i as index"
-        class="text-center"
-      >
-        <td class="align-middle">{{ l.code }}</td>
-        <td class="align-middle">{{ l.name }}</td>
-        <td class="align-middle">{{ l.size }}</td>
-        <td class="align-middle">{{ l.status }}</td>
-
-        <ng-container *ngIf="!entrega">
-          <td class="align-middle">{{ l.type }}</td>
-          <td class="align-middle">{{ l.cost }}</td>
-          <td class="align-middle">{{ l.stock }}</td>
-          <td class="align-middle">{{ l.cantidadA }}</td>
-        </ng-container>
-
-        <td class="align-middle">{{ l.stock - l.cantidadA }}</td>
-
-        <td class="align-middle">
-          <ng-container *ngIf="!entrega; else input">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
-              >
-                <i class="fas fa-sort-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item waves-light  caja-botones"
-                  (click)="listarSalidas(l)"
-                >
-                  <i class="fas fa-truck-loading"></i> Entregas
-                </a>
-                <a
-                  class="dropdown-item waves-light  caja-botones"
-                  (click)="listarEntradas(l)"
-                >
-                  <i class="fas fa-truck"></i> Salidas
-                </a>
-                <a
-                  class="dropdown-item waves-light  caja-botones"
-                  (click)="getApartadas(l, addApartadas)"
-                >
-                  <i class="fas fa-clipboard"></i> Apartadas
-                </a>
-              </div>
-            </div>
+  <div class="table-responsive">
+    <table
+      *ngIf="!loading && Lista_Grupos_Inventario1.length > 0; else notData"
+      class="table table-bordered table-striped table-sm"
+      style="font-size: smaller"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Cod.</th>
+          <th>Nombre</th>
+          <th>Talla</th>
+          <th>Calidad</th>
+          <ng-container *ngIf="!entrega">
+            <th>Tipo</th>
+            <th>Costo</th>
+            <th>Total</th>
+            <th>Apartada</th>
           </ng-container>
-
-          <ng-template #input>
-            <div
-              [ngClass]="{
-                'text-danger font-weight-bold':
-                  l.quantity > l.stock - l.cantidadA
-              }"
-              class="col-md-8"
-            >
-              <md-tooltip
-                ngbTooltip="Error en la Cantidad"
-                *ngIf="l.quantity > l.stock - l.cantidadA"
-              >
-                Cantidad Incorrecta
-              </md-tooltip>
-            </div>
-            <input
-              (onChange)="maxLengthCheck(l)"
-              type="number"
-              name="producto{{ i }}"
-              class="form-control form-control-sm"
-              min="0"
-              max="{{ l.stock }}"
-              (blur)="cambio(l)"
-              [(ngModel)]="l.quantity"
-              [ngModelOptions]="{ standalone: true }"
-              placeholder="0"
-              required
-            />
-          </ng-template>
-
-          <!-- <div
-            class="row mb-2"
-            *ngFor="let category of Lista_Grupos_Inventario1; i as index"
-          >
-            <div class="col-12">
-              <h5>{{ category.name }}</h5>
-            </div>
-            <div class="col-md-4 mb-2" *ngFor="let prod of category.inventary">
-              <div class="row">
-                <div class="col-md-4">
-                  <input
-                    (onChange)="maxLengthCheck(prod)"
-                    type="number"
-                    name="producto{{ i }}"
-                    class="form-control form-control-sm"
-                    min="0"
-                    (blur)="cambio(prod)"
-                    max="{{ prod.Cantidad }}"
-                    [(ngModel)]="prod.quantity"
-                    placeholder="0"
-                    required
-                  />
-                </div>
-                <div
-                  [ngClass]="{
-                    'text-danger font-weight-bold': prod.quantity > prod.stock
-                  }"
-                  class="col-md-8"
+          <th>Disponible</th>
+          <th>Acc</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let l of Lista_Grupos_Inventario1; i as index"
+          class="text-center"
+        >
+          <td class="align-middle">{{ l.code }}</td>
+          <td class="align-middle">{{ l.name }}</td>
+          <td class="align-middle">{{ l.size }}</td>
+          <td class="align-middle">{{ l.status }}</td>
+          <ng-container *ngIf="!entrega">
+            <td class="align-middle">{{ l.type }}</td>
+            <td class="align-middle">{{ l.cost }}</td>
+            <td class="align-middle">{{ l.stock }}</td>
+            <td class="align-middle">{{ l.cantidadA }}</td>
+          </ng-container>
+          <td class="align-middle">{{ l.stock - l.cantidadA }}</td>
+          <td class="align-middle">
+            <ng-container *ngIf="!entrega; else input">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm  waves-light"
+                  type="button"
                 >
-                  <span class="f-9">
-                    <strong>({{ prod.stock }})</strong> - {{ prod.name }} -
-                    {{ category.delivery_type }}
-                  </span>
-                  <md-tooltip
-                    ngbTooltip="Error en la Cantidad"
-                    *ngIf="prod.quantity > prod.stock"
+                  <i class="fas fa-sort-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light  caja-botones"
+                    (click)="listarSalidas(l)"
                   >
-                    Cantidad Incorrecta
-                  </md-tooltip>
+                    <i class="fas fa-truck-loading"></i> Entregas
+                  </a>
+                  <a
+                    class="dropdown-item waves-light  caja-botones"
+                    (click)="listarEntradas(l)"
+                  >
+                    <i class="fas fa-truck"></i> Salidas
+                  </a>
+                  <a
+                    class="dropdown-item waves-light  caja-botones"
+                    (click)="getApartadas(l, addApartadas)"
+                  >
+                    <i class="fas fa-clipboard"></i> Apartadas
+                  </a>
                 </div>
               </div>
-            </div>
-          </div> -->
-        </td>
-      </tr>
-    </tbody>
-  </table>
+            </ng-container>
+            <ng-template #input>
+              <div
+                [ngClass]="{
+                  'text-danger font-weight-bold':
+                    l.quantity > l.stock - l.cantidadA
+                }"
+                class="col-md-8"
+              >
+                <md-tooltip
+                  ngbTooltip="Error en la Cantidad"
+                  *ngIf="l.quantity > l.stock - l.cantidadA"
+                >
+                  Cantidad Incorrecta
+                </md-tooltip>
+              </div>
+              <input
+                (onChange)="maxLengthCheck(l)"
+                type="number"
+                name="producto{{ i }}"
+                class="form-control form-control-sm"
+                min="0"
+                max="{{ l.stock }}"
+                (blur)="cambio(l)"
+                [(ngModel)]="l.quantity"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="0"
+                required
+              />
+            </ng-template>
+            <!-- <div
+              class="row mb-2"
+              *ngFor="let category of Lista_Grupos_Inventario1; i as index"
+            >
+              <div class="col-12">
+                <h5>{{ category.name }}</h5>
+              </div>
+              <div class="col-md-4 mb-2" *ngFor="let prod of category.inventary">
+                <div class="row">
+                  <div class="col-md-4">
+                    <input
+                      (onChange)="maxLengthCheck(prod)"
+                      type="number"
+                      name="producto{{ i }}"
+                      class="form-control form-control-sm"
+                      min="0"
+                      (blur)="cambio(prod)"
+                      max="{{ prod.Cantidad }}"
+                      [(ngModel)]="prod.quantity"
+                      placeholder="0"
+                      required
+                    />
+                  </div>
+                  <div
+                    [ngClass]="{
+                      'text-danger font-weight-bold': prod.quantity > prod.stock
+                    }"
+                    class="col-md-8"
+                  >
+                    <span class="f-9">
+                      <strong>({{ prod.stock }})</strong> - {{ prod.name }} -
+                      {{ category.delivery_type }}
+                    </span>
+                    <md-tooltip
+                      ngbTooltip="Error en la Cantidad"
+                      *ngIf="prod.quantity > prod.stock"
+                    >
+                      Cantidad Incorrecta
+                    </md-tooltip>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <ngb-pagination
     class="d-flex justify-content-center pagination-rounded pagination-sm"
     maxSize="5"
@@ -256,37 +253,38 @@
     ></button>
   </div>
   <div class="modal-body">
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && Apartadas.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Fecha</th>
-          <th>Funcionario</th>
-          <th>Funcionario</th>
-          <th>Tipo</th>
-          <th>Cantidad</th>
-          <th>Estado</th>
-          <!-- <th>Tipo</th>
-          <th>Valor</th>
-          <th>Cantidad</th>
-          <th>Total</th> -->
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let item of Apartadas; else: notData" class="text-center">
-          <td>{{ item.created_at | date }}</td>
-          <td>{{ item.delivery_code }}</td>
-          <td>{{ item.nameF }}</td>
-          <td>{{ item.type }}</td>
-          <td>{{ item.quantity }}</td>
-          <td>{{ item.delivery_state }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && Apartadas.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Fecha</th>
+            <th>Funcionario</th>
+            <th>Funcionario</th>
+            <th>Tipo</th>
+            <th>Cantidad</th>
+            <th>Estado</th>
+            <!-- <th>Tipo</th>
+            <th>Valor</th>
+            <th>Cantidad</th>
+            <th>Total</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of Apartadas; else: notData" class="text-center">
+            <td>{{ item.created_at | date }}</td>
+            <td>{{ item.delivery_code }}</td>
+            <td>{{ item.nameF }}</td>
+            <td>{{ item.type }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.delivery_state }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="modal-footer">
     <button

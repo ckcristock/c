@@ -14,6 +14,7 @@ export class CardreportesComponent implements OnInit {
   constructor( private contabiliad:BoardContabilidadService) { }
 
   ngOnInit() {
+    console.log(this.Reportes)
     this.subcripcion=this.contabiliad.event.subscribe((data:any)=>{
       this.params=data;
      if(data==''){

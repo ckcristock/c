@@ -1,42 +1,50 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Alertas y comunicaciones</h4>
-      <button
-        class="btn btn-primary btn-sm"
-        (click)="openConfirm(add)"
-        ngbTooltip="Enviar"
-      >
-        <i class="fas fa-paper-plane"></i>
-      </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Alertas y comunicaciones</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(add)"
+            ngbTooltip="Enviar"
+          >
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
     </div>
     <hr class="line" />
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && datas.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th class="align-middle" scope="col">Fecha</th>
-          <th class="align-middle" scope="col">Tipo</th>
-          <th class="align-middle" scope="col">Persona Recibe</th>
-          <th class="align-middle" scope="col">Titulo</th>
-          <th class="align-middle" scope="col">Detalles</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of datas" class="text-center">
-          <td class="align-middle" scope="row">{{ data.created_at | date }}</td>
-          <td class="align-middle">{{ data.type }}</td>
-          <td class="align-middle">
-            {{ data.first_name }} {{ data.first_surname }}
-          </td>
-          <td class="align-middle">{{ data.title }}</td>
-          <td class="align-middle">{{ data.description }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && datas.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th class="align-middle" scope="col">Fecha</th>
+            <th class="align-middle" scope="col">Tipo</th>
+            <th class="align-middle" scope="col">Persona Recibe</th>
+            <th class="align-middle" scope="col">Titulo</th>
+            <th class="align-middle" scope="col">Detalles</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of datas" class="text-center">
+            <td class="align-middle" scope="row">{{ data.created_at | date }}</td>
+            <td class="align-middle">{{ data.type }}</td>
+            <td class="align-middle">
+              {{ data.first_name }} {{ data.first_surname }}
+            </td>
+            <td class="align-middle">{{ data.title }}</td>
+            <td class="align-middle">{{ data.description }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"

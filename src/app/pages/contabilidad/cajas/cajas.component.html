@@ -1,17 +1,21 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Lista de Cajas</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button
-          (click)="newPrettyCash.emit(true)"
-          class="btn btn-sm btn-primary"
-        >
-          <i class="fa fa-plus"></i>Agregar
-        </button>
-        <button class="btn btn-info btn-sm" (click)="openClose()">
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Cajas</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            (click)="newPrettyCash.emit(true)"
+            class="btn btn-sm btn-primary"
+          >
+            <i class="fa fa-plus"></i>Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
@@ -22,39 +26,41 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && prettyCashList.length; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Caja</th>
-          <th>Plan Cuenta</th>
-          <th>Responsable</th>
-          <th>Fun. Creó</th>
-          <th>Saldo Inicial</th>
-          <th>Saldo Actual</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of prettyCashList" class="text-center">
-          <td class="align-middle">{{ item.description }}</td>
-          <td class="align-middle">
-            {{ item.account_plan.name }} - {{ item.account_plan.code }}
-          </td>
-          <td class="align-middle">
-            {{ item.person.first_name }} {{ item.person.first_surname }}
-          </td>
-          <td class="align-middle">
-            {{ item.user.person.first_name }}
-            {{ item.user.person.first_surname }}
-          </td>
-          <td class="align-middle">{{ item.initial_balance }}</td>
-          <td class="align-middle">{{ item.account_plan.balance.balance }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && prettyCashList.length; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Caja</th>
+            <th>Plan Cuenta</th>
+            <th>Responsable</th>
+            <th>Fun. Creó</th>
+            <th>Saldo Inicial</th>
+            <th>Saldo Actual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of prettyCashList" class="text-center">
+            <td class="align-middle">{{ item.description }}</td>
+            <td class="align-middle">
+              {{ item.account_plan.name }} - {{ item.account_plan.code }}
+            </td>
+            <td class="align-middle">
+              {{ item.person.first_name }} {{ item.person.first_surname }}
+            </td>
+            <td class="align-middle">
+              {{ item.user.person.first_name }}
+              {{ item.user.person.first_surname }}
+            </td>
+            <td class="align-middle">{{ item.initial_balance }}</td>
+            <td class="align-middle">{{ item.account_plan.balance.balance }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [maxSize]="5"

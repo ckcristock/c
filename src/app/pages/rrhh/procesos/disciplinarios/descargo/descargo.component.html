@@ -24,45 +24,47 @@
       </div>
     </div>
     <hr class="line" />
-    <table
-      class="table table-light table-sm table-responsive-lg"
-      style="font-size: small"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Funcionario responsable</th>
-          <th>Fecha de inicio</th>
-          <th *ngIf="processSelected.status == 'Cerrado'">Fecha final</th>
-          <th>Descripción</th>
-          <th>Descargar</th>
-          <th *ngIf="processSelected.status == 'Cerrado'">
-            Observación del cierre
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="text-center">
-          <td class="align-middle">{{ fullNameSelected }}</td>
-          <td class="align-middle">{{ processSelected.date_of_admission }}</td>
-          <td class="align-middle" *ngIf="processSelected.status == 'Cerrado'">
-            {{ processSelected.date_end }}
-          </td>
-          <td class="align-middle">{{ processSelected.process_description }}</td>
-          <td class="align-middle">
-            <button
-              class="btn btn-primary btn-sm"
-              *ngIf="file"
-              (click)="download(file, fileType)"
-            >
-              <i class="far fa-arrow-alt-circle-down"></i> Descargar evidencia
-            </button>
-          </td>
-          <th *ngIf="processSelected.status == 'Cerrado'">
-            {{ processSelected.close_description }}
-          </th>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table
+        class="table table-light table-sm"
+        style="font-size: small"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Funcionario responsable</th>
+            <th>Fecha de inicio</th>
+            <th *ngIf="processSelected.status == 'Cerrado'">Fecha final</th>
+            <th>Descripción</th>
+            <th>Descargar</th>
+            <th *ngIf="processSelected.status == 'Cerrado'">
+              Observación del cierre
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td class="align-middle">{{ fullNameSelected }}</td>
+            <td class="align-middle">{{ processSelected.date_of_admission }}</td>
+            <td class="align-middle" *ngIf="processSelected.status == 'Cerrado'">
+              {{ processSelected.date_end }}
+            </td>
+            <td class="align-middle">{{ processSelected.process_description }}</td>
+            <td class="align-middle">
+              <button
+                class="btn btn-primary btn-sm"
+                *ngIf="file"
+                (click)="download(file, fileType)"
+              >
+                <i class="far fa-arrow-alt-circle-down"></i> Descargar evidencia
+              </button>
+            </td>
+            <th *ngIf="processSelected.status == 'Cerrado'">
+              {{ processSelected.close_description }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <hr />
     <div *ngIf="anotaciones.length > 0">
       <div class="card-title d-flex justify-content-between">
@@ -75,106 +77,110 @@
           Agregar
         </button>
       </div>
-      <table
-        class="table table-light table-sm table-responsive-lg"
-        style="font-size: small"
-        *ngFor="let anotacion of anotaciones; let i = index"
-      >
-        <thead class="bg-light">
-          <tr class="text-center text-uppercase">
-            <th>Creador</th>
-            <th>Involucrado</th>
-            <th>Memorandos</th>
-            <th>Observaciones</th>
-            <th>Fecha de creación</th>
-            <th *ngIf="anotacion.file"><i class="fas fa-file-download"></i></th>
-            <th *ngIf="processSelected.status != 'Cerrado'">Anular</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="text-center">
-            <td class="align-middle">
-              {{
-                anotacion.user.person.first_name +
-                  " " +
-                  anotacion.user.person.first_surname
-              }}
-            </td>
-            <td class="align-middle">
-              {{ anotacion.person.first_name }}
-              {{ anotacion.person.first_surname }}
-            </td>
-            <td class="align-middle">
-              <button
-                class="btn btn-sm btn-link shadow-none"
-                type="button"
-                (click)="collapsed[i] = !collapsed[i]"
-                [attr.aria-expanded]="!collapsed"
-                aria-controls="collapseExample2"
-              >
-                <i class="fas fa-angle-down text-info" *ngIf="!collapsed[i]"></i>
-                <i class="fas fa-angle-up text-info" *ngIf="collapsed[i]"></i>
-              </button>
-            </td>
-            <td class="align-middle">
-              {{ anotacion.observation }}
-            </td>
-            <td class="align-middle">{{ anotacion.created_at | date }}</td>
-            <td class="align-middle" *ngIf="anotacion.file">
-              <button
-                type="button"
-                class="btn btn-link btn-sm"
-                (click)="download(anotacion.file, anotacion.fileType)"
-              >
-                <h5><i class="fas fa-file-download text-success"></i></h5>
-              </button>
-            </td>
-            <td class="align-middle" *ngIf="processSelected.status != 'Cerrado'">
-              <button
-                class="btn btn-outline-danger btn-sm"
-                type="button"
-                (click)="cancelAnnotation(anotacion.id)"
-              >
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </td>
-          </tr>
-          <tr [ngbCollapse]="!collapsed[i]">
-            <ng-container
-              *ngIf="anotacion.memorandum_involved.length > 0; else notM"
-            >
-              <td class="align-middle" colspan="100%">
-                <table
-                  class="table table-light table-sm table-responsive-lg"
-                  style="font-size: small"
-                >
-                  <ng-container
-                    *ngIf="anotacion.memorandum_involved.length > 0; else notM"
-                  >
-                    <thead class="bg-light">
-                      <tr class="text-center text-uppercase">
-                        <th>Motivo</th>
-                        <th>Detalle</th>
-                        <th>Fecha de creación</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        class="text-center"
-                        *ngFor="let item of anotacion.memorandum_involved"
-                      >
-                        <td class="align-middle">{{ item.memorandum.memorandumtype.name }}</td>
-                        <td class="align-middle">{{ item.memorandum.details }}</td>
-                        <td class="align-middle">{{ item.memorandum.created_at | date }}</td>
-                      </tr>
-                    </tbody>
-                  </ng-container>
-                </table>
+      <div class="table-responsive">
+        <table
+          class="table table-light table-sm"
+          style="font-size: small"
+          *ngFor="let anotacion of anotaciones; let i = index"
+        >
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th>Creador</th>
+              <th>Involucrado</th>
+              <th>Memorandos</th>
+              <th>Observaciones</th>
+              <th>Fecha de creación</th>
+              <th *ngIf="anotacion.file"><i class="fas fa-file-download"></i></th>
+              <th *ngIf="processSelected.status != 'Cerrado'">Anular</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-center">
+              <td class="align-middle">
+                {{
+                  anotacion.user.person.first_name +
+                    " " +
+                    anotacion.user.person.first_surname
+                }}
               </td>
-            </ng-container>
-          </tr>
-        </tbody>
-      </table>
+              <td class="align-middle">
+                {{ anotacion.person.first_name }}
+                {{ anotacion.person.first_surname }}
+              </td>
+              <td class="align-middle">
+                <button
+                  class="btn btn-sm btn-link shadow-none"
+                  type="button"
+                  (click)="collapsed[i] = !collapsed[i]"
+                  [attr.aria-expanded]="!collapsed"
+                  aria-controls="collapseExample2"
+                >
+                  <i class="fas fa-angle-down text-info" *ngIf="!collapsed[i]"></i>
+                  <i class="fas fa-angle-up text-info" *ngIf="collapsed[i]"></i>
+                </button>
+              </td>
+              <td class="align-middle">
+                {{ anotacion.observation }}
+              </td>
+              <td class="align-middle">{{ anotacion.created_at | date }}</td>
+              <td class="align-middle" *ngIf="anotacion.file">
+                <button
+                  type="button"
+                  class="btn btn-link btn-sm"
+                  (click)="download(anotacion.file, anotacion.fileType)"
+                >
+                  <h5><i class="fas fa-file-download text-success"></i></h5>
+                </button>
+              </td>
+              <td class="align-middle" *ngIf="processSelected.status != 'Cerrado'">
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  type="button"
+                  (click)="cancelAnnotation(anotacion.id)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+            <tr [ngbCollapse]="!collapsed[i]">
+              <ng-container
+                *ngIf="anotacion.memorandum_involved.length > 0; else notM"
+              >
+                <td class="align-middle" colspan="100%">
+                  <div class="table-responsive">
+                    <table
+                      class="table table-light table-sm"
+                      style="font-size: small"
+                    >
+                      <ng-container
+                        *ngIf="anotacion.memorandum_involved.length > 0; else notM"
+                      >
+                        <thead class="bg-light">
+                          <tr class="text-center text-uppercase">
+                            <th>Motivo</th>
+                            <th>Detalle</th>
+                            <th>Fecha de creación</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            class="text-center"
+                            *ngFor="let item of anotacion.memorandum_involved"
+                          >
+                            <td class="align-middle">{{ item.memorandum.memorandumtype.name }}</td>
+                            <td class="align-middle">{{ item.memorandum.details }}</td>
+                            <td class="align-middle">{{ item.memorandum.created_at | date }}</td>
+                          </tr>
+                        </tbody>
+                      </ng-container>
+                    </table>
+                  </div>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="card-title d-flex justify-content-between">
       <h5 *ngIf="legalDocuments.length > 0">Documentos</h5>

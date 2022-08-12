@@ -4,26 +4,28 @@
 ></app-crear-novedad>
 
 <div class="row">
-  <div class="col-8">
+  <div class="col-lg-8">
     <div class="card">
       <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-          <h4 class="text-primary">Listado de Novedades</h4>
-          <div class="btn-group rounded w-sm-100">
-            <button
-              class="btn btn-primary btn-sm"
-              style="float: right"
-              (click)="openModal.emit()"
-            >
-              <i class="fa fa-plus"></i> Agregar
-            </button>
-            <button
-              class="btn btn-info btn-sm"
-              style="float: right"
-              (click)="openClose()"
-            >
-              <i class="fas fa-sliders-h"></i> Filtros
-            </button>
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Novedades</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="openModal.emit()"
+              >
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+              <button
+                class="btn btn-info btn-sm"
+                (click)="openClose()"
+              >
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+            </div>
           </div>
         </div>
         <hr class="line" />
@@ -31,7 +33,7 @@
           <mat-expansion-panel class="mat-elevation-z0">
             <form [formGroup]="form" (ngSubmit)="cargarNovedades()">
               <div class="row">
-                <div class="col-md-4">
+                <div class="col">
                   <ng-select
                     formControlName="personfill"
                     [items]="peopleSelects"
@@ -46,13 +48,13 @@
                   >
                   </ng-select>
                 </div>
-                <mat-form-field class="col-md-4" appearance="outline">
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Fecha de inicio</mat-label>
-                  <input matInput type="date" formControlName="date_start"/>
+                  <input matInput type="date" formControlName="date_start" />
                 </mat-form-field>
-                <mat-form-field class="col-md-4" appearance="outline">
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Fecha de fin</mat-label>
-                  <input matInput type="date" formControlName="date_end"/>
+                  <input matInput type="date" formControlName="date_end" />
                 </mat-form-field>
                 <div class="col-md-12 text-center mb-2">
                   <button
@@ -66,110 +68,118 @@
             </form>
           </mat-expansion-panel>
         </mat-accordion>
-        <table
-          class="table table-bordered table-striped table-sm table-responsive-lg"
-          style="font-size: small"
-          *ngIf="!loading && people.length > 0; else notData"
-        >
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th>Foto</th>
-              <th>Funcionarios</th>
-              <th>Dependencia</th>
-              <th class="text-center col-1">
-                <i class="fas fa-angle-down"></i>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor="let person of people">
-              <tr class="text-center">
-                <td class="align-middle">
-                  <img
-                    src="{{ person?.image | image }}"
-                    onerror="this.src='../../../../assets/images/noprofile.png'"
-                    class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
-                  />
-                </td>
-                <td class="align-middle">
-                  {{ person.first_name }} {{ person.first_surname }}
-                </td>
-                <td class="align-middle">
-                  {{ person.contractultimate.position.dependency.name }}
-                </td>
-                <td class="align-middle">
-                  <i
-                    class="fas fa-angle-down text-primary"
-                    role="button"
-                    (click)="person.selected = !person.selected"
-                  ></i>
-                </td>
+        <div class="table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            style="font-size: small"
+            *ngIf="!loading && people.length > 0; else notData"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Foto</th>
+                <th>Funcionarios</th>
+                <th>Dependencia</th>
+                <th class="col-1">
+                  <i class="fas fa-angle-down"></i>
+                </th>
               </tr>
-              <ng-container *ngIf="this.person.selected">
-                <tr class="p-0">
-                  <td colspan="4">
-                    <table class="table table-hover">
-                      <thead class="bg-light">
-                        <tr class="text-center text-uppercase">
-                          <th>Fecha</th>
-                          <th>Novedad</th>
-                          <th>Descripción</th>
-                          <th>Inicio</th>
-                          <th>Fin</th>
-                          <th class="col-md-1">ACC.</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr
-                          *ngFor="let fact of person.payroll_factors"
-                          class="text-center"
-                        >
-                          <td class="align-middle">
-                            {{ fact.created_at | date }}
-                          </td>
-                          <td class="align-middle">
-                            {{ fact.disability_leave.concept }}
-                          </td>
-                          <td class="align-middle">
-                            {{ fact.observation }}
-                          </td>
-                          <td class="align-middle">
-                            {{ fact.date_start | date }}
-                          </td>
-                          <td class="align-middle">
-                            {{ fact.date_end | date }}
-                          </td>
-                          <td class="align-middle">
-                            <div ngbDropdown container="body" class="dropdown-primary">
-                              <button
-                                ngbDropdownToggle
-                                class="btn btn-primary btn-sm  waves-light"
-                                type="button"
-                              >
-                                <i class="fas fa-sort-down"></i>
-                              </button>
-                              <div ngbDropdownMenu>
-                                <a
-                                  class="dropdown-item text-info waves-light  caja-botones"
-                                  (click)="editarNovedad(fact)"
-                                >
-                                  <i class="fas fa-edit"></i> Editar</a
-                                >
-                                <!-- <a class="dropdown-item waves-light  caja-botones" href="" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a eliminar la novedad' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'Dejame verificar'}"
-                                                                  (confirm)="EliminarNovedad(novedad.Id_Novedad)">
-                                                                  <i class="fa fa-times"></i> Elim.</a> -->
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let person of people">
+                <tr class="text-center">
+                  <td class="align-middle">
+                    <img
+                      src="{{ person?.image | image }}"
+                      onerror="this.src='../../../../assets/images/noprofile.png'"
+                      class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
+                    />
+                  </td>
+                  <td class="align-middle">
+                    {{ person.first_name }} {{ person.first_surname }}
+                  </td>
+                  <td class="align-middle">
+                    {{ person.contractultimate.position.dependency.name }}
+                  </td>
+                  <td class="align-middle">
+                    <i
+                      class="fas fa-angle-down text-primary"
+                      role="button"
+                      (click)="person.selected = !person.selected"
+                    ></i>
                   </td>
                 </tr>
+                <ng-container *ngIf="this.person.selected">
+                  <tr class="p-0">
+                    <td colspan="4">
+                      <div class="table-responsive">
+                        <table class="table table-hover">
+                          <thead class="bg-light">
+                            <tr class="text-center text-uppercase">
+                              <th>Fecha</th>
+                              <th>Novedad</th>
+                              <th>Descripción</th>
+                              <th>Inicio</th>
+                              <th>Fin</th>
+                              <th class="col-1">ACC.</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr
+                              *ngFor="let fact of person.payroll_factors"
+                              class="text-center"
+                            >
+                              <td class="align-middle">
+                                {{ fact.created_at | date }}
+                              </td>
+                              <td class="align-middle">
+                                {{ fact.disability_leave.concept }}
+                              </td>
+                              <td class="align-middle">
+                                {{ fact.observation }}
+                              </td>
+                              <td class="align-middle">
+                                {{ fact.date_start | date }}
+                              </td>
+                              <td class="align-middle">
+                                {{ fact.date_end | date }}
+                              </td>
+                              <td class="align-middle">
+                                <div
+                                  ngbDropdown
+                                  container="body"
+                                  class="dropdown-primary"
+                                >
+                                  <button
+                                    ngbDropdownToggle
+                                    class="btn btn-primary btn-sm waves-light"
+                                    type="button"
+                                  >
+                                    <i class="fas fa-sort-down"></i>
+                                  </button>
+                                  <div ngbDropdownMenu>
+                                    <a
+                                      class="dropdown-item text-info waves-light caja-botones"
+                                      (click)="editarNovedad(fact)"
+                                    >
+                                      <i class="fas fa-edit"></i> Editar</a
+                                    >
+                                    <!-- <a class="dropdown-item waves-light  caja-botones" href="" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a eliminar la novedad' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'Dejame verificar'}"
+                                                                      (confirm)="EliminarNovedad(novedad.Id_Novedad)">
+                                                                      <i class="fa fa-times"></i> Elim.</a> -->
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-container>
               </ng-container>
-            </ng-container>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <ng-template #notData>
@@ -178,7 +188,7 @@
     </div>
   </div>
 
-  <div class="col-4">
+  <div class="col-lg-4">
     <div class="row">
       <div class="col-6">
         <div class="card mb-4">

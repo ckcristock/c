@@ -1,152 +1,237 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-            <h4 class="text-primary">Comprobantes de Egresos</h4>
-            <div class="btn-group rounded w-sm-100">
-                <button style="float: right;" type="button" class="btn btn-primary btn-sm"
-                    [routerLink]="['/contabilidad/comprobantes/comprobanteegresovarioscrear']"><i
-                        class="fa fa-plus"></i>
-                    Agregar
-                </button>
-                <button class="btn btn-info btn-sm" style="float: right;" (click)="openClose()">
-                    <i class="fas fa-sliders-h"></i> Filtros
-                </button>
-            </div>
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Comprobantes de egresos</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            [routerLink]="[
+              '/contabilidad/comprobantes/comprobanteegresovarioscrear'
+            ]"
+          >
+            <i class="fa fa-plus"></i>
+            Agregar
+          </button>
+          <button
+            type="button"
+            class="btn btn-info btn-sm"
+            (click)="openClose()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
-        <hr class="line">
-        <mat-accordion multi>
-            <mat-expansion-panel class="mat-elevation-z0">
-                <mat-form-field class="col-md-2 pl-0" appearance="outline">
-                    <mat-label>Fecha de inicio</mat-label>
-                    <input matInput [matDatepicker]="picker" [(ngModel)]="fechita" (dateInput)="fechitaF($event)"
-                        autocomplete="off" placeholder="Busca por fecha">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-                <mat-form-field class="col-md-2 pl-0" appearance="outline">
-                    <mat-label>Fecha de fin</mat-label>
-                    <input matInput [matDatepicker]="picker2" [(ngModel)]="fechita2" (dateInput)="fechitaF2($event)"
-                        autocomplete="off" placeholder="Busca por fecha">
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker>
-                </mat-form-field>
-                <mat-form-field class="col-md-2 pl-0" appearance="outline">
-                    <mat-label>Documento</mat-label>
-                    <input matInput type="text" placeholder="Busca por documento" [(ngModel)]="filtro_codigo" (input)="filtros()">
-                </mat-form-field>
-                <mat-form-field class="col-md-3 pl-0" appearance="outline">
-                    <mat-label>Beneficiario</mat-label>
-                    <input matInput type="text" placeholder="Busca por beneficiario" [(ngModel)]="filtro_cliente" (input)="filtros()">
-                </mat-form-field>
-                <mat-form-field class="col-md-2 pl-0" appearance="outline">
-                    <mat-label>Cheques</mat-label>
-                    <input matInput type="text" placeholder="Busca por cheques" [(ngModel)]="filtro_cheque" (input)="filtros()">
-                </mat-form-field>
-                <mat-form-field class="col-md-1 pl-0" appearance="outline">
-                    <mat-label>Estado</mat-label>
-                    <mat-select [(ngModel)]="filtro_estado" (selectionChange)="filtros()">
-                        <mat-option value="">Todas</mat-option>
-                        <mat-option value="Activo">Activas</mat-option>
-                        <mat-option value="Anulada">Anuladas</mat-option>
-                    </mat-select>
-                </mat-form-field> 
-            </mat-expansion-panel>
-        </mat-accordion>
-        <table class="table table-bordered table-striped table-responsible-sm table-sm" style="font-size: small;"
-            *ngIf="!Cargando && Comprobantes.length > 0; else notData">
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Documento</th>
-                    <th>Beneficiario</th>
-                    <th>Concepto</th>
-                    <th>Cheques</th>
-                    <th>Total Debito</th>
-                    <th>Total Credito</th>
-                    <th>Total Debito NIIF</th>
-                    <th>Total Credito NIIF</th>
-                    <th>Funcionario</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngIf="Comprobantes.length == 0" class="text-center">
-                    <td colspan="12" class="text-center">
-                        <i class="fa fa-exclamation-circle fa-5x"></i>
-                        <h4>No existen comprobantes de egresos para mostrar.</h4>
-                    </td>
-                </tr>
-                <tr *ngFor="let comprobante of Comprobantes" [ngClass]="{'bg-danger': comprobante.Estado == 'Anulada'}">
-                    <td>{{comprobante.Fecha}}</td>
-                    <td>{{comprobante.Codigo}}</td>
-                    <td>{{comprobante.Beneficiario}} - {{comprobante.Tercero}}</td>
-                    <td>{{comprobante.Concepto}}</td>
-                    <td>{{comprobante.Cheques}}</td>
-                    <td>{{comprobante.Total_Debe_PCGA | currency }}</td>
-                    <td>{{comprobante.Total_Haber_PCGA | currency }}</td>
-                    <td>{{comprobante.Total_Debe_NIIF | currency }}</td>
-                    <td>{{comprobante.Total_Haber_NIIF | currency }}</td>
-                    <td>{{comprobante.Funcionario }}</td>
-                    <td width="60"><span *ngIf="comprobante.Estado != 'Anulada'"
-                            class="label label-success">{{comprobante.Estado }}</span></td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown container="body" class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-mini  waves-light "
-                                    type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light  caja-botones"
-                                        href="{{enviromen.ruta}}/php/comprobantes/egreso_descarga_pdf.php?id={{comprobante.Id_Documento_Contable}}"
-                                        target="_blank">
-                                        <i class="fa fa-print"></i> Ver PCGA</a>
-                                    <a class="dropdown-item waves-light  caja-botones"
-                                        href="{{enviromen.ruta}}/php/comprobantes/egreso_descarga_pdf.php?id={{comprobante.Id_Documento_Contable}}&tipo=Niif"
-                                        target="_blank">
-                                        <i class="fa fa-print"></i> Ver NIIF</a>
-                                    <a *ngIf="comprobante.Estado != 'Anulada' && perfilUsuario == '27'"
-                                        class="dropdown-item waves-light  caja-botones bg-danger"
-                                        href="javascript:;" [swal]="confirmacionAnular"
-                                        (click)="IdDocumento = comprobante.Id_Documento_Contable">
-                                        <i class="fa fa-close"></i> Anular</a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div id="paginacion-container" *ngIf="Comprobantes.length > 0">
-            <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-                [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm"
-                (pageChange)="filtros(true)" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
-            <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{
-                    InformacionPaginacion.total }}</b></p>
-            <!-- <div class="row">
-                                    <div class="col">
-                                    </div>
-                                </div> -->
-        </div>
+      </div>
     </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de inicio</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [(ngModel)]="fechita"
+              (dateInput)="fechitaF($event)"
+              autocomplete="off"
+              placeholder="Busca por fecha"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de fin</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker2"
+              [(ngModel)]="fechita2"
+              (dateInput)="fechitaF2($event)"
+              autocomplete="off"
+              placeholder="Busca por fecha"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker2"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Documento</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por documento"
+              [(ngModel)]="filtro_codigo"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Beneficiario</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por beneficiario"
+              [(ngModel)]="filtro_cliente"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cheques</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por cheques"
+              [(ngModel)]="filtro_cheque"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select
+              [(ngModel)]="filtro_estado"
+              (selectionChange)="filtros()"
+            >
+              <mat-option value="">Todas</mat-option>
+              <mat-option value="Activo">Activas</mat-option>
+              <mat-option value="Anulada">Anuladas</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!Cargando && Comprobantes.length > 0; else notData"
+      >
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Documento</th>
+            <th>Beneficiario</th>
+            <th>Concepto</th>
+            <th>Cheques</th>
+            <th>Total Debito</th>
+            <th>Total Credito</th>
+            <th>Total Debito NIIF</th>
+            <th>Total Credito NIIF</th>
+            <th>Funcionario</th>
+            <th class="col-1">Estado</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let comprobante of Comprobantes"
+            [ngClass]="{ 'text-danger': comprobante.Estado == 'Anulada' }"
+          >
+            <td>{{ comprobante.Fecha }}</td>
+            <td>{{ comprobante.Codigo }}</td>
+            <td>{{ comprobante.Beneficiario }} - {{ comprobante.Tercero }}</td>
+            <td>{{ comprobante.Concepto }}</td>
+            <td>{{ comprobante.Cheques }}</td>
+            <td>{{ comprobante.Total_Debe_PCGA | currency: "":"" }}</td>
+            <td>{{ comprobante.Total_Haber_PCGA | currency: "":"" }}</td>
+            <td>{{ comprobante.Total_Debe_NIIF | currency: "":"" }}</td>
+            <td>{{ comprobante.Total_Haber_NIIF | currency: "":"" }}</td>
+            <td>{{ comprobante.Funcionario }}</td>
+            <td>
+              <span
+                *ngIf="comprobante.Estado != 'Anulada'"
+                class="badge badge-success"
+                >{{ comprobante.Estado }}</span
+              >
+            </td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-mini waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    href="{{
+                      enviromen.ruta
+                    }}/php/comprobantes/egreso_descarga_pdf.php?id={{
+                      comprobante.Id_Documento_Contable
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="fa fa-print"></i> Ver PCGA</a
+                  >
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    href="{{
+                      enviromen.ruta
+                    }}/php/comprobantes/egreso_descarga_pdf.php?id={{
+                      comprobante.Id_Documento_Contable
+                    }}&tipo=Niif"
+                    target="_blank"
+                  >
+                    <i class="fa fa-print"></i> Ver NIIF</a
+                  >
+                  <a
+                    *ngIf="
+                      comprobante.Estado != 'Anulada' && perfilUsuario == '27'
+                    "
+                    class="dropdown-item waves-light caja-botones bg-danger"
+                    href="javascript:;"
+                    [swal]="confirmacionAnular"
+                    (click)="IdDocumento = comprobante.Id_Documento_Contable"
+                  >
+                    <i class="fa fa-close"></i> Anular</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="paginacion-container" *ngIf="Comprobantes.length > 0">
+      <ngb-pagination
+        class="d-flex justify-content-center pagination-rounded pagination-sm"
+        [collectionSize]="TotalItems"
+        [(page)]="page"
+        [maxSize]="maxSize"
+        [pageSize]="pageSize"
+        size="sm"
+        (pageChange)="filtros(true)"
+        [rotate]="true"
+        [boundaryLinks]="true"
+      ></ngb-pagination>
+    </div>
+  </div>
 </div>
 
 <ng-template #notData>
-    <app-not-data [loading]="Cargando"></app-not-data>
+  <app-not-data [loading]="Cargando"></app-not-data>
 </ng-template>
 <ng-template #rt2 let-r="result" let-t="term">
-    <span class="f-9"><strong>{{ r.NombreProveedor }}</strong>
-    </span>
+  <span class="f-9"
+    ><strong>{{ r.NombreProveedor }}</strong>
+  </span>
 </ng-template>
 
 <swal #confirmacionAnular [swalOptions]="alertOption"></swal>
 
 <swal #alertSwal title="" html="" type=""></swal>
 <ng-template #rt let-r="result" let-t="term">
-    <span class="f-9">{{ r.Nombre }} </span>
+  <span class="f-9">{{ r.Nombre }} </span>
 </ng-template>
 
 <ng-template #rtCuenta let-r="result" let-t="term">
-    <span class="f-9">{{ r.Codigo }} </span>
+  <span class="f-9">{{ r.Codigo }} </span>
 </ng-template>

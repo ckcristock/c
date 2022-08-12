@@ -138,40 +138,42 @@
         >aquí</a
       >
     </div>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg mb-0"
-      style="font-size: small"
-      *ngIf="!loading && people.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th *ngIf="checkPersona">Nombre</th>
-          <th *ngIf="checkPersona">Documento</th>
-          <th *ngIf="checkTercero">Tercero</th>
-          <th *ngIf="checkTelefono">Tel. Celular</th>
-          <th *ngIf="checkEmail">Email</th>
-          <th *ngIf="checkCargo">Cargo</th>
-          <th *ngIf="checkObservacion">Observación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let person of people" class="text-center">
-          <td class="align-middle" *ngIf="checkPersona">{{ person.name }}</td>
-          <td class="align-middle">{{ person.n_document }}</td>
-          <td class="align-middle" *ngIf="checkTercero">
-            {{ person.third_party }}
-          </td>
-          <td class="align-middle" *ngIf="checkTelefono">
-            {{ person.cell_phone }}
-          </td>
-          <td class="align-middle" *ngIf="checkEmail">{{ person.email }}</td>
-          <td class="align-middle" *ngIf="checkCargo">{{ person.position }}</td>
-          <td class="align-middle" *ngIf="checkObservacion">
-            {{ person.observation }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm mb-0"
+        style="font-size: small"
+        *ngIf="!loading && people.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th *ngIf="checkPersona">Nombre</th>
+            <th *ngIf="checkPersona">Documento</th>
+            <th *ngIf="checkTercero">Tercero</th>
+            <th *ngIf="checkTelefono">Tel. Celular</th>
+            <th *ngIf="checkEmail">Email</th>
+            <th *ngIf="checkCargo">Cargo</th>
+            <th *ngIf="checkObservacion">Observación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let person of people" class="text-center">
+            <td class="align-middle" *ngIf="checkPersona">{{ person.name }}</td>
+            <td class="align-middle">{{ person.n_document }}</td>
+            <td class="align-middle" *ngIf="checkTercero">
+              {{ person.third_party }}
+            </td>
+            <td class="align-middle" *ngIf="checkTelefono">
+              {{ person.cell_phone }}
+            </td>
+            <td class="align-middle" *ngIf="checkEmail">{{ person.email }}</td>
+            <td class="align-middle" *ngIf="checkCargo">{{ person.position }}</td>
+            <td class="align-middle" *ngIf="checkObservacion">
+              {{ person.observation }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <mat-paginator
       *ngIf="paginacion"
       [length]="paginacion.total"

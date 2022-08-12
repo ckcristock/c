@@ -1,21 +1,28 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Almuerzos</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button class="btn btn-sm btn-primary" (click)="openConfirm(add, 'md')">
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button class="btn btn-info btn-sm" (click)="openClose()">
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Almuerzos</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-sm btn-primary"
+            (click)="openConfirm(add, 'md')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-3 mb-4">
             <ng-select
               [(ngModel)]="filtro.person"
               (change)="getLunches()"
@@ -30,7 +37,7 @@
             >
             </ng-select>
           </div>
-          <mat-form-field class="col-md-3" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Fecha de inicio</mat-label>
             <input
               matInput
@@ -39,7 +46,7 @@
               (change)="getLunches()"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-3" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Fecha de fin</mat-label>
             <input
               matInput
@@ -48,9 +55,9 @@
               (change)="getLunches()"
             />
           </mat-form-field>
-          <div class="col-md-3 mt-2">
+          <div class="col">
             <button
-              class="btn btn-sm btn-outline-primary btn-block"
+              class="btn btn-primary btn-block text-nowrap"
               (click)="Download()"
             >
               <i class="fas fa-file-download"></i>
@@ -69,80 +76,82 @@
       </mat-expansion-panel>
     </mat-accordion>
 
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!loading && lunches.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th scope="col">Funcionario</th>
-          <th scope="col">Func. Creó</th>
-          <th scope="col">Valor</th>
-          <th scope="col">¿Aplica?</th>
-          <th scope="col">Fecha</th>
-          <th scope="col" class="col-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let lunch of lunches"
-          class="text-center"
-          [ngClass]="{
-            'text-danger font-weight-bold': lunch.state == 'Inactivo'
-          }"
-        >
-          <td class="align-middle">
-            {{ lunch.first_name | titlecase }}
-            {{ lunch.first_surname | titlecase }}
-          </td>
-          <td class="align-middle">{{ lunch.user }}</td>
-          <td class="align-middle">{{ lunch.value | currency }}</td>
-          <ng-container *ngIf="lunch.apply == null; else elseTemplate">
-            <td class="align-middle">Sin Validar</td>
-          </ng-container>
-          <ng-template #elseTemplate>
-            <td class="align-middle">{{ lunch.apply }}</td>
-          </ng-template>
-          <td class="align-middle">
-            {{ lunch.created_at | date: "longDate" }}
-          </td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  (click)="getLunchValu(lunch); openConfirm(edit, 'sm')"
-                  class="dropdown-item waves-light text-info  caja-botones"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && lunches.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th scope="col">Funcionario</th>
+            <th scope="col">Func. Creó</th>
+            <th scope="col">Valor</th>
+            <th scope="col">¿Aplica?</th>
+            <th scope="col">Fecha</th>
+            <th scope="col" class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let lunch of lunches"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': lunch.state == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">
+              {{ lunch.first_name | titlecase }}
+              {{ lunch.first_surname | titlecase }}
+            </td>
+            <td class="align-middle">{{ lunch.user }}</td>
+            <td class="align-middle">{{ lunch.value | currency }}</td>
+            <ng-container *ngIf="lunch.apply == null; else elseTemplate">
+              <td class="align-middle">Sin Validar</td>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <td class="align-middle">{{ lunch.apply }}</td>
+            </ng-template>
+            <td class="align-middle">
+              {{ lunch.created_at | date: "longDate" }}
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
                 >
-                  <i class="far fa-edit"></i> Editar
-                </a>
-                <a
-                  *ngIf="lunch.state == 'Activo'"
-                  (click)="activateOrInactivate(lunch.id, 'Inactivo')"
-                  class="dropdown-item waves-light text-danger  caja-botones"
-                >
-                  <i class="far fa-trash-alt"></i> Anular
-                </a>
-                <a
-                  *ngIf="lunch.state == 'Inactivo'"
-                  (click)="activateOrInactivate(lunch.id, 'Activo')"
-                  class="dropdown-item waves-light text-success  caja-botones"
-                >
-                  <i class="fas fa-check"></i> Activar
-                </a>
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    (click)="getLunchValu(lunch); openConfirm(edit, 'sm')"
+                    class="dropdown-item waves-light text-info caja-botones"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="lunch.state == 'Activo'"
+                    (click)="activateOrInactivate(lunch.id, 'Inactivo')"
+                    class="dropdown-item waves-light text-danger caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
+                  <a
+                    *ngIf="lunch.state == 'Inactivo'"
+                    (click)="activateOrInactivate(lunch.id, 'Activo')"
+                    class="dropdown-item waves-light text-success caja-botones"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"

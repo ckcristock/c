@@ -4,35 +4,37 @@
       <div class="card-body">
         <h5 class="card-title text-primary">Postulados</h5>
         <div *ngIf="!loading && applicants.length > 0; else notData">
-          <table
-            class="table table-bordered table-striped table-sm table-responsive-lg"
-            style="font-size: small"
-          >
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
-                <th>Nombre</th>
-                <th>Experiencia</th>
-                <th>-</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let applicant of applicants" class="text-center">
-                <td>{{ applicant.name }} {{ applicant.sur_name }}</td>
-                <td>{{ applicant.experience_year }} / Años</td>
-                <td>
-                  <a
-                    (click)="applicantModal.show(applicant)"
-                    class="text-primary"
-                  >
-                    <i class="fas fa-eye"></i> Ver
-                  </a>
-                  <!--  <a  >
-                                          <i class="fas fa-eye"></i> Ver
-                                      </a> -->
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table
+              class="table table-bordered table-striped table-sm"
+              style="font-size: small"
+            >
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Nombre</th>
+                  <th>Experiencia</th>
+                  <th>-</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let applicant of applicants" class="text-center">
+                  <td>{{ applicant.name }} {{ applicant.sur_name }}</td>
+                  <td>{{ applicant.experience_year }} / Años</td>
+                  <td>
+                    <a
+                      (click)="applicantModal.show(applicant)"
+                      class="text-primary"
+                    >
+                      <i class="fas fa-eye"></i> Ver
+                    </a>
+                    <!--  <a  >
+                                            <i class="fas fa-eye"></i> Ver
+                                        </a> -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

@@ -1,96 +1,100 @@
-<table
-  class="table table-bordered table-striped table-sm table-responsive-lg"
-  style="font-size: small"
->
-  <thead class="bg-light">
-    <tr class="text-center text-uppercase">
-      <th>Observaciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>{{ data.observation }}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    style="font-size: small"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ data.observation }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 <hr />
-<table
-  class="table table-bordered table-striped table-sm table-responsive-lg"
-  style="font-size: small"
->
-  <thead class="bg-light">
-    <tr class="text-center text-uppercase">
-      <th class="col-md-3">Item</th>
-      <th>Dolares</th>
-      <th>Pesos</th>
-      <th class="col-md-3">Item</th>
-      <th>Dolares</th>
-      <th>Pesos</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr class="text-center">
-      <th class="align-middle">Hospedaje</th>
-      <td class="text-right">
-        {{ data.total_hotels_usd | currency }}
-      </td>
-      <td class="text-right">
-        {{ data.total_hotels_cop | currency: 'COP' }}
-      </td>
-      <th class="align-middle">Transporte Terrestre</th>
-      <td></td>
-      <td class="text-right">
-        {{ data.total_transports_cop | currency: 'COP' }}
-      </td>
-    </tr>
-    <tr class="text-center">
-      <th class="align-middle">Taxis</th>
-      <td class="text-right">
-        {{ data.total_taxis_usd | currency }}
-      </td>
-      <td class="text-right">
-        {{ data.total_taxis_cop | currency: 'COP' }}
-      </td>
-      <th class="align-middle">Alimentación</th>
-      <td class="text-right">
-        {{ data.total_feedings_usd | currency }}
-      </td>
-      <td class="text-right">
-        {{ data.total_feedings_cop | currency: 'COP' }}
-      </td>
-    </tr>
-    <tr class="text-center">
-      <th class="align-middle">Lavanderia</th>
-      <td class="text-right">
-        {{ data.total_laundry_usd | currency }}
-      </td>
-      <td class="text-right">
-        {{ data.total_laundry_cop | currency: 'COP' }}
-      </td>
-      <th class="align-middle">Sobre Equipaje</th>
-      <td class="text-right">
-        {{ data.baggage_usd | currency }}
-      </td>
-      <td class="text-right">
-        {{ data.baggage_cop | currency: 'COP' }}
-      </td>
-    </tr>
-    <tr class="text-center">
-      <th class="align-middle">Otros Gastos</th>
-      <td class="text-right">
-        {{ data.other_expenses_usd | currency }}
-      </td>
-      <td class="text-right">
-        {{ data.other_expenses_cop | currency: 'COP' }}
-      </td>
-      <th class="align-middle">Total</th>
-      <td class="text-right">
-        {{ data.total_usd | currency }}
-      </td>
-
-      <td class="text-right">
-        {{ data.total_cop | currency: 'COP' }}
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    style="font-size: small"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th class="col-md-3">Item</th>
+        <th>Dolares</th>
+        <th>Pesos</th>
+        <th class="col-md-3">Item</th>
+        <th>Dolares</th>
+        <th>Pesos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="text-center">
+        <th class="align-middle">Hospedaje</th>
+        <td class="text-right">
+          {{ data.total_hotels_usd | currency }}
+        </td>
+        <td class="text-right">
+          {{ data.total_hotels_cop | currency: 'COP' }}
+        </td>
+        <th class="align-middle">Transporte Terrestre</th>
+        <td></td>
+        <td class="text-right">
+          {{ data.total_transports_cop | currency: 'COP' }}
+        </td>
+      </tr>
+      <tr class="text-center">
+        <th class="align-middle">Taxis</th>
+        <td class="text-right">
+          {{ data.total_taxis_usd | currency }}
+        </td>
+        <td class="text-right">
+          {{ data.total_taxis_cop | currency: 'COP' }}
+        </td>
+        <th class="align-middle">Alimentación</th>
+        <td class="text-right">
+          {{ data.total_feedings_usd | currency }}
+        </td>
+        <td class="text-right">
+          {{ data.total_feedings_cop | currency: 'COP' }}
+        </td>
+      </tr>
+      <tr class="text-center">
+        <th class="align-middle">Lavanderia</th>
+        <td class="text-right">
+          {{ data.total_laundry_usd | currency }}
+        </td>
+        <td class="text-right">
+          {{ data.total_laundry_cop | currency: 'COP' }}
+        </td>
+        <th class="align-middle">Sobre Equipaje</th>
+        <td class="text-right">
+          {{ data.baggage_usd | currency }}
+        </td>
+        <td class="text-right">
+          {{ data.baggage_cop | currency: 'COP' }}
+        </td>
+      </tr>
+      <tr class="text-center">
+        <th class="align-middle">Otros Gastos</th>
+        <td class="text-right">
+          {{ data.other_expenses_usd | currency }}
+        </td>
+        <td class="text-right">
+          {{ data.other_expenses_cop | currency: 'COP' }}
+        </td>
+        <th class="align-middle">Total</th>
+        <td class="text-right">
+          {{ data.total_usd | currency }}
+        </td>
+  
+        <td class="text-right">
+          {{ data.total_cop | currency: 'COP' }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

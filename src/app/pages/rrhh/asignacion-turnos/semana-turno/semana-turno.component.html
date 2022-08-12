@@ -8,74 +8,76 @@
     Asignar
   </button>
 </div>
-<table
-  class="table table-bordered table-striped table-sm table-responsive-lg"
-  style="font-size: small"
->
-  <thead class="bg-light">
-    <tr class="text-center text-uppercase">
-      <th class="align-middle"><i class="fas fa-check-square"></i></th>
-      <th class="align-middle">Funcionario</th>
-      <th class="align-middle" *ngFor="let dia of diasSemana">
-        {{ dia.dia }}
-        <br />
-        {{ formatFecha(dia.fecha) }}
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let person of people" class="text-center">
-      <td class="align-middle">
-        <input
-          type="checkbox"
-          [checked]="person.selected"
-          (change)="person.selected = !person.selected"
-          name=""
-          id=""
-        />
-      </td>
-      <td class="align-middle">
-        <img
-          [src]="person?.image | image"
-          onerror="this.src='../../../../assets/images/noprofile.png'"
-          class="d-block img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
-        />
-        <span>{{ person.first_name }} {{ person.second_name }}</span>
-      </td>
-      <td
-        class="align-middle"
-        *ngFor="let dia of person.diasSemana; let i = index"
-      >
-        <!-- {{ turnos }} -->
-        <!--   <app-turno
-              (changed)="turnChanged($event, person, dia)"
-              [turnos]="turnos"
-            ></app-turno> -->
-        <select
-          class="form-control form-control-sm select-turno"
-          [(ngModel)]="dia.turno"
-          [ngStyle]="{ 'background-color': dia.color, color: '#FFF' }"
-          (change)="getColorByDay(dia)"
+<div class="table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    style="font-size: small"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th class="align-middle"><i class="fas fa-check-square"></i></th>
+        <th class="align-middle">Funcionario</th>
+        <th class="align-middle" *ngFor="let dia of diasSemana">
+          {{ dia.dia }}
+          <br />
+          {{ formatFecha(dia.fecha) }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let person of people" class="text-center">
+        <td class="align-middle">
+          <input
+            type="checkbox"
+            [checked]="person.selected"
+            (change)="person.selected = !person.selected"
+            name=""
+            id=""
+          />
+        </td>
+        <td class="align-middle">
+          <img
+            [src]="person?.image | image"
+            onerror="this.src='../../../../assets/images/noprofile.png'"
+            class="d-block img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
+          />
+          <span>{{ person.first_name }} {{ person.second_name }}</span>
+        </td>
+        <td
+          class="align-middle"
+          *ngFor="let dia of person.diasSemana; let i = index"
         >
-          <option value="seleccione">Seleccione</option>
-          <option
-            value="0"
-            [ngStyle]="{ 'background-color': '#000', color: '#FFF' }"
+          <!-- {{ turnos }} -->
+          <!--   <app-turno
+                (changed)="turnChanged($event, person, dia)"
+                [turnos]="turnos"
+              ></app-turno> -->
+          <select
+            class="form-control form-control-sm select-turno"
+            [(ngModel)]="dia.turno"
+            [ngStyle]="{ 'background-color': dia.color, color: '#FFF' }"
+            (change)="getColorByDay(dia)"
           >
-            Descanso
-          </option>
-          <option
-            *ngFor="let turn of turnos"
-            [value]="turn.id"
-            [ngStyle]="{ 'background-color': turn.color, color: '#FFF' }"
-          >
-            {{ turn.name }} ({{ turn.entry_time }} {{ turn.leave_time }})
-          </option>
-        </select>
-      </td>
-    </tr>
-  </tbody>
-</table>
+            <option value="seleccione">Seleccione</option>
+            <option
+              value="0"
+              [ngStyle]="{ 'background-color': '#000', color: '#FFF' }"
+            >
+              Descanso
+            </option>
+            <option
+              *ngFor="let turn of turnos"
+              [value]="turn.id"
+              [ngStyle]="{ 'background-color': turn.color, color: '#FFF' }"
+            >
+              {{ turn.name }} ({{ turn.entry_time }} {{ turn.leave_time }})
+            </option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <button
   class="btn btn-primary btn-block"

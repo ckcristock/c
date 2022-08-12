@@ -1,11 +1,15 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Horas extra reportadas</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button class="btn btn-info btn-sm" (click)="openClose()">
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Horas extra reportadas</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
@@ -23,7 +27,7 @@
               <mat-option value="fijo">Fijo</mat-option>
             </mat-select>
           </mat-form-field>
-          <div class="col-md-4">
+          <div class="col-md-4 mb-4">
             <ng-select
               [items]="people"
               [(ngModel)]="people_id"

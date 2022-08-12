@@ -1,279 +1,276 @@
-<div class="page-body">
-  <div class="row">
-    <div class="col-md-2">
-      <app-filtrosgeneralesauditor
-        MostrarFiltrosAdicionales="true"
-      ></app-filtrosgeneralesauditor>
-      <div class="m-t-10">
-        <!-- [ngStyle]="{'visibility': resoluciones > 0 ? 'visible' : 'hidden'}" -->
-        <div class="">
-          <div class="card-header">
-            <p style="font-weight: bold" class="text-center">
-              Resoluciones por vencer
-            </p>
-          </div>
-          <div class="card-block">
-            <div class="row">
-              <div class="col-md-12">
-                <app-resolucionesxvencer
-                  (resolucionesXVencer)="countResolucionesXVencer($event)"
-                ></app-resolucionesxvencer>
-              </div>
-            </div>
-          </div>
+<div class="card-title">
+  <h3 class="text-center text-primary">Contabilidad</h3>
+</div>
+<hr class="line" />
+<div class="row">
+  <div class="col-lg-12">
+    <app-filtrosgeneralesauditor
+      MostrarFiltrosAdicionales="true"
+    ></app-filtrosgeneralesauditor>
+    <div class="m-t-10" [ngStyle]="{'display': resoluciones > 0 ? 'initial' : 'none'}">
+      <div class="">
+        <div class="card-header">
+          <p style="font-weight: bold" class="text-center">
+            Resoluciones por vencer
+          </p>
         </div>
-      </div>
-    </div>
-    <div class="col-md-10">
-      <app-cardreportes [Reportes]="Reportes"></app-cardreportes>
-
-      <div class="container mt-4">
-        <div class="">
-          <div class="card-body">
-            <div class="card-title d-flex justify-content-between">
-              <h4 class="text-primary">Facturación</h4>
-              <div class="btn-group rounded w-sm-100">
-                <button class="btn btn-info btn-sm" style="float: right">
-                  <!-- (click)="openClose() -->
-                  <i class="fas fa-sliders-h"></i> Filtros
-                </button>
-              </div>
-            </div>
-            <hr class="line" />
-            <div class="container" style="font-size: small">
-              <table
-                class="table table-bordered table-striped table-sm table-responsive-lg"
-              >
-                <thead>
-                  <tr>
-                    <th>Codigo</th>
-                    <th>Fecha</th>
-                    <th>Facturador</th>
-                    <th>Cliente</th>
-                    <th>Tipo</th>
-                    <th>Modalidad</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                  </tr>
-
-                  <tr>
-                    <th class="table-filtro">
-                      <input
-                        type="text"
-                        [(ngModel)]="filtro_cod_fact"
-                        (change)="filtros1()"
-                        class="form-control input-sm"
-                        placeholder="Filtro Codigo"
-                      />
-                    </th>
-                    <th class="table-filtro">
-                      <my-date-range-picker
-                        name="mydaterange1"
-                        [options]="myDateRangePickerOptions1"
-                        (dateRangeChanged)="dateRangeChanged1($event)"
-                        placeholder="Filtro Fechas"
-                      ></my-date-range-picker>
-                    </th>
-                    <th class="table-filtro">
-                      <input
-                        type="text"
-                        [(ngModel)]="filtro_facturador"
-                        (change)="filtros1()"
-                        class="form-control input-sm"
-                        placeholder="Filtro Facturador"
-                      />
-                    </th>
-                    <th class="table-filtro">
-                      <input
-                        type="text"
-                        [(ngModel)]="filtro_cliente"
-                        (change)="filtros1()"
-                        class="form-control input-sm"
-                        placeholder="Filtro Cliente"
-                      />
-                    </th>
-                    <th class="table-filtro">
-                      <select
-                        (change)="filtros1()"
-                        [(ngModel)]="filtro_tipo_fact"
-                        class="form-control input-sm"
-                      >
-                        <option value="">Todas</option>
-                        <option value="Capita">Capita</option>
-                        <option value="Evento">Evento</option>
-                        <option value="NoPos">NoPos</option>
-                      </select>
-                    </th>
-                    <th class="table-filtro">
-                      <!-- <select (change)="filtros1()" [(ngModel)]="filtro_mod" class="form-control input-sm">
-                          <option value="">Todas</option>
-                          <option value="Factura">Factura</option>
-                          <option value="Homologo">Homologo</option>
-                          </select> -->
-                    </th>
-                    <th class="table-filtro">
-                      <select
-                        (change)="filtros1()"
-                        [(ngModel)]="filtro_estado_fact"
-                        class="form-control input-sm"
-                      >
-                        <option value="">Todas</option>
-                        <option value="Sin Cancelar">Sin Cancelar</option>
-                        <option value="Cancelada">Canceladas</option>
-                      </select>
-                    </th>
-                    <th class="table-filtro"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngIf="Facturas.length == 0">
-                    <td colspan="8" class="text-center">
-                      <i class="fa fa-exclamation-circle fa-5x"></i>
-                      <h4>No Existen Facturas para mostrar</h4>
-                    </td>
-                  </tr>
-                  <tr
-                    *ngFor="let factura of Facturas"
-                    [ngClass]="{
-                      'bg-danger': factura.Estado_Factura == 'Anulada'
-                    }"
-                  >
-                    <td>
-                      <strong>{{ factura.Codigo }}</strong>
-                    </td>
-                    <td class="text-center">
-                      {{ factura.Fecha_Documento | date: "dd/MM/yyyy" }}
-                    </td>
-                    <td>
-                      {{ factura.Funcionario }}
-                    </td>
-                    <td>{{ factura.Cliente }}</td>
-                    <td>
-                      <div class="text-center">
-                        <span
-                          class="label"
-                          [ngClass]="{
-                            'label-primary': factura.Tipo == 'Capita',
-                            'label-info': factura.Tipo == 'Evento',
-                            'label-inverse': factura.Tipo == 'NoPos'
-                          }"
-                          >{{ factura.Tipo }}</span
-                        >
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-center">
-                        <span
-                          class="label"
-                          [ngClass]="{
-                            'label-primary': factura.Modalidad == 'Homologo',
-                            'label-success': factura.Modalidad == 'Factura'
-                          }"
-                          >{{ factura.Modalidad }}</span
-                        >
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-center">
-                        <span
-                          class="label {{
-                            factura.Estado_Factura == 'Sin Cancelar'
-                              ? 'label-danger'
-                              : 'label-success'
-                          }}"
-                          >{{ factura.Estado_Factura }}</span
-                        >
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-center">
-                        <div ngbDropdown container="body" class="dropdown-primary">
-                          <button
-                            ngbDropdownToggle
-                            class="btn btn-secondary btn-mini  waves-light"
-                            type="button"
-                          >
-                            Acciones
-                          </button>
-                          <div ngbDropdownMenu>
-                            <!-- <a *ngIf="factura.Tipo == 'Evento' || factura.Tipo == 'NoPos'" class="dropdown-item waves-light  caja-botones" href="javascript:;" (click)="Id_Factura = factura.Id_Factura;modalInfoExtra.show()">
-                                <i class="fa fa-plus-circle"></i>Añadir Info Extra</a> -->
-                            <a
-                              *ngIf="factura.Tipo != 'Pos-Capita'"
-                              class="dropdown-item waves-light  caja-botones"
-                              href=""
-                              [routerLink]="[
-                                '/cmfacturaver',
-                                factura.Tipo_Fact == 'Factura'
-                                  ? factura.Id_Factura
-                                  : factura.Id_Factura_Asociada
-                              ]"
-                            >
-                              <i class="ti-eye"></i>Ver</a
-                            >
-                            <a
-                              *ngIf="factura.Tipo == 'Pos-Capita'"
-                              class="dropdown-item waves-light  caja-botones"
-                              href=""
-                              [routerLink]="[
-                                '/cmfacturacapitaver',
-                                factura.Id_Factura
-                              ]"
-                            >
-                              <i class="ti-eye"></i>Ver</a
-                            >
-                            <!-- Ver de Factura Capita -->
-                            <a
-                              *ngIf="factura.Tipo != 'Pos-Capita'"
-                              class="dropdown-item waves-light  caja-botones"
-                              href="{{
-                                globales.ruta
-                              }}php/facturasventas/factura_dis_pdf.php?id={{
-                                factura.Id_Factura
-                              }}"
-                              target="_blank"
-                            >
-                              <i class="ti-printer"></i>Imprimir Factura</a
-                            >
-                            <a
-                              *ngIf="factura.Tipo == 'Pos-Capita'"
-                              class="dropdown-item waves-light  caja-botones"
-                              href="{{
-                                globales.ruta
-                              }}php/factura_capita/factura_capita_pdf.php?id={{
-                                factura.Id_Factura
-                              }}"
-                              target="_blank"
-                            >
-                              <i class="ti-printer"></i>Imprimir Factura</a
-                            >
-                            <!-- Imprimir de Factura Capita -->
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              {{ page1 * maxSize - maxSize + 1 }} al
-              {{
-                page1 * maxSize > TotalItems1 ? TotalItems1 : page1 * maxSize
-              }}
-              de {{ TotalItems1 }}
-              <ngb-pagination
-                class="pull-right"
-                [collectionSize]="TotalItems1"
-                [(page)]="page1"
-                [maxSize]="10"
-                [pageSize]="maxSize"
-                size="sm"
-                (pageChange)="paginacion()"
-                [boundaryLinks]="true"
-              ></ngb-pagination>
+        <div class="card-block">
+          <div class="row">
+            <div class="col-md-12">
+              <app-resolucionesxvencer
+                (resolucionesXVencer)="countResolucionesXVencer($event)"
+              ></app-resolucionesxvencer>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="col-lg-12">
+    <app-cardreportes [Reportes]="Reportes"></app-cardreportes>
+  </div>
+  <div class="col-md-12">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Facturación</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
+      </div>
+    </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Código</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por código"
+              [(ngModel)]="filtro_cod_fact"
+              (input)="filtros1()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <div class="col">
+            <my-date-range-picker
+              name="mydaterange1"
+              [options]="myDateRangePickerOptions1"
+              (dateRangeChanged)="dateRangeChanged1($event)"
+              placeholder="Filtro Fechas"
+            ></my-date-range-picker>
+          </div>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Facturador</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por facturador"
+              [(ngModel)]="filtro_facturador"
+              (input)="filtros1()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cliente</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por cliente"
+              [(ngModel)]="filtro_cliente"
+              (input)="filtros1()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select
+              (selectionChange)="filtros1()"
+              [(ngModel)]="filtro_tipo_fact"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Capita">Capita</mat-option>
+              <mat-option value="Evento">Evento</mat-option>
+              <mat-option value="NoPos">NoPos</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Modalidad</mat-label>
+            <mat-select (selectionChange)="filtros1()" [(ngModel)]="filtro_mod">
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Factura">Factura</mat-option>
+              <mat-option value="Homologo">Homologo</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select
+              (selectionChange)="filtros1()"
+              [(ngModel)]="filtro_estado_fact"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Sin Cancelar">Sin cancelar</mat-option>
+              <mat-option value="Cancelada">Canceladas</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!loading && Facturas.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Codigo</th>
+            <th>Fecha</th>
+            <th>Facturador</th>
+            <th>Cliente</th>
+            <th>Tipo</th>
+            <th>Modalidad</th>
+            <th>Estado</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let factura of Facturas"
+            class="text-center"
+            [ngClass]="{
+              'text-danger': factura.Estado_Factura == 'Anulada'
+            }"
+          >
+            <td>{{ factura.Codigo }}</td>
+            <td>{{ factura.Fecha_Documento | date: "dd/MM/yyyy" }}</td>
+            <td>{{ factura.Funcionario }}</td>
+            <td>{{ factura.Cliente }}</td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'badge-primary': factura.Tipo == 'Capita',
+                  'badge-info': factura.Tipo == 'Evento',
+                  'badge-darks': factura.Tipo == 'NoPos'
+                }"
+                >{{ factura.Tipo }}</span
+              >
+            </td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'badge-primary': factura.Modalidad == 'Homologo',
+                  'badge-success': factura.Modalidad == 'Factura'
+                }"
+                >{{ factura.Modalidad }}</span
+              >
+            </td>
+            <td>
+              <span
+                class="badge {{
+                  factura.Estado_Factura == 'Sin Cancelar'
+                    ? 'badge-danger'
+                    : 'badge-success'
+                }}"
+                >{{ factura.Estado_Factura }}</span
+              >
+            </td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    *ngIf="factura.Tipo == 'Evento' || factura.Tipo == 'NoPos'"
+                    class="dropdown-item waves-light caja-botones"
+                    href="javascript:;"
+                    (click)="
+                      Id_Factura = factura.Id_Factura; modalInfoExtra.show()
+                    "
+                  >
+                    <i class="fas fa-plus-circle"></i> Añadir info extra</a
+                  >
+                  <a
+                    *ngIf="factura.Tipo != 'Pos-Capita'"
+                    class="dropdown-item waves-light caja-botones"
+                    href=""
+                    [routerLink]="[
+                      '/cmfacturaver',
+                      factura.Tipo_Fact == 'Factura'
+                        ? factura.Id_Factura
+                        : factura.Id_Factura_Asociada
+                    ]"
+                  >
+                    <i class="fas fa-eye"></i> Ver</a
+                  >
+                  <a
+                    *ngIf="factura.Tipo == 'Pos-Capita'"
+                    class="dropdown-item waves-light caja-botones"
+                    href=""
+                    [routerLink]="['/cmfacturacapitaver', factura.Id_Factura]"
+                  >
+                    <i class="fas fa-eye"></i> Ver</a
+                  >
+                  <!-- Ver de Factura Capita -->
+                  <a
+                    *ngIf="factura.Tipo != 'Pos-Capita'"
+                    class="dropdown-item waves-light caja-botones"
+                    href="{{
+                      globales.ruta
+                    }}php/facturasventas/factura_dis_pdf.php?id={{
+                      factura.Id_Factura
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="fas fa-printer"></i> Imprimir factura</a
+                  >
+                  <a
+                    *ngIf="factura.Tipo == 'Pos-Capita'"
+                    class="dropdown-item waves-light caja-botones"
+                    href="{{
+                      globales.ruta
+                    }}php/factura_capita/factura_capita_pdf.php?id={{
+                      factura.Id_Factura
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="fas fa-printer"></i> Imprimir factura</a
+                  >
+                  <!-- Imprimir de Factura Capita -->
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- {{ page1 * maxSize - maxSize + 1 }} al
+    {{ page1 * maxSize > TotalItems1 ? TotalItems1 : page1 * maxSize }}
+    de {{ TotalItems1 }} -->
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="TotalItems1"
+      [(page)]="page1"
+      [maxSize]="10"
+      [pageSize]="maxSize"
+      size="sm"
+      (pageChange)="paginacion()"
+      [boundaryLinks]="true"
+    ></ngb-pagination>
+  </div>
 </div>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

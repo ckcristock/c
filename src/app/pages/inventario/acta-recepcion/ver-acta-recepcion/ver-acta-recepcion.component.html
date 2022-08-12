@@ -208,41 +208,43 @@
                   {{ item.Cantidad_Solicitada | number | puntos }}
                 </td>
                 <td class="align-middle" colspan="6">
-                  <table
-                    class="table table-bordered table-responsive-lg table-sm"
-                    style="font-size: small"
-                  >
-                    <thead class="bg-light">
-                      <tr class="text-center text-uppercase">
-                        <th>Cantidad</th>
-                        <th>Lote</th>
-                        <th>FV</th>
-                        <th>Precio</th>
-                        <th>Iva</th>
-                        <th>Subtotal</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let lote of item.Lotes" class="text-center">
-                        <td class="align-middle">
-                          {{ lote.Cantidad | number | puntos }}
-                        </td>
-                        <td class="align-middle">
-                          {{ lote.Lote }}
-                        </td>
-                        <td class="align-middle">
-                          {{ lote.Fecha_Vencimiento }}
-                        </td>
-                        <td class="align-middle">
-                          {{ lote.Precio | currency: "COP" }}
-                        </td>
-                        <td class="align-middle">{{ lote.Impuesto }}%</td>
-                        <td class="align-middle">
-                          {{ lote.Precio * lote.Cantidad | currency: "COP" }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-sm"
+                      style="font-size: small"
+                    >
+                      <thead class="bg-light">
+                        <tr class="text-center text-uppercase">
+                          <th>Cantidad</th>
+                          <th>Lote</th>
+                          <th>FV</th>
+                          <th>Precio</th>
+                          <th>Iva</th>
+                          <th>Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let lote of item.Lotes" class="text-center">
+                          <td class="align-middle">
+                            {{ lote.Cantidad | number | puntos }}
+                          </td>
+                          <td class="align-middle">
+                            {{ lote.Lote }}
+                          </td>
+                          <td class="align-middle">
+                            {{ lote.Fecha_Vencimiento }}
+                          </td>
+                          <td class="align-middle">
+                            {{ lote.Precio | currency: "COP" }}
+                          </td>
+                          <td class="align-middle">{{ lote.Impuesto }}%</td>
+                          <td class="align-middle">
+                            {{ lote.Precio * lote.Cantidad | currency: "COP" }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </td>
                 <!-- <td class="text-center">{{item.Precio}} </td>
                           <td class="text-center">{{item.Lote}} </td>

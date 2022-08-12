@@ -20,283 +20,273 @@
       </div>
     </div>
     <hr class="line" />
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!Cargando && Documentos.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th class="text-center">#</th>
-          <th class="text-center">Tipo</th>
-          <th class="text-center">Estado</th>
-          <th class="text-center">Fecha</th>
-          <th class="text-center">Digitador</th>
-          <th class="text-center">Contador</th>
-          <th class="text-center">Bodega</th>
-          <th class="text-center">Estiba</th>
-          <th class="text-center">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let documento of Documentos" class="text-center">
-          <td class="align-middle">
-            {{ documento.Id_Doc_Inventario_Fisico }}
-          </td>
-          <td class="align-middle">{{ documento.Tipo }}</td>
-          <td class="align-middle">{{ documento.Estado }}</td>
-          <td class="align-middle">{{ documento.Fecha_Inicio }}</td>
-          <td class="align-middle">
-            {{ documento.Funcionario_Digita_Nombres }}
-            {{ documento.Funcionario_Digita_Apellidos }}
-          </td>
-          <td class="align-middle">
-            {{ documento.Funcionario_Cuenta_Nombres }}
-            {{ documento.Funcionario_Cuenta_Apellidos }}
-          </td>
-          <td class="align-middle">{{ documento.Bodega }}</td>
-          <td class="align-middle">{{ documento.Estiba }}</td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-light"
-                *ngIf="
-                  documento.Estado == 'Primer Conteo' ||
-                  documento.Estado == 'Pendiente Primer Conteo' ||
-                  documento.Estado == 'Segundo Conteo' ||
-                  miPerfil == '16'
-                "
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item waves-light caja-botones"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!Cargando && Documentos.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th class="text-center">#</th>
+            <th class="text-center">Tipo</th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Fecha</th>
+            <th class="text-center">Digitador</th>
+            <th class="text-center">Contador</th>
+            <th class="text-center">Bodega</th>
+            <th class="text-center">Estiba</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let documento of Documentos" class="text-center">
+            <td class="align-middle">
+              {{ documento.Id_Doc_Inventario_Fisico }}
+            </td>
+            <td class="align-middle">{{ documento.Tipo }}</td>
+            <td class="align-middle">{{ documento.Estado }}</td>
+            <td class="align-middle">{{ documento.Fecha_Inicio }}</td>
+            <td class="align-middle">
+              {{ documento.Funcionario_Digita_Nombres }}
+              {{ documento.Funcionario_Digita_Apellidos }}
+            </td>
+            <td class="align-middle">
+              {{ documento.Funcionario_Cuenta_Nombres }}
+              {{ documento.Funcionario_Cuenta_Apellidos }}
+            </td>
+            <td class="align-middle">{{ documento.Bodega }}</td>
+            <td class="align-middle">{{ documento.Estiba }}</td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
                   *ngIf="
-                    documento.Estado == 'Pendiente Primer Conteo' &&
-                    documento.Tipo == 'General'
+                    documento.Estado == 'Primer Conteo' ||
+                    documento.Estado == 'Pendiente Primer Conteo' ||
+                    documento.Estado == 'Segundo Conteo' ||
+                    miPerfil == '16'
                   "
-                  [routerLink]="[
-                    '/inventario/inventario-estibas',
-                    documento.Id_Doc_Inventario_Fisico
-                  ]"
+                  type="button"
                 >
-                  <i class="ti-printer"></i> Continuar conteo
-                </a>
-
-                <a
-                  class="dropdown-item waves-light caja-botones"
-                  *ngIf="
-                    documento.Estado == 'Segundo Conteo' &&
-                    documento.Tipo == 'General'
-                  "
-                  [swal]="{
-                    title: '¿Está Seguro?',
-                    text: 'Ingrese su cédula para ajustar el inventario',
-                    input: 'password',
-                    showCancelButton: true,
-                    confirmButtonText: 'Confirmar',
-                    cancelButtonText: 'Cancelar'
-                  }"
-                  (confirm)="
-                    AccionInventario(
-                      '/inventario/ajuste-documentos',
-                      $event,
-                      documento.Id_Estiba
-                    )
-                  "
-                >
-                  <i class="ti-printer"></i> Ajustar Documentos
-                </a>
-
-                <a
-                  class="dropdown-item waves-light caja-botones"
-                  *ngIf="
-                    documento.Estado == 'Primer Conteo' &&
-                    documento.Tipo == 'General'
-                  "
-                  [swal]="{
-                    title: '¿Está Seguro?',
-                    text: 'Ingrese su cédula para continuar el inventario',
-                    input: 'password',
-                    showCancelButton: true,
-                    confirmButtonText: 'Confirmar',
-                    cancelButtonText: 'Cancelar'
-                  }"
-                  (confirm)="
-                    AccionInventario(
-                      '/inventario/reconteo-estiba',
-                      $event,
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    *ngIf="
+                      documento.Estado == 'Pendiente Primer Conteo' &&
+                      documento.Tipo == 'General'
+                    "
+                    [routerLink]="[
+                      '/inventario/inventario-estibas',
                       documento.Id_Doc_Inventario_Fisico
-                    )
-                  "
-                >
-                  <i class="ti-printer"></i> Reconteo
-                </a>
-
-                <!-- cambiar estados -->
-
-                <a
-                  class="dropdown-item waves-light caja-botones"
-                  *ngIf="
-                    documento.Estado == 'Haciendo Primer Conteo' &&
-                    miPerfil == '16' &&
-                    documento.Tipo == 'General'
-                  "
-                  [swal]="{
-                    title: '¿Está Seguro ?',
-                    text: 'Va a cambiar el estado a Pendiente Primer Conteo',
-                    showCancelButton: true,
-                    confirmButtonText: 'Confirmar',
-                    cancelButtonText: 'Cancelar'
-                  }"
-                  (confirm)="
-                    CambiarEstadoDocumento('Haciendo Primer Conteo', documento)
-                  "
-                >
-                  <i class="ti-printer"></i> Cambiar Estado Primer Conteo
-                </a>
-
-                <!-- cambiar estados -->
-
-                <a
-                  class="dropdown-item waves-light caja-botones"
-                  *ngIf="
-                    documento.Estado == 'Haciendo Segundo Conteo' &&
-                    miPerfil == '16' &&
-                    documento.Tipo == 'General'
-                  "
-                  [swal]="{
-                    title: '¿Está Seguro ?',
-                    text: 'Va a cambiar el estado a Primer Conteo',
-                    showCancelButton: true,
-                    confirmButtonText: 'Confirmar',
-                    cancelButtonText: 'Cancelar',
-                    type: 'warning'
-                  }"
-                  (confirm)="
-                    CambiarEstadoDocumento('Haciendo Segundo Conteo', documento)
-                  "
-                >
-                  <i class="ti-printer"></i> Cambiar Estado Segundo Conteo
-                </a>
-
-                <!-- /*
-                      Estados para inventario auditable
-                      */ -->
-
-                <a
-                  class="dropdown-item waves-light caja-botones"
-                  *ngIf="
-                    documento.Estado == 'Pendiente Primer Conteo' &&
-                    documento.Tipo == 'Auditoria'
-                  "
-                  (click)="continuarConteo(documento)"
-                >
-                  <i class="ti-printer"></i> Continuar Conteo
-                </a>
-
-                <a
-                  class="dropdown-item waves-light caja-botones"
-                  *ngIf="
-                    documento.Estado == 'Segundo Conteo' &&
-                    documento.Tipo == 'Auditoria'
-                  "
-                  [swal]="{
-                    title: '¿Está Seguro?',
-                    text: 'Ingrese su cédula para ajustar el inventario',
-                    input: 'password',
-                    showCancelButton: true,
-                    confirmButtonText: 'Confirmar',
-                    cancelButtonText: 'Cancelar'
-                  }"
-                  (confirm)="
-                    AccionInventario(
-                      '/ajustedocumentosauditables',
-                      $event,
-                      documento.Id_Doc_Inventario_Fisico,
-                      documento
-                    )
-                  "
-                >
-                  <i class="ti-printer"></i> Ajustar Documentos
-                </a>
-
-                <a
-                  class="dropdown-item waves-light caja-botones"
-                  *ngIf="
-                    documento.Estado == 'Primer Conteo' &&
-                    documento.Tipo == 'Auditoria'
-                  "
-                  [swal]="{
-                    title: '¿Está Seguro?',
-                    text: 'Ingrese su cédula para continuar el inventario',
-                    input: 'password',
-                    showCancelButton: true,
-                    confirmButtonText: 'Confirmar',
-                    cancelButtonText: 'Cancelar'
-                  }"
-                  (confirm)="
-                    AccionInventario(
-                      '/reconteoCustom',
-                      $event,
-                      documento.Id_Doc_Inventario_Fisico
-                    )
-                  "
-                >
-                  <i class="ti-printer"></i> Reconteo
-                </a>
-
-                <a
-                  class="dropdown-item waves-light caja-botones"
-                  *ngIf="
-                    documento.Estado == 'Haciendo Primer Conteo' &&
-                    miPerfil == '16' &&
-                    documento.Tipo == 'Auditoria'
-                  "
-                  [swal]="{
-                    title: '¿Está Seguro ?',
-                    text: 'Va a cambiar el estado a Pendiente Primer Conteo',
-                    showCancelButton: true,
-                    confirmButtonText: 'Confirmar',
-                    cancelButtonText: 'Cancelar'
-                  }"
-                  (confirm)="
-                    CambiarEstadoDocumento('Haciendo Primer Conteo', documento)
-                  "
-                >
-                  <i class="ti-printer"></i> Cambiar Estado Primer Conteo
-                </a>
-
-                <a
-                  class="dropdown-item waves-light caja-botones"
-                  *ngIf="
-                    documento.Estado == 'Haciendo Segundo Conteo' &&
-                    miPerfil == '16' &&
-                    documento.Tipo == 'Auditoria'
-                  "
-                  [swal]="{
-                    title: '¿Está Seguro ?',
-                    text: 'Va a cambiar el estado a Primer Conteo',
-                    showCancelButton: true,
-                    confirmButtonText: 'Confirmar',
-                    cancelButtonText: 'Cancelar',
-                    type: 'warning'
-                  }"
-                  (confirm)="
-                    CambiarEstadoDocumento('Haciendo Segundo Conteo', documento)
-                  "
-                >
-                  <i class="ti-printer"></i> Cambiar Estado Segundo Conteo
-                </a>
+                    ]"
+                  >
+                    <i class="ti-printer"></i> Continuar conteo
+                  </a>
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    *ngIf="
+                      documento.Estado == 'Segundo Conteo' &&
+                      documento.Tipo == 'General'
+                    "
+                    [swal]="{
+                      title: '¿Está Seguro?',
+                      text: 'Ingrese su cédula para ajustar el inventario',
+                      input: 'password',
+                      showCancelButton: true,
+                      confirmButtonText: 'Confirmar',
+                      cancelButtonText: 'Cancelar'
+                    }"
+                    (confirm)="
+                      AccionInventario(
+                        '/inventario/ajuste-documentos',
+                        $event,
+                        documento.Id_Estiba
+                      )
+                    "
+                  >
+                    <i class="ti-printer"></i> Ajustar Documentos
+                  </a>
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    *ngIf="
+                      documento.Estado == 'Primer Conteo' &&
+                      documento.Tipo == 'General'
+                    "
+                    [swal]="{
+                      title: '¿Está Seguro?',
+                      text: 'Ingrese su cédula para continuar el inventario',
+                      input: 'password',
+                      showCancelButton: true,
+                      confirmButtonText: 'Confirmar',
+                      cancelButtonText: 'Cancelar'
+                    }"
+                    (confirm)="
+                      AccionInventario(
+                        '/inventario/reconteo-estiba',
+                        $event,
+                        documento.Id_Doc_Inventario_Fisico
+                      )
+                    "
+                  >
+                    <i class="ti-printer"></i> Reconteo
+                  </a>
+                  <!-- cambiar estados -->
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    *ngIf="
+                      documento.Estado == 'Haciendo Primer Conteo' &&
+                      miPerfil == '16' &&
+                      documento.Tipo == 'General'
+                    "
+                    [swal]="{
+                      title: '¿Está Seguro ?',
+                      text: 'Va a cambiar el estado a Pendiente Primer Conteo',
+                      showCancelButton: true,
+                      confirmButtonText: 'Confirmar',
+                      cancelButtonText: 'Cancelar'
+                    }"
+                    (confirm)="
+                      CambiarEstadoDocumento('Haciendo Primer Conteo', documento)
+                    "
+                  >
+                    <i class="ti-printer"></i> Cambiar Estado Primer Conteo
+                  </a>
+                  <!-- cambiar estados -->
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    *ngIf="
+                      documento.Estado == 'Haciendo Segundo Conteo' &&
+                      miPerfil == '16' &&
+                      documento.Tipo == 'General'
+                    "
+                    [swal]="{
+                      title: '¿Está Seguro ?',
+                      text: 'Va a cambiar el estado a Primer Conteo',
+                      showCancelButton: true,
+                      confirmButtonText: 'Confirmar',
+                      cancelButtonText: 'Cancelar',
+                      type: 'warning'
+                    }"
+                    (confirm)="
+                      CambiarEstadoDocumento('Haciendo Segundo Conteo', documento)
+                    "
+                  >
+                    <i class="ti-printer"></i> Cambiar Estado Segundo Conteo
+                  </a>
+                  <!-- /*
+                        Estados para inventario auditable
+                        */ -->
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    *ngIf="
+                      documento.Estado == 'Pendiente Primer Conteo' &&
+                      documento.Tipo == 'Auditoria'
+                    "
+                    (click)="continuarConteo(documento)"
+                  >
+                    <i class="ti-printer"></i> Continuar Conteo
+                  </a>
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    *ngIf="
+                      documento.Estado == 'Segundo Conteo' &&
+                      documento.Tipo == 'Auditoria'
+                    "
+                    [swal]="{
+                      title: '¿Está Seguro?',
+                      text: 'Ingrese su cédula para ajustar el inventario',
+                      input: 'password',
+                      showCancelButton: true,
+                      confirmButtonText: 'Confirmar',
+                      cancelButtonText: 'Cancelar'
+                    }"
+                    (confirm)="
+                      AccionInventario(
+                        '/ajustedocumentosauditables',
+                        $event,
+                        documento.Id_Doc_Inventario_Fisico,
+                        documento
+                      )
+                    "
+                  >
+                    <i class="ti-printer"></i> Ajustar Documentos
+                  </a>
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    *ngIf="
+                      documento.Estado == 'Primer Conteo' &&
+                      documento.Tipo == 'Auditoria'
+                    "
+                    [swal]="{
+                      title: '¿Está Seguro?',
+                      text: 'Ingrese su cédula para continuar el inventario',
+                      input: 'password',
+                      showCancelButton: true,
+                      confirmButtonText: 'Confirmar',
+                      cancelButtonText: 'Cancelar'
+                    }"
+                    (confirm)="
+                      AccionInventario(
+                        '/reconteoCustom',
+                        $event,
+                        documento.Id_Doc_Inventario_Fisico
+                      )
+                    "
+                  >
+                    <i class="ti-printer"></i> Reconteo
+                  </a>
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    *ngIf="
+                      documento.Estado == 'Haciendo Primer Conteo' &&
+                      miPerfil == '16' &&
+                      documento.Tipo == 'Auditoria'
+                    "
+                    [swal]="{
+                      title: '¿Está Seguro ?',
+                      text: 'Va a cambiar el estado a Pendiente Primer Conteo',
+                      showCancelButton: true,
+                      confirmButtonText: 'Confirmar',
+                      cancelButtonText: 'Cancelar'
+                    }"
+                    (confirm)="
+                      CambiarEstadoDocumento('Haciendo Primer Conteo', documento)
+                    "
+                  >
+                    <i class="ti-printer"></i> Cambiar Estado Primer Conteo
+                  </a>
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    *ngIf="
+                      documento.Estado == 'Haciendo Segundo Conteo' &&
+                      miPerfil == '16' &&
+                      documento.Tipo == 'Auditoria'
+                    "
+                    [swal]="{
+                      title: '¿Está Seguro ?',
+                      text: 'Va a cambiar el estado a Primer Conteo',
+                      showCancelButton: true,
+                      confirmButtonText: 'Confirmar',
+                      cancelButtonText: 'Cancelar',
+                      type: 'warning'
+                    }"
+                    (confirm)="
+                      CambiarEstadoDocumento('Haciendo Segundo Conteo', documento)
+                    "
+                  >
+                    <i class="ti-printer"></i> Cambiar Estado Segundo Conteo
+                  </a>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -375,84 +365,81 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="!Cargando2 && Inventarios_Terminados.length > 0; else notData2"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>#</th>
-          <th>Fecha</th>
-          <th>Funcionario Autorizó</th>
-
-          <th>Bodega</th>
-          <th>Grupo</th>
-          <!-- <th class="text-center">Subcategoría</th> -->
-          <th>Acciones</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let item of Inventarios_Terminados" class="text-center">
-          <!--<td *ngIf="perfilUsuario == '27'">
-                  <a href="{{globales.ruta}}php/contabilidad/movimientoscontables/movimientos_inventario_fisico_pdf.php?id_registro={{item.Id_Inventario_Fisico}}&id_funcionario_elabora={{funcionario.Identificacion_Funcionario}}" target="_blank" style="font-size: 10px;">
-                    INVF{{item.Id_Inventario_Fisico}}
-                  </a>
-                </td>-->
-          <td class="align-middle">
-            {{ item.Id_Inventario_Fisico_Nuevo }}
-          </td>
-          <td class="align-middle">
-            {{ item.Fecha | date: "dd/MM/yyyy hh:mm:ss a" }}
-          </td>
-          <td class="align-middle">{{ item.Nombre_Funcionario_Autorizo }}</td>
-
-          <td class="align-middle">{{ item.Nombre_Bodega }}</td>
-          <td class="align-middle">{{ item.Nombre_Grupo }}</td>
-
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <ng-container
-                  *ngIf="item.Tipo != 'Auditoria'; else elseTemplate"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!Cargando2 && Inventarios_Terminados.length > 0; else notData2"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Funcionario Autorizó</th>
+            <th>Bodega</th>
+            <th>Grupo</th>
+            <!-- <th class="text-center">Subcategoría</th> -->
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of Inventarios_Terminados" class="text-center">
+            <!--<td *ngIf="perfilUsuario == '27'">
+                    <a href="{{globales.ruta}}php/contabilidad/movimientoscontables/movimientos_inventario_fisico_pdf.php?id_registro={{item.Id_Inventario_Fisico}}&id_funcionario_elabora={{funcionario.Identificacion_Funcionario}}" target="_blank" style="font-size: 10px;">
+                      INVF{{item.Id_Inventario_Fisico}}
+                    </a>
+                  </td>-->
+            <td class="align-middle">
+              {{ item.Id_Inventario_Fisico_Nuevo }}
+            </td>
+            <td class="align-middle">
+              {{ item.Fecha | date: "dd/MM/yyyy hh:mm:ss a" }}
+            </td>
+            <td class="align-middle">{{ item.Nombre_Funcionario_Autorizo }}</td>
+            <td class="align-middle">{{ item.Nombre_Bodega }}</td>
+            <td class="align-middle">{{ item.Nombre_Grupo }}</td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
                 >
-                  <a
-                    class="dropdown-item waves-light caja-botones"
-                    [routerLink]="[
-                      '/inventario/inventariofisicoestibas',
-                      item.Id_Inventario_Fisico_Nuevo
-                    ]"
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <ng-container
+                    *ngIf="item.Tipo != 'Auditoria'; else elseTemplate"
                   >
-                    <i class="ti-printer"></i> Ver Detalles</a
-                  >
-                </ng-container>
-
-                <ng-template #elseTemplate>
-                  <a
-                    class="dropdown-item waves-light caja-botones"
-                    [routerLink]="[
-                      '/inventarioauditor',
-                      item.Id_Inventario_Fisico_Nuevo
-                    ]"
-                  >
-                    <i class="ti-printer"></i> Ver Detalles</a
-                  >
-                </ng-template>
+                    <a
+                      class="dropdown-item waves-light caja-botones"
+                      [routerLink]="[
+                        '/inventario/inventariofisicoestibas',
+                        item.Id_Inventario_Fisico_Nuevo
+                      ]"
+                    >
+                      <i class="ti-printer"></i> Ver Detalles</a
+                    >
+                  </ng-container>
+                  <ng-template #elseTemplate>
+                    <a
+                      class="dropdown-item waves-light caja-botones"
+                      [routerLink]="[
+                        '/inventarioauditor',
+                        item.Id_Inventario_Fisico_Nuevo
+                      ]"
+                    >
+                      <i class="ti-printer"></i> Ver Detalles</a
+                    >
+                  </ng-template>
+                </div>
+                -
               </div>
-              -
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="TotalItems"

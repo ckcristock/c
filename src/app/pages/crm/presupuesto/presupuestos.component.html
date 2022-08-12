@@ -69,101 +69,103 @@
         aquí
       </a>
     </div>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg mb-0"
-      style="font-size: small"
-      *ngIf="!loading && budgets.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th *ngIf="checkItem">Item</th>
-          <th *ngIf="checkFecha">Fecha</th>
-          <th *ngIf="checkCliente">Cliente</th>
-          <th *ngIf="checkDestino">Destino</th>
-          <th *ngIf="checkLinea">Linea</th>
-          <th *ngIf="checkQuien">Quien elabora</th>
-          <th *ngIf="checkTCop">Total COP</th>
-          <th *ngIf="checkTUsd">Total USD</th>
-          <th class="col-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let item of budgets"
-          class="text-center"
-          [ngClass]="{
-            'text-danger font-weight-bold': item.state == 'Inactivo'
-          }"
-        >
-          <td *ngIf="checkItem" class="align-middle">PRES {{ item.id }}</td>
-          <td *ngIf="checkFecha" class="align-middle">
-            {{ item.created_at | date: "longDate" }}
-          </td>
-          <td *ngIf="checkCliente" class="align-middle">
-            {{ item.customer.name }}
-          </td>
-          <td *ngIf="checkDestino" class="align-middle">
-            {{ item.destiny.name }}
-          </td>
-          <td *ngIf="checkLinea" class="align-middle">{{ item.line }}</td>
-          <td *ngIf="checkQuien" class="align-middle">
-            {{ item.user.person.first_name }}
-            {{ item.user.person.first_surname }}
-          </td>
-          <td *ngIf="checkTCop" class="align-middle">
-            ${{ item.total_cop | currency: "":"" }}
-          </td>
-          <td *ngIf="checkTUsd" class="align-middle">
-            ${{ item.total_usd | currency: "":"" }}
-          </td>
-          <td class="align-middle">
-            <div
-              ngbDropdown
-              container="body"
-              class="d-inline-block dropdown-primary"
-            >
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm"
-                type="button"
-                id="dropdownBasic1"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm mb-0"
+        style="font-size: small"
+        *ngIf="!loading && budgets.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th *ngIf="checkItem">Item</th>
+            <th *ngIf="checkFecha">Fecha</th>
+            <th *ngIf="checkCliente">Cliente</th>
+            <th *ngIf="checkDestino">Destino</th>
+            <th *ngIf="checkLinea">Linea</th>
+            <th *ngIf="checkQuien">Quien elabora</th>
+            <th *ngIf="checkTCop">Total COP</th>
+            <th *ngIf="checkTUsd">Total USD</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of budgets"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': item.state == 'Inactivo'
+            }"
+          >
+            <td *ngIf="checkItem" class="align-middle">PRES {{ item.id }}</td>
+            <td *ngIf="checkFecha" class="align-middle">
+              {{ item.created_at | date: "longDate" }}
+            </td>
+            <td *ngIf="checkCliente" class="align-middle">
+              {{ item.customer.name }}
+            </td>
+            <td *ngIf="checkDestino" class="align-middle">
+              {{ item.destiny.name }}
+            </td>
+            <td *ngIf="checkLinea" class="align-middle">{{ item.line }}</td>
+            <td *ngIf="checkQuien" class="align-middle">
+              {{ item.user.person.first_name }}
+              {{ item.user.person.first_surname }}
+            </td>
+            <td *ngIf="checkTCop" class="align-middle">
+              ${{ item.total_cop | currency: "":"" }}
+            </td>
+            <td *ngIf="checkTUsd" class="align-middle">
+              ${{ item.total_usd | currency: "":"" }}
+            </td>
+            <td class="align-middle">
+              <div
+                ngbDropdown
+                container="body"
+                class="d-inline-block dropdown-primary"
               >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <a
-                  
-                  class="dropdown-item waves-light text-success  caja-botones"
-                  [routerLink]="['/crm/presupuesto/ver', item.id]"
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm"
+                  type="button"
+                  id="dropdownBasic1"
                 >
-                  <i class="far fa-eye"></i> Ver
-                </a>
-                <a
-                  class="dropdown-item waves-light text-info  caja-botones"
-                  [routerLink]="['/crm/presupuesto/editar', item.id]"
-                >
-                  <i class="far fa-edit"></i> Editar
-                </a>
-                <a
-                  *ngIf="item.state == 'Activo'"
-                  (click)="activateOrInactive('Inactivo', item.id)"
-                  class="dropdown-item waves-light text-danger  caja-botones"
-                >
-                  <i class="far fa-trash-alt"></i> Anular
-                </a>
-                <a
-                  *ngIf="item.state == 'Inactivo'"
-                  (click)="activateOrInactive('Activo', item.id)"
-                  class="dropdown-item waves-light text-primary  caja-botones"
-                >
-                  <i class="fas fa-check"></i> Activar
-                </a>
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <a
+      
+                    class="dropdown-item waves-light text-success  caja-botones"
+                    [routerLink]="['/crm/presupuesto/ver', item.id]"
+                  >
+                    <i class="far fa-eye"></i> Ver
+                  </a>
+                  <a
+                    class="dropdown-item waves-light text-info  caja-botones"
+                    [routerLink]="['/crm/presupuesto/editar', item.id]"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Activo'"
+                    (click)="activateOrInactive('Inactivo', item.id)"
+                    class="dropdown-item waves-light text-danger  caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Inactivo'"
+                    (click)="activateOrInactive('Activo', item.id)"
+                    class="dropdown-item waves-light text-primary  caja-botones"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <mat-paginator
       *ngIf="paginacion"

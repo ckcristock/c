@@ -10,26 +10,28 @@
   <hr />
   <div class="text-center text-uppercase card-title">Deducciones</div>
 
-  <table
-    class="table table-bordered table-striped table-sm table-responsive-lg"
-  >
-    <thead class="bg-light">
-      <tr class="text-uppercase">
-        <th>Concepto</th>
-        <th class="text-center col-md-1">Valor</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let deduccion of deducciones">
-        <td>{{ deduccion.concepto }}</td>
-        <td class="text-center">{{ deduccion.valor | currency: "":"" }}</td>
-      </tr>
-      <tr class="font-weight-bold">
-        <td>Total deducciones</td>
-        <td class="text-center">
-          {{ deduccionesDatos.valor_total | currency: "":"" }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table
+      class="table table-bordered table-striped table-sm"
+    >
+      <thead class="bg-light">
+        <tr class="text-uppercase">
+          <th>Concepto</th>
+          <th class="text-center col-md-1">Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let deduccion of deducciones">
+          <td>{{ deduccion.concepto }}</td>
+          <td class="text-center">{{ deduccion.valor | currency: "":"" }}</td>
+        </tr>
+        <tr class="font-weight-bold">
+          <td>Total deducciones</td>
+          <td class="text-center">
+            {{ deduccionesDatos.valor_total | currency: "":"" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

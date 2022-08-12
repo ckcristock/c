@@ -1,191 +1,191 @@
 <div class="card">
-  <div class="card-block card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Notas contables</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button
-          type="button"
-          class="btn btn-primary btn-sm"
-          [routerLink]="['/contabilidad/comprobantes/crear-nota-contable']"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <button class="btn btn-info btn-sm" (click)="openClose()">
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Notas contables</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            [routerLink]="['/contabilidad/comprobantes/crear-nota-contable']"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Fecha de inicio</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            [(ngModel)]="fechita"
-            (dateInput)="fechitaF($event)"
-            autocomplete="off"
-            placeholder="Busca por fecha"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Fecha de fin</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker2"
-            [(ngModel)]="fechita2"
-            (dateInput)="fechitaF2($event)"
-            autocomplete="off"
-            placeholder="Busca por fecha"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker2"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker2></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field class="col-md-3 pl-0" appearance="outline">
-          <mat-label>Documento</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Busca por documento"
-            [(ngModel)]="filtros.codigo"
-            (input)="filtrar()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-3 pl-0" appearance="outline">
-          <mat-label>Beneficiario</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Busca por beneficiario"
-            [(ngModel)]="filtros.tercero"
-            (input)="filtrar()"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
-          <mat-label>Estado</mat-label>
-          <mat-select
-            [(ngModel)]="filtros.estado"
-            (selectionChange)="filtrar()"
-          >
-            <mat-option value="">Todas</mat-option>
-            <mat-option value="Activo">Activo</mat-option>
-            <mat-option value="Anulada">Anulada</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <!-- <th>
-                    <select (change)="filtrar()" name="Id_Empresa" id="Id_Empresa" [(ngModel)]="filtros.Id_Empresa"
-                        class="form-control input-sm" placeholder="Filtro Empresa" required>
-                        <option *ngFor="let item of companies" [value]="item.value">
-                            {{ item.text }}
-                        </option>
-                    </select>
-                </th> -->
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de inicio</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [(ngModel)]="fechita"
+              (dateInput)="fechitaF($event)"
+              autocomplete="off"
+              placeholder="Busca por fecha"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de fin</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker2"
+              [(ngModel)]="fechita2"
+              (dateInput)="fechitaF2($event)"
+              autocomplete="off"
+              placeholder="Busca por fecha"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker2"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Documento</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por documento"
+              [(ngModel)]="filtros.codigo"
+              (input)="filtrar()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Beneficiario</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por beneficiario"
+              [(ngModel)]="filtros.tercero"
+              (input)="filtrar()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select
+              [(ngModel)]="filtros.estado"
+              (selectionChange)="filtrar()"
+            >
+              <mat-option value="">Todas</mat-option>
+              <mat-option value="Activo">Activo</mat-option>
+              <mat-option value="Anulada">Anulada</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <table
-      class="table table-bordered table-striped table-responsive-lg table-sm"
-      style="font-size: small"
-      *ngIf="!Cargando && NotasContables.length > 0; else notData"
-    >
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <!-- <th>Empresa</th> -->
-          <th>Documento</th>
-          <th>Beneficiario</th>
-          <th>Concepto</th>
-          <th>Total Debito</th>
-          <th>Total Credito</th>
-          <th>Total Debito NIIF</th>
-          <th>Total Credito NIIF</th>
-          <th>Funcionario</th>
-          <th>Estado</th>
-          <th class="text-center col-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let item of NotasContables"
-          [ngClass]="{ 'bg-danger': item.Estado == 'Anulada' }"
-        >
-          <td>{{ item.Fecha }}</td>
-          <!-- <td> {{ item.Empresa }} </td> -->
-          <td>{{ item.Codigo }}</td>
-          <td>{{ item.Beneficiario }} - {{ item.Tercero }}</td>
-          <td>{{ item.Concepto }}</td>
-          <td>{{ item.Total_Debe_PCGA | currency }}</td>
-          <td>{{ item.Total_Haber_PCGA | currency }}</td>
-          <td>{{ item.Total_Debe_NIIF | currency }}</td>
-          <td>{{ item.Total_Haber_NIIF | currency }}</td>
-          <td>{{ item.Funcionario }}</td>
-          <td width="60">
-            <span
-              *ngIf="item.Estado != 'Anulada'"
-              class="label label-success"
-              >{{ item.Estado }}</span
-            >
-          </td>
-          <td>
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!Cargando && NotasContables.length > 0; else notData"
+      >
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <!-- <th>Empresa</th> -->
+            <th>Documento</th>
+            <th>Beneficiario</th>
+            <th>Concepto</th>
+            <th>Total Debito</th>
+            <th>Total Credito</th>
+            <th>Total Debito NIIF</th>
+            <th>Total Credito NIIF</th>
+            <th>Funcionario</th>
+            <th class="col-1">Estado</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of NotasContables"
+            [ngClass]="{ 'text-danger': item.Estado == 'Anulada' }"
+          >
+            <td>{{ item.Fecha }}</td>
+            <!-- <td> {{ item.Empresa }} </td> -->
+            <td>{{ item.Codigo }}</td>
+            <td>{{ item.Beneficiario }} - {{ item.Tercero }}</td>
+            <td>{{ item.Concepto }}</td>
+            <td>{{ item.Total_Debe_PCGA | currency: "":"" }}</td>
+            <td>{{ item.Total_Haber_PCGA | currency: "":"" }}</td>
+            <td>{{ item.Total_Debe_NIIF | currency: "":"" }}</td>
+            <td>{{ item.Total_Haber_NIIF | currency: "":"" }}</td>
+            <td>{{ item.Funcionario }}</td>
+            <td>
+              <span
+                *ngIf="item.Estado != 'Anulada'"
+                class="badge badge-success"
+                >{{ item.Estado }}</span
               >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item waves-light  caja-botones"
-                  href="{{
-                    envirom.ruta
-                  }}php/contabilidad/notascontables/descarga_pdf.php?id={{
-                    item.Id_Documento_Contable
-                  }}"
-                  target="_blank"
+            </td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
                 >
-                  <i class="fa fa-print"></i> Ver PCGA</a
-                >
-                <a
-                  class="dropdown-item waves-light  caja-botones"
-                  href="{{
-                    envirom.ruta
-                  }}php/contabilidad/notascontables/descarga_pdf.php?id={{
-                    item.Id_Documento_Contable
-                  }}&tipo=Niif"
-                  target="_blank"
-                >
-                  <i class="fa fa-print"></i> Ver NIIF</a
-                >
-                <a
-                  *ngIf="item.Estado != 'Anulada' && perfilUsuario == '27'"
-                  class="dropdown-item waves-light  caja-botones bg-danger"
-                  href="javascript:;"
-                  [swal]="confirmacionAnular"
-                  (click)="IdDocumento = item.Id_Documento_Contable"
-                >
-                  <i class="fa fa-close"></i> Anular</a
-                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    href="{{
+                      envirom.ruta
+                    }}php/contabilidad/notascontables/descarga_pdf.php?id={{
+                      item.Id_Documento_Contable
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="fa fa-print"></i> Ver PCGA</a
+                  >
+                  <a
+                    class="dropdown-item waves-light caja-botones"
+                    href="{{
+                      envirom.ruta
+                    }}php/contabilidad/notascontables/descarga_pdf.php?id={{
+                      item.Id_Documento_Contable
+                    }}&tipo=Niif"
+                    target="_blank"
+                  >
+                    <i class="fa fa-print"></i> Ver NIIF</a
+                  >
+                  <a
+                    *ngIf="item.Estado != 'Anulada' && perfilUsuario == '27'"
+                    class="dropdown-item waves-light caja-botones bg-danger"
+                    href="javascript:;"
+                    [swal]="confirmacionAnular"
+                    (click)="IdDocumento = item.Id_Documento_Contable"
+                  >
+                    <i class="fa fa-close"></i> Anular</a
+                  >
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <small *ngIf="TotalItems != 0" class="d-flex justify-content-center">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+   <!--  <small *ngIf="TotalItems != 0" class="d-flex justify-content-center">
       {{ page * maxSize - maxSize + 1 }} al
       {{ page * maxSize > TotalItems ? TotalItems : page * maxSize }} de
       {{ TotalItems }}
-    </small>
+    </small> -->
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [(collectionSize)]="TotalItems"

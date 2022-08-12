@@ -107,7 +107,7 @@
       </div>
       <div *ngIf="Mostrar" class="row" style="margin-top: 30px">
         <div class="col-sm-12">
-          <div class="table-responsive tabla">
+          <div class="tabla table-responsive">
             <table
               class="table invoice-detail-table space"
               style="table-layout: auto !important"
@@ -234,14 +234,16 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <table class="table table-responsive invoice-table invoice-total">
-            <tbody>
-              <tr>
-                <td>Total:</td>
-                <td>{{ Total | currency }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table invoice-table invoice-total">
+              <tbody>
+                <tr>
+                  <td>Total:</td>
+                  <td>{{ Total | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="row">

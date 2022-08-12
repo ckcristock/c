@@ -1,26 +1,30 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Inventario de Dotación y EPP</h4>
-      <div class="btn-group rounded w-sm-100">
-        <button
-          type="button"
-          class="btn btn-sm btn-primary"
-          (click)="openConfirm(add); listarGrupo()"
-        >
-          <i class="fa fa-plus"></i>
-          Agregar
-        </button>
-        <button class="btn btn-info btn-sm" (click)="openClose()">
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Inventario de dotación y EPP</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            type="button"
+            class="btn btn-sm btn-primary"
+            (click)="openConfirm(add); listarGrupo()"
+          >
+            <i class="fa fa-plus"></i>
+            Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <mat-form-field class="col-md-3" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Código</mat-label>
             <input
               matInput
@@ -30,7 +34,7 @@
               (input)="filtros()"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-3" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre del elemento</mat-label>
             <input
               matInput
@@ -40,7 +44,7 @@
               (input)="filtros()"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-3" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Calidad</mat-label>
             <mat-select
               [(ngModel)]="filtro_calidad"
@@ -50,7 +54,7 @@
               <mat-option value="usado">Usado</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="col-md-3" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Tipo</mat-label>
             <mat-select [(ngModel)]="filtro_tipo" (selectionChange)="filtros()">
               <mat-option value="dotacion">Dotacion</mat-option>
@@ -60,37 +64,39 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg"
-      style="font-size: small"
-      *ngIf="Inventarios.length > 0 && !loading; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Código</th>
-          <th>Nombre Elemento</th>
-          <th>Calidad</th>
-          <th>Tipo</th>
-          <th>Costo</th>
-          <th>Cantidad</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let inventario of Inventarios; let i = index"
-          class="text-center"
-        >
-          <td class="align-middle">{{ inventario.code }}</td>
-          <td class="align-middle">{{ inventario.name }}</td>
-          <td class="align-middle">{{ inventario.status }}</td>
-          <td class="align-middle">{{ inventario.type }}</td>
-          <td class="text-right align-middle">
-            $ {{ inventario.cost | number | puntos }}
-          </td>
-          <td class="align-middle">{{ inventario.stock }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="Inventarios.length > 0 && !loading; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Código</th>
+            <th>Nombre Elemento</th>
+            <th>Calidad</th>
+            <th>Tipo</th>
+            <th>Costo</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let inventario of Inventarios; let i = index"
+            class="text-center"
+          >
+            <td class="align-middle">{{ inventario.code }}</td>
+            <td class="align-middle">{{ inventario.name }}</td>
+            <td class="align-middle">{{ inventario.status }}</td>
+            <td class="align-middle">{{ inventario.type }}</td>
+            <td class="text-right align-middle">
+              $ {{ inventario.cost | number | puntos }}
+            </td>
+            <td class="align-middle">{{ inventario.stock }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"

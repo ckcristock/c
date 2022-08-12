@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { IMyDrpOptions } from 'mydaterangepicker';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-board-contabilidad',
@@ -10,6 +11,17 @@ import { IMyDrpOptions } from 'mydaterangepicker';
   styleUrls: ['./board-contabilidad.component.scss']
 })
 export class BoardContabilidadComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   globales = {ruta: 'http://inventario.sigmaqmo.com/'}
   private _rutaReportesAuditor =this.globales.ruta+'php/tableroauditor/reportes.php';
   private _rutaReportesContabilidad =this.globales.ruta+'php/tablerocontabilidad/reportes.php';
@@ -22,138 +34,137 @@ export class BoardContabilidadComponent implements OnInit {
     selectionTxtFontSize: '10px',
     dateFormat: 'yyyy-mm-dd',
   };
-
   public Reportes:any=[
     {
-      Color: 'bg-inverse',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Ventas ',
+      Color: 'text-info',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte ventas ',
       Tipo:'Ventas',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-viber',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Actas Compras ',
+      Color: 'text-warning',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte actas compras ',
       Tipo:'Acta_Compra',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-success',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Ajuste Individual ',
+      Color: 'text-success',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte ajuste individual ',
       Tipo:'Reporte_Ajuste',
       Ruta: this._rutaReportesAuditor
     },
     {
-      Color: 'bg-c-yellow',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Remisiones ',
+      Color: 'text-info',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte remisiones ',
       Tipo:'Reporte_Remision',
       Ruta: this._rutaReportesAuditor
     },
     {
-      Color: 'bg-twitter',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Actas Remisiones ',
+      Color: 'text-danger',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte actas remisiones ',
       Tipo:'Reporte_Acta_Remision',
       Ruta: this._rutaReportesAuditor
     },
     {
-      Color: 'bg-instagram',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Inventario Fisico Bodega ',
+      Color: 'text-primary',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte inventario físico bodega ',
       Tipo:'Reporte_Inventario_Bodega',
       Ruta: this._rutaReportesAuditor
     },
     {
-      Color: 'bg-dark',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Inventario Fisico Puntos ',
+      Color: 'text-info',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte inventario físico puntos ',
       Tipo:'Reporte_Inventario_Punto',
       Ruta: this._rutaReportesAuditor
     },
     {
-      Color: 'bg-c-lite-green',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Actas Internacionales ',
+      Color: 'text-warning',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte actas internacionales ',
       Tipo:'Reporte_Acta_Internacional',
       Ruta: this._rutaReportesAuditor
     },
     {
-      Color: 'bg-c-lite-green',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Nacionalización ',
+      Color: 'text-success',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte nacionalización ',
       Tipo:'Reporte_Nacionalizacion',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-youtube',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Devolucion Compras ',
+      Color: 'text-info',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte devolución compras ',
       Tipo:'DevolucionC',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-secondary',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Devolucion Ventas  ',
+      Color: 'text-danger',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte devolución ventas  ',
       Tipo:'DevolucionV',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-youtube',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Inventario Valorizado ',
+      Color: 'text-primary',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte inventario valorizado ',
       Tipo:'Inventario_Valorizado',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-inverse',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Dispensación',
+      Color: 'text-info',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte dispensación',
       Tipo:'Dispensacion',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-instagram',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Dispensación Cuotas',
+      Color: 'text-danger',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte dispensación cuotas',
       Tipo:'Dispensacion_Cuotas',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-c-lite-green',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Terceros Consolidados',
+      Color: 'text-info',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte terceros consolidados',
       Tipo:'Terceros',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-viber',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Dispensacion Costo Pendiente',
+      Color: 'text-success',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte dispensacion costo pendiente',
       Tipo:'Dispensacion_Pendientes',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-c-yellow',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte de Exentos',
+      Color: 'text-warning',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte de exentos',
       Tipo:'Reporte_Exentos',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-twitter',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Nota Credito G',
+      Color: 'text-primary',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte nota crédito g.',
       Tipo:'Nota_Credito_Global',
       Ruta: this._rutaReportesContabilidad
     },
     {
-      Color: 'bg-primary',
-      Icono: ' fa fa-download',
-      Texto: 'Reporte Compras - Parciales Internacionales',
+      Color: 'text-danger',
+      Icono: 'fas fa-file-download',
+      Texto: 'Reporte compras - Parciales internacionales',
       Tipo:'Compra_Pai',
       Ruta: this._rutaReportesContabilidad
     }
@@ -168,8 +179,9 @@ export class BoardContabilidadComponent implements OnInit {
   TotalItems1:number = 0;
   public maxSize = 20;
   filtro_tipo_fact: string = '';
+  filtro_mod: string = '';
   resoluciones: any = 0;
-
+  loading: boolean = false
   constructor(private route: ActivatedRoute, private http: HttpClient, private location: Location) { }
   
   ngOnInit() {
@@ -177,7 +189,7 @@ export class BoardContabilidadComponent implements OnInit {
   }
 
   ListarDetallesFacturacion() {
-    
+    this.loading = true
     let params = this.route.snapshot.queryParams;
 
     let queryString = '';
@@ -196,6 +208,7 @@ export class BoardContabilidadComponent implements OnInit {
     
     this.http.get(this.globales.ruta + '/php/tablero_jefe_facturacion/lista_facturas.php'+queryString).subscribe((data: any) => {
       this.Facturas = data.Facturas;
+      this.loading = false
       this.TotalItems1 = data.numReg;
     });
   }

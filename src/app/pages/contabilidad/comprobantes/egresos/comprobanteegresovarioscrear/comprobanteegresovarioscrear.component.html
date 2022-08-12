@@ -478,24 +478,24 @@
     </div>
     <div class="row">
       <div class="col-sm-12">
-        <table class="table table-responsive invoice-table invoice-total">
-          <tbody>
-            <tr>
-              <th>Total Debito:</th>
-              <td>{{ Total_Debito | currency }}</td>
-            </tr>
-
-            <tr>
-              <th>Total Credito:</th>
-              <td>{{ Total_Credito | currency }}</td>
-            </tr>
-
-            <tr>
-              <th>Diferencia:</th>
-              <td>{{ Total_Debito - Total_Credito | currency }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table invoice-table invoice-total">
+            <tbody>
+              <tr>
+                <th>Total Debito:</th>
+                <td>{{ Total_Debito | currency }}</td>
+              </tr>
+              <tr>
+                <th>Total Credito:</th>
+                <td>{{ Total_Credito | currency }}</td>
+              </tr>
+              <tr>
+                <th>Diferencia:</th>
+                <td>{{ Total_Debito - Total_Credito | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <button

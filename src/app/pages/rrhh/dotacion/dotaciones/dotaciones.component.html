@@ -7,13 +7,13 @@
       class="nav nav-pills nav-justified border border-primary rounded"
     >
       <li [ngbNavItem]="1">
-        <a ngbNavLink>Inventario Dotación</a>
+        <a ngbNavLink class="h-100">Inventario de dotación</a>
         <ng-template ngbNavContent>
           <app-category-stock></app-category-stock>
         </ng-template>
       </li>
       <li [ngbNavItem]="2">
-        <a ngbNavLink>Entrega Dotación</a>
+        <a ngbNavLink class="h-100">Entrega de dotación</a>
         <ng-template ngbNavContent>
           <app-table-inventary></app-table-inventary>
         </ng-template>
@@ -27,7 +27,7 @@
 
 <app-modal-basic #modalDevolver [dialogClass]="'modal-lg'">
   <div class="app-modal-header">
-    <h4 class="modal-title">Devolución de Dotación</h4>
+    <h4 class="modal-title">Devolución de dotación</h4>
     <button
       type="button"
       class="close basic-close"
@@ -44,16 +44,18 @@
       <div class="col-md-8">
         <div class="invoice-box row">
           <div class="col-sm-12">
-            <table
-              class="table table-responsive invoice-table table-borderless"
-              style="padding-left: 0 !important"
-            >
-              <tbody>
-                <tr>
-                  <td style="width: 100px; padding: 0 !important"></td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-responsive">
+              <table
+                class="table invoice-table table-borderless"
+                style="padding-left: 0 !important"
+              >
+                <tbody>
+                  <tr>
+                    <td style="width: 100px; padding: 0 !important"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

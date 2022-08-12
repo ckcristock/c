@@ -178,100 +178,102 @@
         aquí
       </a>
     </div>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-lg mb-0"
-      style="font-size: small"
-      *ngIf="!loading && jobs.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th *ngIf="checkCodigo">Código</th>
-          <th *ngIf="checkPublicacion">Publicación</th>
-          <th *ngIf="checkInicio">Inicio</th>
-          <th *ngIf="checkFin">Fin</th>
-          <th *ngIf="checkTitulo">Título</th>
-          <th *ngIf="checkDependencia">Dependencia</th>
-          <th *ngIf="checkCargo">Cargo</th>
-          <th *ngIf="checkDepartamento">Departamento</th>
-          <th *ngIf="checkMunicipio">Municipio</th>
-          <th *ngIf="checkEstado">Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let job of jobs"
-          class="text-center"
-          class="{{ job.state == 'Cancelada' ? 'bg-danger text-white' : '' }}"
-        >
-          <td class="align-middle" *ngIf="checkCodigo">{{ job.code }}</td>
-          <td class="align-middle" *ngIf="checkPublicacion">
-            {{ job.created_at | date: "dd/M/yyyy" }}
-          </td>
-          <td class="align-middle" *ngIf="checkInicio">
-            {{ job.date_start | date: "dd/M/yyyy" }}
-          </td>
-          <td class="align-middle" *ngIf="checkFin">
-            {{ job.date_end | date: "dd/M/yyyy" }}
-          </td>
-          <td class="align-middle" *ngIf="checkTitulo">
-            {{ job.title }}
-          </td>
-          <td class="align-middle" *ngIf="checkDependencia">
-            {{ job.position.dependency.name }}
-          </td>
-          <td class="align-middle" *ngIf="checkCargo">
-            {{ job.position.name }}
-          </td>
-          <td class="align-middle" *ngIf="checkDependencia">
-            {{ job.municipality.department.name }}
-          </td>
-          <td class="align-middle" *ngIf="checkMunicipio">
-            {{ job.municipality.name }}
-          </td>
-          <td class="align-middle" *ngIf="checkEstado">
-            <div class="text-center">
-              <span
-                class="label {{
-                  job.status == 'Activo' ? 'label-success' : 'label-primary'
-                }}"
-                >{{ job.state }}
-              </span>
-            </div>
-          </td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <!--  <a *ngIf="job.state!='Cancelada'"
-                                            class="dropdown-item waves-light  caja-botones" href=""
-                                            [routerLink]="['/vacanteseditar',job.id]">
-                                            <i class="ti-pencil"></i> Editar</a> -->
-                <a
-                  class="dropdown-item text-info waves-light  caja-botones"
-                  [routerLink]="['/rrhh/vacantes-ver', job.id]"
-                >
-                  <i class="fas fa-eye"></i> Ver</a
-                >
-                <a
-                  *ngIf="job.state != 'Cancelada'"
-                  class="dropdown-item text-danger waves-light  caja-botones"
-                  (click)="cancelar(job.id)"
-                >
-                  <i class="fa fa-times"></i> Anular</a
-                >
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm mb-0"
+        style="font-size: small"
+        *ngIf="!loading && jobs.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th *ngIf="checkCodigo">Código</th>
+            <th *ngIf="checkPublicacion">Publicación</th>
+            <th *ngIf="checkInicio">Inicio</th>
+            <th *ngIf="checkFin">Fin</th>
+            <th *ngIf="checkTitulo">Título</th>
+            <th *ngIf="checkDependencia">Dependencia</th>
+            <th *ngIf="checkCargo">Cargo</th>
+            <th *ngIf="checkDepartamento">Departamento</th>
+            <th *ngIf="checkMunicipio">Municipio</th>
+            <th *ngIf="checkEstado">Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let job of jobs"
+            class="text-center"
+            class="{{ job.state == 'Cancelada' ? 'bg-danger text-white' : '' }}"
+          >
+            <td class="align-middle" *ngIf="checkCodigo">{{ job.code }}</td>
+            <td class="align-middle" *ngIf="checkPublicacion">
+              {{ job.created_at | date: "dd/M/yyyy" }}
+            </td>
+            <td class="align-middle" *ngIf="checkInicio">
+              {{ job.date_start | date: "dd/M/yyyy" }}
+            </td>
+            <td class="align-middle" *ngIf="checkFin">
+              {{ job.date_end | date: "dd/M/yyyy" }}
+            </td>
+            <td class="align-middle" *ngIf="checkTitulo">
+              {{ job.title }}
+            </td>
+            <td class="align-middle" *ngIf="checkDependencia">
+              {{ job.position.dependency.name }}
+            </td>
+            <td class="align-middle" *ngIf="checkCargo">
+              {{ job.position.name }}
+            </td>
+            <td class="align-middle" *ngIf="checkDependencia">
+              {{ job.municipality.department.name }}
+            </td>
+            <td class="align-middle" *ngIf="checkMunicipio">
+              {{ job.municipality.name }}
+            </td>
+            <td class="align-middle" *ngIf="checkEstado">
+              <div class="text-center">
+                <span
+                  class="label {{
+                    job.status == 'Activo' ? 'label-success' : 'label-primary'
+                  }}"
+                  >{{ job.state }}
+                </span>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm  waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <!--  <a *ngIf="job.state!='Cancelada'"
+                                              class="dropdown-item waves-light  caja-botones" href=""
+                                              [routerLink]="['/vacanteseditar',job.id]">
+                                              <i class="ti-pencil"></i> Editar</a> -->
+                  <a
+                    class="dropdown-item text-info waves-light  caja-botones"
+                    [routerLink]="['/rrhh/vacantes-ver', job.id]"
+                  >
+                    <i class="fas fa-eye"></i> Ver</a
+                  >
+                  <a
+                    *ngIf="job.state != 'Cancelada'"
+                    class="dropdown-item text-danger waves-light  caja-botones"
+                    (click)="cancelar(job.id)"
+                  >
+                    <i class="fa fa-times"></i> Anular</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <mat-paginator
       *ngIf="paginacion"
       [length]="paginacion.total"

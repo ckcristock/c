@@ -87,71 +87,73 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <table
-      class="table table-bordered table-striped table-responsive-lg table-sm"
-      style="font-size: small"
-      *ngIf="!Cargando && Planes.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Codigo Cuenta</th>
-          <th>Nombre Cuenta</th>
-          <th>Codigo Cuenta NIIF</th>
-          <th>Nombre Cuenta NIIF</th>
-          <th class="col-md-1">Estado</th>
-          <th class="col-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of Planes" class="text-center">
-          <td class="align-middle">{{ item.Codigo }}</td>
-          <td class="align-middle">{{ item.Nombre }}</td>
-          <!-- <td> {{ item.Empresa }} </td> -->
-          <td class="align-middle">{{ item.Codigo_Niif }}</td>
-          <td class="align-middle">{{ item.Nombre_Niif }}</td>
-          <td class="align-middle">
-            <span
-              [ngClass]="
-                item.Estado == 'INACTIVO'
-                  ? 'badge badge-danger'
-                  : 'badge badge-primary'
-              "
-            >
-              {{ item.Estado }}
-            </span>
-          </td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm  waves-light"
-                type="button"
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!Cargando && Planes.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Codigo Cuenta</th>
+            <th>Nombre Cuenta</th>
+            <th>Codigo Cuenta NIIF</th>
+            <th>Nombre Cuenta NIIF</th>
+            <th class="col-md-1">Estado</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of Planes" class="text-center">
+            <td class="align-middle">{{ item.Codigo }}</td>
+            <td class="align-middle">{{ item.Nombre }}</td>
+            <!-- <td> {{ item.Empresa }} </td> -->
+            <td class="align-middle">{{ item.Codigo_Niif }}</td>
+            <td class="align-middle">{{ item.Nombre_Niif }}</td>
+            <td class="align-middle">
+              <span
+                [ngClass]="
+                  item.Estado == 'INACTIVO'
+                    ? 'badge badge-danger'
+                    : 'badge badge-primary'
+                "
               >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  class="dropdown-item text-success waves-light  caja-botones"
-                  (click)="VerPlanCuenta(item.Id_Plan_Cuentas)"
+                {{ item.Estado }}
+              </span>
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm  waves-light"
+                  type="button"
                 >
-                  <i class="far fa-eye"></i> Ver</a
-                >
-                <a
-                  *ngIf="item.Estado != 'Anulada'"
-                  class="dropdown-item text-info waves-light  caja-botones"
-                  (click)="EditarPlanCuenta(item.Id_Plan_Cuentas)"
-                >
-                  <i class="far fa-edit"></i> Editar</a
-                >
-                <!-- <a *ngIf="item.Estado!='Anulada'" class="dropdown-item waves-light  caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a cambiar el estado de este plan de cuenta' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                                            (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)">
-                                                            <i class="far fa-trash-alt"></i> Anular</a> -->
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item text-success waves-light  caja-botones"
+                    (click)="VerPlanCuenta(item.Id_Plan_Cuentas)"
+                  >
+                    <i class="far fa-eye"></i> Ver</a
+                  >
+                  <a
+                    *ngIf="item.Estado != 'Anulada'"
+                    class="dropdown-item text-info waves-light  caja-botones"
+                    (click)="EditarPlanCuenta(item.Id_Plan_Cuentas)"
+                  >
+                    <i class="far fa-edit"></i> Editar</a
+                  >
+                  <!-- <a *ngIf="item.Estado!='Anulada'" class="dropdown-item waves-light  caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a cambiar el estado de este plan de cuenta' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                                              (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)">
+                                                              <i class="far fa-trash-alt"></i> Anular</a> -->
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="TotalItems"

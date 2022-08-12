@@ -59,101 +59,107 @@
           </div>
         </div>
         <hr class="line" />
-        <table
-          class="table table-bordered table-striped table-sm table-responsive-lg"
-          style="font-size: small"
-        >
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th style="text-align: center">Proveedor</th>
-              <th style="text-align: center">Bodega</th>
-              <th style="text-align: center">Fecha de Compra</th>
-              <th style="text-align: center">Fecha Probable de Entrega</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="text-center">
-              <td>
-                {{ Compra.Proveedor }}
-              </td>
-              <td>
-                {{ Compra.Bodega }}
-              </td>
-              <td>
-                {{ Compra.Fecha_Compra | date: "dd/MM/yyyy" }}
-              </td>
-              <td>
-                {{ Compra.Fecha_Probable }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            style="font-size: small"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th style="text-align: center">Proveedor</th>
+                <th style="text-align: center">Bodega</th>
+                <th style="text-align: center">Fecha de Compra</th>
+                <th style="text-align: center">Fecha Probable de Entrega</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center">
+                <td>
+                  {{ Compra.Proveedor }}
+                </td>
+                <td>
+                  {{ Compra.Bodega }}
+                </td>
+                <td>
+                  {{ Compra.Fecha_Compra | date: "dd/MM/yyyy" }}
+                </td>
+                <td>
+                  {{ Compra.Fecha_Probable }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="clearfix"></div>
         <hr />
-        <table
-          class="table table-bordered table-striped table-sm table-responsive-lg"
-          style="font-size: small"
-        >
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th colspan="100%" class="bg-light">Observaciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="text-center">
-              <td colspan="100%">{{ Compra.Observaciones }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            style="font-size: small"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th colspan="100%" class="bg-light">Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center">
+                <td colspan="100%">{{ Compra.Observaciones }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <hr />
-        <table
-          class="table table-bordered table-striped table-sm table-responsive-lg"
-          style="font-size: small"
-        >
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th>#</th>
-              <th>Producto</th>
-              <th>Embalaje</th>
-              <th>Cantidad</th>
-              <th>Costo</th>
-              <th>IVA</th>
-              <th>SubTotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let Producto of Productos; let i = index"
-              class="text-center"
-              id="fila{{ i }}"
-            >
-              <td class="align-middle">
-                <strong>{{ i + 1 }}</strong>
-              </td>
-              <td class="align-middle">
-                <strong>{{ Producto.Nombre_Comercial }}</strong>
-                <span>
-                  {{ Producto.Nombre_Producto }}
-                </span>
-              </td>
-              <td class="align-middle">
-                <span class="text-muted">
-                  {{ Producto.Embalaje }}
-                </span>
-              </td>
-              <td class="align-middle">
-                {{ Producto.Cantidad | number | puntos }}
-              </td>
-              <td class="align-middle">
-                {{ Producto.Costo | currency: "COP" }}
-              </td>
-              <td class="align-middle">{{ Producto.Iva }}%</td>
-              <td class="align-middle">
-                {{ Producto.Total | currency: "COP" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            style="font-size: small"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>#</th>
+                <th>Producto</th>
+                <th>Embalaje</th>
+                <th>Cantidad</th>
+                <th>Costo</th>
+                <th>IVA</th>
+                <th>SubTotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let Producto of Productos; let i = index"
+                class="text-center"
+                id="fila{{ i }}"
+              >
+                <td class="align-middle">
+                  <strong>{{ i + 1 }}</strong>
+                </td>
+                <td class="align-middle">
+                  <strong>{{ Producto.Nombre_Comercial }}</strong>
+                  <span>
+                    {{ Producto.Nombre_Producto }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <span class="text-muted">
+                    {{ Producto.Embalaje }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  {{ Producto.Cantidad | number | puntos }}
+                </td>
+                <td class="align-middle">
+                  {{ Producto.Costo | currency: "COP" }}
+                </td>
+                <td class="align-middle">{{ Producto.Iva }}%</td>
+                <td class="align-middle">
+                  {{ Producto.Total | currency: "COP" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <hr class="line" />
         <div class="d-flex justify-content-end">
           <table class="table table-hover">

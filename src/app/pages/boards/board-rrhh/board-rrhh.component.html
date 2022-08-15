@@ -48,9 +48,9 @@
     </div>
     <div class="card border border-3 border-light">
       <div class="card-body">
-        <h5 class="card-title">Top 6 llegadas tarde</h5>
+        <h5 class="card-title text-center">Top 6 llegadas tarde</h5>
         <div
-          class="alert alert-primary mb-0"
+          class="alert alert-primary text-center mb-0"
           role="alert"
           *ngIf="funcionarios_tarde.length == 0"
         >
@@ -95,11 +95,11 @@
 
     <div class="row">
       <div class="col-md-6">
-        <div class="card">
-          <div class="card-header" style="padding-bottom: 0px">
-            <h6>Llegadas tarde de los últimos 15 días</h6>
-          </div>
+        <div class="card border border-3 border-light">
           <div class="card-body">
+            <h5 class="card-title text-center">
+              Llegadas tarde de los últimos 15 días
+            </h5>
             <div #studentChart>
               <chart
                 id="llegadas_tarde_chart"
@@ -112,95 +112,94 @@
         </div>
       </div>
       <div class="col-md-6">
-        <div class="card" style="min-height: 283px">
-          <div class="card-header" style="padding-bottom: 0px">
-            <h6>Permisos Pendientes</h6>
-          </div>
-          <div class="card-block" style="height: 100px; overflow-y: auto">
-            <div class="col-md-12">
-              <div *ngIf="Permisos.length == 0" class="col-md-12 text-center">
-                <h6>No hay Permisos para mostrar</h6>
-              </div>
-              <div *ngIf="Permisos.length > 0">
-                <div
-                  *ngFor="let item of Permisos; let i = index"
-                  class="row"
-                  style="margin-bottom: 10px"
-                >
-                  <!--Repetir esta linea de codigo para llenar el tablero de cumpleaños-->
+        <div class="card border border-3 border-light">
+          <div class="card-body">
+            <h5 class="card-title text-center">Permisos pendientes</h5>
+            <div
+              class="alert alert-primary text-center mb-0"
+              role="alert"
+              *ngIf="Permisos.length == 0"
+            >
+              No hay permisos para mostrar.
+            </div>
+            <div *ngIf="Permisos.length > 0">
+              <div
+                *ngFor="let item of Permisos; let i = index"
+                class="row"
+                style="margin-bottom: 10px"
+              >
+                <!--Repetir esta linea de codigo para llenar el tablero de cumpleaños-->
 
-                  <div class="col-md-2">
-                    <img
-                      *ngIf="item.Imagen == ''"
-                      src="assets/images/user.jpg"
-                      class="img-radius imagen2"
-                    />
-                    <img
-                      *ngIf="item.Imagen != ''"
-                      src="{{ globales.ruta }}IMAGENES/FUNCIONARIOS/{{
-                        item.Imagen
-                      }}"
-                      class="img-radius imagen2"
-                      alt=""
-                    />
-                  </div>
-                  <div class="col-md-10 m-t-10" style="text-align: left">
-                    <div>
-                      <span>{{ item.Funcionario }}</span>
-                      <i
-                        class="fa fa-check-square-o pull-right"
-                        style="color: seagreen"
-                        (click)="MostrarPermiso(i)"
-                      ></i>
-                    </div>
+                <div class="col-md-2">
+                  <img
+                    *ngIf="item.Imagen == ''"
+                    src="assets/images/user.jpg"
+                    class="img-radius imagen2"
+                  />
+                  <img
+                    *ngIf="item.Imagen != ''"
+                    src="{{ globales.ruta }}IMAGENES/FUNCIONARIOS/{{
+                      item.Imagen
+                    }}"
+                    class="img-radius imagen2"
+                    alt=""
+                  />
+                </div>
+                <div class="col-md-10 m-t-10" style="text-align: left">
+                  <div>
+                    <span>{{ item.Funcionario }}</span>
+                    <i
+                      class="fa fa-check-square-o pull-right"
+                      style="color: seagreen"
+                      (click)="MostrarPermiso(i)"
+                    ></i>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div
-            class="card-block"
-            style="
-              height: 100px;
-              overflow-y: auto;
-              padding-top: 2px;
-              padding-left: 15px;
-            "
-          >
-            <div class="col-md-12">
-              <h6>OtroSi Pendientes</h6>
-              <div *ngIf="OtroSi.length > 0">
-                <div
-                  *ngFor="let item of OtroSi; let i = index"
-                  class="row"
-                  style="margin-bottom: 10px"
-                >
-                  <!--Repetir esta linea de codigo para llenar el tablero de cumpleaños-->
+        </div>
+        <div class="card border border-3 border-light">
+          <div class="card-body">
+            <h5 class="card-title text-center">Otro sí pendientes</h5>
+            <div
+              class="alert alert-primary text-center mb-0"
+              role="alert"
+              *ngIf="OtroSi.length == 0"
+            >
+              No hay otro sí para mostrar.
+            </div>
+            <div *ngIf="OtroSi.length > 0">
+              <div
+                *ngFor="let item of OtroSi; let i = index"
+                class="row"
+                style="margin-bottom: 10px"
+              >
+                <!--Repetir esta linea de codigo para llenar el tablero de cumpleaños-->
 
-                  <div class="col-md-2">
-                    <img
-                      *ngIf="item.Imagen == ''"
-                      src="assets/images/user.jpg"
-                      class="img-radius imagen2"
-                    />
-                    <img
-                      *ngIf="item.Imagen != ''"
-                      src="{{ globales.ruta }}IMAGENES/FUNCIONARIOS/{{
-                        item.Imagen
-                      }}"
-                      class="img-radius imagen2"
-                      alt=""
-                    />
-                  </div>
-                  <div class="col-md-10 m-t-10" style="text-align: left">
-                    <div>
-                      <span>{{ item.Funcionario1 }}</span>
-                      <i
-                        class="fa fa-check-square-o pull-right"
-                        style="color: seagreen"
-                        (click)="AbrirModal(item)"
-                      ></i>
-                    </div>
+                <div class="col-md-2">
+                  <img
+                    *ngIf="item.Imagen == ''"
+                    src="assets/images/user.jpg"
+                    class="img-radius imagen2"
+                  />
+                  <img
+                    *ngIf="item.Imagen != ''"
+                    src="{{ globales.ruta }}IMAGENES/FUNCIONARIOS/{{
+                      item.Imagen
+                    }}"
+                    class="img-radius imagen2"
+                    alt=""
+                  />
+                </div>
+                <div class="col-md-10 m-t-10" style="text-align: left">
+                  <div>
+                    <span>{{ item.Funcionario1 }}</span>
+                    <i
+                      class="fa fa-check-square-o pull-right"
+                      style="color: seagreen"
+                      (click)="AbrirModal(item)"
+                    ></i>
                   </div>
                 </div>
               </div>
@@ -217,7 +216,7 @@
       </div>
       <div class="card-body">
         <div
-          class="alert alert-info text-center"
+          class="alert alert-info text-center mb-0"
           role="alert"
           *ngIf="cumpleanerosSiguientes.length == 0"
         >
@@ -270,7 +269,11 @@
     <div class="card border border-3 border-danger">
       <div class="card-body">
         <h6 class="card-title text-center">Contratos por vencer</h6>
-        <div class="alert alert-danger text-center" role="alert" *ngIf="Contratos.length == 0">
+        <div
+          class="alert alert-danger text-center mb-0"
+          role="alert"
+          *ngIf="Contratos.length == 0"
+        >
           No hay contratos para mostrar
         </div>
         <div *ngIf="Contratos.length > 0">
@@ -328,7 +331,11 @@
     <div class="card border border-warning border-3">
       <div class="card-body">
         <h6 class="card-title text-center">Periodo de prueba</h6>
-        <div class="alert alert-warning text-center" role="alert" *ngIf="ContratosPrueba.length == 0">
+        <div
+          class="alert alert-warning text-center mb-0"
+          role="alert"
+          *ngIf="ContratosPrueba.length == 0"
+        >
           No hay contratos para mostra
         </div>
         <div

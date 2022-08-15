@@ -26,7 +26,10 @@ export class BoardJefeBodegaComponent implements OnInit {
   public Ajuste_Salida:any = [];
   public alertOptionAprobar:SweetAlertOptions = {};
   public alertOptionAnular:SweetAlertOptions = {};
-
+  loading1: boolean = false
+  loading2: boolean = false
+  loading3: boolean = false
+  loading4: boolean = false
   ListaNacional = [];
   @ViewChild('confirmacionSwal') confirmacionSwal:any;
   @ViewChild('modalRemisionesFuncionario') modalRemisionesFuncionario: any;
@@ -69,6 +72,10 @@ export class BoardJefeBodegaComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.loading1 = true
+    this.loading2 = true
+    this.loading3 = true
+    this.loading4 = true
     this.user = JSON.parse(localStorage.getItem("User"));
 
     this.ListaAjustesPendientesSalida();
@@ -78,18 +85,21 @@ export class BoardJefeBodegaComponent implements OnInit {
     });
     this.http.get(this.globales.ruta + 'php/tablero_jefe_bodega/lista_nota_pendiente.php').subscribe((data: any) => {
       this.Notas = data;
+      this.loading1 = false
     });
     this.ListarMovimientos();
     this.http.get(this.globales.ruta + 'php/bodega/lista_compras_pendientes.php', {
       params: { compra: 'Nacional' }
     }).subscribe((data: any) => {
       this.ListaNacional = data;
+      this.loading3 = false
     });
 
   }
   ListarMovimientos(){
     this.http.get(this.globales.ruta + 'php/tablero_jefe_bodega/lista_movimientos.php').subscribe((data: any) => {
       this.Movimientos = data;
+      this.loading2 = false
     });
   }
   VerRemisiones(id_funcionario){
@@ -142,10 +152,12 @@ export class BoardJefeBodegaComponent implements OnInit {
   }
 
   ListaAjustesPendientesSalida(){
+    this.loading4 = true
     let funcionario = this.user.Identificacion_Funcionario;
     this.http.get(this.globales.ruta + 'php/ajuste_individual_nuevo/lotes_pendiente_aprobacion_salida.php',{  params: { funcionario }
     }).subscribe((data: any) => {
        this.AjustesPendientesSalida = data;
+       this.loading4 = false
     });
   }
 

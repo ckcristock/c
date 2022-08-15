@@ -235,201 +235,199 @@
     <!-- <a href="{{globales.ruta}}php/archivos/descarga_lista_nuevo.php?id={{lista_informe}}" target="_blank" class="btn btn-success btn-sm btn-block" style="line-height: 0 !important; margin-top: 0 !important">
                                               <i class="fa fa-download"></i> Descarga Lista
                                           </a> -->
-    <table
-      class="table table-bordered table-striped table-sm table-responsive"
-      style="font-size: small"
-      *ngIf="!Cargando_Tabla && Inventarios.length > 0; else notData"
-    >
-      <!--  -->
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th class="align-middle">Categoría</th>
-          <th class="align-middle">N. Producto</th>
-          <th class="align-middle th-edit">
-            <i class="fa fa-archive"></i> Embalaje
-          </th>
-          <th class="align-middle th-edit"><i class="fa fa-th"></i> Estiba</th>
-          <th class="align-middle">Grupo</th>
-          <th class="align-middle">Invima</th>
-          <th class="align-middle">Laboratorios</th>
-          <th class="align-middle">Cum</th>
-          <th class="align-middle">Lote</th>
-          <th class="align-middle">F. Venc</th>
-          <th class="align-middle" *ngIf="permiso">Costo</th>
-          <th class="align-middle" *ngIf="!permiso && lista_informe != 0">
-            Precio Venta
-          </th>
-          <th class="align-middle">Cant. Disp</th>
-          <th class="align-middle">Cant. Apar</th>
-          <th class="align-middle">Cant. Selecc</th>
-          <th class="align-middle">Cant. Contra</th>
-          <!-- <th class="align-middle">Borradores</th> -->
-          <th class="align-middle">Iva</th>
-          <th class="align-middle">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- <tr *ngIf="Inventarios.length == 0 && !Cargando_Tabla && !filtrando">
-          <td colspan="100%" class="text-center">
-            <i class="fa fa-exclamation-circle fa-5x"></i>
-            <h4>Seleccione la Bodega a consultar</h4>
-          </td>
-        </tr> -->
-
-        <tr
-          *ngFor="let inventario of Inventarios; let i = index"
-          class="text-center"
-        >
-          <input
-            type="hidden"
-            id="NombreProducto{{ i }}"
-            [value]="inventario.Nombre_Comercial"
-          />
-          <input
-            type="hidden"
-            id="LoteProducto{{ i }}"
-            [value]="inventario.Lote"
-          />
-          <input
-            type="hidden"
-            id="Fecha_Venc{{ i }}"
-            [value]="inventario.Fecha_Vencimiento"
-          />
-          <td class="align-middle td-edit">
-            <strong>{{ inventario.Nombre_Categoria }}</strong>
-          </td>
-          <td class="align-middle td-edit">
-            <strong>{{ inventario.Nombre_Comercial }}</strong
-            ><br /><span style="font-size: smaller" class="text-muted">{{
-              inventario.Nombre_Producto
-            }}</span>
-          </td>
-          <td class="align-middle td-edit">{{ inventario.Embalaje }}</td>
-          <td class="align-middle td-edit">{{ inventario.Nombre_Estiba }}</td>
-          <td class="align-middle td-edit">{{ inventario.Nombre_Grupo }}</td>
-          <td class="align-middle td-edit">{{ inventario.Invima }}</td>
-          <td class="align-middle td-edit">
-            <strong>Comercial: </strong
-            ><span>{{ inventario.Laboratorio_Comercial }} </span> <br />
-            <strong>Genérico: </strong
-            ><span>{{ inventario.Laboratorio_Generico }} </span>
-          </td>
-
-          <td class="align-middle td-edit">{{ inventario.Codigo_CUM }}</td>
-          <td class="align-middle td-edit">{{ inventario.Lote }}</td>
-          <td class="align-middle td-edit">
-            {{ inventario.Fecha_Vencimiento | date: "dd/MM/yyyy" }}
-          </td>
-          <td class="text-right align-middle td-edit" *ngIf="permiso">
-            <span
-              *ngIf="inventario.Costo"
-              style="color: red"
-              role="button"
-              (click)="verCompras(inventario.Id_Producto, i, addCompras)"
-              >{{ inventario.Costo | currency: "COP" }}</span
-            >
-            <br /><span style="color: rgb(17, 43, 129)">{{
-              inventario.Precio_Lista | currency: "COP"
-            }}</span>
-          </td>
-          <td
-            class="text-right align-middle td-edit"
-            *ngIf="!permiso && lista_informe != 0"
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+      
+        *ngIf="!Cargando_Tabla && Inventarios.length > 0; else notData"
+      >
+        <!--  -->
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th class="align-middle">Categoría</th>
+            <th class="align-middle">N. Producto</th>
+            <th class="align-middle th-edit">
+              <i class="fa fa-archive"></i> Embalaje
+            </th>
+            <th class="align-middle th-edit"><i class="fa fa-th"></i> Estiba</th>
+            <th class="align-middle">Grupo</th>
+            <th class="align-middle">Invima</th>
+            <th class="align-middle">Laboratorios</th>
+            <th class="align-middle">Cum</th>
+            <th class="align-middle">Lote</th>
+            <th class="align-middle">F. Venc</th>
+            <th class="align-middle" *ngIf="permiso">Costo</th>
+            <th class="align-middle" *ngIf="!permiso && lista_informe != 0">
+              Precio Venta
+            </th>
+            <th class="align-middle">Cant. Disp</th>
+            <th class="align-middle">Cant. Apar</th>
+            <th class="align-middle">Cant. Selecc</th>
+            <th class="align-middle">Cant. Contra</th>
+            <!-- <th class="align-middle">Borradores</th> -->
+            <th class="align-middle">Iva</th>
+            <th class="align-middle">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr *ngIf="Inventarios.length == 0 && !Cargando_Tabla && !filtrando">
+            <td colspan="100%" class="text-center">
+              <i class="fa fa-exclamation-circle fa-5x"></i>
+              <h4>Seleccione la Bodega a consultar</h4>
+            </td>
+          </tr> -->
+          <tr
+            *ngFor="let inventario of Inventarios; let i = index"
+            class="text-center"
           >
-            <span style="color: rgb(17, 43, 129)">{{
-              inventario.Precio_Lista | currency: "COP"
-            }}</span>
-          </td>
-          <td class="align-middle td-edit">
-            {{
-              inventario.Cantidad_Disponible - inventario.cantidadContrato
-                | number: "1.0-0"
-            }}
-          </td>
-          <td class="align-middle td-edit">
-            {{ inventario.Cantidad_Apartada | number: "1.0-0" }}
-          </td>
-          <td class="align-middle td-edit">
-            {{ inventario.Cantidad_Seleccionada | number: "1.0-0" }}
-          </td>
-
-          <td
-            class="align-middle td-edit"
-            [ngClass]="{
-              'text-danger': inventario.cantidadContrato > 0,
-              'text-dark': inventario.cantidadContrato <= 0
-            }"
-          >
-            {{ inventario.cantidadContrato }}
-          </td>
-          <!-- <td></td> -->
-          <td
-            class="align-middle td-edit"
-            [ngClass]="{
-              'text-danger': inventario.Gravado == 'Si',
-              'text-success': inventario.Gravado == 'No'
-            }"
-          >
-            {{ inventario.Gravado }}
-          </td>
-
-          <!-- <td style="max-width: 100px">{{ inventario.Nombre_Bodega }}</td> -->
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm"
-                type="button"
+            <input
+              type="hidden"
+              id="NombreProducto{{ i }}"
+              [value]="inventario.Nombre_Comercial"
+            />
+            <input
+              type="hidden"
+              id="LoteProducto{{ i }}"
+              [value]="inventario.Lote"
+            />
+            <input
+              type="hidden"
+              id="Fecha_Venc{{ i }}"
+              [value]="inventario.Fecha_Vencimiento"
+            />
+            <td class="align-middle td-edit">
+              <strong>{{ inventario.Nombre_Categoria }}</strong>
+            </td>
+            <td class="align-middle td-edit">
+              <strong>{{ inventario.Nombre_Comercial }}</strong
+              ><br /><span style="font-size: smaller" class="text-muted">{{
+                inventario.Nombre_Producto
+              }}</span>
+            </td>
+            <td class="align-middle td-edit">{{ inventario.Embalaje }}</td>
+            <td class="align-middle td-edit">{{ inventario.Nombre_Estiba }}</td>
+            <td class="align-middle td-edit">{{ inventario.Nombre_Grupo }}</td>
+            <td class="align-middle td-edit">{{ inventario.Invima }}</td>
+            <td class="align-middle td-edit">
+              <strong>Comercial: </strong
+              ><span>{{ inventario.Laboratorio_Comercial }} </span> <br />
+              <strong>Genérico: </strong
+              ><span>{{ inventario.Laboratorio_Generico }} </span>
+            </td>
+            <td class="align-middle td-edit">{{ inventario.Codigo_CUM }}</td>
+            <td class="align-middle td-edit">{{ inventario.Lote }}</td>
+            <td class="align-middle td-edit">
+              {{ inventario.Fecha_Vencimiento | date: "dd/MM/yyyy" }}
+            </td>
+            <td class="text-right align-middle td-edit" *ngIf="permiso">
+              <span
+                *ngIf="inventario.Costo"
+                style="color: red"
+                role="button"
+                (click)="verCompras(inventario.Id_Producto, i, addCompras)"
+                >{{ inventario.Costo | currency: "COP" }}</span
               >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <!-- TODO Imprimir etiqueta -->
-                <a
-                  class="dropdown-item text-success"
-                  target="_blank"
-                  role="button"
+              <br /><span style="color: rgb(17, 43, 129)">{{
+                inventario.Precio_Lista | currency: "COP"
+              }}</span>
+            </td>
+            <td
+              class="text-right align-middle td-edit"
+              *ngIf="!permiso && lista_informe != 0"
+            >
+              <span style="color: rgb(17, 43, 129)">{{
+                inventario.Precio_Lista | currency: "COP"
+              }}</span>
+            </td>
+            <td class="align-middle td-edit">
+              {{
+                inventario.Cantidad_Disponible - inventario.cantidadContrato
+                  | number: "1.0-0"
+              }}
+            </td>
+            <td class="align-middle td-edit">
+              {{ inventario.Cantidad_Apartada | number: "1.0-0" }}
+            </td>
+            <td class="align-middle td-edit">
+              {{ inventario.Cantidad_Seleccionada | number: "1.0-0" }}
+            </td>
+            <td
+              class="align-middle td-edit"
+              [ngClass]="{
+                'text-danger': inventario.cantidadContrato > 0,
+                'text-dark': inventario.cantidadContrato <= 0
+              }"
+            >
+              {{ inventario.cantidadContrato }}
+            </td>
+            <!-- <td></td> -->
+            <td
+              class="align-middle td-edit"
+              [ngClass]="{
+                'text-danger': inventario.Gravado == 'Si',
+                'text-success': inventario.Gravado == 'No'
+              }"
+            >
+              {{ inventario.Gravado }}
+            </td>
+            <!-- <td style="max-width: 100px">{{ inventario.Nombre_Bodega }}</td> -->
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm"
+                  type="button"
                 >
-                  <i class="fa fa-print"></i> Imprimir etiqueta</a
-                >
-                <a
-                  *ngIf="inventario.Cantidad_Apartada > 0"
-                  class="dropdown-item text-info"
-                  href="javascript:void(0)"
-                  (click)="
-                    verApartadas(
-                      inventario.Id_Inventario_Nuevo,
-                      i,
-                      addApartadas
-                    )
-                  "
-                >
-                  <i class="fa fa-cart-arrow-down"></i> Ver apartadas</a
-                >
-                <a
-                  *ngIf="inventario.Cantidad_Seleccionada > 0"
-                  class="dropdown-item text-info"
-                  href="javascript:void(0)"
-                  (click)="verSeleccionadas(inventario, i, addSeleccionadas)"
-                >
-                  <i class="fa fa-cart-arrow-down"></i> Ver seleccionadas</a
-                >
-                <a
-                  *ngIf="inventario.cantidadContrato > 0"
-                  class="dropdown-item text-info"
-                  href="javascript:void(0)"
-                  (click)="
-                    verContrato(inventario.Id_Inventario_Nuevo, i, addContrato)
-                  "
-                >
-                  <i class="fa fa-eye"></i> Ver contrato</a
-                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <!-- TODO Imprimir etiqueta -->
+                  <a
+                    class="dropdown-item text-success"
+                    target="_blank"
+                    role="button"
+                  >
+                    <i class="fa fa-print"></i> Imprimir etiqueta</a
+                  >
+                  <a
+                    *ngIf="inventario.Cantidad_Apartada > 0"
+                    class="dropdown-item text-info"
+                    href="javascript:void(0)"
+                    (click)="
+                      verApartadas(
+                        inventario.Id_Inventario_Nuevo,
+                        i,
+                        addApartadas
+                      )
+                    "
+                  >
+                    <i class="fa fa-cart-arrow-down"></i> Ver apartadas</a
+                  >
+                  <a
+                    *ngIf="inventario.Cantidad_Seleccionada > 0"
+                    class="dropdown-item text-info"
+                    href="javascript:void(0)"
+                    (click)="verSeleccionadas(inventario, i, addSeleccionadas)"
+                  >
+                    <i class="fa fa-cart-arrow-down"></i> Ver seleccionadas</a
+                  >
+                  <a
+                    *ngIf="inventario.cantidadContrato > 0"
+                    class="dropdown-item text-info"
+                    href="javascript:void(0)"
+                    (click)="
+                      verContrato(inventario.Id_Inventario_Nuevo, i, addContrato)
+                    "
+                  >
+                    <i class="fa fa-eye"></i> Ver contrato</a
+                  >
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="TotalItems"
@@ -458,10 +456,10 @@
     ></button>
   </div>
   <div class="modal-body">
-    <div class="table-responsive">
+    <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        style="font-size: small"
+        
         *ngIf="
           !CargandoDetalleContrato && DetalleContrato.length > 0;
           else notDataContrato
@@ -516,10 +514,10 @@
     ></button>
   </div>
   <div class="modal-body">
-    <div class="table-responsive">
+    <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        style="font-size: small"
+        
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
@@ -538,10 +536,10 @@
       </table>
     </div>
     <hr />
-    <div class="table-responsive">
+    <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        style="font-size: small"
+        
         *ngIf="
           !Cargando_Apartadas && Apartadas.length > 0;
           else notDataApartadas
@@ -607,10 +605,10 @@
     ></button>
   </div>
   <div class="modal-body">
-    <div class="table-responsive">
+    <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        style="font-size: small"
+        
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
@@ -629,10 +627,10 @@
       </table>
     </div>
     <hr />
-    <div class="table-responsive">
+    <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        style="font-size: small"
+        
         *ngIf="
           !Cargando_Seleccionados && Seleccionados.length > 0;
           else notDataSeleccionadas
@@ -693,10 +691,10 @@
     ></button>
   </div>
   <div class="modal-body">
-    <div class="table-responsive">
+    <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        style="font-size: small"
+        
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
@@ -711,10 +709,10 @@
       </table>
     </div>
     <hr />
-    <div class="table-responsive">
+    <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        style="font-size: small"
+        
         *ngIf="!Cargando_Compras && Compras.length > 0; else notDataCompras"
       >
         <thead class="bg-light">

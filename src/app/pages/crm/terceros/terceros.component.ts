@@ -70,6 +70,7 @@ export class TercerosComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log(this.paginator);
     for (let i in this.listaCampos){
       if (this.listaCampos[i].selected){
         this.selectedCampos.push(this.listaCampos[i].value)

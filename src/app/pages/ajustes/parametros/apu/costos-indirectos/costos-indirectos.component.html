@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-sm btn-primary"
-            (click)="openConfirm(add, 'Nuevo Costo indirecto')"
+            (click)="openConfirm(add, 'Nuevo costo indirecto')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -53,6 +53,7 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
                     (click)="
                       getIndirect(item);
                       openConfirm(add, 'Actualizar costo indirecto')
@@ -62,6 +63,7 @@
                   </a>
                   <a
                     *ngIf="item.state == 'Inactivo'"
+                    href="javascript: void(0);"
                     (click)="activateOrInactivate(item, 'Activo')"
                     class="dropdown-item waves-light text-success"
                   >
@@ -69,6 +71,7 @@
                   </a>
                   <a
                     *ngIf="item.state == 'Activo'"
+                    href="javascript: void(0);"
                     (click)="activateOrInactivate(item, 'Inactivo')"
                     class="dropdown-item waves-light text-danger"
                   >

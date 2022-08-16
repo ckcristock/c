@@ -19,7 +19,7 @@
       class="nav nav-pills nav-justified border border-primary rounded"
     >
       <li [ngbNavItem]="1">
-        <a ngbNavLink (click)="getNegocios()" class="h-100">
+        <a ngbNavLink (click)="getNegocios(); changeUrl('?active=1')" class="h-100">
           <i class="fa fa-list"></i> Tabla de negocios
         </a>
         <ng-template ngbNavContent>
@@ -30,11 +30,11 @@
         </ng-template>
       </li>
       <li [ngbNavItem]="2">
-        <a ngbNavLink (click)="getNegocios()" class="h-100">
+        <a ngbNavLink (click)="getNegocios(); changeUrl('?active=2')" class="h-100">
           <i class="fa fa-th"></i> Etapas
         </a>
         <ng-template ngbNavContent>
-          <div class="row mt-3">
+          <div class="row mt-3" *ngIf="!loading2 && negocios.length > 0; else notData">
             <div class="col-md-4">
               <div class="card bg-light">
                 <div class="card-body border-bottom">
@@ -232,7 +232,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field
-          class="col-md-12 mat-form-field-no-padding"
+          class="col-md-12 mat-form-field-no-padding textarea"
           appearance="outline"
         >
           <mat-label>Descripción</mat-label>
@@ -400,4 +400,7 @@
       Guardar
     </button>
   </div>
+</ng-template>
+<ng-template #notData>
+  <app-not-data [loading]="loading2"></app-not-data>
 </ng-template>

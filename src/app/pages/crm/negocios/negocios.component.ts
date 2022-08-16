@@ -11,6 +11,8 @@ import {
 import { ValidatorsService } from '../../ajustes/informacion-base/services/reactive-validation/validators.service';
 import { Negocio } from './negocio.interface';
 import { NegociosService } from './negocios.service';
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-negocios',
@@ -47,23 +49,44 @@ export class NegociosComponent implements OnInit {
   companies: any[];
   companySelected: any;
   loading: boolean = true;
+  loading2: boolean
   cities: any;
   city: any;
+  orderObj: any
 
   constructor(
     private _reactiveValid: ValidatorsService,
     private fb: FormBuilder,
     private _negocios: NegociosService,
+    private route: ActivatedRoute,
     private modalService: NgbModal,
+    private location: Location,
   ) { }
 
   ngOnInit(): void {
+    this.route.queryParamMap
+      .subscribe((params) => {
+        this.orderObj = { ...params.keys, ...params };
+        if (params.keys.length == 0){
+          this.active = 1
+          this.changeUrl('?active=1')
+        } else if (this.orderObj.params.active == 2){
+          this.active = 2
+        } else if (this.orderObj.params.active == 1){
+          this.active = 1
+        }
+      }
+      );
     this.createForm();
     this.getCompanies();
     this.getNegocios();
     this.getLists();
     this.calcularTotal();
     this.getCountries();
+  }
+
+  changeUrl(url) {
+    this.location.replaceState('/crm/negocios', url);
   }
 
   closeResult = '';
@@ -87,6 +110,7 @@ export class NegociosComponent implements OnInit {
 
   getNegocios() {
     this.loading = true;
+    this.loading2 = true; 
     this._negocios.getBusinesses().subscribe((resp: any) => {
       this.loading = false;
       this.negocios = resp.data;
@@ -135,6 +159,7 @@ export class NegociosComponent implements OnInit {
   }
 
   private getLists() {
+    this.loading2 = true
     setTimeout(() => {
       this.negocios_segunda_etapa = this.negocios.filter(
         (t) => t.status === 'second'
@@ -145,6 +170,7 @@ export class NegociosComponent implements OnInit {
       this.negocios_primera_etapa = this.negocios.filter(
         (t) => t.status === 'first'
       );
+      this.loading2 = false
     }, 1000);
 
   }
@@ -262,7 +288,7 @@ export class NegociosComponent implements OnInit {
       return this.form.addControl('budget_value', this.fb.control(a + b.total_cop))
     }, 0)
     this._negocios.saveNeg(this.form.value).subscribe(r => {
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
       this.budgetsSelected = [];
       this.budgets = [];
       this.getNegocios();

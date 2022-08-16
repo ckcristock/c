@@ -45,7 +45,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     accumulator + parseFloat(currentValue.Total);
 
   public alertOption: SweetAlertOptions = {};
-  public Cargando: boolean = false;
+  public Cargando: boolean = true;
   public ListaProductos: any[] = [];
   public Lista_Productos: any = [
     {
@@ -183,6 +183,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     let params = this.route.snapshot.queryParams;
     this.user = this._user.user.person.id;
     console.log(this.user)
+    this.Cargando = true
     if (params.Pre_Compra != undefined) {
       this.http
         .get(environment.ruta + 'php/rotativoscompras/detalle_pre_compra.php', {
@@ -190,6 +191,7 @@ export class CrearCompraNacionalComponent implements OnInit {
         })
         .subscribe((data: any) => {
           this.Lista_Productos = data.Productos;
+          this.Cargando = false
           this.Id_Proveedor = data.Datos.Id_Proveedor;
           this.Lista_Productos.push({
             producto: '',
@@ -367,7 +369,6 @@ export class CrearCompraNacionalComponent implements OnInit {
 
     if (producto != '') {
       this.http
-
         .get(environment.ruta + 'php/comprasnacionales/lista_productos.php', {
           params: { nom: producto, company_id: this._user.user.person.company_worked.id },
         })
@@ -376,6 +377,7 @@ export class CrearCompraNacionalComponent implements OnInit {
           this.ListaProducto = data;
         });
     } else {
+      this.Cargando = false;
     }
   }
 

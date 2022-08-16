@@ -2,16 +2,22 @@
   <div class="col-lg-9">
     <div class="card">
       <div class="card-body">
-        <div class="row card-title d-flex justify-content-between">
+        <div
+          class="row card-title d-flex justify-content-between"
+          *ngIf="paginacion"
+        >
           <div class="col-md-6 px-0">
-            <h4 class="text-primary">Contratos</h4>
+            <h4 class="text-primary">
+              Contratos<span style="font-size: smaller">
+                <small class="pb-2 text-secondary text-muted">
+                  pág. {{ paginacion.current_page }}
+                </small>
+              </span>
+            </h4>
           </div>
           <div class="col-md-6 px-0 text-right">
             <div class="btn-group rounded w-sm-100">
-              <button
-                class="btn btn-info btn-sm"
-                (click)="openClose()"
-              >
+              <button class="btn btn-info btn-sm" (click)="openClose()">
                 <i class="fas fa-sliders-h"></i> Filtros
               </button>
             </div>
@@ -32,7 +38,9 @@
                   (selectionChange)="getAllContracts()"
                   name="empresa"
                 >
-                  <mat-option *ngFor="let item of companies" [value]="item.value"
+                  <mat-option
+                    *ngFor="let item of companies"
+                    [value]="item.value"
                     >{{ item.text }}
                   </mat-option>
                 </mat-select>
@@ -56,9 +64,11 @@
                   (selectionChange)="getAllContracts()"
                   name="group"
                 >
-                  <mat-option *ngFor="let item of groups" [value]="item.value">{{
-                    item.text
-                  }}</mat-option>
+                  <mat-option
+                    *ngFor="let item of groups"
+                    [value]="item.value"
+                    >{{ item.text }}</mat-option
+                  >
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
@@ -82,7 +92,9 @@
                   (selectionChange)="getAllContracts()"
                   name="position"
                 >
-                  <mat-option *ngFor="let item of positions" [value]="item.value"
+                  <mat-option
+                    *ngFor="let item of positions"
+                    [value]="item.value"
                     >{{ item.text }}
                   </mat-option>
                 </mat-select>
@@ -90,9 +102,22 @@
             </div>
           </mat-expansion-panel>
         </mat-accordion>
+        <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
+          <strong>
+            Hay filtros de búsqueda activos, para mostrar todos los resultados
+            haz click
+          </strong>
+          <a
+            href="javascript: void(0)"
+            (click)="resetFiltros()"
+            class="alert-link"
+          >
+            aquí
+          </a>
+        </div>
         <div class="rounded-top table-responsive">
           <table
-            class="table table-bordered table-striped table-sm"
+            class="table table-bordered table-striped table-sm mb-0"
             style="font-size: smaller"
             *ngIf="!loading && contracts.length > 0; else notData"
           >
@@ -148,7 +173,7 @@
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
-                      class="btn btn-primary btn-sm  waves-light"
+                      class="btn btn-primary btn-sm waves-light"
                       type="button"
                     >
                       <i class="mdi mdi-chevron-down"></i>
@@ -166,14 +191,14 @@
                         > -->
                       <a
                         type="button"
-                        class="dropdown-item text-success waves-light "
+                        class="dropdown-item text-success waves-light"
                         ngbTooltip="Descargar"
                       >
                         <i class="fas fa-download"></i> Descargar
                       </a>
                       <a
                         type="button"
-                        class="dropdown-item text-info waves-light "
+                        class="dropdown-item text-info waves-light"
                         [routerLink]="[
                           '/ajustes/informacion-base/funcionario/',
                           contract.id
@@ -189,7 +214,16 @@
             </tbody>
           </table>
         </div>
-        <ngb-pagination
+        <mat-paginator
+          *ngIf="paginacion"
+          [length]="paginacion.total"
+          [pageSize]="paginacion.per_page"
+          [pageIndex]="paginacion.current_page - 1"
+          (page)="handlePageEvent($event)"
+          aria-label="Select page"
+        >
+        </mat-paginator>
+        <!-- <ngb-pagination
           class="d-flex justify-content-center pagination-rounded pagination-sm"
           [collectionSize]="pagination.collectionSize"
           (pageChange)="getAllContracts($event)"
@@ -204,7 +238,7 @@
           ellipses="false"
           boundaryLinks="true"
         >
-        </ngb-pagination>
+        </ngb-pagination> -->
       </div>
     </div>
   </div>
@@ -276,5 +310,5 @@
 </ng-template>
 
 <ng-template #notConlcude>
-  <p>No aplica</p>
+  <span>No aplica</span>
 </ng-template>

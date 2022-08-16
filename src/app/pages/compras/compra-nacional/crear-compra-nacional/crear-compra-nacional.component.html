@@ -145,25 +145,22 @@
           </div>
         </div>
       </div>
-      <small class="font-weight-bold" 
+      <small class="font-weight-bold"
         >*Nota: Para hacer más efectiva la busqueda, por favor digite el nombre
         completo del producto.</small
       >
       <div class="rounded-top table-responsive">
-        <table
-          class="table table-bordered table-striped table-sm"
-          
-        >
+        <table class="table table-bordered table-striped table-sm">
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
-              <th class="col-sm-4">Producto</th>
+              <th class="col-4">Producto</th>
               <th></th>
-              <th class="col-sm-1">Presentación</th>
-              <th class="col-sm-1" *ngIf="Rotativo">Rotativo</th>
-              <th class="col-sm-1">Cantidad</th>
-              <th class="col-sm-2">Costo</th>
-              <th class="col-sm-1">IVA</th>
-              <th class="col-sm-2">Subtotal</th>
+              <th class="col-1">Presentación</th>
+              <th class="col-1" *ngIf="Rotativo">Rotativo</th>
+              <th class="col-1">Cantidad</th>
+              <th class="col-2">Costo</th>
+              <th class="col-1">IVA</th>
+              <th class="col-2">Subtotal</th>
               <th></th>
             </tr>
           </thead>
@@ -172,7 +169,7 @@
               *ngFor="let item of Lista_Productos; let i = index"
               id="fila{{ i }}"
             >
-              <td>
+              <td class="align-middle">
                 <input
                   type="hidden"
                   name="productoModel{{ i }}"
@@ -188,14 +185,20 @@
                   [value]="item.producto"
                   [readonly]="item.producto != ''"
                 />
-                <label *ngIf="item.Id_Producto != ''">{{
-                  item.producto
-                }}</label>
-                <!-- <input type="text" name="producto{{i}}" id="Producto{{i}}" class="form-control form-control-sm f-9 input-product" [ngModel]="item.producto"
-                        [ngbTypeahead]="search1" [resultTemplate]="rt" [inputFormatter]="formatter1" (ngModelChange)="BuscarLote(item.producto, i)"
-                      /> -->
+                <span *ngIf="item.Id_Producto != ''">{{ item.producto }}</span>
+                <!-- <input
+                  type="text"
+                  name="producto{{ i }}"
+                  id="Producto{{ i }}"
+                  class="form-control form-control-sm f-9 input-product"
+                  [ngModel]="item.producto"
+                  [ngbTypeahead]="search1"
+                  [resultTemplate]="rt"
+                  [inputFormatter]="formatter1"
+                  (ngModelChange)="BuscarLote(item.producto, i)"
+                /> -->
               </td>
-              <td class="text-center">
+              <td class="text-center align-middle">
                 <button
                   *ngIf="item.producto == ''"
                   class="btn btn-primary btn-sm"
@@ -214,19 +217,25 @@
                     }}</span></span
                   >
                 </span>
-                <!-- <button *ngIf="item.delete" class="btn btn-danger btn-xs btn-search" (click)="deleteProduct(i);" title="Eliminar producto" style="display: inline-block;">
-                        &nbsp;<i class="fa fa-trash"></i>
-                      </button> -->
+                <!-- <button
+                  *ngIf="item.delete"
+                  class="btn btn-danger btn-xs btn-search"
+                  (click)="deleteProduct(i)"
+                  title="Eliminar producto"
+                  style="display: inline-block"
+                >
+                  &nbsp;<i class="fa fa-trash"></i>
+                </button> -->
               </td>
-              <td class="text-center">
+              <td class="text-center align-middle">
                 <input
                   type="hidden"
                   name="PresentacionModel{{ i }}"
                   [ngModel]="item.Presentacion"
                 />
-                <p id="Presentacion{{ i }}" name="Presentacion{{ i }}">
+                <span id="Presentacion{{ i }}" name="Presentacion{{ i }}">
                   {{ item.Presentacion }}
-                </p>
+                </span>
               </td>
               <td *ngIf="Rotativo">
                 <input
@@ -281,13 +290,39 @@
                 />
               </td>
               <td>
-                <!--<input id="Iva{{i}}" name="Iva{{i}}" [ngModel]="item.Iva" type="number" min="1" class="form-control form-control-sm text-right f-9"
-                        (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
+                <!-- <input
+                  id="Iva{{ i }}"
+                  name="Iva{{ i }}"
+                  [ngModel]="item.Iva"
+                  type="number"
+                  min="1"
+                  class="form-control form-control-sm text-right f-9"
+                  (change)="
+                    CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
+                  "
+                /> -->
                 <input
                   type="hidden"
                   name="IvaModel{{ i }}"
                   [ngModel]="item.Iva"
                 />
+                <!-- <mat-form-field class="pb-0" appearance="outline">
+                  <mat-select
+                    [ngModel]="item.Iva"
+                    id="Iva{{ i }}"
+                    name="Iva{{ i }}"
+                    (selectionChange)="
+                      CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
+                    "
+                  >
+                    <mat-option
+                      *ngFor="let Impuesto of Impuestos; let i = index"
+                      [value]="Impuesto.Valor"
+                    >
+                      {{ Impuesto.Valor }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field> -->
                 <select
                   [ngModel]="item.Iva"
                   id="Iva{{ i }}"
@@ -305,13 +340,13 @@
                   </option>
                 </select>
               </td>
-              <td class="text-center">
+              <td class="text-center align-middle">
                 <input
                   type="hidden"
                   name="TotalModel{{ i }}"
                   [ngModel]="item.Total"
                 />
-                <p
+                <span
                   name="Total{{ i }}"
                   id="Total{{ i }}"
                   type="text"
@@ -322,9 +357,9 @@
                   readonly
                 >
                   $ {{ item.Total | currency: "COP":"symbol" }}
-                </p>
+                </span>
               </td>
-              <td>
+              <td class="align-middle">
                 <button
                   class="btn btn-danger btn-sm"
                   (click)="deleteProduct(i, $event)"
@@ -401,77 +436,70 @@
     ></button>
   </div>
   <div class="modal-body">
-    <div class="container mt-4" >
-      <input type="hidden" name="pos" [(ngModel)]="posicion" />
-      <div class="row">
-        <div class="col-2 input-group-sm">
-          <label for="">Catalogo</label>
-          <select
-            (change)="filtros()"
-            [(ngModel)]="filtro_catalogo"
-            class="form-control form-control-sm"
-          >
-            <option *ngFor="let item of tipoMaterial" [value]="item">
-              {{ item }}
-            </option>
-          </select>
-        </div>
-        <div class="col-2 input-group-sm">
-          <label for="">Nombre</label>
+    <input type="hidden" name="pos" [(ngModel)]="posicion" />
+    <div class="row">
+      <mat-form-field class="col" appearance="outline">
+        <mat-label>Catálogo</mat-label>
+        <mat-select (selectionChange)="filtros()" [(ngModel)]="filtro_catalogo">
+          <mat-option *ngFor="let item of tipoMaterial" [value]="item">
+            {{ item }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="col" appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Busca por nombre"
+          [(ngModel)]="filtro_nombre"
+          (input)="filtros()"
+          autocomplete="off"
+        />
+      </mat-form-field>
+      <ng-container *ngIf="filtro_catalogo == 'Medicamento'">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Laboratorio comercial</mat-label>
           <input
+            matInput
             type="text"
-            [(ngModel)]="filtro_nombre"
-            (blur)="filtros()"
-            class="form-control form-control-sm"
-            placeholder="Filtro Nombre"
-          />
-        </div>
-        <div
-          class="col-2 input-group-sm"
-          *ngIf="filtro_catalogo == 'Medicamento'"
-        >
-          <label for="">Lab. Comercial</label>
-          <input
-            type="text"
+            placeholder="Busca por laboratorio comercial"
             [(ngModel)]="filtro_lab_com"
-            (blur)="filtros()"
-            class="form-control form-control-sm"
-            placeholder="Filtro Lab. Comercial"
+            (input)="filtros()"
+            autocomplete="off"
           />
-        </div>
-        <div
-          class="col-2 input-group-sm"
-          *ngIf="filtro_catalogo == 'Medicamento'"
-        >
-          <label for="">Lab. Genérico</label>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Laboratorio genérico</mat-label>
           <input
+            matInput
             type="text"
+            placeholder="Busca por laboratorio genérico"
             [(ngModel)]="filtro_lab_gen"
-            (blur)="filtros()"
-            class="form-control form-control-sm"
-            placeholder="Filtro Lab. Generico"
+            (input)="filtros()"
+            autocomplete="off"
           />
-        </div>
-        <div
-          class="col-2 input-group-sm"
-          *ngIf="filtro_catalogo == 'Medicamento'"
-        >
-          <label for="">Cum</label>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>CUM</mat-label>
           <input
+            matInput
             type="text"
+            placeholder="Busca por CUM"
             [(ngModel)]="filtro_cum"
-            (blur)="filtros()"
-            class="form-control form-control-sm"
-            placeholder="Filtro Cum"
+            (input)="filtros()"
+            autocomplete="off"
           />
-        </div>
-      </div>
+        </mat-form-field>
+      </ng-container>
+    </div>
+    <div class="rounded-top table-responsive">
       <table
-        class="table table-bordered table-striped table-sm mt-4"
+        class="table table-bordered table-striped table-sm"
         *ngIf="!Cargando && ListaProducto.length > 0; else notData"
       >
-        <thead>
-          <tr>
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
             <th>✔</th>
             <td>Foto</td>
             <td>Catalogo</td>
@@ -483,8 +511,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let producto of ListaProducto; let i = index">
-            <td>
+          <tr
+            *ngFor="let producto of ListaProducto; let i = index"
+            class="text-center"
+          >
+            <td class="align-middle">
               <input
                 type="checkbox"
                 id="check{{ i }}"
@@ -492,37 +523,35 @@
                 (change)="addProduct(i)"
               />
             </td>
-            <td>
-              <div class="text-center">
-                <img
-                  class="rounded-circle mx-auto img-fluid header-profile-user"
-                  src="../../../../../assets/images/nofound.png"
-                  alt=""
-                />
-                <!-- TODO IMAGEN DEL PRODUCTO DINAMICO  -->
-                <!--   <a *ngIf="producto.Imagen != ''" href="{{environment.ruta}}IMAGENES/PRODUCTOS/{{producto.Imagen}}" target="_blank">
-                                        <img class="img-radius imagen" src="{{environment.ruta}}IMAGENES/PRODUCTOS/{{producto.Imagen}}" alt="">
-                                    </a> -->
-              </div>
+            <td class="align-middle">
+              <img
+                class="rounded-circle mx-auto img-fluid header-profile-user"
+                src="../../../../../assets/images/nofound.png"
+                alt=""
+              />
+              <!-- TODO IMAGEN DEL PRODUCTO DINAMICO  -->
+              <!--   <a *ngIf="producto.Imagen != ''" href="{{environment.ruta}}IMAGENES/PRODUCTOS/{{producto.Imagen}}" target="_blank">
+                                          <img class="img-radius imagen" src="{{environment.ruta}}IMAGENES/PRODUCTOS/{{producto.Imagen}}" alt="">
+                                      </a> -->
             </td>
-            <td>{{ producto.Tipo_Catalogo }}</td>
-
-            <td>
-              <strong>{{ producto.Nombre_Comercial }}</strong>
-              <p>
+            <td class="align-middle">{{ producto.Tipo_Catalogo }}</td>
+            <td class="align-middle">
+              <strong>{{ producto.Nombre_Comercial }}</strong
+              ><br />
+              <span>
                 {{ producto.Nombre }}
-              </p>
+              </span>
             </td>
-            <td *ngIf="filtro_catalogo == 'Medicamento'">
+            <td class="align-middle" *ngIf="filtro_catalogo == 'Medicamento'">
               {{ producto.Laboratorio_Comercial }}
             </td>
-            <td *ngIf="filtro_catalogo == 'Medicamento'">
+            <td class="align-middle" *ngIf="filtro_catalogo == 'Medicamento'">
               {{ producto.Laboratorio_Generico }}
             </td>
-            <td *ngIf="filtro_catalogo == 'Medicamento'">
+            <td class="align-middle" *ngIf="filtro_catalogo == 'Medicamento'">
               {{ producto.Codigo_Cum }}
             </td>
-            <td>
+            <td class="align-middle">
               {{ producto.Embalaje }}
             </td>
           </tr>

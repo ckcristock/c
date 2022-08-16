@@ -5,13 +5,13 @@
         <h4 class="text-primary">Preliquidados</h4>
       </div>
       <hr class="line" />
-      <div class="container mt-4">
-        <div
-          class="row"
-          *ngIf="!loading && preliquidados.length > 0; else notData"
-        >
-          <div class="col mb-3" *ngFor="let preliquidado of preliquidados">
-            <div class="text-center">
+      <div
+        class="row d-flex align-items-stretch"
+        *ngIf="!loading && preliquidados.length > 0; else notData"
+      >
+        <div class="col mb-4 d-flex align-items-stretch" *ngFor="let preliquidado of preliquidados">
+          <div class="card border border-3 border-light w-100 text-center">
+            <div class="card-body pb-0">
               <img
                 [src]="preliquidado.image | image"
                 class="card-img-top"
@@ -19,7 +19,7 @@
                 onerror="this.src='../../../../assets/images/noprofile.png'"
               />
               <div class="card-title">
-                <p class="mt-3 names">
+                <p class="mb-0 mt-2">
                   <strong>
                     {{ preliquidado.first_name }} {{ preliquidado.first_surname }}
                   </strong>
@@ -29,8 +29,10 @@
                   <small> {{ preliquidado.updated_at.tiempo }} </small>
                 </p>
               </div>
+            </div>
+            <div class="card-footer">
               <div
-                class="btn-group btn-group-sm"
+                class="btn-group btn-group-sm btn-block"
                 role="group"
                 aria-label="Basic example"
               >

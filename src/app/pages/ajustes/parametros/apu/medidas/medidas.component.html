@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-sm btn-primary"
-            (click)="openConfirm(add, 'Nueva Medida')"
+            (click)="openConfirm(add, 'Nueva medida')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -57,6 +57,7 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
                     (click)="
                       getMeasure(item); openConfirm(add, 'Actualizar medida')
                     "
@@ -65,6 +66,7 @@
                   </a>
                   <a
                     *ngIf="item.state == 'Activo'"
+                    href="javascript: void(0);"
                     (click)="changeState(item, 'Inactivo')"
                     class="dropdown-item waves-light text-danger caja-botones"
                   >
@@ -72,6 +74,7 @@
                   </a>
                   <a
                     *ngIf="item.state == 'Inactivo'"
+                    href="javascript: void(0);"
                     (click)="changeState(item, 'Activo')"
                     class="dropdown-item waves-light text-success caja-botones"
                   >

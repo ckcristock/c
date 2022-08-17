@@ -12,10 +12,7 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -27,7 +24,10 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Tipo</mat-label>
-            <mat-select [(ngModel)]="filtro.tipo" (selectionChange)="getTaxis()">
+            <mat-select
+              [(ngModel)]="filtro.tipo"
+              (selectionChange)="getTaxis()"
+            >
               <mat-option value="Nacional">Nacional</mat-option>
               <mat-option value="Internacional">Internacional</mat-option>
             </mat-select>
@@ -38,7 +38,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && taxis.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -68,6 +67,7 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
                     (click)="getTaxi(item); openConfirm(add, 'Editar taxi')"
                   >
                     <i class="far fa-edit"></i> Editar
@@ -111,47 +111,43 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <div class="col-12">
-          <div class="form-row">
-            <div class="form-group col-12">
-              <label for="">Tipo</label>
-              <select
-                class="form-control form-control-sm"
-                formControlName="type"
-              >
-                <option value="Nacional">Nacional</option>
-                <option value="Internacional">Internacional</option>
-              </select>
-            </div>
-            <div class="form-group col-6">
-              <label for="">Trayecto</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="route"
-              />
-            </div>
-            <div class="form-group col-6">
-              <label for="">Ciudad</label>
-              <select
-                class="form-control form-control-sm"
-                formControlName="city_id"
-              >
-                <option *ngFor="let city of cities" [value]="city.value">
-                  {{ city.text }}
-                </option>
-              </select>
-            </div>
-            <div class="form-group col-12">
-              <label for="">Tarifa</label>
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                formControlName="value"
-              />
-            </div>
-          </div>
-        </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option value="Nacional">Nacional</mat-option>
+            <mat-option value="Internacional">Internacional</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Trayecto</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el trayecto"
+            required
+            formControlName="route"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Ciudad</mat-label>
+          <mat-select formControlName="city_id" required>
+            <mat-option *ngFor="let city of cities" [value]="city.value">
+              {{ city.text }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tarifa</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa la tarifa"
+            required
+            formControlName="value"
+            autocomplete="off"
+          />
+        </mat-form-field>
       </div>
     </form>
   </div>
@@ -163,7 +159,7 @@
     >
       Cancelar
     </button>
-    <button type="button" (click)="save()" class="btn btn-primary">
+    <button type="button" (click)="save()" [disabled]="!form.valid" class="btn btn-primary">
       Guardar
     </button>
   </div>

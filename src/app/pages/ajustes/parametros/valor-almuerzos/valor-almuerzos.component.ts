@@ -23,9 +23,11 @@ export class ValorAlmuerzosComponent implements OnInit {
   title: string = '';
   form: FormGroup;
   constructor(
-    private _lunchValues: ValorAlmuerzosService, private _swal: SwalService,
+    private _lunchValues: ValorAlmuerzosService, 
+    private _swal: SwalService,
     private fb: FormBuilder,
     private modalService: NgbModal,
+    
   ) { }
 
   ngOnInit(): void {
@@ -53,51 +55,54 @@ export class ValorAlmuerzosComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
   save() {
-    this._lunchValues.save(this.form.value).subscribe(r => {
+    this._lunchValues.save(this.form.value).subscribe((r: any) => {
       this.getValues();
       this.modalService.dismissAll(); 
       this.form.reset();
       this._swal.show({
         icon: 'success',
-        title: 'Se ha guardado con éxito',
+        title: r.data,
         text: '',
+        timer: 1000,
         showCancel: false
+      })
+    },
+    err => {
+      this._swal.show({
+        title: 'ERROR',
+        text: 'Intenta nuevamente',
+        icon: 'error',
+        showCancel: false,
       })
     });
   }
 
   anularOActivar(value, state) {
     let data: any = { id: value.id, state }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (state === 'Inactivo' ? 'El valor se inactivará!' : 'El valor se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (state === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
-    }).then((result) => {
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (state === 'Inactivo' ? '¡El valor se inactivará!' : '¡El valor se activará!'),
+      icon: 'question',
+      showCancel: true
+    })
+    .then((result) => {
       if (result.isConfirmed) {
         this._lunchValues.save(data)
           .subscribe(res => {
             this.getValues();
-            Swal.fire({
-              title: (state === 'Inactivo' ? 'Valor Inhabilitado!' : 'Valor activado'),
-              text: (state === 'Inactivo' ? 'El valor ha sido Inhabilitado con éxito.' : 'El valor ha sido activado con éxito.'),
-              icon: 'success'
+            this._swal.show({
+              icon: 'success',
+              title: (state === 'Inactivo' ? '¡Valor inhabilitado!' : '¡Valor activado!'),
+              text: (state === 'Inactivo' ? 'El valor ha sido inhabilitado con éxito.' : 'El valor ha sido activado con éxito.'),
+              timer: 1000,
+              showCancel: false
             })
+            
           })
       }
     })

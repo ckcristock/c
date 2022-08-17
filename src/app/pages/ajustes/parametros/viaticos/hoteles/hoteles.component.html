@@ -12,10 +12,7 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -42,7 +39,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && hotels.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -66,8 +62,12 @@
             <td class="align-middle">{{ hotel.phone }}</td>
             <td class="align-middle">{{ hotel.landline }}</td>
             <td class="align-middle">{{ hotel.accommodation }}</td>
-            <td class="align-middle">{{ hotel.simple_rate | currency: "COP" }}</td>
-            <td class="align-middle">{{ hotel.double_rate | currency: "COP" }}</td>
+            <td class="align-middle">
+              {{ hotel.simple_rate | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ hotel.double_rate | currency: "COP" }}
+            </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -80,7 +80,8 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
-                    (click)="getHotel(hotel); openConfirm(add, 'Editar Hotel')"
+                    href="javascript: void(0);"
+                    (click)="getHotel(hotel); openConfirm(add, 'Editar hotel')"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
@@ -123,99 +124,96 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <div class="col-12">
-          <div class="form-row">
-            <div class="form-group col-4">
-              <label for="">Tipo</label>
-              <select
-                class="form-control form-control-sm"
-                formControlName="type"
-              >
-                <option value="Nacional">Nacional</option>
-                <option value="Internacional">Internacional</option>
-              </select>
-            </div>
-            <div class="form-group col-4">
-              <label for="">Nombre</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="name"
-              />
-            </div>
-            <div class="form-group col-4">
-              <label for="">Ciudad</label>
-              <select
-                class="form-control form-control-sm"
-                formControlName="city_id"
-              >
-                <option *ngFor="let item of cities" [value]="item.value">
-                  {{ item.text }}
-                </option>
-              </select>
-            </div>
-            <div class="form-group col-4">
-              <label for="">Tel. Fijo</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="landline"
-              />
-            </div>
-            <div class="form-group col-4">
-              <label for="">Tel. Contacto</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="phone"
-              />
-            </div>
-            <div class="form-group col-4">
-              <label for="">Dirección</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="address"
-              />
-            </div>
-            <div class="form-group col-6">
-              <label for="">¿Incluye Desayuno?</label>
-              <select
-                class="form-control form-control-sm"
-                formControlName="breakfast"
-              >
-                <option value="Si">Si</option>
-                <option value="No">No</option>
-              </select>
-            </div>
-            <div class="form-group col-6">
-              <label for="">Tipo de Acomodación</label>
-              <select
-                class="form-control form-control-sm"
-                formControlName="accommodation"
-              >
-                <option value="Sencilla">Sencilla</option>
-                <option value="Doble">Doble</option>
-              </select>
-            </div>
-            <div class="form-group col-6">
-              <label for="">Tasa Simple</label>
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                formControlName="simple_rate"
-              />
-            </div>
-            <div class="form-group col-6">
-              <label for="">Tasa Doble</label>
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                formControlName="double_rate"
-              />
-            </div>
-          </div>
-        </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option value="Nacional">Nacional</mat-option>
+            <mat-option value="Internacional">Internacional</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Ciudad</mat-label>
+          <mat-select formControlName="city_id" required>
+            <mat-option *ngFor="let item of cities" [value]="item.value">
+              {{ item.text }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Teléfono fijo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el teléfono fijo"
+            formControlName="landline"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Teléfono de contacto</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el teléfono de contacto"
+            formControlName="phone"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la dirección"
+            formControlName="address"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Desayuno</mat-label>
+          <mat-select formControlName="breakfast" required>
+            <mat-option value="Si">Sí</mat-option>
+            <mat-option value="No">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo de acomodacióm</mat-label>
+          <mat-select formControlName="accommodation" required>
+            <mat-option value="Sencilla">Sencilla</mat-option>
+            <mat-option value="Doble">Doble</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tasa simple</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa la tasa simple"
+            formControlName="simple_rate"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tasa doble</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la tasa doble"
+            formControlName="double_rate"
+            autocomplete="off"
+          />
+        </mat-form-field>
       </div>
     </form>
   </div>
@@ -227,7 +225,12 @@
     >
       Cancelar
     </button>
-    <button type="button" (click)="save()" class="btn btn-primary">
+    <button
+      type="button"
+      (click)="save()"
+      [disabled]="!form.valid"
+      class="btn btn-primary"
+    >
       Guardar
     </button>
   </div>

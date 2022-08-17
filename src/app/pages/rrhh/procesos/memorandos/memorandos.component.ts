@@ -110,15 +110,9 @@ export class MemorandosComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.formLlamada.reset()
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   openMotivo() {
@@ -304,7 +298,7 @@ export class MemorandosComponent implements OnInit {
               icon: 'success',
               title: 'El Memorando Ha sido Aprobado!',
               text: '¡Aprobado!',
-              timer: 2500,
+              timer: 1000,
               showCancel: false
             })
             this.getMemorandumList();

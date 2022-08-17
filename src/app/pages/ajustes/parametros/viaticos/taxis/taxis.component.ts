@@ -5,6 +5,7 @@ import { TaxisService } from './taxis.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 
 @Component({
   selector: 'app-taxis',
@@ -44,6 +45,7 @@ export class TaxisComponent implements OnInit {
     private _taxi: TaxisService,
     private _swal: SwalService,
     private modalService: NgbModal,
+    private _validators: ValidatorsService,
   ) { }
 
   ngOnInit(): void {
@@ -65,24 +67,18 @@ export class TaxisComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+
   }
 
   createForm() {
     this.form = this.fb.group({
       id: [this.taxi.id],
-      route: [''],
-      type: [''],
-      city_id: [''],
-      value: [''],
+      route: ['', this._validators.required],
+      type: ['', this._validators.required],
+      city_id: ['', this._validators.required],
+      value: ['', this._validators.required],
       taxi_id: [this.taxi.taxi_id]
     })
   }
@@ -121,27 +117,46 @@ export class TaxisComponent implements OnInit {
   save() {
     let id = this.form.value.id;
     if (id) {
-      this._taxi.updateTaxi(this.form.value, id).subscribe((r: any) => {
-        this.modalService.dismissAll(); 
-        this.getTaxis();
-        this.form.reset();
-        this._swal.show({
-          icon: 'success',
-          title: 'Acualizado!',
-          text: 'El Taxi ha sido actualizado satisfactoriamente',
-          showCancel: false
-        })
-      })
+      this._taxi.updateTaxi(this.form.value, id).
+        subscribe((r: any) => {
+          this.modalService.dismissAll();
+          this.getTaxis();
+          this.form.reset();
+          this._swal.show({
+            icon: 'success',
+            title: '¡Acualizado!',
+            text: 'El taxi ha sido actualizado satisfactoriamente.',
+            showCancel: false,
+            timer: 1000,
+          })
+        },
+          err => {
+            this._swal.show({
+              title: 'ERROR',
+              text: 'Intenta más tarde',
+              icon: 'error',
+              showCancel: false,
+            })
+          }
+        )
     } else {
       this._taxi.createTaxi(this.form.value).subscribe((r: any) => {
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.getTaxis();
         this.form.reset();
         this._swal.show({
           icon: 'success',
           title: '¡Creado!',
-          text: 'El Taxi ha sido creado satisfactoriamente',
-          showCancel: false
+          text: 'El taxi ha sido creado satisfactoriamente',
+          showCancel: false,
+          timer: 1000,
+        })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta más tarde',
+          icon: 'error',
+          showCancel: false,
         })
       });
     }

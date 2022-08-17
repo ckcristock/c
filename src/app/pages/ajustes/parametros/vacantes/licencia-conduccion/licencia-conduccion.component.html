@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-sm btn-primary"
-            (click)="openConfirm(add, 'Nueva Licencia de conducción')"
+            (click)="openConfirm(add, 'Nueva licencia de conducción')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -51,9 +51,10 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
                     (click)="
                       getDrivingLicense(license);
-                      openConfirm(add, 'Editar Licencia de conducción')
+                      openConfirm(add, 'Editar licencia de conducción')
                     "
                   >
                     <i class="far fa-edit"></i> Editar
@@ -61,12 +62,14 @@
                   <a
                     *ngIf="license.state == 'Inactivo'"
                     (click)="activateOrInactivate(license, 'Activo')"
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-success"
                   >
                     <i class="fas fa-check"></i> Activar
                   </a>
                   <a
                     *ngIf="license.state == 'Activo'"
+                    href="javascript: void(0);"
                     (click)="activateOrInactivate(license, 'Inactivo')"
                     class="dropdown-item waves-light text-danger"
                   >
@@ -110,26 +113,28 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Tipo</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el tipo"
-          formControlName="type"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>Descripción</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa la descripción"
-          formControlName="description"
-          required
-        />
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el tipo"
+            formControlName="type"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la descripción"
+            formControlName="description"
+            required
+          />
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

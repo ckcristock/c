@@ -50,15 +50,9 @@ export class MedidasComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
 
@@ -104,7 +98,8 @@ export class MedidasComponent implements OnInit {
             icon: 'success',
             title: 'Proceso satisfactio',
             text: (data.state == 'Inactivo' ? 'La medida ha sido anulada.' : 'La medida ha sido activada.'),
-            showCancel: false
+            showCancel: false,
+            timer: 1000,
         }); 
         });
       }

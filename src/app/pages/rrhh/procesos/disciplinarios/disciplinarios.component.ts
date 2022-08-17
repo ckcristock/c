@@ -162,7 +162,7 @@ export class DisciplinariosComponent implements OnInit {
             icon: 'success',
             title: 'El Proceso Ha sido Aprobado!',
             text: '¡Aprobado!',
-            timer: 2500,
+            timer: 1000,
             showCancel: false
           })
           this.getDisciplinaryProcess();

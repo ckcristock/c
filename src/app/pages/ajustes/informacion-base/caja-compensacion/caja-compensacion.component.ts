@@ -6,6 +6,7 @@ import { CajaCompensacionService } from './caja-compensacion.service';
 import { ValidatorsService } from '../services/reactive-validation/validators.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from '../services/swal.service';
 
 @Component({
   selector: 'app-caja-compensacion',
@@ -16,14 +17,14 @@ export class CajaCompensacionComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   loading: boolean = false;
   selected: any;
@@ -41,6 +42,7 @@ export class CajaCompensacionComponent implements OnInit {
   constructor(
     private _compensationService: CajaCompensacionService,
     private fb: FormBuilder,
+    private _swal: SwalService,
     private _validators: ValidatorsService,
     private modalService: NgbModal,) { }
 
@@ -62,15 +64,9 @@ export class CajaCompensacionComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   getData(data) {
@@ -111,52 +107,54 @@ export class CajaCompensacionComponent implements OnInit {
       id: contract.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo' ? 'La Caja de Compensación se inactivará!' : 'La Caja de Compensación se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._compensationService.createCompensationFund(data)
-          .subscribe(res => {
-            this.getCompensationFunds();
-            this.modalService.dismissAll(); 
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'Caja de Compensación Inhabilitada!' : 'Caja de Compensación activada'),
-              text: (status === 'Inactivo' ? 'La Caja de Compesación ha sido Inhabilitada con éxito.' : 'La Caja de Compensación ha sido activada con éxito.'),
-              icon: 'success'
-            })
-          })
-      }
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡La caja de compensación se inactivará!' : '¡La caja de compensación se activará!'),
+      icon: 'question',
+      showCancel: true
     })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._compensationService.createCompensationFund(data)
+            .subscribe(res => {
+              this.getCompensationFunds();
+              this.modalService.dismissAll();
+              this._swal.show({
+                icon: 'success',
+                title: (status === 'Inactivo' ? 'Caja de compensación inhabilitada!' : 'Caja de compensación activada'),
+                text: (status === 'Inactivo' ? 'La caja de compesación ha sido inhabilitada con éxito.' : 'La caja de compensación ha sido activada con éxito.'),
+                timer: 1000,
+                showCancel: false
+              })
+            })
+        }
+      })
   }
 
   createCompensationFund() {
-    
+
     this._compensationService.createCompensationFund(this.form.value)
       .subscribe((res: any) => {
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.getCompensationFunds();
-        Swal.fire({
+        this._swal.show({
           icon: 'success',
           title: res.data,
-          text: 'Se ha agregado con éxito.'
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
       },
         err => {
-          Swal.fire({
-            title: 'Ooops!',
-            /* html: err.error.errors.code + '<br>' + err.error.errors.nit, */
+          this._swal.show({
+            title: 'ERROR',
+            text: 'Aún no puedes editar una caja de compensación con el mismo código o NIT, estamos trabajando en esto.',
             icon: 'error',
-            allowOutsideClick: false,
-            allowEscapeKey: false
+            showCancel: false,
           })
-        })
+        }
+
+      );
   }
 
 }

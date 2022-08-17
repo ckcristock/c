@@ -58,15 +58,9 @@ public openConfirm(confirm, titulo){
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-private getDismissReason(reason: any): string {
+private getDismissReason(reason: any) {
   this.form.reset()
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
   createForm() {
     this.form = this.fb.group({
@@ -129,7 +123,7 @@ private getDismissReason(reason: any): string {
             icon: 'success',
             title: '¡Activado!',
             text: (data.state == 'Activo' ? 'El tipo de visa ha sido Activado con éxito.' : 'El tipo de visa ha sido desactivado con éxito.'),
-            timer: 2500,
+            timer: 1000,
             showCancel: false
           })
         }

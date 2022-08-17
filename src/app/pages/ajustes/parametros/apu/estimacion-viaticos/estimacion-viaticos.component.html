@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-sm btn-primary"
-            (click)="openConfirm(add, 'Nueva Estimación Viáticos')"
+            (click)="openConfirm(add, 'Nueva estimación de viáticos')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -19,7 +19,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && estimations.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -37,8 +36,12 @@
             <td class="align-middle">{{ item.description }}</td>
             <td class="align-middle">{{ item.unit }}</td>
             <td class="align-middle">{{ item.amount }}</td>
-            <td class="align-middle">{{ item.unit_value | currency: "COP" }}</td>
-            <td class="align-middle">{{ item.created_at | date: "longDate" }}</td>
+            <td class="align-middle">
+              {{ item.unit_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.created_at | date: "longDate" }}
+            </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -51,9 +54,10 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript:void(0)"
                     (click)="
                       getEstimation(item);
-                      openConfirm(add, 'Actualizar Estimación Viáticos')
+                      openConfirm(add, 'Actualizar estimación de viáticos')
                     "
                   >
                     <i class="far fa-edit"></i> Editar
@@ -81,81 +85,88 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <div class="col-12">
-          <div class="form-row">
-            <div class="form-group col-3">
-              <label>Descripción</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="description"
-              />
-            </div>
-            <div class="form-group col-3">
-              <label>Unidad</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="unit"
-              />
-            </div>
-            <div class="form-group col-3">
-              <label>Cantidad</label>
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                formControlName="amount"
-              />
-            </div>
-            <div class="form-group col-3">
-              <label>Valor Unitario</label>
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                formControlName="unit_value"
-              />
-            </div>
-            <div class="col-12">
-              <div class="text-center">
-                <h6>Variables</h6>
-                <hr />
-              </div>
-              <perfect-scrollbar style="height: 250px">
-                <div class="row">
-                  <div
-                    class="form-group col-4 mb-0"
-                    *ngFor="let item of variables"
-                  >
-                    <label> {{ item.label }} </label>
-                    <p class="text-info">{{ "{" + item.var + "}" }}</p>
-                  </div>
-                </div>
-              </perfect-scrollbar>
-              <div class="row">
-                <div class="form-group col-6">
-                  <label for="">Formula Cantidad</label>
-                  <textarea
-                    class="form-control form-control-sm"
-                    formControlName="formula_amount"
-                    name="formula"
-                    cols="30"
-                    rows="3"
-                  ></textarea>
-                </div>
-                <div class="form-group col-6">
-                  <label for="">Formula Valor Total</label>
-                  <textarea
-                    class="form-control form-control-sm"
-                    formControlName="formula_total_value"
-                    name="formula"
-                    cols="30"
-                    rows="3"
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-          </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la descripción"
+            formControlName="description"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Unidad</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la unidad"
+            formControlName="unit"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cantidad</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa la cantidad"
+            formControlName="amount"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor unitario</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor unitario"
+            formControlName="unit_value"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <div class="col-md-12">
+          <h6 class="text-center">Variables</h6>
+          <hr />
         </div>
+        <div class="form-group col-lg-4 mb-0" *ngFor="let item of variables">
+          <label> {{ item.label }} </label>
+          <p class="text-info">{{ "{" + item.var + "}" }}</p>
+        </div>
+        <mat-form-field
+          class="col-md-6 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Fórmula de cantidad</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa la fórmula de cantidad"
+            rows="5"
+            formControlName="formula_amount"
+            name="formula"
+            [cdkTextareaAutosize]="true"
+            required
+          ></textarea>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-6 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Fórmula de valor total</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa la fórmula de valor total"
+            rows="5"
+            formControlName="formula_total_value"
+            name="formula"
+            [cdkTextareaAutosize]="true"
+            required
+          ></textarea>
+        </mat-form-field>
       </div>
     </form>
   </div>

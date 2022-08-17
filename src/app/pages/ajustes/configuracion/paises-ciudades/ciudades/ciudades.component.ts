@@ -64,15 +64,9 @@ export class CiudadesComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset()
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   createForm() {
@@ -138,8 +132,8 @@ export class CiudadesComponent implements OnInit {
       state
     }
     this._swal.show({
-      title: '¿Estas Seguro?',
-      text: "¡La Ciudad será Desactivada!",
+      title: '¿Estás seguro(a)?',
+      text: "¡La ciudad será desactivada!",
       icon: 'question',
       showCancel: true
     })
@@ -151,8 +145,8 @@ export class CiudadesComponent implements OnInit {
           this._swal.show({
             icon: 'success',
             title: '¡Activada!',
-            text: 'La Ciudad ha sido Activada con éxito.',
-            timer: 2500,
+            text: 'La ciudad ha sido activada con éxito.',
+            timer: 1000,
             showCancel: false
           })
         }

@@ -226,8 +226,8 @@ export class CerrarProcesoComponent implements OnInit {
 
   cerrarDescargo() {
     this._swal.show({
-      title: '¿Estás seguro?',
-      text: 'Si cierras el proceso se cambiará el estado a Cerrado y no se permitirán más cambios',
+      title: '¿Estás seguro(a)?',
+      text: 'Si cierras el proceso se cambiará el estado a cerrado y no se permitirán más cambios',
       icon: 'question'
     }).then((r) => {
       if (r.isConfirmed) {

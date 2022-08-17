@@ -57,15 +57,9 @@ export class ProfesionesComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset()
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   createForm() {
@@ -95,7 +89,7 @@ export class ProfesionesComponent implements OnInit {
         title: 'Creado con éxito',
         text: "¡La Profesión ha sido creada!",
         icon: 'success',
-        timer: 2500,
+        timer: 1000,
         showCancel: false
       });
     });
@@ -121,7 +115,7 @@ export class ProfesionesComponent implements OnInit {
             icon: 'success',
             title: '¡Proceso Satisfactorio!',
             text: 'La Profesión ha sido Activada con éxito.',
-            timer: 2500,
+            timer: 1000,
             showCancel: false
           })
         }

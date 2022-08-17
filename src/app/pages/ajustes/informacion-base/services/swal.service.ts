@@ -36,27 +36,29 @@ export class SwalService {
   }
   show({ title, text, icon, timer = 0, showCancel = true,
 
-  },  preConfirm ?  ) {
+  }, preConfirm?) {
     let swal: any = {
       title,
       text,
       icon,
       timer,
-      allowOutsideClick: false,
-      allowEscapeKey: false,
+      allowOutsideClick: true,
+      allowEscapeKey: true,
       showCancelButton: showCancel,
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: showCancel ? '¡Si, Confirmar!' : 'Ok',
+      confirmButtonColor: '#A3BD30',
+      confirmButtonText: showCancel ? '¡Sí, confirmar!' : 'OK',
       cancelButtonColor: '#d33',
       cancelButtonText: 'Cancelar',
+      reverseButtons: true
 
     };
     if (preConfirm) {
-      swal = {...swal,
+      swal = {
+        ...swal,
         preConfirm,
-        allowOutsideClick : () => !Swal.isLoading(),
+        allowOutsideClick: () => !Swal.isLoading(),
         showLoaderOnConfirm: true
-        }
+      }
     }
     return Swal.fire(swal)
   }

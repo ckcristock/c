@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-sm btn-primary"
-            (click)="openConfirm(add, 'Nuevo Espesor')"
+            (click)="openConfirm(add, 'Nuevo espesor')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -45,8 +45,9 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript:void(0)"
                     (click)="
-                      getThickness(item); openConfirm(add, 'Actualizar Espesor')
+                      getThickness(item); openConfirm(add, 'Actualizar espesor')
                     "
                   >
                     <i class="far fa-edit"></i> Editar
@@ -73,16 +74,18 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-12 pl-0" appearance="outline">
-        <mat-label>Espesor</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el espesor"
-          formControlName="thickness"
-          required
-        />
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Espesor</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el espesor"
+            formControlName="thickness"
+            required
+          />
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

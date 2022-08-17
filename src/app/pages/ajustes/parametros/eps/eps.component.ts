@@ -5,6 +5,7 @@ import { EpsService } from './eps.service';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-eps',
@@ -15,14 +16,14 @@ export class EpsComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   epss: any = [];
   eps: any = {};
@@ -40,7 +41,13 @@ export class EpsComponent implements OnInit {
   status: any = 'Inactivo';
   loading: boolean = false;
 
-  constructor(private epsService: EpsService, private fb: FormBuilder, private _validators: ValidatorsService, private modalService: NgbModal,) { }
+  constructor(
+    private epsService: EpsService,
+    private fb: FormBuilder,
+    private _validators: ValidatorsService,
+    private modalService: NgbModal,
+    private _swal: SwalService,
+  ) { }
 
   ngOnInit(): void {
     this.getAllEps();
@@ -55,15 +62,9 @@ export class EpsComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   openModal() {
@@ -111,25 +112,23 @@ export class EpsComponent implements OnInit {
       id: zone.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo' ? 'La EPS se Inactivará!' : 'La EPS se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡La EPS se inactivará!' : '¡La EPS se activará!'),
+      icon: 'question',
+      showCancel: true,
     }).then((result) => {
       if (result.isConfirmed) {
         this.epsService.createNewEps(data)
           .subscribe(res => {
             this.getAllEps();
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'EPS Inhabilitada!' : 'EPS activada'),
-              text: (status === 'Inactivo' ? 'La EPS ha sido Inhabilitada con éxito.' : 'La EPS ha sido activada con éxito.'),
-              icon: 'success'
-            })
+            this._swal.show({
+              title: (status === 'Inactivo' ? '¡EPS inhabilitada!' : '¡EPS activada!'),
+              text: (status === 'Inactivo' ? 'La EPS ha sido inhabilitada con éxito.' : 'La EPS ha sido activada con éxito.'),
+              icon: 'success',
+              showCancel: false,
+              timer: 1000
+            })            
           })
       }
     })
@@ -141,24 +140,26 @@ export class EpsComponent implements OnInit {
     if (this.form.invalid) { return false; }
     this.epsService.createNewEps(this.form.value)
       .subscribe((res: any) => {
+        console.log(res)
         this.getAllEps();
         this.modalService.dismissAll();
-        Swal.fire({
+        this._swal.show({
           title: res.data,
           icon: 'success',
-          allowOutsideClick: false,
-          allowEscapeKey: false
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
       },
         err => {
-          Swal.fire({
-            title: 'Ooops!',
-            html: 'El NIT o el código ya existen',
+          this._swal.show({
+            title: 'ERROR',
+            text: 'El NIT o el código ya existen',
             icon: 'error',
-            allowOutsideClick: false,
-            allowEscapeKey: false
+            showCancel: false,
           })
         }
+
       );
   }
 

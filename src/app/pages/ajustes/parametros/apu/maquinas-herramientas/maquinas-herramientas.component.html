@@ -78,42 +78,44 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el nombre"
-          formControlName="name"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>Unidad</mat-label>
-        <mat-select formControlName="unit_id">
-          <mat-option *ngFor="let item of units" [value]="item.id">{{
-            item.name
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Costo</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el costo"
-          formControlName="unit_cost"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>Unidad</mat-label>
-        <mat-select formControlName="type_id">
-          <mat-option value="1">Máquinas herramientas</mat-option>
-          <mat-option value="2">Procesos internos</mat-option>
-          <mat-option value="3">Procesos externos</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Unidad</mat-label>
+          <mat-select formControlName="unit_id">
+            <mat-option *ngFor="let item of units" [value]="item.id">{{
+              item.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Costo</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el costo"
+            formControlName="unit_cost"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Unidad</mat-label>
+          <mat-select formControlName="type_id">
+            <mat-option value="1">Máquinas herramientas</mat-option>
+            <mat-option value="2">Procesos internos</mat-option>
+            <mat-option value="3">Procesos externos</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

@@ -8,14 +8,11 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nueva Cuenta Bancaria')"
+            (click)="openConfirm(add, 'Nueva cuenta bancaria')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -43,7 +40,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && bankAccounts.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -79,15 +75,16 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item text-info waves-light caja-botones"
-                    target="_blank"
+                    href="javascript: void(0);"
                     (click)="
                       getBankAccount(bankAccount);
-                      openConfirm(add, 'Actualizar Cuenta Bancaria')
+                      openConfirm(add, 'Actualizar cuenta bancaria')
                     "
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="bankAccount.status == 'Activo'"
+                    href="javascript: void(0);"
                     class="text-danger dropdown-item waves-light caja-botones"
                     (click)="activateOrInactivate(bankAccount, 'Inactivo')"
                   >
@@ -95,6 +92,7 @@
                   >
                   <a
                     *ngIf="bankAccount.status == 'Inactivo'"
+                    href="javascript: void(0);"
                     class="text-success dropdown-item waves-light caja-botones"
                     (click)="activateOrInactivate(bankAccount, 'Activo')"
                   >
@@ -138,65 +136,73 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <div class="form-row">
-        <div class="form-group col-md-4">
-          <label class="custom-label" for="funcionario_id">Tipo</label>
-          <select class="form-control form-control-sm" formControlName="type">
-            <option *ngFor="let type of types" [value]="type.valor">
-              {{ type.clave }}
-            </option>
-          </select>
-        </div>
-        <div class="form-group col-md-4">
-          <label class="custom-label" for="funcionario_id">Nombre</label>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option *ngFor="let type of types" [value]="type.valor">
+              {{ type.clave }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el nombre"
             formControlName="name"
             required
+            autocomplete="off"
           />
-        </div>
-        <div class="form-group col-md-4">
-          <label class="custom-label" for="funcionario_id"
-            >Número de Cuenta</label
-          >
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Número de cuenta</mat-label>
           <input
+            matInput
             type="number"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el número de cuenta"
             formControlName="account_number"
             required
+            autocomplete="off"
           />
-        </div>
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="funcionario_id"
-            >Cuenta Asociada</label
-          >
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cuenta asociada</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa la cuenta asociada"
             formControlName="associated_account"
             required
+            autocomplete="off"
           />
-        </div>
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="funcionario_id">Saldo</label>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Saldo</mat-label>
           <input
+            matInput
             type="number"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el saldo"
             formControlName="balance"
             required
+            autocomplete="off"
           />
-        </div>
-        <div class="form-group col-md-12">
-          <label class="custom-label" for="funcionario_id">Descripción</label>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Descripción</mat-label>
           <textarea
-            class="form-control form-control-sm"
+            matInput
+            placeholder="Ingresa la descripción"
+            rows="5"
             formControlName="description"
-            cols="3"
-            rows="3"
             required
+            [cdkTextareaAutosize]="true"
           ></textarea>
-        </div>
+        </mat-form-field>
       </div>
     </form>
   </div>

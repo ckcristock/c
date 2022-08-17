@@ -4,6 +4,7 @@ import { HotelesService } from './hoteles.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 
 @Component({
   selector: 'app-hoteles',
@@ -41,6 +42,7 @@ export class HotelesComponent implements OnInit {
     private fb: FormBuilder,
     private _hoteles: HotelesService,
     private _swal: SwalService,
+    private _validators: ValidatorsService,
     private modalService: NgbModal,
   ) { }
 
@@ -63,15 +65,9 @@ export class HotelesComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   createForm() {
@@ -128,13 +124,15 @@ export class HotelesComponent implements OnInit {
 
   save() {
     this._hoteles.createHotel(this.form.value).subscribe((r: any) => {
-      this.modal.hide();
+      this.modalService.dismissAll();
+      console.log(r)
       this.getHotels();
       this.form.reset();
       this._swal.show({
         icon: 'success',
-        title: '¡Creado!',
-        text: 'El hotel ha sido creado satisfactoriamente',
+        title: r.data,
+        text: '',
+        timer: 1000,
         showCancel: false
       })
     })

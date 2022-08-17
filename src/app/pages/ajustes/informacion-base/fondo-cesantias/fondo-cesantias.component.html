@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo Fondo de Cesantías')"
+            (click)="openConfirm(add, 'Nuevo fondo de cesantías')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -37,10 +37,9 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <div class="row">
+    <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && severances.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -72,15 +71,16 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
-                    target="_blank"
+                    href="javascript: void(0);"
                     (click)="
                       getSeverance(severance);
-                      openConfirm(add, 'Actualizar Fondo de Cesantías')
+                      openConfirm(add, 'Actualizar fondo de cesantías')
                     "
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="severance.status == 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-danger waves-light caja-botones"
                     (click)="activateOrInactivate(severance, 'Inactivo')"
                   >
@@ -88,6 +88,7 @@
                   >
                   <a
                     *ngIf="severance.status == 'Inactivo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-success waves-light caja-botones"
                     (click)="activateOrInactivate(severance, 'Activo')"
                   >
@@ -131,25 +132,29 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="funcionario_id">Nombre</label>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el nombre"
             formControlName="name"
             required
+            autocomplete="off"
           />
-        </div>
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="funcionario_id">NIT</label>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>NIT</mat-label>
           <input
-            type="number"
-            class="form-control form-control-sm"
+            matInput
+            type="text"
+            placeholder="Ingresa el NIT"
             formControlName="nit"
             required
+            autocomplete="off"
           />
-        </div>
+        </mat-form-field>
       </div>
     </form>
   </div>

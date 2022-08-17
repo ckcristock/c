@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { EstimationValuesService } from './estimation-values.service';
 
@@ -24,6 +25,7 @@ export class EstimacionViaticosValuesComponent implements OnInit {
     private _estimationValue: EstimationValuesService,
     private _swal: SwalService,
     private modalService: NgbModal,
+    private _validators: ValidatorsService,
   ) { }
 
   ngOnInit(): void {
@@ -35,7 +37,7 @@ export class EstimacionViaticosValuesComponent implements OnInit {
   createform() {
     this.form = this.fb.group({
       id: [this.value.id],
-      travel_expense_estimation_id: [],
+      travel_expense_estimation_id: ['', this._validators.required],
       land_national_value: [0],
       land_international_value: [0],
       aerial_national_value: [0],
@@ -51,20 +53,14 @@ export class EstimacionViaticosValuesComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   openModal() {
     this.modal.show();
-    
+
   }
 
   getTravelExpenseEstimation() {
@@ -77,7 +73,7 @@ export class EstimacionViaticosValuesComponent implements OnInit {
     this.value = { ...value };
     this.form.patchValue({
       id: this.value.id,
-      travel_expense_estimation_id: this.value.travel_expense_estimation.description,
+      travel_expense_estimation_id: this.value.travel_expense_estimation.id,
       land_national_value: this.value.land_national_value,
       land_international_value: this.value.land_international_value,
       aerial_national_value: this.value.aerial_national_value,
@@ -100,11 +96,20 @@ export class EstimacionViaticosValuesComponent implements OnInit {
       this.getEstimationValues();
       this._swal.show({
         icon: 'success',
-        title: r.data.title,
-        text: r.data.text,
-        showCancel: false
+        title: 'Creado con éxito',
+        text: '',
+        showCancel: false,
+        timer: 1000
       })
-    })
+    }, err => {
+      this._swal.show({
+        title: 'ERROR',
+        text: 'Ocurrió un error, intente de nuevo',
+        icon: 'error',
+        showCancel: false,
+      })
+    }
+    );
   }
 
 }

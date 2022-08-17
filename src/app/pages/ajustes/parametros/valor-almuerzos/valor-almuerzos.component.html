@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo Valor')"
+            (click)="openConfirm(add, 'Nuevo valor')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -19,7 +19,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && values.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -53,13 +52,14 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
-                    target="_blank"
-                    (click)="getValue(value); openConfirm(add, 'Editar Valor')"
+                    href="javascript: void(0);"
+                    (click)="getValue(value); openConfirm(add, 'Editar valor')"
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="value.state === 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-danger waves-light caja-botones"
                     (click)="anularOActivar(value, 'Inactivo')"
                   >
@@ -67,6 +67,7 @@
                   >
                   <a
                     *ngIf="value.state === 'Inactivo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-success waves-light caja-botones"
                     (click)="anularOActivar(value, 'Activo')"
                   >
@@ -107,19 +108,25 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <label class="custom-label" for="funcionario_id">Valor</label>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor</mat-label>
           <input
+            matInput
             type="number"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el valor"
             formControlName="value"
+            autocomplete="off"
           />
-        </div>
+        </mat-form-field>
         <!-- <div class="form-group col-md-6">
-                    <label class="custom-label" for="funcionario_id">Descripción</label>
-                    <textarea class="form-control form-control-sm" rows="3" formControlName="description"></textarea>
-                </div> -->
+          <label class="custom-label" for="funcionario_id">Descripción</label>
+          <textarea
+            class="form-control form-control-sm"
+            rows="3"
+            formControlName="description"
+          ></textarea>
+        </div> -->
       </div>
     </form>
   </div>

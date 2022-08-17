@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { EstimacionViaticosService } from './estimacion-viaticos.service';
 
@@ -40,6 +41,7 @@ export class EstimacionViaticosComponent implements OnInit {
     private _estimations: EstimacionViaticosService,
     private _swal: SwalService,
     private modalService: NgbModal,
+    private _validators: ValidatorsService,
   ) { }
 
   ngOnInit(): void {
@@ -50,12 +52,12 @@ export class EstimacionViaticosComponent implements OnInit {
   createform() {
     this.form = this.fb.group({
       id: [this.estimation.id],
-      description: [''],
-      unit: [''],
-      amount: [0],
-      unit_value: [0],
-      formula_amount: [''],
-      formula_total_value: ['']
+      description: ['', this._validators.required],
+      unit: ['', this._validators.required],
+      amount: [0, this._validators.required],
+      unit_value: [0, this._validators.required],
+      formula_amount: ['', this._validators.required],
+      formula_total_value: ['', this._validators.required]
     })
   }
   closeResult = '';
@@ -67,15 +69,9 @@ export class EstimacionViaticosComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   openModal() {
@@ -111,9 +107,10 @@ export class EstimacionViaticosComponent implements OnInit {
       this.getEstimations();
       this._swal.show({
         icon: 'success',
-        title: r.data.title,
-        text: r.data.text,
-        showCancel: false
+        title: 'Creado con éxito',
+        text: '',
+        showCancel: false,
+        timer: 1000,
       })
     })
   }

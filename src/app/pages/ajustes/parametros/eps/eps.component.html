@@ -90,13 +90,14 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item text-info waves-light caja-botones"
-                    target="_blank"
+                    href="javascript: void(0);"
                     (click)="getEps(eps); openConfirm(add, 'Actualizar EPS')"
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="eps.status === 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-danger waves-light caja-botones"
                     (click)="anularOActivar(eps, 'Inactivo')"
                   >
@@ -104,6 +105,7 @@
                   >
                   <a
                     *ngIf="eps.status === 'Inactivo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-success waves-light caja-botones"
                     (click)="anularOActivar(eps, 'Activo')"
                   >
@@ -144,42 +146,44 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-12 px-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el nombre"
-          [class.is-invalid]="name_eps_valid"
-          formControlName="name"
-          required
-        />
-        <mat-error *ngIf="name_eps_valid"> Es necesario el nombre </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Código</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el código"
-          [class.is-invalid]="code_eps_valid"
-          formControlName="code"
-          required
-        />
-        <mat-error *ngIf="code_eps_valid"> Es necesario el código </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>NIT</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el NIT"
-          [class.is-invalid]="nit_eps_valid"
-          formControlName="nit"
-          required
-        />
-        <mat-error *ngIf="nit_eps_valid"> Es necesario el nit </mat-error>
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            [class.is-invalid]="name_eps_valid"
+            formControlName="name"
+            required
+          />
+          <mat-error *ngIf="name_eps_valid"> Es necesario el nombre </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el código"
+            [class.is-invalid]="code_eps_valid"
+            formControlName="code"
+            required
+          />
+          <mat-error *ngIf="code_eps_valid"> Es necesario el código </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>NIT</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el NIT"
+            [class.is-invalid]="nit_eps_valid"
+            formControlName="nit"
+            required
+          />
+          <mat-error *ngIf="nit_eps_valid"> Es necesario el NIT </mat-error>
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

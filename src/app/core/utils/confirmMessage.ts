@@ -2,14 +2,15 @@ import Swal from 'sweetalert2';
 
 export async function showConfirm<T>(status: any, model: string) {
     return Swal.fire({
-        title: '¿Estas seguro?',
-        text: (status === 'Inactivo' ? `La ${model} se Inactivará!` : `La ${model} se activará`),
+        title: '¿Estás seguro(a)?',
+        text: (status === 'Inactivo' ? `La ${model} se inactivará!` : `La ${model} se activará`),
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#A3BD30',
         cancelButtonColor: '#d33',
         cancelButtonText: 'Cancelar',
-        confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
+        reverseButtons: true,
+        confirmButtonText: (status === 'Inactivo' ? 'Sí, inhabilitar' : 'Sí, activar')
     })
 }
 
@@ -23,8 +24,8 @@ export async function showConfirmCancel<T>(status: any, model: string) {
     })
 
     return SwalMsje.fire({
-        title: '¿está seguro?',
-        text: "Se dispone a Cancelar una ".concat(model),
+        title: '¿Estás seguro(a)?',
+        text: "Se dispone a cancelar una ".concat(model),
         icon: 'warning',
         input: 'text',
         inputAttributes: {
@@ -33,28 +34,28 @@ export async function showConfirmCancel<T>(status: any, model: string) {
             autocorrect: 'off'
         },
         showCancelButton: true,
-        confirmButtonText: 'Si, ¡Cita Cancelar '.concat(model),
-        cancelButtonText: 'No, ¡déjeme comprobar!',
+        confirmButtonText: 'Si, cancelar '.concat(model),
+        cancelButtonText: 'No, ¡déjame comprobar!',
         reverseButtons: true
     })
 }
 
 export async function showConfirmCancelWhitoutMessage<T>(status: any, model: string) {
     return Swal.fire({
-        title: '¿Estas seguro?',
+        title: '¿Estás seguro(a)?',
         text: `Estas a un paso de ${status} esta  ${model} !`,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#A3BD30',
         cancelButtonColor: '#d33',
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Si, ' + status
+        confirmButtonText: 'Sí, ' + status
     })
 }
 
 export function successMessage<T>(
     status: any = 'Operación exitosa',
-    message: string = 'Felicidades, Operacíón realizada correctamente.',
+    message: string = 'Felicidades, operacíón realizada correctamente.',
     model: string = ''
 ) {
     Swal.fire({

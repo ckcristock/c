@@ -34,14 +34,8 @@ export class RestorePasswordComponent implements OnInit {
   public openConfirm(confirm) {
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true })
   }
-  /* private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  /* private getDismissReason(reason: any) {
+    
   } */
 
   changePassword() {

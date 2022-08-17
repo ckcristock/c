@@ -141,7 +141,7 @@ export class CrearGeometriaComponent implements OnInit {
           this.router.navigate(['/ajustes/parametros/apu/geometrias']);
         })
       }
-    } else { return this.message = 'Por favor, Seleccione'; }
+    } else { return this.message = 'Por favor, seleccione'; }
   }
 
   get name_valid() {

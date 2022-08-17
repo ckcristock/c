@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
+import { SwalService } from '../../../informacion-base/services/swal.service';
 import { ConfiguracionEmpresaService } from '../configuracion-empresa.service';
 
 @Component({
@@ -17,6 +19,8 @@ export class DatosNominaComponent implements OnInit {
     private _configuracionEmpresaService: ConfiguracionEmpresaService,
     private fb: FormBuilder,
     private modalService: NgbModal,
+    private _swal: SwalService,
+    private _validators: ValidatorsService,
   ) { }
 
   ngOnInit(): void {
@@ -31,14 +35,8 @@ export class DatosNominaComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  private getDismissReason(reason: any) {
+    
   }
 
   openModal() {
@@ -48,13 +46,13 @@ export class DatosNominaComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [this.nomina.id],
-      max_extras_hours: [''],
-      max_holidays_legal: [''],
-      max_late_arrival: [''],
-      base_salary: [''],
-      transportation_assistance: [''],
-      night_start_time: [''],
-      night_end_time: ['']
+      max_extras_hours: ['', this._validators.required],
+      max_holidays_legal: ['', this._validators.required],
+      max_late_arrival: ['', this._validators.required],
+      base_salary: ['', this._validators.required],
+      transportation_assistance: ['', this._validators.required],
+      night_start_time: ['', this._validators.required],
+      night_end_time: ['', this._validators.required]
     });
   }
 
@@ -80,11 +78,22 @@ export class DatosNominaComponent implements OnInit {
       .subscribe((res: any) => {
         this.modalService.dismissAll(); 
         this.getNominaData();
-        Swal.fire({
+        this._swal.show({
           icon: 'success',
-          title: 'Actualizado Correctamente'
-        });
-      })
+          title: 'Actualizado correctamente',
+          text: '',
+          timer: 1000,
+          showCancel: false
+        })        
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta nuevamente',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+      )
   }
 
 }

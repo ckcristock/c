@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-sm btn-primary"
-            (click)="openConfirm(add, 'Nuevos Valores')"
+            (click)="openConfirm(add, 'Nuevo valor')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -19,7 +19,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && values.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -50,7 +49,9 @@
             <td class="align-middle">
               {{ item.aerial_international_value | currency: "COP" }}
             </td>
-            <td class="align-middle">{{ item.created_at | date: "longDate" }}</td>
+            <td class="align-middle">
+              {{ item.created_at | date: "longDate" }}
+            </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -63,9 +64,10 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
                     (click)="
                       getEstimationValue(item);
-                      openConfirm(add, 'Actualizar Valores')
+                      openConfirm(add, 'Actualizar valor')
                     "
                   >
                     <i class="far fa-edit"></i> Editar
@@ -93,53 +95,54 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <div class="col-12">
-          <div class="form-row">
-            <div class="form-group col-md-12">
-              <label for="">Descripción</label>
-              <select
-                class="form-control form-control-sm"
-                formControlName="travel_expense_estimation_id"
-              >
-                <option *ngFor="let item of estimations" [value]="item.id">
-                  {{ item.description }}
-                </option>
-              </select>
-            </div>
-            <div class="form-group col-md-6">
-              <label for="">Valor Nacional Terrestre</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="land_national_value"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="">Valor Internacional Terrestre</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="land_international_value"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="">Valor Nacional Aereo</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="aerial_national_value"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="">Valor Internacioal Aereo</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="aerial_international_value"
-              />
-            </div>
-          </div>
-        </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <mat-select formControlName="travel_expense_estimation_id">
+            <mat-option *ngFor="let item of estimations" [value]="item.id">
+              {{ item.description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor nacional terrestre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el valor nacional terrestre"
+            formControlName="land_national_value"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor internacional terrestre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el valor internacional terrestre"
+            formControlName="land_international_value"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor nacional aéreo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el valor nacional aéreo"
+            formControlName="aerial_national_value"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor internacional aéreo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el valor internacional aéreo"
+            formControlName="aerial_international_value"
+            autocomplete="off"
+          />
+        </mat-form-field>
       </div>
     </form>
   </div>

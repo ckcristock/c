@@ -8,14 +8,11 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo Banco')"
+            (click)="openConfirm(add, 'Nuevo banco')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -43,7 +40,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && banks.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -75,12 +71,15 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
-                    target="_blank"
-                    (click)="getBank(bank); openConfirm(add, 'Actualizar Banco')"
+                    href="javascript: void(0);"
+                    (click)="
+                      getBank(bank); openConfirm(add, 'Actualizar banco')
+                    "
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="bank.status == 'Activo'"
+                    href="javascript: void(0);"
                     class="text-danger dropdown-item waves-light caja-botones"
                     (click)="activateOrInactivate(bank, 'Inactivo')"
                   >
@@ -88,6 +87,7 @@
                   >
                   <a
                     *ngIf="bank.status == 'Inactivo'"
+                    href="javascript: void(0);"
                     class="text-success dropdown-item waves-light caja-botones"
                     (click)="activateOrInactivate(bank, 'Activo')"
                   >
@@ -131,25 +131,29 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="funcionario_id">Nombre</label>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el nombre"
             formControlName="name"
             required
+            autocomplete="off"
           />
-        </div>
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="funcionario_id">Código</label>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el código"
             formControlName="code"
             required
+            autocomplete="off"
           />
-        </div>
+        </mat-form-field>
       </div>
     </form>
   </div>

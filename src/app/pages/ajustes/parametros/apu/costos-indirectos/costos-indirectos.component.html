@@ -112,26 +112,28 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-8 pl-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el nombre"
-          formControlName="name"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-4 pr-0" appearance="outline">
-        <mat-label>%</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el porcentaje"
-          formControlName="percentage"
-          required
-        />
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col-md-8" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>%</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el porcentaje"
+            formControlName="percentage"
+            required
+          />
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

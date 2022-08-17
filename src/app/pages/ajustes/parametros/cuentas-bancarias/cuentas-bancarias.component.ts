@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { consts } from '../../../../core/utils/consts';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-cuentas-bancarias',
@@ -44,6 +45,7 @@ export class CuentasBancariasComponent implements OnInit {
     private _bankAccountService: CuentasBancariasService,
     private _validators: ValidatorsService,
     private modalService: NgbModal,
+    private _swal: SwalService,
   ) { }
 
   ngOnInit(): void {
@@ -65,15 +67,9 @@ export class CuentasBancariasComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   getBankAccount(bankAccount) {
@@ -120,11 +116,22 @@ export class CuentasBancariasComponent implements OnInit {
       .subscribe((res: any) => {
         this.modalService.dismissAll(); 
         this.getBankAccounts();
-        Swal.fire({
+        this._swal.show({
           icon: 'success',
-          title: res.data
+          title: res.data,
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
-      })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta de nuevo',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+      )
   }
 
   activateOrInactivate(novelty, status) {
@@ -132,25 +139,25 @@ export class CuentasBancariasComponent implements OnInit {
       id: novelty.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo' ? 'La Cuenta Bancaria se inactivará!' : 'La Cuenta Bancaria se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
-    }).then((result) => {
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡La cuenta bancaria se inactivará!' : '¡La cuenta bancaria se activará!'),
+      icon: 'question',
+      showCancel: true
+    })
+    .then((result) => {
       if (result.isConfirmed) {
         this._bankAccountService.createBankAccounts(data)
           .subscribe(res => {
             this.getBankAccounts();
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'La Cuenta Bancaria Inhabilitada!' : 'La Cuenta Bancaria activada'),
-              text: (status === 'Inactivo' ? 'La Cuenta Bancaria ha sido Inhabilitada con éxito.' : 'La Cuenta Bancaria ha sido activada con éxito.'),
-              icon: 'success'
-            });
+            this._swal.show({
+              icon: 'success',
+              title: (status === 'Inactivo' ? '¡Cuenta bancaria inhabilitada!' : '¡Cuenta bancaria activada!'),
+              text: (status === 'Inactivo' ? 'La cuenta bancaria ha sido inhabilitada con éxito.' : 'La cuenta bancaria ha sido activada con éxito.'),
+              timer: 1000,
+              showCancel: false
+            })
+            
           });
       }
     });

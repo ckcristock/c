@@ -4,6 +4,8 @@ import Swal from 'sweetalert2';
 import { ConfiguracionEmpresaService } from '../configuracion-empresa.service';
 import { functionsUtils } from '../../../../../core/utils/functionsUtils';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalService } from '../../../informacion-base/services/swal.service';
+import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 
 @Component({
   selector: 'app-datos-basicos-empresa',
@@ -21,6 +23,8 @@ export class DatosBasicosEmpresaComponent implements OnInit {
     private _configuracionEmpresaService: ConfiguracionEmpresaService,
     private fb: FormBuilder,
     private modalService: NgbModal,
+    private _validators: ValidatorsService,
+    private _swal: SwalService,
   ) { }
 
   ngOnInit(): void {
@@ -35,14 +39,8 @@ export class DatosBasicosEmpresaComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  private getDismissReason(reason: any) {
+    
   }
   openModal() {
     this.modal.show();
@@ -52,13 +50,13 @@ export class DatosBasicosEmpresaComponent implements OnInit {
     this.form = this.fb.group({
       id: [this.company.id],
       logo: [''],
-      social_reason: [''],
+      social_reason: ['', this._validators.required],
       document_type: [''],
-      document_number: [''],
-      verification_digit: [''],
-      constitution_date: [''],
-      email_contact: [''],
-      phone: [''],
+      document_number: ['', this._validators.required],
+      verification_digit: ['', this._validators.required],
+      constitution_date: ['', this._validators.required],
+      email_contact: ['', this._validators.required],
+      phone: ['', this._validators.required],
       typeImage: ['']
     });
 

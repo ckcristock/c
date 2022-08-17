@@ -46,15 +46,9 @@ export class LicenciaConduccionComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   createForm() {
@@ -90,8 +84,8 @@ export class LicenciaConduccionComponent implements OnInit {
       state
     }
     this._swal.show({
-      title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? '¡La licencia será desactivada!' : 'La licencia será Activada'),
+      title: '¿Estás seguro(a)?',
+      text: (data.state == 'Inactivo' ? '¡La licencia será desactivada!' : 'La licencia será activada'),
       icon: 'question',
       showCancel: true
     })
@@ -103,8 +97,8 @@ export class LicenciaConduccionComponent implements OnInit {
           this._swal.show({
             icon: 'success',
             title: '¡Activado!',
-            text: (data.state == 'Activo' ? 'La licencia ha sido Activada con éxito.' : 'La licencia ha sido desactivada con éxito.'),
-            timer: 2500,
+            text: (data.state == 'Activo' ? 'La licencia ha sido activada con éxito.' : 'La licencia ha sido desactivada con éxito.'),
+            timer: 1000,
             showCancel: false
           })
         }
@@ -119,8 +113,9 @@ export class LicenciaConduccionComponent implements OnInit {
       this._swal.show({
         icon: 'success',
         title: r.data.title,
-        text: r.data.text,
-        showCancel: false
+        text: '',
+        showCancel: false,
+        timer: 1000,
       })
     })
   }

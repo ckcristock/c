@@ -20,6 +20,7 @@
                 placeholder="Ingresa el nombre"
                 formControlName="name"
                 autocomplete="off"
+                required
               />
               <mat-error *ngIf="name_valid">Campo obligatorio</mat-error>
             </mat-form-field>
@@ -57,31 +58,32 @@
                 rows="6"
                 formControlName="weight_formula"
                 name="formula"
+                required
                 [cdkTextareaAutosize]="true"
               ></textarea>
-              <mat-error *ngIf="weight_formula_valid">Campo obligatorio</mat-error>
+              <mat-error *ngIf="weight_formula_valid"
+                >Campo obligatorio</mat-error
+              >
             </mat-form-field>
           </div>
         </div>
         <div class="col-md-2">
           <p *ngIf="message" class="text-danger">{{ message }}</p>
-          <perfect-scrollbar style="height: 300px">
-            <div
-              class="custom-control custom-checkbox"
-              *ngFor="let item of measures"
-            >
-              <input
-                class="custom-control-input"
-                [checked]="item.checked"
-                (change)="item.checked = !item.checked; message = ''"
-                type="checkbox"
-                [id]="item.value"
-              />
-              <label class="custom-control-label" [for]="item.value">
-                {{ item.text }}
-              </label>
-            </div>
-          </perfect-scrollbar>
+          <div
+            class="custom-control custom-checkbox"
+            *ngFor="let item of measures"
+          >
+            <input
+              class="custom-control-input"
+              [checked]="item.checked"
+              (change)="item.checked = !item.checked; message = ''"
+              type="checkbox"
+              [id]="item.value"
+            />
+            <label class="custom-control-label" [for]="item.value">
+              {{ item.text }}
+            </label>
+          </div>
         </div>
         <div class="col-md-3">
           <table class="table table-hover" *ngIf="fill.length > 0">
@@ -103,7 +105,11 @@
           </div>
         </div>
       </div>
-      <button class="btn btn-primary btn-block" (click)="save()">
+      <button
+        class="btn btn-primary btn-block mt-4"
+        (click)="save()"
+        [disabled]="!form.valid"
+      >
         Guardar
       </button>
     </form>

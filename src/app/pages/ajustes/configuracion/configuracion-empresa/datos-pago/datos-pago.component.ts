@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
+import { SwalService } from '../../../informacion-base/services/swal.service';
 import { configEmpresa } from '../configuracion';
 import { ConfiguracionEmpresaService } from '../configuracion-empresa.service';
 
@@ -23,6 +25,8 @@ export class DatosPagoComponent implements OnInit {
     private _configuracionEmpresaService: ConfiguracionEmpresaService,
     private fb: FormBuilder,
     private modalService: NgbModal,
+    private _swal: SwalService,
+    private _validators: ValidatorsService,
   ) { }
 
   ngOnInit(): void {
@@ -42,24 +46,18 @@ export class DatosPagoComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  private getDismissReason(reason: any) {
+
   }
 
   createForm() {
     this.form = this.fb.group({
       id: [this.payments.id],
-      payment_frequency: [''],
-      payment_method: [''],
-      account_number: [''],
-      account_type: [''],
-      bank_id: ['']
+      payment_frequency: ['', this._validators.required],
+      payment_method: ['', this._validators.required],
+      account_number: ['', this._validators.required],
+      account_type: ['', this._validators.required],
+      bank_id: ['', this._validators.required]
     });
   }
 
@@ -89,13 +87,25 @@ export class DatosPagoComponent implements OnInit {
   savePaymentData() {
     this._configuracionEmpresaService.saveCompanyData(this.form.value)
       .subscribe((res: any) => {
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.getPaymentData();
-        Swal.fire({
+        this._swal.show({
           icon: 'success',
-          title: 'Actualizado Correctamente'
-        });
-      });
+          title: 'Actualizado correctamente',
+          text: '',
+          timer: 1000,
+          showCancel: false
+        })
+
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta nuevamente',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+      );
   }
 
 }

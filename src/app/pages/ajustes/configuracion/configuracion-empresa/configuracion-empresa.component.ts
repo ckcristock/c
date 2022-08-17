@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
+import { SwalService } from '../../informacion-base/services/swal.service';
 import { ConfiguracionEmpresaService } from './configuracion-empresa.service';
 
 @Component({
@@ -16,6 +18,8 @@ export class ConfiguracionEmpresaComponent implements OnInit {
     private _configuracionEmpresaService: ConfiguracionEmpresaService,
     private fb: FormBuilder,
     private modalService: NgbModal,
+    private _swal: SwalService,
+    private _validators: ValidatorsService,
   ) { }
 
   ngOnInit(): void {
@@ -29,14 +33,8 @@ export class ConfiguracionEmpresaComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  private getDismissReason(reason: any) {
+
   }
   openModal() {
     this.modal.show();
@@ -45,25 +43,36 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       calculate_work_disability: [''],
-      pay_deductions: [''],
-      recurring_payment: [''],
-      payment_transport_subsidy: [''],
-      affects_transportation_subsidy: [''],
-      pay_vacations: [''],
+      pay_deductions: ['', this._validators.required],
+      recurring_payment: ['', this._validators.required],
+      payment_transport_subsidy: ['', this._validators.required],
+      affects_transportation_subsidy: ['', this._validators.required],
+      pay_vacations: ['', this._validators.required],
     });
   }
 
   changePaymentConfiguration() {
     this._configuracionEmpresaService.changePaymentConfiguration(this.form.value)
       .subscribe((res: any) => {
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.form.reset();
-        Swal.fire({
+        this._swal.show({
           icon: 'success',
-          title: 'Configuración cambiada',
-          text: 'La Configuración de pago ha sido cambiada con éxito'
-        });
-      })
+          title: '¡Correcto!',
+          text: 'La configuración de pago ha sido cambiada con éxito.',
+          timer: 1000,
+          showCancel: false
+        })
+
+      },
+        err => {
+          this._swal.show({
+            title: 'ERROR',
+            text: 'Intenta nuevamente.',
+            icon: 'error',
+            showCancel: false,
+          })
+        })
   }
 
 }

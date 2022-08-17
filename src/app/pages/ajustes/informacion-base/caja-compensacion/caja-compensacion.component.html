@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nueva Caja de Compensación')"
+            (click)="openConfirm(add, 'Nueva caja de compensación')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -41,7 +41,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && compensations.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -75,15 +74,16 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item text-info waves-light caja-botones"
-                    target="_blank"
+                    href="javascript: void(0);"
                     (click)="
                       getData(compensation);
-                      openConfirm(add, 'Actualizar Caja de Compensación')
+                      openConfirm(add, 'Actualizar caja de compensación')
                     "
                     ><i class="far fa-edit"></i>Editar</a
                   >
                   <a
                     *ngIf="compensation.status == 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-danger waves-light caja-botones"
                     (click)="activateOrInactivate(compensation, 'Inactivo')"
                   >
@@ -91,6 +91,7 @@
                   >
                   <a
                     *ngIf="compensation.status == 'Inactivo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-success waves-light caja-botones"
                     (click)="activateOrInactivate(compensation, 'Activo')"
                   >
@@ -134,38 +135,40 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <label class="custom-label" for="funcionario_id">Nombre</label>
+      <div class="row">
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Nombre</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el nombre"
+            autocomplete="off"
             formControlName="name"
             required
           />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <label class="custom-label" for="funcionario_id">Código</label>
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Código</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el código"
+            autocomplete="off"
             formControlName="code"
             required
           />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <label class="custom-label" for="funcionario_id">NIT</label>
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>NIT</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el NIT"
+            autocomplete="off"
             formControlName="nit"
             required
           />
-        </div>
+        </mat-form-field>
       </div>
     </form>
   </div>

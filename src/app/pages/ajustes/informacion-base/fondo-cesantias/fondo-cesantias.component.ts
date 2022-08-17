@@ -5,6 +5,7 @@ import { ValidatorsService } from '../services/reactive-validation/validators.se
 import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from '../services/swal.service';
 
 @Component({
   selector: 'app-fondo-cesantias',
@@ -15,14 +16,14 @@ export class FondoCesantiasComponent implements OnInit {
   @ViewChild('modal') modal: any
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   loading: boolean = false;
   selected: any;
@@ -41,6 +42,7 @@ export class FondoCesantiasComponent implements OnInit {
     private _fondoCensatiasService: FondoCesantiasService,
     private fb: FormBuilder,
     private _validators: ValidatorsService,
+    private _swal: SwalService,
     private modalService: NgbModal,) { }
 
   ngOnInit(): void {
@@ -50,8 +52,8 @@ export class FondoCesantiasComponent implements OnInit {
 
   openModal() {
     this.modal.show();
-    
-    
+
+
   }
   closeResult = '';
   public openConfirm(confirm, titulo) {
@@ -62,15 +64,9 @@ export class FondoCesantiasComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+
   }
   getSeverance(severance) {
     this.severance = { ...severance }
@@ -108,46 +104,50 @@ export class FondoCesantiasComponent implements OnInit {
       id: contract.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo' ? 'El Fondo de Cesantia se inactivará!' : 'El Fondo de Cesantia se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._fondoCensatiasService.createSeveranceFunds(data)
-          .subscribe(res => {
-            this.getSeveranceFunds();
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'Fondo de Cesantia Inhabilitado!' : 'Fondo de Cesantia activado'),
-              text: (status === 'Inactivo' ? 'El Fondo de Cesantia ha sido Inhabilitado con éxito.' : 'El Fondo de Cesantia ha sido activado con éxito.'),
-              icon: 'success'
-            })
-          })
-      }
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡El fondo de cesantías se inactivará!' : '¡El fondo de cesantías se activará!'),
+      icon: 'question',
+      showCancel: true
     })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._fondoCensatiasService.createSeveranceFunds(data)
+            .subscribe(res => {
+              this.getSeveranceFunds();
+              this._swal.show({
+                icon: 'success',
+                title: (status === 'Inactivo' ? '¡Fondo de cesantías inhabilitado!' : '¡Fondo de cesantías activado!'),
+                text: (status === 'Inactivo' ? 'El fondo de cesantías ha sido nnhabilitado con éxito.' : 'El fondo de cesantías ha sido activado con éxito.'),
+                timer: 1000,
+                showCancel: false
+              })
+            })
+        }
+      })
   }
 
   createSeveranceFunds() {
     this._fondoCensatiasService.createSeveranceFunds(this.form.value)
       .subscribe((res: any) => {
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.getSeveranceFunds();
-        Swal.fire({
+        this._swal.show({
           icon: 'success',
-          title: res.data
+          title: res.data,
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
       },
-        err => {
-          Swal.fire({
-            icon: 'error',
-            title: err.error.errors.nit
-          })
-        }
+      err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Aún no puedes editar un fondo de cesantías con el mismo NIT, estamos trabajando en esto.',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
       );
   }
 

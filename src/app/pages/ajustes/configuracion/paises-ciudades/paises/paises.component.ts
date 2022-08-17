@@ -62,15 +62,9 @@ export class PaisesComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   getData(data) {
@@ -135,7 +129,7 @@ export class PaisesComponent implements OnInit {
             icon: 'success',
             title: '¡Activado!',
             text: (data.state == 'Activo' ? 'El País ha sido Activado con éxito.' : 'El País ha sido desactivado con éxito.'),
-            timer: 2500,
+            timer: 1000,
             showCancel: false
           })
         }

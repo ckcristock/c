@@ -58,15 +58,9 @@ export class PerfilesApuComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   openModal() {
@@ -119,8 +113,8 @@ export class PerfilesApuComponent implements OnInit {
   activateOrInactivate(profile, state) {
     let data = { id: profile.id, state }
     this._swal.show({
-      title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? '¡El perfil será desactivada!' : 'el perfil será Activada'),
+      title: '¿Estás seguro(a)?',
+      text: (data.state == 'Inactivo' ? '¡El perfil será desactivado!' : '¡El perfil será activado!'),
       icon: 'question',
       showCancel: true
     })
@@ -132,8 +126,8 @@ export class PerfilesApuComponent implements OnInit {
           this._swal.show({
             icon: 'success',
             title: '¡Activado!',
-            text: (data.state == 'Activo' ? 'El perfil ha sido Activada con éxito.' : 'El perfil ha sido desactivada con éxito.'),
-            timer: 2500,
+            text: (data.state == 'Activo' ? 'El perfil ha sido activado con éxito.' : 'El perfil ha sido desactivado con éxito.'),
+            timer: 1000,
             showCancel: false
           })
         }

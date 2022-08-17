@@ -75,6 +75,7 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript:void(0)"
                     (click)="
                       getProfile(item);
                       openConfirm(add, 'Actualizar perfil laboral')
@@ -84,6 +85,7 @@
                   </a>
                   <a
                     *ngIf="item.state == 'Inactivo'"
+                    href="javascript:void(0)"
                     class="dropdown-item waves-light text-success caja-botones"
                     (click)="activateOrInactivate(item, 'Activo')"
                   >
@@ -91,6 +93,7 @@
                   </a>
                   <a
                     *ngIf="item.state == 'Activo'"
+                    href="javascript:void(0)"
                     class="dropdown-item waves-light text-danger caja-botones"
                     (click)="activateOrInactivate(item, 'Inactivo')"
                   >
@@ -134,76 +137,78 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-12 px-0" appearance="outline">
-        <mat-label>Perfil</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el perfil"
-          formControlName="profile"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-4 pl-0" appearance="outline">
-        <mat-label>$/h desplazamiento diurna</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el valor por hora"
-          formControlName="value_time_daytime_displacement"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-4" appearance="outline">
-        <mat-label>$/h desplazamiento nocturna</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el valor por hora"
-          formControlName="value_time_night_displacement"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-4 pr-0" appearance="outline">
-        <mat-label>$/h ordinaria diurna</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el valor por hora"
-          formControlName="daytime_ordinary_hour_value"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-4 pl-0" appearance="outline">
-        <mat-label>$/h ordinaria nocturna</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el valor por hora"
-          formControlName="night_ordinary_hour_value"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-4" appearance="outline">
-        <mat-label>$/h dominical diurna</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el valor por hora"
-          formControlName="sunday_daytime_value"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-4 pr-0" appearance="outline">
-        <mat-label>$/h dominical nocturna</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el valor por hora"
-          formControlName="sunday_night_time_value"
-          required
-        />
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Perfil</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el perfil"
+            formControlName="profile"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h desplazamiento diurna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="value_time_daytime_displacement"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h desplazamiento nocturna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="value_time_night_displacement"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h ordinaria diurna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="daytime_ordinary_hour_value"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h ordinaria nocturna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="night_ordinary_hour_value"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h dominical diurna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="sunday_daytime_value"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h dominical nocturna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="sunday_night_time_value"
+            required
+          />
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

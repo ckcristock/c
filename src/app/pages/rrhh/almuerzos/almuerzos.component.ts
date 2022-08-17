@@ -94,15 +94,9 @@ export class AlmuerzosComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset(); this.personList.clear()
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
   estadoFiltros = false;
   mostrarFiltros() {
@@ -266,7 +260,7 @@ export class AlmuerzosComponent implements OnInit {
         this._swal.show({
           icon: 'success',
           title: 'Operación exitosa',
-          timer: 2500,
+          timer: 1000,
           text: 'Almuerzo creado con éxito',
           showCancel: false
         });
@@ -288,7 +282,7 @@ export class AlmuerzosComponent implements OnInit {
         this._swal.show({
           icon: 'success',
           title: 'Operación exitosa',
-          timer: 2500,
+          timer: 1000,
           text: 'Valor del Almuerzo editado con éxito',
           showCancel: false
         });

@@ -53,15 +53,9 @@ export class CamposTercerosComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset()
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   createForm() {
@@ -93,16 +87,16 @@ export class CamposTercerosComponent implements OnInit {
   changeState(id, state) {
     this._swal.show({
       icon: 'question',
-      title: '¿Estas Seguro?',
-      text: (state == 'Inactivo' ? '¡El campo se Anulará!' : '¡El campo se Activará!')
+      title: '¿Estás seguro(a)?',
+      text: (state == 'Inactivo' ? '¡El campo se anulará!' : '¡El campo se activará!')
     }).then((r) => {
       if (r.isConfirmed) {
         this._field.changeState({ state: state }, id).subscribe((r: any) => {
           this.getFields();
           this._swal.show({
             icon: 'success',
-            title: 'Proceso Satisfactio',
-            text: (state == 'Inactivo' ? 'El campo ha sido Anulado.' : 'El campo ha sido Activado.'),
+            title: 'Proceso satisfactorio',
+            text: (state == 'Inactivo' ? 'El campo ha sido anulado.' : 'El campo ha sido activado.'),
             showCancel: false
           });
         })

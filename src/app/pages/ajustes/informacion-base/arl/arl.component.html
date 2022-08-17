@@ -75,12 +75,13 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
-                    target="_blank"
+                    href="javascript: void(0);"
                     (click)="getData(arl); openConfirm(add, 'Actualizar ARL')"
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="arl.status == 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-danger waves-light caja-botones"
                     (click)="activateOrInactivate(arl, 'Inactivo')"
                   >
@@ -88,6 +89,7 @@
                   >
                   <a
                     *ngIf="arl.status == 'Inactivo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-success waves-light caja-botones"
                     (click)="activateOrInactivate(arl, 'Activo')"
                   >
@@ -130,41 +132,43 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el nombre"
-          formControlName="name"
-          required
-        />
-        <mat-error *ngIf="name_invalid">Campo obligatorio</mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-3" appearance="outline">
-        <mat-label>Código</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el código"
-          formControlName="accounting_account"
-          required
-        />
-        <mat-error *ngIf="accounting_account_invalid"
-          >Campo obligatorio</mat-error
-        >
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pr-0" appearance="outline">
-        <mat-label>NIT</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el NIT"
-          formControlName="nit"
-          required
-        />
-        <mat-error *ngIf="nit_invalid">Campo obligatorio</mat-error>
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            required
+          />
+          <mat-error *ngIf="name_invalid">Campo obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el código"
+            formControlName="accounting_account"
+            required
+          />
+          <mat-error *ngIf="accounting_account_invalid"
+            >Campo obligatorio</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>NIT</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el NIT"
+            formControlName="nit"
+            required
+          />
+          <mat-error *ngIf="nit_invalid">Campo obligatorio</mat-error>
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

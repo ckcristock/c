@@ -5,6 +5,7 @@ import { ValidatorsService } from '../../informacion-base/services/reactive-vali
 import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-bancos',
@@ -41,6 +42,7 @@ export class BancosComponent implements OnInit {
     private fb: FormBuilder,
     private _bancosService: BancosService,
     private _validators: ValidatorsService,
+    private _swal: SwalService,
     private modalService: NgbModal,
   ) { }
 
@@ -51,8 +53,6 @@ export class BancosComponent implements OnInit {
 
   openModal() {
     this.modal.show();
-
-
   }
 
   closeResult = '';
@@ -64,15 +64,9 @@ export class BancosComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any) {
     this.form.reset();
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+    
   }
 
   getBank(bank) {
@@ -111,11 +105,22 @@ export class BancosComponent implements OnInit {
       .subscribe((res: any) => {
         this.modalService.dismissAll();
         this.getBanks();
-        Swal.fire({
+        this._swal.show({
           icon: 'success',
-          title: res.data
+          title: res.data,
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
-      })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Ocurrió un error, intenta más tarde.',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+      )
   }
 
   activateOrInactivate(novelty, status) {
@@ -123,25 +128,24 @@ export class BancosComponent implements OnInit {
       id: novelty.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo' ? 'El Banco se inactivará!' : 'El Banco se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
-    }).then((result) => {
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡El banco se inactivará!' : '¡El banco se activará!'),
+      icon: 'question',
+      showCancel: true
+    })
+    .then((result) => {
       if (result.isConfirmed) {
         this._bancosService.createBank(data)
           .subscribe(res => {
             this.getBanks();
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'banco Inhabilitado!' : 'Banco activado'),
-              text: (status === 'Inactivo' ? 'Banco ha sido Inhabilitada con éxito.' : 'Banco ha sido activada con éxito.'),
-              icon: 'success'
-            });
+            this._swal.show({
+              icon: 'success',
+              title: (status === 'Inactivo' ? '¡Banco inhabilitado!' : '¡Banco activado!'),
+              text: (status === 'Inactivo' ? 'El banco ha sido inhabilitado con éxito.' : 'El banco ha sido activado con éxito.'),
+              timer: 1000,
+              showCancel: false
+            })
           });
       }
     });

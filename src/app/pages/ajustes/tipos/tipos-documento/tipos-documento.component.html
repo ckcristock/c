@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo Tipo de Documento')"
+            (click)="openConfirm(add, 'Nuevo tipo de documento')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -77,15 +77,16 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
-                    target="_blank"
+                    href="javascript: void(0);"
                     (click)="
                       getData(document);
-                      openConfirm(add, 'Actualizar Tipo de Documento')
+                      openConfirm(add, 'Actualizar tipo de documento')
                     "
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="document.status == 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-danger waves-light caja-botones"
                     (click)="activateOrInactivate(document, 'Inactivo')"
                   >
@@ -93,6 +94,7 @@
                   >
                   <a
                     *ngIf="document.status == 'Inactivo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-success waves-light caja-botones"
                     (click)="activateOrInactivate(document, 'Activo')"
                   >
@@ -136,42 +138,44 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Código</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el código"
-          formControlName="code"
-          autocomplete="off"
-          required
-        />
-        <mat-error *ngIf="code_invalid"> Campo obligatorio </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>Abreviatura</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa la abreviatura"
-          formControlName="abbreviation"
-          autocomplete="off"
-          required
-        />
-        <mat-error *ngIf="abbreviation_invalid"> Campo obligatorio </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-12 px-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el nombre"
-          formControlName="name"
-          autocomplete="off"
-          required
-        />
-        <mat-error *ngIf="name_invalid"> Campo obligatorio </mat-error>
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el código"
+            formControlName="code"
+            autocomplete="off"
+            required
+          />
+          <mat-error *ngIf="code_invalid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Abreviatura</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la abreviatura"
+            formControlName="abbreviation"
+            autocomplete="off"
+            required
+          />
+          <mat-error *ngIf="abbreviation_invalid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            autocomplete="off"
+            required
+          />
+          <mat-error *ngIf="name_invalid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

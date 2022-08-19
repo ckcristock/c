@@ -103,8 +103,9 @@ export class TiposRegimenComponent implements OnInit {
       this.getRegimeTypes();
       this._swal.show({
         icon: 'success',
-        title: 'Proceso Satisfactio',
-        text: 'El tipo de régimen ha sido creado con éxito.',
+        title: r.data,
+        text: '',
+        timer: 1000,
         showCancel: false
       });
     })
@@ -118,6 +119,7 @@ export class TiposRegimenComponent implements OnInit {
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
+      showCancel: true,
       text: (data.state == 'Inactivo' ? '¡El tipo de régimen de anulará!' : '¡El tipo de régimen de activará!')
     }).then((r) => {
       if (r.isConfirmed) {
@@ -125,9 +127,10 @@ export class TiposRegimenComponent implements OnInit {
           this.getRegimeTypes();
           this._swal.show({
             icon: 'success',
-            title: '¿Estás seguro(a)?',
+            title: (data.state === 'Inactivo' ? '¡Tipo de régimen inhabilitado!' : '¡Tipo de régimen activado!'),
             text: (data.state == 'Inactivo' ? 'El tipo de régimen ha sido anulado con éxito.' : 'El tipo de régimen ha sido activado con éxito.'),
-            showCancel: false
+            showCancel: false,
+            timer: 1000,
           })
         })
       }

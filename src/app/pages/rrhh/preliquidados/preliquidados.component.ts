@@ -11,83 +11,85 @@ import * as moment from 'moment';
   styleUrls: ['./preliquidados.component.scss']
 })
 export class PreliquidadosComponent implements OnInit {
-  @ViewChild('modal') modal:any;
-  preliquidados:any = []
-  loading:boolean = false;
-  diffDays:any;
-  constructor( 
-                private router: Router,
-                private _preliquidadosService:PreliquidadosService,
-                private _swal: SwalService
-              ) { }
+  @ViewChild('modal') modal: any;
+  preliquidados: any = []
+  loading: boolean = false;
+  diffDays: any;
+  constructor(
+    private router: Router,
+    private _preliquidadosService: PreliquidadosService,
+    private _swal: SwalService
+  ) { }
 
   ngOnInit(): void {
     this.getPreliquidados();
   }
-  
+
   openModal() {
     this.modal.show();
   }
-  
+
   getPreliquidados() {
     this.loading = true;
     this._preliquidadosService.getPreliquidados()
-    .subscribe( (res:any) => {
-      this.preliquidados = res.data;
-      this.loading = false;
-      for (let index = 0; index < this.preliquidados.length; index++) {
-        let fecha  = this.preliquidados[index].updated_at;
-        let InfoH  = this.cantidadDate(fecha);
-        this.preliquidados[index].updated_at = InfoH;
-      }
-    })
+      .subscribe((res: any) => {
+        this.preliquidados = res.data;
+        this.loading = false;
+        for (let index = 0; index < this.preliquidados.length; index++) {
+          let fecha = this.preliquidados[index].updated_at;
+          let InfoH = this.cantidadDate(fecha);
+          this.preliquidados[index].updated_at = InfoH;
+        }
+      })
   }
 
-  cantidadDate(fecha){
-    let now    = moment(fecha).startOf('D').fromNow();
-    let hoy    = new Date();
+  cantidadDate(fecha) {
+    let now = moment(fecha).startOf('D').fromNow();
+    let hoy = new Date();
     let fecha1 = moment(hoy, "YYYY-MM-DD HH:mm:ss");
     let fecha2 = moment(fecha, "YYYY-MM-DD HH:mm:ss");
-    let horas  = Math.abs(fecha2.diff(fecha1, 'h')); 
+    let horas = Math.abs(fecha2.diff(fecha1, 'h'));
     let tiempo = '';
-    if(horas > 24){
-      let dias   = horas/24
-          dias   = Math.trunc(dias);
-          tiempo = 'Hace ' + dias + ' Dias';     
-      if(dias > 30){
-        let meses  = dias/30;
-            meses  = Math.trunc(meses);
-            tiempo = 'Hace ' + meses + ' Meses';
-        if(meses > 12){
-          let años   = meses/12;
-              años   = Math.trunc(años);
-              tiempo = 'Hace ' + años + ' Años';     
-        }    
-      }                       
-    } else if ( horas == 0 ) {
-          tiempo = 'Hace un momento ';            
+    if (horas > 24) {
+      let dias = horas / 24
+      dias = Math.trunc(dias);
+      tiempo = 'Hace ' + dias + ' Dias';
+      if (dias > 30) {
+        let meses = dias / 30;
+        meses = Math.trunc(meses);
+        tiempo = 'Hace ' + meses + ' Meses';
+        if (meses > 12) {
+          let años = meses / 12;
+          años = Math.trunc(años);
+          tiempo = 'Hace ' + años + ' Años';
+        }
+      }
+    } else if (horas == 0) {
+      tiempo = 'Hace un momento ';
     } else {
-          tiempo = 'Hace ' + horas + ' Horas';            
+      tiempo = 'Hace ' + horas + ' Horas';
     }
-    return  {
-      'tiempo' : tiempo,
-      'horas'  : horas 
+    return {
+      'tiempo': tiempo,
+      'horas': horas
     };
   }
 
-  alert(id){
+  alert(id) {
     Swal.fire({
-      icon: 'warning',
+      icon: 'question',
       title: '¿Desea incluir los dias trabajados en la liquidación?',
       input: 'select',
       inputOptions: {
-        si: 'Si',
+        si: 'Sí',
         no: 'No'
       },
       showCancelButton: true,
-      cancelButtonColor: "#d33", 
-      cancelButtonText: "No, Dejame Comprobar", 
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
       confirmButtonText: 'Liquidar',
+      confirmButtonColor: '#A3BD30',
+      reverseButtons: true,
       showLoaderOnConfirm: true,
       allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {
@@ -97,20 +99,21 @@ export class PreliquidadosComponent implements OnInit {
     })
   }
 
-  activate(id){
+  activate(id) {
     this._swal.show({
       icon: 'question',
-      title: '¿Estas Seguro?',
-      text: 'Se dispone a Activar el empleado'
+      title: '¿Estás seguro(a)?',
+      text: 'Vamos a activar a este empleado'
     }).then((result) => {
       if (result.isConfirmed) {
-        this._preliquidadosService.activate({status : 'Activo'}, id).subscribe((r:any) => {
+        this._preliquidadosService.activate({ status: 'Activo' }, id).subscribe((r: any) => {
           this.getPreliquidados();
           this._swal.show({
             icon: 'success',
-            title: 'Proceso Satisfactorio',
-            text: 'El Funcionario ha sido activado con éxito.',
-            showCancel: false
+            title: 'Proceso finalizado',
+            text: 'El funcionario ha sido activado con éxito.',
+            showCancel: false,
+            timer: 1000
           });
         });
       }

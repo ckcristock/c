@@ -98,7 +98,8 @@ private getDismissReason(reason: any) {
         icon: 'success',
         title: r.data.title,
         text: r.data.text,
-        showCancel: false
+        showCancel: false,
+        timer: 1000
       })
     })
   }
@@ -109,8 +110,8 @@ private getDismissReason(reason: any) {
       state
     }
     this._swal.show({
-      title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? '¡El tipo de visa será desactivado!' : 'El tipo de visa será Activado'),
+      title: '¿Estás seguro(a)?',
+      text: (data.state == 'Inactivo' ? '¡El tipo de visa será desactivado!' : '¡El tipo de visa será activado!'),
       icon: 'question',
       showCancel: true
     })
@@ -121,8 +122,8 @@ private getDismissReason(reason: any) {
           })
           this._swal.show({
             icon: 'success',
-            title: '¡Activado!',
-            text: (data.state == 'Activo' ? 'El tipo de visa ha sido Activado con éxito.' : 'El tipo de visa ha sido desactivado con éxito.'),
+            title: (data.state == 'Inactivo' ? '¡Tipo de visa inhabilitada!' : '¡Tipo de visa activada!'),
+            text: (data.state == 'Activo' ? 'El tipo de visa ha sido activado con éxito.' : 'El tipo de visa ha sido desactivado con éxito.'),
             timer: 1000,
             showCancel: false
           })

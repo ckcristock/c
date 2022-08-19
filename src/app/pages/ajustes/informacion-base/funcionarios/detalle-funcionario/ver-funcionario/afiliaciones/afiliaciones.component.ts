@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { SwalService } from '../../../../services/swal.service';
 import { AfiliacionesService } from './afiliaciones.service';
 
 @Component({
@@ -30,7 +31,10 @@ export class AfiliacionesComponent implements OnInit {
     private fb: FormBuilder,
     private afiliationService: AfiliacionesService,
     private activatedRoute: ActivatedRoute,
-    private modalService: NgbModal,) { }
+    private modalService: NgbModal,
+    private _swal: SwalService,
+    )
+     { }
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
@@ -90,10 +94,13 @@ export class AfiliacionesComponent implements OnInit {
       .subscribe(res => {
         this.getAfiliationInfo();
         this.modalService.dismissAll();
-        Swal.fire({
+        this._swal.show({
+          title: 'Actualizado correctamente',
+          text: '',
           icon: 'success',
-          title: 'Actualizado correctamente'
-        })
+          showCancel: false,
+          timer: 1000
+        }) 
       });
   }
 

@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { DependenciesService } from '../../../../services/dependencies.service';
 import { GroupService } from '../../../../services/group.service';
 import { PositionService } from '../../../../services/positions.service';
+import { SwalService } from '../../../../services/swal.service';
 import { DatosEmpresaService } from './datos-empresa.service';
 
 @Component({
@@ -40,6 +41,7 @@ export class DatosEmpresaComponent implements OnInit {
     private _dependecies: DependenciesService,
     private _group: GroupService,
     private modalService: NgbModal,
+    private _swal: SwalService,
   ) { }
 
   ngOnInit(): void {
@@ -126,10 +128,13 @@ export class DatosEmpresaComponent implements OnInit {
       .subscribe(res => {
         this.getEnterpriseData();
         this.modalService.dismissAll();
-        Swal.fire({
-          icon: 'success',
+        this._swal.show({
           title: 'Actualizado correctamente',
-        });
+          text: '',
+          icon: 'success',
+          showCancel: false,
+          timer: 1000
+        }) 
       });
   }
   createForm() {

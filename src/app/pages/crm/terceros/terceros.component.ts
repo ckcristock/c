@@ -6,6 +6,7 @@ import { SwalService } from '../../ajustes/informacion-base/services/swal.servic
 import { MatAccordion } from '@angular/material/expansion';
 import { Location } from '@angular/common';
 import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+import { UserService } from 'src/app/core/services/user.service';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class TercerosComponent implements OnInit {
   camposForm = new FormControl(this.selectedCampos);
   orderObj: any
   filtrosActivos: boolean = false
-  
+
   checkFoto: boolean = true;
   campos: any[] = []
   matPanel = false;
@@ -45,14 +46,14 @@ export class TercerosComponent implements OnInit {
   listaCampos: any[] = [
     { value: 0, text: 'Foto', selected: true },
     { value: 2, text: 'Nombre', selected: true },
-    { value: 1, text: 'Documento', selected: true },    
+    { value: 1, text: 'Documento', selected: true },
     { value: 3, text: 'Dirección', selected: true },
     { value: 4, text: 'Municipio', selected: true },
     { value: 5, text: 'Teléfono', selected: true },
     { value: 6, text: 'Tipo', selected: true },
     { value: 8, text: 'Correo electrónico', selected: false },
     { value: 7, text: 'Estado', selected: true },
-    
+
   ]
 
   constructor(
@@ -62,44 +63,61 @@ export class TercerosComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private paginator: MatPaginatorIntl,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private _user: UserService
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
   }
 
+  estado: any
+  public sacarMenu(menu, state) {
+    for (let i in menu) {
+      if (menu[i]['child'].length > 0) {
+        this.sacarMenu(menu[i]['child'], state)
+      } else if (menu[i]['link'] && state.url.split('?')[0].match(menu[i]['link'])) {
+        this.estado = true
+      }
+    }
+    return this.estado
+  }
 
 
   ngOnInit(): void {
-    console.log(this.paginator);
-    for (let i in this.listaCampos){
-      if (this.listaCampos[i].selected){
-        this.selectedCampos.push(this.listaCampos[i].value)
+    let estado = this.sacarMenu(this._user.user.menu, this.router)
+    if (!estado) {
+      this.router.navigateByUrl('/notauthorized');
+    } else {
+      for (let i in this.listaCampos) {
+        if (this.listaCampos[i].selected) {
+          this.selectedCampos.push(this.listaCampos[i].value)
+        }
       }
-    }
-    this.route.queryParamMap
-      .subscribe((params) => {
-        this.orderObj = { ...params.keys, ...params };
-        for (let i in this.orderObj.params) {
-          if (this.orderObj.params[i]) {
-            if (Object.keys(this.orderObj).length > 2) {
-              this.filtrosActivos = true
+      this.route.queryParamMap
+        .subscribe((params) => {
+          this.orderObj = { ...params.keys, ...params };
+          for (let i in this.orderObj.params) {
+            if (this.orderObj.params[i]) {
+              if (Object.keys(this.orderObj).length > 2) {
+                this.filtrosActivos = true
+              }
+              this.filtros[i] = this.orderObj.params[i]
+
             }
-            this.filtros[i] = this.orderObj.params[i]
-
           }
-        }
 
-        if (this.orderObj.params.pag) {
-          this.getThirdParties(this.orderObj.params.pag);
-        } else {
-          this.getThirdParties()
-        }
+          if (this.orderObj.params.pag) {
+            this.getThirdParties(this.orderObj.params.pag);
+          } else {
+            this.getThirdParties()
+          }
 
-      }
-      );
+        }
+        );
+    }
+
   }
 
-  cambiarCampo(event){
+  cambiarCampo(event) {
     let position = event.source._keyManager._activeItemIndex
     this.listaCampos[position].selected ? this.listaCampos[position].selected = false : this.listaCampos[position].selected = true
   }

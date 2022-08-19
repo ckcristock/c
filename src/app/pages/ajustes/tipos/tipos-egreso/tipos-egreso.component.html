@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo Tipo de Egreso')"
+            (click)="openConfirm(add, 'Nuevo tipo de egreso')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -63,15 +63,16 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
-                    target="_blank"
+                    href="javascript: void(0);"
                     (click)="
                       getEgress(egress);
-                      openConfirm(add, 'Actualizar Tipo de Egreso')
+                      openConfirm(add, 'Actualizar tipo de egreso')
                     "
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="egress.status == 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-danger caja-botones"
                     (click)="activateOrInactivate(egress, 'Inactivo')"
                   >
@@ -79,6 +80,7 @@
                   >
                   <a
                     *ngIf="egress.status == 'Inactivo'"
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-success caja-botones"
                     (click)="activateOrInactivate(egress, 'Activo')"
                   >
@@ -122,36 +124,37 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="funcionario_id">Nombre</label>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el nombre"
             formControlName="name"
             required
+            autocomplete="off"
           />
-        </div>
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="funcionario_id"
-            >Cuenta Asociada</label
-          >
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cuenta asociada</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa la cuenta asociada"
             formControlName="associated_account"
             required
+            autocomplete="off"
           />
-        </div>
-        <div class="form-group col-md-12">
-          <label class="custom-label" for="funcionario_id">Tipo</label>
-          <!-- <input type="text" class="form-control form-control-sm" formControlName="type" required> -->
-          <select class="form-control form-control-sm" formControlName="type">
-            <option *ngFor="let type of egressTypes" [value]="type.valor">
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option *ngFor="let type of egressTypes" [value]="type.valor">
               {{ type.clave }}
-            </option>
-          </select>
-        </div>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </form>
   </div>

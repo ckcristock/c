@@ -163,7 +163,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
       .show({
         title: '¿Está seguro?',
         text: 'Se va a crear/actualizar el turno rotativo',
-        icon: 'warning',
+        icon: 'question',
       })
       .then((r) => {
         if (r.isConfirmed) {
@@ -188,6 +188,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
         text: 'Se ha guardado correctamente el turno',
         icon: 'success',
         showCancel: false,
+        timer: 1000
       });
       this.modalService.dismissAll(); 
       this.saved.emit();

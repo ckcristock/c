@@ -1,6 +1,6 @@
 <ng-template #modal let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Turno Rotativo</h4>
+    <h4 class="text-primary modal-title">Turno rotativo</h4>
     <button
       type="button"
       class="btn btn-sm btn-flash-border-primary ri-close-fill"
@@ -10,217 +10,157 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="forma" *ngIf="show">
-      <mat-form-field class="col-md-4 pl-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="name"
-          [class.is-invalid]="invalid_name"
-          placeholder="Ingrese el nombre del turno"
-        />
-        <mat-error *ngIf="invalid_name">
-          <small> El campo debe tener al menos 5 caracteres </small>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-3" appearance="outline">
-        <mat-label>Tolerancia de entrada</mat-label>
-        <input
-          matInput
-          type="number"
-          formControlName="entry_tolerance"
-          [class.is-invalid]="invalid_entry_tolerance"
-        />
-        <mat-error *ngIf="invalid_entry_tolerance">
-          <small
-            *ngFor="
-              let item of forma.get('entry_tolerance').errors | ObjToArrayPipe
-            "
-            class="text-danger"
-          >
-            {{ item?.msj }}
-          </small>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-3" appearance="outline">
-        <mat-label>Tolerancia de salida</mat-label>
-        <input
-          matInput
-          type="number"
-          formControlName="leave_tolerance"
-          [class.is-invalid]="invalid_leave_tolerance"
-        />
-        <mat-error *ngIf="invalid_leave_tolerance">
-          <small
-            *ngFor="
-              let item of forma.get('leave_tolerance').errors | ObjToArrayPipe
-            "
-            class="text-danger"
-          >
-            {{ item?.msj }}
-          </small>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-2 pr-0" appearance="outline">
-        <mat-label>Horas extra</mat-label>
-        <mat-select name="extras" value="0">
-          <mat-option value="0">No</mat-option>
-          <mat-option value="1">Sí</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pl-0" appearance="outline">
-        <mat-label>Hora de entrada</mat-label>
-        <input
-          matInput
-          type="time"
-          formControlName="entry_time"
-          [class.is-invalid]="invalid_entry_time"
-        />
-        <mat-error *ngIf="invalid_entry_time">
-          <small
-            *ngFor="let item of forma.get('entry_time').errors | ObjToArrayPipe"
-            class="text-danger"
-          >
-            {{ item?.msj }}
-          </small>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-3" appearance="outline">
-        <mat-label>Hora de salida</mat-label>
-        <input
-          matInput
-          type="time"
-          formControlName="leave_time"
-          [class.is-invalid]="invalid_leave_time"
-        />
-        <mat-error *ngIf="invalid_leave_time">
-          <small
-            *ngFor="let item of forma.get('leave_time').errors | ObjToArrayPipe"
-            class="text-danger"
-          >
-            {{ item?.msj }}
-          </small>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-3" appearance="outline">
-        <mat-label>Sábado</mat-label>
-        <mat-select name="extras" formControlName="saturday_id">
-          <mat-option *ngFor="let item of turns" [value]="item.value">{{
-            item.text
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pr-0" appearance="outline">
-        <mat-label>Domingo</mat-label>
-        <mat-select name="extras" formControlName="sunday_id">
-          <mat-option *ngFor="let item of turns" [value]="item.value">{{
-            item.text
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
       <div class="row">
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="name"
+            [class.is-invalid]="invalid_name"
+            placeholder="Ingresa el nombre del turno"
+            required
+          />
+          <mat-error *ngIf="invalid_name">
+            <small> El campo debe tener al menos 5 caracteres </small>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Tolerancia de entrada</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="entry_tolerance"
+            [class.is-invalid]="invalid_entry_tolerance"
+            required
+          />
+          <mat-error *ngIf="invalid_entry_tolerance">
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Tolerancia de salida</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="leave_tolerance"
+            [class.is-invalid]="invalid_leave_tolerance"
+            required
+          />
+          <mat-error *ngIf="invalid_leave_tolerance">
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-2" appearance="outline">
+          <mat-label>Horas extra</mat-label>
+          <mat-select name="extras" value="0">
+            <mat-option value="0">No</mat-option>
+            <mat-option value="1">Sí</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Hora de entrada</mat-label>
+          <input
+            matInput
+            type="time"
+            formControlName="entry_time"
+            [class.is-invalid]="invalid_entry_time"
+            required
+          />
+          <mat-error *ngIf="invalid_entry_time"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Hora de salida</mat-label>
+          <input
+            matInput
+            type="time"
+            formControlName="leave_time"
+            [class.is-invalid]="invalid_leave_time"
+            required
+          />
+          <mat-error *ngIf="invalid_leave_time"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Sábado</mat-label>
+          <mat-select name="extras" formControlName="saturday_id">
+            <mat-option *ngFor="let item of turns" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Domingo</mat-label>
+          <mat-select name="extras" formControlName="sunday_id">
+            <mat-option *ngFor="let item of turns" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <mat-checkbox class="col-md-6" formControlName="launch" color="primary"
           >Aplica lunch</mat-checkbox
         >
         <mat-checkbox class="col-md-6" formControlName="breack" color="primary"
           >Aplica break</mat-checkbox
         >
-      </div>
-
-      <div class="form-row">
-        <div class="form-group col-md-3">
-          <label class="custom-label" for="dia">Hora inicio lunch </label>
-          <input
-            type="time"
-            class="form-control"
-            formControlName="launch_time"
-          />
-          <ng-container
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Hora de inicio lunch</mat-label>
+          <input matInput type="time" formControlName="launch_time" required />
+          <mat-error
             *ngIf="
               forma.get('launch_time').invalid &&
               forma.get('launch_time').touched
             "
           >
-            <small
-              *ngFor="
-                let item of forma.get('launch_time').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </ng-container>
-        </div>
-        <div class="form-group col-md-3">
-          <label class="custom-label" for="dia">Hora fin lunch</label>
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Hora de fin lunch</mat-label>
           <input
+            matInput
             type="time"
-            class="form-control"
             formControlName="launch_time_two"
+            required
           />
-          <ng-container
+          <mat-error
             *ngIf="
               forma.get('launch_time_two').invalid &&
               forma.get('launch_time_two').touched
             "
           >
-            <small
-              *ngFor="
-                let item of forma.get('launch_time_two').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </ng-container>
-        </div>
-        <div class="form-group col-md-3">
-          <label class="custom-label" for="dia">Hora inicio break </label>
-          <input
-            type="time"
-            class="form-control"
-            formControlName="breack_time"
-          />
-          <ng-container
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Hora de inicio break</mat-label>
+          <input matInput type="time" formControlName="breack_time" required />
+          <mat-error
             *ngIf="
               forma.get('breack_time').invalid &&
               forma.get('breack_time').touched
             "
           >
-            <small
-              *ngFor="
-                let item of forma.get('breack_time').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </ng-container>
-        </div>
-        <div class="form-group col-md-3">
-          <label class="custom-label" for="dia">Hora fin break </label>
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Hora de fin break</mat-label>
           <input
+            matInput
             type="time"
-            class="form-control"
             formControlName="breack_time_two"
+            required
           />
-          <ng-container
+          <mat-error
             *ngIf="
               forma.get('breack_time_two').invalid &&
               forma.get('breack_time_two').touched
             "
           >
-            <small
-              *ngFor="
-                let item of forma.get('breack_time_two').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </ng-container>
-        </div>
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
       </div>
     </form>
   </div>
@@ -234,7 +174,7 @@
     </button>
     <button
       type="button"
-      [disabled]="forma.pristine"
+      [disabled]="!forma.valid"
       (click)="save()"
       class="btn btn-primary"
     >

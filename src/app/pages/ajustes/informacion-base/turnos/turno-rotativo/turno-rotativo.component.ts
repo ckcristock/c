@@ -60,7 +60,7 @@ export class TurnoRotativoComponent implements OnInit {
               title = 'Ha ocurrido un error';
             }
             this.getAll();
-            this._swal.show({ title, text, icon, showCancel: false });
+            this._swal.show({ title, text, icon, showCancel: false,timer: 1000 });
           });
         }
       });

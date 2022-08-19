@@ -6,6 +6,7 @@ import { consts } from 'src/app/core/utils/consts';
 import Swal from 'sweetalert2';
 import { DatosBasicosService } from '../datos-basicos/datos-basicos.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalService } from '../../../../services/swal.service';
 
 @Component({
   selector: 'app-salario',
@@ -29,7 +30,9 @@ export class SalarioComponent implements OnInit {
     private salaryService: SalarioService,
     private activateRoute: ActivatedRoute,
     private basicDataService: DatosBasicosService,
-    private modalService: NgbModal,) { }
+    private modalService: NgbModal,
+    private _swal: SwalService,
+    ) { }
 
   ngOnInit(): void {
     this.salaryService.getWorkContractType().subscribe((d: any) => {
@@ -62,7 +65,7 @@ export class SalarioComponent implements OnInit {
       type_contract: ['', Validators.required],
       salary: ['', Validators.required],
       date_of_admission: ['', Validators.required],
-      retirement_date: ['', Validators.required]
+      date_end: ['', Validators.required]
     });
   }
 
@@ -86,7 +89,7 @@ export class SalarioComponent implements OnInit {
 
   get retirement_date_valid() {
     return (
-      this.form.get('retirement_date').invalid && this.form.get('retirement_date').touched
+      this.form.get('date_end').invalid && this.form.get('date_end').touched
     );
   }
 
@@ -95,6 +98,7 @@ export class SalarioComponent implements OnInit {
     this.salaryService.getSalaryInfo(this.id)
       .subscribe((res: any) => {
         this.salary_info = res.data;
+        console.log(this.salary_info)
       });
   }
 
@@ -106,9 +110,12 @@ export class SalarioComponent implements OnInit {
       .subscribe(res => {
         this.modalService.dismissAll(); 
         this.getSalaryInfo();
-        Swal.fire({
+        this._swal.show({
+          title: 'Actualizado correctamente',
           icon: 'success',
-          title: 'Actualizado correctamente'
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
         this.basicDataService.datos$.emit()
       });

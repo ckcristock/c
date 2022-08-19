@@ -83,7 +83,7 @@ export class TurnoFijoComponent implements OnInit {
               title = 'Ha ocurrido un error';
             }
             this.getTunrs();
-            this._swal.show({ title, text, icon, showCancel: false });
+            this._swal.show({ title, text, icon, showCancel: false, timer: 1000 });
           });
         }
       });

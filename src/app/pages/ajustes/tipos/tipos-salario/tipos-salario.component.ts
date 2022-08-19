@@ -5,6 +5,7 @@ import { ValidatorsService } from '../../informacion-base/services/reactive-vali
 import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-tipos-salario',
@@ -15,14 +16,14 @@ export class TiposSalarioComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   loading: boolean = false;
   selected: any;
@@ -42,7 +43,9 @@ export class TiposSalarioComponent implements OnInit {
     private _typesSalaryService: TiposSalarioService,
     private fb: FormBuilder,
     private _reactiveValid: ValidatorsService,
-    private modalService: NgbModal,) { }
+    private modalService: NgbModal,
+    private _swal: SwalService,
+  ) { }
 
   ngOnInit(): void {
     this.getSalaryTypes();
@@ -66,7 +69,7 @@ export class TiposSalarioComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   getData(data) {
@@ -104,24 +107,22 @@ export class TiposSalarioComponent implements OnInit {
       id: contract.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo' ? 'El Salario se inactivará!' : 'El Salario se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡El salario se inactivará!' : '¡El salario se activará!'),
+      icon: 'question',
+      showCancel: true,
     }).then((result) => {
       if (result.isConfirmed) {
         this._typesSalaryService.createSalaryType(data)
           .subscribe(res => {
             this.getSalaryTypes();
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'Salario Inhabilitado!' : 'Salario activado'),
-              text: (status === 'Inactivo' ? 'El Salario ha sido Inhabilitado con éxito.' : 'El Salario ha sido activado con éxito.'),
-              icon: 'success'
+            this._swal.show({
+              title: (status === 'Inactivo' ? '¡Salario inhabilitado!' : '¡Salario activado!'),
+              text: (status === 'Inactivo' ? 'El salario ha sido inhabilitado con éxito.' : 'El salario ha sido activado con éxito.'),
+              icon: 'success',
+              showCancel: false,
+              timer: 1000
             })
           })
       }
@@ -132,13 +133,23 @@ export class TiposSalarioComponent implements OnInit {
     this._typesSalaryService.createSalaryType(this.form.value)
       .subscribe((res: any) => {
         this.getSalaryTypes();
-        this.modalService.dismissAll(); 
-        Swal.fire({
-          icon: 'success',
+        this.modalService.dismissAll();
+        this._swal.show({
           title: res.data,
-          text: 'Se ha agregado a los Salarios con éxito'
+          icon: 'success',
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
-      })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta nuevamente',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+      )
   }
 
 }

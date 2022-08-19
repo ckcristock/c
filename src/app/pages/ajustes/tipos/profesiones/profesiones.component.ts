@@ -86,8 +86,8 @@ export class ProfesionesComponent implements OnInit {
       this.form.reset();
       this.getProfessions();
       this._swal.show({
-        title: 'Creado con éxito',
-        text: "¡La Profesión ha sido creada!",
+        title: 'Creada con éxito',
+        text: "¡La profesión ha sido creada!",
         icon: 'success',
         timer: 1000,
         showCancel: false
@@ -101,10 +101,10 @@ export class ProfesionesComponent implements OnInit {
       state
     }
     this._swal.show({
-      title: '¿Estas Seguro?',
-      text: "¡La Profesión será Desactivada!",
+      title: '¿Estás seguro(a)?',
+      text: (state === 'Inactivo' ? '¡La profesión será desactivada!' : '¡La profesión será activada!'),
       icon: 'question',
-      showCancel: true
+      showCancel: true,
     })
       .then((result) => {
         if (result.isConfirmed) {
@@ -112,12 +112,12 @@ export class ProfesionesComponent implements OnInit {
             this.getProfessions();
           })
           this._swal.show({
+            title: (state === 'Inactivo' ? '¡Profesión inhabilitada!' : 'Profesión activada!'),
+            text: (state === 'Inactivo' ? 'La profesión ha sido inhabilitada con éxito.' : 'La profesión ha sido activada con éxito.'),
             icon: 'success',
-            title: '¡Proceso Satisfactorio!',
-            text: 'La Profesión ha sido Activada con éxito.',
-            timer: 1000,
-            showCancel: false
-          })
+            showCancel: false,
+            timer: 1000
+          }) 
         }
       })
   }

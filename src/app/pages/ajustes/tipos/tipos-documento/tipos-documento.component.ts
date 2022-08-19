@@ -4,6 +4,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
+import { SwalService } from '../../informacion-base/services/swal.service';
 import { TiposDocumentoService } from './tipos-documento.service';
 
 @Component({
@@ -43,6 +44,7 @@ export class TiposDocumentoComponent implements OnInit {
     private _reactiveValid: ValidatorsService,
     private _typesDocumentService: TiposDocumentoService,
     private modalService: NgbModal,
+    private _swal: SwalService,
   ) { }
 
   ngOnInit(): void {
@@ -61,7 +63,7 @@ export class TiposDocumentoComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   openModal() {
@@ -94,28 +96,27 @@ export class TiposDocumentoComponent implements OnInit {
       id: contract.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo' ? 'El Documento se inactivará!' : 'El Documento se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._typesDocumentService.createNewDocument(data)
-          .subscribe(res => {
-            this.getDocumentTypes();
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'Documento Inhabilitado!' : 'Documento activado'),
-              text: (status === 'Inactivo' ? 'El Documento ha sido Inhabilitada con éxito.' : 'El Documento ha sido activada con éxito.'),
-              icon: 'success'
-            })
-          })
-      }
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡El documento se inactivará!' : '¡El documento se activará!'),
+      icon: 'question',
+      showCancel: true,
     })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._typesDocumentService.createNewDocument(data)
+            .subscribe(res => {
+              this.getDocumentTypes();
+              this._swal.show({
+                title: (status === 'Inactivo' ? '¡Documento inhabilitado!' : '¡Documento activado!'),
+                text: (status === 'Inactivo' ? 'El documento ha sido inhabilitado con éxito.' : 'El documento ha sido activado con éxito.'),
+                icon: 'success',
+                showCancel: false,
+                timer: 1000
+              })
+            })
+        }
+      })
   }
 
 
@@ -138,13 +139,23 @@ export class TiposDocumentoComponent implements OnInit {
     this._typesDocumentService.createNewDocument(this.form.value)
       .subscribe((res: any) => {
         this.getDocumentTypes();
-        this.modalService.dismissAll(); 
-        Swal.fire({
-          icon: 'success',
+        this.modalService.dismissAll();
+        this._swal.show({
           title: res.data,
-          text: 'Se ha agregado a los tipos de contrato con éxito.'
+          icon: 'success',
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
-      })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta nuevamente',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+      )
   }
 
   get name_invalid() {

@@ -105,9 +105,10 @@ export class ResponsabilidadesFiscalesComponent implements OnInit {
       this.getFiscalResponsibility();
       this._swal.show({
         icon: 'success',
-        title: 'Proceso Satisfactio',
-        text: 'La responsabilidad fiscal ha sido creado con éxito.',
-        showCancel: false
+        title: r.data,
+        text: '',
+        showCancel: false,
+        timer: 1000
       });
     })
   }
@@ -120,16 +121,17 @@ export class ResponsabilidadesFiscalesComponent implements OnInit {
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
-      text: (data.state == 'Inactivo' ? '¡La responsabilidad fiscal de anulará!' : '¡La responsabilidad fiscal de activará!')
+      text: (data.state == 'Inactivo' ? '¡La responsabilidad fiscal se anulará!' : '¡La responsabilidad fiscal se activará!')
     }).then((r) => {
       if (r.isConfirmed) {
         this._responsabilidades.updateOrCreategetFiscalResponsibility(data).subscribe((r) => {
           this.getFiscalResponsibility();
           this._swal.show({
             icon: 'success',
-            title: '¿Estás seguro(a)?',
+            title: (data.state === 'Inactivo' ? '¡Responsabilidad fiscal inhabilitada!' : '¡Responsabilidad fiscal activada!'),
             text: (data.state == 'Inactivo' ? 'La responsabilidad fiscal ha sido anulada con éxito.' : 'La responsabilidad fiscal ha sido activada con éxito.'),
-            showCancel: false
+            showCancel: false,
+            timer: 1000
           })
         })
       }

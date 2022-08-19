@@ -4,6 +4,7 @@ import { AuthGuard } from '../core/guards/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { TaskViewComponent } from './tasks/task-view/task-view.component';
+import { NoautorizadoComponent } from './noautorizado/noautorizado.component';
 
 const routes: Routes = [
     { path: '', component: DashboardComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
     { path: 'crm',   loadChildren : () => import('./crm/crm.module').then(m => m.CrmModule )},
     { path: 'compras',   loadChildren : () => import('./compras/compras.module').then(m => m.ComprasModule )},
     { path: 'inventario', loadChildren: () => import('./inventario/inventario.module').then(m => m.InventarioModule) },
+    { path: 'notauthorized', component: NoautorizadoComponent}
 
 
 ];

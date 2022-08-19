@@ -5,6 +5,7 @@ import { ValidatorsService } from '../../informacion-base/services/reactive-vali
 import Swal from 'sweetalert2';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-tipos-riesgo',
@@ -43,6 +44,7 @@ export class TiposRiesgoComponent implements OnInit {
     private fb: FormBuilder,
     private _validatorsService: ValidatorsService,
     private modalService: NgbModal,
+    private _swal: SwalService,
 
   ) { }
 
@@ -68,7 +70,7 @@ export class TiposRiesgoComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   getData(data) {
@@ -108,10 +110,19 @@ export class TiposRiesgoComponent implements OnInit {
       .subscribe((res: any) => {
         this.modalService.dismissAll();
         this.getRiskType();
-        Swal.fire({
-          icon: 'success',
+        this._swal.show({
           title: res.data,
-          text: 'Proceso realizado satisfactoriamente'
+          icon: 'success',
+          text: '',
+          timer: 1000,
+          showCancel: false
+        })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta nuevamente',
+          icon: 'error',
+          showCancel: false,
         })
       })
   }
@@ -121,25 +132,23 @@ export class TiposRiesgoComponent implements OnInit {
       id: novelty.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo' ? 'El Riesgo se inactivará!' : 'El Riesgo se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡El riesgo se inactivará!' : '¡El riesgo se activará!'),
+      icon: 'question',
+      showCancel: true,
     }).then((result) => {
       if (result.isConfirmed) {
         this._tiposRiegoService.createRisk(data)
           .subscribe(res => {
             this.getRiskType();
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'Riesgo Inhabilitado!' : 'Riesgo activado'),
-              text: (status === 'Inactivo' ? 'El Riesgo ha sido Inhabilitado con éxito.' : 'El Riesgo ha sido activado con éxito.'),
-              icon: 'success'
-            });
+            this._swal.show({
+              title: (status === 'Inactivo' ? '¡Riesgo inhabilitado!' : '¡Riesgo activado!'),
+              text: (status === 'Inactivo' ? 'El riesgo ha sido inhabilitado con éxito.' : 'El riesgo ha sido activado con éxito.'),
+              icon: 'success',
+              showCancel: false,
+              timer: 1000
+            })
           });
       }
     });

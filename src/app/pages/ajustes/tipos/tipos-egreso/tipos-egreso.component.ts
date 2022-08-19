@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { consts } from '../../../../core/utils/consts';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-tipos-egreso',
@@ -43,7 +44,9 @@ export class TiposEgresoComponent implements OnInit {
     private _egressTypeService: TiposEgresoService,
     private _validators: ValidatorsService,
     private fb: FormBuilder,
-    private modalService: NgbModal,) { }
+    private modalService: NgbModal,
+    private _swal: SwalService,
+  ) { }
 
   ngOnInit(): void {
     this.getEgressType();
@@ -66,7 +69,7 @@ export class TiposEgresoComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
   getEgress(egress) {
     this.egress = { ...egress }
@@ -106,11 +109,22 @@ export class TiposEgresoComponent implements OnInit {
       .subscribe((res: any) => {
         this.modalService.dismissAll();
         this.getEgressType();
-        Swal.fire({
+        this._swal.show({
+          title: res.data,
           icon: 'success',
-          title: res.data
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
-      })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta nuevamente',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+      )
   }
 
   activateOrInactivate(novelty, status) {
@@ -118,25 +132,23 @@ export class TiposEgresoComponent implements OnInit {
       id: novelty.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo' ? 'El Tipo Egreso se inactivará!' : 'El Tipo Egreso se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡El tipo de egreso se inactivará!' : '¡El tipo de egreso se activará!'),
+      icon: 'question',
+      showCancel: true,
     }).then((result) => {
       if (result.isConfirmed) {
         this._egressTypeService.createEgressType(data)
           .subscribe(res => {
             this.getEgressType();
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'Tipo de Egreso Inhabilitado!' : 'Tipo de Egreso activado'),
-              text: (status === 'Inactivo' ? 'El Tipo de Egreso ha sido Inhabilitada con éxito.' : 'El tipo de Egreso ha sido activada con éxito.'),
-              icon: 'success'
-            });
+            this._swal.show({
+              title: (status === 'Inactivo' ? '¡Tipo de egreso inhabilitado!' : '¡Tipo de egreso activado!'),
+              text: (status === 'Inactivo' ? 'El tipo de egreso ha sido inhabilitado con éxito.' : 'El tipo de egreso ha sido activado con éxito.'),
+              icon: 'success',
+              showCancel: false,
+              timer: 1000
+            })
           });
       }
     });

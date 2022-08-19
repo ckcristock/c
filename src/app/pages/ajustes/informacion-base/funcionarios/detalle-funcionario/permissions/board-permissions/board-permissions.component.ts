@@ -53,7 +53,8 @@ export class BoardPermissionsComponent implements OnInit {
           icon: 'success',
           title: 'Correcto',
           text: ('Tablero asignado con éxito'),
-          showCancel: false
+          showCancel: false,
+          timer: 1000
         });
         //this._user.user.person.id == this.personId ? location.reload() : null
       })

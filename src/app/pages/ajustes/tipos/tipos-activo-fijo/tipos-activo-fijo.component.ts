@@ -228,8 +228,9 @@ export class TiposActivoFijoComponent implements OnInit {
       this.getFixedAssetTypes();
       this._swal.show({
         icon: 'success',
-        title: 'Proceso Satisfactorio',
-        text: 'El Tipo de Activo se ha creado Satisfactoriamente.',
+        title: 'Proceso finalizado',
+        text: 'El tipo de activo se ha creado satisfactoriamente.',
+        timer: 1000,
         showCancel: false
       })
     })
@@ -242,18 +243,20 @@ export class TiposActivoFijoComponent implements OnInit {
     }
     this._swal.show({
       icon: 'question',
-      title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? '¡El tipo de Activo Fijo de anulará!' : '¡El tipo de Activo Fijo de activará!')
+      showCancel: true,
+      title: '¿Estás seguro(a)?',
+      text: (data.state == 'Inactivo' ? '¡El tipo de activo fijo se anulará!' : '¡El tipo de activo fijo se activará!')
     }).then((r) => {
       if (r.isConfirmed) {
         this._tipoActivoFijo.updateOrCreateFixedAssetType(data).subscribe((r) => {
           this.getFixedAssetTypes();
           this._swal.show({
+            title: (data.state === 'Inactivo' ? '¡Tipo de activo fijo inhabilitado!' : '¡Tipo de activo fijo activada!'),
+            text: (data.state === 'Inactivo' ? 'El tipo de activo fijo ha sido inhabilitado con éxito.' : 'El tipo de activo fijo ha sido activado con éxito.'),
             icon: 'success',
-            title: '¿Estas Seguro?',
-            text: (data.state == 'Inactivo' ? 'El tipo de Activo Fijo ha sido anulado con éxito.' : 'El tipo de Activo Fijo ha sido activado con éxito.'),
-            showCancel: false
-          })
+            showCancel: false,
+            timer: 1000
+          })  
         })
       }
     });

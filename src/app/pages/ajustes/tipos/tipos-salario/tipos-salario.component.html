@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo Tipo de Salario')"
+            (click)="openConfirm(add, 'Nuevo tipo de salario')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -72,15 +72,16 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
-                    target="_blank"
+                    href="javascript: void(0);"
                     (click)="
                       getData(salary);
-                      openConfirm(add, 'Actualizar Tipo de Salario')
+                      openConfirm(add, 'Actualizar tipo de salario')
                     "
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="salary.status == 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-danger waves-light caja-botones"
                     (click)="activateOrInactivate(salary, 'Inactivo')"
                   >
@@ -88,6 +89,7 @@
                   >
                   <a
                     *ngIf="salary.status == 'Inactivo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-success waves-light caja-botones"
                     (click)="activateOrInactivate(salary, 'Activo')"
                   >
@@ -131,18 +133,20 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-12 px-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el nombre"
-          formControlName="name"
-          required
-          autocomplete="off"
-        />
-        <mat-error *ngIf="name_invalid">Campo necesario</mat-error>
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            required
+            autocomplete="off"
+          />
+          <mat-error *ngIf="name_invalid">Campo necesario</mat-error>
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

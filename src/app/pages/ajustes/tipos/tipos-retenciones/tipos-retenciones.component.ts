@@ -148,11 +148,12 @@ private getDismissReason(reason: any) {
       this.form.reset();
       this.getRetentionTypes();
       this._swal.show({
+        title: r.data,
         icon: 'success',
-        title: 'Proceso Satisfactio',
-        text: 'El tipo de Retención ha sido creado con éxito.',
+        text: '',
+        timer: 1000,
         showCancel: false
-      });
+      })
     })
   }
 
@@ -163,17 +164,19 @@ private getDismissReason(reason: any) {
     }
     this._swal.show({
       icon: 'question',
-      title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? '¡El tipo de Retención de anulará!' : '¡El tipo de Retención de activará!')
+      title: '¿Estás seguro(a)?',
+      text: (data.state == 'Inactivo' ? '¡El tipo de retención de anulará!' : '¡El tipo de retención de activará!'),
+      showCancel: true,
     }).then((r) => {
       if (r.isConfirmed) {
         this._retentionType.updateOrCreateRetentionType(data).subscribe((r) => {
           this.getRetentionTypes();
           this._swal.show({
             icon: 'success',
-            title: '¿Estas Seguro?',
-            text: (data.state == 'Inactivo' ? 'El tipo de Retención ha sido anulado con éxito.' : 'El tipo de Retención ha sido activado con éxito.'),
-            showCancel: false
+            title: (data.state == 'Inactivo' ? 'Tipo de retención inhabilitado!' : '¡Tipo de retención activado!'),
+            text: (data.state == 'Inactivo' ? 'El tipo de retención ha sido anulado con éxito.' : 'El tipo de retención ha sido activado con éxito.'),
+            showCancel: false,
+            timer: 1000
           })
         })
       }

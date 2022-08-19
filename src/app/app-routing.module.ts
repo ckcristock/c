@@ -6,13 +6,21 @@ import { AuthRoutingModule } from './auth/auth.routing';
 import { LayoutComponent } from './layouts/layout/layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
-
-
 const routes: Routes = [
 
-  {path: '',canActivate: [AuthGuard],canLoad: [AuthGuard], component: LayoutComponent, loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)
+  {
+    path: '',
+    canActivate: [AuthGuard], 
+    canLoad: [AuthGuard], 
+    component: LayoutComponent, 
+    /* canActivateChild: [AuthGuard], */
+    loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)
   },
-  { path: '**', redirectTo: '/', pathMatch: 'full' },
+  { 
+    path: '**', 
+    redirectTo: '/', 
+    pathMatch: 'full' 
+  },
 
 ];
 

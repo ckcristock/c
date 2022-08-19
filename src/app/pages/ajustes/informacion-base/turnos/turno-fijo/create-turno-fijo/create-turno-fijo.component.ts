@@ -33,7 +33,7 @@ export class CreateTurnoFijoComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
 
   week = [
@@ -86,12 +86,13 @@ export class CreateTurnoFijoComponent implements OnInit {
     if (this.forma.invalid) return false;
     this._swal
       .show({
-        title: this.id == undefined ? '¿Desea Guardar?' : '¿Desea Actulizar?',
+        title: this.id == undefined ? '¿Desea guardar?' : '¿Desea actulizar?',
         text:
           this.id == undefined
-            ? 'Se Dispone a guardar el nuevo turno'
-            : 'Se Dispone a actualizar el turno',
-        icon: 'warning',
+            ? 'Vamos a guardar el nuevo turno'
+            : 'Vamos a actualizar el turno',
+        icon: 'question',
+        showCancel: true,
       })
       .then((r) => {
         if (r.isConfirmed) {
@@ -131,8 +132,9 @@ export class CreateTurnoFijoComponent implements OnInit {
     if (code == 200) {
       this._swal.show({
         title: 'Operación exitosa',
-        text: 'Guardado Correctamente',
+        text: 'Guardado correctamente',
         icon: 'success',
+        timer: 1000,
         showCancel: false,
       });
       this.router.navigateByUrl('/ajustes/informacion-base/turnos');
@@ -188,7 +190,7 @@ export class CreateTurnoFijoComponent implements OnInit {
       }
     });
 
-    this.modalService.dismissAll(); 
+    this.modalService.dismissAll();
 
     /*  this.dayList. */
   }

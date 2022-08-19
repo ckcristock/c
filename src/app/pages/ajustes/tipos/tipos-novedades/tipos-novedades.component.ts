@@ -5,6 +5,7 @@ import { consts } from '../../../../core/utils/consts';
 import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-tipos-novedades',
@@ -38,7 +39,12 @@ export class TiposNovedadesComponent implements OnInit {
     novelty: '',
   }
   modalities = consts.modalities;
-  constructor(private _tiposNovedadesService: TiposNovedadesService, private fb: FormBuilder, private modalService: NgbModal,) { }
+  constructor(
+    private _tiposNovedadesService: TiposNovedadesService,
+    private fb: FormBuilder,
+    private modalService: NgbModal,
+    private _swal: SwalService,
+  ) { }
 
   ngOnInit(): void {
     this.getNovelties();
@@ -62,7 +68,7 @@ export class TiposNovedadesComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   getData(data) {
@@ -103,10 +109,19 @@ export class TiposNovedadesComponent implements OnInit {
       .subscribe((res: any) => {
         this.modalService.dismissAll();
         this.getNovelties();
-        Swal.fire({
-          icon: 'success',
+        this._swal.show({
           title: res.data,
-          text: 'Proceso realizado satisfactoriamente'
+          icon: 'success',
+          text: '',
+          timer: 1000,
+          showCancel: false
+        })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta nuevamente',
+          icon: 'error',
+          showCancel: false,
         })
       })
   }
@@ -116,25 +131,23 @@ export class TiposNovedadesComponent implements OnInit {
       id: novelty.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo' ? 'La novedad se inactivará!' : 'La novedad se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: (status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar')
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡La novedad se inactivará!' : '¡La novedad se activará!'),
+      icon: 'question',
+      showCancel: true,
     }).then((result) => {
       if (result.isConfirmed) {
         this._tiposNovedadesService.createNovelty(data)
           .subscribe(res => {
             this.getNovelties();
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'Novedad Inhabilitado!' : 'Novedad activado'),
-              text: (status === 'Inactivo' ? 'La novedad ha sido Inhabilitada con éxito.' : 'La novedad ha sido activada con éxito.'),
-              icon: 'success'
-            });
+            this._swal.show({
+              title: (status === 'Inactivo' ? '¡Novedad inhabilitada!' : '¡Novedad activada!'),
+              text: (status === 'Inactivo' ? 'La novedad ha sido inhabilitada con éxito.' : 'La novedad ha sido activada con éxito.'),
+              icon: 'success',
+              showCancel: false,
+              timer: 1000
+            }) 
           });
       }
     });

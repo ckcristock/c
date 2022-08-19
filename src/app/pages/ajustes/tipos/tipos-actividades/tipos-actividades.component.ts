@@ -103,7 +103,8 @@ export class TiposActividadesComponent implements OnInit {
         icon: 'success',
         title: r.data,
         text: '',
-        showCancel: false
+        showCancel: false,
+        timer: 1000
       })
     })
   }

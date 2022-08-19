@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { consts } from 'src/app/core/utils/consts';
 import Swal from 'sweetalert2';
+import { SwalService } from '../../../../services/swal.service';
 import { BonoService } from './bono.service';
 
 @Component({
@@ -27,6 +28,7 @@ export class BonoComponent implements OnInit {
     private fb: FormBuilder,
     private bonusService: BonoService,
     private modalService: NgbModal,
+    private _swal: SwalService,
   ) { }
 
   ngOnInit(): void {
@@ -44,7 +46,7 @@ export class BonoComponent implements OnInit {
     this.form.patchValue({
       countable_income_id: '',
       value: '',
-      work_contract_id: this.id
+      work_contract_id: this.id,
     });
   }
   private getDismissReason(reason: any) {
@@ -60,7 +62,8 @@ export class BonoComponent implements OnInit {
     this.form = this.fb.group({
       countable_income_id: ['', Validators.required],
       value: ['', Validators.required],
-      work_contract_id: [this.id]
+      work_contract_id: [this.id],
+      status: 1
     });
   }
 
@@ -69,25 +72,23 @@ export class BonoComponent implements OnInit {
       id: bonus.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
       text: 'El bono se inhabilitará',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: 'Si, Inhabilitar'
+      icon: 'question',
+      showCancel: true,
     }).then((result) => {
       if (result.isConfirmed) {
         this.bonusService.addBonus(data)
           .subscribe(res => {
             this.getBonusData();
-            Swal.fire({
+            this._swal.show({
               title: 'Bono inhabilitado',
               text: 'El bono ha sido inhabilitado con éxito',
-              icon: 'success'
-            })
+              icon: 'success',
+              showCancel: false,
+              timer: 1000
+            }) 
           })
       }
     })
@@ -105,6 +106,7 @@ export class BonoComponent implements OnInit {
     this.bonusService.getBonusData({ id: this.id })
       .subscribe((res: any) => {
         this.bonu = res.data;
+        console.log(this.bonu)
         this.loading = false;
       });
   }
@@ -116,11 +118,14 @@ export class BonoComponent implements OnInit {
       .subscribe(res => {
         this.modalService.dismissAll(); 
         this.getBonusData();
-        Swal.fire({
-          icon: 'success',
+        this._swal.show({
           title: 'Creado con éxito',
-          text: 'Se han actualizado los cambios correctamente'
+          icon: 'success',
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
+        
       })
   }
 

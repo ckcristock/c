@@ -43,62 +43,63 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Grupo</mat-label>
-        <mat-select
-          formControlName="group_id"
-          (selectionChange)="getDependencies($event.value)"
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Grupo</mat-label>
+          <mat-select
+            formControlName="group_id"
+            (selectionChange)="getDependencies($event.value)"
+          >
+            <mat-option *ngFor="let item of groups" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="group_valid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Dependencia</mat-label>
+          <mat-select
+            formControlName="dependency_id"
+            (selectionChange)="getPositions($event.value)"
+          >
+            <mat-option *ngFor="let item of dependencies" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="dependency_valid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Cargo</mat-label>
+          <mat-select formControlName="position_id">
+            <mat-option *ngFor="let item of positions" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="position_valid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Turno</mat-label>
+          <mat-select formControlName="turn_type">
+            <mat-option *ngFor="let item of turnos" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="turn_valid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-12"
+          appearance="outline"
+          *ngIf="turnSelected == 'Fijo'"
         >
-          <mat-option *ngFor="let item of groups" [value]="item.value">{{
-            item.text
-          }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="group_valid"> Campo obligatorio </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>Dependencia</mat-label>
-        <mat-select
-          formControlName="dependency_id"
-          (selectionChange)="getPositions($event.value)"
-        >
-          <mat-option *ngFor="let item of dependencies" [value]="item.value">{{
-            item.text
-          }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="dependency_valid"> Campo obligatorio </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Cargo</mat-label>
-        <mat-select formControlName="position_id">
-          <mat-option *ngFor="let item of positions" [value]="item.value">{{
-            item.text
-          }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="position_valid"> Campo obligatorio </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>Turno</mat-label>
-        <mat-select formControlName="turn_type">
-          <mat-option *ngFor="let item of turnos" [value]="item.value">{{
-            item.text
-          }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="turn_valid"> Campo obligatorio </mat-error>
-      </mat-form-field>
-      <mat-form-field
-        class="col-md-12 px-0"
-        appearance="outline"
-        *ngIf="turnSelected == 'Fijo'"
-      >
-        <mat-label>Turno asignado</mat-label>
-        <mat-select formControlName="fixed_turn_id">
-          <mat-option *ngFor="let item of fixed_turns" [value]="item.value">{{
-            item.text
-          }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="fixed_turn_valid"> Campo obligatorio </mat-error>
-      </mat-form-field>
+          <mat-label>Turno asignado</mat-label>
+          <mat-select formControlName="fixed_turn_id">
+            <mat-option *ngFor="let item of fixed_turns" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="fixed_turn_valid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">
@@ -111,6 +112,7 @@
     </button>
     <button
       type="button"
+      [disabled]="!form.valid"
       (click)="updateEnterpriseData()"
       class="btn btn-primary"
     >

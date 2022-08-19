@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo Tipo de Riesgo')"
+            (click)="openConfirm(add, 'Nuevo tipo de riesgo')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -52,7 +52,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && risks.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -84,15 +83,16 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item text-info waves-light caja-botones"
-                    target="_blank"
+                    href="javascript: void(0);"
                     (click)="
                       getData(risk);
-                      openConfirm(add, 'Actualizar Tipo de Riesgo')
+                      openConfirm(add, 'Actualizar tipo de riesgo')
                     "
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="risk.status == 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-danger waves-light caja-botones"
                     (click)="activateOrInactivate(risk, 'Inactivo')"
                   >
@@ -100,6 +100,7 @@
                   >
                   <a
                     *ngIf="risk.status == 'Inactivo'"
+                    href="javascript: void(0);"
                     class="dropdown-item text-success waves-light caja-botones"
                     (click)="activateOrInactivate(risk, 'Activo')"
                   >
@@ -143,39 +144,29 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="nombre_riesgo"
-            >Nombre Tipo Riesgo</label
-          >
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
-            id="nombre_riesgo"
+            placeholder="Ingresa el nombre"
             formControlName="risk_type"
             required
+            autocomplete="off"
           />
-          <!-- <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
-                        </small>
-                    </div> -->
-        </div>
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="cuenta_contable"
-            >Cuenta Contable</label
-          >
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cuenta contable</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
-            id="cuenta_contable"
+            placeholder="Ingresa la cuenta contable"
             formControlName="accounting_account"
             required
+            autocomplete="off"
           />
-          <!-- <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
-                        </small>
-                    </div> -->
-        </div>
+        </mat-form-field>
       </div>
     </form>
   </div>
@@ -187,7 +178,7 @@
     >
       Cancelar
     </button>
-    <button type="button" (click)="createRisk()" class="btn btn-primary">
+    <button type="button" [disabled]="!form.valid" (click)="createRisk()" class="btn btn-primary">
       Guardar
     </button>
   </div>

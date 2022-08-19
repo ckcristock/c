@@ -9,6 +9,7 @@ import { PersonDataService } from '../../../create/personData.service';
 import { Person } from 'src/app/core/models/person.model';
 import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalService } from '../../../../services/swal.service';
 
 @Component({
   selector: 'app-datos-basicos',
@@ -45,6 +46,7 @@ export class DatosBasicosComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private _person: PersonDataService,
     private modalService: NgbModal,
+    private _swal: SwalService,
   ) { }
   person: Person
   ngOnInit(): void {
@@ -209,11 +211,13 @@ export class DatosBasicosComponent implements OnInit {
       .subscribe(res => {
         this.modalService.dismissAll();
         this.getBasicsData();
-        Swal.fire({
+        this._swal.show({
+          title: 'Proceso finalizado',
+          text: 'Se han actualizado los cambios correctamente.',
           icon: 'success',
-          title: 'Editado con éxito',
-          text: 'Se han actualizado los cambios correctamente'
-        })
+          showCancel: false,
+          timer: 1000
+        }) 
         this.basicDataService.datos$.emit()
       });
     this.person.image = this.file;

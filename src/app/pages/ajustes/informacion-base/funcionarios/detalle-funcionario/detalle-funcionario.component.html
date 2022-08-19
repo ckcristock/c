@@ -50,6 +50,7 @@
     <div class="d-flex justify-content-end">
       <div class="btn-group rounded w-sm-100">
         <button
+          *ngIf="funcionario.status == 'Activo'"
           type="button"
           class="btn btn-danger btn-sm"
           (click)="liquidar('PreLiquidado')"
@@ -59,7 +60,7 @@
         <button
           *ngIf="user?.state == 'Activo'"
           type="button"
-          class="btn btn-secondary btn-sm"
+          class="btn btn-danger btn-sm"
           (click)="bloquear('Inactivo')"
         >
           <i class="fas fa-ban"></i> Bloquear
@@ -67,7 +68,7 @@
         <button
           *ngIf="user?.state == 'Inactivo'"
           type="button"
-          class="btn btn-success btn-sm"
+          class="btn btn-primary btn-sm"
           (click)="bloquear('Activo')"
         >
           <i class="fas fa-check"></i> Activar

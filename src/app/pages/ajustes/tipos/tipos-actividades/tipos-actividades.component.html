@@ -12,10 +12,7 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -33,7 +30,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && activityTypes.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -44,12 +40,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of activityTypes" class="text-center">
+          <tr
+            [ngClass]="{
+              'text-danger font-weight-bold': item.state == 'Cancelado'
+            }"
+            *ngFor="let item of activityTypes"
+            class="text-center"
+          >
             <td class="align-middle">{{ item.name }}</td>
             <td class="align-middle">
               <span
                 class="badge"
-                [ngStyle]="{ 'background-color': item.color, color: item.color }"
+                [ngStyle]="{
+                  'background-color': item.color,
+                  color: item.color
+                }"
                 >________</span
               >
             </td>
@@ -65,24 +70,27 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
                     (click)="
                       getActivity(item);
-                      openConfirm(add, 'Editar Tipo de Actividad')
+                      openConfirm(add, 'Editar tipo de actividad')
                     "
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="item.state == 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-danger caja-botones"
                   >
-                    <i class="far fa-trash-alt"></i> Anular</a
+                    <i class="far fa-trash-alt"></i> Anular -en desarrollo-</a
                   >
                   <a
                     *ngIf="item.state == 'Cancelado'"
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-success caja-botones"
                   >
-                    <i class="fa fa-check"></i> Activar</a
+                    <i class="fa fa-check"></i> Activar -en desarrollo-</a
                   >
                 </div>
               </div>
@@ -123,28 +131,29 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <div class="col-12">
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="">Nombre</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="name"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="actividad">Color</label>
-              <input
-                type="color"
-                class="form-control form-control-sm"
-                name="color"
-                id="actividad"
-                formControlName="color"
-              />
-            </div>
-          </div>
-        </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Color</mat-label>
+          <input
+            matInput
+            type="color"
+            name="color"
+            id="actividad"
+            formControlName="color"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
       </div>
     </form>
   </div>

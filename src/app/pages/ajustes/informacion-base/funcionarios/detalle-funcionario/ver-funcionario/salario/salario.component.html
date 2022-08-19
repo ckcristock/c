@@ -45,75 +45,77 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Tipo de contrato</mat-label>
-        <mat-select
-          [class.is-invalid]="type_contract_valid"
-          [(ngModel)]="salary_info.work_contract_type_id"
-          formControlName="type_contract"
-          id="type_contract"
-          required
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Tipo de contrato</mat-label>
+          <mat-select
+            [class.is-invalid]="type_contract_valid"
+            [(ngModel)]="salary_info.work_contract_type_id"
+            formControlName="type_contract"
+            id="type_contract"
+            required
+          >
+            <mat-option
+              *ngFor="let contract_type of contract_types"
+              [value]="contract_type.value"
+            >
+              {{ contract_type.text }}</mat-option
+            >
+          </mat-select>
+          <mat-error *ngIf="type_contract_valid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Salario</mat-label>
+          <input
+            matInput
+            type="number"
+            pattern="([0-9]{1,3}).([0-9]{1,3})"
+            placeholder="Ingresa el salario"
+            [class.is-invalid]="salary_valid"
+            [(ngModel)]="salary_info.salary"
+            formControlName="salary"
+            id="funcionario_id"
+            required
+            autocomplete="off"
+          />
+          <mat-error *ngIf="salary_valid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Fecha de ingreso</mat-label>
+          <input
+            matInput
+            type="date"
+            [class.is-invalid]="date_of_admission_valid"
+            [(ngModel)]="salary_info.date_of_admission"
+            formControlName="date_of_admission"
+            id="fecha_ingreso"
+            required
+          />
+          <mat-error *ngIf="date_of_admission_valid">
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-6"
+          appearance="outline"
+          *ngIf="salary_info.work_contract_type_id == 2"
         >
-          <mat-option
-            *ngFor="let contract_type of contract_types"
-            [value]="contract_type.value"
-          >
-            {{ contract_type.text }}</mat-option
-          >
-        </mat-select>
-        <mat-error *ngIf="type_contract_valid"> Campo obligatorio </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pr-0" appearance="outline">
-        <mat-label>Salario</mat-label>
-        <input
-          matInput
-          type="number"
-          pattern="([0-9]{1,3}).([0-9]{1,3})"
-          placeholder="Ingresa el salario"
-          [class.is-invalid]="salary_valid"
-          [(ngModel)]="salary_info.salary"
-          formControlName="salary"
-          id="funcionario_id"
-          required
-          autocomplete="off"
-        />
-        <mat-error *ngIf="salary_valid"> Campo obligatorio </mat-error>
-      </mat-form-field>
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Fecha de ingreso</mat-label>
-        <input
-          matInput
-          type="date"
-          [class.is-invalid]="date_of_admission_valid"
-          [(ngModel)]="salary_info.date_of_admission"
-          formControlName="date_of_admission"
-          id="fecha_ingreso"
-          required
-        />
-        <mat-error *ngIf="date_of_admission_valid">
-          Campo obligatorio
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field
-        class="col-md-6 pr-0"
-        appearance="outline"
-        *ngIf="salary_info.work_contract_type_id == 2"
-      >
-        <mat-label>Fecha de retiro</mat-label>
-        <input
-          matInput
-          type="date"
-          [class.is-invalid]="retirement_date_valid"
-          [(ngModel)]="salary_info.date_end"
-          formControlName="retirement_date"
-          id="fecha_retiro"
-          required
-        />
-        <mat-error *ngIf="retirement_date_valid"> Campo obligatorio </mat-error>
-      </mat-form-field>
-      <mat-checkbox id="flexCheckDefault" color="primary"
-        >¿Pagar auxilio?</mat-checkbox
-      >
+          <mat-label>Fecha de retiro</mat-label>
+          <input
+            matInput
+            type="date"
+            [class.is-invalid]="retirement_date_valid"
+            [(ngModel)]="salary_info.date_end"
+            formControlName="date_end"
+            id="fecha_retiro"
+            required
+          />
+          <mat-error *ngIf="retirement_date_valid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-checkbox class="col-md-12" id="flexCheckDefault" color="primary"
+          >¿Pagar auxilio?</mat-checkbox
+        >
+      </div>
     </form>
   </div>
   <div class="modal-footer">

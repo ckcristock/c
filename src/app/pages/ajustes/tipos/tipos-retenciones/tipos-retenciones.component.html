@@ -12,10 +12,7 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -33,7 +30,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && retentionTypes.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -72,12 +68,14 @@
                       getRetention(item);
                       openConfirm(add, 'Editar tipo de retención')
                     "
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-info caja-botones"
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="item.state == 'Inactivo'"
+                    href="javascript: void(0);"
                     (click)="activateOrInactivate(item, 'Activo')"
                     class="dropdown-item waves-light text-success caja-botones"
                   >
@@ -85,6 +83,7 @@
                   >
                   <a
                     *ngIf="item.state == 'Activo'"
+                    href="javascript: void(0);"
                     (click)="activateOrInactivate(item, 'Inactivo')"
                     class="dropdown-item waves-light text-danger caja-botones"
                   >
@@ -129,48 +128,58 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <div class="col-12">
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="">Nombre Retención</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="name"
-              />
-            </div>
-            <div class="form-group col-md-4">
-              <label for="">Tipo Retención</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="account_plan_id"
-                (change)="getTipo()"
-                [ngbTypeahead]="search"
-                [resultFormatter]="resultFormatBandListValue"
-                [inputFormatter]="inputFormatBandListValue"
-                [editable]="false"
-              />
-            </div>
-            <div class="form-group col-md-4">
-              <label for="">Porcentaje</label>
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                formControlName="percentage"
-              />
-            </div>
-            <div class="form-group col-12">
-              <label for="">Descripción</label>
-              <textarea
-                class="form-control form-control-sm"
-                cols="30"
-                rows="4"
-                formControlName="description"
-              ></textarea>
-            </div>
-          </div>
-        </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el tipo"
+            formControlName="account_plan_id"
+            (change)="getTipo()"
+            [ngbTypeahead]="search"
+            [resultFormatter]="resultFormatBandListValue"
+            [inputFormatter]="inputFormatBandListValue"
+            [editable]="false"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Porcentaje</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el porcentaje"
+            formControlName="percentage"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Descripción</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa la descripción"
+            rows="5"
+            formControlName="description"
+            required
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+        </mat-form-field>
       </div>
     </form>
   </div>

@@ -67,6 +67,7 @@
                     (click)="
                       getRegime(item); openConfirm(add, 'Editar tipo de régimen')
                     "
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-info caja-botones"
                   >
                     <i class="far fa-edit"></i> Editar</a
@@ -74,6 +75,7 @@
                   <a
                     *ngIf="item.state == 'Inactivo'"
                     (click)="activateOrInactivate(item, 'Activo')"
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-success caja-botones"
                   >
                     <i class="fa fa-check"></i> Activar</a
@@ -81,6 +83,7 @@
                   <a
                     *ngIf="item.state == 'Activo'"
                     (click)="activateOrInactivate(item, 'Inactivo')"
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-danger caja-botones"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -123,17 +126,19 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-12 px-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el nombre"
-          required
-          formControlName="name"
-          autocomplete="off"
-        />
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            required
+            formControlName="name"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

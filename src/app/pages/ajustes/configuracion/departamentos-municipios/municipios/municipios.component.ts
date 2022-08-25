@@ -2,7 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DepartmentService } from 'src/app/core/services/department.service';
 import Swal from 'sweetalert2';
+import { SwalService } from '../../../informacion-base/services/swal.service';
+import { DepartamentosService } from '../departamentos/departamentos.service';
 import { MunicipiosService } from './municipios.service';
 
 @Component({
@@ -14,14 +17,14 @@ export class MunicipiosComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   loading: boolean = false;
 
@@ -41,11 +44,17 @@ export class MunicipiosComponent implements OnInit {
     department: ''
   }
 
-  constructor(private municipioService: MunicipiosService, private modalService: NgbModal,) { }
+  constructor(
+    private municipioService: MunicipiosService,
+    private modalService: NgbModal,
+    private departamentoService: DepartmentService,
+    private _swal: SwalService,
+  ) { }
 
   ngOnInit(): void {
     this.getAllMunicipalities();
     this.getMunicipalities();
+    this.getDepartaments();
   }
 
 
@@ -64,20 +73,19 @@ export class MunicipiosComponent implements OnInit {
         if (res.code === 200) {
           this.getAllMunicipalities();
           this.modalService.dismissAll();
-          Swal.fire({
-            title: 'Operación exitosa',
-            text: 'Felicidades, se ha registrado el nuevo Municipio',
+          this._swal.show({
+            title: res.data,
             icon: 'success',
-            allowOutsideClick: false,
-            allowEscapeKey: false
+            text: '',
+            timer: 1000,
+            showCancel: false
           })
         } else {
-          Swal.fire({
-            title: 'UPS',
-            text: 'Algunos datos ya existen en la base de datos',
+          this._swal.show({
+            title: 'ERROR',
             icon: 'error',
-            allowOutsideClick: false,
-            allowEscapeKey: false
+            text: 'Algunos datos ya existen en la base de datos',
+            showCancel: false
           })
         }
       });
@@ -88,6 +96,13 @@ export class MunicipiosComponent implements OnInit {
       .subscribe((res: any) => {
         this.munic = res.data;
       });
+  }
+  dep: any[]
+  getDepartaments() {
+    this.departamentoService.getDepartments().subscribe((res: any) => {
+      this.dep = res.data
+      console.log(res)
+    })
   }
 
   openModalM() {
@@ -110,7 +125,7 @@ export class MunicipiosComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   getAllMunicipalities(page = 1) {

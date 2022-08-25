@@ -31,6 +31,7 @@ export class RightsidebarComponent implements OnInit {
     private _user: UserService,
     private http: HttpClient,
     private sanitizer: DomSanitizer,
+    private router: Router,
     public fb: FormBuilder,
     private _texteditor: TexteditorService,) {}
 
@@ -49,6 +50,10 @@ export class RightsidebarComponent implements OnInit {
             this.pendientes[i].descripcion = this.sanitizer.bypassSecurityTrustHtml(atob(this.pendientes[i].descripcion))
           }
         });
+  }
+
+  route(id){
+    this.router.navigate(["task", id]);
   }
 
   public hide() {

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { TaskService } from '../../ajustes/informacion-base/services/task.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
@@ -13,7 +13,6 @@ import { TexteditorService } from '../../ajustes/informacion-base/services/texte
   styleUrls: ['./task-view.component.scss']
 })
 export class TaskViewComponent implements OnInit {
-
   estado: any;
   idtask: any;
   taskdata: any;
@@ -21,7 +20,14 @@ export class TaskViewComponent implements OnInit {
   fechaActual: any;
   horaActual: any;
   realizador: any;
+  myComment: any;
+  commentSave: any;
+  comments = []
+  deleteCommentStatus: any
+  adjuntos: any;
+  link: any;
   datePipe = new DatePipe('es-CO');
+
   constructor(
     private _task: TaskService,
     private router: Router,
@@ -32,26 +38,22 @@ export class TaskViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.idtask = params.get('id');
+      this.taskView();
+    });
     this.obtenerAdjuntos();
     this.nuevoComentario();
     this.getComment();
     this.date = Date();
     this.fechaActual = this.datePipe.transform(this.date, 'yyyy-MM-dd');
     this.horaActual = this.datePipe.transform(this.date, 'hh:mm a');
-    this.taskView()
-  }
-
-  //descripcion:any;
-  myComment: any;
-  commentSave: any;
-  comments = []
-  deleteCommentStatus: any
+  }  
 
   deleteComment(commentId) {
     this._task.deleteComment(commentId).subscribe(
       (d: any) => {
         this.deleteCommentStatus = d.code
-        console.log(this.deleteCommentStatus)
       }
     )
     this.getComment()
@@ -67,7 +69,6 @@ export class TaskViewComponent implements OnInit {
         this.comments = d.data;
         for (let i in d.data) {
           this.comments[i].comentario = this.sanitizer.bypassSecurityTrustHtml(atob(this.comments[i].comentario))
-          
           if (d.data[i].id_person == this._user.user.person.id) {
             this.comments[i].deleteItem = true
           } else {
@@ -82,6 +83,7 @@ export class TaskViewComponent implements OnInit {
       comentario: new FormControl(),
     });
   }
+
   saveComment() {
     var fecha = Date();
     fecha = this.datePipe.transform(fecha, 'yyyy-MM-dd HH:mm:ss')
@@ -101,6 +103,7 @@ export class TaskViewComponent implements OnInit {
       }
     )
   }
+
   updateArchivada() {
     this._task.updateArchivada(this.route.snapshot.paramMap.get("id")).subscribe()
     this.taskView()
@@ -111,8 +114,6 @@ export class TaskViewComponent implements OnInit {
     this.router.navigate(["/task"])
   }
 
-  adjuntos: any;
-  link: any;
   obtenerAdjuntos() {
     this._task.obtenerAdjuntos(this.route.snapshot.paramMap.get("id")).subscribe(
       (d: any) => {
@@ -127,18 +128,18 @@ export class TaskViewComponent implements OnInit {
       }
     )
   }
+  
   abrirBlob(blob) {
     window.open(blob);
   }
 
   taskView() {
-    this.idtask = this.route.snapshot.paramMap.get("id");
     this._task.taskView(this.idtask).subscribe(
       (d: any) => {
         if (d.data[0].id_realizador == this._user.user.person.id || d.data[0].id_asignador == this._user.user.person.id) {
           this.taskdata = d.data[0];
           this.taskdata.descripcion = this.sanitizer.bypassSecurityTrustHtml(atob(this.taskdata.descripcion))
-          if(this.taskdata.descripcion.changingThisBreaksApplicationSecurity == 'null'){
+          if (this.taskdata.descripcion.changingThisBreaksApplicationSecurity == 'null') {
             this.taskdata.descripcion.changingThisBreaksApplicationSecurity = 'Ups, no existe una descripción para esta tarea'
           }
           this.taskdata.adjuntos = atob(this.taskdata.adjuntos)

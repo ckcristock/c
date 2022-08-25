@@ -6,118 +6,106 @@
     </div>
     <hr class="line" />
     <form #FormActivoFijo="ngForm">
-      <div class="form-row mb-2 f-10">
-        <div class="col-md-2">
-          <div class="form-group">
-            <label for="fecha">Fecha</label>
-            <input
-              type="date"
-              name="fecha"
-              id="fecha"
-              [(ngModel)]="ActivoFijoModel.Fecha"
-              (change)="getCodigo($event.target.value)"
-              class="form-control form-control-sm"
-            />
-          </div>
-        </div>
-        <div class="col-md-2">
-          <div class="form-group">
-            <label for="nit_empresa">Nit</label>
-            <input
-              class="form-control form-control-sm"
-              name="nit_empresa"
-              id="nit_empresa"
-              (change)="AsignarTercero()"
-              (blur)="validarCampo(TerceroSeleccionado, $event, 'Nit')"
-              [(ngModel)]="TerceroSeleccionado"
-              type="text"
-              placeholder="Nombre o NIT"
-              [ngbTypeahead]="search_tercero"
-              required
-              [resultTemplate]="rt_tercero"
-              [inputFormatter]="formatter_tercero"
-              autocomplete="off"
-            />
-          </div>
-        </div>
-        <div class="col-md-2">
-          <div class="form-group">
-            <label for="nombre">Nombre Activo</label>
-            <input
-              type="text"
-              style="text-transform: uppercase"
-              class="form-control form-control-sm"
-              name="Nombre"
-              id="nombre"
-              (change)="AsignarConcepto()"
-              required
-              [(ngModel)]="ActivoFijoModel.Nombre"
-            />
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label for="documento">Documento</label>
-            <input
-              style="text-transform: uppercase"
-              type="text"
-              name="documento"
-              id="documento"
-              (change)="AsignarConcepto()"
-              [(ngModel)]="ActivoFijoModel.Documento"
-              class="form-control form-control-sm"
-            />
-          </div>
-        </div>
-        <div class="col-md-2">
-          <div class="form-group">
-            <label for="concepto">Concepto</label>
-            <input
-              style="text-transform: uppercase"
-              type="text"
-              name="concepto"
-              id="concepto"
-              [(ngModel)]="ActivoFijoModel.Concepto"
-              class="form-control form-control-sm"
-              readonly
-            />
-          </div>
-        </div>
-        <div class="col-md-3" *ngIf="Crear">
-          <div class="form-group">
-            <label for="tipo_activo">Tipo Activo</label>
-            <select
-              name="Id_Tipo_Activo_Fijo"
-              id="tipo_activo"
-              class="form-control form-control-sm"
-              required
-              [(ngModel)]="ActivoFijoModel.Id_Tipo_Activo_Fijo"
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha</mat-label>
+          <input
+            matInput
+            type="date"
+            name="fecha"
+            id="fecha"
+            [(ngModel)]="ActivoFijoModel.Fecha"
+            (change)="getCodigo($event.target.value)"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>NIT</mat-label>
+          <input
+            matInput
+            name="nit_empresa"
+            id="nit_empresa"
+            (change)="AsignarTercero()"
+            (blur)="validarCampo(TerceroSeleccionado, $event, 'NIT')"
+            [(ngModel)]="TerceroSeleccionado"
+            type="text"
+            placeholder="Ingresa nombre o NIT"
+            [ngbTypeahead]="search_tercero"
+            required
+            [resultTemplate]="rt_tercero"
+            [inputFormatter]="formatter_tercero"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre de activo</mat-label>
+          <input
+            matInput
+            type="text"
+            class="text-uppercase"
+            name="Nombre"
+            id="nombre"
+            placeholder="Ingresa nombre de activo"
+            (change)="AsignarConcepto()"
+            required
+            [(ngModel)]="ActivoFijoModel.Nombre"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Documento</mat-label>
+          <input
+            matInput
+            type="text"
+            class="text-uppercase"
+            name="documento"
+            placeholder="Ingresa documento"
+            id="documento"
+            (change)="AsignarConcepto()"
+            [(ngModel)]="ActivoFijoModel.Documento"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Concepto</mat-label>
+          <input
+            matInput
+            type="text"
+            class="text-uppercase"
+            name="concepto"
+            id="concepto"
+            [(ngModel)]="ActivoFijoModel.Concepto"
+            readonly
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline" *ngIf="Crear">
+          <mat-label>Tipo de activo</mat-label>
+          <mat-select
+            name="Id_Tipo_Activo_Fijo"
+            id="tipo_activo"
+            required
+            [(ngModel)]="ActivoFijoModel.Id_Tipo_Activo_Fijo"
+          >
+            <mat-option
+              *ngFor="let ta of TipoActivos"
+              [value]="ta.Id_Tipo_Activo_Fijo"
             >
-              <option value="" selected>Seleccione tipo</option>
-              <option
-                *ngFor="let ta of TipoActivos"
-                [value]="ta.Id_Tipo_Activo_Fijo"
-              >
-                {{ ta.Nombre_Tipo_Activo }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-3" *ngIf="!Crear">
-          <div class="form-group">
-            <label for="tipo_activo">Tipo Activo</label>
-            <input
-              style="text-transform: uppercase"
-              type="text"
-              name="Tipo_activo"
-              id="Tipo_Activo"
-              [(ngModel)]="ActivoFijoModel.Tipo_Activo"
-              readonly
-              class="form-control form-control-sm"
-            />
-          </div>
-        </div>
+              {{ ta.Nombre_Tipo_Activo }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline" *ngIf="!Crear">
+          <mat-label>Tipo de activo</mat-label>
+          <input
+            matInput
+            type="text"
+            name="Tipo_activo"
+            id="Tipo_Activo"
+            [(ngModel)]="ActivoFijoModel.Tipo_Activo"
+            readonly
+            class="text-uppercase"
+          />
+        </mat-form-field>
+      </div>
+      <div class="form-row mb-2 f-10">
         <div class="col-md-3" *ngIf="Crear">
           <div class="form-group">
             <label for="tipo_activo">C. Costo</label>

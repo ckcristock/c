@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { SwalService } from '../../../informacion-base/services/swal.service';
 import { DepartamentosService } from './departamentos.service';
 
 @Component({
@@ -39,7 +40,11 @@ export class DepartamentosComponent implements OnInit {
   filtro: any = {
     name: ''
   }
-  constructor(private depService: DepartamentosService, private modalService: NgbModal,) { }
+  constructor(
+    private depService: DepartamentosService, 
+    private modalService: NgbModal,
+    private _swal: SwalService,
+    ) { }
 
   ngOnInit(): void {
     this.getAllDepartment();
@@ -88,12 +93,12 @@ export class DepartamentosComponent implements OnInit {
     if (this.form.invalid) { return false; }
     this.depService.createNewDepartment(this.department)
       .subscribe((res: any) => {
-        Swal.fire({
-          title: 'Operación exitosa',
-          text: 'Felicidades, se ha registrado el nuevo Departamento',
+        this._swal.show({
+          title: 'Agregada correctamente',
           icon: 'success',
-          allowOutsideClick: false,
-          allowEscapeKey: false
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
         this.getAllDepartment();
         this.modalService.dismissAll(); 

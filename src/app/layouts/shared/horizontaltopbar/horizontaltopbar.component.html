@@ -73,9 +73,11 @@
                 <h6 class="m-0">Notificaciones</h6>
               </div>
               <div class="col-auto">
-                <a 
-              [routerLink]="['/rrhh/alertas-comun',this.user.person.id]" 
-              class="small">Ver todas</a>
+                <a
+                  [routerLink]="['/rrhh/alertas-comun', this.user.person.id]"
+                  class="small"
+                  >Ver todas</a
+                >
               </div>
             </div>
           </div>
@@ -83,10 +85,12 @@
             style="position: relative; height: 330px"
             [config]="configData"
           >
-          <ng-container *ngIf=" alerts.length ; else notData">
-              <a *ngFor="let notification of alerts" 
-              (click)="modalAlert.show(notification)"
-              class="text-reset notification-item">
+            <ng-container *ngIf="alerts.length; else notData">
+              <a
+                *ngFor="let notification of alerts"
+                (click)="modalAlert.show(notification)"
+                class="text-reset notification-item"
+              >
                 <div class="media">
                   <img
                     [src]="notification.image"
@@ -96,7 +100,9 @@
                   <div class="media-body">
                     <h6 class="mt-0 mb-1">{{ notification.title }}</h6>
                     <div class="font-size-12 text-muted">
-                      <p class="mb-1">{{ notification.description |minWords }}</p>
+                      <p class="mb-1">
+                        {{ notification.description | minWords }}
+                      </p>
                       <p class="mb-0">
                         <i class="mdi mdi-clock-outline"></i
                         >{{ notification.created_at | date }}
@@ -105,13 +111,13 @@
                   </div>
                 </div>
               </a>
-          </ng-container>
+            </ng-container>
           </perfect-scrollbar>
           <div class="p-2 border-top">
             <a
               class="btn btn-sm btn-link font-size-14 btn-block text-center"
               href="javascript:void(0)"
-              [routerLink]="['/rrhh/alertas-comun',user.id]" 
+              [routerLink]="['/rrhh/alertas-comun', user.id]"
             >
               <i class="mdi mdi-arrow-right-circle mr-1"></i> Ver Más
             </a>
@@ -130,17 +136,19 @@
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <img *ngIf="imageProfile != null"
+          <img
+            *ngIf="imageProfile != null"
             class="rounded-circle header-profile-user"
             [src]="imageProfile"
             alt="Header Avatar"
           />
-          <img *ngIf="imageProfile == null"
+          <img
+            *ngIf="imageProfile == null"
             class="rounded-circle header-profile-user"
             src="../../../../assets/images/noprofile.png"
             alt="Header Avatar"
           />
-              
+
           <span class="d-none d-xl-inline-block ml-1"
             >{{ user.person.first_name }} {{ user.person.first_surname }}</span
           >
@@ -161,10 +169,14 @@
       </div>
 
       <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect" (click)="onSettingsButtonClicked()">
-                  <i class="ri-todo-line"></i>
-                </button>
-            </div>
+        <button
+          type="button"
+          class="btn header-item noti-icon right-bar-toggle waves-effect"
+          (click)="onSettingsButtonClicked()"
+        >
+          <i class="ri-todo-line"></i>
+        </button>
+      </div>
     </div>
   </div>
 </header>
@@ -173,6 +185,4 @@
   <app-not-data [loading]="false" [text]="'Sin notificaciones'"></app-not-data>
 </ng-template>
 
-<app-modal-alert #modalAlert>
-
-</app-modal-alert>
+<app-modal-alert #modalAlert> </app-modal-alert>

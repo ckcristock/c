@@ -39,7 +39,7 @@
     </mat-accordion>
     <div class="rounded-top table-responsive">
       <table
-        class="table table-bordered table-striped table-sm"
+        class="table table-bordered table-striped table-sm mb-0"
         *ngIf="!loading && materials.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -94,22 +94,15 @@
         </tbody>
       </table>
     </div>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      (pageChange)="getMaterials($event)"
-      aria-label="Default pagination"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
+    <mat-paginator
+      *ngIf="paginacion"
+      [length]="paginacion.total"
+      [pageSize]="paginacion.per_page"
+      [pageIndex]="paginacion.current_page - 1"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
     >
-    </ngb-pagination>
+    </mat-paginator>
   </div>
 </div>
 
@@ -433,9 +426,7 @@
 <ng-template #sinDatos>
   <tr>
     <td colspan="100%" class="text-center">
-      <div class="alert alert-danger" role="alert">
-        Sin datos agregados
-      </div>
+      <div class="alert alert-danger" role="alert">Sin datos agregados</div>
     </td>
   </tr>
 </ng-template>

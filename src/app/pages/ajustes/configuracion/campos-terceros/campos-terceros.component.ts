@@ -81,6 +81,13 @@ export class CamposTercerosComponent implements OnInit {
       this.modalService.dismissAll();
       this.form.reset();
       this.getFields();
+      this._swal.show({
+        title: r.data,
+        icon: 'success',
+        text: '',
+        timer: 1000,
+        showCancel: false
+      })
     })
   }
 
@@ -88,6 +95,7 @@ export class CamposTercerosComponent implements OnInit {
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
+      showCancel: true,
       text: (state == 'Inactivo' ? '¡El campo se anulará!' : '¡El campo se activará!')
     }).then((r) => {
       if (r.isConfirmed) {
@@ -95,9 +103,10 @@ export class CamposTercerosComponent implements OnInit {
           this.getFields();
           this._swal.show({
             icon: 'success',
-            title: 'Proceso satisfactorio',
+            title: (state === 'Inactivo' ? '¡Campo inhabilitado!' : '¡Campo activado!'),
             text: (state == 'Inactivo' ? 'El campo ha sido anulado.' : 'El campo ha sido activado.'),
-            showCancel: false
+            showCancel: false,
+            timer: 1000
           });
         })
       }

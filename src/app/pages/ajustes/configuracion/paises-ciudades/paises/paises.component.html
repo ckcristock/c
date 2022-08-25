@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo País')"
+            (click)="openConfirm(add, 'Nuevo país')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -41,7 +41,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && paises.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -71,13 +70,14 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
-                    target="_blank"
-                    (click)="getData(pais); openConfirm(add, 'Editar País')"
+                    href="javascript: void(0);"
+                    (click)="getData(pais); openConfirm(add, 'Editar país')"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
                   <a
                     *ngIf="pais.state == 'Inactivo'"
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-success"
                     (click)="activateOrInactivate(pais, 'Activo')"
                   >
@@ -85,6 +85,7 @@
                   </a>
                   <a
                     *ngIf="pais.state == 'Activo'"
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-danger"
                     (click)="activateOrInactivate(pais, 'Inactivo')"
                   >
@@ -128,22 +129,22 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <label class="custom-label" for="funcionario_id">Nombre País</label>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el nombre"
             formControlName="name"
             name="name"
             required
+            autocomplete="off"
           />
-          <div class="col-md-7 offset-4">
-            <small class="invalid text-danger" *ngIf="name_invalid">
-              Es necesario el nombre del País
-            </small>
-          </div>
-        </div>
+          <mat-error *ngIf="name_invalid">
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
       </div>
     </form>
   </div>

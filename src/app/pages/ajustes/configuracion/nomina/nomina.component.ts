@@ -34,6 +34,7 @@ export class NominaComponent implements OnInit {
   }
   getIncapacidades() {
     this._nominaConfig.getIncapacidades().subscribe((r:any)=>{
+      console.log(r)
       this.incapacidadesDatos = r
     })
   }

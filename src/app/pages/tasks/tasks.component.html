@@ -1,9 +1,9 @@
 <div class="d-flex justify-content-between">
-  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-tabs mx-3">
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-tabs">
     <li [ngbNavItem]="1">
       <a ngbNavLink>Administrador de tareas</a>
       <ng-template ngbNavContent>
-        <div class="container mt-4">
+        <div class="mt-4">
           <div class="row" cdkDropListGroup>
             <div class="col-3">
               <div class="card">
@@ -287,11 +287,7 @@
     <li [ngbNavItem]="2">
       <a ngbNavLink>Calendario</a>
       <ng-template ngbNavContent>
-        <div class="container mt-4">
-          <!--  -->
-        </div>
-
-        <div class="col-8 mx-auto">
+        <div class="mt-4">
           <div class="card">
             <div class="card-body">
               <div class="row">
@@ -355,7 +351,7 @@
     <li [ngbNavItem]="3">
       <a ngbNavLink>Tareas asignadas por mí</a>
       <ng-template ngbNavContent>
-        <div class="container mt-4">
+        <div class="mt-4">
           <div class="card">
             <div class="card-body">
               <div class="row">
@@ -459,7 +455,7 @@
     <li [ngbNavItem]="4">
       <a ngbNavLink>Mis tareas archivadas</a>
       <ng-template ngbNavContent>
-        <div class="container mt-4">
+        <div class="mt-4">
           <div class="card">
             <div class="card-body">
               <div class="row">
@@ -543,131 +539,123 @@
     </div>
 
     <div class="modal-body">
-      <div class="row p-1">
-        <div class="col-md-6 form-group">
-          <label>Nombre de la tarea</label>
-          <input
-            type="text"
-            class="form-control"
-            name="nombre"
-            required
-            placeholder="Nombre de la tarea"
-            formControlName="nombre"
-            autocomplete="off"
-          />
-        </div>
-
-        <div class="col-md-6 form-group">
-          <label>Tipo de tarea</label>
-          <ng-select
-            [items]="_task.tipo"
-            name="tipo"
-            bindLabel="name"
-            bindValue="{{ _task.tipo.name }}"
-            placeholder="Seleccione"
-            formControlName="tipo"
-          >
-          </ng-select>
-        </div>
-      </div>
-
-      <div class="row p-1">
-        <div class="col-md-6 form-group">
-          <label>Asignar tarea a:</label>
-          <ng-select
-            [items]="_task.person"
-            required
-            bindLabel="name"
-            bindValue="{{ _task.person.id }}"
-            [placeholder]="_task.person == 0 ? 'Seleccione' : 'Select'"
-            name="id_asignador"
-            loadingText="loading"
-            formControlName="id_asignador"
-            ngDefaultControl
-          >
-          </ng-select>
-        </div>
-
-        <div class="col-md-3 form-group">
-          <label for="validationServerUsername">Fecha</label>
-          <input
-            type="date"
-            class="form-control"
-            id="validationServerUsername"
-            name="fecha"
-            placeholder="Ingrese la fecha"
-            required
-            formControlName="fecha"
-          />
-        </div>
-
-        <div class="col-md-3 form-group">
-          <label for="exampleInput">Hora</label>
-          <input
-            type="time"
-            class="form-control"
-            id="exampleInput"
-            name="hora"
-            placeholder="HH:mm:ss"
-            required
-            formControlName="hora"
-          />
-        </div>
-      </div>
-
-      <div class="row p-1">
-        <div class="col-md-12 form-group">
-          <label for="exampleFormControlTextarea1">Descripción</label>
-          <ckeditor
-            [editor]="_texteditor.Editor"
-            (ready)="_texteditor.onReady($event)"
-            [config]="_texteditor.configEditor"
-            name="descripcion"
-            formControlName="descripcion"
-          ></ckeditor>
-        </div>
-      </div>
-
-      <div class="row p-1">
+      <div class="row">
         <div class="col-md-6">
-          <label>Adjuntar archivos</label>
-          <div class="custom-file">
-            <input
-              multiple
-              type="file"
-              class="custom-file-input"
-              id="customFileLang"
-              value="Elegir"
-              (change)="_task.onChange($event)"
-            />
-            <label class="custom-file-label" for="customFileLang"
-              >Seleccionar Archivo</label
-            >
+          <div class="row">
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Nombre</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa el nombre de la tarea"
+                required
+                name="nombre"
+                formControlName="nombre"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Tipo</mat-label>
+              <mat-select formControlName="tipo" name="tipo" required>
+                <mat-option
+                  *ngFor="let item of _task.tipo"
+                  [value]="item.name"
+                  >{{ item.name }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Fecha</mat-label>
+              <input
+                matInput
+                type="date"
+                placeholder="Ingresa la fecha"
+                required
+                name="fecha"
+                id="validationServerUsername"
+                formControlName="fecha"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Hora</mat-label>
+              <input
+                matInput
+                type="time"
+                placeholder="HH:mm:ss"
+                required
+                name="hora"
+                id="exampleInput"
+                formControlName="hora"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <div class="col-md-12">
+              <input
+                multiple
+                class="d-none"
+                type="file"
+                id="customFileLang"
+                (change)="_task.onChange($event)"
+              />
+              <label
+                for="customFileLang"
+                role="button"
+                class="btn btn-primary btn-block"
+                >Adjuntar archivos</label
+              >
+            </div>
+            <div class="col-md-12">
+              <ul class="list-group" *ngFor="let item of _task.file">
+                <li class="list-group-item">
+                  <div class="d-flex justify-content-between">
+                    <p>{{ item.name }}</p>
+                    <div (click)="_task.eliminarAdjunto(item.id)">
+                      <button
+                        class="btn btn-outline-danger btn-sm rounded-2"
+                        type="button"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Delete"
+                      >
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
-
-          <!-- <button (click)="onUpload()" class="btn btn-success">
-                      Upload
-                  </button> -->
         </div>
         <div class="col-md-6">
-          <ul class="list-group" *ngFor="let item of _task.file">
-            <li class="list-group-item">
-              <div class="d-flex justify-content-between">
-                <p>{{ item.name }}</p>
-                <div (click)="_task.eliminarAdjunto(item.id)">
-                  <button
-                    class="btn btn-outline-danger btn-sm rounded-2"
-                    type="button"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Delete"
-                  >
-                    <i class="fa fa-trash"></i>
-                  </button>
-                </div>
-              </div>
-            </li>
-          </ul>
+          <div class="row">
+            <div class="col-md-12">
+              <ng-select
+                [items]="_task.person"
+                required
+                bindLabel="name"
+                placeholder="Asignar a"
+                bindValue="{{ _task.person.id }}"
+                name="id_asignador"
+                loadingText="loading"
+                appearance="outline"
+                [appendTo]="'body'"
+                formControlName="id_asignador"
+                ngDefaultControl
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-12">
+              <ckeditor
+                [editor]="_texteditor.Editor"
+                (ready)="_texteditor.onReady($event)"
+                [config]="_texteditor.configEditor"
+                name="descripcion"
+                aria-placeholder="Ingrese la descripción"
+                formControlName="descripcion"
+              ></ckeditor>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -693,7 +681,7 @@
       </div>
       <button
         type="button"
-        class="btn btn-outline-dark"
+        class="btn btn-primary"
         [disabled]="
           _task.myGroup.value.nombre === '' || _task.myGroup.value.fecha === ''
         "

@@ -27,7 +27,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && fields.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -76,12 +75,14 @@
                   <a
                     *ngIf="field.state == 'Activo'"
                     (click)="changeState(field.id, 'Inactivo')"
+                    href="javascript: void(0);"
                     class="dropdown-item waves-light text-danger caja-botones"
                   >
                     <i class="far fa-trash-alt"></i> Anular
                   </a>
                   <a
                     *ngIf="field.state == 'Inactivo'"
+                    href="javascript: void(0);"
                     (click)="changeState(field.id, 'Activo')"
                     class="dropdown-item waves-light text-success caja-botones"
                   >
@@ -109,41 +110,44 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="">Nombre</label>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
           <input
+            matInput
             type="text"
-            class="form-control form-control-sm"
+            placeholder="Ingresa el nombre"
             formControlName="name"
+            required
+            autocomplete="off"
           />
-        </div>
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="">Tipo</label>
-          <select class="form-control form-control-sm" formControlName="type">
-            <option *ngFor="let tipo of tipos" [value]="tipo.valor">
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option *ngFor="let tipo of tipos" [value]="tipo.valor">
               {{ tipo.clave }}
-            </option>
-          </select>
-        </div>
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="">Requerido</label>
-          <select
-            class="form-control form-control-sm"
-            formControlName="required"
-          >
-            <option value="Si">Si</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-        <div class="form-group col-md-6">
-          <label class="custom-label" for="">Longitud</label>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Requerido</mat-label>
+          <mat-select formControlName="required" required>
+            <mat-option value="Si">Sí</mat-option>
+            <mat-option value="No">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Longitud</mat-label>
           <input
+            matInput
             type="number"
-            class="form-control form-control-sm"
+            placeholder="Ingresa la longitud"
             formControlName="length"
+            required
+            autocomplete="off"
           />
-        </div>
+        </mat-form-field>
       </div>
     </form>
   </div>

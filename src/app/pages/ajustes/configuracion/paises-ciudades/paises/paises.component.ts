@@ -101,10 +101,12 @@ export class PaisesComponent implements OnInit {
       .subscribe((res: any) => {
         this.getCountries();
         this.modalService.dismissAll();
-        Swal.fire({
-          icon: 'success',
+        this._swal.show({
           title: res.data,
-          text: 'Se ha agregado a los paises con éxito.'
+          icon: 'success',
+          text: '',
+          timer: 1000,
+          showCancel: false
         })
       })
   }
@@ -115,8 +117,8 @@ export class PaisesComponent implements OnInit {
       state
     }
     this._swal.show({
-      title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? '¡El País será Desactivado!' : 'El País será Activado'),
+      title: '¿Estás seguro(a)?',
+      text: (data.state == 'Inactivo' ? '¡El país será desactivado!' : '¡El país será activado!'),
       icon: 'question',
       showCancel: true
     })
@@ -127,8 +129,8 @@ export class PaisesComponent implements OnInit {
           })
           this._swal.show({
             icon: 'success',
-            title: '¡Activado!',
-            text: (data.state == 'Activo' ? 'El País ha sido Activado con éxito.' : 'El País ha sido desactivado con éxito.'),
+            title: (data.state == 'Inactivo' ? '¡País inhabilitado!' : '¡País activado!'),
+            text: (data.state == 'Activo' ? 'El país ha sido activado con éxito.' : 'El país ha sido desactivado con éxito.'),
             timer: 1000,
             showCancel: false
           })

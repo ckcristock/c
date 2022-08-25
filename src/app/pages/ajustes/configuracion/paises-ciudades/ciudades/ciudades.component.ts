@@ -117,10 +117,12 @@ export class CiudadesComponent implements OnInit {
       this.modalService.dismissAll();
       this.form.reset();
       this.getCities();
+      console.log(r)
       this._swal.show({
+        title: r.data,
         icon: 'success',
-        title: '¡Creado!',
-        text: 'La ciudad ha sido creada satisfactoriamente',
+        text: '',
+        timer: 1000,
         showCancel: false
       })
     })
@@ -133,7 +135,7 @@ export class CiudadesComponent implements OnInit {
     }
     this._swal.show({
       title: '¿Estás seguro(a)?',
-      text: "¡La ciudad será desactivada!",
+      text: (data.state === 'Inactivo' ? '¡La ciudad se inactivará!' : '¡La ciudad se activará!'),
       icon: 'question',
       showCancel: true
     })
@@ -144,8 +146,8 @@ export class CiudadesComponent implements OnInit {
           })
           this._swal.show({
             icon: 'success',
-            title: '¡Activada!',
-            text: 'La ciudad ha sido activada con éxito.',
+            title: (data.state === 'Inactivo' ? '¡Ciudad inhabilitada!' : '¡Ciudad activada!'),
+            text: (data.state === 'Inactivo' ? 'La ciudad ha sido inhabilitada con éxito.' : 'La ciudad ha sido activada con éxito.'),
             timer: 1000,
             showCancel: false
           })

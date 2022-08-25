@@ -8,8 +8,8 @@
       (click)="modal.dismiss('Cross click')"
     ></button>
   </div>
-  <form #FormPrestamo="ngForm" (ngSubmit)="save()">
-    <div class="modal-body">
+  <div class="modal-body">
+    <form #FormPrestamo="ngForm" (ngSubmit)="save()">
       <div class="row">
         <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Empleado</mat-label>
@@ -188,21 +188,25 @@
           ></textarea>
         </mat-form-field>
       </div>
-    </div>
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-default"
-        (click)="modal.dismiss('Cross click')"
-      >
-        Cancelar
-      </button>
-      <button class="btn btn-primary" [disabled]="!FormPrestamo.valid">
-        <i class="fa fa-save"></i>
-        Guardar
-      </button>
-    </div>
-  </form>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="save()"
+      [disabled]="!FormPrestamo.valid"
+    >
+      <i class="fa fa-save"></i>
+      Guardar
+    </button>
+  </div>
 </ng-template>
 
 <ng-template #rt3 let-r="result" let-t="term">

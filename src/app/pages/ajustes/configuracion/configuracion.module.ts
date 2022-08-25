@@ -30,6 +30,8 @@ import { SSocialEmpresaConfigComponent } from './nomina/components/s-social-empr
 import { IncapacidadesConfigComponent } from './nomina/components/incapacidades-config/incapacidades-config.component';
 import { ParafiscalesConfigComponent } from './nomina/components/parafiscales-config/parafiscales-config.component';
 import { RiesgoArlConfigComponent } from './nomina/components/riesgo-arl-config/riesgo-arl-config.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -69,6 +71,8 @@ import { RiesgoArlConfigComponent } from './nomina/components/riesgo-arl-config/
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
   ]
 })
 export class ConfiguracionModule { }

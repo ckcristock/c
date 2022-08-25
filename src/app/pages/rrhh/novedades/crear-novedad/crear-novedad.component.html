@@ -1,6 +1,6 @@
 <ng-template #modal let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Crear/Editar Novedad</h4>
+    <h4 class="text-primary modal-title">Crear o editar novedad</h4>
     <button
       type="button"
       class="btn btn-sm btn-flash-border-primary ri-close-fill"
@@ -8,10 +8,10 @@
       (click)="modal.dismiss('Cross click')"
     ></button>
   </div>
-  <form [formGroup]="form" (ngSubmit)="save()">
-    <div class="modal-body">
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="save()">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col mb-4">
           <ng-select
             formControlName="person_id"
             [items]="people"
@@ -28,7 +28,7 @@
             Es nesario el funcionario
           </small>
         </div>
-        <div class="col-md-4">
+        <div class="col mb-4">
           <ng-select
             formControlName="disability_leave_id"
             [items]="disabilityLeaves"
@@ -49,7 +49,7 @@
             Es nesaria la novedad
           </small>
         </div>
-        <mat-form-field class="col-md-4" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de novedad</mat-label>
           <input
             matInput
@@ -60,25 +60,23 @@
             autocomplete="off"
           />
         </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field class="col-md-3" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha de inicio</mat-label>
           <input matInput type="date" formControlName="date_start" />
           <mat-error *ngIf="date_start_invalid">Campo obligatorio</mat-error>
         </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label># días</mat-label>
           <input matInput type="number" formControlName="number_days" />
           <mat-error *ngIf="number_days_invalid">Campo obligatorio</mat-error>
         </mat-form-field>
-        <mat-form-field class="col-md-3" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha de fin</mat-label>
           <input matInput type="date" formControlName="date_end" readonly />
           <mat-error *ngIf="date_end_invalid">Campo obligatorio</mat-error>
         </mat-form-field>
         <mat-form-field
-          class="col-md-3"
+          class="col"
           appearance="outline"
           *ngIf="vacationSelected == true"
         >
@@ -107,16 +105,18 @@
           <mat-error *ngIf="observation_invalid">Campo obligatorio</mat-error>
         </mat-form-field>
       </div>
-    </div>
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-default"
-        (click)="modal.dismiss('Cross click')"
-      >
-        Cancelar
-      </button>
-      <button type="submit" class="btn btn-primary">Guardar</button>
-    </div>
-  </form>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button type="submit" (click)="save()" class="btn btn-primary">
+      Guardar
+    </button>
+  </div>
 </ng-template>

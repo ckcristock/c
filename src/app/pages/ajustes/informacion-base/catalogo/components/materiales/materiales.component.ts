@@ -8,7 +8,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import { throwIfEmpty } from 'rxjs/operators';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-materiales',
@@ -38,7 +38,7 @@ export class MaterialesComponent implements OnInit {
   SubCategorias: any[] = [];
   Producto: any = {};
   DotationType: any[] = [];
-
+  paginacion: any
 
   thicknesses: any[] = [];
   material: any = {};
@@ -58,7 +58,10 @@ export class MaterialesComponent implements OnInit {
     private _materials: MaterialesService,
     private _swal: SwalService,
     private modalService: NgbModal,
-  ) { }
+    private paginator: MatPaginatorIntl,
+  ) {
+    this.paginator.itemsPerPageLabel = "Items por página:";
+  }
 
   ngOnInit(): void {
     console.log(this.cardBorder)
@@ -121,12 +124,16 @@ export class MaterialesComponent implements OnInit {
     });
   }
 
+  handlePageEvent(event: PageEvent) {
+    this.getMaterials(event.pageIndex + 1)
+  }
+
   get fieldDinamic() {
     return this.form.get('dynamic') as FormArray;
   }
 
   closeResult = '';
-  
+
   public openConfirm(confirm, titulo) {
     this.title = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
@@ -141,7 +148,7 @@ export class MaterialesComponent implements OnInit {
     this.thicknessList.clear();
     this.fieldList.clear();
     this.getThicknesses();
-    
+
   }
 
   openModal() {
@@ -149,12 +156,12 @@ export class MaterialesComponent implements OnInit {
   }
 
   closeModalVer() {
-    this.modalService.dismissAll(); 
+    this.modalService.dismissAll();
     this.fieldList.clear();
   }
 
   closeModal() {
-    this.modalService.dismissAll(); 
+    this.modalService.dismissAll();
     this.form.reset();
     this.thicknessList.clear();
     this.fieldList.clear();
@@ -314,6 +321,7 @@ export class MaterialesComponent implements OnInit {
     this._materials.getMaterials(params).subscribe((r: any) => {
       this.materials = r.data.data;
       this.loading = false;
+      this.paginacion = r.data
       this.pagination.collectionSize = r.data.total;
     })
   }
@@ -322,7 +330,7 @@ export class MaterialesComponent implements OnInit {
     if (this.form.get('id').value) {
       this._materials.update(this.form.value, this.material.id).subscribe((r: any) => {
         this.form.reset();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.thicknessList.clear();
         this.fieldList.clear();
         this.getMaterials();
@@ -336,7 +344,7 @@ export class MaterialesComponent implements OnInit {
     } else {
       this._materials.save(this.form.value).subscribe((r: any) => {
         this.form.reset();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.thicknessList.clear();
         this.fieldList.clear();
         this.getMaterials();

@@ -11,7 +11,7 @@
   <div class="modal-body">
     <form [formGroup]="forma">
       <div class="row">
-        <mat-form-field class="col-md-8" appearance="outline">
+        <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Plan de cuenta</mat-label>
           <input
             matInput
@@ -26,7 +26,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <div class="col-md-4 mt-3">
+        <div class="col-md-4 d-flex align-items-center">
           <h6>${{ forma.get("initial_balance").value | currency: "":"" }}</h6>
           <input
             id="typeahead-format"

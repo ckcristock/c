@@ -36,6 +36,11 @@ export class VerPresupuestoComponent implements OnInit {
       title: 'Se dispone a descargar el presupuesto',
       input: 'select',
       showCancelButton: true,
+      confirmButtonColor: '#A3BD30',
+      confirmButtonText: '¡Sí, confirmar!',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
       inputValidator: (value) => {
         return new Promise((resolve) => {
           if (value) {

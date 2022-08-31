@@ -122,6 +122,7 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item text-info waves-light caja-botones"
+                    href="javascript:void(0)"
                     (click)="
                       EditarCentroCosto(item.Id_Centro_Costo); openConfirm(edit)
                     "
@@ -130,6 +131,7 @@
                   >
                   <a
                     class="dropdown-item text-danger waves-light caja-botones"
+                    href="javascript:void(0)"
                     [swal]="{
                       title: 'Eliminar',
                       text: 'Se dispone a eliminar el centro de costo.\n¿Está seguro(a)?',
@@ -144,6 +146,7 @@
                   >
                   <a
                     class="dropdown-item waves-light caja-botones"
+                    href="javascript:void(0)"
                     [ngClass]="{
                       'text-success': item.Estado == 'Inactivo',
                       'text-danger': item.Estado == 'Activo'

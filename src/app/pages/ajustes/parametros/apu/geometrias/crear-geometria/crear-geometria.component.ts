@@ -126,7 +126,8 @@ export class CrearGeometriaComponent implements OnInit {
             icon: 'success',
             title: 'Actualizado correctamente',
             text: 'Se ha actualizado la geometria correctamente',
-            showCancel: false
+            showCancel: false,
+            timer: 1000,
           })
           this.router.navigate(['/ajustes/parametros/apu/geometrias']);
         })
@@ -136,7 +137,8 @@ export class CrearGeometriaComponent implements OnInit {
             icon: 'success',
             title: 'Creación exitosa',
             text: 'Se ha creado la geometria correctamente',
-            showCancel: false
+            showCancel: false,
+            timer: 1000,
           })
           this.router.navigate(['/ajustes/parametros/apu/geometrias']);
         })

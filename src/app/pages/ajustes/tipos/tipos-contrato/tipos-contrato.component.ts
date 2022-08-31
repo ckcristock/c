@@ -144,7 +144,7 @@ export class TiposContratoComponent implements OnInit {
         this._swal.show({
           title: res.data,
           icon: 'success',
-          text: 'Se ha agregado con éxito.',
+          text: '',
           timer: 1000,
           showCancel: false
         })

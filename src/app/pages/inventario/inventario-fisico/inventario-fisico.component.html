@@ -79,6 +79,7 @@
                       documento.Estado == 'Pendiente Primer Conteo' &&
                       documento.Tipo == 'General'
                     "
+                    href="javascript:void(0)"
                     [routerLink]="[
                       '/inventario/inventario-estibas',
                       documento.Id_Doc_Inventario_Fisico
@@ -92,6 +93,7 @@
                       documento.Estado == 'Segundo Conteo' &&
                       documento.Tipo == 'General'
                     "
+                    href="javascript:void(0)"
                     [swal]="{
                       title: '¿Está Seguro?',
                       text: 'Ingrese su cédula para ajustar el inventario',
@@ -108,7 +110,7 @@
                       )
                     "
                   >
-                    <i class="ti-printer"></i> Ajustar Documentos
+                    <i class="ti-printer"></i> Ajustar documentos
                   </a>
                   <a
                     class="dropdown-item waves-light caja-botones"
@@ -124,6 +126,7 @@
                       confirmButtonText: 'Confirmar',
                       cancelButtonText: 'Cancelar'
                     }"
+                    href="javascript:void(0)"
                     (confirm)="
                       AccionInventario(
                         '/inventario/reconteo-estiba',
@@ -149,11 +152,12 @@
                       confirmButtonText: 'Confirmar',
                       cancelButtonText: 'Cancelar'
                     }"
+                    href="javascript:void(0)"
                     (confirm)="
                       CambiarEstadoDocumento('Haciendo Primer Conteo', documento)
                     "
                   >
-                    <i class="ti-printer"></i> Cambiar Estado Primer Conteo
+                    <i class="ti-printer"></i> Cambiar estado primer conteo
                   </a>
                   <!-- cambiar estados -->
                   <a
@@ -171,11 +175,12 @@
                       cancelButtonText: 'Cancelar',
                       type: 'warning'
                     }"
+                    href="javascript:void(0)"
                     (confirm)="
                       CambiarEstadoDocumento('Haciendo Segundo Conteo', documento)
                     "
                   >
-                    <i class="ti-printer"></i> Cambiar Estado Segundo Conteo
+                    <i class="ti-printer"></i> Cambiar estado segundo conteo
                   </a>
                   <!-- /*
                         Estados para inventario auditable
@@ -187,8 +192,9 @@
                       documento.Tipo == 'Auditoria'
                     "
                     (click)="continuarConteo(documento)"
+                    href="javascript:void(0)"
                   >
-                    <i class="ti-printer"></i> Continuar Conteo
+                    <i class="ti-printer"></i> Continuar conteo
                   </a>
                   <a
                     class="dropdown-item waves-light caja-botones"
@@ -204,6 +210,7 @@
                       confirmButtonText: 'Confirmar',
                       cancelButtonText: 'Cancelar'
                     }"
+                    href="javascript:void(0)"
                     (confirm)="
                       AccionInventario(
                         '/ajustedocumentosauditables',
@@ -213,7 +220,7 @@
                       )
                     "
                   >
-                    <i class="ti-printer"></i> Ajustar Documentos
+                    <i class="ti-printer"></i> Ajustar documentos
                   </a>
                   <a
                     class="dropdown-item waves-light caja-botones"
@@ -229,6 +236,7 @@
                       confirmButtonText: 'Confirmar',
                       cancelButtonText: 'Cancelar'
                     }"
+                    href="javascript:void(0)"
                     (confirm)="
                       AccionInventario(
                         '/reconteoCustom',
@@ -246,6 +254,7 @@
                       miPerfil == '16' &&
                       documento.Tipo == 'Auditoria'
                     "
+                    href="javascript:void(0)"
                     [swal]="{
                       title: '¿Está Seguro ?',
                       text: 'Va a cambiar el estado a Pendiente Primer Conteo',
@@ -257,7 +266,7 @@
                       CambiarEstadoDocumento('Haciendo Primer Conteo', documento)
                     "
                   >
-                    <i class="ti-printer"></i> Cambiar Estado Primer Conteo
+                    <i class="ti-printer"></i> Cambiar estado primer conteo
                   </a>
                   <a
                     class="dropdown-item waves-light caja-botones"
@@ -266,6 +275,7 @@
                       miPerfil == '16' &&
                       documento.Tipo == 'Auditoria'
                     "
+                    href="javascript:void(0)"
                     [swal]="{
                       title: '¿Está Seguro ?',
                       text: 'Va a cambiar el estado a Primer Conteo',
@@ -278,7 +288,7 @@
                       CambiarEstadoDocumento('Haciendo Segundo Conteo', documento)
                     "
                   >
-                    <i class="ti-printer"></i> Cambiar Estado Segundo Conteo
+                    <i class="ti-printer"></i> Cambiar estado segundo conteo
                   </a>
                 </div>
               </div>

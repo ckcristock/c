@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card col-md-8 mx-auto">
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
@@ -36,6 +36,7 @@
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
             <th class="col-1">Color</th>
+            <th class="col-1">Estado</th>
             <th class="col-1">Acciones</th>
           </tr>
         </thead>
@@ -57,6 +58,17 @@
                 }"
                 >________</span
               >
+            </td>
+            <td>
+              <span
+                [ngClass]="
+                  item.state == 'Cancelado'
+                    ? 'badge badge-danger'
+                    : 'badge badge-primary'
+                "
+              >
+                {{ item.state }}
+              </span>
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -80,17 +92,19 @@
                   >
                   <a
                     *ngIf="item.state == 'Activo'"
+                    (click)="CambiarEstadoTipo(item.id, 'Cancelado')"
                     href="javascript: void(0);"
                     class="dropdown-item waves-light text-danger caja-botones"
                   >
-                    <i class="far fa-trash-alt"></i> Anular -en desarrollo-</a
+                    <i class="far fa-trash-alt"></i> Anular</a
                   >
                   <a
                     *ngIf="item.state == 'Cancelado'"
+                    (click)="CambiarEstadoTipo(item.id, 'Activo')"
                     href="javascript: void(0);"
                     class="dropdown-item waves-light text-success caja-botones"
                   >
-                    <i class="fa fa-check"></i> Activar -en desarrollo-</a
+                    <i class="fa fa-check"></i> Activar</a
                   >
                 </div>
               </div>
@@ -142,7 +156,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col" appearance="legacy">
           <mat-label>Color</mat-label>
           <input
             matInput

@@ -1,40 +1,30 @@
 <ng-container [formGroup]="forma">
-  <div class="row" formArrayName="items">
-    <div class="col-md-12 text-center m-4">
-      <h5>Elementos del presupuesto</h5>
-    </div>
+  <div formArrayName="items">
+    <h5 class="text-center">Elementos del presupuesto</h5>
     <ng-container *ngIf="items.controls.length; else notData">
-      <div class="card" *ngFor="let item of items.controls; let i = index">
-        <div class="card-header header-item w-100">
-          <div class="d-flex align-items-center justify-content-between">
-            <h4>
-              <span class="badge badge-primary">{{ i + 1 }}</span>
-            </h4>
-            <span class="text-center">
-              <strong>ITEM {{ i + 1 }} </strong></span
-            >
-            <span class="text-center">
-              <i
-                ngbTooltip="Eliminar Item"
-                (click)="deleteItem(i)"
-                class="text-danger fas fa-trash-alt bg-white"
-              ></i>
-            </span>
-          </div>
+      <div *ngFor="let item of items.controls; let i = index">
+        <div class="d-flex align-items-center justify-content-between">
+          <h4>
+            <span class="badge badge-primary">{{ i + 1 }}</span>
+          </h4>
+          <span class="text-center">
+            <strong>ITEM {{ i + 1 }} </strong></span
+          >
+          <span class="text-center">
+            <i
+              ngbTooltip="Eliminar Item"
+              (click)="deleteItem(i)"
+              class="text-danger fas fa-trash-alt bg-white"
+            ></i>
+          </span>
         </div>
-        <div
-          style="overflow-x: auto"
-          class="items table-responsive"
-          class="card-body py-0"
-        >
+        <div class="rounded-top table-responsive">
           <table
             [formGroupName]="i"
-            width="100%"
-            cellspacing="0"
-            class="table table-bordered table-sm table-items"
+            class="table table-bordered table-striped table-sm text-nowrap"
           >
             <thead>
-              <tr>
+              <tr class="text-center text-uppercase table-primary">
                 <th class="align-middle" colspan="7">Costos Directos</th>
                 <th
                   class="align-middle"
@@ -96,10 +86,9 @@
                   Prorrateo de Valores
                 </th>
                 <th></th>
-
                 <th></th>
               </tr>
-              <tr>
+              <tr class="text-center text-uppercase">
                 <th class="align-middle">#</th>
                 <th class="align-middle">Tipo</th>
                 <th class="align-middle">Descripción</th>
@@ -114,11 +103,9 @@
                     {{ item.text }}
                   </th>
                 </ng-container>
-
                 <th class="align-middle" title="Subtotal Indirectos">
                   SubT. Indirectos
                 </th>
-
                 <ng-container *ngIf="item.controls.shows.value.sum_others">
                   <th class="align-middle">%</th>
                   <th class="align-middle">AMD</th>
@@ -127,7 +114,6 @@
                   <th class="align-middle">%</th>
                   <th class="align-middle">Utilidad</th>
                 </ng-container>
-
                 <th class="align-middle">ADM+IMP+UTI</th>
                 <th class="align-middle">Otros Cargos</th>
                 <ng-container *ngIf="item.controls.shows.value.total_sale">
@@ -143,7 +129,6 @@
                   <th class="align-middle">V/U Venta Prorr. COP</th>
                   <th class="align-middle">V/U Venta Prorr. USD</th>
                 </ng-container>
-
                 <th class="align-middle">Observ.</th>
                 <th class="align-middle"></th>
               </tr>
@@ -182,16 +167,14 @@
                       </td>
                       <td class="align-middle">
                         <!--  <input type="text" style="width:280px" formControlName="description"
-                                                    class="form-control form-control-sm" /> -->
+                                                      class="form-control form-control-sm" /> -->
                         <!--  <input id="typeahead-focus" type="text" class="form-control"
-                                                    [(ngModel)]="model" [ngbTypeahead]="search"
-                                                    (focus)="focus$.next($any($event).target.value)"
-                                                    (click)="click$.next($any($event).target.value)"
-                                                    #instance="ngbTypeahead" /> -->
-
+                                                      [(ngModel)]="model" [ngbTypeahead]="search"
+                                                      (focus)="focus$.next($any($event).target.value)"
+                                                      (click)="click$.next($any($event).target.value)"
+                                                      #instance="ngbTypeahead" /> -->
                         <div style="position: relative">
                           <!-- [class.is-invalid]="(subItem.get('apu_id').invalid && subItem.get('description').touched)" -->
-
                           <input
                             style="width: 280px"
                             id="typeahead-http"
@@ -206,7 +189,7 @@
                           />
                         </div>
                         <!--  <small *ngIf="searching"
-                                                    class="form-text text-muted">searching...</small> -->
+                                                      class="form-text text-muted">searching...</small> -->
                       </td>
                       <td class="align-middle">
                         <input
@@ -238,7 +221,6 @@
                           }}
                         </div>
                       </td>
-
                       <!-- Costos directos -->
                       <ng-container
                         formArrayName="indirect_costs"
@@ -270,7 +252,6 @@
                         </div>
                       </td>
                       <!-- end Costos directos -->
-
                       <!-- Variables AMD IMPREVISTOS UTILIDAD -->
                       <ng-container
                         *ngIf="item.controls.shows.value.sum_others"
@@ -290,7 +271,6 @@
                             }}
                           </div>
                         </td>
-
                         <td class="align-middle">
                           <input
                             formControlName="percentage_unforeseen"
@@ -307,7 +287,6 @@
                             }}
                           </div>
                         </td>
-
                         <td class="align-middle">
                           <input
                             formControlName="percentage_utility"
@@ -325,7 +304,6 @@
                           </div>
                         </td>
                       </ng-container>
-
                       <td class="align-middle">
                         <div class="values" style="width: 90px">
                           {{
@@ -334,9 +312,7 @@
                           }}
                         </div>
                       </td>
-
                       <!-- END Variables AMD IMPREVISTOS UTILIDAD -->
-
                       <!-- Variables TOTAl Venta -->
                       <td class="align-middle">
                         <input
@@ -356,7 +332,6 @@
                             }}
                           </div>
                         </td>
-
                         <td class="align-middle">
                           <div class="values" style="width: 90px">
                             {{
@@ -518,7 +493,6 @@
                       }}
                     </div>
                   </td>
-
                   <!-- END OTHERS -->
                   <!-- TOTAL VALOR VENTA -->
                   <td class="align-middle">
@@ -526,7 +500,6 @@
                       {{ item.controls.another_values.value | currency: "":"" }}
                     </div>
                   </td>
-
                   <ng-container *ngIf="item.controls.shows.value.total_sale">
                     <td class="align-middle">
                       <div class="values">
@@ -555,7 +528,6 @@
                     </div>
                   </td>
                   <!-- END TOTAL VALOR VENTA -->
-
                   <!-- TOTAL PRORRATEO -->
                   <ng-container *ngIf="item.controls.shows.value.prorrateo">
                     <td class="align-middle">
@@ -598,35 +570,38 @@
             </tbody>
           </table>
         </div>
-        <div class="d-flex justify-content-end">
-            <div class="btn-group text-right w-100 bg-white col-md-1" role="group">
-              <button
-                ngbTooltip="Agregar Sub Item Manual"
-                type="button"
-                (click)="addSubItem(item)"
-                class="btn btn-primary btn-sm"
-              >
-                <i class="fas fa-plus"></i>
-              </button>
-              <button
-                ngbTooltip="Agregar Sub Item"
-                type="button"
-                (click)="findApus(item)"
-                class="btn btn-info btn-sm"
-              >
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
+        <div class="text-right">
+          <div
+            class="btn-group w-sm-100"
+            role="group"
+          >
+            <button
+              ngbTooltip="Agregar subitem manual"
+              type="button"
+              (click)="addSubItem(item)"
+              class="btn btn-success btn-sm"
+            >
+              <i class="fas fa-plus"></i>
+            </button>
+            <button
+              ngbTooltip="Agregar subitem"
+              type="button"
+              (click)="findApus(item)"
+              class="btn btn-info btn-sm"
+            >
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
         </div>
       </div>
     </ng-container>
 
-    <div class="col-md-12 mb-3 text-right">
+    <div class="my-3 text-right">
       <button
         (click)="addItems()"
         class="btn btn-primary btn-sm"
         type="button"
-        ngbTooltip="Agregar Item"
+        ngbTooltip="Agregar item"
       >
         <i class="fas fa-plus"></i>
       </button>
@@ -635,10 +610,8 @@
 </ng-container>
 
 <ng-template #notData>
-  <div class="card-body">
-    <div class="alert alert-warning text-center" role="alert">
-      ¡No hay datos aquí!
-    </div>
+  <div class="alert alert-warning text-center" role="alert">
+    ¡No hay datos aquí!
   </div>
 </ng-template>
 

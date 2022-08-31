@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import swal,  {SweetAlertOptions}  from 'sweetalert2';
+import swal, { SweetAlertOptions } from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-tabladepreciacion',
@@ -12,36 +13,39 @@ import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 export class TabladepreciacionComponent implements OnInit {
 
   @ViewChild('alertSwal') alertSwal: SwalComponent;
-  enviromen:any = {}
-  public DepreciacionModel:any = {
+  enviromen: any = {}
+  public DepreciacionModel: any = {
     Mes: '',
-    Inicio:'',
-    Fin:'',
+    Inicio: '',
+    Fin: '',
     Tipo: 'PCGA',
     Identificacion_Funcionario: '1'
     // Identificacion_Funcionario: JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario
   };
-  public alertOption:SweetAlertOptions = {};
-  public queryParams:string = '';
-  public Fecha:any = new Date();
-  public Depreciacion:Array<any> = [];
-  public Cargando:boolean = false;
-  public Meses:Array<string> = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-  public Years:Array<string> = [];
+  public alertOption: SweetAlertOptions = {};
+  public queryParams: string = '';
+  public Fecha: any = new Date();
+  public Depreciacion: Array<any> = [];
+  public Cargando: boolean = false;
+  public Meses: Array<string> = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  public Years: Array<string> = [];
 
-  public mesActual:number = this.getMesActual();
+  public mesActual: number = this.getMesActual();
   //public yearActual:number = this.getYearActual();
 
-  constructor(private http:HttpClient) {
+  constructor(private http: HttpClient, private _swal: SwalService,) {
     this.alertOption = {
-      title: "¿Está Seguro?",
+      title: '¿Estás seguro(a)?',
       text: "Se dispone a generar la depreciacion",
       showCancelButton: true,
-      cancelButtonText: "No, Dejame Comprobar!",
-      confirmButtonText: 'Si, Guardar',
+      cancelButtonText: "Cancelar",
+      confirmButtonText: '¡Sí, confirmar!',
       showLoaderOnConfirm: true,
+      reverseButtons: true,
+      confirmButtonColor: '#A3BD30',
+      cancelButtonColor: '#d33',
       focusCancel: true,
-      icon: 'info',
+      icon: 'question',
       preConfirm: () => {
         return new Promise((resolve) => {
           this.GuardarDepreciacion();
@@ -50,12 +54,12 @@ export class TabladepreciacionComponent implements OnInit {
       allowOutsideClick: () => !swal.isLoading()
     }
   }
-  
+
   ngOnInit() {
     this.enviromen = environment;
     let year_ini = 2018;
     let year_fin = this.Fecha.getFullYear();
-    for(let i=year_ini; i<=year_fin;i++){
+    for (let i = year_ini; i <= year_fin; i++) {
       this.Years.push(i.toString());
     }
   }
@@ -64,40 +68,41 @@ export class TabladepreciacionComponent implements OnInit {
     let info = JSON.stringify(this.DepreciacionModel);
     let datos = new FormData();
     datos.append('datos', info);
-    this.http.post(environment.ruta+'php/depreciacion/guardar_depreciacion.php', datos).subscribe((data:any) => {
+    this.http.post(environment.ruta + 'php/depreciacion/guardar_depreciacion.php', datos).subscribe((data: any) => {
       if (data.tipo == 'success') {
 
-          window.open(environment.ruta + 'php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro='+data.Id+'&id_funcionario_elabora='+this.DepreciacionModel.Identificacion_Funcionario,'_blank');
+        window.open(environment.ruta + 'php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro=' + data.Id + '&id_funcionario_elabora=' + this.DepreciacionModel.Identificacion_Funcionario, '_blank');
 
-          window.open(environment.ruta + 'php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro='+data.Id+'&id_funcionario_elabora='+this.DepreciacionModel.Identificacion_Funcionario+'&tipo_valor=Niif','_blank');
-        
-          swal.fire({
-            icon: data.tipo,
-            title: data.titulo,
-            text: data.mensaje
-          })
+        window.open(environment.ruta + 'php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro=' + data.Id + '&id_funcionario_elabora=' + this.DepreciacionModel.Identificacion_Funcionario + '&tipo_valor=Niif', '_blank');
+        this._swal.show({
+          title: data.titulo,
+          text: data.mensaje,
+          icon: data.tipo,
+          showCancel: false,
+        })
         // this.ShowSwal(data.tipo, data.titulo, data.mensaje);
       } else {
-        swal.fire({
-          icon: data.tipo,
+        this._swal.show({
           title: data.titulo,
-          text: data.mensaje
+          text: data.mensaje,
+          icon: data.tipo,
+          showCancel: false,
         })
         // this.ShowSwal(data.tipo, data.titulo, data.mensaje);
       }
     }, error => {
       console.log(error);
-      
+
       /* let response = {
         tipo: 'error',
         mensaje: 'Ha ocurrido un error en la conexión. Por favor vuelve a intentarlo',
         titulo: 'Oops!'
       }; */
-      swal.fire({
-        title: 'Oops!',
-        icon: 'error',
+      this._swal.show({
+        title: 'ERROR',
         text: 'Ha ocurrido un error en la conexión. Por favor vuelve a intentarlo',
-
+        icon: 'error',
+        showCancel: false,
       })
       // this.ShowSwal(response.tipo, response.titulo, response.mensaje);
     })
@@ -105,7 +110,7 @@ export class TabladepreciacionComponent implements OnInit {
 
   setQueryParams() {
 
-    let params:any = {};
+    let params: any = {};
 
     /*
     Original
@@ -133,19 +138,19 @@ export class TabladepreciacionComponent implements OnInit {
 
   }
 
-  ShowSwal(tipo, titulo:string, msg:string){
+  ShowSwal(tipo, titulo: string, msg: string) {
     this.alertSwal.icon = tipo;
     this.alertSwal.title = titulo;
     this.alertSwal.text = msg;
     this.alertSwal.fire();
   }
 
-  getMesActual():number {
+  getMesActual(): number {
     let fecha = new Date();
     let mes = fecha.getMonth().toString();
 
-    if(mes=='0'){
-      mes='12';
+    if (mes == '0') {
+      mes = '12';
     }
 
     return parseInt(mes);

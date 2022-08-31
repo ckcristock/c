@@ -315,9 +315,9 @@ export class CrearTercerosComponent implements OnInit {
 
   getTitle() {
     if (this.actRoute.snapshot.params.id) {
-      this.title = 'Editar Tercero';
+      this.title = 'Editar tercero';
     } else {
-      this.title = 'Nuevo Tercero';
+      this.title = 'Nuevo tercero';
     }
   }
 
@@ -671,14 +671,14 @@ export class CrearTercerosComponent implements OnInit {
       return this._swal.show({
         icon: 'error',
         title: '¡Incorrecto!',
-        text: 'Por favor, complete los campos requeridos.',
+        text: 'Por favor completa los campos requeridos.',
         showCancel: false
       })
     }
     if (!this.id) {
       this._swal.show({
         icon: 'question',
-        title: '¿Estas seguro?',
+        title: '¿Estás seguro(a)?',
         text: 'Se agregará un nuevo tercero.',
         showCancel: true
       }).then((r) => {
@@ -687,9 +687,10 @@ export class CrearTercerosComponent implements OnInit {
           this._terceros.saveInformation(this.form.value).subscribe((r: any) => {
             this._swal.show({
               icon: 'success',
-              title: 'Proceso Satisfactorio',
+              title: 'Creado con éxito',
               text: 'El tercero ha sido creado con éxito.',
-              showCancel: false
+              showCancel: false,
+              timer: 1000
             })
             this.location.back();
           });
@@ -698,10 +699,11 @@ export class CrearTercerosComponent implements OnInit {
     } else {
       this._swal.show({
         icon: 'question',
-        title: '¿Estas Seguro?',
+        title: '¿Estás seguro(a)?',
         text: 'El tercero será acualizado.',
         showCancel: true
       }).then((r) => {
+        console.log(r)
         if (r.isConfirmed) {
           this.values()
           this._terceros.updateThirdParties(this.form.value, this.third.id).subscribe((r: any) => {
@@ -709,7 +711,8 @@ export class CrearTercerosComponent implements OnInit {
               icon: 'success',
               title: 'Actualizado con éxito',
               text: 'El tercero ha sido actualizado con éxito.',
-              showCancel: false
+              showCancel: false,
+              timer: 1000
             })
             this.location.back();
           });

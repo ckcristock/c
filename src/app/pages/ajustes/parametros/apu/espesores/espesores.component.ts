@@ -79,7 +79,8 @@ export class EspesoresComponent implements OnInit {
         icon: 'success',
         title: r.data.title,
         text: r.data.text,
-        showCancel: false
+        showCancel: false,
+        timer: 1000,
       })
     })
   }

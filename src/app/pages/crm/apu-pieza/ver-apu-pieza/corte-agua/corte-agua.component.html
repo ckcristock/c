@@ -1,5 +1,5 @@
 <hr />
-<h6 class="mt-3">Corte Agua</h6>
+<h6 class="mt-3">Corte agua</h6>
 <div class="rounded-top table-responsive">
   <table
     class="table table-bordered table-striped table-sm"
@@ -72,18 +72,32 @@
   </table>
 </div>
 <div class="row d-flex justify-content-end">
-  <div class="col-md-3">
+  <div class="col-md-4">
     <div class="d-flex justify-content-between">
-      <label>SubTotal Unitario:</label>
-      <span>{{ cut_water_unit_subtotal }}</span>
-    </div>
-    <div class="d-flex justify-content-between">
-      <label>Cantidad Total:</label>
-      <span>{{ cut_water_total_amount }}</span>
-    </div>
-    <div class="d-flex justify-content-between">
-      <label>SubTotal:</label>
-      <span>{{ cut_water_subtotal }}</span>
+      <div class="rounded-top table-responsive">
+        <table class="table table-hover">
+          <tbody>
+            <tr>
+              <td>SUBTOTAL UNITARIO</td>
+              <td class="text-right">
+                ${{ cut_water_unit_subtotal }}
+              </td>
+            </tr>
+            <tr>
+              <td>CANTIDAD TOTAL</td>
+              <td class="text-right">
+                ${{ cut_water_total_amount }}
+              </td>
+            </tr>
+            <tr>
+              <td>SUBTOTAL</td>
+              <td class="text-right">
+                ${{ cut_water_subtotal }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

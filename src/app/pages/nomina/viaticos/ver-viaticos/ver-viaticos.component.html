@@ -1,14 +1,18 @@
 <div *ngIf="data">
   <div class="card">
     <div class="card-body">
-      <div class="card-title d-flex justify-content-between">
-        <h4 class="text-primary">Ver viático</h4>
-        <mat-form-field class="col-md-3 pr-0 pb-0" appearance="outline">
-          <mat-label>Orden de trabajo</mat-label>
-          <mat-select>
-            <mat-option value="pendiente">Pendiente</mat-option>
-          </mat-select>
-        </mat-form-field>
+      <div class="row card-title d-flex justify-content-between">
+        <div class="col-md-6 px-0">
+          <h4 class="text-primary">Ver viático</h4>
+        </div>
+        <div class="col-md-6 px-0 text-right">
+          <mat-form-field class="col pb-0 px-0" appearance="outline">
+            <mat-label>Orden de trabajo</mat-label>
+            <mat-select>
+              <mat-option value="pendiente">Pendiente (?)</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
       <hr class="line" />
       <div *ngIf="!loading">

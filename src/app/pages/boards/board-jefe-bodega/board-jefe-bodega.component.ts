@@ -16,7 +16,7 @@ import swal, { SweetAlertOptions } from 'sweetalert2';
   styleUrls: ['./board-jefe-bodega.component.scss']
 })
 export class BoardJefeBodegaComponent implements OnInit {
-  globales = {ruta: 'https://sigespro.com.co/'}
+  globales = {ruta: 'http://inventario.sigmaqmo.com/'}
   public Funcionarios:any[]=[];
   public Notas:any[]=[];
   public Movimientos:any[]=[];
@@ -72,6 +72,7 @@ export class BoardJefeBodegaComponent implements OnInit {
    }
 
   ngOnInit() {
+    console.log('Prueba')
     this.loading1 = true
     this.loading2 = true
     this.loading3 = true
@@ -153,7 +154,7 @@ export class BoardJefeBodegaComponent implements OnInit {
 
   ListaAjustesPendientesSalida(){
     this.loading4 = true
-    let funcionario = this.user.Identificacion_Funcionario;
+    let funcionario = this.user;
     this.http.get(this.globales.ruta + 'php/ajuste_individual_nuevo/lotes_pendiente_aprobacion_salida.php',{  params: { funcionario }
     }).subscribe((data: any) => {
        this.AjustesPendientesSalida = data;

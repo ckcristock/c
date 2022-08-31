@@ -141,9 +141,10 @@ export class PerfilesApuComponent implements OnInit {
       this.getProfiles();
       this._swal.show({
         icon: 'success',
-        title: r.data.title,
-        text: r.data.text,
-        showCancel: false
+        title: 'Correcto',
+        text: '',
+        showCancel: false,
+        timer: 1000,
       })
     })
   }

@@ -136,12 +136,14 @@
                 <div ngbDropdownMenu>
                   <a
                     [routerLink]="['/nomina/ver-viatico', item.id]"
+                    href="javascript:void(0)"
                     class="dropdown-item text-success waves-light caja-botones"
                   >
                     <i class="far fa-eye"></i> Ver</a
                   >
                   <a
                     [routerLink]="['/nomina/editar-viatico', item.id]"
+                    href="javascript:void(0)"
                     class="dropdown-item waves-light text-info caja-botones"
                   >
                     <i class="far fa-edit"></i> Editar</a
@@ -151,6 +153,7 @@
                       permission.permissions.approve && item.state != 'Aprobado'
                     "
                     (click)="changeState(item, 'Aprobado')"
+                    href="javascript:void(0)"
                     class="dropdown-item waves-light text-success caja-botones"
                   >
                     <i class="far fa-thumbs-up"></i> Aprobar</a
@@ -161,6 +164,7 @@
                     "
                     [routerLink]="['legalizar', item.id]"
                     routerLinkActive="router-link-active"
+                    href="javascript:void(0)"
                     class="dropdown-item waves-light text-success caja-botones"
                   >
                     <i class="far fa-thumbs-up"></i> Legalizar</a
@@ -168,6 +172,7 @@
                   <a
                     *ngIf="!item.state == ''"
                     (click)="changeState(item, 'Inactivo')"
+                    href="javascript:void(0)"
                     class="dropdown-item waves-light text-danger caja-botones"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a

@@ -20,6 +20,7 @@ import { AccountPlanService } from 'src/app/core/services/account-plan.service';
 import { PrettyCashService } from 'src/app/core/services/pretty-cash.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidatorsService } from 'src/app/pages/ajustes/informacion-base/services/reactive-validation/validators.service';
 type Person = { value: number; text: string };
 @Component({
   selector: 'app-crear-caja',
@@ -40,7 +41,8 @@ export class CrearCajaComponent implements OnInit {
     private _prettyCash: PrettyCashService,
     private _account: AccountPlanService,
     private modalService: NgbModal,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private _reactiveValid: ValidatorsService,
   ) { }
 
   ngOnInit(): void {
@@ -62,7 +64,7 @@ export class CrearCajaComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+    this.forma.reset()
   }
 
   getAccounts() {
@@ -113,10 +115,10 @@ export class CrearCajaComponent implements OnInit {
 
   createForm() {
     this.forma = this.fb.group({
-      person: [''],
-      account_plan: [''],
-      initial_balance: [''],
-      description: [''],
+      person: ['', this._reactiveValid.required],
+      account_plan: ['', this._reactiveValid.required],
+      initial_balance: ['', this._reactiveValid.required],
+      description: ['', this._reactiveValid.required],
     });
     this.forma.get('account_plan').valueChanges.subscribe((r) => {
       if (typeof r == 'object') {

@@ -8,6 +8,7 @@ import swal from 'sweetalert2';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-personas',
@@ -82,6 +83,7 @@ export class PersonasComponent implements OnInit {
     private _validators: ValidatorsService,
     private route: ActivatedRoute,
     private paginator: MatPaginatorIntl,
+    private _swal: SwalService,
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
   }
@@ -175,11 +177,13 @@ export class PersonasComponent implements OnInit {
   addPerson() {
     this._terceros.addThirdPartyPerson(this.form.value)
       .subscribe((res: any) => {
-        swal.fire({
-          icon: 'success',
+        this._swal.show({
           title: res.data,
-          text: 'Se ha agregado la persona con éxito.'
-        });
+          icon: 'success',
+          text: '',
+          timer: 1000,
+          showCancel: false
+        })
         this.getPerson();
         this.modalService.dismissAll();
       });

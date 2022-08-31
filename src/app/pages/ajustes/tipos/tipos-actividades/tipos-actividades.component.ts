@@ -83,6 +83,22 @@ export class TiposActividadesComponent implements OnInit {
     })
   }
 
+  CambiarEstadoTipo(id, state) {
+    this._tipoAct.setActivityType({ id, state }).subscribe((r: any) => {
+      console.log(r)
+      if (r.code == 200) {
+        this._swal.show({
+          title: 'Operación exitosa',
+          text: 'Se ha cambiado el estado',
+          icon: 'success',
+          showCancel: false,
+          timer: 1000
+        });
+        this.getActivityTypes();
+      }
+    });
+  }
+
   getActivityTypes(page = 1) {
     this.pagination.page = page;
     this.loading = true;

@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./board-nomina.component.scss']
 })
 export class BoardNominaComponent implements OnInit {
-  globales = {ruta: 'https://sigespro.com.co/'}
+  globales = {ruta: 'http://inventario.sigmaqmo.com/'}
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) { }
 

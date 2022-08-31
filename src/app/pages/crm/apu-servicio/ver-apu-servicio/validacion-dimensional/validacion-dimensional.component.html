@@ -1,14 +1,13 @@
 <div class="rounded-top table-responsive">
-  <table
-    class="table table-bordered table-striped table-sm"
-    
-  >
-    <thead class="thead-dark">
-      <th colspan="4"></th>
-      <th colspan="5" class="text-center">Desplazamiento</th>
-      <th colspan="5" class="text-center">Ordinarias</th>
-      <th colspan="6" class="text-center">Festivas</th>
-      <th></th>
+  <table class="table table-bordered table-striped table-sm">
+    <thead>
+      <tr class="table-primary">
+        <th colspan="4"></th>
+        <th colspan="5" class="text-center">Desplazamiento</th>
+        <th colspan="5" class="text-center">Ordinarias</th>
+        <th colspan="6" class="text-center">Festivas</th>
+        <th></th>
+      </tr>
     </thead>
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
@@ -117,11 +116,10 @@
             <div class="rounded-top table-responsive">
               <table
                 [ngbCollapse]="collapsed[i]"
-                class="table table-bordered table-striped table-sm w-50"
-                
+                class="table table-bordered table-striped table-sm w-100"
               >
-                <thead class="thead-dark">
-                  <tr>
+                <thead>
+                  <tr class="table-primary">
                     <th class="text-center">Perfil</th>
                     <th colspan="4" class="text-center">Viáticos</th>
                     <th></th>
@@ -164,7 +162,7 @@
                 <tfoot>
                   <tr>
                     <td colspan="5" class="text-right text-uppercase">
-                      <label><b>Subtotal</b></label>
+                      Subtotal
                     </td>
                     <td colspan="6" class="text-center">
                       {{ item.subtotal }}

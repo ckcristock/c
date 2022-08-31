@@ -338,7 +338,8 @@ export class MaterialesComponent implements OnInit {
           icon: 'success',
           title: 'Material actualizado con éxito',
           text: '',
-          showCancel: false
+          showCancel: false,
+          timer: 1000,
         })
       })
     } else {
@@ -352,7 +353,8 @@ export class MaterialesComponent implements OnInit {
           icon: 'success',
           title: 'Material creado con éxito',
           text: '',
-          showCancel: false
+          showCancel: false,
+          timer: 1000,
         })
       })
     }

@@ -107,7 +107,7 @@ export class EstimacionViaticosComponent implements OnInit {
       this.getEstimations();
       this._swal.show({
         icon: 'success',
-        title: 'Creado con éxito',
+        title: r.data,
         text: '',
         showCancel: false,
         timer: 1000,

@@ -3,15 +3,18 @@
     <h4 class="text-primary modal-title">Crear o editar novedad</h4>
     <button
       type="button"
-      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      class="close"
+      data-dismiss="modal"
       aria-label="Close"
       (click)="modal.dismiss('Cross click')"
-    ></button>
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="row">
-        <div class="col mb-4">
+        <div class="col-md-4" [ngClass]="person_id_invalid ? 'mb-0' : 'mb-4'">
           <ng-select
             formControlName="person_id"
             [items]="people"
@@ -22,13 +25,17 @@
             [appendTo]="'body'"
             loadingText="loading"
             ngDefaultControl
+            required
           >
           </ng-select>
-          <small class="invalid text-danger" *ngIf="person_id_invalid">
-            Es nesario el funcionario
-          </small>
+          <span class="ml-2" *ngIf="person_id_invalid">
+            <small class="text-danger"><b> Campo obligatorio </b></small>
+          </span>
         </div>
-        <div class="col mb-4">
+        <div
+          class="col-md-4"
+          [ngClass]="disability_leave_id_invalid ? 'mb-0' : 'mb-4'"
+        >
           <ng-select
             formControlName="disability_leave_id"
             [items]="disabilityLeaves"
@@ -40,14 +47,12 @@
             placeholder="Novedad"
             loadingText="loading"
             ngDefaultControl
+            required
           >
           </ng-select>
-          <small
-            class="invalid text-danger"
-            *ngIf="disability_leave_id_invalid"
-          >
-            Es nesaria la novedad
-          </small>
+          <span class="ml-2" *ngIf="disability_leave_id_invalid">
+            <small class="text-danger"><b> Campo obligatorio </b></small>
+          </span>
         </div>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de novedad</mat-label>
@@ -62,12 +67,17 @@
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha de inicio</mat-label>
-          <input matInput type="date" formControlName="date_start" />
+          <input matInput type="date" formControlName="date_start" required />
           <mat-error *ngIf="date_start_invalid">Campo obligatorio</mat-error>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label># días</mat-label>
-          <input matInput type="number" formControlName="number_days" />
+          <input
+            matInput
+            type="number"
+            formControlName="number_days"
+            required
+          />
           <mat-error *ngIf="number_days_invalid">Campo obligatorio</mat-error>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
@@ -86,6 +96,7 @@
             type="date"
             name="fecha_reintegro"
             formControlName="payback_date"
+            required
           />
         </mat-form-field>
         <mat-form-field
@@ -115,7 +126,12 @@
     >
       Cancelar
     </button>
-    <button type="submit" (click)="save()" class="btn btn-primary">
+    <button
+      type="submit"
+      (click)="save()"
+      [disabled]="!form.valid"
+      class="btn btn-primary"
+    >
       Guardar
     </button>
   </div>

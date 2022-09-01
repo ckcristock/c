@@ -8,6 +8,8 @@ import { MatAccordion } from '@angular/material/expansion';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+import { FormControl } from '@angular/forms';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-vacantes',
@@ -26,7 +28,21 @@ export class VacantesComponent implements OnInit {
   checkDepartamento: boolean = true
   checkMunicipio: boolean = true
   checkEstado: boolean = true
+  selectedCampos = [];
+  camposForm = new FormControl(this.selectedCampos);
+  listaCampos: any[] = [
+    { value: 0, text: 'Código', selected: true },
+    { value: 1, text: 'Publicación', selected: true },
+    { value: 2, text: 'Inicio', selected: true },
+    { value: 3, text: 'Fin', selected: true },
+    { value: 4, text: 'Título', selected: true },
+    { value: 5, text: 'Dependencia', selected: true },
+    { value: 6, text: 'Cargo', selected: true },
+    { value: 7, text: 'Departamento', selected: true },
+    { value: 8, text: 'Municipio', selected: true },
+    { value: 9, text: 'Estado', selected: true },
 
+  ]
   @ViewChild('firstAccordion') firstAccordion: MatAccordion;
   @ViewChild('secondAccordion') secondAccordion: MatAccordion;
   matPanel = false;
@@ -38,6 +54,10 @@ export class VacantesComponent implements OnInit {
       this.firstAccordion.closeAll();
       this.matPanel = false;
     }
+  }
+  cambiarCampo(event) {
+    let position = event.source._keyManager._activeItemIndex
+    this.listaCampos[position].selected ? this.listaCampos[position].selected = false : this.listaCampos[position].selected = true
   }
   matPanel2 = false;
   openClose2() {
@@ -93,12 +113,18 @@ export class VacantesComponent implements OnInit {
     private paginator: MatPaginatorIntl,
     private route: ActivatedRoute,
     private location: Location,
-    private _department: DepartmentService
+    private _department: DepartmentService,
+    private _swal: SwalService,
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
   }
 
   ngOnInit() {
+    for (let i in this.listaCampos) {
+      if (this.listaCampos[i].selected) {
+        this.selectedCampos.push(this.listaCampos[i].value)
+      }
+    }
     this.route.queryParamMap
       .subscribe((params) => {
         this.orderObj = { ...params.keys, ...params };
@@ -212,14 +238,11 @@ export class VacantesComponent implements OnInit {
   }
 
   cancelar(id) {
-    Swal.fire({
-      title: '¿Seguro?',
-      text: 'Se va a CANCELAR una nueva vacante',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Si, Hazlo!'
+    this._swal.show({
+      text: 'Vamos a cancelar esta vacante',
+      title: '¿Estás seguro(a)?',
+      icon: 'question',
+      showCancel: true,
     }).then(result => {
       if (result.value) {
         this.sendData(id);
@@ -232,11 +255,12 @@ export class VacantesComponent implements OnInit {
     this._job.setState(id, { state: 'Cancelada' }).subscribe((r: any) => {
 
       if (r.code == 200) {
-        Swal.fire({
-          title: 'Creación exitosa',
-          text: 'Felicidades, se ha actualizado la vacante',
+        this._swal.show({
+          text: '',
+          title: 'Cancelación exitosa',
           icon: 'success',
-
+          showCancel: false,
+          timer: 1000
         })
       }
       this.getJobs();

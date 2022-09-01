@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <div class="col">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
         <img
           src="assets/images/logo2.png"
           class="img-fluid"
@@ -9,433 +9,225 @@
           alt=""
         />
       </div>
-      <div class="col">
+      <div class="col-md-6 px-0 text-md-right text-center">
         <h4 class="text-primary">
           <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
         </h4>
       </div>
     </div>
     <hr class="line" />
-    <div class="container mt-4">
-      <div class="col-md-12 text-center">
-        <h2>
-          Liquidación {{ liquidado.first_name }} {{ liquidado.second_name }}
-          {{ liquidado.first_surname }} {{ liquidado.second_surname }}
-        </h2>
-      </div>
-      <mat-horizontal-stepper #stepper [linear]="false">
-        <mat-step>
-          <ng-template matStepLabel>Causas y fecha</ng-template>
-          <div class="row mt-4">
-            <div class="col-6">
-              <fieldset>
-                <legend class="text-primary h5">1. Causas liquidación</legend>
-                <div class="form-group">
-                  <label class="control-label" for="causa_terminacion"
-                    >¿Motivo de liquidación?</label
-                  >
-                  <input
-                    class="form-control form-control-sm"
-                    required
-                    placeholder="Ej: Retiro Voluntario"
-                    type="text"
-                    name="causa_terminacion"
-                    id="causa_terminacion"
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="control-label" for="motivo"
-                    >¿Liquidacion con justa causa?</label
-                  >
-                  <select
-                    name="motivo"
-                    id="motivo"
-                    class="form-control form-control-sm"
-                  >
-                    <option value="Si" selected>Si</option>
-                    <option value="No">No</option>
-                  </select>
-                </div>
-              </fieldset>
-            </div>
-            <div class="col-6">
-              <fieldset>
-                <legend class="text-primary h5">2. Fecha Liquidación</legend>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label class="control-label" for="fecha_inicio"
-                        >Fecha de Contratación</label
-                      >
-                      <input
-                        class="form-control form-control-sm"
-                        type="date"
-                        name="fecha_inicio"
-                        id="fecha_inicio"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label class="control-label" for="fecha_fin"
-                        >Fecha de Teminación</label
-                      >
-                      <input
-                        class="form-control form-control-sm"
-                        type="date"
-                        name="fecha_fin"
-                        id="fecha_fin"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                    <div class="form-group">
-                      <label class="control-label" for="dias_liquidar"
-                        >Días a Liquidar</label
-                      >
-                      <input
-                        class="form-control form-control-sm"
-                        type="text"
-                        name="dias_liquidar"
-                        id="dias_liquidar"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-4">
-                    <div class="form-group">
-                      <label class="control-label" for="dias"
-                        >Días Vacaciones</label
-                      >
-                      <input
-                        class="form-control form-control-sm"
-                        type="text"
-                        name="Dias"
-                        id="dias"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-4">
-                    <div class="form-group">
-                      <label class="control-label" for="vacaciones_acumuladas"
-                        >Vacaciones Acum.
-                      </label>
-                      <input
-                        class="form-control form-control-sm"
-                        type="text"
-                        name="Dias"
-                        id="vacaciones_acumuladas"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
+    <h5 class="text-center">
+      Liquidación de {{ liquidado.first_name }} {{ liquidado.second_name }}
+      {{ liquidado.first_surname }} {{ liquidado.second_surname }}
+    </h5>
+    <mat-horizontal-stepper #stepper [linear]="false">
+      <mat-step>
+        <ng-template matStepLabel>Causa y fecha</ng-template>
+        <h6>1. Causa</h6>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Motivo</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa el motivo, ej: retiro voluntario"
+              name="causa_terminacion"
+              id="causa_terminacion"
+              required
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>¿Justa causa?</mat-label>
+            <mat-select name="motivo" id="motivo" required>
+              <mat-option value="Si">Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <h6>2. Fecha</h6>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de contratación</mat-label>
+            <input
+              matInput
+              type="date"
+              name="fecha_inicio"
+              id="fecha_inicio"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de terminación</mat-label>
+            <input
+              matInput
+              type="date"
+              name="fecha_fin"
+              id="fecha_fin"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Días a liquidar</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Ingresa los días a liquidar"
+              name="dias_liquidar"
+              id="dias_liquidar"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Días de vacaciones</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Ingresa los días de vacaciones"
+              name="Dias"
+              id="dias"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Vacaciones acumuladas</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Ingresa el numero"
+              name="Dias"
+              id="vacaciones_acumuladas"
+              required
+            />
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <div class="col-12 d-flex justify-content-end">
+            <button
+              class="btn btn-primary btn-lg"
+              (click)="goForward()"
+              type="button"
+            >
+              Siguiente
+            </button>
           </div>
-          <div class="row">
-            <div class="col-12 d-flex justify-content-end">
-              <button
-                class="btn btn-primary btn-lg"
-                (click)="goForward()"
-                type="button"
-              >
-                Siguiente
-              </button>
-            </div>
-          </div>
-        </mat-step>
-        <mat-step>
-          <ng-template matStepLabel>Bases cálculo liquidación</ng-template>
-          <div class="row mt-4">
-            <div class="col-md-6">
-              <fieldset>
-                <legend class="text-primary h5">
-                  3. Bases cálculo liquidación
-                </legend>
-                <div class="row">
-                  <div class="col-4">
-                    <div class="form-group">
-                      <label class="control-label" for="salario_base"
-                        >Salario Base</label
-                      >
-                      <input
-                        class="form-control form-control-sm"
-                        type="number"
-                        name="salario_base"
-                        id="salario_base"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-4">
-                    <div class="form-group">
-                      <label class="control-label" for="pago_vacaciones"
-                        >Vacaciones</label
-                      >
-                      <input
-                        class="form-control form-control-sm"
-                        type="text"
-                        name="Vacaciones"
-                        id="pago_vacaciones"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-4">
-                    <div class="form-group">
-                      <label class="control-label" for="cesantias"
-                        >Cesantías</label
-                      >
-                      <input
-                        class="form-control form-control-sm"
-                        type="text"
-                        name="cesantias"
-                        id="cesantias"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-            <div class="col-md-6">
-              <fieldset>
-                <legend class="text-primary h5">4. Opciones adicionales</legend>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label class="control-label" for="dominicales"
-                      >¿Incluir dominicales?</label
-                    >
-                    <div class="form-group">
-                      <select
-                        name="dominicales"
-                        id="dominicales"
-                        class="form-control form-control-sm"
-                      >
-                        <option value="Si">Si</option>
-                        <option value="No" selected>No</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="control-label" for="cesantias_anteriores"
-                        >¿Incluir cesantías año anterior?</label
-                      >
-                      <select
-                        name="cesantias_anteriores"
-                        id="cesantias_anteriores"
-                        class="form-control form-control-sm"
-                      >
-                        <option value="Si">Si</option>
-                        <option value="No" selected>No</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label
-                        class="control-label"
-                        for="interes_cesantias_anteriores"
-                        >¿Incluir intereses cesantías?</label
-                      >
-                      <select
-                        name="interes_cesantias_anteriores"
-                        id="interes_cesantias_anteriores"
-                        class="form-control form-control-sm"
-                      >
-                        <option value="Si" selected>Si</option>
-                        <option value="No">No</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <fieldset>
-                <legend class="text-primary h5">5. Otros</legend>
-                <div class="row">
-                  <div class="col-4">
-                    <div class="form-group">
-                      <label class="control-label" for="otros_ingresos"
-                        >Otros Ingresos</label
-                      >
-                      <input
-                        class="form-control form-control-sm"
-                        type="number"
-                        name="otros_ingresos"
-                        id="otros_ingresos"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-4">
-                    <div class="form-group">
-                      <label class="control-label" for="prestamos"
-                        >Valor préstamos</label
-                      >
-                      <input
-                        class="form-control form-control-sm"
-                        type="number"
-                        name="prestamos"
-                        id="prestamos"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-4">
-                    <div class="form-group">
-                      <label class="control-label" for="deducciones"
-                        >Otras deducciones</label
-                      >
-                      <input
-                        class="form-control form-control-sm"
-                        type="number"
-                        name="deducciones"
-                        id="deducciones"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12 d-flex justify-content-between">
-              <button
-                class="btn btn-primary btn-lg"
-                (click)="goBack()"
-                type="button"
-              >
-                Anterior
-              </button>
-              <button
-                class="btn btn-primary btn-lg"
-                (click)="goForward()"
-                type="button"
-              >
-                Siguiente
-              </button>
-            </div>
-          </div>
-        </mat-step>
-        <mat-step>
-          <ng-template matStepLabel>Notas</ng-template>
-          <div class="row mt-4">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label class="control-label" for="nota">Notas</label>
-                <textarea
-                  name="nota"
-                  id="nota"
-                  cols="10"
-                  rows="3"
-                  class="form-control form-control-sm"
-                ></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12 d-flex justify-content-between">
-              <button
-                class="btn btn-primary btn-lg"
-                (click)="goBack()"
-                type="button"
-              >
-                Anterior
-              </button>
-              <button
-                class="btn btn-primary btn-lg"
-                (click)="goForward()"
-                type="button"
-              >
-                Siguiente
-              </button>
-            </div>
-          </div>
-        </mat-step>
-        <mat-step>
-          <ng-template matStepLabel>Resumen liquidación</ng-template>
-          <div class="row m-t-10">
-            <div class="col-md-6">
-              <div class="card-body contenido">
-                <h5 class="text-primary">8. Resumen liquidación</h5>
-                <table class="table table-bordered m-t-10">
-                  <tbody>
-                    <tr>
-                      <td style="width: 250px">
-                        Dias de vacaciones pendientes
-                      </td>
-                      <td class="text-right">$ 45151</td>
-                    </tr>
-                    <tr>
-                      <td style="width: 250px">
-                        <strong>Total liquidación</strong>
-                      </td>
-                      <td class="text-right"><strong>$ 5215141</strong></td>
-                    </tr>
-                    <tr>
-                      <td style="width: 250px">Interes Cesantias</td>
-                      <td class="text-right">$ 45151</td>
-                    </tr>
-                    <tr>
-                      <td style="width: 250px">
-                        <strong>Prima de servicios</strong>
-                      </td>
-                      <td class="text-right"><strong>$ 5215141</strong></td>
-                    </tr>
-                    <tr>
-                      <td style="width: 250px">Indemnización por despido</td>
-                      <td class="text-right">$ 45151</td>
-                    </tr>
-                    <tr>
-                      <td style="width: 250px">
-                        <strong>Sueldo pendiente por cancelar</strong>
-                      </td>
-                      <td class="text-right"><strong>$ 5215141</strong></td>
-                    </tr>
-                    <tr>
-                      <td style="width: 250px">
-                        Aux. Transp. Pendiente por Cancelar
-                      </td>
-                      <td class="text-right">$ 45151</td>
-                    </tr>
-                    <tr>
-                      <td style="width: 250px"><strong>Otros</strong></td>
-                      <td class="text-right"><strong>$ 5215141</strong></td>
-                    </tr>
-                    <tr>
-                      <td style="width: 250px"><strong>Salud</strong></td>
-                      <td class="text-right"><strong>$ 5215141</strong></td>
-                    </tr>
-                    <tr>
-                      <td style="width: 250px"><strong>Pensión</strong></td>
-                      <td class="text-right"><strong>$ 5215141</strong></td>
-                    </tr>
-                    <tr>
-                      <td style="width: 250px">
-                        <strong>Total Liquidacion</strong>
-                      </td>
-                      <td class="text-right"><strong>$ 5215141</strong></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card-body contenido" style="height: 433px">
-                <div class="col-md-12" style="height: 433px">
-                  <h5 class="text-primary">9. Liquida al empleado</h5>
-                  <br />
-                  <p>
-                    Al confirmar la liquidación, el empleado no volverá a
-                    aparecer en la lista de empleados activos, ni en el
-                    siguiente pago de nómina.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row d-flex justify-content-between">
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Bases de cálculo</ng-template>
+        <h6>3. Bases de cálculo</h6>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Salario base</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Ingresa el salario base"
+              name="salario_base"
+              id="salario_base"
+              required
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Vacaciones</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa el valor"
+              name="Vacaciones"
+              id="pago_vacaciones"
+              required
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cesantías</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa el valor"
+              name="cesantias"
+              id="cesantias"
+              required
+              autocomplete="off"
+            />
+          </mat-form-field>
+        </div>
+        <h6>4. Opciones adicionales</h6>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Dominicales incluidas</mat-label>
+            <mat-select name="dominicales" id="dominicales" required>
+              <mat-option value="Si">Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cesantías año anterior incluidas</mat-label>
+            <mat-select
+              name="cesantias_anteriores"
+              id="cesantias_anteriores"
+              required
+            >
+              <mat-option value="Si">Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Intereses de cesantías incluidos</mat-label>
+            <mat-select
+              name="interes_cesantias_anteriores"
+              id="interes_cesantias_anteriores"
+              value="Si"
+              required
+            >
+              <mat-option value="Si" selected>Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <h6>5. Otros</h6>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Otros ingresos</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Ingresa el valor"
+              name="otros_ingresos"
+              id="otros_ingresos"
+              required
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Préstamos</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Ingresa el valor"
+              name="prestamos"
+              id="prestamos"
+              required
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Otras deducciones</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Ingresa el valor"
+              name="deducciones"
+              id="deducciones"
+              required
+              autocomplete="off"
+            />
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <div class="col-12 d-flex justify-content-between">
             <button
               class="btn btn-primary btn-lg"
               (click)="goBack()"
@@ -443,17 +235,142 @@
             >
               Anterior
             </button>
-            <div class="btn-group" role="group" aria-label="Basic example">
-              <button class="btn btn-danger btn-lg" (click)="cancelButton()">
-                Cancelar Liquidacion
-              </button>
-              <button class="btn btn-primary btn-lg" type="button">
-                Liquidar Empleado
-              </button>
+            <button
+              class="btn btn-primary btn-lg"
+              (click)="goForward()"
+              type="button"
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Notas</ng-template>
+        <div class="row">
+          <mat-form-field
+            class="col-md-12 mat-form-field-no-padding textarea"
+            appearance="outline"
+          >
+            <mat-label>Notas</mat-label>
+            <textarea
+              matInput
+              placeholder="Ingresa la notas"
+              rows="5"
+              name="nota"
+              id="nota"
+              required
+              [cdkTextareaAutosize]="true"
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <div class="col-12 d-flex justify-content-between">
+            <button
+              class="btn btn-primary btn-lg"
+              (click)="goBack()"
+              type="button"
+            >
+              Anterior
+            </button>
+            <button
+              class="btn btn-primary btn-lg"
+              (click)="goForward()"
+              type="button"
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Resumen de liquidación</ng-template>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="rounded-top table-responsive">
+              <table class="table table-hover">
+                <tbody>
+                  <tr>
+                    <td>Dias de vacaciones pendientes</td>
+                    <td class="text-right">$ 45151</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Total liquidación</strong>
+                    </td>
+                    <td class="text-right"><strong>$ 5215141</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Interes Cesantias</td>
+                    <td class="text-right">$ 45151</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Prima de servicios</strong>
+                    </td>
+                    <td class="text-right"><strong>$ 5215141</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Indemnización por despido</td>
+                    <td class="text-right">$ 45151</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Sueldo pendiente por cancelar</strong>
+                    </td>
+                    <td class="text-right"><strong>$ 5215141</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Aux. Transp. Pendiente por Cancelar</td>
+                    <td class="text-right">$ 45151</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Otros</strong></td>
+                    <td class="text-right"><strong>$ 5215141</strong></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Salud</strong></td>
+                    <td class="text-right"><strong>$ 5215141</strong></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Pensión</strong></td>
+                    <td class="text-right"><strong>$ 5215141</strong></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Total Liquidacion</strong>
+                    </td>
+                    <td class="text-right"><strong>$ 5215141</strong></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-        </mat-step>
-      </mat-horizontal-stepper>
-    </div>
+          <div class="col-lg-6">
+            <div class="alert alert-danger" role="alert">
+              Al confirmar la liquidación, el empleado no volverá a aparecer en
+              la lista de empleados activos, ni en el siguiente pago de nómina.
+            </div>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <button
+            class="btn btn-primary btn-lg"
+            (click)="goBack()"
+            type="button"
+          >
+            Anterior
+          </button>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button class="btn btn-danger btn-lg" (click)="cancelButton()">
+              Cancelar
+            </button>
+            <button class="btn btn-primary btn-lg" type="button">
+              Liquidar
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
   </div>
 </div>

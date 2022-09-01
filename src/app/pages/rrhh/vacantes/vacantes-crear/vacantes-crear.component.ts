@@ -204,11 +204,8 @@ export class VacantesCrearComponent implements OnInit {
                     icon: 'success',
                     showCancel: false,
                     timer: 1000
-                }).then(result => {
-                    if (result.value) {
-                        this.router.navigateByUrl('/rrhh/vacantes')
-                    }
-                });
+                })
+                this.router.navigateByUrl('/rrhh/vacantes')
             }
         })
     }

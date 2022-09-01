@@ -171,7 +171,22 @@ export class ActividadesComponent {
   eventrender(event, element) {
     // event.element[0].querySelectorAll(".fc-content")[0].setAttribute("data-tooltip", event.event.title);
   }
+  validarFechas() {
+    var fecha_inicio = this.ActividadModel.Fecha_Inicio
+    var fecha_fin = this.ActividadModel.Fecha_Fin
 
+    if (fecha_inicio >= fecha_fin && fecha_fin != "") {
+      this.ActividadModel.Fecha_Inicio = ''
+      this.ActividadModel.Fecha_Fin = ''
+      this._swal.show({
+        title: 'Fechas invalidas',
+        text: 'La fecha de inicio no puede ser mayor a la fecha de fin',
+        icon: 'error',
+        showCancel: false,
+      });
+
+    }
+  }
   SetCalendarData() {
     this.DataActivities = [];
     this.userLogin1 = 1;
@@ -429,7 +444,6 @@ export class ActividadesComponent {
   cancelOptions() {
     Swal.fire({
       title: 'Anular la actividad',
-      text: 'Elige una opción',
       icon: 'question',
       showCancelButton: true,
       input: 'select',
@@ -442,7 +456,7 @@ export class ActividadesComponent {
         cancelAll: 'Anular ciclo',
         cancelDay: 'Anular día',
       },
-      inputPlaceholder: 'Acciones',
+      inputPlaceholder: 'Seleccionar...',
     }).then((result) => {
       if (result.value) {
         console.log(result.value);
@@ -476,7 +490,7 @@ export class ActividadesComponent {
             Editar: 'Editar',
             Anular: 'Anular',
           },
-          inputPlaceholder: 'Acciones',
+          inputPlaceholder: 'Seleccionar...',
         }).then((result) => {
           console.log(result)
           if (result.value) {

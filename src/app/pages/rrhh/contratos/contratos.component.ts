@@ -25,7 +25,7 @@ export class ContratosComponent implements OnInit {
       this.matPanel = false;
     }
   }
-  contractData: boolean = false;
+  contractData: boolean;
   contracts: any[] = [];
   groups: any[];
   loading = false;
@@ -37,13 +37,14 @@ export class ContratosComponent implements OnInit {
   orderObj: any
   filtrosActivos: boolean = false
   paginacion: any
+  paginacion2: any
   pagination: any = {
     pageSize: 12,
     page: 1,
     collectionSize: 0
   }
   paginationCV: any = {
-    pageSize: 2,
+    pageSize: 7,
     page: 1,
     collectionSize: 0
   }
@@ -107,6 +108,9 @@ export class ContratosComponent implements OnInit {
   handlePageEvent(event: PageEvent) {
     this.getAllContracts(event.pageIndex + 1)
   }
+  handlePageEvent2(event: PageEvent) {
+    this.getContractsToExpire(event.pageIndex + 1)
+  }
 
   SetFiltros(paginacion) {
     let params: any = {};
@@ -166,11 +170,15 @@ export class ContratosComponent implements OnInit {
   }
 
   getContractsToExpire(page = 1) {
+    this.contractData = true
     this.paginationCV.page = page;
     this.contractService.getContractsToExpire(this.paginationCV)
       .subscribe((res: any) => {
         this.contractsToExpire = res.data.data;
+        console.log(this.contractsToExpire)
         this.paginationCV.collectionSize = res.data.total;
+        this.paginacion2 = res.data
+        this.contractData = false
       });
   }
 

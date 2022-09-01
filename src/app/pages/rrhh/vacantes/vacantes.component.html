@@ -26,9 +26,6 @@
           <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
-          <button class="btn btn-secondary btn-sm" (click)="openClose2()">
-            <i class="fas fa-eye"></i>
-          </button>
         </div>
       </div>
     </div>
@@ -79,6 +76,7 @@
               [(ngModel)]="filtros.dependencia"
               (selectionChange)="getJobs()"
             >
+              <mat-option value="">Todas</mat-option>
               <mat-option
                 *ngFor="let item of dependencies"
                 [value]="item.value"
@@ -92,6 +90,7 @@
               [(ngModel)]="filtros.cargo"
               (selectionChange)="getJobs()"
             >
+              <mat-option value="">Todos</mat-option>
               <mat-option *ngFor="let item of positions" [value]="item.value">{{
                 item.text
               }}</mat-option>
@@ -103,6 +102,7 @@
               [(ngModel)]="filtros.departamento"
               (selectionChange)="getJobs()"
             >
+              <mat-option value="">Todos</mat-option>
               <mat-option
                 *ngFor="let item of department"
                 [value]="item.value"
@@ -116,6 +116,7 @@
               [(ngModel)]="filtros.municipio"
               (selectionChange)="getJobs()"
             >
+              <mat-option value="">Todos</mat-option>
               <mat-option
                 *ngFor="let item of municipalities"
                 [value]="item.value"
@@ -123,43 +124,21 @@
               >
             </mat-select>
           </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Campos</mat-label>
+            <mat-select
+              [formControl]="camposForm"
+              multiple
+              (selectionChange)="cambiarCampo($event)"
+            >
+              <mat-option
+                *ngFor="let item of listaCampos"
+                [value]="item.value"
+                >{{ item.text }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
         </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-accordion multi #secondAccordion="matAccordion">
-      <mat-expansion-panel class="mat-elevation-z0">
-        <section class="d-flex justify-content-between mx-1">
-          <mat-checkbox color="primary" [(ngModel)]="checkCodigo"
-            >Código</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkPublicacion"
-            >Publicación</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkInicio"
-            >Inicio</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkFin"
-            >Fin</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkTitulo"
-            >Título</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkDependencia"
-            >Dependencia</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkCargo"
-            >Cargo</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkDepartamento"
-            >Departamento</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkMunicipio"
-            >Municipio</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkEstado"
-            >Estado</mat-checkbox
-          >
-        </section>
       </mat-expansion-panel>
     </mat-accordion>
     <div>
@@ -181,11 +160,13 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm mb-0"
-        
         *ngIf="!loading && jobs.length > 0; else notData"
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
+            <!-- <ng-container *ngFor="let item of listaCampos; let i = index">
+              <th *ngIf="item.selected">{{ item.text }}</th>
+            </ng-container> -->
             <th *ngIf="checkCodigo">Código</th>
             <th *ngIf="checkPublicacion">Publicación</th>
             <th *ngIf="checkInicio">Inicio</th>
@@ -196,7 +177,8 @@
             <th *ngIf="checkDepartamento">Departamento</th>
             <th *ngIf="checkMunicipio">Municipio</th>
             <th *ngIf="checkEstado">Estado</th>
-            <th>Acciones</th>
+
+            <th class="col-1">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -233,8 +215,8 @@
             <td class="align-middle" *ngIf="checkEstado">
               <div class="text-center">
                 <span
-                  class="label {{
-                    job.status == 'Activo' ? 'label-success' : 'label-primary'
+                  class="badge {{
+                    job.status == 'Activo' ? 'badge-danger' : 'badge-success'
                   }}"
                   >{{ job.state }}
                 </span>
@@ -244,7 +226,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm  waves-light"
+                  class="btn btn-primary btn-sm waves-light"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -255,14 +237,16 @@
                                               [routerLink]="['/vacanteseditar',job.id]">
                                               <i class="ti-pencil"></i> Editar</a> -->
                   <a
-                    class="dropdown-item text-info waves-light  caja-botones"
+                    class="dropdown-item text-info waves-light caja-botones"
+                    href="javascript:void(0)"
                     [routerLink]="['/rrhh/vacantes-ver', job.id]"
                   >
                     <i class="fas fa-eye"></i> Ver</a
                   >
                   <a
                     *ngIf="job.state != 'Cancelada'"
-                    class="dropdown-item text-danger waves-light  caja-botones"
+                    class="dropdown-item text-danger waves-light caja-botones"
+                    href="javascript:void(0)"
                     (click)="cancelar(job.id)"
                   >
                     <i class="fa fa-times"></i> Anular</a

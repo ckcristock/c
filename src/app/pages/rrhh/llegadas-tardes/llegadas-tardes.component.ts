@@ -110,6 +110,12 @@ export class LlegadasTardesComponent implements OnInit {
     this.getStatisticsByDays();
   }
   getData() { }
+
+  filtrar() {
+    this.getLateArrivals(); 
+    this.getStatisticsByDays(); 
+    this.getLinearDataset()
+  }
   getLateArrivals() {
     let params = this.getParams();
     this.loading = true;

@@ -64,6 +64,7 @@
                   (selectionChange)="getAllContracts()"
                   name="group"
                 >
+                  <mat-option value="">Todos</mat-option>
                   <mat-option
                     *ngFor="let item of groups"
                     [value]="item.value"
@@ -78,6 +79,7 @@
                   (selectionChange)="getAllContracts()"
                   name="dependency"
                 >
+                  <mat-option value="">Todas</mat-option>
                   <mat-option
                     *ngFor="let item of dependencies"
                     [value]="item.value"
@@ -92,6 +94,7 @@
                   (selectionChange)="getAllContracts()"
                   name="position"
                 >
+                  <mat-option value="">Todos</mat-option>
                   <mat-option
                     *ngFor="let item of positions"
                     [value]="item.value"
@@ -148,9 +151,13 @@
                   {{ contract.identifier }}
                 </td>
                 <!-- <td>
-                                  <img alt="" class="rounded-circle avatar-sm" src="{{ contract.image | image: 'users' }}"
-                                      alt="" />
-                              </td> -->
+                  <img
+                    alt=""
+                    class="rounded-circle avatar-sm"
+                    src="{{ contract.image | image: 'users' }}"
+                    alt=""
+                  />
+                </td> -->
                 <!--  <td>{{ contract.position }}</td> -->
                 <td class="align-middle">{{ contract.work_contract_type }}</td>
                 <td class="align-middle">{{ contract.date_of_admission }}</td>
@@ -194,7 +201,8 @@
                         class="dropdown-item text-success waves-light"
                         ngbTooltip="Descargar"
                       >
-                        <i class="fas fa-download"></i> Descargar
+                        <i class="fas fa-download"></i> Descargar -en
+                        desarrollo-
                       </a>
                       <a
                         type="button"
@@ -223,62 +231,54 @@
           aria-label="Select page"
         >
         </mat-paginator>
-        <!-- <ngb-pagination
-          class="d-flex justify-content-center pagination-rounded pagination-sm"
-          [collectionSize]="pagination.collectionSize"
-          (pageChange)="getAllContracts($event)"
-          [pageSize]="pagination.pageSize"
-          [(page)]="pagination.page"
-          aria-label="Default pagination"
-          maxSize="5"
-          rotate="true"
-          ellipses="false"
-          boundaryLinks="true"
-          rotate="true"
-          ellipses="false"
-          boundaryLinks="true"
-        >
-        </ngb-pagination> -->
       </div>
     </div>
   </div>
   <div class="col-lg-3">
     <div class="card">
-      <div class="card-body">
+      <div class="card-body px-0">
         <h5 class="text-center text-primary">Por vencer</h5>
-        <table
-          *ngIf="!contractData && contractsToExpire.length > 0; else image"
+        <hr class="line" />
+        <div
+          *ngIf="
+            !contractData && contractsToExpire.length > 0;
+            else notDataPorVencer
+          "
         >
-          <td *ngFor="let contractToExpire of contractsToExpire">
-            {{ contractToExpire.first_name }}
-            {{ contractToExpire.first_surname }} <br />
-            <small>
-              {{ contractToExpire.date_end }}
-            </small>
-          </td>
-        </table>
+          <div class="list-group list-group-flush rounded">
+            <a
+              *ngFor="let contractToExpire of contractsToExpire"
+              href="javascript:void(0)"
+              class="list-group-item list-group-item-action flex-column align-items-start"
+            >
+              <div class="d-flex w-100 justify-content-between">
+                <div class="mb-1">
+                  {{ contractToExpire.first_name }}
+                  {{ contractToExpire.first_surname }}
+                </div>
+                <div>
+                  <img
+                    [src]="contractToExpire.image | image"
+                    onerror="this.src='../../../../assets/images/noprofile.png'"
+                    class="rounded-circle mx-auto img-fluid header-profile-user"
+                  />
+                </div>
+              </div>
+              <small class="text-muted">{{ contractToExpire.date_end }}</small>
+            </a>
+          </div>
+        </div>
+        <mat-paginator
+          *ngIf="paginacion2 && !contractData && contractsToExpire.length > 0"
+          [length]="paginacion2.total"
+          [pageSize]="paginacion2.per_page"
+          hidePageSize="true"
+          [pageIndex]="paginacion2.current_page - 1"
+          (page)="handlePageEvent2($event)"
+          aria-label="Select page"
+        >
+        </mat-paginator>
       </div>
-      <ngb-pagination
-        class="d-flex justify-content-center pagination-rounded pagination-sm ps"
-        [collectionSize]="paginationCV.collectionSize"
-        (pageChange)="getContractsToExpire($event)"
-        [pageSize]="paginationCV.pageSize"
-        [(page)]="paginationCV.page"
-        aria-label="Default pagination"
-        maxSize="5"
-        rotate="true"
-        ellipses="true"
-        boundaryLinks="true"
-        rotate="true"
-      >
-      </ngb-pagination>
-      <ng-template #image>
-        <img
-          width="100%"
-          src="../../../../assets/images/contratos.png"
-          alt=""
-        />
-      </ng-template>
     </div>
     <!--   <div class="card">
       <div class="card-body">
@@ -308,7 +308,12 @@
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
-
+<ng-template #notDataPorVencer>
+  <app-not-data [loading]="contractData"></app-not-data>
+</ng-template>
+<ng-template #image>
+  <img width="100%" src="../../../../assets/images/contratos.png" alt="" />
+</ng-template>
 <ng-template #notConlcude>
   <span>No aplica</span>
 </ng-template>

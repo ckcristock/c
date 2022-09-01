@@ -12,14 +12,14 @@ import { MatAccordion } from '@angular/material/expansion';
 export class HorasExtrasComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   primerDiaSemana = moment().startOf('week').format('YYYY-MM-DD');
   ultimoDiaSemana = moment().endOf('week').format('YYYY-MM-DD');
@@ -34,7 +34,7 @@ export class HorasExtrasComponent implements OnInit {
   constructor(
     private _extraHours: ExtraHoursService,
     private _people: PersonService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getPeople();
@@ -42,10 +42,10 @@ export class HorasExtrasComponent implements OnInit {
   }
 
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
-  
+
   getPerson() {
     this._people.getAll({}).subscribe((res: any) => {
       this.people = res.data;
@@ -59,7 +59,7 @@ export class HorasExtrasComponent implements OnInit {
   get ultimoDiaSemanaFormato() {
     return moment(this.ultimoDiaSemana, 'YYYY-MM-DD').format('DD/MM/YYYY');
   }
-  changeTipoTurno(turn) {}
+  changeTipoTurno(turn) { }
 
   cambiarSemana() {
     let año = this.semana.split('-')[0];
@@ -110,7 +110,9 @@ export class HorasExtrasComponent implements OnInit {
         params
       )
       .subscribe((r: any) => {
+
         this.loading = false;
+        console.log(r.data)
         this.horasExtras = r.data;
       });
   }

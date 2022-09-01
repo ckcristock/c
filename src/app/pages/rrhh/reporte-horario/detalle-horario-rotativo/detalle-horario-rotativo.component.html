@@ -1,8 +1,5 @@
 <div class="rounded-top table-responsive">
-  <table
-    class="table table-bordered table-striped table-sm mt-2"
-    
-  >
+  <table class="table table-bordered table-striped table-sm mt-2">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th>Fecha</th>
@@ -31,7 +28,7 @@
             - {{ horario.temp_one }}
           </a>
         </td>
-  
+
         <td>
           <div
             *ngIf="
@@ -45,7 +42,7 @@
             </span>
           </div>
         </td>
-  
+
         <td>
           <div
             *ngIf="
@@ -59,7 +56,7 @@
             </span>
           </div>
         </td>
-  
+
         <td>
           <div
             *ngIf="
@@ -86,7 +83,7 @@
             </span>
           </div>
         </td>
-  
+
         <td>
           <div
             *ngIf="
@@ -95,7 +92,9 @@
             "
           >
             <!-- <span class="dot" [class]="horario.colors.leave"></span> -->
-            <span class="custom-label">{{ horario.leave_time_one | time }} </span>
+            <span class="custom-label"
+              >{{ horario.leave_time_one | time }}
+            </span>
             <a
               class="btn btn-link p-0"
               *ngIf="horario.temp_two && horario.temp_two != '0.0'"
@@ -120,11 +119,8 @@
     </tbody>
   </table>
 </div>
-<div class="mt-2">
-  <div class="text-right text-muted font-weight-bold">
-    Total horas trabajadas:
-    {{ horas }}
-  </div>
+<div class="alert alert-info text-center" role="alert">
+  Total horas trabajadas: {{ horas }}
 </div>
 
 <ng-template #notHour2>

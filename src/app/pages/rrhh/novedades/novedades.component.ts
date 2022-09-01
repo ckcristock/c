@@ -5,6 +5,7 @@ import { DisabilityLeavesService } from './disability-leaves.service';
 import { PayrollFactorService } from './payroll-factor.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-novedades',
@@ -13,19 +14,9 @@ import { MatAccordion } from '@angular/material/expansion';
 })
 export class NovedadesComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
-  matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }    
-  }
+  matPanel = false;  
   openModal = new EventEmitter<any>()
   form: FormGroup
-
   people: any[] = [];
   peopleSelects:any[] = [];
   loading = false
@@ -42,6 +33,17 @@ export class NovedadesComponent implements OnInit {
     this.createFrom()
     this.cargarNovedades()
     this.getPeople()
+  }
+
+  openClose(){
+    
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
   }
   estadoFiltros = false;
   mostrarFiltros(){
@@ -61,9 +63,10 @@ export class NovedadesComponent implements OnInit {
   createFrom() {
     let dateStart = moment().startOf("month").format(moment.HTML5_FMT.DATE)
     let dateEnd = moment().endOf("month").format(moment.HTML5_FMT.DATE)
+    //novedades del mes actual
     this.form = this.fb.group({
-      date_start: ['', Validators.required],
-      date_end: ['', Validators.required],
+      date_start: [dateStart, Validators.required],
+      date_end: [dateEnd, Validators.required],
       personfill: ['']
     })
   }
@@ -71,7 +74,7 @@ export class NovedadesComponent implements OnInit {
   getPeople() {
     this._people.getPeopleIndex().subscribe((r: any) => {
       this.peopleSelects = r.data;
-      this.peopleSelects.unshift({ text: 'Seleccione', value: '' });
+      this.peopleSelects.unshift({ text: 'Todos', value: '' });
     });
   }
 

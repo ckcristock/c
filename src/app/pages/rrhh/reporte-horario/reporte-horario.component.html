@@ -7,9 +7,22 @@
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
           <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
+            type="button"
+            (click)="download()"
+            *ngIf="reporteHorarios.length > 0"
+            class="btn btn-success btn-sm"
           >
+            <span *ngIf="!donwloading; else status"
+              ><i class="fas fa-file-download"></i> Descargar</span
+            >
+            <ng-template #status>
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              Generando...
+            </ng-template>
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -18,7 +31,7 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <form [formGroup]="forma" (ngSubmit)="getDiaries()">
+        <form [formGroup]="forma">
           <div class="row">
             <mat-form-field
               class="col"
@@ -27,22 +40,32 @@
             >
               <mat-label>Empresa</mat-label>
               <mat-select formControlName="company_id">
-                <mat-option *ngFor="let item of companies" [value]="item.value">{{
-                  item.text
-                }}</mat-option>
+                <mat-option
+                  *ngFor="let item of companies"
+                  [value]="item.value"
+                  >{{ item.text }}</mat-option
+                >
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Grupo</mat-label>
-              <mat-select formControlName="group_id">
-                <mat-option *ngFor="let item of groupList" [value]="item.value">{{
-                  item.text
-                }}</mat-option>
+              <mat-select
+                formControlName="group_id"
+                (selectionChange)="getDiaries()"
+              >
+                <mat-option
+                  *ngFor="let item of groupList"
+                  [value]="item.value"
+                  >{{ item.text }}</mat-option
+                >
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Dependencia</mat-label>
-              <mat-select formControlName="dependency_id">
+              <mat-select
+                formControlName="dependency_id"
+                (selectionChange)="getDiaries()"
+              >
                 <mat-option
                   *ngFor="let item of dependencyList"
                   [value]="item.value"
@@ -57,6 +80,7 @@
                 type="date"
                 formControlName="first_day"
                 required
+                (change)="getDiaries()"
                 autocomplete="off"
               />
             </mat-form-field>
@@ -66,13 +90,17 @@
                 matInput
                 type="date"
                 formControlName="last_day"
+                (change)="getDiaries()"
                 required
                 autocomplete="off"
               />
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Funcionario</mat-label>
-              <mat-select formControlName="person_id">
+              <mat-select
+                formControlName="person_id"
+                (selectionChange)="getDiaries()"
+              >
                 <mat-option *ngFor="let item of people" [value]="item.value">{{
                   item.text
                 }}</mat-option>
@@ -80,37 +108,15 @@
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Tipo de turno</mat-label>
-              <mat-select formControlName="turn_type" name="tipo_turno">
+              <mat-select
+                formControlName="turn_type"
+                name="tipo_turno"
+                (selectionChange)="getDiaries()"
+              >
                 <mat-option value="Rotativo">Turno Rotativo</mat-option>
                 <mat-option value="Fijo">Turno Fijo</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <button type="submit" class="btn btn-info btn-sm btn-block">
-                <i class="fa fa-search"></i> Filtrar
-              </button>
-            </div>
-            <div class="col-md-6 mb-3">
-              <button
-                type="button"
-                class="btn btn-success btn-sm btn-block"
-                (click)="download()"
-              >
-                <i class="fas fa-file-download"></i>
-
-                <span *ngIf="!donwloading; else status"> Descargar</span>
-                <ng-template #status>
-                  <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                  Generando...
-                </ng-template>
-              </button>
-            </div>
           </div>
         </form>
       </mat-expansion-panel>

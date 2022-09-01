@@ -14,6 +14,7 @@ import { PayrollFactorService } from '../payroll-factor.service';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-crear-novedad',
@@ -34,6 +35,7 @@ export class CrearNovedadComponent implements OnInit {
     private _people: PersonService,
     private _payrollFactor: PayrollFactorService,
     private modalService: NgbModal,
+    private _swal: SwalService,
   ) { }
 
   ngOnInit(): void {
@@ -76,13 +78,13 @@ export class CrearNovedadComponent implements OnInit {
   getPeople() {
     this._people.getPeopleIndex().subscribe((r: any) => {
       this.people = r.data;
-      this.people.unshift({ text: 'Seleccione', value: '' });
+      this.people.unshift({ text: 'Selecciona', value: '' });
     });
   }
   getDisabilityLeaves() {
     this._disabilityLeaves.getDisabilityLeaves().subscribe((r: any) => {
       this.disabilityLeaves = r.data;
-      this.disabilityLeaves.unshift({ text: 'Seleccione', value: '' });
+      this.disabilityLeaves.unshift({ text: 'Selecciona', value: '' });
     });
   }
 
@@ -98,14 +100,11 @@ export class CrearNovedadComponent implements OnInit {
     if (this.form.invalid) {
       return false;
     }
-    Swal.fire({
-      title: '¿Seguro?',
-      text: 'Va a modificar las novedades',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Si, Hazlo!',
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: ''
     }).then((result) => {
       if (result.value) {
         this.sendData();
@@ -116,13 +115,13 @@ export class CrearNovedadComponent implements OnInit {
     this.form.get('disability_type').enable();
     this._payrollFactor.savePayrollFactor(this.form.value).subscribe((r: any) => {
       if (r.code == 200) {
-        Swal.fire({
-          title: 'Opersación exitosa',
-          text: 'Felicidades, se han actualizado las novedades',
+        this._swal.show({
           icon: 'success',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-        });
+          title: 'Operación exitosa',
+          showCancel: false,
+          text: 'Se han actualizado las novedades',
+          timer: 1000
+        })
         this.createForm();
         this.saving.next();
         this.modalService.dismissAll(); 

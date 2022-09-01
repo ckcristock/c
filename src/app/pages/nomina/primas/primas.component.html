@@ -58,10 +58,13 @@
     <h4 class="text-primary modal-title">Ingrese datos</h4>
     <button
       type="button"
-      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      class="close"
+      data-dismiss="modal"
       aria-label="Close"
       (click)="modal.dismiss('Cross click')"
-    ></button>
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <form [formGroup]="form">

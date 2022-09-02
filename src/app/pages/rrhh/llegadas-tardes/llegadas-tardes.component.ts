@@ -122,7 +122,7 @@ export class LlegadasTardesComponent implements OnInit {
     this._lateArrivals
       .getLateArrivals(this.firstDay, this.lastDay, params)
       .subscribe((r: any) => {
-        this.companies = r.data;
+        this.companies = r.data
         this.loading = false;
         this.transformData();
       });
@@ -232,7 +232,7 @@ export class LlegadasTardesComponent implements OnInit {
     this._lateArrivals
       .getStatistcs(this.firstDay, this.lastDay, params)
       .subscribe((r: any) => {
-        console.log(r.data)
+        //console.log(r.data)
         this.dataDiary.total = r.data.lates.total;
         if (r.data.lates.time_diff_total != null) {
           this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
@@ -257,6 +257,10 @@ export class LlegadasTardesComponent implements OnInit {
   transformData() {
     this.companies.forEach((c) => {
       c.groups.forEach((g) => {
+        if (Array.isArray(g.dependencies)) {
+        } else {
+          g.dependencies = Object.values(g.dependencies)
+        }        
         g.dependencies.forEach((d) => {
           d.people.forEach((pr) => {
             pr.averageTime = this.tiempoTotal(pr.late_arrivals);

@@ -60,132 +60,229 @@
       </mat-expansion-panel>
     </mat-accordion>
 
-    <ng-container *ngIf="horasExtras.length && !loading; else notData">
-      <div class="row">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-12" *ngFor="let company of horasExtras">
-                  <p class="font-weight-bold mt-2">{{ company.name }}</p>
-                  <div class="row">
-                    <div class="col-12" *ngFor="let group of company.groups">
-                      <p class="font-weight-bold mt-1">
-                        {{ group.name }}
-                      </p>
-                      <div
-                        *ngFor="let dependency of group.dependencies"
-                        class="mb-3"
+    <ng-container *ngIf="horasExtras.length > 0 && !loading; else notData">
+      <div *ngFor="let company of horasExtras">
+        <h4 *ngIf="horasExtras.length > 1">{{ company.name }}</h4>
+        <div *ngFor="let group of company.groups">
+          <h5 class="text-uppercase font-weight-bold text-primary">
+            Grupo:
+            <span class="text-secondary">{{ group.name }}</span>
+          </h5>
+          <div *ngFor="let dependency of group.dependencies">
+            <h6 class="font-weight-bold text-center text-uppercase">
+              {{ dependency.name }}
+            </h6>
+            <div
+              class="row"
+              *ngIf="dependency.people.length > 0; else alertNoData"
+            >
+              <div class="rounded-top table-responsive">
+                <table class="table table-hover table-sm">
+                  <tbody>
+                    <ng-container *ngFor="let person of dependency.people">
+                      <tr
+                        class="text-center"
+                        (click)="person.show = !person.show"
+                        role="button"
                       >
-                        <div class="row">
-                          <div class="mt-2 col-12">
-                            {{ dependency.name }}
-                          </div>
+                        <td class="col-1">
+                          <img
+                            src="{{ person?.image | image: 'users' }}"
+                            onerror="this.src='../../../../assets/images/noprofile.png'"
+                            class="rounded-circle mx-auto header-profile-user"
+                          />
+                        </td>
+                        <td>
+                          {{ person.first_name }}
+                          {{ person.fist_surname }}
+                        </td>
+                        <td class="col-1">
+                          <i
+                            [ngClass]="
+                              person.show ? 'fa-angle-up' : 'fa-angle-down'
+                            "
+                            class="fas text-primary"
+                            role="button"
+                            (click)="person.show = !person.show"
+                          ></i>
+                        </td>
+                      </tr>
+                      <ng-container *ngIf="person.show == true">
+                        <tr>
+                          <td colspan="100%">
+                            <div class="rounded-top table-responsive">
+                              <table
+                                class="table table-bordered table-striped table-sm"
+                              >
+                                <thead class="bg-light">
+                                  <tr class="text-center text-uppercase">
+                                    <th class="col-3">Información</th>
+                                    <!-- <th class="col-1" *ngIf="hasDay">Editar</th> -->
+                                    <th
+                                      data-toggle="tooltip"
+                                      class="col-1"
+                                      data-placement="top"
+                                      title="Horas trabajadas"
+                                      role="button"
+                                    >
+                                      HT
+                                    </th>
+                                    <th
+                                      class="col-1"
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      title="Horas extra diurnas"
+                                      role="button"
+                                    >
+                                      HED
+                                    </th>
+                                    <th
+                                      class="col-1"
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      title="Horas extra nocturnas"
+                                      role="button"
+                                    >
+                                      HEN
+                                    </th>
+                                    <th
+                                      class="col-1"
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      title="Horas extra diurnas festivas/dominicales"
+                                      role="button"
+                                    >
+                                      HEDFD
+                                    </th>
+                                    <th
+                                      class="col-1"
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      title="Horas extra nocturnas festivas/dominicales"
+                                      role="button"
+                                    >
+                                      HENFD
+                                    </th>
+                                    <th
+                                      class="col-1"
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      title="Recargos nocturnos"
+                                      role="button"
+                                    >
+                                      RN
+                                    </th>
+                                    <th
+                                      class="col-1"
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      title="Recargos festivos"
+                                      role="button"
+                                    >
+                                      RF
+                                    </th>
+                                    <th class="col-1">Validar</th>
+                                  </tr>
+                                </thead>
+                              </table>
+                            </div>
 
-                          <div
-                            class="col-12 row pl-2 mt-2 mr-4 pr-3"
-                            *ngFor="let person of dependency.people"
-                          >
-                            <div class="col-md-3">
-                              <div>
-                                <img
-                                  [src]="person.image"
-                                  alt="foto_person"
-                                  width="20px"
-                                />
-                                <span class="custom-label">
-                                  {{ person.first_name }}
-                                  {{ person.fist_surname }}
-                                </span>
-                                <span class="turno text-center font-weight-bold"
-                                  >F</span
-                                >
-                              </div>
-                            </div>
-
-                            <div class="col-md-1">
-                              <button
-                                class="btn btn-link btn-sm"
-                                (click)="person.show = !person.show"
-                              >
-                                <i class="fa fa-search font-weight-bold"></i>
-                              </button>
-                            </div>
-
-                            <div class="col-md-1">
-                              <p
-                                class="text-center item-hora"
-                                title="Horas Trabajadas"
-                              >
-                                HT
-                              </p>
-                            </div>
-
-                            <div class="col-md-1">
-                              <p
-                                class="text-center item-hora"
-                                title="Horas Extras Diurnas"
-                              >
-                                HED
-                              </p>
-                            </div>
-                            <div class="col-md-1">
-                              <p
-                                class="text-center item-hora"
-                                title="Horas Extras Nocturnas"
-                              >
-                                HEN
-                              </p>
-                            </div>
-                            <div class="col-md-1">
-                              <p
-                                class="text-center item-hora"
-                                title="Horas Extras Diurnas Festivas/Dominicales"
-                              >
-                                HEDFD
-                              </p>
-                            </div>
-                            <div class="col-md-1">
-                              <p
-                                class="text-center item-hora"
-                                title="Horas Extras Nocturnas Festivas/Dominicales"
-                              >
-                                HEDFN
-                              </p>
-                            </div>
-                            <div class="col-md-1">
-                              <p
-                                class="text-center item-hora"
-                                title="Recargos Nocturnos"
-                              >
-                                RN
-                              </p>
-                            </div>
-                            <div class="col-md-1">
-                              <p
-                                class="text-center item-hora"
-                                title="Recargos Festivos"
-                              >
-                                RF
-                              </p>
-                            </div>
-                            <div class="col-12">
-                              <app-lista-fijos
-                                *ngIf="person.show == true"
-                                [turnType]="turnType"
-                                [person]="person"
-                                [primerDia]="primerDiaSemana"
-                                [ultimodiaDia]="ultimoDiaSemana"
-                              ></app-lista-fijos>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <hr />
-                </div>
+                            <app-lista-fijos
+                              *ngIf="person.show == true"
+                              [turnType]="turnType"
+                              [person]="person"
+                              [primerDia]="primerDiaSemana"
+                              [ultimodiaDia]="ultimoDiaSemana"
+                            ></app-lista-fijos>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </table>
               </div>
+              <!-- <div
+                class="col-12 row pl-2 mt-2 mr-4 pr-3"
+                *ngFor="let person of dependency.people"
+              >
+                <div class="col-md-3">
+                  <div>
+                    <img
+                      src="{{ person?.image | image: 'users' }}"
+                      onerror="this.src='../../../../assets/images/noprofile.png'"
+                      class="rounded-circle mx-auto header-profile-user"
+                    />
+                    <span class="custom-label">
+                      {{ person.first_name }}
+                      {{ person.fist_surname }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="col-md-1">
+                  <i
+                    [ngClass]="person.show ? 'fa-angle-up' : 'fa-angle-down'"
+                    class="fas text-primary"
+                    role="button"
+                    (click)="person.show = !person.show"
+                  ></i>
+                </div>
+
+                <div class="col-md-1">
+                  <p class="text-center item-hora" title="Horas Trabajadas">
+                    HT
+                  </p>
+                </div>
+
+                <div class="col-md-1">
+                  <p class="text-center item-hora" title="Horas Extras Diurnas">
+                    HED
+                  </p>
+                </div>
+                <div class="col-md-1">
+                  <p
+                    class="text-center item-hora"
+                    title="Horas Extras Nocturnas"
+                  >
+                    HEN
+                  </p>
+                </div>
+                <div class="col-md-1">
+                  <p
+                    class="text-center item-hora"
+                    title="Horas Extras Diurnas Festivas/Dominicales"
+                  >
+                    HEDFD
+                  </p>
+                </div>
+                <div class="col-md-1">
+                  <p
+                    class="text-center item-hora"
+                    title="Horas Extras Nocturnas Festivas/Dominicales"
+                  >
+                    HEDFN
+                  </p>
+                </div>
+                <div class="col-md-1">
+                  <p class="text-center item-hora" title="Recargos Nocturnos">
+                    RN
+                  </p>
+                </div>
+                <div class="col-md-1">
+                  <p class="text-center item-hora" title="Recargos Festivos">
+                    RF
+                  </p>
+                </div>
+                <div class="col-12">
+                  <app-lista-fijos
+                    *ngIf="person.show == true"
+                    [turnType]="turnType"
+                    [person]="person"
+                    [primerDia]="primerDiaSemana"
+                    [ultimodiaDia]="ultimoDiaSemana"
+                  ></app-lista-fijos>
+                </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -194,8 +291,11 @@
   </div>
 </div>
 
+<ng-template #alertNoData>
+  <div class="alert alert-info" role="alert">
+    No hemos encontrado nada aquí.
+  </div>
+</ng-template>
 <ng-template #notData>
-  <app-not-data
-    [loading]="loading"
-  ></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

@@ -94,7 +94,7 @@ export class ReporteHorarioComponent implements OnInit {
 
   createForm() {
     this.forma = this.fb.group({
-      turn_type: ['Fijo'],
+      turn_type: [''],
       first_day: [moment().format('YYYY-MM-DD')],
       last_day: [moment().format('YYYY-MM-DD')],
       group_id: [0],

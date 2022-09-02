@@ -1,33 +1,38 @@
+<tbody>
+  <tr class="text-center" [ngClass]="{ extra: validada }">
+    <td class="col-3 text-left">
+      <div *ngIf="day.date" class="text-primary font-weight-bold">
+        {{ day.date | date: "EEEE" | uppercase }}
+      </div>
+      <div *ngIf="turnoDato != '' && turnoDato != undefined">
+        Turno:
+        <b>
+          {{ turnoDato.entry_time | time }} - {{ turnoDato.leave_time | time }}
+        </b>
+      </div>
+      <div>
+        Real:
+        <b *ngIf="diario.entry_time_one; else descanso">
+          {{ diario.entry_time_one | time }} -
+          {{ diario.leave_time_one | time }}
+        </b>
+        <ng-template #descanso>
+          <b>Descanso</b>
+        </ng-template>
+      </div>
+    </td>
+    <td class="col-1" *ngIf="diario.entry_time_one">
+      <a (click)="modal.show()" title="Editar">
+        <i class="fa fa-pencil-alt"></i>
+      </a>
+    </td>
+    <td class="col-1">
+      {{ lista.horasTrabajadas }}
+    </td>
+  </tr>
+</tbody>
+
 <div class="row pt-3" [ngClass]="{ extra: validada }">
-  <div class="col-md-3">
-    <p *ngIf="day.date" class="text-primary font-weight-bold m-0 p-0">
-      {{ day.date | date: "EEEE" |  uppercase  }}
-    </p>
-    <p class="m-0 p-0" *ngIf="turnoDato != '' && turnoDato != undefined">
-      Turno:
-      <b>
-        {{ turnoDato.entry_time | time }} - {{ turnoDato.leave_time | time }}
-      </b>
-    </p>
-    <p class="m-0 p-0">
-      Real:
-      <b *ngIf="diario.entry_time_one; else descanso">
-        {{ diario.entry_time_one | time }} -
-        {{ diario.leave_time_one | time }}
-      </b>
-      <ng-template #descanso>
-        <b>Descanso</b>
-      </ng-template>
-    </p>
-  </div>
-  <div class="col-md-1 text-left">
-    <a *ngIf="diario.entry_time_one" (click)="modal.show()" title="Editar">
-      <i class="fa fa-pencil-alt"></i>
-    </a>
-  </div>
-  <div class="col-md-1">
-    <p class="pl-4 pt-2">{{ lista.horasTrabajadas }}</p>
-  </div>
   <div class="col-md-1">
     <input
       type="number"

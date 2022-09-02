@@ -232,7 +232,11 @@
                               <ng-container
                                 *ngFor="let person of dependency.people"
                               >
-                                <tr class="text-center">
+                                <tr
+                                  class="text-center"
+                                  (click)="person.selected = !person.selected"
+                                  role="button"
+                                >
                                   <td>
                                     <img
                                       src="{{ person?.image | image: 'users' }}"

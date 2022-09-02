@@ -13,10 +13,14 @@ export class ExtraHoursService {
     return this.http.get( `${environment.base_url}/horas_extras/turno_rotativo/${d1}/${d2}/${type}`,{params})
     .pipe(
       map((d: any) => {
-        Array.from(d.data).forEach((company: any) => {
-          Array.from(company.groups).forEach((group: any) => {
-            Array.from(group.dependencies).forEach((dependency: any) => {
-              Array.from(dependency.people).forEach((person: any) => {
+        d.data.forEach((company) => {
+          company.groups.forEach((group) => {
+            if (Array.isArray(group.dependencies)) {
+            } else {
+              group.dependencies = Object.values(group.dependencies)
+            } 
+            group.dependencies.forEach((dependency) => {
+              dependency.people.forEach((person) => {
                 person.show = 0;
                 
               });

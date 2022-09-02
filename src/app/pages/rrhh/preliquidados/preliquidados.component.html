@@ -9,19 +9,23 @@
         class="row d-flex align-items-stretch"
         *ngIf="!loading && preliquidados.length > 0; else notData"
       >
-        <div class="col mb-4 d-flex align-items-stretch" *ngFor="let preliquidado of preliquidados">
+        <div
+          class="col mb-4 d-flex align-items-stretch"
+          *ngFor="let preliquidado of preliquidados"
+        >
           <div class="card border border-3 border-light w-100 text-center">
             <div class="card-body pb-0">
               <img
                 [src]="preliquidado.image | image"
-                class="card-img-top "
+                class="card-img-top"
                 alt=""
                 onerror="this.src='../../../../assets/images/noprofile.png'"
               />
               <div class="card-title">
                 <p class="mb-0 mt-2">
                   <strong>
-                    {{ preliquidado.first_name }} {{ preliquidado.first_surname }}
+                    {{ preliquidado.first_name }}
+                    {{ preliquidado.first_surname }}
                   </strong>
                   <br />
                   <b>{{ preliquidado.position }}</b
@@ -38,21 +42,21 @@
               >
                 <button
                   type="button"
-                  class="btn btn-outline-success btn-sm"
-                  placement="bottom"
-                  ngbTooltip="Liquidar"
-                  (click)="alert(preliquidado.id)"
-                >
-                  <i class="fas fa-id-card"></i>
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-sm"
+                  class="btn btn-danger btn-sm"
                   placement="bottom"
                   ngbTooltip="No liquidar"
                   (click)="activate(preliquidado.id)"
                 >
                   <i class="fas fa-times"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                  placement="bottom"
+                  ngbTooltip="Liquidar"
+                  (click)="alert(preliquidado.id)"
+                >
+                  <i class="fas fa-id-card"></i>
                 </button>
               </div>
             </div>

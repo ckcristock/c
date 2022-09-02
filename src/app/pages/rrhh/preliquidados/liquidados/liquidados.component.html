@@ -354,20 +354,24 @@
           </div>
         </div>
         <div class="row d-flex justify-content-between">
-          <button
-            class="btn btn-primary btn-lg"
-            (click)="goBack()"
-            type="button"
-          >
-            Anterior
-          </button>
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <button class="btn btn-danger btn-lg" (click)="cancelButton()">
-              Cancelar
+          <div class="col">
+            <button
+              class="btn btn-primary btn-sm"
+              (click)="goBack()"
+              type="button"
+            >
+              Anterior
             </button>
-            <button class="btn btn-primary btn-lg" type="button">
-              Liquidar
-            </button>
+          </div>
+          <div class="col text-right">
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button class="btn btn-danger btn-sm" (click)="cancelButton()">
+                Cancelar
+              </button>
+              <button class="btn btn-primary btn-sm" type="button">
+                Liquidar
+              </button>
+            </div>
           </div>
         </div>
       </mat-step>

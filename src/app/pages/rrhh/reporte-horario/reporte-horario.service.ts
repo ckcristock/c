@@ -19,6 +19,10 @@ export class ReporteHorarioService {
         map((d: any) => {
           d.data.forEach((company) => {
             company.groups.forEach((group) => {
+              if (Array.isArray(group.dependencies)) {
+              } else {
+                group.dependencies = Object.values(group.dependencies)
+              } 
               group.dependencies.forEach((dependency) => {
                 dependency.people.forEach((person) => {
                   person.totalHours = 0;

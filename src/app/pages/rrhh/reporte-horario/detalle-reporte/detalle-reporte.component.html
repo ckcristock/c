@@ -21,7 +21,11 @@
                 <ng-container
                   *ngFor="let person of dependency.people; let i = index"
                 >
-                  <tr class="text-center">
+                  <tr
+                    class="text-center"
+                    (click)="person.show = !person.show"
+                    role="button"
+                  >
                     <td class="col-1">
                       <img
                         src="{{ person.image | image: 'users' }}"

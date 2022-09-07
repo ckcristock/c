@@ -29,74 +29,71 @@
     <td class="col-1">
       {{ lista.horasTrabajadas }}
     </td>
+    <td class="col-1">
+      <input
+        type="number"
+        min="0"
+        name="horas"
+        class="form-control custom-control"
+        [(ngModel)]="lista.horasExtrasDiurnas"
+      />
+    </td>
+    <td class="col-1">
+      <input
+        type="number"
+        min="0"
+        name="horasExtrasNocturnas"
+        class="form-control custom-control"
+        [(ngModel)]="lista.horasExtrasNocturnas"
+      />
+    </td>
+    <td class="col-1">
+      <input
+        type="number"
+        min="0"
+        class="form-control custom-control"
+        name="horasExtrasDiurnasFestivasDom"
+        [(ngModel)]="lista.horasExtrasDiurnasFestivasDom"
+      />
+    </td>
+    <td class="col-1">
+      <input
+        type="number"
+        min="0"
+        name="horasExtrasNocturnasFestivasDom"
+        class="form-control custom-control"
+        [(ngModel)]="lista.horasExtrasNocturnasFestivasDom"
+      />
+    </td>
+    <td class="col-1">
+      <input
+        type="number"
+        min="0"
+        class="form-control custom-control"
+        name="recargosNocturnos"
+        [(ngModel)]="lista.recargosNocturnos"
+      />
+    </td>
+    <td class="col-1">
+      <input
+        type="number"
+        min="0"
+        name="recargosFestivos"
+        class="form-control custom-control"
+        [(ngModel)]="lista.recargosFestivos"
+      />
+    </td>
+    <td class="col-1">
+      <a (click)="guardarReporteDeExtras()" class="toCheck" title="Validar">
+        <i class="fa fa-check-circle"></i>
+      </a>
+      <div class="text-success font-weight-bold text-muted" *ngIf="validada">
+        Validada
+      </div>
+    </td>
   </tr>
 </tbody>
 
-<div class="row pt-3" [ngClass]="{ extra: validada }">
-  <div class="col-md-1">
-    <input
-      type="number"
-      min="0"
-      name="horas"
-      class="form-control custom-control"
-      [(ngModel)]="lista.horasExtrasDiurnas"
-    />
-  </div>
-  <div class="col-md-1">
-    <input
-      type="number"
-      min="0"
-      name="horasExtrasNocturnas"
-      class="form-control custom-control"
-      [(ngModel)]="lista.horasExtrasNocturnas"
-    />
-  </div>
-  <div class="col-md-1">
-    <input
-      type="number"
-      min="0"
-      class="form-control custom-control"
-      name="horasExtrasDiurnasFestivasDom"
-      [(ngModel)]="lista.horasExtrasDiurnasFestivasDom"
-    />
-  </div>
-  <div class="col-md-1">
-    <input
-      type="number"
-      min="0"
-      name="horasExtrasNocturnasFestivasDom"
-      class="form-control custom-control"
-      [(ngModel)]="lista.horasExtrasNocturnasFestivasDom"
-    />
-  </div>
-  <div class="col-md-1">
-    <input
-      type="number"
-      min="0"
-      class="form-control custom-control"
-      name="recargosNocturnos"
-      [(ngModel)]="lista.recargosNocturnos"
-    />
-  </div>
-  <div class="col-md-1">
-    <input
-      type="number"
-      min="0"
-      name="recargosFestivos"
-      class="form-control custom-control"
-      [(ngModel)]="lista.recargosFestivos"
-    />
-  </div>
-
-  <div class="col-md-1 pr-4 pl-0">
-    <a (click)="guardarReporteDeExtras()" class="toCheck" title="Validar">
-      <i class="fa fa-check-circle"></i>
-    </a>
-    <p class="text-success font-weight-bold text-muted" *ngIf="validada">
-      Validada
-    </p>
-  </div>
-</div>
 <app-edit-diario-rotating
   (saved)="saved()"
   [diario]="diario"

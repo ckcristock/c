@@ -1,10 +1,11 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { RotatingTurnService } from '../../ajustes/informacion-base/turnos/turno-rotativo/rotating-turn.service';
 import { AsignacionTurnosService } from '../asignacion-turnos/asignacion-turnos.service';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
+import { MatAccordion } from '@angular/material';
 
 @Component({
   selector: 'app-asignar-horas-extras',
@@ -28,7 +29,17 @@ export class AsignarHorasExtrasComponent implements OnInit {
     private _groups: GroupService,
     private _dependencies: DependenciesService
   ) {}
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   ngOnInit(): void {
     this.createForm();
     this.getData();
@@ -85,6 +96,7 @@ export class AsignarHorasExtrasComponent implements OnInit {
     this.changeWeek.emit();
   }
 
+  
 
   getData() {
     this.loading = true;
@@ -96,6 +108,9 @@ export class AsignarHorasExtrasComponent implements OnInit {
       }, 200);
     });
   }
+
+
+
   addElement() {
     this.dependencyList.unshift({ value: 0, text: 'Todas' });
   }

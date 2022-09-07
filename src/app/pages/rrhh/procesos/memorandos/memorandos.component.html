@@ -75,7 +75,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && memorandums.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -115,16 +114,16 @@
             <td class="align-middle">
               {{ memorandum.first_name }} {{ memorandum.first_surname }}
             </td>
-            <td class="align-middle">{{ memorandum.level }}</td>
+            <td class="align-middle">{{ memorandum.level ? memorandum.level : 'No aplica'  }}</td>
             <td class="align-middle">
-              {{ memorandum.memorandumType }}
+              {{ memorandum.memorandumType ? memorandum.memorandumType : 'No aplica'}}
             </td>
             <td class="align-middle">{{ memorandum.type }}</td>
             <td class="align-middle">{{ memorandum.details }}</td>
             <td class="align-middle">
               {{ memorandum.created_at | date: "longDate" }}
             </td>
-            <td class="align-middle">{{ memorandum.state }}</td>
+            <td class="align-middle">{{ memorandum.state ? memorandum.state : 'No aplica' }}</td>
             <td class="align-middle" *ngIf="permission.permissions.approve">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -134,24 +133,34 @@
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
-                <div ngbDropdownMenu *ngIf="memorandum.type == 'Memorando'">
-                  <a
-                    (click)="aprobarMemorando(memorandum, 'Aprobado')"
-                    *ngIf="
-                      permission.permissions.approve &&
-                      memorandum.state == 'Pendiente'
-                    "
-                    class="dropdown-item waves-light text-success caja-botones"
-                  >
-                    <i class="far fa-thumbs-up"></i> Aprobar
-                  </a>
-                  <a
-                    *ngIf="memorandum.type == 'Memorando'"
-                    class="dropdown-item waves-light text-success caja-botones"
-                    (click)="download(memorandum.file)"
-                  >
-                    Descargar archivo
-                  </a>
+                <div ngbDropdownMenu>
+                  <div *ngIf="memorandum.type == 'Memorando'; else llamado">
+                    <a
+                      (click)="aprobarMemorando(memorandum, 'Aprobado')"
+                      href="javascript:void(0)"
+                      *ngIf="memorandum.state == 'Pendiente'"
+                      class="dropdown-item waves-light text-success caja-botones"
+                    >
+                      <i class="far fa-thumbs-up"></i> Aprobar
+                    </a>
+                    <a
+                      *ngIf="memorandum.type == 'Memorando'"
+                      href="javascript:void(0)"
+                      class="dropdown-item waves-light text-info caja-botones"
+                      (click)="download(memorandum.file)"
+                    >
+                      <i class="fas fa-file-download"></i> Descargar
+                    </a>
+                  </div>
+                  <ng-template #llamado>
+                    <a
+                      href="javascript:void(0)"
+                      class="dropdown-item waves-light text-dark caja-botones"
+                      (click)="download(memorandum.file)"
+                    >
+                      <i class="fas fa-ban"></i> Nada por hacer
+                    </a>
+                  </ng-template>
                 </div>
               </div>
             </td>
@@ -195,8 +204,8 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="formMotivo">
-      <div class="d-table-cell w-100 align-middle">
-        <mat-form-field class="col-md-12 pl-0" appearance="outline">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
             matInput
@@ -207,16 +216,15 @@
             required
             autocomplete="off"
           />
+          <button
+            matSuffix
+            mat-icon-button
+            (click)="saveReason()"
+            [disabled]="!formMotivo.valid"
+          >
+            <mat-icon>save</mat-icon>
+          </button>
         </mat-form-field>
-      </div>
-      <div class="d-table-cell">
-        <button
-          class="btn btn-primary"
-          (click)="saveReason()"
-          [disabled]="!formMotivo.valid"
-        >
-          Guardar
-        </button>
       </div>
     </form>
     <h6 class="mb-3 text-uppercase text-primary text-center">Motivos</h6>

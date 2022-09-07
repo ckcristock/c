@@ -1,135 +1,213 @@
-<div class="card" *ngIf="process">
-    <div class="card-header">
-        <h5 class="card-title text-primary"> Cerrar Proceso Disciplinario </h5>
-        <h6 class="card-title" *ngIf="process.status=='Cerrado'"> Proceso cerrado anteriormente, no se permiten mas cambios </h6>
+<div class="card col-lg-6 mx-auto" *ngIf="process">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <h4 class="text-primary">Cerrar proceso disciplinario</h4>
     </div>
-    <div class="card-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="col-6">
-                    <div class="form-group">
-                        <div class="col-12" *ngIf="process.status=='Abierto'">
-                            <label class="custom-label" for="funcionario_id">Funcionario(s) responsable(s)</label>
-                            <div class="row ml-0 mr-0">
-
-                                <input id="typeahead-format" type="text" class="form-control form-control-sm col-9" placeholder="Funcionario..." formControlName="person_id" (change)="getHistory()" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue"
-                                    [editable]='false' />
-                                <button class="btn btn-primary btn-sm col-2 ml-2" (click)="open();">Agregar</button>
-                            </div>
-
-                            <ng-container *ngIf="person_id_valid">
-                                <small *ngFor="let item of form.get('person_id').errors | ObjToArrayPipe" class="text-danger">
-                                    {{ item?.msj }}
-                                </small>
-                            </ng-container>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-group mb-3 col-7">
-                            <label for="importFile">Documento Legal</label>
-                            <input *ngIf="process.status=='Abierto'" class="ml-1" type="file" id="importFile" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
-                        </div>
-                        <div class="col-5 text-right">
-                            <button class="btn btn-sm btn-primary" *ngIf="process.status=='Cerrado'" (click)="download(legalDocument)">Descargar</button>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-md-6 panel">
-                    <div class="form-group mt-3">
-                        <label for="">Descripción</label>
-                        <p>{{process.process_description}}</p>
-                    </div>
-                </div>
-
-            </div>
-        </form>
-
-
-        <table *ngIf="funcionarios.length" class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Funcionarios Responsables</th>
-                    <th scope="col">Memorandos</th>
-                    <th scope="col">Fecha Memorando</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let user of funcionarios; let i= index">
-                    <th scope="row">{{i+1}}</th>
-                    <td>{{user.personId.name}}</td>
-                    <td *ngIf="user.memorandos.length>0">
-                        <p *ngFor="let memo of user.memorandos">{{memo.name}}</p>
-                    </td>
-                    <td *ngIf="!user.memorandos.length>0">
-                        <p>Sin Memorandos</p>
-                    </td>
-                    <td>
-                        <p *ngFor="let memo of user.memorandos">{{memo.value}}</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="col" *ngIf="process.status=='Abierto'">
-            <button class="btn btn-errorbtn btn-danger mr-2 btn-sm btn-block" (click)="cerrarDescargo()"> Cerrar
-            Descargo</button>
-
-        </div>
-
+    <hr class="line" />
+    <div
+      class="alert alert-info text-center"
+      role="alert"
+      *ngIf="process.status == 'Cerrado'"
+    >
+      Proceso cerrado anteriormente, no se permiten más cambios
     </div>
-
-    <app-modal-basic #modal [dialogClass]="'modal-lg'">
-        <div class="app-modal-header">
-            <h5 class="modal-title"> Memorandos </h5>
-            <h6 class="modal-title"> Seleccione a continuacion los memorandos que se relacionan al descargo seleccionado
-            </h6>
-            <button type="button" class="close basic-close" (click)="modal.hide(); formSelect.reset()">
-                <span aria-hidden="true">
-                    <i class="fas fa-times" (click)="modal.hide(); formSelect.reset()"></i>
-                </span>
-            </button>
-        </div>
-        <div class="app-modal-body">
-            <form>
-                <div class="form-row">
-                    <div class="col-md-12 panel">
-                        <div class="panel-body">
-                            <div class="ml-4">
-                                <div class="mt-5 text-center" *ngIf="!form.get('person_id').value">
-                                    <i class="fa fa-exclamation-circle fa-3x"></i>
-                                    <h4>Seleccione Un Usuario</h4>
-                                </div>
-                                <div *ngIf="!historyInfo && form.get('person_id').value">
-                                    <h5>El usuario no tiene memorandos a la actualidad</h5>
-                                </div>
-                                <div class="mt-4" style="margin-left: 30px; margin-right: 50px;">
-
-                                    <div *ngFor="let historyInf of historyInfo">
-                                        <input class="mr-2" type="checkbox" [value]="historyInf.created_at_memorandum" [id]="historyInf.id" (change)="onSelectOption($event)" [name]="historyInf.memorandumType">
-                                        <label for="checkbox">
-
-                                            <b lass="fs-3"> Memorando | <i styles="color:gray;"> {{
-                                                    historyInf.created_at_memorandum | date:'MM-dd-yy' }} </i>
-                                            </b><br>
-                                            <strong>Categoria:</strong> <b> {{ historyInf.activity !="" ?
-                                                historyInf.memorandumType : 'Sin Categoria' }} </b>
-                                            <label>Detalle: {{ historyInf.details }} </label> <br>
-                                        </label>
-                                        <hr>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="app-modal-footer">
-            <div class="form-group text-right">
-                <button (click)="modal.hide(); " type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-                <button type="submit" class="btn btn-primary btn-sm raised" (click)="modal.hide(); guardarFuncionario(form.value.person_id); form.reset()">Guardar</button>
+    <div>
+      <title>Descripción</title>
+      <p>{{ process.process_description }}</p>
+    </div>
+    <form [formGroup]="form">
+      <div class="row" *ngIf="process.status == 'Abierto'">
+        <div class="col-md-6">
+          <div class="row">
+            <mat-form-field class="col-12" appearance="outline">
+              <mat-label>Funcionario(s) responsable(s)</mat-label>
+              <input
+                matInput
+                id="typeahead-format"
+                type="text"
+                placeholder="Ingresa el nombre"
+                formControlName="person_id"
+                (change)="getHistory()"
+                [ngbTypeahead]="search"
+                [inputFormatter]="inputFormatBandListValue"
+                [resultFormatter]="resultFormatBandListValue"
+                [editable]="false"
+              />
+              <mat-error *ngIf="person_id_valid"> Campo obligatorio </mat-error>
+            </mat-form-field>
+            <div class="col-12 mb-4">
+              <button
+                class="btn btn-primary btn-sm btn-block"
+                (click)="openConfirm(add)"
+                [disabled]="!form.valid"
+              >
+                Agregar
+              </button>
             </div>
+          </div>
         </div>
-    </app-modal-basic>
+        <!-- </div>
+      <div class="row mt-4" *ngIf="process.status == 'Abierto'"> -->
+        <div class="col-md-6">
+          <div class="form-group text-center">
+            <div class="custom-input-file col-md-12">
+              <input
+                type="file"
+                #fileInput
+                id="fichero-tarifas"
+                class="input-file"
+                (change)="onFileChanged($event)"
+                accept=".pdf, .png, .jpg, .jpeg"
+              />
+              Cargar documento legal
+            </div>
+            <div class="col-md-12 text-center">
+              <small *ngIf="previsualizacion" class="text-success"
+                >Documento legal cargado</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4" *ngIf="process.status == 'Cerrado'">
+        <div class="col">
+          <button
+            class="btn btn-sm btn-success btn-block"
+            (click)="download(legalDocument)"
+          >
+            Descargar
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div class="rounded-top table-responsive">
+      <table
+        *ngIf="funcionarios.length"
+        class="table table-bordered table-striped table-sm"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th scope="col">#</th>
+            <th scope="col">Funcionarios Responsables</th>
+            <th scope="col">Memorandos</th>
+            <th scope="col">Fecha Memorando</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let user of funcionarios; let i = index"
+            class="text-center"
+          >
+            <th class="align-middle">{{ i + 1 }}</th>
+            <td>{{ user.personId.name }}</td>
+            <td *ngIf="user.memorandos.length > 0">
+              <div *ngFor="let memo of user.memorandos">{{ memo.name }}</div>
+            </td>
+            <td *ngIf="!user.memorandos.length > 0">
+              <div>Sin memorandos</div>
+            </td>
+            <td>
+              <span *ngFor="let memo of user.memorandos">{{ memo.value }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <button
+        *ngIf="process.status == 'Abierto'"
+        class="btn btn-danger btn-block"
+        (click)="cerrarDescargo()"
+      >
+        Cerrar descargo
+      </button>
+    </div>
+  </div>
 </div>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Memorandos</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <h6 class="modal-title">
+      Seleccione a continuacion los memorandos que se relacionan al descargo
+      seleccionado
+    </h6>
+    <div class="text-center mt-4" *ngIf="!form.get('person_id').value">
+      <i class="fas fa-exclamation-circle fa-5x text-warning"></i>
+      <h5 class="text-warning">Selecciona usuario</h5>
+    </div>
+    <!-- <div
+      class="alert alert-info text-center mt-4"
+      role="alert"
+      *ngIf="!historyInfo && form.get('person_id').value"
+    >
+      El usuario no tiene memorandos actualmente
+    </div> -->
+
+    <form *ngIf="historyInfo && !loadingHistory; else notData">
+      <div *ngFor="let historyInf of historyInfo; let i = index">
+        <ul class="list-group mt-3">
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-1">
+                <input
+                  class="form-check-input ml-1"
+                  type="checkbox"
+                  [value]="historyInf.created_at_memorandum"
+                  [id]="historyInf.id"
+                  (change)="onSelectOption($event)"
+                  [name]="historyInf.memorandumType"
+                />
+              </div>
+              <div class="col">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">Memorando</h5>
+                  <small>{{
+                    historyInf.created_at_memorandum | date: "MM-dd-yy"
+                  }}</small>
+                </div>
+                <p class="mb-1">
+                  Categoría:
+                  {{
+                    historyInf.activity != ""
+                      ? historyInf.memorandumType
+                      : "Sin categoria"
+                  }}
+                </p>
+                <small>Detalle: {{ historyInf.details }} </small>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="guardarFuncionario(form.value.person_id); form.reset()"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+<ng-template #notData>
+  <app-not-data [loading]="loadingHistory"></app-not-data>
+</ng-template>

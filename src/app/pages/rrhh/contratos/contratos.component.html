@@ -135,11 +135,11 @@
                 <th>F. Fin</th>
                 <th>F. Fin prueba</th>
                 <th>F. Notific.</th>
-                <th>Acc.</th>
+                <th>Acc</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let contract of contracts" class="text-center">
+              <tr *ngFor="let contract of contracts; let i = index" class="text-center">
                 <td class="align-middle">{{ contract.code }}</td>
                 <td class="align-middle">
                   <strong>
@@ -199,7 +199,7 @@
                       <a
                         type="button"
                         class="dropdown-item text-success waves-light"
-                        ngbTooltip="Descargar"
+                        (click)="download(contract.id, contract)"
                       >
                         <i class="fas fa-download"></i> Descargar -en
                         desarrollo-
@@ -211,7 +211,6 @@
                           '/ajustes/informacion-base/funcionario/',
                           contract.id
                         ]"
-                        ngbTooltip="Ver Perfil"
                       >
                         <i class="fas fa-address-card"></i> Ver perfil
                       </a>

@@ -36,8 +36,8 @@ export class CesantiasComponent implements OnInit {
   setState( { id }, state) {
     this._swal.show({
       text: 'Se dispone a cambiar el estado',
-      title: '¿Está seguro?',
-      icon: 'warning',
+      title: '¿Estás seguro(a)?',
+      icon: 'question',
     }).then(r=>{
       if(r.isConfirmed){
       }

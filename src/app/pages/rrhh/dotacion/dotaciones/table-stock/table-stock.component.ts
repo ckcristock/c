@@ -5,6 +5,7 @@ import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/pe
 import { DotacionService } from '../../dotacion.service';
 import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-table-stock',
@@ -60,7 +61,12 @@ export class TableStockComponent implements OnInit {
 
   }
 
-  constructor(private _dotation: DotacionService, private _person: PersonService, private modalService: NgbModal,) { }
+  constructor(
+    private _dotation: DotacionService, 
+    private _person: PersonService, 
+    private modalService: NgbModal,
+    private _swal: SwalService,
+    ) { }
 
   formatter4 = (x: { Nombres: string }) => x.Nombres;
   search4 = (text$: Observable<string>) =>
@@ -96,20 +102,21 @@ export class TableStockComponent implements OnInit {
     this.getData();
   }
 
-  getData(page = 1) {
+  getData(page = 1, nombre = '') {
 
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtros,
       type: this.type ? this.type : this.tipoEntrega,
-      name: this.name
+      name: nombre
     }
 
     this.entrega ? params.entrega = true : '';
     this.loading = true;
     this._dotation.getStok(params).subscribe((r: any) => {
-      console.log(r)
+      //console.log(r)
       this.Lista_Grupos_Inventario1 = r.data.data;
+      console.log(this.Lista_Grupos_Inventario1)
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     });
@@ -118,6 +125,7 @@ export class TableStockComponent implements OnInit {
   getPeople() {
     this._person.getAll({}).subscribe((res: any) => {
       this.people = res.data;
+      //console.log(this.people)
       this.people.unshift({ text: 'Todos', value: 0 });
       //console.log(this.people)
     });
@@ -126,6 +134,7 @@ export class TableStockComponent implements OnInit {
   Lista_Empleados() {
     this._person.getPeopleIndex().subscribe((r: any) => {
       this.Empleados = r.data;
+      //console.log(this.Empleados)
     });
   }///FINAL LISTAR EMPLEADOS
 
@@ -183,15 +192,11 @@ export class TableStockComponent implements OnInit {
   }
 
   save() {
-
-    Swal.fire({
-      title: '¿Seguro?',
-      text: 'Va a generar una nueva dotación',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Si, Hazlo!'
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: 'Vas a generar una nueva dotación',
     }).then(result => {
       if (result.value) {
         this.GuardarEntrega()
@@ -220,12 +225,12 @@ export class TableStockComponent implements OnInit {
     this._dotation.saveDotation({ entrega, prods }).subscribe((r: any) => {
 
       if (r.code == 200) {
-        Swal.fire({
-          title: 'Opersación exitosa',
-          text: 'Felicidades, se ha guardado la dotación',
+        this._swal.show({
           icon: 'success',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
+          title: 'Operación exitosa',
+          showCancel: false,
+          text: 'Dotación guardada',
+          timer: 1000
         })
         this.cerrarModal();
         // this.onChange1();
@@ -242,12 +247,11 @@ export class TableStockComponent implements OnInit {
           type: ''
         }
       } else {
-        Swal.fire({
-          title: 'Operación denegada',
-          text: r.err,
+        this._swal.show({
           icon: 'error',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
+          title: 'Operación denegada',
+          showCancel: false,
+          text: r.err,
         })
       }
 

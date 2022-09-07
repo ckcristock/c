@@ -29,6 +29,7 @@ export class FijoComponent implements OnInit {
   constructor(private _swal: SwalService, private _extra: ExtraHoursService) {}
 
   ngOnInit(): void {
+    console.log(this.day)
     this.funcionarioDato = this.person;
     this.diarioDato = this.diario;
 
@@ -55,8 +56,8 @@ export class FijoComponent implements OnInit {
   guardarReporteDeExtras() {
     this._swal
       .show({
-        title: '¿Está seguro(a)?',
-        text: 'Va a realizar el guardado de validación de las horas extras del funcionario, asegúrese que todo coincida como debe ya que esto afectará cálculos de nómina.',
+        title: '¿Estás seguro(a)?',
+        text: 'Vas a realizar la validación de las horas extras del funcionario, confirma que todo coincida correctamente pues esto afectará los cálculos de nómina.',
         icon: 'warning',
       })
       .then((res) => {

@@ -149,9 +149,10 @@ export class SemanaTurnoComponent implements OnInit {
   makeHorario() {
     this._swal
       .show({
-        title: '¿Está seguro?',
-        text: 'Se dispone a asignar horarios',
+        title: '¿Estás seguro(a)?',
+        text: 'Te dispones a asignar horarios',
         icon: 'question',
+        showCancel: true,
       })
       .then((r) => {
         if (r.isConfirmed) {
@@ -194,14 +195,15 @@ export class SemanaTurnoComponent implements OnInit {
       (r: any) => {
         this._swal.show({
           icon: 'success',
-          text: 'Guardado con éxito',
-          title: 'Operación realizada',
+          title: 'Guardado con éxito',
+          text: '',
           showCancel: false,
+          timer: 1000
         });
       },
       (err) => {
         this._swal.show({
-          icon: 'erro',
+          icon: 'error',
           text: 'Ha ocurrido un error',
           title: 'Operación erronea',
           showCancel: false,

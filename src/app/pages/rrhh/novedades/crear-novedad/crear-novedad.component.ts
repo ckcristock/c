@@ -127,13 +127,12 @@ export class CrearNovedadComponent implements OnInit {
         this.modalService.dismissAll(); 
         //this.modal.hide();
       } else {
-        Swal.fire({
-          title: 'Operación denegada',
-          text: r.err,
+        this._swal.show({
           icon: 'error',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-        });
+          title: 'Operación denegada',
+          showCancel: false,
+          text: r.err,
+        })
       }
     });
   }

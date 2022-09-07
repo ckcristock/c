@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { title } from 'process';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
@@ -54,7 +55,7 @@ export class CerrarProcesoComponent implements OnInit {
   funcionarios: any[] = [];
   seleccionadas: any[] = [];
   payload: any = {};
-  legalDocument:any;
+  legalDocument: any;
 
   constructor(
     private disciplinarioService: DisciplinariosService,
@@ -63,7 +64,8 @@ export class CerrarProcesoComponent implements OnInit {
     private _swal: SwalService,
     private rutaActiva: ActivatedRoute,
     private ruta: Router,
-    private _proceso: CerrarProcesoService
+    private _proceso: CerrarProcesoService,
+    private modalService: NgbModal,
   ) {
   }
 
@@ -78,6 +80,24 @@ export class CerrarProcesoComponent implements OnInit {
     }
   }
 
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    this.formSelect.reset()
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
   createForm() {
 
@@ -126,7 +146,7 @@ export class CerrarProcesoComponent implements OnInit {
     }
   }
 
-  
+
   download(file) {
     this.disciplinarioService.download(file)
       .subscribe((response: BlobPart) => {
@@ -140,15 +160,17 @@ export class CerrarProcesoComponent implements OnInit {
       error => { console.log('Error downloading the file'); this.loading = false },
       () => { console.info('File downloaded successfully'); this.loading = false };
   }
-
+  previsualizacion: any
   onFileChanged(event) {
     if (event.target.files[0]) {
+      this.previsualizacion = true
       let file = event.target.files[0];
       const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
       if (!types.includes(file.type)) {
-        Swal.fire({
+        this._swal.show({
           icon: 'error',
           title: 'Error de archivo',
+          showCancel: false,
           text: 'El tipo de archivo no es válido'
         });
         return null
@@ -186,11 +208,11 @@ export class CerrarProcesoComponent implements OnInit {
 
   }
 
-  getLegalDocument(){
-    this._proceso.getFileToDownload(this.filtros.code).subscribe((file:any) => {
+  getLegalDocument() {
+    this._proceso.getFileToDownload(this.filtros.code).subscribe((file: any) => {
       this.legalDocument = file.data.file;
       console.log(this.legalDocument);
-      
+
     })
   }
 
@@ -214,10 +236,10 @@ export class CerrarProcesoComponent implements OnInit {
 
 
   guardarFuncionario(persona) {
-
+    this.modalService.dismissAll(); 
     let resp: { personId: any, memorandos: any[] } = { personId: { id: persona.value, name: persona.text }, memorandos: this.seleccionadas }
     console.log(resp);
-    
+
     let i = this.funcionarios.findIndex(funcionar => funcionar.personId.id === persona.value)
     i < 0 ? this.funcionarios.push(resp) : this.funcionarios[i] = resp;
     this.proceso.responsables = this.funcionarios;
@@ -243,9 +265,15 @@ export class CerrarProcesoComponent implements OnInit {
         this.payload.file = this.file;
         this.process.status = "Cerrado"
         this.process.file = this.file;
-        this._proceso.cerrarProceso(this.process.id, this.process).subscribe((r)=>{
+        this._proceso.cerrarProceso(this.process.id, this.process).subscribe((r) => {
           this.ruta.navigate(['/rrhh/procesos/disciplinarios'])
-          Swal.fire('Success', 'Cerrado con éxito', 'success')
+          this._swal.show({
+            icon: 'success',
+            title: 'Cerado correctamente',
+            showCancel: false,
+            text: '',
+            timer: 1000
+          })
         });
       }
     })

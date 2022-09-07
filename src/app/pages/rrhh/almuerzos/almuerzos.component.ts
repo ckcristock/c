@@ -79,6 +79,13 @@ export class AlmuerzosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    let fecha = new Date();
+    let hoy = fecha.toISOString().split('T')[0];
+    this.filtro.date_end = hoy;
+    this.filtro.date_start = new Date(fecha.setDate(fecha.getDate() - 2))
+      .toISOString()
+      .split('T')[0];
     this.createForm();
     this.getPeople();
     this.getGroups();
@@ -96,7 +103,7 @@ export class AlmuerzosComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset(); this.personList.clear()
-    
+
   }
   estadoFiltros = false;
   mostrarFiltros() {
@@ -253,7 +260,7 @@ export class AlmuerzosComponent implements OnInit {
     this._almuerzo.createLunch(this.form.value)
       .subscribe((r) => {
         //this.modal.hide();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.form.reset();
         this.personList.clear();
         this.getLunches();
@@ -277,13 +284,13 @@ export class AlmuerzosComponent implements OnInit {
     this._almuerzo.edit(this.id, { value: this.value })
       .subscribe((r: any) => {
         this.getLunches();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         //this.modalEdit.hide();
         this._swal.show({
           icon: 'success',
           title: 'Operación exitosa',
           timer: 1000,
-          text: 'Valor del Almuerzo editado con éxito',
+          text: 'Valor del almuerzo editado con éxito',
           showCancel: false
         });
       })
@@ -296,17 +303,18 @@ export class AlmuerzosComponent implements OnInit {
     }
     this._swal.show({
       icon: 'question',
-      title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? 'El funcionario será anulado del almuerzo' : 'El Almuerzo será activado al funcionario')
+      title: '¿Estás seguro(a)?',
+      text: (data.state == 'Inactivo' ? 'El funcionario será anulado del almuerzo' : 'El almuerzo será activado al funcionario')
     }).then((r) => {
       if (r.isConfirmed) {
         this._almuerzo.activateOrInactivate(data).subscribe((r: any) => {
           this.getLunches();
           this._swal.show({
             icon: 'success',
-            title: 'Proceso Satisfactorio',
-            text: (data.state == 'Inactivo' ? 'Funcionario Anulado del almuerzo Correctamente' : 'Se le ha activado el almuerzo al funcionario correctamente'),
-            showCancel: false
+            title: 'Proceso satisfactorio',
+            text: (data.state == 'Inactivo' ? 'Funcionario anulado del almuerzo correctamente' : 'Se ha activado el almuerzo al funcionario correctamente'),
+            showCancel: false,
+            timer: 1000
           })
         });
       }

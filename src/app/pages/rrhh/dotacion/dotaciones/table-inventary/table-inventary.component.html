@@ -1,4 +1,4 @@
-<ng-container *ngIf="!loading; else notData">
+<ng-container>
   <div class="row card-title d-flex justify-content-between">
     <div class="col-md-6 px-0">
       <h5 class="text-primary">Listado de entregas de dotación y EPP</h5>
@@ -15,15 +15,14 @@
         <button class="btn btn-primary btn-sm" (click)="configEntrega('EPP')">
           <i class="fa fa-plus"></i> EPP
         </button>
-        <button class="btn btn-sm btn-primary" (click)="downloadDeliveries()">
-          <i class="fas fa-file-download"></i>
-          <span *ngIf="!donwloading; else status"> Descargar</span>
+        <button class="btn btn-sm btn-success" (click)="downloadDeliveries()">
+          <span *ngIf="!donwloading; else status">
+            <i class="fas fa-file-download"></i> Descargar</span
+          >
           <ng-template #status>
-            <span
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
             Generando...
           </ng-template>
         </button>
@@ -48,6 +47,7 @@
             placeholder="Funcionario entrega"
             bindLabel="text"
             bindValue="value"
+            (change)="filtrar()"
             ngDefaultControl
           >
           </ng-select>
@@ -61,6 +61,7 @@
             bindLabel="text"
             bindValue="value"
             appearance="outline"
+            (change)="filtrar()"
             [appendTo]="'body'"
             placeholder="Funcionario recibe"
             ngDefaultControl
@@ -75,11 +76,18 @@
             placeholder="Busca por código"
             [(ngModel)]="cod"
             autocomplete="off"
+            (input)="filtrar()"
           />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo</mat-label>
-          <mat-select name="Tipo" id="tipo" [(ngModel)]="type" required>
+          <mat-select
+            name="Tipo"
+            id="tipo"
+            [(ngModel)]="type"
+            required
+            (selectionChange)="filtrar()"
+          >
             <mat-option value="">Todos</mat-option>
             <mat-option value="Dotacion">Dotacion</mat-option>
             <mat-option value="EPP">EPP</mat-option>
@@ -87,10 +95,16 @@
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Estado</mat-label>
-          <mat-select name="Estado" id="estado" [(ngModel)]="delivery" required>
+          <mat-select
+            name="Estado"
+            id="estado"
+            [(ngModel)]="delivery"
+            required
+            (selectionChange)="filtrar()"
+          >
             <mat-option value="">Todos</mat-option>
             <mat-option value="Pendiente">Pendiente</mat-option>
-            <mat-option value="Anulado">Anulado</mat-option>
+            <mat-option value="Anulada">Anulado</mat-option>
             <mat-option value="Aprobado">Aprobado</mat-option>
             <mat-option value="Entregado">Entregado</mat-option>
           </mat-select>
@@ -103,6 +117,7 @@
             [(ngModel)]="firstDay"
             id="Fecha_Inicio"
             autocomplete="off"
+            (change)="filtrar()"
           />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
@@ -113,151 +128,164 @@
             [(ngModel)]="lastDay"
             id="Fecha_Fin"
             autocomplete="off"
+            (change)="filtrar()"
           />
         </mat-form-field>
-        <div class="col-md-12 mb-2">
-          <button
-            class="btn btn-sm btn-primary btn-block"
-            (click)="ListarDotaciones(); listarTotales(); Graficar()"
-          >
+        <!--  <div class="col-md-12 mb-2">
+          <button class="btn btn-sm btn-primary btn-block" (click)="filtrar()">
             <i class="fas fa-search"></i>
             Buscar
           </button>
-        </div>
+        </div> -->
       </div>
     </mat-expansion-panel>
   </mat-accordion>
-  <div class="rounded-top table-responsive">
-    <table
-      class="table table-bordered table-striped table-sm"
-      
-      *ngIf="!loading && Lista_Dotaciones.length > 0; else notDataTable"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th class="align-middle">Código</th>
-          <th class="align-middle">Tipo</th>
-          <th class="align-middle">Fecha</th>
-          <th class="align-middle">Funcionario Entrega</th>
-          <th class="align-middle">Funcionario Recibe</th>
-          <th class="align-middle">Detalles</th>
-          <th class="align-middle">Artículos</th>
-          <th class="align-middle">Valor</th>
-          <th class="align-middle">Estado</th>
-          <th class="align-middle">Estado Entrega</th>
-          <th class="align-middle">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let item of Lista_Dotaciones"
-          class="text-center"
-          [ngClass]="{
-            'text-danger font-weight-bold': item.state == 'Anulada'
-          }"
-        >
-          <td class="align-middle">{{ item.delivery_code }}</td>
-          <td class="align-middle">{{ item.type }}</td>
-          <td class="align-middle">{{ item.created_at | date: "dd/MM/yyyy" }}</td>
-          <td class="align-middle">{{ item.entrega }}</td>
-          <td class="align-middle">{{ item.recibe }}</td>
-          <td class="align-middle">{{ item.description }}</td>
-          <td class="align-middle">
-            <div class="articulos-table">
-              {{ item.product_name }}
-            </div>
-          </td>
-          <td class="align-middle">${{ item.total | number | puntos }}</td>
-          <td class="align-middle">
-            <span>{{ item.state }}</span>
-          </td>
-          <td class="align-middle">
-            <span>{{ item.delivery_state }}</span>
-          </td>
-          <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-light"
-                type="button"
-              >
-                <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                  *ngIf="item.state != 'Anulada'"
-                  class="dropdown-item text-danger waves-light caja-botones"
-                  (click)="anularDotacion(item.id)"
-                >
-                  <i class="fa fa-times"></i> Anular
-                </a>
-                <a
-                  *ngIf="item.delivery_state == 'Pendiente'"
-                  class="dropdown-item text-success waves-light caja-botones"
-                  (click)="aprobarDotacion(item.id)"
-                >
-                  <i class="far fa-thumbs-up"></i> Aprobar
-                </a>
+  <div *ngIf="!loading && Lista_Dotaciones.length > 0; else notData">
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && Lista_Dotaciones.length > 0; else notDataTable"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th class="align-middle">Código</th>
+            <th class="align-middle">Tipo</th>
+            <th class="align-middle">Fecha</th>
+            <th class="align-middle">F. Entrega</th>
+            <th class="align-middle">F. Recibe</th>
+            <th class="align-middle">Detalles</th>
+            <th class="align-middle">Artículos</th>
+            <th class="align-middle">Valor</th>
+            <th class="align-middle">Estado</th>
+            <th class="align-middle">Estado Entrega</th>
+            <th class="align-middle">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of Lista_Dotaciones"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': item.state == 'Anulada'
+            }"
+          >
+            <td class="align-middle">{{ item.delivery_code }}</td>
+            <td class="align-middle">{{ item.type }}</td>
+            <td class="align-middle">
+              {{ item.created_at | date: "dd/MM/yyyy" }}
+            </td>
+            <td class="align-middle">{{ item.entrega }}</td>
+            <td class="align-middle">{{ item.recibe }}</td>
+            <td class="align-middle">{{ item.description }}</td>
+            <td class="align-middle">
+              <div class="articulos-table">
+                {{ item.product_name }}
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <ngb-pagination
-    maxSize="5"
-    [collectionSize]="pagination.collectionSize"
-    (pageChange)="ListarDotaciones($event)"
-    [pageSize]="pagination.pageSize"
-    class="d-flex justify-content-center pagination-rounded pagination-sm"
-    [(page)]="pagination.page"
-    aria-label="Default pagination "
-  >
-  </ngb-pagination>
-  <hr />
-  <div class="row">
-    <div class="col-md-6">
-      <h5 class="text-center text-primary">Montos totales</h5>
-      <div class="row text-center mt-2">
-        <div class="col-md-6 costo">
-          <i class="fas fa-dollar-sign"></i>
-          <p class="card-text mb-0">Costos total</p>
-          <h5 class="mb-1">$ {{ Totales | number | puntos }}</h5>
-        </div>
-        <div class="col-md-6 costo">
-          <i class="fas fa-hand-holding-heart"></i>
-          <p class="card-text mb-0"># Entregas realizadas</p>
-          <h5>{{ CantidadTotal | number | puntos }}</h5>
-        </div>
-      </div>
-      <div class="row text-center mt-2">
-        <div class="col-md-6 costo">
-          <i class="fas fa-street-view"></i>
-          <p class="card-text mb-0"># Dotaciones totales</p>
-          <h5 class="mb-1">{{ TotalesDotaciones | number | puntos }}</h5>
-        </div>
-
-        <div class="col-md-6 costo">
-          <i class="fas fa-user-shield"></i>
-          <p class="card-text mb-0"># EPP totales</p>
-          <h5>{{ totalEpp | number | puntos }}</h5>
-        </div>
-      </div>
+            </td>
+            <td class="align-middle">${{ item.total | number | puntos }}</td>
+            <td class="align-middle">
+              <span>{{ item.state }}</span>
+            </td>
+            <td class="align-middle">
+              <span>{{ item.delivery_state }}</span>
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    *ngIf="item.state != 'Anulada'"
+                    class="dropdown-item text-danger waves-light caja-botones"
+                    href="javascript:void(0)"
+                    (click)="anularDotacion(item.id)"
+                  >
+                    <i class="fas fa-times"></i> Anular
+                  </a>
+                  <a
+                    *ngIf="item.delivery_state == 'Pendiente'"
+                    href="javascript:void(0)"
+                    class="dropdown-item text-success waves-light caja-botones"
+                    (click)="aprobarDotacion(item.id)"
+                  >
+                    <i class="fas fa-check"></i> Aprobar
+                  </a>
+                  <a
+                    *ngIf="
+                      item.delivery_state != 'Pendiente' &&
+                      item.state == 'Anulada'
+                    "
+                    href="javascript:void(0)"
+                    class="dropdown-item text-dark waves-light caja-botones"
+                  >
+                    <i class="fas fa-ban"></i> Nada por hacer
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
-    <div class="col-md-6">
-      <h5 class="text-center text-primary">Dotación y EPP's por categorías</h5>
-      <div #dotacion_chart>
-        <canvas
-          baseChart
-          [datasets]="barChartData"
-          [labels]="barChartLabels"
-          [options]="barChartOptions"
-          [legend]="barChartLegend"
-          [chartType]="barChartType"
-        >
-        </canvas>
+    <ngb-pagination
+      maxSize="5"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="ListarDotaciones($event)"
+      [pageSize]="pagination.pageSize"
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [(page)]="pagination.page"
+      aria-label="Default pagination "
+    >
+    </ngb-pagination>
+    <hr />
+    <div class="row">
+      <div class="col-lg-6">
+        <h5 class="text-center text-primary">Montos totales</h5>
+        <div class="row text-center mt-2">
+          <div class="col-md-6 costo">
+            <i class="fas fa-dollar-sign"></i>
+            <p class="card-text mb-0">Costos total</p>
+            <h5 class="mb-1">$ {{ Totales | number | puntos }}</h5>
+          </div>
+          <div class="col-md-6 costo">
+            <i class="fas fa-hand-holding-heart"></i>
+            <p class="card-text mb-0"># Entregas realizadas</p>
+            <h5>{{ CantidadTotal | number | puntos }}</h5>
+          </div>
+        </div>
+        <div class="row text-center mt-2">
+          <div class="col-md-6 costo">
+            <i class="fas fa-street-view"></i>
+            <p class="card-text mb-0"># Dotaciones totales</p>
+            <h5 class="mb-1">{{ TotalesDotaciones | number | puntos }}</h5>
+          </div>
+          <div class="col-md-6 costo">
+            <i class="fas fa-user-shield"></i>
+            <p class="card-text mb-0"># EPP totales</p>
+            <h5>{{ totalEpp | number | puntos }}</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <h5 class="text-center text-primary">
+          Dotación y EPP's por categorías
+        </h5>
+        <div #dotacion_chart>
+          <canvas
+            baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartType"
+          >
+          </canvas>
+        </div>
       </div>
     </div>
   </div>
@@ -269,7 +297,7 @@
 
 <ng-template #add let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title"></h4>
+    <h4 class="text-primary modal-title">Nueva entrega de dotación</h4>
     <button
       type="button"
       class="close"
@@ -302,19 +330,32 @@
 </ng-template>
 
 <app-modal-basic #modalEntrega [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="text-primary text-center modal-title">
+      Nueva entrega de dotación
+    </h4>
+    <button type="button" class="close basic-close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
   <div class="app-modal-body">
-    <div class="row">
-      <div class="col-md-12">
-        <app-table-stock
-          #tablestock
-          [name]="nombre"
-          [type]="flagDotacionApp"
-          [entrega]="true"
-          [find]="false"
-          (closeModal)="closeModal()"
-        ></app-table-stock>
-      </div>
-    </div>
+    <app-table-stock
+      #tablestock
+      [name]="nombre"
+      [type]="flagDotacionApp"
+      [entrega]="true"
+      [find]="false"
+      (closeModal)="closeModal()"
+    ></app-table-stock>
+  </div>
+  <div class="app-modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      (click)="this.tablestock.save()"
+    >
+      Reportar
+    </button>
   </div>
 </app-modal-basic>
 

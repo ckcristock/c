@@ -10,6 +10,7 @@ import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-inventario-dotacion',
@@ -58,6 +59,7 @@ export class InventarioDotacionComponent implements OnInit {
     private route: ActivatedRoute,
     private _dotation: DotacionService,
     private modalService: NgbModal,
+    private _swal: SwalService,
   ) { }
 
   ngOnInit() {
@@ -103,14 +105,11 @@ export class InventarioDotacionComponent implements OnInit {
     })
   }
   GuardarGrupo(form: NgForm) {
-    Swal.fire({
-      title: '¿Seguro?',
-      text: 'Va a modificar los grupos',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Si, Hazlo!'
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: 'Vas a modificar los grupos',
     }).then(result => {
       if (result.value) {
         this.sendData(form)
@@ -122,23 +121,22 @@ export class InventarioDotacionComponent implements OnInit {
   sendData(form) {
     this._dotation.saveProductDotationTypes(form.value).subscribe((data: any) => {
       if (data.code == 200) {
-        Swal.fire({
-          title: 'Opersación exitosa',
-          text: 'Felicidades, se han creado una nueva categoria',
+        this._swal.show({
           icon: 'success',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
+          title: 'Operación exitosa',
+          showCancel: false,
+          text: 'Categoria guardada',
+          timer: 1000
         })
         this.listarGrupo()
         form.reset()
         this.modalService.dismissAll(); 
       } else {
-        Swal.fire({
-          title: 'Operación denegada',
-          text: 'Ha ocorrido un erro',
+        this._swal.show({
           icon: 'error',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
+          title: 'Operación denegada',
+          showCancel: false,
+          text: 'Ha ocurrido un error',
         })
       }
     });
@@ -155,7 +153,7 @@ export class InventarioDotacionComponent implements OnInit {
     params.pag = this.pagination.page = 1;
 
     if (this.filtro_codigo != "") {
-      params.codigo = this.filtro_codigo;
+      params.code = this.filtro_codigo;
     }
     if (this.filtro_nombre != "") {
       params.nombre = this.filtro_nombre;
@@ -170,14 +168,20 @@ export class InventarioDotacionComponent implements OnInit {
     let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
     this.location.replaceState('/inventariodotacion', queryString);
-
-    /* 
     this.loading = true;
-    this.http.get(this.globales.ruta + 'php/dotaciones/lista_inventario.php?' + queryString).subscribe((data: any) => {
+    this._dotation.getInventary(params).subscribe((r: any) => {
+      this.loading = false;
+      this.Inventarios = r.data.data;
+
+      this.pagination.collectionSize = r.data.total;
+    })
+    
+    
+    /* this.http.get(this.globales.ruta + 'php/dotaciones/lista_inventario.php?' + queryString).subscribe((data: any) => {
       this.loading = false;
       this.Inventarios = data.Listado;
       this.TotalItems = data.numReg;
-    }); */
+    });  */
   }
   paginacion() {
     let params: any = {

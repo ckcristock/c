@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IMyDrpOptions } from 'mydaterangepicker';
 import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 import { DotacionService } from '../../dotacion.service';
@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { MatAccordion } from '@angular/material';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 
 @Component({
@@ -16,9 +17,8 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./table-inventary.component.scss']
 })
 export class TableInventaryComponent implements OnInit {
-
-
-  @ViewChild('tablestock') private tablestock;
+  @ViewChild('add', {read: TemplateRef}) add: TemplateRef<any>;
+  @ViewChild('tablestock') tablestock;
   @ViewChild('modalEntrega') modalEntrega: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
@@ -87,7 +87,12 @@ export class TableInventaryComponent implements OnInit {
   };
 
 
-  constructor(private _dotation: DotacionService, private modalService: NgbModal, private _person: PersonService) {
+  constructor(
+    private _dotation: DotacionService, 
+    private modalService: NgbModal, 
+    private _person: PersonService,
+    private _swal: SwalService,
+    ) {
 
   }
 
@@ -108,17 +113,26 @@ export class TableInventaryComponent implements OnInit {
   }
 
   closeResult = '';
-  public openConfirm(confirm, value: string) {
-    //this.tablestock.search(value);
-    this.configEntrega(value)
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+  public openConfirm(value: string, tablestock) {
+    
+    //this.configEntrega(value)
+    this.modalService.open(this.add, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+    console.log(value)
+    console.log(tablestock)
+    tablestock.search(value); 
   }
   private getDismissReason(reason: any) {
     
+  }
+
+  filtrar() {
+    this.ListarDotaciones(); 
+    this.listarTotales(null); 
+    this.Graficar()
   }
 
   listarTotales(cantMes) {
@@ -252,7 +266,7 @@ export class TableInventaryComponent implements OnInit {
   configEntrega(value: string) {
     // this.flagDotacionApp = value;
     // console.log(this.flagDotacionApp);
-
+    //console.log(this.tablestock)
     this.tablestock.search(value);
     this.modalEntrega.show()
   }
@@ -270,7 +284,7 @@ export class TableInventaryComponent implements OnInit {
   getPeople() {
     this._person.getAll({}).subscribe((res: any) => {
       this.people = res.data;
-      this.people.unshift({ text: 'Todos', value: 0 });
+      this.people.unshift({ text: 'Todos', value: '' });
     });
   }
 
@@ -281,34 +295,29 @@ export class TableInventaryComponent implements OnInit {
   }
 
   anularDotacion(id) {
-
-    Swal.fire({
-      title: '¿Seguro?',
-      text: 'Va a cambiar el estado de la dotación',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Si, Hazlo!'
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: 'Vas a cambiar el estado de la dotación',
     }).then(result => {
       if (result.value) {
         this._dotation.setDotation({ id, data: { state: 'Anulada' } }).subscribe((r: any) => {
           if (r.code == 200) {
-            Swal.fire({
-              title: 'Opersación exitosa',
-              text: 'Felicidades, se han actualizado la dotación',
+            this._swal.show({
               icon: 'success',
-              allowOutsideClick: false,
-              allowEscapeKey: false,
+              title: 'Operación exitosa',
+              showCancel: false,
+              text: 'Dotación actualizada',
+              timer: 1000
             })
             this.ListarDotaciones()
           } else {
-            Swal.fire({
-              title: 'Operación denegada',
-              text: r.err,
+            this._swal.show({
               icon: 'error',
-              allowOutsideClick: false,
-              allowEscapeKey: false,
+              title: 'Operación denegada',
+              showCancel: false,
+              text: r.err,
             })
           }
         })
@@ -317,34 +326,29 @@ export class TableInventaryComponent implements OnInit {
 
   }
   aprobarDotacion(id) {
-
-    Swal.fire({
-      title: '¿Seguro?',
-      text: 'Va a aprobar la dotación',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Si, Hazlo!'
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: 'Vas a aprobar la dotación',
     }).then(result => {
       if (result.value) {
         this._dotation.approveDotation({ id, data: { state: 'Aprobado' } }).subscribe((r: any) => {
           if (r.code == 200) {
-            Swal.fire({
-              title: 'Opersación exitosa',
-              text: 'Felicidades, aprobó la dotación',
+            this._swal.show({
               icon: 'success',
-              allowOutsideClick: false,
-              allowEscapeKey: false,
+              title: 'Operación exitosa',
+              showCancel: false,
+              text: 'Dotación aprobada',
+              timer: 1000
             })
             this.ListarDotaciones()
           } else {
-            Swal.fire({
-              title: 'Operación denegada',
-              text: r.err,
+            this._swal.show({
               icon: 'error',
-              allowOutsideClick: false,
-              allowEscapeKey: false,
+              title: 'Operación denegada',
+              showCancel: false,
+              text: r.err,
             })
           }
         })

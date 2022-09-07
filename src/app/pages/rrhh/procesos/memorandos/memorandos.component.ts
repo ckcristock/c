@@ -59,7 +59,7 @@ export class MemorandosComponent implements OnInit {
   permission: Permissions = {
     menu: 'Memorandos',
     permissions: {
-      approve: false
+      approve: true
     }
   };
   states: any = [
@@ -128,10 +128,12 @@ export class MemorandosComponent implements OnInit {
   saveReason() {
     this.memorandosService.createNewMemorandumType(this.formMotivo.value)
       .subscribe((res: any) => {
-        Swal.fire({
-          title: ('Guardado'),
-          text: ('El nuevo motivo ha sido guardado con éxito.'),
-          icon: 'success'
+        this._swal.show({
+          icon: 'success',
+          title: 'Guardado',
+          showCancel: false,
+          text: '',
+          timer: 1000
         })
         this.getTypeMemorandum();
         this.formMotivo.reset();
@@ -145,21 +147,19 @@ export class MemorandosComponent implements OnInit {
     }
     this.memorandosService.createNewMemorandumType(data)
       .subscribe(res => {
-        Swal.fire({
-          title: '¿Estas Seguro?',
-          text: (status === 'Inactivo' ? 'El Motivo se anulará' : 'El Motivo se Activará'),
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          cancelButtonText: 'Cancelar',
-          confirmButtonText: (status === 'Inactivo' ? 'Si, Anular' : 'Si, Activar')
+        this._swal.show({
+          icon: 'question',
+          title: '¿Estás seguro(a)?',
+          showCancel: true,
+          text: (status === 'Inactivo' ? 'El motivo se anulará' : 'El motivo se activará'),
         }).then((result) => {
           if (result.isConfirmed) {
-            Swal.fire({
-              title: (status === 'Inactivo' ? 'Motivo Anulado!' : 'Motivo Activado'),
-              text: (status === 'Inactivo' ? 'El Motivo ha sido anulado con éxito.' : 'El Motivo ha sido activado con éxito.'),
-              icon: 'success'
+            this._swal.show({
+              icon: 'success',
+              title: (status === 'Inactivo' ? '¡Motivo anulado!' : '¡Motivo activado!'),
+              showCancel: false,
+              timer: 1000,
+              text: (status === 'Inactivo' ? 'El motivo ha sido anulado con éxito.' : 'El motivo ha sido activado con éxito.'),
             })
             this.getTypeMemorandum();
             this.getList();
@@ -252,10 +252,12 @@ export class MemorandosComponent implements OnInit {
         this.formMemorando.reset();
         this.person_selected = '';
         this.getMemorandumList();
-        Swal.fire({
+        this._swal.show({
           icon: 'success',
-          //title: res.data,
-          text: 'Felicidades, Creado Satisfactiamente'
+          title: 'Creado con éxito',
+          showCancel: false,
+          text: '',
+          timer: 1000
         })
       });
   }
@@ -285,8 +287,8 @@ export class MemorandosComponent implements OnInit {
       state
     }
     this._swal.show({
-      title: '¿Estas Seguro?',
-      text: "¡El Memorando será aprobado",
+      title: '¿Estás seguro(a)?',
+      text: "¡El memorando será aprobado!",
       icon: 'question',
       showCancel: true
     })
@@ -296,8 +298,8 @@ export class MemorandosComponent implements OnInit {
 
             this._swal.show({
               icon: 'success',
-              title: 'El Memorando Ha sido Aprobado!',
-              text: '¡Aprobado!',
+              text: '¡El memorando ha sido aprobado!',
+              title: '¡Aprobado!',
               timer: 1000,
               showCancel: false
             })
@@ -336,9 +338,10 @@ export class MemorandosComponent implements OnInit {
       console.log(file);
       const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
       if (!types.includes(file.type)) {
-        Swal.fire({
+        this._swal.show({
           icon: 'error',
           title: 'Error de archivo',
+          showCancel: false,
           text: 'El tipo de archivo no es válido'
         });
         return null
@@ -373,15 +376,11 @@ export class MemorandosComponent implements OnInit {
     this.memorandosService.attentionCalls(person_id).subscribe((r: any) => {
       this.call = r;
       if (this.call?.person_id == person_id && this.call?.cantidad == 2) {
-        Swal.fire({
+        this._swal.show({
           icon: 'warning',
           title: '¡ALERTA!',
-          text: 'Este es el tercer llamado de atención del funcionario, por normatividad de la empresa se procedera a generarlo como un memorando Leve. ¿Está seguro de realizar este cambio?',
-          showCancelButton: true,
-          cancelButtonColor: '#d33',
-          confirmButtonColor: '#3085d6',
-          cancelButtonText: 'No, ¡Dejame comprobar!',
-          confirmButtonText: 'Si. ¡Hazlo!',
+          showCancel: true,
+          text: 'Este es el tercer llamado de atención del funcionario, por normatividad de la empresa se procede a generarlo como un memorando leve. ¿Estás seguro(a) de realizar este cambio?',
         }).then((result) => {
           if (result.isConfirmed) {
             this.modalService.dismissAll(); 
@@ -412,11 +411,13 @@ export class MemorandosComponent implements OnInit {
             this.modalService.dismissAll(); 
             this.getMemorandumList();
             this.formLlamada.reset();
-            Swal.fire({
+            this._swal.show({
               icon: 'success',
               title: res.data,
-              text: '¡Llamada de Atención creada con éxito!'
-            });
+              showCancel: false,
+              text: '¡Llamado de atención creado con éxito!',
+              timer: 1000
+            })
           })
       };
     })

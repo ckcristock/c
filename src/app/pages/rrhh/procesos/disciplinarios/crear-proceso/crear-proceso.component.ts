@@ -60,9 +60,8 @@ export class CrearProcesoComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    this.fileInvolved.value = ''
     this.closeModal()
-    
+    this.fileInvolved = ''
   }
 
   openModal() {
@@ -76,8 +75,8 @@ export class CrearProcesoComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      person: ['', this._reactiveValid.required],
-      person_id: [''],
+      person: [''],
+      person_id: ['', this._reactiveValid.required],
       date_of_admission: ['', Validators.required],
       process_description: ['', this._reactiveValid.required],
       type: [''],
@@ -121,9 +120,10 @@ export class CrearProcesoComponent implements OnInit {
       let file = event.target.files[0];
       const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
       if (!types.includes(file.type)) {
-        Swal.fire({
+        this._swal.show({
           icon: 'error',
           title: 'Error de archivo',
+          showCancel: false,
           text: 'El tipo de archivo no es válido'
         });
         return null
@@ -203,7 +203,7 @@ export class CrearProcesoComponent implements OnInit {
     forma.memorandums = this.seleccionadas;
     this.involvedList.push(this.InvolvedControl(forma))
     //this.modal.hide();
-    this.modalService.dismissAll(); 
+    this.modalService.dismissAll();
     this.formInvolved.reset();
     this.historyInfo = [];
     this.seleccionadas = []
@@ -217,7 +217,7 @@ export class CrearProcesoComponent implements OnInit {
       this._swal.show({
         icon: 'warning',
         title: '¡Ooops!',
-        text: 'El funcionario que intenta ingresar ya se encuentra como involucrado en el proceso',
+        text: 'El funcionario que intentas ingresar ya se encuentra involucrado en el proceso',
         showCancel: false
       })
     }
@@ -255,33 +255,42 @@ export class CrearProcesoComponent implements OnInit {
   }
 
   save() {
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Se iniciará nuevo proceso disciplinario!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, Guardar!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.form.patchValue({
-          file: this.file,
-          type: this.type,
-          person_id: this.form.value.person_id.value
-        })
-        this.disciplinarioService.createNewProcess(this.form.value)
-          .subscribe((res: any) => {
-            Swal.fire({
-              icon: 'success',
-              title: res.data,
-              text: 'Proceso creado satisfactoriamente'
+    if (this.form.valid && this.involvedList.length > 0) {
+      this._swal.show({
+        icon: 'question',
+        title: '¿Estás seguro(a)?',
+        showCancel: true,
+        text: "Se iniciará un nuevo proceso disciplinario",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.form.patchValue({
+            file: this.file,
+            type: this.type,
+            person_id: this.form.value.person_id.value
+          })
+          this.disciplinarioService.createNewProcess(this.form.value)
+            .subscribe((res: any) => {
+              this._swal.show({
+                icon: 'success',
+                title: 'Proceso agregado con éxito',
+                showCancel: false,
+                text: '',
+                timer: 1000
+              })
+              
+              this.router.navigate(['/rrhh/procesos/disciplinarios']);
+              this.form.reset();
             });
-            this.router.navigate(['/rrhh/procesos/disciplinarios']);
-            this.form.reset();
-          });
-      }
-    })
+        }
+      })
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Faltan datos',
+        showCancel: false,
+        text: 'Asegúrate de agregar todos los datos'
+      })
+    }
   }
 
   get person_valid() {

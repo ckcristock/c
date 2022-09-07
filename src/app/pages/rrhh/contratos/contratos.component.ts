@@ -7,6 +7,7 @@ import { ContratosService } from './contratos.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-contratos',
@@ -135,6 +136,7 @@ export class ContratosComponent implements OnInit {
     this.contractService.getAllContracts(params)
       .subscribe((res: any) => {
         this.contracts = res.data.data;
+        console.log(this.contracts)
         this.paginacion = res.data
         this.pagination.collectionSize = res.data.total;
         this.loading = false;
@@ -180,6 +182,25 @@ export class ContratosComponent implements OnInit {
         this.paginacion2 = res.data
         this.contractData = false
       });
+  }
+
+  download(id, funcionario) {
+    funcionario = Object.entries(funcionario)
+    let params = {id: id, funcionario }
+    this.contractService.download(params).subscribe((response: BlobPart) => {
+      let blob = new Blob([response], { type: 'application/pdf' });
+      let link = document.createElement('a');
+      const filename = name + '.pdf';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.pdf`;
+      link.click();
+    },
+      (error) => {
+        console.log('Error downloading the file');
+      },
+      () => {
+        console.info('File downloaded successfully');
+      })
   }
 
   getContractByTrialPeriod() {

@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import * as moment from 'moment';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-dotaciones',
@@ -44,7 +45,7 @@ export class DotacionesComponent implements OnInit {
 
   people: any[] = [];
 
-  filtros:any = {
+  filtros: any = {
     cod: '',
     type: '',
     recibe: '',
@@ -67,7 +68,7 @@ export class DotacionesComponent implements OnInit {
   public TotalesMes = 0
   public SumaMes = 0
   public prefijoCodigo: string = 'ED00';
-  public flagDotacionApp:  string = '';
+  public flagDotacionApp: string = '';
 
   selectedMes: string;
   public Meses = consts.meses;
@@ -130,7 +131,8 @@ export class DotacionesComponent implements OnInit {
   constructor(
     private _dotation: DotacionService,
     private location: Location, private route: ActivatedRoute,
-    private _person: PersonService
+    private _person: PersonService,
+    private _swal: SwalService,
   ) {
 
   }
@@ -159,7 +161,7 @@ export class DotacionesComponent implements OnInit {
     this.getStokEpp()
   }
 
-  closeModal(){
+  closeModal() {
     this.modalEntrega.hide();
     this.ListarDotaciones();
     // this.flagDotacionApp = ''
@@ -172,8 +174,8 @@ export class DotacionesComponent implements OnInit {
     });
   }
 
-  listarEntradas(l){
-    this.openModal.next({data:l})
+  listarEntradas(l) {
+    this.openModal.next({ data: l })
   }
 
 
@@ -187,13 +189,13 @@ export class DotacionesComponent implements OnInit {
     }
   }
 
-  ListarDotaciones(page = 1){
+  ListarDotaciones(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtros
     }
     this.loading = true;
-    this._dotation.getDotations(params).subscribe((r:any) => {
+    this._dotation.getDotations(params).subscribe((r: any) => {
       this.Lista_Dotaciones = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
@@ -236,11 +238,11 @@ export class DotacionesComponent implements OnInit {
   public barChartLabels: Label[] = ['Categorías'];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
-/*   public barChartPlugins = [pluginDataLabels]; */
+  /*   public barChartPlugins = [pluginDataLabels]; */
 
-  public barChartData : ChartDataSets[] = [];
+  public barChartData: ChartDataSets[] = [];
 
-  graphicData:any = {}
+  graphicData: any = {}
 
   Graficar() {
 
@@ -250,8 +252,8 @@ export class DotacionesComponent implements OnInit {
 
       if (totals) {
         this.barChartData = totals.reduce((acc, el) => {
-          let daSet = {data: [ el.value], label: [el.name]}
-          return [ ...acc,daSet]
+          let daSet = { data: [el.value], label: [el.name] }
+          return [...acc, daSet]
         }, [])
       }
     })
@@ -432,12 +434,12 @@ export class DotacionesComponent implements OnInit {
     this._dotation.saveDotation({ entrega, prods }).subscribe((r: any) => {
 
       if (r.code == 200) {
-        Swal.fire({
-          title: 'Opersación exitosa',
-          text: 'Felicidades, se ha guardado la dotación',
+        this._swal.show({
           icon: 'success',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
+          title: 'Operación exitosa',
+          showCancel: false,
+          text: 'Dotación guardada',
+          timer: 1000
         })
         // this.onChange1();
         // this.modalEntrega.hide()
@@ -453,12 +455,11 @@ export class DotacionesComponent implements OnInit {
           type: ''
         }
       } else {
-        Swal.fire({
-          title: 'Operación denegada',
-          text: r.err,
+        this._swal.show({
           icon: 'error',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
+          title: 'Operación denegada',
+          showCancel: false,
+          text: r.err,
         })
       }
 
@@ -467,15 +468,11 @@ export class DotacionesComponent implements OnInit {
   }
 
   save() {
-
-    Swal.fire({
-      title: '¿Seguro?',
-      text: 'Va a generar una nueva dotación',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Si, Hazlo!'
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: 'Vas a generar una nueva dotación',
     }).then(result => {
       if (result.value) {
         this.GuardarEntrega()
@@ -493,34 +490,29 @@ export class DotacionesComponent implements OnInit {
   paginacion() {
   }
   anularDotacion(id) {
-
-    Swal.fire({
-      title: '¿Seguro?',
-      text: 'Va a cambiar el estado de la dotación',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Si, Hazlo!'
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: 'Vas a cambiar el estado de la dotación',
     }).then(result => {
       if (result.value) {
         this._dotation.setDotation({ id, data: { state: 'Anulada' } }).subscribe((r: any) => {
           if (r.code == 200) {
-            Swal.fire({
-              title: 'Opersación exitosa',
-              text: 'Felicidades, se han actualizado la dotación',
+            this._swal.show({
               icon: 'success',
-              allowOutsideClick: false,
-              allowEscapeKey: false,
+              title: 'Operación exitosa',
+              showCancel: false,
+              text: 'Dotación actualizada',
+              timer: 1000
             })
             this.ListarDotaciones()
           } else {
-            Swal.fire({
-              title: 'Operación denegada',
-              text: r.err,
+            this._swal.show({
               icon: 'error',
-              allowOutsideClick: false,
-              allowEscapeKey: false,
+              title: 'Operación denegada',
+              showCancel: false,
+              text: r.err,
             })
           }
         })
@@ -529,34 +521,29 @@ export class DotacionesComponent implements OnInit {
 
   }
   aprobarDotacion(id) {
-
-    Swal.fire({
-      title: '¿Seguro?',
-      text: 'Va a aprobar la dotación',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Si, Hazlo!'
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: 'Vas a aprobar la dotación',
     }).then(result => {
       if (result.value) {
         this._dotation.approveDotation({ id, data: { state: 'Aprobado' } }).subscribe((r: any) => {
           if (r.code == 200) {
-            Swal.fire({
-              title: 'Opersación exitosa',
-              text: 'Felicidades, aprobó la dotación',
+            this._swal.show({
               icon: 'success',
-              allowOutsideClick: false,
-              allowEscapeKey: false,
+              title: 'Operación exitosa',
+              showCancel: false,
+              text: 'Dotación aprobada',
+              timer: 1000
             })
             this.ListarDotaciones()
           } else {
-            Swal.fire({
-              title: 'Operación denegada',
-              text: r.err,
+            this._swal.show({
               icon: 'error',
-              allowOutsideClick: false,
-              allowEscapeKey: false,
+              title: 'Operación denegada',
+              showCancel: false,
+              text: r.err,
             })
           }
         })

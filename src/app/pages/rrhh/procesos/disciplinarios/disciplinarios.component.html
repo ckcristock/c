@@ -78,7 +78,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && process.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -89,6 +88,7 @@
             <th scope="col">Descripción</th>
             <th scope="col">Fecha Inicial</th>
             <th scope="col">Fecha Final</th>
+            <th scope="col" class="col-1">Estado</th>
             <th scope="col" class="col-1">Acciones</th>
           </tr>
         </thead>
@@ -96,7 +96,6 @@
           <ng-container *ngFor="let proces of process; let i = index">
             <tr
               [ngClass]="{
-                'text-primary': proces.status == 'Aprobado',
                 'text-danger': proces.status == 'Cerrado'
               }"
               class="text-center"
@@ -107,27 +106,32 @@
                 {{ proces.person.first_surname }}
                 {{ proces.person.second_surname }}
               </td>
-              <td>
-                <button
-                  class="btn btn-sm btn-link shadow-none"
-                  type="button"
-                  (click)="collapsed[i] = !collapsed[i]"
-                  [attr.aria-expanded]="!collapsed"
-                  aria-controls="collapseExample2"
-                >
-                  <i
-                    class="fas fa-angle-down text-info"
-                    *ngIf="!collapsed[i]"
-                  ></i>
-                  <i class="fas fa-angle-up text-info" *ngIf="collapsed[i]"></i>
-                </button>
+              <td role="button" (click)="collapsed[i] = !collapsed[i]">
+                <i
+                  [ngClass]="collapsed[i] ? 'fa-angle-up' : 'fa-angle-down'"
+                  class="fas text-primary"
+                ></i>
               </td>
               <td>{{ proces.process_description }}</td>
               <td>{{ proces.date_of_admission | date }}</td>
               <td>
-                <p *ngIf="proces.status == 'Cerrado'">
+                <div *ngIf="proces.status == 'Cerrado'">
                   {{ proces.date_end | date }}
-                </p>
+                </div>
+                <div *ngIf="proces.status != 'Cerrado'">No aplica</div>
+              </td>
+              <td>
+                <span
+                  [ngClass]="
+                    proces.status == 'Abierto'
+                      ? 'badge badge-info'
+                      : proces.status == 'Aprobado'
+                      ? 'badge badge-success'
+                      : 'badge badge-danger'
+                  "
+                >
+                  {{ proces.status }}
+                </span>
               </td>
               <td>
                 <div ngbDropdown container="body" class="dropdown-primary">
@@ -143,24 +147,39 @@
                       *ngIf="proces.file != null"
                       class="dropdown-item text-info waves-light caja-botones"
                       (click)="download(proces.file)"
+                      href="javascript:void(0)"
                     >
-                      <i class="fa fa-file"></i> Ver Evidencia
+                      <i class="fas fa-file"></i> Ver evidencia
                     </a>
                     <a
                       class="dropdown-item text-success waves-light caja-botones"
-                      [routerLink]="['/rrhh/procesos/disciplinarios/', proces.id]"
+                      [routerLink]="[
+                        '/rrhh/procesos/disciplinarios/',
+                        proces.id
+                      ]"
                     >
-                      <i class="fa fa-eye"></i> Seguimiento
+                      <i class="fas fa-eye"></i> Seguimiento
                     </a>
-                    <!-- <a *ngIf="proces.status=='Abierto' || proces.status=='Aprobado'" [routerLink]="['/rrhh/procesos/disciplinarios/cerrar/', proces.id]" class="dropdown-item waves-light  caja-botones">
-                                                    <i class="fa fa-times-circle"></i> Cerrar proceso
-                                                </a> -->
+                    <a
+                      *ngIf="
+                        proces.status == 'Abierto' ||
+                        proces.status == 'Aprobado'
+                      "
+                      [routerLink]="[
+                        '/rrhh/procesos/disciplinarios/cerrar/',
+                        proces.id
+                      ]"
+                      class="dropdown-item text-danger waves-light caja-botones"
+                    >
+                      <i class="fa fa-times-circle"></i> Cerrar proceso
+                    </a>
                     <a
                       *ngIf="
                         permission.permissions.approve &&
                         proces.status != 'Aprobado'
                       "
                       (click)="aprobar(proces.id)"
+                      href="javascript:void(0)"
                       class="dropdown-item text-success waves-light caja-botones"
                     >
                       <i class="far fa-thumbs-up"></i> Aprobar
@@ -169,23 +188,25 @@
                 </div>
               </td>
             </tr>
-            <tr [ngbCollapse]="!collapsed[i]">
-              <td colspan="100%">
-                <ng-container
-                  *ngIf="proces.person_involved.length > 0; else notI"
-                >
-                  <ul class="list-group">
-                    <li
-                      class="list-group-item"
-                      *ngFor="let item of proces.person_involved"
-                    >
-                      {{ item.person.first_name }}
-                      {{ item.person.first_surname }}
-                    </li>
-                  </ul>
-                </ng-container>
-              </td>
-            </tr>
+            <ng-container *ngIf="collapsed[i]">
+              <tr>
+                <td colspan="100%">
+                  <ng-container
+                    *ngIf="proces.person_involved.length > 0; else notI"
+                  >
+                    <ul class="list-group">
+                      <li
+                        class="list-group-item"
+                        *ngFor="let item of proces.person_involved"
+                      >
+                        {{ item.person.first_name }}
+                        {{ item.person.first_surname }}
+                      </li>
+                    </ul>
+                  </ng-container>
+                </td>
+              </tr>
+            </ng-container>
           </ng-container>
         </tbody>
       </table>

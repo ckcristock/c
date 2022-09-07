@@ -1,4 +1,4 @@
-<ng-container *ngIf="entrega">
+<!-- <ng-container *ngIf="entrega">
   <div class="card-title d-flex justify-content-between">
     <h5 class="text-center text-primary">Nueva entrega de dotación</h5>
     <button class="btn btn-primary btn-sm" (click)="cerrarModal()">
@@ -6,10 +6,10 @@
     </button>
   </div>
   <hr class="line" />
-</ng-container>
+</ng-container> -->
 
 <form #FormDotacion="ngForm">
-  <ng-container *ngIf="entrega">
+  <div *ngIf="entrega">
     <div class="row">
       <div class="col-md-6">
         <ng-select
@@ -41,22 +41,17 @@
       </mat-form-field>
     </div>
 
-    <div class="row">
-      <div class="col-md-12">
-        <h5 class="text-center">Elementos disponibles</h5>
-      </div>
-    </div>
-  </ng-container>
+    <h6 class="text-center">Elementos disponibles</h6>
+  </div>
 
-  <div class="rounded-top table-responsive">
+  <div class="rounded-top table-responsive mt-3">
     <table
       *ngIf="!loading && Lista_Grupos_Inventario1.length > 0; else notData"
       class="table table-bordered table-striped table-sm"
-      style="font-size: smaller"
     >
       <thead class="bg-light">
         <tr class="text-center text-uppercase">
-          <th>Cod.</th>
+          <th>Código</th>
           <th>Nombre</th>
           <th>Talla</th>
           <th>Calidad</th>
@@ -67,7 +62,7 @@
             <th>Apartada</th>
           </ng-container>
           <th>Disponible</th>
-          <th>Acc</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -91,27 +86,30 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm  waves-light"
+                  class="btn btn-primary btn-sm waves-light"
                   type="button"
                 >
                   <i class="fas fa-sort-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item text-info waves-light  caja-botones"
                     (click)="listarSalidas(l)"
+                    href="javascript:void(0)"
                   >
                     <i class="fas fa-truck-loading"></i> Entregas
                   </a>
                   <a
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item text-info waves-light  caja-botones"
                     (click)="listarEntradas(l)"
+                    href="javascript:void(0)"
                   >
                     <i class="fas fa-truck"></i> Salidas
                   </a>
                   <a
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item text-info waves-light  caja-botones"
                     (click)="getApartadas(l, addApartadas)"
+                    href="javascript:void(0)"
                   >
                     <i class="fas fa-clipboard"></i> Apartadas
                   </a>
@@ -225,7 +223,7 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="d-flex justify-content-end">
+    <!-- <div class="d-flex justify-content-end">
       <button
         *ngIf="!cam"
         type="button"
@@ -235,7 +233,7 @@
       >
         Reportar
       </button>
-    </div>
+    </div> -->
   </ng-container>
 </form>
 
@@ -295,7 +293,7 @@
       class="btn btn-danger"
       (click)="modal.dismiss('Cross click')"
     >
-      Cancelar
+      Cerrar
     </button>
   </div>
 </ng-template>

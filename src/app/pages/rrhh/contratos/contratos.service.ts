@@ -27,6 +27,10 @@ export class ContratosService {
     }));
   }
 
+  download (params) {
+    return this.http.get(`${environment.ruta}php/contrato/descargar_contrato.php`, {params})
+  }
+
   getCompanies() {
     return this.http.get(`${environment.base_url}/company`);
   }

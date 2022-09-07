@@ -20,7 +20,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && datas.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -34,7 +33,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of datas" class="text-center">
-            <td class="align-middle" scope="row">{{ data.created_at | date }}</td>
+            <td class="align-middle" scope="row">
+              {{ data.created_at | date }}
+            </td>
             <td class="align-middle">{{ data.type }}</td>
             <td class="align-middle">
               {{ data.first_name }} {{ data.first_surname }}
@@ -82,38 +83,48 @@
     </button>
   </div>
   <div class="modal-body">
-    <form>
+    <form [formGroup]="form">
       <div class="row">
-        <mat-form-field class="col-md-4" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Grupo</mat-label>
-          <mat-select>
-            <mat-option selected>Seleccione</mat-option>
-            <mat-option value="1">Enviar a todos</mat-option>
-            <mat-option value="2">Administración</mat-option>
-            <mat-option value="3">Dispensación</mat-option>
+          <mat-select
+            formControlName="group_id"
+            (selectionChange)="getDependencies($event.value)"
+          >
+            <mat-option *ngFor="let item of groups" [value]="item.value">{{
+              item.text
+            }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-md-4" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Dependencia</mat-label>
-          <mat-select>
-            <mat-option selected>Seleccione</mat-option>
-            <mat-option value="1">Enviar a todas</mat-option>
+          <mat-select
+            (selectionChange)="getPeople($event.value)"
+            formControlName="dependency_id"
+          >
+            <mat-option
+              *ngFor="let item of dependencies"
+              [value]="item.value"
+              >{{ item.text }}</mat-option
+            >
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-md-4" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Funcionarios</mat-label>
-          <mat-select>
-            <mat-option selected>Seleccione</mat-option>
-            <mat-option value="1">Enviar a todos</mat-option>
+          <mat-select formControlName="people_id">
+            <mat-option *ngFor="let item of people" [value]="item.value">{{
+              item.text
+            }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field
-          class="col-md-12 mat-form-field-no-padding textarea"
+          class="col-12 mat-form-field-no-padding textarea"
           appearance="outline"
         >
           <mat-label>Detalle del mensaje</mat-label>
           <textarea
             matInput
+            formControlName="description"
             placeholder="Ingrese el detalle"
             rows="5"
             id="descripcion"
@@ -132,6 +143,8 @@
     >
       Cancelar
     </button>
-    <button type="button" class="btn btn-primary">Enviar</button>
+    <button type="button" [disabled]="!form.valid" class="btn btn-primary">
+      Enviar
+    </button>
   </div>
 </ng-template>

@@ -13,6 +13,6 @@ export class AlertasComunService {
   }
 
   sendAlert(data: any) {
-    return this.http.post(`${environment.base_url}/`, data);
+    return this.http.post(`${environment.base_url}/alerts`, data);
   }
 }

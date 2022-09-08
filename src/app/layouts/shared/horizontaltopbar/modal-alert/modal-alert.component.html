@@ -1,25 +1,25 @@
-<app-modal-basic #alertM [dialogClass]="'modal-md'">
-  <div class="app-modal-header">
-    <div class="row">
-      <h4 class="text text-center justify-content-center modal-title p-1">
-        Detalle de alerta 
-      </h4>
-      <button type="button" class="close basic-close" (click)="alertM.hide()">
-        <span aria-hidden="true">
-          <i class="fas fa-times" (click)="alertM.hide()"></i>
-        </span>
-      </button>
-     
-    </div>
+<ng-template #alertM let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Detalle de la alerta</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-  <div class="app-modal-body">
+
+  <div class="modal-body">
     <div class="row mb-4">
       <div class="col-12">
-      
+        {{ data.created_at | date }}
       </div>
       <div class="col-12">
         <h5>
-          {{ data.title }}
+          {{ data.type }}
         </h5>
       </div>
       <hr />
@@ -29,6 +29,29 @@
         </p>
       </div>
     </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
+      Cancelar
+    </button>
+  </div>
+</ng-template>
+
+<!-- <app-modal-basic #alertM [dialogClass]="'modal-md'">
+  <div class="app-modal-header">
+    <div class="row">
+      <h4 class="text text-center justify-content-center modal-title p-1">
+        Detalle de alerta
+      </h4>
+      <button type="button" class="close basic-close" (click)="alertM.hide()">
+        <span aria-hidden="true">
+          <i class="fas fa-times" (click)="alertM.hide()"></i>
+        </span>
+      </button>
+    </div>
+  </div>
+  <div class="app-modal-body">
+    
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
@@ -41,4 +64,4 @@
       </button>
     </div>
   </div>
-</app-modal-basic>
+</app-modal-basic> -->

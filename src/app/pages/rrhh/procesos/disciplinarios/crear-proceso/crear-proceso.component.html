@@ -271,16 +271,15 @@
               <div class="custom-input-file col-md-12">
                 <input
                   type="file"
-                  #fileInvolved
                   id="importFileP"
                   class="input-file"
-                  (change)="onFileChanged($event)"
+                  (change)="onFileChanged2($event)"
                   accept=".pdf, .png, .jpg, .jpeg"
                 />
                 Cargar evidencia
               </div>
               <div class="col-md-12 text-center">
-                <small *ngIf="file" class="text-success"
+                <small *ngIf="fileInvolved" class="text-success"
                   >Evidencia cargada</small
                 >
               </div>

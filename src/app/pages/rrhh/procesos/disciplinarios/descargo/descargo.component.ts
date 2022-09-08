@@ -33,10 +33,12 @@ export class DescargoComponent implements OnInit {
     code: ''
   }
   loading = false;
+  loading2 = false;
 
   processSelected: any;
   process: any;
   formSeguimiento: FormGroup;
+  formDocumentos: FormGroup;
   formfiles: FormGroup;
   anotaciones: any[] = [];
   fullNameSelected: string = '';
@@ -90,6 +92,7 @@ export class DescargoComponent implements OnInit {
     this.getAnnotation();
     this.getPeople();
     this.createForm();
+    this.createFormDocuments();
     this.getLegalDocument();
   }
 
@@ -101,6 +104,7 @@ export class DescargoComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any): string {
+    this.formDocumentos.reset()
     this.hideModalDocuments()
     this.historyInfo = [];
     this.formSeguimiento.reset();
@@ -161,12 +165,20 @@ export class DescargoComponent implements OnInit {
     })
   }
 
-  fileControl(file, name, type) {
+  createFormDocuments() {
+    this.formDocumentos = this.fb.group({
+      motivo: ['', Validators.required],  
+      documento: ['', Validators.required]    
+    })
+  }
+
+  fileControl(file, name, type, motivo) {
     let group = {
       name: name,
       file: file,
       type: type,
-      disciplinary_process_id: this.filtros.code
+      disciplinary_process_id: this.filtros.code,
+      motivo: motivo
     }
     return group;
   }
@@ -190,7 +202,7 @@ export class DescargoComponent implements OnInit {
   }
 
   getDisciplinaryProcess(page = 1) {
-
+    this.loading2 = true
     let params = {
       ...this.pagination, ...this.filtros
     }
@@ -202,16 +214,18 @@ export class DescargoComponent implements OnInit {
         this.pagination.collectionSize = res.data.total;
       }, () => { }, () => {
         this.processSelected = this.process[0];
-        this.anotaciones = JSON.parse(this.processSelected.anotaciones ? this.processSelected.anotaciones : null) || [];
+        this.loading2 = false
         this.file = this.processSelected.file;
         this.fileType = this.processSelected.fileType;
         this.fullNameSelected = `${this.processSelected.person.first_name} ${this.processSelected.person.first_surname}`
+        //this.anotaciones = JSON.parse(this.processSelected.anotaciones ? this.processSelected.anotaciones : null) || [];
       });
   }
 
   getLegalDocument() {
     this._descargo.getFilesToDownload(this.filtros.code).subscribe((file: any) => {
       this.legalDocuments = file.data;
+      this.legalDocuments = this.legalDocuments.sort((a,b) => a.motivo > b.motivo ? 1 : -1);
     })
   }
 
@@ -246,6 +260,7 @@ export class DescargoComponent implements OnInit {
 
   onSelect(event) {
     this.files.push(...event.addedFiles);
+    this.formDocumentos.get('documento').setValue(true) 
   }
 
   onRemove(event) {
@@ -328,7 +343,7 @@ export class DescargoComponent implements OnInit {
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.fileD = base64;
-        this.fileArr.push(this.fileControl(this.filesString, file.name, this.typeDoc));
+        this.fileArr.push(this.fileControl(this.filesString, file.name, this.typeDoc, this.formDocumentos.get('motivo').value));
       });
     });
     setTimeout(() => {

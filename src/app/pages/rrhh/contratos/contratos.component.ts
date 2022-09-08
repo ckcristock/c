@@ -184,13 +184,11 @@ export class ContratosComponent implements OnInit {
       });
   }
 
-  download(id, funcionario) {
-    funcionario = Object.entries(funcionario)
-    let params = {id: id, funcionario }
-    this.contractService.download(params).subscribe((response: BlobPart) => {
+  download(id) {
+    this.contractService.download(id).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
       let link = document.createElement('a');
-      const filename = name + '.pdf';
+      const filename = 'contrato' + '.pdf';
       link.href = window.URL.createObjectURL(blob);
       link.download = `${filename}.pdf`;
       link.click();

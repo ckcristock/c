@@ -3,23 +3,6 @@
     <div class="d-flex">
       <!-- LOGO -->
       <div class="navbar-brand-box">
-        <!-- <a href="/" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="assets/images/logo-sm-dark.svg" alt="" height="40">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="assets/images/logo-dark.svg" alt="" height="45">
-                    </span>
-                </a> -->
-
-        <!-- <a href="/" class="logo logo-light">
-                    <span class="logo-sm">
-                      <img src="assets/images/logo-sm-light.svg" alt="" height="45">
-                    </span>
-                                <span class="logo-lg">
-                        <img src="assets/images/logo-light.svg" alt="" height="40">
-                        </span>
-                </a> -->
         <a href="/" class="logo">
           <span class="logo-sm">
             <img src="assets/images/logo.png" alt="" height="45" />
@@ -40,86 +23,56 @@
     </div>
 
     <div class="d-flex">
-      <!--FULL SCREEM
-                
-                <div class="dropdown d-none d-lg-inline-block ml-1">
-                <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen" (click)="fullscreen()">
-                  <i class="ri-fullscreen-line"></i>
-                </button>
-            </div> -->
-
       <!--Notifications-->
       <div class="dropdown d-inline-block" ngbDropdown>
         <button
           type="button"
           ngbDropdownToggle
-          class="btn header-item noti-icon waves-effect"
+          class="btn header-item noti-icon waves-effect iconClass"
           id="page-header-notifications-dropdown"
           data-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <i class="ri-notification-3-line"></i>
-          <span class="noti-dot"></span>
+          <i class="fas fa-bell"> </i>
+          <span class="badge badge-pill badge-danger">{{ alerts.length }}</span>
         </button>
         <div
-          class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0"
+          class="dropdown-menu dropdown-menu-lg dropdown-menu-right border border-light"
           ngbDropdownMenu
           aria-labelledby="page-header-notifications-dropdown"
         >
-          <div class="p-3">
-            <div class="row align-items-center">
-              <div class="col">
-                <h6 class="m-0">Notificaciones</h6>
-              </div>
-              <div class="col-auto">
-                <a
-                  [routerLink]="['/rrhh/alertas-comun', this.user.person.id]"
-                  class="small"
-                  >Ver todas</a
-                >
-              </div>
-            </div>
+          <div class="card-title">
+            <h6 class="text-center text-primary mt-2">Notificaciones</h6>
           </div>
-          <perfect-scrollbar
-            style="position: relative; height: 330px"
-            [config]="configData"
-          >
-            <ng-container *ngIf="alerts.length; else notData">
-              <a
-                *ngFor="let notification of alerts"
-                (click)="modalAlert.show(notification)"
-                class="text-reset notification-item"
-              >
-                <div class="media">
-                  <img
-                    [src]="notification.image"
-                    class="mr-3 rounded-circle avatar-xs"
-                    alt="user-pic"
-                  />
-                  <div class="media-body">
-                    <h6 class="mt-0 mb-1">{{ notification.title }}</h6>
-                    <div class="font-size-12 text-muted">
-                      <p class="mb-1">
-                        {{ notification.description | minWords }}
-                      </p>
-                      <p class="mb-0">
-                        <i class="mdi mdi-clock-outline"></i
-                        >{{ notification.created_at | date }}
-                      </p>
-                    </div>
+          <div style="max-height: 50vh; overflow-y: auto">
+            <ng-container *ngIf="!loading && alerts.length > 0; else notData">
+              <div class="list-group list-group-flush">
+                <a
+                  *ngFor="let notification of alerts"
+                  (click)="modalAlert.show(notification)"
+                  href="javascript:void(0)"
+                  class="list-group-item list-group-item-action flex-column align-items-start"
+                >
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">{{ notification.type }}</h6>
+                    <small>{{ notification.created_at | date }}</small>
                   </div>
-                </div>
-              </a>
+                  <p class="mb-1">
+                    {{ notification.description }}
+                  </p>
+                  <small>{{ notification.first_name }}</small>
+                </a>
+              </div>
             </ng-container>
-          </perfect-scrollbar>
+          </div>
           <div class="p-2 border-top">
             <a
               class="btn btn-sm btn-link font-size-14 btn-block text-center"
               href="javascript:void(0)"
               [routerLink]="['/rrhh/alertas-comun', user.id]"
             >
-              <i class="mdi mdi-arrow-right-circle mr-1"></i> Ver Más
+              <i class="mdi mdi-arrow-right-circle mr-1"></i> Ver todas
             </a>
           </div>
         </div>
@@ -163,7 +116,7 @@
           <div class="dropdown-divider"></div>
           <a role="button" class="dropdown-item text-danger" (click)="logout()"
             ><i class="ri-shut-down-line align-middle mr-1 text-danger"></i>
-            Cerrar Sesión
+            Cerrar sesión
           </a>
         </div>
       </div>
@@ -182,7 +135,41 @@
 </header>
 
 <ng-template #notData>
-  <app-not-data [loading]="false" [text]="'Sin notificaciones'"></app-not-data>
+  <app-not-data
+    [loading]="loading"
+    [text]="'Sin notificaciones'"
+  ></app-not-data>
 </ng-template>
 
 <app-modal-alert #modalAlert> </app-modal-alert>
+
+<!-- <a href="/" class="logo logo-dark">
+  <span class="logo-sm">
+    <img src="assets/images/logo-sm-dark.svg" alt="" height="40" />
+  </span>
+  <span class="logo-lg">
+    <img src="assets/images/logo-dark.svg" alt="" height="45" />
+  </span>
+</a> -->
+
+<!-- <a href="/" class="logo logo-light">
+  <span class="logo-sm">
+    <img src="assets/images/logo-sm-light.svg" alt="" height="45" />
+  </span>
+  <span class="logo-lg">
+    <img src="assets/images/logo-light.svg" alt="" height="40" />
+  </span>
+</a> -->
+<!-- FULL SCREEM
+
+<div class="dropdown d-none d-lg-inline-block ml-1">
+  <button
+    type="button"
+    class="btn header-item noti-icon waves-effect"
+    data-toggle="fullscreen"
+    (click)="fullscreen()"
+  >
+    <i class="ri-fullscreen-line"></i>
+  </button>
+</div>
+ -->

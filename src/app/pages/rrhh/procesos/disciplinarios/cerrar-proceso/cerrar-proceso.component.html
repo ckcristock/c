@@ -118,6 +118,7 @@
       <button
         *ngIf="process.status == 'Abierto'"
         class="btn btn-danger btn-block"
+        [disabled]="!form.valid"
         (click)="cerrarDescargo()"
       >
         Cerrar descargo
@@ -202,6 +203,7 @@
     <button
       type="submit"
       class="btn btn-primary"
+      [disabled]="seleccionadas.length == 0"
       (click)="guardarFuncionario(form.value.person_id); form.reset()"
     >
       Guardar

@@ -18,7 +18,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class CrearProcesoComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild('myInputFile') myInputFile: any;
-  @ViewChild('fileInvolved') fileInvolved: any;
+  //@ViewChild('fileInvolved') fileInvolved: any;
   form: FormGroup;
   formInvolved: FormGroup;
   loading = false;
@@ -31,6 +31,13 @@ export class CrearProcesoComponent implements OnInit {
   file: any = '';
   filename: any = '';
   type: any = '';
+
+  fileStringInvolved: any = '';
+  fileInvolved: any = '';
+  filenameInvolved: any = '';
+  typeInvolved: any = '';
+
+
   selected: any[] = [];
   collapsed: boolean[] = [];
   check: boolean = true;
@@ -142,6 +149,33 @@ export class CrearProcesoComponent implements OnInit {
 
     }
   }
+  onFileChanged2(event) {
+    if (event.target.files[0]) {
+      let file = event.target.files[0];
+      const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
+      if (!types.includes(file.type)) {
+        this._swal.show({
+          icon: 'error',
+          title: 'Error de archivo',
+          showCancel: false,
+          text: 'El tipo de archivo no es válido'
+        });
+        return null
+      }
+      this.filenameInvolved = file.name;
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event) => {
+        this.fileStringInvolved = (<FileReader>event.target).result;
+        const type = { ext: this.fileString };
+        this.typeInvolved = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+      };
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.fileInvolved = base64;
+      });
+
+    }
+  }
 
   getHistory() {
     this.disciplinarioService.getHistory(this.formInvolved.value.person.value)
@@ -197,7 +231,7 @@ export class CrearProcesoComponent implements OnInit {
   }
 
   newInvolved() {
-    this.formInvolved.patchValue({ file: this.file, filename: this.filename, type: this.type })
+    this.formInvolved.patchValue({ file: this.fileInvolved, filename: this.filenameInvolved, type: this.typeInvolved })
     this.formInvolved.addControl('memorandums', this.fb.control(this.seleccionadas))
     let forma = this.formInvolved.value;
     forma.memorandums = this.seleccionadas;

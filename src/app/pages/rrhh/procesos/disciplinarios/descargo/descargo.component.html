@@ -70,7 +70,7 @@
       </table>
     </div>
     <hr />
-    <div *ngIf="anotaciones.length > 0">
+    <div>
       <div class="card-title d-flex justify-content-between">
         <h5>Involucrados</h5>
         <button
@@ -81,7 +81,10 @@
           Agregar
         </button>
       </div>
-      <div class="rounded-top table-responsive">
+      <div
+        class="rounded-top table-responsive"
+        *ngIf="!loading2 && anotaciones.length > 0; else notData2"
+      >
         <table
           class="table table-light table-sm"
           *ngFor="let anotacion of anotaciones; let i = index"
@@ -152,10 +155,7 @@
                   <div class="rounded-top table-responsive">
                     <table class="table table-light table-sm">
                       <ng-container
-                        *ngIf="
-                          anotacion.memorandum_involved.length > 0;
-                          else notM
-                        "
+                        *ngIf="anotacion.memorandum_involved.length > 0"
                       >
                         <thead class="bg-light">
                           <tr class="text-center text-uppercase">
@@ -193,11 +193,21 @@
     <div class="card-title d-flex justify-content-between">
       <h5 *ngIf="legalDocuments.length > 0">Documentos</h5>
     </div>
+
     <div class="row">
-      <ng-container *ngFor="let item of legalDocuments">
+      <ng-container *ngFor="let item of legalDocuments; let i = index">
+        <h6
+          class="col-12"
+          *ngIf="
+            !legalDocuments[i - 1] ||
+            item.motivo !== legalDocuments[i - 1].motivo
+          "
+        >
+          {{ item.motivo }}
+        </h6>
         <div class="col-md-2 d-flex align-items-stretch">
           <div class="card card-file w-100 border border-3 border-light">
-            <div class="card-title">
+            <span class="float-right">
               <button
                 type="button"
                 *ngIf="processSelected.status != 'Cerrado'"
@@ -210,9 +220,9 @@
                   <i class="fas fa-times text-danger"></i>
                 </span>
               </button>
-            </div>
+            </span>
             <div
-              class="card-body pt-1"
+              class="card-body pt-0 p-1"
               (click)="downloadDocument(item)"
               placement="left"
               ngbTooltip="Descargar"
@@ -412,18 +422,21 @@
   </div>
 
   <div class="modal-body">
-    <div class="row">
-      <mat-form-field class="col" appearance="outline">
-        <mat-label>Motivo(en desarrollo)</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el motivo"
-          required
-          autocomplete="off"
-        />
-      </mat-form-field>
-    </div>
+    <form [formGroup]="formDocumentos">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Motivo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el motivo"
+            formControlName="motivo"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+    </form>
     <h6 class="text-center">Documentos</h6>
     <ngx-dropzone class="drop-zone" (change)="onSelect($event)">
       <ngx-dropzone-label>
@@ -443,22 +456,29 @@
     <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
       Cancelar
     </button>
-    <button type="submit" class="btn btn-primary" (click)="saveDocuments()">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!formDocumentos.valid"
+      (click)="saveDocuments()"
+    >
       Guardar
     </button>
   </div>
 </ng-template>
 
 <ng-template #notM>
-  <tr class="bg-light">
-    <td class="align-middle" colspan="3" class="text-center">
-      <p class="text-dark">Sin memorandos agregados</p>
-    </td>
-  </tr>
+  <td class="align-middle" colspan="100%" class="text-center">
+    <div class="alert alert-info" role="alert">Sin memorandos agregados</div>
+  </td>
 </ng-template>
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #notData2>
+  <app-not-data [loading]="loading2"></app-not-data>
 </ng-template>
 
 <!-- <app-modal-basic #modalClose [dialogClass]="'modal-sm'">

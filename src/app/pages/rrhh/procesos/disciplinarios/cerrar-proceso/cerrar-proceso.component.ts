@@ -265,6 +265,7 @@ export class CerrarProcesoComponent implements OnInit {
         this.payload.file = this.file;
         this.process.status = "Cerrado"
         this.process.file = this.file;
+        this.process.date_end = new Date();
         this._proceso.cerrarProceso(this.process.id, this.process).subscribe((r) => {
           this.ruta.navigate(['/rrhh/procesos/disciplinarios'])
           this._swal.show({

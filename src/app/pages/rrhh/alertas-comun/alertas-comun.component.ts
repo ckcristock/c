@@ -6,6 +6,8 @@ import { DependenciesService } from '../../ajustes/informacion-base/services/dep
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from 'src/app/core/services/user.service';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-alertas-comun',
@@ -36,6 +38,8 @@ export class AlertasComunComponent implements OnInit {
     private _group: GroupService,
     private _person: PersonService,
     private fb: FormBuilder,
+    private _user: UserService,
+    private _swal: SwalService,
     
     ) { }
 
@@ -47,12 +51,28 @@ export class AlertasComunComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
+      person_id: this._user.user.id,
+      type: ['', Validators.required],
       group_id: ['', Validators.required],
       dependency_id: ['', Validators.required],
-      people_id: ['', Validators.required],
+      user_id: ['', Validators.required],
       people: this.fb.array([]),
-      description: ['', Validators.required]
+      description: ['', Validators.required],
     });
+  }
+
+  createAlert() {
+    this._alert.sendAlert(this.form.value)
+    .subscribe((res:any) => {
+      this.modalService.dismissAll();
+      this._swal.show({
+        title: 'Agregado con éxito',
+        icon: 'success',
+        text: '',
+        timer: 1000,
+        showCancel: false
+      })
+    })
   }
 
   public openConfirm(confirm) {

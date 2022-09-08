@@ -13,6 +13,7 @@ import { environment } from '../../../../environments/environment';
 import { UserService } from '../../../core/services/user.service';
 import { User } from 'src/app/core/models/users.model';
 import { interval, timer, Subscription } from 'rxjs';
+import { AlertasComunService } from 'src/app/pages/rrhh/alertas-comun/alertas-comun.service';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -27,6 +28,7 @@ export class HorizontaltopbarComponent implements OnInit {
   cookieValue;
   flagvalue;
   countryName;
+  loading: boolean
   valueset: string;
   imageProfile: any;
 
@@ -45,10 +47,11 @@ export class HorizontaltopbarComponent implements OnInit {
     private _user: UserService,
     public cookiesService: CookieService,
     public http: HttpClient,
+    private _alert: AlertasComunService,
   ) { }
 
   ngOnInit(): void {
-    // this.initSearch();
+    
     this.element = document.documentElement;
     this.user = this._user.user;
     this.http.get(this.user.imagenUrl).subscribe(result => {
@@ -56,9 +59,9 @@ export class HorizontaltopbarComponent implements OnInit {
     },
       error => {
         //console.log(error)
-        if(error.status == 500){
+        if (error.status == 500) {
           this.imageProfile = null
-        } else{
+        } else {
           this.imageProfile = this.user.imagenUrl
         }
       });
@@ -83,6 +86,7 @@ export class HorizontaltopbarComponent implements OnInit {
         //notificaciones
       }
     });
+    this.getAlerts();
   }
 
   /**
@@ -150,17 +154,36 @@ export class HorizontaltopbarComponent implements OnInit {
   logout() {
     this._user.logout();
   }
-  /*
-    initSearch() {
-      const source = interval(10000); //output: 0,1,2,3,4,5....
-      this.alerts$ = source.subscribe((val) => {
-        let param = { person_id: this.user.person.id };
-  
-        this._user.getAlerts(param).subscribe((r: any) => {
-          this.alerts = r.data;
-        });
+
+  getAlerts() {
+    this.loading = true;
+    if (this.user.person.id) {
+      let param = { person_id: this.user.person.id };
+
+      this._alert.getAlerts(param).subscribe((r: any) => {
+        this.alerts = r.data.data;
+        this.loading = false
       });
-    }*/
+      this.initSearch()
+    } else {
+      this.initSearch()
+    }
+
+  }
+
+  initSearch() {
+    this.loading = true;
+    const source = interval(10000); //output: 0,1,2,3,4,5....
+    this.alerts$ = source.subscribe((val) => {
+      let param = { person_id: this.user.person.id };
+
+      this._alert.getAlerts(param).subscribe((r: any) => {
+        this.alerts = r.data.data;
+        console.log(r.data.data)
+        this.loading = false
+      });
+    });
+  }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.

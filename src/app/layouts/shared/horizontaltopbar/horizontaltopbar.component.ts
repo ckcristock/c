@@ -51,7 +51,7 @@ export class HorizontaltopbarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+    console.log(this._user)
     this.element = document.documentElement;
     this.user = this._user.user;
     this.http.get(this.user.imagenUrl).subscribe(result => {
@@ -179,7 +179,7 @@ export class HorizontaltopbarComponent implements OnInit {
 
       this._alert.getAlerts(param).subscribe((r: any) => {
         this.alerts = r.data.data;
-        console.log(r.data.data)
+        //console.log(r.data.data)
         this.loading = false
       });
     });

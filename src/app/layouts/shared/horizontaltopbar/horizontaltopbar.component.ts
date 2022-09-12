@@ -51,7 +51,6 @@ export class HorizontaltopbarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this._user)
     this.element = document.documentElement;
     this.user = this._user.user;
     this.http.get(this.user.imagenUrl).subscribe(result => {

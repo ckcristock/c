@@ -68,8 +68,8 @@ export class InformacionEmpresaComponent implements OnInit {
         : '';
     });
   }
-  getDependencies(company_id) {
-    this._dependecies.getDependencies({ company_id }).subscribe((d: any) => {
+  getDependencies(group_id) {
+    this._dependecies.getDependencies({ group_id }).subscribe((d: any) => {
       this.dependencies = d.data;
       this.dependencies.unshift({ text: 'Seleccione una', value: '' });
     });
@@ -141,13 +141,13 @@ export class InformacionEmpresaComponent implements OnInit {
   get turnSelected() {
     return this.formCompany.get('turn_type').value;
   }
-  get group_id_invalid() {
-    return this.formCompany.get('group_id').invalid && this.formCompany.get('group_id').touched;
-  }
   get company_id_invalid() {
     return (
       this.formCompany.get('company_id').invalid && this.formCompany.get('company_id').touched
     );
+  }
+  get group_id_invalid() {
+    return this.formCompany.get('group_id').invalid && this.formCompany.get('group_id').touched;
   }
   get dependency_id_invalid() {
     return (

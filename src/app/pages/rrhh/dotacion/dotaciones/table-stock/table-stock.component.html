@@ -62,7 +62,7 @@
             <th>Apartada</th>
           </ng-container>
           <th>Disponible</th>
-          <th>Acciones</th>
+          <th>{{entrega ? 'Cantidad' : 'Acciones'}}</th>
         </tr>
       </thead>
       <tbody>
@@ -93,6 +93,12 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
+                    class="dropdown-item text-dark waves-light  caja-botones"
+                    href="javascript:void(0)"
+                  >
+                    <i class="fas fa-ban"></i> Sin acciones
+                  </a>
+                  <!-- <a
                     class="dropdown-item text-info waves-light  caja-botones"
                     (click)="listarSalidas(l)"
                     href="javascript:void(0)"
@@ -112,7 +118,7 @@
                     href="javascript:void(0)"
                   >
                     <i class="fas fa-clipboard"></i> Apartadas
-                  </a>
+                  </a> -->
                 </div>
               </div>
             </ng-container>

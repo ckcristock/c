@@ -72,6 +72,8 @@ export class AlertasComunComponent implements OnInit {
         timer: 1000,
         showCancel: false
       })
+      this.getAlerts();
+      this.form.reset()
     })
   }
 
@@ -83,24 +85,24 @@ export class AlertasComunComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+    this.form.reset()
   }
   getGroups() {
     this._group.getGroup().subscribe((r: any) => {
       this.groups = r.data;
-      this.groups.unshift({ text: 'Todas', value: 0 });
+      this.groups.unshift({ text: 'Todas', value: 'Todas' });
     });
   }
 
   getDependencies(group_id) {
     if (group_id == '0') {
       this.dependencies = [];
-      this.dependencies.unshift({ text: 'Todas', value: 0 });
+      this.dependencies.unshift({ text: 'Todas', value: 'Todas' });
       return false;
     }
     this._dependecies.getDependencies({ group_id }).subscribe((d: any) => {
       this.dependencies = d.data;
-      this.dependencies.unshift({ text: 'Todas', value: 0 });
+      this.dependencies.unshift({ text: 'Todas', value: 'Todas' });
     });
   }
 
@@ -109,7 +111,7 @@ export class AlertasComunComponent implements OnInit {
       .getAll({ dependencies: [dependencies] })
       .subscribe((r: any) => {
         this.people = r.data;
-        this.people.unshift({ value: '0', text: 'Todos' });
+        this.people.unshift({ value: 'Todos', text: 'Todos' });
       });
   }
   mostrarFiltros() {

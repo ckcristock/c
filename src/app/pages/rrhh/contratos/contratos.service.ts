@@ -29,7 +29,7 @@ export class ContratosService {
 
   download (id) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
-    return this.http.get(`${environment.base_url}/download-work_contracts/${id}`, { headers, responseType: 'blob' as 'json' });
+    return this.http.get(`${environment.base_url}/download-work-contracts/${id}`, { headers, responseType: 'blob' as 'json' });
     
     /* return this.http.get(`${environment.ruta}php/contrato/descargar_contrato.php`, {params}) */
   }

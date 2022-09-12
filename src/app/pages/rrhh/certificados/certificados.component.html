@@ -2,27 +2,233 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">Certificados y cesantías</h4>
+        <h4 class="text-primary">Certificados</h4>
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-primary btn-sm">
+          <button class="btn btn-primary btn-sm" (click)="openConfirm(laboral)">
             <i class="fa fa-plus"></i> Solicitar certificado
           </button>
-          <button class="btn btn-primary btn-sm">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(cesantia)"
+          >
             <i class="fa fa-plus"></i> Solicitar carta cesantía
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
       </div>
     </div>
     <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por nombre"
+              autocomplete="off"
+            />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
     <div class="row">
       <div class="col-lg-6">
-        <app-certificados-list> </app-certificados-list>
+        <app-certificados-list #laboralchild></app-certificados-list>
       </div>
       <div class="col-lg-6">
-        <app-cesantias></app-cesantias>
+        <app-cesantias #cesantiaschild></app-cesantias>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #laboral let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Solicitud de certificado laboral</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="formLaboral">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Información a mostrar</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la información"
+            formControlName="information"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <div class="col-md-6" [ngClass]="person_is_valid ? 'mb-0' : 'mb-4'">
+          <ng-select
+            [items]="people"
+            formControlName="person_id"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Funcionario"
+            bindLabel="text"
+            bindValue="value"
+            ngDefaultControl
+          >
+          </ng-select>
+          <span class="ml-2" *ngIf="person_is_valid">
+            <small class="text-danger"><b> Campo obligatorio </b></small>
+          </span>
+        </div>
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Motivo</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa el motivo de la solicitud"
+            rows="5"
+            formControlName="reason"
+            maxlength="500"
+            required
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="newLaboral()"
+      [disabled]="!formLaboral.valid"
+      class="btn btn-primary"
+    >
+      Solicitar
+    </button>
+  </div>
+</ng-template>
+<ng-template #cesantia let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Solicitud de carta de cesantías</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="formCesantias">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Motivo del retiro</mat-label>
+          <mat-select
+            formControlName="reason_withdrawal"
+            required
+          >
+            <mat-option
+              *ngFor="let item of reason_withdrawal"
+              [value]="item.id"
+              (click)="getRequisitos(item.requirements)"
+              >{{ item.name }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+
+        <div class="col-md-6" [ngClass]="person_is_valid2 ? 'mb-0' : 'mb-4'">
+          <ng-select
+            [items]="people"
+            formControlName="person_id"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Funcionario"
+            bindLabel="text"
+            bindValue="value"
+            ngDefaultControl
+          >
+          </ng-select>
+          <span class="ml-2" *ngIf="person_is_valid2">
+            <small class="text-danger"><b> Campo obligatorio </b></small>
+          </span>
+        </div>
+        <div class="col-12" style="white-space: pre-line;" *ngIf="requisitos != ''">
+          <p>
+            {{ requisitos }}
+          </p>
+        </div>
+        <div class="col-12">
+          <div class="alert alert-info" role="alert">
+            Solo podrás cargar un archivo que debe contener todos los requisitos solicitados
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group text-center">
+            <div class="custom-input-file col-md-12">
+              <input
+                type="file"
+                class="input-file"
+                (change)="onFileChanged($event)"
+                accept=".pdf"
+              />
+              Cargar documento
+            </div>
+            <div class="col-md-12 text-center">
+              <small *ngIf="pdfCargado" class="text-success"
+                >Documento cargado</small
+              >
+            </div>
+          </div>
+        </div>
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Motivo</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa el motivo de la solicitud"
+            rows="5"
+            maxlength="500"
+            formControlName="reason"
+            required
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="newCesantia()"
+      [disabled]="!formCesantias.valid"
+      class="btn btn-primary"
+    >
+      Solicitar
+    </button>
+  </div>
+</ng-template>

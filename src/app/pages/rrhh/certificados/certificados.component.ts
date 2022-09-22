@@ -27,7 +27,12 @@ export class CertificadosComponent implements OnInit {
   pdfFyle: any = '';
   reason_withdrawal: any[] = []
   requisitos: any = ''
-
+  filtroLaboral: any = {
+    name: '',
+  }
+  filtroCesantias: any = {
+    name: '',
+  }
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
@@ -40,6 +45,7 @@ export class CertificadosComponent implements OnInit {
     this.createFormLaboral();
     this.createFormCesantias();
     this.getPeople();
+    this.getPeople2();
     this.getReasonLayoffs();
   }
 
@@ -80,10 +86,18 @@ export class CertificadosComponent implements OnInit {
       this.reason_withdrawal = res.data
     })
   }
+  peopleFiltro: any
 
   getPeople() {
     this._people.getPeopleIndex().subscribe((res: any) => {
-      this.people = res.data
+      this.people = res.data;
+    })
+  }
+
+  getPeople2() {
+    this._people.getPeopleIndex().subscribe((res: any) => {
+      this.peopleFiltro = res.data;
+      this.peopleFiltro.unshift({ text: 'Todos', value: '' });
     })
   }
 
@@ -100,7 +114,7 @@ export class CertificadosComponent implements OnInit {
             showCancel: false
           })
           this.laboralChild.getWorkCertificates();
-        } else if(res.err) {
+        } else if (res.err) {
           this._swal.show({
             title: 'Error',
             icon: 'error',
@@ -133,7 +147,7 @@ export class CertificadosComponent implements OnInit {
             showCancel: false
           })
           this.cesantiaschild.getLayoffsCertificates();
-        } else if(res.err) {
+        } else if (res.err) {
           this._swal.show({
             title: 'Error',
             icon: 'error',
@@ -184,9 +198,9 @@ export class CertificadosComponent implements OnInit {
         this.pdfType = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.pdfFyle = base64;   
-        this.formCesantias.get('document').setValue(this.pdfFyle);     
-      });      
+        this.pdfFyle = base64;
+        this.formCesantias.get('document').setValue(this.pdfFyle);
+      });
       this.formCesantias.get('document').valid
     }
   }

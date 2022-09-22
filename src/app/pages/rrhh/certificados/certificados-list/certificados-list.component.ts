@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { CertificadosService } from '../certificados.service';
 
 @Component({
@@ -7,6 +7,7 @@ import { CertificadosService } from '../certificados.service';
   styleUrls: ['./certificados-list.component.scss']
 })
 export class CertificadosListComponent implements OnInit {
+  @Input() filtro: any
   certificates: any[] = [];
   loading: boolean;
   pagination: any = {
@@ -14,9 +15,7 @@ export class CertificadosListComponent implements OnInit {
     pageSize: 5,
     collectionSize: 0
   }
-  filtro: any = {
-    name: '',
-  }
+
   constructor(
     private _certificados: CertificadosService,
   ) { }

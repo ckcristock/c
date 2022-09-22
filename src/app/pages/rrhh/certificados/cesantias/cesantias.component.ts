@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { environment } from 'src/environments/environment';
 import { CertificadosService } from '../certificados.service';
@@ -9,15 +9,13 @@ import { CertificadosService } from '../certificados.service';
   styleUrls: ['./cesantias.component.scss'],
 })
 export class CesantiasComponent implements OnInit {
+  @Input() filtro: any
   layoffs: any[] = [];
   loading: boolean;
   pagination: any = {
     page: 1,
     pageSize: 5,
     collectionSize: 0
-  }
-  filtro: any = {
-    name: '',
   }
   constructor(
     private _swal: SwalService,

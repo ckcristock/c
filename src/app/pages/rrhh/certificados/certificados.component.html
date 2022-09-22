@@ -25,24 +25,51 @@
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Nombre</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por nombre"
-              autocomplete="off"
-            />
-          </mat-form-field>
+          <div class="col-md-6 mb-4">
+            <ng-select
+              [items]="peopleFiltro"
+              [(ngModel)]="filtroLaboral.name"
+              appearance="outline"
+              [appendTo]="'body'"
+              placeholder="Nombre en c. laboral"
+              (change)="laboralchild.getWorkCertificates()"
+              [clearable]="false"
+              bindLabel="text"
+              bindValue="value"
+              ngDefaultControl
+            >
+            </ng-select>
+          </div>
+          <div class="col-md-6 mb-4">
+            <ng-select
+              [items]="peopleFiltro"
+              [(ngModel)]="filtroCesantias.name"
+              appearance="outline"
+              [appendTo]="'body'"
+              placeholder="Nombre en cesantías"
+              (change)="cesantiaschild.getLayoffsCertificates()"
+              [clearable]="false"
+              bindLabel="text"
+              bindValue="value"
+              ngDefaultControl
+            >
+            </ng-select>
+          </div>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
     <div class="row">
       <div class="col-lg-6">
-        <app-certificados-list #laboralchild></app-certificados-list>
+        <app-certificados-list
+          [filtro]="filtroLaboral"
+          #laboralchild
+        ></app-certificados-list>
       </div>
       <div class="col-lg-6">
-        <app-cesantias #cesantiaschild></app-cesantias>
+        <app-cesantias
+          [filtro]="filtroCesantias"
+          #cesantiaschild
+        ></app-cesantias>
       </div>
     </div>
   </div>
@@ -67,14 +94,27 @@
       <div class="row">
         <mat-form-field class="col" appearance="outline">
           <mat-label>Información a mostrar</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Ingresa la información"
-            formControlName="information"
-            required
-            autocomplete="off"
-          />
+          <mat-select [multiple]="true" formControlName="information" required>
+            <mat-option
+              value="0"
+              *ngIf="
+                formLaboral.value.information == '' ||
+                formLaboral.value.information == '0' ||
+                formLaboral.value.information == null
+              "
+              >Ninguna</mat-option
+            >
+            <mat-option
+              value="cargo"
+              *ngIf="formLaboral.value.information != '0'"
+              >Cargo</mat-option
+            >
+            <mat-option
+              value="salario"
+              *ngIf="formLaboral.value.information != '0'"
+              >Salario</mat-option
+            >
+          </mat-select>
         </mat-form-field>
         <div class="col-md-6" [ngClass]="person_is_valid ? 'mb-0' : 'mb-4'">
           <ng-select
@@ -143,10 +183,7 @@
       <div class="row">
         <mat-form-field class="col" appearance="outline">
           <mat-label>Motivo del retiro</mat-label>
-          <mat-select
-            formControlName="reason_withdrawal"
-            required
-          >
+          <mat-select formControlName="reason_withdrawal" required>
             <mat-option
               *ngFor="let item of reason_withdrawal"
               [value]="item.id"
@@ -172,14 +209,19 @@
             <small class="text-danger"><b> Campo obligatorio </b></small>
           </span>
         </div>
-        <div class="col-12" style="white-space: pre-line;" *ngIf="requisitos != ''">
+        <div
+          class="col-12"
+          style="white-space: pre-line"
+          *ngIf="requisitos != ''"
+        >
           <p>
             {{ requisitos }}
           </p>
         </div>
         <div class="col-12">
           <div class="alert alert-info" role="alert">
-            Solo podrás cargar un archivo que debe contener todos los requisitos solicitados
+            Solo podrás cargar un archivo que debe contener todos los requisitos
+            solicitados
           </div>
         </div>
         <div class="col-12">

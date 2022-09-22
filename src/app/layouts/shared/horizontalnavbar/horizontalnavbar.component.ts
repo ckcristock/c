@@ -1,5 +1,5 @@
 import { style } from '@angular/animations';
-import { Component, OnInit, AfterViewInit, Input, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
 
@@ -19,7 +19,11 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
   navItems = []
   public innerWidth: any;
   // tslint:disable-next-line: max-line-length
-  constructor(private router: Router, private eventService: EventService, private userService: UserService) {
+  constructor(
+    private router: Router, 
+    private eventService: EventService,
+    private userService: UserService,
+    private el: ElementRef) {
     this.navItems = userService.user.menu;
 
     router.events.subscribe(event => {
@@ -89,6 +93,9 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
     this.activateMenu();
   }
 
+  hideMenu() {
+    document.getElementsByClassName('collapse navbar-collapse')[0].classList.remove('show')
+  }
   /**
    * remove active and mm-active class
    */

@@ -15,6 +15,11 @@ export class PreliquidadosComponent implements OnInit {
   preliquidados: any = []
   loading: boolean = false;
   diffDays: any;
+  pagination: any = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
   constructor(
     private router: Router,
     private _preliquidadosService: PreliquidadosService,
@@ -29,11 +34,16 @@ export class PreliquidadosComponent implements OnInit {
     this.modal.show();
   }
 
-  getPreliquidados() {
+  getPreliquidados(page= 1) {
     this.loading = true;
-    this._preliquidadosService.getPreliquidados()
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination,
+    }
+    this._preliquidadosService.getPreliquidados(params)
       .subscribe((res: any) => {
-        this.preliquidados = res.data;
+        this.preliquidados = res.data.data;
+        this.pagination.collectionSize = res.data.total;
         this.loading = false;
         for (let index = 0; index < this.preliquidados.length; index++) {
           let fecha = this.preliquidados[index].updated_at;

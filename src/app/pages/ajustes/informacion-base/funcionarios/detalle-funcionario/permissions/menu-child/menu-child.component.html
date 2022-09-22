@@ -1,3 +1,63 @@
+<!-- <ng-template #sectionTemplate let-Custnode>
+  <ul class="sub-ul-li">
+    <li>
+      <a href="#">
+        <span class="left-main-text">{{ Custnode.name }}</span>
+        <span class="right-main-text">5</span>
+      </a>
+    </li>
+    <ng-container *ngIf="Custnode.child.length > 0">
+      <ng-container *ngFor="let s of Custnode.child">
+        <ng-container
+          *ngTemplateOutlet="titleTemplate; context: { $implicit: s }"
+        >
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ul>
+</ng-template>
+
+<ng-template #titleTemplate let-navItems2>
+  <div class="row">
+    <ng-container *ngFor="let lession of navItems">
+      <div class="col-md-12">
+        <div class="row">
+          <h5>{{ lession.name }}</h5>
+          <div class="ml-2 custom-control custom-switch" dir="ltr">
+            <span
+              class="d-inline-block"
+              tabindex="0"
+              data-toggle="tooltip"
+              title="{{ lession.name + '-' + lession.id }}"
+            >
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                (change)="changeAll(lession)"
+                id="{{ lession.name + '-' + lession.id }}"
+              />
+              <label
+                class="custom-control-label"
+                for="{{ lession.name + '-' + lession.id }}"
+              ></label>
+            </span>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="lession.child.length > 0">
+        <ng-container *ngFor="let ss of lession.child">
+          <ng-container
+            *ngTemplateOutlet="sectionTemplate; context: { $implicit: ss }"
+          >
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-container *ngTemplateOutlet="titleTemplate"> </ng-container> -->
+
 <div class="row">
   <ng-container *ngFor="let item of navItems; let x = index">
     <ng-container *ngIf="!item.link && !navItems[x - 1]?.link">
@@ -10,7 +70,8 @@
           !item.parent_id
         "
       >
-        <div class="col-md-12 ml-3"> <!-- Nombre principal del menú con su checkbox -->
+        <div class="col-md-12 ml-3">
+          <!-- Nombre principal del menú con su checkbox -->
           <div class="row">
             <h5>{{ item.name }}</h5>
             <div class="ml-2 custom-control custom-switch" dir="ltr">
@@ -23,10 +84,10 @@
                 <input
                   type="checkbox"
                   class="custom-control-input"
-                  checked
                   (change)="changeAll(item)"
                   id="{{ item.name + '-' + item.id }}"
                 />
+                <!-- cheked titulo -->
                 <label
                   class="custom-control-label"
                   for="{{ item.name + '-' + item.id }}"
@@ -40,7 +101,8 @@
     <ng-container *ngIf="item.child.length > 0 && item.parent_id">
       <div class="col-12 mx-3">
         <div class="row">
-          <h5>- {{ item.name }}</h5> <!-- Subtitulo -->
+          <h5>- {{ item.name }}</h5>
+          <!-- Subtitulo -->
           <div class="ml-2 text-left custom-control custom-switch" dir="ltr">
             <span
               class="d-inline-block"
@@ -51,10 +113,9 @@
               <input
                 type="checkbox"
                 class="custom-control-input"
-                checked
                 (change)="changeAllChild(item)"
                 id="{{ item.name + '-' + item.id }}"
-              />
+              /><!-- cheked subtitulo -->
               <label
                 class="custom-control-label"
                 for="{{ item.name + '-' + item.id }}"

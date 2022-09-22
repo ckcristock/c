@@ -10,7 +10,7 @@
             <a
               class="nav-link dropdown-toggle arrow-none px-2"
               href="javascript: void(0);"
-              (click)="onMenuClick($event)"
+              (click)="item.name == 'Tablero' ? hideMenu($event) : onMenuClick($event)"
               [routerLink]="item.name == 'Tablero' ? '/' : item.link"
               id="topnav-components"
               role="button"
@@ -38,6 +38,7 @@
                   class="col dropdown-item side-nav-link-ref"
                   *ngIf="!hasItems(subitem)"
                   [routerLink]="subitem.link"
+                  (click)="hideMenu($event)"
                   routerLinkActive="active"
                   >{{ subitem.name }}</a
                 >
@@ -73,6 +74,7 @@
                             <a
                               class="dropdown-item side-nav-link-ref"
                               [routerLink]="subSubitem2.link"
+                              (click)="hideMenu($event)"
                               routerLinkActive="active"
                               >{{ subSubitem2.name }}</a
                             >
@@ -83,6 +85,7 @@
                         <a
                           class="dropdown-item side-nav-link-ref"
                           [routerLink]="subSubitem.link"
+                          (click)="hideMenu($event)"
                           routerLinkActive="active"
                           >{{ subSubitem.name }}</a
                         >

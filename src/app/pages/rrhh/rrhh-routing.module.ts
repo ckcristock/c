@@ -57,7 +57,7 @@ const routes: Routes = [
   { path: 'alertas-comun', component: AlertasComunComponent },
   { path: 'alertas-comun/:pid', component: AlertasComunComponent },
   { path: 'liquidados', component: PreliquidadosComponent },
-  { path: 'liquidado/:id', component: LiquidadosComponent },
+  { path: 'liquidado/:id/:value', component: LiquidadosComponent },
   { path: 'contratos', component: ContratosComponent },
   { path: 'procesos/disciplinarios', component: DisciplinariosComponent },
   { path: 'procesos/disciplinarios/cerrar/:id', component: CerrarProcesoComponent },

@@ -28,6 +28,7 @@ export class ListaFijosComponent implements OnInit {
     };
     this._extraHour.getDetailPeople(data).subscribe((r: any) => {
       this.personData = r.data;
+      console.log(this.personData)
     });
 
     

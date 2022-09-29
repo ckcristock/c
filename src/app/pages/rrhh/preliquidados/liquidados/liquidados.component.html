@@ -40,9 +40,13 @@
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
                 <mat-label>¿Justa causa?</mat-label>
-                <mat-select formControlName="justacausa" required>
-                  <mat-option value="Si">Sí</mat-option>
-                  <mat-option value="No">No</mat-option>
+                <mat-select
+                  (selectionChange)="justaCausaValidate($event)"
+                  formControlName="justa_causa"
+                  required
+                >
+                  <mat-option value="si">Sí</mat-option>
+                  <mat-option value="no">No</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -53,7 +57,8 @@
                 <input
                   matInput
                   type="date"
-                  formControlName="fechacontratacion"
+                  formControlName="fecha_contratacion"
+                  readonly
                   required
                 />
               </mat-form-field>
@@ -62,7 +67,8 @@
                 <input
                   matInput
                   type="date"
-                  formControlName="fechaterminacion"
+                  formControlName="fecha_terminacion"
+                  (change)="changeParams($event.target.value)"
                   required
                 />
               </mat-form-field>
@@ -72,7 +78,8 @@
                   matInput
                   type="number"
                   placeholder="Ingresa los días a liquidar"
-                  formControlName="diasliquidar"
+                  formControlName="dias_liquidados"
+                  readonly
                   required
                 />
               </mat-form-field>
@@ -82,11 +89,11 @@
                   matInput
                   type="number"
                   placeholder="Ingresa los días de vacaciones"
-                  formControlName="diasvacaciones"
+                  formControlName="dias_vacaciones"
                   required
                 />
               </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              <!-- <mat-form-field class="col" appearance="outline">
                 <mat-label>Vacaciones acumuladas</mat-label>
                 <input
                   matInput
@@ -95,7 +102,7 @@
                   formControlName="vacacionesacumuladas"
                   required
                 />
-              </mat-form-field>
+              </mat-form-field> -->
             </div>
             <div class="row">
               <div class="col-12 d-flex justify-content-end">
@@ -119,29 +126,29 @@
                   matInput
                   type="number"
                   placeholder="Ingresa el salario base"
-                  formControlName="salariobase"
+                  formControlName="salario_base"
                   required
                   autocomplete="off"
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
-                <mat-label>Vacaciones</mat-label>
+                <mat-label>Vacaciones base</mat-label>
                 <input
                   matInput
                   type="text"
                   placeholder="Ingresa el valor"
-                  formControlName="vacaciones"
+                  formControlName="vacaciones_base"
                   required
                   autocomplete="off"
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
-                <mat-label>Cesantías</mat-label>
+                <mat-label>Cesantías base</mat-label>
                 <input
                   matInput
                   type="text"
                   placeholder="Ingresa el valor"
-                  formControlName="cesantias"
+                  formControlName="cesantias_base"
                   required
                   autocomplete="off"
                 />
@@ -151,14 +158,14 @@
             <div class="row">
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Dominicales incluidas</mat-label>
-                <mat-select formControlName="dominicalesincluidas" required>
+                <mat-select formControlName="dominicales_incluidas" required>
                   <mat-option value="Si">Sí</mat-option>
                   <mat-option value="No">No</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Cesantías año anterior incluidas</mat-label>
-                <mat-select formControlName="cesantiasanterior" required>
+                <mat-select formControlName="cesantias_anterior" required>
                   <mat-option value="Si">Sí</mat-option>
                   <mat-option value="No">No</mat-option>
                 </mat-select>
@@ -166,7 +173,7 @@
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Intereses de cesantías incluidos</mat-label>
                 <mat-select
-                  formControlName="interesescesantias"
+                  formControlName="intereses_cesantias"
                   value="Si"
                   required
                 >
@@ -183,7 +190,7 @@
                   matInput
                   type="number"
                   placeholder="Ingresa el valor"
-                  formControlName="otrosingresos"
+                  formControlName="otros_ingresos"
                   required
                   autocomplete="off"
                 />
@@ -205,34 +212,11 @@
                   matInput
                   type="number"
                   placeholder="Ingresa el valor"
-                  formControlName="otrasdeducciones"
+                  formControlName="otras_deducciones"
                   required
                   autocomplete="off"
                 />
               </mat-form-field>
-            </div>
-            <div class="row">
-              <div class="col-12 d-flex justify-content-between">
-                <button
-                  class="btn btn-default btn-sm"
-                  (click)="goBack()"
-                  type="button"
-                >
-                  <i class="fas fa-arrow-left"></i>
-                </button>
-                <button
-                  class="btn btn-default btn-sm"
-                  (click)="goForward()"
-                  type="button"
-                >
-                  <i class="fas fa-arrow-right"></i>
-                </button>
-              </div>
-            </div>
-          </mat-step>
-          <mat-step>
-            <ng-template matStepLabel>Notas</ng-template>
-            <div class="row">
               <mat-form-field
                 class="col-md-12 mat-form-field-no-padding textarea"
                 appearance="outline"
@@ -274,23 +258,27 @@
                 <ul class="list-group list-group-flush">
                   <li [class]="classList">
                     Dias de vacaciones pendientes
-                    <span>${{ 45151 | number }}</span>
+                    <span>${{ info.total_vacaciones | number }}</span>
                   </li>
                   <li [class]="classList">
-                    <strong>Total liquidación</strong>
-                    <strong>${{ 45151 | number }}</strong>
+                    Cesantías
+                    <span>${{ info.total_cesantias | number }}</span>
                   </li>
                   <li [class]="classList">
                     Interes de cesantías
-                    <span>${{ 45151 | number }}</span>
+                    <span>${{ info.total_intereses_cesantias | number }}</span>
                   </li>
                   <li [class]="classList">
                     <strong>Prima de servicios</strong>
-                    <strong>${{ 45151 | number }}</strong>
+                    <strong>${{ info.total_prima | number }}</strong>
                   </li>
                   <li [class]="classList">
+                    <strong>Total liquidación</strong>
+                    <strong>${{ info.total_liquidacion | number }}</strong>
+                  </li>                 
+                  <li *ngIf="indemnizacion" [class]="classList">
                     Indemnización por despido
-                    <span>${{ 45151 | number }}</span>
+                    <span>${{ info.total_indemnizacion | number }}</span>
                   </li>
                 </ul>
               </div>
@@ -298,23 +286,23 @@
                 <ul class="list-group list-group-flush">
                   <li [class]="classList">
                     <strong>Sueldo pendiente por cancelar</strong>
-                    <strong>${{ 45151 | number }}</strong>
+                    <strong>$-en desarrollo-</strong>
                   </li>
                   <li [class]="classList">
                     Auxilio de transporte pendiente por cancelar
-                    <span>${{ 45151 | number }}</span>
+                    <span>$-en desarrollo-</span>
                   </li>
                   <li [class]="classList">
                     <strong>Otros</strong>
-                    <strong>${{ 45151 | number }}</strong>
+                    <strong>$-en desarrollo-</strong>
                   </li>
                   <li [class]="classList">
                     <strong>Salud</strong>
-                    <strong>${{ 45151 | number }}</strong>
+                    <strong>$-en desarrollo-</strong>
                   </li>
                   <li [class]="classList">
                     <strong>Pensión</strong>
-                    <strong>${{ 45151 | number }}</strong>
+                    <strong>$-en desarrollo-</strong>
                   </li>
                 </ul>
               </div>
@@ -325,7 +313,7 @@
                 <ul class="list-group list-group-flush">
                   <li [class]="classList">
                     <strong>TOTAL</strong>
-                    <strong>${{ 45151 | number }}</strong>
+                    <strong>${{ total_liquidacion | number }}</strong>
                   </li>
                 </ul>
                 <div class="alert alert-danger text-center" role="alert">
@@ -356,6 +344,7 @@
                   <button
                     [disabled]="!form.valid"
                     class="btn btn-primary btn-sm"
+                    (click)="liquidar()"
                     type="button"
                   >
                     Liquidar

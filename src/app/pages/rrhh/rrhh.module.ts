@@ -13,7 +13,7 @@ import {
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { VacantesCrearComponent } from './vacantes/vacantes-crear/vacantes-crear.component';
 import { PipesModule } from '../../core/pipes/pipes.module';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { LlegadasTardesComponent } from './llegadas-tardes/llegadas-tardes.component';
 
@@ -29,7 +29,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
@@ -78,6 +78,7 @@ import { CerrarProcesoComponent } from './procesos/disciplinarios/cerrar-proceso
 import { CrearProcesoComponent } from './procesos/disciplinarios/crear-proceso/crear-proceso.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -157,9 +158,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatIconModule,
     MatStepperModule,
     MatCheckboxModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatRadioModule,
   ],
-  providers: [{ provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' }],
+  providers: [{ provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' },CurrencyPipe],
   exports: [],
 })
 export class RrhhModule { }

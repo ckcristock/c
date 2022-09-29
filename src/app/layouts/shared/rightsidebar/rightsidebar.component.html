@@ -45,13 +45,21 @@
         Agregar nueva tarea
       </button>
       <h6 class="text-center">Tareas pendientes</h6>
-      <div
-        role="button"
-        class="card border border-light border-3"
-        *ngFor="let item of pendientes"
-        (click)="hide(); route(item.id)"
-      >
-        <div class="p-3">
+      <div class="list-group">
+        <a
+          href="javascript:void(0)"
+          *ngFor="let item of pendientes"
+          (click)="hide(); route(item.id)"
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+        >
+          <h6 class="name">{{ item["titulo"] }}</h6>
+          <small>{{ item["fecha"] | date }}</small>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="p-3">
           <div class="d-flex justify-content-start align-items-center">
             <marquee behavior="" direction="">
               <i class="mdi mdi-account-alert"></i>
@@ -61,12 +69,9 @@
               </span>
             </marquee>
           </div>
-        </div>
-        <div class="px-3">
-          <h4 class="name">{{ item["titulo"] }}</h4>
-          <div class="truncate-module">
-            <p class="quote2" [innerHTML]="item.descripcion"></p>
-          </div>
+        </div> -->
+<!-- <div class="truncate-module">
+          <p class="quote2" [innerHTML]="item.descripcion"></p>
         </div>
         <div class="d-flex justify-content-start px-3 align-items-center">
           <i class="mdi mdi-view-comfy task"></i>
@@ -79,28 +84,23 @@
             <i class="mdi mdi-calendar-clock date"></i>
             <span class="quote2 pl-2"
               >Fecha:
-              {{ item["fecha"] | date }}
+              
             </span>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+        </div> -->
 <ng-template #content let-modal>
   <form [formGroup]="_task.myGroup" class="needs-validation" novalidate>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Agregar nueva tarea</h4>
       <button
-      type="button"
-      class="close"
-      data-dismiss="modal"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
 
     <div class="modal-body">

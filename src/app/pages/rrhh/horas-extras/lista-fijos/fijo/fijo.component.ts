@@ -29,7 +29,10 @@ export class FijoComponent implements OnInit {
   constructor(private _swal: SwalService, private _extra: ExtraHoursService) {}
 
   ngOnInit(): void {
-    console.log(this.day)
+    //console.log(this.hasDay)
+    this.cargarExtrasValidadas(this.funcionarioDato.id);
+    this.relacionarConHoraTurno();
+    this.asignacionDatosReales();
     this.funcionarioDato = this.person;
     this.diarioDato = this.diario;
 
@@ -41,14 +44,11 @@ export class FijoComponent implements OnInit {
       horasExtrasNocturnasFestivasDom:
         this.day['HorasExtrasNocturnasDominicales'],
       recargosNocturnos: this.day['horasRecargoNocturna'],
-      recargosFestivos:
-        parseInt(this.day['horasRecargoDominicalNocturna']) +
-        parseInt(this.day['horasRecargoDominicalDiurno']),
+      recargosDiurnosFestivos:this.day['horasRecargoDominicalDiurno'],
+      recargosNocturnosFestivos: this.day['horasRecargoDominicalNocturna'],
     };
 
-    this.cargarExtrasValidadas(this.funcionarioDato.id);
-    this.relacionarConHoraTurno();
-    this.asignacionDatosReales();
+    
   }
   get hasDay() {
     return this.diario['0']?.day;
@@ -79,6 +79,23 @@ export class FijoComponent implements OnInit {
             rn_reales: this.lista.recargosNocturnosReales,
             rf_reales: this.lista.recargosFestivosReales,
           };
+          /* let reporte = {
+            person_id: this.funcionarioDato.id,
+            date: '2022-09-09',
+            ht: 2,
+            hed: 2,
+            hen: 2,
+            hedfd: 2,
+            hedfn: 2,
+            rn: 2,
+            rf: 2,
+            hed_reales: 2,
+            hen_reales: 2,
+            hedfd_reales: 2,
+            hedfn_reales: 2,
+            rn_reales: 2,
+            rf_reales: 2,
+          }; */
           if (this.validada === true) {
             //Actualizar
             this._extra
@@ -109,7 +126,7 @@ export class FijoComponent implements OnInit {
         .getExtraHoursValids(funcionario, this.diario['0']?.day.date)
         .subscribe((r: any) => {
           this.extrasValidadas = r.data;
-
+          console.log(this.extrasValidadas)
           if (this.extrasValidadas) {
             if (
               this.hasDay &&

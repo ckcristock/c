@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class NominaConfigService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getExtras() {
     return this.http.get(
@@ -37,5 +37,9 @@ export class NominaConfigService {
     return this.http.get(
       `${environment.base_url}/parametrizacion/nomina/ssocial_funcionario`
     );
+  }
+
+  updateExtras(id, data = {}) {
+    return this.http.put(`${environment.base_url}/parametrizacion/nomina/extras/update/${id}`, data);
   }
 }

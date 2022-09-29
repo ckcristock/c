@@ -171,7 +171,8 @@ export class CertificadosComponent implements OnInit {
     this.formLaboral = this.fb.group({
       information: ['', Validators.required],
       person_id: ['', Validators.required],
-      reason: ['', Validators.required]
+      reason: ['', Validators.required],
+      addressee: ['']
     })
   }
 
@@ -181,7 +182,9 @@ export class CertificadosComponent implements OnInit {
       person_id: ['', Validators.required],
       reason: ['', Validators.required],
       document: ['', Validators.required],
-      file_name: ['']
+      file_name: [''],
+      monto: [''],
+      valormonto: [''],
     })
   }
 

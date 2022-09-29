@@ -139,7 +139,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let contract of contracts; let i = index" class="text-center">
+              <tr
+                *ngFor="let contract of contracts; let i = index"
+                class="text-center"
+              >
                 <td class="align-middle">{{ contract.code }}</td>
                 <td class="align-middle">
                   <strong>
@@ -252,7 +255,10 @@
               <div class="d-flex w-100 justify-content-between">
                 <div class="mb-1">
                   {{ contractToExpire.first_name }}
-                  {{ contractToExpire.first_surname }}
+                  {{ contractToExpire.first_surname }} <br />
+                  <small class="text-muted">{{
+                    contractToExpire.date_end | date: "longDate"
+                  }}</small>
                 </div>
                 <div>
                   <img
@@ -262,7 +268,6 @@
                   />
                 </div>
               </div>
-              <small class="text-muted">{{ contractToExpire.date_end }}</small>
             </a>
           </div>
         </div>

@@ -27,7 +27,7 @@ export class HorasExtrasComponent implements OnInit {
   horasExtras: any[] = [];
   people: any[] = [];
   diasSemanaActual: any[] = [];
-  turnType = 'fijo';
+  turnType = 'Rotativo';
   people_id = '';
   loading = false;
 

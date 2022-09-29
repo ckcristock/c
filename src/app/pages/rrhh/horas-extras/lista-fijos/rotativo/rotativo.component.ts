@@ -26,7 +26,7 @@ export class RotativoComponent implements OnInit {
   validada = false;
   esVisible = false;
 
-  constructor(private _swal: SwalService, private _extra: ExtraHoursService) {}
+  constructor(private _swal: SwalService, private _extra: ExtraHoursService) { }
 
   ngOnInit(): void {
     
@@ -41,9 +41,9 @@ export class RotativoComponent implements OnInit {
       horasExtrasNocturnasFestivasDom:
         this.day['HorasExtrasNocturnasDominicales'],
       recargosNocturnos: this.day['horasRecargoNocturna'],
-      recargosFestivos:
-        parseInt(this.day['horasRecargoDominicalNocturna']) +
-        parseInt(this.day['horasRecargoDominicalDiurno']),
+      recargosDiurnosFestivos:this.day['horasRecargoDominicalDiurno'],
+      recargosNocturnosFestivos: this.day['horasRecargoDominicalNocturna'],
+
     };
 
     this.cargarExtrasValidadas(this.funcionarioDato.id);
@@ -60,7 +60,7 @@ export class RotativoComponent implements OnInit {
       })
       .then((res) => {
         if (res.isConfirmed) {
-          
+
           let reporte = {
             person_id: this.funcionarioDato.id,
             date: this.diarioDato.date,
@@ -100,7 +100,7 @@ export class RotativoComponent implements OnInit {
     });
     this.cargarExtrasValidadas(this.funcionarioDato.id);
   };
-  mostrarModalDiarioFijo(diario) {}
+  mostrarModalDiarioFijo(diario) { }
 
   cargarExtrasValidadas(funcionario) {
     if (this.diarioDato['date'] != undefined) {
@@ -135,7 +135,7 @@ export class RotativoComponent implements OnInit {
           }
         }
         );
-    
+
     }
   }
 

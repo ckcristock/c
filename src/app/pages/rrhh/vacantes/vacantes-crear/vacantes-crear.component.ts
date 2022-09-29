@@ -223,8 +223,8 @@ export class VacantesCrearComponent implements OnInit {
             this.positions.unshift({ text: 'Seleccione uno', value: '' });
         })
     }
-    getDependencies(company_id) {
-        this._dependecies.getDependencies({ company_id }).subscribe((d: any) => {
+    getDependencies(group_id) {
+        this._dependecies.getDependencies({ group_id }).subscribe((d: any) => {
             this.dependencies = d.data;
             this.dependencies.unshift({ text: 'Seleccione una', value: '' });
         });

@@ -5,6 +5,7 @@ import { PersonService } from '../persons/person.service'
 import { Person } from 'src/app/core/models/person.model';
 import { DependenciesService } from '../services/dependencies.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -31,39 +32,43 @@ export class FuncionariosComponent implements OnInit {
     collectionSize: 0,
   }
   loading = true;
-  breadCrumbItems: Array<{}>;
   people: Person[] = [];
-  selectedStatus: any[] = [1, 2, 3]
+  form: FormGroup;
+  selectedStatus: any[] = [1, 2, 3, 4]
   selectedDependencies: any[] = []
   status: any[] = [
     { id: 1, name: 'Activo', selected: true },
-    { id: 2, name: 'Suspendido', selected: true },
+    { id: 2, name: 'Inactivo', selected: true },
     { id: 3, name: 'Liquidado', selected: true },
+    { id: 4, name: 'PreLiquidado', selected: true },
   ];
 
   public dependencies: any[]
 
-  isCollapsed: boolean;
-  collapsed: boolean;
-  collapsed3: boolean;
-
-  constructor(private _person: PersonService, private _dependencies: DependenciesService) {
+  constructor(
+    private _person: PersonService,
+    private _dependencies: DependenciesService,
+    private fb: FormBuilder,
+  ) {
     this.getDependencies();
-
   }
 
   ngOnInit(): void {
-    this.breadCrumbItems = [{ label: 'Ecommerce' }, { label: 'Product', active: true }];
-    this.isCollapsed = false;
-    this.collapsed = false;
-    this.collapsed3 = false;
-    //this.accordion.openAll()
+    this.createForm();
+  }
+
+  createForm() {
+    this.form = this.fb.group({
+      status: '',
+      dependency_id: '',
+      name: ''
+    })
   }
 
   getDependencies() {
     this._dependencies.getDependencies().subscribe((r: any) => {
       this.dependencies = r.data
-      for (let i in this.dependencies){
+      for (let i in this.dependencies) {
         this.selectedDependencies.push(this.dependencies[i].value)
       }
       this.dependencies = this.dependencies.map(r => {
@@ -74,22 +79,20 @@ export class FuncionariosComponent implements OnInit {
     })
   }
 
-  getPeople(page = 1, name = '') {
-
+  getPeople(page = 1) {
     this.pagination.page = page;
-    let params: any = { ...this.pagination }
-    params.status = this.statusFilter();
-    params.dependencies = this.dependenciesFilter();
-    params.name = name ? name : ''
-
+    let params: any = {
+      ...this.pagination, ...this.form.value
+    }
     this.loading = true;
-
-    this._person.getPeople({ data: JSON.stringify(params) })
-      .subscribe(d => {
+    /* params.status = this.statusFilter();
+    params.dependencies = this.dependenciesFilter();
+    params.name = name ? name : '' */
+    this._person.getPeople(params)
+      .subscribe((res: any) => {
         this.loading = false;
-        this.people = d['data']['data']
-        //console.log(this.people)
-        this.pagination.collectionSize = d['data']['total']
+        this.people = res.data.data
+        this.pagination.collectionSize = res.data.total
       })
   }
 

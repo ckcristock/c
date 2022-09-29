@@ -42,6 +42,7 @@ export class CrearNovedadComponent implements OnInit {
     this.createForm();
     this.getDisabilityLeaves();
     this.getPeople();
+    console.log(open)
     this.open.subscribe((r) => {
       if (r?.data) {
         this.form.patchValue({

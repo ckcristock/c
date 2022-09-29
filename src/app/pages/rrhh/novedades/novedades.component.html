@@ -2,9 +2,80 @@
   [open]="openModal"
   (saving)="cargarNovedades()"
 ></app-crear-novedad>
-
 <div class="row">
-  <div class="col-lg-8">
+  <div class="col-lg-12">
+    <div class="row">
+      <div class="col">
+        <div class="card border border-light border-3 mx-0">
+          <div class="card-body text-center incapacidades">
+            <i class="ri-suitcase-3-fill"></i>
+            <p class="card-text mb-0">Vacaciones</p>
+            <span class="lead text-center">{{
+              totalVacaciones
+            }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card border border-light border-3 mx-0">
+          <div class="card-body text-center incapacidades">
+            <i class="fas fa-heartbeat"></i>
+            <p class="card-text mb-0">Incapacidades</p>
+            <span class="lead text-center">{{
+              totalIncapacidades
+            }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card border border-light border-3 mx-0">
+          <div class="card-body text-center incapacidades">
+            <i class="fas fa-baby"></i>
+            <p class="card-text mb-0">Licencias</p>
+            <span class="lead text-center">{{
+              totalLicencias
+            }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card border border-light border-3 mx-0">
+          <div class="card-body text-center incapacidades">
+            <i class="ri-calendar-check-line"></i>
+            <p class="card-text mb-0">Permisos</p>
+            <span class="lead text-center">{{
+              totalPermisos
+            }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card border border-light border-3 mx-0">
+          <div class="card-body text-center incapacidades">
+            <i class="fas fa-door-open"></i>
+            <p class="card-text mb-0">Abandonos</p>
+            <span class="lead text-center">{{
+              totalAbandonos
+            }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card border border-light border-3 mx-0">
+          <div class="card-body text-center incapacidades">
+            <i class="ri-user-unfollow-line"></i>
+            <p class="card-text mb-0">Suspensiones</p>
+            <span class="lead text-center">{{
+              totalSuspensiones
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
@@ -15,6 +86,22 @@
             <div class="btn-group rounded w-sm-100">
               <button class="btn btn-primary btn-sm" (click)="openModal.emit()">
                 <i class="fa fa-plus"></i> Agregar
+              </button>
+              <button
+                type="button"
+                (click)="download()"
+                *ngIf="people.length > 0"
+                class="btn btn-success btn-sm"
+              >
+                <span *ngIf="!donwloading; else status"
+                  ><i class="fas fa-file-download"></i> Descargar</span
+                >
+                <ng-template #status>
+                  <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  Generando...
+                </ng-template>
               </button>
               <button class="btn btn-info btn-sm" (click)="openClose()">
                 <i class="fas fa-sliders-h"></i> Filtros
@@ -60,6 +147,21 @@
                     (change)="cargarNovedades()"
                   />
                 </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Tipo</mat-label>
+                  <mat-select
+                    formControlName="type"
+                    (selectionChange)="cargarNovedades()"
+                  >
+                    <mat-option value="">Todos</mat-option>
+                    <mat-option
+                      *ngFor="let item of types"
+                      [value]="item.value"
+                      >{{ item.text }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+                
               </div>
             </form>
           </mat-expansion-panel>
@@ -74,9 +176,12 @@
                 <th>Foto</th>
                 <th>Funcionarios</th>
                 <th>Dependencia</th>
-                <th class="col-1">
-                  <i class="fas fa-angle-down"></i>
-                </th>
+                <th>Fecha</th>
+                <th>Novedad</th>
+                <th>Descripción</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th class="col-1">ACC.</th>
               </tr>
             </thead>
             <tbody>
@@ -84,27 +189,57 @@
                 <tr class="text-center">
                   <td class="align-middle">
                     <img
-                      src="{{ person?.image | image }}"
+                      src="{{ person?.person?.image | image }}"
                       onerror="this.src='../../../../assets/images/noprofile.png'"
                       class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
                     />
                   </td>
                   <td class="align-middle">
-                    {{ person.first_name }} {{ person.first_surname }}
+                    {{ person.person.first_name }}
+                    {{ person.person.first_surname }}
                   </td>
                   <td class="align-middle">
-                    {{ person.contractultimate.position.dependency.name }}
+                    {{
+                      person.person.contractultimate.position.dependency.name
+                    }}
                   </td>
                   <td class="align-middle">
-                    <i
-                      [ngClass]="person.selected ? 'fa-angle-up' : 'fa-angle-down' "
-                      class="fas text-primary"
-                      role="button"
-                      (click)="person.selected = !person.selected"
-                    ></i>
+                    {{ person.created_at | date }}
+                  </td>
+                  <td class="align-middle">
+                    {{ person.disability_leave.concept }}
+                  </td>
+                  <td class="align-middle">
+                    {{ person.observation }}
+                  </td>
+                  <td class="align-middle">
+                    {{ person.date_start | date }}
+                  </td>
+                  <td class="align-middle">
+                    {{ person.date_end | date }}
+                  </td>
+                  <td class="align-middle">
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm"
+                        type="button"
+                      >
+                        <i class="fas fa-sort-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item text-info waves-light caja-botones"
+                          (click)="editarNovedad(person)"
+                          href="javascript:void(0)"
+                        >
+                          <i class="fas fa-edit"></i> Editar</a
+                        >
+                      </div>
+                    </div>
                   </td>
                 </tr>
-                <ng-container *ngIf="this.person.selected">
+                <!-- <ng-container *ngIf="this.person.selected">
                   <tr>
                     <td colspan="100%">
                       <div class="rounded-top table-responsive">
@@ -124,58 +259,36 @@
                               *ngFor="let fact of person.payroll_factors"
                               class="text-center"
                             >
-                              <td class="align-middle">
-                                {{ fact.created_at | date }}
-                              </td>
-                              <td class="align-middle">
-                                {{ fact.disability_leave.concept }}
-                              </td>
-                              <td class="align-middle">
-                                {{ fact.observation }}
-                              </td>
-                              <td class="align-middle">
-                                {{ fact.date_start | date }}
-                              </td>
-                              <td class="align-middle">
-                                {{ fact.date_end | date }}
-                              </td>
-                              <td class="align-middle">
-                                <div
-                                  ngbDropdown
-                                  container="body"
-                                  class="dropdown-primary"
-                                >
-                                  <button
-                                    ngbDropdownToggle
-                                    class="btn btn-primary btn-sm"
-                                    type="button"
-                                  >
-                                    <i class="fas fa-sort-down"></i>
-                                  </button>
-                                  <div ngbDropdownMenu>
-                                    <a
-                                      class="dropdown-item text-info waves-light caja-botones"
-                                      (click)="editarNovedad(fact)"
-                                      href="javascript:void(0)"
-                                    >
-                                      <i class="fas fa-edit"></i> Editar</a
-                                    >
-                                    <!-- <a class="dropdown-item waves-light  caja-botones" href="" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a eliminar la novedad' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'Dejame verificar'}"
-                                                                      (confirm)="EliminarNovedad(novedad.Id_Novedad)">
-                                                                      <i class="fa fa-times"></i> Elim.</a> -->
-                                  </div>
-                                </div>
-                              </td>
+                              
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </td>
                   </tr>
-                </ng-container>
+                </ng-container> -->
               </ng-container>
             </tbody>
           </table>
+          <ngb-pagination
+            class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="pagination.collectionSize"
+            (pageChange)="cargarNovedades($event)"
+            [pageSize]="pagination.pageSize"
+            [(page)]="pagination.page"
+            aria-label="Default pagination"
+            maxSize="5"
+            rotate="true"
+            ellipses="false"
+            boundaryLinks="true"
+            rotate="true"
+            ellipses="false"
+            boundaryLinks="true"
+          >
+          </ngb-pagination>
+          <!-- <div class="text-right" *ngIf="form.get('type').value">
+            {{ form.get("type").value }}:
+          </div> -->
         </div>
       </div>
 
@@ -184,69 +297,20 @@
       </ng-template>
     </div>
   </div>
-
-  <div class="col-lg-4">
-    <div class="row">
-      <div class="col-6">
-        <div class="card mb-4">
-          <div class="card-body text-center incapacidades">
-            <i class="ri-suitcase-3-fill"></i>
-            <p class="card-text mb-0">Vacaciones</p>
-            <p class="lead text-center">{{ totalVacaciones }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-6">
-        <div class="card mb-4">
-          <div class="card-body text-center incapacidades">
-            <i class="fas fa-heartbeat"></i>
-            <p class="card-text mb-0">Incapacidades</p>
-            <p class="lead text-center">{{ totalIncapacidades }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-6">
-        <div class="card mb-4">
-          <div class="card-body text-center incapacidades">
-            <i class="fas fa-baby"></i>
-            <p class="card-text mb-0">Licencias</p>
-            <p class="lead text-center">{{ totalLicencias }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-6">
-        <div class="card mb-4">
-          <div class="card-body text-center incapacidades">
-            <i class="ri-calendar-check-line"></i>
-            <p class="card-text mb-0">Permisos</p>
-            <p class="lead text-center">{{ totalPermisos }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-6">
-        <div class="card mb-4">
-          <div class="card-body text-center incapacidades">
-            <i class="fas fa-door-open"></i>
-            <p class="card-text mb-0">Abandonos</p>
-            <p class="lead text-center">{{ totalAbandonos }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-6">
-        <div class="card mb-4">
-          <div class="card-body text-center incapacidades">
-            <i class="ri-user-unfollow-line"></i>
-            <p class="card-text mb-0">Suspensiones</p>
-            <p class="lead text-center">{{ totalSuspensiones }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
+<!-- <a
+  class="dropdown-item waves-light caja-botones"
+  href=""
+  [swal]="{
+    title: '¿Está Seguro?',
+    text: 'Se dispone a eliminar la novedad',
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Si, Eliminar',
+    cancelButtonText: 'Dejame verificar'
+  }"
+  (confirm)="EliminarNovedad(novedad.Id_Novedad)"
+>
+  <i class="fa fa-times"></i> Elim.</a
+>
+ -->

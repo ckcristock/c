@@ -16,81 +16,68 @@
       </div>
     </div>
     <hr class="line" />
-    <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
-        <div class="row">
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Estado</mat-label>
-            <mat-select [(ngModel)]="selectedStatus" multiple>
-              <mat-option
-                (click)="stat.selected = !stat.selected; getPeople()"
-                *ngFor="let stat of status; let i = index"
-                [value]="stat.id"
-                >{{ stat.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Dependencias</mat-label>
-            <mat-select [(ngModel)]="selectedDependencies" multiple>
-              <mat-option
-                (click)="dependency.selected = !dependency.selected; getPeople()"
-                *ngFor="let dependency of dependencies; let i = index"
-                [value]="dependency.value"
-                >{{ dependency.text }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <!-- <section>
-          <h6>Estado</h6>
-          <mat-checkbox
-            color="primary"
-            *ngFor="let stat of status; let i = index"
-            (change)="stat.selected = !stat.selected; getPeople()"
-            [checked]="stat.selected"
-            class="mx-2"
-            >{{ stat.name }}</mat-checkbox
-          >
-        </section> -->
-        <!-- <section>
-          <h6>Dependencias</h6>
-          <mat-checkbox
-            color="primary"
-            *ngFor="let dependency of dependencies; let i = index"
-            (change)="dependency.selected = !dependency.selected; getPeople()"
-            [checked]="dependency.selected"
-            class="mx-2"
-            >{{ dependency.text }}</mat-checkbox
-          >
-        </section> -->
-      </mat-expansion-panel>
-    </mat-accordion>
-    <div class="row">
-      <mat-form-field class="col pb-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Busca por nombre"
-          (input)="getPeople(1, $event.target.value)"
-          name="name"
-          autocomplete="off"
-        />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-    </div>
+    <form [formGroup]="form">
+      <mat-accordion multi>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <div class="row">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Estado</mat-label>
+              <mat-select
+                formControlName="status"
+                (selectionChange)="getPeople()"
+              >
+                <!-- [(ngModel)]="selectedStatus" -->
+                <mat-option value="">Todos</mat-option>
+                <mat-option
+                  *ngFor="let stat of status; let i = index"
+                  [value]="stat.name"
+                  >{{ stat.name }}
+                </mat-option>
+                <!-- (click)="stat.selected = !stat.selected; getPeople()" -->
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Dependencias</mat-label>
+              <mat-select
+                (selectionChange)="getPeople()"
+                formControlName="dependency_id"
+                ><!-- [(ngModel)]="selectedDependencies" -->
+                <mat-option value="">Todos</mat-option>
+                <mat-option
+                  *ngFor="let dependency of dependencies; let i = index"
+                  [value]="dependency.value"
+                  >{{ dependency.text }}
+                </mat-option>
+                <!-- (click)="dependency.selected = !dependency.selected; getPeople()" -->
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Nombre</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por nombre"
+                formControlName="name"
+                (input)="getPeople()"
+                name="name"
+                autocomplete="off"
+              />
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </form>
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && people.length > 0; else notData"
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Foto</th>
             <th>Nombre</th>
-            <th>N. identificación</th>
+            <th>Identificación</th>
             <th>Dependencia</th>
             <th>Cargo</th>
             <th>Estado</th>
@@ -112,8 +99,10 @@
               {{ item.first_name }} {{ item.first_surname }}
             </td>
             <td class="align-middle">{{ item.identifier }}</td>
-            <td class="align-middle">{{ item.dependency }}</td>
-            <td class="align-middle">{{ item.position }}</td>
+            <td class="align-middle">
+              {{ item.work_contract.position.dependency.name }}
+            </td>
+            <td class="align-middle">{{ item.work_contract.position.name }}</td>
             <td class="align-middle">{{ item.status }}</td>
             <td class="align-middle">
               <button

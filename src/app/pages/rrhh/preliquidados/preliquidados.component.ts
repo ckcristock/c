@@ -104,7 +104,7 @@ export class PreliquidadosComponent implements OnInit {
       allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigate(['rrhh/liquidado/', id]);
+        this.router.navigate(['rrhh/liquidado/', id, result.value]);
       }
     })
   }

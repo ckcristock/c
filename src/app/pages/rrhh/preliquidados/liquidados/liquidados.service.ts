@@ -13,8 +13,32 @@ export class LiquidadosService {
     return this.http.get(`${environment.base_url}/liquidado/${id}`);
   }
 
-  liquidar(data:any){
-    return this.http.post(`${environment.base_url}/`, data);
+  mostrar(id, fechafin){
+    return this.http.get(`${environment.base_url}/nomina/liquidaciones/funcionarios/${id}/mostrar/${fechafin}`);
+  }
+
+  vacacionesActuales(params = {}, id){
+    return this.http.post(`${environment.base_url}/nomina/liquidaciones/${id}/vacaciones_actuales`, {params});
+  }
+
+  salarioBase(params = {}, id){
+    return this.http.post(`${environment.base_url}/nomina/liquidaciones/${id}/salario_base`, {params});
+  }
+
+  bases(params = {}, id){
+    return this.http.post(`${environment.base_url}/nomina/liquidaciones/${id}/bases`, {params});
+  }
+
+  ingresos(params = {}, id){
+    return this.http.post(`${environment.base_url}/nomina/liquidaciones/${id}/ingresos`, {params});
+  }
+
+  getPdfLiquidacion(data) {
+    return this.http.post(`${environment.base_url}/nomina/liquidaciones/previsualizacion`, data);
+  }
+
+  liquidar(data: any) {
+    return this.http.post(`${environment.base_url}/liquidation`, data);
   }
 
 }

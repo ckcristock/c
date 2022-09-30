@@ -41,4 +41,8 @@ export class LiquidadosService {
     return this.http.post(`${environment.base_url}/liquidation`, data);
   }
 
+  getDiasTrabajados(id, fechaFin) {
+    return this.http.get(`${environment.base_url}/nomina/liquidaciones/dias-trabajados/${id}/${fechaFin}`);
+  }
+
 }

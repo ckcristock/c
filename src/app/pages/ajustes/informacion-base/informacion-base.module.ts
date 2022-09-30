@@ -70,6 +70,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';
 
 @NgModule({
   declarations: [
@@ -113,6 +114,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     DotacionCrearComponent,
     BoardPermissionsComponent,
     SedesComponent,
+    VerLiquidacionComponent,
   ],
 
   imports: [

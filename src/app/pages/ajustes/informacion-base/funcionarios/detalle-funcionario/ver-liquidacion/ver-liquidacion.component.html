@@ -1,0 +1,220 @@
+<ng-container *ngIf="liquidationValid; else noLiquidated">
+  <div class="card">
+    <div class="card-body">
+      <ng-container *ngIf="!loading && liquidation; else notData">
+        <div class="card-title">
+          <h4 class="text-primary">
+            Liquidación de {{ liquidation.full_name | titlecase }}
+          </h4>
+        </div>
+        <hr class="line" />
+        <div class="row">
+          <div class="col-lg-6">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <div>Auxilio pendiente</div>
+                <small
+                  >${{
+                    liquidation.liquidation.auxilio_pendiente | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Cesantías del año anterior</div>
+                <small
+                  >${{
+                    liquidation.liquidation.cesantias_anterior | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Base de cesantías</div>
+                <small
+                  >${{
+                    liquidation.liquidation.cesantias_base | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Fecha de liquidación en el sistema</div>
+                <small>{{ liquidation.liquidation.created_at | date }}</small>
+              </li>
+              <li class="list-group-item">
+                <div>Días liquidados</div>
+                <small>{{ liquidation.liquidation.dias_liquidados }}</small>
+              </li>
+              <li class="list-group-item">
+                <div>Días de vacaciones</div>
+                <small>{{ liquidation.liquidation.dias_vacaciones }}</small>
+              </li>
+              <li class="list-group-item">
+                <div>Dominicales</div>
+                <small>{{
+                  liquidation.liquidation.dominicales_incluidas
+                }}</small>
+              </li>
+              <li class="list-group-item">
+                <div>Fecha de contratación</div>
+                <small>{{
+                  liquidation.liquidation.fecha_contratacion | date
+                }}</small>
+              </li>
+              <li class="list-group-item">
+                <div>Fecha de finalización del contrato</div>
+                <small>{{
+                  liquidation.liquidation.fecha_terminacion | date
+                }}</small>
+              </li>
+              <li class="list-group-item">
+                <div>Intereses de las cesantías</div>
+                <small
+                  >${{
+                    liquidation.liquidation.intereses_cesantias
+                      | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>¿Justa causa?</div>
+                <small>{{ liquidation.liquidation.justa_causa }}</small>
+              </li>
+              <li class="list-group-item">
+                <div>Motivo</div>
+                <small>{{ liquidation.liquidation.motivo }}</small>
+              </li>
+              <li class="list-group-item">
+                <div>Notas</div>
+                <small>{{ liquidation.liquidation.notas }}</small>
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-6">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <div>Otras deducciones</div>
+                <small
+                  >${{
+                    liquidation.liquidation.otras_deducciones | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Otros</div>
+                <small
+                  >${{ liquidation.liquidation.otros | currency: "":"" }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Otros ingresos</div>
+                <small
+                  >${{
+                    liquidation.liquidation.otros_ingresos | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Pensión</div>
+                <small
+                  >${{
+                    liquidation.liquidation.pension | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Préstamos</div>
+                <small
+                  >${{
+                    liquidation.liquidation.prestamos | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Salario base</div>
+                <small
+                  >${{
+                    liquidation.liquidation.salario_base | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Salud</div>
+                <small
+                  >${{ liquidation.liquidation.salud | currency: "":"" }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Sueldo pendiente</div>
+                <small
+                  >${{
+                    liquidation.liquidation.sueldo_pendiente | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Base de vacaciones</div>
+                <small
+                  >${{
+                    liquidation.liquidation.vacaciones_base | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Pago por cesantías</div>
+                <small
+                  >${{
+                    liquidation.liquidation.valor_cesantias | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Pago por días de vacaciones</div>
+                <small
+                  >${{
+                    liquidation.liquidation.valor_dias_vacaciones
+                      | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Pago por prima</div>
+                <small
+                  >${{
+                    liquidation.liquidation.valor_prima | currency: "":""
+                  }}</small
+                >
+              </li>
+              <li class="list-group-item">
+                <div>Total</div>
+                <small
+                  >${{ liquidation.liquidation.total | currency: "":"" }}</small
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-12">
+            <button
+              type="button"
+              (click)="descargar(liquidation.id)"
+              class="btn btn-success btn-block"
+            >
+              Descargar
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+<ng-template #noLiquidated>
+  <div class="card no-liquidated">
+    <div
+      class="card-body d-flex align-items-center justify-content-center flex-column"
+    >
+      <i class="fas fa-exclamation-circle fa-10x text-danger"></i><br /><br />
+      <h1 class="card-title">FUNCIONARIO NO LIQUIDADO</h1>
+    </div>
+  </div>
+</ng-template>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

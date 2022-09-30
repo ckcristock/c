@@ -38,6 +38,7 @@ export class LiquidadosComponent implements OnInit {
   form: FormGroup;
   indemnizacion: boolean;
   total_liquidacion: number = 0;
+  valorDiasTrabajados: any[] = []
 
   constructor(
     private router: Router,
@@ -54,6 +55,19 @@ export class LiquidadosComponent implements OnInit {
     this.diasTrabajados = this.activatedRoute.snapshot.params.value;
     this.getLiquidado();
     this.createForm();
+  }
+
+  getDiasTrabajados(fechaFin) {
+    this.liquidadosService.getDiasTrabajados(this.id, fechaFin).subscribe((res: any) => {
+      this.valorDiasTrabajados = res.data
+      this.total_liquidacion += res.data.salario_neto
+      this.form.patchValue({
+        sueldo_pendiente: res.data.salario_neto,
+        salud: res.data.seguridad_social,
+        total: this.total_liquidacion
+      })
+      console.log(res)
+    })
   }
 
   liquidar() {
@@ -97,6 +111,7 @@ export class LiquidadosComponent implements OnInit {
       sueldo_pendiente: [''],
       auxilio_pendiente: [''],
       otros: [''],
+      salud: [''],
       pension: [''],
       total: [''],
     })
@@ -113,6 +128,9 @@ export class LiquidadosComponent implements OnInit {
           fecha_terminacion: fechaFin,          
         })
         this.changeParams(fechaFin)
+        if (this.diasTrabajados == 'si'){
+          this.getDiasTrabajados(fechaFin);
+        }
       })
   }
   
@@ -140,10 +158,10 @@ export class LiquidadosComponent implements OnInit {
   justaCausaValidate(event) {
     if (event.value == 'si') {
       this.indemnizacion = false;
-      this.total_liquidacion = this.info.total_liquidacion;
+      this.total_liquidacion += this.info.total_liquidacion;
     } else if (event.value == 'no') {
       this.indemnizacion = true;
-      this.total_liquidacion = this.info.total_liquidacion_indemnizacion
+      this.total_liquidacion += this.info.total_liquidacion_indemnizacion
     }
     this.form.patchValue({
       total: this.total_liquidacion

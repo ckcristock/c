@@ -222,31 +222,31 @@
                     title=""
                     data-original-title=".btn-mini"
                   >
-                    <div ngbDropdown class="dropdown-primary">
+                    <div ngbDropdown container="body" class="dropdown-primary">
                       <button
                         ngbDropdownToggle
-                        class="btn btn-secondary btn-mini waves-effect waves-light"
+                        class="btn btn-secondary btn-mini  waves-light"
                         type="button"
                       >
                         Acciones
                       </button>
                       <div ngbDropdownMenu>
                         <a
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-info waves-light  caja-botones"
                           [routerLink]="['editar', producto.Id_Producto]"
                         >
                           <i class="ti-pencil"></i>Editar</a
                         >
 
                         <a
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-info  waves-light  caja-botones"
                           [routerLink]="['ver', producto.Id_Producto]"
                         >
                           <i class="ti-eye"></i>Ver</a
                         >
                         <a
                           *ngIf="producto.Estado == 'Activo'"
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-danger waves-light  caja-botones"
                           [swal]="{
                             title: '¿Está Seguro?',
                             text: 'Se dispone a Inactivar este Producto',
@@ -262,7 +262,7 @@
                             )
                           "
                         >
-                          <i class="ti-close"></i>Inactivar</a
+                          <i class="ti-close"></i>Anular</a
                         >
                         <a
                           *ngIf="producto.Estado == 'Inactivo'"
@@ -280,7 +280,7 @@
                               producto.Id_Producto
                             )
                           "
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-success waves-light  caja-botones"
                         >
                           <i class="ti-check"></i>Activar</a
                         >
@@ -297,17 +297,17 @@
                     title=""
                     data-original-title=".btn-mini"
                   >
-                    <div ngbDropdown class="dropdown-primary">
+                    <div ngbDropdown container="body" class="dropdown-primary">
                       <button
                         ngbDropdownToggle
-                        class="btn btn-secondary btn-mini waves-effect waves-light"
+                        class="btn btn-secondary btn-mini  waves-light"
                         type="button"
                       >
                         Acciones
                       </button>
                       <div ngbDropdownMenu>
                         <a
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-info  waves-light  caja-botones"
                           (click)="editGeneric(producto)"
                         >
                           <i class="ti-pencil"></i>Editar</a
@@ -325,31 +325,31 @@
                     title=""
                     data-original-title=".btn-mini"
                   >
-                    <div ngbDropdown class="dropdown-primary">
+                    <div ngbDropdown container="body" class="dropdown-primary">
                       <button
                         ngbDropdownToggle
-                        class="btn btn-secondary btn-mini waves-effect waves-light"
+                        class="btn btn-secondary btn-mini  waves-light"
                         type="button"
                       >
                         Acciones
                       </button>
                       <div ngbDropdownMenu>
                         <a
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-info  waves-light  caja-botones"
                           (click)="EditarProducto(producto.Id_Producto)"
                         >
                           <i class="ti-pencil"></i>Editar</a
                         >
 
                         <a
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item waves-light  caja-botones"
                           [routerLink]="['ver', producto.Id_Producto]"
                         >
                           <i class="ti-eye"></i>Ver</a
                         >
                         <a
                           *ngIf="producto.Estado == 'Activo'"
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-danger  waves-light  caja-botones"
                           [swal]="{
                             title: '¿Está Seguro?',
                             text: 'Se dispone a Inactivar este Producto',
@@ -365,7 +365,7 @@
                             )
                           "
                         >
-                          <i class="ti-close"></i>Inactivar</a
+                          <i class="ti-close"></i>Anular</a
                         >
                         <a
                           *ngIf="producto.Estado == 'Inactivo'"
@@ -383,7 +383,7 @@
                               producto.Id_Producto
                             )
                           "
-                          class="dropdown-item waves-light waves-effect caja-botones"
+                          class="dropdown-item text-success waves-light  caja-botones"
                         >
                           <i class="ti-check"></i>Activar</a
                         >
@@ -1543,7 +1543,7 @@
           <div class="col-md-9">
             <div class="row">
               <div class="col-md-12">
-                <div class="table-responsive">
+                <div class="rounded-top table-responsive">
                   <table class="invoice-detail-table table-ver">
                     <tbody>
                       <tr>
@@ -1581,7 +1581,7 @@
     </div>
     <div class="row">
       <div class="col-md-12" style="width: 100%">
-        <div class="table-responsive">
+        <div class="rounded-top table-responsive">
           <table class="invoice-detail-table table-ver">
             <tbody>
               <tr>

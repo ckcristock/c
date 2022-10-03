@@ -5,13 +5,14 @@ import { CrmRoutingModule } from './crm-routing.module';
 import { TercerosComponent } from './terceros/terceros.component';
 import { CrearTercerosComponent } from './terceros/crear-terceros/crear-terceros.component';
 import { ComponentsModule } from '../../components/components.module';
-import {  NgbDropdownModule, 
-          NgbPaginationModule, 
-          NgbCollapseModule, 
-          NgbNavModule, 
-          NgbTooltipModule, 
-          NgbTypeaheadModule
-        } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDropdownModule,
+  NgbPaginationModule,
+  NgbCollapseModule,
+  NgbNavModule,
+  NgbTooltipModule,
+  NgbTypeaheadModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpClientModule } from '@angular/common/http';
@@ -52,8 +53,20 @@ import { VerNegocioComponent } from './negocios/ver-negocio/ver-negocio.componen
 import { DndModule } from 'ngx-drag-drop';
 import { TareasNegocioComponent } from './negocios/tareas-negocio/tareas-negocio.component';
 import { TableNegociosComponent } from './negocios/table-negocios/table-negocios.component';
-
-
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatRadioModule } from '@angular/material/radio';
+import { HistorialNegocioComponent } from './negocios/historial-negocio/historial-negocio.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -91,6 +104,7 @@ import { TableNegociosComponent } from './negocios/table-negocios/table-negocios
     NegociosComponent,
     VerNegocioComponent,
     TareasNegocioComponent,
+    HistorialNegocioComponent,
     TableNegociosComponent,
   ],
   imports: [
@@ -113,7 +127,19 @@ import { TableNegociosComponent } from './negocios/table-negocios/table-negocios
     NgxDropzoneModule,
     PerfectScrollbarModule,
     DndModule,
-    
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatStepperModule,
+    MatIconModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatCheckboxModule,
+    MatAutocompleteModule,
+    MatRadioModule,
+    MatPaginatorModule,
+    MatTableModule
   ]
 })
 export class CrmModule { }

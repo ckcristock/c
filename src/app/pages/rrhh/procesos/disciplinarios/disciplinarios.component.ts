@@ -10,6 +10,7 @@ import { functionsUtils } from '../../../../core/utils/functionsUtils';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { PermissionService } from '../../../../core/services/permission.service';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { MatAccordion } from '@angular/material/expansion';
 type Person = { value: number, text: string };
 @Component({
   selector: 'app-disciplinarios',
@@ -17,6 +18,17 @@ type Person = { value: number, text: string };
   styleUrls: ['./disciplinarios.component.scss']
 })
 export class DisciplinariosComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   @ViewChild('modal') modal: any;
   @ViewChild('modalseguimiento') modalseguimiento: any;
   permission: Permissions = {
@@ -62,6 +74,10 @@ export class DisciplinariosComponent implements OnInit {
     this.createForm();
     this.getDisciplinaryProcess();
     this.getPeople();
+  }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
   }
 
   open() {
@@ -134,8 +150,8 @@ export class DisciplinariosComponent implements OnInit {
   
   aprobar(id) {
     this._swal.show({
-      title: '¿Estas Seguro?',
-      text: "¡El Proceso será aprobado",
+      title: '¿Estás seguro(a)?',
+      text: "¡El proceso será aprobado!",
       icon: 'question',
       showCancel: true
     })
@@ -144,9 +160,9 @@ export class DisciplinariosComponent implements OnInit {
         this.disciplinarioService.approve({status: 'Aprobado'}, id).subscribe( (r:any) =>{
           this._swal.show({
             icon: 'success',
-            title: 'El Proceso Ha sido Aprobado!',
+            title: 'El proceso ha sido aprobado!',
             text: '¡Aprobado!',
-            timer: 2500,
+            timer: 1000,
             showCancel: false
           })
           this.getDisciplinaryProcess();
@@ -160,9 +176,10 @@ export class DisciplinariosComponent implements OnInit {
       let file = event.target.files[0];
       const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
       if (!types.includes(file.type)) {
-        Swal.fire({
+        this._swal.show({
           icon: 'error',
           title: 'Error de archivo',
+          showCancel: false,
           text: 'El tipo de archivo no es válido'
         });
         return null
@@ -223,11 +240,13 @@ export class DisciplinariosComponent implements OnInit {
     })
     this.disciplinarioService.createNewProcess(this.form.value)
       .subscribe((res: any) => {
-        Swal.fire({
+        this._swal.show({
           icon: 'success',
           title: res.data,
-          text: 'Proceso creado satisfactoriamente'
-        });
+          showCancel: false,
+          text: 'Operación exitosa',
+          timer: 1000
+        })
         this.form.reset();
         this.getDisciplinaryProcess();
         this.modal.hide();

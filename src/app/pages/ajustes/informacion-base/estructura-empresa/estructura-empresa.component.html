@@ -1,171 +1,279 @@
-<div class="row mt-3 mb-3">
-    <div class="col-12 text-center">
-        <h3>Estructura de la empresa</h3>
-      <hr>
+<div class="card">
+  <div class="card-body">
+    <div class="card-title">
+      <h4 class="text-primary">Estructura de la empresa</h4>
     </div>
+    <hr class="line" />
+    <div class="row">
+      <div class="col-lg-4 mb-3">
+        <ul class="list-group list-group-flush">
+          <li
+            class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
+          >
+            Grupos
+            <span>
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="openModal('grupos', add)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </span>
+          </li>
+          <li
+            role="button"
+            *ngFor="let grupo of grupos"
+            [ngClass]="{ 'border border-primary': grupo.selected }"
+            class="list-group-item d-flex justify-content-between align-items-center rounded"
+            (click)="
+              getDependencies(grupo.value); selected(grupos, grupo.value)
+            "
+          >
+            {{ grupo.text }}
+            <span ngbDropdown container="body" class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  href="javascript: void(0);"
+                  class="dropdown-item text-info waves-light caja-botones"
+                  (click)="editar('grupos', grupo, add)"
+                >
+                  <i class="fas fa-edit color-info"></i> Editar</a
+                >
+                <!-- <a
+                    class="dropdown-item text-danger waves-light  caja-botones"
+                    [swal]="anulacion"
+                    (confirm)="delete('grupos', grupo.value)"
+                  >
+                    <i class="fas fa-trash"></i> Eliminar</a
+                  > -->
+              </div>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-4 mb-3">
+        <ul class="list-group list-group-flush">
+          <li
+            class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
+          >
+            Dependencias
+            <span>
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="openModal('dependencias', add)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </span>
+          </li>
+          <li
+            role="button"
+            *ngFor="let dependency of dependecies"
+            [ngClass]="{ 'border border-primary': dependency.selected }"
+            class="list-group-item d-flex justify-content-between align-items-center rounded"
+            (click)="
+              getPosition(dependency.value);
+              selected(dependecies, dependency.value)
+            "
+          >
+            {{ dependency.text }}
+            <span ngbDropdown container="body" class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  href="javascript: void(0);"
+                  class="text-info dropdown-item waves-light caja-botones"
+                  (click)="editar('dependencias', dependency, add)"
+                >
+                  <i class="fas fa-edit"></i> Editar</a
+                >
+                <!-- <a
+                      class="text-danger dropdown-item waves-light  caja-botones"
+                      [swal]="anulacion"
+                      (confirm)="delete('dependencias', dependency.value)"
+                    >
+                      <i class="fas fa-trash"></i> Eliminar</a
+                    > -->
+              </div>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-4 mb-3">
+        <ul
+          class="list-group list-group-flush"
+          *ngIf="!loading && positions.length > 0; else notData"
+        >
+          <li
+            class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
+          >
+            Cargos
+            <span>
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="openModal('cargos', add)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </span>
+          </li>
+          <li
+            role="button"
+            *ngFor="let position of positions"
+            class="list-group-item d-flex justify-content-between align-items-center rounded"
+          >
+            {{ position.text }}
+            <span ngbDropdown container="body" class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  href="javascript: void(0);"
+                  class="text-info dropdown-item waves-light caja-botones"
+                  (click)="editar('cargos', position, add)"
+                >
+                  <i class="fas fa-edit"></i> Editar</a
+                >
+                <!-- <a
+                      class="text-danger dropdown-item waves-light  caja-botones"
+                      [swal]="anulacion"
+                      (confirm)="delete('cargos', position.value)"
+                    >
+                      <i class="fas fa-trash"></i> Eliminar</a
+                    > -->
+              </div>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="row">
+<swal
+  #anulacion
+  title="Eliminando item. Presiona sí para continuar"
+  icon="warning"
+  showCancelButton="true"
+  confirmButtonText="Sí"
+  cancelButtonText="No"
+></swal>
 
-    <div class="col-4 ">
-        <div class="card">
-            <div class="card-body">
-                <div class="col-12 mb-4  d-flex justify-content-between">
-                    <strong>Grupos</strong>
-                    <button class="btn btn-primary btn-sm" (click)="openModal('grupos')"><i class="fa fa-plus"></i></button>
-                </div>
-
-                <div class="col-12">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th class="tabla-filtro">
-                                    Nombre
-                                </th>
-                                <th class="tabla-filtro"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let grupo of grupos " [ngClass]="{'bg-light': grupo.selected}">
-                                <td style="width: 90%;" (click)="getDependencies(grupo.value);selected(grupos,grupo.value)">
-                                    {{grupo.text}}
-                                </td>
-
-                                <td class="text-right">
-                                    <div class="text-center">
-                                        <div ngbDropdown class="dropdown-primary">
-                                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                                <i class="mdi mdi-chevron-down "></i>
-                                            </button>
-                                            <div ngbDropdownMenu>
-                                                <a class="dropdown-item waves-light waves-effect caja-botones" (click)="editar('grupos',grupo)">
-                                                    <i class="ti-pencil"></i> Editar</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<swal #deleteSwal title="Item eliminado con éxito" icon="success"> </swal>
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Lista de {{ tipo }}</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form changeForm="ngForm">
+      <div class="row mt-3">
+        <div *ngIf="tipo != 'grupos'" class="col-md-12 px-0">
+          <mat-form-field appearance="outline" class="col-md-12">
+            <mat-label>Grupo</mat-label>
+            <mat-select
+              (selectionChange)="getDependencies($event.value)"
+              [(value)]="grupoSelcted"
+            >
+              <mat-option
+                *ngFor="let item of grupos"
+                [value]="item.value"
+                (click)="selected(grupos, item.value)"
+                >{{ item.text }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <div *ngIf="tipo == 'cargos'">
+            <mat-form-field appearance="outline" class="col-md-12">
+              <mat-label>Dependencia</mat-label>
+              <mat-select [(value)]="dependenceSelected">
+                <mat-option
+                  *ngFor="let item of dependecies"
+                  [(value)]="item.value"
+                  (click)="selected(dependecies, item.value)"
+                  >{{ item.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
-    </div>
-    <div class="col-4 ">
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            name="name"
+            autocomplete="off"
+            [(ngModel)]="name"
+            placeholder="Ingrese el nombre"
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      *ngIf="tipo == 'grupos'"
+      [disabled]="name == ''"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+    <button
+      *ngIf="tipo == 'dependencias'"
+      [disabled]="name == '' || !grupos.length"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+    <button
+      *ngIf="tipo == 'cargos'"
+      [disabled]="name == '' || !dependecies.length || !grupos.length"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
 
-        <div class="card">
-            <div class="card-body">
-                <div class="col-12 mb-4 d-flex justify-content-between">
-                    <strong>Dependen</strong>
-                    <button class="btn btn-primary btn-sm" (click)="openModal('dependencias')"><i class="fa fa-plus"></i></button>
-                </div>
-
-                <div class="col-12">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th class="tabla-filtro">
-                                    Nombre
-                                </th>
-                                <th class="tabla-filtro"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let dependency of dependecies " [ngClass]="{'bg-light': dependency.selected}">
-                                <td style="width: 90%;" (click)="getPosition(dependency.value);selected(dependecies,dependency.value)">
-                                    {{dependency.text}}
-                                </td>
-
-                                <td class="text-right">
-                                    <div class="text-center">
-                                        <div ngbDropdown class="dropdown-primary">
-                                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                                <i class="mdi mdi-chevron-down "></i>
-                                            </button>
-                                            <div ngbDropdownMenu>
-                                                <a class="dropdown-item waves-light waves-effect caja-botones" (click)="editar('dependencias',dependency)">
-                                                    <i class="ti-pencil"></i> Editar</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body row">
-                <div class="col-12 mb-4 d-flex justify-content-between">
-                    <strong>Cargos</strong>
-                    <button class="btn btn-primary btn-sm" (click)="openModal('cargos')"><i class="fa fa-plus"></i></button>
-                </div>
-
-                <div class="col-12">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th class="tabla-filtro">
-                                    Nombre
-                                </th>
-                                <th class="tabla-filtro"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let position of positions">
-                                <td style="width: 90%;">
-                                    {{position.text}}
-                                </td>
-
-                                <td class="text-right">
-                                    <div class="text-center">
-                                        <div ngbDropdown class="dropdown-primary">
-                                            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                                <i class="mdi mdi-chevron-down "></i>
-                                            </button>
-                                            <div ngbDropdownMenu>
-                                                <a class="dropdown-item waves-light waves-effect caja-botones" (click)="editar('cargos',position)">
-                                                    <i class="ti-pencil"></i> Editar</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <div class="row">
-            <h5 class=" text text-center justify-content-center modal-title   p-1">Agregar nuevo a la lista de {{tipo}}
-            </h5>
-        </div>
-    </div>
-    <div class="app-modal-body">
-        <form changeForm="ngForm">
-            <div class="row mt-3 ">
-                <div class="form-group col-12">
-                    <label for="new-password"></label>
-                    <input type="text" name="name" [(ngModel)]="name" class="form-control" id="new-password" autocomplete="on" placeholder="Nombre">
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer ">
-        <div class="text-right ">
-            <button type="button " (click)="modal.hide()" class="btn btn-danger btn-sm mr-4 ">Cerrar
-             </button>
-            <button type="button " class="btn btn-success btn-sm " (click)="save()">Guardar</button>
-        </div>
-    </div>
-</app-modal-basic>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

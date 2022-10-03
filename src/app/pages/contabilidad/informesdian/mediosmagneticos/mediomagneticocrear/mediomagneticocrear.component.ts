@@ -23,7 +23,7 @@ export class MediomagneticocrearComponent implements OnInit {
   @ViewChild('FormMediosMag') FormMediosMag:any;
   
   public datosCabecera:any = {
-    Titulo: 'Medios Magneticos',
+    Titulo: 'Medios magnéticos',
     Fecha: new Date(),
   }
 

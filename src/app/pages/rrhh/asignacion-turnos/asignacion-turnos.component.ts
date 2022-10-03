@@ -1,10 +1,11 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { AsignacionTurnosService } from './asignacion-turnos.service';
 import { RotatingTurnService } from '../../ajustes/informacion-base/turnos/turno-rotativo/rotating-turn.service';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-asignacion-turnos',
@@ -12,6 +13,18 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./asignacion-turnos.component.scss'],
 })
 export class AsignacionTurnosComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
+
   datosGenerales: any[] = [];
   loading = false;
   turns: any[] = [];
@@ -35,6 +48,10 @@ export class AsignacionTurnosComponent implements OnInit {
     this.getData();
     this.getGrpups();
     this.addElement();
+  }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
   }
   getGrpups() {
     this._groups.getGroup().subscribe((r: any) => {

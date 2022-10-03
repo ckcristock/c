@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-crear-compra-nacional',
@@ -16,6 +17,17 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./crear-compra-nacional.component.scss'],
 })
 export class CrearCompraNacionalComponent implements OnInit {
+  closeResult = '';
+  public openConfirm(confirm){
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    
+  }
   tipoMaterial = ['Activo_Fijo', 'Medicamento', 'Material', 'Dotacion_EPP'];
   public reducer = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Cantidad);
@@ -27,7 +39,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     accumulator + parseFloat(currentValue.Total);
 
   public alertOption: SweetAlertOptions = {};
-  public Cargando: boolean = false;
+  public Cargando: boolean = true;
   public ListaProductos: any[] = [];
   public Lista_Productos: any = [
     {
@@ -97,7 +109,8 @@ export class CrearCompraNacionalComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router,
-    private _user: UserService
+    private _user: UserService,
+    private modalService: NgbModal,
   ) {
     this.alertOption = {
       title: '¿Está Seguro?',
@@ -164,6 +177,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     let params = this.route.snapshot.queryParams;
     this.user = this._user.user.person.id;
     console.log(this.user)
+    this.Cargando = true
     if (params.Pre_Compra != undefined) {
       this.http
         .get(environment.ruta + 'php/rotativoscompras/detalle_pre_compra.php', {
@@ -171,6 +185,7 @@ export class CrearCompraNacionalComponent implements OnInit {
         })
         .subscribe((data: any) => {
           this.Lista_Productos = data.Productos;
+          this.Cargando = false
           this.Id_Proveedor = data.Datos.Id_Proveedor;
           this.Lista_Productos.push({
             producto: '',
@@ -328,6 +343,7 @@ export class CrearCompraNacionalComponent implements OnInit {
         });
     }
   }
+  
 
   searchProduct(pos, editar) {
     this.ListaProducto = [];
@@ -347,7 +363,6 @@ export class CrearCompraNacionalComponent implements OnInit {
 
     if (producto != '') {
       this.http
-
         .get(environment.ruta + 'php/comprasnacionales/lista_productos.php', {
           params: { nom: producto, company_id: this._user.user.person.company_worked.id },
         })
@@ -356,6 +371,7 @@ export class CrearCompraNacionalComponent implements OnInit {
           this.ListaProducto = data;
         });
     } else {
+      this.Cargando = false;
     }
   }
 
@@ -559,7 +575,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       });
     }
 
-    this.modalProductos.hide();
+    this.modalService.dismissAll(); 
     this.Productos = [];
   }
 

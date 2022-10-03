@@ -21,7 +21,7 @@ export class ComprobanteingresocrearComponent implements OnInit {
   public Cargando:boolean = false;
 
   public datosCabecera:any = {
-    Titulo: 'Nuevo Recibo de Caja',
+    Titulo: 'Nuevo recibo de caja',
     Fecha: new Date(),
     Codigo: ''
   }

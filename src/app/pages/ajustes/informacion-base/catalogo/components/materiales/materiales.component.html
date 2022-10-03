@@ -1,256 +1,367 @@
-<div class="row mt-2">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="card-title">
-          <button class="pull-right btn btn-success btn-sm" style="float: right;" (click)="openModal()">
+<div class="card" [ngClass]="cardBorder ? 'border-0 shadow-none mb-0' : 'card'">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Materiales</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(add, 'Nuevo material')"
+          >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <h5 class="text-primary">Materiales</h5>
-          <div class="form-row ml-0 mt-2">
-            <div class="form-group">
-              <label for="">Filtro nombre</label>
-              <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name"
-                (change)="getMaterials()" name="name" autocomplete="off">
-            </div>
-          </div>
-          <hr class="bg-primary">
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
-        <table class="table table-borderless table-striped mt-4" *ngIf="!loading && materials.length > 0; else notData">
-          <thead class="bg-light">
-            <tr>
-              <th>Nombre</th>
-              <th>Unidad</th>
-              <th>Tipo</th>
-              <th>Valor KG</th>
-              <th>F. Creación</th>
-              <th class="text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of materials">
-              <td> {{ item.name | uppercase }} </td>
-              <td> {{ item.unit | titlecase }} </td>
-              <td> {{ item.type }} </td>
-              <td> {{ item.kg_value }} </td>
-              <td> {{ item.created_at | date: 'dd-MM-YYYY' }} </td>
-              <td>
-                <div class="text-center">
-                  <div ngbDropdown class="dropdown-primary">
-                    <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                      <i class="mdi mdi-chevron-down"></i>
-                    </button>
-                    <div ngbDropdownMenu>
-                      <a class="dropdown-item waves-light text-dark waves-effect caja-botones"
-                        (click)="getMaterial(item); modalVer.show()">
-                        <i class="far fa-eye"></i> Ver
-                      </a>
-                      <a class="dropdown-item waves-light text-info waves-effect caja-botones"
-                        (click)="getMaterial(item); modal.show()">
-                        <i class="far fa-edit"></i> Editar
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-          [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
-          (pageChange)="getMaterials($event)" aria-label="Default pagination" maxSize="5" rotate="true" ellipses="false"
-          boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-        </ngb-pagination>
       </div>
     </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por nombre"
+              [(ngModel)]="filtro.name"
+              (input)="getMaterials()"
+              name="name"
+              autocomplete="off"
+            />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm mb-0"
+        *ngIf="!loading && materials.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Nombre</th>
+            <th>Unidad</th>
+            <th>Tipo</th>
+            <th>Valor KG</th>
+            <th>F. Creación</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of materials" class="text-center">
+            <td class="align-middle">{{ item.name | uppercase }}</td>
+            <td class="align-middle">{{ item.unit | titlecase }}</td>
+            <td class="align-middle">{{ item.type }}</td>
+            <td class="align-middle">{{ item.kg_value }}</td>
+            <td class="align-middle">
+              {{ item.created_at | date: "longDate" }}
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    href="javascript:void(0)"
+                    class="dropdown-item waves-light text-success caja-botones"
+                    (click)="getMaterial(item); openConfirm(view, '')"
+                  >
+                    <i class="far fa-eye"></i> Ver
+                  </a>
+                  <a
+                    href="javascript:void(0)"
+                    class="dropdown-item waves-light text-info caja-botones"
+                    (click)="
+                      getMaterial(item); openConfirm(add, 'Editar material')
+                    "
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <mat-paginator
+      *ngIf="paginacion"
+      [length]="paginacion.total"
+      [pageSize]="paginacion.per_page"
+      [pageIndex]="paginacion.current_page - 1"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
   </div>
 </div>
 
-
-
-<app-modal-basic #modal [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">{{ title }}</h5>
-    <button type="button" class="close basic-close" (click)="closeModal()">
-      <span aria-hidden="true">
-        <i class="fas fa-times"></i>
-      </span>
-    </button>
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">{{ title }}</h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click'); closeModal()"
+    ></button>
   </div>
-  <div class="app-modal-body">
+  <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <input type="hidden" class="form-control form-control-sm" formControlName="product_id">
-
-        <div class="col-12">
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="">Nombre</label>
-              <input type="text" class="form-control form-control-sm" formControlName="name">
-            </div>
-            <div class="form-group col-md-6">
-              <label for="">Unidad</label>
-              <select class="form-control form-control-sm" name="color" formControlName="unit">
-                <option value="milimetros">Milimetros</option>
-                <option value="unidad">Unidad</option>
-              </select>
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="tipo">Tipo</label>
-              <select class="form-control form-control-sm" name="color" formControlName="type">
-                <option value="Interno">Interno</option>
-                <option value="Comercial">Comercial</option>
-              </select>
-            </div>
-            <div class="form-group col-md-6">
-              <label for="tipo">Valor KG</label>
-              <input type="number" class="form-control form-control-sm" formControlName="kg_value">
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="">Código Barras</label>
-              <input type="text" class="form-control form-control-sm" formControlName="Codigo_Barras">
-            </div>
-            <div class="form-group col-md-6">
-              <label for="tipo">Tipo Catalogo</label>
-              <select class="form-control form-control-sm" name="color" formControlName="Tipo_Catalogo">
-                <option value="Material">Material</option>
-                <!--<option value="Epp">Epp</option>-->
-              </select>
-            </div>
-
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Categoria</label>
-                <ng-select formControlName="Id_Categoria" [items]="Categorias" bindLabel="text"
-                  (change)="getSubCategories($event.value)" bindValue="value" loadingText="loading" ngDefaultControl>
-                </ng-select>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Subcategoría</label>
-                <ng-select formControlName="Id_Subcategoria" [items]="SubCategorias" bindLabel="text"
-                  (change)="getDinamicField($event.value)" bindValue="value" loadingText="loading" ngDefaultControl>
-                </ng-select>
-              </div>
-            </div>
-
-            <ng-container formArrayName="dynamic">
-              <ng-container *ngFor="let item of fieldDinamic.controls; let i = index">
-                <div class="col-md-3" [formGroupName]="i">
-                  <label for="">{{
-                    item["controls"]["label"]["value"] | titlecase
-                    }}</label>
-                  <input class="form-control form-control-sm" [type]="item['controls']['type']['value']"
-                    formControlName="valor" />
-                </div>
-              </ng-container>
-            </ng-container>
-
-
-            <div class="col-12 mt-4">
-              <label for="" style="font-size: 18px;">Espesores</label>
-            </div>
-            <ng-container formArrayName="thicknesses">
-              <div class="form-group col-1" *ngFor="let item of thicknessList.controls; let i = index">
-                <ng-container [formGroupName]="i">
-                  <label for=""> {{ item.controls.thickness.value }} </label>
-                  <input type="number" class="form-control form-control-sm" formControlName="value">
-                </ng-container>
-              </div>
-            </ng-container>
-            <ng-container>
-              <perfect-scrollbar style="height: 250px;">
-                <table class="table table-sm">
-                  <thead>
-                    <tr>
-                      <th>
-                        <label for="">Propiedad</label>
-                      </th>
-                      <th>
-                        <label for="tipo">Caracteristica</label>
-                      </th>
-                      <th>
-                        <label>Valor</label>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody formArrayName="fields">
-                    <ng-container *ngIf="fieldList.controls.length; else sinDatos">
-                      <ng-container *ngFor="let item of fieldList.controls; let i = index">
-                        <tr [formGroupName]="i">
-                          <td>
-                            <input type="text" class="form-control form-control-sm" formControlName="property">
-                          </td>
-                          <td>
-                            <select class="form-control form-control-sm" name="color" formControlName="type">
-                              <option value="number">Number</option>
-                              <option value="text">Text</option>
-                              <option value="date">Date</option>
-                              <option value="text">Color</option>
-                            </select>
-                          </td>
-                          <td>
-                            <input [type]="item['controls']['type']['value']" class="form-control form-control-sm"
-                              formControlName="value">
-                          </td>
-                          <td>
-                            <button style="float: right;" class="btn btn-danger btn-sm" placement="bottom" type="button"
-                              ngbTooltip="Borrar" (click)="deleteField(i)">
-                              <i class="fas fa-trash-alt"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      </ng-container>
-                    </ng-container>
-                    <tr>
-                      <td colspan="4">
-                        <div class="btn-group" style="float: right">
-                          <button class="btn btn-info btn-sm" placement="bottom" type="button" ngbTooltip="Agregar"
-                            (click)="newField()">
-                            <i class="fas fa-plus"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </perfect-scrollbar>
+        <input
+          type="hidden"
+          class="form-control form-control-sm"
+          formControlName="product_id"
+        />
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Unidad</mat-label>
+          <mat-select name="color" formControlName="unit" required>
+            <mat-option value="milimetros">Milimetros</mat-option>
+            <mat-option value="unidad">Unidad</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select name="color" formControlName="type" required>
+            <mat-option value="Interno">Interno</mat-option>
+            <mat-option value="Comercial">Comercial</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor (kg)</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor"
+            formControlName="kg_value"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código de barras</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el código de barras"
+            formControlName="Codigo_Barras"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo de catálogo</mat-label>
+          <mat-select name="color" formControlName="Tipo_Catalogo" required>
+            <mat-option value="Material">Material</mat-option>
+            <mat-option value="Epp">EPP</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="col-md-6 mb-4">
+          <ng-select
+            formControlName="Id_Categoria"
+            [items]="Categorias"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Categoría"
+            (change)="getSubCategories($event.value)"
+            bindValue="value"
+            loadingText="loading"
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
+        <div class="col-md-6 mb-4">
+          <ng-select
+            formControlName="Id_Subcategoria"
+            [items]="SubCategorias"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Subcategoría"
+            (change)="getDinamicField($event.value)"
+            bindValue="value"
+            loadingText="loading"
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
+        <ng-container formArrayName="dynamic">
+          <ng-container
+            *ngFor="let item of fieldDinamic.controls; let i = index"
+          >
+            <mat-form-field
+              class="col"
+              appearance="outline"
+              [formGroupName]="i"
+            >
+              <mat-label>{{
+                item["controls"]["label"]["value"] | titlecase
+              }}</mat-label>
+              <input
+                matInput
+                [type]="item['controls']['type']['value']"
+                [placeholder]="
+                  'Ingresa el ' + item['controls']['label']['value']
+                "
+                formControlName="valor"
+                autocomplete="off"
+                required
+              />
+            </mat-form-field>
+          </ng-container>
+        </ng-container>
+      </div>
+      <h6 class="text-center">Espesores</h6>
+      <div class="row">
+        <ng-container formArrayName="thicknesses">
+          <div
+            class="col-lg-2"
+            *ngFor="let item of thicknessList.controls; let i = index"
+          >
+            <ng-container [formGroupName]="i">
+              <mat-form-field class="col-12 px-0" appearance="outline">
+                <mat-label>{{ item.controls.thickness.value }}</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  formControlName="value"
+                  autocomplete="off"
+                />
+              </mat-form-field>
             </ng-container>
           </div>
-        </div>
+        </ng-container>
+        <ng-container>
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Propiedad</th>
+                  <th>Característica</th>
+                  <th>Valor</th>
+                  <th><i class="fas fa-trash-alt"></i></th>
+                </tr>
+              </thead>
+              <tbody formArrayName="fields">
+                <ng-container *ngIf="fieldList.controls.length; else sinDatos">
+                  <ng-container
+                    *ngFor="let item of fieldList.controls; let i = index"
+                  >
+                    <tr [formGroupName]="i" class="text-center">
+                      <td>
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          formControlName="property"
+                        />
+                      </td>
+                      <td>
+                        <select
+                          class="form-control form-control-sm"
+                          name="color"
+                          formControlName="type"
+                        >
+                          <option value="number">Number</option>
+                          <option value="text">Text</option>
+                          <option value="date">Date</option>
+                          <option value="text">Color</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input
+                          [type]="item['controls']['type']['value']"
+                          class="form-control form-control-sm"
+                          formControlName="value"
+                        />
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-danger btn-sm"
+                          placement="bottom"
+                          type="button"
+                          (click)="deleteField(i)"
+                        >
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+              <button
+                class="btn btn-primary btn-sm"
+                type="button"
+                (click)="newField()"
+              >
+                <i class="fas fa-plus"></i> Agregar
+              </button>
+            </div>
+          </div>
+        </ng-container>
       </div>
     </form>
   </div>
-  <div class="app-modal-footer">
-    <div class="form-group text-right">
-      <button (click)="closeModal()" type="button"
-        class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-      <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid"
-        (click)="save()">Guardar</button>
-    </div>
-  </div>
-</app-modal-basic>
-
-
-
-<app-modal-basic #modalVer [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">Ver Materia Material</h5>
-    <button type="button" class="close basic-close" (click)="modalVer.hide(); closeModalVer()">
-      <span aria-hidden="true">
-        <i class="fas fa-times"></i>
-      </span>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click'); closeModal()"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
     </button>
   </div>
-  <div class="app-modal-body">
+</ng-template>
+
+<ng-template #view let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Ver Material</h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click'); closeModalVer()"
+    ></button>
+  </div>
+  <div class="modal-body">
     <div class="row">
       <div class="col-6">
-        <strong class="text-title"> PROPIEDADES ({{ material.name | titlecase }}) </strong>
-        <perfect-scrollbar style="height: 300px;">
+        <strong class="text-title">
+          PROPIEDADES ({{ material.name | titlecase }})
+        </strong>
+        <perfect-scrollbar style="height: 300px">
           <table class="table table-sm table-striped">
             <thead>
               <tr class="bg-light stay">
@@ -261,17 +372,19 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of material.material_field">
-                <td> {{ item.property }} </td>
-                <td> {{ item.type }} </td>
-                <td> {{ item.value }} </td>
+                <td>{{ item.property }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.value }}</td>
               </tr>
             </tbody>
           </table>
         </perfect-scrollbar>
       </div>
       <div class="col-6">
-        <strong class="text-title"> ESPESORES ({{ material.name | titlecase }}) </strong>
-        <perfect-scrollbar style="height: 400px;">
+        <strong class="text-title">
+          ESPESORES ({{ material.name | titlecase }})
+        </strong>
+        <perfect-scrollbar style="height: 400px">
           <table class="table table-sm table-striped">
             <thead>
               <tr class="bg-light stay">
@@ -281,8 +394,8 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of material.material_thickness">
-                <td> {{ item.thickness.thickness }} </td>
-                <td> {{ item.value }} </td>
+                <td>{{ item.thickness.thickness }}</td>
+                <td>{{ item.value }}</td>
               </tr>
             </tbody>
           </table>
@@ -290,14 +403,16 @@
       </div>
     </div>
   </div>
-  <div class="app-modal-footer">
-    <div class="form-group text-right">
-      <button (click)="modalVer.hide(); closeModalVer()" type="button"
-        class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-    </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click'); closeModalVer()"
+    >
+      Cerrar
+    </button>
   </div>
-</app-modal-basic>
-
+</ng-template>
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
@@ -309,9 +424,9 @@
   <p>No</p>
 </ng-template>
 <ng-template #sinDatos>
-  <tr class="bg-light">
+  <tr>
     <td colspan="100%" class="text-center">
-      <p class="text-dark">Sin datos agregados</p>
+      <div class="alert alert-danger" role="alert">Sin datos agregados</div>
     </td>
   </tr>
 </ng-template>

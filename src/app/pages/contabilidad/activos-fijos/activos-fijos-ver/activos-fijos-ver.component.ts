@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ActivosFijosVerComponent implements OnInit {
   public Datos:any={
-    Titulo:'Activo Fijo',
+    Titulo:'Activo fijo',
     Fecha:new Date()
   }
   public id = this.route.snapshot.params["id"];

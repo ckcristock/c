@@ -57,19 +57,19 @@ export class InformacionEmpresaComponent implements OnInit {
   getGroups() {
     this._group.getGroup().subscribe((r: any) => {
       this.groups = r.data
-      this.groups.unshift({ text: 'Seleccione uno', value: '' });
     })
   }
   getCompanies() {
     this._company.getCompanies().subscribe((d: any) => {
       this.companies = d.data;
+      console.log(this.companies)
       d.data[0]
         ? this.formCompany.patchValue({ company_id: d.data[0].value })
         : '';
     });
   }
-  getDependencies(company_id) {
-    this._dependecies.getDependencies({ company_id }).subscribe((d: any) => {
+  getDependencies(group_id) {
+    this._dependecies.getDependencies({ group_id }).subscribe((d: any) => {
       this.dependencies = d.data;
       this.dependencies.unshift({ text: 'Seleccione una', value: '' });
     });
@@ -141,13 +141,13 @@ export class InformacionEmpresaComponent implements OnInit {
   get turnSelected() {
     return this.formCompany.get('turn_type').value;
   }
-  get group_id_invalid() {
-    return this.formCompany.get('group_id').invalid && this.formCompany.get('group_id').touched;
-  }
   get company_id_invalid() {
     return (
       this.formCompany.get('company_id').invalid && this.formCompany.get('company_id').touched
     );
+  }
+  get group_id_invalid() {
+    return this.formCompany.get('group_id').invalid && this.formCompany.get('group_id').touched;
   }
   get dependency_id_invalid() {
     return (

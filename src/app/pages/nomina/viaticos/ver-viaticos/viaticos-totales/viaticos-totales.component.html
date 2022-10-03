@@ -1,103 +1,100 @@
-<div class="row mt-2">
-  <div class="col-6">
-    <table>
-      <thead>
-        <tr>
-          <div class="title">
-            <h5>Observaciones</h5>
-          </div>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          {{
-            data.observation
-          }}
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Dolares</th>
-        <th class="text-right">Pesos</th>
+<div class="rounded-top table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Observaciones</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Hospedaje</td>
-        <td class="text-right">
-          {{ data.total_hotels_usd }}
-        </td>
-        <td class="text-right">
-          {{ data.total_hotels_cop }}
-        </td>
+        <td>{{ data.observation }}</td>
       </tr>
-      <tr>
-        <td>Transporte Terrestre</td>
+    </tbody>
+  </table>
+</div>
+<hr />
+<div class="rounded-top table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th class="col-md-3">Item</th>
+        <th>Dolares</th>
+        <th>Pesos</th>
+        <th class="col-md-3">Item</th>
+        <th>Dolares</th>
+        <th>Pesos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="text-center">
+        <th class="align-middle">Hospedaje</th>
+        <td class="text-right">
+          {{ data.total_hotels_usd | currency }}
+        </td>
+        <td class="text-right">
+          {{ data.total_hotels_cop | currency: 'COP' }}
+        </td>
+        <th class="align-middle">Transporte Terrestre</th>
         <td></td>
         <td class="text-right">
-          {{ data.total_transports_cop }}
+          {{ data.total_transports_cop | currency: 'COP' }}
         </td>
       </tr>
-      <tr>
-        <td>Taxis</td>
+      <tr class="text-center">
+        <th class="align-middle">Taxis</th>
         <td class="text-right">
-          {{ data.total_taxis_usd }}
+          {{ data.total_taxis_usd | currency }}
         </td>
         <td class="text-right">
-          {{ data.total_taxis_cop }}
+          {{ data.total_taxis_cop | currency: 'COP' }}
         </td>
-      </tr>
-      <tr>
-        <td>Alimentación</td>
+        <th class="align-middle">Alimentación</th>
         <td class="text-right">
-          {{ data.total_feedings_usd }}
+          {{ data.total_feedings_usd | currency }}
         </td>
         <td class="text-right">
-          {{ data.total_feedings_cop }}
+          {{ data.total_feedings_cop | currency: 'COP' }}
         </td>
       </tr>
-      <tr>
-        <td>Lavanderia</td>
+      <tr class="text-center">
+        <th class="align-middle">Lavanderia</th>
         <td class="text-right">
-          {{ data.total_laundry_usd }}
+          {{ data.total_laundry_usd | currency }}
         </td>
         <td class="text-right">
-          {{ data.total_laundry_cop }}
+          {{ data.total_laundry_cop | currency: 'COP' }}
         </td>
-      </tr>
-      <tr>
-        <td>Sobre Equipaje</td>
+        <th class="align-middle">Sobre Equipaje</th>
         <td class="text-right">
-          {{ data.baggage_usd }}
+          {{ data.baggage_usd | currency }}
         </td>
         <td class="text-right">
-          {{ data.baggage_cop }}
+          {{ data.baggage_cop | currency: 'COP' }}
         </td>
       </tr>
-      <tr>
-        <td>Otros Gastos</td>
+      <tr class="text-center">
+        <th class="align-middle">Otros Gastos</th>
         <td class="text-right">
-          {{ data.other_expenses_usd }}
+          {{ data.other_expenses_usd | currency }}
         </td>
         <td class="text-right">
-          {{ data.other_expenses_cop }}
+          {{ data.other_expenses_cop | currency: 'COP' }}
         </td>
-      </tr>
-      <tr>
-        <td class="text-right">Total</td>
+        <th class="align-middle">Total</th>
         <td class="text-right">
-          {{ data.total_usd }}
+          {{ data.total_usd | currency }}
         </td>
-
+  
         <td class="text-right">
-          {{ data.total_cop }}
+          {{ data.total_cop | currency: 'COP' }}
         </td>
       </tr>
     </tbody>
   </table>
 </div>
-<!-- </div> -->

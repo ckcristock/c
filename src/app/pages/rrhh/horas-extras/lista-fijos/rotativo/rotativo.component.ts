@@ -26,7 +26,7 @@ export class RotativoComponent implements OnInit {
   validada = false;
   esVisible = false;
 
-  constructor(private _swal: SwalService, private _extra: ExtraHoursService) {}
+  constructor(private _swal: SwalService, private _extra: ExtraHoursService) { }
 
   ngOnInit(): void {
     
@@ -41,9 +41,9 @@ export class RotativoComponent implements OnInit {
       horasExtrasNocturnasFestivasDom:
         this.day['HorasExtrasNocturnasDominicales'],
       recargosNocturnos: this.day['horasRecargoNocturna'],
-      recargosFestivos:
-        parseInt(this.day['horasRecargoDominicalNocturna']) +
-        parseInt(this.day['horasRecargoDominicalDiurno']),
+      recargosDiurnosFestivos:this.day['horasRecargoDominicalDiurno'],
+      recargosNocturnosFestivos: this.day['horasRecargoDominicalNocturna'],
+
     };
 
     this.cargarExtrasValidadas(this.funcionarioDato.id);
@@ -54,13 +54,13 @@ export class RotativoComponent implements OnInit {
   guardarReporteDeExtras() {
     this._swal
       .show({
-        title: '¿Está seguro(a)?',
-        text: 'Va a realizar el guardado de validación de las horas extras del funcionario, asegúrese que todo coincida como debe ya que esto afectará cálculos de nómina.',
+        title: '¿Estás seguro(a)?',
+        text: 'Vas a realizar la validación de las horas extras del funcionario, confirma que todo coincida correctamente pues esto afectará los cálculos de nómina.',
         icon: 'warning',
       })
       .then((res) => {
         if (res.isConfirmed) {
-          
+
           let reporte = {
             person_id: this.funcionarioDato.id,
             date: this.diarioDato.date,
@@ -100,7 +100,7 @@ export class RotativoComponent implements OnInit {
     });
     this.cargarExtrasValidadas(this.funcionarioDato.id);
   };
-  mostrarModalDiarioFijo(diario) {}
+  mostrarModalDiarioFijo(diario) { }
 
   cargarExtrasValidadas(funcionario) {
     if (this.diarioDato['date'] != undefined) {
@@ -133,8 +133,9 @@ export class RotativoComponent implements OnInit {
             this.lista.recargosNocturnosReales = this.extrasValidadas.rn_reales;
             this.lista.recargosFestivosReales = this.extrasValidadas.rf_reales;
           }
-        });
-    
+        }
+        );
+
     }
   }
 

@@ -240,7 +240,8 @@ export class ItemsComponent implements OnInit {
 
   findApus(item: FormGroup) {
     this.tempItem = item;
-    this.apus.show()
+    //this.apus.show()
+    this.apus.openConfirm()
   }
   getApus(e: any[]) {
     console.log(e);

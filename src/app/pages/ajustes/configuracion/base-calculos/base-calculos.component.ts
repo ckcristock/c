@@ -33,7 +33,8 @@ export class BaseCalculosComponent implements OnInit {
           icon:'success',
           title:'Se ha guardado con éxito',
           text:'',
-          showCancel:false
+          showCancel:false,
+          timer: 1000
       })
     });
   }

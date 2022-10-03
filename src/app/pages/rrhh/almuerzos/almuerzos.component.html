@@ -1,201 +1,380 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
-                <i class="fa fa-plus"></i> Agregar
-            </button>
-            <h5 class="text-primary">Almuerzos</h5>
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Almuerzos</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-sm btn-primary"
+            (click)="openConfirm(add, 'md')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-success btn-sm" (click)="Download()">
+            <span *ngIf="!donwloading; else status">
+              <i class="fas fa-file-download"></i> Descargar</span
+            >
+            <ng-template #status>
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              Generando...
+            </ng-template>
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
-        <hr class="line">
-        <div class="row mt-4">
-            <div class="form-group col-3">
-                <label for="">Filtro Funcionario</label>
-                <ng-select [(ngModel)]="filtro.person" (change)="getLunches()" [items]="peopleFill" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
-                </ng-select>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="fecha_inicio" class="custom-label">Fecha de Inicio</label>
-                    <input type="date" [(ngModel)]="filtro.date_start" (change)="getLunches()" class="form-control custom-control" />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="fecha_fin" class="custom-label">Fecha de Fin</label>
-                    <input type="date" [(ngModel)]="filtro.date_end" class="form-control custom-control" (change)="getLunches()" />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <button class="btn btn-sm btn-primary btn-block mt-4" style="float: right;" (click)="Download()">
-                    <i class="fas fa-file-download"></i>
-                    <span *ngIf="!donwloading; else status"> Descargar</span>
-                      <ng-template #status>
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        Generando...
-                      </ng-template>
-                  </button>
-            </div>
-        </div>
+      </div>
     </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <ng-select
+              [(ngModel)]="filtro.person"
+              (change)="getLunches()"
+              [items]="peopleFill"
+              bindLabel="text"
+              bindValue="value"
+              appearance="outline"
+              [appendTo]="'body'"
+              placeholder="Funcionario"
+              loadingText="loading "
+              ngDefaultControl
+            >
+            </ng-select>
+          </div>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de inicio</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="filtro.date_start"
+              (change)="getLunches()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de fin</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="filtro.date_end"
+              (change)="getLunches()"
+            />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && lunches.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th scope="col">Funcionario</th>
+            <th scope="col">Func. Creó</th>
+            <th scope="col">Valor</th>
+            <th scope="col">¿Aplica?</th>
+            <th scope="col">Fecha</th>
+            <th scope="col" class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let lunch of lunches"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': lunch.state == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">
+              {{ lunch.first_name | titlecase }}
+              {{ lunch.first_surname | titlecase }}
+            </td>
+            <td class="align-middle">{{ lunch.user }}</td>
+            <td class="align-middle">{{ lunch.value | currency }}</td>
+            <ng-container *ngIf="lunch.apply == null; else elseTemplate">
+              <td class="align-middle">Sin Validar</td>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <td class="align-middle">{{ lunch.apply }}</td>
+            </ng-template>
+            <td class="align-middle">
+              {{ lunch.created_at | date: "longDate" }}
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    (click)="getLunchValu(lunch); openConfirm(edit, 'sm')"
+                    href="javascript:void(0)"
+                    class="dropdown-item waves-light text-info caja-botones"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="lunch.state == 'Activo'"
+                    (click)="activateOrInactivate(lunch.id, 'Inactivo')"
+                    href="javascript:void(0)"
+                    class="dropdown-item waves-light text-danger caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
+                  <a
+                    *ngIf="lunch.state == 'Inactivo'"
+                    (click)="activateOrInactivate(lunch.id, 'Activo')"
+                    href="javascript:void(0)"
+                    class="dropdown-item waves-light text-success caja-botones"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      (pageChange)="getLunches($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
 </div>
-<div class="card">
-    <div class="card-body">
-        <table class="table table-sm table-borderless table-striped mt-4" *ngIf="!loading && lunches.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th scope="col">Funcionario</th>
-                    <th scope="col">Func. Creó</th>
-                    <th scope="col">Valor</th>
-                    <th scope="col">¿Aplica?</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col" class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let lunch of lunches" [ngClass]="{'bg-danger text-white': (lunch.state == 'Inactivo')}">
-                    <td> {{ lunch.first_name | titlecase}} {{ lunch.first_surname | titlecase }} </td>
-                    <td> {{ lunch.user }} </td>
-                    <td> {{ lunch.value | currency }} </td>
-                    <ng-container *ngIf="lunch.apply == null; else elseTemplate">
-                        <td>Sin Validar</td>
-                    </ng-container>
-                    <ng-template #elseTemplate>
-                        <td> {{ lunch.apply }} </td>
-                    </ng-template>
-                    <td> {{ lunch.created_at | date: 'dd-MM-yyyy' }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a (click)="getLunchValu(lunch); modalEdit.show()" class="dropdown-item waves-light text-info waves-effect caja-botones">
-                                        <i class="far fa-edit"></i> Editar
-                                    </a>
-                                    <a *ngIf="lunch.state == 'Activo'" (click)="activateOrInactivate(lunch.id, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
-                                        <i class="far fa-trash-alt"></i> Anular
-                                    </a>
-                                    <a *ngIf="lunch.state == 'Inactivo'" (click)="activateOrInactivate(lunch.id, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
-                                        <i class="fas fa-check"></i> Activar
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getLunches($event)" aria-label="Default pagination"
-            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-        </ngb-pagination>
-    </div>
-</div>
-<app-modal-basic #modal [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> Nuevo Almuerzo </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset(); personList.clear()">
-          <span aria-hidden="true">
-            <i class="fas fa-times" (click)="modal.hide(); form.reset(); personList.clear()"></i>
-          </span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="form-group col-6">
-                    <label>Grupo (*)</label>
-                    <ng-select name="group_id" (change)="getDependencies($event.value)" [items]="groups" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl formControlName="group_id">
-                    </ng-select>
-                </div>
-                <div class="form-group col-6">
-                    <label>Dependencia (*)</label>
-                    <ng-select name="dependency_id" (change)="Dependencia_Cargo($event.value)" [items]="dependencies" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl formControlName="dependency_id">
-                    </ng-select>
-                </div>
-                <div class="form-group col-12">
-                    <label for="" class="form-label">Funcionario</label>
-                    <ng-select formControlName="people_id" [ngClass]="'ng-select'" name="days" [items]="people" bindLabel="text" bindValue="value" [multiple]="true">
-                    </ng-select>
-                    <!-- <input formControlName="fill_person" #box class="form-control form-control-sm" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue" (change)="createPerson(); box.value = '' "> -->
-                </div>
-                <div class="form-group col-12">
-                    <label for="" class="form-label">Valor del Almuerzo</label>
-                    <ng-select appearance="outline" [searchable]="false" [clearable]="false" labelForId="value" formControlName="value">
-                        <ng-option *ngFor="let item of lunchvalues" [value]="item.value">
-                            {{ item.value | currency: '' : ''}}
-                        </ng-option>
-                    </ng-select>
-                    <!-- <input type="number" formControlName="value" class="form-control form-control-sm" readonly> -->
-                </div>
-                <!-- <div class="form-group col-12" *ngIf="personList.controls.length > 0">
-                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                        <table class="table table-sm table-borderless table-striped">
-                            <thead class="bg-light stay">
-                                <tr>
-                                    <th colspan="2" class="text-center">Funcionarios Seleccionados</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr formArrayName="persons" *ngFor="let item of personList.controls; let i = index">
-                                    <td [formGroupName]="i">
-                                        <input type="text" formControlName="name" class="form-control form-control-plaintext form-control-sm" style="background-color: transparent" readonly>
-                                    </td>
-                                    <td [formGroupName]="i">
-                                        <div class="text-center">
-                                            <button class="btn btn-outline-danger btn-sm" type="button" (click)="deletePerson(i)">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div> -->
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide(); form.reset(); personList.clear()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createLunch()" [disabled]="!form.valid">Guardar</button>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nuevo almuerzo</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <ng-select
+            name="group_id"
+            (change)="getDependencies($event.value)"
+            [items]="groups"
+            bindLabel="text"
+            bindValue="value"
+            loadingText="loading"
+            ngDefaultControl
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Grupo (*)"
+            formControlName="group_id"
+          >
+          </ng-select>
         </div>
-    </div>
-</app-modal-basic>
-<app-modal-basic #modalEdit [dialogClass]="'modal-sm'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> Editar Valor </h5>
-        <button type="button" class="close basic-close" (click)="modalEdit.hide()">
-          <span aria-hidden="true">
-            <i class="fas fa-times" (click)="modal.hide()"></i>
-          </span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <div class="form-row">
-            <div class="form-group col-12">
-                <label for="">Funcionario</label>
-                <p> {{ person }} </p>
-            </div>
-            <div class="form-group col-12">
-                <label for="" class="form-label">Valor del Almuerzo</label>
-                <ng-select appearance="outline" [searchable]="false" [clearable]="false" labelForId="value" [(ngModel)]="value">
-                    <ng-option *ngFor="let item of lunchvalues" [value]="item.value">
-                        {{ item.value | currency: 'COP'}}
-                    </ng-option>
-                </ng-select>
-                <!-- <input type="number" formControlName="value" class="form-control form-control-sm" readonly> -->
-            </div>
+        <div class="col-md-6 mb-4">
+          <ng-select
+            name="dependency_id"
+            (change)="Dependencia_Cargo($event.value)"
+            [items]="dependencies"
+            bindLabel="text"
+            bindValue="value"
+            loadingText="loading"
+            ngDefaultControl
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Dependencia (*)"
+            formControlName="dependency_id"
+          >
+          </ng-select>
         </div>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="editLunchValue()">Editar</button>
+        <div class="col-md-12 mb-4">
+          <ng-select
+            formControlName="people_id"
+            [ngClass]="'ng-select'"
+            name="days"
+            [items]="people"
+            bindLabel="text"
+            bindValue="value"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Funcionario (*)"
+            [multiple]="true"
+          >
+          </ng-select>
         </div>
-    </div>
-</app-modal-basic>
-<ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+        <div class="col-md-12 mb-4">
+          <ng-select
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Valor del almuerzo"
+            [searchable]="false"
+            [clearable]="false"
+            labelForId="value"
+            formControlName="value"
+          >
+            <ng-option *ngFor="let item of lunchvalues" [value]="item.value">
+              {{ item.value | currency: "":"" }}
+            </ng-option>
+          </ng-select>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="createLunch()"
+      [disabled]="!form.valid"
+    >
+      Guardar
+    </button>
+  </div>
 </ng-template>
+
+<ng-template #edit let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Editar valor</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6 class="text-center">Funcionario</h6>
+    <h5 class="text-center text-primary">{{ person }}</h5>
+    <div class="row">
+      <div class="col-md-12">
+        <ng-select
+          appearance="outline"
+          [searchable]="false"
+          [clearable]="false"
+          appearance="outline"
+          [appendTo]="'body'"
+          placeholder="Valor del almuerzo"
+          labelForId="value"
+          [(ngModel)]="value"
+        >
+          <ng-option *ngFor="let item of lunchvalues" [value]="item.value">
+            {{ item.value | currency: "COP" }}
+          </ng-option>
+        </ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary" (click)="editLunchValue()">
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading" [text]="'No existen datos para las fechas ' + filtro.date_start + ' - ' + filtro.date_end" ></app-not-data>
+</ng-template>
+<!-- <input
+  formControlName="fill_person"
+  #box
+  class="form-control form-control-sm"
+  [ngbTypeahead]="search"
+  [inputFormatter]="inputFormatBandListValue"
+  [resultFormatter]="resultFormatBandListValue"
+  (change)="createPerson(); box.value = ''"
+/> -->
+<!-- <input
+  type="number"
+  formControlName="value"
+  class="form-control form-control-sm"
+  readonly
+/> -->
+<!-- <input
+  type="number"
+  formControlName="value"
+  class="form-control form-control-sm"
+  readonly
+/> -->
+<!-- <div class="form-group col-12" *ngIf="personList.controls.length > 0">
+  <div class="table-wrapper-scroll-y my-custom-scrollbar">
+    <table class="table table-sm table-borderless table-striped">
+      <thead class="bg-light stay">
+        <tr>
+          <th colspan="2" class="text-center">Funcionarios Seleccionados</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          formArrayName="persons"
+          *ngFor="let item of personList.controls; let i = index"
+        >
+          <td [formGroupName]="i">
+            <input
+              type="text"
+              formControlName="name"
+              class="form-control form-control-plaintext form-control-sm"
+              style="background-color: transparent"
+              readonly
+            />
+          </td>
+          <td [formGroupName]="i">
+            <div class="text-center">
+              <button
+                class="btn btn-outline-danger btn-sm"
+                type="button"
+                (click)="deletePerson(i)"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->

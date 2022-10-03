@@ -1,79 +1,99 @@
-<ng-container *ngIf="loading; else notDataTable">
-
-    <div class="row">
-        <div class="col-md-7">
-            <div class="card mt-2">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <div class="">
-                            <h5>Stock por Categorías</h5>
-                        </div>
-                        <div class="">
-                            <input type="text" class="form-control" (change)="findName()" [(ngModel)]="nombre" name="funcionario" autocomplete="off" placeholder="Nombre" />
-                        </div>
-                        <div class="">
-                            <button class="btn btn-sm btn-primary btn-block" (click)="DownloadInventoryDotation()">
-                              <i class="fas fa-file-download"></i>
-
-                              <span *ngIf="!donwloading; else status"> Descargar</span>
-                                <ng-template #status>
-                                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                  Generando...
-                                </ng-template>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-pills">
-                        <li [ngbNavItem]="1">
-                            <a ngbNavLink>Dotación</a>
-                            <ng-template ngbNavContent>
-
-                                <app-table-stock #tablestock [type]="'Dotacion'" [name]="nombre" [find]="true"></app-table-stock>
-
-                            </ng-template>
-                        </li>
-                        <li [ngbNavItem]="2">
-                            <a ngbNavLink>Epp</a>
-                            <ng-template ngbNavContent>
-
-                                <app-table-stock #tablestock [type]="'EPP'" [name]="nombre" [find]="true"></app-table-stock>
-
-                            </ng-template>
-                        </li>
-                    </ul>
-
-                    <div [ngbNavOutlet]="nav" class="mt-2"></div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-md-5">
-            <div class="card mt-2">
-                <div class="card-header">
-                    <h5>Dotación y Epp's x Categorías</h5>
-                </div>
-                <div class="card-block" #dotacion_chart>
-                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
-                </canvas>
-                </div>
-            </div>
-        </div>
-
+<ng-container>
+  <div class="row card-title d-flex justify-content-between">
+    <div class="col-md-6 px-0">
+      <h5 class="text-primary">Stock por categorías</h5>
     </div>
+    <div class="col-md-6 px-0 text-right">
+      <div class="btn-group rounded w-sm-100">
+        <button
+          class="btn btn-sm btn-success"
+          (click)="DownloadInventoryDotation()"
+        >
+          <span *ngIf="!donwloading; else status">
+            <i class="fas fa-file-download"></i> Descargar</span
+          >
+          <ng-template #status>
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            Generando...
+          </ng-template>
+        </button>
+        <button class="btn btn-info btn-sm" (click)="openClose()">
+          <i class="fas fa-sliders-h"></i> Filtros
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <mat-accordion multi>
+    <mat-expansion-panel class="mat-elevation-z0">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Busca por nombre"
+            (input)="findName()"
+            [(ngModel)]="nombre"
+            name="funcionario"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <div *ngIf="loading; else notDataTable">
+    <ul
+      ngbNav
+      #nav="ngbNav"
+      [(activeId)]="active"
+      class="nav nav-tabs border-primary"
+    >
+      <li [ngbNavItem]="1" class="nav-item">
+        <a ngbNavLink>Dotación</a>
+        <ng-template ngbNavContent>
+          <app-table-stock
+            #tablestock
+            [type]="'Dotacion'"
+            [name]="nombre"
+            [find]="true"
+          >
+          </app-table-stock>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2" class="nav-item">
+        <a ngbNavLink>Epp</a>
+        <ng-template ngbNavContent>
+          <app-table-stock
+            #tablestock
+            [type]="'EPP'"
+            [name]="nombre"
+            [find]="true"
+          >
+          </app-table-stock>
+        </ng-template>
+      </li>
+    </ul>
+    <div [ngbNavOutlet]="nav"></div>
+    <div class="card-title">
+      <h5 class="text-center text-primary">Dotación y EPP por categorías</h5>
+    </div>
+    <div #dotacion_chart>
+      <canvas
+        baseChart
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [legend]="barChartLegend"
+        [chartType]="barChartType"
+      >
+      </canvas>
+    </div>
+  </div>
 
-
-
-
-
-
-
-
-
-
-    <!--
+  <!--
     <div class="row">
       <div class="col-md-6">
           <div class="card mt-4 mb-4 ">
@@ -121,42 +141,12 @@
 
   </div>
  -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </ng-container>
 
-
 <ng-template #notDataTable>
-    <tr>
-        <td colspan="12">
-            <app-not-data></app-not-data>
-        </td>
-    </tr>
+  <tr>
+    <td colspan="12">
+      <app-not-data></app-not-data>
+    </td>
+  </tr>
 </ng-template>

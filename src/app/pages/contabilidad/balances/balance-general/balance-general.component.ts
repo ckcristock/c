@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-balance-general',
@@ -10,7 +11,7 @@ import { environment } from 'src/environments/environment';
 export class BalanceGeneralComponent implements OnInit {
 
   public datosCabecera:any = {
-    Titulo: 'Balance General',
+    Titulo: 'Balance general',
     Fecha: new Date()
   }
 
@@ -23,7 +24,7 @@ export class BalanceGeneralComponent implements OnInit {
   }
 
   public Parametros:any = {
-    Fecha_Corte: '',
+    Fecha_Corte:'',
     Tipo_Reporte: 'Pcga',
     Nivel: '8',
     Centro_Costo: ''
@@ -38,7 +39,7 @@ export class BalanceGeneralComponent implements OnInit {
   queryParams: string = '';
   envirom: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private datePipe: DatePipe) { }
 
   ngOnInit() {
     this.ListarCentroCostos();
@@ -49,17 +50,18 @@ export class BalanceGeneralComponent implements OnInit {
 
     this.http.get(environment.ruta+'php/contabilidad/balanceprueba/lista_centro_costos.php').subscribe((data:any)=>{
       this.Centro_Costos = data;
+      console.log(this.Centro_Costos)
     })
     
   }
-
+  datePipeString : string;
   getQueryParams(){
+    this.datePipeString = this.datePipe.transform(this.Parametros.Fecha_Corte,'yyyy-MM-dd')
     let params:any = {
       tipo: this.Parametros.Tipo_Reporte,
-      fecha_corte: this.Parametros.Fecha_Corte,
+      fecha_corte: this.datePipeString,
       nivel: this.Parametros.Nivel
     };
-
     if (this.Parametros.Centro_Costo != '') {
       params.centro_costo = this.Parametros.Centro_Costo;
     }

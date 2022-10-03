@@ -21,6 +21,10 @@ export class PrestamosLibranzasComponent implements OnInit {
   ngOnInit() {
     this.listaPrestamo();
   }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
   abrirModalPrestamo() {
     this.abrirModalPrestamoCrear.next();
   }

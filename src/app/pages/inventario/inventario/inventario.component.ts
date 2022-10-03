@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IMyDrpOptions } from 'mydaterangepicker';
-import { Location } from "@angular/common";
+import { DatePipe, Location } from "@angular/common";
 import { ActivatedRoute } from '@angular/router';
-import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbDropdownConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
+import { MatAccordion } from '@angular/material';
+import { DateAdapter } from 'saturn-datepicker';
 
 @Component({
   selector: 'app-inventario',
@@ -21,6 +23,18 @@ export class InventarioComponent implements OnInit {
   @ViewChild("modalSeleccionadas") modalSeleccionadas: any;
   @ViewChild("modalCompras") modalCompras: any;
   @ViewChild("modalContrato") modalContrato: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
+  datePipe = new DatePipe('es-CO');
   Bodegadefecto;
   IdPuntoDispensacion;
   rowsFilter = [];
@@ -42,7 +56,7 @@ export class InventarioComponent implements OnInit {
 
   //TODO Corregir funcionario login
   // public user = JSON.parse(localStorage.getItem("User"));
-  public user = {Identificacion_Funcionario : '1'};
+  public user = { Identificacion_Funcionario: '1' };
   public permiso: boolean = false;
 
   public Inventarios: any = [];
@@ -70,14 +84,14 @@ export class InventarioComponent implements OnInit {
   public filtro_bod: any = "";
   public filtro_lab_gen: any = "";
   public filtro_invima: any = "";
-  public filtro_grupo :any = "";
+  public filtro_grupo: any = "";
   public filtro_iva: any = "";
   public Cargando_Tabla = false;
   public Cargando_Apartadas = false;
 
   public listas = [];
   public lista_informe = 1;
-
+  date: { year: number; month: number };
   public tipo_punto: string = "Bodega";
   public subtipo_punto: any = 0;
   public filtrando: boolean = false;
@@ -99,25 +113,29 @@ export class InventarioComponent implements OnInit {
     private http: HttpClient,
     private location: Location,
     private route: ActivatedRoute,
-    public dropConfig :NgbDropdownConfig
+    public dropConfig: NgbDropdownConfig,
+    private modalService: NgbModal,
+    private dateAdapter: DateAdapter<any>
   ) {
     // configuraciones de boton desplegable ngboostrap
     dropConfig.placement = 'left-top';
+    this.dateAdapter.setLocale('es');
     /* dropConfig.autoClose = false; */
   }
 
   ngOnInit() {
 
     this.http
-      .get(environment.ruta+ "php/lista_generales.php", {params: { modulo: "Lista_Ganancia" },}).subscribe((data: any) => {
+      .get(environment.ruta + "php/lista_generales.php", { params: { modulo: "Lista_Ganancia" }, }).subscribe((data: any) => {
         this.listas = data;
+        console.log(data)
       });
 
     this.ListarInventario(true);
 
 
     this.http
-      .get(environment.ruta+ "php/actarecepcion/detalle_perfil_dev.php", {
+      .get(environment.ruta + "php/actarecepcion/detalle_perfil_dev.php", {
         params: { funcionario: this.user.Identificacion_Funcionario },
       })
       .subscribe((data: any) => {
@@ -125,28 +143,49 @@ export class InventarioComponent implements OnInit {
       });
 
     this.http
-      .get(environment.ruta+ "php/bodega_nuevo/get_bodegas.php")
+      .get(environment.ruta + "php/bodega_nuevo/get_bodegas.php")
       .subscribe((data: any) => {
         if (data.Tipo == "success") this.bodegas_nuevo = data.Bodegas;
       });
   }
 
-  ListarInventario(primeraVez=false) {
-    let params = Object.assign({},this.route.snapshot.queryParams);
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    this.limpiarContrato()
+    
+  }
+  selectedDate(fecha) {
+    //console.log(fecha);
+    this.filtro_fecha =
+      this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
+      ' - ' +
+      this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
+    console.log(this.filtro_fecha);
+    this.filtro();
+  }
+  ListarInventario(primeraVez = false) {
+    let params = Object.assign({}, this.route.snapshot.queryParams);
 
-   if (!params.lista) {
+    if (!params.lista) {
       params.lista = 1
 
 
-   }
-   if (params.id_bodega_nuevo) {
-     //params.id es el id de la categoria!!!
-     if (params.id) {
-        this.buscar_categorias(params.id_bodega_nuevo,params.id);
-     }else{
-       this.buscar_categorias(params.id_bodega_nuevo);
-     }
-   }
+    }
+    if (params.id_bodega_nuevo) {
+      //params.id es el id de la categoria!!!
+      if (params.id) {
+        this.buscar_categorias(params.id_bodega_nuevo, params.id);
+      } else {
+        this.buscar_categorias(params.id_bodega_nuevo);
+      }
+    }
 
     let queryString = "";
 
@@ -184,32 +223,33 @@ export class InventarioComponent implements OnInit {
           .map((key) => key + "=" + params[key])
           .join("&");
     }
-    this.Cargando_Tabla=true;
+    this.Cargando_Tabla = true;
 
     this.http
       .get(
-        environment.ruta+"php/inventario_nuevo/lista_inventario.php" + queryString ).subscribe((data: any) => {
-        this.Cargando_Tabla=false;
-        this.Inventarios = data.inventarios;
-        console.log("lista de inventarios");
+        environment.ruta + "php/inventario_nuevo/lista_inventario.php" + queryString).subscribe((data: any) => {
+          this.Cargando_Tabla = false;
+          this.Inventarios = data.inventarios;
+          console.log("lista de inventarios");
 
-        console.log( this.Inventarios);
+          console.log(this.Inventarios);
 
-        this.TotalItems = data.numReg;
-      });
+          this.TotalItems = data.numReg;
+        });
   }
 
-  verContrato(inventario, i) {
+  verContrato(inventario, i, modal) {
     console.log(inventario);
 
-    this.modalContrato.show();
+    //this.modalContrato.show();
+    this.openConfirm(modal)
     this.CargandoDetalleContrato = true;
-    this.http.get(environment.ruta+ "php/inventario_nuevo/ver_inventario_contrato.php", {params: { Id_Inventario_Nuevo: inventario},}).subscribe((data: any) => {
-        this.DetalleContrato = data;
-        this.CargandoDetalleContrato = false;
-      });
+    this.http.get(environment.ruta + "php/inventario_nuevo/ver_inventario_contrato.php", { params: { Id_Inventario_Nuevo: inventario }, }).subscribe((data: any) => {
+      this.DetalleContrato = data;
+      this.CargandoDetalleContrato = false;
+    });
   }
-  limpiarContrato(){
+  limpiarContrato() {
     this.DetalleContrato = [];
 
   }
@@ -241,9 +281,9 @@ export class InventarioComponent implements OnInit {
 
     this.http
       .get(
-        environment.ruta+
-          "php/inventario_nuevo/lista_inventario.php?" +
-          queryString
+        environment.ruta +
+        "php/inventario_nuevo/lista_inventario.php?" +
+        queryString
       )
       .subscribe((data: any) => {
         this.Cargando_Tabla = false;
@@ -263,20 +303,20 @@ export class InventarioComponent implements OnInit {
     // }
 
   }
-  buscar_categorias(id_bodega_nuevo, id_categoria?){
+  buscar_categorias(id_bodega_nuevo, id_categoria?) {
 
-      this.http
-        .get(environment.ruta+ "php/categoria_nueva/get_categorias_por_bodega.php", {
-          params: { id_bodega_nuevo },
-        })
-        .subscribe((data: any) => {
-          this.categorias_nuevas = data['Categorias'];
-          if (id_categoria) {
-           let cat= this.categorias_nuevas.findIndex(cat=>cat.Id_Categoria_Nueva == id_categoria);
-           console.log('categoria encontrada',cat);
+    this.http
+      .get(environment.ruta + "php/categoria_nueva/get_categorias_por_bodega.php", {
+        params: { id_bodega_nuevo },
+      })
+      .subscribe((data: any) => {
+        this.categorias_nuevas = data['Categorias'];
+        if (id_categoria) {
+          let cat = this.categorias_nuevas.findIndex(cat => cat.Id_Categoria_Nueva == id_categoria);
+          console.log('categoria encontrada', cat);
 
-          }
-        });
+        }
+      });
 
 
   }
@@ -326,7 +366,7 @@ export class InventarioComponent implements OnInit {
       params.cant_sel = this.filtro_cant_sel;
     }
     if (this.filtro_fecha != "" && this.filtro_fecha != null) {
-      params.fecha = this.filtro_fecha.formatted;
+      params.fecha = this.filtro_fecha;
     }
     if (this.filtro_iva != "" && this.filtro_iva != null) {
       params.iva = this.filtro_iva;
@@ -340,15 +380,15 @@ export class InventarioComponent implements OnInit {
       .join("&");
 
     this.location.replaceState("/inventarionuevo", queryString);
-  this.Cargando_Tabla=true;
+    this.Cargando_Tabla = true;
     this.http
       .get(
-        environment.ruta+
-          "/php/inventario_nuevo/lista_inventario.php?" +
-          queryString
+        environment.ruta +
+        "/php/inventario_nuevo/lista_inventario.php?" +
+        queryString
       )
       .subscribe((data: any) => {
-        this.Cargando_Tabla=false;
+        this.Cargando_Tabla = false;
         this.Inventarios = data.inventarios;
         this.TotalItems = data.numReg;
       });
@@ -359,7 +399,7 @@ export class InventarioComponent implements OnInit {
     } else {
       this.filtro_fecha = "";
     }
-
+    console.log(this.filtro_fecha.formatted)
     this.filtro();
   }
   filtro() {
@@ -429,7 +469,7 @@ export class InventarioComponent implements OnInit {
         params.cant_sel = this.filtro_cant_sel;
       }
       if (this.filtro_fecha != "" && this.filtro_fecha != null) {
-        params.fecha = this.filtro_fecha.formatted;
+        params.fecha = this.filtro_fecha;
       }
       if (this.lista_informe != 0) {
         params.lista = this.lista_informe;
@@ -453,9 +493,9 @@ export class InventarioComponent implements OnInit {
       this.Cargando_Tabla = true;
       this.http
         .get(
-          environment.ruta+
-            "php/inventario_nuevo/lista_inventario.php?" +
-            queryString
+          environment.ruta +
+          "php/inventario_nuevo/lista_inventario.php?" +
+          queryString
         )
         .subscribe((data: any) => {
           this.Inventarios = data.inventarios;
@@ -484,7 +524,7 @@ export class InventarioComponent implements OnInit {
 
     if (tipo == "Bodega") {
       this.http
-        .get(environment.ruta+ "php/inventario/bodega_punto.php", {
+        .get(environment.ruta + "php/inventario/bodega_punto.php", {
           params: { bod: "Bodega" },
         })
         .subscribe((data: any) => {
@@ -544,7 +584,7 @@ export class InventarioComponent implements OnInit {
     });
     this.rowsFilter = temp;
   }
-  verApartadas(id, i) {
+  verApartadas(id, i, modal) {
     this.Apartadas = [];
     this.nombre_producto = (document.getElementById(
       "NombreProducto" + i
@@ -556,11 +596,12 @@ export class InventarioComponent implements OnInit {
       "Fecha_Venc" + i
     ) as HTMLInputElement).value;
 
-    this.modalApartadas.show();
+    //this.modalApartadas.show();
+    this.openConfirm(modal)
     this.Cargando_Apartadas = true;
 
     this.http
-      .get(environment.ruta+ "php/inventario_nuevo/ver_apartadas.php", {
+      .get(environment.ruta + "php/inventario_nuevo/ver_apartadas.php", {
         params: { id_inventario_nuevo: id },
       })
       .subscribe((data: any) => {
@@ -568,20 +609,21 @@ export class InventarioComponent implements OnInit {
         this.Apartadas = data;
       });
   }
-  verSeleccionadas(inventario, i) {
+  verSeleccionadas(inventario, i, modal) {
     this.Apartadas = [];
     this.nombre_producto = inventario.Nombre_Producto;
-    this.lote_producto =  inventario.Lote;
-    this.fecha_venc_producto =inventario.Fecha_Vencimiento;
+    this.lote_producto = inventario.Lote;
+    this.fecha_venc_producto = inventario.Fecha_Vencimiento;
+    this.openConfirm(modal)
+    //this.modalSeleccionadas.show();
+    this.Cargando_Seleccionados = true;
 
-    this.modalSeleccionadas.show();
-     this.Cargando_Seleccionados = true;
-
-    this.http.get(environment.ruta+ "php/inventario_nuevo/ver_seleccionados.php", {
-        params: { Id_Bodega_Nuevo: inventario.Id_Bodega_Nuevo,
-                  Id_Producto : inventario.Id_Producto
-        },
-      })
+    this.http.get(environment.ruta + "php/inventario_nuevo/ver_seleccionados.php", {
+      params: {
+        Id_Bodega_Nuevo: inventario.Id_Bodega_Nuevo,
+        Id_Producto: inventario.Id_Producto
+      },
+    })
       .subscribe((data: any) => {
         this.Cargando_Seleccionados = false;
         this.Seleccionados = data;
@@ -589,7 +631,7 @@ export class InventarioComponent implements OnInit {
 
       });
   }
-  verCompras(id, i) {
+  verCompras(id, i, modal) {
     this.Compras = [];
     this.nombre_producto = (document.getElementById(
       "NombreProducto" + i
@@ -600,12 +642,12 @@ export class InventarioComponent implements OnInit {
     this.fecha_venc_producto = (document.getElementById(
       "Fecha_Venc" + i
     ) as HTMLInputElement).value;
-
-    this.modalCompras.show();
+    this.openConfirm(modal)
+    //this.modalCompras.show();
     this.Cargando_Compras = true;
 
     this.http
-      .get(environment.ruta+ "php/inventario/ver_compras.php", {
+      .get(environment.ruta + "php/inventario/ver_compras.php", {
         params: { id_producto: id },
       })
       .subscribe((data: any) => {
@@ -627,9 +669,9 @@ export class InventarioComponent implements OnInit {
       .join("&");
 
     window.open(
-      environment.ruta+
-        "php/inventario_nuevo/descargar_excel.php?" +
-        queryString,
+      environment.ruta +
+      "php/inventario_nuevo/descargar_excel.php?" +
+      queryString,
       "_blank"
     );
   }

@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 export class EstadosResultadosComponent implements OnInit {
   envirom:any;
   public datosCabecera:any = {
-    Titulo: 'Estados Resultados',
+    Titulo: 'Estados resultados',
     Fecha: new Date()
   }
 

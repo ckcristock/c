@@ -4,8 +4,8 @@
             <div class="card">
                 <div class="card-header">
                     <!--Encabezado-->
-                    <app-cabecera [datosCabecera]="DatosCabecera">
-                    </app-cabecera>
+                    <!-- <app-cabecera [datosCabecera]="DatosCabecera">
+                    </app-cabecera> -->
                 </div>
 
                 <div class="card-body">
@@ -70,7 +70,7 @@
                                             {{producto.Lote}}
                                         </td>
                                         <td class="text-center font-size: 14px;font-weight: bold">
-                                            <span [ngClass]="{'text-danger':producto.Cantidad_Diferencial<0, 'text-success':producto.Cantidad_Diferencial>0 }">
+                                            <span [ngClass]="{'text-danger font-weight-bold':producto.Cantidad_Diferencial<0, 'text-success':producto.Cantidad_Diferencial>0 }">
                                            <span *ngIf="producto.Cantidad_Diferencial>0">+</span> {{ producto.Cantidad_Diferencial }}
                                             </span>
 
@@ -102,10 +102,10 @@
                         </div>
                     </div>
                     <div class="row ">
-                        <div class="col-md-12 ">
+                        <!-- <div class="col-md-12 ">
                             <button type="button " (click)="confirmacionGuardar.fire() " class="btn btn-primary btn-sm btn-block ">
                            <i class="fa fa-check "></i> Terminar Inventario</button>
-                        </div>
+                        </div> -->
                     </div>
 
 
@@ -117,6 +117,6 @@
 
 
 
-<swal #respuestaRedirectSwal title=" " text=" " type=" " (confirm)="router.navigate(['/inventario/inventario-fisico']) "></swal>
+<!-- <swal #respuestaRedirectSwal title=" " text=" " type=" " (confirm)="router.navigate(['/inventario/inventario-fisico']) "></swal>
 <swal #respuestaSwal title=" " text=" " type=" "></swal>
-<swal #confirmacionGuardar [swalOptions]="alertOpt"></swal>
+<swal #confirmacionGuardar [swalOptions]="alertOpt"></swal> -->

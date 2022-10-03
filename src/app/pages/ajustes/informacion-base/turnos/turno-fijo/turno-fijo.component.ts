@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from '../../services/swal.service';
 import { FixedTurnService } from './turno-fijo.service';
 
@@ -8,6 +10,17 @@ import { FixedTurnService } from './turno-fijo.service';
   styleUrls: ['./turno-fijo.component.scss'],
 })
 export class TurnoFijoComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   turnosFijos = [];
   hours: any = [];
   loading = false;
@@ -15,11 +28,23 @@ export class TurnoFijoComponent implements OnInit {
 
   constructor(
     private _turnFixed: FixedTurnService,
-    private _swal: SwalService
-  ) {}
+    private _swal: SwalService,
+    private modalService: NgbModal,
+  ) { }
 
   ngOnInit(): void {
     this.getTunrs();
+  }
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    
   }
 
   getTunrs() {
@@ -38,7 +63,7 @@ export class TurnoFijoComponent implements OnInit {
     });
   }
 
-  editTurn(id) {}
+  editTurn(id) { }
   changeState(id) {
     this._swal
       .show({
@@ -57,8 +82,8 @@ export class TurnoFijoComponent implements OnInit {
               text = 'Comuníquese con el Dpt. de sistemas';
               title = 'Ha ocurrido un error';
             }
-	    this.getTunrs();
-            this._swal.show({ title, text, icon, showCancel: false });
+            this.getTunrs();
+            this._swal.show({ title, text, icon, showCancel: false, timer: 1000 });
           });
         }
       });

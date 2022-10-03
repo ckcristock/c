@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -25,6 +25,13 @@ export class ContratosService {
       })
       return r
     }));
+  }
+
+  download (id) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/download-work-contracts/${id}`, { headers, responseType: 'blob' as 'json' });
+    
+    /* return this.http.get(`${environment.ruta}php/contrato/descargar_contrato.php`, {params}) */
   }
 
   getCompanies() {

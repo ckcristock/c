@@ -15,6 +15,9 @@ export class ActividadesService {
   getActivityTypesAll(){
     return this.http.get(environment.base_url+'/rrhh-activity-types-all')
   }
+  getActivityTypesActives(){
+    return this.http.get(environment.base_url+'/rrhh-activity-types-actives')
+  }
   saveActivityType(data){
     return this.http.post(environment.base_url+'/rrhh-activity-types',data)
   }

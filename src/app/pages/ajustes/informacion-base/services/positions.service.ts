@@ -15,4 +15,7 @@ export class PositionService {
   save( form ){
     return this.http.post(`${ environment.base_url }/positions`,form)
   }
+  delete(id){
+    return this.http.delete(`${ environment.base_url }/positions/${id}`)
+  }
 }

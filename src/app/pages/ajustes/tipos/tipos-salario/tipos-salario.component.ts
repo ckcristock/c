@@ -3,6 +3,9 @@ import { TiposSalarioService } from './tipos-salario.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
 import Swal from 'sweetalert2';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from '../../informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-tipos-salario',
@@ -10,25 +13,39 @@ import Swal from 'sweetalert2';
   styleUrls: ['./tipos-salario.component.scss']
 })
 export class TiposSalarioComponent implements OnInit {
-  @ViewChild('modal') modal:any;
-  loading:boolean = false;
-  selected:any;
-  lists:any;
-  salaries:any[] = [];
-  form:FormGroup;
-  pagination:any = {
+  @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
+  loading: boolean = false;
+  selected: any;
+  lists: any;
+  salaries: any[] = [];
+  form: FormGroup;
+  pagination: any = {
     page: 1,
     pageSize: 5,
     collectionSize: 0
   }
-  filtro:any = {
+  filtro: any = {
     name: ''
   }
-  salary:any = {};
-  constructor( 
-                private _typesSalaryService:TiposSalarioService, 
-                private fb: FormBuilder,
-                private _reactiveValid: ValidatorsService  ) { }
+  salary: any = {};
+  constructor(
+    private _typesSalaryService: TiposSalarioService,
+    private fb: FormBuilder,
+    private _reactiveValid: ValidatorsService,
+    private modalService: NgbModal,
+    private _swal: SwalService,
+  ) { }
 
   ngOnInit(): void {
     this.getSalaryTypes();
@@ -37,17 +54,30 @@ export class TiposSalarioComponent implements OnInit {
 
   openModal() {
     this.modal.show();
-    this.form.reset();
-    this.selected = 'Nuevo Tipo de Salario';
+
+
   }
 
-  getData(data){
-      this.salary = {...data};
-      this.selected = 'Actualizar Tipo de Salario';
-      this.form.patchValue({
-        id: this.salary.id,
-        name: this.salary.name
-      });
+  closeResult = '';
+  public openConfirm(confirm, titulo) {
+    this.selected = titulo;
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    this.form.reset();
+
+  }
+
+  getData(data) {
+    this.salary = { ...data };
+    this.form.patchValue({
+      id: this.salary.id,
+      name: this.salary.name
+    });
   }
 
   createForm() {
@@ -57,18 +87,18 @@ export class TiposSalarioComponent implements OnInit {
     })
   }
 
-  getSalaryTypes( page = 1 ) {
+  getSalaryTypes(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtro
     }
     this.loading = true;
     this._typesSalaryService.getSalaryTypes(params)
-    .subscribe( (res:any) => {
-      this.loading = false;
-      this.salaries = res.data.data;
-      this.pagination.collectionSize = res.data.total;
-    }); 
+      .subscribe((res: any) => {
+        this.loading = false;
+        this.salaries = res.data.data;
+        this.pagination.collectionSize = res.data.total;
+      });
   }
 
 
@@ -77,41 +107,49 @@ export class TiposSalarioComponent implements OnInit {
       id: contract.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo'? 'El Salario se inactivará!' : 'El Salario se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: ( status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar' )
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡El salario se inactivará!' : '¡El salario se activará!'),
+      icon: 'question',
+      showCancel: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        this._typesSalaryService.createSalaryType( data )
-        .subscribe( res => {
-        this.getSalaryTypes();
-          Swal.fire({
-            title: (status === 'Inactivo' ? 'Salario Inhabilitado!' : 'Salario activado' ),
-            text: (status === 'Inactivo' ? 'El Salario ha sido Inhabilitado con éxito.' : 'El Salario ha sido activado con éxito.'),
-            icon: 'success'
+        this._typesSalaryService.createSalaryType(data)
+          .subscribe(res => {
+            this.getSalaryTypes();
+            this._swal.show({
+              title: (status === 'Inactivo' ? '¡Salario inhabilitado!' : '¡Salario activado!'),
+              text: (status === 'Inactivo' ? 'El salario ha sido inhabilitado con éxito.' : 'El salario ha sido activado con éxito.'),
+              icon: 'success',
+              showCancel: false,
+              timer: 1000
+            })
           })
-        } )
       }
     })
   }
 
   createSalaryType() {
-    this._typesSalaryService.createSalaryType( this.form.value )
-    .subscribe( (res:any) => {
-      this.getSalaryTypes();
-      this.modal.hide();
-      Swal.fire({
-        icon: 'success',
-        title: res.data,
-        text: 'Se ha agregado a los Salarios con éxito'
-      })
-    } )
+    this._typesSalaryService.createSalaryType(this.form.value)
+      .subscribe((res: any) => {
+        this.getSalaryTypes();
+        this.modalService.dismissAll();
+        this._swal.show({
+          title: res.data,
+          icon: 'success',
+          text: '',
+          timer: 1000,
+          showCancel: false
+        })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta nuevamente',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+      )
   }
 
 }

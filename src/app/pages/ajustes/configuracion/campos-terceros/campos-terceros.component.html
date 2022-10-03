@@ -1,97 +1,178 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <button type="button" class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
-                <i class="fa fa-plus"></i> Agregar
-            </button>
-            <h5 class="text-primary">Campos Terceros</h5>
-            <hr class="bg-primary">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Campos terceros</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-primary btn-sm" (click)="openConfirm(add)">
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
-        <table class="table table-borderless table-striped mt-5" *ngIf="!loading && fields.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Tipo</th>
-                    <th>Requerido</th>
-                    <th>Longitud</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let field of fields" [ngClass]="{'bg-danger text-white': (field.state == 'Inactivo')}">
-                    <td> {{ field.label | titlecase }} </td>
-                    <td> {{ field.type | titlecase }} </td>
-                    <td> {{ field.required }} </td>
-                    <td> {{ field.length }} </td>
-                    <td> {{ field.state }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a *ngIf="field.state == 'Activo'" (click)="changeState(field.id, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
-                                        <i class="far fa-trash-alt"></i> Anular
-                                    </a>
-                                    <a *ngIf="field.state == 'Inactivo'" (click)="changeState(field.id, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
-                                        <i class="fas fa-check"></i> Activar
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+      </div>
     </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="alert alert-danger" role="alert">
+          Aún no tenemos filtros para esta sección.
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && fields.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Requerido</th>
+            <th>Longitud</th>
+            <th class="col-1">Estado</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let field of fields"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': field.state == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">{{ field.label | titlecase }}</td>
+            <td class="align-middle">{{ field.type | titlecase }}</td>
+            <td class="align-middle">{{ field.required }}</td>
+            <td class="align-middle">{{ field.length }}</td>
+            <td class="align-middle">
+              <span
+                [ngClass]="
+                  field.state == 'Inactivo'
+                    ? 'badge badge-danger'
+                    : 'badge badge-primary'
+                "
+              >
+                {{ field.state }}
+              </span>
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    *ngIf="field.state == 'Activo'"
+                    (click)="changeState(field.id, 'Inactivo')"
+                    href="javascript: void(0);"
+                    class="dropdown-item waves-light text-danger caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
+                  <a
+                    *ngIf="field.state == 'Inactivo'"
+                    href="javascript: void(0);"
+                    (click)="changeState(field.id, 'Activo')"
+                    class="dropdown-item waves-light text-success caja-botones"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> Nuevo Campo </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide(); form.reset()"></i>
-            </span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label class="custom-label" for="">Nombre</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="name">
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="custom-label" for="">Tipo</label>
-                    <select class="form-control form-control-sm" formControlName="type">
-                        <option *ngFor="let tipo of tipos" [value]="tipo.valor">
-                            {{ tipo.clave }}
-                        </option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="custom-label" for="">Requerido</label>
-                    <select class="form-control form-control-sm" formControlName="required">
-                        <option value="Si">Si</option>
-                        <option value="No">No</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="custom-label" for="">Longitud</label>
-                    <input type="number" class="form-control form-control-sm" formControlName="length">
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="save()">Guardar</button>
-        </div>
-    </div>
-</app-modal-basic>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nuevo campo</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option *ngFor="let tipo of tipos" [value]="tipo.valor">
+              {{ tipo.clave }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Requerido</mat-label>
+          <mat-select formControlName="required" required>
+            <mat-option value="Si">Sí</mat-option>
+            <mat-option value="No">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Longitud</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa la longitud"
+            formControlName="length"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

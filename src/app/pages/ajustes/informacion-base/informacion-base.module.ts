@@ -57,7 +57,20 @@ import { CrearProductoComponent } from './productos/crear-producto/crear-product
 import { ProductosComponent } from './productos/productos.component';
 import { MaterialesComponent } from './catalogo/components/materiales/materiales.component';
 import { DotacionCrearComponent } from './catalogo/components/dotacion-crear/dotacion-crear.component';
+import { BoardPermissionsComponent } from './funcionarios/detalle-funcionario/permissions/board-permissions/board-permissions.component';
 //import { MaterialesComponent } from '../parametros/apu/materiales/materiales.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { SedesComponent } from './sedes/sedes.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';
 
 @NgModule({
   declarations: [
@@ -98,8 +111,10 @@ import { DotacionCrearComponent } from './catalogo/components/dotacion-crear/dot
     CrearProductoComponent,
     ProductosComponent,
     MaterialesComponent,
-    DotacionCrearComponent
-
+    DotacionCrearComponent,
+    BoardPermissionsComponent,
+    SedesComponent,
+    VerLiquidacionComponent,
   ],
 
   imports: [
@@ -121,7 +136,17 @@ import { DotacionCrearComponent } from './catalogo/components/dotacion-crear/dot
     NgbTooltipModule,
     NgbTypeaheadModule,
     PerfectScrollbarModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatAutocompleteModule,
+    MatPaginatorModule,
     SweetAlert2Module.forRoot(),
   ],
 })
-export class InformacionBaseModule {}
+export class InformacionBaseModule { }

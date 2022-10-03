@@ -17,12 +17,16 @@ export class TercerosService {
     return this.http.get(`${environment.base_url}/departments`);
   }
 
-  getMunicipalities(){
-    return this.http.get(`${environment.base_url}/all-municipalities`);
+  getMunicipalities( id ){
+    return this.http.get(`${environment.base_url}/municipalities-for-dep/${id}`);
   }
 
   saveInformation( data:any ){
     return this.http.post(`${environment.base_url}/third-party`, data);
+  }
+
+  addThirdPartyPerson( data: any ){
+    return this.http.post(`${environment.base_url}/third-party-person`, data);
   }
 
   getThirdParties(params = {}){
@@ -59,10 +63,34 @@ export class TercerosService {
 
   getThirdPartyPerson( params = {} ){
     return this.http.get(`${environment.base_url}/third-party-person`, {params});
-  }
+  }  
 
   getFields(){
     return this.http.get(`${environment.base_url}/fields-third`);
   }
 
+  getTypeDocuments(){
+    return this.http.get(`${environment.base_url}/documentTypes`);
+  }
+
+  getRegimeType(){
+    return this.http.get(`${environment.base_url}/regime-type`);
+  }
+
+  getFiscalResponsibility(){
+    return this.http.get(`${environment.base_url}/fiscal-responsibility`);
+  }
+
+  getCountries(){
+    return this.http.get(`${environment.base_url}/countries`);
+  }
+
+  getCities(idCountry){
+    return this.http.get(`${environment.base_url}/citiesCountry/${idCountry}`);
+  }
+
+  getCiiuCodes(){
+    return this.http.get("assets/json/ciiu_codes.json")
+  }
+  
 }

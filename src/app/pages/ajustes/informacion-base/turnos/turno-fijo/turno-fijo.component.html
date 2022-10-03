@@ -1,119 +1,177 @@
-<div class="row mb-3">
-    <div class="col-md-6">
-        <h5 class="text-secondary">Lista de turnos fijos</h5>
+<div class="row card-title d-flex justify-content-between">
+  <div class="col-md-6 px-0">
+    <h6 class="">Fijos</h6>
+  </div>
+  <div class="col-md-6 px-0 text-right">
+    <div class="btn-group rounded w-sm-100">
+      <button class="btn btn-primary btn-sm" [routerLink]="['crear']">
+        <i class="fa fa-plus"></i> Agregar
+      </button>
+      <button class="btn btn-info btn-sm" (click)="openClose()">
+        <i class="fas fa-sliders-h"></i> Filtros
+      </button>
     </div>
-    <div class="col-md-6 text-right">
-        <a class="btn btn-link btn-sm mr-1" [routerLink]="['crear']">
-            <i class="fa fa-plus"></i> Crear Nuevo turno fijo
-        </a>
-    </div>
+  </div>
 </div>
-
-<div class="card" *ngIf="turnosFijos.length && !loading; else notData">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="mb-2">
-                    <div class="collapse d-md-block" id="displayOptions ">
-                        <div class="search-sm d-inline-block float-md-left mr-1 mb-1 align-top">
-                            <input placeholder="Buscar... " class="form-control form-control-sm" />
-                        </div>
-                    </div>
-                </div>
-                <div class="separator mb-5"></div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <table class="table table-bordered table-striped table-sm">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th class="text-center">Horario Semana</th>
-                                    <th class="text-center" style="width: 30px">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let turnoFijo of turnosFijos" [ngClass]="{
-                                  'bg-danger text-white': turnoFijo.state == 'Inactivo'
-                                  }">
-                                    <td class="custom-label">{{ turnoFijo.text }}</td>
-                                    <td class="text-center">
-                                        <button type="button " class="btn btn-link btn-xs" (click)="findHours(turnoFijo.value); hourModal.show()">
-                                          <i class="fa fa-eye"></i>
-                                        </button>
-                                    </td>
-                                    <td class="">
-                                        <div ngbDropdown class="dropdown-primary">
-                                            <button ngbDropdownToggle class="btn btn-secondary btn-sm waves-effect waves-light" type="button">
-                                      <i class="mdi mdi-chevron-down"></i>
-                                    </button>
-                                            <div ngbDropdownMenu>
-                                                <a [routerLink]="['crear', turnoFijo.value]" class="dropdown-item waves-light waves-effect caja-botones">
-                                                    <i class="fa fa-pencil-alt"></i> Editar
-                                                </a>
-                                                <a class="dropdown-item waves-light waves-effect caja-botones" (click)="changeState(turnoFijo.value)">
-                                                    <i [ngClass]="{
-                                                        'fa fa-times': (turnoFijo.state == 'Activo'),
-                                                        'fas fa-check': (turnoFijo.state == 'Inactivo')
-                                                    }"></i> {{turnoFijo.state == 'Inactivo' ? 'Activar': 'Inactivar' }}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- <hr class="line"> -->
+<mat-accordion multi>
+  <mat-expansion-panel class="mat-elevation-z0">
+    <div class="row">
+      <mat-form-field class="col" appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input type="text" matInput placeholder="Busca por nombre" />
+      </mat-form-field>
     </div>
+  </mat-expansion-panel>
+</mat-accordion>
+<div class="rounded-top table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    
+    *ngIf="turnosFijos.length && !loading; else notData"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th class="align-middle">Nombre</th>
+        <th class="col-md-1 align-middle">Estado</th>
+        <th class="col-md-1 align-middle">Horario</th>
+        <th class="col-md-1 align-middle">
+          <i class="mdi mdi-chevron-down"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let turnoFijo of turnosFijos"
+        class="text-center"
+        [ngClass]="{
+          'text-danger font-weight-bold': turnoFijo.state == 'Inactivo'
+        }"
+      >
+        <td class="align-middle">{{ turnoFijo.text }}</td>
+        <td class="align-middle">
+          <span
+            [ngClass]="
+              turnoFijo.state == 'Inactivo'
+                ? 'badge badge-danger'
+                : 'badge badge-primary'
+            "
+          >
+            {{ turnoFijo.state }}
+          </span>
+        </td>
+        <td class="align-middle">
+          <button
+            type="button "
+            class="btn btn-info btn-sm"
+            (click)="findHours(turnoFijo.value); openConfirm(add)"
+          >
+            <i class="fa fa-eye"></i>
+          </button>
+        </td>
+        <td class="align-middle">
+          <div ngbDropdown container="body" class="dropdown-primary">
+            <button
+              ngbDropdownToggle
+              class="btn btn-primary btn-sm waves-light"
+              type="button"
+            >
+              <i class="mdi mdi-chevron-down"></i>
+            </button>
+            <div ngbDropdownMenu>
+              <a
+                [routerLink]="['crear', turnoFijo.value]"
+                href="javascript: void(0);"
+                class="dropdown-item text-info waves-light caja-botones"
+              >
+                <i class="far fa-edit"></i> Editar
+              </a>
+              <a
+                class="dropdown-item waves-light caja-botones"
+                href="javascript: void(0);"
+                [ngClass]="{
+                  'text-success': turnoFijo.state == 'Inactivo',
+                  'text-danger': turnoFijo.state == 'Activo'
+                }"
+                (click)="changeState(turnoFijo.value)"
+              >
+                <i
+                  [ngClass]="{
+                    'far fa-trash-alt': turnoFijo.state == 'Activo',
+                    'fa fa-check': turnoFijo.state == 'Inactivo'
+                  }"
+                ></i>
+                {{ turnoFijo.state == "Inactivo" ? "Activar" : "Anular" }}
+              </a>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <!-- <div class="alert alert-secondary text-center " #notData>
     <p class="font-weight-bold ">No existen turnos fijos actualmente.</p>
 </div> -->
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
 <ng-template #notDataHours>
-    <app-not-data [loading]="loadingHours"></app-not-data>
+  <app-not-data [loading]="loadingHours"></app-not-data>
 </ng-template>
 
-<app-modal-basic #hourModal [dialogClass]="'modal-lg'" class="">
-    <div class="app-modal-header">
-        <div class="row">
-            <div class="col-12">
-                <h5>Información del Turno</h5>
-            </div>
-        </div>
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Información del turno</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-sm"
+        
+        *ngIf="hours.length && !loadingHours; else notDataHours"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Día</th>
+            <th>Entrada 1</th>
+            <th>Salida 1</th>
+            <th>Entrada 2</th>
+            <th>Salida 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let horaTurno of hours" class="text-center"> 
+            <td>{{ horaTurno.day }}</td>
+            <td>{{ horaTurno.entry_time_one }}</td>
+            <td>{{ horaTurno.leave_time_one }}</td>
+            <td>{{ horaTurno.entry_time_two }}</td>
+            <td>{{ horaTurno.leave_time_two }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="app-modal-body">
-        <table class="table table-striped">
-            <thead *ngIf="hours.length && !loadingHours; else notDataHours">
-                <tr>
-                    <th>Día</th>
-                    <th>Entrada 1</th>
-                    <th>Salida 1</th>
-                    <th>Entrada 2</th>
-                    <th>Salida 2</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let horaTurno of hours">
-                    <td>{{ horaTurno.day }}</td>
-                    <td>{{ horaTurno.entry_time_one }}</td>
-                    <td>{{ horaTurno.leave_time_one }}</td>
-                    <td>{{ horaTurno.entry_time_two }}</td>
-                    <td>{{ horaTurno.leave_time_two }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="app-modal-body text-right">
-        <button type="button" (click)="hourModal.hide()" class="btn btn-sm btn-danger">
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
       Cerrar
     </button>
-    </div>
-</app-modal-basic>
+  </div>
+</ng-template>
+
+

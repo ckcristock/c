@@ -8,6 +8,7 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators'
 import Swal from 'sweetalert2';
 import { functionsUtils } from '../../../../../core/utils/functionsUtils';
 import { Route, Router } from '@angular/router';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-crear-proceso',
@@ -15,8 +16,9 @@ import { Route, Router } from '@angular/router';
   styleUrls: ['./crear-proceso.component.scss']
 })
 export class CrearProcesoComponent implements OnInit {
-  @ViewChild('modal') modal:any;
-  @ViewChild('myInputFile') myInputFile:any;
+  @ViewChild('modal') modal: any;
+  @ViewChild('myInputFile') myInputFile: any;
+  //@ViewChild('fileInvolved') fileInvolved: any;
   form: FormGroup;
   formInvolved: FormGroup;
   loading = false;
@@ -27,20 +29,28 @@ export class CrearProcesoComponent implements OnInit {
   processs: any[] = [];
   fileString: any = '';
   file: any = '';
-  filename:any = '';
+  filename: any = '';
   type: any = '';
+
+  fileStringInvolved: any = '';
+  fileInvolved: any = '';
+  filenameInvolved: any = '';
+  typeInvolved: any = '';
+
+
   selected: any[] = [];
-  collapsed:boolean[] = [];
-  check:boolean = true;
+  collapsed: boolean[] = [];
+  check: boolean = true;
   seleccionadas: any[] = [];
 
-  constructor( 
-              private fb:FormBuilder,
-              private _reactiveValid: ValidatorsService,
-              private disciplinarioService: DisciplinariosService,
-              private _swal: SwalService,
-              private router: Router
-              ) { }
+  constructor(
+    private fb: FormBuilder,
+    private _reactiveValid: ValidatorsService,
+    private disciplinarioService: DisciplinariosService,
+    private _swal: SwalService,
+    private modalService: NgbModal,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.getPeople();
@@ -48,19 +58,32 @@ export class CrearProcesoComponent implements OnInit {
     this.createFormInvolved();
   }
 
-  openModal(){
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    this.closeModal()
+    this.fileInvolved = ''
+  }
+
+  openModal() {
     this.modal.show();
   }
-  closeModal(){
-    this.modal.hide();
+  closeModal() {
+    //this.modal.hide();
     this.historyInfo = [];
     this.formInvolved.reset();
   }
 
   createForm() {
     this.form = this.fb.group({
-      person: ['', this._reactiveValid.required],
-      person_id: [''],
+      person: [''],
+      person_id: ['', this._reactiveValid.required],
       date_of_admission: ['', Validators.required],
       process_description: ['', this._reactiveValid.required],
       type: [''],
@@ -70,14 +93,14 @@ export class CrearProcesoComponent implements OnInit {
   }
 
   // this form is to fill out the first form of values involved
-  createFormInvolved(){
+  createFormInvolved() {
     this.formInvolved = this.fb.group({
       person_id: [''],
       person: ['', this._reactiveValid.required],
       file: [''],
-      filename:[''],
+      filename: [''],
       type: [''],
-      observation:['']
+      observation: ['']
       // memorandums: this.fb.array([]),
     })
   }
@@ -104,9 +127,10 @@ export class CrearProcesoComponent implements OnInit {
       let file = event.target.files[0];
       const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
       if (!types.includes(file.type)) {
-        Swal.fire({
+        this._swal.show({
           icon: 'error',
           title: 'Error de archivo',
+          showCancel: false,
           text: 'El tipo de archivo no es válido'
         });
         return null
@@ -125,12 +149,39 @@ export class CrearProcesoComponent implements OnInit {
 
     }
   }
+  onFileChanged2(event) {
+    if (event.target.files[0]) {
+      let file = event.target.files[0];
+      const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
+      if (!types.includes(file.type)) {
+        this._swal.show({
+          icon: 'error',
+          title: 'Error de archivo',
+          showCancel: false,
+          text: 'El tipo de archivo no es válido'
+        });
+        return null
+      }
+      this.filenameInvolved = file.name;
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event) => {
+        this.fileStringInvolved = (<FileReader>event.target).result;
+        const type = { ext: this.fileString };
+        this.typeInvolved = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+      };
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.fileInvolved = base64;
+      });
+
+    }
+  }
 
   getHistory() {
     this.disciplinarioService.getHistory(this.formInvolved.value.person.value)
       .subscribe((res: any) => {
         this.historyInfo = res.data;
-        
+
       });
   }
 
@@ -148,9 +199,9 @@ export class CrearProcesoComponent implements OnInit {
       });
   }
 
-  InvolvedControl(data){
+  InvolvedControl(data) {
     let group = this.fb.group({
-      person_id : [data.person_id],
+      person_id: [data.person_id],
       person: [data.person],
       file: [data.file],
       filename: [data.filename],
@@ -170,61 +221,62 @@ export class CrearProcesoComponent implements OnInit {
     });
     return group;
   }
-  
-  get involvedList(){
+
+  get involvedList() {
     return this.form.get('involved') as FormArray;
   }
 
-  deletedInvolved(i){
-  this.involvedList.removeAt(i);
+  deletedInvolved(i) {
+    this.involvedList.removeAt(i);
   }
 
-  newInvolved(){
-    this.formInvolved.patchValue({file: this.file, filename: this.filename, type: this.type})
+  newInvolved() {
+    this.formInvolved.patchValue({ file: this.fileInvolved, filename: this.filenameInvolved, type: this.typeInvolved })
     this.formInvolved.addControl('memorandums', this.fb.control(this.seleccionadas))
     let forma = this.formInvolved.value;
     forma.memorandums = this.seleccionadas;
     this.involvedList.push(this.InvolvedControl(forma))
-    this.modal.hide();
+    //this.modal.hide();
+    this.modalService.dismissAll();
     this.formInvolved.reset();
     this.historyInfo = [];
     this.seleccionadas = []
   }
 
-  validateInvolved(){
-    let arr:Array<any> = this.form.get('involved').value;
-    this.formInvolved.patchValue({person_id: this.formInvolved.value.person.value})
+  validateInvolved() {
+    let arr: Array<any> = this.form.get('involved').value;
+    this.formInvolved.patchValue({ person_id: this.formInvolved.value.person.value })
     let valid = arr.some(r => r.person_id == this.formInvolved.value.person_id)
     if (valid) {
       this._swal.show({
         icon: 'warning',
         title: '¡Ooops!',
-        text: 'El funcionario que intenta ingresar ya se encuentra como involucrado en el proceso',
+        text: 'El funcionario que intentas ingresar ya se encuentra involucrado en el proceso',
         showCancel: false
       })
     }
   }
 
-  memorandumsGroup(event){
-    let group = this.fb.group({ 
-      value: event.target.value, 
-      id: event.target.id, 
+  memorandumsGroup(event) {
+    let group = this.fb.group({
+      value: event.target.value,
+      id: event.target.id,
       name: event.target.name,
-      date: event.target.date 
+      date: event.target.date
     });
     return group;
   }
 
-  get memorandumsList(){
+  get memorandumsList() {
     return this.formInvolved.get('memorandums') as FormArray;
   }
 
-  deletedMemorandum(i){
-  this.memorandumsList.removeAt(i);
+  deletedMemorandum(i) {
+    this.memorandumsList.removeAt(i);
   }
 
   onSelectOption(event): void {
-    let seleccionada = { value: event.target.value, id: event.target.id, name: event.target.name, date: event.target.date  }
+    let seleccionada = { value: event.target.value, id: event.target.id, name: event.target.name, date: event.target.date }
     if (event.target.checked) {
       // Add the new value in the selected options
       this.seleccionadas.push((seleccionada));
@@ -236,34 +288,43 @@ export class CrearProcesoComponent implements OnInit {
     }
   }
 
-  save(){
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Se iniciará nuevo proceso disciplinario!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, Guardar!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.form.patchValue({
-          file: this.file,
-          type: this.type,
-          person_id: this.form.value.person_id.value
-        })
-        this.disciplinarioService.createNewProcess(this.form.value)
-        .subscribe((res: any) => {
-          Swal.fire({
-            icon: 'success',
-            title: res.data,
-            text: 'Proceso creado satisfactoriamente'
-          });
-          this.router.navigate(['/rrhh/procesos/disciplinarios']);
-          this.form.reset();
-        });
-      }
-    })
+  save() {
+    if (this.form.valid && this.involvedList.length > 0) {
+      this._swal.show({
+        icon: 'question',
+        title: '¿Estás seguro(a)?',
+        showCancel: true,
+        text: "Se iniciará un nuevo proceso disciplinario",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.form.patchValue({
+            file: this.file,
+            type: this.type,
+            person_id: this.form.value.person_id.value
+          })
+          this.disciplinarioService.createNewProcess(this.form.value)
+            .subscribe((res: any) => {
+              this._swal.show({
+                icon: 'success',
+                title: 'Proceso agregado con éxito',
+                showCancel: false,
+                text: '',
+                timer: 1000
+              })
+              
+              this.router.navigate(['/rrhh/procesos/disciplinarios']);
+              this.form.reset();
+            });
+        }
+      })
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Faltan datos',
+        showCancel: false,
+        text: 'Asegúrate de agregar todos los datos'
+      })
+    }
   }
 
   get person_valid() {

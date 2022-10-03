@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { SwalService } from '../../../informacion-base/services/swal.service';
 import { DepartamentosService } from './departamentos.service';
 
 @Component({
@@ -9,10 +12,21 @@ import { DepartamentosService } from './departamentos.service';
   styleUrls: ['./departamentos.component.scss']
 })
 export class DepartamentosComponent implements OnInit {
-  @ViewChild('modal') modal:any;
-  loading:boolean = false;
-  departamentos:any = [];
-  department:any = {};
+  @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
+  loading: boolean = false;
+  departamentos: any = [];
+  department: any = {};
   form = new FormGroup({
     name: new FormControl('', [Validators.required])
   });
@@ -23,62 +37,80 @@ export class DepartamentosComponent implements OnInit {
     collectionSize: 0
   }
 
-  filtro:any = {
+  filtro: any = {
     name: ''
   }
-  constructor( private depService:DepartamentosService ) { }
+  constructor(
+    private depService: DepartamentosService, 
+    private modalService: NgbModal,
+    private _swal: SwalService,
+    ) { }
 
   ngOnInit(): void {
     this.getAllDepartment();
   }
-  
-  getAllDepartment( page = 1 ){
+
+  getAllDepartment(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtro
-    } 
+    }
     this.loading = true;
     this.depService.getDepartmentPaginate(params)
-    .subscribe( (res:any) =>{
-      this.loading = false;
-      this.pagination.collectionSize = res.data.total;
-      this.departamentos = res.data.data;
-    });
-  }
-  
-  openModal(){
-    this.department.name = '';
-    this.modal.show();
-    this.form.reset();
-  }
-
-  getDepartment(department){
-    this.department = department;
-  }
-
-  createNewDepartment(){
-    this.form.markAllAsTouched();
-    if (this.form.invalid) { return false;}
-      this.depService.createNewDepartment(this.department)
-      .subscribe( (res:any) => {
-        Swal.fire({
-          title: 'Operación exitosa',
-          text: 'Felicidades, se ha registrado el nuevo Departamento',
-          icon: 'success',
-          allowOutsideClick: false,
-          allowEscapeKey: false
-        })
-        this.getAllDepartment();
-        this.modal.hide();
+      .subscribe((res: any) => {
+        this.loading = false;
+        this.pagination.collectionSize = res.data.total;
+        this.departamentos = res.data.data;
       });
   }
 
-  get name_department(){
+  openModal() {
+    
+    this.modal.show();
+    
+  }
+
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.department.name = '';
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    this.form.reset();
+    
+  }
+
+  getDepartment(department) {
+    this.department = department;
+  }
+
+  createNewDepartment() {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) { return false; }
+    this.depService.createNewDepartment(this.department)
+      .subscribe((res: any) => {
+        this._swal.show({
+          title: 'Agregada correctamente',
+          icon: 'success',
+          text: '',
+          timer: 1000,
+          showCancel: false
+        })
+        this.getAllDepartment();
+        this.modalService.dismissAll(); 
+      });
+  }
+
+  get name_department() {
     return (
       this.form.get('name').invalid && this.form.get('name').touched
     )
   }
 
-  
+
 
 }

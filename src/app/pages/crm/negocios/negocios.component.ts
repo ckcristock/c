@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, OperatorFunction } from 'rxjs';
 import {
   debounceTime,
@@ -10,6 +11,8 @@ import {
 import { ValidatorsService } from '../../ajustes/informacion-base/services/reactive-validation/validators.service';
 import { Negocio } from './negocio.interface';
 import { NegociosService } from './negocios.service';
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-negocios',
@@ -45,17 +48,35 @@ export class NegociosComponent implements OnInit {
   today = new Date().toISOString().slice(0, 10);
   companies: any[];
   companySelected: any;
-
+  loading: boolean = true;
+  loading2: boolean
   cities: any;
   city: any;
+  orderObj: any
 
   constructor(
     private _reactiveValid: ValidatorsService,
     private fb: FormBuilder,
-    private _negocios: NegociosService
-  ) {}
+    private _negocios: NegociosService,
+    private route: ActivatedRoute,
+    private modalService: NgbModal,
+    private location: Location,
+  ) { }
 
   ngOnInit(): void {
+    this.route.queryParamMap
+      .subscribe((params) => {
+        this.orderObj = { ...params.keys, ...params };
+        if (params.keys.length == 0){
+          this.active = 1
+          this.changeUrl('?active=1')
+        } else if (this.orderObj.params.active == 2){
+          this.active = 2
+        } else if (this.orderObj.params.active == 1){
+          this.active = 1
+        }
+      }
+      );
     this.createForm();
     this.getCompanies();
     this.getNegocios();
@@ -64,9 +85,30 @@ export class NegociosComponent implements OnInit {
     this.getCountries();
   }
 
+  changeUrl(url) {
+    this.location.replaceState('/crm/negocios', url);
+  }
+
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    this.form.reset()
+    
+  }
+
   getNegocios() {
-    this._negocios.getBusinesses().subscribe( (resp: any) => {
+    this.loading = true;
+    this.loading2 = true; 
+    this._negocios.getBusinesses().subscribe((resp: any) => {
+      this.loading = false;
       this.negocios = resp.data;
+      this.getLists()
     });
     // this._negocios.getNeg().subscribe((resp: any) => {
     //   this.negocios = resp;
@@ -106,11 +148,12 @@ export class NegociosComponent implements OnInit {
         index = filteredList.length;
       }
       filteredList.splice(index, 0, event.data);
-      this._negocios.changeState({status: targetStatus}, event.data.id).subscribe();
+      this._negocios.changeState({ status: targetStatus }, event.data.id).subscribe();
     }
   }
 
   private getLists() {
+    this.loading2 = true
     setTimeout(() => {
       this.negocios_segunda_etapa = this.negocios.filter(
         (t) => t.status === 'second'
@@ -121,6 +164,7 @@ export class NegociosComponent implements OnInit {
       this.negocios_primera_etapa = this.negocios.filter(
         (t) => t.status === 'first'
       );
+      this.loading2 = false
     }, 1000);
 
   }
@@ -160,7 +204,7 @@ export class NegociosComponent implements OnInit {
       (resp: any) => {
         this.companies = resp.data.data;
       },
-      () => {},
+      () => { },
       () => {
         // console.log(this.companies);
       }
@@ -214,7 +258,8 @@ export class NegociosComponent implements OnInit {
     if (event.target.checked) {
       // Add the new value in the selected options
       this.budgetsSelected.push((item));
-    } else {;
+    } else {
+      ;
       // removes the unselected option
       this.budgetsSelected = this.budgetsSelected.filter((selected) => {
         selected.id !== event.target.id
@@ -237,6 +282,7 @@ export class NegociosComponent implements OnInit {
       return this.form.addControl('budget_value', this.fb.control(a + b.total_cop))
     }, 0)
     this._negocios.saveNeg(this.form.value).subscribe(r => {
+      this.modalService.dismissAll();
       this.budgetsSelected = [];
       this.budgets = [];
       this.getNegocios();

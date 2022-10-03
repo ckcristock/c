@@ -1,0 +1,92 @@
+<div class="card col-md-8 mx-auto">
+  <div class="card-body">
+    <div class="card-title">
+      <h4 class="text-primary">Configuración de nómina</h4>
+    </div>
+    <hr class="line" />
+    <div class="alert alert-warning text-center" role="alert">
+      Recuerda que los cambios de estos valores modificáran los cálculos
+      correspondientes al momento del pago de la nómina.
+    </div>
+    <div *ngIf="renderizarNomina; else notData">
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">Horas extras y recargos</h6>
+          <app-horas-extras-config
+            [datos]="extrasDatos"
+            (notificacion)="(mostrarMensaje)"
+          ></app-horas-extras-config>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">
+            Aportes seguridad social - Funcionario
+          </h6>
+          <app-s-social-funcionario-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="seguridadFuncionarioDatos"
+          ></app-s-social-funcionario-config>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">
+            Aportes seguridad social - Empresa
+          </h6>
+          <app-s-social-empresa-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="seguridadEmpresaDatos"
+          ></app-s-social-empresa-config>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">Riesgos ARL</h6>
+          <app-riesgo-arl-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="riesgosArlDatos"
+          ></app-riesgo-arl-config>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">Parafiscales</h6>
+          <app-parafiscales-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="parafiscalesDatos"
+          ></app-parafiscales-config>
+        </div>
+      </div>
+
+      <div class="row mt-3" *ngIf="incapacidadesDatos">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">Incapacidades</h6>
+          <app-incapacidades-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="incapacidadesDatos"
+          ></app-incapacidades-config>
+        </div>
+      </div>
+
+      <!--    <notifications group="notificacionesNomina" position="bottom right" /> -->
+    </div>
+
+    <!-- <div class="overlay" v-else>
+                  <div class="container-spinner">
+                    <semipolar-spinner :animation-duration="800" :size="70" color="#fff" />
+                    <p class="text-center font-weight-bold text-spinner">
+                      Cargando módulo...
+                    </p>
+                  </div>
+                </div> -->
+  </div>
+</div>
+
+<ng-template #notData>
+  <app-not-data [loading]="!renderizarNomina"></app-not-data>
+</ng-template>

@@ -1,0 +1,28 @@
+<div class="rounded-top table-responsive">
+  <table class="table table-striped table-sm">
+    <tbody>
+      <tr *ngFor="let extra of datos">
+        <td>{{ extra.concept }}</td>
+        <td class="d-flex justify-content-end">
+          <mat-form-field class="pb-0" appearance="outline">
+            <input
+              matInput
+              type="number"
+              [value]="extra.percentage"
+              autocomplete="off"
+            />
+            <button
+              mat-icon-button
+              color="primary"
+              matSuffix
+              (click)="actualiza(extra)"
+              [attr.aria-label]="'Actualizar'"
+            >
+              <mat-icon>check</mat-icon>
+            </button>
+          </mat-form-field>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+/* import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
@@ -7,12 +7,25 @@ import { donutChart } from './data'
 import { ChartType } from '../../../core/interfaces/chart.interface';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
+import { MatAccordion } from '@angular/material/expansion';
 @Component({
   selector: 'app-llegadas-tardes',
   templateUrl: './llegadas-tardes.component.html',
   styleUrls: ['./llegadas-tardes.component.scss']
 })
 export class LlegadasTardesComponent implements OnInit {
+  
+@ViewChild(MatAccordion) accordion: MatAccordion;
+matPanel = false;
+openClose(){
+  if (this.matPanel == false){
+    this.accordion.openAll()
+    this.matPanel = true;
+  } else {
+    this.accordion.closeAll()
+    this.matPanel = false;
+  }    
+}
   groups: any[];
   dependencies: any[];
   pdfUrl = ''
@@ -28,7 +41,10 @@ export class LlegadasTardesComponent implements OnInit {
       this.groups.unshift({text:'Todos',value:''})
     })
   }
-
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
   getDependencies(group_id){
     if (group_id) {
       this._dependencies.getDependencies({group_id}).subscribe((r:any)=>{
@@ -55,3 +71,4 @@ export class LlegadasTardesComponent implements OnInit {
     return 0
   }
 }
+ */

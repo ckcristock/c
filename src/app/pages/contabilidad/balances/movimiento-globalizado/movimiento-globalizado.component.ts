@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 export class MovimientoGlobalizadoComponent implements OnInit {
 
   public datosCabecera:any = {
-    Titulo: 'Movimientos Globalizados',
+    Titulo: 'Movimientos globalizados',
     Fecha: new Date()
   }
 

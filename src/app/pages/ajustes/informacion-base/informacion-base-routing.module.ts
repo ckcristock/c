@@ -18,12 +18,15 @@ import { CatalogoComponent } from './catalogo/catalogo.component';
 import { CrearProductoComponent } from './productos/crear-producto/crear-producto.component';
 import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
 import { ProductoComponent } from './productos/producto/producto.component';
+import { SedesComponent } from './sedes/sedes.component';
+import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
 
   { path: 'funcionarios', component: FuncionariosComponent },
   { path: 'funcionario/:id', component: DetalleFuncionarioComponent },
+  { path: 'funcionario/:id/liquidacion', component: VerLiquidacionComponent },
   { path: 'funcionarios/crear', component: CreateComponent },
 
   { path: 'regimenes-niveles', component: RegimenesNivelesComponent },
@@ -46,6 +49,8 @@ const routes: Routes = [
    { path: 'catalogo/editar/:id', component: EditarProductoComponent },
    { path: 'catalogo/ver/:id', component: ProductoComponent },
 
+   //sedes
+   { path: 'sedes', component: SedesComponent },
 ];
 
 @NgModule({

@@ -6,6 +6,7 @@ import { consts } from '../../../../../../core/utils/consts';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { Person } from '../../../../../../core/models/person.model';
 import {ValidatorsService} from '../../../services/reactive-validation/validators.service';
+import { DocumentTypeService } from '../../../services/document-type.service';
 @Component({
   selector: 'app-datos-funcionario',
   templateUrl: './datos-funcionario.component.html',
@@ -18,26 +19,35 @@ export class DatosFuncionarioComponent implements OnInit {
   estados = consts.maritalStatus;
   instruccion = consts.degree;
   $person: Subscription;
-
+  documenttypes: any[];
   form: FormGroup;
   file: any = '';
   fileString: any =
     'https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=100';
 
   constructor(private _person: PersonDataService, private fb: FormBuilder,
-	      private _valid: ValidatorsService
+	      private _valid: ValidatorsService,
+        private _documenttypes: DocumentTypeService,
 	     ) { }
   person: Person
   ngOnInit(): void {
+    this.getDocumentType()
     this.crearForm();
     this.$person = this._person.person.subscribe((r) => {
       this.person = r
     });
   }
 
+  getDocumentType() {
+    this._documenttypes.getDocumentTypes().subscribe((r: any) => {
+      this.documenttypes = r.data
+    })
+  }
+
   crearForm() {
     this.form = this.fb.group({
       image: ['', this._valid.required],
+      type_document_id: ['', this._valid.required],
       identifier: ['',this._valid.required ],
       first_name: ['', this._valid.required],
       second_name: ['', ],
@@ -53,10 +63,10 @@ export class DatosFuncionarioComponent implements OnInit {
       date_of_birth: ['', this._valid.required],
       place_of_birth: ['', this._valid.required],
       direction: ['', this._valid.required],
-      phone: ['', [this._valid.required, this._valid.minLength(10), this._valid.maxLength(10)]],
+      phone: ['', [this._valid.required, this._valid.minLength(7), this._valid.maxLength(10)]],
       gener: ['', this._valid.required],
       blood_type: ['', this._valid.required],
-      cell_phone: ['', [this._valid.required, this._valid.minLength(7), this._valid.maxLength(7)]],
+      cell_phone: ['', [this._valid.required, this._valid.minLength(10), this._valid.maxLength(10)]],
       marital_status: ['', this._valid.required],
       number_of_children: ['', this._valid.required],
       degree: ['', this._valid.required],
@@ -67,6 +77,11 @@ export class DatosFuncionarioComponent implements OnInit {
   get image_valid() {
     return (
       this.form.get('image').invalid && this.form.get('image').touched
+    );
+  }
+  get document_type_valid() {
+    return (
+      this.form.get('type_document_id').invalid && this.form.get('type_document_id').touched
     );
   }
   get identifier_valid() {

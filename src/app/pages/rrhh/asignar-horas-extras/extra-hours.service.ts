@@ -8,7 +8,8 @@ import {environment} from 'src/environments/environment';
 export class ExtraHoursService {
 
   constructor( private http: HttpClient) { }
-  save(body){
-    return this.http.post(environment.base_url,body)
+
+  save(body) {
+    return this.http.post(`${environment.base_url}/rotating-hour-diary`,body)
   }
 }

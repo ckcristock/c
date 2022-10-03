@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,24 +10,37 @@ import { PlanCuentasService } from './plan-cuentas.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import swal from 'sweetalert2';
 import * as $ from "jquery";
+import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-plan-cuentas',
   templateUrl: './plan-cuentas.component.html',
   styleUrls: ['./plan-cuentas.component.scss']
 })
-export class PlanCuentasComponent implements OnInit {
-  public Planes:any = [];
+export class PlanCuentasComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
+  public Planes: any = [];
   public Cargando = true;
   Bancos: any;
 
-  envirom : any = {}
+  envirom: any = {}
   //Paginación
   public maxSize = 5;
   public pageSize = 20;
-  public TotalItems:number;
+  public TotalItems: number;
   public page = 1;
-  public InformacionPaginacion:any = {
+  public InformacionPaginacion: any = {
     desde: 0,
     hasta: 0,
     total: 0
@@ -38,15 +51,26 @@ export class PlanCuentasComponent implements OnInit {
   @ViewChild('modalEditarCuenta') modalEditarCuenta: any;
   @ViewChild('modalVerCuenta') modalVerCuenta: any;
 
-    //Variables para filtros
-    public filtro_codigo:any = '';
-    public filtro_nombre:any = '';
-    public filtro_codigo_niif:any = '';
-    public filtro_nombre_niif:any = '';
-    public filtro_estado_cuenta:any = '';
-    public filtro_empresa:any = '';
+  ngAfterViewInit() {
+    if (this.activeFiltros != '?pag=1') {
+      this.openClose()
+      /* setTimeout(() =>{
+        //this.openClose();
+        this.accordion.openAll()
+        this.matPanel = true;
+      }, 1500);  */
+    }
+  }
 
-  public PlanCuentaModel:any = {
+  //Variables para filtros
+  public filtro_codigo: any = '';
+  public filtro_nombre: any = '';
+  public filtro_codigo_niif: any = '';
+  public filtro_nombre_niif: any = '';
+  public filtro_estado_cuenta: any = '';
+  public filtro_empresa: any = '';
+
+  public PlanCuentaModel: any = {
     Id_Plan_Cuenta: '',
     Tipo_P: '',
     Tipo_Niif: '',
@@ -77,18 +101,21 @@ export class PlanCuentasComponent implements OnInit {
     Clase_Cta: '',
     Cta_Numero: '',
     Reporte: '',
-    Id_Empresa:''
+    Id_Empresa: ''
   };
 
-  companies:any[] = [];
+  companies: any[] = [];
 
-  constructor( 
-                private http: HttpClient, 
-                private location: Location, 
-                private route: ActivatedRoute, 
-                private router: Router, 
-                private swalService: SwalService,
-                private _planCuentas: PlanCuentasService) { }
+  constructor(
+    private http: HttpClient,
+    private location: Location,
+    private route: ActivatedRoute,
+    private router: Router,
+    private swalService: SwalService,
+    private modalService: NgbModal,
+    private _planCuentas: PlanCuentasService) { }
+
+
 
   ngOnInit() {
 
@@ -97,23 +124,43 @@ export class PlanCuentasComponent implements OnInit {
     this.ListaPlanCuentas();
     this.ListarBancos();
     this.envirom = environment;
+    this.filtros();
     // this.ListasEmpresas();
   }
 
-  ListaPlanCuentas(){
-    this.http.get(environment.ruta + 'php/plancuentas/lista_plan_cuentas.php').subscribe((data:any) => {
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    
+  }
+  estadoFiltros = false;
+  mostrarFiltros() {
+    this.estadoFiltros = !this.estadoFiltros
+  }
+  openInNewTab() {
+    window.open(this.envirom.ruta + 'php/contabilidad/plancuentas/descargar_informe_plan_cuentas_excel.php', '_blank').focus();
+  }
+
+  ListaPlanCuentas() {
+    this.http.get(environment.ruta + 'php/plancuentas/lista_plan_cuentas.php').subscribe((data: any) => {
       this.Cargando = false;
       this.Planes = data.query_result;
-      
+
     }, error => {
 
     })
   }
 
 
-  SetInformacionPaginacion(){
-    var calculoHasta = (this.page*this.pageSize);
-    var desde = calculoHasta-this.pageSize+1;
+  SetInformacionPaginacion() {
+    var calculoHasta = (this.page * this.pageSize);
+    var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
 
     this.InformacionPaginacion['desde'] = desde;
@@ -127,24 +174,24 @@ export class PlanCuentasComponent implements OnInit {
       // actualizando la variables con los valores de los paremetros.
       this.AsignarParametrosUrl(urlParams);
       this.filtros(this.page > 1);
-    }else{
+    } else {
       this.filtros();
     }
   }
 
   //Setear filtros
-  SetFiltros(paginacion:boolean = false){
-    let params:any = {};
+  SetFiltros(paginacion: boolean = false) {
+    let params: any = {};
 
-    if(paginacion === true){      
+    if (paginacion === true) {
       params.pag = this.page;
-    }else{      
+    } else {
       this.page = 1;
       params.pag = this.page;
     }
-    
+
     if (this.filtro_codigo != "") {
-      params.cod= this.filtro_codigo;
+      params.cod = this.filtro_codigo;
     }
     if (this.filtro_codigo_niif != "") {
       params.cod_niif = this.filtro_codigo_niif;
@@ -165,24 +212,25 @@ export class PlanCuentasComponent implements OnInit {
     let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     return queryString;
   }
-
+  activeFiltros: any;
   //Aplicar filtros en la tabla
-  filtros(paginacion:boolean = false) {
+  filtros(paginacion: boolean = false) {
     this.Cargando = true;
     var params = this.SetFiltros(paginacion);
+    this.activeFiltros = params;
+    this.location.replaceState('/contabilidad/plan-cuentas', params);
 
-    this.location.replaceState('/contabilidad/plan-cuentas', params);    
+    this.http.get(environment.ruta + 'php/plancuentas/lista_plan_cuentas.php' + params).subscribe((data: any) => {
 
-    this.http.get(environment.ruta + 'php/plancuentas/lista_plan_cuentas.php'+params).subscribe((data: any) => {
-      
       this.Planes = data.query_result;
       this.TotalItems = data.numReg;
       this.SetInformacionPaginacion();
       this.Cargando = false;
     });
+
   }
 
-  AsignarParametrosUrl(urlParams:any){
+  AsignarParametrosUrl(urlParams: any) {
     this.page = urlParams.pag ? urlParams.pag : 1;
     this.filtro_codigo_niif = urlParams.cod_niif ? urlParams.cod_niif : '';
     this.filtro_codigo = urlParams.cod ? urlParams.cod : '';
@@ -193,44 +241,44 @@ export class PlanCuentasComponent implements OnInit {
   }
 
 
-  ListarBancos(){
-    this.http.get(environment.ruta + 'php/plancuentas/lista_bancos.php').subscribe((data:any) => {
+  ListarBancos() {
+    this.http.get(environment.ruta + 'php/plancuentas/lista_bancos.php').subscribe((data: any) => {
       this.Bancos = data;
     });
   }
 
-/*   ListasEmpresas(){
-    this._planCuentas.getCompanies().subscribe((data:any) => {
-      this.companies = data.data;
-    })
-  } */
+  /*   ListasEmpresas(){
+      this._planCuentas.getCompanies().subscribe((data:any) => {
+        this.companies = data.data;
+      })
+    } */
 
-  habInfoValue(value){
+  habInfoValue(value) {
 
     if (value == "S") {
-        (document.getElementById('Valor') as HTMLInputElement).disabled = false;
-        (document.getElementById('Porcentaje') as HTMLInputElement).disabled = false;
+      (document.getElementById('Valor') as HTMLInputElement).disabled = false;
+      (document.getElementById('Porcentaje') as HTMLInputElement).disabled = false;
     } else {
       (document.getElementById('Valor') as HTMLInputElement).disabled = true;
       (document.getElementById('Porcentaje') as HTMLInputElement).disabled = true;
     }
   }
 
-  habBancos(value){
+  habBancos(value) {
     if (value == "S") {
-        (document.getElementById('Cod_Banco') as HTMLInputElement).disabled = false;
-        (document.getElementById('Cod_Banco') as HTMLInputElement).value = '';
+      (document.getElementById('Cod_Banco') as HTMLInputElement).disabled = false;
+      (document.getElementById('Cod_Banco') as HTMLInputElement).value = '';
     } else {
       (document.getElementById('Cod_Banco') as HTMLInputElement).disabled = true;
       (document.getElementById('Cod_Banco') as HTMLInputElement).value = '';
     }
   }
 
-  habCampos(value){
-    if (typeof(value) == 'object') {
+  habCampos(value) {
+    if (typeof (value) == 'object') {
       if (value.query_result.Movimiento == "S") {
         $('.input').prop('disabled', false);
-        
+
       } else {
         $('.input').prop('disabled', true);
       }
@@ -246,36 +294,40 @@ export class PlanCuentasComponent implements OnInit {
 
   }
 
-  guardarPlan(Formulario: NgForm, accion:string) {
+  guardarPlan(Formulario: NgForm, accion: string) {
     let datos = new FormData();
-    
-    if(accion == 'guardar'){
-      let info = JSON.stringify(Formulario.value);      
-      datos.append('Datos', info);
-    }else if(accion == 'editar'){
-      let info = JSON.stringify(this.PlanCuentaModel);      
-      datos.append('Datos', info);
-    }    
 
-    this.http.post(environment.ruta+'php/contabilidad/plancuentas/guardar_puc.php', datos).subscribe((data:any)=>{
+    if (accion == 'guardar') {
+      let info = JSON.stringify(Formulario.value);
+      datos.append('Datos', info);
+    } else if (accion == 'editar') {
+      let info = JSON.stringify(this.PlanCuentaModel);
+      datos.append('Datos', info);
+    }
+
+    this.http.post(environment.ruta + 'php/contabilidad/plancuentas/guardar_puc.php', datos).subscribe((data: any) => {
       let title = (data.tipo == 'error' ? 'Error' : 'Exito');
       this.ShowSwal(data.tipo, title, data.mensaje);
-      if(accion == 'guardar'){
-        this.modalCrearCuenta.hide();
-      }else if(accion == 'editar'){
-        this.modalEditarCuenta.hide();
+      if (accion == 'guardar') {
+        //this.modalCrearCuenta.hide();
+        this.modalService.dismissAll(); 
+
+      } else if (accion == 'editar') {
+        //this.modalEditarCuenta.hide();
+        this.modalService.dismissAll(); 
+
       }
 
-      setTimeout(()=>{
+      setTimeout(() => {
         this.filtros();
       }, 1000);
     });
-  
-  
+
+
   }
 
-  EditarPlanCuenta(idPlanCuenta){
-    this.http.get(environment.ruta+'php/contabilidad/plancuentas/detalle_plan_cuenta.php', {params:{id_cuenta:idPlanCuenta}}).subscribe((data:any)=>{
+  EditarPlanCuenta(idPlanCuenta) {
+    this.http.get(environment.ruta + 'php/contabilidad/plancuentas/detalle_plan_cuenta.php', { params: { id_cuenta: idPlanCuenta } }).subscribe((data: any) => {
       this.habCampos(data);
       this.modalEditarCuenta.show();
 
@@ -283,19 +335,19 @@ export class PlanCuentasComponent implements OnInit {
         this.PlanCuentaModel = data.query_result;
         
       }, 500); */
-      
+
     });
   }
 
-  VerPlanCuenta(idPlanCuenta){
-    this.http.get(environment.ruta+'php/contabilidad/plancuentas/detalle_plan_cuenta.php', {params:{id_cuenta:idPlanCuenta}}).subscribe((data:any)=>{
+  VerPlanCuenta(idPlanCuenta) {
+    this.http.get(environment.ruta + 'php/contabilidad/plancuentas/detalle_plan_cuenta.php', { params: { id_cuenta: idPlanCuenta } }).subscribe((data: any) => {
       this.PlanCuentaModel = data.query_result;
       this.modalVerCuenta.show();
     });
   }
 
-  CambiarEstadoPlan(idPlanCuenta){
-    this.http.post(environment.ruta+'php/contabilidad/plancuentas/cambiar_estado_cuenta.php', {params:{id_cuenta:idPlanCuenta}}).subscribe((data:any)=>{
+  CambiarEstadoPlan(idPlanCuenta) {
+    this.http.post(environment.ruta + 'php/contabilidad/plancuentas/cambiar_estado_cuenta.php', { params: { id_cuenta: idPlanCuenta } }).subscribe((data: any) => {
       if (data.codigo == 'OK') {
         Swal.fire({
           icon: 'success',
@@ -303,14 +355,14 @@ export class PlanCuentasComponent implements OnInit {
           text: data.msg
         })
         // this.ShowSwal('success', 'Cambio Exitoso', data.msg);  
-      }else if(data.codigo == 'ERR'){
+      } else if (data.codigo == 'ERR') {
         Swal.fire({
           icon: 'error',
           title: 'Error Inesperado',
           text: data.msg
         })
         // this.ShowSwal('error', 'Error Inesperado', data.msg);
-      }else if(data.codigo == 'WARNING'){
+      } else if (data.codigo == 'WARNING') {
         Swal.fire({
           icon: 'warning',
           title: 'Alerta',
@@ -319,26 +371,26 @@ export class PlanCuentasComponent implements OnInit {
         // this.ShowSwal('warning', 'Alerta', data.msg);
       }
 
-      setTimeout(()=>{
+      setTimeout(() => {
         this.ListaPlanCuentas();
       }, 1000);
     });
   }
 
-  ShowSwal(tipo, titulo:string, msg:string){
+  ShowSwal(tipo, titulo: string, msg: string) {
     this.alertSwal.icon = tipo;
     this.alertSwal.title = titulo;
     this.alertSwal.text = msg;
     this.alertSwal.fire();
   }
 
-  ImprimirExcel(){
-    this.http.get(environment.ruta+'php/contabilidad/plancuentas/descargar_informe_plan_cuentas_excel.php').subscribe((data:any)=>{
+  ImprimirExcel() {
+    this.http.get(environment.ruta + 'php/contabilidad/plancuentas/descargar_informe_plan_cuentas_excel.php').subscribe((data: any) => {
     });
   }
 
-  ImprimirPdf(){
-    this.http.get(environment.ruta+'php/contabilidad/plancuentas/descargar_informe_plan_cuentas.php').subscribe((data:any)=>{
+  ImprimirPdf() {
+    this.http.get(environment.ruta + 'php/contabilidad/plancuentas/descargar_informe_plan_cuentas.php').subscribe((data: any) => {
     });
   }
 
@@ -353,18 +405,18 @@ export class PlanCuentasComponent implements OnInit {
     return tipos[tipo];
   }
 
-  TransformarValor(value){
+  TransformarValor(value) {
     if (value == 'N' || value == '' || value === null) {
       return 'NO';
-    }else{
+    } else {
       return 'SI';
     }
   }
 
-  validarPUC(campo,tipo_puc,editar=false) {
+  validarPUC(campo, tipo_puc, editar = false) {
     let codigo = campo.target.value;
     let id_campo = campo.target.id;
-    
+
     let tipo_plan = '';
     if (tipo_puc == 'pcga') {
       tipo_plan = !editar ? ((document.getElementById('Tipo_P') as HTMLInputElement).value).toLowerCase() : ((document.getElementById('Tipo_P_Editar') as HTMLInputElement).value).toLowerCase();
@@ -373,7 +425,7 @@ export class PlanCuentasComponent implements OnInit {
     }
 
     setTimeout(() => {
-      
+
       if (tipo_plan != '') {
         if (codigo.length != this.lengthByType(tipo_plan)) {
           swal.fire({
@@ -384,12 +436,12 @@ export class PlanCuentasComponent implements OnInit {
           // (document.getElementById(id_campo) as HTMLInputElement).focus();
           // this.showAlert('error','Ooops!',`El código no corresponde al tipo de plan "${tipo_plan}"`);
         } else if (tipo_plan != 'grupo') {
-          let p:any = {
+          let p: any = {
             Tipo_Plan: tipo_plan,
             Codigo: codigo,
             Tipo_Puc: tipo_puc
           };
-          this.http.get(environment.ruta+'php/plancuentas/validar_puc_niveles.php',{params: p}).subscribe((data:any) => {
+          this.http.get(environment.ruta + 'php/plancuentas/validar_puc_niveles.php', { params: p }).subscribe((data: any) => {
             console.log(data);
             if (data.validacion == 0) {
               // (document.getElementById(id_campo) as HTMLInputElement).focus();

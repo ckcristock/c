@@ -1,136 +1,103 @@
-<div class="row">
-    <div class="col">
-        <div class="title mt-3">
-            <h5>Corte Agua</h5>
-        </div>
-        <div class="row">
-            <div class="col">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="">Item</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="material_corte_agua">Material</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="espesor_corte_agua">Espesor(mm)</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="cantidad_corte_agua">Cantidad</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="largo_corte_agua">Largo(mm)</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="ancho_corte_agua">Ancho(mm)</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="longitud_total_corte_agua">Longitud total</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="cantidad_corte_corte_agua">Cantidad</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="diametro_corte_corte_agua">Diametro(mm)</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="perimetro_corte_agua">Perim total agujero</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="tiempo_corte_agua">Tiempo (min)</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="valor_minuto_corte_agua">Valor Minuto</label>
-                            </th>
-                            <th>
-                                <label class="col-form-label col-form-label-sm" for="valor_corte_agua">Valor</label>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <ng-container *ngIf="cutwater.length">
-                            <ng-container *ngFor="let item of cutwater; let i = index">
-                                <tr>
-                                    <td>
-                                        {{ i + 1 }}
-                                    </td>
-                                    <td>
-                                        {{ item.material.name }}
-                                    </td>
-                                    <td>
-                                        {{ item.thickness.thickness }}
-                                    </td>
-                                    <td>
-                                        {{ item.amount }}
-                                    </td>
-                                    <td>
-                                        {{ item.long }}
-                                    </td>
-                                    <td>
-                                        {{ item.width }}
-                                    </td>
-                                    <td>
-                                        {{ item.total_length }}
-                                    </td>
-                                    <td>
-                                        {{ item.amount_cut }}
-                                    </td>
-                                    <td>
-                                        {{ item.diameter }}
-                                    </td>
-                                    <td>
-                                        {{ item.total_hole_perimeter }}
-                                    </td>
-                                    <td>
-                                        {{ item.time }}
-                                    </td>
-                                    <td>
-                                        {{ item.minute_value }}
-                                    </td>
-                                    <td>
-                                        {{ item.value }}
-                                    </td>
-                                </tr>
-                            </ng-container>
-                        </ng-container>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="11">
-                                <label for="" class="mt-1" style="float: right;">SubTotal Unitario: </label>
-                            </td>
-                            <td colspan="12">
-                                <p class="text-right">
-                                    {{ cut_water_unit_subtotal }}
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="11">
-                                <label for="" class="mt-1" style="float: right;">Cantidad Total: </label>
-                            </td>
-                            <td colspan="12">
-                                <p class="text-right">
-                                    {{ cut_water_total_amount }}
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="11">
-                                <label for="" class="mt-1" style="float: right;">SubTotal: </label>
-                            </td>
-                            <td colspan="12">
-                                <p class="text-right">
-                                    {{ cut_water_subtotal }}
-                                </p>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
+<hr />
+<h6 class="mt-3">Corte agua</h6>
+<div class="rounded-top table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th class="align-middle">Item</th>
+        <th class="align-middle">Material</th>
+        <th class="align-middle">Espesor(mm)</th>
+        <th class="align-middle">Cantidad</th>
+        <th class="align-middle">Largo(mm)</th>
+        <th class="align-middle">Ancho(mm)</th>
+        <th class="align-middle">Longitud total</th>
+        <th class="align-middle">Cantidad</th>
+        <th class="align-middle">Diámetro(mm)</th>
+        <th class="align-middle">Perim total agujero</th>
+        <th class="align-middle">Tiempo (min)</th>
+        <th class="align-middle">Valor Minuto</th>
+        <th class="align-middle">Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="cutwater.length">
+        <ng-container *ngFor="let item of cutwater; let i = index">
+          <tr class="text-center">
+            <td class="align-middle">
+              {{ i + 1 }}
+            </td>
+            <td class="align-middle">
+              {{ item.material.name }}
+            </td>
+            <td class="align-middle">
+              {{ item.thickness.thickness }}
+            </td>
+            <td class="align-middle">
+              {{ item.amount }}
+            </td>
+            <td class="align-middle">
+              {{ item.long }}
+            </td>
+            <td class="align-middle">
+              {{ item.width }}
+            </td>
+            <td class="align-middle">
+              {{ item.total_length }}
+            </td>
+            <td class="align-middle">
+              {{ item.amount_cut }}
+            </td>
+            <td class="align-middle">
+              {{ item.diameter }}
+            </td>
+            <td class="align-middle">
+              {{ item.total_hole_perimeter }}
+            </td>
+            <td class="align-middle">
+              {{ item.time }}
+            </td>
+            <td class="align-middle">
+              {{ item.minute_value }}
+            </td>
+            <td class="align-middle">
+              {{ item.value }}
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </tbody>
+  </table>
 </div>
-<hr class="bg-secondary">
+<div class="row d-flex justify-content-end">
+  <div class="col-md-4">
+    <div class="d-flex justify-content-between">
+      <div class="rounded-top table-responsive">
+        <table class="table table-hover">
+          <tbody>
+            <tr>
+              <td>SUBTOTAL UNITARIO</td>
+              <td class="text-right">
+                ${{ cut_water_unit_subtotal }}
+              </td>
+            </tr>
+            <tr>
+              <td>CANTIDAD TOTAL</td>
+              <td class="text-right">
+                ${{ cut_water_total_amount }}
+              </td>
+            </tr>
+            <tr>
+              <td>SUBTOTAL</td>
+              <td class="text-right">
+                ${{ cut_water_subtotal }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

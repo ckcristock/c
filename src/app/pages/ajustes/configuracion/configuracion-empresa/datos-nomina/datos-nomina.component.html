@@ -1,114 +1,149 @@
-<div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <div class="row">
-                <div class="col-6">
-                    <h5>Datos Nómina</h5>
-                </div>
-                <div class="col-6">
-                    <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModal()">
-                        <i class="fas fa-pencil-alt"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Máximas horas extras
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ nomina.max_extras_hours }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Máximos festivos legales
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ nomina.max_holidays_legal }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Máximas llegadas tardes
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ nomina.max_late_arrival }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Salario Base Mensual
-            </p>
-            <p class="col-6 font-weight-bold">
-                $ {{ nomina.base_salary }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Auxilio de Transporte
-            </p>
-            <p class="col-6 font-weight-bold">
-                $ {{ nomina.transportation_assistance }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Hora Inicio Noche
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ nomina.night_start_time }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Hora Fin Noche
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ nomina.night_end_time }}
-            </p>
-        </div>
+<div class="card border border-3 border-light">
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h5>Datos de nómina</h5>
+      <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
+        <i class="fas fa-pencil-alt"></i>
+      </button>
     </div>
+    <div class="rounded-top table-responsive">
+      <table class="table table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Máximo de horas extras</th>
+            <th>Máximo de festivos legales</th>
+            <th>Máximo de llegadas tarde</th>
+            <th>Salario base mensual</th>
+            <th>Auxilio de transporte</th>
+            <th>Inicio hora nocturna</th>
+            <th>Fin hora nocturna</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td>{{ nomina.max_extras_hours }}</td>
+            <td>{{ nomina.max_holidays_legal }}</td>
+            <td>{{ nomina.max_late_arrival }}</td>
+            <td>${{ nomina.base_salary | currency: "":"" }}</td>
+            <td>${{ nomina.transportation_assistance | currency: "":"" }}</td>
+            <td>{{ nomina.night_start_time }}</td>
+            <td>{{ nomina.night_end_time }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Datos Nómina</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-          </button>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label for="">Máx. Núm. Horas Extras</label>
-                            <input type="number" formControlName="max_extras_hours" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Máx. Núm. Fest. Legales</label>
-                            <input type="text" formControlName="max_holidays_legal" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Máx. Núm. Llegadas Tarde</label>
-                            <input type="number" formControlName="max_late_arrival" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Salario Base</label>
-                            <input type="number" formControlName="base_salary" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Aux. Transporte</label>
-                            <input type="number" formControlName="transportation_assistance" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Hora Inicio Noche</label>
-                            <input type="time" formControlName="night_start_time" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Hora Fin Noche</label>
-                            <input type="time" formControlName="night_end_time" class="form-control form-control-sm">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="saveNominaData()">Guardar</button>
-        </div>
-    </div>
-</app-modal-basic>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Datos de nómina</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Máximo de horas extra</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el número máximo"
+            formControlName="max_extras_hours"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Máximo de festivos legales</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el número máximo"
+            formControlName="max_holidays_legal"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Máximo de llegadas tarde</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el número máximo"
+            formControlName="max_late_arrival"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Salario base mensual</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el salario base"
+            formControlName="base_salary"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Auxilio de transporte</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor"
+            formControlName="transportation_assistance"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Inicio hora nocturna</mat-label>
+          <input
+            matInput
+            type="time"
+            formControlName="night_start_time"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fin hora nocturna</mat-label>
+          <input
+            matInput
+            type="time"
+            formControlName="night_end_time"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="saveNominaData()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>

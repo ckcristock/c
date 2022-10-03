@@ -1,313 +1,519 @@
-<div class="row mb-4">
-    <div class="col text-left">
-        <a class="text-primary back" [routerLink]="['/rrhh/procesos/disciplinarios']">Regresar</a>
-    </div>
-</div>
 <div class="card">
-    <div class="card-header">
-        <div class="card-title">
-            <div class="row">
-                <div class="col-6">
-                    <h5 class="text-primary"> Seguimiento Proceso Disciplinario </h5>
-                </div>
-                <div class="col-6 text-right" *ngIf="!loading && processSelected">
-                    <div *ngIf="permission.permissions.close && processSelected.status!='Cerrado'">
-                        <button class="btn btn-danger btn-sm col-2" style="float: right;" (click)="closeProccess()"> Cerrar </button>
-                    </div>
-                    <div *ngIf="processSelected.status == 'Cerrado' && permission.permissions.open">
-                        <button class="btn btn-success btn-sm col-2" style="float: right;" (click)="openProccess()"> Abrir </button>
-                    </div>
-                </div>
-            </div>
+  <div class="card-body" *ngIf="!loading && processSelected; else notData">
+    <div class="card-title d-flex justify-content-between">
+      <h4 class="text-primary">Seguimiento del proceso disciplinario</h4>
+      <div *ngIf="!loading && processSelected.length > 0">
+        <div
+          *ngIf="
+            permission.permissions.close && processSelected.status != 'Cerrado'
+          "
+        >
+          <button class="btn btn-danger btn-sm" (click)="closeProccess()">
+            Cerrar
+          </button>
         </div>
-    </div>
-    <div class="card-body" *ngIf="!loading; else notData">
-        <div class=" row ml-0 mr-0">
-            <div class="form-group col-md-2">
-                <label style="color: black;">Funcionario Resp.</label>
-                <p>{{fullNameSelected}}</p>
-            </div>
-            <!-- <div class="row  ml-0 mr-0"> -->
-            <div class="form-group col-md-2">
-                <label style="color: black;">Fecha Inicio</label>
-                <p>{{processSelected.date_of_admission}}</p>
-            </div>
-            <div class="form-group col-md-2" *ngIf="processSelected.status == 'Cerrado'">
-                <label style="color: black;">Fecha Final</label>
-                <p>{{processSelected.date_end}}</p>
-            </div>
-            <!-- </div> -->
-            <div class=" form-group col-3">
-                <label style="color: black;">Descripción</label>
-                <p>{{processSelected.process_description}}</p>
-            </div>
-            <div class="col-md-3 text-right ">
-                <button class="btn btn-primary btn-sm" *ngIf="file" (click)="download(file, fileType)">
-                            <i class="far fa-arrow-alt-circle-down"> Descargar Evidencia</i>
-                        </button>
-            </div>
-            <div class=" form-group col-12" *ngIf="processSelected.status == 'Cerrado'">
-                <label style="color: black;">Observación del cierre</label>
-                <p>{{processSelected.close_description}}</p>
-            </div>
-            <div class="col-12">
-                <hr class="line">
-            </div>
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-6">
-                        <label for="">Anotaciones</label>
-                    </div>
-                    <div class="col-6 text-right" *ngIf="processSelected.status != 'Cerrado'">
-                        <button class="btn btn-info btn-sm" (click)="openModal()"> Agregar </button>
-                    </div>
-                </div>
-                <div class="col panel-anotaciones mt-3">
-                    <div class="card card-anotation" *ngFor="let anotacion of anotaciones; let i = index">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-2">
-                                    <label for="">Func. Creó</label>
-                                    <h6 class="mb-2 text-muted">{{anotacion.user.person.first_name + ' ' + anotacion.user.person.first_surname }}</h6>
-                                </div>
-                                <div class="col-2">
-                                    <label for="">Involucrado</label>
-                                    <h6 class="mb-2 text-muted">{{ anotacion.person.first_name }} {{ anotacion.person.first_surname }}</h6>
-                                </div>
-                                <div class="col-1">
-                                    <label for="">Memorandos</label>
-                                    <h6 class="mb-2 text-muted">
-                                        <div>
-                                            <button class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="collapsed[i] = !collapsed[i]" [attr.aria-expanded]="!collapsed" aria-controls="collapseExample2">
-                                                <i class="mdi mdi-chevron-down" *ngIf="!collapsed[i]"></i>
-                                                <i class="mdi mdi-chevron-up" *ngIf="collapsed[i]"></i>
-                                            </button>
-                                        </div>
-                                    </h6>
-                                </div>
-                                <div class="col-2">
-                                    <label for="">Observaciones</label>
-                                    <p class="card-text"> {{ anotacion.observation }}</p>
-                                </div>
-                                <div class="col-2">
-                                    <label for="">Fecha Creación</label>
-                                    <h6 class="mb-2 text-muted">{{ anotacion.created_at | date }}</h6>
-                                </div>
-                                <div class="col-2">
-                                    <a *ngIf="anotacion.file" (click)="download(anotacion.file, anotacion.fileType)" class="col-3 card-link pointer">Descargar evidencia</a>
-                                </div>
-                                <div class="col-1" *ngIf="processSelected.status != 'Cerrado'">
-                                    <label for="">Anular</label>
-                                    <h6 class="mb-2 text-muted">
-                                        <div>
-                                            <button class="btn btn-outline-danger btn-sm waves-effect waves-light" type="button" (click)="cancelAnnotation(anotacion.id)">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </div>
-                                    </h6>
-                                </div>
-                                <div class="col-12" [ngbCollapse]="!collapsed[i]">
-                                    <table class="table table-sm table-borderless">
-                                        <ng-container *ngIf="anotacion.memorandum_involved.length > 0; else notM">
-                                            <thead class="bg-light">
-                                                <tr>
-                                                    <th>Motivo</th>
-                                                    <th>Detalle</th>
-                                                    <th>Fecha C.</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let item of anotacion.memorandum_involved">
-                                                    <td> {{ item.memorandum.memorandumtype.name }} </td>
-                                                    <td> {{ item.memorandum.details }} </td>
-                                                    <td> {{ item.memorandum.created_at | date }} </td>
-                                                </tr>
-                                            </tbody>
-                                        </ng-container>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <label class="ml-0" *ngIf="legalDocuments.length > 0">Documentos</label>
-                </div>
-                <div class="row">
-                    <ng-container *ngFor="let item of legalDocuments">
-                        <div class="col-2">
-                            <div class="card card-file">
-                                <div class="card-title">
-                                    <button type="button" *ngIf="processSelected.status != 'Cerrado'" placement="top" ngbTooltip="Eliminar" class="close basic-close mt-2 mr-3" (click)="deleteDocument(item)">
-                                        <span aria-hidden="true">
-                                            <i class="fas fa-times"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <div class="card-body" (click)="downloadDocument(item)" placement="left" ngbTooltip="Descargar">
-                                    <h6 class="file-title text-center">
-                                        {{ item.name }}
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-            <div class="col-12 mt-3" *ngIf="processSelected">
-                <div class="row">
-                    <ng-container *ngIf="processSelected.status != 'Cerrado'">
-                        <button class="btn btn-success btn-sm btn-block" style="float: right;" (click)="modalDocuments.show()"> Agregar Documentos </button>
-                    </ng-container>
-                </div>
-            </div>
+        <div
+          *ngIf="
+            processSelected.status == 'Cerrado' && permission.permissions.open
+          "
+        >
+          <button class="btn btn-success btn-sm" (click)="openProccess()">
+            Abrir
+          </button>
         </div>
+      </div>
     </div>
-</div>
-<app-modal-basic #modal [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> Agregar involucrados </h5>
-        <button type="button" class="close basic-close" (click)="closeModal()">
-            <span aria-hidden="true">
-                <i class="fas fa-times" (click)="closeModal()"></i>
-            </span>
+    <hr class="line" />
+    <div class="rounded-top table-responsive">
+      <table class="table table-light table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Funcionario responsable</th>
+            <th>Fecha de inicio</th>
+            <th *ngIf="processSelected.status == 'Cerrado'">Fecha final</th>
+            <th>Descripción</th>
+            <th>Archivo</th>
+            <th *ngIf="processSelected.status == 'Cerrado'">
+              Observación del cierre
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td class="align-middle">{{ fullNameSelected }}</td>
+            <td class="align-middle">
+              {{ processSelected.date_of_admission }}
+            </td>
+            <td
+              class="align-middle"
+              *ngIf="processSelected.status == 'Cerrado'"
+            >
+              {{ processSelected.date_end }}
+            </td>
+            <td class="align-middle">
+              {{ processSelected.process_description }}
+            </td>
+            <td class="align-middle">
+              <button
+                class="btn btn-success btn-sm"
+                *ngIf="file"
+                (click)="download(file, fileType)"
+              >
+                Descargar
+              </button>
+            </td>
+            <th *ngIf="processSelected.status == 'Cerrado'">
+              {{ processSelected.close_description }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr />
+    <div>
+      <div class="card-title d-flex justify-content-between">
+        <h5>Involucrados</h5>
+        <button
+          *ngIf="processSelected.status != 'Cerrado'"
+          class="btn btn-primary btn-sm"
+          (click)="openConfirm(add)"
+        >
+          Agregar
         </button>
+      </div>
+      <div
+        class="rounded-top table-responsive"
+        *ngIf="!loading2 && anotaciones.length > 0; else notData2"
+      >
+        <table
+          class="table table-light table-sm"
+          *ngFor="let anotacion of anotaciones; let i = index"
+        >
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th>Creador</th>
+              <th>Involucrado</th>
+              <th>Memorandos</th>
+              <th>Observaciones</th>
+              <th>Fecha de creación</th>
+              <th *ngIf="anotacion.file">Archivo</th>
+              <th *ngIf="processSelected.status != 'Cerrado'">Anular</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-center">
+              <td class="align-middle">
+                {{
+                  anotacion.user.person.first_name +
+                    " " +
+                    anotacion.user.person.first_surname
+                }}
+              </td>
+              <td class="align-middle">
+                {{ anotacion.person.first_name }}
+                {{ anotacion.person.first_surname }}
+              </td>
+              <td class="align-middle">
+                <i
+                  [ngClass]="collapsed[i] ? 'fa-angle-up' : 'fa-angle-down'"
+                  class="fas text-primary"
+                  role="button"
+                  (click)="collapsed[i] = !collapsed[i]"
+                ></i>
+              </td>
+              <td class="align-middle">
+                {{ anotacion.observation }}
+              </td>
+              <td class="align-middle">{{ anotacion.created_at | date }}</td>
+              <td class="align-middle" *ngIf="anotacion.file">
+                <button
+                  type="button"
+                  class="btn btn-success btn-sm"
+                  (click)="download(anotacion.file, anotacion.fileType)"
+                >
+                  Descargar
+                </button>
+              </td>
+              <td
+                class="align-middle"
+                *ngIf="processSelected.status != 'Cerrado'"
+              >
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  type="button"
+                  (click)="cancelAnnotation(anotacion.id)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="collapsed[i]">
+              <ng-container
+                *ngIf="anotacion.memorandum_involved.length > 0; else notM"
+              >
+                <td class="align-middle" colspan="100%">
+                  <div class="rounded-top table-responsive">
+                    <table class="table table-light table-sm">
+                      <ng-container
+                        *ngIf="anotacion.memorandum_involved.length > 0"
+                      >
+                        <thead class="bg-light">
+                          <tr class="text-center text-uppercase">
+                            <th>Motivo</th>
+                            <th>Detalle</th>
+                            <th>Fecha de creación</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            class="text-center"
+                            *ngFor="let item of anotacion.memorandum_involved"
+                          >
+                            <td class="align-middle">
+                              {{ item.memorandum.memorandumtype.name }}
+                            </td>
+                            <td class="align-middle">
+                              {{ item.memorandum.details }}
+                            </td>
+                            <td class="align-middle">
+                              {{ item.memorandum.created_at | date }}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </ng-container>
+                    </table>
+                  </div>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div class="app-modal-body">
-        <form [formGroup]="formSeguimiento">
-            <div class="form-row">
-                <div class="col-6">
-                    <div class="form-group">
-                        <div class="col-12">
-                            <label class="custom-label" for="funcionario_id">Funcionario</label>
-                            <input id="typeahead" type="text" class="form-control form-control-sm" placeholder="Funcionario..." formControlName="person" (change)="getHistory()" [ngbTypeahead]="search" [inputFormatter]="inputFormatBandListValue" [resultFormatter]="resultFormatBandListValue"
-                                [editable]='false' />
-                            <ng-container *ngIf="person_id_valid">
-                                <small *ngFor="let item of formSeguimiento.get('person').errors | ObjToArrayPipe" class="text-danger">
-                                    {{ item?.msj }}
-                                </small>
-                            </ng-container>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-12">
-                            <label for="">Observaciones</label>
-                            <textarea class="form-control form-control-sm" name="ob" id="obervaciones" rows="3" formControlName="observation"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-12">
-                            <label for="importFile">Evidencia</label>
-                            <input #inputFile type="file" id="importFileP" (change)="onFileChanged($event)" accept=".pdf, .png, .jpg, .jpeg">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 panel">
-                    <div class="panel-body">
-                        <div class="ml-4">
-                            <div class="mt-5 text-center" *ngIf="!formSeguimiento.get('person').value">
-                                <i class="fa fa-exclamation-circle fa-3x"></i>
-                                <h4>Seleccione un funcionario</h4>
-                            </div>
-                            <div class="mt-5 text-center" *ngIf="historyInfo.length < 0">
-                                <i class="fas fa-cloud"></i>
-                                <h4>Sin Memorandos</h4>
-                            </div>
-                            <div class="mt-4">
-                                <div *ngFor="let historyInf of historyInfo; let i = index">
-                                    <input class="mr-2" type="checkbox" [value]="historyInf.details" [id]="historyInf.id" [date]="historyInf.created_at_memorandum" (change)="onSelectOption($event, i)" [name]="historyInf.memorandumType">
-                                    <label for="checkbox" class="ml-3">
-                                        <b lass="fs-3"> Memorando | <i styles="color:gray;"> {{
-                                                historyInf.created_at_memorandum | date:'MM-dd-yy' }} </i>
-                                        </b><br>
-                                        <strong>Categoria:</strong> <b> {{ historyInf.activity !="" ?
-                                            historyInf.memorandumType : 'Sin Categoria' }} </b>
-                                            <br>
-                                        <label>Detalle: {{ historyInf.details }} </label>
-                                    </label>
-                                    <hr>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+    <div class="card-title d-flex justify-content-between">
+      <h5 *ngIf="legalDocuments.length > 0">Documentos</h5>
     </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="closeModal()" type="button" class="btn btn-danger raised mr-2 btn-sm" (click)="closeModal()">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="agregarAnotacion(); inputFile.value=''">Guardar</button>
-        </div>
-    </div>
-</app-modal-basic>
 
-<app-modal-basic #modalClose [dialogClass]="'modal-sm'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> Cerrar proceso </h5>
-        <button type="button" class="close basic-close" (click)="modalClose.hide()">
-            <span aria-hidden="true">
-                <i class="fas fa-times" (click)="modalClose.hide()"></i>
+    <div class="row">
+      <ng-container *ngFor="let item of legalDocuments; let i = index">
+        <h6
+          class="col-12"
+          *ngIf="
+            !legalDocuments[i - 1] ||
+            item.motivo !== legalDocuments[i - 1].motivo
+          "
+        >
+          {{ item.motivo }}
+        </h6>
+        <div class="col-md-2 d-flex align-items-stretch">
+          <div class="card card-file w-100 border border-3 border-light">
+            <span class="float-right">
+              <button
+                type="button"
+                *ngIf="processSelected.status != 'Cerrado'"
+                placement="top"
+                ngbTooltip="Eliminar"
+                class="btn btn-sm btn-link shadow-none float-right"
+                (click)="deleteDocument(item)"
+              >
+                <span aria-hidden="true">
+                  <i class="fas fa-times text-danger"></i>
+                </span>
+              </button>
             </span>
-        </button>
+            <div
+              class="card-body pt-0 p-1"
+              (click)="downloadDocument(item)"
+              placement="left"
+              ngbTooltip="Descargar"
+            >
+              <h6 class="file-title text-center">
+                {{ item.name }}
+              </h6>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
-    <div class="app-modal-body">
-        <form [formGroup]="formSeguimiento">
-            <div class="form-row">
-                <div class="col-12">
-                    <div class="form-group">
-                        <label for="">Descripción</label>
-                        <textarea class="form-control form-control-sm" rows="3"></textarea>
+    <div *ngIf="processSelected">
+      <ng-container *ngIf="processSelected.status != 'Cerrado'">
+        <button
+          class="btn btn-primary btn-block"
+          (click)="openConfirm(addDocuments)"
+        >
+          Agregar documentos
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Agregar involucrados</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="formSeguimiento">
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Funcionario</mat-label>
+            <input
+              matInput
+              id="typeahead"
+              type="text"
+              placeholder="Busca el nombre del funcionario"
+              formControlName="person"
+              (change)="getHistory()"
+              [ngbTypeahead]="search"
+              [inputFormatter]="inputFormatBandListValue"
+              [resultFormatter]="resultFormatBandListValue"
+              [editable]="false"
+              required
+              autocomplete="off"
+            />
+            <mat-error *ngIf="person_id_valid">
+              <span
+                *ngFor="
+                  let item of formInvolved.get('person').errors | ObjToArrayPipe
+                "
+                class="text-danger"
+              >
+                {{ item?.msj }}
+              </span>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field
+            class="col-md-12 mat-form-field-no-padding textarea"
+            appearance="outline"
+          >
+            <mat-label>Observaciones</mat-label>
+            <textarea
+              matInput
+              placeholder="Ingrese las observaciones"
+              rows="5"
+              formControlName="observation"
+              name="ob"
+              required
+              id="obervaciones"
+              [cdkTextareaAutosize]="true"
+            ></textarea>
+          </mat-form-field>
+          <div class="col-md-12">
+            <div class="form-group text-center">
+              <div class="custom-input-file col-md-12">
+                <input
+                  type="file"
+                  #fileInvolved
+                  id="importFileP"
+                  class="input-file"
+                  (change)="onFileChanged($event)"
+                  accept=".pdf, .png, .jpg, .jpeg"
+                />
+                Cargar evidencia
+              </div>
+              <div class="col-md-12 text-center">
+                <small *ngIf="fileAnotacion" class="text-success"
+                  >Evidencia cargada</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 panel">
+          <div class="panel-body">
+            <div
+              class="mt-3 text-center"
+              *ngIf="formSeguimiento.get('person').value == ''"
+            >
+              <h1>
+                <i class="fa fa-exclamation-circle fa-3x text-warning"></i>
+              </h1>
+              <h6>Seleccione un usuario</h6>
+            </div>
+            <div
+              class="mt-3 text-center"
+              *ngIf="
+                historyInfo.length == 0 &&
+                formSeguimiento.get('person').value != ''
+              "
+            >
+              <h1><i class="fas fa-cloud fa-3x text-info"></i></h1>
+              <h6>Sin memorandos</h6>
+            </div>
+            <div *ngFor="let historyInf of historyInfo; let i = index">
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <div class="row">
+                    <div class="col-md-1">
+                      <input
+                        class="form-check-input ml-1"
+                        type="checkbox"
+                        [value]="historyInf.details"
+                        [id]="historyInf.id"
+                        [date]="historyInf.created_at_memorandum"
+                        (change)="onSelectOption($event, i)"
+                        [name]="historyInf.memorandumType"
+                      />
                     </div>
-                </div>
+                    <div class="col">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Memorando</h5>
+                        <small>{{
+                          historyInf.created_at_memorandum | date: "MM-dd-yy"
+                        }}</small>
+                      </div>
+                      <p class="mb-1">
+                        Categoría:
+                        {{
+                          historyInf.activity != ""
+                            ? historyInf.memorandumType
+                            : "Sin categoria"
+                        }}
+                      </p>
+                      <small>Detalle: {{ historyInf.details }} </small>
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modalClose.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cancelar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised">Cerrar</button>
+          </div>
         </div>
-    </div>
-</app-modal-basic>
-<app-modal-basic #modalDocuments [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> Agregar Documentos </h5>
-        <button type="button" class="close basic-close" (click)="hideModalDocuments()">
-            <span aria-hidden="true">
-                <i class="fas fa-times" (click)="hideModalDocuments()"></i>
-            </span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <div class="col-12">
-            <label for="">Documentos</label>
-            <div class="col">
-                <ngx-dropzone class="drop-zone" (change)="onSelect($event)">
-                    <ngx-dropzone-label>
-                        <span><i class="fas fa-cloud-download-alt"></i></span> Arrastre y suelte el archivo
-                    </ngx-dropzone-label>
-                    <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
-                        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                    </ngx-dropzone-preview>
-                </ngx-dropzone>
-            </div>
-        </div>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="hideModalDocuments()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="saveDocuments()">Guardar Documentos</button>
-        </div>
-    </div>
-</app-modal-basic>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="agregarAnotacion(); inputFile.value = ''"
+      class="btn btn-primary"
+      [disabled]="!formSeguimiento.valid"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #addDocuments let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Agregar documentos</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="formDocumentos">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Motivo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el motivo"
+            formControlName="motivo"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+    </form>
+    <h6 class="text-center">Documentos</h6>
+    <ngx-dropzone class="drop-zone" (change)="onSelect($event)">
+      <ngx-dropzone-label>
+        <span><i class="fas fa-cloud-download-alt"></i></span> Arrastre y suelte
+        el archivo
+      </ngx-dropzone-label>
+      <ngx-dropzone-preview
+        *ngFor="let f of files"
+        [removable]="true"
+        (removed)="onRemove(f)"
+      >
+        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+      </ngx-dropzone-preview>
+    </ngx-dropzone>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!formDocumentos.valid"
+      (click)="saveDocuments()"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
 <ng-template #notM>
-    <tr class="bg-light">
-        <td colspan="3" class="text-center">
-            <p class="text-dark">Sin memorandos agregados</p>
-        </td>
-    </tr>
+  <td class="align-middle" colspan="100%" class="text-center">
+    <div class="alert alert-info" role="alert">Sin memorandos agregados</div>
+  </td>
 </ng-template>
+
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
+
+<ng-template #notData2>
+  <app-not-data [loading]="loading2"></app-not-data>
+</ng-template>
+
+<!-- <app-modal-basic #modalClose [dialogClass]="'modal-sm'">
+  <div class="app-modal-header">
+    <h5 class="modal-title">Cerrar proceso</h5>
+    <button type="button" class="close basic-close" (click)="modalClose.hide()">
+      <span aria-hidden="true">
+        <i class="fas fa-times" (click)="modalClose.hide()"></i>
+      </span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form [formGroup]="formSeguimiento">
+      <div class="form-row">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="">Descripción</label>
+            <textarea class="form-control form-control-sm" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="form-group text-right">
+      <button
+        (click)="modalClose.hide()"
+        type="button"
+        class="btn btn-danger raised mr-2 btn-sm"
+      >
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary btn-sm raised">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</app-modal-basic> -->

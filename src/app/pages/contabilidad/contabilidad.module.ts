@@ -30,9 +30,12 @@ import { CrearFacturaAdministrativaComponent } from './factura-administrativa/cr
 import { ModalcierrecontableComponent } from './cierres-contables/modalcierrecontable/modalcierrecontable.component';
 import { ModalplancuentasComponent } from './cierres-contables/modalplancuentas/modalplancuentas.component';
 import { InventariosValorizadosComponent } from './inventarios-valorizados/inventarios-valorizados.component';
-
-
-
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 @NgModule({
   declarations: [
     PlanCuentasComponent,
@@ -71,7 +74,13 @@ import { InventariosValorizadosComponent } from './inventarios-valorizados/inven
     NgSelectModule,
     ComponentsModule,
     SweetAlert2Module.forRoot(),
-    MyDateRangePickerModule
+    MyDateRangePickerModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     Globales

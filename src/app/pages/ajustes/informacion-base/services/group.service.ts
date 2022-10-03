@@ -17,4 +17,8 @@ export class GroupService {
     return this.http.post(`${ environment.base_url }/group`,form)
   }
 
+  delete(id){
+    return this.http.delete(`${ environment.base_url }/group/${id}`)
+  }
+
 }

@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 export class MediomagneticoagrupacioncrearComponent implements OnInit {
 
   public datosCabecera:any = {
-    Titulo: 'Agrupar Medios Magneticos',
+    Titulo: 'Agrupar medios magnéticos',
     Fecha: new Date(),
   }
   

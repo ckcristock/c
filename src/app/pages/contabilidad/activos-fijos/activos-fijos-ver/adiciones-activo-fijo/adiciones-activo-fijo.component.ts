@@ -8,12 +8,12 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./adiciones-activo-fijo.component.scss']
 })
 export class AdicionesActivoFijoComponent implements OnInit {
-
-  @Input() Id:any;
-  public Adiciones:any = [];
+  loading: boolean = false
+  @Input() Id: any;
+  public Adiciones: any = [];
   // public funcionario:any = JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario;
   public reducer_total = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Costo);
-  envirom:any;
+  envirom: any;
 
   constructor(private http: HttpClient) { }
 
@@ -23,8 +23,10 @@ export class AdicionesActivoFijoComponent implements OnInit {
   }
 
   listarAdicionesActivo() {
-    this.http.get(environment.ruta + 'php/activofijo/adiciones_activo.php',{params: {id: this.Id}}).subscribe((data:any) => {
+    this.loading = true
+    this.http.get(environment.ruta + 'php/activofijo/adiciones_activo.php', { params: { id: this.Id } }).subscribe((data: any) => {
       this.Adiciones = data;
+      this.loading = false
     })
   }
 

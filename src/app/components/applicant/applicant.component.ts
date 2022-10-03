@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { JobService } from '../../pages/rrhh/vacantes/job.service';
 
 @Component({
@@ -9,16 +11,28 @@ import { JobService } from '../../pages/rrhh/vacantes/job.service';
 export class ApplicantComponent implements OnInit {
   @ViewChild('applicantM') applicantM;
   data: any = {};
-  constructor(  private _job: JobService ) {}
+  donwloading: boolean = false;
+  constructor(
+    private _job: JobService,
+    private modalService: NgbModal,
+    private _swal: SwalService
 
-  ngOnInit(): void {}
+  ) { }
+
+  ngOnInit(): void { }
 
   show(data) {
     this.data = data;
-    this.applicantM.show();
+    this.openConfirm(this.applicantM)
+    //this.applicantM.show();
+  }
+
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true })
   }
 
   download(id) {
+    this.donwloading = true
     this._job.download(id).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
       let link = document.createElement('a');
@@ -26,14 +40,23 @@ export class ApplicantComponent implements OnInit {
       link.href = window.URL.createObjectURL(blob);
       link.download = `${filename}.pdf`;
       link.click();
-     
-    }),
-      (error) => {
-        console.log('Error downloading the file');
-      
+      this.donwloading = false
+    },
+      (err: any) => {
+        console.log(err);
+        this._swal.show(
+          {
+            title: 'Error',
+            text: "Ha ocurrido un error descargando este archivo",
+            icon: "error",
+            showCancel: false
+          })
+        this.donwloading = false
       },
       () => {
         console.info('File downloaded successfully');
-      };
+        this.donwloading = false
+      }
+    )
   }
 }

@@ -1,115 +1,169 @@
-<div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <div class="row">
-                <div class="col-6">
-                    <h5>Datos Básicos</h5>
-                </div>
-                <div class="col-6">
-                    <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModal()">
-                        <i class="fas fa-pencil-alt"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Logo Empresa
-            </p>
-            <p class="col-6 font-weight-bold">
-                <img [src]="company.logo" alt="">
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Razón Social
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ company.social_reason }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                {{ company.document_type }}
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ company.document_number }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Fecha de Constitución
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ company.constitution_date }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Email de Contacto
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ company.email_contact }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Teléfono
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ company.phone }}
-            </p>
-        </div>
+<div class="card border border-3 border-light">
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h5>Datos básicos</h5>
+      <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
+        <i class="fas fa-pencil-alt"></i>
+      </button>
     </div>
+    <div class="rounded-top table-responsive">
+      <table class="table table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Logo</th>
+            <th>Razón social</th>
+            <th>NIT</th>
+            <th>Constitución</th>
+            <th>Correo electrónico</th>
+            <th>Teléfono</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td>
+              <img
+                [src]="company.logo"
+                onerror="this.src='../../../../../../assets/images/logo2.png'"
+                alt=""
+              />
+            </td>
+            <td>{{ company.social_reason }}</td>
+            <td>{{ company.document_number }}</td>
+            <td>{{ company.constitution_date }}</td>
+            <td>{{ company.email_contact }}</td>
+            <td>{{ company.phone }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Datos Básicos</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-          </button>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            <img [src]="company.logo" class="img-form d-block m-auto" alt="">
-                            <label for="image" class="subir-archivo mt-3">Cargar imagen</label>
-                            <input type="file" accept="image/*" name="image" (change)="onImageChanged($event)" class="form-control-file text-center" id="image" placeholder="Imagen" />
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            <label for="">Razón Social</label>
-                            <input type="text" formControlName="social_reason" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Tipo de Documento</label>
-                            <input type="text" formControlName="document_type" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Número de Documento</label>
-                            <input type="number" formControlName="document_number" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Digito de Verificación</label>
-                            <input type="number" formControlName="verification_digit" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Fecha de Constitución</label>
-                            <input type="date" formControlName="constitution_date" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Email de Contacto</label>
-                            <input type="email" formControlName="email_contact" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="">Teléfono de Contacto</label>
-                            <input type="number" formControlName="phone" class="form-control form-control-sm">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="saveBasicData()">Guardar</button>
-        </div>
-    </div>
-</app-modal-basic>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Datos básicos</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <img
+        [src]="company.logo"
+        class="img-form d-block m-auto"
+        alt=""
+        onerror="this.src='../../../../../../assets/images/logo2.png'"
+      />
+      <!-- <label for="image" class="subir-archivo mt-3">Cargar imagen</label>
+        <input
+          type="file"
+          accept="image/*"
+          name="image"
+          (change)="onImageChanged($event)"
+          class="form-control-file text-center"
+          id="image"
+          placeholder="Imagen"
+        /> -->
+      <div class="row mt-4">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Razón social</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la razón social"
+            formControlName="social_reason"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo de documento</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el tipo de documento"
+            formControlName="document_type"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Número de documento</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el número de documento"
+            formControlName="document_number"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Dígito de verificación</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el dígito de verificación"
+            formControlName="verification_digit"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha de constitución</mat-label>
+          <input
+            matInput
+            type="date"
+            formControlName="constitution_date"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Correo elctrónico</mat-label>
+          <input
+            matInput
+            placeholder="Ingresa el correo electrónico"
+            type="email"
+            formControlName="email_contact"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Teléfono de contacto</mat-label>
+          <input
+            matInput
+            placeholder="Ingresa el teléfono de contacto"
+            type="number"
+            formControlName="phone"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="saveBasicData()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>

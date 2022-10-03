@@ -40,6 +40,7 @@ import Swal from 'sweetalert2';
 import * as moment from 'moment';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { consts } from 'src/app/core/utils/consts';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-actividades',
@@ -50,7 +51,22 @@ export class ActividadesComponent {
   @ViewChild('ModalActividad') ModalActividad: any;
   @ViewChild('ModalTipoActividad') ModalTipoActividad: any;
   @ViewChild('ModalCambioEstado') ModalCambioEstado: any;
-
+  @ViewChild('add') add: any;
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(
+      confirm,
+      { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true })
+      .result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+  }
+  getDismissReason(reason: any) {
+    this.LimpiarModelo();
+    this.cliente_seleccionado = '';
+  }
   daysOfWeek = consts.diasSemana;
   Id_Dependencia = 1;
 
@@ -73,7 +89,7 @@ export class ActividadesComponent {
   cliente_seleccionado: any = '';
   funcionario_seleccionado: any = '';
   Funcionarios: any[] = [];
-  id_activity:any;
+  id_activity: any;
   alertOption: any = {};
   private eventoActividad: any;
   eventsModel: any;
@@ -115,7 +131,7 @@ export class ActividadesComponent {
   companies: any[] = [];
   groups: any[] = [];
   dependencies: any[] = [];
-  editar:boolean = false;
+  editar: boolean = false;
   constructor(
     private http: HttpClient,
     private _actividad: ActividadesService,
@@ -123,7 +139,8 @@ export class ActividadesComponent {
     private _group: GroupService,
     private _company: CompanyService,
     private _person: PersonService,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private modalService: NgbModal,
   ) {
     this.GetTiposActividad();
   }
@@ -135,13 +152,14 @@ export class ActividadesComponent {
     this.GetActividadesMes();
     //alert(`i'm here`);
     // console.log(this.ActividadModel);
-    
+
   }
+
   GetActividadesMes() {
     this._actividad.getActivities().subscribe((r: any) => {
       this.calendarEvents = r.data;
-      console.log(this.calendarEvents);
-      
+      // console.log(this.calendarEvents);
+
     });
     this.DataActivities = [];
     this.Actividades = [];
@@ -153,7 +171,22 @@ export class ActividadesComponent {
   eventrender(event, element) {
     // event.element[0].querySelectorAll(".fc-content")[0].setAttribute("data-tooltip", event.event.title);
   }
+  validarFechas() {
+    var fecha_inicio = this.ActividadModel.Fecha_Inicio
+    var fecha_fin = this.ActividadModel.Fecha_Fin
 
+    if (fecha_inicio >= fecha_fin && fecha_fin != "") {
+      this.ActividadModel.Fecha_Inicio = ''
+      this.ActividadModel.Fecha_Fin = ''
+      this._swal.show({
+        title: 'Fechas invalidas',
+        text: 'La fecha de inicio no puede ser mayor a la fecha de fin',
+        icon: 'error',
+        showCancel: false,
+      });
+
+    }
+  }
   SetCalendarData() {
     this.DataActivities = [];
     this.userLogin1 = 1;
@@ -216,7 +249,7 @@ export class ActividadesComponent {
   }
 
   GetTiposActividad() {
-    this._actividad.getActivityTypesAll().subscribe((r: any) => {
+    this._actividad.getActivityTypesActives().subscribe((r: any) => {
       if (r.data) {
         this.TiposActividad = r.data;
       }
@@ -232,6 +265,7 @@ export class ActividadesComponent {
           text: 'Se ha guardado correctamente',
           icon: 'success',
         });
+        this.modalService.dismissAll();
       }
     });
   }
@@ -258,14 +292,15 @@ export class ActividadesComponent {
         text: '¡Proceso exitoso!',
         title: (this.editar == true ? 'Actualizado con éxito' : 'Guardado con éxito'),
         icon: 'success',
-        showCancel: false
+        showCancel: false,
+        timer: 1000
       });
     });
   }
 
   CerrarModal() {
     this.LimpiarModelo();
-    this.ModalActividad.hide();
+    this.modalService.dismissAll();
     this.cliente_seleccionado = '';
   }
   search_funcionario: any = [];
@@ -289,7 +324,7 @@ export class ActividadesComponent {
     this.ActividadModel.Fecha_Inicio = moment
       .utc(data.date_start)
       .format('YYYY-MM-DD');
-      //.format('YYYY-MM-DDTHH:mm:ss.SSS');
+    //.format('YYYY-MM-DDTHH:mm:ss.SSS');
     this.ActividadModel.Fecha_Fin = moment
       .utc(data.date_end)
       .format('YYYY-MM-DD');
@@ -308,8 +343,9 @@ export class ActividadesComponent {
     this.getDependencies(data.group_id);
     this.Dependencia_Cargo(data.dependency_id);
     this.verificarUser();
-    this.ModalActividad.show();
-    this.ModalActividad.show();
+    this.openConfirm(this.add)
+    //this.ModalActividad.show();
+    //this.ModalActividad.show();
     this.verificarUser();
     this.FuncionariosSelec(this.ActividadModel.Id_Actividad_Recursos_Humanos);
     this.Grupo_Dependencia(this.ActividadModel.Id_Grupo);
@@ -331,12 +367,12 @@ export class ActividadesComponent {
       this.FuncionariosSele = r.data;
       console.log(this.FuncionariosSele);
       if (r.data) {
-         this.ActividadModel.Funcionario_Asignado =
+        this.ActividadModel.Funcionario_Asignado =
           this.FuncionariosSele.reduce((acc, el) => {
             return [...acc, el.person.id]
           }, [])
       } else {
-          this.ActividadModel.Funcionario_Asignado = ['0'];
+        this.ActividadModel.Funcionario_Asignado = ['0'];
       }
     });
   }
@@ -345,23 +381,27 @@ export class ActividadesComponent {
     this._actividad.cancelActivity(id).subscribe((r: any) => {
       if (r.code == 200) {
         this._swal.show({
-          text: 'Dia anulado',
+          text: 'Día anulado correctamente',
           title: 'Operación exitosa',
           icon: 'success',
+          showCancel: false,
+          timer: 1000
         });
       }
       this.GetActividadesMes();
     });
   }
 
-  cancelCycle(){
+  cancelCycle() {
     let code = this.actividadObj.code;
-    this._actividad.cancelCycleActivity(code, {state: 'Anulada'}).subscribe((r:any) => {
+    this._actividad.cancelCycleActivity(code, { state: 'Anulada' }).subscribe((r: any) => {
       if (r.code == 200) {
         this._swal.show({
-          text: 'Ciclo Anulado',
+          text: 'Ciclo anulado correctamente',
           title: 'Operación exitosa',
           icon: 'success',
+          showCancel: false,
+          timer: 1000
         });
       }
       this.GetActividadesMes();
@@ -386,6 +426,7 @@ export class ActividadesComponent {
     switch (accion) {
       case 'Ver':
         this.editarEvento();
+        this.editar = true;
         this.ver = 1;
         break;
       case 'Editar':
@@ -400,25 +441,26 @@ export class ActividadesComponent {
     }
   }
 
-  cancelOptions(){
+  cancelOptions() {
     Swal.fire({
-      title: 'Eliminar la actividad',
-      text: '¿Qué acción desea elegir?',
-      icon: 'warning',
+      title: 'Anular la actividad',
+      icon: 'question',
       showCancelButton: true,
       input: 'select',
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
+      confirmButtonColor: '#A3BD30',
       confirmButtonText: 'Continuar',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
       inputOptions: {
-        cancelAll: 'Anular Ciclo',
+        cancelAll: 'Anular ciclo',
         cancelDay: 'Anular día',
       },
-      inputPlaceholder: 'Operaciones...',
+      inputPlaceholder: 'Seleccionar...',
     }).then((result) => {
       if (result.value) {
         console.log(result.value);
-        result.value == 'cancelDay' ? this.anularDia() :  this.cancelCycle()
+        result.value == 'cancelDay' ? this.anularDia() : this.cancelCycle()
       }
     });
   }
@@ -426,38 +468,41 @@ export class ActividadesComponent {
 
   actividadObj: any = {};
   accionarEvento(event) {
-    if(event.event){
+    if (event.event) {
       let id = event.event._def.publicId;
       this.actividadObj = this.calendarEvents.find((x) => x.id == id);
       this.id_activity = id;
       if (this.actividadObj.state != 'Anulada') {
         this.eventoActividad = event;
         Swal.fire({
-          title: 'Escoja una acción',
-          text: '¿Qué acción desea elegir?',
-          icon: 'warning',
+          title: 'Elige una acción',
+          text: '',
+          icon: 'question',
           showCancelButton: true,
           input: 'select',
-          confirmButtonColor: '#34c38f',
-          cancelButtonColor: '#f46a6a',
+          confirmButtonColor: '#A3BD30',
           confirmButtonText: 'Continuar',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Cancelar',
+          reverseButtons: true,
           inputOptions: {
             Ver: 'Ver',
             Editar: 'Editar',
             Anular: 'Anular',
           },
-          inputPlaceholder: 'Operaciones...',
+          inputPlaceholder: 'Seleccionar...',
         }).then((result) => {
+          console.log(result)
           if (result.value) {
             this.accionEvento(result.value);
           }
         });
-          
+
         /*  accionEvento */
       }
     }
 
-    
+
   }
   Grupo_Dependencia(Grupo) {
     /* if (Grupo == "Todas") {

@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HotelesService } from './hoteles.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
+import { MatAccordion } from '@angular/material/expansion';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 
 @Component({
   selector: 'app-hoteles',
@@ -9,13 +12,24 @@ import { SwalService } from '../../../informacion-base/services/swal.service';
   styleUrls: ['./hoteles.component.scss']
 })
 export class HotelesComponent implements OnInit {
-  @ViewChild('modal') modal:any;
-  loading:boolean = false;
+  @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
+  loading: boolean = false;
   form: FormGroup;
-  cities:any[] = [];
-  hotels:any[] = [];
-  hotel:any = {};
-  title:any = '';
+  cities: any[] = [];
+  hotels: any[] = [];
+  hotel: any = {};
+  title: any = '';
   pagination = {
     page: 1,
     pageSize: 5,
@@ -24,24 +38,39 @@ export class HotelesComponent implements OnInit {
   filtro = {
     tipo: ''
   }
-  constructor( 
-                private fb:FormBuilder,
-                private _hoteles: HotelesService,
-                private _swal: SwalService
-              ) { }
+  constructor(
+    private fb: FormBuilder,
+    private _hoteles: HotelesService,
+    private _swal: SwalService,
+    private _validators: ValidatorsService,
+    private modalService: NgbModal,
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
     this.getCities();
     this.getHotels();
   }
-  
-  openModal(){
+
+  openModal() {
     this.modal.show();
-    this.title = 'Nuevo hotel';
   }
 
-  createForm(){
+  closeResult = '';
+  public openConfirm(confirm, titulo) {
+    this.title = titulo
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    this.form.reset();
+    
+  }
+
+  createForm() {
     this.form = this.fb.group({
       id: [this.hotel.id],
       type: ['', Validators.required],
@@ -57,28 +86,27 @@ export class HotelesComponent implements OnInit {
     })
   }
 
-  getCities(){
-    this._hoteles.getCities().subscribe((r:any) => {
+  getCities() {
+    this._hoteles.getCities().subscribe((r: any) => {
       this.cities = r.data;
     });
   }
 
-  getHotels( page = 1 ){
+  getHotels(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtro
     }
     this.loading = true;
-    this._hoteles.getHotels(params).subscribe((r:any) => {
+    this._hoteles.getHotels(params).subscribe((r: any) => {
       this.hotels = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     });
   }
 
-  getHotel(hotel){
-    this.hotel = {...hotel};
-    this.title = 'Editar Hotel';
+  getHotel(hotel) {
+    this.hotel = { ...hotel };
     this.form.patchValue({
       id: this.hotel.id,
       type: this.hotel.type,
@@ -94,15 +122,17 @@ export class HotelesComponent implements OnInit {
     })
   }
 
-  save(){
-    this._hoteles.createHotel(this.form.value).subscribe((r:any) => {
-      this.modal.hide();
+  save() {
+    this._hoteles.createHotel(this.form.value).subscribe((r: any) => {
+      this.modalService.dismissAll();
+      console.log(r)
       this.getHotels();
       this.form.reset();
       this._swal.show({
         icon: 'success',
-        title: '¡Creado!',
-        text: 'El hotel ha sido creado satisfactoriamente',
+        title: r.data,
+        text: '',
+        timer: 1000,
         showCancel: false
       })
     })

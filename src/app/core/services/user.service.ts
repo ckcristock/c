@@ -34,6 +34,11 @@ export class UserService {
       map((resp: any) => {
         const { id, usuario, change_password, person, menu } = resp.user;
         this.user = new User(id, usuario, change_password, person, menu);
+        //console.log(resp.user.state)
+        if(resp.user.state == 'Inactivo'){
+          this.logout();
+          return false;
+        } 
         this.guardarLocalStorage(resp.token);
         return true;
       }),
@@ -45,6 +50,7 @@ export class UserService {
     localStorage.removeItem('token');
 
     this.router.navigateByUrl('/login');
+    window.location.reload();
   }
 
   login(formData: LoginForm) {

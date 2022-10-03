@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
-import {ExtraHoursService} from '../extra-hours.service';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { ExtraHoursService } from '../extra-hours.service';
 
 @Component({
   selector: 'app-semanas-extras',
@@ -25,7 +26,10 @@ export class SemanasExtrasComponent implements OnInit {
   active = false;
   withColor = '#9da4ad';
   /**End */
-  constructor(private _asignacion: ExtraHoursService) {}
+  constructor(
+    private _asignacion: ExtraHoursService,
+    private _swal: SwalService
+  ) { }
 
   ngOnInit(): void {
     this.changeWeek.subscribe((d) => {
@@ -38,7 +42,7 @@ export class SemanasExtrasComponent implements OnInit {
     });
   }
 
-  asignarHorariosMasivo() {}
+  asignarHorariosMasivo() { }
   fillDiasSemana() {
     while (this.diaInicialSemana < this.diaFinal) {
       this.diasSemana.push({
@@ -77,14 +81,14 @@ export class SemanasExtrasComponent implements OnInit {
     return turn;
   }
 
-  getColorByDay( dia ) {
-   /* if (dia.turno == 0) {
-      dia.color = '#000';
-    } else {
-      dia.color = this.turnos.find(
-        (turno) => turno.id == dia.turno
-      ).color;
-    }*/
+  getColorByDay(dia) {
+    /* if (dia.turno == 0) {
+       dia.color = '#000';
+     } else {
+       dia.color = this.turnos.find(
+         (turno) => turno.id == dia.turno
+       ).color;
+     }*/
   }
 
   formatFecha(fecha) {
@@ -92,24 +96,35 @@ export class SemanasExtrasComponent implements OnInit {
   }
 
   makeHorario() {
-
-    let horarios = [];
-    this.people.forEach((funcionario) => {
-      funcionario.diasSemana.forEach((dia) => {
-        if (dia.horaExtra) {
-          horarios.push({
-            person_id: funcionario.id,
-            overtimes: dia.horaExtra,
-            date: dia.fecha,
-            weeks_number: moment().format('ww'),
+    console.log('prueba')
+    this._swal
+      .show({
+        title: '¿Estás seguro(a)?',
+        text: 'Te dispones a asignar horarios',
+        icon: 'question',
+        showCancel: true,
+      }).then((r) => {
+        if (r.isConfirmed) {
+          let horarios = [];
+          this.people.forEach((funcionario) => {
+            funcionario.diasSemana.forEach((dia) => {
+              if (dia.horaExtra) {
+                horarios.push({
+                  person_id: funcionario.id,
+                  overtimes: dia.horaExtra,
+                  date: dia.fecha,
+                  weeks_number: moment().format('ww'),
+                });
+              }
+            });
           });
-        }
-      });
-    });
 
-    if (horarios.length) {
-      this.saveHours(horarios);
-    }
+          if (horarios.length) {
+            this.saveHours(horarios);
+          }
+        }
+      })
+
   }
   asignarHorariosExistentes() {
     this.people.forEach((funcionario) => {
@@ -135,7 +150,24 @@ export class SemanasExtrasComponent implements OnInit {
       }
     });
   }
-    saveHours(horarios) {
-    this._asignacion.save(horarios).subscribe((r: any) => {});
+  saveHours(horarios) {
+    this._asignacion.save(horarios).subscribe((r: any) => {
+      this._swal.show({
+        icon: 'success',
+        title: 'Guardado con éxito',
+        text: '',
+        showCancel: false,
+        timer: 1000
+      });
+    },
+      (err) => {
+        this._swal.show({
+          icon: 'error',
+          text: 'Ha ocurrido un error',
+          title: 'Operación erronea',
+          showCancel: false,
+        });
+      }
+    );
   }
 }

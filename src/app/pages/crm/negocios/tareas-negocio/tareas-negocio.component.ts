@@ -4,6 +4,7 @@ import { from } from 'rxjs';
 import { PersonService } from '../../../ajustes/informacion-base/persons/person.service';
 import { NegociosService } from '../negocios.service';
 import Swal from 'sweetalert2';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class TareasNegocioComponent implements OnInit {
 
 
   constructor(private _people: PersonService, private _negocios: NegociosService,
-    private fb: FormBuilder
+    private fb: FormBuilder, private modalService: NgbModal,
   ) { }
 
   ngOnInit(): void {
@@ -36,7 +37,22 @@ export class TareasNegocioComponent implements OnInit {
     this.getPeople()
     this.getTasks()
   }
-
+  closeResult = '';
+  public openConfirm(confirm) {
+    /*
+    this.indexSelected = index;
+    this.indexSelected ? this.createForm(data) : this.createForm();
+    this.modal.show()*/
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'sm', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    this.form.reset();
+    
+  }
   getPeople() {
     this._people.getPeopleIndex().subscribe((r: any) => {
       this.peopleSelects = r.data;
@@ -61,8 +77,8 @@ export class TareasNegocioComponent implements OnInit {
   }
 
 
-  editTask(data) {
-    this.modal.show();
+  editTask(data, add) {
+    this.openConfirm(add)
     this.form.patchValue({
       id: data.id,
       person_id: data.person_id,
@@ -83,7 +99,7 @@ export class TareasNegocioComponent implements OnInit {
           text: '',
         });
         this.updateListTask.emit();
-        this.modal.hide();
+        this.modalService.dismissAll(); 
       });
     } else {
 
@@ -95,7 +111,7 @@ export class TareasNegocioComponent implements OnInit {
           text: '',
         });
         this.updateListTask.emit();
-        this.modal.hide();
+        this.modalService.dismissAll(); 
       });
     }
   }
@@ -113,15 +129,9 @@ export class TareasNegocioComponent implements OnInit {
    * @param data ? on edit mode
    * @param index ? index of value
    */
-  open() {
-    this.modal.show()
-    /*
-    this.indexSelected = index;
-    this.indexSelected ? this.createForm(data) : this.createForm();
-    this.modal.show()*/
-  }
+ 
 
-  closeModal(){
+  closeModal() {
     this.form.reset();
     this.modal.hide();
   }

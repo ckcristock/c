@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { log } from 'util';
 import { ValidatorsService } from '../../../services/reactive-validation/validators.service';
 import { SwalService } from '../../../services/swal.service';
@@ -22,7 +23,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
   @Input('openModal') openModal: EventEmitter<any>;
   @Output('saved') saved = new EventEmitter<any>();
 
-  turns : any[]
+  turns: any[]
   forma: FormGroup;
   show = false;
 
@@ -30,8 +31,9 @@ export class CreateTurnoRotativoComponent implements OnInit {
     private fb: FormBuilder,
     private _valReactive: ValidatorsService,
     private _rotatingT: RotatingTurnService,
-    private _swal: SwalService
-  ) {}
+    private _swal: SwalService,
+    private modalService: NgbModal,
+  ) { }
 
   ngOnInit(): void {
     this.getAll();
@@ -45,13 +47,25 @@ export class CreateTurnoRotativoComponent implements OnInit {
         this.getTur(id);
       }
       this.show = true;
-      this.modal.show();
+      //this.modal.show();
+      this.openConfirm(this.modal)
     });
   }
-  getAll(){
-    this._rotatingT.getAll().subscribe((r:any)=>{
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    
+  } F
+  getAll() {
+    this._rotatingT.getAll().subscribe((r: any) => {
       this.turns = r.data
-      this.turns.unshift({text:'Descanso', value:0})
+      this.turns.unshift({ text: 'Descanso', value: 0 })
     });
   }
   getTur(id) {
@@ -91,8 +105,8 @@ export class CreateTurnoRotativoComponent implements OnInit {
       color: [this.colorHex()],
       breack_time: ['', this._valReactive.required],
       breack_time_two: ['', this._valReactive.required],
-      saturday_id:[0],
-      sunday_id:[0],
+      saturday_id: [0],
+      sunday_id: [0],
       id: [0],
     });
     this.forma.get('launch_time').disable();
@@ -124,23 +138,23 @@ export class CreateTurnoRotativoComponent implements OnInit {
     });
   }
 
-  generateLetters(){
-    let letters = ['a','b','c','d','e','f','0','1','2','3','4','5','6','7','8','9'];
-    let number = (Math.random()*15).toFixed(0);
+  generateLetters() {
+    let letters = ['a', 'b', 'c', 'd', 'e', 'f', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    let number = (Math.random() * 15).toFixed(0);
     return letters[number];
   }
-    
-  colorHex(){
+
+  colorHex() {
     let color = "";
-    for(let i = 0; i< 6; i++){
+    for (let i = 0; i < 6; i++) {
       color = color + this.generateLetters();
     }
     return "#" + color;
-    
+
   }
 
   save() {
-   
+
     this.forma.markAllAsTouched();
     if (this.forma.invalid) {
       return false;
@@ -149,7 +163,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
       .show({
         title: '¿Está seguro?',
         text: 'Se va a crear/actualizar el turno rotativo',
-        icon: 'warning',
+        icon: 'question',
       })
       .then((r) => {
         if (r.isConfirmed) {
@@ -174,8 +188,9 @@ export class CreateTurnoRotativoComponent implements OnInit {
         text: 'Se ha guardado correctamente el turno',
         icon: 'success',
         showCancel: false,
+        timer: 1000
       });
-      this.modal.hide();
+      this.modalService.dismissAll(); 
       this.saved.emit();
     } else {
       this._swal.show({

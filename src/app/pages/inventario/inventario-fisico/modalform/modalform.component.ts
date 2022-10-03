@@ -73,13 +73,13 @@ export class ModalformComponent implements OnInit {
           this.router.navigate(['/inventario/inventario-estiba',data.Id_Doc_Inventario_Fisico]);
           this.activeModal.close('Close click')
 
-          const modalAlertReference = this.modalService.open(ModalAlert, { size: 'lg', centered: true, backdrop:'static'});
+          const modalAlertReference = this.modalService.open(ModalAlert, { size: 'lg', centered: true, backdrop:'static', scrollable: true});
           modalAlertReference.componentInstance.tipo = data.Tipo
           modalAlertReference.componentInstance.title = data.Title
           modalAlertReference.componentInstance.texto = data.Text
 
         } else{
-          const modalAlertReference = this.modalService.open(ModalAlert, { size: 'lg', centered: true, backdrop:'static'});
+          const modalAlertReference = this.modalService.open(ModalAlert, { size: 'lg', centered: true, backdrop:'static', scrollable: true});
           modalAlertReference.componentInstance.tipo = data.Tipo
           modalAlertReference.componentInstance.title = data.Title
           modalAlertReference.componentInstance.texto = data.Text
@@ -108,7 +108,7 @@ export class ModalformComponent implements OnInit {
       </button>
     </div>
     <div class="modal-body d-flex flex-row align-items-center">
-       <i class="fa  fa-5x" [ngClass]="{'text-danger fa-times-circle':!success, 'text-primary fa-check-circle':success}"></i>
+       <i class="fa  fa-5x" [ngClass]="{'text-danger font-weight-bold fa-times-circle':!success, 'text-primary fa-check-circle':success}"></i>
       <h5 class="ml-2 text-alert">{{texto}}</h5>
     </div>
     <div class="modal-footer">

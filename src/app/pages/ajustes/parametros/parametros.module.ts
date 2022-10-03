@@ -36,13 +36,17 @@ import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.compo
 import { CategoriasComponent } from './categorias/categorias.component';
 import { SubcategoriasComponent } from './subcategorias/subcategorias.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-
-
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 
 
 @NgModule({
-    declarations : [
+    declarations: [
         NotasTecnicasComponent,
         // PerfilesComponent,
         ZonasComponent,
@@ -84,10 +88,16 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         CommonModule,
         PerfectScrollbarModule,
         PipesModule,
+        MatExpansionModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatToolbarModule,
+        MatPaginatorModule,
         SweetAlert2Module.forRoot(),
 
     ],
     exports: []
 })
 
-export class ParametrosModule {}
+export class ParametrosModule { }

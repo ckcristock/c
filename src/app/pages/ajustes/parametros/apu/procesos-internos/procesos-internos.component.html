@@ -14,12 +14,12 @@
         </div>
         <hr class="bg-primary">
         <table class="table table-borderless table-striped" *ngIf="!loading && processes.length > 0; else notData">
-            <thead class="bg-light">
+            <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Unidad</th>
                     <th>Costo</th>
-                    <th class="text-center">Acciones</th>
+                    <th class="text-center col-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,12 +29,12 @@
                     <td> {{ item.unit_cost }} </td>
                     <td>
                         <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                            <div ngbDropdown container="body" class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm  waves-light " type="button">
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getProcess(item); modal.show()">
+                                    <a class="dropdown-item waves-light text-info  caja-botones" (click)="getProcess(item); modal.show()">
                                         <i class="far fa-edit"></i> Editar
                                     </a>
                                 </div>

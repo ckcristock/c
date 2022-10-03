@@ -17,6 +17,7 @@ export class MediomagagrupadosespComponent implements OnInit {
   public listaMediosMag:any = [];
   public alertOption: SweetAlertOptions;
   public IdMedioMag:string = '';
+  public Cargando: boolean=true;
   enviromen:any;
 
   constructor(public globales: Globales, private http: HttpClient, private swalService: SwalService) { 
@@ -42,9 +43,14 @@ export class MediomagagrupadosespComponent implements OnInit {
     this.listaFormatosAgrupados();
     this.enviromen = environment
   }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
 
   listaFormatosAgrupados() {
     this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/lista_medios_magneticos_agrupados.php').subscribe((data:any) => {
+      this.Cargando = false
       this.listaMediosMag = data;
     })
   }

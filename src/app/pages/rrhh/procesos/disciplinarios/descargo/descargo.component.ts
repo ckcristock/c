@@ -12,6 +12,7 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators'
 import * as moment from 'moment';
 import { PermissionService } from '../../../../../core/services/permission.service';
 import { Permissions } from '../../../../../core/interfaces/permissions-interface';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-descargo',
@@ -19,8 +20,8 @@ import { Permissions } from '../../../../../core/interfaces/permissions-interfac
   styleUrls: ['./descargo.component.scss']
 })
 export class DescargoComponent implements OnInit {
-  @ViewChild('modal') modal:any;
-  @ViewChild('modalDocuments') modalDocuments:any;
+  @ViewChild('modal') modal: any;
+  @ViewChild('modalDocuments') modalDocuments: any;
   pagination = {
     page: 1,
     pageSize: 5,
@@ -32,10 +33,12 @@ export class DescargoComponent implements OnInit {
     code: ''
   }
   loading = false;
+  loading2 = false;
 
   processSelected: any;
   process: any;
   formSeguimiento: FormGroup;
+  formDocumentos: FormGroup;
   formfiles: FormGroup;
   anotaciones: any[] = [];
   fullNameSelected: string = '';
@@ -47,7 +50,7 @@ export class DescargoComponent implements OnInit {
   filesString: any;
   type: any;
   typeDoc: any;
-  historyInfo:any[] = [];
+  historyInfo: any[] = [];
   people: any[] = [];
   anotacion: {
     description: string,
@@ -63,14 +66,15 @@ export class DescargoComponent implements OnInit {
       open: false
     }
   };
-  collapsed:boolean[] = [];
+  collapsed: boolean[] = [];
   date: Date = new Date();
-  seleccionadas:any[] = [];
+  seleccionadas: any[] = [];
   files: File[] = [];  // Para Documentos legales
-  fileArr:any[] = [];
-  legalDocuments:any[] = [];
-  fileType:any;
-  filename:any;
+  fileArr: any[] = [];
+  legalDocuments: any[] = [];
+  fileType: any;
+  filename: any;
+  closeResult = '';
   constructor(
     private fb: FormBuilder,
     private _descargo: DescargoService,
@@ -78,7 +82,8 @@ export class DescargoComponent implements OnInit {
     private _swal: SwalService,
     private disciplinarioService: DisciplinariosService,
     private router: Router,
-    private _permission: PermissionService
+    private _permission: PermissionService,
+    private modalService: NgbModal,
   ) { this.permission = this._permission.validatePermissions(this.permission) }
 
   ngOnInit(): void {
@@ -87,17 +92,39 @@ export class DescargoComponent implements OnInit {
     this.getAnnotation();
     this.getPeople();
     this.createForm();
+    this.createFormDocuments();
     this.getLegalDocument();
   }
 
-  openModal(){
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    this.formDocumentos.reset()
+    this.hideModalDocuments()
+    this.historyInfo = [];
+    this.formSeguimiento.reset();
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  openModal() {
     this.modal.show();
   }
-  closeModal(){
+ /*  closeModal() {
     this.modal.hide();
     this.historyInfo = [];
     this.formSeguimiento.reset();
-  }
+  } */
 
   inputFormatBandListValue(value: any) {
     if (value.text)
@@ -123,32 +150,40 @@ export class DescargoComponent implements OnInit {
       file: [''],
       filename: [''],
       type: ['']
-    });    
+    });
   }
 
-  createForm(){
+  createForm() {
     this.formSeguimiento = this.fb.group({
       person_id: [''],
       person: ['', Validators.required],
       file: [''],
-      filename:[''],
+      filename: [''],
       type: [''],
-      observation:[''],
-      disciplinary_process_id:['']
+      observation: [''],
+      disciplinary_process_id: ['']
     })
   }
 
-  fileControl(file, name, type){
+  createFormDocuments() {
+    this.formDocumentos = this.fb.group({
+      motivo: ['', Validators.required],  
+      documento: ['', Validators.required]    
+    })
+  }
+
+  fileControl(file, name, type, motivo) {
     let group = {
       name: name,
       file: file,
       type: type,
-      disciplinary_process_id: this.filtros.code
+      disciplinary_process_id: this.filtros.code,
+      motivo: motivo
     }
     return group;
   }
 
-  get fileList(){
+  get fileList() {
     return this.formfiles.get('files') as FormArray
   }
 
@@ -167,7 +202,7 @@ export class DescargoComponent implements OnInit {
   }
 
   getDisciplinaryProcess(page = 1) {
-
+    this.loading2 = true
     let params = {
       ...this.pagination, ...this.filtros
     }
@@ -179,16 +214,18 @@ export class DescargoComponent implements OnInit {
         this.pagination.collectionSize = res.data.total;
       }, () => { }, () => {
         this.processSelected = this.process[0];
-        this.anotaciones = JSON.parse(this.processSelected.anotaciones ? this.processSelected.anotaciones : null) || [];
+        this.loading2 = false
         this.file = this.processSelected.file;
         this.fileType = this.processSelected.fileType;
         this.fullNameSelected = `${this.processSelected.person.first_name} ${this.processSelected.person.first_surname}`
+        //this.anotaciones = JSON.parse(this.processSelected.anotaciones ? this.processSelected.anotaciones : null) || [];
       });
   }
 
-  getLegalDocument(){
-    this._descargo.getFilesToDownload(this.filtros.code).subscribe((file:any) => {
+  getLegalDocument() {
+    this._descargo.getFilesToDownload(this.filtros.code).subscribe((file: any) => {
       this.legalDocuments = file.data;
+      this.legalDocuments = this.legalDocuments.sort((a,b) => a.motivo > b.motivo ? 1 : -1);
     })
   }
 
@@ -198,9 +235,10 @@ export class DescargoComponent implements OnInit {
       let file = event.target.files[0];
       const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
       if (!types.includes(file.type)) {
-        Swal.fire({
+        this._swal.show({
           icon: 'error',
           title: 'Error de archivo',
+          showCancel: false,
           text: 'El tipo de archivo no es válido'
         });
         return null
@@ -222,38 +260,39 @@ export class DescargoComponent implements OnInit {
 
   onSelect(event) {
     this.files.push(...event.addedFiles);
+    this.formDocumentos.get('documento').setValue(true) 
   }
 
   onRemove(event) {
     this.files.splice(this.files.indexOf(event), 1);
   }
 
-  memorandumsGroup(event){
-    let group = this.fb.group({ 
-      value: event.target.value, 
-      id: event.target.id, 
+  memorandumsGroup(event) {
+    let group = this.fb.group({
+      value: event.target.value,
+      id: event.target.id,
       name: event.target.name,
-      date: event.target.date 
+      date: event.target.date
     });
     return group;
   }
 
   agregarAnotacion() {
-    this.formSeguimiento.patchValue({person_id: this.formSeguimiento.value.person.value})
+    this.formSeguimiento.patchValue({ person_id: this.formSeguimiento.value.person.value })
     let valid = this.anotaciones.some(r => r.person_id == this.formSeguimiento.value.person_id)
     if (valid) {
       this._swal.show({
         icon: 'warning',
         title: '¡Ooops!',
-        text: 'El funcionario que intenta ingresar ya se encuentra como involucrado en el proceso',
+        text: 'El funcionario que intentas ingresar ya se encuentra involucrado en el proceso',
         showCancel: false
       })
       this.historyInfo = []
       this.seleccionadas = []
     } else {
       this._swal.show({
-        title: '¿Estas seguro?',
-        text: 'Se dispone a guardar la anotación',
+        title: '¿Estás seguro(a)?',
+        text: 'Guardar anotación',
         icon: 'question'
       }).then(r => {
         if (r.isConfirmed) {
@@ -267,18 +306,19 @@ export class DescargoComponent implements OnInit {
           this.formSeguimiento.addControl('memorandums', this.fb.control(this.seleccionadas))
           let forma = this.formSeguimiento.value;
           forma.memorandums = this.seleccionadas;
-          this._descargo.createAnotacion(forma).subscribe( (data:any) => {
+          this._descargo.createAnotacion(forma).subscribe((data: any) => {
             this.fileAnotacion = null;
             this.formSeguimiento.reset();
             this.getAnnotation();
-            this.modal.hide();
+            this.modalService.dismissAll(); 
             this.historyInfo = [];
             // this.seleccionadas = [];
             this._swal.show({
               icon: 'success',
               title: 'Guardado correctamente',
-              text: 'La Anotación a sido agregada con éxito',
-              showCancel: false
+              text: 'La anotación ha sido agregada con éxito',
+              showCancel: false,
+              timer: 1000
             })
           })
         }
@@ -286,13 +326,12 @@ export class DescargoComponent implements OnInit {
     }
   }
 
-  hideModalDocuments(){
-    this.modalDocuments.hide();
+  hideModalDocuments() {
     this.files = [];
     this.fileArr = [];
   }
 
-  saveDocuments(){
+  saveDocuments() {
     this.files.forEach(elem => {
       let file = elem;
       var reader = new FileReader();
@@ -304,12 +343,12 @@ export class DescargoComponent implements OnInit {
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.fileD = base64;
-        this.fileArr.push(this.fileControl(this.filesString, file.name, this.typeDoc));
+        this.fileArr.push(this.fileControl(this.filesString, file.name, this.typeDoc, this.formDocumentos.get('motivo').value));
       });
     });
     setTimeout(() => {
-      this._descargo.saveFiles(this.fileArr).subscribe((r:any) => {
-        this.modalDocuments.hide();
+      this._descargo.saveFiles(this.fileArr).subscribe((r: any) => {
+        this.modalService.dismissAll(); 
         this.getLegalDocument();
         this.files = [];
         this.fileArr = [];
@@ -317,38 +356,38 @@ export class DescargoComponent implements OnInit {
           icon: 'success',
           title: 'Guardado correctamente',
           text: 'Los documentos han sido guardados correctamente',
-          showCancel: false
+          showCancel: false,
+          timer: 1000
         })
       })
     }, 100);
   }
 
-  deleteDocument(file){
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Se eliminará el documento del proceso!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, Eliminar!'
+  deleteDocument(file) {
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: "Se eliminará el documento del proceso",
     }).then((result) => {
       if (result.isConfirmed) {
-        this._descargo.deleteDocuments({state: 'Inactivo'}, file.id)
-        .subscribe((r:any) => {
-          Swal.fire({
-            icon: 'success',
-            title: '¡Documento eliminado!',
-            text: 'Documento eliminado del proceso satisfactoriamente'
-          });
-          this.getLegalDocument()
-        })
+        this._descargo.deleteDocuments({ state: 'Inactivo' }, file.id)
+          .subscribe((r: any) => {
+            this._swal.show({
+              icon: 'success',
+              title: '¡Documento eliminado!',
+              showCancel: false,
+              text: 'Documento eliminado del proceso satisfactoriamente',
+              timer: 1000
+            })
+            this.getLegalDocument()
+          })
       }
     })
   }
 
   onSelectOption(event): void {
-    let seleccionada = { value: event.target.value, id: event.target.id, name: event.target.name, date: event.target.date  }
+    let seleccionada = { value: event.target.value, id: event.target.id, name: event.target.name, date: event.target.date }
     if (event.target.checked) {
       // Add the new value in the selected options
       this.seleccionadas.push((seleccionada));
@@ -360,17 +399,17 @@ export class DescargoComponent implements OnInit {
     }
   }
 
-  closeProccess(){
+  closeProccess() {
     Swal.fire({
-      title: 'Cerrar Proceso',
+      title: 'Cerrar proceso',
       text: 'Descripción del cierre de proceso',
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       input: 'text',
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Cerrar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonColor: '#A3BD30',
+      confirmButtonText: 'Continuar',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.value) {
         let date = moment().format('YYYY-MM-DD');
@@ -379,56 +418,66 @@ export class DescargoComponent implements OnInit {
           close_description: result.value,
           date_end: date
         }
-        this._descargo.closeOrOpenProccess(this.filtros.code, data).subscribe((data:any) => {
+        this._descargo.closeOrOpenProccess(this.filtros.code, data).subscribe((data: any) => {
           this.router.navigate(['/rrhh/procesos/disciplinarios'])
-          Swal.fire('Success', 'Cerrado con éxito', 'success')
+          this._swal.show({
+            icon: 'success',
+            title: 'Cerrado con éxito',
+            showCancel: false,
+            text: '',
+            timer: 1000
+          })
         })
       }
     });
   }
 
-  openProccess(){
-    Swal.fire({
-      title: 'Abrir Proceso',
+  openProccess() {
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
       text: '¡El proceso será abierto nuevamente!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Abrir',
-      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
-        this._descargo.closeOrOpenProccess(this.filtros.code, {status: 'Abierto'}).subscribe((data:any) => {
+        this._descargo.closeOrOpenProccess(this.filtros.code, { status: 'Abierto' }).subscribe((data: any) => {
           this.router.navigate(['/rrhh/procesos/disciplinarios'])
-          Swal.fire('Success', 'Abierto con éxito', 'success')
+          this._swal.show({
+            icon: 'success',
+            title: 'Operación exitosa',
+            showCancel: false,
+            text: 'Abierto con éxito',
+            timer: 1000
+          })
         })
       }
     });
   }
 
-  getAnnotation(){
+  getAnnotation() {
     this.loading = true;
-    this._descargo.getAnnotations(this.filtros.code).subscribe((data:any) => {
+    this._descargo.getAnnotations(this.filtros.code).subscribe((data: any) => {
       this.anotaciones = data.data
       this.loading = false;
     })
   }
 
-  cancelAnnotation(id){
-    Swal.fire({
-      title: '¿Anular Anotacion?',
-      text: '¡La anotación  será anulada del proceso!',
+  cancelAnnotation(id) {
+    this._swal.show({
       icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Continuar',
-      cancelButtonText: 'Cancelar'
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: '¡La anotación será anulada del proceso!',
     }).then((result) => {
       if (result.value) {
-        this._descargo.cancelAnnotation(id, {state: 'Inactivo'}).subscribe((data:any) => {
-          Swal.fire('Success', 'Anulado con éxito', 'success')
+        this._descargo.cancelAnnotation(id, { state: 'Inactivo' }).subscribe((data: any) => {
+          this._swal.show({
+            icon: 'success',
+            title: 'Operación exitosa',
+            showCancel: false,
+            text: 'Anulado con éxito',
+            timer: 1000
+          })
           this.getAnnotation();
         })
       }

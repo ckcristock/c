@@ -1,85 +1,262 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-sm btn-primary" style="float: right;" [routerLink]="['/crm/crear-tercero']">
-                <i class="fa fa-plus"></i>
-                Agregar Tercero
-            </button>
-            <h5 class="text-primary">Terceros</h5>
-            <p>Todos los terceros registrados en nuestras bases de datos.</p>
+  <div class="card-body">
+    <div
+      class="row card-title d-flex justify-content-between"
+      *ngIf="paginacion"
+    >
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">
+          Terceros
+          <span style="font-size: smaller"
+            ><small class="pb-2 text-secondary text-muted"
+              >pág. {{ paginacion.current_page }}</small
+            ></span
+          >
+        </h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            [routerLink]="['/crm/terceros/crear-tercero']"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
-        <div class="form-row mt-4 ml-1">
-            <div class="form-group col-2">
-                <label for="">Filtro NIT</label>
-                <input type="text" class="form-control form-control-sm" name="nit" [(ngModel)]="filtros.nit" (change)="getThirdParties()">
-            </div>
-            <div class="form-group col-2">
-                <label for="">Filtro Nombre</label>
-                <input type="text" class="form-control form-control-sm" name="name" [(ngModel)]="filtros.name" (change)="getThirdParties()">
-            </div>
-            <div class="form-group col-2">
-                <label for="">Filtro Tipo Tercero</label>
-                <select class="form-control form-control-sm" name="third" [(ngModel)]="filtros.third_party_type" (change)="getThirdParties()">
-                    <option value="Todos" selected>Todos</option>
-                    <option value="Cliente">Cliente</option>
-                    <option value="Proveedor">Proveedor</option>
-                </select>
-            </div>
-        </div>
-        <table class="table table-borderless table-striped" *ngIf="!loading && thirdParties.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th></th>
-                    <th>NIT</th>
-                    <th>Nombre Terceros</th>
-                    <th>Dirección</th>
-                    <th>Municipio</th>
-                    <th>Telefono / Celular</th>
-                    <th>Tipo Tercero</th>
-                    <th>Estado</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let third of thirdParties" [ngClass]="{'bg-danger text-white': (third.state == 'Inactivo')}">
-                    <th>
-                        <img [src]="third.image | image" class="p-0 m-0">
-                    </th>
-                    <td> {{ third.nit }} </td>
-                    <td> {{ third.first_name }} {{ third.first_surname }} </td>
-                    <td> {{ third.cod_dian_address }} </td>
-                    <td> {{ third.municipality.name }} </td>
-                    <td> {{ third.landline }} / {{ third.cell_phone }} </td>
-                    <td> {{ third.third_party_type }} </td>
-                    <td>{{ third.state }}</td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/editar-tercero', third.id]">
-                                        <i class="far fa-edit"></i> editar
-                                    </a>
-                                    <a *ngIf="third.state == 'Activo'" (click)="changeState(third, 'Inactivo')" class="dropdown-item waves-light text-danger waves-effect caja-botones">
-                                        <i class="far fa-trash-alt"></i> Anular
-                                    </a>
-                                    <a *ngIf="third.state == 'Inactivo'" (click)="changeState(third, 'Activo')" class="dropdown-item waves-light text-success waves-effect caja-botones">
-                                        <i class="fas fa-check"></i> Activar
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+      </div>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getThirdParties($event)" aria-label="Default pagination"
-        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-    </ngb-pagination>
+    <hr class="line" />
+    <mat-accordion multi #firstAccordion="matAccordion">
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>R.S/Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              name="name"
+              [(ngModel)]="filtros.name"
+              autocomplete="off"
+              placeholder="Busca por R.S/Nombre"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Documento</mat-label>
+            <input
+              type="text"
+              matInput
+              name="nit"
+              [(ngModel)]="filtros.nit"
+              autocomplete="off"
+              placeholder="Busca por documento"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Dirección</mat-label>
+            <input
+              type="text"
+              matInput
+              name="cod_dian_address"
+              [(ngModel)]="filtros.cod_dian_address"
+              autocomplete="off"
+              placeholder="Busca por dirección"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Ciudad</mat-label>
+            <input
+              type="text"
+              matInput
+              name="municipio"
+              [(ngModel)]="filtros.municipio"
+              autocomplete="off"
+              placeholder="Busca por ciudad"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Tel</mat-label>
+            <input
+              type="text"
+              matInput
+              name="phone"
+              [(ngModel)]="filtros.phone"
+              autocomplete="off"
+              placeholder="Busca por teléfono"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Tipo de tercero</mat-label>
+            <mat-select
+              name="third"
+              [(ngModel)]="filtros.third_party_type"
+              (selectionChange)="getThirdParties()"
+            >
+              <mat-option value="Todos">Todos</mat-option>
+              <mat-option value="Cliente">Cliente</mat-option>
+              <mat-option value="Proveedor">Proveedor</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input
+              type="email"
+              matInput
+              name="email"
+              [(ngModel)]="filtros.email"
+              autocomplete="off"
+              placeholder="Busca por email"
+              (input)="getThirdParties()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Campos</mat-label>
+            <mat-select [formControl]="camposForm" multiple (selectionChange)="cambiarCampo($event)">
+              <mat-option
+                *ngFor="let item of listaCampos"
+                [value]="item.value"
+                >{{ item.text }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    
+    <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
+      <strong
+        >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
+        click
+      </strong>
+      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
+        >aquí</a
+      >
+    </div>
+    
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-striped table-bordered table-sm mb-0"
+        *ngIf="!loading && thirdParties.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <ng-container *ngFor="let item of listaCampos; let i = index">
+              <th *ngIf="item.selected">{{item.text}}</th>
+            </ng-container>
+            <!-- <th *ngIf="listaCampos[0].selected">Foto</th>
+            <th *ngIf="checkNombre">R.S/Nombre</th>
+            <th *ngIf="checkNIT">Documento</th>
+            <th *ngIf="checkDireccion">Dirección</th>
+            <th *ngIf="checkMunicipio">Ciudad</th>
+            <th *ngIf="checkTelefono">Teléfono</th>
+            <th *ngIf="checkTipo">Tipo</th>
+            <th *ngIf="checkEmail">Correo electrónico</th>
+            <th *ngIf="checkEstado" class="col-md-1">Estado</th> -->
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let third of thirdParties"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': third.state == 'Inactivo'
+            }"
+          >
+            <td *ngIf="listaCampos[0].selected">
+              <div>
+                <img
+                  [src]="third.image | image"
+                  onerror="this.src='../../../../assets/images/noprofile.png'"
+                  class="rounded-circle mx-auto img-fluid header-profile-user"
+                />
+              </div>
+            </td>
+            <td class="align-middle" *ngIf="listaCampos[1].selected">
+              {{ third.name }}
+            </td>
+            <td class="align-middle" *ngIf="listaCampos[2].selected">{{ third.nit }}</td>
+            <td class="align-middle" *ngIf="listaCampos[3].selected">
+              {{ third.cod_dian_address }}
+            </td>
+            <td class="align-middle" *ngIf="listaCampos[4].selected">
+              {{ third.municipality.name }}
+            </td>
+            <td class="align-middle" *ngIf="listaCampos[5].selected">
+              {{ third.landline }} - {{ third.cell_phone }}
+            </td>
+            <td class="align-middle" *ngIf="listaCampos[6].selected">
+              {{ third.third_party_type }}
+            </td>
+            <td class="align-middle" *ngIf="listaCampos[7].selected">{{ third.email }}</td>
+            <td class="align-middle" *ngIf="listaCampos[8].selected">
+              <span
+                [ngClass]="
+                  third.state == 'Inactivo'
+                    ? 'badge badge-danger'
+                    : 'badge badge-success'
+                "
+              >
+                {{ third.state }}
+              </span>
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm  waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    [routerLink]="['/crm/terceros/editar-tercero', third.id]"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="third.state == 'Activo'"
+                    (click)="changeState(third, 'Inactivo')"
+                    href="javascript:void(0)"
+                    class="dropdown-item waves-light text-danger caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
+                  <a
+                    *ngIf="third.state == 'Inactivo'"
+                    href="javascript:void(0)"
+                    (click)="changeState(third, 'Activo')"
+                    class="dropdown-item waves-light text-success caja-botones"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <mat-paginator
+      *ngIf="paginacion"
+      [length]="paginacion.total"
+      [pageSize]="paginacion.per_page"
+      [pageIndex]="paginacion.current_page - 1"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </div>
 </div>
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

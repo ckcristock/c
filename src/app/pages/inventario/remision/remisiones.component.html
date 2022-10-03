@@ -1,234 +1,378 @@
 <!-- <div class="col-md-12 "> -->
-<div class="card p-3">
-  <div class="card-header">
-    <div class="row">
-      <div class="col-md-9">
-        <h5>Remisiones </h5>
-        <span>Todas las Remisiones registradas en nuestras bases de datos</span>
+<div class="card">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Remisiones</h4>
       </div>
-      <div class="col-md-3">
-        <button type="button" class="pull-right btn btn-primary btn-sm" [routerLink]="['remisioncrearnuevo']">
-          <i class="fa fa-plus"></i>
-          Crear Nueva Remisión
-        </button>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            [routerLink]="['remisioncrearnuevo']"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button
+            class="btn btn-info btn-sm"
+            (click)="openClose()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
-
-  </div>
-  <div class="card-block">
-
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table table-striped" style="font-size: 10px;">
-          <thead>
-            <tr>
-              <th style="max-width: 100px; width: 100px !important;">Fecha</th>
-              <th style="max-width: 70px; width: 70px !important;">Código</th>
-              <th style="max-width: 50px; width: 50px !important;">Tipo</th>
-              <th style="max-width: 120px; width: 120px !important;">Origen</th>
-              <th style="max-width: 70px; width: 70px !important;">Grupo</th>
-              <th style="max-width: 130px; width: 130px !important;">Destino</th>
-              <th style="max-width: 130px; width: 60px !important;"></th>
-              <th style="max-width: 40px; width: 40px !important;">Items</th>
-              <th style="max-width: 70px; width: 70px !important;">Estado</th>
-              <th style="max-width: 50px; width: 50px !important;">Fase</th>
-              <th style="max-width: 70px; width: 70px !important;">Acciones</th>
-            </tr>
-            <tr>
-              <th class="tabla-filtro" style="max-width: 100px; width: 100px !important;">
-                <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="filtro_fecha"
-                  (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas"></my-date-range-picker>
-              </th>
-              <th class="tabla-filtro" style="max-width: 70px; width: 70px !important;">
-                <input type="text" [(ngModel)]="filtro_cod" (blur)="filtros()" class="form-control input-sm"
-                  placeholder="Filtro Cod.">
-              </th>
-              <th class="tabla-filtro" style="max-width: 50px; width: 50px !important;">
-                <select [(ngModel)]="filtro_tipo" (change)="filtros()" class="form-control input-sm">
-                  <option value="">Todos</option>
-                  <option value="Cliente">Cliente</option>
-                  <option value="Interna">Interna</option>
-                </select>
-              </th>
-              <th class="tabla-filtro" style="max-width: 120px; width: 120px !important;">
-                <input type="text" [(ngModel)]="filtro_origen" (blur)="filtros()" class="form-control input-sm"
-                  placeholder="Filtro Origen">
-              </th>
-              <th class="tabla-filtro" style="max-width: 130px; width: 130px !important;">
-                <input type="text" [(ngModel)]="filtro_grupo" (blur)="filtros()" class="form-control input-sm"
-                  placeholder="Filtro Grupo">
-              </th>
-              <th class="tabla-filtro" style="max-width: 130px; width: 130px !important;">
-                <input type="text" [(ngModel)]="filtro_destino" (blur)="filtros()" class="form-control input-sm"
-                  placeholder="Filtro Dest.">
-              </th>
-              <th></th>
-              <th></th>
-              <th class="tabla-filtro" style="max-width: 70px; width: 70px !important;">
-                <select [(ngModel)]="filtro_est" (change)="filtros()" class="form-control input-sm">
-                  <option value="">Todos</option>
-                  <option value="Pendiente">Pendiente</option>
-                  <option value="Alistada">Alistada</option>
-                  <option value="Enviada">Enviada</option>
-                  <option value="Recibida">Recibida</option>
-                  <option value="No conforme">No conforme</option>
-                  <option value="Anulada">Anulada</option>
-                  <option value="Facturada">Facturada</option>
-                </select>
-              </th>
-              <th class="tabla-filtro" style="max-width: 50px; width: 50px !important;">
-                <select [(ngModel)]="filtro_fase" (change)="filtros()" class="form-control input-sm">
-                  <option value="">Todas</option>
-                  <option value="0">Fase 1</option>
-                  <option value="1">Fase 2</option>
-                  <option value="2">Listo</option>
-                </select>
-              </th>
-              <th class="tabla-filtro" style="max-width: 50px; width: 50px !important;"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="Cargando">
-              <td colspan="10" class="text-center">
-                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-                <span class="sr-only">Cargando...</span>
-                <h4>Cargando remisiones...</h4>
-              </td>
-            </tr>
-            <tr *ngIf="Lista_Remisiones.length == 0 && !Cargando">
-              <td colspan="10" class="text-center">
-                <i class="fa fa-exclamation-circle fa-5x"></i>
-                <h4>No Existen Remisiones para mostrar</h4>
-                <a [routerLink]="['remisioncrearnuevo']" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i>
-                  Cree Una Acá</a>
-              </td>
-            </tr>
-            <tr *ngFor="let remision of Lista_Remisiones" class="{{remision.Estado=='Anulada' ? 'bg-danger' : ''}}">
-              <td style="max-width: 100px; width: 100px !important;">
-                {{remision.Fecha_Remision}}
-              </td>
-              <td style="max-width: 70px; width: 70px !important;">
-                {{remision.Codigo}}
-              </td>
-              <td style="max-width: 50px; width: 50px !important;">
-                <div class="text-center">
-                  <span class="label {{remision.Tipo=='Cliente' ? 'label-success' : 'label-primary'}}">{{remision.Tipo}}
-                  </span>
-                </div>
-              </td>
-              <td style="max-width: 120px !important; width: 120px !important">
-                {{remision.Punto_Origen}}
-                <!--  <i *ngIf="remision.Tipo_Bodega=='MEDICAMENTOS'" class="fa fa-medkit"></i>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field appearance="outline" class="col">
+            <mat-label>Rango de fechas</mat-label>
+            <input
+              matInput
+              [satDatepicker]="picker"
+              [value]="date"
+              (dateChange)="selectedDate($event)"
+              (dateInput)="selectedDate($event)"
+              name="daterange"
+              autocomplete="off"
+              required
+            />
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></sat-datepicker-toggle>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Código</mat-label>
+            <input
+              #inputC
+              matInput
+              type="text"
+              placeholder="Busca por código"
+              [(ngModel)]="filtro_cod"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select [(ngModel)]="filtro_tipo" (selectionChange)="filtros()">
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Cliente">Cliente</mat-option>
+              <mat-option value="Interna">Interna</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Origen</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por origen"
+              [(ngModel)]="filtro_origen"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Grupo</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por grupo"
+              [(ngModel)]="filtro_grupo"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Destino</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por grupo"
+              [(ngModel)]="filtro_destino"
+              (input)="filtros()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select [(ngModel)]="filtro_est" (selectionChange)="filtros()">
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Pendiente">Pendiente</mat-option>
+              <mat-option value="Alistada">Alistada</mat-option>
+              <mat-option value="Enviada">Enviada</mat-option>
+              <mat-option value="Recibida">Recibida</mat-option>
+              <mat-option value="No conforme">No conforme</mat-option>
+              <mat-option value="Anulada">Anulada</mat-option>
+              <mat-option value="Facturada">Facturada</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fase</mat-label>
+            <mat-select [(ngModel)]="filtro_fase" (selectionChange)="filtros()">
+              <mat-option value="">Todas</mat-option>
+              <mat-option value="0">Fase 1</mat-option>
+              <mat-option value="1">Fase 2</mat-option>
+              <mat-option value="2">Listo</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        
+        *ngIf="!Cargando && Lista_Remisiones.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Fecha</th>
+            <th>Código</th>
+            <th>Tipo</th>
+            <th>Origen</th>
+            <th>Grupo</th>
+            <th>Destino</th>
+            <th class="col-md-2">Observaciones</th>
+            <th>Items</th>
+            <th>Estado</th>
+            <th>Fase</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="text-center"
+            *ngFor="let remision of Lista_Remisiones"
+            class="{{ remision.Estado == 'Anulada' ? 'bg-danger' : '' }}"
+          >
+            <td class="align-middle">
+              {{ remision.Fecha_Remision | date: "longDate" }}
+            </td>
+            <td class="align-middle">
+              {{ remision.Codigo }}
+            </td>
+            <td class="align-middle">
+              <span
+                class="label {{
+                  remision.Tipo == 'Cliente' ? 'label-success' : 'label-primary'
+                }}"
+                >{{ remision.Tipo }}
+              </span>
+            </td>
+            <td class="align-middle">
+              {{ remision.Punto_Origen }}
+              <!--  <i *ngIf="remision.Tipo_Bodega=='MEDICAMENTOS'" class="fa fa-medkit"></i>
                                           <i *ngIf="remision.Tipo_Bodega=='MATERIALES'" class="fa fa-archive"></i>
                                           <i *ngIf="remision.Tipo_Bodega=='REFRIGERADOS'" class="fa fa-asterisk"></i> -->
-
-              </td>
-              <td style="max-width: 120px !important; width: 120px !important">
-                {{remision.Grupo}}
-              </td>
-              <td style="max-width: 120px !important; width: 120px !important">
-                {{remision.Punto_Destino}}
-              </td>
-              <td> <span class="mytooltip tooltip-effect-2"><span class="tooltip-item2">
-                    <p style="font-size:11px">
-                      <i class="fa fa-info-circle"></i> Observaciones
-                    </p>
-                  </span><span class="tooltip-content4 clearfix"><span
-                      class="tooltip-text2">{{remision.Observaciones=='' ? "No tiene Observaciones!" :
-                      remision.Observaciones }}</span></span>
+            </td>
+            <td class="align-middle">
+              {{ remision.Grupo }}
+            </td>
+            <td class="align-middle">
+              {{ remision.Punto_Destino }}
+            </td>
+            <td class="align-middle">
+              <details>
+                <summary>Ver observación</summary>
+                <span>{{
+                  remision.Observaciones == ""
+                    ? "No tiene Observaciones!"
+                    : remision.Observaciones
+                }}</span>
+              </details>
+            </td>
+            <td class="align-middle">{{ remision.Items }}</td>
+            <td class="align-middle">
+              <div class="text-center">
+                <span
+                  *ngIf="remision.Estado != 'Facturada'"
+                  class="badge {{ remision.Estado == 'Anulada' ? '' : '' }} {{
+                    remision.Estado == 'Alistada' ? 'badge-dark' : ''
+                  }} {{ remision.Estado == 'Enviada' ? 'badge-info' : '' }}{{
+                    remision.Estado == 'Recibida' ? 'badge-success' : ''
+                  }} {{
+                    remision.Estado == 'Pendiente' && remision.Fase == 1
+                      ? 'badge-danger'
+                      : ''
+                  }} {{
+                    remision.Estado == 'Pendiente' && remision.Fase == 2
+                      ? 'badge-danger'
+                      : ''
+                  }}"
+                  >{{ remision.Estado }}
                 </span>
-
-              </td>
-              <td>{{remision.Items}}</td>
-              <td style="max-width: 70px !important;width: 70px !important;">
-                <div class="text-center">
-                  <span *ngIf="remision.Estado!='Facturada'"
-                    class="label {{remision.Estado=='Anulada' ? '' : ''}} {{remision.Estado=='Alistada' ? 'label-inverse' : ''}} {{remision.Estado=='Enviada' ? 'label-info' : ''}}{{remision.Estado=='Recibida' ? 'label-success' : ''}} {{remision.Estado=='Pendiente'&&remision.Fase==1 ? 'label-danger' : ''}} {{remision.Estado=='Pendiente'&&remision.Fase==2 ? 'label-danger' : ''}}">{{remision.Estado}}
-                  </span>
-                  <a *ngIf="remision.Estado=='Facturada'" class="label label-success"
-                    [routerLink]="['/facturasventasver', remision.Id_Factura]">Facturada</a>
-                </div>
-              </td>
-              <td><strong>{{remision.Fase}}</strong></td>
-              <td style="max-width: 70px !important; width: 70px !important;">
-                <div class="text-center">
-                  <div ngbDropdown class="dropdown-primary">
-                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light "
-                      type="button">Acciones</button>
-                    <div ngbDropdownMenu>
-                      <!--<a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 &&remision.Fase_1==0" class="dropdown-item waves-light waves-effect caja-botones"
+                <a
+                  *ngIf="remision.Estado == 'Facturada'"
+                  class="badge badge-success"
+                  [routerLink]="['/facturasventasver', remision.Id_Factura]"
+                  >Facturada</a
+                >
+              </div>
+            </td>
+            <td class="align-middle">
+              <strong>{{ remision.Fase }}</strong>
+            </td>
+            <td class="overflow-hidden">
+              <div ngbDropdown container="body">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm  waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <!--<a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 &&remision.Fase_1==0" class="dropdown-item waves-light  caja-botones"
                                 href="" [routerLink]="['/remisioneditar',remision.Id_Remision]">
                                 <i class="ti-pencil"></i> Editar</a>-->
-                      <a class="dropdown-item waves-light waves-effect caja-botones" href=""
-                        [routerLink]="['/inventario/remisiones/remision',remision.Id_Remision]">
-                        <i class="ti-eye"></i> Ver</a>
-
-                      <a *ngIf="remision.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{env.ruta}}/php/archivos/descarga_pdf.php?tipo=Remision&id={{remision.Id_Remision}}"
-                        target="_blank">
-                        <i class="fa fa-print"></i> Archivo</a>
-                      <a *ngIf="remision.Estado!='Anulada'&&remision.Tipo=='Cliente'"
-                        class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{env.ruta}}/php/archivos/descarga_pdf_price.php?tipo=Remision&id={{remision.Id_Remision}}"
-                        target="_blank">
-                        <i class="fa fa-print"></i> Archivo con Costos</a>
-
-                      <a *ngIf="remision.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{env.ruta}}/php/archivos/descarga_zebra.php?id={{remision.Id_Remision}}" target="_blank">
-                        <i class="fa fa-ticket"></i> Imprimir Etiqueta</a>
-
-                      <a *ngIf="remision.Estado!='Anulada'" class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{env.ruta}}/php/archivos/descarga_excel.php?id={{remision.Id_Remision}}" target="_blank">
-                        <i class="fa fa-file-excel-o"></i> Descargar Plano</a>
-
-                      <!--   <a *ngIf="!perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 && remision.Fase_1==0" class="dropdown-item waves-light waves-effect caja-botones" (click)="SuspenderRemision(remision.Id_Remision)">
+                  <a
+                    class="dropdown-item text-success waves-light  caja-botones"
+                    href=""
+                    [routerLink]="[
+                      '/inventario/remisiones/remision',
+                      remision.Id_Remision
+                    ]"
+                  >
+                    <i class="fas fa-eye"></i> Ver</a
+                  >
+                  <a
+                    *ngIf="remision.Estado != 'Anulada'"
+                    class="dropdown-item text-info waves-light  caja-botones"
+                    href="{{
+                      env.ruta
+                    }}/php/archivos/descarga_pdf.php?tipo=Remision&id={{
+                      remision.Id_Remision
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="fa fa-print"></i> Archivo</a
+                  >
+                  <a
+                    *ngIf="
+                      remision.Estado != 'Anulada' && remision.Tipo == 'Cliente'
+                    "
+                    class="dropdown-item text-info waves-light  caja-botones"
+                    href="{{
+                      env.ruta
+                    }}/php/archivos/descarga_pdf_price.php?tipo=Remision&id={{
+                      remision.Id_Remision
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="fas fa-print"></i> Archivo con costos</a
+                  >
+                  <a
+                    *ngIf="remision.Estado != 'Anulada'"
+                    class="dropdown-item text-danger waves-light  caja-botones"
+                    href="{{ env.ruta }}/php/archivos/descarga_zebra.php?id={{
+                      remision.Id_Remision
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="far fa-sticky-note"></i> Imprimir etiqueta</a
+                  >
+                  <a
+                    *ngIf="remision.Estado != 'Anulada'"
+                    class="dropdown-item text-primary waves-light  caja-botones"
+                    href="{{ env.ruta }}/php/archivos/descarga_excel.php?id={{
+                      remision.Id_Remision
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="fas fa-file-excel"></i> Descargar plano</a
+                  >
+                  <!--   <a *ngIf="!perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 && remision.Fase_1==0" class="dropdown-item waves-light  caja-botones" (click)="SuspenderRemision(remision.Id_Remision)">
                                                           <i class="fa fa-times"></i> Anular</a> -->
-
-
-                      <a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado!='Recibida' && remision.Estado!='Facturada' && remision.Estado!='Enviada'"
-                        class="dropdown-item waves-light waves-effect caja-botones"
-                        (click)="SuspenderRemision(remision.Id_Remision,remision.Id_Contrato)">
-                        <i class="fa fa-times"></i> Anular</a>
-
-
-                      <a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado!='Recibida' && remision.Estado!='Enviada'"
-                        class="dropdown-item waves-light waves-effect caja-botones" href=""
-                        [routerLink]="['/cambiarlote',remision.Id_Remision]">
-                        <i class="fa fa-times"></i> Cambiar Lote</a>
-
-                      <a *ngIf="remision.Estado!='Anulada' && remision.Entrega_Pendientes=='Si'"
-                        class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{env.ruta}}/php/remision/entrega_pendientes_pdf.php?id={{remision.Id_Remision}}"
-                        target="_blank">
-                        <i class="fa fa-print"></i> Documento Disp.</a>
-                    </div>
-                  </div>
+                  <a
+                    *ngIf="
+                      perfilAdministrador() &&
+                      remision.Estado != 'Anulada' &&
+                      remision.Estado != 'Recibida' &&
+                      remision.Estado != 'Facturada' &&
+                      remision.Estado != 'Enviada'
+                    "
+                    class="dropdown-item text-danger waves-light  caja-botones"
+                    (click)="
+                      SuspenderRemision(
+                        remision.Id_Remision,
+                        remision.Id_Contrato
+                      )
+                    "
+                  >
+                    <i class="fa fa-times"></i> Anular</a
+                  >
+                  <a
+                    *ngIf="
+                      perfilAdministrador() &&
+                      remision.Estado != 'Anulada' &&
+                      remision.Estado != 'Recibida' &&
+                      remision.Estado != 'Enviada'
+                    "
+                    class="dropdown-item waves-light  caja-botones"
+                    href=""
+                    [routerLink]="['/cambiarlote', remision.Id_Remision]"
+                  >
+                    <i class="fa fa-times"></i> Cambiar lote</a
+                  >
+                  <a
+                    *ngIf="
+                      remision.Estado != 'Anulada' &&
+                      remision.Entrega_Pendientes == 'Si'
+                    "
+                    class="dropdown-item waves-light  caja-botones"
+                    href="{{
+                      env.ruta
+                    }}/php/remision/entrega_pendientes_pdf.php?id={{
+                      remision.Id_Remision
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="fa fa-print"></i> Documento Disp.</a
+                  >
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
+  <ngb-pagination
+    class="d-flex justify-content-center pagination-rounded pagination-sm"
+    [(collectionSize)]="TotalItems"
+    [(page)]="page"
+    [maxSize]="10"
+    [pageSize]="maxSize"
+    size="sm"
+    (pageChange)="paginacion()"
+    [rotate]="true"
+    [boundaryLinks]="true"
+  >
+  </ngb-pagination>
+  <!-- <div class="text-center">
     {{(page*maxSize)-maxSize+1}} al {{((page*maxSize) > TotalItems ? TotalItems : (page*maxSize))}} de {{ TotalItems
     }}
-    <ngb-pagination class="pull-right" [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="10"
-      [pageSize]="maxSize" size="sm" (pageChange)="paginacion()" [rotate]="true" [boundaryLinks]="true">
-    </ngb-pagination>
-  </div>
+
+  </div> -->
 </div>
 <!-- </div> -->
-
 
 <ng-template #test>
   <span>prueba</span>
 </ng-template>
 
-<swal #confirmaSwal title="Borrador Eliminado"
+<swal
+  #confirmaSwal
+  title="Borrador Eliminado"
   text="Su Borrador Fue Eliminado de Manera Correcta, Los productos seleccionados, liberaron sus cantidades"
-  type="success">
+  type="success"
+>
 </swal>
 
-<swal #deleteSwal title="" text="" type="">
-</swal>
+<swal #deleteSwal title="" text="" type=""> </swal>
 <swal #anularSwal [swalOptions]="alertInputOption"></swal>
+
+<ng-template #notData>
+  <app-not-data [loading]="Cargando"></app-not-data>
+</ng-template>

@@ -1,5 +1,8 @@
 {
     "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "cli": {
+      "analytics": "6c58ffa4-54cd-487d-ae45-dfa568fdaf77"
+    },
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
@@ -28,11 +31,17 @@
                             "src/assets"
                         ],
                         "styles": [
+                            
                             "src/styles.scss",
                             "src/assets/scss/bootstrap.scss",
                             "src/assets/scss/app.scss"
                         ],
-                        "scripts": []
+                        "scripts": [
+                            "node_modules/jquery/dist/jquery.min.js",
+                            "node_modules/@ckeditor/ckeditor5-build-classic/build/translations/de.js",
+                            "node_modules/popper.js/dist/umd/popper.min.js",
+                            "node_modules/bootstrap/dist/js/bootstrap.min.js"
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -49,8 +58,8 @@
                             "buildOptimizer": true,
                             "budgets": [{
                                     "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
+                                    "maximumWarning": "20mb",
+                                    "maximumError": "25mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",

@@ -1,77 +1,85 @@
-<div class="row" *ngIf="reporteHorarios.length">
-  <div class="col-12 mt-1">
-    <h3 class="font-weight-bold">Lista de Funcionarios</h3>
-
-    <div class="card" *ngFor="let company of reporteHorarios">
-      <div class="card-body ml-4 mt-1">
-        <div class="row">
-          <h4
-            class="centro-nombre text-primary m-0 p-0"
-            *ngIf="reporteHorarios.length > 1"
-          >
-            {{ company.name }}
-          </h4>
-        </div>
-        <div *ngFor="let group of company.groups">
-          <div class="row mb-2">
-            <p class="mb-1 centro-nombre text-primary">
-              Grupo: {{ group.name }}
-            </p>
-
-            <div
-              class="col-12 pl-0 dependency"
-              *ngFor="let dependency of group.dependencies"
-            >
-              <strong>
-                <p class="font-weight-bold mt-3">{{ dependency.name }}</p>
-              </strong>
-
-              <div
-                *ngFor="let person of dependency.people;let i = index"
-                class="funcionario-fila"
-              >
-                <div
-                  class="
-                  "
+<div *ngIf="reporteHorarios.length">
+  <div *ngFor="let company of reporteHorarios">
+    <h4
+      class="text-primary text-uppercase font-weight-bold"
+      *ngIf="reporteHorarios.length > 1"
+    >
+      {{ company.name }}
+    </h4>
+    <div *ngFor="let group of company.groups">
+      <h5 class="text-uppercase font-weight-bold text-primary">
+        Grupo: <span class="text-secondary">{{ group.name }}</span>
+      </h5>
+      <div *ngFor="let dependency of group.dependencies">
+        <h6 class="font-weight-bold text-center text-uppercase">
+          {{ dependency.name }}
+        </h6>
+        <div *ngIf="dependency.people.length > 0; else alertNoData">
+          <div class="rounded-top table-responsive">
+            <table class="table table-hover table-sm">
+              <tbody>
+                <ng-container
+                  *ngFor="let person of dependency.people; let i = index"
                 >
-                  <div class="mb-0">
-                    <!-- {{i}} -->
-                    <img
-                      src="{{ person.image | image: 'users' }}"
-                      class="rounded-circle avatar-sm"
-                      alt="user-pic"
-                    />
-                    <span class="custom-label  mr-2"
-                      >{{ person.first_name }} {{ person.first_surname }}</span
-                    >
-                    <button
-                      class="btn btn-link"
-                      (click)="person.show = !person.show"
-                    >
-                    <i class="fas fa-chevron-down"></i>
-                    </button>
-                  </div>
-                </div>
-                <ng-container *ngIf="person.show">
-                  <ng-container *ngIf="type == 'Rotativo'; else detalleFijo">
-                    <app-detalle-horario-rotativo
-                      [horas]="person.totalHours"
-                      [horarios]="person.diaries"
-                    ></app-detalle-horario-rotativo>
+                  <tr
+                    class="text-center"
+                    (click)="person.show = !person.show"
+                    role="button"
+                  >
+                    <td class="col-1">
+                      <img
+                        src="{{ person.image | image: 'users' }}"
+                        onerror="this.src='../../../../assets/images/noprofile.png'"
+                        class="rounded-circle mx-auto header-profile-user"
+                      />
+                    </td>
+                    <td>{{ person.first_name }} {{ person.first_surname }}</td>
+                    <td class="col-1">
+                      <i
+                        [ngClass]="
+                          person.show ? 'fa-angle-up' : 'fa-angle-down'
+                        "
+                        class="fas text-primary"
+                        role="button"
+                        (click)="person.show = !person.show"
+                      ></i>
+                    </td>
+                  </tr>
+                  <ng-container *ngIf="person.show">
+                    <tr>
+                      <td colspan="100%">
+                        <ng-container
+                          *ngIf="type == 'Rotativo'; else detalleFijo"
+                        >
+                          <app-detalle-horario-rotativo
+                            [horas]="person.totalHours"
+                            [horarios]="person.diaries"
+                          ></app-detalle-horario-rotativo>
+                        </ng-container>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="100%">
+                        <ng-template #detalleFijo>
+                          <app-detalle-horario
+                            [horas]="person.totalHours"
+                            [horarios]="person.diaries"
+                          ></app-detalle-horario>
+                        </ng-template>
+                      </td>
+                    </tr>
                   </ng-container>
-
-                  <ng-template #detalleFijo>
-                    <app-detalle-horario
-                      [horas]="person.totalHours"
-                      [horarios]="person.diaries"
-                    ></app-detalle-horario>
-                  </ng-template>
                 </ng-container>
-              </div>
-            </div>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<ng-template #alertNoData>
+  <div class="alert alert-info" role="alert">
+    No hemos encontrado nada aquí.
+  </div>
+</ng-template>

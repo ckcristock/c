@@ -1,98 +1,201 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModalM()">Agregar nuevo Municipio</button>
-            <h5>Municipios</h5>
-            <p>Municipios del País</p>
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Municipios</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-primary btn-sm" (click)="openConfirm(add)">
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
+      </div>
+    </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-            <div class="col-sm-4">
-                <input type="number" placeholder="Código del Municipio" class="form-control form-control-sm" (change)="getAllMunicipalities()" [(ngModel)]="filtro.code">
-            </div>
-            <div class="col-sm-4">
-                <input type="text" placeholder="Nombre del Municipio" class="form-control form-control-sm" (change)="getAllMunicipalities()" [(ngModel)]="filtro.name">
-            </div>
-            <div class="col-sm-4">
-                <input type="text" placeholder="Nombre del Departamento" class="form-control form-control-sm" (change)="getAllMunicipalities()" [(ngModel)]="filtro.department">
-            </div>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Código</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Busca por código"
+              (input)="getAllMunicipalities()"
+              [(ngModel)]="filtro.code"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Municipio</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por municipio"
+              (input)="getAllMunicipalities()"
+              [(ngModel)]="filtro.name"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Departamento</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por departamento"
+              (input)="getAllMunicipalities()"
+              [(ngModel)]="filtro.department"
+            />
+          </mat-form-field>
         </div>
-        <table class="table table-bordered table-striped table-sm mt-4" *ngIf="!loading && municipios.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th scope="col">Código</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Departamento</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let municipio of municipios">
-                    <th scope="row"> {{ municipio.code }} </th>
-                    <th> {{ municipio.name }} </th>
-                    <th> {{ municipio.department.name }} </th>
-                </tr>
-            </tbody>
-        </table>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && municipios.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Departamento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let municipio of municipios" class="text-center">
+            <td class="align-middle">{{ municipio.code }}</td>
+            <td class="align-middle">{{ municipio.name }}</td>
+            <td class="align-middle">{{ municipio.department.name }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getAllMunicipalities($event)" [pageSize]="pagination.pageSize" maxSize="5" rotate="true" ellipses="false"
-        boundaryLinks="true" [(page)]="pagination.page" aria-label="Default pagination">
+
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="getAllMunicipalities($event)"
+      [pageSize]="pagination.pageSize"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      [(page)]="pagination.page"
+      aria-label="Default pagination"
+    >
     </ngb-pagination>
+  </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> Nuevo Municipio </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-          <span aria-hidden="true">
-            <i class="fas fa-times" (click)="modal.hide()"></i>
-          </span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="municipality_name">Nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="municipality.name" [class.is-invalid]="name_municipality" formControlName="name" id="municipality_name" required>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="name_municipality"> Es necesario el nombre del Municipio 
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="municipality_code">Código</label>
-                    <input type="number" class="form-control form-control-sm" [(ngModel)]="municipality.code" [class.is-invalid]="code_municipality" formControlName="code" id="municipality_code" required>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="code_municipality"> Es necesario el código del Municipio 
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="municipality_department">Departamento</label>
-                    <ng-select [items]="munic" id="municipality_department" [(ngModel)]="municipality.department_id" [class.is-invalid]="department_municipality" formControlName="department_id" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
-                    </ng-select>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="department_municipality"> Es necesario el departamento 
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="municipality_code_dane">Código Dane</label>
-                    <input type="number" class="form-control form-control-sm" [(ngModel)]="municipality.codigo_dane" [class.is-invalid]="code_dane_municipality" formControlName="code_dane" id="municipality_code_dane" required>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="code_dane_municipality"> Es necesario el código dane 
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="createNewMunicipality()" [disabled]="!form.valid">Guardar Municipio</button>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nuevo municipio</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            [(ngModel)]="municipality.name"
+            [class.is-invalid]="name_municipality"
+            required
+            autocomplete="off"
+          />
+          <mat-error *ngIf="name_municipality"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el código"
+            formControlName="code"
+            [(ngModel)]="municipality.code"
+            [class.is-invalid]="code_municipality"
+            required
+            autocomplete="off"
+          />
+          <mat-error *ngIf="code_municipality"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <div class="col">
+          <ng-select
+            [items]="dep"
+            id="municipality_department"
+            [(ngModel)]="municipality.department_id"
+            [class.is-invalid]="department_municipality"
+            formControlName="department_id"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Departamento"
+            bindValue="value"
+            loadingText="loading "
+            ngDefaultControl
+          >
+          </ng-select>
+          <div class="ml-2">
+            <small class="text-danger" *ngIf="department_municipality">
+              Es necesario el departamento
+            </small>
+          </div>
         </div>
-    </div>
-</app-modal-basic>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código DANE</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el código DANE"
+            formControlName="code_dane"
+            [(ngModel)]="municipality.codigo_dane"
+            [class.is-invalid]="code_dane_municipality"
+            required
+            autocomplete="off"
+          />
+          <mat-error *ngIf="code_dane_municipality">
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="createNewMunicipality()"
+      [disabled]="!form.valid"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
 <!-- End municipalities -->
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

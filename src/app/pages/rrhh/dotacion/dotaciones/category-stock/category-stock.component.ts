@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { DotacionService } from '../../dotacion.service';
 import { Label } from 'ng2-charts';
+import { MatAccordion } from '@angular/material/expansion';
 
 
 
@@ -17,7 +18,17 @@ export class CategoryStockComponent implements OnInit {
   @ViewChild('tablestock') private tablestock;
 
   @Input('loading') loading;
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
   nombre:string = '';
   donwloading = false;
 
@@ -34,7 +45,7 @@ export class CategoryStockComponent implements OnInit {
 
   findName(){
 
-    this.tablestock.getData();
+    this.tablestock.getData(1, this.nombre);
   }
 
   public barChartOptions: ChartOptions = {

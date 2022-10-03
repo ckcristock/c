@@ -3,6 +3,9 @@ import { ArlService } from './arl.service';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ValidatorsService } from '../services/reactive-validation/validators.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from '../services/swal.service';
 
 @Component({
   selector: 'app-arl',
@@ -10,39 +13,64 @@ import { ValidatorsService } from '../services/reactive-validation/validators.se
   styleUrls: ['./arl.component.scss']
 })
 export class ArlComponent implements OnInit {
-  @ViewChild('modal') modal:any;
-  loading:boolean = false;
-  selected:any;
-  arls:any[] = [];
-  private arl:any = {};
-  pagination:any = {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
+  @ViewChild('modal') modal: any;
+  loading: boolean = false;
+  selected: any;
+  arls: any[] = [];
+  private arl: any = {};
+  pagination: any = {
     page: 1,
     pageSize: 5,
     collectionSize: 0
   }
-  filtro:any = {
+  filtro: any = {
     name: ''
   }
   form: FormGroup;
   constructor(
-                private _arlService:ArlService,
-                private fb: FormBuilder,
-                private _validators: ValidatorsService ) { }
+    private _arlService: ArlService,
+    private fb: FormBuilder,
+    private _validators: ValidatorsService,
+    private modalService: NgbModal,
+    private _swal: SwalService,
+  ) { }
 
   ngOnInit(): void {
     this.getArls();
     this.createForm();
   }
+  closeResult = '';
+  public openConfirm(confirm, titulo) {
+    this.selected = titulo;
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    this.form.reset();
+    
+  }
 
   openModal() {
     this.modal.show();
     this.form.reset();
-    this.selected = 'Nueva ARL';
   }
 
-  getData( data ) {
-    this.arl = {...data}
-    this.selected = 'Actualizar ARL'
+  getData(data) {
+    this.arl = { ...data }
     this.form.patchValue({
       id: this.arl.id,
       name: this.arl.name,
@@ -67,11 +95,11 @@ export class ArlComponent implements OnInit {
     }
     this.loading = true;
     this._arlService.getArls(params)
-    .subscribe( (res:any) => {
+      .subscribe((res: any) => {
         this.arls = res.data.data;
         this.pagination.collectionSize = res.data.total;
         this.loading = false;
-    })
+      })
   }
 
   activateOrInactivate(contract, status) {
@@ -79,52 +107,51 @@ export class ArlComponent implements OnInit {
       id: contract.id,
       status
     }
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: (status === 'Inactivo'? 'El Contrato se inactivará!' : 'El Contrato se activará'),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: ( status === 'Inactivo' ? 'Si, Inhabilitar' : 'Si, activar' )
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._arlService.createArl(data)
-        .subscribe( res => {
-          this.getArls();
-          this.modal.hide();
-          Swal.fire({
-            title: (status === 'Inactivo' ? 'Contrato Inhabilitado!' : 'Contrato activado' ),
-            text: (status === 'Inactivo' ? 'El Contrato ha sido Inhabilitada con éxito.' : 'El Contrato ha sido activada con éxito.'),
-            icon: 'success'
-          })
-        } )
-      }
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (status === 'Inactivo' ? '¡El contrato se inactivará!' : '¡El contrato se activará!'),
+      icon: 'question',
+      showCancel: true
     })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._arlService.createArl(data)
+            .subscribe(res => {
+              this.getArls();
+              this.modalService.dismissAll();
+              this._swal.show({
+                icon: 'success',
+                title: (status === 'Inactivo' ? 'Contrato inhabilitado!' : 'Contrato activado'),
+                text: (status === 'Inactivo' ? 'El contrato ha sido inhabilitadao con éxito.' : 'El contrato ha sido activado con éxito.'),
+                timer: 1000,
+                showCancel: false
+              })
+            })
+        }
+      })
   }
 
   createArl() {
     this._arlService.createArl(this.form.value)
-    .subscribe( (res:any) => {
+      .subscribe((res: any) => {
         this.getArls();
-        this.modal.hide();
-        Swal.fire({
+        this.modalService.dismissAll();
+        this._swal.show({
           icon: 'success',
           title: res.data,
-          text: 'Se ha agregado a las ARL con éxito.'
-        });
-    },
-    err => {
-      Swal.fire({
-        title: 'Ooops!',
-        html: err.error.errors.nit,
-        icon: 'error',
-        allowOutsideClick: false,
-        allowEscapeKey: false
-      })
-    }
-    );
+          text: 'Se ha agregado a la ARL con éxito.',
+          timer: 1000,
+          showCancel: false
+        })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Aún no puedes editar una ARL con el mismo código o NIT, estamos trabajando en esto.',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+      );
   }
 
   get name_invalid() {

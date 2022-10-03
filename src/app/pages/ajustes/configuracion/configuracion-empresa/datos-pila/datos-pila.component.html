@@ -1,118 +1,129 @@
-<div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <div class="row">
-                <div class="col-6">
-                    <h5>Datos de Pila</h5>
-                </div>
-                <div class="col-6">
-                    <button class="btn btn-link pt-0 edit" style="float: right;" (click)="openModal()">
-                        <i class="fas fa-pencil-alt"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Operador de Pago
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ pilas.paid_operator }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Companía de ARL
-            </p>
-            <p class="col-6 font-weight-bold">
-                {{ arl }}
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Aplica Ley 1429 de 2010
-            </p>
-            <p class="col-6 font-weight-bold">
-                <span *ngIf="pilas.law_1429 === 0; else si"></span>
-                <span *ngIf="pilas.law_1429 === 1; else no"></span>
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Aplica Ley 590 de 2010
-            </p>
-            <p class="col-6 font-weight-bold">
-                <span *ngIf="pilas.law_590 === 0; else si"></span>
-                <span *ngIf="pilas.law_590 === 1; else no"></span>
-            </p>
-            <p class="col-6 font-weight-bold text-mute item-subtitle">
-                Aplica Ley de 1607 de 2012
-            </p>
-            <p class="col-6 font-weight-bold">
-                <span *ngIf="pilas.law_1607 === 0; else si"></span>
-                <span *ngIf="pilas.law_1607 === 1; else no"></span>
-            </p>
-        </div>
+<div class="card border border-3 border-light">
+  <div class="card-body">
+    <div class="card-title d-flex justify-content-between">
+      <h5>Datos de pila</h5>
+      <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
+        <i class="fas fa-pencil-alt"></i>
+      </button>
     </div>
+    <div class="rounded-top table-responsive">
+      <table class="table table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Operador de pago</th>
+            <th>Compañía de ARL</th>
+            <th>Aplica Ley 1429 de 2010</th>
+            <th>Aplica Ley 590 de 2010</th>
+            <th>Aplica Ley de 1607 de 2012</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td>{{ pilas.paid_operator }}</td>
+            <td>{{ arl }}</td>
+            <td>{{ pilas.law_1429 }}</td>
+            <td>{{ pilas.law_590 }}</td>
+            <td>{{ pilas.law_1607 }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Datos De Pila</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-          </button>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            <label for="">Operador de Pago Utilizado</label>
-                            <select class="form-control form-control-sm" formControlName="paid_operator">
-                                <option *ngFor="let item of pay_operators" [value]="item.value">
-                                    {{ item.clave }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group col-12">
-                            <label for="">Compañia ARL Utilizada</label>
-                            <select class="form-control form-control-sm" formControlName="arl_id">
-                                <option *ngFor="let arl of arls" [value]="arl.value">
-                                    {{ arl.text }}
-                                </option>
 
-                            </select>
-                        </div>
-                        <div class="form-check ml-2 mb-2">
-                            <input class="form-check-input" type="checkbox" value="" formControlName="law_1429" id="ley_1429" checked>
-                            <label class="form-check-label" for="ley_1429">
-                                ¿Aplica Para La Ley 1429 de 2010?
-                            </label>
-                        </div>
-                        <div class="form-check ml-2 mb-2">
-                            <input class="form-check-input" type="checkbox" value="" formControlName="law_590" id="ley_590" checked>
-                            <label class="form-check-label" for="ley_590">
-                                ¿Aplica Para La Ley 590 de 2010?
-                            </label>
-                        </div>
-                        <div class="form-check ml-2 mb-2">
-                            <input class="form-check-input" type="checkbox" value="" formControlName="law_1607" id="ley_1607" checked>
-                            <label class="form-check-label" for="ley_1607">
-                                ¿Aplica Para La Ley 1607 de 2012?
-                            </label>
-                        </div>
-                    </div>
-                </div>
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Datos de pila</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Operador de pago</mat-label>
+          <mat-select formControlName="paid_operator" required>
+            <mat-option *ngFor="let item of pay_operators" [value]="item.value">
+              {{ item.clave }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>ARL</mat-label>
+          <mat-select formControlName="arl_id" required>
+            <mat-option *ngFor="let arl of arls" [value]="arl.value">
+              {{ arl.text }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <div class="col-12">
+          <div class="form-row">
+            <div class="form-check ml-2 mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                formControlName="law_1429"
+                id="ley_1429"
+                checked
+              />
+              <label class="form-check-label" for="ley_1429">
+                ¿Aplica Para La Ley 1429 de 2010?
+              </label>
             </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" (click)="savePilaData()">Guardar</button>
+            <div class="form-check ml-2 mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                formControlName="law_590"
+                id="ley_590"
+                checked
+              />
+              <label class="form-check-label" for="ley_590">
+                ¿Aplica Para La Ley 590 de 2010?
+              </label>
+            </div>
+            <div class="form-check ml-2 mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                formControlName="law_1607"
+                id="ley_1607"
+                checked
+              />
+              <label class="form-check-label" for="ley_1607">
+                ¿Aplica Para La Ley 1607 de 2012?
+              </label>
+            </div>
+          </div>
         </div>
-    </div>
-</app-modal-basic>
-<ng-template #si>
-    Si
-</ng-template>
-<ng-template #no>
-    No
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="savePilaData()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
 </ng-template>

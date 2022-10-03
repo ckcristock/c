@@ -17,9 +17,11 @@ export class MenuChildComponent implements OnInit {
   title:any = '';
   checked: boolean = true;
   collapsed:boolean[] = [];
+
   constructor( private _swal:SwalService ) { }
 
   ngOnInit(): void {
+    console.log(this.navItems)
   }
 
   setValues(item: any, position) {

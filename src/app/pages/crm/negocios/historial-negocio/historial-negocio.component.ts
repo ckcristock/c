@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NegociosService } from '../negocios.service';
 
 @Component({
@@ -7,8 +7,8 @@ import { NegociosService } from '../negocios.service';
   styleUrls: ['./historial-negocio.component.scss'],
 })
 export class HistorialNegocioComponent implements OnInit {
-  historial: any[];
-
+  //historial: any[];
+  @Input('historial') historial: any[];
   constructor(private _negocio: NegociosService) {}
 
   ngOnInit(): void {

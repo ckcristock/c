@@ -1,13 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IMyDrpOptions } from 'mydaterangepicker';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { MatAccordion } from '@angular/material/expansion';
 @Component({
   selector: 'app-tabladepreciaciones',
   templateUrl: './tabladepreciaciones.component.html',
   styleUrls: ['./tabladepreciaciones.component.scss']
 })
 export class TabladepreciacionesComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   enviromen:any;
   public Cargando:boolean = false;
   public Filtros:any = {
@@ -32,8 +44,8 @@ export class TabladepreciacionesComponent implements OnInit {
   }
 
   public myDateRangePickerOptions: IMyDrpOptions = {
-    width:'90px', 
-    height: '18px',
+    width:'250px', 
+    height: '28px',
     selectBeginDateTxt:'Inicio',
     selectEndDateTxt:'Fin',
     selectionTxtFontSize: '10px',
@@ -46,7 +58,10 @@ export class TabladepreciacionesComponent implements OnInit {
   ngOnInit() {
     this.enviromen = environment;
   }
-
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
   SetFiltros(paginacion:boolean) {
     let params:any = {};
 
@@ -129,14 +144,31 @@ export class TabladepreciacionesComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  public OnDateRangeChanged( event:any){
-       
+  fechita:any;
+  fechitaF(event){    
+    this.fechita = event.target.value;  
+    if(this.fechita2 !=null){
+      this.Filtros.fechas_acta = this.fechita + ' - ' + this.fechita2;
+      this.ConsultaFiltrada();
+    }  
+  }
+  fechita2:any;
+  fechitaF2(event){
+    this.fechita2 = event.target.value;
+    if(this.fechita !=null){
+      this.Filtros.fechas_acta = this.fechita + ' - ' + this.fechita2;
+      this.ConsultaFiltrada();
+    }  
+  }
+
+/*   public OnDateRangeChanged( event:any){
+    console.log(event.targetElement.value)
     if (event.formatted != "") {
       this.Filtros.fechas_acta = event.formatted;
     } else {
       this.Filtros.fechas_acta = '';
     }
-      this.ConsultaFiltrada();
+      this.ConsultaFiltrada(); 
     
-  }
+  } */
 }

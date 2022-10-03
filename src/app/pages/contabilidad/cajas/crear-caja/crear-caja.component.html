@@ -1,79 +1,86 @@
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-  <div class="app-modal-header">
-    <h5 class="modal-title">Nueva Caja</h5>
-    <button type="button" class="close basic-close" (click)="modal.hide()">
-      <span aria-hidden="true">
-        <i class="fas fa-times" (click)="modal.hide()"></i>
-      </span>
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nueva caja</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="app-modal-body">
+  <div class="modal-body">
     <form [formGroup]="forma">
-      <div class="form-row">
-
-       <div class="form-group col-8">
-          <label for="" class="form-label">Plan de cuenta</label>
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Plan de cuenta</mat-label>
           <input
-            id="typeahead-format"
+            matInput
             type="text"
+            placeholder="Ingresa el plan de cuenta"
+            id="typeahead-format"
             formControlName="account_plan"
-            class="form-control form-control-sm"
             [ngbTypeahead]="searchAccount"
             [inputFormatter]="formatter"
             [resultFormatter]="formatter"
             [editable]="false"
+            autocomplete="off"
           />
-        </div>
-        <div class="form-group col-4">
-          <label for="" class="form-label">Saldo Inicial</label>
+        </mat-form-field>
+        <div class="col-md-4 d-flex align-items-center">
+          <h6>${{ forma.get("initial_balance").value | currency: "":"" }}</h6>
           <input
             id="typeahead-format"
-            type="text"
+            type="hidden"
             formControlName="initial_balance"
             class="form-control form-control-sm form-control-plaintext"
           />
         </div>
-        <div class="form-group col-12">
-          <label for="" class="form-label">Funcionario Responsable</label>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Funcionario responsable</mat-label>
           <input
-            id="typeahead-format"
+            matInput
             type="text"
+            placeholder="Ingresa el nombre"
+            id="typeahead-format"
             formControlName="person"
-            class="form-control form-control-sm"
             [ngbTypeahead]="searchPerson"
             [inputFormatter]="formatter"
             [resultFormatter]="formatter"
             [editable]="false"
+            autocomplete="off"
           />
-        </div>
-<div class="form-group col-12">
-	  <label for="" class="form-label mt-3">Nombre</label>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Nombre de caja</mat-label>
           <input
+            matInput
+            type="text"
             formControlName="description"
-            class="form-control form-control-sm col-sm-12 mr-4 mt-1"
-            placeholder="Nombre de la nueva caja..."
-          >
-        </div>
-              </div>
+            placeholder="Ingresa el nombre de la caja"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
     </form>
   </div>
-  <div class="app-modal-footer">
-    <div class="form-group text-right">
-      <button
-        (click)="modal.hide()"
-        type="button"
-        class="btn btn-danger raised mr-2 btn-sm"
-      >
-        Cerrar
-      </button>
-      <button
-        type="submit"
-        class="btn btn-primary btn-sm raised"
-        (click)="save()"
-        [disabled]="!forma.valid"
-      >
-        Guardar
-      </button>
-    </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="save()"
+      [disabled]="!forma.valid"
+    >
+      Guardar
+    </button>
   </div>
-</app-modal-basic>
+</ng-template>

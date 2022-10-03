@@ -1,0 +1,20 @@
+<div class="row">
+  <mat-form-field class="col-md-4 pb-0" appearance="outline">
+    <mat-label>Tablero permitido</mat-label>
+    <mat-select [(ngModel)]="boardsSelected" name="boardsSelected">
+      <mat-option [value]="0">Sin asignar</mat-option>
+      <mat-option *ngFor="let item of boards" [value]="item.id">{{
+        item.name_board
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="col-md-3">
+    <button class="btn btn-primary w-sm-100 mb-3" (click)="save()">
+      <i
+        class="fa"
+        [ngClass]="{ 'fa-save': !saving, 'fa-sync fa-spin': saving == true }"
+      ></i>
+      Guardar
+    </button>
+  </div>
+</div>

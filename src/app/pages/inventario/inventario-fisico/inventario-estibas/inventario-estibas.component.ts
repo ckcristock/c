@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InventarioFisicoModel } from 'src/app/core/models/InventarioFisicoModel';
+//import { InventarioFisicoModel } from 'src/app/core/models/InventarioFisicoModel';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { InventariofisicoService } from '../../services/inventariofisico.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
@@ -18,7 +18,7 @@ import { environment } from 'src/environments/environment';
 export class InventarioEstibasComponent implements OnInit {
 
 
-  public InventarioFisicoModel: InventarioFisicoModel = new InventarioFisicoModel();
+  //public InventarioFisicoModel: InventarioFisicoModel = new InventarioFisicoModel();
   public DatosEncabezado: any = {};
   public Funcionario_Digita: any = {};
   public Funcionario_Cuenta: any = {};

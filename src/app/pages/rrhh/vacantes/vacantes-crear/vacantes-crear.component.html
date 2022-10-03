@@ -1,368 +1,368 @@
-<div class="page-body">
-    <div class="row">
-        <div class="card">
-            <div class="card-body">
-
-                <form [formGroup]="form" (ngSubmit)="save()">
-
-                    <div class="col-md-12 text-center">
-                        <h4>Nueva Vacante</h4>
-                    </div>
-                    <div class="card-body" style="padding-bottom: 0px;">
-                        <div class="row invoive-info" style="margin-bottom: 0; padding-bottom: 0px;">
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <label>Empresa</label>
-                                    <ng-select formControlName="company_id" [items]="companies" bindLabel="text" bindValue="value" loadingText="loading " ngDefaultControl>
-                                    </ng-select>
-                                    <div class="col-md-7 offset-4">
-                                        <small class="invalid text-danger" *ngIf="company_id_invalid"> Es nesaria la empresa
-                                    </small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Título de vacante</label>
-                                    <input type="text" formControlName="title" class="form-control  f-9" />
-                                    <div *ngIf="title_invalid">
-                                        <small class="invalid text-danger"> Es nesario el título
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Fecha inicio</label>
-                                    <input type="date" formControlName="date_start" class="form-control  f-9" (change)="validarFechas()" />
-                                    <div *ngIf="date_start_invalid">
-                                        <small class="invalid text-danger"> Es nesaria la fecha de inicio
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Fecha fin</label>
-                                    <input type="date" formControlName="date_end" class="form-control  f-9" (change)="validarFechas()" />
-                                    <div *ngIf="date_end_invalid">
-                                        <small class="invalid text-danger"> Es nesaria la fecha de fin
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Grupo</label>
-
-                                    <ng-select class="" formControlName="group_id" (change)="getDependencies($event.value)" [items]="groups" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                                    </ng-select>
-
-                                    <div *ngIf="group_id_invalid">
-                                        <small class="invalid text-danger"> Es nesario el grupo
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Dependencia</label>
-                                    <ng-select formControlName="dependency_id" (change)="getPosition($event.value)" [items]="dependencies" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                                    </ng-select>
-
-                                    <div *ngIf="dependency_id_invalid">
-                                        <small class="invalid text-danger"> Es nesaria la dependencia
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Cargo</label>
-                                    <ng-select formControlName="position_id" [items]="positions" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                                    </ng-select>
-
-                                    <div class="col-md-12" *ngIf="position_id_invalid">
-                                        <small class="invalid text-danger"> Es nesario el cargo
-                                    </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Departamento</label>
-                                    <ng-select formControlName="department_id" [items]="departments" bindLabel="text" (change)="getMunicipalities($event.value)" bindValue="value" loadingText="loading" ngDefaultControl>
-                                    </ng-select>
-                                    <div *ngIf="department_id_invalid">
-                                        <small class="invalid text-danger"> Es nesario el departamento
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Municipio</label>
-                                    <ng-select formControlName="municipality_id" [items]="municipalities" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                                    </ng-select>
-                                    <div *ngIf="municipality_id_invalid">
-                                        <small class="invalid text-danger"> Es nesario el municipio
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <Label>Tipo de Salario</Label>
-                                    <ng-select formControlName="salary_type_id" [items]="salaries" (change)="salaryChange()" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
-                                    </ng-select>
-                                </div>
-                            </div>
-                            <div class="col-md-3" *ngIf="rangeSalary == true">
-                                <div class="form-group">
-                                    <label>Salario</label>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <input type="number" formControlName="min_salary" placeholder="Rango 1" class="form-control  f-9" min="1" (change)="validarSalarios()" />
-                                            <div *ngIf="min_salary_invalid">
-                                                <small class="invalid text-danger"> El rango 1 es necesario
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="number" formControlName="max_salary" placeholder="Rango 2" class="form-control  f-9" min="1" (change)="validarSalarios()" />
-                                            <div *ngIf="max_salary_invalid">
-                                                <small class="invalid text-danger">  El rango 2 es necesario
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Tipo de turno</label>
-                                    <select formControlName="turn_type" class="form-control custom-control">
-                                        <option [value]="turn.value" *ngFor="let turn of turns">
-                                            {{ turn.text }}
-                                        </option>
-                                    </select>
-                                    <div>
-                                        <small class="invalid text-danger" *ngIf="turn_type_invalid"> Es nesario el tipo
-                                            de turno
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Género</label>
-                                    <select class="form-control custom-control" formControlName="gener">
-                                        <option>No Aplica</option>
-                                        <option>Masculino</option>
-                                        <option>Femenino</option>
-                                    </select>
-                                    <div *ngIf="gener_invalid">
-                                        <small class="invalid text-danger"> Es nesario el género
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Idiomas</label>
-                                    <select class="form-control custom-control" formControlName="languages">
-                                        <option selected>Seleccione</option>
-                                        <option>Español</option>
-                                        <option>Inglés</option>
-                                    </select>
-                                    <div *ngIf="languages_invalid">
-                                        <small class="invalid text-danger"> Es nesario el idioma
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Medio de transporte</label>
-                                    <select class="form-control custom-control" formControlName="conveyance">
-                                        <option>Ninguno</option>
-                                        <option>Moto</option>
-                                        <option>Carro</option>
-                                    </select>
-                                    <div *ngIf="conveyance_invalid">
-                                        <small class="invalid text-danger"> Es nesario el medio de transporte
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Tipo de contrato</label>
-                                    <ng-select [items]="contracts" placeholder="Seleccione" formControlName="work_contract_type_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
-                                    <div *ngIf="contractType_invalid">
-                                        <small class="invalid text-danger"> Es nesario el tipo de contrato
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row invoive-info" style="margin-bottom: 0;">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Descripción</label>
-                                    <textarea formControlName="description" type="text" rows="3" class="form-control"></textarea>
-                                    <div *ngIf="description_invalid">
-                                        <small class="invalid text-danger">Es necesaria la descripcion
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 mt-3 mb-3 text-center">
-                                <h5>Requisitos</h5>
-                                <hr>
-                            </div>
-                            <div class="col-md-12">
-
-                                <div class="row mt-3">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Educación Mínima</label>
-                                            <input type="text" formControlName="education" placeholder="Ejm: Universidad / Carrera técnica" class="form-control  f-9" />
-                                            <div *ngIf="education_invalid">
-                                                <small class="invalid text-danger">Es necesario el campo
-                                                    </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Años de experiencia</label>
-                                            <input type="number" formControlName="experience_year" placeholder="" class="form-control  f-9" min="0" />
-                                            <div *ngIf="experience_year_invalid">
-                                                <small class="invalid text-danger">La experiencia es necesaria
-                                                    </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Desde (Edad) </label>
-                                                    <input type="number" formControlName="min_age" min="18" placeholder="Rango Desde" class="form-control  f-9" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Hasta (Edad)</label>
-                                                    <input type="number" formControlName="max_age" min="18" placeholder="Rango Hasta" class="form-control  f-9" />
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Disponibilidad de viajar</label>
-                                            <select formControlName="can_trip" class="form-control  tipo-dis-select">
-                                                    <option value="">Seleccione</option>
-                                                    <option value="1">Sí</option>
-                                                    <option value="0">No</option>
-                                                </select>
-                                            <div *ngIf="can_trip_invalid">
-                                                <small class="invalid text-danger">Es necesario el campo de disponibilidad
-                                                    </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Disponibilidad cambio residencia</label>
-                                            <select formControlName="change_residence" class="form-control  tipo-dis-select">
-                                                    <option value="">Seleccione</option>
-                                                    <option value="1">Sí</option>
-                                                    <option value="0">No</option>
-                                                </select>
-                                            <div *ngIf="change_residence_invalid">
-                                                <small class="invalid text-danger">Es necesario el campo de disponibilidad</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Requisitos de licencia conducción</label>
-                                            <ng-select multiple="true" [items]="licenses" appendTo="body" placeholder="Seleccione" formControlName="drivingLicenseJob" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Documentos legales necesarios</label>
-                                            <ng-select [items]="documents" placeholder="Seleccione" formControlName="document_type_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
-                                            <div *ngIf="documentType_invalid">
-                                                <small class="invalid text-danger">Es necesario el campo de documentos legales
-                                                    </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Pasaporte</label>
-                                            <select class="form-control custom-control" formControlName="passport">
-                                                <option selected>Seleccione</option>
-                                                <option *ngFor="let option of options" [value]="option.valor">
-                                                    {{ option.clave }}
-                                                </option>
-                                            </select>
-                                            <div *ngIf="passport_invalid">
-                                                <small class="invalid text-danger">Es necesario el campo de Pasaporte
-                                                    </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Visa Americana</label>
-                                            <select class="form-control custom-control" formControlName="visa" (change)="visa()">
-                                                <option selected>Seleccione</option>
-                                                <option *ngFor="let option of options" [value]="option.valor">
-                                                    {{ option.clave }}
-                                                </option>
-                                            </select>
-                                            <div *ngIf="visa_invalid">
-                                                <small class="invalid text-danger">Es necesario el campo de Visa
-                                                    </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3" *ngIf="visaSelected == true">
-                                        <div class="form-group">
-                                            <label>Tipo de Visa</label>
-                                            <ng-select [items]="visas" placeholder="Seleccione" formControlName="visa_type_id" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl></ng-select>
-                                            <div *ngIf="visaType_invalid">
-                                                <small class="invalid text-danger">Es necesario el campo de Visa
-                                                    </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-right mt-4">
-                        <button type="submit" class="btn btn-primary btn-sm btn-block">Guardar
-                            Vacante</button>
-                    </div>
-                </form>
-            </div>
-
+<div class="card">
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="save()">
+        <div class="card-title">
+          <h4 class="text-primary">Nueva vacante</h4>
         </div>
+        <hr class="line" />
+        <mat-form-field class="col-md-5 pl-0" appearance="outline">
+          <mat-label>Título</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el título"
+            formControlName="title"
+            autocomplete="off"
+            required
+          />
+          <mat-error *ngIf="title_invalid"> Es necesario el título </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Empresa</mat-label>
+          <mat-select formControlName="company_id" required>
+            <mat-option *ngFor="let item of companies" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="company_id_invalid">
+            Es necesaria la empresa
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Fecha de inicio</mat-label>
+          <input
+            matInput
+            type="date"
+            formControlName="date_start"
+            autocomplete="off"
+            (change)="validarFechas()"
+            required
+          />
+          <mat-error *ngIf="date_start_invalid"> Es necesaria la fecha</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 px-0" appearance="outline">
+          <mat-label>Fecha de fin</mat-label>
+          <input
+            matInput
+            type="date"
+            formControlName="date_end"
+            autocomplete="off"
+            required
+            (change)="validarFechas()"
+          />
+          <mat-error *ngIf="date_end_invalid"> Es necesaria la fecha</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Grupo</mat-label>
+          <mat-select
+            formControlName="group_id"
+            (selectionChange)="getDependencies($event.value)"
+            required
+          >
+            <mat-option *ngFor="let item of groups" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="group_id_invalid"> Es necesario el grupo </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Dependencia</mat-label>
+          <mat-select
+            formControlName="dependency_id"
+            (selectionChange)="getPosition($event.value)"
+            required
+          >
+            <mat-option *ngFor="let item of dependencies" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="dependency_id_invalid">
+            Es necesaria la dependencia
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Cargo</mat-label>
+          <mat-select formControlName="position_id" required>
+            <mat-option *ngFor="let item of positions" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="position_id_invalid">
+            Es necesario el cargo
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 px-0" appearance="outline">
+          <mat-label>Departamento</mat-label>
+          <mat-select
+            formControlName="department_id"
+            required
+            (selectionChange)="getMunicipalities($event.value)"
+          >
+            <mat-option *ngFor="let item of departments" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="department_id_invalid">
+            Es necesario el departamento
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Municipio</mat-label>
+          <mat-select formControlName="municipality_id" required>
+            <mat-option
+              *ngFor="let item of municipalities"
+              [value]="item.value"
+              >{{ item.text }}</mat-option
+            >
+          </mat-select>
+          <mat-error *ngIf="municipality_id_invalid">
+            Es necesario el municipio
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Tipo de salario</mat-label>
+          <mat-select
+            formControlName="salary_type_id"
+            (selectionChange)="salaryChange()"
+            required
+          >
+            <mat-option *ngFor="let item of salaries" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-2 pl-0"
+          appearance="outline"
+          *ngIf="rangeSalary == true"
+        >
+          <mat-label>Salario (-)</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="min_salary"
+            autocomplete="off"
+            placeholder="Ingresa el salario mínimo"
+            min="1"
+            (change)="validarSalarios()"
+            required
+          />
+          <mat-error *ngIf="min_salary_invalid">
+            Es necesario el salario
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-2 pl-0"
+          appearance="outline"
+          *ngIf="rangeSalary == true"
+        >
+          <mat-label>Salario (+)</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="max_salary"
+            placeholder="Ingresa el salario máximo"
+            min="1"
+            (change)="validarSalarios()"
+            required
+          />
+          <mat-error *ngIf="max_salary_invalid">
+            Es necesario el salario
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Tipo de turno</mat-label>
+          <mat-select formControlName="turn_type" required>
+            <mat-option *ngFor="let item of turns" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="turn_type_invalid">
+            Es necesario el tipo de turno
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 px-0" appearance="outline">
+          <mat-label>Género</mat-label>
+          <mat-select formControlName="gener" required>
+            <mat-option value="">No aplica</mat-option>
+            <mat-option value="M">Masculino</mat-option>
+            <mat-option value="F">Femenino</mat-option>
+          </mat-select>
+          <mat-error *ngIf="gener_invalid"> Es necesario el género </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Idiomas</mat-label>
+          <mat-select formControlName="languages" required>
+            <mat-option value="espanol">Español</mat-option>
+            <mat-option value="ingles">Inglés</mat-option>
+          </mat-select>
+          <mat-error *ngIf="languages_invalid">
+            Es necesario el idioma
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Medio de transporte</mat-label>
+          <mat-select formControlName="conveyance" required>
+            <mat-option value="ninguno">Ninguno</mat-option>
+            <mat-option value="moto">Moto</mat-option>
+            <mat-option value="carro">Carro</mat-option>
+          </mat-select>
+          <mat-error *ngIf="conveyance_invalid">
+            Es necesario el medio de transporte
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Tipo de contrato</mat-label>
+          <mat-select formControlName="work_contract_type_id" required>
+            <mat-option *ngFor="let item of contracts" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="contractType_invalid">
+            Es necesario el tipo de contrato
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-12 px-0 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Descripción</mat-label>
+          <textarea
+            matInput
+            formControlName="description"
+            placeholder="Ingresa la descripción"
+            rows="3"
+            [cdkTextareaAutosize]="true"
+            required
+          ></textarea>
+          <mat-error *ngIf="description_invalid">
+            Es necesaria la descripción
+          </mat-error>
+        </mat-form-field>
+        <div class="card-title">
+          <h5 class="text-primary text-center">Requisitos</h5>
+        </div>
+        <hr />
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Educación mínima</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="education"
+            placeholder="Ejm: Universidad / Carrera técnica"
+            required
+          />
+          <mat-error *ngIf="education_invalid"> Es necesario el campo </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Años de experencia</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="experience_year"
+            placeholder="Ingresa los años de experiencia"
+            required
+            min="0"
+          />
+          <mat-error *ngIf="experience_year_invalid">
+            Es necesaria la experiencia
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Edad mínima</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="min_age"
+            placeholder="Ingresa la edad mínima"
+            min="18"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Edad máxima</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="max_age"
+            placeholder="Ingresa la edad máxima"
+            min="18"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-3 px-0" appearance="outline">
+          <mat-label>Disponibilidad para viajar</mat-label>
+          <mat-select formControlName="can_trip" required>
+            <mat-option value="1">Sí</mat-option>
+            <mat-option value="2">No</mat-option>
+          </mat-select>
+          <mat-error *ngIf="can_trip_invalid"> Es necesario el campo </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Cambio de residencia</mat-label>
+          <mat-select formControlName="change_residence" required>
+            <mat-option value="1">Sí</mat-option>
+            <mat-option value="2">No</mat-option>
+          </mat-select>
+          <mat-error *ngIf="change_residence_invalid">
+            Es necesario el campo
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Licencia de conducción</mat-label>
+          <mat-select formControlName="drivingLicenseJob">
+            <mat-option *ngFor="let item of licenses" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Documentos legales necesarios</mat-label>
+          <mat-select formControlName="document_type_id" required>
+            <mat-option *ngFor="let item of documents" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="documentType_invalid">
+            Es necesario el campo
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Pasaporte</mat-label>
+          <mat-select formControlName="passport" required>
+            <mat-option *ngFor="let item of options" [value]="item.valor">{{
+              item.clave
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="passport_invalid"> Es necesario el campo </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 pl-0" appearance="outline">
+          <mat-label>Visa americana</mat-label>
+          <mat-select formControlName="visa" required (selectionChange)="visa()">
+            <mat-option *ngFor="let item of options" [value]="item.valor">{{
+              item.clave
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="visa_invalid"> Es necesario el campo </mat-error>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-2 px-0"
+          appearance="outline"
+          *ngIf="visaSelected == true"
+        >
+          <mat-label>Tipo de visa</mat-label>
+          <mat-select formControlName="visa_type_id" required>
+            <mat-option *ngFor="let item of visas" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="visaType_invalid"> Es necesario el campo </mat-error>
+        </mat-form-field>
+        <button type="submit" class="btn btn-primary btn-block">
+          Guardar vacante
+        </button>
+      </form>
     </div>
-</div>
-<ng-template #rt let-r="result" let-t="term">
+  </div>
+  <ng-template #rt let-r="result" let-t="term">
     <span class="f-9">{{ r.Nombre }} </span>
-</ng-template>
-<!-- <swal #confirmacionSwal title="" text="" type=""></swal> -->
+  </ng-template>
+  <!-- <swal #confirmacionSwal title="" text="" type=""></swal> -->

@@ -1,101 +1,212 @@
-<!-- <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Nuevo tipo</button>
-            <h5>Tipos de Contrato</h5>
-            <div class="form-row mt-4 ml-1">
-                <div class="form-group">
-                    <label for="">Filtro Nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getContractsType()" name="name" autocomplete="off">
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">Nuevo tipo</button>
-            <h5>Tipos de Contrato</h5>
-            <div class="form-row mt-4 ml-1">
-                <div class="form-group">
-                    <label for="">Filtro Nombre</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="filtro.name" (change)="getContractsType()" name="name" autocomplete="off">
-                </div>
-            </div>
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Tipos de contrato</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(add, 'Nuevo tipo de contrato')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
-        <table class="table table-bordered table-striped" *ngIf="!loading && contracts.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let contract of contracts" [ngClass]="{'bg-danger text-white': (contract.status === 'Inactivo' )}">
-                    <td scope="row"> {{ contract.name }} </td>
-                    <td> {{ contract.description }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light waves-effect caja-botones" target="_blank" (click)="getData(contract); modal.show()"><i
-                                            class="fa fa-file-pdf-o"></i>Editar</a>
-                                    <a *ngIf="contract.status == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(contract, 'Inactivo')">
-                                        <i class="fa fa-pencil"></i>Inactivar</a>
-                                    <a *ngIf="contract.status == 'Inactivo'" class="dropdown-item waves-light waves-effect caja-botones" (click)="activateOrInactivate(contract, 'Activo')">
-                                        <i class="fa fa-pencil"></i>Activar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+      </div>
     </div>
-    <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getContractsType($event)" [pageSize]="pagination.pageSize" [(page)]="pagination.page" aria-label="Default pagination"
-        maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-    </ngb-pagination>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filtro.name"
+              (input)="getContractsType()"
+              name="name"
+              autocomplete="off"
+              placeholder="Busca por nombre"
+            />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        
+        *ngIf="!loading && contracts.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let contract of contracts"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': contract.status === 'Inactivo'
+            }"
+          >
+            <td class="align-middle">{{ contract.name }}</td>
+            <td class="align-middle">{{ contract.description }}</td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
+                    (click)="
+                      getData(contract);
+                      openConfirm(add, 'Actualizar tipo de contrato')
+                    "
+                    ><i class="far fa-edit"></i> Editar</a
+                  >
+                  <a
+                    *ngIf="contract.status == 'Activo'"
+                    href="javascript: void(0);"
+                    class="dropdown-item text-danger waves-light caja-botones"
+                    (click)="activateOrInactivate(contract, 'Inactivo')"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular</a
+                  >
+                  <a
+                    *ngIf="contract.status == 'Inactivo'"
+                    href="javascript: void(0);"
+                    class="dropdown-item text-success waves-light caja-botones"
+                    (click)="activateOrInactivate(contract, 'Activo')"
+                  >
+                    <i class="fas fa-check"></i> Activar</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <ngb-pagination
+    class="d-flex justify-content-center pagination-rounded pagination-sm"
+    [collectionSize]="pagination.collectionSize"
+    (pageChange)="getContractsType($event)"
+    [pageSize]="pagination.pageSize"
+    [(page)]="pagination.page"
+    aria-label="Default pagination"
+    maxSize="5"
+    rotate="true"
+    ellipses="false"
+    boundaryLinks="true"
+    rotate="true"
+    ellipses="false"
+    boundaryLinks="true"
+  >
+  </ngb-pagination>
 </div>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">{{ selected }}</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            name="name"
+            autocomplete="off"
+          />
+          <mat-error *ngIf="name_invalid">Es necesario el nombre</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la descripción"
+            formControlName="description"
+            name="description"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="createContractType()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
 <app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> {{ selected }} </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-        </button>
+  <div class="app-modal-header">
+    <h5 class="modal-title"></h5>
+    <button type="button" class="close basic-close" (click)="modal.hide()">
+      <span aria-hidden="true">
+        <i class="fas fa-times" (click)="modal.hide()"></i>
+      </span>
+    </button>
+  </div>
+  <div class="app-modal-body"></div>
+  <div class="app-modal-footer">
+    <div class="form-group text-right">
+      <button
+        (click)="modal.hide()"
+        type="button"
+        class="btn btn-danger raised mr-2 btn-sm"
+      >
+        Cerrar
+      </button>
+      <button type="submit" class="btn btn-primary btn-sm raised">
+        Guardar
+      </button>
     </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label class="custom-label" for="tipo_contrati">Nombre</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="name" name="name" autocomplete="off">
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="custom-label" for="funcionario_id">Descripción</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="description" name="description" required>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre 
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="createContractType()">Guardar</button>
-        </div>
-    </div>
+  </div>
 </app-modal-basic>
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

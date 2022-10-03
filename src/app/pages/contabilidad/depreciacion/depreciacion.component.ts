@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class DepreciacionComponent implements OnInit {
 
   public DatosCabecera = {
-    Titulo: 'Depreciación de Activos Fijos',
+    Titulo: 'Depreciación de activos fijos',
     Fecha: new Date(),
     Codigo:''
   }
@@ -17,5 +17,8 @@ export class DepreciacionComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
 }

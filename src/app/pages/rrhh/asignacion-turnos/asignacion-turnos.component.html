@@ -1,113 +1,105 @@
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-12 mb-4">
-            <h4 class="font-weight-bold">Asignación de Horarios</h4>
-          </div>
+<div class="card">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Asignación de horarios</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
-        <form [formGroup]="forma" (ngSubmit)="makeRequestBySemana();getData()">
-          <div class="row d-flex align-items-end">
-            <div class="col-md-2">
-              <label for="group" class="custom-label">Filtrar por grupos</label>
-              <select
+      </div>
+    </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <form [formGroup]="forma" (ngSubmit)="makeRequestBySemana(); getData()">
+          <div class="row">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Grupo</mat-label>
+              <mat-select
                 formControlName="group_id"
-                class="form-control form-control-sm"
+                (selectionChange)="makeRequestBySemana(); getData()"
               >
-                <option *ngFor="let group of groupList" [value]="group.value">
+                <mat-option
+                  *ngFor="let group of groupList"
+                  [value]="group.value"
+                >
                   {{ group.text }}
-                </option>
-              </select>
-            </div>
-
-            <div class="col-md-2">
-              <label for="dependencia" class="custom-label"
-                >Filtrar por dependencia</label
-              >
-              <select
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Dependencia</mat-label>
+              <mat-select
                 formControlName="dependency_id"
-                class="form-control form-control-sm"
+                (selectionChange)="makeRequestBySemana(); getData()"
               >
-                <option
+                <mat-option
                   *ngFor="let dependency of dependencyList"
                   [value]="dependency.value"
                 >
                   {{ dependency.text }}
-                </option>
-              </select>
-            </div>
-
-            <div class="col-md-3">
-              <label for="centroCosto" class="custom-label"
-                >Nombre funcionario</label
-              >
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Funcionario</mat-label>
               <input
-                [readonly]="false"
-                placeholder="Buscar..."
+                matInput
+                type="text"
+                placeholder="Busca por funcionario"
                 formControlName="person"
-                class="form-control form-control-sm"
+                [readonly]="false"
+                (input)="makeRequestBySemana(); getData()"
               />
-            </div>
-            <div class="col-md-3">
-              <label for="dependencia" class="custom-label"
-                >Filtrar por semana</label
-              >
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Semana</mat-label>
               <input
+                matInput
                 type="week"
+                (change)="makeRequestBySemana(); getData()"
                 formControlName="week"
-                class="form-control form-control-sm text-center"
                 required
               />
-            </div>
-            <div class="col-md-2 text-right">
-              <button
-                class="btn btn-secondary default btn-sm"
-              >
+            </mat-form-field>
+            <!-- <div class="col-md-12 mb-3">
+              <button class="btn btn-outline-primary btn-sm btn-block">
                 <i class="fas fa-search"></i> Filtrar
               </button>
-              <!-- <button
-                *ngIf="datosGenerales.length"
-                title="descargar"
-                class="btn btn-info btn-sm ml-2"
-                (click)="descargarInformeTurnos(group.id)"
-              >
-                <i class="fa fa-download"></i> Descargar
-              </button> -->
-            </div>
+            </div> -->
           </div>
         </form>
-      </div>
-    </div>
-  </div>
-</div>
+      </mat-expansion-panel>
+    </mat-accordion>
 
-<div *ngIf="datosGenerales.length && !loading; else notData">
-  <div class="card text-justify" *ngFor="let company of datosGenerales">
-    <div class="card-header d-flex justify-content-between">
-      <h5 class="card-title text-primary">
-        <strong> {{ company.name }} </strong>
-      </h5>
-    </div>
-
-    <div class="card-body depen">
-      <div *ngFor="let group of company.groups">
-        <h5>{{ group.name }}</h5>
-
-        <div *ngFor="let dependency of group.dependencies">
-          <h6 class="custom-label">{{ dependency.name }}</h6>
-          <app-semana-turno
-            [people]="dependency.people"
-            [turnosRotativos]="turns"
-            [diaInicial]="diaInicialSemana"
-            [changeWeek]="changeWeek"
-            [diaFinal]="diaFinalSemana"
-          ></app-semana-turno>
+    <div *ngIf="datosGenerales.length && !loading; else notData">
+      <div *ngFor="let company of datosGenerales">
+        <div *ngFor="let group of company.groups">
+          <div *ngFor="let dependency of group.dependencies">
+            <h6 class="text-center text-uppercase text-primary">
+              {{ group.name }} - {{ dependency.name }}
+            </h6>
+            <app-semana-turno
+              [people]="dependency.people"
+              [turnosRotativos]="turns"
+              [diaInicial]="diaInicialSemana"
+              [changeWeek]="changeWeek"
+              [diaFinal]="diaFinalSemana"
+            ></app-semana-turno>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
 <!-- 
 <div class="alert alert-secondary" >
   <p class="font-weight-bold text-center">
@@ -115,7 +107,11 @@
     "Configuración"
   </p>
 </div> -->
-
-<ng-template #notData>
-  <app-not-data [loading]="loading"></app-not-data>
-</ng-template>
+<!-- <button
+                *ngIf="datosGenerales.length"
+                title="descargar"
+                class="btn btn-info btn-sm ml-2"
+                (click)="descargarInformeTurnos(group.id)"
+              >
+                <i class="fa fa-download"></i> Descargar
+              </button> -->

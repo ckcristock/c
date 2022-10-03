@@ -17,4 +17,8 @@ export class DependenciesService {
   save( form ){
     return this.http.post(`${ environment.base_url }/dependencies`,form)
   }
+
+  delete(id){
+    return this.http.delete(`${ environment.base_url }/dependencies/${id}`)
+  }
 }

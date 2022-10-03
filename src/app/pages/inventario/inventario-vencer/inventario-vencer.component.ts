@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { MatAccordion } from '@angular/material';
 
 @Component({
   selector: 'app-inventario-vencer',
@@ -9,7 +10,17 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./inventario-vencer.component.scss']
 })
 export class InventarioVencerComponent implements OnInit {
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   public Vencidos:any = [];
   public filtro_nom:any='';
   public filtro_lot:any='';

@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { MatAccordion } from '@angular/material/expansion';
 import {SwalService} from '../../services/swal.service';
 import { RotatingTurnService } from './rotating-turn.service';
 @Component({
@@ -7,6 +8,17 @@ import { RotatingTurnService } from './rotating-turn.service';
   styleUrls: ['./turno-rotativo.component.scss'],
 })
 export class TurnoRotativoComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   showModal = new EventEmitter<any>();
   loading = false;
   turnosRotativo: any = [];
@@ -26,6 +38,7 @@ export class TurnoRotativoComponent implements OnInit {
     this._rotatingT.getAll().subscribe((r: any) => {
       this.loading = false;
       this.turnosRotativo = r.data;
+      console.warn(this.turnosRotativo)
     });
   }
   changeState(id) {
@@ -47,7 +60,7 @@ export class TurnoRotativoComponent implements OnInit {
               title = 'Ha ocurrido un error';
             }
             this.getAll();
-            this._swal.show({ title, text, icon, showCancel: false });
+            this._swal.show({ title, text, icon, showCancel: false,timer: 1000 });
           });
         }
       });

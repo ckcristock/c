@@ -1,101 +1,170 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
-                <i class="fa fa-plus"></i> Agregar
-            </button>
-            <h5 class="text-primary">Valores - Estimación de viáticos</h5>
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Valores - Estimación de viáticos</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-sm btn-primary"
+            (click)="openConfirm(add, 'Nuevo valor')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
         </div>
-        <hr class="bg-primary">
-        <table class="table table-borderless table-striped" *ngIf="!loading && values.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th>Descripción</th>
-                    <th>Valor Nacional Terrestre</th>
-                    <th>Valor Internacional Terrestre</th>
-                    <th>Valor Nacional Aereo</th>
-                    <th>Valor Internacioal Aereo</th>
-                    <th>Fecha Creación</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of values">
-                    <td> {{ item.travel_expense_estimation.description }} </td>
-                    <td> {{ item.land_national_value | currency:'COP' }} </td>
-                    <td> {{ item.land_international_value | currency:'COP' }} </td>
-                    <td> {{ item.aerial_national_value | currency:'COP' }} </td>
-                    <td> {{ item.aerial_international_value | currency:'COP' }} </td>
-                    <td> {{ item.created_at | date: 'dd-MM-YYYY' }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getEstimationValue(item); modal.show()">
-                                        <i class="far fa-edit"></i> Editar
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+      </div>
     </div>
-</div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">{{ title }}</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
-            <span aria-hidden="true">
-              <i class="fas fa-times"></i>
-            </span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="">Descripción</label>
-                            <select class="form-control form-control-sm" formControlName="travel_expense_estimation_id">
-                                <option *ngFor="let item of estimations" [value]="item.id">
-                                    {{ item.description }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Valor Nacional Terrestre</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="land_national_value">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Valor Internacional Terrestre</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="land_international_value">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Valor Nacional Aereo</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="aerial_national_value">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Valor Internacioal Aereo</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="aerial_international_value">
-                        </div>
-                    </div>
+    <hr class="line" />
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && values.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th class="align-middle">Descripción</th>
+            <th class="align-middle">Valor Nacional Terrestre</th>
+            <th class="align-middle">Valor Internacional Terrestre</th>
+            <th class="align-middle">Valor Nacional Aereo</th>
+            <th class="align-middle">Valor Internacioal Aereo</th>
+            <th class="align-middle">Fecha Creación</th>
+            <th class="align-middle col-md-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of values" class="text-center">
+            <td class="align-middle">
+              {{ item.travel_expense_estimation.description }}
+            </td>
+            <td class="align-middle">
+              {{ item.land_national_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.land_international_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.aerial_national_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.aerial_international_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.created_at | date: "longDate" }}
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
+                    (click)="
+                      getEstimationValue(item);
+                      openConfirm(add, 'Actualizar valor')
+                    "
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
                 </div>
-            </div>
-        </form>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="save()">Guardar</button>
-        </div>
-    </div>
-</app-modal-basic>
+  </div>
+</div>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">{{ title }}</h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click'); form.reset()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <mat-select formControlName="travel_expense_estimation_id">
+            <mat-option *ngFor="let item of estimations" [value]="item.id">
+              {{ item.description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor nacional terrestre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el valor nacional terrestre"
+            formControlName="land_national_value"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor internacional terrestre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el valor internacional terrestre"
+            formControlName="land_international_value"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor nacional aéreo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el valor nacional aéreo"
+            formControlName="aerial_national_value"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor internacional aéreo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el valor internacional aéreo"
+            formControlName="aerial_international_value"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click'); form.reset()"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

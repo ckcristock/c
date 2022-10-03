@@ -43,7 +43,7 @@ export class CrearApuPiezaComponent implements OnInit {
   otherCollapsed:boolean;
   indirectCollapsed:boolean;
   auiCollapsed:boolean;
-  loading:boolean = false;
+  loading:boolean;
   calculationBase: any = {}
   constructor(
     private _apuPieza: ApuPiezaService,
@@ -56,7 +56,7 @@ export class CrearApuPiezaComponent implements OnInit {
     ) { }
     
   async ngOnInit() {
-    this.loading = false;
+    this.loading = false
     await this.getBases()
     this.createForm();
     this.getClients();
@@ -70,7 +70,7 @@ export class CrearApuPiezaComponent implements OnInit {
     this.getThicknesses();
     await this.getCutLaserMaterial();
     this.validateData();
-    this.loading = true;
+    this.loading = true
   }
   
   collapses(){
@@ -125,6 +125,7 @@ export class CrearApuPiezaComponent implements OnInit {
   getGeometries(){
     this._apuPieza.getGeometries().subscribe((r:any) => {
       this.geometries = r.data;
+      console.log(this.geometries)
     })
   }
   

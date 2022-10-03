@@ -9,6 +9,7 @@ import * as moment from 'moment';
   styleUrls: ['./nomina-funcionario.component.scss'],
 })
 export class NominaFuncionarioComponent implements OnInit {
+  active = 1;
   tabs = ["Colilla Pago", "Seguridad y Parafiscales", "Provisiones"]
   tabActual = 'Colilla Pago';
   funcionario: any = {};

@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
 export class CertificadoingresoyretencionComponent implements OnInit {
 
   public datosCabecera:any = {
-    Titulo: 'Certificados de Ingreso y Retención',
+    Titulo: 'Ingreso y retención',
     Fecha: new Date()
   }
   public CertificadoRetencionModel: CertificadoRetencionModel = new CertificadoRetencionModel();

@@ -21,11 +21,11 @@
                     <th>Quien elabora</th>
                     <th>Cantidad</th>
                     <th>F. Creación</th>
-                    <th class="text-center">Acciones</th>
+                    <th class="text-center col-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of apuParts" [ngClass]="{'bg-danger text-white': ( item.state == 'Inactivo' )}">
+                <tr *ngFor="let item of apuParts" [ngClass]="{'text-danger font-weight-bold': ( item.state == 'Inactivo' )}">
                     <td> {{ item.code }} </td>
                     <td> {{ item.name }} </td>
                     <td> {{ item.thirdparty.first_name }} {{ item.thirdparty.first_surname }} </td>
@@ -33,24 +33,24 @@
                     <td> {{ item.line }} </td>
                     <td> {{ item.person.first_name }} {{ item.person.first_surname }} </td>
                     <td> {{ item.amount }} </td>
-                    <td> {{ item.created_at | date:'dd-MM-YYYY' }} </td>
+                    <td> {{ item.created_at | date:'longDate' }} </td>
                     <td>
                         <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
+                            <div ngbDropdown container="body" class="dropdown-primary">
+                                <button ngbDropdownToggle class="btn btn-primary btn-sm  waves-light " type="button">
                                     <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-dark waves-effect caja-botones" [routerLink]="['/crm/apu/ver-apu-pieza', item.id]">
+                                    <a class="dropdown-item waves-light text-dark  caja-botones" [routerLink]="['/crm/apu/ver-apu-pieza', item.id]">
                                         <i class="far fa-eye"></i> Ver
                                     </a>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" [routerLink]="['/crm/apu/editar-apu-pieza', item.id]">
+                                    <a class="dropdown-item waves-light text-info  caja-botones" [routerLink]="['/crm/apu/editar-apu-pieza', item.id]">
                                         <i class="far fa-edit"></i> editar
                                     </a>
-                                    <a *ngIf="item.state == 'Activo'" (click)="activateOrInactive('Inactivo', item.id)" class="dropdown-item waves-light text-danger waves-effect caja-botones">
+                                    <a *ngIf="item.state == 'Activo'" (click)="activateOrInactive('Inactivo', item.id)" class="dropdown-item waves-light text-danger  caja-botones">
                                         <i class="far fa-trash-alt"></i> Anular
                                     </a>
-                                    <a *ngIf="item.state == 'Inactivo'" (click)="activateOrInactive('Activo', item.id)" class="dropdown-item waves-light text-success waves-effect caja-botones">
+                                    <a *ngIf="item.state == 'Inactivo'" (click)="activateOrInactive('Activo', item.id)" class="dropdown-item waves-light text-success  caja-botones">
                                         <i class="fas fa-check"></i> Activar
                                     </a>
                                 </div>

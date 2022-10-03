@@ -24,4 +24,12 @@ export class DetalleService {
   blockUser( data:any, id ){
     return this.http.put(`${environment.base_url}/blockOrActivate/${id}`, data);
   }
+
+  getLiquidation(id) {
+    return this.http.get(`${environment.base_url}/liquidation/${id}`);
+  }
+
+  descargar(body){
+    return this.http.post(`${environment.base_url}/nomina/liquidaciones/previsualizacion`, body)
+  }
 }

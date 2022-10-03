@@ -1,124 +1,77 @@
-<div class="row">
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Nombre Activo</label>
-            <p>{{Activo_Fijo.Nombre | uppercase}} </p>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Tipo Activo</label>
-            <p>{{Activo_Fijo.Tipo_Activo | uppercase}} </p>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Proveedor</label>
-            <p>{{Activo_Fijo.Proveedor | uppercase}} </p>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Centro Costo</label>
-            <p>{{Activo_Fijo.Centro_Costo | uppercase}} </p>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Cuenta Contrapartida</label>
-            <p>{{Activo_Fijo.Contrapartida | uppercase}} </p>
-        </div>
-
-    </div>
-
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Documento</label>
-            <p>{{Activo_Fijo.Documento | uppercase}} </p>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Concepto</label>
-            <p>{{Activo_Fijo.Concepto | uppercase }} </p>
-        </div>
-    </div>
-
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Referencia</label>
-            <p>{{Activo_Fijo.Referencia}} </p>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Base</label>
-            <p>{{Activo_Fijo.Base | currency}} </p>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Iva</label>
-            <p>{{Activo_Fijo.Iva | currency}} </p>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Costo PCGA</label>
-            <p>{{Activo_Fijo.Costo_PCGA | currency}} </p>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Costo NIIF</label>
-            <p>{{Activo_Fijo.Costo_NIIF | currency}} </p>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Cuenta  Rete Iva</label>
-            <p>{{Activo_Fijo.Cuenta_Rete_Iva | uppercase}} </p>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Cuenta  Rete Ica</label>
-            <p>{{Activo_Fijo.Cuenta_Rete_Ica | uppercase}} </p>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Costo Rete Iva</label>
-            <p>{{Activo_Fijo.Costo_Rete_Iva=='' ? 0: Activo_Fijo.Costo_Rete_Iva }} </p>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Costo Rete Ica</label>
-            <p>{{Activo_Fijo.Costo_Rete_Fuente=='' ? 0: Activo_Fijo.Costo_Rete_Fuente }} </p>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Funcionario Creacion</label>
-            <p>{{Activo_Fijo.Funcionario | uppercase}} </p>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="">Fecha Creacion</label>
-            <p>{{Activo_Fijo.Fecha | date:'dd/MM/yyyy'}} </p>
-        </div>
-    </div>
-
+<div class="rounded-top table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Nombre Activo</th>
+        <th>Tipo Activo</th>
+        <th>Proveedor</th>
+        <th>Centro Costo</th>
+        <th>Cuenta Contrapartida</th>
+        <th>Documento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="text-center">
+        <td>{{ Activo_Fijo.Nombre | uppercase }}</td>
+        <td>{{ Activo_Fijo.Tipo_Activo | uppercase }}</td>
+        <td>{{ Activo_Fijo.Proveedor | uppercase }}</td>
+        <td>{{ Activo_Fijo.Centro_Costo | uppercase }}</td>
+        <td>{{ Activo_Fijo.Contrapartida | uppercase }}</td>
+        <td>{{ Activo_Fijo.Documento | uppercase }}</td>
+      </tr>
+    </tbody>
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Concepto</th>
+        <th>Referencia</th>
+        <th>Base</th>
+        <th>Iva</th>
+        <th>Costo PCGA</th>
+        <th>Costo NIIF</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="text-center">
+        <td>{{ Activo_Fijo.Concepto | uppercase }}</td>
+        <td>{{ Activo_Fijo.Referencia }}</td>
+        <td>${{ Activo_Fijo.Base | currency: "":"" }}</td>
+        <td>${{ Activo_Fijo.Iva | currency: "":"" }}</td>
+        <td>${{ Activo_Fijo.Costo_PCGA | currency: "":"" }}</td>
+        <td>${{ Activo_Fijo.Costo_NIIF | currency: "":"" }}</td>
+      </tr>
+    </tbody>
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Cuenta Rete Iva</th>
+        <th>Cuenta Rete Ica</th>
+        <th>Costo Rete Iva</th>
+        <th>Costo Rete Ica</th>
+        <th>Funcionario Creacion</th>
+        <th>Fecha Creacion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="text-center">
+        <td>{{ Activo_Fijo.Cuenta_Rete_Iva | uppercase }}</td>
+        <td>{{ Activo_Fijo.Cuenta_Rete_Ica | uppercase }}</td>
+        <td>
+          {{ Activo_Fijo.Costo_Rete_Iva == "" ? 0 : Activo_Fijo.Costo_Rete_Iva }}
+        </td>
+        <td>
+          {{
+            Activo_Fijo.Costo_Rete_Fuente == ""
+              ? 0
+              : Activo_Fijo.Costo_Rete_Fuente
+          }}
+        </td>
+        <td>{{ Activo_Fijo.Funcionario | uppercase }}</td>
+        <td>{{ Activo_Fijo.Fecha | date: "dd/MM/yyyy" }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <swal #alertSwal title="" text="" type=""></swal>

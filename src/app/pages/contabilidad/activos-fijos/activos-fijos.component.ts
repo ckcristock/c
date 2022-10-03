@@ -11,6 +11,7 @@ import { ActivosFijosService } from './activos-fijos.service';
 import { NgOption } from '@ng-select/ng-select';
 import { environment } from 'src/environments/environment';
 import { CentroCostosService } from '../centro-costos/centro-costos.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-activos-fijos',
@@ -18,6 +19,17 @@ import { CentroCostosService } from '../centro-costos/centro-costos.service';
   styleUrls: ['./activos-fijos.component.scss']
 })
 export class ActivosFijosComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   @ViewChild('ModalActivoFijo') ModalActivoFijo:any;
   @ViewChild('ModalActivoFijoAdiccion') ModalActivoFijoAdiccion:any;
   @ViewChild('alertSwal') alertSwal:any;
@@ -91,11 +103,11 @@ export class ActivosFijosComponent implements OnInit {
   // perfilUsuario:any = localStorage.getItem('miPerfil');
 
   myDateRangePickerOptions: IMyDrpOptions = {
-    width:'150px', 
-    height: '21px',
+    width:'220px', 
+    height: '28px',
     selectBeginDateTxt:'Inicio',
     selectEndDateTxt:'Fin',
-    selectionTxtFontSize: '10px',
+    selectionTxtFontSize: '12px',
     dateFormat: 'yyyy-mm-dd',
   };
 
@@ -141,7 +153,10 @@ export class ActivosFijosComponent implements OnInit {
   ngOnInit() {
     // this.ListasEmpresas();
   }
-  
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
   search_tercero = (text$: Observable<string>) =>
   text$
   .pipe(
@@ -515,13 +530,27 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
   }
 
   dateRangeChanged2(event){
-    this.ReporteModel.Fechas = event.formatted;
+    this.ReporteModel.Fechas = event.target.value;
   }
-
+  fechita:any;
+  fechitaF(event){    
+    this.fechita = event.target.value;  
+    if(this.fechita2 !=null){
+      this.ReporteModel.Fechas = this.fechita + ' - ' + this.fechita2;
+    }  
+  }
+  fechita2:any;
+  fechitaF2(event){
+    this.fechita2 = event.target.value;
+    if(this.fechita !=null){
+      this.ReporteModel.Fechas = this.fechita + ' - ' + this.fechita2;
+    }  
+  }
   loadListasDatosReporte() {
     this.http.get(environment.ruta+'php/activofijo/datos_reporte.php').subscribe((data:any) => {
       this.listaTipoActivo = data.Tipos_Activos;
       this.listaCentroCosto = data.Centro_Costos;
+      console.warn(this.listaCentroCosto)
     })
   }
 

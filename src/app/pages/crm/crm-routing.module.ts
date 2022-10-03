@@ -21,8 +21,8 @@ import { VerNegocioComponent } from './negocios/ver-negocio/ver-negocio.componen
 
 const routes: Routes = [
   { path: 'terceros', component: TercerosComponent },
-  { path: 'crear-tercero', component: CrearTercerosComponent },
-  { path: 'editar-tercero/:id', component: CrearTercerosComponent },
+  { path: 'terceros/crear-tercero', component: CrearTercerosComponent },
+  { path: 'terceros/editar-tercero/:id', component: CrearTercerosComponent },
   { path: 'personas', component: PersonasComponent },
   
   { path: 'apus', component: ApusComponent },

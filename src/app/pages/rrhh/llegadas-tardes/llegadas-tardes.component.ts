@@ -9,12 +9,25 @@ import { CompanyService } from '../../ajustes/informacion-base/services/company.
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
+import { MatAccordion } from '@angular/material/expansion';
 @Component({
   selector: 'app-llegadas-tardes',
   templateUrl: './llegadas-tardes.component.html',
   styleUrls: ['./llegadas-tardes.component.scss'],
 })
 export class LlegadasTardesComponent implements OnInit {
+
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
   donutChart = donutChart;
   group_id: any;
   people_id = '';
@@ -80,6 +93,11 @@ export class LlegadasTardesComponent implements OnInit {
     this.getCompanies();
   }
 
+  estadoFiltros = false;
+  mostrarFiltros() {
+    this.estadoFiltros = !this.estadoFiltros
+  }
+
   ngOnInit() {
     let fecha = new Date();
     let hoy = fecha.toISOString().split('T')[0];
@@ -91,14 +109,20 @@ export class LlegadasTardesComponent implements OnInit {
     this.getLinearDataset();
     this.getStatisticsByDays();
   }
-  getData() {}
+  getData() { }
+
+  filtrar() {
+    this.getLateArrivals(); 
+    this.getStatisticsByDays(); 
+    this.getLinearDataset()
+  }
   getLateArrivals() {
     let params = this.getParams();
     this.loading = true;
     this._lateArrivals
       .getLateArrivals(this.firstDay, this.lastDay, params)
       .subscribe((r: any) => {
-        this.companies = r.data;
+        this.companies = r.data
         this.loading = false;
         this.transformData();
       });
@@ -111,13 +135,13 @@ export class LlegadasTardesComponent implements OnInit {
 
       let blob = new Blob([response], { type: 'application/excel' });
 
-        let link = document.createElement('a');
-        const filename = 'reporte_llegadas_tarde';
-        link.href = window.URL.createObjectURL(blob);
-        link.download = `${filename}.xlsx`;
-        link.click();
-        this.donwloading = false;
-      }),
+      let link = document.createElement('a');
+      const filename = 'reporte_llegadas_tarde';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.xlsx`;
+      link.click();
+      this.donwloading = false;
+    }),
       (error) => {
         console.log('Error downloading the file');
         this.donwloading = false;
@@ -208,8 +232,11 @@ export class LlegadasTardesComponent implements OnInit {
     this._lateArrivals
       .getStatistcs(this.firstDay, this.lastDay, params)
       .subscribe((r: any) => {
+        //console.log(r.data)
         this.dataDiary.total = r.data.lates.total;
-        this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
+        if (r.data.lates.time_diff_total != null) {
+          this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
+        }
         this.dataDiary.percentage = r.data.percentage;
 
         let d = r.data.allByDependency.reduce(
@@ -230,6 +257,10 @@ export class LlegadasTardesComponent implements OnInit {
   transformData() {
     this.companies.forEach((c) => {
       c.groups.forEach((g) => {
+        if (Array.isArray(g.dependencies)) {
+        } else {
+          g.dependencies = Object.values(g.dependencies)
+        }        
         g.dependencies.forEach((d) => {
           d.people.forEach((pr) => {
             pr.averageTime = this.tiempoTotal(pr.late_arrivals);

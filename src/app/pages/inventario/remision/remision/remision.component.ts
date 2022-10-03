@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment';
 // import { Globales } from '../shared/globales/globales';
 
 // import { Http, ResponseContentType } from '@angular/http';
+import { User } from 'src/app/core/models/users.model';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-remision',
@@ -15,7 +17,7 @@ export class RemisionComponent implements OnInit {
 
   public remision: any = {};
 
-
+  public userF: User;
   public productos: any[] = [];
   public env: any;
   public origen: any = [];
@@ -28,15 +30,17 @@ export class RemisionComponent implements OnInit {
   public cant_formulada = 0;
   public cant_entregada = 0;
   public cant_diferencia = 0;
-  constructor(private route: ActivatedRoute, private http: HttpClient) {
+  constructor(private route: ActivatedRoute, private http: HttpClient, private _user: UserService) {
     this.env = environment
   }
 
   ngOnInit() {
+    this.userF = this._user.user;
     this.id = this.route.snapshot.params["id"];
     this.http.get(environment.ruta + 'php/remision/remision.php', {
       params: { id: this.id }
     }).subscribe((data: any) => {
+      console.log(data)
       this.remision = data.Remision;
       this.origen = data.Origen;
       this.destino = data.Destino;
@@ -51,5 +55,21 @@ export class RemisionComponent implements OnInit {
     }).subscribe((data: any) => {
       this.Actividades = data;
     });
+  }
+  action(act) {
+    if (act == 'imprimir') {
+      window.open(
+        this.env.ruta +
+        '/php/archivos/descarga_pdf.php?tipo=Remision&id=' +
+        this.id,
+        '_blank'
+      );
+    } else if (act == 'imprimirconprecio') {
+      window.open(
+        this.env.ruta +
+        '/php/archivos/descarga_pdf_price.php?tipo=Remision&id=' +
+        this.id
+      );
+    }
   }
 }

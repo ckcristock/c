@@ -18,7 +18,7 @@ import { environment } from '../../../../../../environments/environment';
 export class NotascarteracrearComponent implements OnInit {
 
   public datosCabecera:any = {
-    Titulo: 'Nueva Nota Cartera',
+    Titulo: 'Nueva nota cartera',
     Fecha: new Date(),
     Codigo: ''
   }

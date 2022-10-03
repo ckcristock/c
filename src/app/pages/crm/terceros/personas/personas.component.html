@@ -1,46 +1,306 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <h4 class="text-primary">Personas</h4>
-            <p>Todas las personas asociadas a un tercero.</p>
+  <div class="card-body">
+    <div
+      class="row card-title d-flex justify-content-between"
+      *ngIf="paginacion"
+    >
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">
+          Personas
+          <span style="font-size: smaller"
+            ><small class="pb-2 text-secondary text-muted"
+              >pág. {{ paginacion.current_page }}</small
+            ></span
+          >
+        </h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-primary btn-sm" (click)="openConfirm(add)">
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+          <button class="btn btn-secondary btn-sm" (click)="openClose2()">
+            <i class="fas fa-eye"></i>
+          </button>
         </div>
-        <div class="form-row mt-4">
-            <div class="form-group col-md-2">
-                <label for="">Filtro Tercero</label>
-                <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.third" (change)="getPerson()">
-            </div>
-            <div class="form-group col-md-2">
-                <label for="">Filtro Nombre</label>
-                <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.name" (change)="getPerson()">
-            </div>
-        </div>
-        <table class="table table-borderless table-striped" *ngIf="!loading && people.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th>Persona</th>
-                    <th>Tercero</th>
-                    <th>Tel. Celular</th>
-                    <th>Email</th>
-                    <th>Cargo</th>
-                    <th>Observación</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let person of people">
-                    <td> {{ person.name }} </td>
-                    <td> {{ person.third_party }} </td>
-                    <td> {{ person.cell_phone }} </td>
-                    <td> {{ person.email }} </td>
-                    <td> {{ person.position }} </td>
-                    <td> {{ person.observation }} </td>
-                </tr>
-            </tbody>
-        </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getPerson($event)" aria-label="Default pagination"
-            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-        </ngb-pagination>
+      </div>
     </div>
+    <hr class="line" />
+    <mat-accordion multi #firstAccordion="matAccordion">
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por nombre"
+              [(ngModel)]="filtros.name"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Documento</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por documento"
+              [(ngModel)]="filtros.documento"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Tercero</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por tercero"
+              [(ngModel)]="filtros.third"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Celular</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por celular"
+              [(ngModel)]="filtros.phone"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input
+              type="email"
+              matInput
+              placeholder="Busca por email"
+              [(ngModel)]="filtros.email"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cargo</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por cargo"
+              [(ngModel)]="filtros.cargo"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Observación</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por observación"
+              [(ngModel)]="filtros.observacion"
+              (input)="getPerson()"
+            />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion multi #secondAccordion="matAccordion">
+      <mat-expansion-panel class="mat-elevation-z0">
+        <section class="d-flex justify-content-between mx-1">
+          <mat-checkbox color="primary" [(ngModel)]="checkPersona"
+            >Nombre</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkTercero"
+            >Tercero</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkTelefono"
+            >Telefono</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkEmail"
+            >Email</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkCargo"
+            >Cargo</mat-checkbox
+          >
+          <mat-checkbox color="primary" [(ngModel)]="checkObservacion"
+            >Observacón</mat-checkbox
+          >
+        </section>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
+      <strong
+        >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
+        click
+      </strong>
+      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
+        >aquí</a
+      >
+    </div>
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm mb-0"
+        
+        *ngIf="!loading && people.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th *ngIf="checkPersona">Nombre</th>
+            <th *ngIf="checkPersona">Documento</th>
+            <th *ngIf="checkTercero">Tercero</th>
+            <th *ngIf="checkTelefono">Tel. Celular</th>
+            <th *ngIf="checkEmail">Email</th>
+            <th *ngIf="checkCargo">Cargo</th>
+            <th *ngIf="checkObservacion">Observación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let person of people" class="text-center">
+            <td class="align-middle" *ngIf="checkPersona">{{ person.name }}</td>
+            <td class="align-middle">{{ person.n_document }}</td>
+            <td class="align-middle" *ngIf="checkTercero">
+              {{ person.third_party }}
+            </td>
+            <td class="align-middle" *ngIf="checkTelefono">
+              {{ person.cell_phone }}
+            </td>
+            <td class="align-middle" *ngIf="checkEmail">{{ person.email }}</td>
+            <td class="align-middle" *ngIf="checkCargo">{{ person.position }}</td>
+            <td class="align-middle" *ngIf="checkObservacion">
+              {{ person.observation }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <mat-paginator
+      *ngIf="paginacion"
+      [length]="paginacion.total"
+      [pageSize]="paginacion.per_page"
+      [pageIndex]="paginacion.current_page - 1"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </div>
 </div>
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Agregar persona</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="form">
+    <div class="modal-body">
+      <small class="text-danger">
+        <b>
+          *Recuerda que este módulo es para agregar una persona que no
+          pertenezca a un tercero. <br />
+          Si deseas agregar una persona que pertenezca a un tercero debes
+          ingresar por el menú CRM - Terceros - Editar
+        </b>
+      </small>
+      <br />
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="name"
+            placeholder="Ingresa el nombre"
+            required
+          />
+          <mat-error *ngIf="name_valid">Campo obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Número de documento</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="n_document"
+            placeholder="Ingresa el número de documento"
+            required
+          />
+          <mat-error *ngIf="n_document_valid">Campo obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="landline"
+            placeholder="Ingresa el número de teléfono"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Celular</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="cell_phone"
+            placeholder="Ingresa el número de celular"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Correo electrónico</mat-label>
+          <input
+            type="email"
+            matInput
+            required
+            formControlName="email"
+            placeholder="Ingresa el correo electrónico"
+          />
+          <mat-error *ngIf="email_valid">Correo inválido</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Cargo</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="position"
+            placeholder="Ingresa el cargo"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Observaciones</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="observation"
+            placeholder="Ingresa las observaciones"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        [disabled]="!form.valid"
+        (click)="addPerson()"
+        class="btn btn-primary"
+      >
+        Guardar
+      </button>
+    </div>
+  </form>
 </ng-template>

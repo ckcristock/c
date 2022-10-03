@@ -5,6 +5,7 @@ import { functionsUtils } from '../../../../../../core/utils/functionsUtils';
 import { ValidatorsService } from '../../../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../../../informacion-base/services/swal.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-crear-geometria',
@@ -18,19 +19,21 @@ export class CrearGeometriaComponent implements OnInit {
   typeImage: any = '';
   image: any = '';
   measures: any[] = [];
-  id:any;
-  message:any = '';
-  geometry:any = {};
-  measu:any;
+  id: any;
+  message: any = '';
+  geometry: any = {};
+  measu: any;
+  previsualizacion: any;
 
   constructor(
-                private _geometrias: GeometriasService,
-                private fb: FormBuilder,
-                private _validators: ValidatorsService,
-                private _swal: SwalService,
-                private router: Router,
-                private activatedRoute: ActivatedRoute
-    ) {}
+    private _geometrias: GeometriasService,
+    private fb: FormBuilder,
+    private _validators: ValidatorsService,
+    private _swal: SwalService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private sanitizer: DomSanitizer
+  ) { }
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
@@ -47,17 +50,32 @@ export class CrearGeometriaComponent implements OnInit {
     });
   }
 
-  getGeometry(){
-    this._geometrias.getGeometry(this.id).subscribe((r:any) => {
+  getGeometry() {
+    this._geometrias.getGeometry(this.id).subscribe((r: any) => {
       this.geometry = r.data;
       this.form.patchValue({
         name: this.geometry.text,
         image: this.geometry.image,
-        weight_formula: this.geometry.weight_formula
+        weight_formula: this.geometry.weight_formula,
+        measures: this.geometry.measures
       });
+      this.previsualizacion = this.geometry.image
+      this.imageString = this.geometry.image
+      this.checkedMeasures();
     })
   }
-  
+
+  checkedMeasures(){
+    for(let i in this.measures){
+      for(let j in this.geometry.measures){
+        if (this.measures[i].value == this.geometry.measures[j].id){
+          console.log(this.measures[i])
+          this.measures[i].checked = true
+        }
+      }
+    }
+  }
+
   getMeasures() {
     this._geometrias.getMesuare().subscribe((r: any) => {
       this.measures = r.data;
@@ -66,13 +84,16 @@ export class CrearGeometriaComponent implements OnInit {
       }
     });
   }
-  
+
   get fill() {
     return this.measures.filter((r) => r.checked);
   }
-
+  
   onFileChanged(event) {
     if (event.target.files[0]) {
+      this.previsualizacion = this.sanitizer.bypassSecurityTrustUrl(
+        window.URL.createObjectURL(event.target.files[0])
+      );
       let file = event.target.files[0];
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
@@ -89,7 +110,7 @@ export class CrearGeometriaComponent implements OnInit {
 
   save() {
     this.form.markAllAsTouched();
-    if (this.form.invalid) { return false;}
+    if (this.form.invalid) { return false; }
     let image = this.imageString;
     let measures = this.measures.reduce((acc, el) => {
       return el.checked ? [...acc, el.value] : acc;
@@ -100,30 +121,32 @@ export class CrearGeometriaComponent implements OnInit {
     });
     if (measures != '') {
       if (this.id) {
-        this._geometrias.update(this.form.value, this.id).subscribe((r:any) => {
+        this._geometrias.update(this.form.value, this.id).subscribe((r: any) => {
           this._swal.show({
             icon: 'success',
             title: 'Actualizado correctamente',
             text: 'Se ha actualizado la geometria correctamente',
-            showCancel: false
+            showCancel: false,
+            timer: 1000,
           })
           this.router.navigate(['/ajustes/parametros/apu/geometrias']);
         })
       } else {
-        this._geometrias.save(this.form.value).subscribe((r:any) => {
+        this._geometrias.save(this.form.value).subscribe((r: any) => {
           this._swal.show({
             icon: 'success',
             title: 'Creación exitosa',
             text: 'Se ha creado la geometria correctamente',
-            showCancel: false
+            showCancel: false,
+            timer: 1000,
           })
           this.router.navigate(['/ajustes/parametros/apu/geometrias']);
         })
       }
-    } else {return this.message = 'Por favor, Seleccione';}
+    } else { return this.message = 'Por favor, seleccione'; }
   }
 
-  get name_valid(){
+  get name_valid() {
     return this.form.get('name').invalid && this.form.get('name').touched;
   }
 
@@ -133,7 +156,7 @@ export class CrearGeometriaComponent implements OnInit {
     );
   } */
 
-  get weight_formula_valid(){
+  get weight_formula_valid() {
     return this.form.get('weight_formula').invalid && this.form.get('weight_formula').touched;
   }
 }

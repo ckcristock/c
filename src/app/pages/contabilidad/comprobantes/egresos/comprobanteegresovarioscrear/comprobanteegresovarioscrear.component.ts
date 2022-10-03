@@ -21,7 +21,7 @@ import { CentroCostosService } from '../../../centro-costos/centro-costos.servic
 export class ComprobanteegresovarioscrearComponent implements OnInit {
 
   public datosCabecera:any = {
-    Titulo: 'Nuevo Egreso',
+    Titulo: 'Nuevo egreso',
     Fecha: new Date(),
     Codigo: ''
   }

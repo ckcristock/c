@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
+import { User } from 'src/app/core/models/users.model';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-ver-acta-recepcion',
@@ -24,15 +26,17 @@ export class VerActaRecepcionComponent implements OnInit {
   public TotalFinal = 0;
   public ActividadesActa:any[] = [];
   public Tipo:string = "Bodega";
+  public userF: User;
 
   public reducer_subt = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Subtotal);
   public reducer_iva = (accumulator, currentValue) => accumulator + (parseFloat(currentValue.Subtotal) * (parseInt(currentValue.Impuesto)/100));
 
   @ViewChild('confirmacionSwal') confimracionSwal:any;
 
-    constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
+    constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router,private _user: UserService) { }
 
     ngOnInit() {
+      this.userF = this._user.user;
       this.envi = environment
       this.init();
     }

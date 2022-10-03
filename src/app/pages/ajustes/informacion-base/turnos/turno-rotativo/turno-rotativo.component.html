@@ -1,105 +1,131 @@
-<div class="row mb-3">
-  <div class="col-md-6">
-    <h5 class="text-secondary">Lista de turnos rotativos</h5>
+<div class="row card-title d-flex justify-content-between">
+  <div class="col-md-6 px-0">
+    <h6 class="">Rotativos</h6>
   </div>
-  <div class="col-md-6 text-right">
-    <a class="btn btn-link btn-sm mr-1" (click)="create()">
-      <i class="fa fa-plus"></i> Crear Nuevo turno rotativo
-    </a>
-  </div>
-</div>
-
-<div class="card" *ngIf="turnosRotativo.length && !loading; else notData">
-  <div class="card-body">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="mb-2">
-          <div class="collapse d-md-block" id="displayOptions ">
-            <div
-              class="search-sm d-inline-block float-md-left mr-1 mb-1 align-top"
-            >
-              <input
-                placeholder="Buscar... "
-                class="form-control form-control-sm"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="separator mb-5"></div>
-        <div class="row">
-          <div class="col-md-12">
-            <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr>
-                  <th>Nombre</th>
-		  <th class="text-center"><!--Horario Semana--></th>
-                  <th class="text-center" style="width: 30px">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="let turno of turnosRotativo"
-                  [ngClass]="{
-                    'bg-danger text-white': turno.state == 'Inactivo'
-                  }"
-                >
-                  <td class="custom-label">{{ turno.text }}</td>
-                  <td class="text-center">
-                    <button
-                      type="button "
-                      class="btn btn-link btn-xs"
-                      (click)="findHours(turno.value); hourModal.show()"
-                    >
-		    <!--<i class="fa fa-eye"></i>-->
-                    </button>
-                  </td>
-                  <td class="">
-                    <div ngbDropdown class="dropdown-primary">
-                      <button
-                        ngbDropdownToggle
-                        class="
-                          btn btn-secondary btn-sm
-                          waves-effect waves-light
-                        "
-                        type="button"
-                      >
-                        <i class="mdi mdi-chevron-down"></i>
-                      </button>
-                      <div ngbDropdownMenu>
-                        <a
-                          class="
-                            dropdown-item
-                            waves-light waves-effect
-                            caja-botones
-                          "
-			  (click)="create(turno.value)"
-                        >
-                          <i class="fa fa-pencil-alt"></i> Editar
-                        </a>
-                        <a
-                          class="
-                            dropdown-item
-                            waves-light waves-effect
-                            caja-botones
-                          "
-                          (click)="changeState(turno.value)"
-                        >
-                          <i class="fa fa-times"></i>
-                          {{
-                            turno.state == "Inactivo" ? "Activar" : "Inactivar"
-                          }}
-                        </a>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+  <div class="col-md-6 px-0 text-right">
+    <div class="btn-group rounded w-sm-100">
+      <button class="btn btn-primary btn-sm" (click)="create()">
+        <i class="fa fa-plus"></i> Agregar
+      </button>
+      <button class="btn btn-info btn-sm" (click)="openClose()">
+        <i class="fas fa-sliders-h"></i> Filtros
+      </button>
     </div>
   </div>
+</div>
+<mat-accordion multi>
+  <mat-expansion-panel class="mat-elevation-z0">
+    <div class="row">
+      <mat-form-field class="col" appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input type="text" matInput placeholder="Busca por nombre" />
+      </mat-form-field>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+<div class="rounded-top table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    
+    *ngIf="turnosRotativo.length && !loading; else notData"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th class="align-middle">Nombre</th>
+        <th class="align-middle">Sábado</th>
+        <th class="align-middle">Domingo</th>
+        <th class="align-middle">Horario</th>
+        <th class="align-middle">Lunch</th>
+        <th class="align-middle">Break</th>
+        <th class="align-middle">Estado</th>
+        <th class="align-middle"><i class="mdi mdi-chevron-down"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="text-center"
+        *ngFor="let turno of turnosRotativo"
+        [ngClass]="{
+          'text-danger font-weight-bold': turno.state == 'Inactivo'
+        }"
+      >
+        <td class="align-middle">{{ turno.text }}</td>
+        <td class="align-middle" *ngIf="turno.saturday_id != 0; else descanso">
+          {{ turno.saturday.name }}
+        </td>
+        <td class="align-middle" *ngIf="turno.sunday_id != 0; else descanso">
+          {{ turno.sunday.name }}
+        </td>
+        <ng-template #descanso>
+          <td class="align-middle">Descanso</td>
+        </ng-template>
+        <td class="align-middle">
+          {{ "01/01/2000 " + turno.entry_time | date: "HH:mm" }} -
+          {{ "01/01/2000 " + turno.leave_time | date: "HH:mm" }}
+        </td>
+        <td class="align-middle" *ngIf="turno.launch == 1; else no">
+          {{ "01/01/2000 " + turno.launch_time | date: "HH:mm" }} -
+          {{ "01/01/2000 " + turno.launch_time_two | date: "HH:mm" }}
+        </td>
+        <td class="align-middle" *ngIf="turno.breack == 1; else no">
+          {{ "01/01/2000 " + turno.breack_time | date: "HH:mm" }} -
+          {{ "01/01/2000 " + turno.breack_time_two | date: "HH:mm" }}
+        </td>
+        <ng-template #no>
+          <td class="align-middle"><i class="fas fa-times"></i></td>
+        </ng-template>
+        <td class="align-middle">
+          <span
+            [ngClass]="
+              turno.state == 'Inactivo'
+                ? 'badge badge-danger'
+                : 'badge badge-primary'
+            "
+          >
+            {{ turno.state }}
+          </span>
+        </td>
+        <td class="align-middle">
+          <div ngbDropdown container="body" class="dropdown-primary">
+            <button
+              ngbDropdownToggle
+              class="btn btn-primary btn-sm waves-light"
+              type="button"
+            >
+              <i class="mdi mdi-chevron-down"></i>
+            </button>
+            <div ngbDropdownMenu>
+              <a
+                (click)="create(turno.value)"
+                href="javascript: void(0);"
+                class="dropdown-item text-info waves-light caja-botones"
+              >
+                <i class="far fa-edit"></i> Editar
+              </a>
+              <a
+                class="dropdown-item waves-light caja-botones"
+                href="javascript: void(0);"
+                [ngClass]="{
+                  'text-success': turno.state == 'Inactivo',
+                  'text-danger': turno.state == 'Activo'
+                }"
+                (click)="changeState(turno.value)"
+              >
+                <i
+                  [ngClass]="{
+                    'far fa-trash-alt': turno.state == 'Activo',
+                    'fa fa-check': turno.state == 'Inactivo'
+                  }"
+                >
+                </i>
+                {{ turno.state == "Inactivo" ? "Activar" : "Anular" }}
+              </a>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <ng-template #notData>

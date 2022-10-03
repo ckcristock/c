@@ -1,118 +1,235 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-sm btn-primary" style="float: right;" (click)="openModal()">
-                <i class="fa fa-plus"></i> Agregar
-            </button>
-            <h5 class="text-primary">Perfiles laborales</h5>
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Perfiles laborales</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-sm btn-primary"
+            (click)="openConfirm(add, 'Nuevo perfil laboral')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
         </div>
-        <hr class="bg-primary">
-        <table class="table table-sm table-borderless table-striped" *ngIf="!loading && profiles.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th>Item</th>
-                    <th>Perfil</th>
-                    <th>Valor Hora Desplazamiento diuerna</th>
-                    <th>Valor Hora Desplazamiento Nocturna</th>
-                    <th>Valor Hora Ordinaria Diurna</th>
-                    <th>Valor Hora Ordinaria Nocturna</th>
-                    <th>Valor Hora Dominical Diurna</th>
-                    <th>Valor Hora Dominical Nocturna</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of profiles" [ngClass]="{'bg-danger text-white': (item.state == 'Inactivo')}">
-                    <td> {{ 'P' + item.id }} </td>
-                    <td> {{ item.profile }} </td>
-                    <td> {{ item.value_time_daytime_displacement | currency: 'COP' }} </td>
-                    <td> {{ item.value_time_night_displacement | currency: 'COP' }} </td>
-                    <td> {{ item.daytime_ordinary_hour_value | currency: 'COP' }} </td>
-                    <td> {{ item.night_ordinary_hour_value | currency: 'COP' }} </td>
-                    <td> {{ item.sunday_daytime_value | currency: 'COP' }} </td>
-                    <td> {{ item.sunday_night_time_value | currency: 'COP' }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" (click)="getProfile(item); modal.show()">
-                                        <i class="far fa-edit"></i> Editar
-                                    </a>
-                                    <a *ngIf="item.state == 'Inactivo'" class="dropdown-item waves-light text-success waves-effect caja-botones" (click)="activateOrInactivate(item, 'Activo')">
-                                        <i class="far fa-thumbs-up"></i> Activar
-                                    </a>
-                                    <a *ngIf="item.state == 'Activo'" class="dropdown-item waves-light text-danger waves-effect caja-botones" (click)="activateOrInactivate(item, 'Inactivo')">
-                                        <i class="far fa-trash-alt"></i> Anular
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getProfiles($event)" aria-label="Default pagination"
-            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-        </ngb-pagination>
+      </div>
     </div>
-</div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">{{ title }}</h5>
-        <button type="button" class="close basic-close" (click)="modal.hide(); form.reset()">
-            <span aria-hidden="true">
-              <i class="fas fa-times"></i>
-            </span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="">Perfil</label>
-                            <input type="text" class="form-control form-control-sm" formControlName="profile">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Valor Hora Desplazamiento Diuerna</label>
-                            <input type="number" class="form-control form-control-sm" formControlName="value_time_daytime_displacement">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Valor Hora Desplazamiento Nocturna</label>
-                            <input type="number" class="form-control form-control-sm" formControlName="value_time_night_displacement">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Valor Hora Ordinaria Diurna</label>
-                            <input type="number" class="form-control form-control-sm" formControlName="daytime_ordinary_hour_value">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Valor Hora Ordinaria Nocturna</label>
-                            <input type="number" class="form-control form-control-sm" formControlName="night_ordinary_hour_value">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Valor Hora Dominical Diurna</label>
-                            <input type="number" class="form-control form-control-sm" formControlName="sunday_daytime_value">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="">Valor Hora Dominical Nocturna</label>
-                            <input type="number" class="form-control form-control-sm" formControlName="sunday_night_time_value">
-                        </div>
-                    </div>
+    <hr class="line" />
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        
+        *ngIf="!loading && profiles.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th class="align-middle">Item</th>
+            <th class="align-middle">Perfil</th>
+            <th class="align-middle">$/Hora Desplazamiento Diurna</th>
+            <th class="align-middle">$/Hora Desplazamiento Nocturna</th>
+            <th class="align-middle">$/Hora Ordinaria Diurna</th>
+            <th class="align-middle">$/Hora Ordinaria Nocturna</th>
+            <th class="align-middle">$/Hora Dominical Diurna</th>
+            <th class="align-middle">$/Hora Dominical Nocturna</th>
+            <th class="align-middle col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of profiles"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': item.state == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">{{ "P" + item.id }}</td>
+            <td class="align-middle">{{ item.profile }}</td>
+            <td class="align-middle">
+              {{ item.value_time_daytime_displacement | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.value_time_night_displacement | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.daytime_ordinary_hour_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.night_ordinary_hour_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.sunday_daytime_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              {{ item.sunday_night_time_value | currency: "COP" }}
+            </td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript:void(0)"
+                    (click)="
+                      getProfile(item);
+                      openConfirm(add, 'Actualizar perfil laboral')
+                    "
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Inactivo'"
+                    href="javascript:void(0)"
+                    class="dropdown-item waves-light text-success caja-botones"
+                    (click)="activateOrInactivate(item, 'Activo')"
+                  >
+                    <i class="far fa-thumbs-up"></i> Activar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Activo'"
+                    href="javascript:void(0)"
+                    class="dropdown-item waves-light text-danger caja-botones"
+                    (click)="activateOrInactivate(item, 'Inactivo')"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
                 </div>
-            </div>
-        </form>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide(); form.reset()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="save()">Guardar</button>
-        </div>
-    </div>
-</app-modal-basic>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      (pageChange)="getProfiles($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
+</div>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">{{ title }}</h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click'); form.reset()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Perfil</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el perfil"
+            formControlName="profile"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h desplazamiento diurna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="value_time_daytime_displacement"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h desplazamiento nocturna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="value_time_night_displacement"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h ordinaria diurna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="daytime_ordinary_hour_value"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h ordinaria nocturna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="night_ordinary_hour_value"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h dominical diurna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="sunday_daytime_value"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>$/h dominical nocturna</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor por hora"
+            formControlName="sunday_night_time_value"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click'); form.reset()"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

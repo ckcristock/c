@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { SweetAlertOptions } from 'sweetalert2';
@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { Location } from '@angular/common';
 import { environment } from '../../../../../environments/environment';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-notas-carteras',
@@ -14,7 +15,17 @@ import { environment } from '../../../../../environments/environment';
   styleUrls: ['./notas-carteras.component.scss']
 })
 export class NotasCarterasComponent implements OnInit {
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   public NotasCarteras:any = [];
   public Cargando:boolean = true;
   public maxSize = 20; 
@@ -28,8 +39,8 @@ export class NotasCarterasComponent implements OnInit {
   }
 public filtro_fecha:any='';
   myDateRangePickerOptions: IMyDrpOptions = {
-    width:'200px', 
-    height: '21px',
+    width:'240px', 
+    height: '28px',
     selectBeginDateTxt:'Inicio',
     selectEndDateTxt:'Fin',
     selectionTxtFontSize: '10px',
@@ -65,6 +76,12 @@ public filtro_fecha:any='';
     this.envirom = environment;
   }
 
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
+
+
   ListarNotasCarteras() {
 
     this.http.get(environment.ruta+'php/contabilidad/notascarteras/lista_notas_carteras.php').subscribe((data:any) => {
@@ -86,6 +103,22 @@ public filtro_fecha:any='';
     }
     
     this.filtrar(); 
+  }
+  fechita:any;
+  fechitaF(event){    
+    this.fechita = event.target.value;  
+    if(this.fechita2 !=null){
+      this.filtros.fechas = this.fechita + ' - ' + this.fechita2;
+      this.filtrar();
+    }  
+  }
+  fechita2:any;
+  fechitaF2(event){
+    this.fechita2 = event.target.value;
+    if(this.fechita !=null){
+      this.filtros.fechas = this.fechita + ' - ' + this.fechita2;
+      this.filtrar();
+    }  
   }
 
   getStrConditions(pagination = false) {

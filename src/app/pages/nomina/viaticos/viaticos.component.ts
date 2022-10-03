@@ -1,14 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {CrearViaticosService} from './crear-viaticos/crear-viaticos.service';
 import { PermissionService } from '../../../core/services/permission.service';
 import { Permissions } from '../../../core/interfaces/permissions-interface';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
+import { MatAccordion } from '@angular/material/expansion';
 @Component({
   selector: 'app-viaticos',
   templateUrl: './viaticos.component.html',
   styleUrls: ['./viaticos.component.scss']
 })
 export class ViaticosComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
   data:any[] = [];
   people:any[] = [];
   person_selected:any;
@@ -46,6 +58,11 @@ export class ViaticosComponent implements OnInit {
     this.getAll();
     this.getPeople();
   }
+
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
   
   tipo(){
     let value = this.filtros.person_id;
@@ -72,6 +89,7 @@ export class ViaticosComponent implements OnInit {
   getPeople(){
     this._viaticos.getPeopleXSelect().subscribe( (r:any) =>{
       this.people = r.data;
+      this.people.unshift({ text: 'Todos', value: '' });
     })
   }
 
@@ -94,7 +112,7 @@ export class ViaticosComponent implements OnInit {
             icon: 'success',
             title: 'El Viatico Ha sido Aprobado!',
             text: '¡Aprobado!',
-            timer: 2500,
+            timer: 1000,
             showCancel: false
           })
         })

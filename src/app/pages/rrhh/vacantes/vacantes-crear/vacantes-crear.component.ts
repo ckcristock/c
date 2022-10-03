@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import 'rxjs/add/operator/takeWhile';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { JobService } from '../job.service';
 import Swal from 'sweetalert2';
 import { CompanyService } from 'src/app/pages/ajustes/informacion-base/services/company.service';
 import { isArraysEqual } from '@fullcalendar/core';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
     selector: 'app-vacantes-crear',
@@ -25,7 +26,7 @@ export class VacantesCrearComponent implements OnInit {
     fecha = new Date();
     departments: any[] = [];
     municipalities: any[] = [];
-    visaSelected:boolean;
+    visaSelected: boolean;
     companies: any[] = [];
     groups: any[] = [];
     dependencies: any[] = [];
@@ -34,11 +35,11 @@ export class VacantesCrearComponent implements OnInit {
     visas: any[] = [];
     licenses: any[] = [];
     documents: any[] = [];
-    salaries :any[] = [];
+    salaries: any[] = [];
 
     turns = consts.turnTypes;
     options = consts.options;
-    rangeSalary:boolean;
+    rangeSalary: boolean;
 
     constructor(
         private router: Router,
@@ -50,6 +51,7 @@ export class VacantesCrearComponent implements OnInit {
         private _department: DepartmentService,
         private _job: JobService,
         private _company: CompanyService,
+        private _swal: SwalService,
 
     ) { }
 
@@ -66,66 +68,66 @@ export class VacantesCrearComponent implements OnInit {
     }
 
     createForm() {
-      this.form = this.fb.group({
-          company_id: ['', Validators.required],
-          title: ['', Validators.required],
-          date_start: ['', Validators.required],
-          date_end: ['', Validators.required],
-          group_id: ['', Validators.required],
-          dependency_id: ['', Validators.required],
-          position_id: ['', Validators.required],
-          department_id: ['', Validators.required],
-          municipality_id: ['', Validators.required],
-          min_salary: [''],
-          max_salary: [''],
-          turn_type: ['', Validators.required],
-          description: ['', Validators.required],
-          education: ['', Validators.required],
-          experience_year: ['', Validators.required],
-          min_age: [''],
-          max_age: [''],
-          can_trip: ['', Validators.required],
-          change_residence: ['', Validators.required],
-          gener: ['No Aplica', Validators.required],
-          languages: ['', Validators.required],
-          conveyance: ['Ninguno'],
-          work_contract_type_id: ['', Validators.required],
-          document_type_id: ['', Validators.required],
-          passport: ['', Validators.required],
-          visa: ['', Validators.required],
-          visa_type_id: [''],
-          salary_type_id: [1],
-          drivingLicenseJob: [[]],
-      })
-  }
+        this.form = this.fb.group({
+            company_id: ['', Validators.required],
+            title: ['', Validators.required],
+            date_start: ['', Validators.required],
+            date_end: ['', Validators.required],
+            group_id: ['', Validators.required],
+            dependency_id: ['', Validators.required],
+            position_id: ['', Validators.required],
+            department_id: ['', Validators.required],
+            municipality_id: ['', Validators.required],
+            min_salary: [''],
+            max_salary: [''],
+            turn_type: ['', Validators.required],
+            description: ['', Validators.required],
+            education: ['', Validators.required],
+            experience_year: ['', Validators.required],
+            min_age: [''],
+            max_age: [''],
+            can_trip: ['', Validators.required],
+            change_residence: ['', Validators.required],
+            gener: ['No Aplica', Validators.required],
+            languages: ['', Validators.required],
+            conveyance: ['Ninguno'],
+            work_contract_type_id: ['', Validators.required],
+            document_type_id: ['', Validators.required],
+            passport: ['', Validators.required],
+            visa: ['', Validators.required],
+            visa_type_id: [''],
+            salary_type_id: [1],
+            drivingLicenseJob: [[]],
+        })
+    }
 
 
-    getSalaryTypes(){
-        this._job.getSalaryTypes().subscribe((r:any) => {
+    getSalaryTypes() {
+        this._job.getSalaryTypes().subscribe((r: any) => {
             this.salaries = r.data;
         })
     }
 
-    getDocumentTypes(){
-        this._job.getDocumentTypes().subscribe((r:any) => {
+    getDocumentTypes() {
+        this._job.getDocumentTypes().subscribe((r: any) => {
             this.documents = r.data;
         })
     }
 
-    getDrivingLicenses(){
-        this._job.getDrivingLicenses().subscribe((r:any) => {
+    getDrivingLicenses() {
+        this._job.getDrivingLicenses().subscribe((r: any) => {
             this.licenses = r.data;
         })
     }
 
-    getVisaTypes(){
-        this._job.getVisaTypes().subscribe((r:any) => {
+    getVisaTypes() {
+        this._job.getVisaTypes().subscribe((r: any) => {
             this.visas = r.data;
         })
     }
 
-    getContractType(){
-        this._job.getContractTypes().subscribe((r:any) => {
+    getContractType() {
+        this._job.getContractTypes().subscribe((r: any) => {
             this.contracts = r.data;
         })
     }
@@ -152,13 +154,13 @@ export class VacantesCrearComponent implements OnInit {
         if (fecha_inicio >= fecha_fin && fecha_fin != "") {
             this.form.get('date_start').patchValue('')
             this.form.get('date_end').patchValue('')
-            Swal.fire({
+            this._swal.show({
                 title: 'Fechas invalidas',
-                text: 'Fecha Inicio no puede ser mayor a Fecha Fin',
+                text: 'La fecha de inicio no puede ser mayor a la fecha de fin',
                 icon: 'error',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-            })
+                showCancel: false,
+            });
+
         }
     }
 
@@ -168,12 +170,11 @@ export class VacantesCrearComponent implements OnInit {
         if (salario_inferior >= salario_superior && salario_superior != "") {
             this.form.get('min_salary').patchValue('')
             this.form.get('max_salary').patchValue('')
-            Swal.fire({
+            this._swal.show({
                 title: 'Salarios invalidos',
-                text: 'Salario Inferior no puede ser mayor al Superior',
+                text: 'El salario inferior no puede ser mayor al superior',
                 icon: 'error',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
+                showCancel: false,
             })
         }
     }
@@ -181,35 +182,30 @@ export class VacantesCrearComponent implements OnInit {
     save() {
         this.form.markAllAsTouched()
         if (this.form.invalid) { return false }
-        Swal.fire({
-            title: '¿Seguro?',
-            text: 'Se va a crear una nueva vacante',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#34c38f',
-            cancelButtonColor: '#f46a6a',
-            confirmButtonText: 'Si, Hazlo!'
-        }).then(result => {
-            if (result.value) {
-                this.sendData()
-            }
-        });
+        this._swal.show({
+            text: 'Vamos a crear una nueva vacante',
+            title: '¿Estás seguro(a)?',
+            icon: 'question',
+            showCancel: true,
+        })
+            .then(result => {
+                if (result.value) {
+                    this.sendData()
+                }
+            });
     }
 
     sendData() {
         this._job.save(this.form.value).subscribe((r: any) => {
             if (r.code == 200) {
-                Swal.fire({
+                this._swal.show({
+                    text: 'Se ha creado una nueva vacante',
                     title: 'Creación exitosa',
-                    text: 'Felicidades, se ha creado una nueva vacante',
                     icon: 'success',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                }).then(result => {
-                    if (result.value) {
-                        this.router.navigateByUrl('/rrhh/vacantes')
-                    }
-                });
+                    showCancel: false,
+                    timer: 1000
+                })
+                this.router.navigateByUrl('/rrhh/vacantes')
             }
         })
     }
@@ -227,8 +223,8 @@ export class VacantesCrearComponent implements OnInit {
             this.positions.unshift({ text: 'Seleccione uno', value: '' });
         })
     }
-    getDependencies(company_id) {
-        this._dependecies.getDependencies({ company_id }).subscribe((d: any) => {
+    getDependencies(group_id) {
+        this._dependecies.getDependencies({ group_id }).subscribe((d: any) => {
             this.dependencies = d.data;
             this.dependencies.unshift({ text: 'Seleccione una', value: '' });
         });

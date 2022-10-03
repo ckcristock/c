@@ -10,18 +10,24 @@ export class ExtraHoursService {
 
   constructor( private http: HttpClient ) { }
   getPeople(d1,d2,type,params = {}){
-    return this.http.get( `${environment.base_url}/horas_extras/turno_rotativo/${d1}/${d2}/${type}`,{params}).pipe(
+    return this.http.get( `${environment.base_url}/horas_extras/turno_rotativo/${d1}/${d2}/${type}`,{params})
+    .pipe(
       map((d: any) => {
         d.data.forEach((company) => {
           company.groups.forEach((group) => {
+            if (Array.isArray(group.dependencies)) {
+            } else {
+              group.dependencies = Object.values(group.dependencies)
+            } 
             group.dependencies.forEach((dependency) => {
               dependency.people.forEach((person) => {
                 person.show = 0;
+                
               });
             });
           });
         });
-        
+        //console.log (d)
         return d;
       })
       );

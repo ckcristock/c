@@ -5,14 +5,22 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { Location } from "@angular/common";
 import { UserService } from 'src/app/core/services/user.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-compra-nacional',
   templateUrl: './compra-nacional.component.html',
-  styleUrls: ['./compra-nacional.component.scss']
+  styleUrls: ['./compra-nacional.component.scss'],
 })
 export class CompraNacionalComponent implements OnInit {
-
+  checkFoto: boolean = true;
+  checkFuncionario: boolean = true;
+  checkFecha: boolean = true;
+  checkCodigo: boolean = true;
+  checkProveedor: boolean = true;
+  checkEstado: boolean = true;
+  checkAprobacion: boolean = true;
+  panelOpenState = false;
   public comprasnacionales: any[] = [];
   @ViewChild('Formcomprasnacionacrear') Formcomprasnaciona: any;
   @ViewChild('studentChart') studentChart: ElementRef;
@@ -22,6 +30,28 @@ export class CompraNacionalComponent implements OnInit {
   @ViewChild('PlantillaValor') PlantillaValor: TemplateRef<any>;
 
   @ViewChild('infoSwal') infoSwal: any;
+  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
+  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
+  matPanel = false;
+  openClose(){
+    if (this.matPanel == false){
+      this.firstAccordion.openAll();
+      this.matPanel = true;
+    } else {
+      this.firstAccordion.closeAll();
+      this.matPanel = false;
+    }    
+  }
+  matPanel2 = false;
+  openClose2(){
+    if (this.matPanel2 == false){
+      this.secondAccordion.openAll();
+      this.matPanel2 = true;
+    } else {
+      this.secondAccordion.closeAll();
+      this.matPanel2 = false;
+    }    
+  }
 
   loadingIndicator = true;
   timeout: any;
@@ -56,11 +86,11 @@ export class CompraNacionalComponent implements OnInit {
 
   public requiredParams: any = { params: { tipo: "todo", funcionario: 1, company_id: '' } };
   myDateRangePickerOptions: IMyDrpOptions = {
-    width: '180px',
-    height: '21px',
+    width: '156px',
+    height: '27px',
     selectBeginDateTxt: 'Inicio',
     selectEndDateTxt: 'Fin',
-    selectionTxtFontSize: '10px',
+    selectionTxtFontSize: '12px',
     dateFormat: 'yyyy-mm-dd',
   };
   public filtro_fecha: any = '';
@@ -84,8 +114,8 @@ export class CompraNacionalComponent implements OnInit {
     });
 
   }
-
-
+  
+  imageProfile: any;
   ListarComprasNacionales() {
 
     let params = this.route.snapshot.queryParams;
@@ -105,14 +135,45 @@ export class CompraNacionalComponent implements OnInit {
 
       this.requiredParams).subscribe((data: any) => {
         this.comprasnacionales = data.compras;
+        console.log(this.comprasnacionales)
         this.TotalItems = data.numReg;
       });
+      for (let i in this.comprasnacionales){
+        this.http.get(this.comprasnacionales[i].Imagen).subscribe(result => {
+          console.log(result)
+        },
+          error => {
+            console.log(error)
+            if(error.status == 500){
+              this.imageProfile = null
+            } else{
+              this.imageProfile = this.comprasnacionales[i].Imagen
+            }
+          });
+      }
+      
   }
-
+  fechita:any;
+  fechitaF(event){    
+    this.fechita = event.target.value;  
+    if(this.fechita2 !=null){
+      this.filtro_fecha = this.fechita + ' - ' + this.fechita2;
+      this.filtros();
+    }  
+  }
+  fechita2:any;
+  fechitaF2(event){
+    this.fechita2 = event.target.value;
+    if(this.fechita !=null){
+      this.filtro_fecha = this.fechita + ' - ' + this.fechita2;
+      this.filtros();
+    }  
+  }
   dateRangeChanged(event) {
 
     if (event.formatted != "") {
-      this.filtro_fecha = event;
+      this.filtro_fecha = event.formatted;
+      console.log(this.filtro_fecha)
     } else {
       this.filtro_fecha = '';
     }
@@ -130,7 +191,7 @@ export class CompraNacionalComponent implements OnInit {
 
 
       if (this.filtro_fecha != "" && this.filtro_fecha != null) {
-        params.fecha = this.filtro_fecha.formatted;
+        params.fecha = this.filtro_fecha;
       }
       if (this.filtro_cod != "") {
         params.cod = this.filtro_cod;
@@ -177,7 +238,7 @@ export class CompraNacionalComponent implements OnInit {
     };
 
     if (this.filtro_fecha != "" && this.filtro_fecha != null) {
-      params.fecha = this.filtro_fecha.formatted;
+      params.fecha = this.filtro_fecha;
     }
     if (this.filtro_cod != "") {
       params.cod = this.filtro_cod;

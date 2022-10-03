@@ -9,6 +9,7 @@ import {
   OTROS_PRESUPUESTOS,
   OTRAS_COTIZACIONES,
 } from './negocio.data';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-ver-negocio',
@@ -34,7 +35,7 @@ export class VerNegocioComponent implements OnInit {
   presupuestosSeleccionados: any[] = [];
   cotizaciones: any[];
   cotizacionesSeleccionadas: any[] = [];
-  business_budget_id:any = '';
+  business_budget_id: any = '';
 
 
   modal_title = '';
@@ -42,11 +43,12 @@ export class VerNegocioComponent implements OnInit {
   filtros = {
     id: '',
   };
-  budget_value:number;
+  budget_value: number;
 
   constructor(
     private ruta: ActivatedRoute,
-    private _negocio: NegociosService
+    private _negocio: NegociosService,
+    private modalService: NgbModal,
   ) { }
 
   ngOnInit(): void {
@@ -57,9 +59,19 @@ export class VerNegocioComponent implements OnInit {
     this.filtros.id = this.ruta.snapshot.params.id;
     //this.negocio.id = this.ruta.snapshot.params.id;
   }
-
-  getBussines(){
-    this._negocio.getBusiness(this.ruta.snapshot.params.id).subscribe((data:any) => {
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    
+  }
+  getBussines() {
+    this._negocio.getBusiness(this.ruta.snapshot.params.id).subscribe((data: any) => {
       this.negocio = data.data;
     })
     this.business_budget_id = this.ruta.snapshot.params.id;
@@ -82,7 +94,7 @@ export class VerNegocioComponent implements OnInit {
     else this.presupuestosSeleccionados.push({
       budget_id: id,
       business_budget_id: this.ruta.snapshot.params.id,
-      total_cop:  total_cop
+      total_cop: total_cop
     });
   }
   guardarCotizacion(id) {
@@ -170,7 +182,8 @@ export class VerNegocioComponent implements OnInit {
       this.addEventToHistory('Se modificaron los presupuestos del negocio');
       this.getBussines();
       this.getPresupuestos();
-      this.modalPresupuestos.hide();
+      this.modalService.dismissAll(); 
+      //this.modalPresupuestos.hide();
       this.presupuestosSeleccionados = [];
     });
   }

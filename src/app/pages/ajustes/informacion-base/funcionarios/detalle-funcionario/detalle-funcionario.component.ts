@@ -14,7 +14,7 @@ export class DetalleFuncionarioComponent implements OnInit {
   habilitado = true;
   components = 'informacion';
   id: any;
-  data$:any;
+  data$: any;
   funcionario: any = {
     salary: '',
     work_contract: '',
@@ -26,80 +26,83 @@ export class DetalleFuncionarioComponent implements OnInit {
     signature: '',
     title: ''
   };
-  user:any = {};
-  constructor( 
-              private detalleService: DetalleService, 
-              private activateRoute: ActivatedRoute,
-              private basicDataService: DatosBasicosService,
-              private location: Location,
-              private _swal: SwalService,
-              private router: Router
-              ) { }
-
-
+  user: any = {};
+  constructor(
+    private detalleService: DetalleService,
+    private activateRoute: ActivatedRoute,
+    private basicDataService: DatosBasicosService,
+    private location: Location,
+    private _swal: SwalService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params.id;
     this.getBasicData();
-    this.data$ = this.basicDataService.datos$.subscribe( data => {
+    this.data$ = this.basicDataService.datos$.subscribe(data => {
       this.getBasicData();
     });
     this.getUser();
   }
 
-  regresar() :void {
+  regresar(): void {
     this.location.back();
   }
 
-  verComponent( componente:string ){
+  verComponent(componente: string) {
     this.components = componente;
   }
 
-  liquidar(status){
+  liquidar(status) {
     let data = {
       status
     }
     this._swal.show({
       icon: 'question',
-      title: '¿Estas Seguro?',
-      text: 'Se dispone a liquidar el empleado'
+      title: '¿Estás seguro(a)?',
+      text: 'Vamos a liquidar a '+ this.funcionario.first_name
     }).then((result) => {
       if (result.isConfirmed) {
-        this.detalleService.liquidar(data, this.id).subscribe((r:any) => {
+        this.detalleService.liquidar(data, this.id).subscribe((r: any) => {
           this._swal.show({
             icon: 'success',
-            title: 'Proceso Satisfactorio',
-            text: 'El Funcionario ha sido liquidado con éxito.',
-            showCancel: false
+            title: 'Proceso finalizado',
+            text: 'El funcionario ha sido preliquidado con éxito.',
+            showCancel: false,
+            timer: 1000
           });
         });
       }
     });
   }
 
-  getUser(){
-    this.detalleService.getUser(this.id).subscribe((r:any) => {
+  getUser() {
+    this.detalleService.getUser(this.id).subscribe((r: any) => {
       this.user = r.data;
+      console.log(this.user)
     })
   }
 
-  bloquear(state){
+  bloquear(state) {
+    console.log(state)
     let data = {
       state
     }
     this._swal.show({
       icon: 'question',
-      title: '¿Estas Seguro?',
-      text: (data.state == 'Inactivo' ? 'Se dispone a bloquear el funcionario.' : 'Se dispone a activar el funcionario.')
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: (data.state == 'Inactivo' ? 'Vamos a bloquear a' + this.funcionario.first_name + '.' : 'Vamos a activar a ' + this.funcionario.first_name + '.')
     }).then((result) => {
       if (result.isConfirmed) {
-        this.detalleService.blockUser(data, this.id).subscribe((r:any) => {
+        this.detalleService.blockUser(data, this.id).subscribe((r: any) => {
           this.getUser();
           this._swal.show({
             icon: 'success',
-            title: 'Proceso Satisfactorio',
-            text: (data.state == 'Inactivo' ? 'El Funcionario ha sido bloqueado con éxito.' : 'El Funcionario ha sido activado con éxito.'),
-            showCancel: false
+            title: 'Proceso finalizado',
+            text: (data.state == 'Inactivo' ? this.funcionario.first_name + ' ha sido bloqueado con éxito.' : this.funcionario.first_name + ' ha sido activado con éxito.'),
+            showCancel: false,
+            timer: 1000
           });
         })
       }
@@ -107,15 +110,16 @@ export class DetalleFuncionarioComponent implements OnInit {
   }
 
 
-  getBasicData(){
+  getBasicData() {
     this.detalleService.getBasicData(this.id)
-    .subscribe( (res:any) => {
+      .subscribe((res: any) => {
         this.funcionario = res.data;
-    });
+        console.log(this.funcionario)
+      });
   }
 
   ngOnDestroy(): void {
     this.data$.unsubscribe();
   }
-  
+
 }

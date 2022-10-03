@@ -9,7 +9,7 @@ import { JobService } from '../job.service';
 })
 export class VacantesVerComponent implements OnInit {
   id = ''
-  loading = false
+  loading: boolean
   postulados:any = []
   applicants:any[] = []
   public job: any;
@@ -33,8 +33,10 @@ export class VacantesVerComponent implements OnInit {
   }
 
   getApplicants(){
+    this.loading = true
     this._job.getApplicants( {job_id:this.id} ).subscribe((r:any)=>{
       this.applicants = r.data
+      this.loading = false
     })
   }
 }

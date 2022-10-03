@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
@@ -27,12 +26,9 @@ export class NominaComponent implements OnInit {
   constructor(
     private _payroll: PayRollService,
     private _people: PersonService,
-    public config: NgbDropdownConfig,
     private _swal: SwalService,
     private route: ActivatedRoute
   ) {
-    config.placement = 'left';
-    config.placement = 'left-bottom';
   }
 
   ngOnInit(): void {
@@ -44,6 +40,10 @@ export class NominaComponent implements OnInit {
     this.getPagoNomina();
     this.getPeople();
   }
+  estadoFiltros = false;
+  mostrarFiltros(){
+    this.estadoFiltros = !this.estadoFiltros
+  }
 
   getPagoNomina() {
 
@@ -52,8 +52,10 @@ export class NominaComponent implements OnInit {
       {
         date1: this.inicioParemeter, date2: this.finParemeter,
       } : {}
+      
     this._payroll.getPayrollPays(params).subscribe((r: any) => {
       this.nomina = r.data;
+      console.log(this.nomina)
       this.pago.id = this.nomina.nomina_paga_id
         ? this.nomina.nomina_paga_id
         : '';

@@ -68,11 +68,11 @@
                                         <td>
                                             <div class="text-center">
                                                 <div class="btn-group " role="group" data-toggle="tooltip" data-placement="top" title="" data-original-title=".btn-mini">
-                                                    <div ngbDropdown class="dropdown-primary">
-                                                        <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                                    <div ngbDropdown container="body" class="dropdown-primary">
+                                                        <button ngbDropdownToggle class="btn btn-secondary btn-mini  waves-light " type="button">Acciones</button>
                                                         <div ngbDropdownMenu>
-                                                            <a class="dropdown-item waves-light waves-effect caja-botones" (click)="EditarCategoria(categoria.Id_Categoria_Nueva)"> <i class="ti-pencil"></i>Editar</a>
-                                                            <a class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar esta compra, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                                            <a class="dropdown-item waves-light  caja-botones" (click)="EditarCategoria(categoria.Id_Categoria_Nueva)"> <i class="ti-pencil"></i>Editar</a>
+                                                            <a class="dropdown-item waves-light  caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar esta compra, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
                                                                 (confirm)="EliminarCategoria(categoria.Id_Categoria_Nueva)"> <i class="ti-trash"></i>Eliminar</a>
                                                         </div>
                                                     </div>
@@ -90,17 +90,17 @@
                     <ng-template #PlantillaBotones let-row="row" let-value="value">
                         <div class="text-center">
                             <div class="btn-group " role="group" data-toggle="tooltip" data-placement="top" title="" data-original-title=".btn-mini">
-                                <!--  <button type="button" class="btn btn-info btn-mini waves-effect waves-light">
+                                <!--  <button type="button" class="btn btn-info btn-mini  waves-light">
                                   <i class="fa fa-search"></i>
                               </button>
                               <button class="btn btn-primary btn-mini" (click)="EditarCategoria(value)" type="button" style="margin:0;">
                                   <i class="ti-pencil"></i>
                               </button>-->
-                                <div ngbDropdown class="dropdown-primary">
-                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones</button>
+                                <div ngbDropdown container="body" class="dropdown-primary">
+                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini  waves-light " type="button">Acciones</button>
                                     <div ngbDropdownMenu>
-                                        <a class="dropdown-item waves-light waves-effect caja-botones" (click)="EditarCategoria(value)"> <i class="ti-pencil"></i>Editar</a>
-                                        <a class="dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar esta compra, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                        <a class="dropdown-item waves-light  caja-botones" (click)="EditarCategoria(value)"> <i class="ti-pencil"></i>Editar</a>
+                                        <a class="dropdown-item waves-light  caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar esta compra, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
                                             (confirm)="EliminarCategoria(value)"> <i class="ti-trash"></i>Eliminar</a>
                                     </div>
                                 </div>

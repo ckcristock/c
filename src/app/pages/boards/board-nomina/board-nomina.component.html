@@ -1,0 +1,365 @@
+<div class="card-title">
+  <h3 class="text-center text-primary">Nómina</h3>
+</div>
+<hr class="line" />
+<h5 class="text-center">Próximos pagos</h5>
+<div class="row d-flex align-items-stretch">
+  <div class="col-md-3 d-flex align-items-stretch">
+    <div class="card border border-3 border-light w-100">
+      <div class="card-body text-center">
+        <i class="fa fa-money text-c-blue d-block f-40"></i>
+        <h4>${{ TotalSueldos | number }}</h4>
+        <h5 class="card-title">Total sueldos</h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 d-flex align-items-stretch">
+    <div class="card border border-3 border-light w-100">
+      <div class="card-body text-center">
+        <h4>${{ TotalAuxilio | number }}</h4>
+        <h5 class="card-title">Total auxilios no salariales</h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 d-flex align-items-stretch">
+    <div class="card border border-3 border-light w-100">
+      <div class="card-body text-center">
+        <h4>${{ TotalDeducciones | number }}</h4>
+        <h5 class="card-title">Total deducciones</h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 d-flex align-items-stretch">
+    <div class="card border border-3 border-light w-100">
+      <div class="card-body text-center">
+        <h4>${{ TotalSueldos + TotalAuxilio - TotalDeducciones | number }}</h4>
+        <h5 class="card-title">Pago total de nómina</h5>
+      </div>
+    </div>
+  </div>
+</div>
+<hr />
+<h5 class="text-center">Semáforo</h5>
+<div class="rounded-top table-responsive">
+  <table class="table table-hover">
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Concepto</th>
+        <th>{{ meses_tabla.mes1 }}</th>
+        <th>{{ meses_tabla.mes2 }}</th>
+        <th>Variación</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th class="text-center">Número de personas</th>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.personas.anterior }}
+        </td>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.personas.actual }}
+        </td>
+        <td class="text-center">
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-success':
+                datos_tabla_semaforo.personas.resultado == 'positivo',
+              'badge-danger':
+                datos_tabla_semaforo.personas.resultado == 'negativo'
+            }"
+            >{{ datos_tabla_semaforo.personas.variacion }}%</span
+          >
+        </td>
+        <td>
+          <i
+            class="fa"
+            [ngClass]="{
+              'fa-arrow-up text-success':
+                datos_tabla_semaforo.personas.resultado == 'positivo',
+              'fa-arrow-down text-danger':
+                datos_tabla_semaforo.personas.resultado == 'negativo'
+            }"
+          ></i>
+        </td>
+      </tr>
+      <tr>
+        <th class="text-center">Salarios</th>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.salarios.anterior }}
+        </td>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.salarios.actual }}
+        </td>
+        <td class="text-center">
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-success':
+                datos_tabla_semaforo.salarios.resultado == 'positivo',
+              'badge-danger':
+                datos_tabla_semaforo.salarios.resultado == 'negativo'
+            }"
+            >{{ datos_tabla_semaforo.salarios.variacion }}%</span
+          >
+        </td>
+        <td>
+          <i
+            class="fa"
+            [ngClass]="{
+              'fa-arrow-up text-success':
+                datos_tabla_semaforo.salarios.resultado == 'positivo',
+              'fa-arrow-down text-danger':
+                datos_tabla_semaforo.salarios.resultado == 'negativo'
+            }"
+          ></i>
+        </td>
+      </tr>
+      <tr>
+        <th class="text-center">Seguridad social</th>
+        <td class="text-right">{{ datos_tabla_semaforo.personas.anterior }}</td>
+        <td class="text-right">{{ datos_tabla_semaforo.personas.actual }}</td>
+        <td class="text-center">
+          <span class="badge badge-danger"
+            >{{ datos_tabla_semaforo.personas.variacion }}%</span
+          >
+        </td>
+        <td><i class="fa fa-arrow-up"></i></td>
+      </tr>
+      <tr>
+        <th class="text-center">Extras y recargos</th>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.extras_recargos.anterior }}
+        </td>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.extras_recargos.actual }}
+        </td>
+        <td class="text-center">
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-success':
+                datos_tabla_semaforo.extras_recargos.resultado == 'positivo',
+              'badge-danger':
+                datos_tabla_semaforo.extras_recargos.resultado == 'negativo'
+            }"
+            >{{ datos_tabla_semaforo.extras_recargos.variacion }}%</span
+          >
+        </td>
+        <td>
+          <i
+            class="fa"
+            [ngClass]="{
+              'fa-arrow-up text-success':
+                datos_tabla_semaforo.extras_recargos.resultado == 'positivo',
+              'fa-arrow-down text-danger':
+                datos_tabla_semaforo.extras_recargos.resultado == 'negativo'
+            }"
+          ></i>
+        </td>
+      </tr>
+      <tr>
+        <th class="text-center">Vacaciones</th>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.vacaciones.anterior }}
+        </td>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.vacaciones.actual }}
+        </td>
+        <td class="text-center">
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-success':
+                datos_tabla_semaforo.vacaciones.resultado == 'positivo',
+              'badge-danger':
+                datos_tabla_semaforo.vacaciones.resultado == 'negativo'
+            }"
+            >{{ datos_tabla_semaforo.vacaciones.variacion }}%</span
+          >
+        </td>
+        <td>
+          <i
+            class="fa"
+            [ngClass]="{
+              'fa-arrow-up text-success':
+                datos_tabla_semaforo.vacaciones.resultado == 'positivo',
+              'fa-arrow-down text-danger':
+                datos_tabla_semaforo.vacaciones.resultado == 'negativo'
+            }"
+          ></i>
+        </td>
+      </tr>
+      <tr>
+        <th class="text-center">Incapacidades</th>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.incapacidades.anterior }}
+        </td>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.incapacidades.actual }}
+        </td>
+        <td class="text-center">
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-success':
+                datos_tabla_semaforo.incapacidades.resultado == 'positivo',
+              'badge-danger':
+                datos_tabla_semaforo.incapacidades.resultado == 'negativo'
+            }"
+            >{{ datos_tabla_semaforo.incapacidades.variacion }}%</span
+          >
+        </td>
+        <td>
+          <i
+            class="fa"
+            [ngClass]="{
+              'fa-arrow-up text-success':
+                datos_tabla_semaforo.incapacidades.resultado == 'positivo',
+              'fa-arrow-down text-danger':
+                datos_tabla_semaforo.incapacidades.resultado == 'negativo'
+            }"
+          ></i>
+        </td>
+      </tr>
+      <tr>
+        <th class="text-center">Ingresos constitutivos de salario</th>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.ingresos_constitutivos.anterior }}
+        </td>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.ingresos_constitutivos.actual }}
+        </td>
+        <td class="text-center">
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-success':
+                datos_tabla_semaforo.ingresos_constitutivos.resultado ==
+                'positivo',
+              'badge-danger':
+                datos_tabla_semaforo.ingresos_constitutivos.resultado ==
+                'negativo'
+            }"
+            >{{ datos_tabla_semaforo.ingresos_constitutivos.variacion }}%</span
+          >
+        </td>
+        <td>
+          <i
+            class="fa"
+            [ngClass]="{
+              'fa-arrow-up text-success':
+                datos_tabla_semaforo.ingresos_constitutivos.resultado ==
+                'positivo',
+              'fa-arrow-down text-danger':
+                datos_tabla_semaforo.ingresos_constitutivos.resultado ==
+                'negativo'
+            }"
+          ></i>
+        </td>
+      </tr>
+      <tr>
+        <th class="text-center">Ingresos no constitutivos de salario</th>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.ingresos_no_constitutivos.anterior }}
+        </td>
+        <td class="text-right">
+          {{ datos_tabla_semaforo.ingresos_no_constitutivos.actual }}
+        </td>
+        <td class="text-center">
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-success':
+                datos_tabla_semaforo.ingresos_no_constitutivos.resultado ==
+                'positivo',
+              'badge-danger':
+                datos_tabla_semaforo.ingresos_no_constitutivos.resultado ==
+                'negativo'
+            }"
+            >{{ datos_tabla_semaforo.ingresos_no_constitutivos.variacion }}%</span
+          >
+        </td>
+        <td>
+          <i
+            class="fa"
+            [ngClass]="{
+              'fa-arrow-up text-success':
+                datos_tabla_semaforo.ingresos_no_constitutivos.resultado ==
+                'positivo',
+              'fa-arrow-down text-danger':
+                datos_tabla_semaforo.ingresos_no_constitutivos.resultado ==
+                'negativo'
+            }"
+          ></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<hr />
+<h5 class="text-center">Costos nómina</h5>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card border border-3 border-light">
+      <div class="card-body">
+        <div #costosNominaChart>
+          <chart
+            id="costos_nomina_chart"
+            [type]="'line'"
+            [data]="costosNominaChartData"
+            [options]="costoNominaChartOption"
+          ></chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card border border-3 border-light">
+      <div class="card-body text-center">
+        <h6 class="card-title">Costos y gastos personales</h6>
+        <div #costosGastosChart>
+          <chart
+            id="costos_gastos_chart"
+            [type]="'doughnut'"
+            [data]="costosGastosFeedbackData"
+            [options]="costosGastosFeedbackOptions"
+          ></chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card border border-3 border-light">
+      <div class="card-body text-center">
+        <h6 class="card-title">Costos por centros de costos</h6>
+        <div #costosGastosGrupoChart>
+          <chart
+            id="costos_gastos_grupo_chart"
+            [type]="'doughnut'"
+            [data]="costosGastosGrupoData"
+            [options]="costosGastosGrupoOptions"
+          ></chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card border border-3 border-light">
+      <div class="card-body text-center">
+        <h6 class="card-title">Costos por áreas</h6>
+        <div #costosGastosChart>
+          <chart
+            id="costos_gastos_dependencia_chart"
+            [type]="'doughnut'"
+            [data]="costosGastosDependenciaData"
+            [options]="costosGastosDependenciaOptions"
+          ></chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

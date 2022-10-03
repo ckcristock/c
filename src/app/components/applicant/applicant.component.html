@@ -1,60 +1,76 @@
-<app-modal-basic #applicantM [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <div class="row">
-            <h4 class=" text text-center justify-content-center modal-title   p-1">Detalle del postulante
-            </h4>
+<ng-template #applicantM let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Detalle del postulante</h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    ></button>
+  </div>
 
-        </div>
+  <div class="modal-body">
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Educación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td>{{ data.name }} {{ data.surname }}</td>
+            <td>{{ data.email }}</td>
+            <td>{{ data.phone }}</td>
+            <td>{{ data.education }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="app-modal-body">
-        <div class="row mb-2">
-            <div class="col-4">
-                <Strong>Nombre:</Strong> {{data.name}} {{data.sur_name}}
-            </div>
-            <div class="col-4">
-                <Strong>Email:</Strong> {{data.email}}
-            </div>
-            <div class="col-4">
-                <Strong>Teléfono:</Strong> {{data.phone}}
-            </div>
-        </div>
-       
-        <div class="row mb-2">
-            <div class="col-4">
-                <Strong>Educación:</Strong> {{data.education}}
-            </div>
-            <div class="col-4">
-                <Strong>Experiencia:</Strong> {{data.experience_year}} años
-            </div>
-            <div class="col-4">
-                <Strong>Vehículo:</Strong> {{data.conveyance}} 
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-4">
-                <Strong>Visa:</Strong> {{data.visa == 1 ? 'Si' :'No'}}
-            </div>
-            <div class="col-4" >
-                <Strong>Tipo Visa:</Strong> {{data.visa_type?.name}}
-            </div>
-            <div class="col-4">
-                <Strong>Licencia:</Strong> {{data.driving_license?.type}}
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-4">
-                <Strong class="text-primary" 
-                (click)="download(data.id)">
-                    <i class="fas fa-file-pdf"></i>
-                    Currimulum</Strong> 
-
-            </div>
-           
-        </div>
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Experiencia</th>
+            <th>Vehículo</th>
+            <th>Visa</th>
+            <th>Tipo Visa</th>
+            <th>Licencia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td>{{ data.experience_year }} años</td>
+            <td>{{ data.conveyance }}</td>
+            <td>{{ data.visa == 1 ? "Si" : "No" }}</td>
+            <td>{{ data.visa_type?.name }}</td>
+            <td>{{ data.driving_license?.type }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="app-modal-footer ">
-        <div class="text-right ">
-            <button type="button " class="btn btn-danger btn-sm mr-2"  (click)="applicantM.hide() ">Cerrar</button>
+    <button
+      type="button"
+      (click)="download(data.id)"
+      class="btn btn-success btn-block"
+    >
+      <span *ngIf="!donwloading; else status"
+        ><i class="fas fa-file-download"></i> Descargar curriculum</span
+      >
+      <ng-template #status>
+        <div class="spinner-border spinner-border-sm" role="status">
+          <span class="sr-only">Loading...</span>
         </div>
-    </div>
-</app-modal-basic>
+        Descargando
+      </ng-template>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>

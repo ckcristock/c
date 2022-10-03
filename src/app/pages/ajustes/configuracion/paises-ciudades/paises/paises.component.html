@@ -1,87 +1,175 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-primary btn-sm" style="float: right;" (click)="openModal()">
-                <i class="fa fa-plus"></i> Nuevo País
-            </button>
-            <h5 class="text-primary">Paises</h5>
-            <p>Paises registrados en nuestra bases de datos.</p>
-            <hr class="bg-primary">
-            <div class="form-row">
-                <div class="form-group col-4">
-                    <label for="">Filtro nombre</label>
-                    <input type="text" class="form-control" [(ngModel)]="filtro.name" (change)="getCountries()" name="name" autocomplete="off">
-                </div>
-            </div>
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Paises</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openConfirm(add, 'Nuevo país')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
-        <table class="table table-sm table-borderless table-striped" *ngIf="!loading && paises.length > 0; else notData">
-            <thead class="bg-light">
-                <tr>
-                    <th>Paises</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let pais of paises" [ngClass]="{'bg-danger text-white': (pais.state == 'Inactivo')}">
-                    <td> {{ pais.name | titlecase }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm waves-effect waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-info waves-effect caja-botones" target="_blank" (click)="getData(pais); modal.show()">
-                                        <i class="far fa-edit"></i> Editar
-                                    </a>
-                                    <a *ngIf="pais.state == 'Inactivo'" class="dropdown-item waves-light text-success waves-effect" (click)="activateOrInactivate(pais, 'Activo')">
-                                        <i class="fas fa-check"></i> Activar
-                                    </a>
-                                    <a *ngIf="pais.state == 'Activo'" class="dropdown-item waves-light text-danger waves-effect" (click)="activateOrInactivate(pais, 'Inactivo')">
-                                        <i class="fas fa-trash-alt"></i> Anular
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" [pageSize]="pagination.pageSize" [(page)]="pagination.page" (pageChange)="getCountries($event)" aria-label="Default pagination"
-            maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" rotate="true" ellipses="false" boundaryLinks="true">
-        </ngb-pagination>
+      </div>
     </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filtro.name"
+              (input)="getCountries()"
+              name="name"
+              autocomplete="off"
+              placeholder="Busca por nombre"
+            />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && paises.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Paises</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let pais of paises"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': pais.state == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">{{ pais.name | titlecase }}</td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
+                    (click)="getData(pais); openConfirm(add, 'Editar país')"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    *ngIf="pais.state == 'Inactivo'"
+                    href="javascript: void(0);"
+                    class="dropdown-item waves-light text-success"
+                    (click)="activateOrInactivate(pais, 'Activo')"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                  <a
+                    *ngIf="pais.state == 'Activo'"
+                    href="javascript: void(0);"
+                    class="dropdown-item waves-light text-danger"
+                    (click)="activateOrInactivate(pais, 'Inactivo')"
+                  >
+                    <i class="fas fa-trash-alt"></i> Anular
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      (pageChange)="getCountries($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
 </div>
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-    <div class="app-modal-header">
-        <h5 class="modal-title"> {{ selected }} </h5>
-        <button type="button" class="close basic-close" (click)="modal.hide()">
-            <span aria-hidden="true">
-              <i class="fas fa-times" (click)="modal.hide()"></i>
-            </span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <form [formGroup]="form">
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label class="custom-label" for="funcionario_id">Nombre País</label>
-                    <input type="text" class="form-control form-control-sm" formControlName="name" name="name" required>
-                    <div class="col-md-7 offset-4">
-                        <small class="invalid text-danger" *ngIf="name_invalid"> Es necesario el nombre del País 
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="form-group text-right">
-            <button (click)="modal.hide()" type="button" class="btn btn-danger raised mr-2 btn-sm">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-sm raised" [disabled]="!form.valid" (click)="createCountry()">Guardar</button>
-        </div>
-    </div>
-</app-modal-basic>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">{{ selected }}</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            name="name"
+            required
+            autocomplete="off"
+          />
+          <mat-error *ngIf="name_invalid">
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="!form.valid"
+      (click)="createCountry()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

@@ -6,9 +6,9 @@ export const environment = {
   production: false,
   id_funcionario: 1,
 
-   base_url: 'http://127.0.0.1:8000/api',
+   base_url: 'http://core-back.test/api',
    //ruta: 'http://localhost/sigmaqmo-back-php/',
-   ruta: 'http://localhost/inventario.sigmagmo.com/',
+   ruta: 'http://inventario.sigmaqmo.com/',
 
 
 

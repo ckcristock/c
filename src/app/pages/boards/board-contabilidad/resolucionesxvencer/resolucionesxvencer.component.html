@@ -1,0 +1,25 @@
+<table *ngIf="Resoluciones.length > 0" style="font-size: 9px" class="table table-striped">
+  <tr>
+    <th style="width:100px">Resolución</th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let item of Resoluciones">
+    <td>{{ item.Resolucion }}</td>
+    <td>
+      <span class="mytooltip tooltip-effect-2">
+        <span class="tooltip-item2"> <p style="font-size:11px"> <i class="fa fa-file-text-o"></i></p></span>
+        <span class="tooltip-content4 clearfix">
+          <span class="tooltip-text2">
+            <ul>
+              <li>Documento: {{ item.Documento }}</li>
+              <li>Resolucion: {{ item.Resolucion }}</li>
+              <li>Fecha Vencimiento: {{ item.Fecha_Vencimiento | date:'dd/MM/yyyy' }}</li>
+              <li>Consecutivo Actual: {{ item.Consecutivo }}</li>
+              <li>Consecutivo Final: {{ item.Consecutivo_Final }}</li>
+            </ul>
+          </span>
+        </span> 
+      </span>
+    </td>
+  </tr>
+</table>

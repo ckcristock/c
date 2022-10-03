@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { PlanCuentasService } from '../../plan-cuentas/plan-cuentas.service';
 import Swal from 'sweetalert2';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-modalcierrecontable',
@@ -15,11 +16,11 @@ import Swal from 'sweetalert2';
 })
 export class ModalcierrecontableComponent implements OnInit, OnDestroy {
 
-  @ViewChild('ModalCierreContable') ModalCierreContable:any;
+  @ViewChild('ModalCierreContable') ModalCierreContable: any;
   @Input() abrirModal: Observable<any> = new Observable;
-  @Output() recargarListas:EventEmitter<any> = new EventEmitter;
-  private _suscription:any;
-  public modelCierre:any = {
+  @Output() recargarListas: EventEmitter<any> = new EventEmitter;
+  private _suscription: any;
+  public modelCierre: any = {
     Id_Cierre_Contable: '',
     Mes: '',
     Anio: '',
@@ -27,48 +28,62 @@ export class ModalcierrecontableComponent implements OnInit, OnDestroy {
     Observaciones: '',
     Id_Empresa: ''
   };
-  public meses:any = [];
-  public Anio:any = new Date().getFullYear();
-  public alertOption:SweetAlertOptions = {};
-  companies:any[] = [];
+  public meses: any = [];
+  public Anio: any = new Date().getFullYear();
+  public alertOption: SweetAlertOptions = {};
+  companies: any[] = [];
   constructor(
-              private cierreContableService: CierrecontableService, 
-              private swalService: SwalService,
-              private http: HttpClient,
-              private _planCuentas: PlanCuentasService
-    ) { 
+    private cierreContableService: CierrecontableService,
+    private swalService: SwalService,
+    private http: HttpClient,
+    private modalService: NgbModal,
+    private _planCuentas: PlanCuentasService
+  ) {
 
-      this.alertOption = {
-        title: "¿Está Seguro?",
-        text: "Se dispone a guardar el proceso de cierre",
-        showCancelButton: true,
-        cancelButtonText: "No, Dejame Comprobar!",
-        confirmButtonText: 'Si, Guardar',
-        showLoaderOnConfirm: true,
-        focusCancel: true,
-        icon: 'info',
-        input: 'select',
-        inputOptions: {
-          Pcga: 'Imprimir en PCGA',
-          Niif: 'Imprimir en NIIF'
-        },
-        preConfirm: (value) => {
-          return new Promise((resolve) => {
-            this.validarCierre(value)
-          })
-        },
-        allowOutsideClick: () => !swal.isLoading()
-      }
+    this.alertOption = {
+      title: "¿Está Seguro?",
+      text: "Se dispone a guardar el proceso de cierre",
+      showCancelButton: true,
+      cancelButtonText: "No, Dejame Comprobar!",
+      confirmButtonText: 'Si, Guardar',
+      showLoaderOnConfirm: true,
+      focusCancel: true,
+      icon: 'info',
+      input: 'select',
+      inputOptions: {
+        Pcga: 'Imprimir en PCGA',
+        Niif: 'Imprimir en NIIF'
+      },
+      preConfirm: (value) => {
+        return new Promise((resolve) => {
+          this.validarCierre(value)
+        })
+      },
+      allowOutsideClick: () => !swal.isLoading()
     }
+  }
 
   ngOnInit() {
-    this._suscription = this.abrirModal.subscribe((data:any) => {
+    this._suscription = this.abrirModal.subscribe((data: any) => {
       this.modelCierre.Tipo_Cierre = data;
-      this.ModalCierreContable.show();
+      this.openConfirm(this.ModalCierreContable)
+      //this.ModalCierreContable.show();
     });
 
     this.getMeses();
     // this.ListasEmpresas();
+  }
+
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    
   }
 
   ngOnDestroy() {
@@ -76,19 +91,20 @@ export class ModalcierrecontableComponent implements OnInit, OnDestroy {
       this._suscription.unsubscribe();
     }
   }
-/* 
-  ListasEmpresas(){
-    this._planCuentas.getCompanies().subscribe((data:any) => {
-      this.companies = data.data;
-    })
-  } */
+  /* 
+    ListasEmpresas(){
+      this._planCuentas.getCompanies().subscribe((data:any) => {
+        this.companies = data.data;
+      })
+    } */
 
   private guardarCierre(datos, tipo) {
-    this.http.post(environment.ruta+'php/contabilidad/cierres/guardar_cierre.php',datos).subscribe((data:any) => {
+    this.http.post(environment.ruta + 'php/contabilidad/cierres/guardar_cierre.php', datos).subscribe((data: any) => {
       if (data.nroId) {
         this.openComprobantesCierreAnio(data.nroId, tipo);
       }
-      this.ModalCierreContable.hide();
+      //this.ModalCierreContable.hide();
+      this.modalService.dismissAll(); 
       this.resetModel();
       Swal.fire({
         icon: data.codigo,
@@ -111,7 +127,7 @@ export class ModalcierrecontableComponent implements OnInit, OnDestroy {
     let datos = new FormData;
     datos.append('datos', info);
 
-    this.http.post(environment.ruta+'php/contabilidad/cierres/validar_cierre.php',datos).subscribe((data:any) => {
+    this.http.post(environment.ruta + 'php/contabilidad/cierres/validar_cierre.php', datos).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.guardarCierre(datos, tipo);
       } else {

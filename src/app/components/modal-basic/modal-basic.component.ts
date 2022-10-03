@@ -32,6 +32,7 @@ export class ModalBasicComponent implements OnInit {
   }
 
   public onContainerClicked(event: MouseEvent): void {
+    console.log('clicks')
     if ((<HTMLElement>event.target).classList.contains('modal')) {
     }
   }

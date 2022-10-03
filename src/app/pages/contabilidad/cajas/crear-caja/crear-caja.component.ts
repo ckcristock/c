@@ -19,6 +19,8 @@ import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/pe
 import { AccountPlanService } from 'src/app/core/services/account-plan.service';
 import { PrettyCashService } from 'src/app/core/services/pretty-cash.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidatorsService } from 'src/app/pages/ajustes/informacion-base/services/reactive-validation/validators.service';
 type Person = { value: number; text: string };
 @Component({
   selector: 'app-crear-caja',
@@ -29,6 +31,7 @@ export class CrearCajaComponent implements OnInit {
   @Input('openModal') openModal: EventEmitter<Boolean>;
   @Output('saved') saved = new EventEmitter<Boolean>();
   @ViewChild('modal') modal;
+  @ViewChild('add') add;
   people: Person[] = [];
   accounts: any[] = [];
   forma: FormGroup;
@@ -37,16 +40,31 @@ export class CrearCajaComponent implements OnInit {
     private _people: PersonService,
     private _prettyCash: PrettyCashService,
     private _account: AccountPlanService,
-    private _swal: SwalService
-  ) {}
+    private modalService: NgbModal,
+    private _swal: SwalService,
+    private _reactiveValid: ValidatorsService,
+  ) { }
 
   ngOnInit(): void {
     this.getPeople();
     this.createForm();
     this.openModal.subscribe((r) => {
       this.getAccounts();
-      this.modal.show();
+      //this.modal.show();
+      this.openConfirm(this.add)
     });
+  }
+
+  closeResult = '';
+  public openConfirm(confirm) {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any) {
+    this.forma.reset()
   }
 
   getAccounts() {
@@ -75,17 +93,18 @@ export class CrearCajaComponent implements OnInit {
                 title: 'Operación Exitosa',
                 text: 'Se ha creado una caja',
                 icon: 'success',
-		showCancel:false
-		
+                showCancel: false
+
               });
               this.saved.emit(true);
-              this.modal.hide();
+              //this.modal.hide();
+              this.modalService.dismissAll(); 
             },
             (er) => {
               this._swal.show({
                 title: 'Operación fallida ',
                 text: 'Ha ocurrido un error',
-		showCancel:false,
+                showCancel: false,
                 icon: 'error',
               });
             }
@@ -96,10 +115,10 @@ export class CrearCajaComponent implements OnInit {
 
   createForm() {
     this.forma = this.fb.group({
-      person: [''],
-      account_plan: [''],
-      initial_balance: [''],
-      description: [''],
+      person: ['', this._reactiveValid.required],
+      account_plan: ['', this._reactiveValid.required],
+      initial_balance: ['', this._reactiveValid.required],
+      description: ['', this._reactiveValid.required],
     });
     this.forma.get('account_plan').valueChanges.subscribe((r) => {
       if (typeof r == 'object') {

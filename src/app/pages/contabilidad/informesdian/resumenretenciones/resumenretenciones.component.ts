@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 export class ResumenretencionesComponent implements OnInit {
 
   public datosCabecera:any = {
-    Titulo: 'Resumen de Retenciones',
+    Titulo: 'Resumen de retenciones',
     Fecha: new Date()
   }
   public model:any = {

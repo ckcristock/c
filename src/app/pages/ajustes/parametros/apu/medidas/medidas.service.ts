@@ -9,6 +9,10 @@ export class MedidasService {
 
   constructor( private http: HttpClient ) { }
   
+  changeState( data:any ){
+    return this.http.put(`${environment.base_url}/act-inact-medidas`, data);
+  }
+
   getMeasures( params = {} ){
     return this.http.get(`${environment.base_url}/paginateMeasure`, {params});
   }

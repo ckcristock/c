@@ -171,7 +171,7 @@ export class CrearApuConjuntoComponent implements OnInit {
 
   findApus() {
     // this.formGroup = item;
-    this.apus.show()
+    this.apus.openConfirm()
   }
 
   getApus(e: any[]) {

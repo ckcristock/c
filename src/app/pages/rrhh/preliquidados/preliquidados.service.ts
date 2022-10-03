@@ -9,8 +9,8 @@ export class PreliquidadosService {
 
   constructor( private http: HttpClient ) { }
   
-  getPreliquidados() {
-    return this.http.get(`${environment.base_url}/preLiquidado`);
+  getPreliquidados( params = {} ) {
+    return this.http.get(`${environment.base_url}/preLiquidado`, {params});
   }
 
   activate(data:any, id){

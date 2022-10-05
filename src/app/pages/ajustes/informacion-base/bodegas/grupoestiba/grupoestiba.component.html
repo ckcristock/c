@@ -1,0 +1,174 @@
+<!-- <div class="row d-flex justify-content-center">
+    <div class="col-12">
+
+    </div>
+    <div class="col-5">
+        <div class="card">
+            <div class="card-header  ">
+                <div class="d-flex justify-content-between">
+
+                    <h4> <i class="fa fa-list-ul"></i> Grupos - {{bodega.Nombre}} </h4>
+
+
+                    <div>
+                        <button class="btn btn-sm btn-primary m-0" (click)="mapaBodega.show()"><i class="fa fa-map" ></i>Ver Mapa</button>
+                        <button class="btn btn-sm btn-success m-0" (click)="abrirModalGrupo.emit({Grupo:{Id_Bodega_Nuevo:idBodega},Tipo:'Crear'})">
+                            <i class="fa fa-plus"></i>Crear Grupo</button>
+                    </div>
+                </div>
+
+                <p class="mt-2 mb-0">
+                    Para desplegar las opciones del grupo <strong>mantega presionado</strong> y se abrirá una ventana
+                </p>
+
+
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Grupo</th>
+                            <th>Fecha Vencimiento</th>
+                            <th>Presentación</th>
+                        </tr>
+                        <tr class="mb-2">
+                            <th><input type="text" [(ngModel)]="filtrosGrupos.Nombre" (change)="getGrupos(true)" class="form-control" placeholder="Buscar Grupo" name="" id=""></th>
+                            <th>
+                                <select name="" [(ngModel)]="filtrosGrupos.Fecha_Vencimiento" (change)="getGrupos(true)" class="form-control" id="">
+                                <option value="">Seleccione Si Aplica</option>
+                                <option value="Si">Si</option>
+                                <option value="No">No</option>
+                              </select>
+                            </th>
+                            <th>
+                                <select name="" [(ngModel)]="filtrosGrupos.Presentacion" (change)="getGrupos(true)" class="form-control" id="">
+                                    <option value="">Seleccione Si Aplica</option>
+                                    <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                              </select>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let grupo of grupos" class="cuerpo" (mousedown)="calcularClick(grupo)" (mouseup)="opercacionGrupo(grupo)" [ngClass]="{'bg-success': grupo.Selected == true }">
+                            <td>{{grupo.Nombre}}</td>
+                            <td>{{grupo.Fecha_Vencimiento}}</td>
+                            <td>{{grupo.Presentacion}}</td>
+                        </tr>
+                        <tr *ngIf="loadingGrupos">
+                            <td colspan="3" class="d-fex fex-column text-center ">
+                                <i class="fa fa-spinner fa-spin fa-3x"></i>
+                                <p>
+                                    Cargando Grupos...
+                                </p>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="!loadingGrupos && grupos.length == 0 ">
+                            <td colspan="3" class="text-danger d-fex fex-column text-center ">
+                                <i class="fa fa-exclamation-triangle fa-3x "></i>
+                                <p>
+                                    No existen Grupos para esta bodega
+                                </p>
+                            </td>
+                        </tr>
+
+                        <tr class="mt-3">
+                            <ngb-pagination [(page)]="currentPageGrupos" [pageSize]="limitGrupos" (pageChange)="getGrupos()" [collectionSize]="sizeGrupos"></ngb-pagination>
+                        </tr>
+                        <tr>
+                            <td colspan="3" *ngIf="abriendo>0">
+                                <ngb-progressbar type="success" [value]="abriendo" [striped]="true"></ngb-progressbar>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header  d-flex justify-content-between">
+
+                <h4><i class="fa fa-cubes"></i>Estibas</h4>
+                <div *ngIf="grupoSelected">
+                    <button class="btn btn-sm btn-success m-0" (click)="abrirModalEstiba.emit({Estiba:{Id_Grupo_Estiba:grupoSelected,Id_Bodega_Nuevo:idBodega},Tipo:'Crear'})">
+                            <i class="fa fa-plus"></i>Crear Estiba</button>
+                </div>
+
+            </div>
+            <div class="card-body">
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th>Estiba</th>
+                            <th>Bodigo_Barras</th>
+                            <th>Estado</th>
+
+                        </tr>
+                        <tr>
+                            <th><input type="text" [(ngModel)]="filtrosEstibas.Nombre" (change)="buscarEstibas(grupoSelected,true)" class="form-control" placeholder="Buscar Estiba" name="" id=""></th>
+                            <th><input type="text" [(ngModel)]="filtrosEstibas.Codigo_Barras" (change)="buscarEstibas(grupoSelected,true)" class="form-control" placeholder="Buscar Codigo Barras" name="" id=""></th>
+                            <th>
+                                <select name="" [(ngModel)]="filtrosEstibas.Estado" (change)="buscarEstibas(grupoSelected,true)" class="form-control" id="">
+                                <option value="">Seleccione un estado</option>
+                                <option value="Disponible">Disponible</option>
+                                <option value="Inventario">Inventario</option>
+                                <option value="Inactiva">Inactiva</option>
+                              </select>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr class="cuerpo" *ngFor="let estiba of estibas" [ngClass]="{'bg-danger': estiba.Estado=='Inactiva' , 'bg-warning':estiba.Estado=='Inventario'}" (click)="abrirModalEstiba.emit({Estiba:estiba,Tipo:'Editar'})">
+                            <td>{{estiba.Nombre}}</td>
+                            <td>{{estiba.Codigo_Barras}}</td>
+                            <td>{{estiba.Estado}}</td>
+                        </tr>
+
+                        <tr *ngIf="loadingEstibas">
+                            <td colspan="3" class="d-fex fex-column text-center ">
+                                <i class="fa fa-spinner fa-spin fa-3x"></i>
+                                <p>
+                                    Cargando Estibas...
+                                </p>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="!loadingEstibas && estibas.length == 0  && grupoSelected">
+                            <td colspan="3" class="text-danger d-fex fex-column text-center ">
+                                <i class="fa fa-exclamation-triangle fa-3x "></i>
+                                <p>
+                                    No existen estibas para este grupo
+                                </p>
+                            </td>
+                        </tr>
+                        <tr *ngIf="!grupoSelected">
+                            <td colspan="3" class="text-danger d-fex fex-column text-center ">
+                                <i class="fa fa-exclamation-triangle fa-3x "></i>
+                                <p>
+                                    ¡No ha seleccionado ningún grupo!
+                                </p>
+                            </td>
+                        </tr>
+                        <tr class="mt-3">
+                            <ngb-pagination [(page)]="currentPageEstibas" [pageSize]="limitEstibas" (pageChange)="buscarEstibas(grupoSelected)" [collectionSize]="sizeEstibas"></ngb-pagination>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<swal #mapaBodega [options]="alertOptionMapa"></swal>
+
+<app-editarestiba [abrirModalEstiba]="abrirModalEstiba" (actualizarEstibas)="buscarEstibas(grupoSelected)"></app-editarestiba>
+<app-editargrupo [abrirModalGrupo]="abrirModalGrupo" (actualizarGrupos)="getGrupos()"></app-editargrupo> -->

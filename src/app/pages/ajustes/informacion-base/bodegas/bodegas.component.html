@@ -1,0 +1,192 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Bodegas</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-sm btn-primary"
+            (click)="openConfirm(add, 'Agregar')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
+      </div>
+    </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input type="text" matInput placeholder="Busca por nombre" />
+          </mat-form-field>
+          <input
+            type="text"
+            [(ngModel)]="filtros.Nombre"
+            name=""
+            id=""
+            (change)="getBodegas()"
+            class="form-control input-sm"
+          />
+          <input
+            type="text"
+            [(ngModel)]="filtros.Direccion"
+            name=""
+            id=""
+            (change)="getBodegas()"
+            class="form-control input-sm"
+          />
+          <input
+            type="number"
+            [(ngModel)]="filtros.Telefono"
+            (change)="getBodegas()"
+            class="form-control input-sm"
+            placeholder="Direccion"
+          />
+          <select
+            name=""
+            (change)="getBodegas()"
+            class="form-control input-sm"
+            [(ngModel)]="filtros.Compra_Internacional"
+            id=""
+          >
+            <option value="Si">Si</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && bodegas.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Bodega</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Compra Internacional</th>
+            <th class="col-1">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="text-center"
+            *ngFor="let bodega of bodegas"
+            [ngClass]="{
+              'text-danger font-weight-bold': bodega.Estado == 'Inactivo'
+            }"
+          >
+            <td class="align-middle">{{ bodega.Nombre }}</td>
+            <td class="align-middle">{{ bodega.Direccion }}</td>
+            <td class="align-middle">{{ bodega.Telefono }}</td>
+            <td class="align-middle">{{ bodega.Compra_Internacional }}</td>
+            <td class="align-middle">
+              <div class="text-center">
+                <div ngbDropdown container="body" class="dropdown-primary">
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-primary btn-sm waves-light"
+                    type="button"
+                  >
+                    <i class="mdi mdi-chevron-down"></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <a
+                      class="dropdown-item waves-light caja-botones text-info"
+                      href="javascript: void(0);"
+                      (click)="openConfirm(add, 'Editar')">
+                      <i class="far fa-edit"></i> Editar</a>
+                    <a
+                      class="dropdown-item waves-light caja-botones text-success"
+                      [routerLink]="[
+                        '/base/bodegas/grupoestiba',
+                        bodega.Id_Bodega_Nuevo
+                      ]"
+                    >
+                      <i class="fa fa-cubes"></i> Grupos - Estibas</a
+                    >
+                    <a
+                      [ngClass]="{
+                        'text-danger': bodega.Estado == 'Activo',
+                        'text-success': bodega.Estado == 'Inactivo'
+                      }"
+                      class="dropdown-item waves-light caja-botones"
+                      (click)="cambiarEstado(bodega, bodega.Estado == 'Activo' ? 'Inactivo': 'Activo')"
+                      
+                      (confirm)="eliminarBodega(bodega.Id_Bodega_Nuevo)"
+                    >
+                      <i
+                        class="fas"
+                        [ngClass]="{
+                          'fa-trash-alt': bodega.Estado == 'Activo',
+                          'fa-check': bodega.Estado == 'Inactivo'
+                        }"
+                      ></i
+                      >{{
+                        bodega.Estado == "Activo" ? " Inactivar" : " Activar"
+                      }}</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- <ngb-pagination 
+                            class="pull-right"
+                            [collectionSize]="totalItems"
+                            [(page)]="current_page"
+                            [pageSize]="limit" size="sm"
+                            (pageChange)="getBodegas(true)"
+                            [boundaryLinks]="true"></ngb-pagination> -->
+
+<!-- <app-crearbodega [abrirCrear]="abrirCrear" (CargarBodegas)="getBodegas()"></app-crearbodega>
+ -->
+<ng-template #add let-modal>
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">{{title}} bodega</h4>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p>Holi</p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+      >
+        Guardar
+      </button>
+    </div>
+  </ng-template>
+<swal #deleteSwal title="" text="" type=""> </swal>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

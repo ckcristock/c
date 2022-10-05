@@ -13,8 +13,8 @@ export class EstimationValuesService {
     return this.http.get(`${environment.base_url}/travel-expense-estimation`);
   }
 
-  getEstimationValues(){
-    return this.http.get(`${environment.base_url}/travelExpenseEstimationValue`);
+  getEstimationValues(params = {}){
+    return this.http.get(`${environment.base_url}/paginateTravelExpenseEstimationValue`, { params });
   }
 
   save(data){

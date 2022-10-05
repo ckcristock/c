@@ -71,9 +71,14 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';
+import { BodegasComponent } from './bodegas/bodegas.component';
+import { CrearbodegaComponent } from './bodegas/crearbodega/crearbodega.component';
+import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.component';
 
 @NgModule({
   declarations: [
+    CrearbodegaComponent,
+    GrupoestibaComponent,
     EmpresasComponent,
     FuncionariosComponent,
     RegimenesNivelesComponent,
@@ -115,6 +120,7 @@ import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-
     BoardPermissionsComponent,
     SedesComponent,
     VerLiquidacionComponent,
+    BodegasComponent,
   ],
 
   imports: [

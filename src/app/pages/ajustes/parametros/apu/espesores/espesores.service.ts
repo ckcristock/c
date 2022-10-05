@@ -9,8 +9,8 @@ export class EspesoresService {
 
   constructor( private http: HttpClient ) { }
 
-  getMeasures(){
-    return this.http.get(`${environment.base_url}/thicknesses`);
+  getMeasures(params = {}){
+    return this.http.get(`${environment.base_url}/paginateThickness`, { params });
   }
 
   save( data ){

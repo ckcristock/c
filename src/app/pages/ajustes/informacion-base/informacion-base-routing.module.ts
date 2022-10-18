@@ -22,6 +22,7 @@ import { SedesComponent } from './sedes/sedes.component';
 import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';
 import { BodegasComponent } from './bodegas/bodegas.component';
 import { CrearbodegaComponent } from './bodegas/crearbodega/crearbodega.component';
+import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
@@ -54,7 +55,8 @@ const routes: Routes = [
   //sedes
   { path: 'sedes', component: SedesComponent },
   { path: 'bodegas', component: BodegasComponent },
-  { path: 'bodegas/crear', component: CrearbodegaComponent }
+  { path: 'bodegas/crear', component: CrearbodegaComponent },
+  { path: 'bodegas/grupoestiba/:id', component: GrupoestibaComponent }
 ];
 
 @NgModule({

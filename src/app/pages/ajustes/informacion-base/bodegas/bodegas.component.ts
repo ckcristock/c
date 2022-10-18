@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { BodegasService } from './bodegas.service.';
 import { MatAccordion } from '@angular/material/expansion';
@@ -17,6 +17,10 @@ export class BodegasComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
+  formBodega: FormGroup;
+  selected: any = '';
+  closeResult = '';
+  private bodega: any = {}
   public abrirCrear = new EventEmitter<any>();
   public loading: boolean = false;
   public filtros: any = {
@@ -30,20 +34,46 @@ export class BodegasComponent implements OnInit {
     pageSize: 10,
     collectionSize: 0
   }
+  bodegas: any[] = []
 
-  openClose(){
-    if (this.matPanel == false){
+  constructor(
+    private bodegaService: BodegasService,
+    private _swal: SwalService,
+    private modalService: NgbModal,
+    private fb: FormBuilder
+  ) {
+
+  }
+
+  ngOnInit(): void {
+    this.getBodegas();
+    this.createForm();
+
+  }
+
+  createForm() {
+    this.formBodega = this.fb.group({
+      id: [this.bodega.Id_Bodega_Nuevo],
+      nombre: ['', Validators.required],
+      direccion: ['', Validators.required],
+      telefono: ['', Validators.required],
+      compraInternacional: ['', Validators.required],
+      mapa: ['']
+    });
+  }
+
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
-  title: any =''
-  closeResult = '';
-  public openConfirm(confirm, type) {
-    this.title = type;
+
+  public openConfirm(confirm, titulo) {
+    this.selected = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -51,23 +81,42 @@ export class BodegasComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+    this.formBodega.reset();
   }
 
-  bodegas: any[] = []
-
-  constructor(
-    private bodegaService: BodegasService,
-    private _swal: SwalService,
-    private modalService: NgbModal,
-  ) {
-    
+  getBodega(data) {
+    this.bodega = { ...data };
+    this.formBodega.patchValue({
+      id: this.bodega.Id_Bodega_Nuevo,
+      nombre: this.bodega.Nombre,
+      direccion: this.bodega.Direccion,
+      telefono: this.bodega.Telefono,
+      compraInternacional: this.bodega.Compra_Internacional
+    });
   }
 
-  ngOnInit(): void {
-    this.getBodegas();
+  createBodega() {
+    this.bodegaService.createBodega(this.formBodega.value)
+      .subscribe((res: any) => {
+        this.getBodegas();
+        this.modalService.dismissAll();
+        this._swal.show({
+          icon: 'success',
+          title: res.data,
+          text: 'Se ha agregado la bodega con éxito.',
+          timer: 1000,
+          showCancel: false
+        })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Aún no puedes editar una bodega con el mismo código, estamos trabajando en esto.',
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+      );
   }
-
 
   getBodegas(page = 1) {
     this.pagination.page = page;
@@ -82,27 +131,7 @@ export class BodegasComponent implements OnInit {
     })
   }
 
-  /* eliminarBodega(id) {
-
-    let data = new FormData();
-    data.append('id', id);
-
-    this.http.post(this.globales.ruta + 'php/bodega_nuevo/eliminar_bodega.php', data).subscribe((res: any) => {
-      this.deleteSwal.type = res['type'];
-      this.deleteSwal.title = res['title'];
-      this.deleteSwal.text = res['message'];
-      this.deleteSwal.show();
-      this.getBodegas();
-
-    }, err => {
-      this.deleteSwal.type = err.error.type;
-      this.deleteSwal.title = err.error.title;
-      this.deleteSwal.text = err.error.message;
-      this.deleteSwal.show();
-    })
-  } */
-  
-  cambiarEstado(bodega, state){
+  cambiarEstado(bodega, state) {
     let data = {
       id: bodega.Id_Bodega_Nuevo,
       state
@@ -128,7 +157,4 @@ export class BodegasComponent implements OnInit {
       }
     })
   }
-
-
-
 }

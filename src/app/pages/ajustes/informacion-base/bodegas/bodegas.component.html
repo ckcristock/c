@@ -24,41 +24,47 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre</mat-label>
-            <input type="text" matInput placeholder="Busca por nombre" />
+            <input
+              type="text"
+              [(ngModel)]="filtros.Nombre"
+              (input)="getBodegas()"
+              matInput
+              placeholder="Busca por nombre"
+            />
           </mat-form-field>
-          <input
-            type="text"
-            [(ngModel)]="filtros.Nombre"
-            name=""
-            id=""
-            (change)="getBodegas()"
-            class="form-control input-sm"
-          />
-          <input
-            type="text"
-            [(ngModel)]="filtros.Direccion"
-            name=""
-            id=""
-            (change)="getBodegas()"
-            class="form-control input-sm"
-          />
-          <input
-            type="number"
-            [(ngModel)]="filtros.Telefono"
-            (change)="getBodegas()"
-            class="form-control input-sm"
-            placeholder="Direccion"
-          />
-          <select
-            name=""
-            (change)="getBodegas()"
-            class="form-control input-sm"
-            [(ngModel)]="filtros.Compra_Internacional"
-            id=""
-          >
-            <option value="Si">Si</option>
-            <option value="No">No</option>
-          </select>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Dirección</mat-label>
+            <input
+              type="text"
+              [(ngModel)]="filtros.Direccion"
+              (input)="getBodegas()"
+              matInput
+              placeholder="Busca por dirección"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Teléfono</mat-label>
+            <input
+              type="text"
+              [(ngModel)]="filtros.Telefono"
+              (input)="getBodegas()"
+              matInput
+              placeholder="Busca por teléfono"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Compra Internacional</mat-label>
+            <mat-select
+              (selectionChange)="getBodegas()"
+              [(ngModel)]="filtros.Compra_Internacional"
+              matInput
+              placeholder="Busca por Compra Internacional"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Sí">Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
@@ -102,12 +108,14 @@
                     <a
                       class="dropdown-item waves-light caja-botones text-info"
                       href="javascript: void(0);"
-                      (click)="openConfirm(add, 'Editar')">
-                      <i class="far fa-edit"></i> Editar</a>
+                      (click)="openConfirm(add, 'Editar'); getBodega(bodega)"
+                    >
+                      <i class="far fa-edit"></i> Editar</a
+                    >
                     <a
                       class="dropdown-item waves-light caja-botones text-success"
                       [routerLink]="[
-                        '/base/bodegas/grupoestiba',
+                        'grupoestiba',
                         bodega.Id_Bodega_Nuevo
                       ]"
                     >
@@ -119,8 +127,12 @@
                         'text-success': bodega.Estado == 'Inactivo'
                       }"
                       class="dropdown-item waves-light caja-botones"
-                      (click)="cambiarEstado(bodega, bodega.Estado == 'Activo' ? 'Inactivo': 'Activo')"
-                      
+                      (click)="
+                        cambiarEstado(
+                          bodega,
+                          bodega.Estado == 'Activo' ? 'Inactivo' : 'Activo'
+                        )
+                      "
                       (confirm)="eliminarBodega(bodega.Id_Bodega_Nuevo)"
                     >
                       <i
@@ -142,50 +154,126 @@
         </tbody>
       </table>
     </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="getBodegas($event)"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      aria-label="Default pagination"
+    >
+    </ngb-pagination>
   </div>
 </div>
-<!-- <ngb-pagination 
-                            class="pull-right"
-                            [collectionSize]="totalItems"
-                            [(page)]="current_page"
-                            [pageSize]="limit" size="sm"
-                            (pageChange)="getBodegas(true)"
-                            [boundaryLinks]="true"></ngb-pagination> -->
 
-<!-- <app-crearbodega [abrirCrear]="abrirCrear" (CargarBodegas)="getBodegas()"></app-crearbodega>
- -->
+<!-- Modals -->
+
 <ng-template #add let-modal>
-    <div class="modal-header">
-      <h4 class="text-primary modal-title">{{title}} bodega</h4>
-      <button
-        type="button"
-        class="close"
-        data-dismiss="modal"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-        <p>Holi</p>
-    </div>
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-danger"
-        (click)="modal.dismiss('Cross click')"
-      >
-        Cancelar
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary"
-      >
-        Guardar
-      </button>
-    </div>
-  </ng-template>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">{{ selected }} bodega</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formBodega">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre bodega</mat-label>
+          <input
+            type="text"
+            formControlName="nombre"
+            matInput
+            placeholder="Nombre de la bodega"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Direccion</mat-label>
+          <input
+            type="text"
+            formControlName="direccion"
+            matInput
+            placeholder="Dirección de la bodega"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input
+            type="text"
+            formControlName="telefono"
+            matInput
+            placeholder="Teléfono de la bodega"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label for="Aplica_Separacion_Categorias"
+            >¿Compras internacionales?</mat-label
+          >
+          <mat-select
+            formControlName="compraInternacional"
+            id="Aplica_Separacion_Categorias"
+            placeholder="Compras internacionales?"
+            required
+          >
+            <mat-option value="Sí">Sí</mat-option>
+            <mat-option value="No">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 px-0">
+        <div class="form-group text-center">
+          <div class="custom-input-file w-100 ">
+            <input
+              type="file"
+              formControlName="mapa"
+              placeholder="Mapa de la Bodega"
+              #Mapa
+              class="input-file"
+              [required]="tipo == 'Crear'"
+              container="body"
+            />
+            Cargar mapa de la bodega.
+          </div>
+          <div class="col-md-12 text-center">
+            <small *ngIf="file" class="text-success">Documento cargado</small>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="createBodega()"
+      [disabled]="formBodega.invalid"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
 <swal #deleteSwal title="" text="" type=""> </swal>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

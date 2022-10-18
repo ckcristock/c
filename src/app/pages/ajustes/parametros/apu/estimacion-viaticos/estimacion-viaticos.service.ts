@@ -9,8 +9,8 @@ export class EstimacionViaticosService {
 
   constructor( private http: HttpClient ) { }
 
-  getTravelExpensEstimations(){
-    return this.http.get(`${environment.base_url}/travel-expense-estimation`);
+  getTravelExpensEstimations(params = {}){
+    return this.http.get(`${environment.base_url}/paginateTravel-expense-estimation`, { params });
   }
   
   save(data){

@@ -4,6 +4,7 @@ import { ValidatorsService } from '../../../informacion-base/services/reactive-v
 import { CorteLaserMaterialService } from './corte-laser-material.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-corte-laser-material',
@@ -12,6 +13,8 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class CorteLaserMaterialComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   loading: boolean = false;
   form: FormGroup;
   title: any = 'Nuevo Material';
@@ -22,6 +25,19 @@ export class CorteLaserMaterialComponent implements OnInit {
     page: 1,
     pageSize: 10,
     collectionSize: 0
+  }
+  filtro: any = {
+    name: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
   }
   variables = [
     { label: 'Espesor', var: 'thickness' },
@@ -140,8 +156,11 @@ export class CorteLaserMaterialComponent implements OnInit {
 
   getMaterials(page = 1) {
     this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._cutLaserM.getMaterials(this.pagination).subscribe((r: any) => {
+    this._cutLaserM.getMaterials(params).subscribe((r: any) => {
       this.materials = r.data.data;
       this.loading = false;
       this.pagination.collectionSize = r.data.total;

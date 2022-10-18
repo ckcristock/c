@@ -20,6 +20,9 @@ import { EditarProductoComponent } from './productos/editar-producto/editar-prod
 import { ProductoComponent } from './productos/producto/producto.component';
 import { SedesComponent } from './sedes/sedes.component';
 import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';
+import { BodegasComponent } from './bodegas/bodegas.component';
+import { CrearbodegaComponent } from './bodegas/crearbodega/crearbodega.component';
+import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
@@ -43,18 +46,21 @@ const routes: Routes = [
   { path: 'fondo-cesantias', component: FondoCesantiasComponent },
   { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent },
 
-   /**Productos */
-   { path: 'catalogo', component: CatalogoComponent },
-   { path: 'catalogo/crear', component: CrearProductoComponent },
-   { path: 'catalogo/editar/:id', component: EditarProductoComponent },
-   { path: 'catalogo/ver/:id', component: ProductoComponent },
+  /**Productos */
+  { path: 'catalogo', component: CatalogoComponent },
+  { path: 'catalogo/crear', component: CrearProductoComponent },
+  { path: 'catalogo/editar/:id', component: EditarProductoComponent },
+  { path: 'catalogo/ver/:id', component: ProductoComponent },
 
-   //sedes
-   { path: 'sedes', component: SedesComponent },
+  //sedes
+  { path: 'sedes', component: SedesComponent },
+  { path: 'bodegas', component: BodegasComponent },
+  { path: 'bodegas/crear', component: CrearbodegaComponent },
+  { path: 'bodegas/grupoestiba/:id', component: GrupoestibaComponent }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class InformacionBaseRoutingModule {}
+export class InformacionBaseRoutingModule { }

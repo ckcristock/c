@@ -4,6 +4,7 @@ import { ValidatorsService } from '../../../informacion-base/services/reactive-v
 import { UnidadesMedidasService } from './unidades-medidas.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-unidades-medidas',
@@ -12,11 +13,31 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class UnidadesMedidasComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   loading: boolean = false;
   form: FormGroup;
   title: string = 'Nueva unidad de medida';
   units: any[] = [];
   unit: any = {};
+  pagination = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  filtro: any = {
+    name: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -66,11 +87,16 @@ export class UnidadesMedidasComponent implements OnInit {
     })
   }
 
-  getUnits() {
+  getUnits(page = 1) {
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._units.getUnits().subscribe((r: any) => {
-      this.units = r.data;
+    this._units.getUnits(params).subscribe((r: any) => {
+      this.units = r.data.data;
       console.log(this.units)
+      this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
   }

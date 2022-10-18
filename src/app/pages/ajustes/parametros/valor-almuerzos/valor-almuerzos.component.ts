@@ -4,6 +4,7 @@ import { ValorAlmuerzosService } from './valor-almuerzos.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
 import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-valor-almuerzos',
@@ -12,6 +13,8 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ValorAlmuerzosComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   values: any[] = [];
   value: any = {};
   loading: boolean = false;
@@ -20,6 +23,20 @@ export class ValorAlmuerzosComponent implements OnInit {
     page: 1,
     collectionSize: 0
   }
+  filtro: any = {
+    value: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
+
   title: string = '';
   form: FormGroup;
   constructor(
@@ -119,8 +136,11 @@ export class ValorAlmuerzosComponent implements OnInit {
 
   getValues(page = 1) {
     this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._lunchValues.getAll(this.pagination).subscribe((data: any) => {
+    this._lunchValues.getAll(params).subscribe((data: any) => {
       this.values = data.data.data;
       this.pagination.collectionSize = data.data.total;
       this.loading = false;

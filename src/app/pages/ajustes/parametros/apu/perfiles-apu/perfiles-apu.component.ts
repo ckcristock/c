@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { PerfilesApuService } from './perfiles-apu.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-perfiles-apu',
@@ -12,6 +13,8 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class PerfilesApuComponent implements OnInit {
 
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   form: FormGroup;
   loading: boolean = false;
   title: any = '';
@@ -21,6 +24,19 @@ export class PerfilesApuComponent implements OnInit {
     page: 1,
     pageSize: 10,
     collectionSize: 0
+  }
+  filtro: any = {
+    name: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
   }
 
   constructor(
@@ -85,8 +101,11 @@ export class PerfilesApuComponent implements OnInit {
 
   getProfiles(page = 1) {
     this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._profiles.getProfiles(this.pagination).subscribe((r: any) => {
+    this._profiles.getProfiles(params).subscribe((r: any) => {
       this.profiles = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;

@@ -12,8 +12,11 @@ export class RotatingTurnService {
   save( form ){
     return this.http.post(environment.base_url + '/rotating-turns',form)
   }
-  getAll(){
-    return this.http.get(environment.base_url + '/rotating-turns')
+  getAllCreate(params = {}){
+    return this.http.get(environment.base_url + '/rotating-turns', { params })
+  }
+  getAll(params = {}){
+    return this.http.get(environment.base_url + '/get-rotating-turns', { params })
   }
 
   getTurn(id){

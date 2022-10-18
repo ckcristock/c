@@ -10,6 +10,14 @@ import { RotatingTurnService } from './rotating-turn.service';
 export class TurnoRotativoComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
+  pagination: any = {
+    page: 1,
+    pageSize: 5,
+    collectionSize: 0
+  }
+  filtro: any = {
+    name: ''
+  }
   openClose(){
     if (this.matPanel == false){
       this.accordion.openAll()
@@ -33,12 +41,16 @@ export class TurnoRotativoComponent implements OnInit {
   create( id = 0 ) {
     this.showModal.emit( id );
   }
-  getAll() {
+  getAll(page = 1) {
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._rotatingT.getAll().subscribe((r: any) => {
+    this._rotatingT.getAll(params).subscribe((r: any) => {
       this.loading = false;
-      this.turnosRotativo = r.data;
-      console.warn(this.turnosRotativo)
+      this.turnosRotativo = r.data.data;
+      this.pagination.collectionSize = r.data.total;
     });
   }
   changeState(id) {

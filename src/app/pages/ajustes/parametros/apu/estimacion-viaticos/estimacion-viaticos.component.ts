@@ -4,6 +4,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { EstimacionViaticosService } from './estimacion-viaticos.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-estimacion-viaticos',
@@ -13,11 +14,32 @@ import { EstimacionViaticosService } from './estimacion-viaticos.service';
 export class EstimacionViaticosComponent implements OnInit {
 
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   form: FormGroup;
   loading: boolean = false;
   title: any = 'Nueva Estimación Viáticos';
   estimations: any[] = [];
   estimation: any = {};
+  pagination = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  filtro: any = {
+    description: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
+
   variables = [
     { label: 'Cantidad', var: 'amount' },
     { label: 'Valor unitario', var: 'unit_value' },
@@ -92,10 +114,15 @@ export class EstimacionViaticosComponent implements OnInit {
     })
   }
 
-  getEstimations() {
+  getEstimations(page = 1) {
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._estimations.getTravelExpensEstimations().subscribe((r: any) => {
-      this.estimations = r.data;
+    this._estimations.getTravelExpensEstimations(params).subscribe((r: any) => {
+      this.estimations = r.data.data;
+      this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
   }

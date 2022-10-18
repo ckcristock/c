@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { EspesoresService } from './espesores.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-espesores',
@@ -11,11 +12,32 @@ import { EspesoresService } from './espesores.service';
 })
 export class EspesoresComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   form: FormGroup;
   loading: boolean = false;
   title: any = '';
   espesores: any[] = [];
   espesor: any = {};
+  pagination = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  filtro: any = {
+    thickness: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
+
   constructor(
     private fb: FormBuilder,
     private _espesores: EspesoresService,
@@ -62,10 +84,15 @@ export class EspesoresComponent implements OnInit {
     })
   }
 
-  getThicknesses() {
+  getThicknesses(page = 1) {
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._espesores.getMeasures().subscribe((r: any) => {
-      this.espesores = r.data;
+    this._espesores.getMeasures(params).subscribe((r: any) => {
+      this.espesores = r.data.data;
+      this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
   }

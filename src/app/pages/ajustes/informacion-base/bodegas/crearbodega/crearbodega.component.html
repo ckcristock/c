@@ -1,0 +1,69 @@
+<!-- <app-modal-basic #modalBodega [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title"> {{tipo}} Bodega</h4>
+        <button type="button" class="close basic-close" (click)="modalBodega.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div style="overflow-x: unset !important;overflow-y: unset !important" class="app-modal-body">
+        <form #FormBodega="ngForm">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nombre Bodega</label>
+                        <input type="text" name="Nombre" placeholder="" class="form-control" [(ngModel)]="bodega.Nombre" required>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Direccion</label>
+                        <input type="text" name="Direccion" placeholder="" class="form-control" [(ngModel)]="bodega.Direccion" required>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Telefono</label>
+                        <input type="text" name="Telefono" placeholder="" class="form-control" [(ngModel)]="bodega.Telefono" required>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Mapa de la bodega</label>
+                        <input type="file" name="Telefono" placeholder="" class="form-control" #Mapa [required]="(tipo=='Crear')">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Aplica_Separacion_Categorias">¿Compras Internacionales?</label>
+                        <select name="Aplica_Separacion_Categorias" id="Aplica_Separacion_Categorias" [(ngModel)]="bodega.Compra_Internacional" class="form-control form-control-sm" required>
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-default btn-sm" (click)="modalBodega.hide()">Cancelar</button>
+            <button type="button" [swal]="guardar" [disabled]="!FormBodega.valid" class="btn btn-primary btn-sm">Guardar</button>
+        </div>
+    </div>
+
+</app-modal-basic>
+
+
+
+<swal #guardar title="¿Está Seguro?" text="Se dispone a Guardar esta bodega" type="warning" showCancelButton="true" confirmButtonText="Si, Guardar" cancelButtonText="No, Dejame Comprobar!" (confirm)="guardarBodega()"></swal>
+<swal #infoSwal title="" type="success" text=""></swal> -->

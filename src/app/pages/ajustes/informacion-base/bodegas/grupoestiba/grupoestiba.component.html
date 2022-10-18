@@ -1,0 +1,373 @@
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card text-left">
+      <img class="card-img-top" alt="" />
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Grupos de estibas</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button class="btn btn-sm btn-secondary m-0">
+                <i class="fa fa-map"></i> Ver mapa
+              </button><!-- (click)="mapaBodega.show()" -->
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="openConfirm(addGrupo, 'Agregar')"
+              >
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+              <button class="btn btn-info btn-sm" (click)="openCloseGrupo()">
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr class="line" />
+        <mat-accordion multi #accordionGrupo="matAccordion">
+          <mat-expansion-panel class="mat-elevation-z0">
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input
+                  type="text"
+                  [(ngModel)]="filtrosGrupos.Nombre"
+                  (input)="getGrupos()"
+                  matInput
+                  placeholder="Busca por nombre"
+                />
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <h5 class="text-dark">Bodega {{ bodega.Nombre | lowercase }}</h5>
+        <div class="rounded-top table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            *ngIf="!loadingGrupos && grupos.length > 0; else notDataGrupos"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Nombre</th>
+                <th>Presentación</th>
+                <th class="col-1">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                role="button"
+                class="text-center"
+                #grupoEstiba
+                *ngFor="let grupo of grupos"
+                (click)="
+                  grupoSelected = {
+                    id: grupo.Id_Grupo_Estiba,
+                    nombre: grupo.Nombre
+                  };
+                  getEstibas(grupo.Id_Grupo_Estiba)
+                "
+              >
+                <td class="align-middle">{{ grupo.Nombre }}</td>
+                <td class="align-middle">{{ grupo.Presentacion }}</td>
+                <td class="align-middle">
+                  <div class="text-center">
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm waves-light"
+                        type="button"
+                      >
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item waves-light caja-botones text-info"
+                          href="javascript: void(0);"
+                          (click)="openConfirm(addGrupo, 'Editar'); getGrupo(grupo)"
+                        >
+                          <i class="far fa-edit"></i> Editar</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ngb-pagination
+          #paginationGrupos
+          class="d-flex justify-content-center pagination-rounded pagination-sm"
+          [collectionSize]="pagination.grupos.collectionSize"
+          (pageChange)="getGrupos($event)"
+          maxSize="5"
+          rotate="true"
+          ellipses="false"
+          boundaryLinks="true"
+          [pageSize]="pagination.grupos.pageSize"
+          [(page)]="pagination.grupos.page"
+          aria-label="Default pagination"
+        >
+        </ngb-pagination>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card text-left">
+      <img class="card-img-top" alt="" />
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Estibas</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="openConfirm(addEstiba, 'Agregar')"
+              >
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+              <button class="btn btn-info btn-sm" (click)="openCloseEstiba()">
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr class="line" />
+        <mat-accordion multi #accordionEstiba="matAccordion">
+          <mat-expansion-panel class="mat-elevation-z0">
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input
+                  type="text"
+                  [(ngModel)]="filtrosEstibas.Nombre"
+                  (input)="getEstibas(grupoSelected.id)"
+                  matInput
+                  placeholder="Busca por nombre"
+                />
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <h5 class="text-dark" *ngIf="grupoSelected.nombre">Grupo {{ grupoSelected.nombre | lowercase }}</h5>
+        <div class="rounded-top table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            *ngIf="!loadingEstibas && estibas.length > 0; else notDataEstibas"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Nombre</th>
+                <th>Código de barras</th>
+                <th>Estado</th>
+                <th class="col-1">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                role="button"
+                class="text-center"
+                *ngFor="let estiba of estibas"
+              >
+                <td class="align-middle">{{ estiba.Nombre }}</td>
+                <td class="align-middle">{{ estiba.Codigo_Barras }}</td>
+                <td class="align-middle">{{ estiba.Estado }}</td>
+                <td class="align-middle">
+                  <div class="text-center">
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm waves-light"
+                        type="button"
+                      >
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item waves-light caja-botones text-info"
+                          href="javascript: void(0);"
+                          (click)="
+                            openConfirm(addEstiba, 'Editar');
+                            getEstiba(estiba)
+                          "
+                        >
+                          <i class="far fa-edit"></i> Editar</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ngb-pagination
+          #paginationEstibas
+          class="d-flex justify-content-center pagination-rounded pagination-sm"
+          [collectionSize]="pagination.estibas.collectionSize"
+          (pageChange)="getEstibas(grupoSelected.id, $event)"
+          maxSize="5"
+          rotate="true"
+          ellipses="false"
+          boundaryLinks="true"
+          [pageSize]="pagination.estibas.pageSize"
+          [(page)]="pagination.estibas.page"
+          aria-label="Default pagination"
+        >
+        </ngb-pagination>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+
+  <ng-template #addGrupo let-modal>
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">
+        {{ tituloFormulario }} Grupo de Estibas
+      </h4>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="formGrupo">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre grupo bodega</mat-label>
+            <input
+              type="text"
+              formControlName="nombre"
+              matInput
+              placeholder="Nombre del grupo de la bodega"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label for="Aplica_Separacion_Categorias"
+              >¿Compras internacionales?</mat-label
+            >
+            <mat-select
+              formControlName="presentacion"
+              id="Presentacion"
+              placeholder="Presentación?"
+              required
+            >
+              <mat-option value="Si">Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        (click)="createGrupo()"
+        [disabled]="formGrupo.invalid"
+        class="btn btn-primary"
+      >
+        Guardar
+      </button>
+    </div>
+  </ng-template>
+
+  <ng-template #addEstiba let-modal>
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">{{ tituloFormulario }} Estiba</h4>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="formEstiba">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre estiba</mat-label>
+            <input
+              type="text"
+              formControlName="nombre"
+              matInput
+              placeholder="Nombre de la estiba"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Código de barras</mat-label>
+            <input
+              type="text"
+              formControlName="codigoBarras"
+              matInput
+              placeholder="Código de barras"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label for="Aplica_Separacion_Categorias"
+              >Estado?</mat-label
+            >
+            <mat-select
+              formControlName="estado"
+              id="Estado"
+              placeholder="Estado"
+              required
+            >
+              <mat-option value="Disponible">Disponible</mat-option>
+              <mat-option value="Inactiva">Inactiva</mat-option>
+              <mat-option value="Inventario">Inventario</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        (click)="createEstiba()"
+        [disabled]="formEstiba.invalid"
+        class="btn btn-primary"
+      >
+        Guardar
+      </button>
+    </div>
+  </ng-template>
+
+  <swal #deleteSwal title="" text="" type=""> </swal>
+
+  <ng-template #notDataGrupos>
+    <app-not-data [loading]="loadingGrupos"></app-not-data>
+  </ng-template>
+
+  <ng-template #notDataEstibas>
+    <app-not-data [loading]="loadingEstibas"></app-not-data>
+  </ng-template>
+</div>

@@ -5,6 +5,7 @@ import { SwalService } from '../../../informacion-base/services/swal.service';
 import { MaquinasHerramientasService } from './maquinas-herramientas.service';
 import { UnidadesMedidasService } from '../unidades-medidas/unidades-medidas.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-maquinas-herramientas',
@@ -13,12 +14,33 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class MaquinasHerramientasComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   loading: boolean = false;
   form: FormGroup;
   title: string = 'Nueva maquina';
   units: any[] = [];
   machines: any[] = [];
   machine: any = {};
+  pagination = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  filtro: any = {
+    name: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
+  
   constructor(
     private fb: FormBuilder,
     private _validators: ValidatorsService,
@@ -80,10 +102,15 @@ export class MaquinasHerramientasComponent implements OnInit {
     })
   }
 
-  getMachines() {
+  getMachines(page = 1) {
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._machine.getMachines().subscribe((r: any) => {
+    this._machine.getMachines(params).subscribe((r: any) => {
       this.machines = r.data.data;
+      this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
   }

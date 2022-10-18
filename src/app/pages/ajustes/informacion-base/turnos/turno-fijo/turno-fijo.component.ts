@@ -25,6 +25,14 @@ export class TurnoFijoComponent implements OnInit {
   hours: any = [];
   loading = false;
   loadingHours = false;
+  pagination: any = {
+    page: 1,
+    pageSize: 5,
+    collectionSize: 0
+  }
+  filtro: any = {
+    name: ''
+  }
 
   constructor(
     private _turnFixed: FixedTurnService,
@@ -33,7 +41,7 @@ export class TurnoFijoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getTunrs();
+    this.getTurns();
   }
   closeResult = '';
   public openConfirm(confirm) {
@@ -47,10 +55,15 @@ export class TurnoFijoComponent implements OnInit {
     
   }
 
-  getTunrs() {
+  getTurns(page = 1) {
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._turnFixed.getFixedTurns().subscribe((r: any) => {
-      this.turnosFijos = r.data;
+    this._turnFixed.getFixedTurns(params).subscribe((r: any) => {
+      this.turnosFijos = r.data.data;
+      this.pagination.collectionSize = r.data.total;
       this.loading = false;
     });
   }
@@ -82,7 +95,7 @@ export class TurnoFijoComponent implements OnInit {
               text = 'Comuníquese con el Dpt. de sistemas';
               title = 'Ha ocurrido un error';
             }
-            this.getTunrs();
+            this.getTurns();
             this._swal.show({ title, text, icon, showCancel: false, timer: 1000 });
           });
         }

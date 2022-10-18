@@ -115,9 +115,12 @@ export class InformacionEmpresaComponent implements OnInit {
 
   turnChanged(turno) {
     if (turno == 'Fijo') {
+      console.log('llegando')
       this.formCompany.get('fixed_turn_id').enable();
+      this.formCompany.get('fixed_turn_id').setValidators(Validators.required);
     } else {
       this.formCompany.get('fixed_turn_id').disable();
+      this.formCompany.get('fixed_turn_id').clearValidators();
     }
   }
   conludeContract = false;

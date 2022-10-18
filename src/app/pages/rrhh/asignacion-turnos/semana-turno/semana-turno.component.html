@@ -1,22 +1,31 @@
 <div class="form-group d-flex justify-content-end">
-  <app-turno (changed)="turnAllChanged($event)" [turnos]="turnos"></app-turno>
-  <button
+  <app-turno
+    (changed)="turnAllChanged($event); asignarHorariosMasivo()"
+    [turnos]="turnos"
+  ></app-turno>
+  <!-- <button
     class="btn btn-primary btn-sm"
     (click)="asignarHorariosMasivo()"
     style="padding: 0 10px !important"
   >
     Asignar
-  </button>
+  </button> -->
 </div>
 <div class="rounded-top table-responsive">
-  <table
-    class="table table-bordered table-striped table-sm"
-    
-  >
+  <table class="table table-bordered table-striped table-sm">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
-        <th class="align-middle"><i class="fas fa-check-square"></i></th>
-        <th class="align-middle">Funcionario</th>
+        <th class="align-middle">
+          <input
+            type="checkbox"
+            [checked]="isAllChecked()"
+            (change)="checkAll($event)"
+            name=""
+            id=""
+          />
+        </th>
+        <th class="align-middle">Foto</th>
+        <th class="align-middle col-2">Nombre</th>
         <th class="align-middle" *ngFor="let dia of diasSemana">
           {{ dia.dia }}
           <br />
@@ -41,10 +50,12 @@
             onerror="this.src='../../../../assets/images/noprofile.png'"
             class="d-block img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
           />
-          <span>{{ person.first_name }} {{ person.second_name }}</span>
+        </td>
+        <td class="align-middle">
+          {{ person.first_name }} {{ person.first_surname }}
         </td>
         <td
-          class="align-middle"
+          class="align-middle p-0"
           *ngFor="let dia of person.diasSemana; let i = index"
         >
           <!-- {{ turnos }} -->
@@ -79,9 +90,6 @@
   </table>
 </div>
 
-<button
-  class="btn btn-primary btn-block mb-3"
-  (click)="makeHorario()"
->
+<button class="btn btn-primary btn-block mb-3" (click)="makeHorario()">
   Guardar
 </button>

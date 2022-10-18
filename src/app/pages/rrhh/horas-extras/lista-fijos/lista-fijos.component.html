@@ -1,21 +1,120 @@
-<ng-container *ngIf="personData" class="text-center">
-  <ng-container *ngFor="let diario of personData.daysWork">
-    <app-rotativo
-      *ngIf="turnType == 'Rotativo'"
-      [person]="person"
-      (updateDates)="getData()"
-      [diario]="diario[0] != undefined ? diario[0].day : {}"
-      [info]="personData"
-      [day]="diario"
-    ></app-rotativo>
+<ng-container
+  *ngIf="dayswork.length > 0 && !loading; else notData"
+  class="text-center"
+>
+  <div class="rounded-top table-responsive">
+    <table class="table table-sm">
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th class="col-3">Información</th>
+          <!-- <th class="col-1" *ngIf="hasDay">Editar</th> -->
+          <th
+            data-toggle="tooltip"
+            class="col-1"
+            data-placement="top"
+            title="Horas trabajadas"
+            role="button"
+          >
+            HT
+          </th>
+          <th
+            class="col-1"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Horas extras diurnas"
+            role="button"
+          >
+            HED
+          </th>
+          <th
+            class="col-1"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Horas extras nocturnas"
+            role="button"
+          >
+            HEN
+          </th>
+          <th
+            class="col-1"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Horas recargo nocturno"
+            role="button"
+          >
+            HRN
+          </th>
+          <th
+            class="col-1"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Horas extras diurnas dominicales y festivas"
+            role="button"
+          >
+            HEDDF
+          </th>
+          <th
+            class="col-1"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Horas recargo diurnas dominicales y festivas"
+            role="button"
+          >
+            HRDDF
+          </th>
 
-    <app-fijo
-      *ngIf="turnType == 'fijo'"
-      [person]="person"
-      (updateDates)="getData()"
-      [diario]="diario"
-      [info]="personData"
-      [day]="diario"
-    ></app-fijo>
-  </ng-container>
+          <th
+            class="col-1"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Horas extras nocturnas dominicales y festivas"
+            role="button"
+          >
+            HENDF
+          </th>
+          <th
+            class="col-1"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Hora recargo nocturno dominicales y festivos"
+            role="button"
+          >
+            HRNDF
+          </th>
+          <th class="col-1">Validar</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td colspan="100%">
+            <ng-container *ngFor="let diario of personData.daysWork">
+              <app-rotativo
+                *ngIf="turnType == 'Rotativo'"
+                [person]="person"
+                (updateDates)="getData()"
+                [diario]="diario[0] != undefined ? diario[0].day : {}"
+                [info]="personData"
+                [day]="diario"
+              ></app-rotativo>
+              <app-fijo
+                *ngIf="turnType == 'fijo'"
+                [person]="person"
+                (updateDates)="getData()"
+                [diario]="diario"
+                [info]="personData"
+                [day]="diario"
+              ></app-fijo>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </ng-container>
+<ng-template #notData>
+  <app-not-data
+    [loading]="loading"
+    [text]="'Sin horario reportado'"
+  ></app-not-data>
+</ng-template>

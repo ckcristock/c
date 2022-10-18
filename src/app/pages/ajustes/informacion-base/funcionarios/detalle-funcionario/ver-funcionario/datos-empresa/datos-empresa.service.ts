@@ -24,6 +24,10 @@ export class DatosEmpresaService {
     return this.http.get(`${environment.base_url}/fixed_turn`, { params });
   }
 
+  getFixed_turnSP(){
+    return this.http.get(`${environment.base_url}/fixed_turn`);
+  }
+
   updateEnterpriseData(data){
     return this.http.post(`${environment.base_url}/enterpriseData`, data);
   }

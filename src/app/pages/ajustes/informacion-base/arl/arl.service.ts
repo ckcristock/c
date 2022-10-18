@@ -17,4 +17,8 @@ export class ArlService {
     return this.http.post(`${environment.base_url}/arl`, data);
   }
 
+  getArl() {
+    return this.http.get(`${environment.base_url}/arl`);
+  }
+
 }

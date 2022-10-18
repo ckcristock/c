@@ -13,13 +13,14 @@ export class ListaFijosComponent implements OnInit {
   @Input('ultimodiaDia') ultimodiaDia;
   constructor(private _extraHour: ExtraHoursService) {}
   personData: any;
+  loading: boolean = false;
   ngOnInit(): void {
       
     this.getData();
   }
-
+  dayswork: any[] = []
   getData() {
-    
+    this.loading = true;
     let data = {
       id: this.person.id,
       tipo: this.person.turn_type,
@@ -29,6 +30,8 @@ export class ListaFijosComponent implements OnInit {
     this._extraHour.getDetailPeople(data).subscribe((r: any) => {
       this.personData = r.data;
       console.log(this.personData)
+      this.dayswork = this.personData.daysWork
+      this.loading = false;
     });
 
     

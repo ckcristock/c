@@ -76,6 +76,26 @@
         </small>
       </span>
     </div>
+    <div class="col-md-3" [ngClass]="arl_id_invalid ? 'mb-0' : 'mb-4'">
+      <ng-select
+        formControlName="arl_id"
+        appearance="outline"
+        [appendTo]="'body'"
+        placeholder="ARL"
+        [items]="arl"
+        bindLabel="text"
+        bindValue="value"
+        loadingText="loading"
+        ngDefaultControl
+      >
+      </ng-select>
+
+      <span class="ml-2" *ngIf="arl_id_invalid">
+        <small class="text-danger">
+          <b> ARL obligatoria</b>
+        </small>
+      </span>
+    </div>
     <div class="col-md-12">
       <div class="d-flex justify-content-between">
         <button type="button" class="btn btn-lg btn-primary" (click)="previus()">

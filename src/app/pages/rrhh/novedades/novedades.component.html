@@ -10,9 +10,7 @@
           <div class="card-body text-center incapacidades">
             <i class="ri-suitcase-3-fill"></i>
             <p class="card-text mb-0">Vacaciones</p>
-            <span class="lead text-center">{{
-              totalVacaciones
-            }}</span>
+            <span class="lead text-center">{{ totalVacaciones }}</span>
           </div>
         </div>
       </div>
@@ -21,9 +19,7 @@
           <div class="card-body text-center incapacidades">
             <i class="fas fa-heartbeat"></i>
             <p class="card-text mb-0">Incapacidades</p>
-            <span class="lead text-center">{{
-              totalIncapacidades
-            }}</span>
+            <span class="lead text-center">{{ totalIncapacidades }}</span>
           </div>
         </div>
       </div>
@@ -32,9 +28,7 @@
           <div class="card-body text-center incapacidades">
             <i class="fas fa-baby"></i>
             <p class="card-text mb-0">Licencias</p>
-            <span class="lead text-center">{{
-              totalLicencias
-            }}</span>
+            <span class="lead text-center">{{ totalLicencias }}</span>
           </div>
         </div>
       </div>
@@ -43,9 +37,7 @@
           <div class="card-body text-center incapacidades">
             <i class="ri-calendar-check-line"></i>
             <p class="card-text mb-0">Permisos</p>
-            <span class="lead text-center">{{
-              totalPermisos
-            }}</span>
+            <span class="lead text-center">{{ totalPermisos }}</span>
           </div>
         </div>
       </div>
@@ -54,9 +46,7 @@
           <div class="card-body text-center incapacidades">
             <i class="fas fa-door-open"></i>
             <p class="card-text mb-0">Abandonos</p>
-            <span class="lead text-center">{{
-              totalAbandonos
-            }}</span>
+            <span class="lead text-center">{{ totalAbandonos }}</span>
           </div>
         </div>
       </div>
@@ -65,9 +55,7 @@
           <div class="card-body text-center incapacidades">
             <i class="ri-user-unfollow-line"></i>
             <p class="card-text mb-0">Suspensiones</p>
-            <span class="lead text-center">{{
-              totalSuspensiones
-            }}</span>
+            <span class="lead text-center">{{ totalSuspensiones }}</span>
           </div>
         </div>
       </div>
@@ -110,9 +98,9 @@
           </div>
         </div>
         <hr class="line" />
-        <mat-accordion multi>
-          <mat-expansion-panel class="mat-elevation-z0">
-            <form [formGroup]="form">
+        <form [formGroup]="form">
+          <mat-accordion multi>
+            <mat-expansion-panel class="mat-elevation-z0">
               <div class="row">
                 <div class="col">
                   <ng-select
@@ -161,11 +149,10 @@
                     >
                   </mat-select>
                 </mat-form-field>
-                
               </div>
-            </form>
-          </mat-expansion-panel>
-        </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </form>
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"

@@ -155,7 +155,7 @@ export class CrearNovedadComponent implements OnInit {
       if (date_start.value) {
         const date_end = this.form.get('date_end');
         const payback_date = this.form.get('payback_date');
-        const finalDate = moment(date_start.value).add(r, 'days').format('YYYY-MM-DD');
+        const finalDate = moment(date_start.value).add(r-1, 'days').format('YYYY-MM-DD');
 
         date_end.patchValue(finalDate);
         payback_date.patchValue(finalDate);

@@ -93,7 +93,7 @@ export class DatosEmpresaComponent implements OnInit {
   }
 
   getFixed_turn() {
-    this.enterpriseDataService.getFixed_turn().subscribe((r: any) => {
+    this.enterpriseDataService.getFixed_turnSP().subscribe((r: any) => {
       this.fixed_turns = r.data;
       this.fixed_turns.unshift({ text: 'Seleccione una', value: '' });
     })

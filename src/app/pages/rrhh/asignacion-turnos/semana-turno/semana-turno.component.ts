@@ -35,6 +35,14 @@ export class SemanaTurnoComponent implements OnInit {
       this.fillDiasSemana();
     });
   }
+  checkAll(ev) {
+    this.people.forEach(x => x.selected = ev.target.checked)
+  }
+  
+  isAllChecked() {
+    return this.people.every(_ => _.selected);
+  }
+
   turnAllChanged(turnId) {
     let turn = this.turnos.find((r) => r.id == turnId);
     if (turn) {

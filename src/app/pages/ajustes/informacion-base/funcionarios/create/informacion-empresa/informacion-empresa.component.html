@@ -126,7 +126,7 @@
           <mat-label>Tipo de turno</mat-label>
           <mat-select
             formControlName="turn_type"
-            (selectionChange)="turnChanged($event.target.value)"
+            (selectionChange)="turnChanged($event.value)"
           >
             <mat-option [value]="turn.value" *ngFor="let turn of turnos">
               {{ turn.text }}

@@ -29,6 +29,7 @@ export class RotativoComponent implements OnInit {
   constructor(private _swal: SwalService, private _extra: ExtraHoursService) { }
 
   ngOnInit(): void {
+    console.log(this.day, this.info, this.diario, this.person)
     
     this.funcionarioDato = this.diario;
     this.diarioDato = this.day;

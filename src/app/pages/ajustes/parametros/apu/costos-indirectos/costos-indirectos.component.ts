@@ -4,6 +4,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { CostosIndirectosService } from './costos-indirectos.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-costos-indirectos',
@@ -12,6 +13,8 @@ import { CostosIndirectosService } from './costos-indirectos.service';
 })
 export class CostosIndirectosComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   form: FormGroup;
   loading: boolean = false;
   title: string = 'Nuevo costo indirecto';
@@ -21,6 +24,19 @@ export class CostosIndirectosComponent implements OnInit {
     page: 1,
     pageSize: 10,
     collectionSize: 0
+  }
+  filtro: any = {
+    name: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
   }
 
   constructor(
@@ -73,8 +89,11 @@ export class CostosIndirectosComponent implements OnInit {
 
   getIndirectCosts(page = 1) {
     this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._indirects.getIndirectCosts(this.pagination).subscribe((r: any) => {
+    this._indirects.getIndirectCosts(params).subscribe((r: any) => {
       this.indirects = r.data.data;
       this.loading = false;
       this.pagination.collectionSize = r.data.total;

@@ -33,6 +33,8 @@ export class AsignacionTurnosComponent implements OnInit {
   diaInicialSemana = moment().startOf('week');
   diaFinalSemana = moment().endOf('week');
   forma: FormGroup;
+  startWeek: any
+  endWeek: any;
   changeWeek = new EventEmitter<any>();
   constructor(
     private fb: FormBuilder,
@@ -43,6 +45,8 @@ export class AsignacionTurnosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.startWeek = moment().startOf('week').toDate()
+    this.endWeek = moment().endOf('week').toDate()
     this.getTurns();
     this.createForm();
     this.getData();
@@ -99,6 +103,8 @@ export class AsignacionTurnosComponent implements OnInit {
     /* this.numeroSemana = moment(semana).week(); */
     this.diaInicialSemana = moment(semana).startOf('week');
     this.diaFinalSemana = moment(semana).endOf('week');
+    this.startWeek = moment(semana).startOf('week').toDate()
+    this.endWeek = moment(semana).endOf('week').toDate()
     //  this.changeWeek.emit({diaInicialSemana:this.diaInicialSemana,
     //	diaFinalSemana:this.diaFinalSemana});
   }

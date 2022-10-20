@@ -12,9 +12,22 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
       </div>
     </div>
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input (input)="getMaterials()" [(ngModel)]="filtro.name" type="text" matInput placeholder="Busca por nombre" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
     <hr class="line" />
     <div class="rounded-top table-responsive">
       <table
@@ -25,7 +38,7 @@
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
             <th>F. Creación</th>
-            <th class="col-1">Acciones</th>
+            <th ><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>

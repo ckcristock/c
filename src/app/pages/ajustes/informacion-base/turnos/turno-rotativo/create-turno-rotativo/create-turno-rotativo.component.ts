@@ -63,7 +63,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
     
   } F
   getAll() {
-    this._rotatingT.getAll().subscribe((r: any) => {
+    this._rotatingT.getAllCreate().subscribe((r: any) => {
       this.turns = r.data
       this.turns.unshift({ text: 'Descanso', value: 0 })
     });

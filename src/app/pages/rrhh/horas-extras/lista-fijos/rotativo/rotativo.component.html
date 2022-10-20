@@ -1,114 +1,112 @@
-<tbody>
-  <tr class="text-center" [ngClass]="{ extra: validada }">
-    <td class="col-3 text-left">
-      <div *ngIf="day.date" class="text-primary font-weight-bold">
-        {{ day.date | date: "EEEE" | uppercase }}
-      </div>
-      <div *ngIf="turnoDato != '' && turnoDato != undefined">
-        Turno:
-        <b>
-          {{ turnoDato.entry_time | time }} - {{ turnoDato.leave_time | time }}
-        </b>
-      </div>
-      <div>
-        Real:
-        <b *ngIf="diario.entry_time_one; else descanso">
-          {{ diario.entry_time_one | time }} -
-          {{ diario.leave_time_one | time }}
-        </b>
-        <ng-template #descanso>
-          <b>Descanso</b>
-        </ng-template>
-      </div>
-    </td>
-    <td class="col-1" *ngIf="diario.entry_time_one">
-      <a (click)="modal.show()" title="Editar">
-        <i class="fa fa-pencil-alt"></i>
-      </a>
-    </td>
-    <td class="col-1">
-      {{ lista.horasTrabajadas }}
-    </td>
-    <td class="col-1">
-      <input
-        type="number"
-        min="0"
-        name="horas"
-        class="form-control custom-control"
-        placeholder="HED"
-        [(ngModel)]="lista.horasExtrasDiurnas"
-      />
-    </td>
-    <td class="col-1">
-      <input
-        type="number"
-        min="0"
-        name="horasExtrasNocturnas"
-        class="form-control custom-control"
-        placeholder="HEN"
-        [(ngModel)]="lista.horasExtrasNocturnas"
-      />
-    </td>
-    <td class="col-1">
-      <input
-        type="number"
-        min="0"
-        class="form-control custom-control"
-        name="recargosNocturnos"
-        placeholder="HRN"
-        [(ngModel)]="lista.recargosNocturnos"
-      />
-    </td>
-    <td class="col-1">
-      <input
-        type="number"
-        min="0"
-        class="form-control custom-control"
-        name="horasExtrasDiurnasFestivasDom"
-        placeholder="HEDDF"
-        [(ngModel)]="lista.horasExtrasDiurnasFestivasDom"
-      />
-    </td>
-    <td class="col-1">
-      <input
-        type="number"
-        min="0"
-        name="recargosFestivos"
-        class="form-control custom-control"
-        placeholder="HRDDF"
-        [(ngModel)]="lista.recargosDiurnosFestivos"
-      />
-    </td>
-    <td class="col-1">
-      <input
-        type="number"
-        min="0"
-        name="horasExtrasNocturnasFestivasDom"
-        class="form-control custom-control"
-        placeholder="HENDF"
-        [(ngModel)]="lista.horasExtrasNocturnasFestivasDom"
-      />
-    </td>    
-    <td class="col-1">
-      <input
-        type="number"
-        min="0"
-        name="recargosFestivos"
-        class="form-control custom-control"
-        placeholder="HRNDF"
-        [(ngModel)]="lista.recargosNocturnosFestivos"
-      />
-    </td>
-    <td class="col-1">
-      <a (click)="guardarReporteDeExtras()" class="toCheck" title="Validar">
-        <i class="fa fa-check-circle"></i>
-      </a>
-      <div class="text-success font-weight-bold text-muted" *ngIf="validada">
-        Validada
-      </div>
-    </td>
-  </tr>
-</tbody>
+<tr class="text-center" [ngClass]="{ extra: validada }">
+  <td class="col-3 text-left">
+    <div *ngIf="day.date" class="text-primary font-weight-bold">
+      {{ day.date | date: "EEEE" | uppercase }}
+    </div>
+    <div *ngIf="turnoDato != '' && turnoDato != undefined">
+      Turno:
+      <b>
+        {{ turnoDato.entry_time | time }} - {{ turnoDato.leave_time | time }}
+      </b>
+    </div>
+    <div>
+      Real:
+      <b *ngIf="diario.entry_time_one; else descanso">
+        {{ diario.entry_time_one | time }} -
+        {{ diario.leave_time_one | time }}
+      </b>
+      <ng-template #descanso>
+        <b>Descanso</b>
+      </ng-template>
+    </div>
+  </td>
+  <td class="col-1" *ngIf="diario.entry_time_one">
+    <a (click)="modal.show()" title="Editar">
+      <i class="fa fa-pencil-alt"></i>
+    </a>
+  </td>
+  <td class="col-1">
+    {{ lista.horasTrabajadas }}
+  </td>
+  <td class="col-1">
+    <input
+      type="number"
+      min="0"
+      name="horas"
+      class="form-control"
+      placeholder="HED"
+      [(ngModel)]="lista.horasExtrasDiurnas"
+    />
+  </td>
+  <td class="col-1">
+    <input
+      type="number"
+      min="0"
+      name="horasExtrasNocturnas"
+      class="form-control"
+      placeholder="HEN"
+      [(ngModel)]="lista.horasExtrasNocturnas"
+    />
+  </td>
+  <td class="col-1">
+    <input
+      type="number"
+      min="0"
+      class="form-control"
+      name="recargosNocturnos"
+      placeholder="HRN"
+      [(ngModel)]="lista.recargosNocturnos"
+    />
+  </td>
+  <td class="col-1">
+    <input
+      type="number"
+      min="0"
+      class="form-control"
+      name="horasExtrasDiurnasFestivasDom"
+      placeholder="HEDDF"
+      [(ngModel)]="lista.horasExtrasDiurnasFestivasDom"
+    />
+  </td>
+  <td class="col-1">
+    <input
+      type="number"
+      min="0"
+      name="recargosFestivos"
+      class="form-control"
+      placeholder="HRDDF"
+      [(ngModel)]="lista.recargosDiurnosFestivos"
+    />
+  </td>
+  <td class="col-1">
+    <input
+      type="number"
+      min="0"
+      name="horasExtrasNocturnasFestivasDom"
+      class="form-control"
+      placeholder="HENDF"
+      [(ngModel)]="lista.horasExtrasNocturnasFestivasDom"
+    />
+  </td>
+  <td class="col-1">
+    <input
+      type="number"
+      min="0"
+      name="recargosFestivos"
+      class="form-control"
+      placeholder="HRNDF"
+      [(ngModel)]="lista.recargosNocturnosFestivos"
+    />
+  </td>
+  <td class="col-1">
+    <a (click)="guardarReporteDeExtras()" class="toCheck" title="Validar">
+      <i class="fa fa-check-circle"></i>
+    </a>
+    <div class="text-success font-weight-bold text-muted" *ngIf="validada">
+      Validada
+    </div>
+  </td>
+</tr>
 
 <app-edit-diario-rotating
   (saved)="saved()"

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LicenciaConduccionService } from './licencia-conduccion.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-licencia-conduccion',
@@ -11,6 +12,8 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class LicenciaConduccionComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   loading: boolean = false;
   form: FormGroup;
   licenses: any[] = [];
@@ -20,6 +23,19 @@ export class LicenciaConduccionComponent implements OnInit {
     page: 1,
     pageSize: 5,
     collectionSize: 0
+  }
+  filtro: any = {
+    tipo: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
   }
   constructor(
     private fb: FormBuilder,
@@ -70,8 +86,11 @@ export class LicenciaConduccionComponent implements OnInit {
 
   getDrivingLicenses(page = 1) {
     this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._licencia.getDrivingLicenses(this.pagination).subscribe((r: any) => {
+    this._licencia.getDrivingLicenses(params).subscribe((r: any) => {
       this.licenses = r.data.data;
       this.loading = false;
       this.pagination.collectionSize = r.data.total;

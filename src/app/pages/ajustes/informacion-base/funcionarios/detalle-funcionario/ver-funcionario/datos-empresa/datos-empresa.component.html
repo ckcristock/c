@@ -14,7 +14,7 @@
           <th>Dependencia</th>
           <th>Cargo</th>
           <th>Turno</th>
-          <th>Asignado</th>
+          <th *ngIf="empresa.fixed_turn_name">Asignado</th>
         </tr>
       </thead>
       <tbody>
@@ -24,7 +24,7 @@
           <td class="align-middle">{{ empresa.dependency_name }}</td>
           <td class="align-middle">{{ empresa.position_name }}</td>
           <td class="align-middle">{{ empresa.turn_type }}</td>
-          <td class="align-middle">{{ empresa.fixed_turn_name }}</td>
+          <td *ngIf="empresa.fixed_turn_name" class="align-middle">{{ empresa.fixed_turn_name }}</td>
         </tr>
       </tbody>
     </table>
@@ -82,7 +82,7 @@
         </mat-form-field>
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Turno</mat-label>
-          <mat-select formControlName="turn_type">
+          <mat-select (selectionChange)="turnChanged($event.value)" formControlName="turn_type">
             <mat-option *ngFor="let item of turnos" [value]="item.value">{{
               item.text
             }}</mat-option>

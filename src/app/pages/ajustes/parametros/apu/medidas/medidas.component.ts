@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MedidasService } from './medidas.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-medidas',
@@ -11,6 +12,8 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class MedidasComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   form: FormGroup;
   loading: boolean = false;
   title: any = '';
@@ -20,6 +23,19 @@ export class MedidasComponent implements OnInit {
     page: 1,
     pageSize: 10,
     collectionSize: 0
+  }
+  filtro: any = {
+    name: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
   }
 
   constructor(
@@ -73,8 +89,11 @@ export class MedidasComponent implements OnInit {
 
   getMeasures(page = 1) {
     this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._medidas.getMeasures(this.pagination).subscribe((r: any) => {
+    this._medidas.getMeasures(params).subscribe((r: any) => {
       this.measures = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;

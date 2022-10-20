@@ -60,7 +60,7 @@ export class DatosEmpresaComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
   openModal() {
     this.modal.show();
@@ -80,6 +80,10 @@ export class DatosEmpresaComponent implements OnInit {
           id: this.empresa.id,
           turn_type: this.empresa.turn_type
         });
+        if (this.form.get('turn_type').value == 'Rotativo') {
+          this.form.patchValue({ fixed_turn_id: null });
+          this.form.get('fixed_turn_id').clearValidators();
+        }
       });
   }
 
@@ -93,7 +97,7 @@ export class DatosEmpresaComponent implements OnInit {
   }
 
   getFixed_turn() {
-    this.enterpriseDataService.getFixed_turn().subscribe((r: any) => {
+    this.enterpriseDataService.getFixed_turnSP().subscribe((r: any) => {
       this.fixed_turns = r.data;
       this.fixed_turns.unshift({ text: 'Seleccione una', value: '' });
     })
@@ -134,8 +138,18 @@ export class DatosEmpresaComponent implements OnInit {
           icon: 'success',
           showCancel: false,
           timer: 1000
-        }) 
+        })
       });
+  }
+
+  turnChanged(turno) {
+    if (turno == 'Fijo') {
+      this.form.get('fixed_turn_id').enable();
+      this.form.get('fixed_turn_id').setValidators(Validators.required);
+    } else {
+      this.form.get('fixed_turn_id').clearValidators();
+      this.form.patchValue({ fixed_turn_id: null });
+    }
   }
   createForm() {
     this.form = this.fb.group({

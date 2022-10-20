@@ -9,8 +9,8 @@ export class UnidadesMedidasService {
 
   constructor( private http: HttpClient ) { }
 
-  getUnits(){
-    return this.http.get(`${environment.base_url}/units`);
+  getUnits(params = {}){
+    return this.http.get(`${environment.base_url}/paginateUnits`, { params });
   }
 
   save( data ){

@@ -77,11 +77,11 @@
               *ngIf="dependency.people.length > 0; else alertNoData"
             >
               <div class="rounded-top table-responsive">
-                <table class="table table-hover table-sm">
+                <table class="table table-sm">
                   <tbody>
                     <ng-container *ngFor="let person of dependency.people">
                       <tr
-                        class="text-center"
+                        class="text-center hover"
                         (click)="person.show = !person.show"
                         role="button"
                       >
@@ -110,93 +110,6 @@
                       <ng-container *ngIf="person.show == true">
                         <tr>
                           <td colspan="100%">
-                            <div class="rounded-top table-responsive">
-                              <table
-                                class="table table-bordered table-striped table-sm"
-                              >
-                                <thead class="bg-light">
-                                  <tr class="text-center text-uppercase">
-                                    <th class="col-3">Información</th>
-                                    <!-- <th class="col-1" *ngIf="hasDay">Editar</th> -->
-                                    <th
-                                      data-toggle="tooltip"
-                                      class="col-1"
-                                      data-placement="top"
-                                      title="Horas trabajadas"
-                                      role="button"
-                                    >
-                                      HT
-                                    </th>
-                                    <th
-                                      class="col-1"
-                                      data-toggle="tooltip"
-                                      data-placement="top"
-                                      title="Horas extras diurnas"
-                                      role="button"
-                                    >
-                                      HED
-                                    </th>
-                                    <th
-                                      class="col-1"
-                                      data-toggle="tooltip"
-                                      data-placement="top"
-                                      title="Horas extras nocturnas"
-                                      role="button"
-                                    >
-                                      HEN
-                                    </th>
-                                    <th
-                                      class="col-1"
-                                      data-toggle="tooltip"
-                                      data-placement="top"
-                                      title="Horas recargo nocturno"
-                                      role="button"
-                                    >
-                                      HRN
-                                    </th>
-                                    <th
-                                      class="col-1"
-                                      data-toggle="tooltip"
-                                      data-placement="top"
-                                      title="Horas extras diurnas dominicales y festivas"
-                                      role="button"
-                                    >
-                                      HEDDF
-                                    </th>
-                                    <th
-                                      class="col-1"
-                                      data-toggle="tooltip"
-                                      data-placement="top"
-                                      title="Horas recargo diurnas dominicales y festivas"
-                                      role="button"
-                                    >
-                                      HRDDF
-                                    </th>
-
-                                    <th
-                                      class="col-1"
-                                      data-toggle="tooltip"
-                                      data-placement="top"
-                                      title="Horas extras nocturnas dominicales y festivas"
-                                      role="button"
-                                    >
-                                      HENDF
-                                    </th>
-                                    <th
-                                      class="col-1"
-                                      data-toggle="tooltip"
-                                      data-placement="top"
-                                      title="Hora recargo nocturno dominicales y festivos"
-                                      role="button"
-                                    >
-                                      HRNDF
-                                    </th>
-                                    <th class="col-1">Validar</th>
-                                  </tr>
-                                </thead>
-                              </table>
-                            </div>
-
                             <app-lista-fijos
                               *ngIf="person.show == true"
                               [turnType]="turnType"

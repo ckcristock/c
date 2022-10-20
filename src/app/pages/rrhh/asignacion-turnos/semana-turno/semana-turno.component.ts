@@ -27,11 +27,13 @@ export class SemanaTurnoComponent implements OnInit {
 
   ngOnInit(): void {
     this.changeWeek.subscribe((d: any) => {
+      console.log(d)
       this.diasSemana = [];
       this.diaFinal = d.diaFinalSemana;
       this.diaInicial = d.diaInicialSemana;
       this.diaInicialSemana = this.diaInicial;
-      this.turnos = this.turnosRotativos;
+      console.log(this.turnosRotativos)
+      this.turnos = this.turnosRotativos.data;
       this.fillDiasSemana();
     });
   }

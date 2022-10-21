@@ -9,8 +9,8 @@ export class MaquinasHerramientasService {
 
   constructor( private http:HttpClient ) { }
 
-  getMachines(){
-    return this.http.get(`${environment.base_url}/paginateMachines`);
+  getMachines(params = {}){
+    return this.http.get(`${environment.base_url}/paginateMachines`, { params });
   }
 
   save( data:any ){

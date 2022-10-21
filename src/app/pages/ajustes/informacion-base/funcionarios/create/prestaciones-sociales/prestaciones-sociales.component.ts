@@ -7,6 +7,7 @@ import { SeveranceFundsService } from '../../../services/severanceFounds.service
 import { PensionFundsService } from '../../../services/pensionFunds.service';
 import { CompensationFundsService } from '../../../services/compensationFunds.service';
 import { EpssService } from '../../../services/epss.service';
+import { ArlService } from '../../../arl/arl.service';
 
 @Component({
   selector: 'app-prestaciones-sociales',
@@ -20,6 +21,7 @@ export class PrestacionesSocialesComponent implements OnInit {
   compensationFunds: any[]
   severanceFunds: any[]
   pensionFunds: any[]
+  arl: any[]
   epss: any[]
 
   person: any;
@@ -32,6 +34,7 @@ export class PrestacionesSocialesComponent implements OnInit {
     private _pensionFund: PensionFundsService,
     private _compensationFund: CompensationFundsService,
     private _epss: EpssService,
+    private _arl: ArlService,
   ) { }
 
   ngOnInit(): void {
@@ -43,12 +46,20 @@ export class PrestacionesSocialesComponent implements OnInit {
     this.getCompensationFounds();
     this.getPensionFounds();
     this.getSeveranceFounds();
+    this.getArl();
   }
 
   getCompensationFounds() {
     this._compensationFund.getCompensationFunds().subscribe((r: any) => {
       this.compensationFunds = r.data
       this.compensationFunds.unshift({ text: 'Seleccione', value: '' })
+    })
+  }
+
+  getArl() {
+    this._arl.getArl().subscribe((r: any) => {
+      this.arl = r.data
+      this.arl.unshift({ text: 'Seleccione', value: '' })
     })
   }
   getPensionFounds() {
@@ -87,7 +98,7 @@ export class PrestacionesSocialesComponent implements OnInit {
       compensation_fund_id: ['', Validators.required],
       severance_fund_id: ['', Validators.required],
       pension_fund_id: ['', Validators.required],
-
+      arl_id: ['', Validators.required]
     })
   }
 
@@ -109,6 +120,11 @@ export class PrestacionesSocialesComponent implements OnInit {
   get pension_fund_id_invalid() {
     return (
       this.formPrestation.get('pension_fund_id').invalid && this.formPrestation.get('pension_fund_id').touched
+    );
+  }
+  get arl_id_invalid() {
+    return (
+      this.formPrestation.get('arl_id').invalid && this.formPrestation.get('arl_id').touched
     );
   }
 

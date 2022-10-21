@@ -4,6 +4,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { EstimationValuesService } from './estimation-values.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-estimacion-viaticos-values',
@@ -13,12 +14,32 @@ import { EstimationValuesService } from './estimation-values.service';
 export class EstimacionViaticosValuesComponent implements OnInit {
 
   @ViewChild('modal') modal: any;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
   form: FormGroup;
   loading: boolean = false;
   title: any = '';
   estimations: any[] = [];
   values: any[] = [];
   value: any = {};
+  pagination = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  filtro: any = {
+    description: ''
+  }
+
+  openClose(){
+    if (this.matPanel == false){
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }    
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -81,10 +102,15 @@ export class EstimacionViaticosValuesComponent implements OnInit {
     })
   }
 
-  getEstimationValues() {
+  getEstimationValues(page = 1) {
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._estimationValue.getEstimationValues().subscribe((r: any) => {
-      this.values = r.data;
+    this._estimationValue.getEstimationValues(params).subscribe((r: any) => {
+      this.values = r.data.data;
+      this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
   }

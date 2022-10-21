@@ -52,10 +52,9 @@
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Tipo de contrato</mat-label>
           <mat-select
-            [class.is-invalid]="type_contract_valid"
-            [(ngModel)]="salary_info.work_contract_type_id"
             formControlName="type_contract"
             id="type_contract"
+            (selectionChange)="changeType()"
             required
           >
             <mat-option
@@ -74,8 +73,6 @@
             type="number"
             pattern="([0-9]{1,3}).([0-9]{1,3})"
             placeholder="Ingresa el salario"
-            [class.is-invalid]="salary_valid"
-            [(ngModel)]="salary_info.salary"
             formControlName="salary"
             id="funcionario_id"
             required
@@ -88,8 +85,6 @@
           <input
             matInput
             type="date"
-            [class.is-invalid]="date_of_admission_valid"
-            [(ngModel)]="salary_info.date_of_admission"
             formControlName="date_of_admission"
             id="fecha_ingreso"
             required
@@ -101,14 +96,12 @@
         <mat-form-field
           class="col-md-6"
           appearance="outline"
-          *ngIf="salary_info.work_contract_type_id == 2"
+          *ngIf="form.get('type_contract').value == 2"
         >
           <mat-label>Fecha de retiro</mat-label>
           <input
             matInput
             type="date"
-            [class.is-invalid]="retirement_date_valid"
-            [(ngModel)]="salary_info.date_end"
             formControlName="date_end"
             id="fecha_retiro"
             required
@@ -132,7 +125,7 @@
     <button
       type="button"
       (click)="updateSalaryInfo()"
-      [disabled]="form.untouched"
+      [disabled]="!form.valid"
       class="btn btn-primary"
     >
       Actualizar

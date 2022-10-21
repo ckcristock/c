@@ -186,7 +186,7 @@ export class ProductosComponent implements OnInit {
       {
         cellTemplate: this.PlantillaBotones,
         prop: 'Id_Producto',
-        name: 'Acciones',
+        name: '<i class="mdi mdi-chevron-down"></i>',
         sortable: false,
         maxWidth: '100',
       },

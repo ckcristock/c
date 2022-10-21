@@ -66,16 +66,11 @@
                 required
               />
             </mat-form-field>
-            <!-- <div class="col-md-12 mb-3">
-              <button class="btn btn-outline-primary btn-sm btn-block">
-                <i class="fas fa-search"></i> Filtrar
-              </button>
-            </div> -->
           </div>
         </form>
       </mat-expansion-panel>
     </mat-accordion>
-
+    <h5><span class="badge badge-pill badge-warning">Semana del {{startWeek | date}} al {{endWeek | date}}</span></h5>
     <div *ngIf="datosGenerales.length && !loading; else notData">
       <div *ngFor="let company of datosGenerales">
         <div *ngFor="let group of company.groups">

@@ -18,7 +18,7 @@ export class SalarioComponent implements OnInit {
   form: FormGroup;
   data: any;
   id: any;
-  contract_types:any;
+  contract_types: any;
   salary_info: any = {
     salary: '',
     contract_type: '',
@@ -32,7 +32,7 @@ export class SalarioComponent implements OnInit {
     private basicDataService: DatosBasicosService,
     private modalService: NgbModal,
     private _swal: SwalService,
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.salaryService.getWorkContractType().subscribe((d: any) => {
@@ -53,7 +53,7 @@ export class SalarioComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
 
   openModal() {
@@ -98,17 +98,34 @@ export class SalarioComponent implements OnInit {
     this.salaryService.getSalaryInfo(this.id)
       .subscribe((res: any) => {
         this.salary_info = res.data;
-        console.log(this.salary_info)
+        this.form.patchValue({
+          salary: this.salary_info.salary,
+          type_contract: this.salary_info.work_contract_type_id,
+          date_of_admission: this.salary_info.date_of_admission,
+          date_end: this.salary_info.date_end
+        })
+        if (this.form.get('type_contract').value != 2) {
+          this.form.patchValue({ date_end: null });
+          this.form.get('date_end').clearValidators();
+        }
       });
   }
-
+  changeType() {
+    if (this.form.get('type_contract').value == 2) {
+      this.form.get('date_end').enable();
+      this.form.get('date_end').setValidators(Validators.required);
+    } else {
+      this.form.get('date_end').clearValidators();
+      this.form.patchValue({ date_end: null });
+    }
+  }
   updateSalaryInfo() {
     /*  this.form.markAllAsTouched();
      if (this.form.invalid) { return false;} */
 
     this.salaryService.updateSalaryInfo(this.salary_info)
       .subscribe(res => {
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.getSalaryInfo();
         this._swal.show({
           title: 'Actualizado correctamente',

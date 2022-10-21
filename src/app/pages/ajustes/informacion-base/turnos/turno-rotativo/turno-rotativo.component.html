@@ -18,7 +18,7 @@
     <div class="row">
       <mat-form-field class="col" appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input type="text" matInput placeholder="Busca por nombre" />
+        <input (input)="getAll()" [(ngModel)]="filtro.name" type="text" matInput placeholder="Busca por nombre" />
       </mat-form-field>
     </div>
   </mat-expansion-panel>
@@ -127,6 +127,11 @@
     </tbody>
   </table>
 </div>
+<ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
+  [collectionSize]="pagination.collectionSize" (pageChange)="getAll($event)" maxSize="5" rotate="true"
+  ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
+  aria-label="Default pagination">
+</ngb-pagination>
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

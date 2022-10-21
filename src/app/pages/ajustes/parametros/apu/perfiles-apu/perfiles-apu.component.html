@@ -12,9 +12,22 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
       </div>
     </div>
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Perfil</mat-label>
+            <input (input)="getProfiles()" [(ngModel)]="filtro.profile" type="text" matInput placeholder="Busca por perfil" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
     <hr class="line" />
     <div class="rounded-top table-responsive">
       <table
@@ -32,7 +45,7 @@
             <th class="align-middle">$/Hora Ordinaria Nocturna</th>
             <th class="align-middle">$/Hora Dominical Diurna</th>
             <th class="align-middle">$/Hora Dominical Nocturna</th>
-            <th class="align-middle col-1">Acciones</th>
+            <th class="align-middle col-1"><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>

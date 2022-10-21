@@ -38,12 +38,12 @@ export class SeguridadParafiscalesComponent implements OnInit {
   getRetencionesDatos() {
     this._payRollDetail.getRetentions({
       pid: this.funcionario.id,
-      inicio: this.fechaInicio,
+      inicio: this.fechaFin,
       fin: this.fechaInicio
     }).subscribe(r => {
       this.retencionesDatos = r
-  
-      
+
+
     })
   }
 
@@ -51,22 +51,22 @@ export class SeguridadParafiscalesComponent implements OnInit {
     this._payRolSocial.getScurity({
       pid: this.funcionario.id,
       inicio: this.fechaInicio,
-      fin: this.fechaInicio
+      fin: this.fechaFin
     }).subscribe(r => {
       this.seguridadDatos = r
       console.log(r);
-      
-      
+
+
     })
   }
-  
+
   async getPorcentajesDatos() {
     this._payRolSocial.getScurityPercentages({
       pid: this.funcionario.id
     }).subscribe(r => {
-      console.log(r);
+      //console.log(r);
       this.porcentajesDatos = r
-  
+
     })
   }
 }

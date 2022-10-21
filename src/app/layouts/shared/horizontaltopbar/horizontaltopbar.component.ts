@@ -163,9 +163,9 @@ export class HorizontaltopbarComponent implements OnInit {
         this.alerts = r.data.data;
         this.loading = false
       });
-      this.initSearch()
+      /* this.initSearch() */
     } else {
-      this.initSearch()
+      /* this.initSearch() */
     }
 
   }

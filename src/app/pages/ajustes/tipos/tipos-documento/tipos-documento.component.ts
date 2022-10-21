@@ -129,7 +129,6 @@ export class TiposDocumentoComponent implements OnInit {
     this._typesDocumentService.getDocuments(params)
       .subscribe((res: any) => {
         this.documents = res.data.data;
-        console.log(this.documents)
         this.pagination.collectionSize = res.data.total;
         this.loading = false;
       })

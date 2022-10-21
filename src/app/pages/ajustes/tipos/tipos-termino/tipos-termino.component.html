@@ -2,13 +2,13 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">Tipos de contrato</h4>
+        <h4 class="text-primary">Términos del contrato</h4>
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo tipo de contrato')"
+            (click)="openConfirm(add, 'Nuevo tipo de término')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -18,8 +18,9 @@
         </div>
       </div>
     </div>
+
     <hr class="line" />
-    <mat-accordion multi>
+    <mat-accordion multi> <!---acordeon de filtros--->
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
           <mat-form-field class="col" appearance="outline">
@@ -28,41 +29,38 @@
               type="text"
               matInput
               [(ngModel)]="filtro.name"
-              (input)="getContractsType()"
+              (input)="getTermsTypes()"
               name="name"
               autocomplete="off"
               placeholder="Busca por nombre"
             />
           </mat-form-field>
+          <!--  <ng-select class="mr-1" [items]="lists" [(ngModel)]="filtro.name" (change)="getSalaryTypes()" name="name" bindLabel="text" bindValue="value" loadingText="loading" ngDefaultControl>
+                      </ng-select> -->
         </div>
       </mat-expansion-panel>
     </mat-accordion>
 
-
     <div class="rounded-top table-responsive">
-
       <table
         class="table table-bordered table-striped table-sm"
-
-        *ngIf="!loading && contracts.length > 0; else notData"
+        *ngIf="!loading && terms.length > 0; else notData"
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th class="col-1">Acciones</th>
+            <th>Tipos de Términos
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr
-            *ngFor="let contract of contracts"
+            *ngFor="let term of terms"
             class="text-center"
             [ngClass]="{
-              'text-danger font-weight-bold': contract.status === 'Inactivo'
+              'text-danger font-weight-bold': term.status === 'inactivo'
             }"
           >
-            <td class="align-middle">{{ contract.name }}</td>
-            <td class="align-middle">{{ contract.description }}</td>
+            <td class="align-middle">{{ term.name }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -77,24 +75,24 @@
                     class="dropdown-item waves-light text-info caja-botones"
                     href="javascript: void(0);"
                     (click)="
-                      getData(contract);
-                      openConfirm(add, 'Actualizar tipo de contrato')
+                      getData(term);
+                      openConfirm(add, 'Actualizar tipo de término')
                     "
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
-                    *ngIf="contract.status == 'Activo'"
+                    *ngIf="term.status == 'activo'"
                     href="javascript: void(0);"
                     class="dropdown-item text-danger waves-light caja-botones"
-                    (click)="activateOrInactivate(contract, 'Inactivo')"
+                    (click)="activateOrInactivate(term, 'inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
                   >
                   <a
-                    *ngIf="contract.status == 'Inactivo'"
+                    *ngIf="term.status == 'inactivo'"
                     href="javascript: void(0);"
                     class="dropdown-item text-success waves-light caja-botones"
-                    (click)="activateOrInactivate(contract, 'Activo')"
+                    (click)="activateOrInactivate(term, 'activo')"
                   >
                     <i class="fas fa-check"></i> Activar</a
                   >
@@ -105,18 +103,17 @@
         </tbody>
       </table>
     </div>
-  </div>
+  </div> <!-- Close Card Body -->
+
+  <!--pagiancion-->
   <ngb-pagination
     class="d-flex justify-content-center pagination-rounded pagination-sm"
     [collectionSize]="pagination.collectionSize"
-    (pageChange)="getContractsType($event)"
     [pageSize]="pagination.pageSize"
     [(page)]="pagination.page"
+    (pageChange)="getTermsTypes($event)"
     aria-label="Default pagination"
     maxSize="5"
-    rotate="true"
-    ellipses="false"
-    boundaryLinks="true"
     rotate="true"
     ellipses="false"
     boundaryLinks="true"
@@ -124,6 +121,8 @@
   </ngb-pagination>
 </div>
 
+
+<!--modal para nuevo-->
 <ng-template #add let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">{{ selected }}</h4>
@@ -140,28 +139,17 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <mat-form-field class="col-md-6" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
             matInput
             type="text"
             placeholder="Ingresa el nombre"
             formControlName="name"
-            name="name"
+            required
             autocomplete="off"
           />
-          <mat-error *ngIf="name_invalid">Es necesario el nombre</mat-error>
-        </mat-form-field>
-        <mat-form-field class="col-md-6" appearance="outline">
-          <mat-label>Descripción</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Ingresa la descripción"
-            formControlName="description"
-            name="description"
-            autocomplete="off"
-          />
+          <mat-error *ngIf="name_invalid">Campo necesario</mat-error>
         </mat-form-field>
       </div>
     </form>
@@ -177,7 +165,7 @@
     <button
       type="button"
       [disabled]="!form.valid"
-      (click)="createContractType()"
+      (click)="createSalaryType()"
       class="btn btn-primary"
     >
       Guardar
@@ -185,31 +173,6 @@
   </div>
 </ng-template>
 
-<app-modal-basic #modal [dialogClass]="'modal-md'">
-  <div class="app-modal-header">
-    <h5 class="modal-title"></h5>
-    <button type="button" class="close basic-close" (click)="modal.hide()">
-      <span aria-hidden="true">
-        <i class="fas fa-times" (click)="modal.hide()"></i>
-      </span>
-    </button>
-  </div>
-  <div class="app-modal-body"></div>
-  <div class="app-modal-footer">
-    <div class="form-group text-right">
-      <button
-        (click)="modal.hide()"
-        type="button"
-        class="btn btn-danger raised mr-2 btn-sm"
-      >
-        Cerrar
-      </button>
-      <button type="submit" class="btn btn-primary btn-sm raised">
-        Guardar
-      </button>
-    </div>
-  </div>
-</app-modal-basic>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

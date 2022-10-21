@@ -31,27 +31,35 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TiposRegimenComponent } from "./tipos-regimen/tipos-regimen.component";
 import { ResponsabilidadesFiscalesComponent } from "./responsabilidades-fiscales/responsabilidades-fiscales.component";
+import { ContratoComponent } from './contrato/contrato.component';
+import { ParametrosModule } from "../parametros/parametros.module";
+import { TiposTerminoComponent } from './tipos-termino/tipos-termino.component';
 
 @NgModule({
     declarations : [
         TiposAgendaComponent,
         TiposConsultaComponent,
         TiposContratoComponent,
-        TiposSalarioComponent, 
-        TiposDocumentoComponent, 
-        TiposNovedadesComponent, 
-        TiposGlosaComponent, 
-        TiposRetencionesComponent, 
-        TiposRegimenComponent, 
+        TiposSalarioComponent,
+        TiposDocumentoComponent,
+        TiposNovedadesComponent,
+        TiposGlosaComponent,
+        TiposRetencionesComponent,
+        TiposRegimenComponent,
         ResponsabilidadesFiscalesComponent,
-        TiposEgresoComponent, 
-        TiposIngresoComponent, 
+        TiposEgresoComponent,
+        TiposIngresoComponent,
         TiposEstadoFinancieroComponent,
-        TiposAnulacionComponent, 
-        TiposRechazoComponent, 
+        TiposAnulacionComponent,
+        TiposRechazoComponent,
         TiposActivoFijoComponent,
-        TiposRiesgoComponent, 
-        ProfesionesComponent, TiposVisaComponent, TiposActividadesComponent
+        TiposRiesgoComponent,
+        ProfesionesComponent,
+        TiposVisaComponent,
+        TiposActividadesComponent,
+        ContratoComponent,
+        TiposTerminoComponent,
+
     ],
     imports : [
         TiposRoutingModule,
@@ -66,9 +74,9 @@ import { ResponsabilidadesFiscalesComponent } from "./responsabilidades-fiscales
         NgSelectModule,
         NgbTypeaheadModule,
         MatExpansionModule,
-	MatFormFieldModule,
-	MatInputModule,
-	MatSelectModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
     ]
 })
 

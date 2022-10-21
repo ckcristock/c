@@ -32,6 +32,7 @@ import { ParafiscalesConfigComponent } from './nomina/components/parafiscales-co
 import { RiesgoArlConfigComponent } from './nomina/components/riesgo-arl-config/riesgo-arl-config.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { LocalidadesComponent } from './localidades/localidades.component';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { MatIconModule } from '@angular/material/icon';
     RiesgoArlConfigComponent,
     ParafiscalesConfigComponent,
     IncapacidadesConfigComponent,
+    LocalidadesComponent,
   ],
   imports: [
     CommonModule,

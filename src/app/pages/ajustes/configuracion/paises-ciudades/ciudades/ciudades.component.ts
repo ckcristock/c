@@ -31,7 +31,7 @@ export class CiudadesComponent implements OnInit {
   title: any = '';
   pagination = {
     page: 1,
-    pageSize: 5,
+    pageSize: 10,
     collectionSize: 0
   }
   filtro = {
@@ -66,7 +66,7 @@ export class CiudadesComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset()
-    
+
   }
 
   createForm() {

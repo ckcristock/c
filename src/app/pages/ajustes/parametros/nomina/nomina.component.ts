@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class NominaComponent implements OnInit {
 
   constructor() { }
+  //Configuracion de parámetros de la nómina
 
   ngOnInit(): void {
   }

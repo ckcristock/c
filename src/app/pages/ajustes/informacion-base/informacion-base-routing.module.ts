@@ -40,10 +40,6 @@ const routes: Routes = [
   { path: 'turnos/crear', component: CreateTurnoFijoComponent },
   { path: 'turnos/crear/:id', component: CreateTurnoFijoComponent },
 
-  { path: 'fondo-pension', component: FondoPensionComponent },
-  { path: 'arl', component: ArlComponent },
-  { path: 'caja-compensacion', component: CajaCompensacionComponent },
-  { path: 'fondo-cesantias', component: FondoCesantiasComponent },
   { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent },
 
   /**Productos */

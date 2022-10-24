@@ -47,6 +47,7 @@
             type="number"
             formControlName="identifier"
             [class.is-invalid]="identifier_valid"
+            (change)="validarCedula($event)"
             name="document"
             class="numberInput"
             autocomplete="off"
@@ -147,7 +148,7 @@
           <mat-label>Correo electrónico</mat-label>
           <input
             matInput
-            placeholder="Ej: genetic@example.com"
+            placeholder="Ej: maqymon@example.com"
             type="email"
             formControlName="email"
             [class.is-invalid]="email_valid"

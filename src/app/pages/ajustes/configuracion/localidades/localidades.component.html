@@ -6,16 +6,152 @@
     <hr class="line" />
     <div class="row">
       <div class="col-lg-4 mb-3">
-        <app-paises></app-paises>
+        <ul class="list-group list-group-flush">
+          <li
+            class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
+          >
+            <b>Paises</b>
+            <span>
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="openModal('countries', 'add')"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </span>
+          </li>
+          <li
+            role="button"
+            *ngFor="let pais of countries"
+            [ngClass]="{ 'border border-primary': pais.selected }"
+            class="list-group-item d-flex justify-content-between align-items-center rounded"
+            (click)="
+              getStates(pais.value); selected(pais, pais.value)
+            "
+          >
+            {{pais.name}}
+            <span ngbDropdown container="body" class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  href="javascript: void(0);"
+                  class="dropdown-item text-info waves-light caja-botones"
+                  (click)="editar('paises', countries, add)"
+                >
+                  <i class="fas fa-edit color-info"></i> Editar</a
+                >
+
+              </div>
+            </span>
+          </li>
+        </ul>
       </div>
 
       <div class="col-lg-4 mb-3">
-        <app-municipios></app-municipios>
+        <ul class="list-group list-group-flush">
+          <li
+            class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
+          >
+            <b>Departamentos</b>
+            <span>
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="openModal('states', 'add')"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </span>
+          </li>
+          <li
+            role="button"
+            *ngFor="let state of states"
+            [ngClass]="{ 'border border-primary': state.selected }"
+            class="list-group-item d-flex justify-content-between align-items-center rounded"
+            (click)="
+              getStates(state.value); selected(state, state.value)
+            "
+          >
+            {{state.name}}
+            <span ngbDropdown container="body" class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  href="javascript: void(0);"
+                  class="dropdown-item text-info waves-light caja-botones"
+                  (click)="editar('paises', states, add)"
+                >
+                  <i class="fas fa-edit color-info"></i> Editar</a
+                >
+
+              </div>
+            </span>
+          </li>
+        </ul>
       </div>
 
       <div class="col-lg-4 mb-3">
-        <app-ciudades></app-ciudades>
+        <ul class="list-group list-group-flush">
+          <li
+            class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
+          >
+            <b>Ciudades</b>
+            <span>
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="openModal('cities', 'add')"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </span>
+          </li>
+          <li
+            role="button"
+            *ngFor="let city of cities"
+            [ngClass]="{ 'border border-primary': city.selected }"
+            class="list-group-item d-flex justify-content-between align-items-center rounded"
+            (click)="
+              getStates(city.value); selected(city, city.value)
+            "
+          >
+            {{city.name}}
+            <span ngbDropdown container="body" class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  href="javascript: void(0);"
+                  class="dropdown-item text-info waves-light caja-botones"
+                  (click)="editar('paises', states, add)"
+                >
+                  <i class="fas fa-edit color-info"></i> Editar</a
+                >
+
+              </div>
+            </span>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 </div>
+
+
+
+

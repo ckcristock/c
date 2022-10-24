@@ -27,35 +27,35 @@ export class EstructuraEmpresaComponent implements OnInit {
   ngOnInit(): void {
     this.getGroups();
   }
-  getGroups() {
+  getGroups() { //copied
     this._group.getGroup().subscribe((r: any) => {
       this.grupos = r.data
       if (this.grupos) {
         this.getDependencies(this.grupos[0].value)
         this.grupos[0].selected = true;
-      }      
+      }
     })
-    
+
   }
   closeResult = '';
-  public openConfirm(confirm) {
+  public openConfirm(confirm) { //copied
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any) {
-    
+  private getDismissReason(reason: any) { //copied
+
   }
   grupoSelcted:any;
   getDependencies(group_id) {
     this.grupoSelcted = group_id
-    console.log(group_id)  
+    console.log(group_id)
     this._dependecies.getDependencies({ group_id })
       .subscribe((r: any) => {
-        this.dependecies = r.data;  
-            
+        this.dependecies = r.data;
+
         if (this.dependecies.length != 0) {
           this.getPosition(this.dependecies[0].value)
           this.dependecies[0].selected = true;
@@ -66,7 +66,7 @@ export class EstructuraEmpresaComponent implements OnInit {
       })
   }
 
-  selected(model, value) {
+  selected(model, value) { ///copied
     model = model.map(m => {
       m.selected = m.value == value ? true : false;
     })
@@ -81,7 +81,7 @@ export class EstructuraEmpresaComponent implements OnInit {
     })
   }
 
-  openModal(tipo, add) {
+  openModal(tipo, add) { ////copied
     this.name = ''
     this.id = '';
     this.operation = 'guardar';
@@ -106,7 +106,7 @@ export class EstructuraEmpresaComponent implements OnInit {
       this._group.delete(id).subscribe(r =>{
         this.getGroups()
         this.deleteSwal.show();
-      })      
+      })
     }
   }
 
@@ -138,25 +138,25 @@ export class EstructuraEmpresaComponent implements OnInit {
   saveGroup(params) {
     this._group.save(params).subscribe(r => {
       this.getGroups()
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
     })
   }
   saveDependency(params) {
     this._dependecies.save(params).subscribe(r => {
       this.getDependencies(params.group_id)
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
     })
   }
   savePosition(params) {
     this._position.save(params).subscribe(r => {
       this.getDependencies(params.dependency_id)
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
     })
   }
   id = '';
   operation = ''
 
-  editar(tipo, modelo, add) {
+  editar(tipo, modelo, add) { //copied
     this.name = modelo.text
     this.openConfirm(add)
     this.tipo = tipo

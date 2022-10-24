@@ -104,7 +104,7 @@ export class TiposTerminoComponent implements OnInit {
     }
     this._swal.show({
       title: '¿Estás seguro(a)?',
-      text: (status === 'inactivo' ? '¡El salario se inactivará!' : '¡El salario se activará!'),
+      text: (status === 'inactivo' ? '¡El término se inactivará!' : '¡El término se activará!'),
       icon: 'question',
       showCancel: true,
     }).then((result) => {
@@ -113,8 +113,8 @@ export class TiposTerminoComponent implements OnInit {
           .subscribe(res => {
             this.getTermsTypes();
             this._swal.show({
-              title: (status === 'inactivo' ? '¡Salario inhabilitado!' : '¡Salario activado!'),
-              text: (status === 'inactivo' ? 'El salario ha sido inhabilitado con éxito.' : 'El salario ha sido activado con éxito.'),
+              title: (status === 'inactivo' ? '¡Término inhabilitado!' : '¡Término activado!'),
+              text: (status === 'inactivo' ? 'El término ha sido inhabilitado con éxito.' : 'El término ha sido activado con éxito.'),
               icon: 'success',
               showCancel: false,
               timer: 1000

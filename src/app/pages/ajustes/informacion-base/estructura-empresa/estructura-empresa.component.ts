@@ -27,7 +27,7 @@ export class EstructuraEmpresaComponent implements OnInit {
   ngOnInit(): void {
     this.getGroups();
   }
-  getGroups() { //copied
+  getGroups() {
     this._group.getGroup().subscribe((r: any) => {
       this.grupos = r.data
       if (this.grupos) {
@@ -38,20 +38,19 @@ export class EstructuraEmpresaComponent implements OnInit {
 
   }
   closeResult = '';
-  public openConfirm(confirm) { //copied
+  public openConfirm(confirm) {
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any) { //copied
+  private getDismissReason(reason: any) {
 
   }
   grupoSelcted:any;
   getDependencies(group_id) {
     this.grupoSelcted = group_id
-    console.log(group_id)
     this._dependecies.getDependencies({ group_id })
       .subscribe((r: any) => {
         this.dependecies = r.data;
@@ -66,7 +65,7 @@ export class EstructuraEmpresaComponent implements OnInit {
       })
   }
 
-  selected(model, value) { ///copied
+  selected(model, value) {
     model = model.map(m => {
       m.selected = m.value == value ? true : false;
     })
@@ -81,7 +80,7 @@ export class EstructuraEmpresaComponent implements OnInit {
     })
   }
 
-  openModal(tipo, add) { ////copied
+  openModal(tipo, add) {
     this.name = ''
     this.id = '';
     this.operation = 'guardar';
@@ -156,7 +155,7 @@ export class EstructuraEmpresaComponent implements OnInit {
   id = '';
   operation = ''
 
-  editar(tipo, modelo, add) { //copied
+  editar(tipo, modelo, add) {
     this.name = modelo.text
     this.openConfirm(add)
     this.tipo = tipo

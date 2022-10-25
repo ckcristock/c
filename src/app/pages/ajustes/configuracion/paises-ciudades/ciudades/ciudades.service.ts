@@ -8,9 +8,17 @@ import { environment } from 'src/environments/environment';
 export class CiudadesService {
 
   constructor( private http: HttpClient ) { }
-  
+
   getContries(){
     return this.http.get(`${environment.base_url}/countries`);
+  }
+
+  getCitiesByStateId(params){ //ciudades por Departamento id
+    return this.http.get(`${environment.base_url}/cities/${params}`);
+  }
+
+  getCitiesByMunicipalityId(params){
+    return this.http.get(`${environment.base_url}/cities-by-municipalities/${params}`);
   }
 
   createCity( data:any ){

@@ -3,7 +3,8 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaisesService } from "../paises-ciudades/paises/paises.service";
 import { DepartamentosService  } from "../departamentos-municipios/departamentos/departamentos.service";
 import { CiudadesService } from "../paises-ciudades/ciudades/ciudades.service";
-import { ThisReceiver } from '@angular/compiler';
+import { SwalService } from "../../../../pages/ajustes/informacion-base/services/swal.service";
+import { showConfirm } from 'src/app/core/utils/confirmMessage';
 
 @Component({
   selector: 'app-localidades',
@@ -17,19 +18,20 @@ export class LocalidadesComponent implements OnInit {
   countries: any[];
   states: any[];
   cities: any[];
-  loading: boolean = false;
+  loading: boolean = true;
   name = ''
   tipo = ''
   id = ''
   operation = ''
-  countrySelected:any;
-  stateSelected:any;
+  countrySelected:any = 1;
+  stateSelected:any = 0;
 
   constructor(
     private _countries: PaisesService,
     private _state: DepartamentosService,
     private _cities: CiudadesService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
@@ -37,14 +39,14 @@ export class LocalidadesComponent implements OnInit {
   }
 
   getCountries() {
+    //luego buscar las relaciones
     this._countries.getCountries().subscribe((r:any) => {
       this.countries = r.data.data;
+      //this.loading = false
       if (this.countries) {
-        this.getStates(this.countries[1].value);
+        this.getStates(this.countries[1].id);
         this.countries[1].selected = true;
-
       }
-      //luego buscar las relaciones
     });
   }
 
@@ -78,31 +80,122 @@ export class LocalidadesComponent implements OnInit {
   }
 
   getStates(country_id){
+    //hacer la consulta de acuerdo al país seleccionado
     this.countrySelected = country_id
-    this._state.getDepartmentPaginate().subscribe((r:any)=>{
-      this.states = r.data.data
-      if (this.states) {
-        this.getCities(this.states[0].value);
-        this.states[0].selected = true;
+    //hay que cambiar el servicio
+    console.log(this.countrySelected);
+    this._state.getDepartmentById(this.countrySelected)
+      .subscribe((r:any)=>{
+      if (r.status == true) {
+        this.states = r.data;
+        if (this.states != null) {
+          this.getCities(this.states[0].id);
+          this.states[0].selected = true;
+        }
       }
+      if (r.status == false) {
+        this.states = null;
+        this.cities = null;
+      }
+      console.log(r.data);
     })
-//hacer la consulta de acuerdo al país seleccionado
   }
 
   getCities(state_id){
 //hacer la consulta de acuerdo al estado seleccionado
+console.log(state_id);
     this.stateSelected = state_id
-    this._cities.getCities().subscribe((r:any)=>{
-      console.log(r.data)
-      this.cities = r.data.data
+    console.log(this.stateSelected);
+    this._cities.getCitiesByStateId(this.stateSelected)
+      .subscribe((r:any)=>{
+      console.log(r)
+      if(r.status==true){
+        this.cities = r.data
+        if(this.cities){
+          this.cities[0].selected = true;
+          this.loading = false
+        }
+      } else {
+        this.cities = null;
+      }
     })
   }
 
   selected(model, value){
+    //console.log(model);
+    console.log(model);
+    console.log(value);
+
     model = model.map(m=>{
-      m.selected = m.value == value ? true : false;
+      m.selected = m.id == value ? true : false;
     })
   }
+
+ /*  delete(tipo, id){
+    if(tipo == 'dependencias'){
+      this._dependecies.delete(id).subscribe(r => {
+        this.getDependencies(1)
+        this.deleteSwal.show();
+      })
+    }
+    if(tipo == 'cargos'){
+      this._position.delete(id).subscribe(r =>{
+        this.getDependencies(1)
+        this.deleteSwal.show();
+      })
+    }
+    if(tipo == 'grupos'){
+      this._group.delete(id).subscribe(r =>{
+        this.getGroups()
+        this.deleteSwal.show();
+      })
+    }
+  }
+
+  save() {
+    if (this.tipo == 'dependencias') {
+      let selected = this.grupos.find(r => r.selected == true);
+      console.warn(selected.value)
+      let params: any = { group_id: selected.value, name: this.name }
+      params ? params.id = this.id : ''
+      params ? params.id = this.id : ''
+
+      this.saveDependency(params)
+    }
+    if (this.tipo == 'cargos') {
+      let selected = this.dependecies.find(r => r.selected == true);
+      console.warn(selected.value)
+      let params: any = { dependency_id: selected.value, name: this.name }
+      params ? params.id = this.id : ''
+      this.savePosition(params)
+    }
+
+    if (this.tipo == 'grupos') {
+      let params: any = { name: this.name }
+      params ? params.id = this.id : ''
+      this.saveGroup(params);
+    }
+  }
+
+  saveCountry(params) {
+    this._countries .save(params).subscribe(r => {
+      this.getGroups()
+      this.modalService.dismissAll();
+    })
+  }
+  saveDependency(params) {
+    this._state _dependecies.save(params).subscribe(r => {
+      this.getDependencies(params.group_id)
+      this.modalService.dismissAll();
+    })
+  }
+  savePosition(params) {
+    this._cities _position.save(params).subscribe(r => {
+      this.getDependencies(params.dependency_id)
+      this.modalService.dismissAll();
+    })
+  } */
+
 
 
 }

@@ -16,7 +16,7 @@
             <span>
               <button
                 class="btn btn-primary btn-sm"
-                (click)="openModal('countries', 'add')"
+                (click)="openModal('paises', add)"
               >
                 <i class="fa fa-plus"></i>
               </button>
@@ -65,7 +65,7 @@
             <span>
               <button
                 class="btn btn-primary btn-sm"
-                (click)="openModal('states', 'add')"
+                (click)="openModal('departamentos', add)"
               >
                 <i class="fa fa-plus"></i>
               </button>
@@ -93,7 +93,7 @@
                 <a
                   href="javascript: void(0);"
                   class="dropdown-item text-info waves-light caja-botones"
-                  (click)="editar('paises', states, add)"
+                  (click)="editar('estados', states, add)"
                 >
                   <i class="fas fa-edit color-info"></i> Editar</a
                 >
@@ -116,7 +116,7 @@
             <span>
               <button
                 class="btn btn-primary btn-sm"
-                (click)="openModal('cities', 'add')"
+                (click)="openModal('ciudades', add)"
               >
                 <i class="fa fa-plus"></i>
               </button>
@@ -144,7 +144,7 @@
                 <a
                   href="javascript: void(0);"
                   class="dropdown-item text-info waves-light caja-botones"
-                  (click)="editar('paises', states, add)"
+                  (click)="editar('ciudades', cities, add)"
                 >
                   <i class="fas fa-edit color-info"></i> Editar</a
                 >
@@ -184,28 +184,30 @@
   </div>
   <div class="modal-body">
     <form changeForm="ngForm">
+
       <div class="row mt-3">
-        <div *ngIf="tipo != 'countries'" class="col-md-12 px-0">
+        <div *ngIf="tipo != 'paises'" class="col-md-12 px-0">
           <mat-form-field appearance="outline" class="col-md-12">
             <mat-label>Paises</mat-label>
             <mat-select
               (selectionChange)="getStates($event.value)"
-              [(value)]="stateSelected"
+              [(value)]="countrySelected"
             >
               <mat-option
                 *ngFor="let item of countries"
                 [value]="item.id"
                 (click)="selected(countries, item.id)"
-                >{{ item.text }}</mat-option
+                >{{ item.name }}</mat-option
               >
             </mat-select>
           </mat-form-field>
-          <div *ngIf="tipo == 'states'">
+
+          <div *ngIf="tipo == 'ciudades'">
             <mat-form-field appearance="outline" class="col-md-12">
-              <mat-label>Departamentos</mat-label>
+              <mat-label>Ciudades</mat-label>
               <mat-select
-                (selectionChange)="getCities($event.value)"
-                [(value)]="citySelected">
+                (selectionChange)="getStates($event.value)"
+                [(value)]="stateSelected">
                 <mat-option
                   *ngFor="let item of states"
                   [(value)]="item.id"
@@ -215,7 +217,8 @@
               </mat-select>
             </mat-form-field>
           </div>
-        </div>
+
+        </div><!--fin de ngId paises, departamento-->
         <mat-form-field class="col-md-12" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
@@ -239,7 +242,7 @@
       Cancelar
     </button>
     <button
-      *ngIf="tipo == 'countries'"
+      *ngIf="tipo == 'paises'"
       [disabled]="name == ''"
       type="button"
       (click)="save()"
@@ -248,7 +251,7 @@
       Guardar
     </button>
     <button
-      *ngIf="tipo == 'states'"
+      *ngIf="tipo == 'departamentos'"
       [disabled]="name == '' || !countries.length"
       type="button"
       (click)="save()"
@@ -257,7 +260,7 @@
       Guardar
     </button>
     <button
-      *ngIf="tipo == 'cities'"
+      *ngIf="tipo == 'ciudades'"
       [disabled]="name == '' || !states.length || !countries.length"
       type="button"
       (click)="save()"

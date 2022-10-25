@@ -29,4 +29,8 @@ export class CiudadesService {
     return this.http.get(`${environment.base_url}/paginateCities`, {params});
   }
 
+  delete(id){
+    return this.http.post(`${environment.base_url}/countries`, id);// 'borrado lógico '+id
+  }
+
 }

@@ -21,4 +21,8 @@ export class DepartamentosService {
     return this.http.post(`${environment.base_url}/departments`, data);
   }
 
+  delete(id){
+    return this.http.post(`${environment.base_url}/countries`, id);// 'borrado lógico '+id
+  }
+
 }

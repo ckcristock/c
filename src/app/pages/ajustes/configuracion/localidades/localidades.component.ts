@@ -80,10 +80,8 @@ export class LocalidadesComponent implements OnInit {
   }
 
   getStates(country_id){
-    //hacer la consulta de acuerdo al país seleccionado
+    //hace la consulta de acuerdo al país seleccionado
     this.countrySelected = country_id
-    //hay que cambiar el servicio
-    console.log(this.countrySelected);
     this._state.getDepartmentById(this.countrySelected)
       .subscribe((r:any)=>{
       if (r.status == true) {
@@ -97,18 +95,14 @@ export class LocalidadesComponent implements OnInit {
         this.states = null;
         this.cities = null;
       }
-      console.log(r.data);
     })
   }
 
   getCities(state_id){
-//hacer la consulta de acuerdo al estado seleccionado
-console.log(state_id);
+  //hace la consulta de acuerdo al estado/departamento seleccionado
     this.stateSelected = state_id
-    console.log(this.stateSelected);
     this._cities.getCitiesByStateId(this.stateSelected)
       .subscribe((r:any)=>{
-      console.log(r)
       if(r.status==true){
         this.cities = r.data
         if(this.cities){
@@ -122,79 +116,75 @@ console.log(state_id);
   }
 
   selected(model, value){
-    //console.log(model);
-    console.log(model);
-    console.log(value);
-
     model = model.map(m=>{
       m.selected = m.id == value ? true : false;
     })
   }
 
- /*  delete(tipo, id){
-    if(tipo == 'dependencias'){
-      this._dependecies.delete(id).subscribe(r => {
-        this.getDependencies(1)
+  delete(tipo, id){
+    if(tipo == 'paises'){
+      this._countries.delete(id).subscribe(r => {
+        this.getStates(1)
         this.deleteSwal.show();
       })
     }
-    if(tipo == 'cargos'){
-      this._position.delete(id).subscribe(r =>{
-        this.getDependencies(1)
+    if(tipo == 'departamentos'){
+      this._state.delete(id).subscribe(r =>{
+        this.getStates(1)
         this.deleteSwal.show();
       })
     }
-    if(tipo == 'grupos'){
-      this._group.delete(id).subscribe(r =>{
-        this.getGroups()
+    if(tipo == 'ciudades'){
+      this._cities.delete(id).subscribe(r =>{
+        this.getCountries()
         this.deleteSwal.show();
       })
     }
   }
 
   save() {
-    if (this.tipo == 'dependencias') {
-      let selected = this.grupos.find(r => r.selected == true);
+    if (this.tipo == 'paises') {
+      let selected = this.countries.find(r => r.selected == true);
       console.warn(selected.value)
       let params: any = { group_id: selected.value, name: this.name }
       params ? params.id = this.id : ''
       params ? params.id = this.id : ''
 
-      this.saveDependency(params)
+      this.saveCity(params)
     }
-    if (this.tipo == 'cargos') {
-      let selected = this.dependecies.find(r => r.selected == true);
+    if (this.tipo == 'departamentos') {
+      let selected = this.states.find(r => r.selected == true);
       console.warn(selected.value)
       let params: any = { dependency_id: selected.value, name: this.name }
       params ? params.id = this.id : ''
-      this.savePosition(params)
+      this.saveState(params)
     }
 
-    if (this.tipo == 'grupos') {
+    if (this.tipo == 'paises') {
       let params: any = { name: this.name }
       params ? params.id = this.id : ''
-      this.saveGroup(params);
+      this.saveCountry(params);
     }
   }
 
   saveCountry(params) {
-    this._countries .save(params).subscribe(r => {
-      this.getGroups()
+    this._countries.createCountry(params).subscribe(r => {
+      this.getCountries()
       this.modalService.dismissAll();
     })
   }
-  saveDependency(params) {
-    this._state _dependecies.save(params).subscribe(r => {
-      this.getDependencies(params.group_id)
+  saveState(params) {
+    this._state.createNewDepartment(params).subscribe(r => {
+      this.getStates(params.state_id)
       this.modalService.dismissAll();
     })
   }
-  savePosition(params) {
-    this._cities _position.save(params).subscribe(r => {
-      this.getDependencies(params.dependency_id)
+  saveCity(params) {
+    this._cities.createCity(params).subscribe(r => {
+      this.getCities(params.city_id)
       this.modalService.dismissAll();
     })
-  } */
+  }
 
 
 

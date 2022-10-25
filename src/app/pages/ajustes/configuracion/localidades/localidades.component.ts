@@ -18,12 +18,14 @@ export class LocalidadesComponent implements OnInit {
   countries: any[];
   states: any[];
   cities: any[];
-  loading: boolean = true;
+  loadingCountry: boolean = false;
+  loadingState: boolean = false;
+  loadingCity: boolean = false;
   name = ''
   tipo = ''
   id = ''
   operation = ''
-  countrySelected:any = 1;
+  countrySelected:any = 0;
   stateSelected:any = 0;
 
   constructor(
@@ -40,14 +42,22 @@ export class LocalidadesComponent implements OnInit {
 
   getCountries() {
     //luego buscar las relaciones
-    this._countries.getCountries().subscribe((r:any) => {
-      this.countries = r.data.data;
+    this.loadingCountry = true;
+    this._countries.getAllCountries().subscribe((r:any) => {
+      console.log(r);
+      this.countries = r.data;
       //this.loading = false
+      console.log(this.countries);
       if (this.countries) {
-        this.getStates(this.countries[1].id);
-        this.countries[1].selected = true;
+        this.getStates(this.countries[0].value);
+        this.countries[0].selected = true;
       }
+      this.loadingCountry = false;
     });
+    console.log('loading',this.loadingCity);
+    console.log(this.countries==null);
+    console.log(this.states==null);
+    console.log(this.cities==null);
   }
 
   closeResult = '';
@@ -81,13 +91,14 @@ export class LocalidadesComponent implements OnInit {
 
   getStates(country_id){
     //hace la consulta de acuerdo al país seleccionado
+    this.loadingState = true
     this.countrySelected = country_id
     this._state.getDepartmentById(this.countrySelected)
       .subscribe((r:any)=>{
       if (r.status == true) {
         this.states = r.data;
         if (this.states != null) {
-          this.getCities(this.states[0].id);
+          this.getCities(this.states[0].value);
           this.states[0].selected = true;
         }
       }
@@ -95,29 +106,31 @@ export class LocalidadesComponent implements OnInit {
         this.states = null;
         this.cities = null;
       }
+      this.loadingState = false
     })
   }
 
   getCities(state_id){
   //hace la consulta de acuerdo al estado/departamento seleccionado
+    this.loadingCity = true;
     this.stateSelected = state_id
     this._cities.getCitiesByStateId(this.stateSelected)
       .subscribe((r:any)=>{
-      if(r.status==true){
-        this.cities = r.data
-        if(this.cities){
-          this.cities[0].selected = true;
-          this.loading = false
+        if(r.status==true){
+          this.cities = r.data
+          if(this.cities){
+            this.cities[0].selected = true;
+          }
+        } else {
+          this.cities = null;
         }
-      } else {
-        this.cities = null;
-      }
-    })
+        this.loadingCity = false;
+      })
   }
 
   selected(model, value){
     model = model.map(m=>{
-      m.selected = m.id == value ? true : false;
+      m.selected = m.value == value ? true : false;
     })
   }
 
@@ -143,6 +156,7 @@ export class LocalidadesComponent implements OnInit {
   }
 
   save() {
+    console.log(this.tipo)
     if (this.tipo == 'paises') {
       let selected = this.countries.find(r => r.selected == true);
       console.warn(selected.value)

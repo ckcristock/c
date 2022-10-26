@@ -67,7 +67,7 @@ export class FondoPensionComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   getData(data) {

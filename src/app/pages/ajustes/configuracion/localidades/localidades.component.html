@@ -5,9 +5,8 @@
     </div>
     <hr class="line" />
     <div class="row">
-      <div class="col-lg-4 mb-3">
-        <ul class="list-group list-group-flush"
-        >
+      <div [ngClass]="{ 'col-lg-3': countrySelected == 1 , 'col-lg-4 mb-3': countrySelected != 1}">
+        <ul class="list-group list-group-flush">
           <li
             class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
           >
@@ -46,7 +45,7 @@
                   <a
                     href="javascript: void(0);"
                     class="dropdown-item text-info waves-light caja-botones"
-                    (click)="editar('countries', countries, add)"
+                    (click)="editar('paises', country, add)"
                   >
                     <i class="fas fa-edit color-info"></i> Editar</a
                   >
@@ -57,7 +56,7 @@
         </ul>
       </div>
 
-      <div class="col-lg-4 mb-3">
+      <div [ngClass]="{ 'col-lg-3': countrySelected == 1 , 'col-lg-4 mb-3': countrySelected != 1}">
         <ul class="list-group list-group-flush">
           <li
             class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
@@ -79,8 +78,8 @@
               *ngFor="let state of states"
               [ngClass]="{ 'border border-primary': state.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
-              (click)="
-                getCities(state.value); selected(states, state.value);
+              (click)=" (coutrySelected == 1) ? getCities(state.value) : getMunicipalities(state.value);
+                       selected(states, state.value);
               "
             >
               {{state.text}}
@@ -96,7 +95,7 @@
                   <a
                     href="javascript: void(0);"
                     class="dropdown-item text-info waves-light caja-botones"
-                    (click)="editar('estados', states, add)"
+                    (click)="editar('departamentos', state, add)"
                   >
                     <i class="fas fa-edit color-info"></i> Editar</a
                   >
@@ -107,10 +106,58 @@
         </ul>
       </div>
 
-      <div class="col-lg-4 mb-3">
-        <ul
-          class="list-group list-group-flush"
-        >
+      <div class="col-lg-3 mb-3" *ngIf="countrySelected == 1">
+        <ul class="list-group list-group-flush">
+          <li
+            class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
+          >
+            <b>Municipios</b>
+            <span>
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="openModal('municipios', add)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </span>
+          </li>
+
+          <div *ngIf="!loadingState && municipalities != null; else notDataMunicipality">
+            <li
+              role="button"
+              *ngFor="let municipality of municipalities"
+              [ngClass]="{ 'border border-primary': municipality.selected }"
+              class="list-group-item d-flex justify-content-between align-items-center rounded"
+              (click)="
+                  getCitiesByMunicipality(municipality.value); selected(municipalities, municipality.value);
+              "
+            >
+              {{municipality.text}}
+              <span ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    href="javascript: void(0);"
+                    class="dropdown-item text-info waves-light caja-botones"
+                    (click)="editar('municipios', municipality, add)"
+                  >
+                    <i class="fas fa-edit color-info"></i> Editar</a
+                  >
+                </div>
+              </span>
+            </li>
+          </div>
+        </ul>
+      </div>
+
+      <div [ngClass]="{ 'col-lg-3': countrySelected == 1 , 'col-lg-4 mb-3': countrySelected != 1}">
+        <ul class="list-group list-group-flush">
           <li
             class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
           >
@@ -148,7 +195,7 @@
                   <a
                     href="javascript: void(0);"
                     class="dropdown-item text-info waves-light caja-botones"
-                    (click)="editar('ciudades', cities, add)"
+                    (click)="editar('ciudades', city, add)"
                   >
                     <i class="fas fa-edit color-info"></i> Editar</a
                   >
@@ -206,9 +253,9 @@
             </mat-select>
           </mat-form-field>
 
-          <div *ngIf="tipo == 'ciudades'">
+          <div *ngIf="tipo == 'ciudades' && countrySelected != 1">
             <mat-form-field appearance="outline" class="col-md-12">
-              <mat-label>Ciudades</mat-label>
+              <mat-label>Departamentos</mat-label>
               <mat-select
                 (selectionChange)="getStates($event.value)"
                 [(value)]="stateSelected">
@@ -220,6 +267,53 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
+          </div>
+
+          <div *ngIf="tipo == 'municipios'">
+            <mat-form-field appearance="outline" class="col-md-12">
+              <mat-label>Departamentos</mat-label>
+              <mat-select
+                (selectionChange)="getStates($event.value)"
+                [(value)]="stateSelected">
+                <mat-option
+                  *ngFor="let item of states"
+                  [(value)]="item.value"
+                  (click)="selected(states, item.value); stateSelected = item.value"
+                  >{{ item.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div *ngIf=" tipo == 'ciudades' && countrySelected == 1">
+            <mat-form-field appearance="outline" class="col-md-12">
+              <mat-label>Departamentos</mat-label>
+              <mat-select
+                (selectionChange)="getStates($event.value)"
+                [(value)]="stateSelected">
+                <mat-option
+                  *ngFor="let item of states"
+                  [(value)]="item.value"
+                  (click)="selected(states, item.value); stateSelected = item.value"
+                  >{{ item.text }}
+                </mat-option>
+              </mat-select>
+
+            </mat-form-field>
+
+            <mat-form-field  appearance="outline" class="col-md-12">
+              <mat-label>Municipios</mat-label>
+              <mat-select
+              (selectionChange)="getMunicipalities($event.value)"
+              [(value)]="municipalitySelected">
+              <mat-option
+              *ngFor="let item of municipalities"
+              [(value)]="item.value"
+              (click)="selected(municipalities, item.value)"
+              >{{ item.text }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           </div>
 
         </div><!--fin de ngId paises, departamento-->
@@ -256,7 +350,16 @@
     </button>
     <button
       *ngIf="tipo == 'departamentos'"
-      [disabled]="name == '' || !countries.length"
+      [disabled]="name == '' || countries== null"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+    <button
+      *ngIf="tipo == 'municipios'"
+      [disabled]="name == '' || states==null || countries== null"
       type="button"
       (click)="save()"
       class="btn btn-primary"
@@ -265,7 +368,7 @@
     </button>
     <button
       *ngIf="tipo == 'ciudades'"
-      [disabled]="name == '' || !states.length || !countries.length"
+      [disabled]="name == '' || states==null || countries==null"
       type="button"
       (click)="save()"
       class="btn btn-primary"
@@ -281,6 +384,10 @@
 
 <ng-template #notDataState>
   <app-not-data [loading]="loadingState"></app-not-data>
+</ng-template>
+
+<ng-template #notDataMunicipality>
+  <app-not-data [loading]="loadingMunicipality"></app-not-data>
 </ng-template>
 
 <ng-template #notDataCity>

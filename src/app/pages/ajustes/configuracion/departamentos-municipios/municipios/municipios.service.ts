@@ -13,12 +13,20 @@ export class MunicipiosService {
     return this.http.get(`${environment.base_url}/municipalities`);
   }
 
+  getAllMunicipalitiesByDepartment(state_id){
+    return this.http.get(`${environment.base_url}/municipalities/${state_id}`);
+  }
+
   getMunicipalityPaginate( params = {} ){
     return this.http.get(`${environment.base_url}/paginateMunicipality`, {params});
   }
-  
+
   createNewMunicipality(data:any){
     return this.http.post(`${environment.base_url}/municipalities`, data);
+  }
+
+  delete(municipality_id: any, data: any){
+    return this.http.post(`${environment.base_url}/${municipality_id}`, data);// 'borrado lógico '+id / hacer en el back
   }
 
 }

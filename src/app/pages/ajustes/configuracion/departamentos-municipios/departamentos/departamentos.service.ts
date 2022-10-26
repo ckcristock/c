@@ -17,7 +17,7 @@ export class DepartamentosService {
     return this.http.get(`${environment.base_url}/departments/${params}` );
   }
 
-  createNewDepartment( data ){
+  setDepartment( data ){
     return this.http.post(`${environment.base_url}/departments`, data);
   }
 

@@ -17,8 +17,8 @@ export class CiudadesService {
     return this.http.get(`${environment.base_url}/cities/${params}`);
   }
 
-  getCitiesByMunicipalityId(params){
-    return this.http.get(`${environment.base_url}/cities-by-municipalities/${params}`);
+  getCitiesByMunicipalityId(municipality_id){
+    return this.http.get(`${environment.base_url}/cities-by-municipalities/${municipality_id}`);
   }
 
   createCity( data:any ){

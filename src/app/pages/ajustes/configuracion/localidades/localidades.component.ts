@@ -5,6 +5,7 @@ import { DepartamentosService  } from "../departamentos-municipios/departamentos
 import { CiudadesService } from "../paises-ciudades/ciudades/ciudades.service";
 import { SwalService } from "../../../../pages/ajustes/informacion-base/services/swal.service";
 import { showConfirm } from 'src/app/core/utils/confirmMessage';
+import { MunicipiosService } from '../departamentos-municipios/municipios/municipios.service';
 
 @Component({
   selector: 'app-localidades',
@@ -17,47 +18,34 @@ export class LocalidadesComponent implements OnInit {
 
   countries: any[];
   states: any[];
+  municipalities: any[];
   cities: any[];
+
   loadingCountry: boolean = false;
   loadingState: boolean = false;
   loadingCity: boolean = false;
+  loadingMunicipality: boolean = false;
+
   name = ''
   tipo = ''
   id = ''
   operation = ''
-  countrySelected:any = 0;
+
+  countrySelected:any = 0; //se toma el id=1 para el país Colombia
+  municipalitySelected: any = 0;
   stateSelected:any = 0;
 
   constructor(
     private _countries: PaisesService,
     private _state: DepartamentosService,
     private _cities: CiudadesService,
+    private _municipality: MunicipiosService,
     private modalService: NgbModal,
     private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
     this.getCountries();
-  }
-
-  getCountries() {
-    //luego buscar las relaciones
-    this.loadingCountry = true;
-    this._countries.getAllCountries().subscribe((r:any) => {
-      console.log(r);
-      this.countries = r.data;
-      //this.loading = false
-      console.log(this.countries);
-      if (this.countries) {
-        this.getStates(this.countries[0].value);
-        this.countries[0].selected = true;
-      }
-      this.loadingCountry = false;
-    });
-    console.log('loading',this.loadingCity);
-    console.log(this.countries==null);
-    console.log(this.states==null);
-    console.log(this.cities==null);
   }
 
   closeResult = '';
@@ -89,16 +77,31 @@ export class LocalidadesComponent implements OnInit {
     this.id = modelo.value
   }
 
+  getCountries() {
+    this.loadingCountry = true;
+    this._countries.getAllCountries().subscribe((r:any) => {
+      this.countries = r.data;
+      if (this.countries) {
+        this.getStates(this.countries[0].value);
+        this.countries[0].selected = true;
+      }
+      this.loadingCountry = false;
+    });
+  }
+
   getStates(country_id){
     //hace la consulta de acuerdo al país seleccionado
     this.loadingState = true
     this.countrySelected = country_id
     this._state.getDepartmentById(this.countrySelected)
-      .subscribe((r:any)=>{
+    .subscribe((r:any)=>{
       if (r.status == true) {
         this.states = r.data;
-        if (this.states != null) {
+        if (this.states != null && this.countrySelected != 1) {
           this.getCities(this.states[0].value);
+          this.states[0].selected = true;
+        } else {
+          this.getMunicipalities(this.states[0].value);
           this.states[0].selected = true;
         }
       }
@@ -110,28 +113,77 @@ export class LocalidadesComponent implements OnInit {
     })
   }
 
-  getCities(state_id){
-  //hace la consulta de acuerdo al estado/departamento seleccionado
-    this.loadingCity = true;
+  getMunicipalities(state_id) {
+    this.loadingMunicipality = true;
     this.stateSelected = state_id
-    this._cities.getCitiesByStateId(this.stateSelected)
+    this._municipality.getAllMunicipalitiesByDepartment(this.stateSelected)
       .subscribe((r:any)=>{
-        if(r.status==true){
-          this.cities = r.data
-          if(this.cities){
-            this.cities[0].selected = true;
+        if (r.status == true) {
+          this.municipalities = r.data;
+          if (this.municipalities != null) {
+            this.getCitiesByMunicipality(this.states[0].value);
+            this.municipalities[0].selected = true;
           }
-        } else {
+        }
+        if (r.status == false) {
+          //this.getSwal('Error en Municipio', r.err, 'error', false);
+          this.municipalities = null;
           this.cities = null;
         }
-        this.loadingCity = false;
       })
+
+    this.loadingMunicipality = false;
+  }
+
+  getCitiesByMunicipality(municipality_id: any){
+    //hace la consulta de acuerdo al municipio seleccionado (solo si es Colombia)
+    this.loadingCity = true;
+    this.municipalitySelected = municipality_id;
+    this._cities.getCitiesByMunicipalityId(this.municipalitySelected)
+    .subscribe((r:any)=>{
+      if(r.status==true){
+        this.cities = r.data
+        if(this.cities){
+          this.cities[0].selected = true;
+        }
+      } else {
+        this.cities = null;
+      }
+      this.loadingCity = false;
+    })
+  }
+
+  getCities(state_id){
+    //hace la consulta de acuerdo al estado/departamento seleccionado
+    this.loadingCity = true;
+    this.stateSelected = state_id;
+    this._cities.getCitiesByStateId(this.stateSelected)
+    .subscribe((r:any)=>{
+      if(r.status==true){
+        this.cities = r.data
+        if(this.cities){
+          this.cities[0].selected = true;
+        }
+      } else {
+        this.cities = null;
+      }
+      this.loadingCity = false;
+    })
   }
 
   selected(model, value){
     model = model.map(m=>{
       m.selected = m.value == value ? true : false;
     })
+  }
+
+  getSwal(title, text, icon, showCancel){
+    this._swal.show({
+      title,
+      text,
+      icon,
+      showCancel
+    }, false)
   }
 
   delete(tipo, id){
@@ -147,6 +199,13 @@ export class LocalidadesComponent implements OnInit {
         this.deleteSwal.show();
       })
     }
+    if(tipo == 'municipios'){
+      let data = {'active': false};
+      this._municipality.delete(id, data).subscribe(r =>{
+        this.getMunicipalities(1)
+        this.deleteSwal.show();
+      })
+    }
     if(tipo == 'ciudades'){
       this._cities.delete(id).subscribe(r =>{
         this.getCountries()
@@ -156,24 +215,29 @@ export class LocalidadesComponent implements OnInit {
   }
 
   save() {
-    console.log(this.tipo)
-    if (this.tipo == 'paises') {
-      let selected = this.countries.find(r => r.selected == true);
-      console.warn(selected.value)
-      let params: any = { group_id: selected.value, name: this.name }
+    if (this.tipo == 'ciudades') {
+      let selected = this.states.find(r => r.selected == true);
+      let params: any = { department_id: selected.value, name: this.name }
+      if (this.countrySelected==1){
+        //si existe municipio, guardar el municipio_id
+        let selectedMun = this.municipalities.find(r => r.selected == true);
+        params.municipality_id = selectedMun.value;
+      }
       params ? params.id = this.id : ''
-      params ? params.id = this.id : ''
-
       this.saveCity(params)
     }
-    if (this.tipo == 'departamentos') {
+    if (this.tipo == 'municipios') {
       let selected = this.states.find(r => r.selected == true);
-      console.warn(selected.value)
-      let params: any = { dependency_id: selected.value, name: this.name }
+      let params: any = { department_id: selected.value, name: this.name.toUpperCase() }
+      params ? params.id = this.id : ''
+      this.saveMunicipality(params)
+    }
+    if (this.tipo == 'departamentos') {
+      let selected = this.countries.find(r => r.selected == true);
+      let params: any = { country_id: selected.value, name: this.name.toUpperCase() }
       params ? params.id = this.id : ''
       this.saveState(params)
     }
-
     if (this.tipo == 'paises') {
       let params: any = { name: this.name }
       params ? params.id = this.id : ''
@@ -182,20 +246,49 @@ export class LocalidadesComponent implements OnInit {
   }
 
   saveCountry(params) {
-    this._countries.createCountry(params).subscribe(r => {
+    this._countries.createCountry(params).subscribe((r:any) => {
+      if(r.status==false){
+        this.getSwal('Error en País', r.err, 'error', false);
+      } else {
+        this.getSwal('País agregado', r.data, 'success' ,false);
+      }
       this.getCountries()
       this.modalService.dismissAll();
     })
   }
   saveState(params) {
-    this._state.createNewDepartment(params).subscribe(r => {
-      this.getStates(params.state_id)
+    this._state.setDepartment(params).subscribe((r: any) => {
+      if(r.status==false){
+        this.getSwal('Error en Departamento', r.err, 'error', false);
+      } else {
+        this.getSwal('Departamento agregado', r.data, 'success' ,false);
+      }
+      this.getStates(params.country_id);
+      this.getSwal('Departamento/Estado agregado', r.data, 'success', false);
       this.modalService.dismissAll();
     })
   }
+  saveMunicipality(params: any){
+    this._municipality.createNewMunicipality(params). subscribe((r:any)=>{
+      if(r.status==false){
+        this.getSwal('Error en Municipio', r.err, 'error', false);
+      } else {
+        this.getSwal('Municipio agregado', r.data, 'success' ,false);
+      }
+      this.getMunicipalities(params.department_id);
+      this.getSwal('Municipio agregado', r.data, 'success', false);
+      this.modalService.dismissAll();
+    })   ////revisar que el servicio agregue y modifique al mismo tiempo
+  }
   saveCity(params) {
-    this._cities.createCity(params).subscribe(r => {
-      this.getCities(params.city_id)
+    this._cities.createCity(params).subscribe((r: any) => {
+      if(r.status==false){
+        this.getSwal('Error en Ciudad', r.err, 'error', false);
+      } else {
+        this.getSwal('Ciudad agregada', r.data, 'success' ,false);
+      }
+      this.getCities(params.department_id);
+      this.getSwal('Ciudad agregada', r.data, 'success' ,false);
       this.modalService.dismissAll();
     })
   }

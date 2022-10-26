@@ -21,9 +21,52 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <div class="alert alert-danger" role="alert">
-          Aún no tenemos filtros para esta sección.
-        </div>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Busca por nombre"
+            [(ngModel)]="filtros.nombre"
+            (input)="getRetentionTypes()"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Porcentaje</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Busca por porcentaje"
+            [(ngModel)]="filtros.porcentaje"
+            (input)="getRetentionTypes()"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Cuenta asociada</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Busca por cuenta asociada (Número de meses)"
+            [(ngModel)]="filtros.cuentaAsociada"
+            (input)="getRetentionTypes()"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-3 pl-0" appearance="outline">
+          <mat-label>Estado</mat-label>
+            <mat-select
+              matInput
+              placeholder="Busca por estado"
+              [(ngModel)]="filtros.estado"
+              (selectionChange)="getRetentionTypes()"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Activo">Activo</mat-option>
+              <mat-option value="Inactivo">Inactivo</mat-option>
+            </mat-select>
+          </mat-form-field>
       </mat-expansion-panel>
     </mat-accordion>
 
@@ -35,9 +78,9 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre Retención</th>
+            <th>Descripción</th>
             <th>Porcentaje</th>
             <th>Cuenta Asociada</th>
-            <th>Estado</th>
             <th ><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
@@ -50,9 +93,9 @@
             }"
           >
             <td class="align-middle">{{ item.name }}</td>
+            <td class="align-middle">{{ item.description }}</td>
             <td class="align-middle">{{ item.percentage }}</td>
             <td class="align-middle">{{ item.account_plan }}</td>
-            <td class="align-middle">{{ item.state }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -148,12 +191,12 @@
             matInput
             type="text"
             placeholder="Ingresa el tipo"
-            formControlName="account_plan_id"
+            formControlName="account_plan"
             (change)="getTipo()"
             [ngbTypeahead]="search"
             [resultFormatter]="resultFormatBandListValue"
             [inputFormatter]="inputFormatBandListValue"
-            [editable]="false"
+            (selectItem)="AsignarCuenta($event)"
             required
             autocomplete="off"
           />

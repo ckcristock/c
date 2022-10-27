@@ -244,9 +244,10 @@
               placeholder="Mapa de la Bodega"
               #Mapa
               class="input-file"
-              [required]="tipo == 'Crear'"
               container="body"
-            />
+              (change)="onFileChanged($event)"
+              accept=".png, .jpg, .jpeg"
+            /><!-- [required]="tipo == 'Crear'" -->
             Cargar mapa de la bodega.
           </div>
           <div class="col-md-12 text-center">

@@ -6,6 +6,7 @@ import { BodegasService } from './bodegas.service.';
 import { MatAccordion } from '@angular/material/expansion';
 import { SwalService } from '../services/swal.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 
 @Component({
   selector: 'app-bodegas',
@@ -35,6 +36,10 @@ export class BodegasComponent implements OnInit {
     collectionSize: 0
   }
   bodegas: any[] = []
+  filename: any = '';
+  fileString: any = '';
+  type: any = '';
+  file: any = '';
 
   constructor(
     private bodegaService: BodegasService,
@@ -58,7 +63,8 @@ export class BodegasComponent implements OnInit {
       direccion: ['', Validators.required],
       telefono: ['', Validators.required],
       compraInternacional: ['', Validators.required],
-      mapa: ['']
+      mapa: [''],
+      typeMapa: ['']
     });
   }
 
@@ -84,6 +90,38 @@ export class BodegasComponent implements OnInit {
     this.formBodega.reset();
   }
 
+  onFileChanged(event) {
+    if (event.target.files[0]) {
+      let file = event.target.files[0];
+      const types = ['image/png', 'image/jpg', 'image/jpeg']
+      if (!types.includes(file.type)) {
+        this._swal.show({
+          icon: 'error',
+          title: 'Error de archivo',
+          showCancel: false,
+          text: 'El tipo de archivo no es válido'
+        });
+        return null
+      }
+      this.filename = file.name;
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event) => {
+        this.fileString = (<FileReader>event.target).result;
+        const type = { ext: this.fileString };
+        this.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+      };
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.file = base64;
+        this.formBodega.patchValue({
+          mapa: this.file,
+          typeMapa: this.type
+        })
+      });
+
+    }
+  }
+
   getBodega(data) {
     this.bodega = { ...data };
     this.formBodega.patchValue({
@@ -91,7 +129,8 @@ export class BodegasComponent implements OnInit {
       nombre: this.bodega.Nombre,
       direccion: this.bodega.Direccion,
       telefono: this.bodega.Telefono,
-      compraInternacional: this.bodega.Compra_Internacional
+      compraInternacional: this.bodega.Compra_Internacional,
+      mapa: this.bodega.Mapa
     });
   }
 

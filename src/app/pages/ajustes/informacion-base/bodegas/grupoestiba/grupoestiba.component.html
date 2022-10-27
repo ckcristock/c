@@ -38,6 +38,32 @@
                   placeholder="Busca por nombre"
                 />
               </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Fecha de vencimiento?</mat-label>
+                <mat-select
+                  (selectionChange)="getGrupos()"
+                  [(ngModel)]="filtrosGrupos.Fecha_Vencimiento"
+                  matInput
+                  placeholder="Busca por fecha de vencimiento"
+                >
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option value="Si">Sí</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Presentación?</mat-label>
+                <mat-select
+                  (selectionChange)="getGrupos()"
+                  [(ngModel)]="filtrosGrupos.Presentacion"
+                  matInput
+                  placeholder="Busca por Presentación"
+                >
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option value="Si">Sí</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
@@ -50,6 +76,7 @@
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>Nombre</th>
+                <th>Fecha de vencimiento</th>
                 <th>Presentación</th>
                 <th class="col-1">Acciones</th>
               </tr>
@@ -65,10 +92,14 @@
                     id: grupo.Id_Grupo_Estiba,
                     nombre: grupo.Nombre
                   };
-                  getEstibas(grupo.Id_Grupo_Estiba)
+                  createFormEstiba();
+                  selected(grupos,grupo.Id_Grupo_Estiba);
+                  getEstibas(grupo.Id_Grupo_Estiba);
                 "
+                [ngClass]="{ 'bg-primary text-white': grupo.selected }"
               >
                 <td class="align-middle">{{ grupo.Nombre }}</td>
+                <td class="align-middle">{{ grupo.Fecha_Vencimiento }}</td>
                 <td class="align-middle">{{ grupo.Presentacion }}</td>
                 <td class="align-middle">
                   <div class="text-center">
@@ -76,6 +107,7 @@
                       <button
                         ngbDropdownToggle
                         class="btn btn-primary btn-sm waves-light"
+                        [ngClass]="{ 'bg-white text-primary': grupo.selected }"
                         type="button"
                       >
                         <i class="mdi mdi-chevron-down"></i>
@@ -96,7 +128,7 @@
             </tbody>
           </table>
         </div>
-        <ngb-pagination
+        <ngb-pagination *ngIf="pagination.grupos.collectionSize > 0"
           #paginationGrupos
           class="d-flex justify-content-center pagination-rounded pagination-sm"
           [collectionSize]="pagination.grupos.collectionSize"
@@ -146,8 +178,34 @@
                   [(ngModel)]="filtrosEstibas.Nombre"
                   (input)="getEstibas(grupoSelected.id)"
                   matInput
+                  autocomplete="off"
                   placeholder="Busca por nombre"
                 />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Código de barras</mat-label>
+                <input
+                  type="text"
+                  [(ngModel)]="filtrosEstibas.Codigo_Barras"
+                  (input)="getEstibas(grupoSelected.id)"
+                  matInput
+                  autocomplete="off"
+                  placeholder="Busca por código de barras"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Estado?</mat-label>
+                <mat-select
+                  (selectionChange)="getEstibas(grupoSelected.id)"
+                  [(ngModel)]="filtrosEstibas.Estado"
+                  matInput
+                  placeholder="Busca por Estado"
+                >
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option value="Disponible">Disponible</mat-option>
+                  <mat-option value="Inactiva">Inactiva</mat-option>
+                  <mat-option value="Inventario">Inventario</mat-option>
+                </mat-select>
               </mat-form-field>
             </div>
           </mat-expansion-panel>
@@ -204,7 +262,7 @@
             </tbody>
           </table>
         </div>
-        <ngb-pagination
+        <ngb-pagination *ngIf="pagination.estibas.collectionSize > 0"
           #paginationEstibas
           class="d-flex justify-content-center pagination-rounded pagination-sm"
           [collectionSize]="pagination.estibas.collectionSize"
@@ -227,7 +285,7 @@
   <ng-template #addGrupo let-modal>
     <div class="modal-header">
       <h4 class="text-primary modal-title">
-        {{ tituloFormulario }} Grupo de Estibas
+        {{ tituloFormulario }} grupo de estibas
       </h4>
       <button
         type="button"
@@ -244,21 +302,29 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre grupo bodega</mat-label>
-            <input
+            <input matInput
               type="text"
               formControlName="nombre"
-              matInput
               placeholder="Nombre del grupo de la bodega"
               required
+              autocomplete="off"
             />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
-            <mat-label for="Aplica_Separacion_Categorias"
-              >¿Compras internacionales?</mat-label
+            <mat-label for="Aplica_Separacion_Categorias">Fecha de vencimiento?</mat-label>
+            <mat-select
+              formControlName="fechaVencimiento"
+              placeholder="Fecha de vencimiento?"
+              required
             >
+              <mat-option value="Si">Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label for="Aplica_Separacion_Categorias">Presentación?</mat-label>
             <mat-select
               formControlName="presentacion"
-              id="Presentacion"
               placeholder="Presentación?"
               required
             >
@@ -312,6 +378,7 @@
               matInput
               placeholder="Nombre de la estiba"
               required
+              autocomplete="off"
             />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
@@ -322,6 +389,7 @@
               matInput
               placeholder="Código de barras"
               required
+              autocomplete="off"
             />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
@@ -368,6 +436,7 @@
   </ng-template>
 
   <ng-template #notDataEstibas>
-    <app-not-data [loading]="loadingEstibas"></app-not-data>
+    <app-not-data *ngIf="grupoSelected.id != 0" [loading]="loadingEstibas"></app-not-data>
+    <app-not-data *ngIf="grupoSelected.id == 0" [loading]="loadingEstibas" text="Seleccione un grupo para ver las estibas en ese grupo"></app-not-data>
   </ng-template>
 </div>

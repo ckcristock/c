@@ -45,7 +45,7 @@ export class AsistenciaComponent implements OnInit {
       this.CambiaVista();
      /*  r.data.timer = 4000; */
      /*  r.data.showConfirmButton = false; */
-      r.timer = 2500
+      r.timer = 1500
       Swal.fire(r);
     }, err => {
       this.CambiaVista();
@@ -55,7 +55,7 @@ export class AsistenciaComponent implements OnInit {
           title: 'Oops!',
           text: "Han ocurrido errores, por favor intentar más tarde",
           icon: "error",
-          timer:2000
+          timer:1500
         })
     })
 

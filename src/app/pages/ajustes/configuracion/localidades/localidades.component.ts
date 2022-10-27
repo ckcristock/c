@@ -112,7 +112,6 @@ export class LocalidadesComponent implements OnInit {
   }
 
   editar(tipo, modelo, add) {
-    console.log(modelo)
     this.name = modelo.name
     this.dian_code = modelo.dian_code
     this.dane_code = modelo.dane_code
@@ -130,7 +129,6 @@ export class LocalidadesComponent implements OnInit {
     this.loadingCountry = true;
     this._countries.getCountries(params).subscribe((r:any) => {
       this.countries = r.data.data;
-      console.log(this.countries)
       this.pagination_pais.collectionSize = r.data.total;
       if (this.countries.length > 0) {
         this.countries[0].selected = true;
@@ -151,7 +149,6 @@ export class LocalidadesComponent implements OnInit {
     this._state.getDepartmentById(this.countrySelected, params)
     .subscribe((r:any)=>{
         this.states = r.data.data;
-        console.log(this.states)
         this.pagination_depto.collectionSize = r.data.total;
         if (this.states.length > 0) {
           this.states[0].selected = true;
@@ -179,7 +176,6 @@ export class LocalidadesComponent implements OnInit {
     this._municipality.getAllMunicipalitiesByDepartment(this.stateSelected, params)
       .subscribe((r:any)=>{
         this.municipalities = r.data.data;
-        console.log(this.municipalities)
         this.pagination_muni.collectionSize = r.data.total;
         if (this.municipalities.length != 0) {
           this.municipalities[0].selected = true;
@@ -204,7 +200,6 @@ export class LocalidadesComponent implements OnInit {
     this._cities.getCitiesByMunicipalityId(this.municipalitySelected, params)
     .subscribe((r:any)=>{
         this.cities = r.data.data;
-        console.log(this.cities)
         if (r.data.total>0) {
           this.cities[0].selected = true;
         }
@@ -222,7 +217,6 @@ export class LocalidadesComponent implements OnInit {
     }
     this.loadingCity = true;
     this.stateSelected = state_id;
-    console.log(state_id)
     this._cities.getCitiesByStateId(this.stateSelected, params)
     .subscribe((r:any)=>{
       this.cities = r.data.data
@@ -291,7 +285,6 @@ export class LocalidadesComponent implements OnInit {
         params.municipality_id = selectedMun.id;
       }
       params ? params.id = this.id : ''
-      console.log(params)
       this.saveCity(params)
     }
     if (this.tipo == 'municipios') {

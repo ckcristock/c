@@ -13,8 +13,8 @@ export class DepartamentosService {
     return this.http.get(`${environment.base_url}/paginateDepartment`, {params} );
   }
 
-  getDepartmentById(params){ //busca departamentos por country_id
-    return this.http.get(`${environment.base_url}/departments/${params}` );
+  getDepartmentById(id, params){ //busca departamentos por country_id
+    return this.http.get(`${environment.base_url}/departments/${id}`, {params} );
   }
 
   setDepartment( data ){

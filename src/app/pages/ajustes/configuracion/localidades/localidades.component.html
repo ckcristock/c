@@ -5,7 +5,12 @@
     </div>
     <hr class="line" />
     <div class="row">
-      <div [ngClass]="{ 'col-lg-3': countrySelected == 1 , 'col-lg-4 mb-3': countrySelected != 1}">
+      <div
+        [ngClass]="{
+          'col-lg-3': countrySelected == 1,
+          'col-lg-4 mb-3': countrySelected != 1
+        }"
+      >
         <ul class="list-group list-group-flush">
           <li
             class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
@@ -21,18 +26,35 @@
             </span>
           </li>
 
-          <div *ngIf="!loadingCountry && countries != null; else notDataCountry" >
+          <ng-container>
+            <mat-form-field appearance="outline" class="col-12 pt-2">
+              <mat-label>Filtro</mat-label>
+              <input
+                matInput
+                type="text"
+                name="name"
+                autocomplete="off"
+                [(ngModel)]="filtro_pais.name"
+                (input)="getCountries()"
+                placeholder="Busca por país"
+              />
+            </mat-form-field>
+          </ng-container>
+
+
+          <ng-container
+            *ngIf="!loadingCountry && countries.length != 0; else notDataCountry"
+          >
             <li
               role="button"
               *ngFor="let country of countries"
               [ngClass]="{ 'border border-primary': country.selected }"
-
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="
-                getStates(country.value); selected(countries, country.value);
+                getStates(country.id); selected(countries, country.id)
               "
             >
-              {{country.text}}
+              {{ country.name }}
               <span ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -52,11 +74,29 @@
                 </div>
               </span>
             </li>
-          </div>
+          </ng-container>
+          <ngb-pagination
+            class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="pagination_pais.collectionSize"
+            [pageSize]="pagination_pais.pageSize"
+            [(page)]="pagination_pais.page"
+            (pageChange)="getCountries($event)"
+            aria-label="Default pagination"
+            maxSize="5"
+            rotate="true"
+            ellipses="false"
+            boundaryLinks="true"
+          >
+          </ngb-pagination>
         </ul>
       </div>
 
-      <div [ngClass]="{ 'col-lg-3': countrySelected == 1 , 'col-lg-4 mb-3': countrySelected != 1}">
+      <div
+        [ngClass]="{
+          'col-lg-3': countrySelected == 1,
+          'col-lg-4 mb-3': countrySelected != 1
+        }"
+      >
         <ul class="list-group list-group-flush">
           <li
             class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
@@ -72,17 +112,35 @@
             </span>
           </li>
 
-          <div *ngIf="!loadingState && states != null; else notDataState">
+          <ng-container>
+            <mat-form-field appearance="outline" class="col-12 pt-2">
+              <mat-label>Filtro</mat-label>
+              <input
+                matInput
+                type="text"
+                name="name"
+                autocomplete="off"
+                [(ngModel)]="filtro_depto.name"
+                (input)="getStates(countrySelected)"
+                placeholder="Busca por país"
+              />
+            </mat-form-field>
+          </ng-container>
+
+          <ng-container *ngIf="!loadingState && states.length != 0; else notDataState">
             <li
               role="button"
               *ngFor="let state of states"
               [ngClass]="{ 'border border-primary': state.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
-              (click)=" (coutrySelected == 1) ? getCities(state.value) : getMunicipalities(state.value);
-                       selected(states, state.value);
+              (click)="
+                countrySelected == 1
+                  ? getMunicipalities(state.id)
+                  : getCities(state.id);
+                selected(states, state.id)
               "
             >
-              {{state.text}}
+              {{ state.name }}
               <span ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -102,7 +160,20 @@
                 </div>
               </span>
             </li>
-          </div>
+          </ng-container>
+          <ngb-pagination
+            class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="pagination_depto.collectionSize"
+            [pageSize]="pagination_depto.pageSize"
+            [(page)]="pagination_depto.page"
+            (pageChange)="getStates(countrySelected, $event)"
+            aria-label="Default pagination"
+            maxSize="5"
+            rotate="true"
+            ellipses="false"
+            boundaryLinks="true"
+          >
+          </ngb-pagination>
         </ul>
       </div>
 
@@ -121,18 +192,38 @@
               </button>
             </span>
           </li>
+          <ng-container>
+            <mat-form-field appearance="outline" class="col-12 pt-2">
+              <mat-label>Filtro</mat-label>
+              <input
+                matInput
+                type="text"
+                name="name"
+                autocomplete="off"
+                [(ngModel)]="filtro_muni.name"
+                (input)="getMunicipalities(stateSelected)"
+                placeholder="Busca por municipios"
+              />
+            </mat-form-field>
+          </ng-container>
 
-          <div *ngIf="!loadingState && municipalities != null; else notDataMunicipality">
+          <ng-container
+            *ngIf="
+              !loadingMunicipality && municipalities.length != 0;
+              else notDataMunicipality
+            "
+          >
             <li
               role="button"
               *ngFor="let municipality of municipalities"
               [ngClass]="{ 'border border-primary': municipality.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="
-                  getCitiesByMunicipality(municipality.value); selected(municipalities, municipality.value);
+                getCitiesByMunicipality(municipality.id);
+                selected(municipalities, municipality.id)
               "
             >
-              {{municipality.text}}
+              {{ municipality.name }}
               <span ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -152,11 +243,29 @@
                 </div>
               </span>
             </li>
-          </div>
+          </ng-container>
+          <ngb-pagination
+            class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="pagination_muni.collectionSize"
+            [pageSize]="pagination_muni.pageSize"
+            [(page)]="pagination_muni.page"
+            (pageChange)="getMunicipalities(stateSelected, $event)"
+            aria-label="Default pagination"
+            maxSize="5"
+            rotate="true"
+            ellipses="false"
+            boundaryLinks="true"
+          >
+          </ngb-pagination>
         </ul>
       </div>
 
-      <div [ngClass]="{ 'col-lg-3': countrySelected == 1 , 'col-lg-4 mb-3': countrySelected != 1}">
+      <div
+        [ngClass]="{
+          'col-lg-3': countrySelected == 1,
+          'col-lg-4 mb-3': countrySelected != 1
+        }"
+      >
         <ul class="list-group list-group-flush">
           <li
             class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
@@ -172,17 +281,29 @@
             </span>
           </li>
 
-          <div *ngIf="!loadingCity && cities != null; else notDataCity">
+          <ng-container>
+            <mat-form-field appearance="outline" class="col-12 pt-2">
+              <mat-label>Filtro</mat-label>
+              <input
+                matInput
+                type="text"
+                name="name"
+                autocomplete="off"
+                [(ngModel)]="filtro_ciud.name"
+                (input)="countrySelected==1 ? getCitiesByMunicipality(municipalitySelected) : getCities(stateSelected)"
+                placeholder="Busca por país"
+              />
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="!loadingCity && cities.length != 0; else notDataCity">
             <li
               role="button"
               *ngFor="let city of cities"
               [ngClass]="{ 'border border-primary': city.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
-              (click)="
-                selected(cities, city.value);
-              "
+              (click)="selected(cities, city.id)"
             >
-              {{city.text}}
+              {{ city.name }}
               <span ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -202,7 +323,20 @@
                 </div>
               </span>
             </li>
-          </div>
+          </ng-container>
+          <ngb-pagination
+            class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="pagination_ciud.collectionSize"
+            [pageSize]="pagination_ciud.pageSize"
+            [(page)]="pagination_ciud.page"
+            (pageChange)="countrySelected==1 ? getCitiesByMunicipality(municipalitySelected, $event) : getCities(stateSelected, $event)"
+            aria-label="Default pagination"
+            maxSize="5"
+            rotate="true"
+            ellipses="false"
+            boundaryLinks="true"
+          >
+          </ngb-pagination>
         </ul>
       </div>
     </div>
@@ -235,7 +369,6 @@
   </div>
   <div class="modal-body">
     <form changeForm="ngForm">
-
       <div class="row mt-3">
         <div *ngIf="tipo != 'paises'" class="col-md-12 px-0">
           <mat-form-field appearance="outline" class="col-md-12">
@@ -246,11 +379,23 @@
             >
               <mat-option
                 *ngFor="let item of countries"
-                [value]="item.value"
-                (click)="selected(countries, item.value)"
-                >{{ item.text }}</mat-option
+                [value]="item.id"
+                (click)="selected(countries, item.id)"
+                >{{ item.name }}</mat-option
               >
             </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Codigo DANE</mat-label>
+            <input
+              matInput
+              type="text"
+              name="dane_code"
+              autocomplete="off"
+              [(ngModel)]="dane_code"
+              placeholder="Ingrese el codigo DANE"
+            />
           </mat-form-field>
 
           <div *ngIf="tipo == 'ciudades' && countrySelected != 1">
@@ -258,12 +403,13 @@
               <mat-label>Departamentos</mat-label>
               <mat-select
                 (selectionChange)="getStates($event.value)"
-                [(value)]="stateSelected">
+                [(value)]="stateSelected"
+              >
                 <mat-option
                   *ngFor="let item of states"
-                  [(value)]="item.value"
-                  (click)="selected(states, item.value)"
-                  >{{ item.text }}
+                  [(value)]="item.id"
+                  (click)="selected(states, item.id)"
+                  >{{ item.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -274,49 +420,67 @@
               <mat-label>Departamentos</mat-label>
               <mat-select
                 (selectionChange)="getStates($event.value)"
-                [(value)]="stateSelected">
+                [(value)]="stateSelected"
+              >
                 <mat-option
                   *ngFor="let item of states"
-                  [(value)]="item.value"
-                  (click)="selected(states, item.value); stateSelected = item.value"
-                  >{{ item.text }}
+                  [(value)]="item.id"
+                  (click)="
+                    selected(states, item.id); stateSelected = item.id
+                  "
+                  >{{ item.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
-          <div *ngIf=" tipo == 'ciudades' && countrySelected == 1">
+          <div *ngIf="tipo == 'ciudades' && countrySelected == 1">
             <mat-form-field appearance="outline" class="col-md-12">
               <mat-label>Departamentos</mat-label>
               <mat-select
                 (selectionChange)="getStates($event.value)"
-                [(value)]="stateSelected">
+                [(value)]="stateSelected"
+              >
                 <mat-option
                   *ngFor="let item of states"
-                  [(value)]="item.value"
-                  (click)="selected(states, item.value); stateSelected = item.value"
-                  >{{ item.text }}
+                  [(value)]="item.id"
+                  (click)="
+                    selected(states, item.id); stateSelected = item.id
+                  "
+                  >{{ item.name }}
                 </mat-option>
               </mat-select>
-
             </mat-form-field>
 
-            <mat-form-field  appearance="outline" class="col-md-12">
+            <mat-form-field appearance="outline" class="col-md-12">
               <mat-label>Municipios</mat-label>
               <mat-select
-              (selectionChange)="getMunicipalities($event.value)"
-              [(value)]="municipalitySelected">
-              <mat-option
-              *ngFor="let item of municipalities"
-              [(value)]="item.value"
-              (click)="selected(municipalities, item.value)"
-              >{{ item.text }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+                (selectionChange)="getMunicipalities($event.value)"
+                [(value)]="municipalitySelected"
+              >
+                <mat-option
+                  *ngFor="let item of municipalities"
+                  [(value)]="item.id"
+                  (click)="selected(municipalities, item.id)"
+                  >{{ item.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
+        </div>
+        <!--fin de ngId paises, departamento-->
 
-        </div><!--fin de ngId paises, departamento-->
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Codigo DIAN</mat-label>
+          <input
+            matInput
+            type="text"
+            name="dian_code"
+            autocomplete="off"
+            [(ngModel)]="dian_code"
+            placeholder="Ingrese el codigo DIAN"
+          />
+        </mat-form-field>
         <mat-form-field class="col-md-12" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
@@ -328,6 +492,7 @@
             placeholder="Ingrese el nombre"
           />
         </mat-form-field>
+
       </div>
     </form>
   </div>
@@ -350,7 +515,7 @@
     </button>
     <button
       *ngIf="tipo == 'departamentos'"
-      [disabled]="name == '' || countries== null"
+      [disabled]="name == '' || countries.length == 0"
       type="button"
       (click)="save()"
       class="btn btn-primary"
@@ -359,7 +524,7 @@
     </button>
     <button
       *ngIf="tipo == 'municipios'"
-      [disabled]="name == '' || states==null || countries== null"
+      [disabled]="name == '' || states.length == 0 || countries.length == 0"
       type="button"
       (click)="save()"
       class="btn btn-primary"
@@ -368,7 +533,7 @@
     </button>
     <button
       *ngIf="tipo == 'ciudades'"
-      [disabled]="name == '' || states==null || countries==null"
+      [disabled]="name == '' || states.length == 0 || countries.length == 0"
       type="button"
       (click)="save()"
       class="btn btn-primary"
@@ -393,4 +558,3 @@
 <ng-template #notDataCity>
   <app-not-data [loading]="loadingCity"></app-not-data>
 </ng-template>
-

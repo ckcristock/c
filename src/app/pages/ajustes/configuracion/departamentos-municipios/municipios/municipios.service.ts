@@ -13,8 +13,8 @@ export class MunicipiosService {
     return this.http.get(`${environment.base_url}/municipalities`);
   }
 
-  getAllMunicipalitiesByDepartment(state_id){
-    return this.http.get(`${environment.base_url}/municipalities/${state_id}`);
+  getAllMunicipalitiesByDepartment(state_id, params){
+    return this.http.get(`${environment.base_url}/municipalities/${state_id}`, {params});
   }
 
   getMunicipalityPaginate( params = {} ){

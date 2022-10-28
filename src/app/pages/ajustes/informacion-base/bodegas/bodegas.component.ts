@@ -7,6 +7,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { SwalService } from '../services/swal.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-bodegas',
@@ -44,7 +45,7 @@ export class BodegasComponent implements OnInit {
   constructor(
     private bodegaService: BodegasService,
     private _swal: SwalService,
-    private modalService: NgbModal,
+    private _modal: ModalService,
     private fb: FormBuilder
   ) {
 
@@ -53,7 +54,6 @@ export class BodegasComponent implements OnInit {
   ngOnInit(): void {
     this.getBodegas();
     this.createForm();
-
   }
 
   createForm() {
@@ -80,14 +80,12 @@ export class BodegasComponent implements OnInit {
 
   public openConfirm(confirm, titulo) {
     this.selected = titulo;
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    this._modal.open( confirm,'md', () => {
+      this.formBodega.reset();
+      this.file="";
+      this.type="";
+      this.bodega = this.formBodega.value;
     });
-  }
-  private getDismissReason(reason: any) {
-    this.formBodega.reset();
   }
 
   onFileChanged(event) {
@@ -137,8 +135,8 @@ export class BodegasComponent implements OnInit {
   createBodega() {
     this.bodegaService.createBodega(this.formBodega.value)
       .subscribe((res: any) => {
-        this.getBodegas();
-        this.modalService.dismissAll();
+        this.getBodegas(this.pagination.page);
+        this._modal.close();
         this._swal.show({
           icon: 'success',
           title: res.data,
@@ -149,7 +147,7 @@ export class BodegasComponent implements OnInit {
       }, err => {
         this._swal.show({
           title: 'ERROR',
-          text: 'Aún no puedes editar una bodega con el mismo código, estamos trabajando en esto.',
+          text: err.error.text,
           icon: 'error',
           showCancel: false,
         })
@@ -184,7 +182,7 @@ export class BodegasComponent implements OnInit {
     .then((result) => {
       if (result.isConfirmed) {
         this.bodegaService.activarInactivar(data).subscribe((r: any) => {
-          this.getBodegas();
+          this.getBodegas(this.pagination.page);
         })
         this._swal.show({
           icon: 'success',

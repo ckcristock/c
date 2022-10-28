@@ -229,9 +229,9 @@ export class GrupoestibaComponent implements OnInit {
     this._bodegas.getBodega(this.id).subscribe((res: any) => {
       this.bodega = res.data;
       this.alertOptionMapa = {
-        title: "Mapa de la Bodega " + this.bodega.Nombre,
+        title: "Mapa de la bodega " + this.bodega.Nombre,
         text: "Ubicación de las Estibas",
-        imageUrl: res.data.map,
+        imageUrl: res.data.Mapa,
         imageWidth: 700,
         width: 800,
       }
@@ -247,7 +247,6 @@ export class GrupoestibaComponent implements OnInit {
       fechaVencimiento: this.dataFormGrupo.Fecha_Vencimiento,
       presentacion: this.dataFormGrupo.Presentacion
     });
-    console.log(this.formGrupo.value);
   }
 
   getEstiba(data) {
@@ -260,7 +259,6 @@ export class GrupoestibaComponent implements OnInit {
       codigoBarras: this.dataFormEstiba.Codigo_Barras,
       estado: this.dataFormEstiba.Estado
     });
-    console.log(this.formEstiba.value);
   }
 
   getGrupos(page = 1) {

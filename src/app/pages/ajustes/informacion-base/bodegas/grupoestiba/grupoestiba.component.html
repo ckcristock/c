@@ -9,7 +9,9 @@
           </div>
           <div class="col-md-6 px-0 text-right">
             <div class="btn-group rounded w-sm-100">
-              <button class="btn btn-sm btn-secondary m-0">
+              <button class="btn btn-sm btn-warning m-0"
+                (click)="openConfirm(mapaBodega, alertOptionMapa.title)"
+              >
                 <i class="fa fa-map"></i> Ver mapa
               </button><!-- (click)="mapaBodega.show()" -->
               <button
@@ -96,7 +98,7 @@
                   selected(grupos,grupo.Id_Grupo_Estiba);
                   getEstibas(grupo.Id_Grupo_Estiba);
                 "
-                [ngClass]="{ 'bg-primary text-white': grupo.selected }"
+                [ngClass]="{ 'bg-secondary text-white': grupo.selected }"
               >
                 <td class="align-middle">{{ grupo.Nombre }}</td>
                 <td class="align-middle">{{ grupo.Fecha_Vencimiento }}</td>
@@ -107,9 +109,9 @@
                       <button
                         ngbDropdownToggle
                         class="btn btn-primary btn-sm waves-light"
-                        [ngClass]="{ 'bg-white text-primary': grupo.selected }"
+
                         type="button"
-                      >
+                      ><!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
                         <i class="mdi mdi-chevron-down"></i>
                       </button>
                       <div ngbDropdownMenu>
@@ -426,6 +428,29 @@
       >
         Guardar
       </button>
+    </div>
+  </ng-template>
+
+  <ng-template #mapaBodega let-modal>
+    <div class="modal-header">
+      <h4 class="text-primary modal-title">
+        {{ tituloFormulario }}
+      </h4>
+    </div>
+    <div class="modal-body">
+      <!-- <img [src]="alertOptionMapa.imageUrl" alt="" srcset=""> -->
+      <div class="bg-image"
+          style="background-image: url('{{alertOptionMapa.imageUrl}}'); height: 50vh;
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center center;"></div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.dismiss('Cross click')"
+      >Cerrar</button>
     </div>
   </ng-template>
 

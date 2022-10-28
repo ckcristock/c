@@ -113,7 +113,7 @@
                       <i class="far fa-edit"></i> Editar</a
                     >
                     <a
-                      class="dropdown-item waves-light caja-botones text-success"
+                      class="dropdown-item waves-light waves-effect caja-botones"
                       [routerLink]="[
                         'grupoestiba',
                         bodega.Id_Bodega_Nuevo
@@ -126,7 +126,7 @@
                         'text-danger': bodega.Estado == 'Activo',
                         'text-success': bodega.Estado == 'Inactivo'
                       }"
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item waves-light caja-botones text-success"
                       (click)="
                         cambiarEstado(
                           bodega,
@@ -248,7 +248,7 @@
               (change)="onFileChanged($event)"
               accept=".png, .jpg, .jpeg"
             /><!-- [required]="tipo == 'Crear'" -->
-            Cargar mapa de la bodega.
+            Cargar <span *ngIf="bodega.Mapa">nuevo</span> mapa de la bodega.
           </div>
           <div class="col-md-12 text-center">
             <small *ngIf="file" class="text-success">Documento cargado</small>
@@ -275,7 +275,9 @@
     </button>
   </div>
 </ng-template>
-<swal #deleteSwal title="" text="" type=""> </swal>
+
+<!-- <swal #deleteSwal title="" text="" type=""> </swal> -->
+
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

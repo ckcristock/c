@@ -6,16 +6,21 @@
         <td class="d-flex justify-content-end">
           <mat-form-field class="pb-0" appearance="outline">
             <input
-              matInput
-              type="number"
-              [value]="extra.percentage"
-              autocomplete="off"
+            matInput
+            #percentage
+            type="number"
+            [value]="extra.percentage"
+            step="0.01"
+            min="0"
+            name="percentage"
+            id="percentage"
+            autocomplete="off"
             />
             <button
               mat-icon-button
               color="primary"
               matSuffix
-              (click)="actualiza(extra)"
+              (click)="actualizar(extra, percentage.value)"
               [attr.aria-label]="'Actualizar'"
             >
               <mat-icon>check</mat-icon>
@@ -26,4 +31,3 @@
     </tbody>
   </table>
 </div>
-  

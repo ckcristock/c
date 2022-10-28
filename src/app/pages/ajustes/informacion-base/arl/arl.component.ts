@@ -26,6 +26,7 @@ export class ArlComponent implements OnInit {
   }
   @ViewChild('modal') modal: any;
   loading: boolean = false;
+  boolNuevaArl: boolean;
   selected: any;
   arls: any[] = [];
   private arl: any = {};
@@ -51,7 +52,8 @@ export class ArlComponent implements OnInit {
     this.createForm();
   }
   closeResult = '';
-  public openConfirm(confirm, titulo) {
+  public openConfirm(confirm, titulo, nuevaArl) {
+    this.boolNuevaArl = nuevaArl;
     this.selected = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -61,7 +63,7 @@ export class ArlComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   openModal() {
@@ -132,7 +134,16 @@ export class ArlComponent implements OnInit {
   }
 
   createArl() {
-    this._arlService.createArl(this.form.value)
+    let data = {};
+    if(this.boolNuevaArl){
+      data = this.form.value
+    } else {
+      data = {
+        id: this.form.get("id").value,
+        name: this.form.get("name").value
+      }
+    }
+    this._arlService.createArl(data)
       .subscribe((res: any) => {
         this.getArls();
         this.modalService.dismissAll();
@@ -146,7 +157,7 @@ export class ArlComponent implements OnInit {
       }, err => {
         this._swal.show({
           title: 'ERROR',
-          text: 'Aún no puedes editar una ARL con el mismo código o NIT, estamos trabajando en esto.',
+          text: err?.error.errors.nit[0],
           icon: 'error',
           showCancel: false,
         })

@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo fondo de pensión')"
+            (click)="openConfirm(add, 'Nuevo fondo de pensión', true)"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -76,7 +76,7 @@
                     href="javascript: void(0);"
                     (click)="
                       getData(pension);
-                      openConfirm(add, 'Actualizar fondo de pensión')
+                      openConfirm(add, 'Actualizar fondo de pensión', false)
                     "
                     ><i class="far fa-edit"></i> Editar</a
                   >
@@ -149,7 +149,7 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col-md-6" appearance="outline">
+        <mat-form-field class="col-md-6" *ngIf="boolNuevoFondo" appearance="outline">
           <mat-label>Código</mat-label>
           <input
             matInput
@@ -160,7 +160,7 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col-md-6" appearance="outline">
+        <mat-form-field class="col-md-6" *ngIf="boolNuevoFondo" appearance="outline">
           <mat-label>NIT</mat-label>
           <input
             matInput

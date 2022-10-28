@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nueva ARL')"
+            (click)="openConfirm(add, 'Nueva ARL', true)"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -41,7 +41,7 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
+
         *ngIf="!loading && arls.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -76,7 +76,7 @@
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
                     href="javascript: void(0);"
-                    (click)="getData(arl); openConfirm(add, 'Actualizar ARL')"
+                    (click)="getData(arl); openConfirm(add, 'Actualizar ARL', false)"
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
@@ -136,7 +136,9 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <mat-form-field class="col-md-6" appearance="outline">
+        <mat-form-field
+          [ngClass]="{ 'col-md-6':boolNuevaArl , 'col-md-12':!boolNuevaArl }"
+          appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
             matInput
@@ -145,9 +147,9 @@
             formControlName="name"
             required
           />
-          <mat-error *ngIf="name_invalid">Campo obligatorio</mat-error>
+          <mat-error *ngIf="name_invalid ">Campo obligatorio</mat-error>
         </mat-form-field>
-        <mat-form-field class="col-md-3" appearance="outline">
+        <mat-form-field class="col-md-3" *ngIf="boolNuevaArl" appearance="outline">
           <mat-label>Código</mat-label>
           <input
             matInput
@@ -160,7 +162,7 @@
             >Campo obligatorio</mat-error
           >
         </mat-form-field>
-        <mat-form-field class="col-md-3" appearance="outline">
+        <mat-form-field class="col-md-3"  *ngIf="boolNuevaArl" appearance="outline">
           <mat-label>NIT</mat-label>
           <input
             matInput

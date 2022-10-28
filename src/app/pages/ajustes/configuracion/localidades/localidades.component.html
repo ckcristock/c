@@ -386,18 +386,6 @@
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field class="col-md-12" appearance="outline">
-            <mat-label>Codigo DANE</mat-label>
-            <input
-              matInput
-              type="text"
-              name="dane_code"
-              autocomplete="off"
-              [(ngModel)]="dane_code"
-              placeholder="Ingrese el codigo DANE"
-            />
-          </mat-form-field>
-
           <div *ngIf="tipo == 'ciudades' && countrySelected != 1">
             <mat-form-field appearance="outline" class="col-md-12">
               <mat-label>Departamentos</mat-label>
@@ -467,6 +455,20 @@
               </mat-select>
             </mat-form-field>
           </div>
+
+          <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Codigo DANE</mat-label>
+            <input
+              matInput
+              type="text"
+              name="dane_code"
+              autocomplete="off"
+              [(ngModel)]="dane_code"
+              placeholder="Ingrese el codigo DANE"
+            />
+          </mat-form-field>
+
+
         </div>
         <!--fin de ngId paises, departamento-->
 

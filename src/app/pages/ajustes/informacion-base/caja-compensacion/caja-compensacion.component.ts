@@ -27,6 +27,7 @@ export class CajaCompensacionComponent implements OnInit {
     }
   }
   loading: boolean = false;
+  boolNuevaCaja: boolean;
   selected: any;
   compensations: any[] = [];
   compensation: any = {};
@@ -56,7 +57,8 @@ export class CajaCompensacionComponent implements OnInit {
     this.form.reset();
   }
   closeResult = '';
-  public openConfirm(confirm, titulo) {
+  public openConfirm(confirm, titulo, nuevaCaja) {
+    this.boolNuevaCaja = nuevaCaja
     this.selected = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -66,7 +68,7 @@ export class CajaCompensacionComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   getData(data) {
@@ -132,8 +134,16 @@ export class CajaCompensacionComponent implements OnInit {
   }
 
   createCompensationFund() {
-
-    this._compensationService.createCompensationFund(this.form.value)
+    let data = {};
+    if(this.boolNuevaCaja){
+      data = this.form.value
+    } else {
+      data = {
+        id: this.form.get("id").value,
+        name: this.form.get("name").value
+      }
+    }
+    this._compensationService.createCompensationFund(data)
       .subscribe((res: any) => {
         this.modalService.dismissAll();
         this.getCompensationFunds();
@@ -146,9 +156,12 @@ export class CajaCompensacionComponent implements OnInit {
         })
       },
         err => {
+          const nit = err?.error.errors.hasOwnProperty('nit') ? err?.error.errors.nit[0] : ' ';
+          const code = err?.error.errors.hasOwnProperty('code') ? err?.error.errors.code[0] : ' ';
+          const texto = nit +' \n '+code
           this._swal.show({
             title: 'ERROR',
-            text: 'Aún no puedes editar una caja de compensación con el mismo código o NIT, estamos trabajando en esto.',
+            text: texto,
             icon: 'error',
             showCancel: false,
           })

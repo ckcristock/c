@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo fondo de cesantías')"
+            (click)="openConfirm(add, 'Nuevo fondo de cesantías', true)"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -74,7 +74,7 @@
                     href="javascript: void(0);"
                     (click)="
                       getSeverance(severance);
-                      openConfirm(add, 'Actualizar fondo de cesantías')
+                      openConfirm(add, 'Actualizar fondo de cesantías', false)
                     "
                     ><i class="far fa-edit"></i> Editar</a
                   >
@@ -147,7 +147,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col" *ngIf="boolNuevoFondo" appearance="outline">
           <mat-label>NIT</mat-label>
           <input
             matInput

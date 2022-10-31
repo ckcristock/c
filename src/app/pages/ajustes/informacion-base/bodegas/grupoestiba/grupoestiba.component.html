@@ -13,10 +13,10 @@
                 (click)="openConfirm(mapaBodega, alertOptionMapa.title)"
               >
                 <i class="fa fa-map"></i> Ver mapa
-              </button><!-- (click)="mapaBodega.show()" -->
+              </button>
               <button
                 class="btn btn-sm btn-primary"
-                (click)="openConfirm(addGrupo, 'Agregar')"
+                (click)="openConfirm(addGrupo, 'Agregar', 'grupo')"
               >
                 <i class="fa fa-plus"></i> Agregar
               </button>
@@ -37,6 +37,7 @@
                   [(ngModel)]="filtrosGrupos.Nombre"
                   (input)="getGrupos()"
                   matInput
+                  autocomplete="off"
                   placeholder="Busca por nombre"
                 />
               </mat-form-field>
@@ -98,7 +99,11 @@
                   selected(grupos,grupo.Id_Grupo_Estiba);
                   getEstibas(grupo.Id_Grupo_Estiba);
                 "
-                [ngClass]="{ 'bg-secondary text-white': grupo.selected }"
+                [ngClass]="
+                  (grupo.selected && grupo.Estado === 'Activo')?'bg-secondary text-white font-weight-bold':
+                  (grupo.selected && grupo.Estado === 'Inactivo')?'bg-danger text-white font-weight-bold':
+                  (!grupo.selected && grupo.Estado === 'Inactivo')?'text-danger font-weight-bold ':''
+                "
               >
                 <td class="align-middle">{{ grupo.Nombre }}</td>
                 <td class="align-middle">{{ grupo.Fecha_Vencimiento }}</td>
@@ -116,12 +121,31 @@
                       </button>
                       <div ngbDropdownMenu>
                         <a
+                          role="button"
                           class="dropdown-item waves-light caja-botones text-info"
                           href="javascript: void(0);"
-                          (click)="openConfirm(addGrupo, 'Editar'); getGrupo(grupo)"
+                          (click)="openConfirm(addGrupo, 'Editar', 'grupo'); getGrupo(grupo)"
                         >
                           <i class="far fa-edit"></i> Editar</a
                         >
+                        <a
+                          role="button"
+                          [ngClass]="{
+                            'text-danger': grupo.Estado == 'Activo',
+                            'text-success': grupo.Estado == 'Inactivo'
+                          }"
+                          class="dropdown-item waves-light caja-botones text-success"
+                          (click)=" cambiarEstado(grupo, grupo.Estado == 'Activo' ? 'Inactivo' : 'Activo')"
+                        >
+                          <i
+                            class="fas"
+                            [ngClass]="{
+                              'fa-trash-alt': grupo.Estado == 'Activo',
+                              'fa-check': grupo.Estado == 'Inactivo'
+                            }"
+                          ></i>
+                          {{ grupo.Estado == "Activo" ? " Inactivar" : " Activar" }}
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -155,11 +179,11 @@
           <div class="col-md-6 px-0">
             <h4 class="text-primary">Estibas</h4>
           </div>
-          <div class="col-md-6 px-0 text-right">
+          <div class="col-md-6 px-0 text-right" *ngIf="grupoSelected.id != null">
             <div class="btn-group rounded w-sm-100">
               <button
                 class="btn btn-sm btn-primary"
-                (click)="openConfirm(addEstiba, 'Agregar')"
+                (click)="openConfirm(addEstiba, 'Agregar', 'estiba')"
               >
                 <i class="fa fa-plus"></i> Agregar
               </button>
@@ -231,6 +255,9 @@
                 role="button"
                 class="text-center"
                 *ngFor="let estiba of estibas"
+                [ngClass]="{
+                  'text-danger font-weight-bold': estiba.Estado == 'Inactivo'
+                }"
               >
                 <td class="align-middle">{{ estiba.Nombre }}</td>
                 <td class="align-middle">{{ estiba.Codigo_Barras }}</td>
@@ -247,12 +274,11 @@
                       </button>
                       <div ngbDropdownMenu>
                         <a
+                          role="button"
                           class="dropdown-item waves-light caja-botones text-info"
                           href="javascript: void(0);"
                           (click)="
-                            openConfirm(addEstiba, 'Editar');
-                            getEstiba(estiba)
-                          "
+                            openConfirm(addEstiba, 'Editar', 'estiba'); getEstiba(estiba);"
                         >
                           <i class="far fa-edit"></i> Editar</a
                         >
@@ -294,7 +320,7 @@
         class="close"
         data-dismiss="modal"
         aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
+        (click)="_modal.close()"
       >
         <span aria-hidden="true">&times;</span>
       </button>
@@ -308,8 +334,8 @@
               type="text"
               formControlName="nombre"
               placeholder="Nombre del grupo de la bodega"
-              required
               autocomplete="off"
+              required
             />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
@@ -341,7 +367,7 @@
       <button
         type="button"
         class="btn btn-danger"
-        (click)="modal.dismiss('Cross click')"
+        (click)="_modal.close()"
       >
         Cancelar
       </button>
@@ -364,7 +390,7 @@
         class="close"
         data-dismiss="modal"
         aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
+        (click)="_modal.close()"
       >
         <span aria-hidden="true">&times;</span>
       </button>
@@ -416,7 +442,7 @@
       <button
         type="button"
         class="btn btn-danger"
-        (click)="modal.dismiss('Cross click')"
+        (click)="_modal.close()"
       >
         Cancelar
       </button>
@@ -438,18 +464,13 @@
       </h4>
     </div>
     <div class="modal-body">
-      <!-- <img [src]="alertOptionMapa.imageUrl" alt="" srcset=""> -->
-      <div class="bg-image"
-          style="background-image: url('{{alertOptionMapa.imageUrl}}'); height: 50vh;
-          background-repeat: no-repeat;
-          background-size: contain;
-          background-position: center center;"></div>
+      <img [src]="alertOptionMapa.imageUrl" alt="" class=" w-100 h-100">
     </div>
     <div class="modal-footer">
       <button
         type="button"
         class="btn btn-danger"
-        (click)="modal.dismiss('Cross click')"
+        (click)="_modal.close()"
       >Cerrar</button>
     </div>
   </ng-template>
@@ -461,7 +482,7 @@
   </ng-template>
 
   <ng-template #notDataEstibas>
-    <app-not-data *ngIf="grupoSelected.id != 0" [loading]="loadingEstibas"></app-not-data>
-    <app-not-data *ngIf="grupoSelected.id == 0" [loading]="loadingEstibas" text="Seleccione un grupo para ver las estibas en ese grupo"></app-not-data>
+    <app-not-data *ngIf="grupoSelected.id != null" [loading]="loadingEstibas"></app-not-data>
+    <app-not-data *ngIf="grupoSelected.id == null" text="Seleccione un grupo para ver las estibas en ese grupo"></app-not-data>
   </ng-template>
 </div>

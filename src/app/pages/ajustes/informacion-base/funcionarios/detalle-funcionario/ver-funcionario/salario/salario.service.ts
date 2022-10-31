@@ -12,6 +12,9 @@ export class SalarioService {
   getSalaryInfo(id){
     return this.http.get(`${environment.base_url}/salary/${id}`);
   }
+  getSalaryHistory(id){
+    return this.http.get(`${environment.base_url}/salary-history/${id}`);
+  }
 
   updateSalaryInfo(data){
     return this.http.post(`${environment.base_url}/salary`, data);

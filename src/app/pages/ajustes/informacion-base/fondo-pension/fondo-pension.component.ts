@@ -29,6 +29,7 @@ export class FondoPensionComponent implements OnInit {
   loading: boolean = false;
   boolNuevoFondo: boolean;
   selected: any;
+  boolNuevoFondo: boolean;
   pensions: any[] = [];
   pension: any = {};
   pagination: any = {
@@ -59,7 +60,7 @@ export class FondoPensionComponent implements OnInit {
 
   }
   closeResult = '';
-  public openConfirm(confirm, titulo, nuevoFondo) {
+  public openConfirm(confirm, titulo,nuevoFondo) {
     this.boolNuevoFondo = nuevoFondo;
     this.selected = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
@@ -139,12 +140,11 @@ export class FondoPensionComponent implements OnInit {
   createPensionFund() {
     let data = {};
     if(this.boolNuevoFondo){
-      data = this.form.value
-    } else {
+      data = this.form.value;
+    }else{
       data = {
         id: this.form.get("id").value,
-        name: this.form.get("name").value
-      }
+        name: this.form.get("name").value      }
     }
     this._fondoPensionService.createPensionFund(data)
       .subscribe((res: any) => {

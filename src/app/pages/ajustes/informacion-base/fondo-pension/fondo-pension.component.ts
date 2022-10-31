@@ -29,7 +29,6 @@ export class FondoPensionComponent implements OnInit {
   loading: boolean = false;
   boolNuevoFondo: boolean;
   selected: any;
-  boolNuevoFondo: boolean;
   pensions: any[] = [];
   pension: any = {};
   pagination: any = {

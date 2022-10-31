@@ -37,7 +37,7 @@ export class DatosPilaComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
 
   openModal() {
@@ -66,7 +66,6 @@ export class DatosPilaComponent implements OnInit {
     this._configuracionEmpresaService.getCompanyData()
       .subscribe((res: any) => {
         this.pilas = res.data;
-        console.log(this.pilas)
         this.arl = res.data.arl.name;
         this.form.patchValue({
           id: this.pilas.id,
@@ -83,7 +82,7 @@ export class DatosPilaComponent implements OnInit {
     this._configuracionEmpresaService.saveCompanyData(this.form.value)
       .subscribe((res: any) => {
         this.getPilaData();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         Swal.fire({
           icon: 'success',
           title: 'Actualizado Correctamente'

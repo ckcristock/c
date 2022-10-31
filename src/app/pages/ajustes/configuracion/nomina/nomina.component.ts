@@ -7,7 +7,7 @@ import { NominaConfigService } from './nomina-config.service';
   styleUrls: ['./nomina.component.scss'],
 })
 export class NominaComponent implements OnInit {
-  
+
   renderizarNomina = false;
   extrasDatos: any[] = [];
   incapacidadesDatos: any[] = [];
@@ -34,7 +34,6 @@ export class NominaComponent implements OnInit {
   }
   getIncapacidades() {
     this._nominaConfig.getIncapacidades().subscribe((r:any)=>{
-      console.log(r)
       this.incapacidadesDatos = r
     })
   }

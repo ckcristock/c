@@ -33,9 +33,9 @@ export class EstructuraEmpresaComponent implements OnInit {
       if (this.grupos) {
         this.getDependencies(this.grupos[0].value)
         this.grupos[0].selected = true;
-      }      
+      }
     })
-    
+
   }
   closeResult = '';
   public openConfirm(confirm) {
@@ -46,16 +46,15 @@ export class EstructuraEmpresaComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
   grupoSelcted:any;
   getDependencies(group_id) {
     this.grupoSelcted = group_id
-    console.log(group_id)  
     this._dependecies.getDependencies({ group_id })
       .subscribe((r: any) => {
-        this.dependecies = r.data;  
-            
+        this.dependecies = r.data;
+
         if (this.dependecies.length != 0) {
           this.getPosition(this.dependecies[0].value)
           this.dependecies[0].selected = true;
@@ -106,7 +105,7 @@ export class EstructuraEmpresaComponent implements OnInit {
       this._group.delete(id).subscribe(r =>{
         this.getGroups()
         this.deleteSwal.show();
-      })      
+      })
     }
   }
 
@@ -138,19 +137,19 @@ export class EstructuraEmpresaComponent implements OnInit {
   saveGroup(params) {
     this._group.save(params).subscribe(r => {
       this.getGroups()
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
     })
   }
   saveDependency(params) {
     this._dependecies.save(params).subscribe(r => {
       this.getDependencies(params.group_id)
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
     })
   }
   savePosition(params) {
     this._position.save(params).subscribe(r => {
       this.getDependencies(params.dependency_id)
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
     })
   }
   id = '';

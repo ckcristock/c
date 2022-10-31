@@ -22,16 +22,12 @@ export class SeguridadSocialResumenComponent implements OnInit {
   }
 
   crearObjetoIbc() {
-    console.log();
-    
     this.ibc.salud = this.ibcSeguridad
     this.ibc.pension = this.ibcSeguridad
     this.ibc.riesgos = this.seguridadDatos.ibc_riesgos['IBC Riesgos']
     this.ibc.sena = this.seguridadDatos.ibc_parafiscales['IBC Parafiscales']
     this.ibc.icbf = this.seguridadDatos.ibc_parafiscales['IBC Parafiscales']
-    this.ibc.caja_compensacion = this.seguridadDatos.ibc_parafiscales[
-      'IBC Parafiscales'
-    ]
+    this.ibc.caja_compensacion = this.seguridadDatos.ibc_parafiscales['IBC Parafiscales']
   }
 
   obtenerPrefijo(prefijo, objeto = {}) {
@@ -40,14 +36,10 @@ export class SeguridadSocialResumenComponent implements OnInit {
       if (prefijoPropiedad === prefijo) {
         return objeto[propiedad]
       }
-
     }
-   
-    
   }
 
   organizarDatos(objetoSeguridad, arrayAllenar = []) {
-    console.log({objetoSeguridad})
     for (let prop in objetoSeguridad) {
       let objeto = Object.create(null)
       let prefijo = prop.slice(0, 4).toLowerCase()
@@ -60,7 +52,7 @@ export class SeguridadSocialResumenComponent implements OnInit {
         objeto['valor'] = objetoSeguridad[prop]
         arrayAllenar.push(objeto)
       }
-      
+
   }
 
 

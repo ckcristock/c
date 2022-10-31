@@ -74,7 +74,6 @@ export class TiposContratoComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-
   }
 
   getData(data) {
@@ -104,7 +103,6 @@ export class TiposContratoComponent implements OnInit {
       .subscribe((res: any) => {
         this.loading = false;
         this.contracts = res.data.data;
-        console.log(this.contracts)
         this.pagination.collectionSize = res.data.total;
       });
   }

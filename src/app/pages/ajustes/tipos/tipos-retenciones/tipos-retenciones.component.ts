@@ -5,7 +5,7 @@ import { SwalService } from '../../informacion-base/services/swal.service';
 import { OperatorFunction, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { MatAccordion } from '@angular/material/expansion';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-tipos-retenciones',
@@ -24,7 +24,7 @@ export class TiposRetencionesComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   loading: boolean = false;
   accountPlan: any[] = [];
@@ -35,6 +35,12 @@ export class TiposRetencionesComponent implements OnInit {
     page: 1,
     pageSize: 5,
     collectionSize: 0
+  }
+  filtros = {
+    nombre: '',
+    porcentaje: '',
+    cuentaAsociada: '',
+    estado: ''
   }
   constructor(
     private fb: FormBuilder,
@@ -51,12 +57,12 @@ export class TiposRetencionesComponent implements OnInit {
 
   openModal() {
     this.modal.show();
-    
+
   }
 
   closeModal() {
-    this.modalService.dismissAll(); 
-    
+    this.modalService.dismissAll();
+
   }
 
   closeResult = '';
@@ -70,7 +76,7 @@ public openConfirm(confirm, titulo){
   }
 private getDismissReason(reason: any) {
   this.form.reset();
-    
+
   }
 
   search: OperatorFunction<string, readonly { code }[]> = (
@@ -112,15 +118,24 @@ private getDismissReason(reason: any) {
       id: [this.retention.id],
       name: ['', Validators.required],
       account_plan_id: ['', Validators.required],
+      account_plan: ['', Validators.required],
       percentage: ['', Validators.required],
       description: ['', Validators.required]
     });
   }
 
+  AsignarCuenta(e: NgbTypeaheadSelectItemEvent) {
+    this.form.get('account_plan_id').setValue(e.item.id);
+    //let data = this.form.get('account_plan_id').value;
+  }
+
   getRetentionTypes(page = 1) {
     this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtros
+    }
     this.loading = true;
-    this._retentionType.getRetentionType(this.pagination).subscribe((r: any) => {
+    this._retentionType.getRetentionType(params).subscribe((r: any) => {
       this.retentionTypes = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
@@ -132,19 +147,16 @@ private getDismissReason(reason: any) {
     this.form.patchValue({
       id: this.retention.id,
       name: this.retention.name,
-      account_plan_id: this.retention.account_plan,
+      account_plan_id: this.retention.account_plan_id,
+      account_plan: this.retention.account_plan,
       percentage: this.retention.percentage,
       description: this.retention.description
     });
   }
 
   save() {
-    let account_plan_id = this.form.value.account_plan_id.id;
-    this.form.patchValue({
-      account_plan_id
-    })
     this._retentionType.updateOrCreateRetentionType(this.form.value).subscribe((r: any) => {
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
       this.form.reset();
       this.getRetentionTypes();
       this._swal.show({

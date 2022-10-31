@@ -6,7 +6,7 @@
     </button>
   </div>
   <div class="rounded-top table-responsive">
-    <table class="table table-sm" >
+    <table class="table table-sm">
       <thead class="bg-light">
         <tr class="text-center text-uppercase">
           <th>Cantidad</th>
@@ -31,6 +31,32 @@
   </div>
   <hr />
   <app-bono *ngIf="salary_info.id" [id]="salary_info.id"></app-bono>
+  <h6>Historial de contratos</h6>
+  <div class="rounded-top table-responsive">
+    <table
+      class="table table-bordered table-striped table-sm"
+      *ngIf="salary_history.length > 0"
+    >
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Salario</th>
+          <th>Tipo</th>
+          <th>Ingreso</th>
+          <th>Finalización</th>
+          <th>Cargo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of salary_history" class="text-center">
+          <th>{{ item.salary | number }}</th>
+          <th>{{ item.work_contract_type.name }}</th>
+          <th>{{ item.date_of_admission | date: "longDate" }}</th>
+          <th>{{ item.date_end | date: "longDate" }}</th>
+          <th>{{ item.position.name }}</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <ng-template #add let-modal>
@@ -106,7 +132,9 @@
             id="fecha_retiro"
             required
           />
-          <mat-error *ngIf="retirement_date_valid"> Campo obligatorio </mat-error>
+          <mat-error *ngIf="retirement_date_valid">
+            Campo obligatorio
+          </mat-error>
         </mat-form-field>
         <mat-checkbox class="col-md-12" id="flexCheckDefault" color="primary"
           >¿Pagar auxilio?</mat-checkbox

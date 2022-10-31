@@ -25,6 +25,8 @@ export class GrupoestibaComponent implements OnInit {
   formEstiba: FormGroup;
   dataFormGrupo: any;
   dataFormEstiba: any;
+  closeResult = '';
+
   public abrirModalEstiba = new EventEmitter<any>();
   public abrirModalGrupo = new EventEmitter<any>();
   public alertOptionMapa: SweetAlertOptions = {};
@@ -34,19 +36,15 @@ export class GrupoestibaComponent implements OnInit {
   public startTime: any;
   public estibas: any = [];
   public abriendo = 0;
-
   public loadingEstibas = false;
   public loadingGrupos = false;
   public Interval: any
-
   public currentPageEstibas = 1;
   public limitEstibas = 15;
   public sizeEstibas = 0
-
   public currentPageGrupos = 1;
   public limitGrupos = 15;
   public sizeGrupos = 0
-
   public filtrosEstibas = {
     Nombre: '',
     Codigo_Barras: '',
@@ -69,14 +67,10 @@ export class GrupoestibaComponent implements OnInit {
       collectionSize: 0
     }
   }
-  
-  closeResult = '';
-
   public grupoSelected: any = {
     id: 0,
     nombre: ''
   };
-
   public tituloFormulario: any = '';
 
   constructor(
@@ -84,23 +78,26 @@ export class GrupoestibaComponent implements OnInit {
     private _bodegas: BodegasService,
     private _swal: SwalService,
     private modalService: NgbModal,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getBodega();
     this.getGrupos();
-    this.createForms();
+    this.createFormGrupo();
   }
 
-  createForms() {
+  createFormGrupo() {
     this.formGrupo = this.fb.group({
       id: [''],
       nombre: ['', Validators.required],
       idBodega: [this.id, Validators.required],
+      fechaVencimiento: ['', Validators.required],
       presentacion: ['', Validators.required]
     });
+  }
+
+  createFormEstiba(){
     this.formEstiba = this.fb.group({
       id: [''],
       nombre: ['', Validators.required],
@@ -115,7 +112,7 @@ export class GrupoestibaComponent implements OnInit {
     (!this.matPanel.accordionGrupo)?this.accordionGrupo.openAll():this.accordionGrupo.closeAll();
     this.matPanel.accordionGrupo=!this.matPanel.accordionGrupo;
   }
-  
+
   openCloseEstiba() {
     (!this.matPanel.accordionEstiba)?this.accordionEstiba.openAll():this.accordionEstiba.closeAll();
     this.matPanel.accordionEstiba=!this.matPanel.accordionEstiba;
@@ -150,20 +147,26 @@ export class GrupoestibaComponent implements OnInit {
 
   }
 
+  selected(model, value) {
+    model = model.map(m => {
+      m.selected = m.Id_Grupo_Estiba == value ? true : false;
+    })
+  }
+
   /* opercacionGrupo(grupo){
     clearInterval(this.Interval);
     this.abriendo=0;
 
     let endTime:any = new Date();
     var timeDiff:any = endTime - this.startTime; //en ms
-  
+
     if(timeDiff<600){
       let grupoAnterior = this.grupos.find(g=>g.Selected==true)
       if (grupoAnterior) {
        grupoAnterior.Selected=false;
       }
        grupo.Selected=true;
-     
+
        this.buscarEstibas(grupo.Id_Grupo_Estiba,true);
     }
   } */
@@ -172,9 +175,9 @@ export class GrupoestibaComponent implements OnInit {
     if (filtros) {
       this.setearEstibas();
     }
-    
+
     this.loadingEstibas=true;
-    
+
     this.grupoSelected = id_grupo;
     let params = {
       Filtros : (JSON.stringify(this.filtrosEstibas)),
@@ -192,22 +195,21 @@ export class GrupoestibaComponent implements OnInit {
 
   } */
 
-
   /*  getGrupos(porFiltros=false){
-     
+
      if (porFiltros) {
        this.currentPageGrupos=1;
        this.sizeGrupos=0;
-     } 
+     }
      this.loadingGrupos = true;
- 
+
      let params = {
        filtros : (JSON.stringify(this.filtrosGrupos)),
        id_bodega_nuevo : this.idBodega,
        currentPage : this.currentPageGrupos.toString(),
        limit : this.limitGrupos.toString()
      }
- 
+
      this.http.get(this.globales.ruta+'php/grupo_estiba/get_grupos_bodega.php',{params})
      .subscribe(res=>{
        this.grupos=res['Grupos'];
@@ -223,15 +225,77 @@ export class GrupoestibaComponent implements OnInit {
     this.estibas = [];
   }
 
+  getBodega() {
+    this._bodegas.getBodega(this.id).subscribe((res: any) => {
+      this.bodega = res.data;
+      this.alertOptionMapa = {
+        title: "Mapa de la bodega " + this.bodega.Nombre,
+        text: "Ubicación de las Estibas",
+        imageUrl: res.data.Mapa,
+        imageWidth: 700,
+        width: 800,
+      }
+    })
+  }
+
+  getGrupo(data) {
+    this.dataFormGrupo = { ...data };
+    this.formGrupo.patchValue({
+      id: this.dataFormGrupo.Id_Grupo_Estiba,
+      nombre: this.dataFormGrupo.Nombre,
+      idBodega: this.id,
+      fechaVencimiento: this.dataFormGrupo.Fecha_Vencimiento,
+      presentacion: this.dataFormGrupo.Presentacion
+    });
+  }
+
+  getEstiba(data) {
+    this.dataFormEstiba = { ...data };
+    this.formEstiba.patchValue({
+      id: this.dataFormEstiba.Id_Estiba,
+      nombre: this.dataFormEstiba.Nombre,
+      idBodega: this.id,
+      idGrupo: this.dataFormEstiba.Id_Grupo_Estiba,
+      codigoBarras: this.dataFormEstiba.Codigo_Barras,
+      estado: this.dataFormEstiba.Estado
+    });
+  }
+
+  getGrupos(page = 1) {
+    this.pagination.grupos.page = page;
+    let params = {
+      ...this.pagination.grupos, ...this.filtrosGrupos
+    }
+    this.loadingGrupos = true;
+    this._bodegas.getGruposBodega(this.id, params).subscribe((res: any) => {
+      this.grupos = res.data.data;
+       this.loadingGrupos = false;
+      this.pagination.grupos.collectionSize = res.data.total;
+    })
+  }
+
+  getEstibas(grupo, page = 1) {
+    this.pagination.estibas.page = page;
+    let params = {
+      ...this.pagination.estibas, ...this.filtrosEstibas
+    }
+    this.loadingEstibas = true;
+    this._bodegas.getEstibasGrupo(grupo, params).subscribe((res: any) => {
+      this.estibas = res.data.data;
+      this.loadingEstibas = false;
+      this.pagination.estibas.collectionSize = res.data.total;
+    })
+  }
+
   createGrupo(){
     this._bodegas.createGrupo(this.formGrupo.value)
       .subscribe((res: any) => {
-        this.getGrupos();
+        this.getGrupos(this.pagination.grupos.page);
         this.modalService.dismissAll();
         this._swal.show({
           icon: 'success',
           title: res.data,
-          text: 'Se ha agregado la bodega con éxito.',
+          text: 'Se ha agregado el grupo con éxito.',
           timer: 1000,
           showCancel: false
         })
@@ -247,65 +311,25 @@ export class GrupoestibaComponent implements OnInit {
   }
 
   createEstiba(){
-
-  }
-
-  getBodega() {
-    this._bodegas.getBodega(this.id).subscribe((res: any) => {
-      this.bodega = res.data;
-      this.alertOptionMapa = {
-        title: "Mapa de la Bodega " + this.bodega.Nombre,
-        text: "Ubicación de las Estibas",
-        imageUrl: res.data.map,
-        imageWidth: 700,
-        width: 800,
+    this._bodegas.createEstiba(this.formEstiba.value)
+      .subscribe((res: any) => {
+        this.getEstibas(this.grupoSelected.id, this.pagination.estibas.page);
+        this.modalService.dismissAll();
+        this._swal.show({
+          icon: 'success',
+          title: res.data,
+          text: 'Se ha agregado la estiba con éxito.',
+          timer: 1000,
+          showCancel: false
+        })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Aún no puedes editar una bodega con el mismo código, estamos trabajando en esto.',
+          icon: 'error',
+          showCancel: false,
+        })
       }
-    })
-  }
-
-  getGrupo(data) {
-    this.dataFormGrupo = { ...data };
-    this.formGrupo.patchValue({
-      id: this.dataFormGrupo.Id_Grupo_Estiba,
-      nombre: this.dataFormGrupo.Nombre,
-      presentacion: this.dataFormGrupo.Presentacion
-    });
-  }
-
-  getEstiba(data) {
-    this.dataFormEstiba = { ...data };
-    this.formEstiba.patchValue({
-      id: this.dataFormEstiba.Id_Estiba,
-      nombre: this.dataFormEstiba.Nombre,
-      grupoEstiba: this.dataFormEstiba.Id_Grupo_Estiba,
-      codigoBarras: this.dataFormEstiba.Codigo_Barras,
-      estado: this.dataFormEstiba.Estado
-    });
-  }
-
-  getGrupos(page = 1) {
-    this.pagination.grupos.page = page;
-    let params = { 
-      ...this.pagination.grupos, ...this.filtrosGrupos
-    }
-    this.loadingGrupos = true;
-    this._bodegas.getGruposBodega(this.id, params).subscribe((res: any) => {
-      this.grupos = res.data.data;
-       this.loadingGrupos = false;
-      this.pagination.grupos.collectionSize = res.data.total;
-    })
-  }
-
-  getEstibas(grupo, page = 1) {
-    this.pagination.estibas.page = page;
-    let params = { 
-      ...this.pagination.estibas, ...this.filtrosEstibas
-    }
-    this.loadingEstibas = true;
-    this._bodegas.getEstibasGrupo(grupo, params).subscribe((res: any) => {
-      this.estibas = res.data.data;
-      this.loadingEstibas = false;
-      this.pagination.estibas.collectionSize = res.data.total;
-    })
+      );
   }
 }

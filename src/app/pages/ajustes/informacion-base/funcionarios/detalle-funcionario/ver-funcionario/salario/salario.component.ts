@@ -19,6 +19,7 @@ export class SalarioComponent implements OnInit {
   data: any;
   id: any;
   contract_types: any;
+  salary_history: any [] = []
   salary_info: any = {
     salary: '',
     contract_type: '',
@@ -42,6 +43,7 @@ export class SalarioComponent implements OnInit {
     this.id = this.activateRoute.snapshot.params.id;
     this.getSalaryInfo();
     this.createForm();
+    this.getSalaryHistory();
   }
 
   closeResult = '';
@@ -110,6 +112,13 @@ export class SalarioComponent implements OnInit {
         }
       });
   }
+
+  getSalaryHistory() {
+    this.salaryService.getSalaryHistory(this.id).subscribe((res:any) => {
+      this.salary_history = res.data
+    })
+  }
+
   changeType() {
     if (this.form.get('type_contract').value == 2) {
       this.form.get('date_end').enable();

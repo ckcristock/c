@@ -51,7 +51,7 @@
         </td>
         <td class="text-center">
           {{ retenciones.IBC_seguridad | currency: "":"" }} *
-          {{ nominaSeguridadFuncionario[i].percentage * factorDeConversion }} %
+          {{ totalPorcentajes[i].valor * factorDeConversion | number: '1.0-2' }} %
         </td>
         <td class="text-center">{{ retencion.valor | currency: "":"" }}</td>
       </tr>

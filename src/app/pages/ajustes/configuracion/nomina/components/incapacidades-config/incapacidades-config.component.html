@@ -1,6 +1,3 @@
-<div class="alert alert-danger" role="alert">
-  En desarrollo
-</div>
 <div class="rounded-top table-responsive">
   <table class="table table-striped table-sm">
     <tbody>
@@ -10,15 +7,20 @@
           <mat-form-field class="pb-0" appearance="outline">
             <input
               matInput
+              #percentage
               type="number"
               [value]="extra.percentage"
+              step="0.05"
+              min="0"
+              name="percentage"
+              id="percentage"
               autocomplete="off"
             />
             <button
               mat-icon-button
               color="primary"
               matSuffix
-              (click)="actualiza(extra)"
+              (click)="actualizar(extra, percentage.value)"
               [attr.aria-label]="'Actualizar'"
             >
               <mat-icon>check</mat-icon>
@@ -29,4 +31,3 @@
     </tbody>
   </table>
 </div>
-  

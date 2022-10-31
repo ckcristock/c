@@ -23,4 +23,8 @@ export class PersonService {
     return this.httpClient.get(`${environment.base_url}/people-all`, { params })
   }
 
+  validarCedula(cedula){
+    return this.httpClient.get(`${environment.base_url}/validar-cedula/${cedula}`)
+  }
+
 }

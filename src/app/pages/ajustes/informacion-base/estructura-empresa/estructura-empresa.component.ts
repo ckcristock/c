@@ -156,7 +156,7 @@ export class EstructuraEmpresaComponent implements OnInit {
   }
   savePosition(params) {
     this._position.save(params).subscribe(r => {
-      this.getPosition(params.dependency_id)
+      this.getPosition(params.dependency_id
       this.modalService.dismissAll();
     })
   }

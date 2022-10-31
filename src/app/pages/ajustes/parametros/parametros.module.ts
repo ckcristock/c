@@ -42,6 +42,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { NominaComponent } from './nomina/nomina.component';
+import { InformacionBaseModule } from "../informacion-base/informacion-base.module";
 
 
 
@@ -74,7 +76,8 @@ import { MatPaginatorModule } from "@angular/material/paginator";
         EstimacionViaticosValuesComponent,
         ValorAlmuerzosComponent,
         CategoriasComponent,
-        SubcategoriasComponent
+        SubcategoriasComponent,
+        NominaComponent
     ],
     imports: [
         ParametrosRoutingModule,
@@ -95,7 +98,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
         MatToolbarModule,
         MatPaginatorModule,
         SweetAlert2Module.forRoot(),
-
+        InformacionBaseModule
     ],
     exports: []
 })

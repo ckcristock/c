@@ -28,19 +28,20 @@ import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.compo
 import { CategoriasComponent } from './categorias/categorias.component';
 import { SubcategoriasComponent } from './subcategorias/subcategorias.component';
 import { MaterialesComponent } from "../informacion-base/catalogo/components/materiales/materiales.component";
+import { NominaComponent } from "./nomina/nomina.component";
 
 
 const routes : Routes = [
     // { path: 'perfiles', component : PerfilesComponent },
     { path: 'rgp', component : RgpComponent },
     { path: 'zonas', component : ZonasComponent },
-    { path: 'eps', component:  EpsComponent},
     { path: 'notas-tecnicas', component : NotasTecnicasComponent },
-    { path: 'bancos', component : BancosComponent },
     { path: 'cuentas-bancarias', component : CuentasBancariasComponent },
     { path: 'viaticos/hoteles', component: HotelesComponent },
     { path: 'viaticos/taxis', component: TaxisComponent },
     { path: 'vacantes/licencia-conduccion', component: LicenciaConduccionComponent },
+
+    { path: 'nomina', component: NominaComponent},
 
     { path: 'apu/geometrias', component: GeometriasComponent },
     { path: 'apu/crear-geometria', component: CrearGeometriaComponent },

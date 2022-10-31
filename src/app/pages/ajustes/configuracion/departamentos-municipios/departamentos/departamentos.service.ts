@@ -13,8 +13,16 @@ export class DepartamentosService {
     return this.http.get(`${environment.base_url}/paginateDepartment`, {params} );
   }
 
-  createNewDepartment( data ){
+  getDepartmentById(id, params){ //busca departamentos por country_id
+    return this.http.get(`${environment.base_url}/departments/${id}`, {params} );
+  }
+
+  setDepartment( data ){
     return this.http.post(`${environment.base_url}/departments`, data);
+  }
+
+  delete(id){
+    return this.http.post(`${environment.base_url}/countries`, id);// 'borrado lógico '+id
   }
 
 }

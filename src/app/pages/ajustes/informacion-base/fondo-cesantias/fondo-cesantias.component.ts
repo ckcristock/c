@@ -29,6 +29,7 @@ export class FondoCesantiasComponent implements OnInit {
   selected: any;
   severances: any[] = [];
   severance: any = {};
+  boolNuevoFondo: boolean;
   pagination: any = {
     page: 1,
     pageSize: 5,
@@ -56,7 +57,8 @@ export class FondoCesantiasComponent implements OnInit {
 
   }
   closeResult = '';
-  public openConfirm(confirm, titulo) {
+  public openConfirm(confirm, titulo, nuevoFondo) {
+    this.boolNuevoFondo = nuevoFondo;
     this.selected = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -128,22 +130,33 @@ export class FondoCesantiasComponent implements OnInit {
   }
 
   createSeveranceFunds() {
-    this._fondoCensatiasService.createSeveranceFunds(this.form.value)
+    let data = {};
+    if(this.boolNuevoFondo){
+      data = this.form.value
+    } else {
+      data = {
+        id: this.form.get("id").value,
+        name: this.form.get("name").value
+      }
+    }
+    this._fondoCensatiasService.createSeveranceFunds(data)
       .subscribe((res: any) => {
+        console.log(res);
         this.modalService.dismissAll();
         this.getSeveranceFunds();
         this._swal.show({
           icon: 'success',
           title: res.data,
-          text: '',
+          text: `Se ha ${this.boolNuevoFondo?'creado':'actualizado'} el fondo con éxito.`,
           timer: 1000,
           showCancel: false
         })
       },
       err => {
+        console.log(err)
         this._swal.show({
           title: 'ERROR',
-          text: 'Aún no puedes editar un fondo de cesantías con el mismo NIT, estamos trabajando en esto.',
+          text: err?.error.errors.nit[0],
           icon: 'error',
           showCancel: false,
         })

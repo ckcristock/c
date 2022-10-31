@@ -22,7 +22,7 @@ export class DepartamentosComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   loading: boolean = false;
   departamentos: any = [];
@@ -41,7 +41,7 @@ export class DepartamentosComponent implements OnInit {
     name: ''
   }
   constructor(
-    private depService: DepartamentosService, 
+    private depService: DepartamentosService,
     private modalService: NgbModal,
     private _swal: SwalService,
     ) { }
@@ -65,9 +65,9 @@ export class DepartamentosComponent implements OnInit {
   }
 
   openModal() {
-    
+
     this.modal.show();
-    
+
   }
 
   closeResult = '';
@@ -81,7 +81,7 @@ export class DepartamentosComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   getDepartment(department) {
@@ -91,7 +91,7 @@ export class DepartamentosComponent implements OnInit {
   createNewDepartment() {
     this.form.markAllAsTouched();
     if (this.form.invalid) { return false; }
-    this.depService.createNewDepartment(this.department)
+    this.depService.setDepartment(this.department)
       .subscribe((res: any) => {
         this._swal.show({
           title: 'Agregada correctamente',
@@ -101,7 +101,7 @@ export class DepartamentosComponent implements OnInit {
           showCancel: false
         })
         this.getAllDepartment();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
       });
   }
 

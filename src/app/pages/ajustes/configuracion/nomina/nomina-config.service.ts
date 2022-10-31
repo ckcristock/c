@@ -42,4 +42,26 @@ export class NominaConfigService {
   updateExtras(id, data = {}) {
     return this.http.put(`${environment.base_url}/parametrizacion/nomina/extras/update/${id}`, data);
   }
+
+  updateSSocialPerson(id, data = {}) {
+    return this.http.put(`${environment.base_url}/parametrizacion/nomina/seguridad-social-persona/update/${id}`, data);
+  }
+
+  updateSSocialCompany(id, data = {}) {
+    return this.http.put(`${environment.base_url}/parametrizacion/nomina/seguridad-social-company/update/${id}`, data);
+  }
+
+  updateRiesgosArl(id, data = {}) {
+    return this.http.put(`${environment.base_url}/parametrizacion/nomina/riesgos-arl/update/${id}`, data);
+  }
+
+  updateParafiscales(id, data = {}) {
+    return this.http.put(`${environment.base_url}/parametrizacion/nomina/parafiscales/update/${id}`, data);
+  }
+
+  updateIncapacidades(id, data = {}) {
+    return this.http.put(`${environment.base_url}/parametrizacion/nomina/incapacidades/update/${id}`, data);
+  }
+
+
 }

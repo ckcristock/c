@@ -56,7 +56,7 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
+
         *ngIf="!loading && epss.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -118,20 +118,20 @@
         </tbody>
       </table>
     </div>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      (pageChange)="getAllEps($event)"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      aria-label="Default pagination"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-    >
-    </ngb-pagination>
   </div>
+  <ngb-pagination
+    class="d-flex justify-content-center pagination-rounded pagination-sm"
+    [collectionSize]="pagination.collectionSize"
+    (pageChange)="getAllEps($event)"
+    [pageSize]="pagination.pageSize"
+    [(page)]="pagination.page"
+    aria-label="Default pagination"
+    maxSize="5"
+    rotate="true"
+    ellipses="false"
+    boundaryLinks="true"
+  >
+  </ngb-pagination>
 </div>
 
 <ng-template #add let-modal>

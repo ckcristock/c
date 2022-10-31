@@ -12,15 +12,19 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class EstructuraEmpresaComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild('modal') modal: any
-  grupos: any[]
-  dependecies: any[]
+  grupos = []
+  dependencies = []
   positions = []
-  loading: boolean = false;
+  loading: any = {
+    grupos: false,
+    dependencies: false,
+    positions: false
+  };
   name = ''
   tipo = ''
   constructor(
     private _group: GroupService,
-    private _dependecies: DependenciesService,
+    private _dependencies: DependenciesService,
     private _position: PositionService,
     private modalService: NgbModal,
   ) { }
@@ -28,14 +32,16 @@ export class EstructuraEmpresaComponent implements OnInit {
     this.getGroups();
   }
   getGroups() {
+    this.loading.grupos = true;
     this._group.getGroup().subscribe((r: any) => {
       this.grupos = r.data
       if (this.grupos) {
         this.getDependencies(this.grupos[0].value)
         this.grupos[0].selected = true;
-      }      
+      }
+      this.loading.grupos = false;
     })
-    
+
   }
   closeResult = '';
   public openConfirm(confirm) {
@@ -46,23 +52,24 @@ export class EstructuraEmpresaComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
   grupoSelcted:any;
   getDependencies(group_id) {
     this.grupoSelcted = group_id
-    console.log(group_id)  
-    this._dependecies.getDependencies({ group_id })
+    this.loading.dependencies = true;
+    this._dependencies.getDependencies({ group_id })
       .subscribe((r: any) => {
-        this.dependecies = r.data;  
-            
-        if (this.dependecies.length != 0) {
-          this.getPosition(this.dependecies[0].value)
-          this.dependecies[0].selected = true;
+        this.dependencies = r.data;
+
+        if (this.dependencies.length != 0) {
+          this.getPosition(this.dependencies[0].value)
+          this.dependencies[0].selected = true;
         }
         else{
           this.positions = []
         }
+        this.loading.dependencies = false;
       })
   }
 
@@ -74,10 +81,10 @@ export class EstructuraEmpresaComponent implements OnInit {
   dependenceSelected:any;
   getPosition(dependency_id) {
     this.dependenceSelected = dependency_id
-    this.loading = true;
+    this.loading.positions = true;
     this._position.getPositions({ dependency_id }).subscribe((r: any) => {
       this.positions = r.data
-      this.loading = false;
+      this.loading.positions = false;
     })
   }
 
@@ -91,7 +98,7 @@ export class EstructuraEmpresaComponent implements OnInit {
 
   delete(tipo, id){
     if(tipo == 'dependencias'){
-      this._dependecies.delete(id).subscribe(r => {
+      this._dependencies.delete(id).subscribe(r => {
         this.getDependencies(1)
         this.deleteSwal.show();
       })
@@ -106,7 +113,7 @@ export class EstructuraEmpresaComponent implements OnInit {
       this._group.delete(id).subscribe(r =>{
         this.getGroups()
         this.deleteSwal.show();
-      })      
+      })
     }
   }
 
@@ -121,7 +128,7 @@ export class EstructuraEmpresaComponent implements OnInit {
       this.saveDependency(params)
     }
     if (this.tipo == 'cargos') {
-      let selected = this.dependecies.find(r => r.selected == true);
+      let selected = this.dependencies.find(r => r.selected == true);
       console.warn(selected.value)
       let params: any = { dependency_id: selected.value, name: this.name }
       params ? params.id = this.id : ''
@@ -138,19 +145,19 @@ export class EstructuraEmpresaComponent implements OnInit {
   saveGroup(params) {
     this._group.save(params).subscribe(r => {
       this.getGroups()
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
     })
   }
   saveDependency(params) {
-    this._dependecies.save(params).subscribe(r => {
+    this._dependencies.save(params).subscribe(r => {
       this.getDependencies(params.group_id)
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
     })
   }
   savePosition(params) {
     this._position.save(params).subscribe(r => {
-      this.getDependencies(params.dependency_id)
-      this.modalService.dismissAll(); 
+      this.getPosition(params.dependency_id)
+      this.modalService.dismissAll()
     })
   }
   id = '';

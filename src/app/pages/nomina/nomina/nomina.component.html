@@ -35,53 +35,24 @@
       <hr *ngIf="nomina?.nomina_paga" />
       <!-- Conceptos CARDS -->
       <div class="row d-flex align-items-stretch">
+
         <div class="col info-cards">
           <app-card-concepto
-            [concepto]="nomina?.salarios"
-            [icon]="'fas fa-money-bill-wave '"
-            [label]="'Salarios (neto)'"
+          [concepto]="nomina?.salarios"
+          [icon]="'fas fa-money-bill-wave '"
+          [label]="'Salarios (neto)'"
           ></app-card-concepto>
         </div>
-        <div class="col info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.provisiones"
-            [icon]="'fas fa-coins'"
-            [label]="'Provisiones'"
-          >
-          </app-card-concepto>
-        </div>
-        <div class="col info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.seguridad_social"
-            [icon]="'fa fa-ambulance'"
-            [label]="'Seg. Social'"
-          >
-          </app-card-concepto>
-        </div>
-        <div class="col info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.retenciones"
-            [icon]="'fa fa-ambulance'"
-            [label]="'Retenciones'"
-          >
-          </app-card-concepto>
-        </div>
-        <div class="col info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.parafiscales"
-            [icon]="'fa fa-users'"
-            [label]="'Parafiscales'"
-          >
-          </app-card-concepto>
-        </div>
+
         <div class="col info-cards">
           <app-card-concepto
             [concepto]="nomina?.extras"
             [icon]="'fas fa-user-clock'"
             [label]="'Hor. Extras'"
-          >
+            >
           </app-card-concepto>
         </div>
+
         <div class="col info-cards">
           <app-card-concepto
             [concepto]="nomina?.ingresos"
@@ -90,6 +61,45 @@
           >
           </app-card-concepto>
         </div>
+
+        <div class="col info-cards">
+          <app-card-concepto
+            [concepto]="nomina?.seguridad_social"
+            [icon]="'fa fa-ambulance'"
+            [label]="'Seg. Social'"
+          >
+          </app-card-concepto>
+        </div>
+
+        <!--<div class="col info-cards">
+          <app-card-concepto
+            [concepto]="nomina?.retenciones"
+            [icon]="'fa fa-ambulance'"
+            [label]="'Retenciones'"
+          >
+          </app-card-concepto>
+        </div>-->
+
+        <div class="col info-cards">
+          <app-card-concepto
+            [concepto]="nomina?.parafiscales"
+            [icon]="'fa fa-users'"
+            [label]="'Parafiscales'"
+          >
+          </app-card-concepto>
+        </div>
+
+
+
+        <div class="col info-cards">
+          <app-card-concepto
+            [concepto]="nomina?.provisiones"
+            [icon]="'fas fa-coins'"
+            [label]="'Provisiones'"
+          >
+          </app-card-concepto>
+        </div>
+
       </div>
       <hr />
       <h5 class="text-center">
@@ -178,7 +188,7 @@
       <div class="rounded-top table-responsive">
         <table
           class="table table-bordered table-striped table-sm"
-          
+
           *ngIf="!loadingPeople && funcionarios.length > 0; else notData"
         >
           <thead class="bg-light">

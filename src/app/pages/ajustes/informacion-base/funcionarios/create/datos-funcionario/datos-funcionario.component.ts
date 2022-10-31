@@ -5,8 +5,12 @@ import { Subscription } from 'rxjs';
 import { consts } from '../../../../../../core/utils/consts';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { Person } from '../../../../../../core/models/person.model';
-import {ValidatorsService} from '../../../services/reactive-validation/validators.service';
+import { ValidatorsService } from '../../../services/reactive-validation/validators.service';
 import { DocumentTypeService } from '../../../services/document-type.service';
+import { PersonService } from '../../../persons/person.service';
+import { SwalService } from '../../../services/swal.service';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-datos-funcionario',
   templateUrl: './datos-funcionario.component.html',
@@ -25,10 +29,14 @@ export class DatosFuncionarioComponent implements OnInit {
   fileString: any =
     'https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=100';
 
-  constructor(private _person: PersonDataService, private fb: FormBuilder,
-	      private _valid: ValidatorsService,
-        private _documenttypes: DocumentTypeService,
-	     ) { }
+  constructor(
+    private _person: PersonDataService,
+    private fb: FormBuilder,
+    private _valid: ValidatorsService,
+    private _people: PersonService,
+    private _documenttypes: DocumentTypeService,
+    private _swal: SwalService,
+  ) { }
   person: Person
   ngOnInit(): void {
     this.getDocumentType()
@@ -44,15 +52,30 @@ export class DatosFuncionarioComponent implements OnInit {
     })
   }
 
+  validarCedula(cedula) {
+    let envio_cedula = cedula.target.value;
+    this._people.validarCedula(envio_cedula).subscribe((r: any) => {
+      if (r.data == true) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Funcionario existente',
+          html: r.code.first_name + ' ' + r.code.second_name + ' ' + r.code.first_surname + ' ' + r.code.second_surname +
+            '<br/>' + envio_cedula,
+        })
+        this.form.get('identifier').reset();
+      }
+    });
+  }
+
   crearForm() {
     this.form = this.fb.group({
       image: ['', this._valid.required],
       type_document_id: ['', this._valid.required],
-      identifier: ['',this._valid.required ],
+      identifier: ['', this._valid.required],
       first_name: ['', this._valid.required],
-      second_name: ['', ],
+      second_name: ['',],
       first_surname: ['', this._valid.required],
-      second_surname: ['', ],
+      second_surname: ['',],
       email: [
         '',
         [
@@ -166,9 +189,9 @@ export class DatosFuncionarioComponent implements OnInit {
 
   save() {
     this.form.markAllAsTouched();
-    if (this.form.invalid) { return false;}
+    if (this.form.invalid) { return false; }
 
-    this.person = { ...this.person,...this.form.value };
+    this.person = { ...this.person, ...this.form.value };
     this.person.image = this.file;
     this._person.person.next(this.person);
     this.siguiente.emit({});

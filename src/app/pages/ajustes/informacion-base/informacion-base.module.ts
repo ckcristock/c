@@ -154,5 +154,11 @@ import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.componen
     MatPaginatorModule,
     SweetAlert2Module.forRoot(),
   ],
+  exports: [
+    ArlComponent,
+    FondoPensionComponent,
+    FondoCesantiasComponent,
+    CajaCompensacionComponent
+  ]
 })
 export class InformacionBaseModule { }

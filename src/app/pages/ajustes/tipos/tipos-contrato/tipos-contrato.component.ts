@@ -101,6 +101,8 @@ export class TiposContratoComponent implements OnInit {
     this.loading = true;
     this._tiposContratoService.getContractsType(params)
       .subscribe((res: any) => {
+        console.log(res.data.data)
+        console.log(res.data.data[3].contract_terms[0].name)
         this.loading = false;
         this.contracts = res.data.data;
         this.pagination.collectionSize = res.data.total;

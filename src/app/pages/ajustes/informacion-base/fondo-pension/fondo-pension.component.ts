@@ -7,6 +7,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
 import { SwalService } from '../services/swal.service';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-fondo-pension',
@@ -46,6 +47,7 @@ export class FondoPensionComponent implements OnInit {
     private fb: FormBuilder,
     private modalService: NgbModal,
     private _swal: SwalService,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +59,10 @@ export class FondoPensionComponent implements OnInit {
     this.modal.show();
 
 
+  }
+
+  close () {
+    this._modal.close()
   }
   closeResult = '';
   public openConfirm(confirm, titulo,nuevoFondo) {

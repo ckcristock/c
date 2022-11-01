@@ -18,10 +18,10 @@ export class LocalidadesComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild('modal') modal: any
 
-  countries: any[];
-  states: any[];
-  municipalities: any[];
-  cities: any[];
+  countries: any[] = [];
+  states: any[] = [];
+  municipalities: any[] = [];
+  cities: any[] = [];
 
   filtro_pais: any = {
     name: ''

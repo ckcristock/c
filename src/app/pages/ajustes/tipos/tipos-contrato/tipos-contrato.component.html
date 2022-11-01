@@ -6,12 +6,12 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button
+         <!--  <button
             class="btn btn-primary btn-sm"
             (click)="openConfirm(add, 'Nuevo tipo de contrato')"
           >
             <i class="fa fa-plus"></i> Agregar
-          </button>
+          </button> -->
           <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
@@ -49,20 +49,19 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
-            <th>Descripción</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <!-- <th>Descripción</th>
+            <th ><i class="mdi mdi-chevron-down"></i></th> -->
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="let contract of contracts"
-            class="text-center"
             [ngClass]="{
               'text-danger font-weight-bold': contract.status === 'Inactivo'
             }"
           >
             <td class="align-middle">{{ contract.name }}</td>
-            <td class="align-middle">{{ contract.description }}</td>
+            <!-- <td class="align-middle">{{ contract.description }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -100,7 +99,7 @@
                   >
                 </div>
               </div>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>

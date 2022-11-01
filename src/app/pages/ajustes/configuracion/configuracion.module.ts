@@ -19,10 +19,7 @@ import { CiudadesComponent } from './paises-ciudades/ciudades/ciudades.component
 import { PaisesCiudadesComponent } from './paises-ciudades/paises-ciudades.component';
 import { DepartamentosMunicipiosComponent } from './departamentos-municipios/departamentos-municipios.component';
 import { BaseCalculosComponent } from './base-calculos/base-calculos.component';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MatExpansionModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule } from '@angular/material';
 import { NominaComponent } from './nomina/nomina.component';
 import { HorasExtrasConfigComponent } from './nomina/components/horas-extras-config/horas-extras-config.component';
 import { SSocialFuncionarioConfigComponent } from './nomina/components/s-social-funcionario-config/s-social-funcionario-config.component';
@@ -30,8 +27,6 @@ import { SSocialEmpresaConfigComponent } from './nomina/components/s-social-empr
 import { IncapacidadesConfigComponent } from './nomina/components/incapacidades-config/incapacidades-config.component';
 import { ParafiscalesConfigComponent } from './nomina/components/parafiscales-config/parafiscales-config.component';
 import { RiesgoArlConfigComponent } from './nomina/components/riesgo-arl-config/riesgo-arl-config.component';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { LocalidadesComponent } from './localidades/localidades.component';
 
 

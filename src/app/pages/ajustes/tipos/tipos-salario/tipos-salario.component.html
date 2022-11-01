@@ -6,12 +6,12 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button
+          <!-- <button
             class="btn btn-primary btn-sm"
             (click)="openConfirm(add, 'Nuevo tipo de salario')"
           >
             <i class="fa fa-plus"></i> Agregar
-          </button>
+          </button> -->
           <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
@@ -42,25 +42,24 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
+
         *ngIf="!loading && salaries.length > 0; else notData"
       >
         <thead class="bg-light">
-          <tr class="text-center text-uppercase">
+          <tr class="text-uppercase">
             <th>Tipos de Salario</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <!-- <th ><i class="mdi mdi-chevron-down"></i></th> -->
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="let salary of salaries"
-            class="text-center"
             [ngClass]="{
               'text-danger font-weight-bold': salary.status === 'Inactivo'
             }"
           >
             <td class="align-middle">{{ salary.name }}</td>
-            <td class="align-middle">
+            <!-- <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -97,7 +96,7 @@
                   >
                 </div>
               </div>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>

@@ -48,7 +48,7 @@
             <li
               role="button"
               *ngFor="let country of countries"
-              [ngClass]="{ 'border border-primary': country.selected }"
+              [ngClass]="{ 'shadow-inset-primary': country.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="
                 getStates(country.id); selected(countries, country.id)
@@ -65,7 +65,7 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    href="javascript: void(0);"
+                    role="button"
                     class="dropdown-item text-info waves-light caja-botones"
                     (click)="editar('paises', country, add)"
                   >
@@ -131,7 +131,7 @@
             <li
               role="button"
               *ngFor="let state of states"
-              [ngClass]="{ 'border border-primary': state.selected }"
+              [ngClass]="{ 'shadow-inset-primary': state.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="
                 countrySelected == 1
@@ -151,7 +151,7 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    href="javascript: void(0);"
+                    role="button"
                     class="dropdown-item text-info waves-light caja-botones"
                     (click)="editar('departamentos', state, add)"
                   >
@@ -216,7 +216,7 @@
             <li
               role="button"
               *ngFor="let municipality of municipalities"
-              [ngClass]="{ 'border border-primary': municipality.selected }"
+              [ngClass]="{ 'shadow-inset-primary': municipality.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="
                 getCitiesByMunicipality(municipality.id);
@@ -234,7 +234,7 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    href="javascript: void(0);"
+                    role="button"
                     class="dropdown-item text-info waves-light caja-botones"
                     (click)="editar('municipios', municipality, add)"
                   >
@@ -299,7 +299,7 @@
             <li
               role="button"
               *ngFor="let city of cities"
-              [ngClass]="{ 'border border-primary': city.selected }"
+              [ngClass]="{ 'shadow-inset-primary': city.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="selected(cities, city.id)"
             >
@@ -314,7 +314,7 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    href="javascript: void(0);"
+                    role="button"
                     class="dropdown-item text-info waves-light caja-botones"
                     (click)="editar('ciudades', city, add)"
                   >

@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import Swal from 'sweetalert2';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
 import { TiposDocumentoService } from './tipos-documento.service';
@@ -78,7 +77,7 @@ export class TiposDocumentoComponent implements OnInit {
       id: this.document.id,
       name: this.document.name,
       code: this.document.code,
-      abbreviation: this.document.abbreviation
+      dian_code: this.document.dian_code
     });
   }
 
@@ -87,7 +86,7 @@ export class TiposDocumentoComponent implements OnInit {
       id: [this.document.id],
       name: ['', this._reactiveValid.required],
       code: ['', this._reactiveValid.required],
-      abbreviation: ['', this._reactiveValid.required]
+      dian_code: ['', this._reactiveValid.required]
     })
   }
 
@@ -165,8 +164,8 @@ export class TiposDocumentoComponent implements OnInit {
     return this.form.get('code').invalid && this.form.get('code').touched;
   }
 
-  get abbreviation_invalid() {
-    return this.form.get('abbreviation').invalid && this.form.get('abbreviation').touched;
+  get dian_code_invalid() {
+    return this.form.get('dian_code').invalid && this.form.get('dian_code').touched;
   }
 
 }

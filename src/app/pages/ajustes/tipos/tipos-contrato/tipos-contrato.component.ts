@@ -1,12 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TiposContratoService } from './tipos-contrato.service';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
-import swal from 'sweetalert2';
 import { consts } from 'src/app/core/utils/consts';
-import { ThemeService } from 'ng2-charts';
-import Swal from 'sweetalert2';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
 import { SwalService } from '../../informacion-base/services/swal.service';
 
@@ -32,7 +29,7 @@ export class TiposContratoComponent implements OnInit {
   selected: any;
   pagination: any = {
     page: 1,
-    pageSize: 10,
+    pageSize: 5,
     collectionSize: 0
   }
   types = consts.contract_type;
@@ -101,8 +98,7 @@ export class TiposContratoComponent implements OnInit {
     this.loading = true;
     this._tiposContratoService.getContractsType(params)
       .subscribe((res: any) => {
-        console.log(res.data.data)
-        console.log(res.data.data[3].contract_terms[0].name)
+
         this.loading = false;
         this.contracts = res.data.data;
         this.pagination.collectionSize = res.data.total;

@@ -163,6 +163,12 @@
             autocomplete="off"
           />
         </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Toppings</mat-label>
+          <mat-select [formControl]="toppings" multiple>
+            <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </form>
   </div>

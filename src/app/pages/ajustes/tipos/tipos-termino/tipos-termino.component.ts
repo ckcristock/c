@@ -32,7 +32,7 @@ export class TiposTerminoComponent implements OnInit {
   form: FormGroup;
   pagination: any = {
     page: 1,
-    pageSize: 10,
+    pageSize: 5,
     collectionSize: 0
   }
   filtro: any = {

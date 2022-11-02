@@ -9,6 +9,19 @@
       correspondientes al momento del pago de la nómina.
     </div>
     <div *ngIf="renderizarNomina; else notData">
+
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">
+            Responsables de aprobación de nómina
+          </h6>
+          <app-responsables-nomina-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="seguridadFuncionarioDatos"
+          ></app-responsables-nomina-config>
+        </div>
+      </div>
+
       <div class="row mt-3">
         <div class="col-md-12">
           <h6 class="font-weight-bold">Horas extras y recargos</h6>

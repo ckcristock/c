@@ -1,0 +1,34 @@
+<div class="rounded-top table-responsive">
+  <table class="table table-striped table-sm">
+    <tbody>
+      <tr *ngFor="let dat of datos">
+        <td>{{ dat.area }}</td>
+        <td class="d-flex justify-content-end">
+          <form [form]="form">
+            <mat-form-field class="pb-0" appearance="outline">
+              <input
+                matInput
+                type="text"
+                [formControl]="manager"
+                [ngbTypeahead]="search"
+                [inputFormatter]="inputFormatBandListValue"
+                [resultFormatter]="resultFormatBandListValue"
+                [editable]="false"
+                autocomplete="off"
+                #manager
+              />
+              <button
+                mat-icon-button
+                color="primary"
+                matSuffix
+                (click)="actualizar(dat, manager.dni)"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+            </mat-form-field>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

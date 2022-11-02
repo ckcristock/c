@@ -159,7 +159,7 @@ export class CreateTurnoFijoComponent implements OnInit {
   createItem(d): FormGroup {
     const required = d == 'Sabado' || d == 'Domingo' ? false : true;
     let controls: any = this.getBasicControl(required);
-    controls.day = [d];
+    controls.day = [{ value: d, disabled: true }];
     return this.fb.group(controls);
   }
 

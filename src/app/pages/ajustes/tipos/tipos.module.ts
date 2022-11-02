@@ -77,6 +77,12 @@ import { TiposTerminoComponent } from './tipos-termino/tipos-termino.component';
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
+    ],
+    exports: [
+        TiposVisaComponent,
+        TiposRegimenComponent,
+        ResponsabilidadesFiscalesComponent,
+        TiposActividadesComponent
     ]
 })
 

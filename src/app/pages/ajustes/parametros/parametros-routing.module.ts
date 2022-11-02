@@ -29,47 +29,42 @@ import { CategoriasComponent } from './categorias/categorias.component';
 import { SubcategoriasComponent } from './subcategorias/subcategorias.component';
 import { MaterialesComponent } from "../informacion-base/catalogo/components/materiales/materiales.component";
 import { NominaComponent } from "./nomina/nomina.component";
+import { ViaticosComponent } from "./viaticos/viaticos.component";
+import { VacantesComponent } from "./vacantes/vacantes.component";
+import { TercerosComponent } from "./terceros/terceros.component";
 
 
 const routes : Routes = [
     // { path: 'perfiles', component : PerfilesComponent },
-    { path: 'rgp', component : RgpComponent },
-    { path: 'zonas', component : ZonasComponent },
-    { path: 'notas-tecnicas', component : NotasTecnicasComponent },
-    { path: 'cuentas-bancarias', component : CuentasBancariasComponent },
-    { path: 'viaticos/hoteles', component: HotelesComponent },
-    { path: 'viaticos/taxis', component: TaxisComponent },
-    { path: 'vacantes/licencia-conduccion', component: LicenciaConduccionComponent },
-
+    // { path: 'rgp', component : RgpComponent },
+    /* { path: 'zonas', component : ZonasComponent }, */
+    /* { path: 'notas-tecnicas', component : NotasTecnicasComponent }, */
+    /* { path: 'cuentas-bancarias', component : CuentasBancariasComponent }, */
+    // { path: 'categorias', component : CategoriasComponent },
+    // { path: 'subcategorias', component : SubcategoriasComponent },
+    // { path: 'valor-almuerzos', component: ValorAlmuerzosComponent },
+    { path: 'viaticos', component: ViaticosComponent },
+    { path: 'vacantes', component: VacantesComponent },
+    { path: 'terceros', component: TercerosComponent },
     { path: 'nomina', component: NominaComponent},
 
     { path: 'apu/geometrias', component: GeometriasComponent },
     { path: 'apu/crear-geometria', component: CrearGeometriaComponent },
     { path: 'apu/editar-geometria/:id', component: CrearGeometriaComponent },
     { path: 'apu/ver-geometria/:id', component: VerGeometriaComponent },
-
     { path: 'apu/materiales', component: MaterialesComponent },
-
     { path: 'apu/unidades-medidas', component: UnidadesMedidasComponent },
     { path: 'apu/variables-apu', component: MaquinasHerramientasComponent },
-    { path: 'apu/procesos-internos', component: ProcesosInternosComponent },
-    { path: 'apu/procesos-externos', component: ProcesosExternosComponent },
-
     { path: 'apu/medidas', component: MedidasComponent },
-
     { path: 'apu/costos-indirectos', component: CostosIndirectosComponent },
-
     { path: 'apu/espesores', component: EspesoresComponent },
     { path: 'apu/corte-laser-material', component: CorteLaserMaterialComponent },
-
     { path: 'apu/perfiles', component: PerfilesApuComponent },
     { path: 'apu/estimacion-viaticos', component: EstimacionViaticosComponent },
     { path: 'apu/est-viaticos-valores', component: EstimacionViaticosValuesComponent },
-
-    { path: 'valor-almuerzos', component: ValorAlmuerzosComponent },
-
-    { path: 'categorias', component : CategoriasComponent },
-    { path: 'subcategorias', component : SubcategoriasComponent },
+    
+    // path: 'apu/procesos-internos', component: ProcesosInternosComponent },
+    // { path: 'apu/procesos-externos', component: ProcesosExternosComponent },
 ]
 
 

@@ -44,6 +44,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { NominaComponent } from './nomina/nomina.component';
 import { InformacionBaseModule } from "../informacion-base/informacion-base.module";
+import { ViaticosComponent } from './viaticos/viaticos.component';
+import { VacantesComponent } from './vacantes/vacantes.component';
+import { TiposModule } from "../tipos/tipos.module";
+import { TercerosComponent } from './terceros/terceros.component';
+import { MatButtonModule, MatIconModule } from "@angular/material";
 
 
 
@@ -77,7 +82,10 @@ import { InformacionBaseModule } from "../informacion-base/informacion-base.modu
         ValorAlmuerzosComponent,
         CategoriasComponent,
         SubcategoriasComponent,
-        NominaComponent
+        NominaComponent,
+        ViaticosComponent,
+        VacantesComponent,
+        TercerosComponent
     ],
     imports: [
         ParametrosRoutingModule,
@@ -96,11 +104,19 @@ import { InformacionBaseModule } from "../informacion-base/informacion-base.modu
         MatInputModule,
         MatSelectModule,
         MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
         MatPaginatorModule,
         SweetAlert2Module.forRoot(),
-        InformacionBaseModule
+        InformacionBaseModule,
+        TiposModule
     ],
-    exports: []
+    exports: [
+        CuentasBancariasComponent,
+        CategoriasComponent,
+        SubcategoriasComponent,
+        ValorAlmuerzosComponent
+    ]
 })
 
 export class ParametrosModule { }

@@ -116,7 +116,8 @@ export class SubcategoriasComponent implements OnInit {
       .get(environment.ruta + 'php/parametros/lista_subcategoria.php', {params: { company_id: this._user.user.person.company_worked.id }})
       .subscribe((data: any) => {
         this.Cargando = false;
-        this.Sucategories = data.Subcategoria;
+        this.Sucategories = data;
+        console.log(this.Sucategories)
       });
   }
 

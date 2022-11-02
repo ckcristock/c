@@ -171,14 +171,13 @@
             matInput
             type="date"
             placeholder="Selecciona la fecha de nacimiento"
-            formControlName="date_of_birth"
-            [class.is-invalid]="date_of_birth_valid"
+            formControlName="birth_date"
           />
           <!-- <mat-icon matSuffix>event</mat-icon> -->
-          <mat-error *ngIf="date_of_birth_valid">
+          <mat-error *ngIf="birth_date_valid">
             <small
               *ngFor="
-                let item of form.get('date_of_birth').errors | ObjToArrayPipe
+                let item of form.get('birth_date').errors | ObjToArrayPipe
               "
               class="text-danger"
             >

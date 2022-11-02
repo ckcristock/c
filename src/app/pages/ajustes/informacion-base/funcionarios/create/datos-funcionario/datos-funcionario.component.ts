@@ -83,7 +83,7 @@ export class DatosFuncionarioComponent implements OnInit {
           Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
         ],
       ],
-      date_of_birth: ['', this._valid.required],
+      birth_date: ['', this._valid.required],
       place_of_birth: ['', this._valid.required],
       direction: ['', this._valid.required],
       phone: ['', [this._valid.required, this._valid.minLength(7), this._valid.maxLength(10)]],
@@ -135,10 +135,10 @@ export class DatosFuncionarioComponent implements OnInit {
   get email_valid() {
     return this.form.get('email').invalid && this.form.get('email').touched;
   }
-  get date_of_birth_valid() {
+  get birth_date_valid() {
     return (
-      this.form.get('date_of_birth').invalid &&
-      this.form.get('date_of_birth').touched
+      this.form.get('birth_date').invalid &&
+      this.form.get('birth_date').touched
     );
   }
   get place_of_birth_valid() {

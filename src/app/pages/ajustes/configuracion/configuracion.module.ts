@@ -13,7 +13,7 @@ import { CamposTercerosComponent } from './campos-terceros/campos-terceros.compo
 import { MunicipiosComponent } from './departamentos-municipios/municipios/municipios.component';
 import { DepartamentosComponent } from './departamentos-municipios/departamentos/departamentos.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbNavModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { PaisesComponent } from './paises-ciudades/paises/paises.component';
 import { CiudadesComponent } from './paises-ciudades/ciudades/ciudades.component';
 import { PaisesCiudadesComponent } from './paises-ciudades/paises-ciudades.component';
@@ -33,6 +33,8 @@ import { RiesgoArlConfigComponent } from './nomina/components/riesgo-arl-config/
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LocalidadesComponent } from './localidades/localidades.component';
+import { InformacionBaseModule } from '../informacion-base/informacion-base.module';
+import { ParametrosModule } from '../parametros/parametros.module';
 
 
 @NgModule({
@@ -64,9 +66,12 @@ import { LocalidadesComponent } from './localidades/localidades.component';
     ComponentsModule,
     FormsModule,
     ConfiguracionRoutingModule,
+    InformacionBaseModule,
+    ParametrosModule,
     HttpClientModule,
     ReactiveFormsModule,
     NgSelectModule,
+    NgbNavModule,
     NgbDropdownModule,
     NgbPaginationModule,
     MatExpansionModule,

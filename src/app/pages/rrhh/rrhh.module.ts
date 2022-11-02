@@ -79,6 +79,8 @@ import { CrearProcesoComponent } from './procesos/disciplinarios/crear-proceso/c
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
+import { ParametrosModule } from '../ajustes/parametros/parametros.module';
+import { TiposModule } from '../ajustes/tipos/tipos.module';
 
 @NgModule({
   declarations: [
@@ -139,6 +141,8 @@ import { MatRadioModule } from '@angular/material/radio';
     /* SweetAlert2Module, */
     NgbPaginationModule,
     NgbCollapseModule,
+    ParametrosModule,
+    TiposModule,
     NgbDropdownModule,
     NgbTypeaheadModule,
     NgbTooltipModule,

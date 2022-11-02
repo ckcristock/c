@@ -1,37 +1,55 @@
-<div class="card border border-3 border-light">
+<div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h5>Datos de pila</h5>
-      <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
-        <i class="fas fa-pencil-alt"></i>
-      </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-10 px-0">
+        <h6 class="text-dark"><i class="fas fa-gavel"></i> Datos de pila</h6>
+      </div>
+      <div class="col-md-2 px-0 text-right">
+        <button class="btn btn-link" (click)="openModal(modal)">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+      </div>
     </div>
-    <div class="rounded-top table-responsive">
-      <table class="table table-sm">
-        <thead class="bg-light">
-          <tr class="text-center text-uppercase">
-            <th>Operador de pago</th>
-            <th>Compañía de ARL</th>
-            <th>Aplica Ley 1429 de 2010</th>
-            <th>Aplica Ley 590 de 2010</th>
-            <th>Aplica Ley de 1607 de 2012</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="text-center">
-            <td>{{ pilas.paid_operator }}</td>
-            <td>{{ arl }}</td>
-            <td>{{ pilas.law_1429 }}</td>
-            <td>{{ pilas.law_590 }}</td>
-            <td>{{ pilas.law_1607 }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="row" *ngIf="!loading && pilas; else notData">
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Operador de Pago
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ pilas.paid_operator }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Companía de ARL
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ arl }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Aplica Ley 1429 de 2010
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ pilas.law_1429 ? 'Sí' : 'No' }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Aplica Ley 590 de 2010
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ pilas.law_590 ? 'Sí' : 'No' }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Aplica Ley de 1607 de 2012
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ pilas.law_1607 ? 'Sí' : 'No' }}
+      </div>
     </div>
   </div>
 </div>
 
-<ng-template #add let-modal>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #modal let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Datos de pila</h4>
     <button

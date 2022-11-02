@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalService } from 'src/app/core/services/modal.service';
 import { consts } from 'src/app/core/utils/consts';
 import Swal from 'sweetalert2';
 import { SwalService } from '../../../../services/swal.service';
@@ -14,10 +14,11 @@ import { BonoService } from './bono.service';
 export class BonoComponent implements OnInit {
   form: FormGroup;
   @ViewChild('modal') modal: any;
+  @ViewChild('add') add: any;
   @Input('id') id: any;
   bonusTypes: any = consts.bonusType;
+  loading: boolean;
   bonus: any;
-  loading: boolean = false;
   bonu: any = [
     {
       concept: '',
@@ -27,8 +28,8 @@ export class BonoComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private bonusService: BonoService,
-    private modalService: NgbModal,
     private _swal: SwalService,
+    private _modal: ModalService,
   ) { }
 
   ngOnInit(): void {
@@ -36,34 +37,20 @@ export class BonoComponent implements OnInit {
     this.getBonusData();
   }
 
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  openModal() {
+    this._modal.open(this.add);
     this.form.patchValue({
       countable_income_id: '',
       value: '',
-      work_contract_id: this.id,
+      work_contract_id: this.id
     });
-  }
-  private getDismissReason(reason: any) {
-    
-  }
-
-  openModal() {
-    this.modal.show();
-
   }
 
   createFormBonus() {
     this.form = this.fb.group({
       countable_income_id: ['', Validators.required],
       value: ['', Validators.required],
-      work_contract_id: [this.id],
-      status: 1
+      work_contract_id: [this.id]
     });
   }
 
@@ -106,7 +93,6 @@ export class BonoComponent implements OnInit {
     this.bonusService.getBonusData({ id: this.id })
       .subscribe((res: any) => {
         this.bonu = res.data;
-        console.log(this.bonu)
         this.loading = false;
       });
   }
@@ -116,7 +102,7 @@ export class BonoComponent implements OnInit {
     if (this.form.invalid) { return false; }
     this.bonusService.addBonus(this.form.value)
       .subscribe(res => {
-        this.modalService.dismissAll(); 
+        this._modal.close();
         this.getBonusData();
         this._swal.show({
           title: 'Creado con éxito',
@@ -125,7 +111,6 @@ export class BonoComponent implements OnInit {
           timer: 1000,
           showCancel: false
         })
-        
       })
   }
 

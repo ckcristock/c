@@ -32,4 +32,8 @@ export class ConfiguracionEmpresaService {
   changePaymentConfiguration(data:any) {
     return this.http.post(`${environment.base_url}/companyPayment`, data);
   }
+
+  public getTypeDocuments() {
+    return this.http.get(`${environment.base_url}/documentTypes`)
+  }
 }

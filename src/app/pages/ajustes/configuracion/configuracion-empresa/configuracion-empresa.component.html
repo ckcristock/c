@@ -1,36 +1,155 @@
-<div class="card">
-  <div class="card-body">
-    <div class="row card-title d-flex justify-content-between">
-      <div class="col-md-6 px-0">
-        <h4 class="text-primary">Datos de la empresa</h4>
-      </div>
-      <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-primary btn-sm" (click)="openConfirm(add)">
-            Cambiar configuración de pago
-          </button>
-        </div>
-      </div>
-    </div>
-    <hr class="line" />
-    <div class="row mt-4">
-      <div class="col-lg-12">
-        <app-datos-basicos-empresa></app-datos-basicos-empresa>
-      </div>
-      <div class="col-lg-12">
-        <app-datos-nomina></app-datos-nomina>
-      </div>
-      <div class="col-lg-12">
-        <app-datos-pago></app-datos-pago>
-      </div>
-      <div class="col-lg-12">
-        <app-datos-pila></app-datos-pila>
-      </div>
+<div class="row card-title d-flex justify-content-between">
+  <div class="col-md-6 px-0">
+    <h4 class="text-dark">{{ company_name }}</h4>
+    <!-- <mat-form-field appearance="outline" *ngIf="!rutaActiva.snapshot.params.id">
+      <mat-label>Empresa</mat-label>
+      <mat-select
+        [(ngModel)]="currentCompany"
+        name="currentCompany"
+        (selectionChange)="getDataCompany()"
+      >
+        <mat-option *ngFor="let company of companies" [value]="company.id">
+          {{ company.name }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field> -->
+  </div>
+  <div class="col-md-2 px-0 text-right">
+    <div class="btn-group rounded w-sm-100">
+      <button
+        type="button"
+        class="btn btn-primary btn-sm"
+        (click)="openModal(modal)"
+      >
+        Cambiar configuración de pago
+      </button>
     </div>
   </div>
 </div>
+<ul
+  ngbNav
+  #nav="ngbNav"
+  [(activeId)]="active"
+  class="nav nav-tabs justify-content-center"
+  role="tablist"
+>
+  <li [ngbNavItem]="1" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      (click)="getDataCompany()"
+      [routerLink]="['../informacion']"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Información</a
+    >
+    <ng-template ngbNavContent>
+      <div class="row">
+        <div class="col-md-6">
+          <app-datos-basicos-empresa
+            (update)="getDataCompany()"
+          ></app-datos-basicos-empresa>
+          <app-datos-pila (update)="getDataCompany()"></app-datos-pila>
+        </div>
+        <div class="col-md-6">
+          <app-datos-nomina (update)="getDataCompany()"></app-datos-nomina>
+          <app-datos-pago (update)="getDataCompany()"></app-datos-pago>
+          <div class="custom-input-file col-md-12 mt-3">
+            <input
+              type="file"
+              #fileInput
+              class="input-file"
+              (change)="onFileChanged($event)"
+              accept="image/*"
+              placeholder="Holi"
+            />
+            {{ string_input }}
+          </div>
+          <div class="col-md-12 text-center">
+            <small
+              [ngClass]="{
+                'text-success': page_heading,
+                'text-danger': !page_heading
+              }"
+              class="text-success"
+              >{{ page_heading ? "Hoja cargada" : "Pendiente" }}</small
+            >
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="2" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      [routerLink]="['../estructura']"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Estructura</a
+    >
+    <ng-template ngbNavContent>
+      <app-estructura-empresa></app-estructura-empresa>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="3" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      [routerLink]="['../cuentas-bancarias']"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Cuentas bancarias</a
+    >
+    <ng-template ngbNavContent>
+      <app-cuentas-bancarias></app-cuentas-bancarias>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="4" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      [routerLink]="['../categorias']"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Categorías</a
+    >
+    <ng-template ngbNavContent>
+      <app-categorias></app-categorias>
+      <app-subcategorias></app-subcategorias>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="5" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      [routerLink]="['../sedes']"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Sedes</a
+    >
+    <ng-template ngbNavContent>
+      <app-sedes></app-sedes>
+    </ng-template>
+  </li>
+</ul>
+<div [ngbNavOutlet]="nav" class="mt-2"></div>
 
-<ng-template #add let-modal>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #modal let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Configuración de pago</h4>
     <button
@@ -43,6 +162,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
+
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
@@ -55,7 +175,9 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Pago de deducciones</mat-label>
           <mat-select formControlName="pay_deductions">
-            <mat-option value="proporcionales">Proporcionales en cada pago</mat-option>
+            <mat-option value="proporcionales"
+              >Proporcionales en cada pago</mat-option
+            >
             <mat-option value="final_periodo">Al final del periodo</mat-option>
           </mat-select>
         </mat-form-field>
@@ -73,14 +195,16 @@
             <mat-option value="Quincenal">Quincenal</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-12" appearance="outline">
-          <mat-label>¿Horas extras y recargos afectan auxilio de transporte?</mat-label>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label
+            >¿Horas extras y recargos afectan auxilio de transporte?</mat-label
+          >
           <mat-select formControlName="affects_transportation_subsidy">
             <mat-option value="Si">Sí</mat-option>
             <mat-option value="No">No</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-12" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>¿Pagar el día 31 del mes en vacaciones?</mat-label>
           <mat-select formControlName="pay_vacations">
             <mat-option value="Si">Sí</mat-option>
@@ -91,18 +215,13 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
       Cancelar
     </button>
     <button
       type="button"
       (click)="changePaymentConfiguration()"
       class="btn btn-primary"
-      [disabled]="!form.valid"
     >
       Guardar
     </button>

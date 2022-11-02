@@ -12,6 +12,7 @@ import { DependenciesService } from '../../ajustes/informacion-base/services/dep
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-almuerzos',
@@ -75,6 +76,7 @@ export class AlmuerzosComponent implements OnInit {
     private _group: GroupService,
     private _person: PersonService,
     private modalService: NgbModal,
+    private _modal: ModalService
 
   ) { }
 
@@ -108,6 +110,10 @@ export class AlmuerzosComponent implements OnInit {
   estadoFiltros = false;
   mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
+  }
+
+  openValues(content) {
+    this._modal.open(content, 'lg')
   }
 
   getPeople() {

@@ -20,6 +20,7 @@ export class SalarioComponent implements OnInit {
   id: any;
   contract_types: any;
   salary_history: any [] = []
+  loading: boolean;
   salary_info: any = {
     salary: '',
     contract_type: '',
@@ -97,8 +98,10 @@ export class SalarioComponent implements OnInit {
 
 
   getSalaryInfo() {
+    this.loading = true;
     this.salaryService.getSalaryInfo(this.id)
       .subscribe((res: any) => {
+        this.loading = false;
         this.salary_info = res.data;
         this.form.patchValue({
           salary: this.salary_info.salary,

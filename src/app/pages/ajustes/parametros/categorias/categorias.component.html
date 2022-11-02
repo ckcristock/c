@@ -1,302 +1,459 @@
-<div class="page-body">
-    <div class="row">
-        <div class="col-md-12 filter-bar">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-10">
-                            <h5>Categorías</h5>
-                            <span>Listado de Categorías registrados en nuestras bases de datos, las Categorías no representan un punto de dispensación, estas representan una categoría principal</span>
-                        </div>
-                        <div class="col-md-2" style="text-align:right;">
-                            <div class="form-group t-10">
-                                <div class="card-header-left">
-                                    <button type="button" class="pull-left btn btn-primary btn-sm" (click)="modalCategoria.show()">
-                              <i class="fa fa-plus"></i>
-                              Agregar Nueva Categoría
-                              </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Categoría</th>
-                                        <th>Departamento</th>
-                                        <th>Municipio</th>
-                                        <th>Dirección</th>
-                                        <th>Telefono</th>
-                                        <th><i class="mdi mdi-chevron-down"></i></th>
-                                    </tr>
-                                    <tr>
-                                        <th class="tabla-filtro">
-                                            <select [(ngModel)]="filtro_categoria" class="form-control input-sm" (change)="filtros()">
-                                            <option value="">Todos</option>
-                                            <option *ngFor="let categoria of categorias_filtro" [value]="categoria.Id_Categoria_Nueva">{{categoria.Nombre}}</option>
-                                        </select>
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <select [(ngModel)]="filtro_departamento" class="form-control input-sm" (change)="filtros()">
-                                              <option value="">Todos</option>
-                                              <option *ngFor="let departamento of Departamentos" [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
-                                          </select>
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <input type="text" [(ngModel)]="filtro_municipio" (blur)="filtros()" class="form-control input-sm" placeholder="Direccion">
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <input type="text" [(ngModel)]="filtro_direccion" (blur)="filtros()" class="form-control input-sm" placeholder="Direccion">
-                                        </th>
-                                        <th class="tabla-filtro">
-                                            <input type="text" [(ngModel)]="filtro_telefono" (blur)="filtros()" class="form-control input-sm" placeholder="Telefono">
-                                        </th>
-                                        <th class="tabla-filtro"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let categoria of categorias">
-                                        <td>{{ categoria.Nombre }}</td>
-                                        <td>{{ categoria.NombreDepartamento }}</td>
-                                        <td>{{ categoria.NombreMunicipio }}</td>
-                                        <td>{{ categoria.Direccion }}</td>
-                                        <td>{{ categoria.Telefono }}</td>
-                                        <td>
-                                            <div class="text-center">
-                                                <div class="btn-group " role="group" data-toggle="tooltip" data-placement="top" title="" data-original-title=".btn-mini">
-                                                    <div ngbDropdown container="body" class="dropdown-primary">
-                                                        <button ngbDropdownToggle class="btn btn-secondary btn-mini  waves-light " type="button"><i class="mdi mdi-chevron-down"></i></button>
-                                                        <div ngbDropdownMenu>
-                                                            <a class="dropdown-item waves-light  caja-botones" (click)="EditarCategoria(categoria.Id_Categoria_Nueva)"> <i class="ti-pencil"></i>Editar</a>
-                                                            <a class="dropdown-item waves-light  caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar esta compra, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                                                (confirm)="EliminarCategoria(categoria.Id_Categoria_Nueva)"> <i class="ti-trash"></i>Eliminar</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" size="sm" (pageChange)="paginacion()" [boundaryLinks]="true"></ngb-pagination>
-
-                    <ng-template #PlantillaBotones let-row="row" let-value="value">
-                        <div class="text-center">
-                            <div class="btn-group " role="group" data-toggle="tooltip" data-placement="top" title="" data-original-title=".btn-mini">
-                                <!--  <button type="button" class="btn btn-info btn-mini  waves-light">
-                                  <i class="fa fa-search"></i>
-                              </button>
-                              <button class="btn btn-primary btn-mini" (click)="EditarCategoria(value)" type="button" style="margin:0;">
-                                  <i class="ti-pencil"></i>
-                              </button>-->
-                                <div ngbDropdown container="body" class="dropdown-primary">
-                                    <button ngbDropdownToggle class="btn btn-secondary btn-mini  waves-light " type="button"><i class="mdi mdi-chevron-down"></i></button>
-                                    <div ngbDropdownMenu>
-                                        <a class="dropdown-item waves-light  caja-botones" (click)="EditarCategoria(value)"> <i class="ti-pencil"></i>Editar</a>
-                                        <a class="dropdown-item waves-light  caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar esta compra, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                            (confirm)="EliminarCategoria(value)"> <i class="ti-trash"></i>Eliminar</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-template>
-                </div>
-            </div>
+<div class="card">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h5 class="text-primary">Categorías</h5>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-primary btn-sm" (click)="openModal(add)">
+            <i class="fa fa-plus"></i>
+            Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
+      </div>
     </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Categoría</mat-label>
+            <mat-select
+              [(ngModel)]="filters.categoria"
+              (selectionChange)="paginacion()"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option
+                *ngFor="let categoria of categorias_filtro"
+                [value]="categoria.Id_Categoria_Nueva"
+              >
+                {{ categoria.Nombre }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Departamento</mat-label>
+            <mat-select
+              [(ngModel)]="filters.departamento"
+              (selectionChange)="paginacion()"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option
+                *ngFor="let departamento of Departamentos"
+                [value]="departamento.Id_Departamento"
+              >
+                {{ departamento.Nombre }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Municipio</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por municipio"
+              [(ngModel)]="filters.municipio"
+              (input)="paginacion()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Dirección</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por dirección"
+              [(ngModel)]="filters.direccion"
+              (input)="paginacion()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Teléfono</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por teléfono"
+              [(ngModel)]="filters.telefono"
+              (input)="paginacion()"
+              autocomplete="off"
+            />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div
+      class="rounded-top table-responsive"
+      *ngIf="!loading && categorias.length > 0; else notData"
+    >
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Categoría</th>
+            <th>Departamento</th>
+            <th>Municipio</th>
+            <th>Dirección</th>
+            <th>Telefono</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center" *ngFor="let categoria of categorias">
+            <td>{{ categoria.Nombre }}</td>
+            <td>{{ categoria.NombreDepartamento }}</td>
+            <td>{{ categoria.NombreMunicipio }}</td>
+            <td>{{ categoria.Direccion }}</td>
+            <td>{{ categoria.Telefono }}</td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item text-info waves-light caja-botones"
+                    href="javascript: void(0);"
+                    (click)="EditarCategoria(categoria.Id_Categoria_Nueva)"
+                  >
+                    <i class="far fa-edit"></i> Editar</a
+                  >
+                  <a
+                    class="dropdown-item text-danger waves-light caja-botones"
+                    href="javascript: void(0);"
+                    (click)="inOff(categoria.Id_Categoria_Nueva)"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.maxSize"
+      [(page)]="pagination.pag"
+      (pageChange)="paginacion($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    ></ngb-pagination>
+  </div>
 </div>
 
-<app-modal-basic #modalCategoria [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h4 class="modal-title">Nueva Categoría</h4>
-        <button type="button" class="close basic-close" (click)="modalCategoria.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div style="overflow-x: unset !important;overflow-y: unset !important" class="app-modal-body">
-        <form #FormCategoria="ngForm">
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nueva categoría</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
           <input
-          name="company_id"
-          type="hidden"
-          placeholder=""
-          class="form-control"
-          [(ngModel)]="company_id"
-        />
-            <div class="row">
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Nombre Categoría</label>
-                        <input type="text" name="Nombre" placeholder="" class="form-control" ngModel required>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Departamento</label>
-                        <select required ngModel class="form-control" name="Departamento" #SelectDepartamento (change)="Municipios_Departamento($event.target.value)">
-                          <option>Seleccione Departamento</option>
-                          <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                      </select>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Municipio</label>
-                        <select name="Municipio" ngModel class="form-control" name="Municipio">
-                          <option value="">Seleccione Municipio</option>
-                          <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                      </select>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="form-group">
-                        <label>Direccion</label>
-                        <input type="text" name="Direccion" placeholder="" class="form-control" ngModel required>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Telefono</label>
-                        <input type="text" name="Telefono" placeholder="" class="form-control" ngModel required>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="form-group">
-                        <label for="">Subcategorias Asociadas</label>
-                        <ng-select [ngClass]="'ng-select'" class="form-control-sm input-sm" bindLabel="Nombre" bindValue="Id_Subcategoria" [items]="Subcategorias" name="Subcategorias" [(ngModel)]="SubcategoriasSeleccionadas" [multiple]="true"></ng-select>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="">¿Aplica separación por Subcategorias?</label>
-                        <select name="Aplica_Separacion_Subcategorias" id="Aplica_Separacion_Subcategorias" ngModel class="form-control form-control-sm" required>
-                          <option value="Si">Si</option>
-                          <option value="No">No</option>
-                      </select>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="button" class="btn btn-default btn-sm" (click)="modalCategoria.hide()">Cancelar</button>
-            <button type="button" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Guardar esta Categoría' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }" (confirm)="GuardarCategoria(FormCategoria,modalCategoria)"
-                [disabled]="!FormCategoria.valid && SubcategoriasSeleccionadas.length == 0" class="btn btn-primary btn-sm">Guardar</button>
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="Nombre"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Departamento</mat-label>
+          <mat-select
+            formControlName="Departamento"
+            (selectionChange)="Municipios_Departamento($event.value)"
+            required
+          >
+            <mat-option
+              *ngFor="let Departamento of Departamentos"
+              [value]="Departamento.Id_Departamento"
+            >
+              {{ Departamento.Nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Municipio</mat-label>
+          <mat-select formControlName="Municipio" required>
+            <mat-option
+              *ngFor="let Municipio of Municipios"
+              [value]="Municipio.Id_Municipio"
+            >
+              {{ Municipio.Nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la dirección"
+            formControlName="Direccion"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el teléfono"
+            formControlName="Telefono"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Separación</mat-label>
+          <mat-select
+            formControlName="Aplica_Separacion_Subcategorias"
+            required
+          >
+            <mat-option value="Si">Sí</mat-option>
+            <mat-option value="No">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="col-md-12">
+          <ng-select
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Subcategorías asociadas"
+            formControlName="Subcategorias"
+            bindLabel="Nombre"
+            bindValue="Id_Subcategoria"
+            [items]="Subcategorias"
+            [multiple]="true"
+            loadingText="loading"
+            ngDefaultControl
+          ></ng-select>
         </div>
-    </div>
-
-</app-modal-basic>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="saveCategory()"
+      class="btn btn-primary"
+      [disabled]="!form.valid"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
 
 <app-modal-basic #modalCategoriaEditar [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h4 class="modal-title">Editar Categoria</h4>
-        <button type="button" class="close basic-close" (click)="modalCategoriaEditar.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div style="overflow-x: unset !important;overflow-y: unset !important" class="app-modal-body">
-        <form #FormCategoriaEditar="ngForm">
-            <input type="hidden" name="Id_Categoria_Nueva" ngModel="{{IdCategoria}}">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Nombre Categoria</label>
-                        <input type="text" name="Nombre" placeholder="" class="form-control" ngModel="{{Categoria.Nombre}}" required>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Departamento</label>
-                        <select ngModel="{{Categoria.Departamento}}" class="form-control" name="Departamento" #SelectDepartamento (change)="Municipios_Departamento($event.target.value)" required>
-                          <option>Seleccione Departamento</option>
-                          <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                      </select>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Municipio</label>
-                        <select name="Municipio" ngModel="{{Categoria.Municipio}}" class="form-control">
-                          <option>Seleccione Municipio</option>
-                          <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                      </select>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-
-
-                <div class="col-md-9">
-                    <div class="form-group">
-                        <label>Direccion</label>
-                        <input type="text" name="Direccion" placeholder="" class="form-control" ngModel="{{Categoria.Direccion}}" required>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Telefono</label>
-                        <input type="text" name="Telefono" placeholder="" class="form-control" ngModel="{{Categoria.Telefono}}" required>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="form-group">
-                        <label for="">Subcategorias Asociadas</label>
-                        <ng-select [ngClass]="'ng-select'" bindLabel="Nombre" bindValue="Id_Subcategoria" class="form-control-sm input-sm" [items]="Subcategorias" name="Subcategorias" [(ngModel)]="SubcategoriasSeleccionadas" [multiple]="true"></ng-select>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="">¿Aplica separación por Subcategorias?</label>
-                        <select name="Aplica_Separacion_Categorias" id="Aplica_Separacion_Subcategorias" [ngModel]="Categoria.Aplica_Separacion_Categorias" class="form-control form-control-sm" required>
-                          <option value="Si">Si</option>
-                          <option value="No">No</option>
-                      </select>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="button" class="btn btn-default btn-sm" (click)="modalCategoriaEditar.hide()">Cancelar</button>
-            <button type="button" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Guardar esta Categoria' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }" (confirm)="GuardarCategoria(FormCategoriaEditar,modalCategoriaEditar)"
-                [disabled]="!FormCategoriaEditar.valid && SubcategoriasSeleccionadas.length == 0" class="btn btn-primary btn-sm">Guardar</button>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Editar Categoria</h4>
+    <button
+      type="button"
+      class="close basic-close"
+      (click)="modalCategoriaEditar.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div
+    style="overflow-x: unset !important; overflow-y: unset !important"
+    class="app-modal-body"
+  >
+    <form #FormCategoriaEditar="ngForm">
+      <input
+        type="hidden"
+        name="Id_Categoria_Nueva"
+        ngModel="{{ IdCategoria }}"
+      />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nombre Categoria</label>
+            <input
+              type="text"
+              name="Nombre"
+              placeholder=""
+              class="form-control"
+              ngModel="{{ Categoria.Nombre }}"
+              required
+            />
+          </div>
         </div>
-    </div>
 
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Departamento</label>
+            <select
+              ngModel="{{ Categoria.Departamento }}"
+              class="form-control"
+              name="Departamento"
+              #SelectDepartamento
+              (change)="Municipios_Departamento($event.target.value)"
+              required
+            >
+              <option>Seleccione Departamento</option>
+              <option
+                *ngFor="let Departamento of Departamentos"
+                [value]="Departamento.Id_Departamento"
+              >
+                {{ Departamento.Nombre }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Municipio</label>
+            <select
+              name="Municipio"
+              ngModel="{{ Categoria.Municipio }}"
+              class="form-control"
+            >
+              <option>Seleccione Municipio</option>
+              <option
+                *ngFor="let Municipio of Municipios"
+                [value]="Municipio.Id_Municipio"
+              >
+                {{ Municipio.Nombre }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-9">
+          <div class="form-group">
+            <label>Direccion</label>
+            <input
+              type="text"
+              name="Direccion"
+              placeholder=""
+              class="form-control"
+              ngModel="{{ Categoria.Direccion }}"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Telefono</label>
+            <input
+              type="text"
+              name="Telefono"
+              placeholder=""
+              class="form-control"
+              ngModel="{{ Categoria.Telefono }}"
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-7">
+          <div class="form-group">
+            <label for="">Subcategorias Asociadas</label>
+            <ng-select
+              [ngClass]="'ng-select'"
+              bindLabel="Nombre"
+              bindValue="Id_Subcategoria"
+              class="form-control-sm input-sm"
+              [items]="Subcategorias"
+              name="Subcategorias"
+              [(ngModel)]="SubcategoriasSeleccionadas"
+              [multiple]="true"
+            ></ng-select>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label for="">¿Aplica separación por Subcategorias?</label>
+            <select
+              name="Aplica_Separacion_Categorias"
+              id="Aplica_Separacion_Subcategorias"
+              [ngModel]="Categoria.Aplica_Separacion_Categorias"
+              class="form-control form-control-sm"
+              required
+            >
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button
+        type="button"
+        class="btn btn-default btn-sm"
+        (click)="modalCategoriaEditar.hide()"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        [swal]="{
+          title: '¿Está Seguro?',
+          text: 'Se dispone a Guardar esta Categoria',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Si, Guardar',
+          cancelButtonText: 'No, Dejame Comprobar!'
+        }"
+        (confirm)="saveCategory()"
+        [disabled]="
+          !FormCategoriaEditar.valid && SubcategoriasSeleccionadas.length == 0
+        "
+        class="btn btn-primary btn-sm"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
 </app-modal-basic>
 
 <swal #deleteSwal title="" text="" type="">
-    <!-- <swal #deleteSwal title="Seleccione Opción" text="Debes seleccionar la Bodega" html="" icon="warning"></swal> -->
-
+  <!-- <swal #deleteSwal title="Seleccione Opción" text="Debes seleccionar la Bodega" html="" icon="warning"></swal> -->
 </swal>

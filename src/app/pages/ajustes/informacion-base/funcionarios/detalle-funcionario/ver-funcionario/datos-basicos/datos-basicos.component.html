@@ -1,51 +1,72 @@
-<div class="card-body">
-  <div class="card-title d-flex justify-content-between">
-    <h5>Datos básicos</h5>
-    <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
-      <i class="fas fa-pencil-alt"></i>
-    </button>
+<div class="d-flex justify-content-end">
+  <button class="btn btn-link" (click)="openConfirm(add)">
+    <i class="fas fa-pencil-alt"></i>
+  </button>
+</div>
+<div class="row" *ngIf="!loading && funcionario; else notData">
+  <div class="col-lg-6 text-lg-right text-center text-primary">
+    Nombre completo
   </div>
-  <div class="rounded-top table-responsive">
-    <table
-      class="table table-sm"
-      
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th class="align-middle">Nombre</th>
-          <th class="align-middle">Documento</th>
-          <th class="align-middle">Correo</th>
-          <th class="align-middle">Título</th>
-          <th class="align-middle">F. Nacimiento</th>
-          <th class="align-middle">Género</th>
-          <th class="align-middle">Estado civil</th>
-          <th class="align-middle">Dirección</th>
-          <th class="align-middle">Teléfono</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="text-center">
-          <td class="align-middle">
-            {{ funcionario.first_name }} {{ funcionario.second_name }}
-            {{ funcionario.first_surname }} {{ funcionario.second_surname }}
-          </td>
-          <td class="align-middle">{{ funcionario.identifier | number }}</td>
-          <td class="align-middle">{{ funcionario.email }}</td>
-          <td class="align-middle">{{ funcionario.degree }}</td>
-          <td class="align-middle">{{ funcionario.date_of_birth | date: "longDate" }}</td>
-          <td class="align-middle">{{ funcionario.gener }}</td>
-          <td class="align-middle">{{ funcionario.marital_status }}</td>
-          <td class="align-middle">{{ funcionario.address }}</td>
-          <td class="align-middle">{{ funcionario.cell_phone }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="col-lg-6 text-lg-left text-center">
+    {{ funcionario.first_name }} {{ funcionario.second_name }}
+    {{ funcionario.first_surname }} {{ funcionario.second_surname }}
+  </div>
+  <div class="col-lg-6 text-lg-right text-center text-primary">
+    Documento de identidad
+  </div>
+  <div class="col-lg-6 text-lg-left text-center">
+    {{ funcionario.identifier }}
+  </div>
+  <div class="col-lg-6 text-lg-right text-center text-primary">
+    Correo electrónico
+  </div>
+  <div class="col-lg-6 text-lg-left text-center">
+    {{ funcionario.email }}
   </div>
 
-  <ng-template #add let-modal>
-    <div class="modal-header">
-      <h4 class="text-primary modal-title">Actualizar funcionario</h4>
-      <button
+  <div class="col-lg-6 text-lg-right text-center text-primary">
+    Título de estudio
+  </div>
+  <div class="col-lg-6 text-lg-left text-center">
+    {{ funcionario.degree }}
+  </div>
+
+  <div class="col-lg-6 text-lg-right text-center text-primary">
+    Fecha de nacimiento
+  </div>
+  <div class="col-lg-6 text-lg-left text-center">
+    {{ funcionario.birth_date }}
+  </div>
+  <div class="col-lg-6 text-lg-right text-center text-primary">Género</div>
+  <div class="col-lg-6 text-lg-left text-center">
+    {{ funcionario.gener }}
+  </div>
+
+  <div class="col-lg-6 text-lg-right text-center text-primary">
+    Estado civil
+  </div>
+  <div class="col-lg-6 text-lg-left text-center">
+    {{ funcionario.marital_status }}
+  </div>
+  <div class="col-lg-6 text-lg-right text-center text-primary">
+    Dirección de residencia
+  </div>
+  <div class="col-lg-6 text-lg-left text-center">
+    {{ funcionario.address }}
+  </div>
+  <div class="col-lg-6 text-lg-right text-center text-primary">Celular</div>
+  <div class="col-lg-6 text-lg-left text-center">
+    {{ funcionario.cell_phone }}
+  </div>
+</div>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Actualizar funcionario</h4>
+    <button
       type="button"
       class="close"
       data-dismiss="modal"
@@ -54,231 +75,230 @@
     >
       <span aria-hidden="true">&times;</span>
     </button>
-    </div>
-    <div class="modal-body">
-      <form [formGroup]="form">
-        <div class="row">
-          <div class="col-xl-2">
-            <div class="form-group text-center">
-              <img
-                [src]="fileString"
-                id="imageOutput"
-                class="img-rounded d-block m-auto img-rounded d-block img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
-                alt=""
-                onerror="this.src='../../../../../../../assets/images/noprofile.png'"
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-xl-2">
+          <div class="form-group text-center">
+            <img
+              [src]="fileString"
+              id="imageOutput"
+              class="img-rounded d-block m-auto img-rounded d-block img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
+              alt=""
+              onerror="this.src='../../../../../../../assets/images/noprofile.png'"
+            />
+            <div class="custom-input-file col-md-12 mt-3">
+              <input
+                type="file"
+                #fileInput
+                class="input-file"
+                name="image"
+                id="image"
+                [class.is-invalid]="image_valid"
+                (change)="onFileChanged($event)"
+                accept="image/*"
               />
-              <div class="custom-input-file col-md-12 mt-3">
-                <input
-                  type="file"
-                  #fileInput
-                  class="input-file"
-                  name="image"
-                  id="image"
-                  [class.is-invalid]="image_valid"
-                  (change)="onFileChanged($event)"
-                  accept="image/*"
-                />
-                Cargar imagen
-              </div>             
-              <div class="col-md-12 text-center">
-                <small *ngIf="fileString" class="text-success"
-                  >Imagen cargada</small
-                >
-              </div>
-              <div class="text-center text-danger" *ngIf="image_valid">
-                <small class="invalid">La imagen es necesaria</small>
-              </div>
+              Cargar imagen
             </div>
-          </div>
-          <div class="col-xl-5">
-            <div class="row">
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Primer nombre</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Ingresa el primer nombre"
-                  id="first_name"
-                  [class.is-invalid]="first_name_valid"
-                  formControlName="first_name"
-                  autocomplete="off"
-                  required
-                />
-                <mat-error *ngIf="first_name_valid">Campo necesario</mat-error>
-              </mat-form-field>
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Segundo nombre</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Ingresa el segundo nombre"
-                  id="second_name"
-                  formControlName="second_name"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Primer apellido</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Ingresa el primer apellido"
-                  id="first_surname"
-                  [class.is-invalid]="first_surname_valid"
-                  formControlName="first_surname"
-                  autocomplete="off"
-                  required
-                />
-                <mat-error *ngIf="first_surname_valid">Campo necesario</mat-error>
-              </mat-form-field>
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Segundo apellido</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Ingresa el segundo apellido"
-                  id="second_surname"
-                  formControlName="second_surname"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Documento de identidad</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Ingresa el número de documento"
-                  name="identifier"
-                  id="identifier"
-                  [class.is-invalid]="identifier_valid"
-                  formControlName="identifier"
-                  autocomplete="off"
-                  required
-                />
-                <mat-error *ngIf="identifier_valid">Campo necesario</mat-error>
-              </mat-form-field>
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Dirección de residencia</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Ingresa la dirección de residencia"
-                  id="address"
-                  [class.is-invalid]="address_valid"
-                  formControlName="address"
-                  autocomplete="off"
-                  required
-                />
-                <mat-error *ngIf="address_valid">Campo necesario</mat-error>
-              </mat-form-field>
+            <div class="col-md-12 text-center">
+              <small *ngIf="fileString" class="text-success"
+                >Imagen cargada</small
+              >
             </div>
-          </div>
-          <div class="col-xl-5">
-            <div class="row">
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Fecha de nacimiento</mat-label>
-                <input
-                  matInput
-                  type="date"
-                  placeholder=""
-                  id="date_of_birth"
-                  [class.is-invalid]="date_of_birth_valid"
-                  formControlName="date_of_birth"
-                  autocomplete="off"
-                  required
-                />
-                <mat-error *ngIf="date_of_birth_valid">Campo necesario</mat-error>
-              </mat-form-field>
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Título de estudio</mat-label>
-                <mat-select
-                  [class.is-invalid]="degree_valid"
-                  id="degree"
-                  formControlName="degree"
-                >
-                  <mat-option
-                    *ngFor="let degree of degrees"
-                    [value]="degree.valor"
-                  >
-                    {{ degree.clave }}</mat-option
-                  >
-                </mat-select>
-                <mat-error *ngIf="degree_valid">Campo necesario</mat-error>
-              </mat-form-field>
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Correo electrónico</mat-label>
-                <input
-                  matInput
-                  type="email"
-                  placeholder="Ingresa el correo electrónico"
-                  id="email"
-                  [class.is-invalid]="email_valid"
-                  formControlName="email"
-                  autocomplete="off"
-                  required
-                />
-                <mat-error *ngIf="email_valid">Campo necesario</mat-error>
-              </mat-form-field>
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Género</mat-label>
-                <mat-select
-                  [class.is-invalid]="gener_valid"
-                  id="gener"
-                  formControlName="gener"
-                >
-                  <mat-option value="Masculino">Masculino</mat-option>
-                  <mat-option value="Femenino">Femenino</mat-option>
-                </mat-select>
-                <mat-error *ngIf="gener_valid">Campo necesario</mat-error>
-              </mat-form-field>
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Estado civil</mat-label>
-                <mat-select
-                  [class.is-invalid]="marital_status_valid"
-                  id="marital_status"
-                  formControlName="marital_status"
-                >
-                  <mat-option
-                    *ngFor="let estado of estados"
-                    [value]="estado.valor"
-                  >
-                    {{ estado.clave }}</mat-option
-                  >
-                </mat-select>
-                <mat-error *ngIf="marital_status_valid"
-                  >Campo necesario</mat-error
-                >
-              </mat-form-field>
-              <mat-form-field class="col-md-6" appearance="outline">
-                <mat-label>Teléfono celular</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Ingresa el número de celular"
-                  id="cell_phone"
-                  [class.is-invalid]="cell_phone_valid"
-                  formControlName="cell_phone"
-                  autocomplete="off"
-                  required
-                />
-                <mat-error *ngIf="cell_phone_valid">Campo necesario</mat-error>
-              </mat-form-field>
+            <div class="text-center text-danger" *ngIf="image_valid">
+              <small class="invalid">La imagen es necesaria</small>
             </div>
           </div>
         </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-danger"
-        (click)="modal.dismiss('Cross click'); hideModal()"
-      >
-        Cancelar
-      </button>
-      <button type="button" (click)="guardar()" class="btn btn-primary">
-        Actualizar
-      </button>
-    </div>
-  </ng-template>
-</div>
+        <div class="col-xl-5">
+          <div class="row">
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Primer nombre</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa el primer nombre"
+                id="first_name"
+                [class.is-invalid]="first_name_valid"
+                formControlName="first_name"
+                autocomplete="off"
+                required
+              />
+              <mat-error *ngIf="first_name_valid">Campo necesario</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Segundo nombre</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa el segundo nombre"
+                id="second_name"
+                formControlName="second_name"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Primer apellido</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa el primer apellido"
+                id="first_surname"
+                [class.is-invalid]="first_surname_valid"
+                formControlName="first_surname"
+                autocomplete="off"
+                required
+              />
+              <mat-error *ngIf="first_surname_valid">Campo necesario</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Segundo apellido</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa el segundo apellido"
+                id="second_surname"
+                formControlName="second_surname"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Documento de identidad</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa el número de documento"
+                name="identifier"
+                id="identifier"
+                [class.is-invalid]="identifier_valid"
+                formControlName="identifier"
+                autocomplete="off"
+                required
+              />
+              <mat-error *ngIf="identifier_valid">Campo necesario</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Dirección de residencia</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa la dirección de residencia"
+                id="address"
+                [class.is-invalid]="address_valid"
+                formControlName="address"
+                autocomplete="off"
+                required
+              />
+              <mat-error *ngIf="address_valid">Campo necesario</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-xl-5">
+          <div class="row">
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Fecha de nacimiento</mat-label>
+              <input
+                matInput
+                type="date"
+                placeholder=""
+                id="birth_date"
+                [class.is-invalid]="birth_date_valid"
+                formControlName="birth_date"
+                autocomplete="off"
+                required
+              />
+              <mat-error *ngIf="birth_date_valid">Campo necesario</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Título de estudio</mat-label>
+              <mat-select
+                [class.is-invalid]="degree_valid"
+                id="degree"
+                formControlName="degree"
+              >
+                <mat-option
+                  *ngFor="let degree of degrees"
+                  [value]="degree.valor"
+                >
+                  {{ degree.clave }}</mat-option
+                >
+              </mat-select>
+              <mat-error *ngIf="degree_valid">Campo necesario</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Correo electrónico</mat-label>
+              <input
+                matInput
+                type="email"
+                placeholder="Ingresa el correo electrónico"
+                id="email"
+                [class.is-invalid]="email_valid"
+                formControlName="email"
+                autocomplete="off"
+                required
+              />
+              <mat-error *ngIf="email_valid">Campo necesario</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Género</mat-label>
+              <mat-select
+                [class.is-invalid]="gener_valid"
+                id="gener"
+                formControlName="gener"
+              >
+                <mat-option value="Masculino">Masculino</mat-option>
+                <mat-option value="Femenino">Femenino</mat-option>
+              </mat-select>
+              <mat-error *ngIf="gener_valid">Campo necesario</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Estado civil</mat-label>
+              <mat-select
+                [class.is-invalid]="marital_status_valid"
+                id="marital_status"
+                formControlName="marital_status"
+              >
+                <mat-option
+                  *ngFor="let estado of estados"
+                  [value]="estado.valor"
+                >
+                  {{ estado.clave }}</mat-option
+                >
+              </mat-select>
+              <mat-error *ngIf="marital_status_valid"
+                >Campo necesario</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Teléfono celular</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa el número de celular"
+                id="cell_phone"
+                [class.is-invalid]="cell_phone_valid"
+                formControlName="cell_phone"
+                autocomplete="off"
+                required
+              />
+              <mat-error *ngIf="cell_phone_valid">Campo necesario</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click'); hideModal()"
+    >
+      Cancelar
+    </button>
+    <button type="button" (click)="guardar()" class="btn btn-primary">
+      Actualizar
+    </button>
+  </div>
+</ng-template>

@@ -9,10 +9,6 @@ import { CreateComponent } from './funcionarios/create/create.component';
 import { EstructuraEmpresaComponent } from './estructura-empresa/estructura-empresa.component';
 import { TurnosComponent } from './turnos/turnos.component';
 import { CreateTurnoFijoComponent } from './turnos/turno-fijo/create-turno-fijo/create-turno-fijo.component';
-import { FondoPensionComponent } from './fondo-pension/fondo-pension.component';
-import { ArlComponent } from './arl/arl.component';
-import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
-import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
 import { ConfiguracionEmpresaComponent } from '../configuracion/configuracion-empresa/configuracion-empresa.component';
 import { CatalogoComponent } from './catalogo/catalogo.component';
 import { CrearProductoComponent } from './productos/crear-producto/crear-producto.component';
@@ -32,9 +28,9 @@ const routes: Routes = [
   { path: 'funcionario/:id/liquidacion', component: VerLiquidacionComponent },
   { path: 'funcionarios/crear', component: CreateComponent },
 
-  { path: 'regimenes-niveles', component: RegimenesNivelesComponent },
+  /* { path: 'regimenes-niveles', component: RegimenesNivelesComponent }, */
   { path: 'aseguradoras', component: AseguradorasComponent },
-  { path: 'estructura-empresa', component: EstructuraEmpresaComponent },
+  /* { path: 'estructura-empresa', component: EstructuraEmpresaComponent }, */
 
   { path: 'turnos', component: TurnosComponent },
   { path: 'turnos/crear', component: CreateTurnoFijoComponent },
@@ -49,7 +45,7 @@ const routes: Routes = [
   { path: 'catalogo/ver/:id', component: ProductoComponent },
 
   //sedes
-  { path: 'sedes', component: SedesComponent },
+  /* { path: 'sedes', component: SedesComponent }, */
   { path: 'bodegas', component: BodegasComponent },
   { path: 'bodegas/crear', component: CrearbodegaComponent },
   { path: 'bodegas/grupoestiba/:id', component: GrupoestibaComponent }

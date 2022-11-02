@@ -1,108 +1,100 @@
-<div class="page-body">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
-          <div class="row">
-            <div class="col-md-8 mt-2">
-              <h5>Subcategorías</h5>
-              <span>Todas las Subcategorías Registradas</span>
-            </div>
-            <div class="col-md-4 mt-2">
-              <button
-                type="button"
-                class="float-right btn btn-primary"
-                (click)="modal.show()"
-              >
-                <i class="fa fa-plus"></i>
-                Agregar Nueva Subcategoría
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-12">
-              <table class="table table-striped" style="font-size: 13px">
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th style="max-width: 90px">¿Es Separable?</th>
-                    <th style="max-width: 100px; width: 100px !important">
-                      <i class="mdi mdi-chevron-down"></i>
-                    </th>
-                    <!-- <th style="max-width: 70px; width: 70px !important;"><i class="mdi mdi-chevron-down"></i></th> -->
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngIf="Cargando">
-                    <td colspan="3" class="text-center">
-                      <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-                      <span class="sr-only">Cargando...</span>
-                      <h4>Cargando Subcategorías...</h4>
-                    </td>
-                  </tr>
-                  <tr *ngIf="Sucategories.length == 0 && !Cargando">
-                    <td colspan="3" class="text-center">
-                      <i class="fa fa-exclamation-circle fa-5x"></i>
-                      <h4>No Existen Subcategorías para mostar</h4>
-                      <a
-                        (click)="modalNuevoEgreso.show()"
-                        class="btn btn-primary btn-sm"
-                        ><i class="fa fa-plus"></i> Cree Una Acá</a
-                      >
-                    </td>
-                  </tr>
-                  <tr *ngFor="let item of Sucategories">
-                    <td>
-                      {{ item.Nombre }}
-                    </td>
-                    <td>
-                      {{ item.Separable }}
-                    </td>
-                    <td>
-                      <div ngbDropdown container="body" class="dropdown-primary">
-                        <button
-                          ngbDropdownToggle
-                          class="btn btn-primary btn-sm  waves-light"
-                          type="button"
-                        >
-                          <i class="mdi mdi-chevron-down"></i>
-                        </button>
-                        <div ngbDropdownMenu>
-                          <a
-                            class="dropdown-item waves-light "
-                            (click)="EditSubcategory(item); modal.show()"
-                          >
-                            <i class="fas fa-user-edit mr-1"></i>Editar
-                          </a>
-                          <a
-                            class="dropdown-item waves-light "
-                            [swal]="{
-                              title: '¿Está Seguro?',
-                              text: 'Se dispone a Eliminar esta Subcategoria, esta acción no se puede revertir',
-                              type: 'warning',
-                              showCancelButton: true,
-                              confirmButtonText: 'Si, Eliminar',
-                              cancelButtonText: 'No, Dejame Comprobar!'
-                            }"
-                            (confirm)="deleteSubcategory(item.Id_subcategoria)"
-                          >
-                            <i class="far fa-trash-alt mr-1"></i>Eliminar</a
-                          >
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+<div class="card">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h5 class="text-primary">Subcategorías</h5>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-primary btn-sm" (click)="modal.show()">
+            <i class="fa fa-plus"></i>
+            Agregar
+          </button>
         </div>
       </div>
     </div>
+    <hr class="line" />
+    <div
+      class="rounded-top table-responsive"
+      *ngIf="!Cargando && Sucategories.length > 0; else notData"
+    >
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Nombre</th>
+            <th>¿Es Separable?</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="Cargando">
+            <td colspan="3" class="text-center">
+              <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+              <span class="sr-only">Cargando...</span>
+              <h4>Cargando Subcategorías...</h4>
+            </td>
+          </tr>
+          <tr *ngIf="Sucategories.length == 0 && !Cargando">
+            <td colspan="3" class="text-center">
+              <i class="fa fa-exclamation-circle fa-5x"></i>
+              <h4>No Existen Subcategorías para mostar</h4>
+              <a
+                (click)="modalNuevoEgreso.show()"
+                class="btn btn-primary btn-sm"
+                ><i class="fa fa-plus"></i> Cree Una Acá</a
+              >
+            </td>
+          </tr>
+          <tr *ngFor="let item of Sucategories">
+            <td>
+              {{ item.Nombre }}
+            </td>
+            <td>
+              {{ item.Separable }}
+            </td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light"
+                    (click)="EditSubcategory(item); modal.show()"
+                  >
+                    <i class="fas fa-user-edit mr-1"></i>Editar
+                  </a>
+                  <a
+                    class="dropdown-item waves-light"
+                    [swal]="{
+                      title: '¿Está Seguro?',
+                      text: 'Se dispone a Eliminar esta Subcategoria, esta acción no se puede revertir',
+                      type: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Si, Eliminar',
+                      cancelButtonText: 'No, Dejame Comprobar!'
+                    }"
+                    (confirm)="deleteSubcategory(item.Id_subcategoria)"
+                  >
+                    <i class="far fa-trash-alt mr-1"></i>Eliminar</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
 
 <app-modal-basic #modal [dialogClass]="'modal-lg'">
   <div class="app-modal-header">
@@ -113,7 +105,7 @@
   </div>
   <div class="app-modal-body">
     <form [formGroup]="form">
-<!-- <input
+      <!-- <input
       name="company_id"
       type="hidden"
       placeholder=""

@@ -10,7 +10,7 @@ export class HotelesService {
   constructor( private http: HttpClient ) { }
 
   getCities(){
-    return this.http.get(`${environment.base_url}/cities`);
+    return this.http.get(`${environment.base_url}/municipalities`);
   }
   
   getHotels( params = {} ){

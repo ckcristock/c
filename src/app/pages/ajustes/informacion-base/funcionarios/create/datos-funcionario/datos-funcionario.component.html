@@ -1,411 +1,409 @@
 <form [formGroup]="form" (ngSubmit)="save()">
   <div class="row">
-    <div class="col-md-4">
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group text-center">
-            <img
-              id="imageOutput"
-              [src]="fileString"
-              alt="Imagen del funcionario"
-              class="d-block img-thumbnail rounded-circle mx-auto img-fluid"
-            />
-            <div class="custom-input-file col-md-12 mt-3">
-              <input
-                type="file"
-                id="image"
-                name="image"
-                class="input-file"
-                formControlName="image"
-                [class.is-invalid]="image_valid"
-                (change)="onFileChanged($event)"
-                accept="image/*"
-              />
-              Cargar imagen
-            </div>
-            <div class="text-center">
-              <ng-container *ngIf="image_valid">
-                <small class="text-danger"> Imagen es obligatoria </small>
-              </ng-container>
-            </div>
-          </div>
+    <div class="col-md-3 mx-auto">
+      <div class="form-group text-center">
+        <img
+          id="imageOutput"
+          [src]="fileString"
+          alt="Imagen del funcionario"
+          class="d-block img-thumbnail rounded-circle mx-auto img-fluid"
+        />
+        <div class="custom-input-file col-md-12 mt-3">
+          <input
+            type="file"
+            id="image"
+            name="image"
+            class="input-file"
+            formControlName="image"
+            [class.is-invalid]="image_valid"
+            (change)="onFileChanged($event)"
+            accept="image/*"
+          />
+          Cargar imagen
         </div>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Tipo de documento</mat-label>
-          <mat-select formControlName="type_document_id">
-            <mat-option *ngFor="let item of documenttypes" [value]="item.value">
-              {{ item.text }}
-            </mat-option>
-          </mat-select>
-          <mat-icon matSuffix>branding_watermark</mat-icon>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Documento de identidad</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa documento de identidad"
-            type="number"
-            formControlName="identifier"
-            [class.is-invalid]="identifier_valid"
-            (change)="validarCedula($event)"
-            name="document"
-            class="numberInput"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>badge</mat-icon>
-          <mat-error *ngIf="identifier_valid"
-            ><small
-              *ngFor="
-                let item of form.get('identifier').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small></mat-error
-          >
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Primer nombre</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa el primer nombre"
-            type="text"
-            formControlName="first_name"
-            [class.is-invalid]="first_name_valid"
-            name="first-name"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>looks_one</mat-icon>
-          <mat-error *ngIf="first_name_valid"
-            ><small
-              *ngFor="
-                let item of form.get('first_name').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small></mat-error
-          >
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Segundo nombre</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa el segundo nombre"
-            type="text"
-            formControlName="second_name"
-            [class.is-invalid]="second_name_valid"
-            name="second-name"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>looks_two</mat-icon>
-          <mat-error *ngIf="second_name_valid">
-            <small>Es nesario el segundo nombre</small>
-          </mat-error>
-        </mat-form-field>
+        <div class="text-center">
+          <ng-container *ngIf="image_valid">
+            <small class="text-danger"> Imagen es obligatoria </small>
+          </ng-container>
+        </div>
       </div>
     </div>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Tipo de documento</mat-label>
+      <mat-select formControlName="type_document_id">
+        <mat-option *ngFor="let item of documenttypes" [value]="item.value">
+          {{ item.text }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matSuffix>branding_watermark</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Documento de identidad</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa documento de identidad"
+        type="number"
+        formControlName="identifier"
+        [class.is-invalid]="identifier_valid"
+        (change)="validarCedula($event)"
+        name="document"
+        class="numberInput"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>badge</mat-icon>
+      <mat-error *ngIf="identifier_valid"
+        ><small
+          *ngFor="let item of form.get('identifier').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small></mat-error
+      >
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Primer nombre</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa el primer nombre"
+        type="text"
+        formControlName="first_name"
+        [class.is-invalid]="first_name_valid"
+        name="first-name"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>looks_one</mat-icon>
+      <mat-error *ngIf="first_name_valid"
+        ><small
+          *ngFor="let item of form.get('first_name').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small></mat-error
+      >
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Segundo nombre</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa el segundo nombre"
+        type="text"
+        formControlName="second_name"
+        [class.is-invalid]="second_name_valid"
+        name="second-name"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>looks_two</mat-icon>
+      <mat-error *ngIf="second_name_valid">
+        <small>Es nesario el segundo nombre</small>
+      </mat-error>
+    </mat-form-field>
+  </div>
 
-    <div class="col-md-4">
-      <div class="row">
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Primer apellido</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa el primer apellido"
-            type="text"
-            formControlName="first_surname"
-            [class.is-invalid]="first_surname_valid"
-            name="first_surname"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>looks_one</mat-icon>
-          <mat-error *ngIf="first_surname_valid">
-            <small
-              *ngFor="
-                let item of form.get('first_surname').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Segundo apellido</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa el segundo apellido"
-            type="text"
-            formControlName="second_surname"
-            [class.is-invalid]="second_surname_valid"
-            name="second_surname"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>looks_two</mat-icon>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Correo electrónico</mat-label>
-          <input
-            matInput
-            placeholder="Ej: maqymon@example.com"
-            type="email"
-            formControlName="email"
-            [class.is-invalid]="email_valid"
-            name="email"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>email</mat-icon>
-          <mat-error *ngIf="first_surname_valid">
-            <small
-              *ngFor="let item of form.get('email').errors | ObjToArrayPipe"
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Fecha de nacimiento</mat-label>
-          <input
-            matInput
-            type="date"
-            placeholder="Selecciona la fecha de nacimiento"
-            formControlName="birth_date"
-          />
-          <!-- <mat-icon matSuffix>event</mat-icon> -->
-          <mat-error *ngIf="birth_date_valid">
-            <small
-              *ngFor="
-                let item of form.get('birth_date').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Lugar de nacimiento</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa el lugar de nacimiento"
-            type="text"
-            formControlName="place_of_birth"
-            [class.is-invalid]="place_of_birth_valid"
-            name="city"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>location_city</mat-icon>
-          <mat-error *ngIf="place_of_birth_valid">
-            <small
-              *ngFor="
-                let item of form.get('place_of_birth').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Dirección de residencia</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa la dirección de residencia"
-            type="text"
-            formControlName="direction"
-            [class.is-invalid]="direction_valid"
-            name="direction"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>home_filled</mat-icon>
-          <mat-error *ngIf="direction_valid">
-            <small
-              *ngFor="let item of form.get('direction').errors | ObjToArrayPipe"
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Género</mat-label>
-          <mat-select [class.is-invalid]="gener_valid" formControlName="gener">
-            <mat-option value="Masculino">Masculino</mat-option>
-            <mat-option value="Femenino">Femenino</mat-option>
-          </mat-select>
-          <mat-icon matSuffix>people</mat-icon>
-          <mat-error *ngIf="gener_valid">
-            <small
-              *ngFor="let item of form.get('gener').errors | ObjToArrayPipe"
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
+  <div class="row">
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Primer apellido</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa el primer apellido"
+        type="text"
+        formControlName="first_surname"
+        [class.is-invalid]="first_surname_valid"
+        name="first_surname"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>looks_one</mat-icon>
+      <mat-error *ngIf="first_surname_valid">
+        <small
+          *ngFor="let item of form.get('first_surname').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Segundo apellido</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa el segundo apellido"
+        type="text"
+        formControlName="second_surname"
+        [class.is-invalid]="second_surname_valid"
+        name="second_surname"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>looks_two</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Correo electrónico</mat-label>
+      <input
+        matInput
+        placeholder="Ej: maqymon@example.com"
+        type="email"
+        formControlName="email"
+        [class.is-invalid]="email_valid"
+        name="email"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>email</mat-icon>
+      <mat-error *ngIf="first_surname_valid">
+        <small
+          *ngFor="let item of form.get('email').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Fecha de nacimiento</mat-label>
+      <input
+        matInput
+        type="date"
+        placeholder="Selecciona la fecha de nacimiento"
+        formControlName="birth_date"
+      />
+      <!-- <mat-icon matSuffix>event</mat-icon> -->
+      <mat-error *ngIf="birth_date_valid">
+        <small
+          *ngFor="let item of form.get('birth_date').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Lugar de nacimiento</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa el lugar de nacimiento"
+        type="text"
+        formControlName="place_of_birth"
+        [class.is-invalid]="place_of_birth_valid"
+        name="city"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>location_city</mat-icon>
+      <mat-error *ngIf="place_of_birth_valid">
+        <small
+          *ngFor="
+            let item of form.get('place_of_birth').errors | ObjToArrayPipe
+          "
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Dirección de residencia</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa la dirección de residencia"
+        type="text"
+        formControlName="direction"
+        [class.is-invalid]="direction_valid"
+        name="direction"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>home_filled</mat-icon>
+      <mat-error *ngIf="direction_valid">
+        <small
+          *ngFor="let item of form.get('direction').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Género</mat-label>
+      <mat-select [class.is-invalid]="gener_valid" formControlName="gener">
+        <mat-option value="Masculino">Masculino</mat-option>
+        <mat-option value="Femenino">Femenino</mat-option>
+      </mat-select>
+      <mat-icon matSuffix>people</mat-icon>
+      <mat-error *ngIf="gener_valid">
+        <small
+          *ngFor="let item of form.get('gener').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Número de pasaporte</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa número de pasaporte"
+        type="number"
+        formControlName="passport_number"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>flight_takeoff</mat-icon>
+    </mat-form-field>
+   
+  </div>
 
-    <div class="col-md-4">
-      <div class="row">
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Teléfono fijo</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa el telefono fijo"
-            type="text"
-            formControlName="phone"
-            [class.is-invalid]="phone_valid"
-            name="phone"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>phone</mat-icon>
-          <mat-error *ngIf="phone_valid">
-            <small
-              *ngFor="let item of form.get('phone').errors | ObjToArrayPipe"
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Teléfono celular</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa el telefono celular"
-            type="text"
-            formControlName="cell_phone"
-            [class.is-invalid]="cell_phone_valid"
-            name="cell-phone"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>phone_iphone</mat-icon>
-          <mat-error *ngIf="cell_phone_valid">
-            <small
-              *ngFor="
-                let item of form.get('cell_phone').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Tipo de sangre</mat-label>
-          <mat-select
-            [class.is-invalid]="blood_type_valid"
-            formControlName="blood_type"
-          >
-            <mat-option *ngFor="let tipo of tipoSangre" [value]="tipo.valor">
-              {{ tipo.clave }}
-            </mat-option>
-          </mat-select>
-          <mat-icon matSuffix>bloodtype</mat-icon>
-          <mat-error *ngIf="blood_type_valid">
-            <small
-              *ngFor="
-                let item of form.get('blood_type').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Estado civil</mat-label>
-          <mat-select
-            [class.is-invalid]="marital_status_valid"
-            formControlName="marital_status"
-          >
-            <mat-option *ngFor="let estado of estados" [value]="estado.valor">
-              {{ estado.clave }}
-            </mat-option>
-          </mat-select>
-          <mat-icon matSuffix>favorite</mat-icon>
-          <mat-error *ngIf="marital_status_valid">
-            <small
-              *ngFor="
-                let item of form.get('marital_status').errors | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Número de hijos</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa el número de hijos"
-            type="number"
-            class="numberInput"
-            formControlName="number_of_children"
-            [class.is-invalid]="number_of_children_valid"
-            name="children"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>escalator_warning</mat-icon>
-          <mat-error *ngIf="number_of_children_valid">
-            <small
-              *ngFor="
-                let item of form.get('number_of_children').errors
-                  | ObjToArrayPipe
-              "
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Nivel académico</mat-label>
-          <mat-select
-            [class.is-invalid]="degree_valid"
-            formControlName="degree"
-          >
-            <mat-option *ngFor="let grado of instruccion" [value]="grado.valor">
-              {{ grado.clave }}
-            </mat-option>
-          </mat-select>
-          <mat-icon matSuffix>school</mat-icon>
-          <mat-error *ngIf="degree_valid">
-            <small
-              *ngFor="let item of form.get('degree').errors | ObjToArrayPipe"
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-          <mat-label>Título</mat-label>
-          <input
-            matInput
-            placeholder="Ingresa el nombre del título"
-            type="text"
-            formControlName="title"
-            [class.is-invalid]="title_valid"
-            name="children"
-            autocomplete="off"
-          />
-          <mat-icon matSuffix>verified</mat-icon>
-          <mat-error *ngIf="title_valid">
-            <small
-              *ngFor="let item of form.get('title').errors | ObjToArrayPipe"
-              class="text-danger"
-            >
-              {{ item?.msj }}
-            </small>
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
+  <div class="row">
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Teléfono fijo</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa el telefono fijo"
+        type="text"
+        formControlName="phone"
+        [class.is-invalid]="phone_valid"
+        name="phone"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>phone</mat-icon>
+      <mat-error *ngIf="phone_valid">
+        <small
+          *ngFor="let item of form.get('phone').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Teléfono celular</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa el telefono celular"
+        type="text"
+        formControlName="cell_phone"
+        [class.is-invalid]="cell_phone_valid"
+        name="cell-phone"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>phone_iphone</mat-icon>
+      <mat-error *ngIf="cell_phone_valid">
+        <small
+          *ngFor="let item of form.get('cell_phone').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Tipo de sangre</mat-label>
+      <mat-select
+        [class.is-invalid]="blood_type_valid"
+        formControlName="blood_type"
+      >
+        <mat-option *ngFor="let tipo of tipoSangre" [value]="tipo.valor">
+          {{ tipo.clave }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matSuffix>bloodtype</mat-icon>
+      <mat-error *ngIf="blood_type_valid">
+        <small
+          *ngFor="let item of form.get('blood_type').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Estado civil</mat-label>
+      <mat-select
+        [class.is-invalid]="marital_status_valid"
+        formControlName="marital_status"
+      >
+        <mat-option *ngFor="let estado of estados" [value]="estado.valor">
+          {{ estado.clave }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matSuffix>favorite</mat-icon>
+      <mat-error *ngIf="marital_status_valid">
+        <small
+          *ngFor="
+            let item of form.get('marital_status').errors | ObjToArrayPipe
+          "
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Número de hijos</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa el número de hijos"
+        type="number"
+        class="numberInput"
+        formControlName="number_of_children"
+        [class.is-invalid]="number_of_children_valid"
+        name="children"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>escalator_warning</mat-icon>
+      <mat-error *ngIf="number_of_children_valid">
+        <small
+          *ngFor="
+            let item of form.get('number_of_children').errors | ObjToArrayPipe
+          "
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Nivel académico</mat-label>
+      <mat-select [class.is-invalid]="degree_valid" formControlName="degree">
+        <mat-option *ngFor="let grado of instruccion" [value]="grado.valor">
+          {{ grado.clave }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matSuffix>school</mat-icon>
+      <mat-error *ngIf="degree_valid">
+        <small
+          *ngFor="let item of form.get('degree').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Título</mat-label>
+      <input
+        matInput
+        placeholder="Ingresa el nombre del título"
+        type="text"
+        formControlName="title"
+        [class.is-invalid]="title_valid"
+        name="children"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix>verified</mat-icon>
+      <mat-error *ngIf="title_valid">
+        <small
+          *ngFor="let item of form.get('title').errors | ObjToArrayPipe"
+          class="text-danger"
+        >
+          {{ item?.msj }}
+        </small>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Visa</mat-label>
+      <mat-select formControlName="visa">
+        <mat-option value="Si">Sí</mat-option>
+        <mat-option value="No">No</mat-option>
+      </mat-select>
+      <mat-icon matSuffix>flight</mat-icon>
+    </mat-form-field>
     <div class="col-12">
       <div class="d-flex justify-content-end">
         <button type="submit" class="btn btn-lg btn-primary">Siguiente</button>

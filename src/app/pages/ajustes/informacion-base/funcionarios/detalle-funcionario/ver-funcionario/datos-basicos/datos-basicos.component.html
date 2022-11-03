@@ -95,7 +95,6 @@
                 class="input-file"
                 name="image"
                 id="image"
-                [class.is-invalid]="image_valid"
                 (change)="onFileChanged($event)"
                 accept="image/*"
               />
@@ -111,23 +110,22 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-5">
+        <div class="col-xl-10">
           <div class="row">
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Primer nombre</mat-label>
               <input
                 matInput
                 type="text"
                 placeholder="Ingresa el primer nombre"
                 id="first_name"
-                [class.is-invalid]="first_name_valid"
                 formControlName="first_name"
                 autocomplete="off"
                 required
               />
               <mat-error *ngIf="first_name_valid">Campo necesario</mat-error>
             </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Segundo nombre</mat-label>
               <input
                 matInput
@@ -138,21 +136,20 @@
                 autocomplete="off"
               />
             </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Primer apellido</mat-label>
               <input
                 matInput
                 type="text"
                 placeholder="Ingresa el primer apellido"
                 id="first_surname"
-                [class.is-invalid]="first_surname_valid"
                 formControlName="first_surname"
                 autocomplete="off"
                 required
               />
               <mat-error *ngIf="first_surname_valid">Campo necesario</mat-error>
             </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Segundo apellido</mat-label>
               <input
                 matInput
@@ -163,7 +160,7 @@
                 autocomplete="off"
               />
             </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Documento de identidad</mat-label>
               <input
                 matInput
@@ -171,52 +168,41 @@
                 placeholder="Ingresa el número de documento"
                 name="identifier"
                 id="identifier"
-                [class.is-invalid]="identifier_valid"
                 formControlName="identifier"
                 autocomplete="off"
                 required
               />
               <mat-error *ngIf="identifier_valid">Campo necesario</mat-error>
             </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Dirección de residencia</mat-label>
               <input
                 matInput
                 type="text"
                 placeholder="Ingresa la dirección de residencia"
                 id="address"
-                [class.is-invalid]="address_valid"
                 formControlName="address"
                 autocomplete="off"
                 required
               />
               <mat-error *ngIf="address_valid">Campo necesario</mat-error>
             </mat-form-field>
-          </div>
-        </div>
-        <div class="col-xl-5">
-          <div class="row">
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Fecha de nacimiento</mat-label>
               <input
                 matInput
                 type="date"
                 placeholder=""
                 id="birth_date"
-                [class.is-invalid]="birth_date_valid"
                 formControlName="birth_date"
                 autocomplete="off"
                 required
               />
               <mat-error *ngIf="birth_date_valid">Campo necesario</mat-error>
             </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Título de estudio</mat-label>
-              <mat-select
-                [class.is-invalid]="degree_valid"
-                id="degree"
-                formControlName="degree"
-              >
+              <mat-select id="degree" formControlName="degree">
                 <mat-option
                   *ngFor="let degree of degrees"
                   [value]="degree.valor"
@@ -226,39 +212,30 @@
               </mat-select>
               <mat-error *ngIf="degree_valid">Campo necesario</mat-error>
             </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Correo electrónico</mat-label>
               <input
                 matInput
                 type="email"
                 placeholder="Ingresa el correo electrónico"
                 id="email"
-                [class.is-invalid]="email_valid"
                 formControlName="email"
                 autocomplete="off"
                 required
               />
               <mat-error *ngIf="email_valid">Campo necesario</mat-error>
             </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Género</mat-label>
-              <mat-select
-                [class.is-invalid]="gener_valid"
-                id="gener"
-                formControlName="gener"
-              >
+              <mat-select id="gener" formControlName="gener">
                 <mat-option value="Masculino">Masculino</mat-option>
                 <mat-option value="Femenino">Femenino</mat-option>
               </mat-select>
               <mat-error *ngIf="gener_valid">Campo necesario</mat-error>
             </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Estado civil</mat-label>
-              <mat-select
-                [class.is-invalid]="marital_status_valid"
-                id="marital_status"
-                formControlName="marital_status"
-              >
+              <mat-select id="marital_status" formControlName="marital_status">
                 <mat-option
                   *ngFor="let estado of estados"
                   [value]="estado.valor"
@@ -270,19 +247,48 @@
                 >Campo necesario</mat-error
               >
             </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Teléfono celular</mat-label>
               <input
                 matInput
                 type="text"
                 placeholder="Ingresa el número de celular"
                 id="cell_phone"
-                [class.is-invalid]="cell_phone_valid"
                 formControlName="cell_phone"
                 autocomplete="off"
                 required
               />
               <mat-error *ngIf="cell_phone_valid">Campo necesario</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Visa</mat-label>
+              <mat-select formControlName="visa">
+                <mat-option value="Si">Sí</mat-option>
+                <mat-option value="No">No</mat-option>
+              </mat-select>
+              <mat-icon matSuffix>flight</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Número de pasaporte</mat-label>
+              <input
+                matInput
+                placeholder="Ingresa número de pasaporte"
+                type="number"
+                formControlName="passport_number"
+                autocomplete="off"
+              />
+              <mat-icon matSuffix>flight_takeoff</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Título</mat-label>
+              <input
+                matInput
+                placeholder="Ingresa título"
+                type="text"
+                formControlName="title"
+                autocomplete="off"
+              />
+              <mat-icon matSuffix>verified</mat-icon>
             </mat-form-field>
           </div>
         </div>

@@ -38,7 +38,10 @@ export class DatosBasicosComponent implements OnInit {
     identifier: '',
     marital_status: '',
     degree: '',
-    image: ''
+    image: '',
+    visa: '',
+    passport_number: '',
+    title: ''
   }
   data: any;
   fileString: any = '';
@@ -95,7 +98,10 @@ export class DatosBasicosComponent implements OnInit {
           second_surname: this.funcionario.second_surname,
           identifier: this.funcionario.identifier,
           marital_status: this.funcionario.marital_status,
-          gener: this.funcionario.gener
+          gener: this.funcionario.gener,
+          visa: this.funcionario.visa,
+          passport_number: this.funcionario.passport_number,
+          title: this.funcionario.title,
         })
         this.file = this.funcionario.image
         this.fileString = this.funcionario.image
@@ -122,7 +128,10 @@ export class DatosBasicosComponent implements OnInit {
       ],
       gener: ['', Validators.required],
       marital_status: ['', Validators.required],
-      cell_phone: ['', Validators.required]
+      cell_phone: ['', Validators.required],
+      visa: [''],
+      passport_number: [''],
+      title: [''],
     });
   }
 

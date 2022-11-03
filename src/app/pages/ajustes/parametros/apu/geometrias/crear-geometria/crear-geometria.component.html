@@ -1,5 +1,5 @@
 <div class="card">
-  <div class="card-body">
+  <div class="card-body" *ngIf="!loading; else notData">
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Crear o editar geometría</h4>
     </div>
@@ -116,12 +116,6 @@
   </div>
 </div>
 
-<!-- <ng-container *ngIf="measures_valid">
-  <small
-    *ngFor="let item of form.get('measures').errors | ObjToArrayPipe"
-    class="text-danger"
-  >
-    {{ item?.msj }}
-  </small>
-</ng-container>
- -->
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

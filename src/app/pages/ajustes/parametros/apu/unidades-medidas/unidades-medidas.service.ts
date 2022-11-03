@@ -13,6 +13,10 @@ export class UnidadesMedidasService {
     return this.http.get(`${environment.base_url}/paginateUnits`, { params });
   }
 
+  selectUnits() {
+    return this.http.get(`${environment.base_url}/units`);
+  }
+
   save( data ){
     return this.http.post(`${environment.base_url}/units`, data);
   }

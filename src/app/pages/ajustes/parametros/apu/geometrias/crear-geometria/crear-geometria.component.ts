@@ -24,7 +24,7 @@ export class CrearGeometriaComponent implements OnInit {
   geometry: any = {};
   measu: any;
   previsualizacion: any;
-
+  loading: boolean;
   constructor(
     private _geometrias: GeometriasService,
     private fb: FormBuilder,
@@ -37,6 +37,7 @@ export class CrearGeometriaComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
+    this.id ? this.loading = true : this.loading = false
     this.createForm();
     this.getMeasures();
   }
@@ -51,6 +52,7 @@ export class CrearGeometriaComponent implements OnInit {
   }
 
   getGeometry() {
+    this.loading = true
     this._geometrias.getGeometry(this.id).subscribe((r: any) => {
       this.geometry = r.data;
       this.form.patchValue({
@@ -62,6 +64,7 @@ export class CrearGeometriaComponent implements OnInit {
       this.previsualizacion = this.geometry.image
       this.imageString = this.geometry.image
       this.checkedMeasures();
+      this.loading = false;
     })
   }
 
@@ -69,7 +72,6 @@ export class CrearGeometriaComponent implements OnInit {
     for(let i in this.measures){
       for(let j in this.geometry.measures){
         if (this.measures[i].value == this.geometry.measures[j].id){
-          console.log(this.measures[i])
           this.measures[i].checked = true
         }
       }

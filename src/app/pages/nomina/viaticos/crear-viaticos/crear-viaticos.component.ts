@@ -67,6 +67,7 @@ export class CrearViaticosComponent implements OnInit {
   getPeople() {
     this._viatico.getPeople().subscribe((res: any) => {
       this.people = res.data;
+      console.log(this.people)
     });
   }
 
@@ -222,14 +223,13 @@ export class CrearViaticosComponent implements OnInit {
   }
 
   crearViatico() {
-    this._swal
-      .show({
-        text: `Se dispone a ${this.id ? 'editar' : 'crear'
-          } una solicitud de viático`,
-        title: '¿Está seguro?',
-        icon: 'warning',
-      })
-      .then((r) => {
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: `Vamos a ${this.id ? 'editar' : 'crear'
+    } una solicitud de viático`,
+    }).then((r) => {
         if (r.isConfirmed) {
           if (this.id) {
             this._viatico.actualizarViatico(this.id, this.form.value).subscribe(
@@ -253,6 +253,7 @@ export class CrearViaticosComponent implements OnInit {
         } con éxito`,
       title: 'Operación exitosa',
       showCancel: false,
+      timer: 1000
     });
     this.roter.navigateByUrl('/nomina/viaticos');
   }

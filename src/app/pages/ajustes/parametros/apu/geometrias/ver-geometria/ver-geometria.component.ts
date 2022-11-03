@@ -11,8 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 export class VerGeometriaComponent implements OnInit {
   id: any;
   geometry: any = {};
+  loading: boolean;
   constructor(
-    private location: Location,
     private _geometria: GeometriasService,
     private activatedRoute: ActivatedRoute
   ) { }
@@ -22,14 +22,11 @@ export class VerGeometriaComponent implements OnInit {
     this.getGeometry();
   }
 
-  regresar() {
-    this.location.back();
-  }
-
   getGeometry() {
+    this.loading = true;
     this._geometria.getGeometry(this.id).subscribe((r: any) => {
       this.geometry = r.data;
-      console.log(this.geometry)
+      this.loading = false;
     })
   }
 

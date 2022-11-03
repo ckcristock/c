@@ -7,9 +7,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class ModalService {
   constructor(private modalService: NgbModal) { }
 
-  open(content, size = 'md', onclose? : (motivo?:any)=>any) {
+  /* open(content, size = 'md') {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: size, scrollable: true })
-    .result.then((motivo)=>onclose(motivo), (motivo)=>onclose(motivo));
   }
   close() {
     this.modalService.dismissAll();
@@ -25,9 +24,9 @@ export class ModalService {
   }
   openScrollableContent(content, onclose? : (motivo?:any)=>any) {
     this.open(content,'lg',onclose);
-  }
+  } */
 
-  /* open(content, size = 'md') {
+  open(content, size = 'md') {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: size, scrollable: true });
   }
   close() {
@@ -44,5 +43,5 @@ export class ModalService {
   }
   openScrollableContent(content) {
     this.modalService.open(content, { scrollable: true, size: 'lg' });
-  } */
+  }
 }

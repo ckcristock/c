@@ -27,7 +27,7 @@ export class DatosFuncionarioComponent implements OnInit {
   form: FormGroup;
   file: any = '';
   fileString: any =
-    'https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=100';
+    'https://ui-avatars.com/api/?background=505D69&color=fff&size=1000&name=F';
 
   constructor(
     private _person: PersonDataService,
@@ -94,6 +94,8 @@ export class DatosFuncionarioComponent implements OnInit {
       number_of_children: ['', this._valid.required],
       degree: ['', this._valid.required],
       title: ['', this._valid.required],
+      passport_number: [''],
+      visa: [''],
     });
   }
 

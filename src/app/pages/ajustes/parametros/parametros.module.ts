@@ -49,7 +49,7 @@ import { VacantesComponent } from './vacantes/vacantes.component';
 import { TiposModule } from "../tipos/tipos.module";
 import { TercerosComponent } from './terceros/terceros.component';
 import { MatButtonModule, MatIconModule } from "@angular/material";
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -105,6 +105,7 @@ import { MatButtonModule, MatIconModule } from "@angular/material";
         MatSelectModule,
         MatToolbarModule,
         MatButtonModule,
+        MatAutocompleteModule,
         MatIconModule,
         MatPaginatorModule,
         SweetAlert2Module.forRoot(),

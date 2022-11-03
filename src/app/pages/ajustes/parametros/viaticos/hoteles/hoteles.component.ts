@@ -5,6 +5,8 @@ import { SwalService } from '../../../informacion-base/services/swal.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-hoteles',
@@ -12,9 +14,9 @@ import { ValidatorsService } from '../../../informacion-base/services/reactive-v
   styleUrls: ['./hoteles.component.scss']
 })
 export class HotelesComponent implements OnInit {
-  @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
+  filteredOptions: Observable<string[]>;
   openClose() {
     if (this.matPanel == false) {
       this.accordion.openAll()
@@ -50,11 +52,25 @@ export class HotelesComponent implements OnInit {
     this.createForm();
     this.getCities();
     this.getHotels();
+
+    /* this.filteredOptions = this.form.get('city_id').valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : (<any>value).text),
+        map(name => name ? this._filter(name) : this.cities.slice())
+      ); */
   }
 
-  openModal() {
-    this.modal.show();
+  /* private _filter(value: string) {
+    const filterValue = value.toLowerCase();
+    return this.cities.filter(option => option.text.toLowerCase().indexOf(filterValue) === 0);
+
   }
+
+  displayFn(country: any): string {
+    return country ? country : undefined;
+  } */
+  
 
   closeResult = '';
   public openConfirm(confirm, titulo) {
@@ -67,7 +83,7 @@ export class HotelesComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   createForm() {
@@ -123,6 +139,9 @@ export class HotelesComponent implements OnInit {
   }
 
   save() {
+    this.form.patchValue({
+      city_id: this.form.get('city_id').value.value
+    }) 
     this._hoteles.createHotel(this.form.value).subscribe((r: any) => {
       this.modalService.dismissAll();
       console.log(r)

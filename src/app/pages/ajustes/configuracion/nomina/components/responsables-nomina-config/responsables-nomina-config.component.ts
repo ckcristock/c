@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Observable, of, OperatorFunction } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { ResponsablesNominaConfigService } from './responsables-nomina-config.service';
 
@@ -15,18 +14,12 @@ export class ResponsablesNominaConfigComponent implements OnInit {
 
   loading: boolean = false;
   people: any = [];
-  manager = new FormControl({});
+  //form: FormGroup;
+  model:any = {};
+  searchFailed = false;
+  searching = false;
   datos: any[] = [];
-  responsable: any = {};
-  busqueda: any = {
-    dni: '',
-    text: ''
-  }
-  form: FormGroup;
-
-  @ViewChild('instance', { static: true }) instance: NgbTypeahead;
-	focus$ = new Subject<string>();
-	click$ = new Subject<string>();
+  dato:any = {};
 
   constructor(
     private _responsableNService: ResponsablesNominaConfigService,
@@ -35,20 +28,7 @@ export class ResponsablesNominaConfigComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getPeopleWithDni();
     this.getPayrollManagers();
-  }
-
-  getPeopleWithDni(){
-    let params = {
-      ...this.busqueda
-    }
-    this.loading = true
-    this._responsableNService.getPeopleWithDni(params)
-    .subscribe((res: any)=>{
-      this.loading = false;
-      this.people = res.data
-    })
   }
 
   getPayrollManagers = () => {
@@ -60,59 +40,54 @@ export class ResponsablesNominaConfigComponent implements OnInit {
     })
   }
 
-  inputFormatBandListValue(value: any) {
-    if (value.text)
-      return value.text
-    return value;
+  /* createForm=(dato)=>{
+    this.form = this.fb.group({
+      area: this.dato.area,
+      manager: this.dato.manager
+    })
   }
+ */
+  formatter = (responsable: any) => responsable.text;
 
-  resultFormatBandListValue(value: any) {
-    return value.text;
-  }
-
-  search: OperatorFunction<string, readonly { text }[]> = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      filter((term)=> term.length >=3),
-      map((term)=>
-        this.people
-          .filter((state)=> new RegExp(term).test(state.text))
-          .slice(0,10)
+  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    tap(() => {
+      this.searching = true;
+      this.searchFailed = false;
+    }),
+    switchMap((term) =>
+      this._responsableNService.getPeopleWithDni({ search: term }).pipe(
+        tap((res) => {
+          if (res.length==0) {
+            this.searchFailed = true;
+          }
+        }),
+        catchError(() => {
+          this.searchFailed = true;
+          return of([]);
+        })
       )
-    );
-		/* const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
-		const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
-		const inputFocus$ = this.focus$;
+    ),
+    tap(() => (this.searching = false))
+  );
 
-		return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-			map((term) =>
-				(term === '' ? this.people : this.people.filter((v) => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10),
-			),
-		); */
-
-
-    actualizar=(responsable, dni)=>{
-      let data = {
-        id: responsable.id,
-        manager: dni
-      }
-      console.log(this.form.value)
-      console.log(data);
+  actualizar=(responsable, dni)=>{
+    let data = {
+      id: responsable.id,
+      manager: dni
     }
+    this._responsableNService.createUpdatePayrollManager(data)
+      .subscribe((res:any)=>{
 
-    getData = (data)=>{
-      this.responsable = {...data};
-      this.form.patchValue({
-        id: this.responsable.id,
-        area: this.responsable.area,
-        manager: this.manager
+        this._swal.show({
+          title: 'Responsable de Nómina',
+          icon: 'success',
+          text: res.data,
+          timer: 1000
+        })
       })
-    }
+  }
 
 }
-
-
-/*
-(focus)="focus$.next($any($event).target.value)"
-                (click)="click$.next($any($event).target.value)" */

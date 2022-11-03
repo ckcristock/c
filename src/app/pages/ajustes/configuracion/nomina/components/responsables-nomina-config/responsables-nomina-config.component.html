@@ -1,34 +1,52 @@
 <div class="rounded-top table-responsive">
   <table class="table table-striped table-sm">
     <tbody>
-      <tr *ngFor="let dat of datos">
-        <td>{{ dat.area }}</td>
-        <td class="d-flex justify-content-end">
-          <form [form]="form">
-            <mat-form-field class="pb-0" appearance="outline">
-              <input
+      <tr>
+
+        <ng-template #responsables>
+        <div class="col" *ngFor="let dat of datos" >
+          <td> {{ dat.area }} </td>
+          <td class="d-flex justify-content-end" >
+              <ng-template #rt let-r="result" let-t="term">
+                <ngb-highlight
+                [result]="r.dni + ' || ' + r.text"
+                [term]="t"
+                ></ngb-highlight>
+              </ng-template>
+              <mat-form-field appearance="outline">
+                <mat-label>Responsable:</mat-label>
+                <input
                 matInput
                 type="text"
-                [formControl]="manager"
+                id="typeahead-manager"
+                placeholder="Busca por documento"
+                [(ngModel)]="dat.manager.dni"
                 [ngbTypeahead]="search"
-                [inputFormatter]="inputFormatBandListValue"
-                [resultFormatter]="resultFormatBandListValue"
+                [inputFormatter]="formatter"
+                [resultFormatter]="formatter"
+                [resultTemplate]="rt"
                 [editable]="false"
-                autocomplete="off"
-                #manager
-              />
-              <button
-                mat-icon-button
-                color="primary"
-                matSuffix
-                (click)="actualizar(dat, manager.dni)"
-              >
-                <mat-icon>check</mat-icon>
-              </button>
-            </mat-form-field>
-          </form>
-        </td>
-      </tr>
+                />
+                <button
+                  mat-icon-button
+                  color="primary"
+                  matSuffix
+                  (click)="actualizar(dat, dat.manager.dni)"
+                  [attr.aria-label]="'Actualizar'"
+                >
+                  <mat-icon>check</mat-icon>
+                </button>
+                <mat-hint *ngIf="searchingPatient">Buscando</mat-hint>
+                <mat-hint *ngIf="searchFailedPatient"
+                >No hemos encontrado resultados</mat-hint
+                >
+              </mat-form-field>
+          </td>
+        </div>
+        </ng-template>
+        <ng-container *ngIf="datos.length<0 else responsables " ></ng-container>
+
+    </tr>
     </tbody>
   </table>
 </div>

@@ -13,7 +13,7 @@ import { CamposTercerosComponent } from './campos-terceros/campos-terceros.compo
 import { MunicipiosComponent } from './departamentos-municipios/municipios/municipios.component';
 import { DepartamentosComponent } from './departamentos-municipios/departamentos/departamentos.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { PaisesComponent } from './paises-ciudades/paises/paises.component';
 import { CiudadesComponent } from './paises-ciudades/ciudades/ciudades.component';
 import { PaisesCiudadesComponent } from './paises-ciudades/paises-ciudades.component';
@@ -70,6 +70,7 @@ import { ResponsablesNominaConfigComponent } from './nomina/components/responsab
     ReactiveFormsModule,
     NgSelectModule,
     NgbDropdownModule,
+    NgbTypeaheadModule,
     NgbPaginationModule,
     MatExpansionModule,
     MatFormFieldModule,

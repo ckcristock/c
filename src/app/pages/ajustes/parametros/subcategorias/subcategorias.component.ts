@@ -10,6 +10,7 @@ import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { SubcategoryService } from './subcategory.service';
 import { UserService } from 'src/app/core/services/user.service';
 import Swal from 'sweetalert2';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-subcategorias',
@@ -28,7 +29,7 @@ export class SubcategoriasComponent implements OnInit {
   public Cuenta = [];
   public Modelo_Cuenta: any;
   public Bodegas: any[] = [];
-  public Cargando: boolean = true;
+  public Cargando: boolean;
   public page = 1;
   public TotalItems: number;
   public Sucategories: any[] = [];
@@ -51,29 +52,34 @@ export class SubcategoriasComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     private _swalService: SwalService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _modal: ModalService
   ) {
     this.company_id = this._user.user.person.company_worked.id;
   }
 
 
   search1 = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    map((term) =>
-    term.length < 4 ? [] : this.Cuenta.filter((v) => v.Codigo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
+    text$.pipe(
+      debounceTime(200),
+      map((term) =>
+        term.length < 4 ? [] : this.Cuenta.filter((v) => v.Codigo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
     );
-    formatter1 = (x: { Codigo: string }) => x.Codigo;
+  formatter1 = (x: { Codigo: string }) => x.Codigo;
 
-    ngOnInit() {
-      this.createForm();
-      this.getSubcategory();
-      this.http.get(environment.ruta + 'php/lista_generales.php', {
-        params: { modulo: 'Bodega_Nuevo' },
-      })
+  ngOnInit() {
+    this.createForm();
+    this.getSubcategory();
+    this.http.get(environment.ruta + 'php/lista_generales.php', {
+      params: { modulo: 'Bodega_Nuevo' },
+    })
       .subscribe((data: any) => {
         this.Bodegas = data;
       });
+  }
+
+  openModal(content) {
+    this._modal.open(content, 'lg')
   }
 
   createForm() {
@@ -105,15 +111,26 @@ export class SubcategoriasComponent implements OnInit {
   }
 
   deleteField(i, item) {
-    this.fieldDinamic.removeAt(i);
-    this._subcategory
-      .deleteVariable(item.controls.id.value)
-      .subscribe((data: any) => {});
+    this._swalService.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: 'Vamos a eliminar este campo, esta acción no se puede revertir'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.fieldDinamic.removeAt(i);
+        this._subcategory
+          .deleteVariable(item.controls.id.value)
+          .subscribe((data: any) => { });
+      }
+    })
+
   }
 
   getSubcategory() {
+    this.Cargando = true;
     this.http
-      .get(environment.ruta + 'php/parametros/lista_subcategoria.php', {params: { company_id: this._user.user.person.company_worked.id }})
+      .get(environment.ruta + 'php/parametros/lista_subcategoria.php', { params: { company_id: this._user.user.person.company_worked.id } })
       .subscribe((data: any) => {
         this.Cargando = false;
         this.Sucategories = data;
@@ -130,7 +147,8 @@ export class SubcategoriasComponent implements OnInit {
       Separable: this.Subcategory.Separable,
     });
     this.fieldDinamic.clear();
-    this.Subcategory.Variables.forEach((element) => {
+    console.log(this.Subcategory)
+    /* this.Subcategory.Variables.forEach((element) => {
       let group = this.fb.group({
         id: element.id,
         label: element.label,
@@ -138,7 +156,7 @@ export class SubcategoriasComponent implements OnInit {
         required: element.required,
       });
       this.fieldDinamic.push(group);
-    });
+    }); */
   }
 
   SaveSubcategory() {
@@ -147,19 +165,23 @@ export class SubcategoriasComponent implements OnInit {
         .update(this.form.value, this.Subcategory.Id_Subcategoria)
         .subscribe((r: any) => {
           this.dataClear();
-          Swal.fire({
+          this._swalService.show({
             icon: 'success',
-            title: 'Subcategoria creada con éxito',
+            title: 'Subcategoria actualizada con éxito',
             text: '',
+            showCancel: false,
+            timer: 1000
           });
         });
     } else {
       this._subcategory.save(this.form.value).subscribe((r: any) => {
         this.dataClear();
-        Swal.fire({
+        this._swalService.show({
           icon: 'success',
           title: 'Subcategoria creada con éxito',
           text: '',
+          showCancel: false,
+          timer: 1000
         });
       });
     }
@@ -169,7 +191,7 @@ export class SubcategoriasComponent implements OnInit {
     this.form.reset();
     this.fieldDinamic.clear();
     this.getSubcategory();
-    this.modal.hide();
+    this._modal.close();
   }
 
   normalize = (function () {
@@ -229,9 +251,14 @@ export class SubcategoriasComponent implements OnInit {
       });
   }
 
-  public CerrarModal() {
-    this.modal.hide();
-    this.form.reset();
-    this.fieldDinamic.clear();
+  deleteSubcategory(id) {
+    this._swalService.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: ''
+    })
   }
+
+  
 }

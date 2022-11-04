@@ -80,6 +80,9 @@ import { ParametrosModule } from '../parametros/parametros.module';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+  ],
+  exports: [
+    CamposTercerosComponent
   ]
 })
 export class ConfiguracionModule { }

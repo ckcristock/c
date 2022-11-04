@@ -1,6 +1,6 @@
 <div class="card-title d-flex justify-content-between">
   <h6><i class="fas fa-money-bill"></i> Salario</h6>
-  <button class="btn btn-link" (click)="openModal()">
+  <button class="btn btn-link" (click)="openConfirm(add)">
     <i class="fas fa-pencil-alt"></i>
   </button>
 </div>
@@ -91,8 +91,8 @@
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Tipo de contrato</mat-label>
           <mat-select
-            formControlName="type_contract"
-            id="type_contract"
+            formControlName="work_contract_type_id"
+            id="work_contract_type_id"
             (selectionChange)="changeType()"
             required
           >
@@ -103,7 +103,7 @@
               {{ contract_type.text }}</mat-option
             >
           </mat-select>
-          <mat-error *ngIf="type_contract_valid"> Campo obligatorio </mat-error>
+          <mat-error *ngIf="work_contract_type_id_valid"> Campo obligatorio </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Salario</mat-label>
@@ -113,7 +113,6 @@
             pattern="([0-9]{1,3}).([0-9]{1,3})"
             placeholder="Ingresa el salario"
             formControlName="salary"
-            id="funcionario_id"
             required
             autocomplete="off"
           />
@@ -135,7 +134,7 @@
         <mat-form-field
           class="col-md-6"
           appearance="outline"
-          *ngIf="form.get('type_contract').value == 2"
+          *ngIf="form.get('work_contract_type_id').value == 2"
         >
           <mat-label>Fecha de retiro</mat-label>
           <input

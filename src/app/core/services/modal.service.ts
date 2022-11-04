@@ -26,8 +26,8 @@ export class ModalService {
     this.open(content,'lg',onclose);
   } */
 
-  open(content, size = 'md') {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: size, scrollable: true });
+  open(content, size = 'md', scroll = true) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: size, scrollable: scroll });
   }
   close() {
     this.modalService.dismissAll();

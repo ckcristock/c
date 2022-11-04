@@ -4,6 +4,25 @@
       <tr *ngFor="let extra of datos">
         <td>{{ extra.concept }}</td>
         <td class="d-flex justify-content-end">
+          <ng-template #rt2 let-r="result" let-t="term">
+            <span class="f-9">{{ r.Codigo_Niif }} - {{ r.Nombre_Niif }}</span>
+          </ng-template>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cuenta débito depreciación</mat-label>
+            <input
+              matInput
+              type="text"
+              required
+              autocomplete="off"
+              [ngbTypeahead]="search_cuenta_niif"
+              [resultTemplate]="rt2"
+              [inputFormatter]="formatter"
+              [resultFormatter]="formatter"
+              [class.is-invalid]="busquedaCuentaFallida"
+            />
+            <mat-hint *ngIf="buscandoCuenta">Buscando...</mat-hint>
+            <div *ngIf="busquedaCuentaFallida">Lo lamentamos, las opciones no pudieron ser cargadas.</div>
+          </mat-form-field>
           <mat-form-field class="pb-0" appearance="outline">
             <input
               matInput

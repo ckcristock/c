@@ -19,7 +19,7 @@ export class LocalidadesComponent implements OnInit {
   countries: any[] = [];
   states: any[] = [];
   municipalities: any[] = [];
-  cities: any[] = [];
+//  cities: any[] = [];
 
   filtro_pais: any = {
     name: ''
@@ -57,7 +57,7 @@ export class LocalidadesComponent implements OnInit {
 
   loadingCountry: boolean = true;
   loadingState: boolean = true;
-  loadingCity: boolean = true;
+  //loadingCity: boolean = true;
   loadingMunicipality: boolean = true;
 
   name = ''
@@ -76,7 +76,7 @@ export class LocalidadesComponent implements OnInit {
   constructor(
     private _countries: PaisesService,
     private _state: DepartamentosService,
-    private _cities: CiudadesService,
+    //private _cities: CiudadesService,
     private _municipality: MunicipiosService,
     private _modal: ModalService,
     private _swal: SwalService
@@ -150,7 +150,7 @@ export class LocalidadesComponent implements OnInit {
         }
       if (r.data.total == 0) {
         this.municipalities = [];
-        this.cities = [];
+        //this.cities = [];
       }
       this.loadingState = false
     })
@@ -252,12 +252,12 @@ export class LocalidadesComponent implements OnInit {
         this.deleteSwal.show();
       })
     }
-    if(tipo == 'ciudades'){
+    /* if(tipo == 'ciudades'){
       this._cities.delete(id).subscribe(r =>{
         this.getCountries()
         this.deleteSwal.show();
       })
-    }
+    } */
   }
 
   save() {

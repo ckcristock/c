@@ -30,6 +30,7 @@ import { SubcategoriasComponent } from './subcategorias/subcategorias.component'
 import { MaterialesComponent } from "../informacion-base/catalogo/components/materiales/materiales.component";
 import { NominaComponent } from "./nomina/nomina.component";
 import { ContratoComponent } from "../tipos/contrato/contrato.component";
+import { ParametrosNominaComponent } from "./params-nomina/parametros-nomina/parametros-nomina.component";
 
 
 const routes : Routes = [
@@ -70,6 +71,7 @@ const routes : Routes = [
 
     { path: 'categorias', component : CategoriasComponent },
     { path: 'subcategorias', component : SubcategoriasComponent },
+    { path: 'params-nomina', component: ParametrosNominaComponent }
 ]
 
 

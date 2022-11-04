@@ -39,6 +39,21 @@ export class NominaConfigService {
     );
   }
 
+  getTipoActivosFijos(params){  //del php puro, es tipo de activos
+    return this.http.get(
+      `${environment.ruta}php/tipoactivo/get_lista_tipo_activo.php?`, {params}
+    );
+    //this.http.get(environment.ruta+'php/tipoactivo/get_lista_tipo_activo.php?'+params).subscribe((data:any) => {
+  }
+
+  getAccountingAccount(params){
+    return this.http.get<readonly string[]>(
+      `${environment.ruta}php/plancuentas/filtrar_cuentas.php`, params
+    )
+    //http.get<readonly string[]>(environment.ruta + "php/plancuentas/filtrar_cuentas.php", { params: { coincidencia: term, tipo: 'niif' }})
+  }
+
+
   updateExtras(id, data = {}) {
     return this.http.put(`${environment.base_url}/parametrizacion/nomina/extras/update/${id}`, data);
   }

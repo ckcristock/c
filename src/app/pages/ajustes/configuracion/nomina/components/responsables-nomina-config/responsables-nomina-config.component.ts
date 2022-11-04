@@ -47,7 +47,7 @@ export class ResponsablesNominaConfigComponent implements OnInit {
     })
   }
  */
-  formatter = (responsable: any) => responsable.text;
+  formatter = (responsable: {identifier: string, text: string}) => responsable.text;
 
   search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
   text$.pipe(
@@ -73,11 +73,12 @@ export class ResponsablesNominaConfigComponent implements OnInit {
     tap(() => (this.searching = false))
   );
 
-  actualizar=(responsable, dni)=>{
+  actualizar=(responsable, identifier)=>{
     let data = {
       id: responsable.id,
-      manager: dni
+      manager: identifier
     }
+    console.log(data)
     this._responsableNService.createUpdatePayrollManager(data)
       .subscribe((res:any)=>{
 

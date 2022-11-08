@@ -1,12 +1,22 @@
-<div class="rounded-top table-responsive">
+<div class="rounded-top table-responsive" id="cuenta">
   <table class="table table-striped table-sm">
     <tbody>
       <tr *ngFor="let extra of datos">
         <td>{{ extra.concept }}</td>
-        <td class="d-flex justify-content-end">
+        <td class="d-flex justify-content-end" id="typeahead">
           <ng-template #rt2 let-r="result" let-t="term">
-            <span class="f-9">{{ r.Codigo_Niif }} - {{ r.Nombre_Niif }}</span>
+            <ngb-highlight
+              [result]="r.Codigo_Niif + ' || ' + r.Nombre_Niif"
+              [term]="t"
+            ></ngb-highlight>
           </ng-template>
+
+          <ng-template #rt2 let-r="result" let-t="term">
+            <ngb-highlight>
+              <span class="f-9">{{ r.Codigo_Niif }} - {{ r.Nombre_Niif }}</span>
+            </ngb-highlight>
+          </ng-template>
+
           <mat-form-field class="col" appearance="outline">
             <mat-label>Cuenta débito depreciación</mat-label>
             <input
@@ -14,14 +24,26 @@
               type="text"
               required
               autocomplete="off"
+              [(ngModel)]="extra.term"
               [ngbTypeahead]="search_cuenta_niif"
               [resultTemplate]="rt2"
               [inputFormatter]="formatter"
               [resultFormatter]="formatter"
               [class.is-invalid]="busquedaCuentaFallida"
             />
+            <button
+              mat-icon-button
+              color="primary"
+              matSuffix
+              (click)="setAccount(extra, extra.term.Codigo_Niif)"
+              [attr.aria-label]="'Actualizar'"
+            >
+              <mat-icon>check</mat-icon>
+            </button>
             <mat-hint *ngIf="buscandoCuenta">Buscando...</mat-hint>
-            <div *ngIf="busquedaCuentaFallida">Lo lamentamos, las opciones no pudieron ser cargadas.</div>
+            <div *ngIf="busquedaCuentaFallida">
+              Lo lamentamos, las opciones no pudieron ser cargadas.
+            </div>
           </mat-form-field>
           <mat-form-field class="pb-0" appearance="outline">
             <input

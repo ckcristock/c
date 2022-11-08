@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
-import { TaskService } from '../../ajustes/informacion-base/services/task.service';
+import { TaskService } from '../task.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
 import { DomSanitizer } from '@angular/platform-browser';

@@ -1,0 +1,48 @@
+<div class="p-3">
+  <div class="d-flex justify-content-start align-items-center">
+    <div>
+      <i class="fas fa-user"></i> Asignada {{ view_state ? "a" : "por" }}:
+      {{ view_state ? list.realizador.full_name : list.asignador.full_name }}
+    </div>
+    <div style="color: black" *ngIf="view_state">
+      <div *ngIf="list.estado == 'Pendiente'">
+        <div class="badge ml-2" style="background-color: #ef476f">
+          {{ list.estado }}
+        </div>
+      </div>
+      <div *ngIf="list.estado == 'En ejecucion'">
+        <div class="badge ml-2" style="background-color: #ffd166">
+          {{ list.estado }}
+        </div>
+      </div>
+      <div *ngIf="list.estado == 'En espera'">
+        <div class="badge ml-2" style="background-color: #118ab2">
+          {{ list.estado }}
+        </div>
+      </div>
+      <div *ngIf="list.estado == 'Finalizado'">
+        <div class="badge ml-2" style="background-color: #06d6a0">
+          {{ list.estado }}
+        </div>
+      </div>
+      <div *ngIf="list.estado == 'Archivada'">
+        <div class="badge ml-2" style="background-color: gray">
+          {{ list.estado }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="px-3">
+  <h4 class="name">{{ list["titulo"] }}</h4>
+</div>
+<div class="d-flex justify-content-start px-3 align-items-center">
+  <i class="mdi mdi-view-comfy task"></i>
+  <span class="quote2 pl-2">Categoría: {{ list["tipo"] }}</span>
+</div>
+<div class="d-flex justify-content-between px-3 align-items-center pb-3">
+  <div class="d-flex justify-content-start align-items-center">
+    <i class="mdi mdi-calendar-clock date"></i>
+    <span class="quote2 pl-2">Fecha: {{ list["fecha"] | date }} </span>
+  </div>
+</div>

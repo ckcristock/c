@@ -33,6 +33,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NoautorizadoComponent } from './noautorizado/noautorizado.component';
+import { NewTaskComponent } from './tasks/new-task/new-task.component';
+import { CardTaskComponent } from './tasks/card-task/card-task.component';
 
 registerLocaleData(localeEs, 'es');
 
@@ -50,7 +52,9 @@ registerLocaleData(localeEs, 'es');
         FiltrosgeneralesauditorComponent,
         ResolucionesxvencerComponent,
         CardreportesComponent,
-        NoautorizadoComponent
+        NoautorizadoComponent,
+        NewTaskComponent,
+        CardTaskComponent
     ],
     imports: [
         FullCalendarModule,
@@ -72,7 +76,9 @@ registerLocaleData(localeEs, 'es');
         MatSelectModule,
         //AngularFileUploaderModule,
     ],
-    exports: [],
+    exports: [
+        NewTaskComponent
+    ],
     providers: [{ provide: LOCALE_ID, useValue: 'es' }, BoardContabilidadService, // Añades esta línea en los providers
     ],
 })

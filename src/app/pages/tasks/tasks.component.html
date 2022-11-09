@@ -21,149 +21,209 @@
         <ng-template ngbNavContent>
           <div class="mt-4">
             <div class="row" cdkDropListGroup>
-              <div class="col-md-3">
-                <div class="card">
-                  <div class="card-header text-center">
+              <div class="col-md-3 pb-4">
+                <div class="card h-100">
+                  <div class="card-header text-center pb-0">
                     <h4 class="card-title">Pendientes</h4>
                     <hr style="border-color: #ef476f" />
                   </div>
-                  <div
-                    #list
-                    class="m-2 example-list"
-                    cdkDropList
-                    [cdkDropListData]="pendientes"
-                    cdkDropListSortingDisabled
-                    [cdkDropListConnectedTo]="[
-                      'list-ejecucion',
-                      'list-espera',
-                      'list-finalizado'
-                    ]"
-                    (cdkDropListDropped)="drop($event)"
-                    id="list-pendientes"
-                  >
-                    <ng-container
-                      *ngIf="
-                        !loadingPendientes && pendientes.length > 0;
-                        else notDataPendientes
-                      "
+                  <div class="card-body p-0">
+                    <div
+                      #list
+                      class="m-2 example-list"
+                      cdkDropList
+                      [cdkDropListData]="pendientes"
+                      cdkDropListSortingDisabled
+                      [cdkDropListConnectedTo]="[
+                        'list-ejecucion',
+                        'list-espera',
+                        'list-finalizado'
+                      ]"
+                      (cdkDropListDropped)="drop($event)"
+                      id="list-pendientes"
                     >
-                      <div
-                        class="card bg-light"
-                        *ngFor="let item of pendientes"
-                        cdkDrag
-                        [routerLink]="['/task', item.id]"
+                      <ng-container
+                        *ngIf="
+                          !loadingPendientes && pendientes.length > 0;
+                          else notDataPendientes
+                        "
                       >
-                        <app-card-task [list]="item"></app-card-task>
-                      </div>
-                    </ng-container>
+                        <div
+                          class="card bg-light"
+                          *ngFor="let item of pendientes"
+                          cdkDrag
+                          [routerLink]="['/task', item.id]"
+                        >
+                          <app-card-task [list]="item"></app-card-task>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="text-center">
+                      {{
+                        pendientes.length == 0
+                          ? "Sin tareas"
+                          : pendientes.length == 1
+                          ? pendientes.length + " tarea"
+                          : pendientes.length > 1
+                          ? pendientes.length + " tareas"
+                          : ""
+                      }}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-3">
-                <div class="card">
-                  <div class="card-header text-center">
+              <div class="col-md-3 pb-4">
+                <div class="card h-100">
+                  <div class="card-header text-center pb-0">
                     <h5 class="card-title">En ejecución</h5>
                     <hr style="border-color: #ffd166" />
                   </div>
-                  <div
-                    class="m-2 example-list"
-                    cdkDropList
-                    [cdkDropListData]="ejecucion"
-                    [cdkDropListConnectedTo]="[
-                      'list-pendientes',
-                      'list-espera',
-                      'list-finalizado'
-                    ]"
-                    (cdkDropListDropped)="drop($event)"
-                    id="list-ejecucion"
-                  >
-                    <ng-container
-                      *ngIf="
-                        !loadingEjecucion && ejecucion.length > 0;
-                        else notDataEjecucion
-                      "
+                  <div class="card-body p-0">
+                    <div
+                      class="m-2 example-list"
+                      cdkDropList
+                      [cdkDropListData]="ejecucion"
+                      [cdkDropListConnectedTo]="[
+                        'list-pendientes',
+                        'list-espera',
+                        'list-finalizado'
+                      ]"
+                      (cdkDropListDropped)="drop($event)"
+                      id="list-ejecucion"
                     >
-                      <div
-                        class="card bg-light"
-                        *ngFor="let item of ejecucion"
-                        cdkDrag
-                        [routerLink]="['/task', item.id]"
+                      <ng-container
+                        *ngIf="
+                          !loadingEjecucion && ejecucion.length > 0;
+                          else notDataEjecucion
+                        "
                       >
-                        <app-card-task [list]="item"></app-card-task>
-                      </div>
-                    </ng-container>
+                        <div
+                          class="card bg-light"
+                          *ngFor="let item of ejecucion"
+                          cdkDrag
+                          [routerLink]="['/task', item.id]"
+                        >
+                          <app-card-task [list]="item"></app-card-task>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="text-center">
+                      {{
+                        ejecucion.length == 0
+                          ? "Sin tareas"
+                          : ejecucion.length == 1
+                          ? ejecucion.length + " tarea"
+                          : ejecucion.length > 1
+                          ? ejecucion.length + " tareas"
+                          : ""
+                      }}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-3">
-                <div class="card">
-                  <div class="card-header text-center">
+              <div class="col-md-3 pb-4">
+                <div class="card h-100">
+                  <div class="card-header text-center pb-0">
                     <h5 class="card-title">En espera</h5>
                     <hr style="border-color: #118ab2" />
                   </div>
-                  <div
-                    class="m-2 example-list"
-                    cdkDropList
-                    [cdkDropListData]="espera"
-                    [cdkDropListConnectedTo]="[
-                      'list-ejecucion',
-                      'list-pendientes',
-                      'list-finalizado'
-                    ]"
-                    (cdkDropListDropped)="drop($event)"
-                    id="list-espera"
-                  >
-                    <ng-container
-                      *ngIf="
-                        !loadingEspera && espera.length > 0;
-                        else notDataEspera
-                      "
+                  <div class="card-body p-0">
+                    <div
+                      class="m-2 example-list"
+                      cdkDropList
+                      [cdkDropListData]="espera"
+                      [cdkDropListConnectedTo]="[
+                        'list-ejecucion',
+                        'list-pendientes',
+                        'list-finalizado'
+                      ]"
+                      (cdkDropListDropped)="drop($event)"
+                      id="list-espera"
                     >
-                      <div
-                        class="card bg-light"
-                        *ngFor="let item of espera"
-                        cdkDrag
-                        [routerLink]="['/task', item.id]"
+                      <ng-container
+                        *ngIf="
+                          !loadingEspera && espera.length > 0;
+                          else notDataEspera
+                        "
                       >
-                        <app-card-task [list]="item"></app-card-task>
-                      </div>
-                    </ng-container>
+                        <div
+                          class="card bg-light"
+                          *ngFor="let item of espera"
+                          cdkDrag
+                          [routerLink]="['/task', item.id]"
+                        >
+                          <app-card-task [list]="item"></app-card-task>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="text-center">
+                      {{
+                        espera.length == 0
+                          ? "Sin tareas"
+                          : espera.length == 1
+                          ? espera.length + " tarea"
+                          : espera.length > 1
+                          ? espera.length + " tareas"
+                          : ""
+                      }}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-3">
-                <div class="card">
-                  <div class="card-header">
+              <div class="col-md-3 pb-4">
+                <div class="card h-100">
+                  <div class="card-header pb-0">
                     <h5 class="card-title text-center">Finalizado</h5>
                     <hr style="border-color: #06d6a0" />
                   </div>
-                  <div
-                    class="m-2 example-list"
-                    cdkDropList
-                    [cdkDropListData]="finalizado"
-                    [cdkDropListConnectedTo]="[
-                      'list-ejecucion',
-                      'list-espera',
-                      'list-pendientes'
-                    ]"
-                    (cdkDropListDropped)="drop($event)"
-                    id="list-finalizado"
-                  >
-                    <ng-container
-                      *ngIf="
-                        !loadingFinalizado && finalizado.length > 0;
-                        else notDataFinalizado
-                      "
+                  <div class="card-body p-0">
+                    <div
+                      class="m-2 example-list"
+                      cdkDropList
+                      [cdkDropListData]="finalizado"
+                      [cdkDropListConnectedTo]="[
+                        'list-ejecucion',
+                        'list-espera',
+                        'list-pendientes'
+                      ]"
+                      (cdkDropListDropped)="drop($event)"
+                      id="list-finalizado"
                     >
-                      <div
-                        class="card bg-light"
-                        *ngFor="let item of finalizado"
-                        cdkDrag
-                        [routerLink]="['/task', item.id]"
+                      <ng-container
+                        *ngIf="
+                          !loadingFinalizado && finalizado.length > 0;
+                          else notDataFinalizado
+                        "
                       >
-                        <app-card-task [list]="item"></app-card-task>
-                      </div>
-                    </ng-container>
+                        <div
+                          class="card bg-light"
+                          *ngFor="let item of finalizado"
+                          cdkDrag
+                          [routerLink]="['/task', item.id]"
+                        >
+                          <app-card-task [list]="item"></app-card-task>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="text-center">
+                      {{
+                        finalizado.length == 0
+                          ? "Sin tareas"
+                          : finalizado.length == 1
+                          ? finalizado.length + " tarea"
+                          : finalizado.length > 1
+                          ? finalizado.length + " tareas"
+                          : ""
+                      }}
+                    </div>
                   </div>
                 </div>
               </div>

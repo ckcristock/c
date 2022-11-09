@@ -77,7 +77,8 @@ registerLocaleData(localeEs, 'es');
         //AngularFileUploaderModule,
     ],
     exports: [
-        NewTaskComponent
+        NewTaskComponent,
+        CardTaskComponent
     ],
     providers: [{ provide: LOCALE_ID, useValue: 'es' }, BoardContabilidadService, // Añades esta línea en los providers
     ],

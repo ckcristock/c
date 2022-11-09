@@ -25,31 +25,17 @@ export class TaskService {
     return this.http.post(`${environment.base_url}/status-update`, data)
   }
 
-  updateArchivada(id) {
-    return this.http.post(`${environment.base_url}/updatearchivada/${id}`, id)
-  }
-
   save( data ) {
     return this.http.post(`${environment.base_url}/newtask`, data)
   }
   taskView(id) {
     return this.http.get(`${environment.base_url}/taskview/${id}`)
   }
-  newComment(comment) {
-    return this.http.post(`${environment.base_url}/newcomment/${comment}`, comment)
-  }
-  getComments(idTask) {
-    return this.http.get(`${environment.base_url}/getcomments/${idTask}`)
+  newComment(data) {
+    return this.http.post(`${environment.base_url}/newcomment`, data)
   }
   deleteComment(commentId) {
     return this.http.get(`${environment.base_url}/deletecomment/${commentId}`)
-  }
-  eliminarTarea(idTarea) {
-    return this.http.get(`${environment.base_url}/deletetask/${idTarea}`)
-  }
-
-  obtenerAdjuntos(idTask) {
-    return this.http.get(`${environment.base_url}/adjuntostask/${idTask}`)
   }
 
   downloadAd(url) {

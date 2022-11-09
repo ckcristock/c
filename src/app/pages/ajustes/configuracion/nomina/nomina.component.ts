@@ -11,6 +11,7 @@ export class NominaComponent implements OnInit {
   renderizarNomina = false;
   extrasDatos: any[] = [];
   incapacidadesDatos: any[] = [];
+  novedadesList: any[] = [];
   parafiscalesDatos: any[] = [];
   riesgosArlDatos: any[] = [];
   seguridadEmpresaDatos: any[] = [];
@@ -21,6 +22,7 @@ export class NominaComponent implements OnInit {
   ngOnInit(): void {
     this.getExtras()
     this.getIncapacidades()
+    this.getNovedades()
     this.getParafiscales()
     this.getRiesgos()
     this.getSeguridadEmpresa()
@@ -35,6 +37,11 @@ export class NominaComponent implements OnInit {
   getIncapacidades() {
     this._nominaConfig.getIncapacidades().subscribe((r:any)=>{
       this.incapacidadesDatos = r
+    })
+  }
+  getNovedades = () =>{
+    this._nominaConfig.getNovedades().subscribe((r:any)=>{
+      this.novedadesList = r.data
     })
   }
   getParafiscales() {

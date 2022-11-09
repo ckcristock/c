@@ -34,6 +34,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LocalidadesComponent } from './localidades/localidades.component';
 import { ResponsablesNominaConfigComponent } from './nomina/components/responsables-nomina-config/responsables-nomina-config.component';
+import { NovedadesConfigComponent } from './nomina/components/novedades-config/novedades-config.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { ResponsablesNominaConfigComponent } from './nomina/components/responsab
     IncapacidadesConfigComponent,
     LocalidadesComponent,
     ResponsablesNominaConfigComponent,
+    NovedadesConfigComponent,
   ],
   imports: [
     CommonModule,

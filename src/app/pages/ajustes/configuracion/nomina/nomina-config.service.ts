@@ -18,6 +18,11 @@ export class NominaConfigService {
       `${environment.base_url}/parametrizacion/nomina/incapacidades`
     );
   }
+  getNovedades() {
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/novelties`
+    );
+  }
   getParafiscales() {
     return this.http.get(
       `${environment.base_url}/parametrizacion/nomina/parafiscales`
@@ -77,6 +82,12 @@ export class NominaConfigService {
   updateIncapacidades(id, data = {}) {
     return this.http.put(`${environment.base_url}/parametrizacion/nomina/incapacidades/update/${id}`, data);
   }
+
+  updateCreateNovedades(data = {}) {
+    return this.http.post(`${environment.base_url}/disability-leaves`, data);
+  }
+
+
 
 
 }

@@ -1,4 +1,4 @@
-<div class="card col-md-8 mx-auto">
+<div class="card col-md-10 mx-auto">
   <div class="card-body">
     <div class="card-title">
       <h4 class="text-primary">Configuración de nómina</h4>
@@ -76,13 +76,13 @@
         </div>
       </div>
 
-      <div class="row mt-3" *ngIf="incapacidadesDatos">
+      <div class="row mt-3" *ngIf="novedadesList">
         <div class="col-md-12">
-          <h6 class="font-weight-bold">Incapacidades</h6>
-          <app-incapacidades-config
+          <h6 class="font-weight-bold">Novedades</h6>
+          <app-novedades-config
             (notificacion)="(mostrarMensaje)"
-            [datos]="incapacidadesDatos"
-          ></app-incapacidades-config>
+            [datos]="novedadesList"
+          ></app-novedades-config>
         </div>
       </div>
 

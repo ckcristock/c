@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
@@ -8,24 +8,41 @@ import { environment } from 'src/environments/environment';
 import { NominaConfigService } from '../../nomina-config.service';
 
 @Component({
-  selector: 'app-horas-extras-config',
-  templateUrl: './horas-extras-config.component.html',
-  styleUrls: ['./horas-extras-config.component.scss']
+  selector: 'app-novedades-config',
+  templateUrl: './novedades-config.component.html',
+  styleUrls: ['./novedades-config.component.scss']
 })
-export class HorasExtrasConfigComponent implements OnInit {
+export class NovedadesConfigComponent implements OnInit {
 
   @Input('datos') datos;
   @Output('notificacion') notificacion = new EventEmitter<any>();
 
   form: FormGroup;
-  busquedaCuentaFallida: boolean;
-  buscandoCuenta: boolean;
+  page: any = '';
+  pagination: any = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  loading: boolean = false;
+  filtros: any  = {
+    nombre:'',
+    categoria:'',
+    vida_util:'',
+    depreciacion:''
+  };
+  pageSize: any = 10;
+  cuentas: any;
+  buscandoCuenta: boolean = false;
+  busquedaCuentaFallida: boolean = false;
+  search = []
+  fail = []
 
   constructor(
     private _nominaService: NominaConfigService,
     private _swal: SwalService,
     private http: HttpClient
-  ) { }
+    ) { }
 
   ngOnInit(): void {
   }
@@ -58,32 +75,37 @@ export class HorasExtrasConfigComponent implements OnInit {
 
   actualizar(event, percentage) {
     let params = {
+      id: event.id,
       percentage: percentage
     }
-    this._nominaService.updateExtras(event.id, params).subscribe((res: any) => {
+    this._nominaService.updateCreateNovedades(params).subscribe((res: any) => {
       this._swal.show({
         icon: 'success',
-        title: 'Horas Extras',
-        text: res.data,
+        title: 'Novedades',
         showCancel: false,
+        text: res.data,
         timer: 1000
       })
     })
   }
 
-  setAccount(event, identifier) {
-    let params = {
-      id: event.id,
-      account_plan_id: identifier
+  setAccount=(cuentas, identifier)=>{
+    let data = {
+      id: cuentas.id,
+      accounting_account: identifier
     }
-    this._nominaService.updateExtras(event.id, params).subscribe((res: any) => {
-      this._swal.show({
-        icon: 'success',
-        title: 'Horas Extras',
-        text: res.data,
-        showCancel: false,
-        timer: 1000
+    this._nominaService.updateCreateNovedades(data)
+      .subscribe((res:any)=>{
+        this._swal.show({
+          title: 'Novedades',
+          icon: 'success',
+          text: res.data,
+          timer: 1000
+        })
       })
-    })
   }
+
+  //las novedades no las agrega el usuario del sistema,
+  //por tanto no hay modal para nueve
+
 }

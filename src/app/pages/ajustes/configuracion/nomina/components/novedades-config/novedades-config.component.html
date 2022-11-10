@@ -3,45 +3,17 @@
     <tbody>
       <ng-template #novedades>
         <tr *ngFor="let extra of datos; index as i">
-          <td class="">{{ extra.concept }}</td>
-          <td class="" id="typeahead">
-            <ng-template #rt2 let-r="result" let-t="term">
-              <ngb-highlight
-                [result]="r.Codigo_Niif + ' || ' + r.Nombre_Niif"
-                [term]="t"
-              ></ngb-highlight>
-            </ng-template>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Cuenta contable</mat-label>
-              <input
-                matInput
-                type="text"
-                required
-                autocomplete="off"
-                [(ngModel)]="extra.cuenta_contable"
-                [ngbTypeahead]="search_cuenta_niif"
-                [resultTemplate]="rt2"
-                [inputFormatter]="formatter"
-                [resultFormatter]="formatter"
-              />
-              <button
-                mat-icon-button
-                color="primary"
-                matSuffix
-                (click)="setAccount(extra, extra.cuenta_contable.Codigo_Niif)"
-                [attr.aria-label]="'Actualizar'"
-              >
-                <mat-icon>check</mat-icon>
-              </button>
-              <mat-hint *ngIf="buscandoCuenta">Buscando...</mat-hint>
-              <mat-hint *ngIf="busquedaCuentaFallida">
-                Lo lamentamos, las opciones no pudieron ser cargadas.
-              </mat-hint>
-              <!-- <mat-hint *ngIf="busquedaCuentaFallida">Lo lamentamos, las opciones no pudieron ser cargadas.</mat-hint> -->
-            </mat-form-field>
+          <td>{{ extra.concept }}</td>
+          <td id="typeahead">
+            <app-row-typeahead
+            (setAccount)="setAccount($event)"
+            [extra]="extra"
+            [variable]="extra.cuenta_contable"
+            [titulo]="'Cuentas Contables'"
+            ></app-row-typeahead>
           </td>
-          <td class="">
-            <mat-form-field class="pb-0" appearance="outline">
+          <td>
+            <mat-form-field class="col" appearance="outline">
               <mat-label>Porcentaje</mat-label>
               <input
                 matInput

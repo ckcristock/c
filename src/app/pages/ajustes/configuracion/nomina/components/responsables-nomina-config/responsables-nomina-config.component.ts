@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, of, OperatorFunction } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
@@ -14,7 +13,6 @@ export class ResponsablesNominaConfigComponent implements OnInit {
 
   loading: boolean = false;
   people: any = [];
-  //form: FormGroup;
   model:any = {};
   searchFailed = false;
   searching = false;
@@ -23,7 +21,6 @@ export class ResponsablesNominaConfigComponent implements OnInit {
 
   constructor(
     private _responsableNService: ResponsablesNominaConfigService,
-    private fb: FormBuilder,
     private _swal: SwalService
   ) { }
 
@@ -86,6 +83,7 @@ export class ResponsablesNominaConfigComponent implements OnInit {
           title: 'Responsable de Nómina',
           icon: 'success',
           text: res.data,
+          showCancel: false,
           timer: 1000
         })
       })

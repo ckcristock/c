@@ -3,8 +3,25 @@
     <tbody>
       <tr *ngFor="let extra of datos">
         <td>{{ extra.concept }}</td>
-        <td class="d-flex justify-content-end">
-          <mat-form-field class="pb-0" appearance="outline">
+        <td>
+          <app-row-typeahead
+            (setAccount)="setAccount($event)"
+            [extra]="extra"
+            [variable]="extra.cuenta_contable"
+            [titulo]="'Cuenta contable'"
+          ></app-row-typeahead>
+        </td>
+        <td>
+          <app-row-typeahead
+          (setAccount)="setContrapartida($event)"
+          [extra]="extra"
+          [variable]="extra.cuenta_contrapartida"
+          [titulo]="'Contrapartida'"
+          ></app-row-typeahead>
+        </td>
+        <td>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Porcentaje</mat-label>
             <input
             matInput
             #percentage

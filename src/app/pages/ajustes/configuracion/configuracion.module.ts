@@ -35,6 +35,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { LocalidadesComponent } from './localidades/localidades.component';
 import { ResponsablesNominaConfigComponent } from './nomina/components/responsables-nomina-config/responsables-nomina-config.component';
 import { NovedadesConfigComponent } from './nomina/components/novedades-config/novedades-config.component';
+import { RowTypeaheadComponent } from './nomina/components/horas-extras-config/row-typeahead/row-typeahead.component';
 
 
 @NgModule({
@@ -62,6 +63,7 @@ import { NovedadesConfigComponent } from './nomina/components/novedades-config/n
     LocalidadesComponent,
     ResponsablesNominaConfigComponent,
     NovedadesConfigComponent,
+    RowTypeaheadComponent,
   ],
   imports: [
     CommonModule,

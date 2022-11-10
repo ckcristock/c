@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
+import { UserService } from 'src/app/core/services/user.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { environment } from 'src/environments/environment';
 import { NominaConfigService } from '../../nomina-config.service';
@@ -41,10 +42,12 @@ export class NovedadesConfigComponent implements OnInit {
   constructor(
     private _nominaService: NominaConfigService,
     private _swal: SwalService,
-    private http: HttpClient
+    private http: HttpClient,
+    private _user: UserService
     ) { }
 
   ngOnInit(): void {
+    console.log(this._user.user.person.company_worked.id)
   }
 
   formatter = (cuentas: { Nombre_Niif: string , Codigo_Niif: string }) => cuentas.Nombre_Niif;
@@ -78,7 +81,8 @@ export class NovedadesConfigComponent implements OnInit {
       id: event.id,
       percentage: percentage
     }
-    this._nominaService.updateCreateNovedades(params).subscribe((res: any) => {
+    this._nominaService.updateCreateNovedades(params)
+    .subscribe((res: any) => {
       this._swal.show({
         icon: 'success',
         title: 'Novedades',
@@ -89,10 +93,10 @@ export class NovedadesConfigComponent implements OnInit {
     })
   }
 
-  setAccount=(cuentas, identifier)=>{
+  setAccount=(datos)=>{
     let data = {
-      id: cuentas.id,
-      accounting_account: identifier
+      id: datos.datos.id,
+      account_plan_id: datos.identifier
     }
     this._nominaService.updateCreateNovedades(data)
       .subscribe((res:any)=>{

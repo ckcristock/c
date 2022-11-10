@@ -4,14 +4,14 @@
       <ng-template #responsables>
         <tr *ngFor="let dat of datos">
           <td>{{ dat.area }}</td>
-          <td class="d-flex justify-content-end">
+          <td>
             <ng-template #rt let-r="result" let-t="term">
               <ngb-highlight
                 [result]="r.identifier + ' || ' + r.text"
                 [term]="t"
               ></ngb-highlight>
             </ng-template>
-            <mat-form-field class="" appearance="outline">
+            <mat-form-field class="col"  appearance="outline">
               <mat-label>Responsable:</mat-label>
               <input
                 matInput

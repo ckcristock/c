@@ -32,29 +32,30 @@ export class HorasExtrasConfigComponent implements OnInit {
 
   formatter = (cuentas: { Nombre_Niif: string , Codigo_Niif: string }) => cuentas.Nombre_Niif;
 
-  search_cuenta_niif = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(300),
-    distinctUntilChanged(),
-    tap(() => {
-      this.buscandoCuenta = true;
-      this.busquedaCuentaFallida = false;
-    }),
-    switchMap(term =>
-      this.http.get(`${environment.ruta}php/plancuentas/filtrar_cuentas.php?`, { params: { coincidencia: term, tipo: 'codigo' }}).pipe(
-        tap((res : Array<{ Nombre_Niif: string , Codigo_Niif: string }>) => {
-          if(res.length==0){
-            this.busquedaCuentaFallida = true
-          }
-        }),
-        catchError(() => {
-          this.busquedaCuentaFallida = true;
-          return of([]);
-        })
-      )
-    ),
-    tap(() => (this.buscandoCuenta = false))
-  );
+  search_cuenta_niif1 = (text$: Observable<string>) =>{
+    return text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => {
+        this.buscandoCuenta = true;
+        this.busquedaCuentaFallida = false;
+      }),
+      switchMap(term =>
+        this.http.get(`${environment.ruta}php/plancuentas/filtrar_cuentas.php?`, { params: { coincidencia: term, tipo: 'codigo' }}).pipe(
+          tap((res : Array<{ Nombre_Niif: string , Codigo_Niif: string }>) => {
+            if(res.length==0){
+              this.busquedaCuentaFallida = true
+            }
+          }),
+          catchError(() => {
+            this.busquedaCuentaFallida = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.buscandoCuenta = false))
+    );
+  }
 
   actualizar(event, percentage) {
     let params = {
@@ -71,12 +72,12 @@ export class HorasExtrasConfigComponent implements OnInit {
     })
   }
 
-  setAccount(event, identifier) {
+  setAccount(datos) {
     let params = {
-      id: event.id,
-      account_plan_id: identifier
+      id: datos.datos.id,
+      account_plan_id: datos.identifier
     }
-    this._nominaService.updateExtras(event.id, params).subscribe((res: any) => {
+    this._nominaService.updateExtras(datos.datos.id, params).subscribe((res: any) => {
       this._swal.show({
         icon: 'success',
         title: 'Horas Extras',
@@ -86,4 +87,5 @@ export class HorasExtrasConfigComponent implements OnInit {
       })
     })
   }
+
 }

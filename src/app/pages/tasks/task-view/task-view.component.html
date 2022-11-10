@@ -175,17 +175,45 @@
     </div>
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Archivos adjuntos</h5>
+        <h5 class="card-title text-center">Archivos adjuntos</h5>
         <ng-container
           *ngIf="!loading && task_data.adjuntos.length > 0; else notData"
         >
-          <div class="list-group" *ngFor="let item of task_data.adjuntos">
-            <div class="list-group-item">
-              <p>{{ item.name }}</p>
-              <a [href]="item.file" target="_blank">
-                <i class="fa fa-download"></i> Ver o descargar
-              </a>
-            </div>
+          <div class="row">
+            <ng-container *ngFor="let item of task_data.adjuntos">
+              <div
+                class="col-md-4"
+                *ngIf="
+                  item.type == 'png' ||
+                    item.type == 'jpeg' ||
+                    item.type == 'jpg';
+                  else pdf
+                "
+              >
+                <a [href]="item.file" target="_blank">
+                  <div class="card bg-light card-style" role="button">
+                    <div class="card-body d-flex align-items-center p-2 pt-3">
+                      <img [src]="item.file" class="files-img" />
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <ng-template #pdf>
+                <div class="col-md-4">
+                  <a [href]="item.file" target="_blank">
+                    <div class="card bg-light card-style" role="button">
+                      <div class="card-body text-center p-2 pt-3">
+                        <i class="fas fa-file-pdf fa-4x text-danger"></i>
+                        <div class="text-truncate">
+                          <small class="text-truncate">{{ item.name }}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </ng-template>
+            </ng-container>
           </div>
         </ng-container>
       </div>

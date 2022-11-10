@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { TaskService } from '../task.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -7,13 +7,16 @@ import { UserService } from 'src/app/core/services/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TexteditorService } from '../../ajustes/informacion-base/services/texteditor.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
+import { interval, Subscription } from 'rxjs';
+import { startWith, switchMap } from 'rxjs/operators';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-task-view',
   templateUrl: './task-view.component.html',
   styleUrls: ['./task-view.component.scss']
 })
-export class TaskViewComponent implements OnInit {
+export class TaskViewComponent implements OnInit, OnDestroy {
   person_id: any;
   estado: any;
   id_task: any;
@@ -24,7 +27,8 @@ export class TaskViewComponent implements OnInit {
   form_comment: FormGroup;
   datePipe = new DatePipe('es-CO');
   loading: boolean;
-  tasks: any[] = []
+  tasks: any[] = [];
+  timeInterval: Subscription;
 
   constructor(
     private _task: TaskService,
@@ -50,13 +54,17 @@ export class TaskViewComponent implements OnInit {
     this.horaActual = this.datePipe.transform(this.date, 'hh:mm a');
   }
 
+  ngOnDestroy(): void {
+    this.timeInterval.unsubscribe()
+  }
+
   getTask() {
     let params = {
       person_id: this.person_id,
       except: this.id_task,
       max: 5,
     }
-    this._task.personTasks(params).subscribe((res:any) => {
+    this._task.personTasks(params).subscribe((res: any) => {
       this.tasks = res.data;
     })
   }
@@ -80,7 +88,21 @@ export class TaskViewComponent implements OnInit {
           }
           this.sanitize(this.task_data.comment)
         }
+        this.updateComments();
       });
+  }
+
+  updateComments() {
+    let params = {
+      id: this.id_task
+    }
+    this.timeInterval = interval(5000).pipe(
+      startWith(0),
+      switchMap(() => this._task.updateComments(params))
+    ).subscribe((res: any) => { 
+      this.task_data.comment = res.data
+      this.sanitize(this.task_data.comment)
+    })
   }
 
   createForm() {

@@ -93,16 +93,12 @@ export class TasksComponent implements OnInit {
           for (let i in d.data) {
             if (d.data[i].estado == 'Pendiente') {
               this.pendientes.push(d.data[i]);
-              this.color = '#ef476f'
             } else if (d.data[i].estado == 'En ejecucion') {
               this.ejecucion.push(d.data[i]);
-              this.color = '#ffd166'
             } else if (d.data[i].estado == 'En espera') {
               this.espera.push(d.data[i]);
-              this.color = '#118ab2'
             } else if (d.data[i].estado == 'Finalizado') {
               this.finalizado.push(d.data[i]);
-              this.color = '#06d6a0'
             }
           }
           this.pushEvents()
@@ -112,7 +108,12 @@ export class TasksComponent implements OnInit {
   pushEvents() {
     this.events = []
     for (let i in this.tasks) {
-      if (this.tasks[i].estado != 'Archivada') {
+      let status = this.tasks[i].estado
+      if (status != 'Archivada') {
+        status == 'Pendiente' ? this.color = '#ef476f' :
+          status == 'En ejecucion' ? this.color = '#ffd166' :
+            status == 'En espera' ? this.color = '#118ab2' :
+              status == 'Finalizado' ? this.color = '#06d6a0' : ''
         var object = {
           title: this.tasks[i].titulo,
           start: this.tasks[i].fecha,
@@ -184,9 +185,12 @@ export class TasksComponent implements OnInit {
     }
     for (let i in data) {
       let r: any = data[i]
-      params.id = r.id
-      params.status = status
-      this._task.statusUpdate(params).subscribe()
+      if (r.estado != status) {
+        params.id = r.id
+        params.status = status
+        this._task.statusUpdate(params).subscribe()
+        r.estado = status
+      }
     }
   }
 }

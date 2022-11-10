@@ -34,34 +34,14 @@
     <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
       Cancelar
     </button>
+    <a
+      *ngIf="data.url"
+      type="button"
+      class="btn btn-primary"
+      [routerLink]="data.url"
+      (click)="modal.dismiss()"
+    >
+      Ver
+    </a>
   </div>
 </ng-template>
-
-<!-- <app-modal-basic #alertM [dialogClass]="'modal-md'">
-  <div class="app-modal-header">
-    <div class="row">
-      <h4 class="text text-center justify-content-center modal-title p-1">
-        Detalle de alerta
-      </h4>
-      <button type="button" class="close basic-close" (click)="alertM.hide()">
-        <span aria-hidden="true">
-          <i class="fas fa-times" (click)="alertM.hide()"></i>
-        </span>
-      </button>
-    </div>
-  </div>
-  <div class="app-modal-body">
-    
-  </div>
-  <div class="app-modal-footer">
-    <div class="text-right">
-      <button
-        type="button "
-        class="btn btn-danger btn-sm mr-2"
-        (click)="alertM.hide()"
-      >
-        Cerrar
-      </button>
-    </div>
-  </div>
-</app-modal-basic> -->

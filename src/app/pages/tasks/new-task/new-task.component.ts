@@ -21,7 +21,8 @@ export class NewTaskComponent implements OnInit {
   @Output() refresh: EventEmitter<any> = new EventEmitter();
   private _suscription: any;
   fileString: any = '';
-  file: any = '';
+  file: any[] = [];
+  files: any[] = [];
   type: any = '';
   tipo = [
     { id: 1, name: 'Tipo 1' },
@@ -53,9 +54,8 @@ export class NewTaskComponent implements OnInit {
   }
 
   getPeople() {
-    this._task.personCompany(this.company_id).subscribe((res:any) => {
+    this._task.personCompany(this.company_id).subscribe((res: any) => {
       this.people = res.data
-      console.log(this.people)
     })
   }
 
@@ -64,19 +64,30 @@ export class NewTaskComponent implements OnInit {
       id_realizador: ['', Validators.required],
       tipo: ['', Validators.required],
       titulo: ['', Validators.required],
-      descripcion: ['', Validators.required],
+      descripcion: [''],
+      descripcion_aux: ['', Validators.required],
       fecha: ['', Validators.required],
-      adjuntos: [''],
+      files: [''],
       link: [''],
       id_asignador: this._user.user.person.id,
       hora: ['', Validators.required],
-      type: ['']
     })
   }
 
+  deleteFiles(id) {
+    this.files = this.files.filter(function (e) { return e.id != id })
+    this.file = this.file.filter(function (e) { return e.id != id })
+  }
+
   onFileChanged(event) {
-    if (event.target.files[0]) {
-      let file = event.target.files[0];
+    let f = event.target.files;
+    for (let i = 0; i < f.length; i++) {
+      let params = {
+        name: f[i].name,
+        id: i
+      }
+      this.files.push(params)
+      let file = f[i];
       const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
       if (!types.includes(file.type)) {
         this._swal.show({
@@ -87,35 +98,35 @@ export class NewTaskComponent implements OnInit {
         });
         return null
       }
-
       var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
+      reader.readAsDataURL(file);
       reader.onload = (event) => {
         this.fileString = (<FileReader>event.target).result;
         const type = { ext: this.fileString };
         this.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.file = base64;
-        this.form.patchValue({
-          adjuntos: this.file,
-          type: this.type
-        })
+        this.file.push({ 
+          id: i,
+          name: file.name, 
+          type: this.type, 
+          base64: base64 
+        });
       });
-
     }
   }
 
   save() {
-    if (this.form.get('link').value != null) {
+    if (this.form.value.link) {
       this.form.patchValue({
-        link: (this.router.url).toString().split('/').join('_')
+        link: this.router.url
       })
     }
     this.form.patchValue({
-      descripcion: btoa(this.form.value.descripcion),
+      descripcion: btoa(this.form.value.descripcion_aux),
+      files: this.file
     })
-    this._task.save(this.form.value).subscribe((res:any) => {
+    this._task.save(this.form.value).subscribe((res: any) => {
       this._modal.close()
       this.form.reset()
       Swal.fire({
@@ -124,7 +135,10 @@ export class NewTaskComponent implements OnInit {
         showDenyButton: true,
         icon: 'success',
         confirmButtonText: 'Sí',
+        confirmButtonColor: '#A3BD30',
         denyButtonText: `No`,
+        denyButtonColor: '#d33',
+        reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
           this.router.navigate(['/task', res.code])

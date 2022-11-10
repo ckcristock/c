@@ -29,16 +29,11 @@
                   </div>
                   <div class="card-body p-0">
                     <div
-                      #list
-                      class="m-2 example-list"
                       cdkDropList
+                      #pend="cdkDropList"
+                      class="m-2 example-list"
                       [cdkDropListData]="pendientes"
-                      cdkDropListSortingDisabled
-                      [cdkDropListConnectedTo]="[
-                        'list-ejecucion',
-                        'list-espera',
-                        'list-finalizado'
-                      ]"
+                      [cdkDropListConnectedTo]="[ejec]"
                       (cdkDropListDropped)="drop($event)"
                       id="list-pendientes"
                     >
@@ -82,14 +77,11 @@
                   </div>
                   <div class="card-body p-0">
                     <div
-                      class="m-2 example-list"
                       cdkDropList
+                      #ejec="cdkDropList"
+                      class="m-2 example-list"
                       [cdkDropListData]="ejecucion"
-                      [cdkDropListConnectedTo]="[
-                        'list-pendientes',
-                        'list-espera',
-                        'list-finalizado'
-                      ]"
+                      [cdkDropListConnectedTo]="['list-espera']"
                       (cdkDropListDropped)="drop($event)"
                       id="list-ejecucion"
                     >
@@ -136,11 +128,7 @@
                       class="m-2 example-list"
                       cdkDropList
                       [cdkDropListData]="espera"
-                      [cdkDropListConnectedTo]="[
-                        'list-ejecucion',
-                        'list-pendientes',
-                        'list-finalizado'
-                      ]"
+                      [cdkDropListConnectedTo]="['list-finalizado']"
                       (cdkDropListDropped)="drop($event)"
                       id="list-espera"
                     >
@@ -187,11 +175,7 @@
                       class="m-2 example-list"
                       cdkDropList
                       [cdkDropListData]="finalizado"
-                      [cdkDropListConnectedTo]="[
-                        'list-ejecucion',
-                        'list-espera',
-                        'list-pendientes'
-                      ]"
+                      [cdkDropListConnectedTo]="[]"
                       (cdkDropListDropped)="drop($event)"
                       id="list-finalizado"
                     >

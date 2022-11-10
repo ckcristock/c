@@ -30,9 +30,7 @@
           ngbDropdownToggle
           class="btn header-item noti-icon waves-effect iconClass"
           id="page-header-notifications-dropdown"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
+          (click)="getAlerts()"
         >
           <i class="fas fa-bell"> </i>
           <span class="badge badge-pill badge-danger">{{ alerts.length }}</span>
@@ -54,14 +52,14 @@
                   href="javascript:void(0)"
                   class="list-group-item list-group-item-action flex-column align-items-start"
                 >
+                  <h6 class="mb-1">
+                    <i [class]="notification.icon"></i>
+                    {{ notification.type }}
+                  </h6>
                   <div class="d-flex w-100 justify-content-between">
-                    <h6 class="mb-1">{{ notification.type }}</h6>
+                    <small>{{ notification.first_name }} {{notification.first_surname}}</small>
                     <small>{{ notification.created_at | date }}</small>
                   </div>
-                  <p class="mb-1">
-                    {{ notification.description }}
-                  </p>
-                  <small>{{ notification.first_name }}</small>
                 </a>
               </div>
             </ng-container>
@@ -85,9 +83,6 @@
           ngbDropdownToggle
           class="btn header-item waves-effect"
           id="page-header-user-dropdown"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
         >
           <img
             *ngIf="imageProfile != null"
@@ -127,7 +122,7 @@
           class="btn header-item noti-icon right-bar-toggle waves-effect"
           (click)="onSettingsButtonClicked()"
         >
-          <i class="ri-todo-line"></i>
+          <i class="fas fa-tasks"></i>
         </button>
       </div>
     </div>

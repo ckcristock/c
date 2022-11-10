@@ -14,9 +14,11 @@ export class TaskService {
   getAsignadas(id) {
     return this.http.get(`${environment.base_url}/taskfor/${id}`)
   }
+
   personCompany(companyId) {
     return this.http.get(`${environment.base_url}/taskperson/${companyId}`)
   }
+
   personTasks( params = {} ) {
     return this.http.get(`${environment.base_url}/person-tasks`, {params})
   }
@@ -28,17 +30,20 @@ export class TaskService {
   save( data ) {
     return this.http.post(`${environment.base_url}/newtask`, data)
   }
+
   taskView(id) {
     return this.http.get(`${environment.base_url}/taskview/${id}`)
   }
+
   newComment(data) {
     return this.http.post(`${environment.base_url}/newcomment`, data)
   }
+
   deleteComment(commentId) {
     return this.http.get(`${environment.base_url}/deletecomment/${commentId}`)
   }
 
-  downloadAd(url) {
-    return this.http.get(`${environment.base_url}/downloadad/${url}`)
+  updateComments( params = {} ) {
+    return this.http.get(`${environment.base_url}/update-comments`, {params})
   }
 }

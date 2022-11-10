@@ -8,6 +8,9 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-contratos',
@@ -26,6 +29,7 @@ export class ContratosComponent implements OnInit {
       this.matPanel = false;
     }
   }
+  formContrato: FormGroup;
   contractData: boolean;
   contracts: any[] = [];
   groups: any[];
@@ -60,10 +64,12 @@ export class ContratosComponent implements OnInit {
     private contractService: ContratosService,
     private _group: GroupService,
     private _positions: PositionService,
-    private _dependecies: DependenciesService,
+    private _dependencies: DependenciesService,
+    private _modal: ModalService,
     private paginator: MatPaginatorIntl,
     private route: ActivatedRoute,
     private location: Location,
+    private fb: FormBuilder
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
   }
@@ -75,25 +81,29 @@ export class ContratosComponent implements OnInit {
     this.getCompanies();
     this.getContractsToExpire();
     this.getContractByTrialPeriod();
-    this.route.queryParamMap
-      .subscribe((params) => {
-        this.orderObj = { ...params.keys, ...params };
-        for (let i in this.orderObj.params) {
-          if (this.orderObj.params[i]) {
-            if (Object.keys(this.orderObj).length > 2) {
-              this.filtrosActivos = true
-            }
-            this.filtros[i] = this.orderObj.params[i]
+    this.route.queryParamMap.subscribe((params) => {
+      this.orderObj = { ...params.keys, ...params };
+      for (let i in this.orderObj.params) {
+        if (this.orderObj.params[i]) {
+          if (Object.keys(this.orderObj).length > 2) {
+            this.filtrosActivos = true
           }
-        }
-        if (this.orderObj.params.pag) {
-          this.getAllContracts(this.orderObj.params.pag);
-        } else {
-          this.getAllContracts()
+          this.filtros[i] = this.orderObj.params[i]
         }
       }
-      );
+      if (this.orderObj.params.pag) {
+        this.getAllContracts(this.orderObj.params.pag);
+      } else {
+        this.getAllContracts()
+      }
+    });
+   /*  this.createForm();
   }
+
+  createForm() {
+    this.formContrato = this.fb.group({}); */
+  }
+
   estadoFiltros = false;
   mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
@@ -136,7 +146,6 @@ export class ContratosComponent implements OnInit {
     this.contractService.getAllContracts(params)
       .subscribe((res: any) => {
         this.contracts = res.data.data;
-        console.log(this.contracts)
         this.paginacion = res.data
         this.pagination.collectionSize = res.data.total;
         this.loading = false;
@@ -171,13 +180,24 @@ export class ContratosComponent implements OnInit {
     });
   }
 
+  getDependenciesByGroup(group_id) {
+    this._dependencies.getDependencies({ group_id }).subscribe((r: any) => {
+      this.dependencies = r.data;
+    });
+  }
+
+  getPositionsByDependency(dependency_id) {
+    this._positions.getPositions({ dependency_id }).subscribe((r: any) => {
+      this.positions = r.data
+    });
+  }
+
   getContractsToExpire(page = 1) {
     this.contractData = true
     this.paginationCV.page = page;
     this.contractService.getContractsToExpire(this.paginationCV)
       .subscribe((res: any) => {
         this.contractsToExpire = res.data.data;
-        console.log(this.contractsToExpire)
         this.paginationCV.collectionSize = res.data.total;
         this.paginacion2 = res.data
         this.contractData = false
@@ -206,6 +226,42 @@ export class ContratosComponent implements OnInit {
       .subscribe((res: any) => {
         this.contractsTrialPeriod = res.data;
       })
+  }
+
+  // Se toma la decisión de si se renueva al contraro on se liquida.
+  makeChoice(employee, modal) {
+    (async () => {
+      const { value: choice } = await Swal.fire({
+        title: `Seleccione qué acción se tomará sobre el contrato de ${employee.first_name+' '+employee.first_surname}.`,
+        icon: 'question',
+        input: 'radio',
+        inputOptions: {
+          'true': 'Renovar',
+          'false': 'Liquidar'
+        },
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Debes seleccionar una acción!'
+          }
+        }
+      })
+
+      if (choice) {
+        if (choice=='true') {
+          this.contractService.getContract(employee.id).subscribe((res: any) => {
+            let formVacio = res.data;
+            this.formContrato = this.fb.group(formVacio);
+            this.getDependenciesByGroup(res.data.group_id);
+            this.getPositionsByDependency(res.data.dependency_id);
+            this.formContrato.patchValue(res.data);
+            this.formContrato['codigo']="CON"+res.data.id;
+            this._modal.open(modal);
+          })
+        }else{
+          Swal.fire({ html: `El contrato será liquidado el día ${employee.date_end}.` });
+        }
+      }
+    })()
   }
 
 }

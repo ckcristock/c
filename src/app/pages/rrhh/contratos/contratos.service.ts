@@ -18,9 +18,9 @@ export class ContratosService {
           d.date_of_notify = moment(d.date_end).subtract(30,'days').format("YYYY-MM-DD")
         }else{
           d.date_of_notify = '';
-    
+
         }
-        d.date_trial = this.getPeriod(d); 
+        d.date_trial = this.getPeriod(d);
         return d
       })
       return r
@@ -30,8 +30,12 @@ export class ContratosService {
   download (id) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
     return this.http.get(`${environment.base_url}/download-work-contracts/${id}`, { headers, responseType: 'blob' as 'json' });
-    
+
     /* return this.http.get(`${environment.ruta}php/contrato/descargar_contrato.php`, {params}) */
+  }
+
+  getContract(id) {
+    return this.http.get(`${environment.base_url}/work_contracts/${id}`);
   }
 
   getCompanies() {
@@ -61,9 +65,9 @@ export class ContratosService {
       let date_end = moment(d.date_end)
       period = date_end.diff(date_of_admission, 'months', true) / 3 ;
     }
-           
+
     period =  (period > 2 ? 2 : period  ) ;
-  
+
     return date_of_admission.add( period , 'months').format("YYYY-MM-DD");
   }
 }

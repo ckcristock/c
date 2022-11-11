@@ -16,6 +16,10 @@ export class NominaComponent implements OnInit {
   riesgosArlDatos: any[] = [];
   seguridadEmpresaDatos: any[] = [];
   seguridadFuncionarioDatos: any[] = [];
+  incomeDatos: any[] = [];
+  deductionsDatos: any[] = [];
+  liquidationsDatos: any[] = [];
+  salariosSubsidiosDatos: any[] = [];
 
   constructor(private _nominaConfig:NominaConfigService) {}
 
@@ -27,6 +31,10 @@ export class NominaComponent implements OnInit {
     this.getRiesgos()
     this.getSeguridadEmpresa()
     this.getSeguridadFuncionario()
+    this.getIncomeDatos()
+    this.getDeductionDatos()
+    this.getLiquidationDatos()
+    this.getsalariosSubsidiosDatos()
   }
 
   getExtras() {
@@ -65,6 +73,29 @@ export class NominaComponent implements OnInit {
       this.renderizarNomina = true;
     })
   }
+  getIncomeDatos = () => {
+    this._nominaConfig.getCountableIncome().subscribe((r:any)=>{
+      this.incomeDatos = r
+    })
+  }
+  getDeductionDatos = () => {
+    this._nominaConfig.getCountableDeductions().subscribe((r:any)=>{
+      this.deductionsDatos = r
+    })
+  }
+
+  getLiquidationDatos = () => {
+    this._nominaConfig.getLiquidation().subscribe((r:any)=>{
+      this.liquidationsDatos = r
+    })
+  }
+
+  getsalariosSubsidiosDatos(){
+    this._nominaConfig.getSalariosSubsidios().subscribe((r:any)=>{
+      this.salariosSubsidiosDatos = r
+    })
+  }
+
   mostrarMensaje(mensaje) {
    /*  setTimeout(() => {
       this.$notify({

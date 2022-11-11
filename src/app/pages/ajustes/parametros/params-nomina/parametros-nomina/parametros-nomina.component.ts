@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ThemePalette } from '@angular/material';
 
 @Component({
   selector: 'app-parametros-nomina',
@@ -10,6 +11,10 @@ export class ParametrosNominaComponent implements OnInit {
   datos:any[] = [];
   searchingPatient;
   searchFailedPatient;
+
+  color: ThemePalette = 'accent';
+  checked = false;
+  disabled = false;
 
   constructor() { }
 

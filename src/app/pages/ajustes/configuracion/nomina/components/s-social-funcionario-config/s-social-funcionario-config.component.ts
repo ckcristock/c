@@ -60,7 +60,6 @@ export class SSocialFuncionarioConfigComponent implements OnInit {
       id: datos.datos.id,
       account_setoff: datos.identifier
     }
-    console.log(params);
     this._nominaService.updateSSocialPerson(datos.datos.id, params)
     .subscribe((res: any) => {
       this._swal.show({

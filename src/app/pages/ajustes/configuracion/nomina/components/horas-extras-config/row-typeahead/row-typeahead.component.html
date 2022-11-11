@@ -16,16 +16,9 @@
     [inputFormatter]="formatter"
     [resultFormatter]="formatter"
     [class.is-invalid]="searchFail"
+    (change)="fijarCuenta(datos, variable.Codigo_Niif)"
   />
-  <button
-    mat-icon-button
-    color="primary"
-    matSuffix
-    (click)="fijarCuenta(datos, variable.Codigo_Niif)"
-    [attr.aria-label]="'Actualizar'"
-  >
-    <mat-icon>check</mat-icon>
-  </button>
+
   <mat-hint *ngIf="searching">Buscando...</mat-hint>
   <mat-hint *ngIf="searchFail">
     Lo lamentamos, las opciones no pudieron ser cargadas.

@@ -36,6 +36,11 @@ import { LocalidadesComponent } from './localidades/localidades.component';
 import { ResponsablesNominaConfigComponent } from './nomina/components/responsables-nomina-config/responsables-nomina-config.component';
 import { NovedadesConfigComponent } from './nomina/components/novedades-config/novedades-config.component';
 import { RowTypeaheadComponent } from './nomina/components/horas-extras-config/row-typeahead/row-typeahead.component';
+import { EgresosConfigComponent } from './nomina/components/egresos-config/egresos-config.component';
+import { IngresosConfigComponent } from './nomina/components/ingresos-config/ingresos-config.component';
+import { MatCheckboxModule, MatSlideToggleModule } from '@angular/material';
+import { LiquidacionConfigComponent } from './nomina/components/liquidacion-config/liquidacion-config.component';
+import { SalariosConfigComponent } from './nomina/components/salarios-config/salarios-config.component';
 
 
 @NgModule({
@@ -64,6 +69,10 @@ import { RowTypeaheadComponent } from './nomina/components/horas-extras-config/r
     ResponsablesNominaConfigComponent,
     NovedadesConfigComponent,
     RowTypeaheadComponent,
+    EgresosConfigComponent,
+    IngresosConfigComponent,
+    LiquidacionConfigComponent,
+    SalariosConfigComponent,
   ],
   imports: [
     CommonModule,
@@ -82,6 +91,8 @@ import { RowTypeaheadComponent } from './nomina/components/horas-extras-config/r
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
   ]
 })
 export class ConfiguracionModule { }

@@ -46,6 +46,7 @@ import { NominaComponent } from './nomina/nomina.component';
 import { InformacionBaseModule } from "../informacion-base/informacion-base.module";
 import { ParametrosNominaComponent } from './params-nomina/parametros-nomina/parametros-nomina.component';
 import { TiposModule } from "../tipos/tipos.module";
+import { MatCard, MatRadioGroup } from "@angular/material";
 
 
 
@@ -81,6 +82,7 @@ import { TiposModule } from "../tipos/tipos.module";
         SubcategoriasComponent,
         NominaComponent,
         ParametrosNominaComponent,
+
 
     ],
     imports: [

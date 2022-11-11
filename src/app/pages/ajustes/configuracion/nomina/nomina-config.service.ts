@@ -58,6 +58,31 @@ export class NominaConfigService {
     //http.get<readonly string[]>(environment.ruta + "php/plancuentas/filtrar_cuentas.php", { params: { coincidencia: term, tipo: 'niif' }})
   }
 
+  getCountableIncome(){
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/income`
+    );
+  }
+
+  getCountableDeductions(){
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/deductions`
+    );
+  }
+
+  getLiquidation(){
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/liquidations`
+    );
+  }
+
+  getSalariosSubsidios(){
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/salarios-subsidios`
+    );
+  }
+
+  /////////////////////////UPDATES//////////////////////////////////////
 
   updateExtras(id, data = {}) {
     return this.http.put(`${environment.base_url}/parametrizacion/nomina/extras/update/${id}`, data);
@@ -87,7 +112,21 @@ export class NominaConfigService {
     return this.http.post(`${environment.base_url}/disability-leaves`, data);
   }
 
+  updateCreateIngresos(data={}) {
+    return this.http.post(`${environment.base_url}/parametrizacion/nomina/income/update`, data);
+  }
 
+  updateCreateEgresos(data={}) {
+    return this.http.post(`${environment.base_url}/parametrizacion/nomina/deductions/update`, data);
+  }
+
+  updateCreateLiquidaciones(data={}) {
+    return this.http.post(`${environment.base_url}/parametrizacion/nomina/liquidations/update`, data);
+  }
+
+  updateCreateSalariosSubsidios(data={}) {
+    return this.http.post(`${environment.base_url}/parametrizacion/nomina/salarios-subsidios/update`, data);
+  }
 
 
 }

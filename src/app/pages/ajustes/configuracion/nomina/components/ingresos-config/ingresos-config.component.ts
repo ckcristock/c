@@ -1,30 +1,31 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { NominaConfigService } from '../../nomina-config.service';
 
 @Component({
-  selector: 'app-horas-extras-config',
-  templateUrl: './horas-extras-config.component.html',
-  styleUrls: ['./horas-extras-config.component.scss']
+  selector: 'app-ingresos-config',
+  templateUrl: './ingresos-config.component.html',
+  styleUrls: ['./ingresos-config.component.scss']
 })
-export class HorasExtrasConfigComponent implements OnInit {
+export class IngresosConfigComponent implements OnInit {
 
   @Input('datos') datos;
   @Output('notificacion') notificacion = new EventEmitter<any>();
 
   constructor(
     private _nominaService: NominaConfigService,
-    private _swal: SwalService,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
   }
 
-  actualizar(event, percentage) {
+  actualizar(event, variable, id) {
     let params = {
-      percentage: percentage
+      id: id,
+      [variable]: event
     }
-    this._nominaService.updateExtras(event.id, params).subscribe((res: any) => {
+    this._nominaService.updateCreateIngresos(params).subscribe((res: any) => {
       this._swal.show({
         icon: 'success',
         title: 'Horas Extras',
@@ -35,12 +36,12 @@ export class HorasExtrasConfigComponent implements OnInit {
     })
   }
 
-  setAccount(datos) {
+  /* setAccount(datos) {
     let params = {
       id: datos.datos.id,
-      account_plan_id: datos.identifier
+      accounting_account: datos.identifier
     }
-    this._nominaService.updateExtras(datos.datos.id, params).subscribe((res: any) => {
+    this._nominaService.updateCreateIngresos(params).subscribe((res: any) => {
       this._swal.show({
         icon: 'success',
         title: 'Horas Extras',
@@ -49,6 +50,6 @@ export class HorasExtrasConfigComponent implements OnInit {
         timer: 1000
       })
     })
-  }
+  } */
 
 }

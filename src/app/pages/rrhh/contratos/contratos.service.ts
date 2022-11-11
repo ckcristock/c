@@ -34,6 +34,10 @@ export class ContratosService {
     /* return this.http.get(`${environment.ruta}php/contrato/descargar_contrato.php`, {params}) */
   }
 
+  getTurnTypes() {
+    return this.http.get(`${environment.base_url}/get-turn-types`);
+  }
+
   getContract(id) {
     return this.http.get(`${environment.base_url}/work_contracts/${id}`);
   }

@@ -381,13 +381,14 @@
             >{{ dependency.text }}</mat-option>
           </mat-select>
         </mat-form-field>
+      </div>
+      <div class="row">
         <mat-form-field class="col" appearance="outline">
           <mat-label for="Aplica_Separacion_Categorias"
             >Posición</mat-label
           >
           <mat-select
             formControlName="position_id"
-            id="Aplica_Separacion_Categorias"
             placeholder="Posición"
             required
           >
@@ -396,6 +397,84 @@
               [value]="position.value"
             >{{ position.text }}</mat-option>
         </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Salario</mat-label>
+          <input
+            type="number"
+            class="text-right"
+            formControlName="salary"
+            matInput
+            placeholder="Salario"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label for="Aplica_Separacion_Categorias"
+            >Tipo de turno</mat-label
+          >
+          <mat-select
+            formControlName="turn_type"
+            placeholder="Tipos de turno"
+            (selectionChange)="getTurnsbyType($event.value)"
+            required
+          >
+            <mat-option
+              *ngFor="let lista of listaTiposTurno"
+              [value]="lista.tipoTurno"
+            >{{ lista.tipoTurno }}</mat-option>
+        </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label for="Aplica_Separacion_Categorias"
+            >Turno</mat-label
+          >
+          <mat-select
+            formControlName="turn_id"
+            placeholder="Turno"
+            required
+          >
+            <mat-option
+              *ngFor="let turno of listaTurnos"
+              [value]="turno.id"
+            >{{ turno.name }}</mat-option>
+        </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col-4" appearance="outline">
+          <mat-label>Fecha de inicio</mat-label>
+          <input
+            formControlName="date_of_admission"
+            matInput
+            type="date"
+            autocomplete="off"
+            readonly
+          />
+        </mat-form-field>
+        <mat-form-field class="col-4" appearance="outline">
+          <mat-label>Número de días</mat-label>
+          <input
+            type="number"
+            formControlName="date_diff"
+            matInput
+            (input)="calcularFecha($event)"
+            placeholder="Número de días"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-4" appearance="outline">
+          <mat-label>Fecha de finalización</mat-label>
+          <input
+            matInput
+            type="date"
+            (input)="calcularDias($event)"
+            (selectionChange)="calcularDias($event)"
+            formControlName="date_end"
+            placeholder="Fecha de finalización"
+          />
         </mat-form-field>
       </div>
     </form>

@@ -11,6 +11,8 @@ import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FixedTurnService } from '../../ajustes/informacion-base/turnos/turno-fijo/turno-fijo.service';
+import { RotatingTurnService } from '../../ajustes/informacion-base/turnos/turno-rotativo/rotating-turn.service';
 
 @Component({
   selector: 'app-contratos',
@@ -34,6 +36,8 @@ export class ContratosComponent implements OnInit {
   contracts: any[] = [];
   groups: any[];
   loading = false;
+  listaTiposTurno: any = [];
+  listaTurnos: any = [];
   contractsTrialPeriod: any = [];
   contractsToExpire: any = [];
   dependencies: any[];
@@ -66,6 +70,8 @@ export class ContratosComponent implements OnInit {
     private _positions: PositionService,
     private _dependencies: DependenciesService,
     private _modal: ModalService,
+    private _fixedTurns: FixedTurnService,
+    private _rotatingTurs: RotatingTurnService,
     private paginator: MatPaginatorIntl,
     private route: ActivatedRoute,
     private location: Location,
@@ -97,11 +103,45 @@ export class ContratosComponent implements OnInit {
         this.getAllContracts()
       }
     });
-   /*  this.createForm();
+    this.getTurnTypes();
   }
 
-  createForm() {
-    this.formContrato = this.fb.group({}); */
+  getTurnTypes() {
+    this.contractService.getTurnTypes().subscribe((res: any) => {
+      this.listaTiposTurno = res.data;
+    });
+  }
+
+  getTurnsbyType(turnType: string) {
+    this.listaTurnos=[];
+    if(turnType=="Fijo"){
+      this._fixedTurns.getFixedTurns().subscribe((res: any) => {
+        res.data.data.forEach(data => {
+          this.listaTurnos.push({"id":"TF"+data.value,"name":data.text});
+        });
+      });
+    }else{
+      this._rotatingTurs.getAllCreate().subscribe((res: any) => {
+        res.data.forEach(data => {
+          this.listaTurnos.push({"id":"TR"+data.id,"name":data.name});
+        });
+      });
+    }
+  }
+
+  calcularDias(event){
+    let date = new Date(event.target.value);
+    let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
+    let numDias =  Math.floor((date.getTime() - dateInicio.getTime()) / (1000 * 60 * 60 * 24));
+    console.log("Días: ", numDias);
+    this.formContrato.get('date_diff').setValue(numDias);
+  }
+
+  calcularFecha(event){
+    let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
+    dateInicio.setDate(dateInicio.getDate() + parseInt(event.target.value));
+    console.log("Fecha: ", dateInicio.toISOString().split('T')[0]);
+    this.formContrato.get('date_end').setValue(dateInicio.toISOString().split('T')[0]);
   }
 
   estadoFiltros = false;
@@ -249,12 +289,27 @@ export class ContratosComponent implements OnInit {
       if (choice) {
         if (choice=='true') {
           this.contractService.getContract(employee.id).subscribe((res: any) => {
-            let formVacio = res.data;
+            res.data['codigo']="CON"+res.data.id;
+            if(res.data.turn_type=="Fijo"){
+              res.data['turn_id']="TF"+res.data.fixed_turn_id;
+              res.data['turn_name']=res.data.fixed_turn_name;
+            }else{
+              res.data['turn_id']="TR"+res.data.rotating_turn_id;
+              res.data['turn_name']=res.data.rotating_turn_name;
+            }
+            delete res.data.rotating_turn_id;
+            delete res.data.rotating_turn_name;
+            delete res.data.fixed_turn_id;
+            delete res.data.fixed_turn_name;
+            const formVacio = Object.fromEntries(
+              Object.entries(res.data)
+              .map(([ key ]) => [ key,  ['',Validators.required] ])
+            );
             this.formContrato = this.fb.group(formVacio);
             this.getDependenciesByGroup(res.data.group_id);
             this.getPositionsByDependency(res.data.dependency_id);
             this.formContrato.patchValue(res.data);
-            this.formContrato['codigo']="CON"+res.data.id;
+            this.getTurnsbyType(res.data.turn_type);
             this._modal.open(modal);
           })
         }else{

@@ -30,9 +30,9 @@
             </mat-form-field>
             <mat-form-field class="col-md-6" appearance="outline">
               <mat-label>Tipo</mat-label>
-              <mat-select formControlName="tipo" required>
-                <mat-option *ngFor="let item of tipo" [value]="item.name">{{
-                  item.name
+              <mat-select formControlName="type_id" required (click)="getTypes()">
+                <mat-option *ngFor="let item of types" [value]="item.value">{{
+                  item.text
                 }}</mat-option>
               </mat-select>
             </mat-form-field>

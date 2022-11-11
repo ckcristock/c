@@ -9,9 +9,10 @@ import bootstrapPlugin from '@fullcalendar/bootstrap';
 import { EventInput } from '@fullcalendar/core';
 import { TaskService } from './task.service';
 import { Router } from '@angular/router';
-import { TexteditorService } from '../ajustes/informacion-base/services/texteditor.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SwalService } from '../ajustes/informacion-base/services/swal.service';
 
 
 @Component({
@@ -30,12 +31,15 @@ export class TasksComponent implements OnInit {
   archivadas: any[] = [];
   tasks: any[] = [];
   asignadas: any[] = [];
+  taskTypes: any[] = [];
   loadingPendientes: boolean;
   loadingEjecucion: boolean;
   loadingEspera: boolean;
   loadingFinalizado: boolean;
   loadingAsignadas: boolean;
   loadingArchivadas: boolean;
+  loadingTypes: boolean;
+  formTypes: FormGroup
   color: string;
   user: any;
   params: any;
@@ -47,30 +51,76 @@ export class TasksComponent implements OnInit {
     interactionPlugin,
     listPlugin,
   ];
+  paginationAsiggned: any = {
+    page: 1,
+    pageSize: 16,
+    collectionSize: 0
+  }
+  paginationArch: any = {
+    page: 1,
+    pageSize: 16,
+    collectionSize: 0
+  }
+  paginationTypes: any = {
+    page: 1,
+    pageSize: 5,
+    collectionSize: 0
+  }
   calendarEvents: EventInput[];
-  array1 = [
-    "list-pendientes",
-    "list-espera",
-    "list-finalizado"
-  ];
-
+  values = [5, 10, 50, 100, 500];
   constructor(
     public _task: TaskService,
     private _user: UserService,
     private router: Router,
-    private sanitizer: DomSanitizer,
+    private _modal: ModalService,
+    private fb: FormBuilder,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
     this.user = this._user.user.person.id;
     this.params = {
       person_id: this.user,
+      max: 100,
     }
     this.getTasks();
+
   }
 
   openModal() {
     this.open.next()
+  }
+
+  saveType() {
+    this._task.saveType(this.formTypes.value).subscribe((res:any) => {
+      this._swal.show({
+        title: 'Agregado con éxito',
+        icon: 'success',
+        text: '',
+        showCancel: false,
+        timer: 1000
+      })
+      this.paginateTypes();
+      this.formTypes.reset()
+    })
+  }
+
+  openModalTypes(content) {
+    this.formTypes = this.fb.group({
+      name: ['', Validators.required]
+    })
+    this._modal.open(content, 'sm')
+    this.paginateTypes();
+  }
+
+  paginateTypes(page = 1) {
+    this.loadingTypes = true;
+    this.paginationTypes.page = page;
+    this._task.paginateTypes(this.paginationTypes).subscribe((res: any) => {
+      this.taskTypes = res.data.data;
+      this.paginationTypes.collectionSize = res.data.total;
+      this.loadingTypes = false
+    })
   }
 
   getTasks() {
@@ -131,22 +181,27 @@ export class TasksComponent implements OnInit {
     this.router.navigate(['/task', taskview]);
   }
 
-  getArchivadas() {
+  getArchivadas(page = 1) {
     this.loadingArchivadas = true;
+    this.paginationArch.page = page;
     let params = {
       person_id: this.user,
-      estado: 'Archivada'
+      estado: 'Archivada',
+      ...this.paginationArch
     }
-    this._task.personTasks(params).subscribe((d: any) => {
-      this.archivadas = d.data;
+    this._task.getArchivadas(params).subscribe((d: any) => {
+      this.archivadas = d.data.data;
       this.loadingArchivadas = false;
+      this.paginationArch.collectionSize = d.data.total;
     });
   }
 
-  getAsignadas() {
+  getAsignadas(page = 1) {
     this.loadingAsignadas = true
-    this._task.getAsignadas(this.user).subscribe((d: any) => {
-      this.asignadas = d.data;
+    this.paginationAsiggned.page = page;
+    this._task.getAsignadas(this.user, this.paginationAsiggned).subscribe((d: any) => {
+      this.asignadas = d.data.data;
+      this.paginationAsiggned.collectionSize = d.data.total;
       this.loadingAsignadas = false
     });
 

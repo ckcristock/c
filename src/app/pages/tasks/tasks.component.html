@@ -1,5 +1,5 @@
 <div class="row d-flex justify-content-between">
-  <div class="col-md-11">
+  <div class="col-md-10">
     <ul
       ngbNav
       #nav="ngbNav"
@@ -20,7 +20,7 @@
         >
         <ng-template ngbNavContent>
           <div class="mt-4">
-            <div class="row" cdkDropListGroup>
+            <div class="row">
               <div class="col-md-3 pb-4">
                 <div class="card h-100">
                   <div class="card-header text-center pb-0">
@@ -30,10 +30,10 @@
                   <div class="card-body p-0">
                     <div
                       cdkDropList
-                      #pend="cdkDropList"
+                      #pen="cdkDropList"
                       class="m-2 example-list"
                       [cdkDropListData]="pendientes"
-                      [cdkDropListConnectedTo]="[ejec]"
+                      [cdkDropListConnectedTo]="[eje]"
                       (cdkDropListDropped)="drop($event)"
                       id="list-pendientes"
                     >
@@ -78,10 +78,10 @@
                   <div class="card-body p-0">
                     <div
                       cdkDropList
-                      #ejec="cdkDropList"
+                      #eje="cdkDropList"
                       class="m-2 example-list"
                       [cdkDropListData]="ejecucion"
-                      [cdkDropListConnectedTo]="['list-espera']"
+                      [cdkDropListConnectedTo]="esp"
                       (cdkDropListDropped)="drop($event)"
                       id="list-ejecucion"
                     >
@@ -127,8 +127,9 @@
                     <div
                       class="m-2 example-list"
                       cdkDropList
+                      #esp="cdkDropList"
                       [cdkDropListData]="espera"
-                      [cdkDropListConnectedTo]="['list-finalizado']"
+                      [cdkDropListConnectedTo]="[fin]"
                       (cdkDropListDropped)="drop($event)"
                       id="list-espera"
                     >
@@ -174,8 +175,8 @@
                     <div
                       class="m-2 example-list"
                       cdkDropList
+                      #fin="cdkDropList"
                       [cdkDropListData]="finalizado"
-                      [cdkDropListConnectedTo]="[]"
                       (cdkDropListDropped)="drop($event)"
                       id="list-finalizado"
                     >
@@ -211,6 +212,20 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-11"></div>
+            <div class="col-md-1">
+              <select
+                class="custom-select custom-select-sm"
+                [(ngModel)]="params.max"
+                (change)="getTasks()"
+              >
+                <option *ngFor="let item of values" [value]="item">
+                  {{ item }}
+                </option>
+              </select>
             </div>
           </div>
         </ng-template>
@@ -286,6 +301,20 @@
               </div>
             </div>
           </div>
+          <div class="row mb-4">
+            <div class="col-md-11"></div>
+            <div class="col-md-1">
+              <select
+                class="custom-select custom-select-sm"
+                [(ngModel)]="params.max"
+                (change)="getTasks()"
+              >
+                <option *ngFor="let item of values" [value]="item">
+                  {{ item }}
+                </option>
+              </select>
+            </div>
+          </div>
         </ng-template>
       </li>
       <li [ngbNavItem]="3" class="nav-item flex-sm-fill">
@@ -323,6 +352,19 @@
                     </div>
                   </div>
                 </ng-container>
+                <ngb-pagination
+                  class="d-flex justify-content-center pagination-rounded pagination-sm"
+                  [collectionSize]="paginationAsiggned.collectionSize"
+                  (pageChange)="getAsignadas($event)"
+                  [pageSize]="paginationAsiggned.pageSize"
+                  [(page)]="paginationAsiggned.page"
+                  aria-label="Default pagination"
+                  maxSize="5"
+                  rotate="true"
+                  ellipses="false"
+                  boundaryLinks="true"
+                >
+                </ngb-pagination>
               </div>
             </div>
           </div>
@@ -361,6 +403,19 @@
                     </div>
                   </div>
                 </ng-container>
+                <ngb-pagination
+                  class="d-flex justify-content-center pagination-rounded pagination-sm"
+                  [collectionSize]="paginationArch.collectionSize"
+                  (pageChange)="getArchivadas($event)"
+                  [pageSize]="paginationArch.pageSize"
+                  [(page)]="paginationArch.page"
+                  aria-label="Default pagination"
+                  maxSize="5"
+                  rotate="true"
+                  ellipses="false"
+                  boundaryLinks="true"
+                >
+                </ngb-pagination>
               </div>
             </div>
           </div>
@@ -368,20 +423,113 @@
       </li>
     </ul>
   </div>
-  <div class="col">
-    <button type="button" class="btn btn-primary btn-sm" (click)="openModal()">
-      <i class="fa fa-plus"></i> Agregar
-    </button>
+  <div class="col text-right">
+    <div class="btn-group rounded w-sm-100">
+      <button
+        type="button"
+        class="btn btn-warning btn-sm"
+        (click)="openModalTypes(types)"
+      >
+        <i class="fa fa-plus"></i> Tipos
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary btn-sm"
+        (click)="openModal()"
+      >
+        <i class="fa fa-plus"></i> Agregar
+      </button>
+    </div>
   </div>
 </div>
 
 <div [ngbNavOutlet]="nav" class="mt-2"></div>
 
+<ng-template #types let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Tipos de tareas</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="formTypes">
+      <div class="row">
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>Nuevo tipo</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            formControlName="name"
+            required
+            autocomplete="off"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            color="primary"
+            (click)="saveType()"
+            [disabled]="!formTypes.valid"
+          >
+            <mat-icon>save</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </form>
+    <div
+      class="rounded-top table-responsive"
+      *ngIf="!loadingTypes && taskTypes.length > 0; else notDataTypes"
+    >
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Nombre</th>
+            <!-- <th><i class="mdi mdi-chevron-down"></i></th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center" *ngFor="let item of taskTypes">
+            <td>{{ item.name }}</td>
+            <!-- <td>{{ item.name }}</td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="paginationTypes.collectionSize"
+      [pageSize]="paginationTypes.pageSize"
+      [(page)]="paginationTypes.page"
+      (pageChange)="paginateTypes($event)"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>
 <app-new-task
   [open]="open.asObservable()"
   (refresh)="getTasks()"
 ></app-new-task>
 
+<ng-template #notDataTypes>
+  <app-not-data [loading]="loadingTypes"></app-not-data>
+</ng-template>
 <ng-template #notDataPendientes>
   <app-not-data [loading]="loadingPendientes"></app-not-data>
 </ng-template>

@@ -1,4 +1,5 @@
 export class ActivoFijoModel{
+    public company_id:any = ''; 
     public Id_Actividad:string = '';
     public Nombre:string = '';
     public Id_Tipo_Activo_Fijo:string = '';

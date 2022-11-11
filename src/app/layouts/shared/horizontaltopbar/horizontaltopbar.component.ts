@@ -24,6 +24,7 @@ export class HorizontaltopbarComponent implements OnInit {
   alerts$: Subscription;
   configData: any;
   alerts: any[] = [];
+  count: any = 0;
   element: any;
   cookieValue;
   flagvalue;
@@ -158,10 +159,15 @@ export class HorizontaltopbarComponent implements OnInit {
   getAlerts() {
     this.loading = true;
     if (this.user.person.id) {
-      let param = { person_id: this.user.person.id };
+      let param = { user_id: this.user.person.id };
 
-      this._alert.getAlerts(param).subscribe((r: any) => {
-        this.alerts = r.data.data;
+      this._alert.getAlertsNotification(param).subscribe((r: any) => {
+        this.alerts = r.data;
+        if (r.code <= 99) {
+          this.count = r.code
+        } else {
+          this.count = '99+'
+        }
         this.loading = false
       });
       /* this.initSearch() */
@@ -169,6 +175,23 @@ export class HorizontaltopbarComponent implements OnInit {
       /* this.initSearch() */
     }
 
+  }
+
+  read(not) {
+    if(not.read_boolean == 0) {
+      let params = {
+        id: not.id,
+        user_id: this.user.person.id
+      }
+      this._alert.read(params).subscribe((res:any) => {
+        this.alerts = res.data;
+        if (res.code <= 99) {
+          this.count = res.code
+        } else {
+          this.count = '99+'
+        }
+      })
+    }
   }
 
   initSearch() {

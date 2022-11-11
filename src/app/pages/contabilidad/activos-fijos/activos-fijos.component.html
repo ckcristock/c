@@ -1,184 +1,180 @@
 <div class="row">
-  <div class="col-lg-9">
+  <div class="col-md-9">
     <div class="card">
       <div class="card-body">
-        <div class="row card-title d-flex justify-content-between">
-          <div class="col-md-6 px-0">
-            <h4 class="text-primary">Activos fijos</h4>
-          </div>
-          <div class="col-md-6 px-0 text-right">
-            <div class="btn-group rounded w-sm-100">
-              <button
-                type="button"
-                class="btn btn-primary btn-sm"
-                [routerLink]="['/contabilidad/activos-fijos-crear']"
-              >
-                <i class="fa fa-plus"></i> Agregar
-              </button>
-              <button
-                class="btn btn-warning btn-sm"
-                [routerLink]="['/ajustes/tipos/tipos-activo-fijo']"
-              >
-                <i class="fas fa-pencil-alt"></i> Tipos
-              </button>
-              <button class="btn btn-info btn-sm" (click)="openClose()">
-                <i class="fas fa-sliders-h"></i> Filtros
-              </button>
-            </div>
+        <div class="card-title d-flex justify-content-between">
+          <h4 class="text-primary">Activos Fijos</h4>
+          <div class="btn-group rounded">
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              [routerLink]="['/contabilidad/activos-fijos-crear']"
+            >
+              <i class="fa fa-plus"></i> Agregar
+            </button>
+            <button
+              class="btn btn-warning btn-sm"
+              [routerLink]="['/ajustes/tipos/tipos-activo-fijo']"
+            >
+              <i class="fas fa-pencil-alt"></i> Tipos
+            </button>
+            <button class="btn btn-info btn-sm" (click)="openClose()">
+              <i class="fas fa-sliders-h"></i> Filtros
+            </button>
+            <!-- <button type="button" class="pull-left btn btn-primary btn-sm" (click)="CrearActivoFijo()"><i
+                        class="fa fa-plus"></i>
+                      Agregar Nuevo Activo Fijo
+                    </button> -->
           </div>
         </div>
         <hr class="line" />
         <mat-accordion multi>
           <mat-expansion-panel class="mat-elevation-z0">
-            <div class="row">
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Documento</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Busca por documento"
-                  [(ngModel)]="Filtros.codigo"
-                  (input)="ConsultaFiltrada()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Nombre</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Busca por nombre"
-                  [(ngModel)]="Filtros.nombre"
-                  (input)="ConsultaFiltrada()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Tipo de activo</mat-label>
-                <mat-select
-                  [(ngModel)]="Filtros.tipo"
-                  (selectionChange)="ConsultaFiltrada()"
+            <mat-form-field class="col-md-2 pl-0" appearance="outline">
+              <mat-label>Documento</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por documento"
+                [(ngModel)]="Filtros.codigo"
+                (input)="ConsultaFiltrada()"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-3 pl-0" appearance="outline">
+              <mat-label>Nombre</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por nombre"
+                [(ngModel)]="Filtros.nombre"
+                (input)="ConsultaFiltrada()"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-3 pl-0" appearance="outline">
+              <mat-label>Tipo de activo</mat-label>
+              <mat-select
+                [(ngModel)]="Filtros.tipo"
+                (selectionChange)="ConsultaFiltrada()"
+              >
+                <mat-option
+                  *ngFor="let ta of TipoActivos"
+                  [value]="ta.Id_Tipo_Activo_Fijo"
                 >
-                  <mat-option
-                    *ngFor="let ta of TipoActivos"
-                    [value]="ta.Id_Tipo_Activo_Fijo"
-                  >
-                    {{ ta.Nombre_Tipo_Activo }}</mat-option
-                  >
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Costo PCGA</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Busca por costo PCGA"
-                  [(ngModel)]="Filtros.costo_pcga"
-                  (input)="ConsultaFiltrada()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Costo NIIF</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Busca por costo NIIF"
-                  [(ngModel)]="Filtros.costo_niif"
-                  (input)="ConsultaFiltrada()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-            </div>
+                  {{ ta.Nombre_Tipo_Activo }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-2 pl-0" appearance="outline">
+              <mat-label>Costo</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por Costo"
+                [(ngModel)]="Filtros.costo_niif"
+                (input)="ConsultaFiltrada()"
+                autocomplete="off"
+              />
+            </mat-form-field>
           </mat-expansion-panel>
         </mat-accordion>
-        <div class="rounded-top table-responsive">
-          <table
-            class="table table-bordered table-striped table-sm"
-            *ngIf="!Cargando && ActivosFijos.length > 0; else notData"
-          >
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
-                <th class="align-middle">Documento</th>
-                <th class="align-middle">Nombre</th>
-                <th class="align-middle">Tipo de Activo</th>
-                <th class="align-middle">Centro Costo</th>
-                <th class="align-middle">Costo PCGA(Local)</th>
-                <th class="align-middle">Costo NIIF</th>
-                <th class="col-md-1 align-middle">
-                  <i class="mdi mdi-chevron-down"></i>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="let af of ActivosFijos"
-                class="text-center"
-                [ngClass]="{ 'bg-danger': af.Estado == 'Anulada' }"
-              >
-                <td class="align-middle">{{ af.Codigo }}</td>
-                <td class="align-middle">{{ af.Nombre }}</td>
-                <td class="align-middle">{{ af.Tipo_Activo }}</td>
-                <td class="align-middle">{{ af.Centro_Costo }}</td>
-                <td class="align-middle">
-                  ${{ af.Costo_PCGA | number | puntos }}
-                </td>
-                <td class="align-middle">
-                  ${{ af.Costo_NIIF | number | puntos }}
-                </td>
-                <td class="align-middle">
-                  <div class="text-center">
-                    <div ngbDropdown container="body" class="dropdown-primary">
-                      <button
-                        ngbDropdownToggle
-                        class="btn btn-primary btn-sm waves-light"
-                        type="button"
+        <table
+          class="table table-bordered table-striped table-sm table-responsive-sm"
+          style="font-size: small"
+          *ngIf="!Cargando && ActivosFijos.length > 0; else notData"
+        >
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th class="align-middle">Documento</th>
+              <th class="align-middle">Nombre</th>
+              <th class="align-middle">Tipo de Activo</th>
+              <th class="align-middle">Centro Costo</th>
+              <th class="align-middle">Costo</th>
+              <th class="col-md-1 align-middle">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let af of ActivosFijos"
+              [ngClass]="{ 'bg-danger': af.Estado == 'Anulada' }"
+              class="text-center"
+            >
+              <td class="align-middle text-left">{{ af.Codigo }}</td>
+              <td class="align-middle text-left">{{ af.Nombre }}</td>
+              <td class="align-middle">{{ af.Tipo_Activo }}</td>
+              <td class="align-middle">{{ af.Centro_Costo }}</td>
+              <td class="align-middle text-right" style="width: 100px">
+                $ {{ af.Costo_NIIF | number | puntos }}
+              </td>
+              <td class="align-middle">
+                <div class="text-center">
+                  <div ngbDropdown class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm waves-effect waves-light"
+                      type="button"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        class="dropdown-item waves-light waves-effect caja-botones"
+                        href="{{
+                          env.ruta
+                        }}php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{
+                          af.Id_Activo_Fijo
+                        }}&id_funcionario_elabora={{
+                          Identificacion_Funcionario
+                        }}&tipo=Niif&company={{ company_id }}"
+                        target="_blank"
                       >
-                        <i class="mdi mdi-chevron-down"></i>
-                      </button>
-                      <div ngbDropdownMenu>
-                        <!-- <a class="dropdown-item waves-light  caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}"
-                                                                  target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion PCGA</a>
-                                                              <a class="dropdown-item waves-light  caja-botones" href="{{generalService.Ruta_Principal}}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{af.Id_Activo_Fijo}}&id_funcionario_elabora={{Identificacion_Funcionario}}&tipo=Niif"
-                                                                  target="_blank"> <i class="fa fa-list-alt"></i>Ver Contabilizacion NIIF</a> -->
-                        <a
-                          class="dropdown-item text-primary waves-light caja-botones"
-                          [routerLink]="['/contabilidad/activos-fijos-crear']"
-                          [queryParams]="{
-                            Tipo: 'Adicion',
-                            AF: af.Id_Activo_Fijo
-                          }"
-                        >
-                          <i class="fa fa-plus"></i> Adición</a
-                        >
-                        <a
-                          class="dropdown-item text-info waves-light caja-botones"
-                          [routerLink]="[
-                            '/contabilidad/activo-fijo-ver',
-                            af.Id_Activo_Fijo
-                          ]"
-                        >
-                          <i class="fa fa-eye"></i> Ver</a
-                        >
-                        <a
-                          *ngIf="
-                            af.Estado != 'Anulada' && perfilUsuario == '27'
-                          "
-                          class="dropdown-item waves-light caja-botones bg-danger"
-                          href="javascript:;"
-                          [swal]="confirmacionAnular"
-                          (click)="IdDocumento = af.Id_Activo_Fijo"
-                        >
-                          <i class="fa fa-close"></i> Anular</a
-                        >
-                      </div>
+                        <i class="fa fa-list-alt"></i> Ver Contabilización</a
+                      >
+                      <a
+                        class="dropdown-item waves-light waves-effect caja-botones"
+                        [routerLink]="['/contabilidad/activos-fijos-crear']"
+                        [queryParams]="{
+                          Tipo: 'Adicion',
+                          AF: af.Id_Activo_Fijo
+                        }"
+                      >
+                        <i class="fa fa-plus"></i> Adición</a
+                      >
+                      <a
+                        class="dropdown-item waves-light waves-effect caja-botones"
+                        [routerLink]="[
+                          '/contabilidad/activo-fijo-ver',
+                          af.Id_Activo_Fijo
+                        ]"
+                      >
+                        <i class="fa fa-eye"></i> Ver</a
+                      >
+                      <a
+                        *ngIf="af.Estado != 'Anulada'"
+                        class="dropdown-item text-danger waves-light waves-effect caja-botones"
+                        [swal]="{
+                          title: 'Cambio de estado',
+                          text: 'Se dispone a cambiar el estado de este Activo Fijo.',
+                          icon: 'warning',
+                          showCancelButton: true,
+                          confirmButtonText: 'Confirmar',
+                          cancelButtonText: 'Cancelar',
+                          reverseButtons: true
+                        }"
+                        (confirm)="CambiarEstado(af.Id_Activo_Fijo)"
+                      >
+                        <span *ngIf="af.Estado == 'Activo'">
+                          <i class="fas fa-times"> </i> Anular
+                        </span>
+                      </a>
                     </div>
                   </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <ngb-pagination
           class="d-flex justify-content-center pagination-rounded pagination-sm"
           [collectionSize]="TotalItems"
@@ -191,137 +187,122 @@
         >
         </ngb-pagination>
         <!-- <div
-            id="paginacion-container"
-            class="d-flex justify-content-center"
-            *ngIf="ActivosFijos.length > 0"
-          >
-            <small>
-              {{ InformacionPaginacion.desde }} -
-              {{ InformacionPaginacion.hasta }} de
-              {{ InformacionPaginacion.total }}
-            </small>
-          </div> -->
+          id="paginacion-container"
+          class="d-flex justify-content-center"
+          *ngIf="ActivosFijos.length > 0"
+        >
+          <small>
+            {{ InformacionPaginacion.desde }} -
+            {{ InformacionPaginacion.hasta }} de
+            {{ InformacionPaginacion.total }}
+          </small>
+        </div> -->
       </div>
     </div>
   </div>
 
-  <div class="col-lg-3">
+  <div class="col-md-3">
     <div class="card">
       <div class="card-body">
         <div class="card-title">
           <h4 class="text-primary">Reportes</h4>
         </div>
         <hr class="line" />
-        <div class="row">
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Tipo de reporte</mat-label>
-            <mat-select
-              name="tipo_reporte"
-              id="tipo_reporte"
-              [(ngModel)]="ReporteModel.Tipo_Reporte"
-            >
-              <mat-option value="Compras">Compras de un Periodo</mat-option>
-              <mat-option value="Movimientos"
-                >Movimientos de un Periodo</mat-option
-              >
-              <mat-option value="Relacion">Relación de Activos</mat-option>
-              <mat-option value="Adiciones">Adiciones de Activos</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field
-            class="col"
-            appearance="outline"
-            *ngIf="ReporteModel.Tipo_Reporte != 'Relacion'"
+        <mat-form-field class="col-md-12 px-0" appearance="outline">
+          <mat-label>Tipo de reporte</mat-label>
+          <mat-select
+            name="tipo_reporte"
+            id="tipo_reporte"
+            [(ngModel)]="ReporteModel.Tipo_Reporte"
           >
-            <mat-label>Fecha de inicio</mat-label>
-            <input
-              matInput
-              [matDatepicker]="picker"
-              [(ngModel)]="fechita"
-              (dateInput)="fechitaF($event)"
-              autocomplete="off"
-              placeholder="Busca por fecha"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <mat-form-field
-            class="col"
-            appearance="outline"
-            *ngIf="ReporteModel.Tipo_Reporte != 'Relacion'"
-          >
-            <mat-label>Fecha de fin</mat-label>
-            <input
-              matInput
-              [matDatepicker]="picker2"
-              [(ngModel)]="fechita2"
-              (dateInput)="fechitaF2($event)"
-              autocomplete="off"
-              placeholder="Busca por fecha"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="picker2"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-          </mat-form-field>
-          <mat-form-field
-            class="col"
-            appearance="outline"
-            *ngIf="ReporteModel.Tipo_Reporte == 'Relacion'"
-          >
-            <mat-label>Fecha</mat-label>
-            <input
-              matInput
-              [matDatepicker]="picker"
-              name="fechas"
-              id="fechas"
-              [(ngModel)]="ReporteModel.Fechas"
-              placeholder="Busca por fecha"
-              (dateInput)="dateRangeChanged2($event)"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Tipo de activo</mat-label>
-            <mat-select
-              name="tipo_activo"
-              id="tipo_activo"
-              [(ngModel)]="ReporteModel.Tipo_Activo"
+            <mat-option value="Compras">Compras de un Periodo</mat-option>
+            <mat-option value="Movimientos"
+              >Movimientos de un Periodo</mat-option
             >
-              <mat-option
-                *ngFor="let item of listaTipoActivo"
-                [value]="item.value"
-                >{{ item.label }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Centro de costo</mat-label>
-            <mat-select
-              name="centro_costo"
-              id="centro_costo"
-              [(ngModel)]="ReporteModel.Centro_Costo"
+            <mat-option value="Relacion">Relación de Activos</mat-option>
+            <mat-option value="Adiciones">Adiciones de Activos</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field
+          appearance="outline"
+          class="col-md-12 px-0"
+          *ngIf="ReporteModel.Tipo_Reporte != 'Relacion'"
+        >
+          <mat-label>Rango de fechas</mat-label>
+          <input
+            matInput
+            [satDatepicker]="picker"
+            [value]="date"
+            (dateChange)="selectedDate($event)"
+            (dateInput)="selectedDate($event)"
+            name="daterange"
+            autocomplete="off"
+            required
+          />
+          <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+          <sat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></sat-datepicker-toggle>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-12 px-0"
+          appearance="outline"
+          *ngIf="ReporteModel.Tipo_Reporte == 'Relacion'"
+        >
+          <mat-label>Fecha</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            name="fechas"
+            id="fechas"
+            [(ngModel)]="ReporteModel.Fechas"
+            placeholder="Busca por fecha"
+            (dateInput)="dateRangeChanged2($event)"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-12 px-0" appearance="outline">
+          <mat-label>Tipo de activo</mat-label>
+          <mat-select
+            name="tipo_activo"
+            id="tipo_activo"
+            [(ngModel)]="ReporteModel.Tipo_Activo"
+          >
+            <mat-option
+              *ngFor="let item of listaTipoActivo"
+              [value]="item.value"
+              >{{ item.label }}</mat-option
             >
-              <mat-option
-                *ngFor="let item of listaCentroCosto"
-                [value]="item.value"
-                >{{ item.label }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <div *ngIf="ReporteModel.Fechas != ''" class="col">
-            <button class="btn btn-success btn-block" (click)="verReporte()">
-              <i class="fa fa-table"></i> Descargar
-            </button>
-          </div>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-12 px-0" appearance="outline">
+          <mat-label>Centro de costo</mat-label>
+          <mat-select
+            name="centro_costo"
+            id="centro_costo"
+            [(ngModel)]="ReporteModel.Centro_Costo"
+          >
+            <mat-option
+              *ngFor="let item of listaCentroCosto"
+              [value]="item.value"
+              >{{ item.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <div *ngIf="ReporteModel.Fechas != ''" class="col-md-12 px-0">
+          <button
+            class="btn btn-sm btn-success btn-block"
+            (click)="verReporte()"
+          >
+            <i class="fa fa-table"></i> Descargar
+          </button>
         </div>
       </div>
     </div>
@@ -331,12 +312,12 @@
 <!-- <swal #confirmacionAnular [options]="alertOption"></swal> -->
 
 <!-- <swal #alertSwal title="" text="" type=""></swal> -->
-<ng-template #notData>
-  <app-not-data [loading]="Cargando"></app-not-data>
-</ng-template>
 
 <ng-template #rt_tercero let-r="result" let-t="term">
   <span class="f-9">
     {{ r.Nombre_Tercero }}
   </span>
+</ng-template>
+<ng-template #notData>
+  <app-not-data [loading]="Cargando"></app-not-data>
 </ng-template>

@@ -33,7 +33,7 @@
           (click)="getAlerts()"
         >
           <i class="fas fa-bell"> </i>
-          <span class="badge badge-pill badge-danger">{{ alerts.length }}</span>
+          <span class="badge badge-pill badge-danger">{{ count }}</span>
         </button>
         <div
           class="dropdown-menu dropdown-menu-lg dropdown-menu-right border border-light"
@@ -48,16 +48,32 @@
               <div class="list-group list-group-flush">
                 <a
                   *ngFor="let notification of alerts"
-                  (click)="modalAlert.show(notification)"
+                  (click)="modalAlert.show(notification); read(notification)"
                   href="javascript:void(0)"
                   class="list-group-item list-group-item-action flex-column align-items-start"
                 >
-                  <h6 class="mb-1">
-                    <i [class]="notification.icon"></i>
-                    {{ notification.type }}
-                  </h6>
-                  <div class="d-flex w-100 justify-content-between">
-                    <small>{{ notification.first_name }} {{notification.first_surname}}</small>
+                  <div class="d-flex justify-content-between">
+                    <h6
+                      class="mb-1"
+                      [ngClass]="
+                        notification.read_boolean != 0 ? 'text-muted' : ''
+                      "
+                    >
+                      <i [class]="notification.icon"></i>
+                      {{ notification.type }}
+                    </h6>
+                    <i
+                      *ngIf="notification.read_boolean == 0"
+                      class="fas fa-circle text-primary"
+                    ></i>
+                  </div>
+                  <div
+                    class="d-flex w-100 justify-content-between"
+                    [ngClass]="
+                      notification.read_boolean != 0 ? 'text-muted' : ''
+                    "
+                  >
+                    <small>{{ notification.transmitter.full_name }}</small>
                     <small>{{ notification.created_at | date }}</small>
                   </div>
                 </a>

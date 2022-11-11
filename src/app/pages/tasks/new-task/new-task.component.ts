@@ -24,13 +24,8 @@ export class NewTaskComponent implements OnInit {
   file: any[] = [];
   files: any[] = [];
   type: any = '';
-  tipo = [
-    { id: 1, name: 'Tipo 1' },
-    { id: 2, name: 'Tipo 2' },
-    { id: 3, name: 'Tipo 3' },
-    { id: 4, name: 'Tipo 4' },
-    { id: 5, name: 'Tipo 5' }
-  ];
+  loadingTypes: boolean;
+  types: any[] = []
   form: FormGroup;
   people: any[] = []
   company_id: number;
@@ -47,6 +42,7 @@ export class NewTaskComponent implements OnInit {
   ngOnInit(): void {
     this.company_id = this._user.user.person.company_worked.id
     this.getPeople();
+    this.getTypes();
     this.createForm();
     this._suscription = this.open.subscribe((data: any) =>
       this._modal.open(this.newtask, 'lg')
@@ -59,10 +55,18 @@ export class NewTaskComponent implements OnInit {
     })
   }
 
+  getTypes() {
+    this.loadingTypes = true;
+    this._task.getTypes().subscribe((res: any) => {
+      this.types = res.data;
+      this.loadingTypes = false;
+    })
+  }
+
   createForm() {
     this.form = this.fb.group({
       id_realizador: ['', Validators.required],
-      tipo: ['', Validators.required],
+      type_id: ['', Validators.required],
       titulo: ['', Validators.required],
       descripcion: [''],
       descripcion_aux: ['', Validators.required],
@@ -106,11 +110,11 @@ export class NewTaskComponent implements OnInit {
         this.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.file.push({ 
+        this.file.push({
           id: i,
-          name: file.name, 
-          type: this.type, 
-          base64: base64 
+          name: file.name,
+          type: this.type,
+          base64: base64
         });
       });
     }
@@ -124,11 +128,14 @@ export class NewTaskComponent implements OnInit {
     }
     this.form.patchValue({
       descripcion: btoa(this.form.value.descripcion_aux),
-      files: this.file
+      files: this.file,
+      id_asignador: this._user.user.person.id,
     })
     this._task.save(this.form.value).subscribe((res: any) => {
       this._modal.close()
       this.form.reset()
+      this.file = []
+      this.files = []
       Swal.fire({
         title: res.data,
         text: '¿Deseas ir a la tarea?',

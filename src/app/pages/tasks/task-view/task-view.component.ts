@@ -58,6 +58,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
     this.timeInterval.unsubscribe()
   }
 
+
   getTask() {
     let params = {
       person_id: this.person_id,
@@ -108,7 +109,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   createForm() {
     this.form_comment = this.fb.group({
       person_id: [''],
-      comment_temp: [''],
+      comment_temp: ['', Validators.required],
       comment: ['', Validators.required],
       fecha: [''],
       task_id: ['']

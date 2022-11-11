@@ -11,7 +11,10 @@ import { ActivosFijosService } from './activos-fijos.service';
 import { NgOption } from '@ng-select/ng-select';
 import { environment } from 'src/environments/environment';
 import { CentroCostosService } from '../centro-costos/centro-costos.service';
-import { MatAccordion } from '@angular/material/expansion';
+import { UserService } from 'src/app/core/services/user.service';
+import { MatAccordion } from '@angular/material';
+import { DatePipe } from '@angular/common';
+import { DateAdapter } from 'saturn-datepicker';
 
 @Component({
   selector: 'app-activos-fijos',
@@ -19,6 +22,12 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./activos-fijos.component.scss']
 })
 export class ActivosFijosComponent implements OnInit {
+  env = environment
+  datePipe = new DatePipe('es-CO');
+  date: { year: number; month: number };
+  @ViewChild('ModalActivoFijo') ModalActivoFijo:any;
+  @ViewChild('ModalActivoFijoAdiccion') ModalActivoFijoAdiccion:any;
+  @ViewChild('alertSwal') alertSwal:any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
   openClose(){
@@ -30,10 +39,6 @@ export class ActivosFijosComponent implements OnInit {
       this.matPanel = false;
     }    
   }
-  @ViewChild('ModalActivoFijo') ModalActivoFijo:any;
-  @ViewChild('ModalActivoFijoAdiccion') ModalActivoFijoAdiccion:any;
-  @ViewChild('alertSwal') alertSwal:any;
-
   public ActivoFijoModel:ActivoFijoModel = new ActivoFijoModel();
   public Cargando:boolean = false;
 
@@ -45,7 +50,7 @@ export class ActivosFijosComponent implements OnInit {
     codigo:'',
     tipo:'',
     costo_niif:'',
-    costo_pcga:''
+    Id_Empresa: ''
   };
 
 
@@ -77,7 +82,7 @@ export class ActivosFijosComponent implements OnInit {
   public typeahead_Cuenta:any={
     placeholder:'Contrapartida',
     name:'Contrapartida',
-    id:'Contrapartida', 
+    id:'Contrapartida',
     Requerido:true
   }
   public typeahead_Rete_Iva:any={
@@ -92,22 +97,23 @@ export class ActivosFijosComponent implements OnInit {
     id:'Rete_Fuente',
     Requerido:false
   }
- 
+
  public Codigo:any='';
   public TerceroSeleccionado:any='';
   public Retenciones:any=[];
-  // public Identificacion_Funcionario=(JSON.parse(localStorage.getItem("User"))).Identificacion_Funcionario;
+  public Identificacion_Funcionario=this._user.user.person.id;
+  public company_id: any = this._user.user.person.company_worked.id;
   IdDocumento: string = '';
   // id_funcionario: any = JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario;
   alertOption: SweetAlertOptions;
   // perfilUsuario:any = localStorage.getItem('miPerfil');
 
   myDateRangePickerOptions: IMyDrpOptions = {
-    width:'220px', 
-    height: '28px',
+    width:'150px',
+    height: '21px',
     selectBeginDateTxt:'Inicio',
     selectEndDateTxt:'Fin',
-    selectionTxtFontSize: '12px',
+    selectionTxtFontSize: '10px',
     dateFormat: 'yyyy-mm-dd',
   };
 
@@ -119,14 +125,15 @@ export class ActivosFijosComponent implements OnInit {
   };
   public listaTipoActivo: Array<any>;
   public listaCentroCosto: Array<any>;
-  companies:any[] = [];
   constructor(
               private swalService: SwalService,
               private http: HttpClient,
               private _activoFijo: ActivosFijosService,
-              private _company: CentroCostosService
-              ) 
+              private _user: UserService,
+              private dateAdapter: DateAdapter<any>
+              )
   {
+    this.dateAdapter.setLocale('es');
     this.GetTipoActivos();
     this.ConsultaFiltrada();
     this.GetRetenciones();
@@ -151,29 +158,20 @@ export class ActivosFijosComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.ListasEmpresas();
   }
-  estadoFiltros = false;
-  mostrarFiltros(){
-    this.estadoFiltros = !this.estadoFiltros
-  }
+
   search_tercero = (text$: Observable<string>) =>
   text$
   .pipe(
     debounceTime(200),
     distinctUntilChanged(),
     switchMap( term => term.length < 4 ? [] :
-      this.FiltrarTerceros(term)
+      this._activoFijo.FiltrarTerceros(term)
       .map(response => response)
     )
   );
 
 formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
-
-  FiltrarTerceros(match:string):Observable<any>{
-    let p = {coincidencia:match};
-    return this.http.get(environment.ruta+'filtrar_terceros.php', {params:p});
-  }
 
   GuardarActivoFijo(){
     if (!this.ValidateBeforeSubmit()) {
@@ -185,7 +183,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
     this.http.post(environment.ruta+'php/activofijo/guardar_activo_fijo_adicion.php', data)
     .subscribe((data:any) => {
       if (data.codigo == 'success') {
-        
+
         this.CerrarModal();
         this.ConsultaFiltrada();
         // window.open(environment.ruta+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario,'_blank');
@@ -193,7 +191,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
           this.LimpiarModelo();
         }, 200);
       }
-  
+
       this.ShowSwal(data.codigo, data.titulo, data.mensaje);
     })
   }
@@ -207,33 +205,23 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
     this.http.post(environment.ruta+'php/activofijo/guardar_activo_fijo_adicion.php', data)
     .subscribe((data:any) => {
       if (data.codigo == 'success') {
-        
+
         this.CerrarModal();
         this.ConsultaFiltrada();
         // window.open(environment.ruta+'php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro='+data.Id+'&id_funcionario_elabora='+this.ActivoFijoModel.Identificacion_Funcionario,'_blank');
         setTimeout(() => {
           this.LimpiarModelo();
         }, 200);
-       
+
       }
-  
+
       this.ShowSwal(data.codigo, data.titulo, data.mensaje);
     })
   }
 
-/*   ListasEmpresas(){
-    this._company.getCompanies().subscribe((data:any) => {
-      this.companies = data.data;
-    })
-  } */
-
   ValidateBeforeSubmit(){
     if (this.ActivoFijoModel.Costo_NIIF == 0) {
       this.ShowSwal('warning', 'Alerta', 'El costo no puede ser 0, verifique el costo NIIF!');
-      return false;
-
-    }else if (this.ActivoFijoModel.Costo_PCGA == 0) {
-      this.ShowSwal('warning', 'Alerta', 'El costo no puede ser 0, verifique el costo PCGA!');
       return false;
 
     }else if (this.ActivoFijoModel.Id_Centro_Costo == '' ) {
@@ -251,7 +239,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
     .subscribe((data:any) => {
       if (data.codigo = 'success') {
         this.TipoActivos = data.query_result;
-  
+
       }else{
         this.TipoActivos = [];
         this.ShowSwal(data.codigo, data.titulo, data.mensaje);
@@ -262,7 +250,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
     this.http.get(environment.ruta+'php/activofijo/retenciones.php')
     .subscribe((data:any) => {
       if (data.codigo = 'success') {
-        this.Retenciones = data;        
+        this.Retenciones = data;
       }else{
         this.Retenciones = [];
         this.ShowSwal(data.codigo, data.titulo, data.mensaje);
@@ -284,7 +272,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
         this.Codigo=data.Activo.Codigo;
         this.ModalActivoFijo.show();
       }else{
-        
+
         this.ShowSwal(data.codigo, data.titulo, data.mensaje);
       }
     });
@@ -305,7 +293,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
 
     if(paginacion === true){
       params.pag = this.page;
-    }else{        
+    }else{
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
@@ -316,7 +304,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
 
     if (this.Filtros.nombre.trim() != "") {
       params.nombre = this.Filtros.nombre;
-    }
+    } 
 
     if (this.Filtros.tipo.trim() != "") {
       params.tipo = this.Filtros.tipo;
@@ -326,11 +314,10 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
       params.costo_niif = this.Filtros.costo_niif;
     }
 
-    if (this.Filtros.costo_pcga.trim() != "") {
-      params.costo_pcga = this.Filtros.costo_pcga;
-    }
+    let queryString = '?'+ Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
-    return params;
+
+    return queryString;
   }
 
   ConsultaFiltrada(paginacion:boolean = false) {
@@ -341,19 +328,18 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
       this.ResetValues();
       return;
     }
-    
+
     this.Cargando = true;
-    this.http.get(environment.ruta+'php/activofijo/get_lista_activo_fijo.php', {params:params})
+    this.http.get(environment.ruta+'php/activofijo/get_lista_activo_fijo.php'+params, {params:{company_id: this._user.user.person.company_worked.id}})
     .subscribe((data:any) => {
       if (data.codigo == 'success') {
         this.ActivosFijos = data.query_result;
-        console.log(data);
         this.TotalItems = data.numReg;
       }else{
         this.ActivosFijos = [];
         this.ShowSwal(data.codigo, data.titulo, data.mensaje);
       }
-      
+
       this.Cargando = false;
       this.SetInformacionPaginacion();
     });
@@ -398,24 +384,24 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
 
     this.http.post(environment.ruta+'php/activofijo/adicion_activo.php', datos)
     .subscribe((data:any)=> {
-      
+
       this.ShowSwal(data.codigo, data.titulo, data.mensaje);
       this.ConsultaFiltrada();
-      
+
     })
   }
 
   AsignarTercero(){
-    
+
     if (typeof(this.TerceroSeleccionado) == 'object') {
 
-      this.ActivoFijoModel.Nit = this.TerceroSeleccionado.Nit;   
-      this.ActivoFijoModel.Tipo=this.TerceroSeleccionado.Tipo;   
+      this.ActivoFijoModel.Nit = this.TerceroSeleccionado.Nit;
+      this.ActivoFijoModel.Tipo=this.TerceroSeleccionado.Tipo;
     }else{
       this.ActivoFijoModel.Nit = '';
     }
   }
-  AsignarConcepto(){  
+  AsignarConcepto(){
     this.ActivoFijoModel.Concepto=this.ActivoFijoModel.Nombre+' '+this.ActivoFijoModel.Documento;
   }
 
@@ -424,11 +410,11 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
       this.Codigo=data.consecutivo;
       this.ModalActivoFijo.show();
     })
-   
+
   }
   CapturarIdCentroCosto(id:string, tipo:string){
     if(tipo=='Centro'){
-      this.ActivoFijoModel.Id_Centro_Costo=id; 
+      this.ActivoFijoModel.Id_Centro_Costo=id;
     }else if(tipo=='Rete_Ica'){
       this.ActivoFijoModel.Id_Cuenta_Rete_Ica=parseInt(id);
       if (id!='') {
@@ -446,12 +432,11 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
         }
        }
     }
-      
+
   }
   AsignarValor(){
     let valor=parseFloat(this.ActivoFijoModel.Base.toString())+parseFloat(this.ActivoFijoModel.Iva.toString());
     this.ActivoFijoModel.Costo_NIIF=valor;
-    this.ActivoFijoModel.Costo_PCGA=valor;
     this.RecalcularRetenciones();
   }
   AdicionActivo(id){
@@ -470,7 +455,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
         this.ModalActivoFijo.show();
 
       }else{
-        
+
         this.ShowSwal(data.codigo, data.titulo, data.mensaje);
       }
     });
@@ -478,7 +463,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
   RecalcularRetenciones(){
     if(parseFloat(this.ActivoFijoModel.Id_Cuenta_Rete_Fuente.toString())!=0){
       let  pos=this.Retenciones.findIndex(x=> x.Id_Plan_Cuenta===this.ActivoFijoModel.Id_Cuenta_Rete_Fuente);
-     
+
       if(pos>=0){
         this.ActivoFijoModel.Costo_Rete_Fuente=(this.Retenciones[pos].Porcentaje/100)*this.ActivoFijoModel.Base;
       }
@@ -486,11 +471,11 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
     if(parseFloat(this.ActivoFijoModel.Id_Cuenta_Rete_Ica.toString())!=0){
       let  pos=this.Retenciones.findIndex(x=> x.Id_Plan_Cuenta===this.ActivoFijoModel.Id_Cuenta_Rete_Ica);
       if(pos>=0){
-        
+
         this.ActivoFijoModel.Costo_Rete_Ica=(this.Retenciones[pos].Porcentaje/100)*this.ActivoFijoModel.Base;
       }
     }
-    
+
   }
 
   anularDocumento() {
@@ -517,7 +502,7 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
       };
       this.swalService.ShowMessage(swal);
     });
-    
+
   }
 
   public AnularDocumentoContable(datos) {
@@ -532,25 +517,16 @@ formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
   dateRangeChanged2(event){
     this.ReporteModel.Fechas = event.target.value;
   }
-  fechita:any;
-  fechitaF(event){    
-    this.fechita = event.target.value;  
-    if(this.fechita2 !=null){
-      this.ReporteModel.Fechas = this.fechita + ' - ' + this.fechita2;
-    }  
-  }
-  fechita2:any;
-  fechitaF2(event){
-    this.fechita2 = event.target.value;
-    if(this.fechita !=null){
-      this.ReporteModel.Fechas = this.fechita + ' - ' + this.fechita2;
-    }  
+  selectedDate(fecha) {
+    this.ReporteModel.Fechas =
+      this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
+      ' - ' +
+      this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
   }
   loadListasDatosReporte() {
-    this.http.get(environment.ruta+'php/activofijo/datos_reporte.php').subscribe((data:any) => {
+    this.http.get(environment.ruta+'php/activofijo/datos_reporte.php', {params:{company_id: this._user.user.person.company_worked.id}}).subscribe((data:any) => {
       this.listaTipoActivo = data.Tipos_Activos;
       this.listaCentroCosto = data.Centro_Costos;
-      console.warn(this.listaCentroCosto)
     })
   }
 

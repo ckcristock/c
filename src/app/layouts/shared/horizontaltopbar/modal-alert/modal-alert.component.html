@@ -1,6 +1,12 @@
 <ng-template #alertM let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Detalle de la alerta</h4>
+    <h4 class="text-primary modal-title bm-0">
+      {{ data.type }}
+      <br />
+      <div class="tex-muted text-secondary" style="font-size: small;">
+        <small>{{ data.created_at | date: 'MMM d, y, h:mm a' }}</small>
+      </div>
+    </h4>
     <button
       type="button"
       class="close"
@@ -13,22 +19,7 @@
   </div>
 
   <div class="modal-body">
-    <div class="row mb-4">
-      <div class="col-12">
-        {{ data.created_at | date }}
-      </div>
-      <div class="col-12">
-        <h5>
-          {{ data.type }}
-        </h5>
-      </div>
-      <hr />
-      <div class="col-12">
-        <p>
-          {{ data.description }}
-        </p>
-      </div>
-    </div>
+    {{ data.description }}
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="modal.dismiss()">

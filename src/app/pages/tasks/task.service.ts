@@ -11,8 +11,8 @@ export class TaskService {
     private http: HttpClient,
   ) { }
 
-  getAsignadas(id) {
-    return this.http.get(`${environment.base_url}/taskfor/${id}`)
+  getAsignadas(id, params = {}) {
+    return this.http.get(`${environment.base_url}/taskfor/${id}`, {params})
   }
 
   personCompany(companyId) {
@@ -21,6 +21,22 @@ export class TaskService {
 
   personTasks( params = {} ) {
     return this.http.get(`${environment.base_url}/person-tasks`, {params})
+  }
+  
+  getArchivadas( params = {} ) {
+    return this.http.get(`${environment.base_url}/get-archivadas`, {params})
+  }
+
+  getTypes() {
+    return this.http.get(`${environment.base_url}/task-types`)
+  }
+
+  saveType(data) {
+    return this.http.post(`${environment.base_url}/task-types`, data)
+  }
+
+  paginateTypes( params = {} ) {
+    return this.http.get(`${environment.base_url}/paginate-task-types`, {params})
   }
 
   statusUpdate( data ) {

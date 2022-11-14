@@ -88,7 +88,7 @@ export class LocalidadesComponent implements OnInit {
 
   closeResult = '';
   public openConfirm(confirm) {
-    this._modal.open(confirm, 'md', ()=>{})
+    this._modal.open(confirm, 'md')
   }
 
   openModal(tipo, add) {

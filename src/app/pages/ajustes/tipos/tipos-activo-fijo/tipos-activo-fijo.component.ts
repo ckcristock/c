@@ -477,7 +477,7 @@ export class TiposActivoFijoComponent implements OnInit {
     return value.code;
   }
 
-  // formatter = (x: { code }) => x.code; 
+  // formatter = (x: { code }) => x.code;
   search: OperatorFunction<string, readonly { code }[]> = (
     text$: Observable<string>
   ) =>
@@ -570,7 +570,7 @@ export class TiposActivoFijoComponent implements OnInit {
       /* let porcentaje = (100 / parseInt(this.form.value.useful_life_pcga)).toFixed(4);
       this.form.patchValue({
         annual_depreciation_percentage_pcga: porcentaje
-      }) */
+      })
     } else {
       let porcentaje = (100 / parseInt(this.form.value.useful_life_niif)).toFixed(4);
       this.form.patchValue({
@@ -586,7 +586,7 @@ export class TiposActivoFijoComponent implements OnInit {
     let niif_account_plan_id = this.form.value.niif_account_plan_id.id;
     /* let pcga_account_plan_credit_depreciation_id = this.form.value.pcga_account_plan_credit_depreciation_id.id;
     let pcga_account_plan_debit_depreciation_id = this.form.value.pcga_account_plan_debit_depreciation_id.id;
-    let pcga_account_plan_id = this.form.value.pcga_account_plan_id.id; */
+    let pcga_account_plan_id = this.form.value.pcga_account_plan_id.id;
     this.form.patchValue({
       niif_account_plan_credit_depreciation_id,
       niif_account_plan_debit_depreciation_id,

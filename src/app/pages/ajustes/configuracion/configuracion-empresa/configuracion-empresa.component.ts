@@ -1,12 +1,10 @@
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { data, map, param } from 'jquery';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalService } from 'src/app/core/services/modal.service';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
-import { SwalService } from '../../informacion-base/services/swal.service';
 import { ConfiguracionEmpresaService } from './configuracion-empresa.service';
 import { DatosBasicosEmpresaComponent } from './datos-basicos-empresa/datos-basicos-empresa.component';
 import { DatosNominaComponent } from './datos-nomina/datos-nomina.component';
@@ -111,11 +109,11 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       calculate_work_disability: [this.calculate_work_disability],
-      pay_deductions: ['', this._validators.required],
-      recurring_payment: ['', this._validators.required],
-      payment_transport_subsidy: ['', this._validators.required],
-      affects_transportation_subsidy: ['', this._validators.required],
-      pay_vacations: ['', this._validators.required],
+      pay_deductions: ['', Validators.required],
+      recurring_payment: ['', Validators.required],
+      payment_transport_subsidy: ['', Validators.required],
+      affects_transportation_subsidy: ['', Validators.required],
+      pay_vacations: ['', Validators.required],
     });
   }
 
@@ -125,13 +123,15 @@ export class ConfiguracionEmpresaComponent implements OnInit {
     this._configuracionEmpresaService.changePaymentConfiguration(this.form.value)
       .subscribe((res: any) => {
         console.log(this.form.value);
-        this.modalService.dismissAll();
+        this._modal.close();
         this.form.reset();
         console.log(res)
         this._swal.show({
           icon: 'success',
           title: 'Configuración cambiada',
-          text: 'La Configuración de pago ha sido cambiada con éxito',
+          text: 'La configuración de pago ha sido cambiada con éxito.',
+          showCancel: false,
+          timer: 1000
         });
       });
   }

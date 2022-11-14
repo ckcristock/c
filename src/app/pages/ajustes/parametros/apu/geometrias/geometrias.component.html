@@ -23,7 +23,13 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre</mat-label>
-            <input (input)="getGeometries()" [(ngModel)]="filtro.name" type="text" matInput placeholder="Busca por nombre" />
+            <input
+              (input)="getGeometries()"
+              [(ngModel)]="filtro.name"
+              type="text"
+              matInput
+              placeholder="Busca por nombre"
+            />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -32,7 +38,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && geometries.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -40,7 +45,7 @@
             <th>Nombre</th>
             <th>Imagen</th>
             <th>Formula de volúmen</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>

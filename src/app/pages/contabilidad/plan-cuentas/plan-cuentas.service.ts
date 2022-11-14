@@ -21,4 +21,8 @@ export class PlanCuentasService {
     return this.http.get(`${environment.base_url}/banks`)
   }
 
+  getCompanies(){
+    return this.http.get(`${environment.base_url}/company`);
+  }
+
 }

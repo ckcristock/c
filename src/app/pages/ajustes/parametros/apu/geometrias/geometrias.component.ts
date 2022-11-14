@@ -54,7 +54,6 @@ export class GeometriasComponent implements OnInit {
     this.loading = true;
     this._geometrias.getGeometries(params).subscribe((r: any) => {
       this.geometries = r.data.data;
-      console.log(this.geometries)
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })

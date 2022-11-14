@@ -14,6 +14,7 @@ export class PermissionService {
   constructor(private _user: UserService, private HttpClient: HttpClient) { }
 
   validatePermissions(perms) {
+    console.log(perms)
     this.itemToFind = perms.menu;
     this.findMenuItem(this._user.user.menu);
     if (this.itemFinded) {
@@ -32,6 +33,7 @@ export class PermissionService {
         if (element.child) { this.findMenuItem(element.child) }
         if (element.name == this.itemToFind) {
           this.itemFinded = element;
+          console.log(this.itemFinded)
         }
       }
     } catch (finded) {};

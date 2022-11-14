@@ -53,8 +53,8 @@
         <tbody>
           <tr *ngFor="let item of taxis" class="text-center">
             <td class="align-middle">{{ item.type }}</td>
-            <td class="align-middle">{{ item.route }}</td>
-            <td class="align-middle">{{ item.city }}</td>
+            <td class="align-middle">{{ item.taxi.route }}</td>
+            <td class="align-middle">{{ item.city.name }}</td>
             <td class="align-middle">{{ item.value | currency: "COP" }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -133,14 +133,20 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Ciudad</mat-label>
-          <mat-select formControlName="city_id" required>
-            <mat-option *ngFor="let city of cities" [value]="city.value">
-              {{ city.text }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
+        <div class="col">
+          <ng-select
+            [items]="cities"
+            formControlName="city_id"
+            bindLabel="text"
+            bindValue="value"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Ciudad"
+            loadingText="loading "
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tarifa</mat-label>
           <input

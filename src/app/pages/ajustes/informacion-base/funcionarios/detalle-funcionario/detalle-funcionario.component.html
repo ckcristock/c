@@ -1,126 +1,167 @@
-<div class="card">
-  <div class="card-body">
-    <div
-      class="row card-title d-flex justify-content-between d-flex align-items-center"
-    >
-      <div class="col-md-6">
-        <div class="row d-flex align-items-center">
-          <div class="col-md-6 text-center">
-            <img
-              [src]="funcionario.image | image"
-              class="img-rounded img-thumbnail rounded-circle mx-auto img-fluid"
-              alt=""
-              onerror="this.src='../../../../../../../assets/images/noprofile.png'"
-            />
-          </div>
-          <div class="col-md-6 text-center">
-            <h5 class="text-primary">
-              {{ funcionario.first_name }} {{ funcionario.second_name }}
-              {{ funcionario.first_surname }} {{ funcionario.second_surname }}
-            </h5>
-            <strong *ngIf="funcionario.title != 'null'">
-              {{ funcionario.title }}
-            </strong>
-            <strong>
-              {{ funcionario.signature }}
-            </strong>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 text-center">
-        <!-- <img
-            src="../../../../../../../assets/images/coin-icon.svg"
-            height="80"
-            alt=""
-          /> -->
-        <h5 class="text-primary">Salario base</h5>
-        <strong>${{ funcionario.salary | currency: "":"" }}</strong>
-      </div>
-      <div class="col-md-3 text-center">
-        <!-- <img
-            height="80"
-            src="../../../../../../../assets/images/vacations-icon.svg"
-            alt=""
-          /> -->
-        <h5 class="text-primary">Vaciones acumuladas</h5>
-        <strong>en desarrollo</strong>
-      </div>
-    </div>
-    <hr class="line" />
-    <div class="d-flex justify-content-end">
-      <div class="btn-group rounded w-sm-100">
-        <button
-          *ngIf="funcionario.status == 'Activo'"
-          type="button"
-          class="btn btn-warning btn-sm"
-          (click)="liquidar('PreLiquidado')"
-        >
-          Preliquidar
-        </button>
-        <button
-          *ngIf="user?.state == 'Activo'"
-          type="button"
-          class="btn btn-danger btn-sm"
-          (click)="bloquear('Inactivo')"
-        >
-          <i class="fas fa-ban"></i> Bloquear
-        </button>
-        <button
-          *ngIf="user?.state == 'Inactivo'"
-          type="button"
-          class="btn btn-primary btn-sm"
-          (click)="bloquear('Activo')"
-        >
-          <i class="fas fa-check"></i> Activar
-        </button>
-        <div ngbDropdown container="body" class="dropdown-primary">
-          <button
-            style="border-top-left-radius: 0px; border-bottom-left-radius: 0px"
-            ngbDropdownToggle
-            class="btn btn-primary btn-sm rounded-right"
-            type="button"
-          >
-            <i class="mdi mdi-chevron-down"></i>
-          </button>
-          <div ngbDropdownMenu>
-            <a
-              href="javascript:void(0)"
-              class="dropdown-item text-info waves-light caja-botones"
-              (click)="verComponent('informacion')"
-            >
-              <i class="fas fa-user"></i> Información personal</a
-            >
-            <a
-              href="javascript:void(0)"
-              class="dropdown-item text-primary waves-light caja-botones"
-              (click)="verComponent('documentos')"
-            >
-              <i class="fas fa-book"></i> Documentos</a
-            >
-            <a
-              href="javascript:void(0)"
-              class="dropdown-item text-dark waves-light caja-botones"
-              (click)="verComponent('privilegios')"
-            >
-              <i class="fas fa-lock"></i> Privilegios</a
-            >
-            <a
-              href="javascript:void(0)"
-              *ngIf="funcionario.status == 'Liquidado'"
-              class="dropdown-item text-danger waves-light caja-botones"
-              [routerLink]="['liquidacion']"
-            >
-              <i class="fas fa-outdent"></i> Ver liquidación
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="mt-4">
-      <app-ver-funcionario
-        *ngIf="components === 'informacion'"
-      ></app-ver-funcionario>
-      <app-permissions *ngIf="components === 'privilegios'"></app-permissions>
+<div class="row card-title d-flex justify-content-between">
+  <div class="col-md-10 px-0">
+    <h4 class="text-dark">
+      {{ funcionario.first_name }} {{ funcionario.second_name }}
+      {{ funcionario.first_surname }}
+      {{ funcionario.second_surname }}
+    </h4>
+  </div>
+  <div class="col-md-2 px-0 text-right">
+    <div class="btn-group rounded w-sm-100">
+      <button
+        *ngIf="funcionario.status == 'Activo'"
+        type="button"
+        class="btn btn-warning btn-sm"
+        (click)="liquidar('PreLiquidado')"
+      >
+        <i class="fas fa-money-bill"></i>
+        Preliquidar
+      </button>
+      <button
+        *ngIf="funcionario.status == 'Activo'"
+        type="button"
+        class="btn btn-danger btn-sm"
+        (click)="bloquear('Inactivo')"
+      >
+        <i class="fas fa-ban"></i> Bloquear
+      </button>
+      <button
+        *ngIf="funcionario.status == 'Inactivo'"
+        type="button"
+        class="btn btn-success btn-sm"
+        (click)="bloquear('Activo')"
+      >
+        <i class="fas fa-check"></i> Activar
+      </button>
     </div>
   </div>
 </div>
+<ul
+  ngbNav
+  #nav="ngbNav"
+  [(activeId)]="active"
+  class="nav nav-tabs justify-content-center"
+  role="tablist"
+>
+  <li [ngbNavItem]="1" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Información</a
+    >
+    <ng-template ngbNavContent>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card">
+            <ng-container *ngIf="!loading && funcionario; else notData">
+              <img
+                class="mt-4 card-img-top img-rounded img-thumbnail rounded-circle mx-auto img-fluid"
+                [ngClass]="
+                  funcionario.status == 'Activo'
+                    ? 'bg-success'
+                    : funcionario.status == 'Inactivo'
+                    ? 'bg-danger'
+                    : funcionario.status == 'PreLiquidado'
+                    ? 'bg-warning'
+                    : 'bg-secondary'
+                "
+                [src]="funcionario.image | image: 'users'"
+                onerror="this.src='../../../../../../../assets/images/noprofile.png'"
+              />
+              <div class="card-body text-center">
+                <h5 class="card-title text-uppercase">
+                  {{ funcionario.first_name }} {{ funcionario.second_name }}
+                  {{ funcionario.first_surname }}
+                  {{ funcionario.second_surname }}
+                </h5>
+                <strong *ngIf="funcionario.title != 'null'">
+                  {{ funcionario.title }}
+                </strong>
+                <app-datos-basicos></app-datos-basicos>
+              </div>
+              <!-- <div class="card-footer">
+                <img
+                  [src]="funcionario.signature"
+                  onerror="this.src='../../../../assets/images/not-available.png'"
+                  class="mt-4 img-fluid signature-image"
+                  one
+                />
+              </div> -->
+            </ng-container>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <app-datos-empresa></app-datos-empresa>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <app-afiliaciones></app-afiliaciones>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <app-salario></app-salario>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="2" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Privilegios</a
+    >
+    <ng-template ngbNavContent>
+      <div class="card">
+        <div class="card-body">
+          <app-permissions></app-permissions>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="3" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Documentos</a
+    >
+    <ng-template ngbNavContent>
+      <iframe
+        [src]="url | safe"
+        style="width: 100%; border: 0"
+        height="400"
+        scrolling="no"
+      ></iframe>
+      <!-- <ejs-filemanager class="bg-white mb-3" id='default-filemanager' [ajaxSettings]='ajaxSettings'></ejs-filemanager> -->
+    </ng-template>
+  </li>
+</ul>
+<div [ngbNavOutlet]="nav" class="mt-2"></div>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

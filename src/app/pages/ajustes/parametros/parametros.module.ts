@@ -44,6 +44,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { NominaComponent } from './nomina/nomina.component';
 import { InformacionBaseModule } from "../informacion-base/informacion-base.module";
+import { ViaticosComponent } from './viaticos/viaticos.component';
+import { VacantesComponent } from './vacantes/vacantes.component';
+import { TiposModule } from "../tipos/tipos.module";
+import { TercerosComponent } from './terceros/terceros.component';
+import { MatButtonModule, MatIconModule } from "@angular/material";
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ParametrosNominaComponent } from './params-nomina/parametros-nomina/parametros-nomina.component';
 import { TiposModule } from "../tipos/tipos.module";
 import { MatCard, MatRadioGroup } from "@angular/material";
@@ -81,6 +87,9 @@ import { MatCard, MatRadioGroup } from "@angular/material";
         CategoriasComponent,
         SubcategoriasComponent,
         NominaComponent,
+        ViaticosComponent,
+        VacantesComponent,
+        TercerosComponent
         ParametrosNominaComponent,
 
 
@@ -102,12 +111,20 @@ import { MatCard, MatRadioGroup } from "@angular/material";
         MatInputModule,
         MatSelectModule,
         MatToolbarModule,
+        MatButtonModule,
+        MatAutocompleteModule,
+        MatIconModule,
         MatPaginatorModule,
         SweetAlert2Module.forRoot(),
         InformacionBaseModule,
         TiposModule
     ],
-    exports: []
+    exports: [
+        CuentasBancariasComponent,
+        CategoriasComponent,
+        SubcategoriasComponent,
+        ValorAlmuerzosComponent
+    ]
 })
 
 export class ParametrosModule { }

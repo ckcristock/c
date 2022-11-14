@@ -80,10 +80,10 @@ export class BodegasComponent implements OnInit {
 
   openConfirm(confirm, titulo) {
     this.selected = titulo;
-    this._modal.open(confirm);
+    this._modal.open(confirm, 'md')
     this.formBodega.reset();
-    this.file="";
-    this.type="";
+    this.file = "";
+    this.type = "";
     this.bodega = this.formBodega.value;
   }
 
@@ -179,19 +179,19 @@ export class BodegasComponent implements OnInit {
       icon: 'question',
       showCancel: true
     })
-    .then((result) => {
-      if (result.isConfirmed) {
-        this.bodegaService.activarInactivar(data).subscribe((r: any) => {
-          this.getBodegas(this.pagination.page);
-        })
-        this._swal.show({
-          icon: 'success',
-          title: 'Tarea completada con éxito!',
-          text: (bodega.Estado == 'Inactivo' ? 'La bodega ha sido activada con éxito.' : 'La bodega ha sido desactivada con éxito.'),
-          timer: 1000,
-          showCancel: false
-        })
-      }
-    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.bodegaService.activarInactivar(data).subscribe((r: any) => {
+            this.getBodegas(this.pagination.page);
+          })
+          this._swal.show({
+            icon: 'success',
+            title: 'Tarea completada con éxito!',
+            text: (bodega.Estado == 'Inactivo' ? 'La bodega ha sido activada con éxito.' : 'La bodega ha sido desactivada con éxito.'),
+            timer: 1000,
+            showCancel: false
+          })
+        }
+      })
   }
 }

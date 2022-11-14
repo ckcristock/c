@@ -21,7 +21,7 @@ export class CrearViaticosService {
   } */
 
   getCity() {
-    return this.http.get(`${environment.base_url}/city`);
+    return this.http.get(`${environment.base_url}/municipalities`);
   }
 
   getCities() {

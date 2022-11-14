@@ -1,21 +1,41 @@
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { data, map, param } from 'jquery';
+import { Observable } from 'rxjs';
+import Swal from 'sweetalert2';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
 import { ConfiguracionEmpresaService } from './configuracion-empresa.service';
-
+import { DatosBasicosEmpresaComponent } from './datos-basicos-empresa/datos-basicos-empresa.component';
+import { DatosNominaComponent } from './datos-nomina/datos-nomina.component';
+import { DatosPagoComponent } from './datos-pago/datos-pago.component';
+import { DatosPilaComponent } from './datos-pila/datos-pila.component';
+import { ActivatedRoute, Params } from '@angular/router';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { functionsUtils } from 'src/app/core/utils/functionsUtils';
+import { SwalService } from '../../informacion-base/services/swal.service';
 @Component({
   selector: 'app-configuracion-empresa',
   templateUrl: './configuracion-empresa.component.html',
-  styleUrls: ['./configuracion-empresa.component.scss']
+  styleUrls: ['./configuracion-empresa.component.scss'],
 })
 export class ConfiguracionEmpresaComponent implements OnInit {
   @ViewChild('modal') modal: any;
-  @Input('datos') datosEmpresa;
+  @ViewChild(DatosBasicosEmpresaComponent) datBasic: DatosBasicosEmpresaComponent;
+  @ViewChild(DatosNominaComponent) datNomina: DatosNominaComponent;
+  @ViewChild(DatosPagoComponent) datPago: DatosPagoComponent;
+  @ViewChild(DatosPilaComponent) datPila: DatosPilaComponent;
   form: FormGroup;
-
+  dataCompany: any;
+  companies: Array<Object>;
+  showBasicData: boolean = false;
+  file: any;
+  fileString: any;
+  company_name: string = '';
+  active: number = 1;
+  @Input('datos') datosEmpresa;
   calculate_work_disability = '';
   pay_deductions = '';
   recurring_payment = '';
@@ -27,29 +47,53 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   constructor(
     private _configuracionEmpresaService: ConfiguracionEmpresaService,
     private fb: FormBuilder,
-    private modalService: NgbModal,
-    private _swal: SwalService,
-    private _validators: ValidatorsService,
+    public rutaActiva: ActivatedRoute,
+    private _modal: ModalService,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
-    this.getData();
+    let value = this.rutaActiva.snapshot.params.value
+    value == 'informacion'
+      ? this.active = 1
+      : value == 'estructura'
+        ? this.active = 2
+        : value == 'cuentas-bancarias'
+          ? this.active = 3
+          : value == 'categorias'
+            ? this.active = 4
+            : value == 'sedes'
+              ? this.active = 5
+              : this.active = 1
+
+    //this.getData();
     this.createForm();
-  }
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
-
+    this.getDataCompany()
   }
 
-  openModal() {
-    this.modal.show();
+
+  page_heading: boolean;
+  getDataCompany() {
+    this._configuracionEmpresaService
+      .getCompanyData()
+      .subscribe((res: any) => {
+        res.data.page_heading ? this.page_heading = true : false
+        this.company_name = res.data.name
+        this.datBasic.company = res.data;
+        this.datNomina.nomina = res.data;
+        this.datPago.payments = res.data;
+        this.datPago.bank = res?.data?.bank?.name;
+        this.datPila.pilas = res.data;
+        this.datPila.arl = res?.data?.arl?.name;
+        this.datBasic.getBasicData();
+        this.datPila.getPilaData();
+        this.datNomina.getNominaData();
+        this.datPago.getPaymentData();
+      });
+  }
+
+  openModal(modal) {
+    this._modal.open(modal);
   }
 
   getData(){
@@ -86,21 +130,36 @@ export class ConfiguracionEmpresaComponent implements OnInit {
         console.log(res)
         this._swal.show({
           icon: 'success',
-          title: '¡Correcto!',
-          text: 'La configuración de pago ha sido cambiada con éxito.',
-          timer: 1000,
-          showCancel: false
-        })
-
-      },
-        err => {
-          this._swal.show({
-            title: 'ERROR',
-            text: 'Intenta nuevamente.',
-            icon: 'error',
-            showCancel: false,
-          })
-        })
+          title: 'Configuración cambiada',
+          text: 'La Configuración de pago ha sido cambiada con éxito',
+        });
+      });
   }
-
+  string_input = 'Cargar hoja membrete'
+  onFileChanged(event) {
+    if (event.target.files[0]) {
+      let file = event.target.files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event) => {
+        this.fileString = (<FileReader>event.target).result;
+      };
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.file = base64
+        this._configuracionEmpresaService.saveCompanyData({
+          id: 1,
+          page_heading: this.file
+        }).subscribe((res: any) => {
+          this._swal.show({
+            icon: 'success',
+            title: 'Hoja cargada con éxito',
+            showCancel: false,
+            text: '',
+            timer: 1000
+          })
+          this.page_heading = true;
+        })
+      });
+    }
+  }
 }

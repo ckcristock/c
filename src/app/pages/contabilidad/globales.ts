@@ -40,9 +40,11 @@ export class Globales {
     }else if((platformLocation as any).location.origin == 'http://localhost:4200'){
       this.ruta = 'http://localhost/sigespro/back/';
     }else{
-      this.ruta ='https://sigespro.com.co/';
+      /* this.ruta ='https://sigespro.com.co/'; */
+      this.ruta ='http://inventario.sigmaqmo.com/';
     }
-    this.ruta ='https://sigespro.com.co/';
+    /* this.ruta ='https://sigespro.com.co/'; */
+    this.ruta ='http://inventario.sigmaqmo.com/';
     // this.ruta ='https://sigesproreslpaldo.com/';
     //this.ruta ='http://localhost:4500/sigespro/sigespro-backend/';
      // this.ruta ='http://localhost/sigespro-backend/';

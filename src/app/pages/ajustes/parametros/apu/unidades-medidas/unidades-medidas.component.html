@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card col-md-6 mx-auto">
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
@@ -8,7 +8,7 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-sm btn-primary"
-            (click)="openConfirm(add, 'Nueva unidad de medida')"
+            (click)="openConfirm(add, 'Nueva UM')"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -60,7 +60,7 @@
                     class="dropdown-item waves-light text-info caja-botones"
                     (click)="
                       getUnit(item);
-                      openConfirm(add, 'Actualizar unidad de medida')
+                      openConfirm(add, 'Actualizar UM')
                     "
                   >
                     <i class="far fa-edit"></i> Editar
@@ -102,28 +102,30 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <mat-form-field class="col-md-12 px-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el nombre"
-          autocomplete="off"
-          formControlName="name"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-12 px-0" appearance="outline">
-        <mat-label>Unidad</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa la sigla"
-          autocomplete="off"
-          formControlName="unit"
-          required
-        />
-      </mat-form-field>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            autocomplete="off"
+            formControlName="name"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Unidad</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la sigla"
+            autocomplete="off"
+            formControlName="unit"
+            required
+          />
+        </mat-form-field>
+      </div>
     </form>
   </div>
   <div class="modal-footer">

@@ -28,7 +28,7 @@ export class ViaticosComponent implements OnInit {
   permission: Permissions = {
     menu: 'Viáticos',
     permissions: {
-      approve: false
+      approve: true
     }
   };
   filtros:any = {

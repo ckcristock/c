@@ -28,6 +28,7 @@
             <th class="align-middle" scope="col">Tipo</th>
             <th class="align-middle" scope="col">Persona que Recibe</th>
             <th class="align-middle" scope="col">Detalles</th>
+            <th class="align-middle" scope="col">Ver</th>
           </tr>
         </thead>
         <tbody>
@@ -40,6 +41,19 @@
               {{ data.first_name }} {{ data.first_surname }}
             </td>
             <td class="align-middle">{{ data.description }}</td>
+            <td class="align-middle">
+              <a
+                *ngIf="data.url"
+                type="button"
+                class="btn btn-primary btn-sm"
+                [routerLink]="data.url"
+              >
+                <i class="fas fa-eye"></i>
+              </a>
+              <a *ngIf="!data.url" type="button" class="btn btn-danger btn-sm">
+                <i class="fas fa-ban"></i>
+              </a>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -152,7 +166,12 @@
     >
       Cancelar
     </button>
-    <button type="button" (click)="createAlert()" [disabled]="!form.valid" class="btn btn-primary">
+    <button
+      type="button"
+      (click)="createAlert()"
+      [disabled]="!form.valid"
+      class="btn btn-primary"
+    >
       Enviar
     </button>
   </div>

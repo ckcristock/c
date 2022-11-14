@@ -12,7 +12,15 @@ export class AlertasComunService {
     return this.http.get(`${environment.base_url}/paginateAlert`, {params});
   }
 
+  getAlertsNotification(params = {}) {
+    return this.http.get(`${environment.base_url}/alerts`, {params});
+  }
+
   sendAlert(data: any) {
     return this.http.post(`${environment.base_url}/alerts`, data);
+  }
+
+  read(params = {} ){
+    return this.http.get(`${environment.base_url}/read-alert`, {params});
   }
 }

@@ -1,13 +1,13 @@
 <div class="card-title d-flex justify-content-between">
   <h6>Bonificación recurrente</h6>
-  <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
+  <button class="btn btn-link btn-sm" (click)="openModal()">
     <i class="fas fa-plus"></i>
   </button>
 </div>
-<div class="rounded-top table-responsive">
+<div class="rounded-top table-responsive" *ngIf="!loading && bonu.length > 0; else notData">
   <table
-    *ngIf="!loading && bonu.length > 0; else notData"
-    class="table table-sm"
+    class="table table-bordered table-striped table-sm"
+    
   >
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
@@ -18,11 +18,11 @@
     </thead>
     <tbody>
       <tr
-        class="text-center"
         *ngFor="let bon of bonu"
+        class="text-center"
         [ngClass]="{ 'text-danger font-weight-bold': bon.status == 0 }"
       >
-        <th scope="row">{{ bon.concept }}</th>
+        <th>{{ bon.concept }}</th>
         <td>{{ bon.value }}</td>
         <td>
           <button
@@ -137,3 +137,4 @@
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
+

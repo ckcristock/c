@@ -158,7 +158,9 @@ import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.componen
     ArlComponent,
     FondoPensionComponent,
     FondoCesantiasComponent,
-    CajaCompensacionComponent
+    CajaCompensacionComponent,
+    EstructuraEmpresaComponent,
+    SedesComponent
   ]
 })
 export class InformacionBaseModule { }

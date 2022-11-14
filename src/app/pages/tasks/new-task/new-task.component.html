@@ -1,0 +1,140 @@
+<ng-template #newtask let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nueva tarea</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row">
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Nombre</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa el nombre de la tarea"
+                required
+                formControlName="titulo"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Tipo</mat-label>
+              <mat-select formControlName="type_id" required (click)="getTypes()">
+                <mat-option *ngFor="let item of types" [value]="item.value">{{
+                  item.text
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Fecha</mat-label>
+              <input
+                matInput
+                type="date"
+                placeholder="Ingresa la fecha"
+                required
+                formControlName="fecha"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Hora</mat-label>
+              <input
+                matInput
+                type="time"
+                placeholder="HH:mm:ss"
+                required
+                formControlName="hora"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <div class="col-md-12">
+              <input
+                class="d-none"
+                type="file"
+                id="task_files"
+                multiple
+                (change)="onFileChanged($event)"
+              />
+              <label
+                for="task_files"
+                role="button"
+                class="btn btn-primary btn-block"
+                >Adjuntar archivo</label
+              >
+            </div>
+            <div class="col-md-12">
+              <div
+                class="d-flex justify-content-between"
+                *ngFor="let item of files"
+              >
+                <span class="text-truncate">{{ item.name }}</span>
+                <a role="button" class="text-danger" (click)="deleteFiles(item.id)"
+                  ><i class="fas fa-trash"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-12 mb-4">
+              <ng-select
+                [items]="people"
+                required
+                bindLabel="text"
+                bindValue="value"
+                placeholder="Asloaignar a"
+                loadingText="ding"
+                appearance="outline"
+                [appendTo]="'body'"
+                formControlName="id_realizador"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-12">
+              <ckeditor
+                [editor]="_texteditor.Editor"
+                (ready)="_texteditor.onReady($event)"
+                [config]="_texteditor.configEditor"
+                formControlName="descripcion_aux"
+              ></ckeditor>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <form [formGroup]="form">
+      <div>
+        <input
+          class="form-check-input"
+          type="checkbox"
+          formControlName="link"
+        />
+        <label class="form-check-label" for="flexCheckDefault">
+          ¿Adjuntar link actual?
+        </label>
+      </div>
+    </form>
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!form.valid"
+      (click)="save()"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>

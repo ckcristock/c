@@ -35,25 +35,22 @@
       <hr *ngIf="nomina?.nomina_paga" />
       <!-- Conceptos CARDS -->
       <div class="row d-flex align-items-stretch">
-
-        <div class="col info-cards">
+        <div class="col-2 info-cards">
           <app-card-concepto
-          [concepto]="nomina?.salarios"
-          [icon]="'fas fa-money-bill-wave '"
-          [label]="'Salarios (neto)'"
+            [concepto]="nomina?.salarios"
+            [icon]="'fas fa-money-bill-wave '"
+            [label]="'Salarios (neto)'"
           ></app-card-concepto>
         </div>
-
-        <div class="col info-cards">
+        <div class="col-2 info-cards">
           <app-card-concepto
             [concepto]="nomina?.extras"
             [icon]="'fas fa-user-clock'"
             [label]="'Hor. Extras'"
-            >
+          >
           </app-card-concepto>
         </div>
-
-        <div class="col info-cards">
+        <div class="col-2 info-cards">
           <app-card-concepto
             [concepto]="nomina?.ingresos"
             [icon]="'fas fa-wallet'"
@@ -61,8 +58,7 @@
           >
           </app-card-concepto>
         </div>
-
-        <div class="col info-cards">
+        <div class="col-2 info-cards">
           <app-card-concepto
             [concepto]="nomina?.seguridad_social"
             [icon]="'fa fa-ambulance'"
@@ -70,7 +66,6 @@
           >
           </app-card-concepto>
         </div>
-
         <!--<div class="col info-cards">
           <app-card-concepto
             [concepto]="nomina?.retenciones"
@@ -79,8 +74,7 @@
           >
           </app-card-concepto>
         </div>-->
-
-        <div class="col info-cards">
+        <div class="col-2 info-cards">
           <app-card-concepto
             [concepto]="nomina?.parafiscales"
             [icon]="'fa fa-users'"
@@ -88,10 +82,7 @@
           >
           </app-card-concepto>
         </div>
-
-
-
-        <div class="col info-cards">
+        <div class="col-2 info-cards">
           <app-card-concepto
             [concepto]="nomina?.provisiones"
             [icon]="'fas fa-coins'"
@@ -99,60 +90,64 @@
           >
           </app-card-concepto>
         </div>
-
       </div>
       <hr />
       <h5 class="text-center">
-        <strong>Costo total empresa:</strong>
+        <i class="fas fa-money-bill"></i>
+        <strong> Costo total empresa:</strong>
         <span> $ {{ nomina.costo_total_empresa | currency: "":"" }} </span>
       </h5>
       <hr />
       <!-- Eventos Nomina paga  -->
-      <div class="row">
-        <div class="col-md-3 mx-auto" *ngIf="nomina?.nomina_paga">
-          <div ngbDropdown container="body" class="dropdown-primary">
-            <button
-              type="button"
-              class="btn btn-info btn-block"
-              id="dropdownBasic1"
-              ngbDropdownToggle
-            >
-              <i class="mdi mdi-chevron-down"></i> <i class="mdi mdi-chevron-down"></i>
-            </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button ngbDropdownItem>
-                <i class="fas fa-file-excel"></i> Resumen de nómina
-              </button>
-              <button ngbDropdownItem>
-                <i class="fas fa-bell"></i> Resumen de novedades
-              </button>
-              <button ngbDropdownItem>
-                <i class="fas fa-download"></i> Descargar colillas de pago
-              </button>
-              <button ngbDropdownItem>
-                <i class="fas fa-mail-bulk"></i> Notificar vía email y SMS
-              </button>
-              <button ngbDropdownItem>
-                <i class="fas fa-umbrella"></i> Archivo seguridad social
-              </button>
-              <button ngbDropdownItem>
-                <i class="fas fa-piggy-bank"></i> Archivo pago bancos
-              </button>
-              <button ngbDropdownItem>
-                <i class="fas fa-suitcase"></i> Archivo contable
-              </button>
-              <button ngbDropdownItem>
-                <i class="fas fa-clock"></i> Archivo de horarios
-              </button>
-              <button
-                (click)="showInterfaceForGlobo('modalInterfaceForGlobo')"
-                ngbDropdownItem
-              >
-                <i class="fas fa-laptop"></i> Interfaz contable
-              </button>
-            </div>
-          </div>
+      <div class="row" *ngIf="nomina?.nomina_paga">
+        <div class="col">
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fas fa-file-excel"></i> Resumen de nómina
+          </button>
         </div>
+        <div class="col">
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fas fa-bell"></i> Resumen de novedades
+          </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fas fa-download"></i> Descargar colillas de pago
+          </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fas fa-mail-bulk"></i> Notificar vía email y SMS
+          </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fas fa-umbrella"></i> Archivo seguridad social
+          </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fas fa-piggy-bank"></i> Archivo pago bancos
+          </button>
+        </div>
+        <!-- <div class="col">
+          <button class="btn btn-primary btn-sm">
+            <i class="fas fa-suitcase"></i> Archivo contable
+          </button>
+        </div> -->
+        <!-- <div class="col">
+          <button class="btn btn-primary btn-sm">
+            <i class="fas fa-clock"></i> Archivo de horarios
+          </button>
+        </div> -->
+        <!-- <div class="col">
+          <button
+            (click)="showInterfaceForGlobo('modalInterfaceForGlobo')"
+            class="btn btn-primary btn-sm"
+          >
+            <i class="fas fa-laptop"></i> Interfaz contable
+          </button>
+        </div> -->
       </div>
       <hr *ngIf="nomina?.nomina_paga" />
       <div class="row card-title d-flex justify-content-between">
@@ -188,7 +183,6 @@
       <div class="rounded-top table-responsive">
         <table
           class="table table-bordered table-striped table-sm"
-
           *ngIf="!loadingPeople && funcionarios.length > 0; else notData"
         >
           <thead class="bg-light">
@@ -199,7 +193,9 @@
               <th class="align-middle">Ingresos No Prestacionales</th>
               <th class="align-middle">Deducciones</th>
               <th class="align-middle">Pago a Empleado</th>
-              <th class="col-md-1 align-middle"><i class="mdi mdi-chevron-down"></i></th>
+              <th class="col-md-1 align-middle">
+                <i class="mdi mdi-chevron-down"></i>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -216,16 +212,17 @@
                 {{ funcionario.surname }}
               </td>
               <td class="align-middle">
-                {{ funcionario.valor_ingresos_salariales | currency: "":"" }}
+                $ {{ funcionario.valor_ingresos_salariales | currency: "":"" }}
               </td>
               <td class="align-middle">
+                $
                 {{ funcionario.valor_ingresos_no_salariales | currency: "":"" }}
               </td>
               <td class="align-middle">
-                {{ funcionario.valor_deducciones | currency: "":"" }}
+                $ {{ funcionario.valor_deducciones | currency: "":"" }}
               </td>
               <td class="align-middle">
-                {{ funcionario.salario_neto | currency: "":"" }} /
+                $ {{ funcionario.salario_neto | currency: "":"" }} /
                 {{ nomina.frecuencia_pago }}
               </td>
               <td class="align-middle">
@@ -240,33 +237,39 @@
                   <div ngbDropdownMenu>
                     <a
                       class="dropdown-item waves-light caja-botones"
+                      href="javascript:void(0)"
                       (click)="modalExtras.show(funcionario)"
                       >Extras y recargos</a
                     >
                     <a
                       class="dropdown-item waves-light caja-botones"
+                      href="javascript:void(0)"
                       (click)="modalNovedades.show(funcionario)"
                       >Vacaciones, incapacidades <br />
                       y licencias</a
                     >
                     <a
                       class="dropdown-item waves-light caja-botones"
+                      href="javascript:void(0)"
                       (click)="modalIngPrest.show(funcionario)"
                       >Ingresos prestacionales</a
                     >
                     <a
                       class="dropdown-item waves-light caja-botones"
+                      href="javascript:void(0)"
                       (click)="modalIngNoPrest.show(funcionario)"
                       >Ingresos no prestacionales</a
                     >
                     <a
                       class="dropdown-item waves-light caja-botones"
+                      href="javascript:void(0)"
                       (click)="modalDeducciones.show(funcionario)"
                       >Deducciones</a
                     >
                     <div class="dropdown-divider"></div>
                     <a
                       class="dropdown-item waves-light caja-botones"
+                      href="javascript:void(0)"
                       [routerLink]="[
                         'colilla',
                         funcionario.id,

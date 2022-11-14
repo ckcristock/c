@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
+import { ModalService } from 'src/app/core/services/modal.service';
 import { consts } from 'src/app/core/utils/consts';
-import Swal from 'sweetalert2';
+import { CompanyService } from '../../../../services/company.service';
 import { DependenciesService } from '../../../../services/dependencies.service';
 import { GroupService } from '../../../../services/group.service';
 import { PositionService } from '../../../../services/positions.service';
@@ -18,6 +18,7 @@ import { DatosEmpresaService } from './datos-empresa.service';
 })
 export class DatosEmpresaComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild('add') add: any;
   form: FormGroup;
   id: any;
   turnos = consts.turnTypes;
@@ -25,22 +26,18 @@ export class DatosEmpresaComponent implements OnInit {
   groups: any[];
   dependencies: any[];
   fixed_turns: any[];
+  loading: boolean;
   positions: any[];
-  empresa: any = {
-    company_name: '',
-    group_name: '',
-    dependency_name: '',
-    position_name: '',
-    turn_type: '',
-    fixed_turn_name: ''
-  };
+  companies: any[];
+  empresa: any;
   constructor(private fb: FormBuilder,
     private enterpriseDataService: DatosEmpresaService,
     private activatedRoute: ActivatedRoute,
     private _positions: PositionService,
     private _dependecies: DependenciesService,
     private _group: GroupService,
-    private modalService: NgbModal,
+    private _company: CompanyService,
+    private _modal: ModalService,
     private _swal: SwalService,
   ) { }
 
@@ -51,24 +48,17 @@ export class DatosEmpresaComponent implements OnInit {
     this.getGroups();
     this.createForm();
   }
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
 
-  }
   openModal() {
-    this.modal.show();
+    this._modal.open(this.add)
+    this.getCompanies()
   }
 
   getEnterpriseData() {
+    this.loading = true;
     this.enterpriseDataService.getEnterpriseData(this.id)
       .subscribe((res: any) => {
+        this.loading = false
         this.empresa = res.data;
         this.getDependencies(this.empresa.group_id);
         this.getPositions(this.empresa.dependency_id)
@@ -77,6 +67,7 @@ export class DatosEmpresaComponent implements OnInit {
           position_id: this.empresa.position_id,
           group_id: this.empresa.group_id,
           dependency_id: this.empresa.dependency_id,
+          company_id: this.empresa.company_id,
           id: this.empresa.id,
           turn_type: this.empresa.turn_type
         });
@@ -97,7 +88,7 @@ export class DatosEmpresaComponent implements OnInit {
   }
 
   getFixed_turn() {
-    this.enterpriseDataService.getFixed_turnSP().subscribe((r: any) => {
+    this.enterpriseDataService.getFixed_turn().subscribe((r: any) => {
       this.fixed_turns = r.data;
       this.fixed_turns.unshift({ text: 'Seleccione una', value: '' });
     })
@@ -117,29 +108,11 @@ export class DatosEmpresaComponent implements OnInit {
     });
   }
 
-  /* turnChanged(turno) {
-    if (turno == 'Rotativo') {
-      this.form.get('fixed_turn_id').enable();
-    } else if(turno == 'Fijo') {
-      this.form.get('fixed_turn_id').disable();
-    }
-  } */
-
-  updateEnterpriseData() {
-    this.form.markAllAsTouched();
-    if (this.form.invalid) { return false; }
-    this.enterpriseDataService.updateEnterpriseData(this.form.value)
-      .subscribe(res => {
-        this.getEnterpriseData();
-        this.modalService.dismissAll();
-        this._swal.show({
-          title: 'Actualizado correctamente',
-          text: '',
-          icon: 'success',
-          showCancel: false,
-          timer: 1000
-        })
-      });
+  getCompanies() {
+    this._company.getCompanies().subscribe((d: any) => {
+      this.companies = d.data;
+      this.companies.unshift({ text: 'Seleccione una', value: '' });
+    });
   }
 
   turnChanged(turno) {
@@ -151,6 +124,23 @@ export class DatosEmpresaComponent implements OnInit {
       this.form.patchValue({ fixed_turn_id: null });
     }
   }
+
+  updateEnterpriseData() {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) { return false; }
+    this.enterpriseDataService.updateEnterpriseData(this.form.value)
+      .subscribe(res => {
+        this.getEnterpriseData();
+        this._modal.close();
+        this._swal.show({
+          title: 'Actualizado correctamente',
+          text: '',
+          icon: 'success',
+          showCancel: false,
+          timer: 1000
+        })
+      });
+  }
   createForm() {
     this.form = this.fb.group({
       dependency_id: ['', Validators.required],
@@ -158,6 +148,7 @@ export class DatosEmpresaComponent implements OnInit {
       fixed_turn_id: ['', Validators.required],
       group_id: ['', Validators.required],
       turn_type: ['', Validators.required],
+      company_id:  ['', Validators.required],
       id: ['']
     });
   }
@@ -167,9 +158,9 @@ export class DatosEmpresaComponent implements OnInit {
       this.form.get('dependency_id').invalid && this.form.get('dependency_id').touched
     );
   }
-  get group_valid() {
+  get company_valid() {
     return (
-      this.form.get('group_id').invalid && this.form.get('group_id').touched
+      this.form.get('company_id').invalid && this.form.get('company_id').touched
     );
   }
 

@@ -14,6 +14,7 @@ export class DetalleFuncionarioComponent implements OnInit {
   habilitado = true;
   components = 'informacion';
   id: any;
+  active = 1;
   data$: any;
   funcionario: any = {
     salary: '',

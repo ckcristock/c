@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalService } from 'src/app/core/services/modal.service';
 import Swal from 'sweetalert2';
 import { SwalService } from '../../../../services/swal.service';
 import { AfiliacionesService } from './afiliaciones.service';
@@ -13,28 +13,24 @@ import { AfiliacionesService } from './afiliaciones.service';
 })
 export class AfiliacionesComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild('add') add: any;
   form: FormGroup;
   data: any;
   eps: any;
+  loading: boolean;
   compensations: any;
   pensions: any;
   severances: any;
   arls: any;
-  afiliations: any = {
-    eps_name: '',
-    pension_fund_name: '',
-    severance_fund_name: '',
-    compensation_fund_name: ''
-  };
+  afiliations: any;
   id: any;
   constructor(
     private fb: FormBuilder,
     private afiliationService: AfiliacionesService,
     private activatedRoute: ActivatedRoute,
-    private modalService: NgbModal,
     private _swal: SwalService,
-    )
-     { }
+    private _modal: ModalService,
+  ) { }
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
@@ -46,21 +42,9 @@ export class AfiliacionesComponent implements OnInit {
     this.getSeverance_funds();
     this.getArls();
   }
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
-    
-  }
-
 
   openModal() {
-    this.modal.show();
+    this._modal.open(this.add)
   }
 
   createForm() {
@@ -74,8 +58,10 @@ export class AfiliacionesComponent implements OnInit {
   }
 
   getAfiliationInfo() {
+    this.loading = true;
     this.afiliationService.getAfiliationInfo(this.id)
       .subscribe((res: any) => {
+        this.loading = false;
         this.afiliations = res.data;
         this.form.patchValue({
           eps_id: this.afiliations.eps_id,
@@ -93,14 +79,14 @@ export class AfiliacionesComponent implements OnInit {
     this.afiliationService.updateAfiliation(this.form.value, this.id)
       .subscribe(res => {
         this.getAfiliationInfo();
-        this.modalService.dismissAll();
+        this._modal.close();
         this._swal.show({
           title: 'Actualizado correctamente',
           text: '',
           icon: 'success',
           showCancel: false,
           timer: 1000
-        }) 
+        })
       });
   }
 

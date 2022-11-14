@@ -165,7 +165,6 @@
               <input
                 matInput
                 type="number"
-                [value]=""
                 formControlName="n_nights"
                 id="n_dias"
               />
@@ -182,7 +181,6 @@
       <div class="rounded-top table-responsive">
         <table
           class="table table-bordered table-striped table-sm"
-          
           *ngIf="hospedajeList.controls.length; else notData"
         >
           <thead class="bg-light">
@@ -333,7 +331,6 @@
       <div class="rounded-top table-responsive">
         <table
           class="table table-bordered table-striped table-sm"
-          
           *ngIf="transporteList.controls.length; else notData"
         >
           <thead class="bg-light">
@@ -435,7 +432,6 @@
       <div class="rounded-top table-responsive">
         <table
           class="table table-bordered table-striped table-sm"
-          
           *ngIf="taxiList.controls.length; else notData"
         >
           <thead class="bg-light">
@@ -545,7 +541,6 @@
       <div class="rounded-top table-responsive">
         <table
           class="table table-bordered table-striped table-sm"
-          
           *ngIf="FeedingList.controls.length; else notData"
         >
           <thead class="bg-light">
@@ -655,10 +650,7 @@
         <h5>Total viáticos</h5>
       </div>
       <div class="rounded-top table-responsive">
-        <table
-          class="table table-bordered table-striped table-sm"
-          
-        >
+        <table class="table table-bordered table-striped table-sm">
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
               <th class="col-md-3">Item</th>
@@ -671,87 +663,34 @@
           </thead>
           <tbody>
             <tr class="text-center">
-              <th class="align-middle">Hospedaje</th>
-              <td>
-                <input
-                  type="number"
-                  formControlName="total_hotels_usd"
-                  readonly
-                  class="form-control form-control-sm"
-                />
+              <th class="align-middle col-2">Hospedaje</th>
+              <td class="col-2">{{ form.get("total_hotels_usd").value | currency }}</td>
+              <td class="col-2">
+                {{ form.get("total_hotels_cop").value | currency: "COP" }}
               </td>
-              <td>
-                <input
-                  type="number"
-                  formControlName="total_hotels_cop"
-                  readonly
-                  class="form-control form-control-sm"
-                />
-              </td>
-              <th class="align-middle">Transporte Terrestre</th>
-              <td></td>
-              <td>
-                <input
-                  type="number"
-                  formControlName="total_transports_cop"
-                  readonly
-                  class="form-control form-control-sm"
-                />
-              </td>
-            </tr>
-            <tr class="text-center">
-              <th class="align-middle">Taxis</th>
-              <td>
-                <input
-                  type="number"
-                  formControlName="total_taxis_usd"
-                  readonly
-                  class="form-control form-control-sm"
-                />
-              </td>
-              <td>
-                <input
-                  type="number"
-                  formControlName="total_taxis_cop"
-                  readonly
-                  class="form-control form-control-sm"
-                />
-              </td>
-              <th class="align-middle">Alimentación</th>
-              <td>
-                <input
-                  type="number"
-                  formControlName="total_feedings_usd"
-                  readonly
-                  class="form-control form-control-sm"
-                />
-              </td>
-              <td>
-                <input
-                  type="number"
-                  formControlName="total_feedings_cop"
-                  readonly
-                  class="form-control form-control-sm"
-                />
-              </td>
-            </tr>
-            <tr class="text-center">
-              <th class="align-middle">Lavanderia</th>
-              <td>
+              <th class="align-middle col-2">Lavanderia</th>
+              <td class="col-2">
                 <input
                   type="number"
                   formControlName="total_laundry_usd"
                   class="form-control form-control-sm"
                 />
               </td>
-              <td>
+              <td class="col-2">
                 <input
                   type="number"
                   formControlName="total_laundry_cop"
                   class="form-control form-control-sm"
                 />
               </td>
-              <th class="align-middle">Sobre Equipaje</th>
+            </tr>
+            <tr class="text-center">
+              <th class="align-middle">Transporte terrestre</th>
+              <td>{{0 | currency}}</td>
+              <td>
+                {{ form.get("total_transports_cop").value | currency: "COP" }}
+              </td>
+              <th class="align-middle">Sobre equipaje</th>
               <td>
                 <input
                   type="number"
@@ -768,7 +707,10 @@
               </td>
             </tr>
             <tr class="text-center">
-              <th class="align-middle">Otros Gastos</th>
+              <th class="align-middle">Taxis</th>
+              <td>{{ form.get("total_taxis_usd").value | currency }}</td>
+              <td>{{ form.get("total_taxis_cop").value | currency: "COP" }}</td>
+              <th class="align-middle">Otros gastos</th>
               <td>
                 <input
                   type="number"
@@ -783,29 +725,26 @@
                   class="form-control form-control-sm"
                 />
               </td>
-              <th class="align-middle">Total</th>
-              <td>
-                <input
-                  type="number"
-                  formControlName="total_usd"
-                  readonly
-                  class="form-control form-control-sm"
-                />
-              </td>
-              <td>
-                <input
-                  type="number"
-                  formControlName="total_cop"
-                  readonly
-                  class="form-control form-control-sm"
-                />
-              </td>
             </tr>
+            <tr class="text-center">
+              <th class="align-middle">Alimentación</th>
+              <td>
+                {{ form.get("total_feedings_usd").value | currency }}
+              </td>
+              <td>
+                {{ form.get("total_feedings_cop").value | currency: "COP" }}
+              </td>
+
+              <th class="align-middle">Total</th>
+              <th>{{ form.get("total_usd").value | currency }}</th>
+              <th>{{ form.get("total_cop").value | currency: "COP" }}</th>
+            </tr>
+            <tr></tr>
           </tbody>
         </table>
       </div>
       <button class="btn btn-primary btn-block" (click)="crearViatico()">
-        Guardar Viatico
+        Guardar
       </button>
     </form>
   </div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-//import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/es';
 //import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
@@ -10,7 +10,7 @@ import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 export class TexteditorService {
 
     constructor() { }
-    public Editor = DecoupledEditor;
+    public Editor = ClassicEditor;
     public onReady(editor) {
         editor.ui.view.editable.element.parentElement.insertBefore(
             editor.ui.view.toolbar.element,
@@ -18,7 +18,7 @@ export class TexteditorService {
         );
     }
     configEditor = {
-        /* toolbar: {
+        toolbar: {
           items: [
             '|',
             'heading',
@@ -32,7 +32,8 @@ export class TexteditorService {
             'undo',
             'redo',
           ]
-        }, */
+        },
+        placeholder: 'Escribe un comentario',
         language: 'es',
       }
 

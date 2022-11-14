@@ -1,41 +1,69 @@
-<div class="card border border-3 border-light">
+<div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h5>Datos de nómina</h5>
-      <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
-        <i class="fas fa-pencil-alt"></i>
-      </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-10 px-0">
+        <h6 class="text-dark">
+          <i class="fas fa-money-bill"></i> Datos de nómina
+        </h6>
+      </div>
+      <div class="col-md-2 px-0 text-right">
+        <button class="btn btn-link" (click)="openModal(modal)">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+      </div>
     </div>
-    <div class="rounded-top table-responsive">
-      <table class="table table-sm">
-        <thead class="bg-light">
-          <tr class="text-center text-uppercase">
-            <th>Máximo de horas extras</th>
-            <th>Máximo de festivos legales</th>
-            <th>Máximo de llegadas tarde</th>
-            <th>Salario base mensual</th>
-            <th>Auxilio de transporte</th>
-            <th>Inicio hora nocturna</th>
-            <th>Fin hora nocturna</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="text-center">
-            <td>{{ nomina.max_extras_hours }}</td>
-            <td>{{ nomina.max_holidays_legal }}</td>
-            <td>{{ nomina.max_late_arrival }}</td>
-            <td>${{ nomina.base_salary | currency: "":"" }}</td>
-            <td>${{ nomina.transportation_assistance | currency: "":"" }}</td>
-            <td>{{ nomina.night_start_time }}</td>
-            <td>{{ nomina.night_end_time }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="row" *ngIf="!loading && nomina; else notData">
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Máximas de horas extras
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ nomina.max_extras_hours }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Máximos de festivos legales
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ nomina.max_holidays_legal }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Máximas llegadas tardes
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ nomina.max_late_arrival }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Salario base mensual
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        $ {{ nomina.base_salary | number }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Auxilio de transporte
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        $ {{ nomina.transportation_assistance | number }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Hora de inicio nocturna
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ nomina.night_start_time }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Hora de fin nocturna
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ nomina.night_end_time }}
+      </div>
     </div>
   </div>
 </div>
 
-<ng-template #add let-modal>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #modal let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Datos de nómina</h4>
     <button
@@ -147,3 +175,5 @@
     </button>
   </div>
 </ng-template>
+
+

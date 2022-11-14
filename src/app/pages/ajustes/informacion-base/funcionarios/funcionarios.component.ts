@@ -59,7 +59,7 @@ export class FuncionariosComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      status: '',
+      status: 'Activo',
       dependency_id: '',
       name: ''
     })

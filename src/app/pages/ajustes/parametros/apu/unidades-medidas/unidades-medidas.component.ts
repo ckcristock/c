@@ -17,7 +17,7 @@ export class UnidadesMedidasComponent implements OnInit {
   matPanel = false;
   loading: boolean = false;
   form: FormGroup;
-  title: string = 'Nueva unidad de medida';
+  title: string = 'Nueva UM';
   units: any[] = [];
   unit: any = {};
   pagination = {
@@ -29,14 +29,14 @@ export class UnidadesMedidasComponent implements OnInit {
     name: ''
   }
 
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
 
   constructor(
@@ -54,7 +54,7 @@ export class UnidadesMedidasComponent implements OnInit {
 
   openModal() {
     this.modal.show();
-    this.title = 'Nueva unidad de medida';
+    this.title = 'Nueva UM';
   }
   closeResult = '';
   public openConfirm(confirm, titulo) {
@@ -67,11 +67,11 @@ export class UnidadesMedidasComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
   createForm() {
     this.form = this.fb.group({
-      id: [this.unit.id],
+      id: [''],
       name: ['', this._validators.required],
       unit: ['', this._validators.required],
     })
@@ -95,28 +95,12 @@ export class UnidadesMedidasComponent implements OnInit {
     this.loading = true;
     this._units.getUnits(params).subscribe((r: any) => {
       this.units = r.data.data;
-      console.log(this.units)
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
   }
 
   save() {
-    if (this.unit.id) {
-      this._units.update(this.form.value, this.unit.id).subscribe((r: any) => {
-        this.modalService.dismissAll();
-        this.form.reset();
-        this.getUnits();
-        console.log(r)
-        this._swal.show({
-          icon: 'success',
-          title: r.data.title,
-          text: r.data.text,
-          showCancel: false,
-          timer: 1000,
-        })
-      })
-    }
     this._units.save(this.form.value).subscribe((r: any) => {
       this.modalService.dismissAll();
       this.form.reset();

@@ -41,6 +41,7 @@ import * as moment from 'moment';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { consts } from 'src/app/core/utils/consts';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-actividades',
@@ -141,6 +142,7 @@ export class ActividadesComponent {
     private _person: PersonService,
     private _swal: SwalService,
     private modalService: NgbModal,
+    private _modal: ModalService
   ) {
     this.GetTiposActividad();
   }

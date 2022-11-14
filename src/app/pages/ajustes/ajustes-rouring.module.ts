@@ -10,7 +10,7 @@ const routes : Routes = [
     { path : 'tipos', loadChildren : () => import('./tipos/tipos.module').then( m => m.TiposModule )},
     { path : 'parametros', loadChildren : () => import('./parametros/parametros.module').then( m => m.ParametrosModule )},
     { path : 'configuracion', loadChildren : () => import('./configuracion/configuracion.module').then( m => m.ConfiguracionModule )},
-    { path : 'encuestas', loadChildren : () => import('./encuestas/encuestas.module').then( m => m.EncuestasModule )}
+    //{ path : 'encuestas', loadChildren : () => import('./encuestas/encuestas.module').then( m => m.EncuestasModule )}
 ]
 
 @NgModule({

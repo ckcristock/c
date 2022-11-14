@@ -16,6 +16,11 @@ import { environment } from 'src/environments/environment';
 })
 export class NotascreditocrearComponent implements OnInit {
   enviromen:any;
+  public datosCabecera:any = {
+    Titulo: 'Nueva nota de crédito',
+    Fecha: new Date(),
+    Codigo: ''
+  }
 
   public Tipo_Factura = [
     // {Nombre:'Factura Dispensación',Modulo:'Factura'},

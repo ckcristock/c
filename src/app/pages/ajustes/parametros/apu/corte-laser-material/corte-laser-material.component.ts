@@ -87,6 +87,7 @@ export class CorteLaserMaterialComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
+    this.materialsList.clear();
     
   }
 

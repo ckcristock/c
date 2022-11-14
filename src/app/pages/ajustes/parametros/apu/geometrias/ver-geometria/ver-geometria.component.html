@@ -1,11 +1,5 @@
-<!-- <div class="row mb-4">
-    <div class="col text-left">
-        <a class="text-primary back" (click)="regresar()">Regresar</a>
-    </div>
-</div> -->
-
 <div class="card col-md-6 mx-auto px-0">
-  <div class="card-body">
+  <div class="card-body" *ngIf="!loading && geometry; else notData">
     <div class="card-title d-flex justify-content-between">
       <h4 class="text-primary">Ver geometría</h4>
     </div>
@@ -39,3 +33,6 @@
     <span> {{ geometry.weight_formula }} </span>
   </div>
 </div>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ConfiguracionEmpresaService } from '../configuracion-empresa.service';
@@ -6,31 +6,51 @@ import { functionsUtils } from '../../../../../core/utils/functionsUtils';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-datos-basicos-empresa',
   templateUrl: './datos-basicos-empresa.component.html',
   styleUrls: ['./datos-basicos-empresa.component.scss']
 })
-export class DatosBasicosEmpresaComponent implements OnInit {
+export class DatosBasicosEmpresaComponent implements OnInit, DoCheck  {
   @ViewChild('modal') modal: any;
   company: any = [];
   form: FormGroup;
   imageString: any = '';
   typeImage: any = '';
+  loading: boolean = true;
+  differ: any;
   image: any = '';
+  documents_types: any = []
+  fileString: string | ArrayBuffer = "";
   constructor(
     private _configuracionEmpresaService: ConfiguracionEmpresaService,
     private fb: FormBuilder,
     private modalService: NgbModal,
     private _validators: ValidatorsService,
+    private _modal: ModalService,
     private _swal: SwalService,
+    private _data: ConfiguracionEmpresaService
   ) { }
 
   ngOnInit(): void {
     this.getBasicData();
     this.createForm();
+    this.getDocumentsTypes();
   }
+  ngDoCheck() {
+    if (this.company.id) {
+      this.loading = false
+    }
+  }
+
+  getDocumentsTypes() {
+    this._data.getTypeDocuments().subscribe((res:any) => {
+      this.documents_types = res.data
+    })
+  }
+
   closeResult = '';
   public openConfirm(confirm) {
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
@@ -66,7 +86,7 @@ export class DatosBasicosEmpresaComponent implements OnInit {
     this._configuracionEmpresaService.getCompanyData()
       .subscribe((res: any) => {
         this.company = res.data;
-
+        console.log(this.company)
         this.form.patchValue({
           id: this.company.id,
           social_reason: this.company.social_reason,
@@ -78,6 +98,7 @@ export class DatosBasicosEmpresaComponent implements OnInit {
           phone: this.company.phone
         })
       })
+      this.fileString = this.company.logo
   }
 
   onImageChanged(event) {
@@ -89,6 +110,7 @@ export class DatosBasicosEmpresaComponent implements OnInit {
         this.imageString = (<FileReader>event.target).result;
         const type = { ext: this.imageString };
         this.typeImage = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+        this.fileString = (<FileReader>event.target).result;
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.image = base64;

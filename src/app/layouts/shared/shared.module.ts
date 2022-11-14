@@ -18,6 +18,7 @@ import { ComponentsModule } from '../../components/components.module';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { PagesModule } from 'src/app/pages/pages.module';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
@@ -35,6 +36,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     ReactiveFormsModule,
     CKEditorModule,
     NgSelectModule,
+    PagesModule
   ],
   exports: [ FooterComponent,  RightsidebarComponent, HorizontaltopbarComponent, HorizontalnavbarComponent],
   providers: []

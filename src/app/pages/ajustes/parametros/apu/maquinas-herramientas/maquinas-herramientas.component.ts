@@ -13,7 +13,6 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./maquinas-herramientas.component.scss']
 })
 export class MaquinasHerramientasComponent implements OnInit {
-  @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
   loading: boolean = false;
@@ -66,11 +65,6 @@ export class MaquinasHerramientasComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
-  }
-  openModal() {
-    this.modal.show();
-
   }
 
   createForm() {
@@ -84,7 +78,7 @@ export class MaquinasHerramientasComponent implements OnInit {
   }
 
   getUnits() {
-    this._units.getUnits().subscribe((r: any) => {
+    this._units.selectUnits().subscribe((r: any) => {
       this.units = r.data;
     })
   }
@@ -92,13 +86,12 @@ export class MaquinasHerramientasComponent implements OnInit {
   getMaquine(machine) {
     this.machine = { ...machine };
     //this.title = 'Actualizar maquina';
-    let type_id = parseInt(this.machine.type_id);
     this.form.patchValue({
       id: this.machine.id,
       name: this.machine.name,
       unit_id: this.machine.unit_id,
       unit_cost: this.machine.unit_cost,
-      type_id: type_id
+      type_id: this.machine.type_id
     })
   }
 

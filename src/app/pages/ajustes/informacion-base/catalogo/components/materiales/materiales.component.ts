@@ -9,6 +9,7 @@ import { throwIfEmpty } from 'rxjs/operators';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-materiales',
@@ -16,20 +17,10 @@ import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
   styleUrls: ['./materiales.component.scss']
 })
 export class MaterialesComponent implements OnInit {
-  @ViewChild('modalVer') modalVer: any;
-  @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @Input() cardBorder: any;
+
   matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
   loading: boolean = false;
   form: FormGroup;
   title: any = '';
@@ -39,7 +30,6 @@ export class MaterialesComponent implements OnInit {
   Producto: any = {};
   DotationType: any[] = [];
   paginacion: any
-
   thicknesses: any[] = [];
   material: any = {};
   pagination = {
@@ -50,6 +40,7 @@ export class MaterialesComponent implements OnInit {
   filtro = {
     name: ''
   }
+
   constructor(
     private _category: CategoryService,
     private fb: FormBuilder,
@@ -59,18 +50,27 @@ export class MaterialesComponent implements OnInit {
     private _swal: SwalService,
     private modalService: NgbModal,
     private paginator: MatPaginatorIntl,
+    private _modal: ModalService
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
   }
 
   ngOnInit(): void {
-    console.log(this.cardBorder)
     this.createForm();
     this.getMaterials();
     this.getThicknesses();
     this.getCategory();
     this.getDotationType();
+  }
 
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
   }
 
   getCategory() {
@@ -86,11 +86,13 @@ export class MaterialesComponent implements OnInit {
       this.SubCategorias = r.data;
     });
   }
+
   getDinamicField(Id_Subcategoria) {
     this.Producto.Id_Producto
       ? this.getSubCategoryEditar(this.Producto.Id_Producto, Id_Subcategoria)
       : this.getDinamicVariables(Id_Subcategoria);
   }
+
   getSubCategoryEdit(Id_Producto, Id_Subcategoria) {
     this._category
       .getSubCategoryEdit(Id_Producto, Id_Subcategoria)
@@ -108,6 +110,7 @@ export class MaterialesComponent implements OnInit {
         });
       });
   }
+
   getDinamicVariables(Id_Subcategoria) {
     this._category.getDinamicVariables(Id_Subcategoria).subscribe((r: any) => {
       // this.fieldDinamic.clear();
@@ -132,40 +135,17 @@ export class MaterialesComponent implements OnInit {
     return this.form.get('dynamic') as FormArray;
   }
 
-  closeResult = '';
 
-  public openConfirm(confirm, titulo) {
+  openConfirm(confirm, titulo) {
     this.title = titulo;
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
-    this.fieldList.clear();
-    this.form.reset();
-    this.thicknessList.clear();
-    this.fieldList.clear();
-    this.getThicknesses();
-
-  }
-
-  openModal() {
-    this.modal.show();
-  }
-
-  closeModalVer() {
-    this.modalService.dismissAll();
-    this.fieldList.clear();
-  }
-
-  closeModal() {
-    this.modalService.dismissAll();
-    this.form.reset();
-    this.thicknessList.clear();
-    this.fieldList.clear();
-    this.getThicknesses();
+    this._modal.open(confirm, 'lg')
+    if (titulo != 'Editar material') {
+      this.fieldList.clear();
+      this.form.reset();
+      this.thicknessList.clear();
+      this.fieldList.clear();
+      this.getThicknesses();
+    }
   }
 
   getThicknesses() {

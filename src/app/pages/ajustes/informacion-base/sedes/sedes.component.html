@@ -23,30 +23,27 @@
               matInput
               name="nombre"
               autocomplete="off"
+              [(ngModel)]="filters.name"
               placeholder="Busca por nombre"
             />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm"
-        
-      >
+    <div
+      class="rounded-top table-responsive"
+      *ngIf="!loading && sedes.length > 0; else notData"
+    >
+      <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th>Empresa</th>
             <th>Nombre</th>
             <th>Código</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of sedes" class="text-center">
-            <td class="align-middle">
-              {{ item.enterprise }}
-            </td>
             <td class="align-middle">
               {{ item.name }}
             </td>
@@ -77,7 +74,17 @@
       [collectionSize]="pagination.collectionSize"
       [pageSize]="pagination.pageSize"
       [(page)]="pagination.page"
-      aria-label="Default pagination "
-    ></ngb-pagination>
+      (pageChange)="getLocations($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
   </div>
 </div>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

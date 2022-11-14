@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit, } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -6,17 +6,13 @@ import timeGrigPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { UserService } from 'src/app/core/services/user.service';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
-import esLocale from '@fullcalendar/core/locales/es';
 import { EventInput } from '@fullcalendar/core';
-import { TaskService } from '../ajustes/informacion-base/services/task.service';
-import { RightsidebarComponent } from 'src/app/layouts/shared/rightsidebar/rightsidebar.component';
+import { TaskService } from './task.service';
 import { Router } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { FormControl, Validators } from '@angular/forms';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { TexteditorService } from '../ajustes/informacion-base/services/texteditor.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Subject } from 'rxjs';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SwalService } from '../ajustes/informacion-base/services/swal.service';
 
 
 @Component({
@@ -25,14 +21,28 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent implements OnInit {
-
-
-  closeResult = '';
+  @ViewChild('list') list: ElementRef;
+  public open: Subject<any> = new Subject;
   active = 1;
-  pendientes: [];
-  ejecucion: [];
-  espera: [];
-  finalizado: [];
+  pendientes: any[] = [];
+  ejecucion: any[] = [];
+  espera: any[] = [];
+  finalizado: any[] = [];
+  archivadas: any[] = [];
+  tasks: any[] = [];
+  asignadas: any[] = [];
+  taskTypes: any[] = [];
+  loadingPendientes: boolean;
+  loadingEjecucion: boolean;
+  loadingEspera: boolean;
+  loadingFinalizado: boolean;
+  loadingAsignadas: boolean;
+  loadingArchivadas: boolean;
+  loadingTypes: boolean;
+  formTypes: FormGroup
+  color: string;
+  user: any;
+  params: any;
   public events: Array<EventInput> = [];
   calendarPlugins = [
     dayGridPlugin,
@@ -41,80 +51,169 @@ export class TasksComponent implements OnInit {
     interactionPlugin,
     listPlugin,
   ];
+  paginationAsiggned: any = {
+    page: 1,
+    pageSize: 16,
+    collectionSize: 0
+  }
+  paginationArch: any = {
+    page: 1,
+    pageSize: 16,
+    collectionSize: 0
+  }
+  paginationTypes: any = {
+    page: 1,
+    pageSize: 5,
+    collectionSize: 0
+  }
   calendarEvents: EventInput[];
-  array1 = [
-    "list-pendientes",
-    "list-espera",
-    "list-finalizado"
-  ];
-  task: any;
-  task2: any;
-  task3: any;
-  taskview: any;
+  values = [5, 10, 50, 100, 500];
   constructor(
     public _task: TaskService,
     private _user: UserService,
     private router: Router,
-    private modalService: NgbModal,
-    private _texteditor: TexteditorService,
-    private sanitizer: DomSanitizer,
-    private fb: FormBuilder,) { }
-
-    count:any;
-
-  @ViewChild('list') list: ElementRef;
-  ngAfterViewInit() {
-    this.count = this.list.nativeElement.offsetheight
-    //this.count.subscribe(res => console.log(res));
-  }
+    private _modal: ModalService,
+    private fb: FormBuilder,
+    private _swal: SwalService
+  ) { }
 
   ngOnInit(): void {
-    this.getPersonTaskPendiente();
-    this.getTask();
-    this.getTaskFor();
-    this._task.getPerson();
-    this.getArchivadas();
+    this.user = this._user.user.person.id;
+    this.params = {
+      person_id: this.user,
+      max: 100,
+    }
+    this.getTasks();
+
+  }
+
+  openModal() {
+    this.open.next()
+  }
+
+  saveType() {
+    this._task.saveType(this.formTypes.value).subscribe((res:any) => {
+      this._swal.show({
+        title: 'Agregado con éxito',
+        icon: 'success',
+        text: '',
+        showCancel: false,
+        timer: 1000
+      })
+      this.paginateTypes();
+      this.formTypes.reset()
+    })
+  }
+
+  openModalTypes(content) {
+    this.formTypes = this.fb.group({
+      name: ['', Validators.required]
+    })
+    this._modal.open(content, 'sm')
+    this.paginateTypes();
+  }
+
+  paginateTypes(page = 1) {
+    this.loadingTypes = true;
+    this.paginationTypes.page = page;
+    this._task.paginateTypes(this.paginationTypes).subscribe((res: any) => {
+      this.taskTypes = res.data.data;
+      this.paginationTypes.collectionSize = res.data.total;
+      this.loadingTypes = false
+    })
+  }
+
+  getTasks() {
+    this.pendientes = []
+    this.ejecucion = []
+    this.espera = []
+    this.finalizado = []
+    this.loadingPendientes = true;
+    this.loadingEjecucion = true;
+    this.loadingEspera = true;
+    this.loadingFinalizado = true;
+    this._task.personTasks(this.params)
+      .subscribe(
+        (d: any) => {
+          this.loadingPendientes = false;
+          this.loadingEjecucion = false;
+          this.loadingEspera = false;
+          this.loadingFinalizado = false;
+          this.tasks = d.data
+          for (let i in d.data) {
+            if (d.data[i].estado == 'Pendiente') {
+              this.pendientes.push(d.data[i]);
+            } else if (d.data[i].estado == 'En ejecucion') {
+              this.ejecucion.push(d.data[i]);
+            } else if (d.data[i].estado == 'En espera') {
+              this.espera.push(d.data[i]);
+            } else if (d.data[i].estado == 'Finalizado') {
+              this.finalizado.push(d.data[i]);
+            }
+          }
+          this.pushEvents()
+        });
+  }
+
+  pushEvents() {
+    this.events = []
+    for (let i in this.tasks) {
+      let status = this.tasks[i].estado
+      if (status != 'Archivada') {
+        status == 'Pendiente' ? this.color = '#ef476f' :
+          status == 'En ejecucion' ? this.color = '#ffd166' :
+            status == 'En espera' ? this.color = '#118ab2' :
+              status == 'Finalizado' ? this.color = '#06d6a0' : ''
+        var object = {
+          title: this.tasks[i].titulo,
+          start: this.tasks[i].fecha,
+          description: this.tasks[i].estado,
+          backgroundColor: this.color,
+          publicId: this.tasks[i].id,
+        }
+        this.events.push(object);
+      }
+    }
   }
 
   onEventClick(event) {
-    this.taskview = event.event._def.extendedProps.publicId
-    this.router.navigate(['/task', this.taskview]);
-    console.log(event.event._def.extendedProps.publicId)
+    let taskview = event.event._def.extendedProps.publicId
+    this.router.navigate(['/task', taskview]);
   }
 
-  archivadas = []
-  getArchivadas() {
-    this._task.getArchivada(this._user.user.person.id).subscribe(
-      (d: any) => {
-        this.archivadas = d.data;
-        for (let i in d.data) {
-          this.archivadas[i].descripcion = this.sanitizer.bypassSecurityTrustHtml(atob(this.archivadas[i].descripcion))
-        }
-      });
+  getArchivadas(page = 1) {
+    this.loadingArchivadas = true;
+    this.paginationArch.page = page;
+    let params = {
+      person_id: this.user,
+      estado: 'Archivada',
+      ...this.paginationArch
+    }
+    this._task.getArchivadas(params).subscribe((d: any) => {
+      this.archivadas = d.data.data;
+      this.loadingArchivadas = false;
+      this.paginationArch.collectionSize = d.data.total;
+    });
   }
 
-  getTask() {
-    this._task.personTask(this._user.user.person.id).subscribe(
-      (d: any) => {
-        this.task2 = d.data;
-      });
-  }
+  getAsignadas(page = 1) {
+    this.loadingAsignadas = true
+    this.paginationAsiggned.page = page;
+    this._task.getAsignadas(this.user, this.paginationAsiggned).subscribe((d: any) => {
+      this.asignadas = d.data.data;
+      this.paginationAsiggned.collectionSize = d.data.total;
+      this.loadingAsignadas = false
+    });
 
-  getTaskFor() {
-    this._task.personTaskFor(this._user.user.person.id).subscribe(
-      (d: any) => {
-        this.task3 = d.data;
-        for (let i in d.data) {
-          this.task3[i].descripcion = this.sanitizer.bypassSecurityTrustHtml(atob(this.task3[i].descripcion))
-          this.ngAfterViewInit()
-        }
-      });
-      
   }
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -123,125 +222,30 @@ export class TasksComponent implements OnInit {
         event.currentIndex,
       );
     }
-    console.log(event.container.id)
     if (event.container.id == 'list-pendientes') {
-      for (let i = 0; i < event.container.data.length; i++) {
-        var r = event.container.data[i]
-        if (r["estado"] != 'Pendiente') {
-          //console.log(r["estado"])
-          this._task.updatePendiente(r["id"]).subscribe()
-        }
-      }
-    }
-    else if (event.container.id == 'list-finalizado') {
-      for (let j = 0; j < event.container.data.length; j++) {
-        var r1 = event.container.data[j]
-        if (r1["estado"] != 'Finalizado') {
-          //console.log(r1["estado"])
-          this._task.updateFinalizado(r1["id"]).subscribe()
-        }
-      }
+      this.statusUpdate(event.container.data, 'Pendiente')
+    } else if (event.container.id == 'list-finalizado') {
+      this.statusUpdate(event.container.data, 'Finalizado')
     } else if (event.container.id == 'list-ejecucion') {
-      for (let k = 0; k < event.container.data.length; k++) {
-        var r2 = event.container.data[k]
-        if (r2["estado"] != 'En ejecucion') {
-          //console.log(r2["estado"])
-          this._task.updateEjecucion(r2["id"]).subscribe()
-        }
-      }
+      this.statusUpdate(event.container.data, 'En ejecucion')
     } else if (event.container.id == 'list-espera') {
-      for (let l = 0; l < event.container.data.length; l++) {
-        var r3 = event.container.data[l]
-        if (r3["estado"] != 'En espera') {
-          //console.log(r3["estado"])
-          this._task.updateEspera(r3["id"]).subscribe()
-        }
-      }
+      this.statusUpdate(event.container.data, 'En espera')
     }
-
   }
 
-  getPersonTaskPendiente() {
-    this._task
-      .personTaskPendiente(this._user.user.person.id)
-      .subscribe(
-        (d: any) => {
-          this.pendientes = d.data;
-          for (let i in d.data) {
-            this.pendientes[i].descripcion = this.sanitizer.bypassSecurityTrustHtml(atob(this.pendientes[i].descripcion))
-          }
-          for (let i = 0; i < d.data.length; i++) {
-            var object = {
-              title: d.data[i]["titulo"],
-              start: d.data[i]["fecha"],
-              description: d.data[i]["estado"],
-              backgroundColor: '#ef476f',
-              publicId: d.data[i]["id"],
-            }
-            this.events.push(object);
-          }
-        });
-
-    this._task
-      .personTaskEjecucion(this._user.user.person.id)
-      .subscribe(
-        (d: any) => {
-          this.ejecucion = d.data;
-          for (let i in d.data) {
-            this.ejecucion[i].descripcion = this.sanitizer.bypassSecurityTrustHtml(atob(this.ejecucion[i].descripcion))
-          }
-          for (let i = 0; i < d.data.length; i++) {
-            var object = {
-              title: d.data[i]["titulo"],
-              start: d.data[i]["fecha"],
-              description: d.data[i]["estado"],
-              backgroundColor: '#ffd166',
-              publicId: d.data[i]["id"],
-            }
-            this.events.push(object);
-          }
-        });
-
-    this._task
-      .personTaskEspera(this._user.user.person.id)
-      .subscribe(
-        (d: any) => {
-          this.espera = d.data;
-          for (let i in d.data) {
-            this.espera[i].descripcion = this.sanitizer.bypassSecurityTrustHtml(atob(this.espera[i].descripcion))
-          }
-          for (let i = 0; i < d.data.length; i++) {
-
-            var object = {
-              title: d.data[i]["titulo"],
-              start: d.data[i]["fecha"],
-              description: d.data[i]["estado"],
-              backgroundColor: '#118ab2',
-              publicId: d.data[i]["id"],
-            }
-            this.events.push(object);
-          }
-        });
-
-    this._task
-      .personTaskFinalizado(this._user.user.person.id)
-      .subscribe(
-        (d: any) => {
-          this.finalizado = d.data;
-          for (let i in d.data) {
-            this.finalizado[i].descripcion = this.sanitizer.bypassSecurityTrustHtml(atob(this.finalizado[i].descripcion))
-          }
-          for (let i = 0; i < d.data.length; i++) {
-
-            var object = {
-              title: d.data[i]["titulo"],
-              start: d.data[i]["fecha"],
-              description: d.data[i]["estado"],
-              backgroundColor: '#06d6a0',
-              publicId: d.data[i]["id"],
-            }
-            this.events.push(object);
-          }
-        });
+  statusUpdate(data, status) {
+    let params = {
+      id: '',
+      status: ''
+    }
+    for (let i in data) {
+      let r: any = data[i]
+      if (r.estado != status) {
+        params.id = r.id
+        params.status = status
+        this._task.statusUpdate(params).subscribe()
+        r.estado = status
+      }
+    }
   }
 }

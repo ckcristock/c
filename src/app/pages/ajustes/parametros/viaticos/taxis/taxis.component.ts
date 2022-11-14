@@ -106,7 +106,7 @@ export class TaxisComponent implements OnInit {
     this.taxi = { ...taxi };
     this.form.patchValue({
       id: this.taxi.id,
-      route: this.taxi.route,
+      route: this.taxi.taxi.route,
       city_id: this.taxi.city_id,
       type: this.taxi.type,
       value: this.taxi.value,

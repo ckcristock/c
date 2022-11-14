@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
+import { ModalService } from 'src/app/core/services/modal.service';
+import Swal from 'sweetalert2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
@@ -42,7 +44,7 @@ export class TiposDocumentoComponent implements OnInit {
     private fb: FormBuilder,
     private _reactiveValid: ValidatorsService,
     private _typesDocumentService: TiposDocumentoService,
-    private modalService: NgbModal,
+    private _modal: ModalService,
     private _swal: SwalService,
   ) { }
 
@@ -54,25 +56,13 @@ export class TiposDocumentoComponent implements OnInit {
   closeResult = '';
   public openConfirm(confirm, titulo) {
     this.selected = titulo;
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
+    this._modal.open(confirm);
     this.form.reset();
-
-  }
-
-  openModal() {
-    this.modal.show();
-
-
   }
 
   getData(data) {
     this.document = { ...data };
+    this.selected = 'Actualizar tipo de documento';
     this.form.patchValue({
       id: this.document.id,
       name: this.document.name,
@@ -86,7 +76,7 @@ export class TiposDocumentoComponent implements OnInit {
       id: [this.document.id],
       name: ['', this._reactiveValid.required],
       code: ['', this._reactiveValid.required],
-      dian_code: ['', this._reactiveValid.required]
+      dian_code: ['', this._reactiveValid.required],
     })
   }
 
@@ -137,7 +127,7 @@ export class TiposDocumentoComponent implements OnInit {
     this._typesDocumentService.createNewDocument(this.form.value)
       .subscribe((res: any) => {
         this.getDocumentTypes();
-        this.modalService.dismissAll();
+        this._modal.close();
         this._swal.show({
           title: res.data,
           icon: 'success',

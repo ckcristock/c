@@ -1,0 +1,75 @@
+<div class="rounded-top table-responsive">
+  <table class="table table-striped table-md">
+    <tbody>
+      <ng-template #ingresos>
+        <tr *ngFor="let extra of datos; let i = index">
+          <td>{{ extra.concept }}</td>
+          <td>
+            <app-row-typeahead
+              (setAccount)="actualizar($event.identifier, 'accounting_account', $event.datos.id)"
+              [extra]="extra"
+              [variable]="extra.cuenta_contable"
+              [titulo]="'Cuentas contables'"
+            ></app-row-typeahead>
+          </td>
+
+          <td>
+            <mat-slide-toggle
+              (change)="actualizar($event.checked, 'state',  extra.id)"
+              color="primary"
+              [(ngModel)]="extra.state"
+              >{{ extra.state == 1 ? "Activo" : "Inactivo" }}</mat-slide-toggle
+            >
+            <!-- <div class="col-md-7 custom-control custom-switch mb-2">
+
+              <span
+                class="d-inline-block"
+                data-toggle="tooltip"
+                title="{{ extra.id }}"
+                >
+                <input
+                  id="{{extra.id}}"
+                  name="status{{extra.id}}"
+                  type="checkbox"
+                  class="custom-control-input"
+                  [(checked)]="extra.state"
+                  (click)="extra.state =! extra.state"
+                />
+                <label for="estatus{{extra.id}}" class="custom-control-label"
+                  >Estatus</label
+                >
+              </span>
+            </div> -->
+          </td>
+
+          <td>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Porcentaje</mat-label>
+              <input
+                matInput
+                #percentage
+                type="number"
+                [value]="extra.percentage"
+                step="0.05"
+                min="0"
+                name="percentage"
+                id="percentage"
+                autocomplete="off"
+              />
+              <button
+                mat-icon-button
+                color="primary"
+                matSuffix
+                (click)="actualizar(percentage.value, 'percentage' , extra.id)"
+                [attr.aria-label]="'Actualizar'"
+              >
+                <mat-icon>save</mat-icon>
+              </button>
+            </mat-form-field>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-container *ngIf="datos.length <= 0; else ingresos"></ng-container>
+    </tbody>
+  </table>
+</div>

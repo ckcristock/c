@@ -17,7 +17,7 @@ export class PreliquidadosComponent implements OnInit {
   diffDays: any;
   pagination: any = {
     page: 1,
-    pageSize: 10,
+    pageSize: 12,
     collectionSize: 0
   }
   constructor(

@@ -47,11 +47,11 @@
         *ngIf="!loading && documents.length > 0; else notData"
       >
         <thead class="bg-light">
-          <tr class="text-uppercase">
-            <th>CÓDIGO</th>
-            <th>NOMBRE</th>
-            <th>CÓDIGO DIAN</th>
-            <th><i class="mdi mdi-chevron-down"></i></th>
+          <tr class="text-center text-uppercase">
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Código DIAN</th>
+            <th ><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -61,9 +61,9 @@
               'text-danger font-weight-bold': document.status === 'Inactivo'
             }"
           >
-            <td>{{ document.code }}</td>
-            <td class="text-left">{{ document.name }}</td>
-            <td>{{ document.dian_code }}</td>
+          <td class="align-middle">{{ document.code }}</td>
+          <td class="align-middle">{{ document.name }}</td>
+          <td class="align-middle">{{ document.dian_code }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -155,18 +155,18 @@
           />
           <mat-error *ngIf="code_invalid">Es necesario el código</mat-error>
         </mat-form-field>
-
         <mat-form-field appearance="outline" class="col">
           <mat-label>Código DIAN</mat-label>
           <input
             matInput
             type="number"
             placeholder="Ingresa el código DIAN"
+            maxlength="5"
             formControlName="dian_code"
             autocomplete="off"
             required
           />
-          <mat-error *ngIf="dian_code_invalid">Es necesario el código</mat-error>
+          <mat-error *ngIf="dian_code_invalid"> Campo obligatorio </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" class="col">
           <mat-label>Nombre</mat-label>

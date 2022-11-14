@@ -1,0 +1,51 @@
+<div class="row d-flex" *ngFor="let dat of datos">
+  <div class="col">{{ dat.area }}</div>
+  <div class="col">
+    <ng-template #rt let-r="result" let-t="term">
+      <ngb-highlight
+      [result]="r.dni + ' || ' + r.text"
+      [term]="t"
+      ></ngb-highlight>
+    </ng-template>
+    <mat-form-field appearance="outline" id="responsable">
+      <mat-label>Responsable:</mat-label>
+      <input
+      matInput
+      type="text"
+      id="typeahead-manager"
+      placeholder="Busca por documento"
+      [(ngModel)]="model"
+      [value]="dat.manager"
+      [ngbTypeahead]="search"
+      [inputFormatter]="formatter"
+      [resultFormatter]="formatter"
+      [resultTemplate]="rt"
+      [editable]="false"
+      />
+      <button
+        mat-icon-button
+        color="primary"
+        matSuffix
+        (click)="actualizar(dat, model.dni)"
+        [attr.aria-label]="'Actualizar'"
+      >
+        <mat-icon>check</mat-icon>
+      </button>
+      <mat-hint *ngIf="searchingPatient">Buscando</mat-hint>
+      <mat-hint *ngIf="searchFailedPatient"
+      >No hemos encontrado resultados</mat-hint
+      >
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6">
+    <app-tipos-ingreso></app-tipos-ingreso>
+    <app-tipos-riesgo></app-tipos-riesgo>
+  </div>
+  <div class="col-lg-6">
+    <app-tipos-egreso></app-tipos-egreso>
+    <app-tipos-novedades></app-tipos-novedades>
+  </div>
+</div>

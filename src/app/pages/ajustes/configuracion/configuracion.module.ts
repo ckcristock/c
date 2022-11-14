@@ -13,7 +13,7 @@ import { CamposTercerosComponent } from './campos-terceros/campos-terceros.compo
 import { MunicipiosComponent } from './departamentos-municipios/municipios/municipios.component';
 import { DepartamentosComponent } from './departamentos-municipios/departamentos/departamentos.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { PaisesComponent } from './paises-ciudades/paises/paises.component';
 import { CiudadesComponent } from './paises-ciudades/ciudades/ciudades.component';
 import { PaisesCiudadesComponent } from './paises-ciudades/paises-ciudades.component';
@@ -28,6 +28,14 @@ import { IncapacidadesConfigComponent } from './nomina/components/incapacidades-
 import { ParafiscalesConfigComponent } from './nomina/components/parafiscales-config/parafiscales-config.component';
 import { RiesgoArlConfigComponent } from './nomina/components/riesgo-arl-config/riesgo-arl-config.component';
 import { LocalidadesComponent } from './localidades/localidades.component';
+import { ResponsablesNominaConfigComponent } from './nomina/components/responsables-nomina-config/responsables-nomina-config.component';
+import { NovedadesConfigComponent } from './nomina/components/novedades-config/novedades-config.component';
+import { RowTypeaheadComponent } from './nomina/components/horas-extras-config/row-typeahead/row-typeahead.component';
+import { EgresosConfigComponent } from './nomina/components/egresos-config/egresos-config.component';
+import { IngresosConfigComponent } from './nomina/components/ingresos-config/ingresos-config.component';
+import { MatCheckboxModule, MatSlideToggleModule } from '@angular/material';
+import { LiquidacionConfigComponent } from './nomina/components/liquidacion-config/liquidacion-config.component';
+import { SalariosConfigComponent } from './nomina/components/salarios-config/salarios-config.component';
 
 
 @NgModule({
@@ -53,6 +61,13 @@ import { LocalidadesComponent } from './localidades/localidades.component';
     ParafiscalesConfigComponent,
     IncapacidadesConfigComponent,
     LocalidadesComponent,
+    ResponsablesNominaConfigComponent,
+    NovedadesConfigComponent,
+    RowTypeaheadComponent,
+    EgresosConfigComponent,
+    IngresosConfigComponent,
+    LiquidacionConfigComponent,
+    SalariosConfigComponent,
   ],
   imports: [
     CommonModule,
@@ -63,6 +78,7 @@ import { LocalidadesComponent } from './localidades/localidades.component';
     ReactiveFormsModule,
     NgSelectModule,
     NgbDropdownModule,
+    NgbTypeaheadModule,
     NgbPaginationModule,
     MatExpansionModule,
     MatFormFieldModule,
@@ -70,6 +86,8 @@ import { LocalidadesComponent } from './localidades/localidades.component';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
   ]
 })
 export class ConfiguracionModule { }

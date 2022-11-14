@@ -1,4 +1,4 @@
-<div class="card col-md-8 mx-auto">
+<div class="card col-md-11 mx-auto">
   <div class="card-body">
     <div class="card-title">
       <h4 class="text-primary">Configuración de nómina</h4>
@@ -9,6 +9,29 @@
       correspondientes al momento del pago de la nómina.
     </div>
     <div *ngIf="renderizarNomina; else notData">
+
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">
+            Responsables de aprobación de nómina
+          </h6>
+          <app-responsables-nomina-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="seguridadFuncionarioDatos"
+          ></app-responsables-nomina-config>
+        </div>
+      </div>
+
+      <div class="row mt-3" *ngIf="salariosSubsidiosDatos">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">Salario y subsidios</h6>
+          <app-salarios-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="salariosSubsidiosDatos"
+          ></app-salarios-config>
+        </div>
+      </div>
+
       <div class="row mt-3">
         <div class="col-md-12">
           <h6 class="font-weight-bold">Horas extras y recargos</h6>
@@ -63,13 +86,43 @@
         </div>
       </div>
 
-      <div class="row mt-3" *ngIf="incapacidadesDatos">
+      <div class="row mt-3" *ngIf="novedadesList">
         <div class="col-md-12">
-          <h6 class="font-weight-bold">Incapacidades</h6>
-          <app-incapacidades-config
+          <h6 class="font-weight-bold">Novedades</h6>
+          <app-novedades-config
             (notificacion)="(mostrarMensaje)"
-            [datos]="incapacidadesDatos"
-          ></app-incapacidades-config>
+            [datos]="novedadesList"
+          ></app-novedades-config>
+        </div>
+      </div>
+
+      <div class="row mt-3" *ngIf="incomeDatos">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">Ingresos</h6>
+          <app-ingresos-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="incomeDatos"
+          ></app-ingresos-config>
+        </div>
+      </div>
+
+      <div class="row mt-3" *ngIf="deductionsDatos">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">Egresos</h6>
+          <app-egresos-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="deductionsDatos"
+          ></app-egresos-config>
+        </div>
+      </div>
+
+      <div class="row mt-3" *ngIf="liquidationsDatos">
+        <div class="col-md-12">
+          <h6 class="font-weight-bold">Liquidación</h6>
+          <app-liquidacion-config
+            (notificacion)="(mostrarMensaje)"
+            [datos]="liquidationsDatos"
+          ></app-liquidacion-config>
         </div>
       </div>
 

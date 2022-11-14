@@ -44,6 +44,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { NominaComponent } from './nomina/nomina.component';
 import { InformacionBaseModule } from "../informacion-base/informacion-base.module";
+import { ParametrosNominaComponent } from './params-nomina/parametros-nomina/parametros-nomina.component';
+import { TiposModule } from "../tipos/tipos.module";
+import { MatCard, MatRadioGroup } from "@angular/material";
 
 
 
@@ -77,7 +80,10 @@ import { InformacionBaseModule } from "../informacion-base/informacion-base.modu
         ValorAlmuerzosComponent,
         CategoriasComponent,
         SubcategoriasComponent,
-        NominaComponent
+        NominaComponent,
+        ParametrosNominaComponent,
+
+
     ],
     imports: [
         ParametrosRoutingModule,
@@ -98,7 +104,8 @@ import { InformacionBaseModule } from "../informacion-base/informacion-base.modu
         MatToolbarModule,
         MatPaginatorModule,
         SweetAlert2Module.forRoot(),
-        InformacionBaseModule
+        InformacionBaseModule,
+        TiposModule
     ],
     exports: []
 })

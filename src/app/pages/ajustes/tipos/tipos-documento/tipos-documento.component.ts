@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalService } from 'src/app/core/services/modal.service';
 import Swal from 'sweetalert2';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
 import { TiposDocumentoService } from './tipos-documento.service';

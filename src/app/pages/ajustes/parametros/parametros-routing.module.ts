@@ -29,6 +29,8 @@ import { CategoriasComponent } from './categorias/categorias.component';
 import { SubcategoriasComponent } from './subcategorias/subcategorias.component';
 import { MaterialesComponent } from "../informacion-base/catalogo/components/materiales/materiales.component";
 import { NominaComponent } from "./nomina/nomina.component";
+import { ContratoComponent } from "../tipos/contrato/contrato.component";
+import { ParametrosNominaComponent } from "./params-nomina/parametros-nomina/parametros-nomina.component";
 
 
 const routes : Routes = [
@@ -40,9 +42,8 @@ const routes : Routes = [
     { path: 'viaticos/hoteles', component: HotelesComponent },
     { path: 'viaticos/taxis', component: TaxisComponent },
     { path: 'vacantes/licencia-conduccion', component: LicenciaConduccionComponent },
-
+    { path: 'contratos' , component: ContratoComponent },
     { path: 'nomina', component: NominaComponent},
-
     { path: 'apu/geometrias', component: GeometriasComponent },
     { path: 'apu/crear-geometria', component: CrearGeometriaComponent },
     { path: 'apu/editar-geometria/:id', component: CrearGeometriaComponent },
@@ -70,6 +71,7 @@ const routes : Routes = [
 
     { path: 'categorias', component : CategoriasComponent },
     { path: 'subcategorias', component : SubcategoriasComponent },
+    { path: 'params-nomina', component: ParametrosNominaComponent }
 ]
 
 

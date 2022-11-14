@@ -60,8 +60,8 @@ export class CreateTurnoRotativoComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
-  } F
+
+  }
   getAll() {
     this._rotatingT.getAllCreate().subscribe((r: any) => {
       this.turns = r.data
@@ -190,7 +190,7 @@ export class CreateTurnoRotativoComponent implements OnInit {
         showCancel: false,
         timer: 1000
       });
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
       this.saved.emit();
     } else {
       this._swal.show({

@@ -83,6 +83,10 @@ import { TiposTerminoComponent } from './tipos-termino/tipos-termino.component';
         TiposRegimenComponent,
         ResponsabilidadesFiscalesComponent,
         TiposActividadesComponent
+      TiposIngresoComponent,
+      TiposEgresoComponent,
+      TiposRiesgoComponent,
+      TiposNovedadesComponent
     ]
 })
 

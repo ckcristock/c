@@ -3,9 +3,26 @@
     <tbody>
       <tr *ngFor="let extra of datos">
         <td>{{ extra.concept }}</td>
-        <td class="d-flex justify-content-end">
+        <td>
+          <app-row-typeahead
+            (setAccount)="setAccount($event)"
+            [extra]="extra"
+            [variable]="extra.cuenta_contable"
+            [titulo]="'Cuenta contable'"
+          ></app-row-typeahead>
+        </td>
+        <td>
+          <app-row-typeahead
+          (setAccount)="setContrapartida($event)"
+          [extra]="extra"
+          [variable]="extra.contrapartida"
+          [titulo]="'Contrapartida'"
+          ></app-row-typeahead>
+        </td>
+        <td>
           <form [form]="form">
-            <mat-form-field class="pb-0" appearance="outline">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Porcentaje</mat-label>
               <input
                 matInput
                 #percentage
@@ -24,7 +41,7 @@
                 (click)="actualizar(extra, percentage.value)"
                 [attr.aria-label]="'Actualizar'"
               >
-                <mat-icon>check</mat-icon>
+                <mat-icon>save</mat-icon>
               </button>
             </mat-form-field>
           </form>

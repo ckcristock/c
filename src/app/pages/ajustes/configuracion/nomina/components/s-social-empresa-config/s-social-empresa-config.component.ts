@@ -26,14 +26,51 @@ export class SSocialEmpresaConfigComponent implements OnInit {
     let params = {
       percentage: percentage
     }
-    this._nominaService.updateSSocialCompany(event.id, params).subscribe((res:any)=>{
+    this._nominaService.updateSSocialCompany(event.id, params)
+    .subscribe((res:any)=>{
       this._swal.show({
         icon: 'success',
-        title: res.data,
+        title: 'Seguridad Social Empresa',
         showCancel: false,
-        text: '',
+        text: res.data,
         timer: 1000
       })
     })
   }
+
+  setAccount=(datos)=>{
+    let data = {
+      id: datos.datos.id,
+      accounting_account: datos.identifier
+    }
+    this._nominaService.updateSSocialCompany(datos.datos.id, data)
+      .subscribe((res:any)=>{
+        this._swal.show({
+          title: 'Seguridad Social Empresa',
+          icon: 'success',
+          text: res.data,
+          showCancel: false,
+          timer: 1000
+        })
+      })
+  }
+
+  setContrapartida(datos) {
+    let params = {
+      id: datos.datos.id,
+      account_setoff: datos.identifier
+    }
+    console.log(params);
+    this._nominaService.updateSSocialCompany(datos.datos.id, params)
+    .subscribe((res: any) => {
+      this._swal.show({
+        icon: 'success',
+        title: 'Seguridad Social Empresa',
+        text: res.data,
+        showCancel: false,
+        timer: 1000
+      })
+    })
+  }
+
 }

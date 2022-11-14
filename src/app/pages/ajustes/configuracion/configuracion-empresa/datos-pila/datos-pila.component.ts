@@ -37,7 +37,6 @@ export class DatosPilaComponent implements OnInit, DoCheck {
     this.getPilaData();
     this.getArl();
   }
-
   updateData() {
     this.update.emit()
   }
@@ -79,6 +78,19 @@ export class DatosPilaComponent implements OnInit, DoCheck {
       arl_id: this.pilas.arl_id
       // });
     })
+    /*this._configuracionEmpresaService.getCompanyData()
+      .subscribe((res: any) => {
+        this.pilas = res.data;
+        this.arl = res.data.arl.name;
+        this.form.patchValue({
+          id: this.pilas.id,
+          paid_operator: this.pilas.paid_operator,
+          law_1429: this.pilas.law_1429,
+          law_590: this.pilas.law_590,
+          law_1607: this.pilas.law_1607,
+          arl_id: this.pilas.arl_id
+        });
+      })*/
   }
 
   savePilaData() {

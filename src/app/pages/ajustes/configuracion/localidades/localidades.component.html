@@ -6,10 +6,7 @@
     <hr class="line" />
     <div class="row">
       <div
-        [ngClass]="{
-          'col-lg-3': countrySelected == 1,
-          'col-lg-4 mb-3': countrySelected != 1
-        }"
+        [ngClass]="{'col-lg-4 mb-3': true }"
       >
         <ul class="list-group list-group-flush">
           <li
@@ -48,7 +45,7 @@
             <li
               role="button"
               *ngFor="let country of countries"
-              [ngClass]="{ 'border border-primary': country.selected }"
+              [ngClass]="{ 'shadow-inset-primary': country.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="
                 getStates(country.id); selected(countries, country.id)
@@ -65,7 +62,7 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    href="javascript: void(0);"
+                    role="button"
                     class="dropdown-item text-info waves-light caja-botones"
                     (click)="editar('paises', country, add)"
                   >
@@ -92,10 +89,7 @@
       </div>
 
       <div
-        [ngClass]="{
-          'col-lg-3': countrySelected == 1,
-          'col-lg-4 mb-3': countrySelected != 1
-        }"
+        [ngClass]="{'col-lg-4 mb-3': true }"
       >
         <ul class="list-group list-group-flush">
           <li
@@ -131,12 +125,10 @@
             <li
               role="button"
               *ngFor="let state of states"
-              [ngClass]="{ 'border border-primary': state.selected }"
+              [ngClass]="{ 'shadow-inset-primary': state.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="
-                countrySelected == 1
-                  ? getMunicipalities(state.id)
-                  : getCities(state.id);
+                getMunicipalities(state.id);
                 selected(states, state.id)
               "
             >
@@ -151,7 +143,7 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    href="javascript: void(0);"
+                    role="button"
                     class="dropdown-item text-info waves-light caja-botones"
                     (click)="editar('departamentos', state, add)"
                   >
@@ -177,7 +169,7 @@
         </ul>
       </div>
 
-      <div class="col-lg-3 mb-3" *ngIf="countrySelected == 1">
+      <div class="col-lg-4 mb-3">
         <ul class="list-group list-group-flush">
           <li
             class="rounded-top list-group-item list-group-item-primary d-flex justify-content-between"
@@ -208,18 +200,16 @@
           </ng-container>
 
           <ng-container
-            *ngIf="
-              !loadingMunicipality && municipalities.length != 0;
+            *ngIf="!loadingMunicipality && municipalities.length != 0;
               else notDataMunicipality
             "
           >
             <li
               role="button"
               *ngFor="let municipality of municipalities"
-              [ngClass]="{ 'border border-primary': municipality.selected }"
+              [ngClass]="{ 'shadow-inset-primary': municipality.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="
-                getCitiesByMunicipality(municipality.id);
                 selected(municipalities, municipality.id)
               "
             >
@@ -234,7 +224,7 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    href="javascript: void(0);"
+                    role="button"
                     class="dropdown-item text-info waves-light caja-botones"
                     (click)="editar('municipios', municipality, add)"
                   >
@@ -260,7 +250,7 @@
         </ul>
       </div>
 
-      <div
+      <!-- <div
         [ngClass]="{
           'col-lg-3': countrySelected == 1,
           'col-lg-4 mb-3': countrySelected != 1
@@ -299,7 +289,7 @@
             <li
               role="button"
               *ngFor="let city of cities"
-              [ngClass]="{ 'border border-primary': city.selected }"
+              [ngClass]="{ 'shadow-inset-primary': city.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="selected(cities, city.id)"
             >
@@ -314,7 +304,7 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    href="javascript: void(0);"
+                    role="button"
                     class="dropdown-item text-info waves-light caja-botones"
                     (click)="editar('ciudades', city, add)"
                   >
@@ -338,7 +328,8 @@
           >
           </ngb-pagination>
         </ul>
-      </div>
+      </div> -->
+
     </div>
   </div>
 </div>
@@ -362,7 +353,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
+      (click)="_modal.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -386,7 +377,7 @@
             </mat-select>
           </mat-form-field>
 
-          <div *ngIf="tipo == 'ciudades' && countrySelected != 1">
+          <!-- <div *ngIf="tipo == 'ciudades' && countrySelected != 1">
             <mat-form-field appearance="outline" class="col-md-12">
               <mat-label>Departamentos</mat-label>
               <mat-select
@@ -401,7 +392,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
+          </div> -->
 
           <div *ngIf="tipo == 'municipios'">
             <mat-form-field appearance="outline" class="col-md-12">
@@ -422,7 +413,7 @@
             </mat-form-field>
           </div>
 
-          <div *ngIf="tipo == 'ciudades' && countrySelected == 1">
+          <!-- <div *ngIf="tipo == 'ciudades' && countrySelected == 1">
             <mat-form-field appearance="outline" class="col-md-12">
               <mat-label>Departamentos</mat-label>
               <mat-select
@@ -454,7 +445,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
+          </div> -->
 
           <mat-form-field class="col-md-12" appearance="outline">
             <mat-label>Codigo DANE</mat-label>
@@ -502,7 +493,7 @@
     <button
       type="button"
       class="btn btn-danger"
-      (click)="modal.dismiss('Cross click')"
+      (click)="_modal.close()"
     >
       Cancelar
     </button>
@@ -533,7 +524,7 @@
     >
       Guardar
     </button>
-    <button
+<!--     <button
       *ngIf="tipo == 'ciudades'"
       [disabled]="name == '' || states.length == 0 || countries.length == 0"
       type="button"
@@ -541,7 +532,7 @@
       class="btn btn-primary"
     >
       Guardar
-    </button>
+    </button> -->
   </div>
 </ng-template>
 
@@ -557,6 +548,6 @@
   <app-not-data [loading]="loadingMunicipality"></app-not-data>
 </ng-template>
 
-<ng-template #notDataCity>
+<!-- <ng-template #notDataCity>
   <app-not-data [loading]="loadingCity"></app-not-data>
-</ng-template>
+</ng-template> -->

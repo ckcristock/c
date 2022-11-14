@@ -50,6 +50,10 @@ import { TiposModule } from "../tipos/tipos.module";
 import { TercerosComponent } from './terceros/terceros.component';
 import { MatButtonModule, MatIconModule } from "@angular/material";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ParametrosNominaComponent } from './params-nomina/parametros-nomina/parametros-nomina.component';
+import { TiposModule } from "../tipos/tipos.module";
+import { MatCard, MatRadioGroup } from "@angular/material";
+
 
 
 @NgModule({
@@ -86,6 +90,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         ViaticosComponent,
         VacantesComponent,
         TercerosComponent
+        ParametrosNominaComponent,
+
+
     ],
     imports: [
         ParametrosRoutingModule,

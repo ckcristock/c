@@ -29,6 +29,7 @@
               [(ngModel)]="filtros.Nombre"
               (input)="getBodegas()"
               matInput
+              autocomplete="off"
               placeholder="Busca por nombre"
             />
           </mat-form-field>
@@ -39,6 +40,7 @@
               [(ngModel)]="filtros.Direccion"
               (input)="getBodegas()"
               matInput
+              autocomplete="off"
               placeholder="Busca por dirección"
             />
           </mat-form-field>
@@ -49,6 +51,7 @@
               [(ngModel)]="filtros.Telefono"
               (input)="getBodegas()"
               matInput
+              autocomplete="off"
               placeholder="Busca por teléfono"
             />
           </mat-form-field>
@@ -106,6 +109,7 @@
                   </button>
                   <div ngbDropdownMenu>
                     <a
+                      role="button"
                       class="dropdown-item waves-light caja-botones text-info"
                       href="javascript: void(0);"
                       (click)="openConfirm(add, 'Editar'); getBodega(bodega)"
@@ -113,6 +117,7 @@
                       <i class="far fa-edit"></i> Editar</a
                     >
                     <a
+                      role="button"
                       class="dropdown-item waves-light waves-effect caja-botones"
                       [routerLink]="[
                         'grupoestiba',
@@ -122,18 +127,13 @@
                       <i class="fa fa-cubes"></i> Grupos - Estibas</a
                     >
                     <a
+                      role="button"
                       [ngClass]="{
                         'text-danger': bodega.Estado == 'Activo',
                         'text-success': bodega.Estado == 'Inactivo'
                       }"
                       class="dropdown-item waves-light caja-botones text-success"
-                      (click)="
-                        cambiarEstado(
-                          bodega,
-                          bodega.Estado == 'Activo' ? 'Inactivo' : 'Activo'
-                        )
-                      "
-                      (confirm)="eliminarBodega(bodega.Id_Bodega_Nuevo)"
+                      (click)=" cambiarEstado(bodega, bodega.Estado == 'Activo' ? 'Inactivo' : 'Activo')"
                     >
                       <i
                         class="fas"
@@ -141,11 +141,9 @@
                           'fa-trash-alt': bodega.Estado == 'Activo',
                           'fa-check': bodega.Estado == 'Inactivo'
                         }"
-                      ></i
-                      >{{
-                        bodega.Estado == "Activo" ? " Inactivar" : " Activar"
-                      }}</a
-                    >
+                      ></i>
+                      {{ bodega.Estado == "Activo" ? " Inactivar" : " Activar" }}
+                    </a>
                   </div>
                 </div>
               </div>
@@ -180,7 +178,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
+      (click)="_modal.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -195,6 +193,7 @@
             formControlName="nombre"
             matInput
             placeholder="Nombre de la bodega"
+            autocomplete="off"
             required
           />
         </mat-form-field>
@@ -206,6 +205,7 @@
             formControlName="direccion"
             matInput
             placeholder="Dirección de la bodega"
+            autocomplete="off"
             required
           />
         </mat-form-field>
@@ -216,6 +216,7 @@
             formControlName="telefono"
             matInput
             placeholder="Teléfono de la bodega"
+            autocomplete="off"
             required
           />
         </mat-form-field>
@@ -240,18 +241,17 @@
           <div class="custom-input-file w-100 ">
             <input
               type="file"
-              formControlName="mapa"
               placeholder="Mapa de la Bodega"
-              #Mapa
               class="input-file"
               container="body"
               (change)="onFileChanged($event)"
               accept=".png, .jpg, .jpeg"
-            /><!-- [required]="tipo == 'Crear'" -->
+              [required]="selected == 'Agregar'"
+            />
             Cargar <span *ngIf="bodega.Mapa">nuevo</span> mapa de la bodega.
           </div>
           <div class="col-md-12 text-center">
-            <small *ngIf="file" class="text-success">Documento cargado</small>
+            <small *ngIf="file&&type" class="text-success">Documento cargado</small>
           </div>
         </div>
       </div>
@@ -261,7 +261,7 @@
     <button
       type="button"
       class="btn btn-danger"
-      (click)="modal.dismiss('Cross click')"
+      (click)="_modal.close()"
     >
       Cancelar
     </button>

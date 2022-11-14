@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 export class ConfiguracionEmpresaService {
 
   constructor( private http: HttpClient ) { }
-    
+
   getBanks() {
     return this.http.get(`${environment.base_url}/banks`);
   }
@@ -27,6 +27,10 @@ export class ConfiguracionEmpresaService {
 
   saveCompanyData(data:any) {
     return this.http.post(`${environment.base_url}/saveCompanyData`, data);
+  }
+
+  getPaymentConfiguration(){
+    return this.http.get(`${environment.base_url}/companyPayment`);//trae los datos del id 1
   }
 
   changePaymentConfiguration(data:any) {

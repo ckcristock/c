@@ -32,6 +32,8 @@ import { NominaComponent } from "./nomina/nomina.component";
 import { ViaticosComponent } from "./viaticos/viaticos.component";
 import { VacantesComponent } from "./vacantes/vacantes.component";
 import { TercerosComponent } from "./terceros/terceros.component";
+import { ContratoComponent } from "../tipos/contrato/contrato.component";
+import { ParametrosNominaComponent } from "./params-nomina/parametros-nomina/parametros-nomina.component";
 
 
 const routes : Routes = [
@@ -46,8 +48,8 @@ const routes : Routes = [
     { path: 'viaticos', component: ViaticosComponent },
     { path: 'vacantes', component: VacantesComponent },
     { path: 'terceros', component: TercerosComponent },
+    { path: 'contratos' , component: ContratoComponent },
     { path: 'nomina', component: NominaComponent},
-
     { path: 'apu/geometrias', component: GeometriasComponent },
     { path: 'apu/crear-geometria', component: CrearGeometriaComponent },
     { path: 'apu/editar-geometria/:id', component: CrearGeometriaComponent },
@@ -65,6 +67,9 @@ const routes : Routes = [
     
     // path: 'apu/procesos-internos', component: ProcesosInternosComponent },
     // { path: 'apu/procesos-externos', component: ProcesosExternosComponent },
+
+    { path: 'valor-almuerzos', component: ValorAlmuerzosComponent },
+    { path: 'params-nomina', component: ParametrosNominaComponent }
 ]
 
 

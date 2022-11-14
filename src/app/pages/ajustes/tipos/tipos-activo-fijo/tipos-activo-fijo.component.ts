@@ -534,16 +534,20 @@ export class TiposActivoFijoComponent implements OnInit {
       name: this.fixedAsset.name,
       category: this.fixedAsset.category,
       useful_life_niif: this.fixedAsset.useful_life_niif,
+      useful_life_pcga: this.fixedAsset.useful_life_niif,
+      //useful_life_pcga: this.fixedAsset.useful_life_pcga,
       annual_depreciation_percentage_niif: this.fixedAsset.annual_depreciation_percentage_niif,
-      useful_life_pcga: this.fixedAsset.useful_life_pcga,
-      annual_depreciation_percentage_pcga: this.fixedAsset.annual_depreciation_percentage_pcga,
-      niif_depreciation_account_plan_id: this.fixedAsset.niif_depreciation_account_plan,
+      annual_depreciation_percentage_pcga: this.fixedAsset.annual_depreciation_percentage_niif,
+      //annual_depreciation_percentage_pcga: this.fixedAsset.annual_depreciation_percentage_pcga,
+      //niif_depreciation_account_plan_id: this.fixedAsset.niif_depreciation_account_plan,
+      //pcga_depreciation_account_plan_id: this.fixedAsset.pcga_depreciation_account_pland,
       niif_account_plan_id: this.fixedAsset.niif_account_plan,
-      pcga_depreciation_account_plan_id: this.fixedAsset.pcga_depreciation_account_pland,
-      pcga_account_plan_id: this.fixedAsset.pcga_account_plan,
+      pcga_account_plan_id: this.fixedAsset.niif_account_plan,
+      //pcga_account_plan_id: this.fixedAsset.pcga_account_plan,
       niif_account_plan_credit_depreciation_id: this.fixedAsset.niif_account_plan_credit_depreciation,
-      pcga_account_plan_credit_depreciation_id: this.fixedAsset.pcga_account_plan_credit_depreciation,
-      pcga_account_plan_debit_depreciation_id: this.fixedAsset.pcga_account_plan_debit_depreciation,
+      pcga_account_plan_credit_depreciation_id: this.fixedAsset.niif_account_plan_credit_depreciation,
+      //pcga_account_plan_credit_depreciation_id: this.fixedAsset.pcga_account_plan_credit_depreciation,
+      pcga_account_plan_debit_depreciation_id: this.fixedAsset.niif_account_plan_debit_depreciation,
       niif_account_plan_debit_depreciation_id: this.fixedAsset.niif_account_plan_debit_depreciation
     });
   }
@@ -563,14 +567,15 @@ export class TiposActivoFijoComponent implements OnInit {
 
   calculateDepreciationPercentage(tipo) {
     if (tipo == 'pcga') {
-      let porcentaje = (100 / parseInt(this.form.value.useful_life_pcga)).toFixed(4);
+      /* let porcentaje = (100 / parseInt(this.form.value.useful_life_pcga)).toFixed(4);
       this.form.patchValue({
         annual_depreciation_percentage_pcga: porcentaje
-      })
+      }) */
     } else {
       let porcentaje = (100 / parseInt(this.form.value.useful_life_niif)).toFixed(4);
       this.form.patchValue({
-        annual_depreciation_percentage_niif: porcentaje
+        annual_depreciation_percentage_niif: porcentaje,
+        annual_depreciation_percentage_pcga: porcentaje
       })
     }
   }
@@ -579,16 +584,16 @@ export class TiposActivoFijoComponent implements OnInit {
     let niif_account_plan_credit_depreciation_id = this.form.value.niif_account_plan_credit_depreciation_id.id;
     let niif_account_plan_debit_depreciation_id = this.form.value.niif_account_plan_debit_depreciation_id.id;
     let niif_account_plan_id = this.form.value.niif_account_plan_id.id;
-    let pcga_account_plan_credit_depreciation_id = this.form.value.pcga_account_plan_credit_depreciation_id.id;
+    /* let pcga_account_plan_credit_depreciation_id = this.form.value.pcga_account_plan_credit_depreciation_id.id;
     let pcga_account_plan_debit_depreciation_id = this.form.value.pcga_account_plan_debit_depreciation_id.id;
-    let pcga_account_plan_id = this.form.value.pcga_account_plan_id.id;
+    let pcga_account_plan_id = this.form.value.pcga_account_plan_id.id; */
     this.form.patchValue({
       niif_account_plan_credit_depreciation_id,
       niif_account_plan_debit_depreciation_id,
       niif_account_plan_id,
-      pcga_account_plan_credit_depreciation_id,
-      pcga_account_plan_debit_depreciation_id,
-      pcga_account_plan_id
+      pcga_account_plan_credit_depreciation_id: niif_account_plan_credit_depreciation_id,
+      pcga_account_plan_debit_depreciation_id: niif_account_plan_debit_depreciation_id,
+      pcga_account_plan_id: niif_account_plan_id
     });
     this._tipoActivoFijo.updateOrCreateFixedAssetType(this.form.value).subscribe((r: any) => {
       this.modalService.dismissAll();

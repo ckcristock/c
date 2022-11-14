@@ -19,7 +19,7 @@ import { ContratoComponent } from "./contrato/contrato.component";
 const routes : Routes = [
     { path: 'tipos-agenda' , component: TiposAgendaComponent },
     { path: 'tipos-consulta' , component: TiposConsultaComponent },
-    { path: 'contrato' , component: ContratoComponent },
+
     { path: 'tipos-riesgo' , component: TiposRiesgoComponent },
     { path: 'tipos-novedad' , component: TiposNovedadesComponent },
     { path: 'tipos-egreso' , component: TiposEgresoComponent },

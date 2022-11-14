@@ -18,6 +18,11 @@ export class NominaConfigService {
       `${environment.base_url}/parametrizacion/nomina/incapacidades`
     );
   }
+  getNovedades() {
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/novelties`
+    );
+  }
   getParafiscales() {
     return this.http.get(
       `${environment.base_url}/parametrizacion/nomina/parafiscales`
@@ -38,6 +43,46 @@ export class NominaConfigService {
       `${environment.base_url}/parametrizacion/nomina/ssocial_funcionario`
     );
   }
+
+  getTipoActivosFijos(params){  //del php puro, es tipo de activos
+    return this.http.get(
+      `${environment.ruta}php/tipoactivo/get_lista_tipo_activo.php?`, {params}
+    );
+    //this.http.get(environment.ruta+'php/tipoactivo/get_lista_tipo_activo.php?'+params).subscribe((data:any) => {
+  }
+
+  getAccountingAccount(params){
+    return this.http.get<readonly string[]>(
+      `${environment.ruta}php/plancuentas/filtrar_cuentas.php`, params
+    )
+    //http.get<readonly string[]>(environment.ruta + "php/plancuentas/filtrar_cuentas.php", { params: { coincidencia: term, tipo: 'niif' }})
+  }
+
+  getCountableIncome(){
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/income`
+    );
+  }
+
+  getCountableDeductions(){
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/deductions`
+    );
+  }
+
+  getLiquidation(){
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/liquidations`
+    );
+  }
+
+  getSalariosSubsidios(){
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/salarios-subsidios`
+    );
+  }
+
+  /////////////////////////UPDATES//////////////////////////////////////
 
   updateExtras(id, data = {}) {
     return this.http.put(`${environment.base_url}/parametrizacion/nomina/extras/update/${id}`, data);
@@ -61,6 +106,26 @@ export class NominaConfigService {
 
   updateIncapacidades(id, data = {}) {
     return this.http.put(`${environment.base_url}/parametrizacion/nomina/incapacidades/update/${id}`, data);
+  }
+
+  updateCreateNovedades(data = {}) {
+    return this.http.post(`${environment.base_url}/disability-leaves`, data);
+  }
+
+  updateCreateIngresos(data={}) {
+    return this.http.post(`${environment.base_url}/parametrizacion/nomina/income/update`, data);
+  }
+
+  updateCreateEgresos(data={}) {
+    return this.http.post(`${environment.base_url}/parametrizacion/nomina/deductions/update`, data);
+  }
+
+  updateCreateLiquidaciones(data={}) {
+    return this.http.post(`${environment.base_url}/parametrizacion/nomina/liquidations/update`, data);
+  }
+
+  updateCreateSalariosSubsidios(data={}) {
+    return this.http.post(`${environment.base_url}/parametrizacion/nomina/salarios-subsidios/update`, data);
   }
 
 

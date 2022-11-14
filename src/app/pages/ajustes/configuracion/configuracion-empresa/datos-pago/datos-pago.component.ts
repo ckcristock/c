@@ -86,7 +86,7 @@ export class DatosPagoComponent implements OnInit {
 
   savePaymentData() {
     this._configuracionEmpresaService.saveCompanyData(this.form.value)
-      .subscribe((res: any) => {
+    .subscribe((res: any) => {
         this.modalService.dismissAll();
         this.getPaymentData();
         this._swal.show({

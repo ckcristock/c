@@ -41,7 +41,7 @@ $rightbar-width : 350px;
 // Display
 $display-none: none;
 $display-block: block;
-// Brand 
+// Brand
 $navbar-brand-box-width: 240px;
 // Boxed layout width
 $boxed-layout-width : 1300px;
@@ -155,7 +155,15 @@ $paragraph-margin-bottom : 1rem;
 //
 // Define the minimum dimensions at which your layout will change,
 // adapting to different screen sizes, for use in media queries.
-$grid-breakpoints: ( xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px);
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1600px,
+  xxxl: 3000px
+);
 @include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
 @include _assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
 // Grid containers

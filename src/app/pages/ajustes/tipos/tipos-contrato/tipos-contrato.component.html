@@ -49,7 +49,7 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
-            <th>Descripción</th>
+            <th>Terminos del contrato</th>
             <th ><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
@@ -62,7 +62,11 @@
             }"
           >
             <td class="align-middle">{{ contract.name }}</td>
-            <td class="align-middle">{{ contract.description }}</td>
+            <td class="align-middle">
+              <marquee>
+                <span *ngFor="let term of contract.contract_terms">{{ term.name }}.  </span>
+              </marquee>
+            </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -162,6 +166,17 @@
             name="description"
             autocomplete="off"
           />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Terminos del contrato</mat-label>
+          <mat-select
+            [formControl]="contractsTerms"
+            [multiple]="true"
+          >
+            <mat-option *ngFor="let term of listTerms" [value]="term.value">
+              {{term.text}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
     </form>

@@ -1,37 +1,55 @@
-<div class="card border border-3 border-light">
+<div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h5>Datos de pago</h5>
-      <button class="btn btn-link pt-0 edit" (click)="openConfirm(add)">
-        <i class="fas fa-pencil-alt"></i>
-      </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-10 px-0">
+        <h6 class="text-dark">
+          <i class="fas fa-piggy-bank"></i> Datos de pago
+        </h6>
+      </div>
+      <div class="col-md-2 px-0 text-right">
+        <button class="btn btn-link" (click)="openModal(modal)">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+      </div>
     </div>
-    <div class="rounded-top table-responsive">
-      <table class="table table-sm">
-        <thead class="bg-light">
-          <tr class="text-center text-uppercase">
-            <th>Frecuencia de pago</th>
-            <th>Medio de pago</th>
-            <th>Banco</th>
-            <th>Tipo de cuenta</th>
-            <th>Número de cuenta</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="text-center">
-            <td>{{ payments.payment_frequency }}</td>
-            <td>{{ payments.payment_method }}</td>
-            <td>{{ bank }}</td>
-            <td>{{ payments.account_type }}</td>
-            <td>{{ payments.account_number }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="row" *ngIf="!loading && payments; else notData">
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Frecuencia de pago
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ payments.payment_frequency }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Medio de pago
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ payments.payment_method }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">Banco</div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ bank }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Tipo de cuenta
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ payments.account_type }}
+      </div>
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Número de cuenta
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ payments.account_number }}
+      </div>
     </div>
   </div>
 </div>
 
-<ng-template #add let-modal>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #modal let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Datos de pago</h4>
     <button

@@ -22,11 +22,12 @@ export class DatosBasicosComponent implements OnInit {
   degrees = consts.degree;
   $person: Subscription;
   form: FormGroup;
+  loading: boolean;
   id: any;
   file: any = '';
   funcionario = {
     cell_phone: '',
-    date_of_birth: '',
+    birth_date: '',
     address: '',
     email: '',
     first_name: '',
@@ -37,7 +38,10 @@ export class DatosBasicosComponent implements OnInit {
     identifier: '',
     marital_status: '',
     degree: '',
-    image: ''
+    image: '',
+    visa: '',
+    passport_number: '',
+    title: ''
   }
   data: any;
   fileString: any = '';
@@ -77,13 +81,15 @@ export class DatosBasicosComponent implements OnInit {
   }
 
   getBasicsData() {
+    this.loading = true;
     this.basicDataService.getBasicsData(this.id)
       .subscribe((res: any) => {
         this.funcionario = res.data;
+        this.loading = false;
         this.form.patchValue({
           address: this.funcionario.address,
           cell_phone: this.funcionario.cell_phone,
-          date_of_birth: this.funcionario.date_of_birth,
+          birth_date: this.funcionario.birth_date,
           degree: this.funcionario.degree,
           email: this.funcionario.email,
           first_name: this.funcionario.first_name,
@@ -92,7 +98,10 @@ export class DatosBasicosComponent implements OnInit {
           second_surname: this.funcionario.second_surname,
           identifier: this.funcionario.identifier,
           marital_status: this.funcionario.marital_status,
-          gener: this.funcionario.gener
+          gener: this.funcionario.gener,
+          visa: this.funcionario.visa,
+          passport_number: this.funcionario.passport_number,
+          title: this.funcionario.title,
         })
         this.file = this.funcionario.image
         this.fileString = this.funcionario.image
@@ -107,7 +116,7 @@ export class DatosBasicosComponent implements OnInit {
       first_surname: ['', Validators.required],
       second_surname: [''],
       identifier: ['', Validators.required],
-      date_of_birth: ['', Validators.required],
+      birth_date: ['', Validators.required],
       address: ['', Validators.required],
       degree: ['', Validators.required],
       email: [
@@ -119,7 +128,10 @@ export class DatosBasicosComponent implements OnInit {
       ],
       gener: ['', Validators.required],
       marital_status: ['', Validators.required],
-      cell_phone: ['', Validators.required]
+      cell_phone: ['', Validators.required],
+      visa: [''],
+      passport_number: [''],
+      title: [''],
     });
   }
 
@@ -158,10 +170,10 @@ export class DatosBasicosComponent implements OnInit {
   get email_valid() {
     return this.form.get('email').invalid && this.form.get('email').touched;
   }
-  get date_of_birth_valid() {
+  get birth_date_valid() {
     return (
-      this.form.get('date_of_birth').invalid &&
-      this.form.get('date_of_birth').touched
+      this.form.get('birth_date').invalid &&
+      this.form.get('birth_date').touched
     );
   }
   get address_valid() {

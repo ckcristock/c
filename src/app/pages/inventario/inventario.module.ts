@@ -54,6 +54,7 @@ import {
 import { SharedModule } from 'src/app/shared/shared.module';
 //import { InventarioEstibaComponent } from './inventario-fisico/inventario-estiba/inventario-estiba.component';
 import { InventarioEstibasComponent } from './inventario-fisico/inventario-estibas/inventario-estibas.component';
+import { ReconteoEstibaComponent } from './inventario-fisico/reconteo-estiba/reconteo-estiba.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -82,7 +83,8 @@ export const MY_FORMATS = {
     AlistamientoComponent,
     AlistamientoCrearComponent,
     //InventarioEstibaComponent,
-    InventarioEstibasComponent
+    InventarioEstibasComponent,
+    ReconteoEstibaComponent,
   ],
   imports: [
     CommonModule,

@@ -27,7 +27,7 @@ export class DatosFuncionarioComponent implements OnInit {
   form: FormGroup;
   file: any = '';
   fileString: any =
-    'https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=100';
+    'https://ui-avatars.com/api/?background=505D69&color=fff&size=1000&name=F';
 
   constructor(
     private _person: PersonDataService,
@@ -83,7 +83,7 @@ export class DatosFuncionarioComponent implements OnInit {
           Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
         ],
       ],
-      date_of_birth: ['', this._valid.required],
+      birth_date: ['', this._valid.required],
       place_of_birth: ['', this._valid.required],
       direction: ['', this._valid.required],
       phone: ['', [this._valid.required, this._valid.minLength(7), this._valid.maxLength(10)]],
@@ -94,6 +94,8 @@ export class DatosFuncionarioComponent implements OnInit {
       number_of_children: ['', this._valid.required],
       degree: ['', this._valid.required],
       title: ['', this._valid.required],
+      passport_number: [''],
+      visa: [''],
     });
   }
 
@@ -135,10 +137,10 @@ export class DatosFuncionarioComponent implements OnInit {
   get email_valid() {
     return this.form.get('email').invalid && this.form.get('email').touched;
   }
-  get date_of_birth_valid() {
+  get birth_date_valid() {
     return (
-      this.form.get('date_of_birth').invalid &&
-      this.form.get('date_of_birth').touched
+      this.form.get('birth_date').invalid &&
+      this.form.get('birth_date').touched
     );
   }
   get place_of_birth_valid() {

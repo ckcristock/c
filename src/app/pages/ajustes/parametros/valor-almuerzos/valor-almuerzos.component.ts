@@ -55,7 +55,7 @@ export class ValorAlmuerzosComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [this.value.id],
-      value: [0, Validators.required]
+      value: ['', Validators.required]
     })
   }
 
@@ -79,7 +79,7 @@ export class ValorAlmuerzosComponent implements OnInit {
   save() {
     this._lunchValues.save(this.form.value).subscribe((r: any) => {
       this.getValues();
-      this.modalService.dismissAll(); 
+      /* this.modalService.dismissAll();  */
       this.form.reset();
       this._swal.show({
         icon: 'success',

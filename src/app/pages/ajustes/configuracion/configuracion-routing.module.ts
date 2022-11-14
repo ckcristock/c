@@ -13,9 +13,9 @@ import { LocalidadesComponent } from "./localidades/localidades.component";
 
 
 const routes : Routes = [
-    { path: 'configuracion-empresa', component: ConfiguracionEmpresaComponent },
+    { path: 'configuracion-empresa/:value', component: ConfiguracionEmpresaComponent },
     { path: 'campos-terceros', component: CamposTercerosComponent },
-    { path: 'localidades', component: LocalidadesComponent },
+    { path: 'ubicaciones', component: LocalidadesComponent },
     { path: 'base-calculos', component: BaseCalculosComponent },
     { path: 'configuracion-nomina', component: NominaComponent },
 ]

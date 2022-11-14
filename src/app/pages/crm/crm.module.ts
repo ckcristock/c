@@ -67,6 +67,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { HistorialNegocioComponent } from './negocios/historial-negocio/historial-negocio.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material';
+import { ConfiguracionModule } from '../ajustes/configuracion/configuracion.module';
 
 @NgModule({
   declarations: [
@@ -111,6 +112,7 @@ import { MatTableModule } from '@angular/material';
     CommonModule,
     CrmRoutingModule,
     NgbPaginationModule,
+    ConfiguracionModule,
     NgbDropdownModule,
     ComponentsModule,
     FormsModule,

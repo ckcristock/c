@@ -20,6 +20,7 @@ export class SalarioComponent implements OnInit {
   id: any;
   contract_types: any;
   salary_history: any [] = []
+  loading: boolean;
   salary_info: any = {
     salary: '',
     contract_type: '',
@@ -38,8 +39,7 @@ export class SalarioComponent implements OnInit {
   ngOnInit(): void {
     this.salaryService.getWorkContractType().subscribe((d: any) => {
       this.contract_types = d.data;
-    });;
-    console.log(this.contract_types)
+    });
     this.id = this.activateRoute.snapshot.params.id;
     this.getSalaryInfo();
     this.createForm();
@@ -64,16 +64,73 @@ export class SalarioComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      type_contract: ['', Validators.required],
+      id: [''],
       salary: ['', Validators.required],
+      work_contract_type_id: ['', Validators.required],
       date_of_admission: ['', Validators.required],
       date_end: ['', Validators.required]
     });
   }
 
-  get type_contract_valid() {
+  
+
+
+  getSalaryInfo() {
+    this.loading = true;
+    this.salaryService.getSalaryInfo(this.id)
+      .subscribe((res: any) => {
+        this.loading = false;
+        this.salary_info = res.data;
+        this.form.patchValue({
+          id: this.salary_info.id,
+          salary: this.salary_info.salary,
+          work_contract_type_id: this.salary_info.work_contract_type_id,
+          date_of_admission: this.salary_info.date_of_admission,
+          date_end: this.salary_info.date_end
+        })
+        if (this.form.get('work_contract_type_id').value != 2) {
+          this.form.patchValue({ date_end: null });
+          this.form.get('date_end').clearValidators();
+        }
+      });
+  }
+
+  getSalaryHistory() {
+    this.salaryService.getSalaryHistory(this.id).subscribe((res:any) => {
+      this.salary_history = res.data
+    })
+  }
+
+  changeType() {
+    if (this.form.get('work_contract_type_id').value == 2) {
+      this.form.get('date_end').enable();
+      this.form.get('date_end').setValidators(Validators.required);
+    } else {
+      this.form.get('date_end').clearValidators();
+      this.form.patchValue({ date_end: null });
+    }
+  }
+  updateSalaryInfo() {
+    /*  this.form.markAllAsTouched();
+     if (this.form.invalid) { return false;} */
+
+    this.salaryService.updateSalaryInfo(this.form.value)
+      .subscribe(res => {
+        this.modalService.dismissAll();
+        this.getSalaryInfo();
+        this._swal.show({
+          title: 'Actualizado correctamente',
+          icon: 'success',
+          text: '',
+          timer: 1000,
+          showCancel: false
+        })
+        this.basicDataService.datos$.emit()
+      });
+  }
+  get work_contract_type_id_valid() {
     return (
-      this.form.get('type_contract').invalid && this.form.get('type_contract').touched
+      this.form.get('work_contract_type_id').invalid && this.form.get('work_contract_type_id').touched
     );
   }
 
@@ -94,57 +151,4 @@ export class SalarioComponent implements OnInit {
       this.form.get('date_end').invalid && this.form.get('date_end').touched
     );
   }
-
-
-  getSalaryInfo() {
-    this.salaryService.getSalaryInfo(this.id)
-      .subscribe((res: any) => {
-        this.salary_info = res.data;
-        this.form.patchValue({
-          salary: this.salary_info.salary,
-          type_contract: this.salary_info.work_contract_type_id,
-          date_of_admission: this.salary_info.date_of_admission,
-          date_end: this.salary_info.date_end
-        })
-        if (this.form.get('type_contract').value != 2) {
-          this.form.patchValue({ date_end: null });
-          this.form.get('date_end').clearValidators();
-        }
-      });
-  }
-
-  getSalaryHistory() {
-    this.salaryService.getSalaryHistory(this.id).subscribe((res:any) => {
-      this.salary_history = res.data
-    })
-  }
-
-  changeType() {
-    if (this.form.get('type_contract').value == 2) {
-      this.form.get('date_end').enable();
-      this.form.get('date_end').setValidators(Validators.required);
-    } else {
-      this.form.get('date_end').clearValidators();
-      this.form.patchValue({ date_end: null });
-    }
-  }
-  updateSalaryInfo() {
-    /*  this.form.markAllAsTouched();
-     if (this.form.invalid) { return false;} */
-
-    this.salaryService.updateSalaryInfo(this.salary_info)
-      .subscribe(res => {
-        this.modalService.dismissAll();
-        this.getSalaryInfo();
-        this._swal.show({
-          title: 'Actualizado correctamente',
-          icon: 'success',
-          text: '',
-          timer: 1000,
-          showCancel: false
-        })
-        this.basicDataService.datos$.emit()
-      });
-  }
-
 }

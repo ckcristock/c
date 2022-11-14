@@ -79,6 +79,10 @@ import { TiposTerminoComponent } from './tipos-termino/tipos-termino.component';
         MatSelectModule,
     ],
     exports: [
+        TiposVisaComponent,
+        TiposRegimenComponent,
+        ResponsabilidadesFiscalesComponent,
+        TiposActividadesComponent
       TiposIngresoComponent,
       TiposEgresoComponent,
       TiposRiesgoComponent,

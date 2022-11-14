@@ -74,7 +74,7 @@
                   <a
                     href="javascript:void(0)"
                     class="dropdown-item waves-light text-success caja-botones"
-                    (click)="getMaterial(item); openConfirm(view, '')"
+                    (click)="openConfirm(view, ''); getMaterial(item)"
                   >
                     <i class="far fa-eye"></i> Ver
                   </a>
@@ -113,7 +113,7 @@
       type="button"
       class="btn btn-sm btn-flash-border-primary ri-close-fill"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click'); closeModal()"
+      (click)="_modal.close()"
     ></button>
   </div>
   <div class="modal-body">
@@ -330,7 +330,7 @@
     <button
       type="button"
       class="btn btn-danger"
-      (click)="modal.dismiss('Cross click'); closeModal()"
+      (click)="_modal.close()"
     >
       Cancelar
     </button>
@@ -347,12 +347,12 @@
 
 <ng-template #view let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Ver Material</h4>
+    <h4 class="text-primary modal-title">Ver material</h4>
     <button
       type="button"
       class="btn btn-sm btn-flash-border-primary ri-close-fill"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click'); closeModalVer()"
+      (click)="_modal.close()"
     ></button>
   </div>
   <div class="modal-body">
@@ -407,7 +407,7 @@
     <button
       type="button"
       class="btn btn-danger"
-      (click)="modal.dismiss('Cross click'); closeModalVer()"
+      (click)="_modal.close()"
     >
       Cerrar
     </button>

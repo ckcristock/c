@@ -52,7 +52,7 @@
             <th>Acomodación</th>
             <th>T. Sencilla</th>
             <th>T. Doble</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -82,7 +82,7 @@
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
                     href="javascript: void(0);"
-                    (click)="getHotel(hotel); openConfirm(add, 'Editar hotel')"
+                    (click)="openConfirm(add, 'Editar hotel'); getHotel(hotel)"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
@@ -146,14 +146,38 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <!-- <mat-form-field class="col" appearance="outline">
           <mat-label>Ciudad</mat-label>
-          <mat-select formControlName="city_id" required>
-            <mat-option *ngFor="let item of cities" [value]="item.value">
-              {{ item.text }}</mat-option
+          <input
+            type="text"
+            matInput
+            formControlName="city_id"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let option of cities"
+              [value]="option.value"
             >
-          </mat-select>
-        </mat-form-field>
+              {{ option.text }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field> -->
+        <div class="col">
+          <ng-select
+            [items]="cities"
+            formControlName="city_id"
+            bindLabel="text"
+            bindValue="value"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Ciudad"
+            loadingText="loading "
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
+
         <mat-form-field class="col" appearance="outline">
           <mat-label>Teléfono fijo</mat-label>
           <input

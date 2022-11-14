@@ -1,60 +1,60 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Centros de Costos</h4>
-      <div class="btn-group rounded">
-        <button
-          type="button"
-          class="btn btn-primary btn-sm"
-          (click)="openModal(centroCostoN)"
-        >
-          <i class="fa fa-plus"></i>
-          Agregar
-        </button>
-        <button
-          class="btn btn-success btn-sm"
-          (click)="openInNewTab()"
-        >
-          <i class="fas fa-table"></i> Exportar
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Centros de costos</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            (click)="openModal(centroCostoN)"
+          >
+            <i class="fa fa-plus"></i>
+            Agregar
+          </button>
+          <button class="btn btn-success btn-sm" (click)="openInNewTab()">
+            <i class="fas fa-table"></i> Exportar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
 
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field
-          class="col-lg-3 col-md-3 col-sm-4 pl-0"
-          appearance="outline"
-        >
-          <mat-label>Código</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Busca por código"
-            (input)="filtrar('No')"
-            [(ngModel)]="Filtros.Codigo"
-          />
-        </mat-form-field>
-        <mat-form-field
-          class="col-lg-3 col-md-3 col-sm-4 pl-0"
-          appearance="outline"
-        >
-          <mat-label>Nombre</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Busca por nombre"
-            (input)="filtrar('No')"
-            [(ngModel)]="Filtros.Nombre"
-          />
-        </mat-form-field>
+        <div class="row">
+          <mat-form-field
+            class="col"
+            appearance="outline"
+          >
+            <mat-label>Código</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por código"
+              (input)="filtrar('No')"
+              [(ngModel)]="Filtros.Codigo"
+            />
+          </mat-form-field>
+          <mat-form-field
+            class="col"
+            appearance="outline"
+          >
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por nombre"
+              (input)="filtrar('No')"
+              [(ngModel)]="Filtros.Nombre"
+            />
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
     <table
@@ -76,13 +76,21 @@
       <tbody>
         <tr
           *ngFor="let item of items"
-          [ngClass]="{ 'text-danger font-weight-bold': item.Estado == 'Inactivo' }"
+          [ngClass]="{
+            'text-danger font-weight-bold': item.Estado == 'Inactivo'
+          }"
         >
           <td class="align-middle">{{ item.Codigo }}</td>
           <td class="align-middle">{{ item.Nombre }}</td>
           <td class="align-middle text-center">{{ item.PadreCentro }}</td>
-          <td class="align-middle text-center">{{ (item.Tipo_Centro!="" ? item.Tipo_Centro : 'Sin Asignar' )  }}</td>
-          <td class="align-middle text-center">{{ (item.ValorTipoCentro!="" ? item.ValorTipoCentro : 'Sin Asignar' ) }}</td>
+          <td class="align-middle text-center">
+            {{ item.Tipo_Centro != "" ? item.Tipo_Centro : "Sin Asignar" }}
+          </td>
+          <td class="align-middle text-center">
+            {{
+              item.ValorTipoCentro != "" ? item.ValorTipoCentro : "Sin Asignar"
+            }}
+          </td>
           <td class="align-middle text-center">
             <span
               [ngClass]="
@@ -226,7 +234,7 @@
           required
         />
       </mat-form-field>
-      
+
       <mat-form-field class="col-md-4" appearance="outline">
         <mat-label>Padre</mat-label>
         <mat-select
@@ -411,7 +419,7 @@
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
         confirmButtonText: 'Guardar',
-        reverseButtons: true      
+        reverseButtons: true
       }"
       (confirm)="
         GuardarCentroCosto(

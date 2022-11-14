@@ -2,81 +2,87 @@
   <div class="col-md-9">
     <div class="card">
       <div class="card-body">
-        <div class="card-title d-flex justify-content-between">
-          <h4 class="text-primary">Activos Fijos</h4>
-          <div class="btn-group rounded">
-            <button
-              type="button"
-              class="btn btn-primary btn-sm"
-              [routerLink]="['/contabilidad/activos-fijos-crear']"
-            >
-              <i class="fa fa-plus"></i> Agregar
-            </button>
-            <button
-              class="btn btn-warning btn-sm"
-              [routerLink]="['/ajustes/tipos/tipos-activo-fijo']"
-            >
-              <i class="fas fa-pencil-alt"></i> Tipos
-            </button>
-            <button class="btn btn-info btn-sm" (click)="openClose()">
-              <i class="fas fa-sliders-h"></i> Filtros
-            </button>
-            <!-- <button type="button" class="pull-left btn btn-primary btn-sm" (click)="CrearActivoFijo()"><i
-                        class="fa fa-plus"></i>
-                      Agregar Nuevo Activo Fijo
-                    </button> -->
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Activos fijos</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                [routerLink]="['/contabilidad/activos-fijos-crear']"
+              >
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+              <button
+                class="btn btn-warning btn-sm"
+                [routerLink]="['/ajustes/tipos/tipos-activo-fijo']"
+              >
+                <i class="fas fa-pencil-alt"></i> Tipos
+              </button>
+              <button class="btn btn-info btn-sm" (click)="openClose()">
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+              <!-- <button type="button" class="pull-left btn btn-primary btn-sm" (click)="CrearActivoFijo()"><i
+                          class="fa fa-plus"></i>
+                        Agregar Nuevo Activo Fijo
+                      </button> -->
+            </div>
           </div>
         </div>
         <hr class="line" />
         <mat-accordion multi>
           <mat-expansion-panel class="mat-elevation-z0">
-            <mat-form-field class="col-md-2 pl-0" appearance="outline">
-              <mat-label>Documento</mat-label>
-              <input
-                matInput
-                type="text"
-                placeholder="Busca por documento"
-                [(ngModel)]="Filtros.codigo"
-                (input)="ConsultaFiltrada()"
-                autocomplete="off"
-              />
-            </mat-form-field>
-            <mat-form-field class="col-md-3 pl-0" appearance="outline">
-              <mat-label>Nombre</mat-label>
-              <input
-                matInput
-                type="text"
-                placeholder="Busca por nombre"
-                [(ngModel)]="Filtros.nombre"
-                (input)="ConsultaFiltrada()"
-                autocomplete="off"
-              />
-            </mat-form-field>
-            <mat-form-field class="col-md-3 pl-0" appearance="outline">
-              <mat-label>Tipo de activo</mat-label>
-              <mat-select
-                [(ngModel)]="Filtros.tipo"
-                (selectionChange)="ConsultaFiltrada()"
-              >
-                <mat-option
-                  *ngFor="let ta of TipoActivos"
-                  [value]="ta.Id_Tipo_Activo_Fijo"
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Documento</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por documento"
+                  [(ngModel)]="Filtros.codigo"
+                  (input)="ConsultaFiltrada()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por nombre"
+                  [(ngModel)]="Filtros.nombre"
+                  (input)="ConsultaFiltrada()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Tipo de activo</mat-label>
+                <mat-select
+                  [(ngModel)]="Filtros.tipo"
+                  (selectionChange)="ConsultaFiltrada()"
                 >
-                  {{ ta.Nombre_Tipo_Activo }}</mat-option
-                >
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="col-md-2 pl-0" appearance="outline">
-              <mat-label>Costo</mat-label>
-              <input
-                matInput
-                type="text"
-                placeholder="Busca por Costo"
-                [(ngModel)]="Filtros.costo_niif"
-                (input)="ConsultaFiltrada()"
-                autocomplete="off"
-              />
-            </mat-form-field>
+                  <mat-option
+                    *ngFor="let ta of TipoActivos"
+                    [value]="ta.Id_Tipo_Activo_Fijo"
+                  >
+                    {{ ta.Nombre_Tipo_Activo }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Costo</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por Costo"
+                  [(ngModel)]="Filtros.costo_niif"
+                  (input)="ConsultaFiltrada()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
           </mat-expansion-panel>
         </mat-accordion>
         <table

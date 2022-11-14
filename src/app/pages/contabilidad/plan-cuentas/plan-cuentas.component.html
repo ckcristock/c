@@ -1,74 +1,81 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">Plan único de cuentas</h4>
-
-      <div class="btn-group rounded">
-        <button
-          class="btn btn-primary btn-sm"
-          (click)="openModal(crearCuenta); habCampos('N')"
-        >
-          <i class="fa fa-plus"></i> Agregar
-        </button>
-        <a
-          class="btn btn-success btn-sm"
-          href="{{env.ruta}}php/contabilidad/plancuentas/descargar_informe_plan_cuentas_excel.php?id={{company_id}}"
-          target="_blank"
-        >
-          <i class="fas fa-table"></i> Exportar Excel
-        </a>
-        <button
-          class="btn btn-info btn-sm"
-          style="float: right"
-          (click)="openClose()"
-        >
-          <i class="fas fa-sliders-h"></i> Filtros
-        </button>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Plan único de cuentas</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openModal(crearCuenta); habCampos('N')"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <a
+            class="btn btn-success btn-sm"
+            href="{{
+              env.ruta
+            }}php/contabilidad/plancuentas/descargar_informe_plan_cuentas_excel.php?id={{
+              company_id
+            }}"
+            target="_blank"
+          >
+            <i class="fas fa-table"></i> Exportar
+          </a>
+          <button
+            class="btn btn-info btn-sm"
+            style="float: right"
+            (click)="openClose()"
+          >
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Código Cuenta</mat-label>
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="filtro_codigo_niif"
-            (input)="filtros()"
-            name="codigoniif"
-            autocomplete="off"
-            placeholder="Busca por código de Cuenta"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-8 pl-0" appearance="outline">
-          <mat-label>Nombre Cuenta</mat-label>
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="filtro_nombre_niif"
-            (input)="filtros()"
-            name="nombreniif"
-            autocomplete="off"
-            placeholder="Busca por nombre Cuenta"
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2 pl-0" appearance="outline">
-          <mat-label>Estado</mat-label>
-          <mat-select
-            [(ngModel)]="filtro_estado_cuenta"
-            (selectionChange)="filtros()"
-          >
-            <mat-option value="">Todos</mat-option>
-            <mat-option value="ACTIVO">ACTIVO</mat-option>
-            <mat-option value="INACTIVO">INACTIVO</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Código Cuenta</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filtro_codigo_niif"
+              (input)="filtros()"
+              name="codigoniif"
+              autocomplete="off"
+              placeholder="Busca por código de Cuenta"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre Cuenta</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filtro_nombre_niif"
+              (input)="filtros()"
+              name="nombreniif"
+              autocomplete="off"
+              placeholder="Busca por nombre Cuenta"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select
+              [(ngModel)]="filtro_estado_cuenta"
+              (selectionChange)="filtros()"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="ACTIVO">ACTIVO</mat-option>
+              <mat-option value="INACTIVO">INACTIVO</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <div class="rounded-top table-responsive">
-
-    </div>
+    <div class="rounded-top table-responsive"></div>
     <table
       class="table table-bordered table-striped table-sm"
       style="font-size: small"
@@ -84,9 +91,22 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of Planes">
-          <td class="align-middle" [ngClass]="item.Estado != 'ACTIVO' ? 'text-danger font-weight-bold' : ''"
-          >{{ item.Codigo_Niif }}</td>
-          <td class="align-middle" [ngClass]="item.Estado != 'ACTIVO' ? 'text-danger font-weight-bold' : ''">{{ item.Nombre_Niif }}</td>
+          <td
+            class="align-middle"
+            [ngClass]="
+              item.Estado != 'ACTIVO' ? 'text-danger font-weight-bold' : ''
+            "
+          >
+            {{ item.Codigo_Niif }}
+          </td>
+          <td
+            class="align-middle"
+            [ngClass]="
+              item.Estado != 'ACTIVO' ? 'text-danger font-weight-bold' : ''
+            "
+          >
+            {{ item.Nombre_Niif }}
+          </td>
           <td class="align-middle text-center">
             <span
               [ngClass]="
@@ -116,7 +136,7 @@
                     <i class="far fa-eye"></i> Ver</a
                   >
                   <a
-                  *ngIf="item.Estado!='INACTIVO'"
+                    *ngIf="item.Estado != 'INACTIVO'"
                     class="dropdown-item text-info waves-light waves-effect caja-botones"
                     (click)="
                       EditarPlanCuenta(item.Id_Plan_Cuentas, editarCuenta)
@@ -124,14 +144,37 @@
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
-                  <a *ngIf="item.Estado!='INACTIVO'" class="text-dager dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a cambiar el estado de esta Cuenta Contable' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                      (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)">
-                      <i class="far fa-trash-alt"></i> Desactivar</a>
+                  <a
+                    *ngIf="item.Estado != 'INACTIVO'"
+                    class="text-danger dropdown-item waves-light waves-effect caja-botones"
+                    [swal]="{
+                      title: '¿Está Seguro?',
+                      text: 'Se Dispone a cambiar el estado de esta Cuenta Contable',
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Si, Cambiar',
+                      cancelButtonText: 'No, Dejame Comprobar!'
+                    }"
+                    (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)"
+                  >
+                    <i class="far fa-trash-alt"></i> Desactivar</a
+                  >
 
-                   <a *ngIf="item.Estado=='INACTIVO'" class="text-warning dropdown-item waves-light waves-effect caja-botones" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a cambiar el estado de esta Cuenta Contable' , icon : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cambiar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                      (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)">
-                      <i class="fa fa-arrow-circle-left"></i> Reactivar</a>
-
+                  <a
+                    *ngIf="item.Estado == 'INACTIVO'"
+                    class="text-warning dropdown-item waves-light waves-effect caja-botones"
+                    [swal]="{
+                      title: '¿Está Seguro?',
+                      text: 'Se Dispone a cambiar el estado de esta Cuenta Contable',
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Si, Cambiar',
+                      cancelButtonText: 'No, Dejame Comprobar!'
+                    }"
+                    (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)"
+                  >
+                    <i class="fa fa-arrow-circle-left"></i> Reactivar</a
+                  >
                 </div>
               </div>
             </div>
@@ -181,11 +224,19 @@
 
     <div class="modal-body">
       <form #FormPlan="ngForm">
-        <input name="company_id" id="company_id" [(ngModel)]="company_id" type="hidden" />
+        <input
+          name="company_id"
+          id="company_id"
+          [(ngModel)]="company_id"
+          type="hidden"
+        />
         <div class="row">
           <div class="col-md-12">
             <h6 class="text-center">Datos Cuenta Contable</h6>
-            <mat-form-field class="col-md-2 pl-md-0 pr-md-0" appearance="outline">
+            <mat-form-field
+              class="col-md-2 pl-md-0 pr-md-0"
+              appearance="outline"
+            >
               <mat-label>Tipo Cuenta</mat-label>
               <mat-select required name="Tipo_Niif" id="Tipo_Niif" ngModel>
                 <mat-option value="CLASE">CLASE</mat-option>
@@ -315,7 +366,6 @@
               </select>
             </div>
           </div>
-
 
           <div class="col-md-2">
             <div class="form-group">
@@ -556,7 +606,10 @@
         <div class="row">
           <div class="col-md-12">
             <h6 class="text-center">Datos Cuenta Contable</h6>
-            <mat-form-field class="col-md-2 pl-md-0 pr-md-0" appearance="outline">
+            <mat-form-field
+              class="col-md-2 pl-md-0 pr-md-0"
+              appearance="outline"
+            >
               <mat-label>Tipo Cuenta</mat-label>
               <mat-select
                 required

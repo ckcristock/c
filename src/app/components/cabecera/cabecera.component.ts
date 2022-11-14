@@ -12,9 +12,9 @@ export class CabeceraComponent implements OnInit, OnChanges {
   @Input() datosCabecera: any;
   Empresa : {
     logo:'',
-    tin:'',
+    document_number:'',
     name:'',
-    dv:''
+    verification_digit:''
   };
 
   constructor( private http: HttpClient, private _user: UserService) {

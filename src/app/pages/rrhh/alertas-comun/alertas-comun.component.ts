@@ -62,6 +62,9 @@ export class AlertasComunComponent implements OnInit {
   }
 
   createAlert() {
+    this.form.patchValue({
+      person_id: this._user.user.id
+    })
     this._alert.sendAlert(this.form.value)
     .subscribe((res:any) => {
       this.modalService.dismissAll();

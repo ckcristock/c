@@ -46,7 +46,6 @@ import { NominaComponent } from './nomina/nomina.component';
 import { InformacionBaseModule } from "../informacion-base/informacion-base.module";
 import { ViaticosComponent } from './viaticos/viaticos.component';
 import { VacantesComponent } from './vacantes/vacantes.component';
-import { TiposModule } from "../tipos/tipos.module";
 import { TercerosComponent } from './terceros/terceros.component';
 import { MatButtonModule, MatIconModule } from "@angular/material";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -89,7 +88,7 @@ import { MatCard, MatRadioGroup } from "@angular/material";
         NominaComponent,
         ViaticosComponent,
         VacantesComponent,
-        TercerosComponent
+        TercerosComponent,
         ParametrosNominaComponent,
 
 

@@ -95,8 +95,6 @@ import { SalariosConfigComponent } from './nomina/components/salarios-config/sal
   ],
   exports: [
     CamposTercerosComponent
-    MatCheckboxModule,
-    MatSlideToggleModule,
   ]
 })
 export class ConfiguracionModule { }

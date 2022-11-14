@@ -22,7 +22,7 @@ export class SalariosConfigComponent implements OnInit {
   }
 
   openModal(confirm){
-    this._modal.open(confirm, 'md' ,()=>{})
+    this._modal.open(confirm, 'md')
   }
 
   actualizar(event, variable, id) {

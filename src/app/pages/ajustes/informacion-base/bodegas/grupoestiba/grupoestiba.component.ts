@@ -4,9 +4,9 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { SweetAlertOptions } from 'sweetalert2';
 import { BodegasService } from '../bodegas.service.';
 import { MatAccordion } from '@angular/material/expansion';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SwalService } from '../../services/swal.service';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-grupoestiba',
@@ -68,7 +68,7 @@ export class GrupoestibaComponent implements OnInit {
     }
   }
   public grupoSelected: any = {
-    id: 0,
+    id: null,
     nombre: ''
   };
   public tituloFormulario: any = '';
@@ -77,7 +77,7 @@ export class GrupoestibaComponent implements OnInit {
     private route: ActivatedRoute,
     private _bodegas: BodegasService,
     private _swal: SwalService,
-    private modalService: NgbModal,
+    private _modal: ModalService,
     private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -118,17 +118,17 @@ export class GrupoestibaComponent implements OnInit {
     this.matPanel.accordionEstiba=!this.matPanel.accordionEstiba;
   }
 
-  public openConfirm(confirm, titulo) {
+  public openConfirm(confirm, titulo, modulo = '') {
     this.tituloFormulario = titulo;
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
-    this.formGrupo.reset();
-    this.formEstiba.reset();
+    this._modal.open(confirm);
+    if(modulo== 'grupo'){
+      this.formGrupo.reset();
+      this.formGrupo.get("idBodega").setValue(this.id);
+    }else if(modulo== 'estiba'){
+      this.formEstiba.reset();
+      this.formEstiba.get("idBodega").setValue(this.id);
+      this.formEstiba.get("idGrupo").setValue(this.grupoSelected.id);
+    }
   }
 
   calcularClick(grupo) {
@@ -291,7 +291,7 @@ export class GrupoestibaComponent implements OnInit {
     this._bodegas.createGrupo(this.formGrupo.value)
       .subscribe((res: any) => {
         this.getGrupos(this.pagination.grupos.page);
-        this.modalService.dismissAll();
+        this._modal.close();
         this._swal.show({
           icon: 'success',
           title: res.data,
@@ -314,7 +314,7 @@ export class GrupoestibaComponent implements OnInit {
     this._bodegas.createEstiba(this.formEstiba.value)
       .subscribe((res: any) => {
         this.getEstibas(this.grupoSelected.id, this.pagination.estibas.page);
-        this.modalService.dismissAll();
+        this._modal.close();
         this._swal.show({
           icon: 'success',
           title: res.data,
@@ -331,5 +331,33 @@ export class GrupoestibaComponent implements OnInit {
         })
       }
       );
+  }
+
+  cambiarEstado(grupo, state) {
+    let data = {
+      id: grupo.Id_Grupo_Estiba,
+      modulo: 'grupo',
+      state
+    }
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: (grupo.Estado == 'Activo' ? '¡El grupo de estibas será desactivado!' : '¡El grupo de estibas será activado!'),
+      icon: 'question',
+      showCancel: true
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        this._bodegas.activarInactivar(data).subscribe((r: any) => {
+          this.getGrupos(this.pagination.grupos.page);
+        })
+        this._swal.show({
+          icon: 'success',
+          title: 'Tarea completada con éxito!',
+          text: (grupo.Estado == 'Inactivo' ? 'El grupo de estibas ha sido activado con éxito.' : 'El grupo de estibas ha sido desactivado con éxito.'),
+          timer: 1000,
+          showCancel: false
+        })
+      }
+    })
   }
 }

@@ -249,7 +249,8 @@
           <div class="list-group list-group-flush rounded">
             <a
               *ngFor="let contractToExpire of contractsToExpire"
-              href="javascript:void(0)"
+              role="button"
+              (click)="makeChoice(contractToExpire,renovarContrato)"
               class="list-group-item list-group-item-action flex-column align-items-start"
             >
               <div class="d-flex w-100 justify-content-between">
@@ -307,6 +308,195 @@
     </div> -->
   </div>
 </div>
+
+<ng-template #renovarContrato let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Renovar contrato</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formContrato">
+      <div class="row">
+        <mat-form-field class="col-4" appearance="outline">
+          <mat-label>Contrato</mat-label>
+          <input
+            type="text"
+            formControlName="codigo"
+            matInput
+            placeholder="Nombre del empleado"
+            autocomplete="off"
+            readonly
+          />
+        </mat-form-field>
+        <mat-form-field class="col-8" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            type="text"
+            formControlName="name"
+            matInput
+            placeholder="Nombre del empleado"
+            autocomplete="off"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label for="Aplica_Separacion_Categorias"
+            >Grupo</mat-label
+          >
+          <mat-select
+            formControlName="group_id"
+            placeholder="Grupo"
+            (selectionChange)="getDependenciesByGroup($event.value)"
+            required
+          >
+          <mat-option
+            *ngFor="let group of groups"
+            [value]="group.value"
+          >{{ group.text }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label for="Aplica_Separacion_Categorias"
+            >Dependencia</mat-label
+          >
+          <mat-select
+            formControlName="dependency_id"
+            placeholder="Dependencia"
+            (selectionChange)="getPositionsByDependency($event.value)"
+            required
+          >
+            <mat-option
+              *ngFor="let dependency of dependencies"
+              [value]="dependency.value"
+            >{{ dependency.text }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label for="Aplica_Separacion_Categorias"
+            >Posición</mat-label
+          >
+          <mat-select
+            formControlName="position_id"
+            placeholder="Posición"
+            required
+          >
+            <mat-option
+              *ngFor="let position of positions"
+              [value]="position.value"
+            >{{ position.text }}</mat-option>
+        </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Salario</mat-label>
+          <input
+            type="number"
+            class="text-right"
+            formControlName="salary"
+            matInput
+            placeholder="Salario"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label for="Aplica_Separacion_Categorias"
+            >Tipo de turno</mat-label
+          >
+          <mat-select
+            formControlName="turn_type"
+            placeholder="Tipos de turno"
+            (selectionChange)="getTurnsbyType($event.value)"
+            required
+          >
+            <mat-option
+              *ngFor="let lista of listaTiposTurno"
+              [value]="lista.tipoTurno"
+            >{{ lista.tipoTurno }}</mat-option>
+        </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label for="Aplica_Separacion_Categorias"
+            >Turno</mat-label
+          >
+          <mat-select
+            formControlName="turn_id"
+            placeholder="Turno"
+            required
+          >
+            <mat-option
+              *ngFor="let turno of listaTurnos"
+              [value]="turno.id"
+            >{{ turno.name }}</mat-option>
+        </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col-4" appearance="outline">
+          <mat-label>Fecha de inicio</mat-label>
+          <input
+            formControlName="date_of_admission"
+            matInput
+            type="date"
+            autocomplete="off"
+            readonly
+          />
+        </mat-form-field>
+        <mat-form-field class="col-4" appearance="outline">
+          <mat-label>Número de días</mat-label>
+          <input
+            type="number"
+            formControlName="date_diff"
+            matInput
+            (input)="calcularFecha($event)"
+            placeholder="Número de días"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-4" appearance="outline">
+          <mat-label>Fecha de finalización</mat-label>
+          <input
+            matInput
+            type="date"
+            (input)="calcularDias($event)"
+            (selectionChange)="calcularDias($event)"
+            formControlName="date_end"
+            placeholder="Fecha de finalización"
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="_modal.close()"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="alert('Nice!')"
+      [disabled]="formContrato.invalid"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

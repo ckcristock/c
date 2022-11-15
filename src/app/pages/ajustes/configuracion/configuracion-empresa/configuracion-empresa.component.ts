@@ -66,7 +66,8 @@ export class ConfiguracionEmpresaComponent implements OnInit {
 
     //this.getData();
     this.createForm();
-    this.getDataCompany()
+    this.getDataCompany();
+    this.getData();
   }
 
 
@@ -97,6 +98,7 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   getData(){
     this._configuracionEmpresaService.getPaymentConfiguration()
     .subscribe((res:any)=>{
+      console.log(res)
       this.affects_transportation_subsidy = res.affects_transportation_subsidy;
       this.calculate_work_disability = res.calculate_work_disability;
       this.pay_deductions = res.pay_deductions;

@@ -74,4 +74,8 @@ export class ContratosService {
 
     return date_of_admission.add( period , 'months').format("YYYY-MM-DD");
   }
+
+  saveFinishContractConditions(data:any) {
+    return this.http.post(`${environment.base_url}/finish-contract`, data);
+  }
 }

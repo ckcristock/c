@@ -322,7 +322,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body pb-0">
     <form [formGroup]="formContrato">
       <div class="row">
         <mat-form-field class="col-4" appearance="outline">
@@ -331,7 +331,7 @@
             type="text"
             formControlName="codigo"
             matInput
-            placeholder="Nombre del empleado"
+            placeholder="Contrato"
             autocomplete="off"
             readonly
           />
@@ -346,6 +346,34 @@
             autocomplete="off"
             readonly
           />
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo de contrato</mat-label>
+          <mat-select
+            formControlName="contract_term_id"
+            placeholder="Término del contrato"
+            required
+          >
+            <mat-option
+              *ngFor="let contractType of contractTypes"
+              [value]="contractType.value"
+            >{{ contractType.text }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Término del contrato</mat-label>
+          <mat-select
+          formControlName="work_contract_type_id"
+          placeholder="Tipo de contrato"
+          required
+        >
+          <mat-option
+            *ngFor="let term of terms"
+            [value]="term.value"
+          >{{ term.text }}</mat-option>
+        </mat-select>
         </mat-form-field>
       </div>
       <div class="row">
@@ -489,7 +517,7 @@
     </button>
     <button
       type="button"
-      (click)="alert('Nice!')"
+      (click)="saveRenewalConditions()"
       [disabled]="formContrato.invalid"
       class="btn btn-primary"
     >

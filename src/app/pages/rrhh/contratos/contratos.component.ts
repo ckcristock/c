@@ -13,6 +13,10 @@ import { ModalService } from 'src/app/core/services/modal.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FixedTurnService } from '../../ajustes/informacion-base/turnos/turno-fijo/turno-fijo.service';
 import { RotatingTurnService } from '../../ajustes/informacion-base/turnos/turno-rotativo/rotating-turn.service';
+import { convertCompilerOptionsFromJson } from 'typescript';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
+import { TiposTerminosService } from '../../ajustes/tipos/tipos-termino/tipos-terminos.service';
+import { WorkContractTypesService } from '../../ajustes/informacion-base/services/workContractTypes.service';
 
 @Component({
   selector: 'app-contratos',
@@ -43,6 +47,8 @@ export class ContratosComponent implements OnInit {
   dependencies: any[];
   positions: any[];
   companies: any[] = [];
+  terms: any[] = [];
+  contractTypes: any[] = [];
   orderObj: any
   filtrosActivos: boolean = false
   paginacion: any
@@ -70,6 +76,9 @@ export class ContratosComponent implements OnInit {
     private _positions: PositionService,
     private _dependencies: DependenciesService,
     private _modal: ModalService,
+    private _swal: SwalService,
+    private _typesTermsService: TiposTerminosService,
+    private _workContractTypesService: WorkContractTypesService,
     private _fixedTurns: FixedTurnService,
     private _rotatingTurs: RotatingTurnService,
     private paginator: MatPaginatorIntl,
@@ -104,6 +113,8 @@ export class ContratosComponent implements OnInit {
       }
     });
     this.getTurnTypes();
+    this.getTermsTypes();
+    this.getWorkContractTypes();
   }
 
   getTurnTypes() {
@@ -114,16 +125,17 @@ export class ContratosComponent implements OnInit {
 
   getTurnsbyType(turnType: string) {
     this.listaTurnos=[];
+    this.formContrato.get('turn_id').setValue("");
     if(turnType=="Fijo"){
       this._fixedTurns.getFixedTurns().subscribe((res: any) => {
         res.data.data.forEach(data => {
-          this.listaTurnos.push({"id":"TF"+data.value,"name":data.text});
+          this.listaTurnos.push({"id":data.value,"name":data.text});
         });
       });
     }else{
       this._rotatingTurs.getAllCreate().subscribe((res: any) => {
         res.data.forEach(data => {
-          this.listaTurnos.push({"id":"TR"+data.id,"name":data.name});
+          this.listaTurnos.push({"id":data.id,"name":data.name});
         });
       });
     }
@@ -133,14 +145,12 @@ export class ContratosComponent implements OnInit {
     let date = new Date(event.target.value);
     let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
     let numDias =  Math.floor((date.getTime() - dateInicio.getTime()) / (1000 * 60 * 60 * 24));
-    console.log("Días: ", numDias);
     this.formContrato.get('date_diff').setValue(numDias);
   }
 
   calcularFecha(event){
     let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
     dateInicio.setDate(dateInicio.getDate() + parseInt(event.target.value));
-    console.log("Fecha: ", dateInicio.toISOString().split('T')[0]);
     this.formContrato.get('date_end').setValue(dateInicio.toISOString().split('T')[0]);
   }
 
@@ -202,14 +212,24 @@ export class ContratosComponent implements OnInit {
   getGroups() {
     this._group.getGroup().subscribe((r: any) => {
       this.groups = r.data
-      //this.groups.unshift({ text: 'Seleccione uno', value: '' });
     })
+  }
+
+  getTermsTypes() {
+    this._typesTermsService.getTermsTypeList().subscribe((res: any) => {
+      this.terms = res.data;
+    });
+  }
+
+  getWorkContractTypes() {
+    this._workContractTypesService.getWorkContractTypes().subscribe((res: any) => {
+      this.contractTypes = res.data;
+    });
   }
 
   getDependencies() {
     this.contractService.getDependencies().subscribe((d: any) => {
       this.dependencies = d.data;
-      //this.dependencies.unshift({ text: 'Seleccione una', value: '' });
     });
   }
 
@@ -221,12 +241,14 @@ export class ContratosComponent implements OnInit {
   }
 
   getDependenciesByGroup(group_id) {
+    this.formContrato.get('dependency_id').setValue("");
     this._dependencies.getDependencies({ group_id }).subscribe((r: any) => {
       this.dependencies = r.data;
     });
   }
 
   getPositionsByDependency(dependency_id) {
+    this.formContrato.get('position_id').setValue("");
     this._positions.getPositions({ dependency_id }).subscribe((r: any) => {
       this.positions = r.data
     });
@@ -290,17 +312,20 @@ export class ContratosComponent implements OnInit {
         if (choice=='true') {
           this.contractService.getContract(employee.id).subscribe((res: any) => {
             res.data['codigo']="CON"+res.data.id;
+            res.data['contract_id']=res.data.id;
+            res.data['renewed']=1;
             if(res.data.turn_type=="Fijo"){
-              res.data['turn_id']="TF"+res.data.fixed_turn_id;
+              res.data['turn_id']=res.data.fixed_turn_id;
               res.data['turn_name']=res.data.fixed_turn_name;
             }else{
-              res.data['turn_id']="TR"+res.data.rotating_turn_id;
+              res.data['turn_id']=res.data.rotating_turn_id;
               res.data['turn_name']=res.data.rotating_turn_name;
             }
             delete res.data.rotating_turn_id;
             delete res.data.rotating_turn_name;
             delete res.data.fixed_turn_id;
             delete res.data.fixed_turn_name;
+            delete res.data.id;
             const formVacio = Object.fromEntries(
               Object.entries(res.data)
               .map(([ key ]) => [ key,  ['',Validators.required] ])
@@ -308,8 +333,9 @@ export class ContratosComponent implements OnInit {
             this.formContrato = this.fb.group(formVacio);
             this.getDependenciesByGroup(res.data.group_id);
             this.getPositionsByDependency(res.data.dependency_id);
-            this.formContrato.patchValue(res.data);
             this.getTurnsbyType(res.data.turn_type);
+            this.formContrato.patchValue(res.data);
+            console.log(this.formContrato.value);
             this._modal.open(modal);
           })
         }else{
@@ -317,6 +343,34 @@ export class ContratosComponent implements OnInit {
         }
       }
     })()
+  }
+
+  saveRenewalConditions(){
+    if(this.formContrato.get('turn_type').value=="Fijo"){
+      this.formContrato.addControl('fixed_turn_id',this.fb.control(this.formContrato.get('turn_id').value));
+    }else{
+      this.formContrato.addControl('rotating_turn_id',this.fb.control(this.formContrato.get('turn_id').value));
+    }
+    console.log(this.formContrato.value);
+    this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
+      this.getAllContracts(this.pagination.page);
+        this._modal.close();
+        this._swal.show({
+          icon: 'success',
+          title: res.data,
+          text: 'Las condiciones se han registrado con éxito.',
+          timer: 1000,
+          showCancel: false
+        })
+      }, err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: err.error.text,
+          icon: 'error',
+          showCancel: false,
+        })
+      }
+    );
   }
 
 }

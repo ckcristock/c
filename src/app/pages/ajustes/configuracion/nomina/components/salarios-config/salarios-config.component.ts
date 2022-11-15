@@ -30,7 +30,8 @@ export class SalariosConfigComponent implements OnInit {
       id: id,
       [variable]: event
     }
-    this._nominaService.updateCreateSalariosSubsidios(params).subscribe((res: any) => {
+    this._nominaService.updateCreateSalariosSubsidios(params)
+    .subscribe((res: any) => {
       this._swal.show({
         icon: 'success',
         title: 'Salarios y subsidios',

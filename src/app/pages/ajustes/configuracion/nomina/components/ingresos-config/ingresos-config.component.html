@@ -18,6 +18,7 @@
               (change)="actualizar($event.checked, 'state',  extra.id)"
               color="primary"
               [(ngModel)]="extra.state"
+              [ngModelOption]="{standalone: true}"
               >{{ extra.state == 1 ? "Activo" : "Inactivo" }}</mat-slide-toggle
             >
             <!-- <div class="col-md-7 custom-control custom-switch mb-2">

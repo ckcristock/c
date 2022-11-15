@@ -7,10 +7,21 @@
           <td>
               <app-row-typeahead
               (setAccount)="setAccount($event)"
+              (setAccount)="actualizar($event.identifier, 'accounting_account', $event.datos.id)"
               [extra]="extra"
               [variable]="extra.cuenta_contable"
               [titulo]="'Cuentas contables'"
               ></app-row-typeahead>
+          </td>
+
+          <td>
+            <mat-slide-toggle
+              (change)="actualizar($event.checked, 'state',  extra.id)"
+              color="primary"
+              [(ngModel)]="extra.state"
+              [ngModelOption]="{standalone: true}"
+              >{{ extra.state == 1 ? "Activo" : "Inactivo" }}
+            </mat-slide-toggle>
           </td>
 
           <td>
@@ -31,7 +42,7 @@
                   mat-icon-button
                   color="primary"
                   matSuffix
-                  (click)="actualizar(extra, percentage.value)"
+                  (click)="actualizar(percentage.value, 'percentage', extra.id )"
                   [attr.aria-label]="'Actualizar'"
                   >
                   <mat-icon>save</mat-icon>

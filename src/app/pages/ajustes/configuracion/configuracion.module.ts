@@ -33,7 +33,7 @@ import { InformacionBaseModule } from '../informacion-base/informacion-base.modu
 import { ParametrosModule } from '../parametros/parametros.module';
 import { ResponsablesNominaConfigComponent } from './nomina/components/responsables-nomina-config/responsables-nomina-config.component';
 import { NovedadesConfigComponent } from './nomina/components/novedades-config/novedades-config.component';
-import { RowTypeaheadComponent } from './nomina/components/horas-extras-config/row-typeahead/row-typeahead.component';
+import { RowTypeaheadComponent } from './nomina/components/row-typeahead/row-typeahead.component';
 import { EgresosConfigComponent } from './nomina/components/egresos-config/egresos-config.component';
 import { IngresosConfigComponent } from './nomina/components/ingresos-config/ingresos-config.component';
 import { MatCheckboxModule, MatSlideToggleModule } from '@angular/material';
@@ -92,6 +92,7 @@ import { SalariosConfigComponent } from './nomina/components/salarios-config/sal
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    MatSlideToggleModule
   ],
   exports: [
     CamposTercerosComponent

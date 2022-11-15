@@ -28,28 +28,12 @@ export class IngresosConfigComponent implements OnInit {
     this._nominaService.updateCreateIngresos(params).subscribe((res: any) => {
       this._swal.show({
         icon: 'success',
-        title: 'Horas Extras',
+        title: 'Ingresos',
         text: res.data,
         showCancel: false,
         timer: 1000
       })
     })
   }
-
-  /* setAccount(datos) {
-    let params = {
-      id: datos.datos.id,
-      accounting_account: datos.identifier
-    }
-    this._nominaService.updateCreateIngresos(params).subscribe((res: any) => {
-      this._swal.show({
-        icon: 'success',
-        title: 'Horas Extras',
-        text: res.data,
-        showCancel: false,
-        timer: 1000
-      })
-    })
-  } */
 
 }

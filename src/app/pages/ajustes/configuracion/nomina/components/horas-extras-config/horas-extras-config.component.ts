@@ -20,9 +20,11 @@ export class HorasExtrasConfigComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  actualizar(event, percentage) {
+
+  actualizar(event, variable, id) {
     let params = {
-      percentage: percentage
+      id: id,
+      [variable]: event
     }
     this._nominaService.updateExtras(event.id, params).subscribe((res: any) => {
       this._swal.show({
@@ -35,20 +37,5 @@ export class HorasExtrasConfigComponent implements OnInit {
     })
   }
 
-  setAccount(datos) {
-    let params = {
-      id: datos.datos.id,
-      account_plan_id: datos.identifier
-    }
-    this._nominaService.updateExtras(datos.datos.id, params).subscribe((res: any) => {
-      this._swal.show({
-        icon: 'success',
-        title: 'Horas Extras',
-        text: res.data,
-        showCancel: false,
-        timer: 1000
-      })
-    })
-  }
 
 }

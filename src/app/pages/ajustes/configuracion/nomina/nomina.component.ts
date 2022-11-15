@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { NominaConfigService } from './nomina-config.service';
+import 'rxjs/add/observable/forkJoin';
 
 @Component({
   selector: 'app-nomina',
@@ -35,6 +37,9 @@ export class NominaComponent implements OnInit {
     this.getDeductionDatos()
     this.getLiquidationDatos()
     this.getsalariosSubsidiosDatos()
+    Observable.forkJoin().subscribe(r=>{
+
+    })
   }
 
   getExtras() {

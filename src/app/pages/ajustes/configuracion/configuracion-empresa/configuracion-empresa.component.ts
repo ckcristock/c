@@ -64,7 +64,6 @@ export class ConfiguracionEmpresaComponent implements OnInit {
               ? this.active = 5
               : this.active = 1
 
-    //this.getData();
     this.createForm();
     this.getDataCompany();
     this.getData();
@@ -93,12 +92,12 @@ export class ConfiguracionEmpresaComponent implements OnInit {
 
   openModal(modal) {
     this._modal.open(modal);
+    this.createForm();
   }
 
   getData(){
     this._configuracionEmpresaService.getPaymentConfiguration()
     .subscribe((res:any)=>{
-      console.log(res)
       this.affects_transportation_subsidy = res.affects_transportation_subsidy;
       this.calculate_work_disability = res.calculate_work_disability;
       this.pay_deductions = res.pay_deductions;
@@ -111,11 +110,11 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       calculate_work_disability: [this.calculate_work_disability],
-      pay_deductions: ['', Validators.required],
-      recurring_payment: ['', Validators.required],
-      payment_transport_subsidy: ['', Validators.required],
-      affects_transportation_subsidy: ['', Validators.required],
-      pay_vacations: ['', Validators.required],
+      pay_deductions: [this.pay_deductions],
+      recurring_payment: [this.recurring_payment],
+      payment_transport_subsidy: [this.payment_transport_subsidy],
+      affects_transportation_subsidy: [this.affects_transportation_subsidy],
+      pay_vacations: [this.pay_vacations],
     });
   }
 

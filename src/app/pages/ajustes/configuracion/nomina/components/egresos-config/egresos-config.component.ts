@@ -23,30 +23,16 @@ export class EgresosConfigComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  actualizar(event, percentage) {
+  actualizar(event, variable, id) {
     let params = {
-      percentage: percentage
+      id: id,
+      [variable]: event
     }
-    this._nominaService.updateExtras(event.id, params).subscribe((res: any) => {
+    this._nominaService.updateCreateEgresos(params)
+    .subscribe((res: any) => {
       this._swal.show({
         icon: 'success',
-        title: 'Ingresos',
-        text: res.data,
-        showCancel: false,
-        timer: 1000
-      })
-    })
-  }
-
-  setAccount(datos) {
-    let params = {
-      id: datos.datos.id,
-      accounting_account: datos.identifier
-    }
-    this._nominaService.updateCreateEgresos(params).subscribe((res: any) => {
-      this._swal.show({
-        icon: 'success',
-        title: 'Ingresos',
+        title: 'Egresos',
         text: res.data,
         showCancel: false,
         timer: 1000

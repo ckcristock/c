@@ -92,6 +92,7 @@ import { SalariosConfigComponent } from './nomina/components/salarios-config/sal
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    MatSlideToggleModule
   ],
   exports: [
     CamposTercerosComponent

@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-7 px-0">
-        <h4 class="text-primary">Términos del contrato</h4>
+        <h4 class="text-primary">Tipos de contrato</h4>
       </div>
       <div class="col-md-5 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
@@ -20,7 +20,8 @@
     </div>
 
     <hr class="line" />
-    <mat-accordion multi> <!---acordeon de filtros--->
+    <mat-accordion multi>
+      <!---acordeon de filtros--->
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
           <mat-form-field class="col" appearance="outline">
@@ -48,7 +49,8 @@
       >
         <thead class="bg-light">
           <tr class="text-uppercase">
-            <th>Tipos de Términos
+            <th>Nombre</th>
+            <th>Terminos del contrato</th>
             <!-- <th><i class="mdi mdi-chevron-down"></i></th> -->
           </tr>
         </thead>
@@ -60,6 +62,11 @@
             }"
           >
             <td class="align-middle">{{ term.name }}</td>
+            <td class="align-middle">
+              <span *ngFor="let item of term.work_contract_types"
+                >{{ item.name }}.
+              </span>
+            </td>
             <!-- <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -102,7 +109,8 @@
         </tbody>
       </table>
     </div>
-  </div> <!-- Close Card Body -->
+  </div>
+  <!-- Close Card Body -->
 
   <!--pagiancion-->
   <ngb-pagination
@@ -119,7 +127,6 @@
   >
   </ngb-pagination>
 </div>
-
 
 <!--modal para nuevo-->
 <ng-template #add let-modal>

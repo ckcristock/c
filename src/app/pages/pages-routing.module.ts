@@ -17,6 +17,7 @@ const routes: Routes = [
     { path: 'crm',   loadChildren : () => import('./crm/crm.module').then(m => m.CrmModule )},
     { path: 'compras',   loadChildren : () => import('./compras/compras.module').then(m => m.ComprasModule )},
     { path: 'inventario', loadChildren: () => import('./inventario/inventario.module').then(m => m.InventarioModule) },
+    { path: 'sst', loadChildren: () => import('./sst/sst.module').then(m => m.SstModule) },
     { path: 'notauthorized', component: NoautorizadoComponent}
 
 

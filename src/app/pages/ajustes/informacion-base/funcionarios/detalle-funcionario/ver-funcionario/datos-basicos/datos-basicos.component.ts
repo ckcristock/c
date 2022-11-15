@@ -70,7 +70,7 @@ export class DatosBasicosComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
   openModal() {
     this.modal.show();
@@ -85,6 +85,7 @@ export class DatosBasicosComponent implements OnInit {
     this.basicDataService.getBasicsData(this.id)
       .subscribe((res: any) => {
         this.funcionario = res.data;
+        console.log(this.funcionario)
         this.loading = false;
         this.form.patchValue({
           address: this.funcionario.address,
@@ -229,7 +230,7 @@ export class DatosBasicosComponent implements OnInit {
           icon: 'success',
           showCancel: false,
           timer: 1000
-        }) 
+        })
         this.basicDataService.datos$.emit()
       });
     this.person.image = this.file;

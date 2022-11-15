@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalService } from 'src/app/core/services/modal.service';
 import { NominaConfigService } from './nomina-config.service';
 import 'rxjs/add/observable/forkJoin';
 
@@ -23,7 +25,13 @@ export class NominaComponent implements OnInit {
   liquidationsDatos: any[] = [];
   salariosSubsidiosDatos: any[] = [];
 
-  constructor(private _nominaConfig:NominaConfigService) {}
+  form: FormGroup;
+
+  constructor(
+    private _nominaConfig:NominaConfigService,
+    private _modal: ModalService,
+    private fb: FormBuilder
+    ) {}
 
   ngOnInit(): void {
     this.getExtras()
@@ -41,6 +49,22 @@ export class NominaComponent implements OnInit {
 
     })
   }
+
+  openModal(confirm){
+    this._modal.open(confirm, 'md' ,()=>{
+
+    })
+  }
+
+  createForm() {
+    this.form = this.fb.group({
+      //id: [this.bodega.Id_Bodega_Nuevo],
+      concept: ['', Validators.required],
+      account_plan_id: ['', Validators.required],
+      state: ['', Validators.required],
+    });
+  }
+
 
   getExtras() {
    this._nominaConfig.getExtras().subscribe((r:any)=>{

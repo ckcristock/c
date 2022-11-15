@@ -21,9 +21,6 @@ export class SalariosConfigComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  openModal(confirm){
-    this._modal.open(confirm, 'md')
-  }
 
   actualizar(event, variable, id) {
     let params = {

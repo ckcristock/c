@@ -23,32 +23,6 @@
               >{{ extra.state == 1 ? "Activo" : "Inactivo" }}
             </mat-slide-toggle>
           </td>
-
-          <td>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Porcentaje</mat-label>
-                <input
-                  matInput
-                  #percentage
-                  type="number"
-                  [value]="extra.percentage"
-                  step="0.05"
-                  min="0"
-                  name="percentage"
-                  id="percentage"
-                  autocomplete="off"
-                />
-                <button
-                  mat-icon-button
-                  color="primary"
-                  matSuffix
-                  (click)="actualizar(percentage.value, 'percentage', extra.id )"
-                  [attr.aria-label]="'Actualizar'"
-                  >
-                  <mat-icon>save</mat-icon>
-                </button>
-            </mat-form-field>
-          </td>
         </tr>
       </ng-template>
       <ng-container *ngIf="datos.length<=0; else horasExtras" ></ng-container>

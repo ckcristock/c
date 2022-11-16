@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { NominaConfigService } from './nomina-config.service';
 import 'rxjs/add/observable/forkJoin';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-nomina',
@@ -12,6 +12,7 @@ import 'rxjs/add/observable/forkJoin';
 })
 export class NominaComponent implements OnInit {
 
+  public open: Subject<any> = new Subject;
   renderizarNomina = false;
   extrasDatos: any[] = [];
   incapacidadesDatos: any[] = [];
@@ -45,15 +46,11 @@ export class NominaComponent implements OnInit {
     this.getDeductionDatos()
     this.getLiquidationDatos()
     this.getsalariosSubsidiosDatos()
-    Observable.forkJoin().subscribe(r=>{
-
-    })
+    this.renderizarNomina = true;
   }
 
-  openModal(confirm){
-    this._modal.open(confirm, 'md' ,()=>{
-
-    })
+  openModal(){
+    this.open.next();
   }
 
   createForm() {
@@ -99,7 +96,7 @@ export class NominaComponent implements OnInit {
   getSeguridadFuncionario() {
     this._nominaConfig.getSeguridadFuncionario().subscribe((r:any)=>{
       this.seguridadFuncionarioDatos = r
-      this.renderizarNomina = true;
+
     })
   }
   getIncomeDatos = () => {

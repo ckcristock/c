@@ -21,56 +21,87 @@
               [ngModelOption]="{standalone: true}"
               >{{ extra.state == 1 ? "Activo" : "Inactivo" }}</mat-slide-toggle
             >
-            <!-- <div class="col-md-7 custom-control custom-switch mb-2">
-
-              <span
-                class="d-inline-block"
-                data-toggle="tooltip"
-                title="{{ extra.id }}"
-                >
-                <input
-                  id="{{extra.id}}"
-                  name="status{{extra.id}}"
-                  type="checkbox"
-                  class="custom-control-input"
-                  [(checked)]="extra.state"
-                  (click)="extra.state =! extra.state"
-                />
-                <label for="estatus{{extra.id}}" class="custom-control-label"
-                  >Estatus</label
-                >
-              </span>
-            </div> -->
           </td>
 
-          <td>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Porcentaje</mat-label>
-              <input
-                matInput
-                #percentage
-                type="number"
-                [value]="extra.percentage"
-                step="0.05"
-                min="0"
-                name="percentage"
-                id="percentage"
-                autocomplete="off"
-              />
-              <button
-                mat-icon-button
-                color="primary"
-                matSuffix
-                (click)="actualizar(percentage.value, 'percentage' , extra.id)"
-                [attr.aria-label]="'Actualizar'"
-              >
-                <mat-icon>save</mat-icon>
-              </button>
-            </mat-form-field>
-          </td>
         </tr>
       </ng-template>
       <ng-container *ngIf="datos.length <= 0; else ingresos"></ng-container>
     </tbody>
   </table>
 </div>
+
+<ng-template #modalIngreso let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nuevo Ingreso</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row mt-3">
+
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Concepto</mat-label>
+          <input
+            matInput
+            type="text"
+            name="concept"
+            autocomplete="off"
+            formControlName="concept"
+            placeholder="Ingrese el Concepto"
+          />
+        </mat-form-field>
+
+        <!--acá tambien necesito un typeahead para la cuenta cuando se crea-->
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Cuenta</mat-label>
+          <input
+            matInput
+            type="text"
+            name="cuenta"
+            autocomplete="off"
+            formControlName="cuenta"
+            placeholder="Ingrese la cuenta"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            name="name"
+            autocomplete="off"
+            formControlName="name"
+            placeholder="Ingrese el nombre"
+          />
+        </mat-form-field>
+
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="_modal.close()"
+    >
+      Cancelar
+    </button>
+    <button
+      [disabled]="name == ''"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>

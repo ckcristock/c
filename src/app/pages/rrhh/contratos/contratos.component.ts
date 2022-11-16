@@ -40,6 +40,7 @@ export class ContratosComponent implements OnInit {
   contracts: any[] = [];
   groups: any[];
   loading = false;
+  dateMin = "";
   listaTiposTurno: any = [];
   listaTurnos: any = [];
   contractsTrialPeriod: any = [];
@@ -149,9 +150,11 @@ export class ContratosComponent implements OnInit {
   }
 
   calcularFecha(event){
-    let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
-    dateInicio.setDate(dateInicio.getDate() + parseInt(event.target.value));
-    this.formContrato.get('date_end').setValue(dateInicio.toISOString().split('T')[0]);
+    if(event.target.value != ""){
+      let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
+      dateInicio.setDate(dateInicio.getDate() + parseInt(event.target.value));
+      this.formContrato.get('date_end').setValue(dateInicio.toISOString().split('T')[0]);
+    }
   }
 
   estadoFiltros = false;
@@ -316,30 +319,76 @@ export class ContratosComponent implements OnInit {
             res.data['renewed']=1;
             if(res.data.turn_type=="Fijo"){
               res.data['turn_id']=res.data.fixed_turn_id;
-              res.data['turn_name']=res.data.fixed_turn_name;
             }else{
               res.data['turn_id']=res.data.rotating_turn_id;
-              res.data['turn_name']=res.data.rotating_turn_name;
             }
             delete res.data.rotating_turn_id;
             delete res.data.rotating_turn_name;
             delete res.data.fixed_turn_id;
             delete res.data.fixed_turn_name;
+            delete res.data.group_name;
+            delete res.data.dependency_name;
+            delete res.data.position_name;
             delete res.data.id;
-            const formVacio = Object.fromEntries(
+            this.dateMin = res.data.date_end;
+            this.formContrato = this.fb.group({
+              codigo: [''],
+              contract_id: ['',Validators.required],
+              person_id: ['',Validators.required],
+              name: [''],
+              renewed: ['',Validators.required],
+              company_id: ['',Validators.required],
+              company_name: ['',Validators.required],
+              contract_term_id: ['',Validators.required],
+              work_contract_type_id: ['',Validators.required],
+              group_id: ['',Validators.required],
+              dependency_id: ['',Validators.required],
+              position_id: ['',Validators.required],
+              turn_type: ['',Validators.required],
+              turn_id: ['',Validators.required],
+              date_of_admission: ['',Validators.required],
+              date_end: ['',Validators.required],
+              date_diff: ['',[Validators.min(res.data.date_diff),Validators.required]],
+              old_date_end: ['',Validators.required],
+              salary: ['',Validators.required]
+            });
+            /* const formVacio = Object.fromEntries(
               Object.entries(res.data)
-              .map(([ key ]) => [ key,  ['',Validators.required] ])
+              .map(([ key ]) => [ key,  ['',(key=='date_diff')?[Validators.min(res.data.date_diff),Validators.required]:Validators.required] ])
             );
-            this.formContrato = this.fb.group(formVacio);
+            this.formContrato = this.fb.group(formVacio); */
             this.getDependenciesByGroup(res.data.group_id);
             this.getPositionsByDependency(res.data.dependency_id);
             this.getTurnsbyType(res.data.turn_type);
-            this.formContrato.patchValue(res.data);
+            this.formContrato.patchValue(res.data);''
             console.log(this.formContrato.value);
             this._modal.open(modal);
           })
         }else{
-          Swal.fire({ html: `El contrato será liquidado el día ${employee.date_end}.` });
+          this.formContrato = this.fb.group({
+            codigo: [null],
+            contract_id: [employee.contract_id],
+            person_id: [employee.id],
+            name: [null],
+            renewed: [0],
+            company_id: [null],
+            company_name: [null],
+            contract_term_id: [null],
+            work_contract_type_id: [null],
+            group_id: [null],
+            dependency_id: [null],
+            position_id: [null],
+            turn_type: [null],
+            turn_id: [null],
+            date_of_admission: [null],
+            date_end: [null],
+            date_diff: [null],
+            old_date_end: [null],
+            salary: [null]
+          });
+          this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
+            Swal.fire({ html: `El contrato será liquidado el día ${employee.date_end}.` });
+          });
         }
       }
     })()
@@ -351,9 +400,9 @@ export class ContratosComponent implements OnInit {
     }else{
       this.formContrato.addControl('rotating_turn_id',this.fb.control(this.formContrato.get('turn_id').value));
     }
+    this.formContrato.removeControl('turn_id')
     console.log(this.formContrato.value);
     this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
-      this.getAllContracts(this.pagination.page);
         this._modal.close();
         this._swal.show({
           icon: 'success',

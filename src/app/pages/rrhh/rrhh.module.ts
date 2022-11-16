@@ -81,6 +81,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { ParametrosModule } from '../ajustes/parametros/parametros.module';
 import { TiposModule } from '../ajustes/tipos/tipos.module';
+import { MatBadgeModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -164,6 +165,7 @@ import { TiposModule } from '../ajustes/tipos/tipos.module';
     MatCheckboxModule,
     MatPaginatorModule,
     MatRadioModule,
+    MatBadgeModule
   ],
   providers: [{ provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' },CurrencyPipe],
   exports: [],

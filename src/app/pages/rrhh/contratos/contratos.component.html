@@ -253,7 +253,7 @@
               (click)="makeChoice(contractToExpire,renovarContrato)"
               class="list-group-item list-group-item-action flex-column align-items-start"
             >
-              <div class="d-flex w-100 justify-content-between">
+              <div class="d-flex w-100 justify-content-between" matBadge="!">
                 <div class="mb-1">
                   {{ contractToExpire.first_name }}
                   {{ contractToExpire.first_surname }} <br />
@@ -492,12 +492,18 @@
             placeholder="Número de días"
             autocomplete="off"
           />
+          <mat-error *ngIf="formContrato.get('date_diff').hasError('required')">
+            El valor es <strong>requerido</strong>
+          </mat-error><mat-error *ngIf="formContrato.get('date_diff').hasError('min')">
+            La fecha de finalización debe ser posterior a <strong>{{ dateMin }}</strong>
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="col-4" appearance="outline">
           <mat-label>Fecha de finalización</mat-label>
           <input
             matInput
             type="date"
+            [min]="dateMin"
             (input)="calcularDias($event)"
             (selectionChange)="calcularDias($event)"
             formControlName="date_end"

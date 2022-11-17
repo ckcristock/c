@@ -63,11 +63,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of salary_history" class="text-center">
-          <th>{{ item.salary | number }}</th>
-          <th>{{ item.work_contract_type.name }}</th>
-          <th>{{ item.date_of_admission | date: "longDate" }}</th>
-          <th>{{ item.date_end | date: "longDate" }}</th>
-          <th>{{ item.position.name }}</th>
+          <td>${{ item.salary | number }}</td>
+          <td>{{ item.work_contract_type.name }}</td>
+          <td>{{ item.date_of_admission | date }}</td>
+          <td>{{ item.date_end | date }}</td>
+          <td>{{ item.position.name }}</td>
         </tr>
       </tbody>
     </table>

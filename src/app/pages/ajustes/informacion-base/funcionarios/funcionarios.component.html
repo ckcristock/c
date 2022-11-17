@@ -85,16 +85,6 @@
         >aquí</a
       >
     </div>
-    <mat-paginator
-      *ngIf="paginacion"
-      [length]="paginacion.total"
-      [pageSize]="paginacion.per_page"
-      [pageIndex]="paginacion.current_page - 1"
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      (page)="handlePageEvent($event)"
-      aria-label="Select page"
-    >
-    </mat-paginator>
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm mb-0"
@@ -158,42 +148,6 @@
       aria-label="Select page"
     >
     </mat-paginator>
-    <!-- <div>
-      <div
-        *ngIf="!loading && people.length > 0; else notData"
-        class="row no-gutters text-center"
-      >
-        <div
-          class="col-xl-3 p-2 col-sm-6 d-flex align-items-stretch"
-          *ngFor="let person of people"
-        >
-          <div
-            role="button"
-            class="card pointer border border-light"
-            [routerLink]="['/ajustes/informacion-base/funcionario', person.id]"
-          >
-            <span class="badge badge-primary">{{ person.status }}</span>
-            <img
-              class="card-img-top"
-              src="{{ person.image | image: 'users' }}"
-              onerror="this.src='../../../../../assets/images/nofound.png'"
-              alt="Card image cap"
-            />
-            <div class="card-body">
-              <p class="card-text">{{ person.company }}</p>
-              <h6 class="card-title">
-                {{ person.first_name }} {{ person.first_surname }}
-              </h6>
-              <p class="card-text">{{ person.dependency }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row mt-4">
-        <div class="col-lg-12"></div>
-      </div>
-    </div> -->
   </div>
 </div>
 

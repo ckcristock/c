@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild, Input, EventEmitter } from '@angular/core
 import Swal from 'sweetalert2';
 import { UserService } from '../../core/services/user.service';
 import { Router } from '@angular/router';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-restore-password',
@@ -14,11 +15,16 @@ export class RestorePasswordComponent implements OnInit {
   @Input('canExit') canExit: any;
 
   newPassword: string;
+  form: FormGroup
   constructor(public _user: UserService,
     private router: Router,
     private modalService: NgbModal,
-
-  ) { }
+    config: NgbModalConfig,
+    private fb: FormBuilder
+  ) {
+    config.backdrop = 'static';
+    config.keyboard = false;
+  }
 
   ngOnInit(): void {
 
@@ -27,15 +33,18 @@ export class RestorePasswordComponent implements OnInit {
   ngAfterViewInit() {
     if (this._user.user.change_password == true) {
       this.openConfirm(this.restoreModal)
-      //this.restoreModal.show()
+      this.form = this.fb.group({
+        id: this._user.user.id,
+        newPassword: ['', Validators.required]
+      })
     }
   }
   closeResult = '';
   public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true })
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'sm', scrollable: true })
   }
   /* private getDismissReason(reason: any) {
-    
+
   } */
 
   changePassword() {
@@ -48,7 +57,7 @@ export class RestorePasswordComponent implements OnInit {
     this._user.changePassword(parm).subscribe(d => {
 
       Swal.fire('Operacion exitosa', 'Felicidades, su contraseña se ha actualizado', 'success')
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
       this._user.logout();
       /*  this.router.navigateByUrl('/'); */
 

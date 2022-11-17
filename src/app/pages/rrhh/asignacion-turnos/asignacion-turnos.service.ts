@@ -21,10 +21,9 @@ export class AsignacionTurnosService {
               if (Array.isArray(group.dependencies)) {
               } else {
                 group.dependencies = Object.values(group.dependencies)
-              } 
+              }
               group.dependencies.forEach((dependency) => {
                 dependency.people.forEach((person) => {
-                  console.log(person)
                   person.selected = 0;
                 });
               });

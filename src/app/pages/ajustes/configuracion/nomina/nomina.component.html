@@ -9,12 +9,9 @@
       correspondientes al momento del pago de la nómina.
     </div>
     <div *ngIf="renderizarNomina; else notData">
-
       <div class="row mt-3">
         <div class="col-md-12">
-          <h6 class="font-weight-bold">
-            Responsables de aprobación de nómina
-          </h6>
+          <h6 class="font-weight-bold">Responsables de aprobación de nómina</h6>
           <app-responsables-nomina-config
             (notificacion)="(mostrarMensaje)"
             [datos]="seguridadFuncionarioDatos"
@@ -22,7 +19,8 @@
         </div>
       </div>
 
-      <div class="row mt-3" *ngIf="salariosSubsidiosDatos">
+      <div class="row mt-3" *ngIf="salariosSubsidiosDatos ">
+      <div class="row mt-3" *ngIf="!loading.salariosSubsidios && salariosSubsidiosDatos.length > 0; else notDataSalarios">
         <div class="col-md-12">
           <div class="row">
             <div class="col-6">
@@ -60,9 +58,7 @@
 
       <div class="row mt-3">
         <div class="col-md-12">
-          <h6 class="font-weight-bold">
-            Aportes seguridad social - Empresa
-          </h6>
+          <h6 class="font-weight-bold">Aportes seguridad social - Empresa</h6>
           <app-s-social-empresa-config
             (notificacion)="(mostrarMensaje)"
             [datos]="seguridadEmpresaDatos"
@@ -100,31 +96,49 @@
         </div>
       </div>
 
-      <div class="row mt-3" *ngIf="incomeDatos">
-        <div class="col-md-12">
+      <div class="row d-flex justify-content-between">
+        <div class="col-md-6">
           <h6 class="font-weight-bold">Ingresos</h6>
-          <span>
-            <button
-              class="btn btn-primary btn-sm"
-              (click)="openModal()">
-              <i class="fa fa-plus"></i>
+        </div>
+        <div class="col-md-6 text-right">
+          <div class="btn-group rounded w-sm-100">
+            <button class="btn btn-primary btn-sm" (click)="openModal(openIngreso)">
+              <i class="fa fa-plus"></i> Agregar
             </button>
-            </span>
-
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3" *ngIf="!loading.ingresos && incomeDatos.length > 0; else notDataIngresos">
+        <div class="col-md-12">
           <app-ingresos-config
             (notificacion)="(mostrarMensaje)"
             [datos]="incomeDatos"
-            [open]="open.asObservable()"
+            [open]="openIngreso.asObservable()"
+            (refresh)="getIncomeDatos()"
           ></app-ingresos-config>
         </div>
       </div>
 
+
+      <div class="row d-flex justify-content-between">
+        <div class="col-md-6">
+          <h6 class="font-weight-bold">Egresos</h6>
+        </div>
+        <div class="col-md-6 text-right">
+          <div class="btn-group rounded w-sm-100">
+            <button class="btn btn-primary btn-sm" (click)="openModal(openEgreso)">
+              <i class="fa fa-plus"></i> Agregar
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="row mt-3" *ngIf="deductionsDatos">
         <div class="col-md-12">
-          <h6 class="font-weight-bold">Egresos</h6>
           <app-egresos-config
             (notificacion)="(mostrarMensaje)"
             [datos]="deductionsDatos"
+            [open]="openEgreso.asObservable()"
+            (refresh)="getDeductionDatos()"
           ></app-egresos-config>
         </div>
       </div>
@@ -156,4 +170,36 @@
 <ng-template #notData>
   <app-not-data [loading]="!renderizarNomina"></app-not-data>
 </ng-template>
-
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.extras"></app-not-data>
+</ng-template>
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.incapacidades"></app-not-data>
+</ng-template>
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.novedades"></app-not-data>
+</ng-template>
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.parafiscales"></app-not-data>
+</ng-template>
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.riesgos"></app-not-data>
+</ng-template>
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.segEmpresa"></app-not-data>
+</ng-template>
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.segFuncionario"></app-not-data>
+</ng-template>
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.ingresos"></app-not-data>
+</ng-template>
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.egresos"></app-not-data>
+</ng-template>
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.liquidaciones"></app-not-data>
+</ng-template>
+<ng-template #notDataIngresos>
+  <app-not-data [loading]="loading.salariosSubsidios"></app-not-data>
+</ng-template>

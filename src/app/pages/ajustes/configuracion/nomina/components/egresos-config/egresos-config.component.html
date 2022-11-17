@@ -6,7 +6,6 @@
           <td>{{ extra.concept }}</td>
           <td>
               <app-row-typeahead
-              (setAccount)="setAccount($event)"
               (setAccount)="actualizar($event.identifier, 'accounting_account', $event.datos.id)"
               [extra]="extra"
               [variable]="extra.cuenta_contable"
@@ -29,3 +28,105 @@
     </tbody>
   </table>
 </div>
+
+
+<ng-template #modalEgreso let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nuevo Egreso</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Concepto</mat-label>
+          <input
+            matInput
+            type="text"
+            name="concept"
+            autocomplete="off"
+            formControlName="concept"
+            placeholder="Ingrese el Concepto"
+          />
+        </mat-form-field>
+
+        <!-- <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <input
+            matInput
+            type="text"
+            name="type"
+            autocomplete="off"
+            formControlName="type"
+            placeholder="Ingrese la cuenta"
+          />
+        </mat-form-field> -->
+
+        <ng-template #rt2 let-r="result" let-t="term">
+          <ngb-highlight
+            [result]="r.Codigo_Niif + ' || ' + r.Nombre_Niif"
+            [term]="t"
+          ></ngb-highlight>
+        </ng-template>
+        <mat-form-field class="col-md-12" appearance="outline" >
+          <mat-label>Cuenta Contable</mat-label>
+          <input
+            matInput
+            type="text"
+            autocomplete="off"
+            formControlName="accounting_account"
+            [ngbTypeahead]="search_cuenta_niif"
+            [resultTemplate]="rt2"
+            [inputFormatter]="formatter"
+            [resultFormatter]="formatter"
+            [class.is-invalid]="searchFail"
+          />
+
+          <mat-hint *ngIf="searching">Buscando...</mat-hint>
+          <mat-hint *ngIf="searchFail">
+            Lo lamentamos, las opciones no pudieron ser cargadas.
+          </mat-hint >
+        </mat-form-field>
+
+       <!--  <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            name="name"
+            autocomplete="off"
+            formControlName="name"
+            placeholder="Ingrese el nombre"
+          />
+        </mat-form-field> -->
+
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="_modal.close()"
+    >
+      Cancelar
+    </button>
+    <button
+      [disabled]="name == ''"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>

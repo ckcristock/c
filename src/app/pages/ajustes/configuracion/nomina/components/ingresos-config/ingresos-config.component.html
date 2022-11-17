@@ -30,6 +30,7 @@
   </table>
 </div>
 
+
 <ng-template #modalIngreso let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Nuevo Ingreso</h4>
@@ -45,7 +46,7 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <div class="row mt-3">
+      <div class="row">
 
         <mat-form-field class="col-md-12" appearance="outline">
           <mat-label>Concepto</mat-label>
@@ -59,30 +60,50 @@
           />
         </mat-form-field>
 
-        <!--acá tambien necesito un typeahead para la cuenta cuando se crea-->
         <mat-form-field class="col-md-12" appearance="outline">
-          <mat-label>Cuenta</mat-label>
-          <input
-            matInput
-            type="text"
-            name="cuenta"
-            autocomplete="off"
-            formControlName="cuenta"
-            placeholder="Ingrese la cuenta"
-          />
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option value="Constitutivo">Constitutivo</mat-option>
+            <mat-option value="No Constitutivo">No Constitutivo</mat-option>
+          </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="col-md-12" appearance="outline">
-          <mat-label>Nombre</mat-label>
+        <ng-template #rt2 let-r="result" let-t="term">
+          <ngb-highlight
+            [result]="r.Codigo_Niif + ' || ' + r.Nombre_Niif"
+            [term]="t"
+          ></ngb-highlight>
+        </ng-template>
+        <mat-form-field class="col-md-12" appearance="outline" >
+          <mat-label>Cuenta Contable</mat-label>
           <input
             matInput
             type="text"
-            name="name"
             autocomplete="off"
-            formControlName="name"
+            formControlName="accounting_account"
+            [ngbTypeahead]="search_cuenta_niif"
+            [resultTemplate]="rt2"
+            [inputFormatter]="formatter"
+            [resultFormatter]="formatter"
+            [class.is-invalid]="searchFail"
+          />
+          <mat-hint *ngIf="searching">Buscando...</mat-hint>
+          <mat-hint *ngIf="searchFail">
+            Lo lamentamos, las opciones no pudieron ser cargadas.
+          </mat-hint >
+        </mat-form-field>
+
+        <!-- <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Estado</mat-label>
+          <input
+            matInput
+            type="text"
+            name="state"
+            autocomplete="off"
+            formControlName="state"
             placeholder="Ingrese el nombre"
           />
-        </mat-form-field>
+        </mat-form-field> -->
 
       </div>
     </form>

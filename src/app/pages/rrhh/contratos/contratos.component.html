@@ -135,7 +135,7 @@
                 <th>F. Fin</th>
                 <th>F. Fin prueba</th>
                 <th>F. Notific.</th>
-                <th>Acc</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -253,7 +253,12 @@
               (click)="makeChoice(contractToExpire,renovarContrato)"
               class="list-group-item list-group-item-action flex-column align-items-start"
             >
-              <div class="d-flex w-100 justify-content-between" matBadge="!">
+              <div class="d-flex w-100 justify-content-between"
+                matBadgeSize="small"
+                [matBadgeColor]="(contractToExpire.renewed==0)?'warn':(contractToExpire.cantidad==0)?'primary':'accent'"
+                [matBadge]="(contractToExpire.renewed==0 || contractToExpire.cantidad==0)?'!':contractToExpire.cantidad"
+                [matBadgeHidden]="contractToExpire.renewed==null && contractToExpire.cantidad==0"
+              >
                 <div class="mb-1">
                   {{ contractToExpire.first_name }}
                   {{ contractToExpire.first_surname }} <br />
@@ -488,23 +493,26 @@
             type="number"
             formControlName="date_diff"
             matInput
-            (input)="calcularFecha($event)"
+            [min]="minRenewalPeriod.numDays"
+            (change)="calcularFecha($event)"
             placeholder="Número de días"
+            required
             autocomplete="off"
           />
           <mat-error *ngIf="formContrato.get('date_diff').hasError('required')">
             El valor es <strong>requerido</strong>
-          </mat-error><mat-error *ngIf="formContrato.get('date_diff').hasError('min')">
-            La fecha de finalización debe ser posterior a <strong>{{ dateMin }}</strong>
           </mat-error>
+          <!-- <mat-error *ngIf="formContrato.get('date_diff').hasError('min')">
+            La fecha de finalización debe ser posterior a <strong>{{ dateMin }}</strong>
+          </mat-error> -->
         </mat-form-field>
         <mat-form-field class="col-4" appearance="outline">
           <mat-label>Fecha de finalización</mat-label>
           <input
             matInput
             type="date"
-            [min]="dateMin"
-            (input)="calcularDias($event)"
+            [min]="minRenewalPeriod.date"
+            (change)="calcularDias($event)"
             (selectionChange)="calcularDias($event)"
             formControlName="date_end"
             placeholder="Fecha de finalización"

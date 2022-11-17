@@ -40,7 +40,7 @@ export class ContratosComponent implements OnInit {
   contracts: any[] = [];
   groups: any[];
   loading = false;
-  dateMin = "";
+  minRenewalPeriod = { date:"", numDays: 0};
   listaTiposTurno: any = [];
   listaTurnos: any = [];
   contractsTrialPeriod: any = [];
@@ -125,35 +125,45 @@ export class ContratosComponent implements OnInit {
   }
 
   getTurnsbyType(turnType: string) {
-    this.listaTurnos=[];
+    this.listaTurnos = [];
     this.formContrato.get('turn_id').setValue("");
-    if(turnType=="Fijo"){
+    if (turnType == "Fijo") {
       this._fixedTurns.getFixedTurns().subscribe((res: any) => {
         res.data.data.forEach(data => {
-          this.listaTurnos.push({"id":data.value,"name":data.text});
+          this.listaTurnos.push({ "id": data.value, "name": data.text });
         });
       });
-    }else{
+    } else {
       this._rotatingTurs.getAllCreate().subscribe((res: any) => {
         res.data.forEach(data => {
-          this.listaTurnos.push({"id":data.id,"name":data.name});
+          this.listaTurnos.push({ "id": data.id, "name": data.name });
         });
       });
     }
   }
 
-  calcularDias(event){
+  calcularDias(event) {
     let date = new Date(event.target.value);
     let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
-    let numDias =  Math.floor((date.getTime() - dateInicio.getTime()) / (1000 * 60 * 60 * 24));
+    let numDias = Math.floor((date.getTime() - dateInicio.getTime()) / (1000 * 60 * 60 * 24));
     this.formContrato.get('date_diff').setValue(numDias);
   }
 
-  calcularFecha(event){
-    if(event.target.value != ""){
+  calcularFecha(event) {
+    if (event.target.value != "") {
       let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
       dateInicio.setDate(dateInicio.getDate() + parseInt(event.target.value));
       this.formContrato.get('date_end').setValue(dateInicio.toISOString().split('T')[0]);
+      if (!this.formContrato.controls.date_diff.valid) {
+        this._swal.show({
+          title: '',
+          text: ' La fecha de finalización debe ser posterior a '+this.minRenewalPeriod.date,
+          icon: 'error',
+          showCancel: false
+        });
+        this.formContrato.get('date_diff').setValue(this.minRenewalPeriod.numDays);
+        this.formContrato.get('date_end').setValue(this.minRenewalPeriod.date);
+      }
     }
   }
 
@@ -293,116 +303,147 @@ export class ContratosComponent implements OnInit {
       })
   }
 
-  // Se toma la decisión de si se renueva al contraro on se liquida.
+  // Se toma la decisión de si se renueva al contraro o se liquida.
   makeChoice(employee, modal) {
-    (async () => {
-      const { value: choice } = await Swal.fire({
-        title: `Seleccione qué acción se tomará sobre el contrato de ${employee.first_name+' '+employee.first_surname}.`,
-        icon: 'question',
-        input: 'radio',
-        inputOptions: {
-          'true': 'Renovar',
-          'false': 'Liquidar'
-        },
-        inputValidator: (value) => {
-          if (!value) {
-            return 'Debes seleccionar una acción!'
+    if(employee.renewed==null || employee.renewed==1){
+      (async () => {
+        const { value: choice } = await Swal.fire({
+          title: (employee.renewed==1)?
+            `El contrato de ${employee.first_name + ' ' + employee.first_surname} ya presenta un proceso de renovación de contrato. Qué desea hacer?`:
+            `Seleccione qué acción se tomará sobre el contrato de ${employee.first_name + ' ' + employee.first_surname}.`,
+          icon: 'question',
+          input: 'radio',
+          inputOptions: {
+            'true': (employee.renewed==1)?'Ajustar condiciones':'Renovar',
+            'false': 'Liquidar'
+          },
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Debes seleccionar una acción!'
+            }
+          }
+        })
+
+        if (choice) {
+          if (choice == 'true') {
+            this.adjustRenewal(employee, modal);
+          } else {
+            this.formContrato = this.fb.group({
+              codigo: [null],
+              contract_id: [employee.contract_id],
+              person_id: [employee.id],
+              name: [null],
+              renewed: [0],
+              company_id: [null],
+              company_name: [null],
+              contract_term_id: [null],
+              work_contract_type_id: [null],
+              group_id: [null],
+              dependency_id: [null],
+              position_id: [null],
+              turn_type: [null],
+              turn_id: [null],
+              date_of_admission: [null],
+              date_end: [null],
+              date_diff: [null],
+              old_date_end: [null],
+              salary: [null]
+            });
+            if (employee.renewed==1) {
+              this.formContrato.addControl('id', this.fb.control(employee.process_id));
+            }
+            this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
+              Swal.fire({ html: `El contrato será liquidado el día ${employee.date_end}.` });
+              this.getContractsToExpire();
+            });
           }
         }
-      })
-
-      if (choice) {
-        if (choice=='true') {
-          this.contractService.getContract(employee.id).subscribe((res: any) => {
-            res.data['codigo']="CON"+res.data.id;
-            res.data['contract_id']=res.data.id;
-            res.data['renewed']=1;
-            if(res.data.turn_type=="Fijo"){
-              res.data['turn_id']=res.data.fixed_turn_id;
-            }else{
-              res.data['turn_id']=res.data.rotating_turn_id;
-            }
-            delete res.data.rotating_turn_id;
-            delete res.data.rotating_turn_name;
-            delete res.data.fixed_turn_id;
-            delete res.data.fixed_turn_name;
-            delete res.data.group_name;
-            delete res.data.dependency_name;
-            delete res.data.position_name;
-            delete res.data.id;
-            this.dateMin = res.data.date_end;
-            this.formContrato = this.fb.group({
-              codigo: [''],
-              contract_id: ['',Validators.required],
-              person_id: ['',Validators.required],
-              name: [''],
-              renewed: ['',Validators.required],
-              company_id: ['',Validators.required],
-              company_name: ['',Validators.required],
-              contract_term_id: ['',Validators.required],
-              work_contract_type_id: ['',Validators.required],
-              group_id: ['',Validators.required],
-              dependency_id: ['',Validators.required],
-              position_id: ['',Validators.required],
-              turn_type: ['',Validators.required],
-              turn_id: ['',Validators.required],
-              date_of_admission: ['',Validators.required],
-              date_end: ['',Validators.required],
-              date_diff: ['',[Validators.min(res.data.date_diff),Validators.required]],
-              old_date_end: ['',Validators.required],
-              salary: ['',Validators.required]
-            });
-            /* const formVacio = Object.fromEntries(
-              Object.entries(res.data)
-              .map(([ key ]) => [ key,  ['',(key=='date_diff')?[Validators.min(res.data.date_diff),Validators.required]:Validators.required] ])
-            );
-            this.formContrato = this.fb.group(formVacio); */
-            this.getDependenciesByGroup(res.data.group_id);
-            this.getPositionsByDependency(res.data.dependency_id);
-            this.getTurnsbyType(res.data.turn_type);
-            this.formContrato.patchValue(res.data);''
-            console.log(this.formContrato.value);
-            this._modal.open(modal);
-          })
-        }else{
-          this.formContrato = this.fb.group({
-            codigo: [null],
-            contract_id: [employee.contract_id],
-            person_id: [employee.id],
-            name: [null],
-            renewed: [0],
-            company_id: [null],
-            company_name: [null],
-            contract_term_id: [null],
-            work_contract_type_id: [null],
-            group_id: [null],
-            dependency_id: [null],
-            position_id: [null],
-            turn_type: [null],
-            turn_id: [null],
-            date_of_admission: [null],
-            date_end: [null],
-            date_diff: [null],
-            old_date_end: [null],
-            salary: [null]
-          });
-          this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
-            Swal.fire({ html: `El contrato será liquidado el día ${employee.date_end}.` });
-          });
+      })()
+    }else{
+      Swal.fire({
+        title: 'Atención!',
+        text: "Este empleado ya presenta un proceso de preliquidación de contrato, desea renovarlo?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Renovar contrato',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.adjustRenewal(employee, modal);
         }
-      }
-    })()
+      })
+    }
   }
 
-  saveRenewalConditions(){
-    if(this.formContrato.get('turn_type').value=="Fijo"){
-      this.formContrato.addControl('fixed_turn_id',this.fb.control(this.formContrato.get('turn_id').value));
-    }else{
-      this.formContrato.addControl('rotating_turn_id',this.fb.control(this.formContrato.get('turn_id').value));
-    }
-    this.formContrato.removeControl('turn_id')
-    console.log(this.formContrato.value);
-    this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
+  adjustRenewal(employee, modal){
+    this.contractService.getContract(employee.id).subscribe((res: any) => {
+      res.data['codigo'] = "CON" + res.data.id;
+      res.data['contract_id'] = res.data.id;
+      res.data['renewed'] = 1;
+      if (res.data.turn_type == "Fijo") {
+        res.data['turn_id'] = res.data.fixed_turn_id;
+      } else {
+        res.data['turn_id'] = res.data.rotating_turn_id;
+      }
+      delete res.data.rotating_turn_id;
+      delete res.data.rotating_turn_name;
+      delete res.data.fixed_turn_id;
+      delete res.data.fixed_turn_name;
+      delete res.data.group_name;
+      delete res.data.dependency_name;
+      delete res.data.position_name;
+      delete res.data.id;
+      this.minRenewalPeriod = { date: res.data.date_end, numDays: res.data.date_diff };
+      this.formContrato = this.fb.group({
+        codigo: [''],
+        contract_id: ['', Validators.required],
+        person_id: ['', Validators.required],
+        name: [''],
+        renewed: ['', Validators.required],
+        company_id: ['', Validators.required],
+        company_name: ['', Validators.required],
+        contract_term_id: ['', Validators.required],
+        work_contract_type_id: ['', Validators.required],
+        group_id: ['', Validators.required],
+        dependency_id: ['', Validators.required],
+        position_id: ['', Validators.required],
+        turn_type: ['', Validators.required],
+        turn_id: ['', Validators.required],
+        date_of_admission: ['', Validators.required],
+        date_end: ['',[Validators.min(res.data.date_end), Validators.required]],
+        date_diff: ['', [Validators.min(res.data.date_diff), Validators.required]],
+        old_date_end: ['', Validators.required],
+        salary: ['', Validators.required]
+      });
+      /* const formVacio = Object.fromEntries(
+        Object.entries(res.data)
+        .map(([ key ]) => [ key,  ['',(key=='date_diff')?[Validators.min(res.data.date_diff),Validators.required]:Validators.required] ])
+      );
+      this.formContrato = this.fb.group(formVacio); */
+
+      if (employee.renewed!=null) {
+        this.formContrato.addControl('id', this.fb.control(employee.process_id));
+      }
+      this.getDependenciesByGroup(res.data.group_id);
+      this.getPositionsByDependency(res.data.dependency_id);
+      this.getTurnsbyType(res.data.turn_type);
+      this.formContrato.patchValue(res.data);
+      this._modal.open(modal);
+    })
+  }
+
+  saveRenewalConditions() {
+    if (this.formContrato.valid) {
+      if (this.formContrato.get('turn_type').value == "Fijo") {
+        this.formContrato.addControl('fixed_turn_id', this.fb.control(this.formContrato.get('turn_id').value));
+      } else {
+        this.formContrato.addControl('rotating_turn_id', this.fb.control(this.formContrato.get('turn_id').value));
+      }
+      this.formContrato.removeControl('turn_id')
+      console.log(this.formContrato.value);
+      this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
         this._modal.close();
         this._swal.show({
           icon: 'success',
@@ -411,6 +452,7 @@ export class ContratosComponent implements OnInit {
           timer: 1000,
           showCancel: false
         })
+        this.getContractsToExpire();
       }, err => {
         this._swal.show({
           title: 'ERROR',
@@ -418,8 +460,15 @@ export class ContratosComponent implements OnInit {
           icon: 'error',
           showCancel: false,
         })
-      }
-    );
+      });
+    }else{
+      this._swal.show({
+        title: 'ERROR',
+        text: 'Parte de la información suministrada no es correcta, por favor verifique e intente de nuevo.',
+        icon: 'error',
+        showCancel: false,
+      })
+    }
   }
 
 }

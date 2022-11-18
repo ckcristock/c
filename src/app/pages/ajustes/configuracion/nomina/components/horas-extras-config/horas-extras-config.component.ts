@@ -26,7 +26,7 @@ export class HorasExtrasConfigComponent implements OnInit {
       id: id,
       [variable]: event
     }
-    this._nominaService.updateExtras(event.id, params).subscribe((res: any) => {
+    this._nominaService.updateExtras(id, params).subscribe((res: any) => {
       this._swal.show({
         icon: 'success',
         title: 'Horas Extras',

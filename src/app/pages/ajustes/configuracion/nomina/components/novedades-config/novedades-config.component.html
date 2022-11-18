@@ -6,36 +6,35 @@
           <td>{{ extra.concept }}</td>
           <td id="typeahead">
             <app-row-typeahead
-            (setAccount)="actualizar($event.identifier, 'account_plan_id', $event.datos.id)"
+            (setAccount)="actualizar($event.identifier, 'accounting_account', $event.datos.id)"
             [extra]="extra"
             [variable]="extra.cuenta_contable"
             [titulo]="'Cuentas Contables'"
             ></app-row-typeahead>
           </td>
           <td>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Porcentaje</mat-label>
-              <input
-                matInput
-                #percentage
-                type="number"
-                [value]="extra.percentage"
-                step="0.01"
-                min="0"
-                name="percentage"
-                id="percentage"
-                autocomplete="off"
-              />
-              <button
-                mat-icon-button
-                color="primary"
-                matSuffix
-                (click)="actualizar(percentage.value, 'percentage' , extra.id)"
-                [attr.aria-label]="'Actualizar'"
-              >
-                <mat-icon>save</mat-icon>
-              </button>
+            <mat-form-field
+            class="col-md-12"
+            appearance="outline"
+            >
+              <mat-label>Modalidad</mat-label>
+              <mat-select
+                [(ngModel)]="extra.modality"
+                (selectionChange)="actualizar($event.value, 'modality',  extra.id)"
+                required>
+                <mat-option value="Por Dia">Por día</mat-option>
+                <mat-option value="Por Hora">Por hora</mat-option>
+              </mat-select>
             </mat-form-field>
+          </td>
+          <td>
+            <mat-slide-toggle
+              (change)="actualizar($event.checked, 'state',  extra.id)"
+              color="primary"
+              [(ngModel)]="extra.state"
+              [ngModelOption]="{standalone: true}"
+              >{{ extra.state == 1 ? "Activo" : "Inactivo" }}</mat-slide-toggle
+            >
           </td>
         </tr>
       </ng-template>

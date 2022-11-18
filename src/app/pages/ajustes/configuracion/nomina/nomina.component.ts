@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { NominaConfigService } from './nomina-config.service';
 import { Subject } from 'rxjs';
 
@@ -10,9 +10,11 @@ import { Subject } from 'rxjs';
 })
 export class NominaComponent implements OnInit {
 
+  public openResponsable: Subject<any> = new Subject;
   public openIngreso: Subject<any> = new Subject;
   public openEgreso: Subject<any> = new Subject;
-  renderizarNomina = false;
+
+  responsableNominaDatos: any[] = [];
   extrasDatos: any[] = [];
   incapacidadesDatos: any[] = [];
   novedadesList: any[] = [];
@@ -24,7 +26,9 @@ export class NominaComponent implements OnInit {
   deductionsDatos: any[] = [];
   liquidationsDatos: any[] = [];
   salariosSubsidiosDatos: any[] = [];
+
   loading:any = {
+    responsables: false,
     extras: false,
     incapacidades: false,
     novedades: false,
@@ -42,10 +46,10 @@ export class NominaComponent implements OnInit {
 
   constructor(
     private _nominaConfig:NominaConfigService,
-    private fb: FormBuilder
     ) {}
 
   ngOnInit(): void {
+    this.getResponsablesNomina()
     this.getExtras()
     this.getIncapacidades()
     this.getNovedades()
@@ -57,11 +61,19 @@ export class NominaComponent implements OnInit {
     this.getDeductionDatos()
     this.getLiquidationDatos()
     this.getsalariosSubsidiosDatos()
-    this.renderizarNomina = true;
   }
 
   openModal(open){
     open.next();
+  }
+
+  getResponsablesNomina = () => {
+    this.loading.responsables = true
+    this._nominaConfig.getResponsablesNomina()
+    .subscribe((res:any)=>{
+      this.responsableNominaDatos = res.data
+      this.loading.responsables = false;
+    })
   }
 
   getExtras() {
@@ -111,7 +123,7 @@ export class NominaComponent implements OnInit {
     this._nominaConfig.getSeguridadFuncionario().subscribe((r:any)=>{
       this.seguridadFuncionarioDatos = r
       this.loading.segFuncionario = false
-      
+
     })
   }
   getIncomeDatos = () => {
@@ -122,13 +134,13 @@ export class NominaComponent implements OnInit {
     })
   }
   getDeductionDatos = () => {
-    this.loading.deductionsDatos = true
+    this.loading.egresos = true
     this._nominaConfig.getCountableDeductions().subscribe((r:any)=>{
       this.deductionsDatos = r
-      this.loading.deductionsDatos = false
+      this.loading.egresos = false
     })
   }
-  
+
   getLiquidationDatos = () => {
     this.loading.liquidacion = true
     this._nominaConfig.getLiquidation().subscribe((r:any)=>{
@@ -136,7 +148,7 @@ export class NominaComponent implements OnInit {
       this.loading.liquidacion = false
     })
   }
-  
+
   getsalariosSubsidiosDatos(){
     this.loading.salariosSubsidios = true
     this._nominaConfig.getSalariosSubsidios().subscribe((r:any)=>{

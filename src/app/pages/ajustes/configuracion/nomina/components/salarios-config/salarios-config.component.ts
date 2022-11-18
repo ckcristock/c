@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ModalService } from 'src/app/core/services/modal.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { NominaConfigService } from '../../nomina-config.service';
 
@@ -15,12 +14,10 @@ export class SalariosConfigComponent implements OnInit {
   constructor(
     private _nominaService: NominaConfigService,
     private _swal: SwalService,
-    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
   }
-
 
   actualizar(event, variable, id) {
     let params = {

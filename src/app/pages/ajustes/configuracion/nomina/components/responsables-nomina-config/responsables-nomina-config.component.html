@@ -5,40 +5,12 @@
         <tr *ngFor="let dat of datos">
           <td>{{ dat.area }}</td>
           <td>
-            <ng-template #rt let-r="result" let-t="term">
-              <ngb-highlight
-                [result]="r.identifier + ' || ' + r.text"
-                [term]="t"
-              ></ngb-highlight>
-            </ng-template>
-            <mat-form-field class="col"  appearance="outline">
-              <mat-label>Responsable:</mat-label>
-              <input
-                matInput
-                type="text"
-                id="typeahead-manager"
-                placeholder="Busca por documento"
-                [(ngModel)]="dat.responsable"
-                [ngModelOption]="{standalone: true}"
-                [ngbTypeahead]="search"
-                [inputFormatter]="formatter"
-                [resultFormatter]="formatter"
-                [resultTemplate]="rt"
-                [editable]="false"
-              />
-              <button
-                mat-icon-button
-                color="primary"
-                matSuffix
-                (click)="actualizar(dat, dat.responsable.identifier)"
-                [attr.aria-label]="'Actualizar'"
-              >
-                <mat-icon>save</mat-icon>
-              </button>
-              <mat-hint *ngIf="searchingPatient">Buscando</mat-hint>
-              <mat-hint *ngIf="searchFailedPatient">No hemos encontrado resultados</mat-hint
-              >
-            </mat-form-field>
+            <app-typeahead-person
+              (setAccount)="actualizar($event.datos, $event.identifier)"
+              [data]="dat"
+              [variable]="dat.responsable"
+              [titulo]="'Responsable'"
+            ></app-typeahead-person>
           </td>
         </tr>
       </ng-template>
@@ -46,3 +18,92 @@
     </tbody>
   </table>
 </div>
+
+
+<ng-template #modalResponsable let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nuevo Responsable</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Area</mat-label>
+          <input
+            matInput
+            type="text"
+            name="area"
+            autocomplete="off"
+            formControlName="area"
+            placeholder="Ingrese el Área"
+          />
+        </mat-form-field>
+
+        <ng-template #rt let-r="result" let-t="term">
+          <ngb-highlight
+            [result]="r.identifier + ' || ' + r.text"
+            [term]="t"
+          ></ngb-highlight>
+        </ng-template>
+        <mat-form-field class="col"  appearance="outline">
+          <mat-label>Responsable</mat-label>
+          <input
+            matInput
+            type="text"
+            id="typeahead-manager"
+            placeholder="Busca por documento"
+            formControlName="manager"
+            [ngbTypeahead]="search"
+            [inputFormatter]="formatterName"
+            [resultFormatter]="formatterName"
+            [resultTemplate]="rt"
+            [editable]="false"
+          >
+          <mat-hint *ngIf="searchingName">Buscando</mat-hint>
+          <mat-hint *ngIf="searchFailedName">No hemos encontrado resultados</mat-hint
+          >
+        </mat-form-field>
+
+        <!-- <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Estado</mat-label>
+          <input
+            matInput
+            type="text"
+            name="state"
+            autocomplete="off"
+            formControlName="state"
+            placeholder="Ingrese el nombre"
+          />
+        </mat-form-field> -->
+
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="_modal.close()"
+    >
+      Cancelar
+    </button>
+    <button
+      [disabled]="name == ''"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>

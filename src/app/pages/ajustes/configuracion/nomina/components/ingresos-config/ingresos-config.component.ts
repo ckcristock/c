@@ -15,10 +15,10 @@ import { NominaConfigService } from '../../nomina-config.service';
 })
 export class IngresosConfigComponent implements OnInit {
   @ViewChild('modalIngreso') modalIngreso: any;
-  @Input() open: Observable<any> = new Observable();
-  @Output() refresh: EventEmitter<any> = new EventEmitter;
   @Input('datos') datos: any;
+  @Input() open: Observable<any> = new Observable();
   @Output('notificacion') notificacion = new EventEmitter<any>();
+  @Output() refresh: EventEmitter<any> = new EventEmitter;
   private _suscription: any;
 
   form: FormGroup;

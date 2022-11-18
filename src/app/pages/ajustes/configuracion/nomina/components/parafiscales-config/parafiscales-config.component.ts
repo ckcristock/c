@@ -26,7 +26,7 @@ export class ParafiscalesConfigComponent implements OnInit {
       id: id,
       [variable]: event
     }
-    this._nominaService.updateParafiscales(event.id, params)
+    this._nominaService.updateParafiscales(id, params)
     .subscribe((res: any) => {
       this._swal.show({
         icon: 'success',

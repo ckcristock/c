@@ -26,7 +26,7 @@ export class SSocialFuncionarioConfigComponent implements OnInit {
       id: id,
       [variable]: event
     }
-    this._nominaService.updateSSocialPerson(event.id, params)
+    this._nominaService.updateSSocialPerson(id, params)
     .subscribe((res: any) => {
       this._swal.show({
         icon: 'success',

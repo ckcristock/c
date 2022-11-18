@@ -26,7 +26,7 @@ export class RiesgoArlConfigComponent implements OnInit {
       id: id,
       [variable]: event
     }
-    this._nominaService.updateRiesgosArl(event.id, params)
+    this._nominaService.updateRiesgosArl(id, params)
     .subscribe((res: any) => {
       this._swal.show({
         icon: 'success',

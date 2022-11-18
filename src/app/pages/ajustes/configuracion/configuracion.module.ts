@@ -39,6 +39,7 @@ import { IngresosConfigComponent } from './nomina/components/ingresos-config/ing
 import { MatCheckboxModule, MatSlideToggleModule } from '@angular/material';
 import { LiquidacionConfigComponent } from './nomina/components/liquidacion-config/liquidacion-config.component';
 import { SalariosConfigComponent } from './nomina/components/salarios-config/salarios-config.component';
+import { TypeaheadPersonComponent } from './nomina/components/responsables-nomina-config/typeahead-person/typeahead-person.component';
 
 
 @NgModule({
@@ -71,6 +72,7 @@ import { SalariosConfigComponent } from './nomina/components/salarios-config/sal
     IngresosConfigComponent,
     LiquidacionConfigComponent,
     SalariosConfigComponent,
+    TypeaheadPersonComponent,
   ],
   imports: [
     CommonModule,

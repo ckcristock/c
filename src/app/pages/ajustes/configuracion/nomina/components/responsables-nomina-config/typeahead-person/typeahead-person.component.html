@@ -1,0 +1,32 @@
+<ng-template #rt let-r="result" let-t="term">
+  <ngb-highlight
+    [result]="r.identifier + ' || ' + r.text"
+    [term]="t"
+  ></ngb-highlight>
+</ng-template>
+<mat-form-field class="col" appearance="outline">
+  <mat-label>{{titulo}}</mat-label>
+  <input
+    matInput
+    type="text"
+    id="typeahead-manager"
+    placeholder="Busca por documento"
+    [(ngModel)]="variable"
+    [ngbTypeahead]="search"
+    [inputFormatter]="formatterName"
+    [resultFormatter]="formatterName"
+    [resultTemplate]="rt"
+    [editable]="false"
+  />
+  <button
+    mat-icon-button
+    color="primary"
+    matSuffix
+    (click)="fijarResponsable(datos, variable)"
+    [attr.aria-label]="'Actualizar'"
+  >
+    <mat-icon>save</mat-icon>
+  </button>
+  <mat-hint *ngIf="searching">Buscando</mat-hint>
+  <mat-hint *ngIf="searchFail">No hemos encontrado resultados</mat-hint>
+</mat-form-field>

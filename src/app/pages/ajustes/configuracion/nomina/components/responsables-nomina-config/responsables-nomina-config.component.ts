@@ -39,7 +39,6 @@ export class ResponsablesNominaConfigComponent implements OnInit {
       this._modal.open(this.modalResponsable, 'md', false)
     });
     this.createForm();
-    console.log(this.datos);
   }
 
   createForm() {

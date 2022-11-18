@@ -9,184 +9,179 @@
       correspondientes al momento del pago de la nómina.
     </div>
 
-          <div class="row d-flex justify-content-between">
-            <div class="col-md-6">
-              <h6 class="font-weight-bold">Responsables de aprobación de nómina</h6>
-            </div>
-            <div class="col-md-6 text-right">
-              <div class="btn-group rounded w-sm-100">
-                <button class="btn btn-primary btn-sm" (click)="openModal(openResponsable)">
-                  <i class="fa fa-plus"></i> Agregar
-                </button>
-              </div>
+      <div *ngIf="!renderNomina ; else notData" >
+        <div class="row d-flex justify-content-between">
+          <div class="col-md-6">
+            <h6 class="font-weight-bold">Responsables de aprobación de nómina</h6>
+          </div>
+          <div class="col-md-6 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button class="btn btn-primary btn-sm" (click)="openModal(openResponsable)">
+                <i class="fa fa-plus"></i> Agregar
+              </button>
             </div>
           </div>
-          <div class="row mt-3" *ngIf="!loading.responsables && responsableNominaDatos.length > 0; else notDataResponsables">
-            <div class="col-md-12">
-              <app-responsables-nomina-config
-                (notificacion)="(mostrarMensaje)"
-                [datos]="responsableNominaDatos"
-                [open]="openResponsable.asObservable()"
-                (refresh)="getResponsablesNomina()"
-              ></app-responsables-nomina-config>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.responsables && responsableNominaDatos.length > 0; else notDataResponsables">
+          <div class="col-md-12">
+            <app-responsables-nomina-config
+              (notificacion)="(mostrarMensaje)"
+              [datos]="responsableNominaDatos"
+              [open]="openResponsable.asObservable()"
+              (refresh)="getResponsablesNomina()"
+            ></app-responsables-nomina-config>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <h6 class="font-weight-bold">Salario y subsidios</h6>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.salariosSubsidios && salariosSubsidiosDatos.length > 0; else notDataSalarios">
+          <div class="col-md-12">
+            <app-salarios-config
+              (notificacion)="(mostrarMensaje)"
+              [datos]="salariosSubsidiosDatos"
+            ></app-salarios-config>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <h6 class="font-weight-bold">Horas extras y recargos</h6>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.extras && extrasDatos.length > 0; else notDataExtras">
+          <div class="col-md-12">
+            <app-horas-extras-config
+              [datos]="extrasDatos"
+              (notificacion)="(mostrarMensaje)"
+            ></app-horas-extras-config>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <h6 class="font-weight-bold">Aportes seguridad social - Funcionario</h6>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.segFuncionario && seguridadFuncionarioDatos.length > 0; else notDataSegFuncionario">
+          <div class="col-md-12">
+            <app-s-social-funcionario-config
+              (notificacion)="(mostrarMensaje)"
+              [datos]="seguridadFuncionarioDatos"
+            ></app-s-social-funcionario-config>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <h6 class="font-weight-bold">Aportes seguridad social - Empresa</h6>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.segEmpresa && seguridadEmpresaDatos.length > 0; else notDataSegEmpresa">
+          <div class="col-md-12">
+            <app-s-social-empresa-config
+              (notificacion)="(mostrarMensaje)"
+              [datos]="seguridadEmpresaDatos"
+            ></app-s-social-empresa-config>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <h6 class="font-weight-bold">Riesgos ARL</h6>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.riesgos && riesgosArlDatos.length > 0; else notDataRiesgos">
+          <div class="col-md-12">
+            <app-riesgo-arl-config
+              (notificacion)="(mostrarMensaje)"
+              [datos]="riesgosArlDatos"
+            ></app-riesgo-arl-config>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <h6 class="font-weight-bold">Parafiscales</h6>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.parafiscales && parafiscalesDatos.length > 0; else notDataParafiscales">
+          <div class="col-md-12">
+            <app-parafiscales-config
+              (notificacion)="(mostrarMensaje)"
+              [datos]="parafiscalesDatos"
+            ></app-parafiscales-config>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <h6 class="font-weight-bold">Novedades</h6>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.novedades && novedadesList.length > 0; else notDataNovedades">
+          <div class="col-md-12">
+            <app-novedades-config
+              (notificacion)="(mostrarMensaje)"
+              [datos]="novedadesList"
+            ></app-novedades-config>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <div class="col-md-6">
+            <h6 class="font-weight-bold">Ingresos</h6>
+          </div>
+          <div class="col-md-6 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button class="btn btn-primary btn-sm" (click)="openModal(openIngreso)">
+                <i class="fa fa-plus"></i> Agregar
+              </button>
             </div>
           </div>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.ingresos && incomeDatos.length > 0; else notDataIngresos">
+          <div class="col-md-12">
+            <app-ingresos-config
+              (notificacion)="(mostrarMensaje)"
+              [datos]="incomeDatos"
+              [open]="openIngreso.asObservable()"
+              (refresh)="getIncomeDatos()"
+            ></app-ingresos-config>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <div class="col-md-6">
+            <h6 class="font-weight-bold">Egresos</h6>
+          </div>
+          <div class="col-md-6 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button class="btn btn-primary btn-sm" (click)="openModal(openEgreso)">
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.egresos && deductionsDatos.length > 0; else notDataEgresos">
+          <div class="col-md-12">
+            <app-egresos-config
+              (notificacion)="(mostrarMensaje)"
+              [datos]="deductionsDatos"
+              [open]="openEgreso.asObservable()"
+              (refresh)="getDeductionDatos()"
+            ></app-egresos-config>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-between">
+          <h6 class="font-weight-bold">Liquidación</h6>
+        </div>
+        <div class="row mt-3" *ngIf="!loading.liquidacion && liquidationsDatos.length > 0; else notDataLiquidaciones">
+          <div class="col-md-12">
+            <app-liquidacion-config
+              (notificacion)="(mostrarMensaje)"
+              [datos]="liquidationsDatos"
+            ></app-liquidacion-config>
+          </div>
+        </div>
+            </div>
 
-          <div class="row d-flex justify-content-between">
-            <h6 class="font-weight-bold">Salario y subsidios</h6>
-          </div>
-          <div class="row mt-3" *ngIf="!loading.salariosSubsidios && salariosSubsidiosDatos.length > 0; else notDataSalarios">
-            <div class="col-md-12">
-              <app-salarios-config
-                (notificacion)="(mostrarMensaje)"
-                [datos]="salariosSubsidiosDatos"
-              ></app-salarios-config>
-            </div>
-          </div>
+              <!--    <notifications group="notificacionesNomina" position="bottom right" /> -->
 
-          <div class="row d-flex justify-content-between">
-            <h6 class="font-weight-bold">Horas extras y recargos</h6>
-          </div>
-          <div class="row mt-3" *ngIf="!loading.extras && extrasDatos.length > 0; else notDataExtras">
-            <div class="col-md-12">
-              <app-horas-extras-config
-                [datos]="extrasDatos"
-                (notificacion)="(mostrarMensaje)"
-              ></app-horas-extras-config>
-            </div>
-          </div>
-
-          <div class="row d-flex justify-content-between">
-            <h6 class="font-weight-bold">Aportes seguridad social - Funcionario</h6>
-          </div>
-          <div class="row mt-3" *ngIf="!loading.segFuncionario && seguridadFuncionarioDatos.length > 0; else notDataSegFuncionario">
-            <div class="col-md-12">
-              <app-s-social-funcionario-config
-                (notificacion)="(mostrarMensaje)"
-                [datos]="seguridadFuncionarioDatos"
-              ></app-s-social-funcionario-config>
-            </div>
-          </div>
-
-          <div class="row d-flex justify-content-between">
-            <h6 class="font-weight-bold">Aportes seguridad social - Empresa</h6>
-          </div>
-          <div class="row mt-3" *ngIf="!loading.segEmpresa && seguridadEmpresaDatos.length > 0; else notDataSegEmpresa">
-            <div class="col-md-12">
-              <app-s-social-empresa-config
-                (notificacion)="(mostrarMensaje)"
-                [datos]="seguridadEmpresaDatos"
-              ></app-s-social-empresa-config>
-            </div>
-          </div>
-
-          <div class="row d-flex justify-content-between">
-            <h6 class="font-weight-bold">Riesgos ARL</h6>
-          </div>
-          <div class="row mt-3" *ngIf="!loading.riesgos && riesgosArlDatos.length > 0; else notDataRiesgos">
-            <div class="col-md-12">
-              <app-riesgo-arl-config
-                (notificacion)="(mostrarMensaje)"
-                [datos]="riesgosArlDatos"
-              ></app-riesgo-arl-config>
-            </div>
-          </div>
-
-          <div class="row d-flex justify-content-between">
-            <h6 class="font-weight-bold">Parafiscales</h6>
-          </div>
-          <div class="row mt-3" *ngIf="!loading.parafiscales && parafiscalesDatos.length > 0; else notDataParafiscales">
-            <div class="col-md-12">
-              <app-parafiscales-config
-                (notificacion)="(mostrarMensaje)"
-                [datos]="parafiscalesDatos"
-              ></app-parafiscales-config>
-            </div>
-          </div>
-
-          <div class="row d-flex justify-content-between">
-            <h6 class="font-weight-bold">Novedades</h6>
-          </div>
-          <div class="row mt-3" *ngIf="!loading.novedades && novedadesList.length > 0; else notDataNovedades">
-            <div class="col-md-12">
-              <app-novedades-config
-                (notificacion)="(mostrarMensaje)"
-                [datos]="novedadesList"
-              ></app-novedades-config>
-            </div>
-          </div>
-
-          <div class="row d-flex justify-content-between">
-            <div class="col-md-6">
-              <h6 class="font-weight-bold">Ingresos</h6>
-            </div>
-            <div class="col-md-6 text-right">
-              <div class="btn-group rounded w-sm-100">
-                <button class="btn btn-primary btn-sm" (click)="openModal(openIngreso)">
-                  <i class="fa fa-plus"></i> Agregar
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3" *ngIf="!loading.ingresos && incomeDatos.length > 0; else notDataIngresos">
-            <div class="col-md-12">
-              <app-ingresos-config
-                (notificacion)="(mostrarMensaje)"
-                [datos]="incomeDatos"
-                [open]="openIngreso.asObservable()"
-                (refresh)="getIncomeDatos()"
-              ></app-ingresos-config>
-            </div>
-          </div>
-
-          <div class="row d-flex justify-content-between">
-            <div class="col-md-6">
-              <h6 class="font-weight-bold">Egresos</h6>
-            </div>
-            <div class="col-md-6 text-right">
-              <div class="btn-group rounded w-sm-100">
-                <button class="btn btn-primary btn-sm" (click)="openModal(openEgreso)">
-                  <i class="fa fa-plus"></i> Agregar
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3" *ngIf="!loading.egresos && deductionsDatos.length > 0; else notDataEgresos">
-            <div class="col-md-12">
-              <app-egresos-config
-                (notificacion)="(mostrarMensaje)"
-                [datos]="deductionsDatos"
-                [open]="openEgreso.asObservable()"
-                (refresh)="getDeductionDatos()"
-              ></app-egresos-config>
-            </div>
-          </div>
-
-          <div class="row d-flex justify-content-between">
-            <h6 class="font-weight-bold">Liquidación</h6>
-          </div>
-          <div class="row mt-3" *ngIf="!loading.liquidacion && liquidationsDatos.length > 0; else notDataLiquidaciones">
-            <div class="col-md-12">
-              <app-liquidacion-config
-                (notificacion)="(mostrarMensaje)"
-                [datos]="liquidationsDatos"
-              ></app-liquidacion-config>
-            </div>
-          </div>
-    </div>
-
-      <!--    <notifications group="notificacionesNomina" position="bottom right" /> -->
-
-    <!-- <div class="overlay" v-else>
-                  <div class="container-spinner">
-                    <semipolar-spinner :animation-duration="800" :size="70" color="#fff" />
-                    <p class="text-center font-weight-bold text-spinner">
-                      Cargando módulo...
-                    </p>
-                  </div>
-                </div> -->
+            <!-- <div class="overlay" v-else>
+                <div class="container-spinner">
+                  <semipolar-spinner :animation-duration="800" :size="70" color="#fff" />
+                  <p class="text-center font-weight-bold text-spinner">
+                    Cargando módulo...
+                  </p>
+                </div>
+              </div> -->
+      </div>
 </div>
 
+<ng-template #notData>
+  <app-not-data [loading]="renderNomina"></app-not-data>
+</ng-template>
 <ng-template #notDataResponsables>
   <app-not-data [loading]="loading.responsables"></app-not-data>
 </ng-template>

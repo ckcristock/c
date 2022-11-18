@@ -28,28 +28,31 @@ export class NominaComponent implements OnInit {
   salariosSubsidiosDatos: any[] = [];
 
   loading:any = {
-    responsables: false,
-    extras: false,
-    incapacidades: false,
-    novedades: false,
-    parafiscales: false,
-    riesgos: false,
-    segEmpresa: false,
-    segFuncionario: false,
-    ingresos: false,
-    egresos: false,
-    liquidacion: false,
-    salariosSubsidios: false,
+    responsables: true,
+    extras: true,
+    incapacidades: true,
+    novedades: true,
+    parafiscales: true,
+    riesgos: true,
+    segEmpresa: true,
+    segFuncionario: true,
+    ingresos: true,
+    egresos: true,
+    liquidacion: true,
+    salariosSubsidios: true,
   };
 
   form: FormGroup;
+  renderNomina: boolean;
+  data: any;
 
   constructor(
     private _nominaConfig:NominaConfigService,
     ) {}
 
   ngOnInit(): void {
-    this.getResponsablesNomina()
+    this.getParametrosAll()
+/*     this.getResponsablesNomina()
     this.getExtras()
     this.getIncapacidades()
     this.getNovedades()
@@ -60,7 +63,53 @@ export class NominaComponent implements OnInit {
     this.getIncomeDatos()
     this.getDeductionDatos()
     this.getLiquidationDatos()
-    this.getsalariosSubsidiosDatos()
+    this.getsalariosSubsidiosDatos() */
+  }
+
+  getParametrosAll(){
+    this.renderNomina = true
+    this._nominaConfig.getAllParams()
+    .subscribe((res:any)=>{
+      this.data = res.data
+
+      this.responsableNominaDatos = res.data.responsables
+      this.loading.responsables = false
+
+      this.extrasDatos = res.data.extras
+      this.loading.extras = false
+
+      this.incapacidadesDatos = res.data.incapacidades
+      this.loading.incapacidades = false
+
+      this.novedadesList = res.data.novedades
+      this.loading.novedades = false
+
+      this.parafiscalesDatos = res.data.parafiscales
+      this.loading.parafiscales = false
+
+      this.riesgosArlDatos = res.data.riesgos
+      this.loading.riesgos = false
+
+      this.seguridadEmpresaDatos = res.data.segSocEmp
+      this.loading.segEmpresa = false
+
+      this.seguridadFuncionarioDatos = res.data.segSocFunc
+      this.loading.segFuncionario = false
+
+      this.incomeDatos = res.data.ingresos
+      this.loading.ingresos = false
+
+      this.deductionsDatos = res.data.egresos
+      this.loading.egresos = false
+
+      this.liquidationsDatos = res.data.liquidacion
+      this.loading.liquidacion = false
+
+      this.salariosSubsidiosDatos = res.data.salarios
+      this.loading.salariosSubsidios = false
+
+      this.renderNomina = false
+    })
   }
 
   openModal(open){

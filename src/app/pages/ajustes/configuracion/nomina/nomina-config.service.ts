@@ -9,6 +9,12 @@ import { map } from 'rxjs/operators';
 export class NominaConfigService {
   constructor(private http: HttpClient) { }
 
+  getAllParams(){
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/all`
+    );
+  }
+
   getExtras() {
     return this.http.get(
       `${environment.base_url}/parametrizacion/nomina/extras`

@@ -24,15 +24,15 @@
 
     <div class="d-flex">
       <!-- Files -->
-      <div class="dropdown d-inline-block" ngbDropdown>
+      <div class="dropdown d-inline-block" ngbDropdown *ngIf="view_folder">
         <button
           type="button"
           ngbDropdownToggle
           class="btn header-item noti-icon waves-effect iconClass"
           id="page-header-notifications-dropdown"
-          [routerLink]="['/sst/documentos-gestion/rrhh']"
+          [routerLink]="['/sst/documentos-gestion/' + folder_permission]"
         >
-          <i class="fas fa-folder text-info"></i>
+          <i class="fas fa-folder"></i>
         </button>
       </div>
       <!--Notifications-->

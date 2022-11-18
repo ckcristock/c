@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, ParamMap, Params } from '@angular/router';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-documentos-gestion',
@@ -9,40 +10,47 @@ import { ActivatedRoute, ParamMap, Params } from '@angular/router';
 })
 export class DocumentosGestionComponent implements OnInit {
   modulo: string;
-  public ruta3 = environment.url_assets + '/filemanager3/tinyfilemanager.php';
-  constructor(private rutaActiva: ActivatedRoute) {}
+  param_folder: any;
+  public ruta: string;
+  view_folder: boolean = false;
+  name_folder: string;
+  folder_permission: any;
+  constructor(
+    private rutaActiva: ActivatedRoute,
+    private _user: UserService
+  ) { }
 
   ngOnInit(): void {
-    this.ruta3 = environment.url_assets + '/filemanager/tinyfilemanager.php'
-    /* this.rutaActiva.paramMap.subscribe((params: ParamMap) => {
-      //window.open(this.ruta3, '_blank')
+    this.param_folder = this.rutaActiva.snapshot.params.modulo;
+    this.folder_permission = this._user.user.person.folder_id
+    this.rutaActiva.paramMap.subscribe((params: ParamMap) => {
       this.modulo = params.get('modulo');
-      switch (this.modulo) {
-        case 'rrhh':
-          this.ruta3 = 
-            environment.url_assets + '/filemanager4/filemanager/dialog.php?type=0&lang=es&car=rrhh';
-          break;
-        case 'contabilidad':
-          this.ruta3 =
-            environment.url_assets + '/filemanager4/filemanager/dialog.php?type=0&lang=es&car=contabilidad';
-          break;
-        case 'juridico':
-          this.ruta3 =
-            environment.url_assets + '/filemanager4/filemanager/dialog.php?type=0&car=juridico';
-          break;
-        case 'calidad':
-          this.ruta3 =
-            environment.url_assets + '/filemanager4/filemanager/dialog.php?type=0&car=calidad';
-          break;
-        case 'gerencia':
-          this.ruta3 =
-            environment.url_assets + '/filemanager4/filemanager/dialog.php?type=0&car=';
-          break;
-        default:
-          this.ruta3 =
-            environment.url_assets + '/filemanager4/filemanager/dialog.php?type=0&car=';
+      if (this.folder_permission == this.modulo) {
+        this.view_folder = true
+        switch (this.modulo) {
+          case '1':
+            this.ruta =
+              environment.url_assets + '/filemanager/filemanager/dialog.php?type=0&lang=es&car=rrhh';
+            break;
+          case '2':
+            this.ruta =
+              environment.url_assets + '/filemanager/filemanager/dialog.php?type=0&lang=es&car=contabilidad';
+            break;
+          case '3':
+            this.ruta =
+              environment.url_assets + '/filemanager/filemanager/dialog.php?type=0&car=juridico';
+            break;
+          case '4':
+            this.ruta =
+              environment.url_assets + '/filemanager/filemanager/dialog.php?type=0&car=calidad';
+            break;
+          case '5':
+            this.ruta =
+              environment.url_assets + '/filemanager/filemanager/dialog.php?type=0&car=';
+            break;
+        }
       }
-    }); */
+    });
     //console.log(this.rutaActiva.snapshot.params.modulo);
   }
 }

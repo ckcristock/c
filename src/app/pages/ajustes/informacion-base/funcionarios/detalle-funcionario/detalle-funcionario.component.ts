@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, Route } from '@angular/router';
 import { DetalleService } from './detalle.service';
 import { DatosBasicosService } from './ver-funcionario/datos-basicos/datos-basicos.service';
 import { SwalService } from '../../services/swal.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-detalle-funcionario',
@@ -27,6 +28,8 @@ export class DetalleFuncionarioComponent implements OnInit {
     signature: '',
     title: ''
   };
+  public ruta = environment.url_assets
+  public url: string;
   user: any = {};
   constructor(
     private detalleService: DetalleService,
@@ -116,6 +119,7 @@ export class DetalleFuncionarioComponent implements OnInit {
       .subscribe((res: any) => {
         this.funcionario = res.data;
         console.log(this.funcionario)
+        this.url = this.ruta + '/filemanager/filemanager/dialog.php?type=0&car=rrhh%2Ffuncionarios%2F' + this.funcionario.identifier
       });
   }
 

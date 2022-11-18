@@ -21,7 +21,6 @@ export class MenuChildComponent implements OnInit {
   constructor( private _swal:SwalService ) { }
 
   ngOnInit(): void {
-    console.log(this.navItems)
   }
 
   setValues(item: any, position) {
@@ -31,7 +30,7 @@ export class MenuChildComponent implements OnInit {
   changeAll(item){
     item.child.forEach( el => {
       el.permissions?.forEach(permission => {
-        permission.Activo = !permission.Activo  
+        permission.Activo = !permission.Activo
       });
       el.child?.forEach(child => {
         child.permissions?.forEach(childPermission => {
@@ -49,7 +48,7 @@ export class MenuChildComponent implements OnInit {
     });
   }
 
-/*   
+/*
   save() {
     let navFilter = [...this.navItems]
 

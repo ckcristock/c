@@ -74,6 +74,7 @@ import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-
 import { BodegasComponent } from './bodegas/bodegas.component';
 import { CrearbodegaComponent } from './bodegas/crearbodega/crearbodega.component';
 import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.component';
+import { FilePermissionsComponent } from './funcionarios/detalle-funcionario/permissions/file-permissions/file-permissions.component';
 
 @NgModule({
   declarations: [
@@ -121,6 +122,7 @@ import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.componen
     SedesComponent,
     VerLiquidacionComponent,
     BodegasComponent,
+    FilePermissionsComponent,
   ],
 
   imports: [

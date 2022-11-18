@@ -16,4 +16,12 @@ export class PersonService {
     return this.httpClient.get(`${environment.base_url}/people-paginate`, { params })
   }
 
+  updateFilePermission(data) {
+    return this.httpClient.post(`${environment.base_url}/update-file-permission`, data)
+  }
+
+  getFilePermission(id) {
+    return this.httpClient.get(`${environment.base_url}/get-file-permission/${id}`)
+  }
+
 }

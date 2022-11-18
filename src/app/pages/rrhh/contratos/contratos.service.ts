@@ -58,6 +58,10 @@ export class ContratosService {
     return this.http.get(`${environment.base_url}/contractsToExpire`, { params });
   }
 
+  getContractRevewal( process_id ) {
+    return this.http.get(`${environment.base_url}/contractRevewal/${process_id}`);
+  }
+
   getContractByTrialPeriod() {
     return this.http.get(`${environment.base_url}/periodoP`);
   }

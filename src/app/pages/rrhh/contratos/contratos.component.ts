@@ -154,7 +154,7 @@ export class ContratosComponent implements OnInit {
       let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
       dateInicio.setDate(dateInicio.getDate() + parseInt(event.target.value));
       this.formContrato.get('date_end').setValue(dateInicio.toISOString().split('T')[0]);
-      if (!this.formContrato.controls.date_diff.valid) {
+      if (this.formContrato.controls.date_diff.hasError('min')) {
         this._swal.show({
           title: '',
           text: ' La fecha de finalización debe ser posterior a '+this.minRenewalPeriod.date,
@@ -273,6 +273,7 @@ export class ContratosComponent implements OnInit {
     this.contractService.getContractsToExpire(this.paginationCV)
       .subscribe((res: any) => {
         this.contractsToExpire = res.data.data;
+        this.contractsToExpire.renewed = (res.data.data==1) || null;
         this.paginationCV.collectionSize = res.data.total;
         this.paginacion2 = res.data
         this.contractData = false
@@ -305,18 +306,19 @@ export class ContratosComponent implements OnInit {
 
   // Se toma la decisión de si se renueva al contraro o se liquida.
   makeChoice(employee, modal) {
-    if(employee.renewed==null || employee.renewed==1){
+    if(employee.renewed==null || employee.renewed){
       (async () => {
         const { value: choice } = await Swal.fire({
-          title: (employee.renewed==1)?
-            `El contrato de ${employee.first_name + ' ' + employee.first_surname} ya presenta un proceso de renovación de contrato. Qué desea hacer?`:
-            `Seleccione qué acción se tomará sobre el contrato de ${employee.first_name + ' ' + employee.first_surname}.`,
+          title: (employee.renewed)?
+            `El contrato de ${employee.first_name + ' ' + employee.first_surname} ya presenta un proceso de renovación de contrato. Qué desea hacer?`
+            :`Seleccione qué acción se tomará sobre el contrato de ${employee.first_name + ' ' + employee.first_surname}.`,
           icon: 'question',
           input: 'radio',
           inputOptions: {
-            'true': (employee.renewed==1)?'Ajustar condiciones':'Renovar',
+            'true': (employee.renewed)?'Ajustar condiciones':'Renovar',
             'false': 'Liquidar'
           },
+          footer: (employee.cantidad>0)?'Renovaciones previas: <strong>'+employee.cantidad+'</strong>':'',
           inputValidator: (value) => {
             if (!value) {
               return 'Debes seleccionar una acción!'
@@ -325,9 +327,9 @@ export class ContratosComponent implements OnInit {
         })
 
         if (choice) {
-          if (choice == 'true') {
+          if (choice == 'true') { // Se renueva
             this.adjustRenewal(employee, modal);
-          } else {
+          } else {  // Se preliquida
             this.formContrato = this.fb.group({
               codigo: [null],
               contract_id: [employee.contract_id],
@@ -349,7 +351,7 @@ export class ContratosComponent implements OnInit {
               old_date_end: [null],
               salary: [null]
             });
-            if (employee.renewed==1) {
+            if (employee.renewed) {
               this.formContrato.addControl('id', this.fb.control(employee.process_id));
             }
             this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
@@ -368,7 +370,8 @@ export class ContratosComponent implements OnInit {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Renovar contrato',
-        cancelButtonText: 'Cancelar'
+        cancelButtonText: 'Cancelar',
+        footer: (employee.cantidad>0)?'Renovaciones previas: <strong>'+employee.cantidad+'</strong>':'',
       }).then((result) => {
         if (result.isConfirmed) {
           this.adjustRenewal(employee, modal);
@@ -378,10 +381,17 @@ export class ContratosComponent implements OnInit {
   }
 
   adjustRenewal(employee, modal){
-    this.contractService.getContract(employee.id).subscribe((res: any) => {
-      res.data['codigo'] = "CON" + res.data.id;
-      res.data['contract_id'] = res.data.id;
-      res.data['renewed'] = 1;
+    /**
+     * Si ya existe un proceso de renovación, se trae la información previamente registrada,
+     * de lo contrario, se trae la información del contrato vigente.
+     */
+    let service = (employee.renewed)?
+      this.contractService.getContractRevewal(employee.process_id)
+      :this.contractService.getContract(employee.id);
+    service.subscribe((res: any) => {
+      res.data['contract_id'] = (employee.renewed)?res.data.contract_id:res.data.id;
+      res.data['codigo'] = "CON" + res.data.contract_id;
+      res.data['renewed'] = true;
       if (res.data.turn_type == "Fijo") {
         res.data['turn_id'] = res.data.fixed_turn_id;
       } else {
@@ -395,13 +405,25 @@ export class ContratosComponent implements OnInit {
       delete res.data.dependency_name;
       delete res.data.position_name;
       delete res.data.id;
+
+      /** Si lleva menos de tres renovaciones y si el periodo es menor a un año,
+       *  se procede a renovar por al menos un año. Pero si es la cuarta renovación
+       *  y si el periodo es menor a un año, se procede a renovar por al menos un año.
+       *  Lo mismo sucede si el periodo desde el contrato original ha sido menor de un año.
+      */
+      if(res.data.date_diff >= 365 || employee.cantidad >= 3){
+        res.data.date_diff = 365;
+        let dateEnd = new Date(res.data.date_of_admission);
+        dateEnd.setDate(dateEnd.getDate() + 365);
+        res.data.date_end = dateEnd.toISOString().split('T')[0];
+      }
       this.minRenewalPeriod = { date: res.data.date_end, numDays: res.data.date_diff };
       this.formContrato = this.fb.group({
         codigo: [''],
-        contract_id: ['', Validators.required],
-        person_id: ['', Validators.required],
+        contract_id: [employee.contract_id, Validators.required],
+        person_id: [employee.id, Validators.required],
         name: [''],
-        renewed: ['', Validators.required],
+        renewed: [1, Validators.required],
         company_id: ['', Validators.required],
         company_name: ['', Validators.required],
         contract_term_id: ['', Validators.required],
@@ -423,6 +445,7 @@ export class ContratosComponent implements OnInit {
       );
       this.formContrato = this.fb.group(formVacio); */
 
+      // Si se va a modificar un proceso existente, se crea de nuevo el campo "id".
       if (employee.renewed!=null) {
         this.formContrato.addControl('id', this.fb.control(employee.process_id));
       }
@@ -442,7 +465,6 @@ export class ContratosComponent implements OnInit {
         this.formContrato.addControl('rotating_turn_id', this.fb.control(this.formContrato.get('turn_id').value));
       }
       this.formContrato.removeControl('turn_id')
-      console.log(this.formContrato.value);
       this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
         this._modal.close();
         this._swal.show({

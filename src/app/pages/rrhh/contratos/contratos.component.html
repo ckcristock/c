@@ -255,9 +255,9 @@
             >
               <div class="d-flex w-100 justify-content-between"
                 matBadgeSize="small"
-                [matBadgeColor]="(contractToExpire.renewed==0)?'warn':(contractToExpire.cantidad==0)?'primary':'accent'"
-                [matBadge]="(contractToExpire.renewed==0 || contractToExpire.cantidad==0)?'!':contractToExpire.cantidad"
-                [matBadgeHidden]="contractToExpire.renewed==null && contractToExpire.cantidad==0"
+                [matBadgeColor]="(contractToExpire.renewed)?'primary':(contractToExpire.cantidad>0)?'accent':'warn'"
+                [matBadge]="(contractToExpire.cantidad==0)?'!':contractToExpire.cantidad"
+                [matBadgeHidden]="contractToExpire.renewed===null && contractToExpire.cantidad==0"
               >
                 <div class="mb-1">
                   {{ contractToExpire.first_name }}

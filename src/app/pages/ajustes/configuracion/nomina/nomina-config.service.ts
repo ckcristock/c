@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NominaConfigService {
   constructor(private http: HttpClient) { }
+
+  getAllParams(){
+    return this.http.get(
+      `${environment.base_url}/parametrizacion/nomina/all`
+    );
+  }
 
   getExtras() {
     return this.http.get(
@@ -82,6 +89,21 @@ export class NominaConfigService {
     );
   }
 
+  getPeopleWithDni(params) {
+    return this.http.get<[any, string[]]>(
+      `${environment.base_url}/people-with-dni`, { params }
+    ).pipe(
+      map(response => response['data'])
+    );;
+  }
+
+  getResponsablesNomina() {
+    return this.http.get(
+      `${environment.base_url}/payroll-manager`
+    );
+  }
+
+
   /////////////////////////UPDATES//////////////////////////////////////
 
   updateExtras(id, data = {}) {
@@ -126,6 +148,12 @@ export class NominaConfigService {
 
   updateCreateSalariosSubsidios(data={}) {
     return this.http.post(`${environment.base_url}/parametrizacion/nomina/salarios-subsidios/update`, data);
+  }
+
+  updateCreatePayrollManager(data){
+    return this.http.post(
+      `${environment.base_url}/payroll-manager`, data
+    )
   }
 
 

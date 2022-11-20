@@ -5,7 +5,7 @@
         <td>{{ extra.concept }}</td>
         <td>
           <app-row-typeahead
-            (setAccount)="setAccount($event)"
+            (setAccount)="actualizar($event.identifier, 'accounting_account', $event.datos.id)"
             [extra]="extra"
             [variable]="extra.cuenta_contable"
             [titulo]="'Cuentas Contables'"
@@ -13,7 +13,7 @@
         </td>
         <td>
           <app-row-typeahead
-          (setAccount)="setContrapartida($event)"
+          (setAccount)="actualizar($event.identifier, 'account_setoff', $event.datos.id)"
           [extra]="extra"
           [variable]="extra.contrapartida"
           [titulo]="'Contrapartida'"
@@ -37,7 +37,7 @@
               mat-icon-button
               color="primary"
               matSuffix
-              (click)="actualizar(extra, percentage.value)"
+              (click)="actualizar(percentage.value, 'percentage', extra.id)"
               [attr.aria-label]="'Actualizar'"
             >
               <mat-icon>save</mat-icon>

@@ -135,7 +135,7 @@
                 <th>F. Fin</th>
                 <th>F. Fin prueba</th>
                 <th>F. Notific.</th>
-                <th>Acc</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -253,7 +253,12 @@
               (click)="makeChoice(contractToExpire,renovarContrato)"
               class="list-group-item list-group-item-action flex-column align-items-start"
             >
-              <div class="d-flex w-100 justify-content-between">
+              <div class="d-flex w-100 justify-content-between"
+                matBadgeSize="small"
+                [matBadgeColor]="(contractToExpire.renewed)?'primary':(contractToExpire.cantidad>0)?'accent':'warn'"
+                [matBadge]="(contractToExpire.cantidad==0)?'!':contractToExpire.cantidad"
+                [matBadgeHidden]="contractToExpire.renewed===null && contractToExpire.cantidad==0"
+              >
                 <div class="mb-1">
                   {{ contractToExpire.first_name }}
                   {{ contractToExpire.first_surname }} <br />
@@ -322,7 +327,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body pb-0">
     <form [formGroup]="formContrato">
       <div class="row">
         <mat-form-field class="col-4" appearance="outline">
@@ -331,7 +336,7 @@
             type="text"
             formControlName="codigo"
             matInput
-            placeholder="Nombre del empleado"
+            placeholder="Contrato"
             autocomplete="off"
             readonly
           />
@@ -346,6 +351,34 @@
             autocomplete="off"
             readonly
           />
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo de contrato</mat-label>
+          <mat-select
+            formControlName="contract_term_id"
+            placeholder="Término del contrato"
+            required
+          >
+            <mat-option
+              *ngFor="let contractType of contractTypes"
+              [value]="contractType.value"
+            >{{ contractType.text }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Término del contrato</mat-label>
+          <mat-select
+          formControlName="work_contract_type_id"
+          placeholder="Tipo de contrato"
+          required
+        >
+          <mat-option
+            *ngFor="let term of terms"
+            [value]="term.value"
+          >{{ term.text }}</mat-option>
+        </mat-select>
         </mat-form-field>
       </div>
       <div class="row">
@@ -460,17 +493,26 @@
             type="number"
             formControlName="date_diff"
             matInput
-            (input)="calcularFecha($event)"
+            [min]="minRenewalPeriod.numDays"
+            (change)="calcularFecha($event)"
             placeholder="Número de días"
+            required
             autocomplete="off"
           />
+          <mat-error *ngIf="formContrato.get('date_diff').hasError('required')">
+            El valor es <strong>requerido</strong>
+          </mat-error>
+          <!-- <mat-error *ngIf="formContrato.get('date_diff').hasError('min')">
+            La fecha de finalización debe ser posterior a <strong>{{ dateMin }}</strong>
+          </mat-error> -->
         </mat-form-field>
         <mat-form-field class="col-4" appearance="outline">
           <mat-label>Fecha de finalización</mat-label>
           <input
             matInput
             type="date"
-            (input)="calcularDias($event)"
+            [min]="minRenewalPeriod.date"
+            (change)="calcularDias($event)"
             (selectionChange)="calcularDias($event)"
             formControlName="date_end"
             placeholder="Fecha de finalización"
@@ -489,7 +531,7 @@
     </button>
     <button
       type="button"
-      (click)="alert('Nice!')"
+      (click)="saveRenewalConditions()"
       [disabled]="formContrato.invalid"
       class="btn btn-primary"
     >

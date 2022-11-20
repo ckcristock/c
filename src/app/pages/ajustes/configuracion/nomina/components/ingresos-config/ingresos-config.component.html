@@ -18,58 +18,111 @@
               (change)="actualizar($event.checked, 'state',  extra.id)"
               color="primary"
               [(ngModel)]="extra.state"
+              [ngModelOption]="{standalone: true}"
               >{{ extra.state == 1 ? "Activo" : "Inactivo" }}</mat-slide-toggle
             >
-            <!-- <div class="col-md-7 custom-control custom-switch mb-2">
-
-              <span
-                class="d-inline-block"
-                data-toggle="tooltip"
-                title="{{ extra.id }}"
-                >
-                <input
-                  id="{{extra.id}}"
-                  name="status{{extra.id}}"
-                  type="checkbox"
-                  class="custom-control-input"
-                  [(checked)]="extra.state"
-                  (click)="extra.state =! extra.state"
-                />
-                <label for="estatus{{extra.id}}" class="custom-control-label"
-                  >Estatus</label
-                >
-              </span>
-            </div> -->
           </td>
 
-          <td>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Porcentaje</mat-label>
-              <input
-                matInput
-                #percentage
-                type="number"
-                [value]="extra.percentage"
-                step="0.05"
-                min="0"
-                name="percentage"
-                id="percentage"
-                autocomplete="off"
-              />
-              <button
-                mat-icon-button
-                color="primary"
-                matSuffix
-                (click)="actualizar(percentage.value, 'percentage' , extra.id)"
-                [attr.aria-label]="'Actualizar'"
-              >
-                <mat-icon>save</mat-icon>
-              </button>
-            </mat-form-field>
-          </td>
         </tr>
       </ng-template>
       <ng-container *ngIf="datos.length <= 0; else ingresos"></ng-container>
     </tbody>
   </table>
 </div>
+
+
+<ng-template #modalIngreso let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nuevo Ingreso</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Concepto</mat-label>
+          <input
+            matInput
+            type="text"
+            name="concept"
+            autocomplete="off"
+            formControlName="concept"
+            placeholder="Ingrese el Concepto"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="type">
+            <mat-option value="Constitutivo">Constitutivo</mat-option>
+            <mat-option value="No Constitutivo">No Constitutivo</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <ng-template #rt2 let-r="result" let-t="term">
+          <ngb-highlight
+            [result]="r.Codigo_Niif + ' || ' + r.Nombre_Niif"
+            [term]="t"
+          ></ngb-highlight>
+        </ng-template>
+        <mat-form-field class="col-md-12" appearance="outline" >
+          <mat-label>Cuenta Contable</mat-label>
+          <input
+            matInput
+            type="text"
+            autocomplete="off"
+            formControlName="accounting_account"
+            [ngbTypeahead]="search_cuenta_niif"
+            [resultTemplate]="rt2"
+            [inputFormatter]="formatter"
+            [resultFormatter]="formatter"
+            [class.is-invalid]="searchFail"
+          />
+          <mat-hint *ngIf="searching">Buscando...</mat-hint>
+          <mat-hint *ngIf="searchFail">
+            Lo lamentamos, las opciones no pudieron ser cargadas.
+          </mat-hint >
+        </mat-form-field>
+
+        <!-- <mat-form-field class="col-md-12" appearance="outline">
+          <mat-label>Estado</mat-label>
+          <input
+            matInput
+            type="text"
+            name="state"
+            autocomplete="off"
+            formControlName="state"
+            placeholder="Ingrese el nombre"
+          />
+        </mat-form-field> -->
+
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="_modal.close()"
+    >
+      Cancelar
+    </button>
+    <button
+      [disabled]="name == ''"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>

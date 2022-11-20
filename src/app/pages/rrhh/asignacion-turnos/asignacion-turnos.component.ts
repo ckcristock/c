@@ -22,7 +22,7 @@ export class AsignacionTurnosComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
 
   datosGenerales: any[] = [];
@@ -71,8 +71,9 @@ export class AsignacionTurnosComponent implements OnInit {
   }
 
   getTurns() {
-    this._rotatingTurn.getAll().subscribe((r: any) => {
-      this.turns = r.data;
+    this._rotatingTurn.getAllSelect().subscribe((r: any) => {
+      this.turns = r;
+      console.log(this.turns)
     });
   }
 

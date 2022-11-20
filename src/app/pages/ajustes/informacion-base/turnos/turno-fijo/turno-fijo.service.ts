@@ -9,8 +9,13 @@ export class FixedTurnService {
   constructor(private http: HttpClient) {}
 
   getFixedTurns(params = {}) {
-    return this.http.get(`${environment.base_url}/fixed-turns`, { params });
+    return this.http.get(`${environment.base_url}/paginate-fixed-turns`, { params });
   }
+
+  comboFixedTurns() {
+    return this.http.get(`${environment.base_url}/fixed-turns`);
+  }
+
   getFixedTurn(id) {
     return this.http.get(`${environment.base_url}/fixed-turns/${id}`);
   }

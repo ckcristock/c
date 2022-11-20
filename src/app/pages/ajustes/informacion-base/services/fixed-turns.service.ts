@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class FixedTurnsService {
   constructor(private http: HttpClient) {}
-
+  //!creo que no se usa
   getFixedTurns(params = {}) {
     return this.http.get(`${environment.base_url}/fixed-turns`, { params });
   }

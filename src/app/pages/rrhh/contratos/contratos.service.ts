@@ -58,6 +58,10 @@ export class ContratosService {
     return this.http.get(`${environment.base_url}/contractsToExpire`, { params });
   }
 
+  getContractRevewal( process_id ) {
+    return this.http.get(`${environment.base_url}/contractRevewal/${process_id}`);
+  }
+
   getContractByTrialPeriod() {
     return this.http.get(`${environment.base_url}/periodoP`);
   }
@@ -73,5 +77,9 @@ export class ContratosService {
     period =  (period > 2 ? 2 : period  ) ;
 
     return date_of_admission.add( period , 'months').format("YYYY-MM-DD");
+  }
+
+  saveFinishContractConditions(data:any) {
+    return this.http.post(`${environment.base_url}/finish-contract`, data);
   }
 }

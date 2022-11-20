@@ -12,10 +12,7 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -43,7 +40,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-
         *ngIf="!loading && documents.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -51,7 +47,7 @@
             <th>Código</th>
             <th>Nombre</th>
             <th>Código DIAN</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -61,9 +57,9 @@
               'text-danger font-weight-bold': document.status === 'Inactivo'
             }"
           >
-          <td class="align-middle">{{ document.code }}</td>
-          <td class="align-middle">{{ document.name }}</td>
-          <td class="align-middle">{{ document.dian_code }}</td>
+            <td class="align-middle">{{ document.code }}</td>
+            <td class="align-middle">{{ document.name }}</td>
+            <td class="align-middle">{{ document.dian_code }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button

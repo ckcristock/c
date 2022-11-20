@@ -9,6 +9,7 @@ import { WorkContractTypesService } from '../../../services/workContractTypes.se
 import { consts } from '../../../../../../core/utils/consts';
 import { GroupService } from '../../../services/group.service';
 import { FixedTurnService } from '../../../turnos/turno-fijo/turno-fijo.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-informacion-empresa',
@@ -21,7 +22,8 @@ export class InformacionEmpresaComponent implements OnInit {
   dependencies: any[];
   companies: any[];
   positions: any[];
-  workContractTypes: any[];
+  workContractTypes: any[] = [];
+  contractTerms: any[] = [];
   fixedTurns: any[];
   groups: any[];
 
@@ -71,7 +73,6 @@ export class InformacionEmpresaComponent implements OnInit {
   getDependencies(group_id) {
     this._dependecies.getDependencies({ group_id }).subscribe((d: any) => {
       this.dependencies = d.data;
-      this.dependencies.unshift({ text: 'Seleccione una', value: '' });
     });
   }
 
@@ -79,7 +80,6 @@ export class InformacionEmpresaComponent implements OnInit {
     if (dependency_id) {
       this._positions.getPositions({ dependency_id }).subscribe((d: any) => {
         this.positions = d.data;
-        this.positions.unshift({ text: 'Seleccione una', value: '' });
       });
     }
   }
@@ -87,13 +87,26 @@ export class InformacionEmpresaComponent implements OnInit {
   getworkContractTypes() {
     this._workContractTypes.getWorkContractTypes().subscribe((r: any) => {
       this.workContractTypes = r.data;
-      this.workContractTypes.unshift({ text: 'Seleccione uno', value: '' });
     });
   }
+
+  getContractTerms(value) {
+    this._workContractTypes.getContractTerms().subscribe((r: any) => {
+      this.contractTerms = []
+      r.data.forEach(
+        (contract_term:any) => contract_term.work_contract_types.forEach(
+          (work_contract_type: any) => {
+            if (work_contract_type.id == value) {
+              this.contractTerms.push(contract_term)
+            }
+          }))
+    });
+
+  }
+
   getRotatingTurns() {
-    this._fixedTurns.getFixedTurns().subscribe((r: any) => {
-      this.fixedTurns = r.data;
-      this.fixedTurns.unshift({ text: 'Seleccione una', value: '' });
+    this._fixedTurns.comboFixedTurns().subscribe((r: any) => {
+      this.fixedTurns = r.data
     });
   }
   crearForm() {
@@ -105,6 +118,7 @@ export class InformacionEmpresaComponent implements OnInit {
       salary: ['', Validators.required],
       date_of_admission: ['', Validators.required],
       work_contract_type_id: ['', Validators.required],
+      contract_term_id: ['', Validators.required],
       turn_type: ['Fijo', Validators.required],
       fixed_turn_id: ['', Validators.required],
       date_end: ['', Validators.required],
@@ -144,54 +158,7 @@ export class InformacionEmpresaComponent implements OnInit {
   get turnSelected() {
     return this.formCompany.get('turn_type').value;
   }
-  get company_id_invalid() {
-    return (
-      this.formCompany.get('company_id').invalid && this.formCompany.get('company_id').touched
-    );
-  }
-  get group_id_invalid() {
-    return this.formCompany.get('group_id').invalid && this.formCompany.get('group_id').touched;
-  }
-  get dependency_id_invalid() {
-    return (
-      this.formCompany.get('dependency_id').invalid && this.formCompany.get('dependency_id').touched
-    );
-  }
-  get position_id_invalid() {
-    return (
-      this.formCompany.get('position_id').invalid && this.formCompany.get('position_id').touched
-    );
-  }
-  get salary_invalid() {
-    return (
-      this.formCompany.get('salary').invalid && this.formCompany.get('salary').touched
-    );
-  }
-  get date_of_admission_invalid() {
-    return (
-      this.formCompany.get('date_of_admission').invalid && this.formCompany.get('date_of_admission').touched
-    );
-  }
-  get work_contract_type_id_invalid() {
-    return (
-      this.formCompany.get('work_contract_type_id').invalid && this.formCompany.get('work_contract_type_id').touched
-    );
-  }
-  get turn_type_invalid() {
-    return (
-      this.formCompany.get('turn_type').invalid && this.formCompany.get('turn_type').touched
-    );
-  }
-  get fixed_turn_id_invalid() {
-    return (
-      this.formCompany.get('fixed_turn_id').invalid && this.formCompany.get('fixed_turn_id').touched
-    );
-  }
-  get date_end_invalid() {
-    return (
-      this.formCompany.get('date_end').invalid && this.formCompany.get('date_end').touched
-    );
-  }
+
   ngOnDestroy(): void {
     this.$person.unsubscribe();
   }

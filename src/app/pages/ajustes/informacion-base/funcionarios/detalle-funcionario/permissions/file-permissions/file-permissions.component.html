@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col" appearance="outline">
+      <mat-label>Carpeta permitida</mat-label>
+      <mat-select required formControlName="folder_id">
+        <mat-option *ngFor="let item of folders" [value]="item.value">{{
+          item.text
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="col-12">
+      <button
+        class="btn btn-primary btn-sm btn-block"
+        [disabled]="!form.valid"
+        (click)="save()"
+      >
+        <i
+          class="fa"
+          [ngClass]="{ 'fa-save': !saving, 'fa-sync fa-spin': saving == true }"
+        ></i>
+        Guardar
+      </button>
+    </div>
+  </div>
+</form>

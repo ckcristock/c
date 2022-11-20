@@ -14,11 +14,21 @@
           </td>
 
           <td>
+            <app-row-typeahead
+              (setAccount)="actualizar($event.identifier, 'account_setoff', $event.datos.id)"
+              [extra]="extra"
+              [variable]="extra.contrapartida"
+              [titulo]="'Contrapartida'"
+            ></app-row-typeahead>
+          </td>
+
+          <td>
             <mat-slide-toggle
               class="col"
               (change)="actualizar($event.checked, 'status',  extra.id)"
               color="primary"
               [(ngModel)]="extra.status"
+              [ngModelOption]="{standalone: true}"
               >{{ extra.status == 1 ? "Activo" : "Inactivo" }}</mat-slide-toggle
             >
           </td>

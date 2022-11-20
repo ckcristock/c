@@ -28,12 +28,14 @@
   <div class="col-lg-6 text-lg-left text-center">
     {{ empresa?.turn_type }}
   </div>
-  <div class="col-lg-6 text-lg-right text-center text-primary">
-    Turno asignado
-  </div>
-  <div class="col-lg-6 text-lg-left text-center">
-    {{ empresa?.fixed_turn_name }}
-  </div>
+  <ng-container *ngIf="empresa.fixed_turn_name">
+    <div class="col-lg-6 text-lg-right text-center text-primary">
+      Turno asignado
+    </div>
+    <div class="col-lg-6 text-lg-left text-center">
+      {{ empresa?.fixed_turn_name }}
+    </div>
+  </ng-container>
 </div>
 
 <ng-template #notData>

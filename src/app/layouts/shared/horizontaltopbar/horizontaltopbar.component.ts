@@ -32,7 +32,9 @@ export class HorizontaltopbarComponent implements OnInit {
   loading: boolean
   valueset: string;
   imageProfile: any;
-
+  view_folder: boolean;
+  name_folder: string;
+  folder_permission: any;
   listLang = [
     { text: 'English', flag: 'assets/images/flags/us.jpg', lang: 'en' },
     { text: 'Spanish', flag: 'assets/images/flags/spain.jpg', lang: 'es' },
@@ -49,11 +51,15 @@ export class HorizontaltopbarComponent implements OnInit {
     public cookiesService: CookieService,
     public http: HttpClient,
     private _alert: AlertasComunService,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
     this.element = document.documentElement;
+
     this.user = this._user.user;
+    this.folder_permission = this._user.user.person.folder_id
+    this.validateFolder(this.folder_permission)
     this.http.get(this.user.imagenUrl).subscribe(result => {
       //console.log(result)
     },
@@ -87,6 +93,13 @@ export class HorizontaltopbarComponent implements OnInit {
       }
     });
     this.getAlerts();
+  }
+
+  validateFolder(id) {
+    this.view_folder = false
+    if (id && id != 0) {
+      this.view_folder = true
+    }
   }
 
   /**
@@ -178,12 +191,12 @@ export class HorizontaltopbarComponent implements OnInit {
   }
 
   read(not) {
-    if(not.read_boolean == 0) {
+    if (not.read_boolean == 0) {
       let params = {
         id: not.id,
         user_id: this.user.person.id
       }
-      this._alert.read(params).subscribe((res:any) => {
+      this._alert.read(params).subscribe((res: any) => {
         this.alerts = res.data;
         if (res.code <= 99) {
           this.count = res.code

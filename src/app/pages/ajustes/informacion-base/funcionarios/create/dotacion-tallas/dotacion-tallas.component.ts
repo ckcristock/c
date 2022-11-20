@@ -5,6 +5,7 @@ import { consts } from 'src/app/core/utils/consts';
 import { PersonService } from '../../../services/person.service';
 import { PersonDataService } from '../personData.service';
 import Swal from 'sweetalert2';
+import { SwalService } from '../../../services/swal.service';
 
 @Component({
   selector: 'app-dotacion-tallas',
@@ -27,7 +28,8 @@ export class DotacionTallasComponent implements OnInit {
   constructor(
     private _personData: PersonDataService,
     private _person:PersonService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
@@ -68,26 +70,22 @@ export class DotacionTallasComponent implements OnInit {
   save(){
     this.formDotation.markAllAsTouched();
     if(this.formDotation.invalid){return false}
-
-    Swal.fire({
-      title: '¿Seguro?',
-      text: 'Se va a crear un nuevo funcionario',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#34c38f',
-      cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Si, Hazlo!'
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: 'Vamos a crear un nuevo funcionario',
     }).then(result => {
       if (result.value) {
         this.sendData()
       }
     });
-    
-    
+
+
   }
 
   sendData(){
-  
+
     this.saving = true;
     this.person =  {...this.person,...this.formDotation.value }
     this._person.savePerson({person:this.person}).subscribe( (r:any )=>{

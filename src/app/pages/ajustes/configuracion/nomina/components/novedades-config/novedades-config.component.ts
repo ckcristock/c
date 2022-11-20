@@ -47,69 +47,26 @@ export class NovedadesConfigComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    console.log(this._user.user.person.company_worked.id)
   }
 
-  formatter = (cuentas: { Nombre_Niif: string , Codigo_Niif: string }) => cuentas.Nombre_Niif;
-
-  search_cuenta_niif = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(300),
-    distinctUntilChanged(),
-    tap(() => {
-      this.buscandoCuenta = true;
-      this.busquedaCuentaFallida = false;
-    }),
-    switchMap(term =>
-      this.http.get(`${environment.ruta}php/plancuentas/filtrar_cuentas.php?`, { params: { coincidencia: term, tipo: 'codigo' }}).pipe(
-        tap((res : Array<{ Nombre_Niif: string , Codigo_Niif: string }>) => {
-          if(res.length==0){
-            this.busquedaCuentaFallida = true
-          }
-        }),
-        catchError(() => {
-          this.busquedaCuentaFallida = true;
-          return of([]);
-        })
-      )
-    ),
-    tap(() => (this.buscandoCuenta = false))
-  );
-
-  actualizar(event, percentage) {
+  actualizar(event, variable, id) {
     let params = {
-      id: event.id,
-      percentage: percentage
+      id: id,
+      [variable]: event
     }
     this._nominaService.updateCreateNovedades(params)
     .subscribe((res: any) => {
       this._swal.show({
         icon: 'success',
         title: 'Novedades',
-        showCancel: false,
         text: res.data,
+        showCancel: false,
         timer: 1000
       })
     })
   }
 
-  setAccount=(datos)=>{
-    let data = {
-      id: datos.datos.id,
-      account_plan_id: datos.identifier
-    }
-    this._nominaService.updateCreateNovedades(data)
-      .subscribe((res:any)=>{
-        this._swal.show({
-          title: 'Novedades',
-          icon: 'success',
-          text: res.data,
-          timer: 1000
-        })
-      })
-  }
-
   //las novedades no las agrega el usuario del sistema,
-  //por tanto no hay modal para nueve
+  //por tanto no hay modal para nueva
 
 }

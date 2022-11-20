@@ -4,6 +4,16 @@
       <ng-template #incapacidades>
         <tr *ngFor="let extra of datos">
           <td>{{ extra.concept }}</td>
+          <td>
+            <app-row-typeahead
+            (setAccount)="setAccount($event)"
+            (setAccount)="actualizar($event.identifier, 'account_plan_id', $event.datos.id)"
+            [extra]="extra"
+            [variable]="extra.cuenta_contable"
+            [titulo]="'Cuentas contables'"
+            ></app-row-typeahead>
+        </td>
+
           <td class="d-flex justify-content-end" id="typeahead">
             <ng-template #rt2 let-r="result" let-t="term">
               <ngb-highlight
@@ -19,6 +29,7 @@
                 required
                 autocomplete="off"
                 [(ngModel)]="extra.term"
+                [ngModelOption]="{standalone: true}"
                 [ngbTypeahead]="search_cuenta_niif"
                 [resultTemplate]="rt2"
                 [inputFormatter]="formatter"

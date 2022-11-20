@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { DatosBasicosService } from '../datos-basicos/datos-basicos.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from '../../../../services/swal.service';
+import { WorkContractTypesService } from '../../../../services/workContractTypes.service';
 
 @Component({
   selector: 'app-salario',
@@ -20,18 +21,21 @@ export class SalarioComponent implements OnInit {
   id: any;
   contract_types: any;
   salary_history: any [] = []
+  contractTerms: any[] = [];
   loading: boolean;
   salary_info: any = {
     salary: '',
     contract_type: '',
     date_of_admission: '',
-    date_end: ''
+    date_end: '',
+    contract_term_id: ''
   };
   constructor(
     private fb: FormBuilder,
     private salaryService: SalarioService,
     private activateRoute: ActivatedRoute,
     private basicDataService: DatosBasicosService,
+    private _workContractTypes: WorkContractTypesService,
     private modalService: NgbModal,
     private _swal: SwalService,
   ) { }
@@ -67,13 +71,25 @@ export class SalarioComponent implements OnInit {
       id: [''],
       salary: ['', Validators.required],
       work_contract_type_id: ['', Validators.required],
+      contract_term_id: ['', Validators.required],
       date_of_admission: ['', Validators.required],
       date_end: ['', Validators.required]
     });
   }
 
-  
+  getContractTerms(value) {
+    this._workContractTypes.getContractTerms().subscribe((r: any) => {
+      this.contractTerms = []
+      r.data.forEach(
+        (contract_term:any) => contract_term.work_contract_types.forEach(
+          (work_contract_type: any) => {
+            if (work_contract_type.id == value) {
+              this.contractTerms.push(contract_term)
+            }
+          }))
+    });
 
+  }
 
   getSalaryInfo() {
     this.loading = true;
@@ -81,33 +97,37 @@ export class SalarioComponent implements OnInit {
       .subscribe((res: any) => {
         this.loading = false;
         this.salary_info = res.data;
+        console.log(this.salary_info)
         this.form.patchValue({
           id: this.salary_info.id,
           salary: this.salary_info.salary,
           work_contract_type_id: this.salary_info.work_contract_type_id,
+          contract_term_id: this.salary_info.contract_term_id,
           date_of_admission: this.salary_info.date_of_admission,
           date_end: this.salary_info.date_end
         })
-        if (this.form.get('work_contract_type_id').value != 2) {
-          this.form.patchValue({ date_end: null });
-          this.form.get('date_end').clearValidators();
+        if (!this.salary_info.conclude) {
+          this.form.get('date_end').disable();
         }
+        this.getContractTerms(this.salary_info.work_contract_type_id)
       });
   }
-
+  loadingHistory: boolean;
   getSalaryHistory() {
+    this.loadingHistory = true
     this.salaryService.getSalaryHistory(this.id).subscribe((res:any) => {
       this.salary_history = res.data
+      this.loadingHistory = false
     })
   }
-
-  changeType() {
-    if (this.form.get('work_contract_type_id').value == 2) {
+  conludeContract = false;
+  changeType(conclude) {
+    if (conclude) {
       this.form.get('date_end').enable();
-      this.form.get('date_end').setValidators(Validators.required);
+      this.conludeContract = true;
     } else {
-      this.form.get('date_end').clearValidators();
-      this.form.patchValue({ date_end: null });
+      this.form.get('date_end').disable();
+      this.conludeContract = false;
     }
   }
   updateSalaryInfo() {

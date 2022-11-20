@@ -10,11 +10,18 @@
 
   <div class="row">
     <div class="col-lg-6 text-lg-right text-center text-primary">
-      Tipo de contrato
+      Término de contrato
     </div>
 
     <div class="col-lg-6 text-lg-left text-center">
       {{ salary_info.contract_type }}
+    </div>
+    <div class="col-lg-6 text-lg-right text-center text-primary">
+      Tipo de contrato
+    </div>
+
+    <div class="col-lg-6 text-lg-left text-center">
+      {{ salary_info.contract_term }}
     </div>
 
     <div class="col-lg-6 text-lg-right text-center text-primary">
@@ -43,7 +50,7 @@
   <div class="rounded-top table-responsive">
     <table
       class="table table-bordered table-striped table-sm"
-      *ngIf="salary_history.length > 0"
+      *ngIf="!loadingHistory && salary_history.length > 0; else notDataHistory"
     >
       <thead class="bg-light">
         <tr class="text-center text-uppercase">
@@ -56,11 +63,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of salary_history" class="text-center">
-          <th>{{ item.salary | number }}</th>
-          <th>{{ item.work_contract_type.name }}</th>
-          <th>{{ item.date_of_admission | date: "longDate" }}</th>
-          <th>{{ item.date_end | date: "longDate" }}</th>
-          <th>{{ item.position.name }}</th>
+          <td>${{ item.salary | number }}</td>
+          <td>{{ item.work_contract_type.name }}</td>
+          <td>{{ item.date_of_admission | date }}</td>
+          <td>{{ item.date_end | date }}</td>
+          <td>{{ item.position.name }}</td>
         </tr>
       </tbody>
     </table>
@@ -69,6 +76,10 @@
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #notDataHistory>
+  <app-not-data [loading]="loadingHistory"></app-not-data>
 </ng-template>
 
 
@@ -89,28 +100,40 @@
     <form [formGroup]="form">
       <div class="row">
         <mat-form-field class="col-md-6" appearance="outline">
-          <mat-label>Tipo de contrato</mat-label>
+          <mat-label>Término</mat-label>
           <mat-select
             formControlName="work_contract_type_id"
             id="work_contract_type_id"
-            (selectionChange)="changeType()"
+            (selectionChange)="getContractTerms($event.value)"
             required
           >
             <mat-option
               *ngFor="let contract_type of contract_types"
-              [value]="contract_type.value"
+              (click)="changeType(contract_type.conclude)"
+              [value]="contract_type.id"
             >
-              {{ contract_type.text }}</mat-option
+              {{ contract_type.name }}</mat-option
             >
           </mat-select>
           <mat-error *ngIf="work_contract_type_id_valid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo de contrato</mat-label>
+          <mat-select
+            formControlName="contract_term_id"
+            required
+          >
+            <mat-option *ngFor="let item of contractTerms" [value]="item.id">{{
+              item.name
+            }}</mat-option>
+          </mat-select>
+          <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Salario</mat-label>
           <input
             matInput
             type="number"
-            pattern="([0-9]{1,3}).([0-9]{1,3})"
             placeholder="Ingresa el salario"
             formControlName="salary"
             required
@@ -134,7 +157,7 @@
         <mat-form-field
           class="col-md-6"
           appearance="outline"
-          *ngIf="form.get('work_contract_type_id').value == 2"
+          *ngIf="conludeContract"
         >
           <mat-label>Fecha de retiro</mat-label>
           <input

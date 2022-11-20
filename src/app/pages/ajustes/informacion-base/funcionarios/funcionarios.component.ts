@@ -6,7 +6,9 @@ import { Person } from 'src/app/core/models/person.model';
 import { DependenciesService } from '../services/dependencies.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-funcionarios',
@@ -17,25 +19,25 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class FuncionariosComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
   pagination = {
-    pageSize: 12,
+    pageSize: 10,
     page: 1,
     collectionSize: 0,
   }
   loading = true;
+  filtros = {
+    pag: 1,
+    status: 'Activo',
+    name: '',
+    dependency_id: ''
+  }
   people: Person[] = [];
   form: FormGroup;
   selectedStatus: any[] = [1, 2, 3, 4]
-  selectedDependencies: any[] = []
+  selectedDependencies: any[] = [];
+  orderObj: any
+  filtrosActivos: boolean = false
+  paginacion: any
   status: any[] = [
     { id: 1, name: 'Activo', selected: true },
     { id: 2, name: 'Inactivo', selected: true },
@@ -48,21 +50,25 @@ export class FuncionariosComponent implements OnInit {
   constructor(
     private _person: PersonService,
     private _dependencies: DependenciesService,
-    private fb: FormBuilder,
+    private paginator: MatPaginatorIntl,
+    private route: ActivatedRoute,
+    private location: Location,
   ) {
-    this.getDependencies();
+    this.paginator.itemsPerPageLabel = "Items por página:";
   }
 
   ngOnInit(): void {
-    this.createForm();
+    this.getDependencies();
   }
 
-  createForm() {
-    this.form = this.fb.group({
-      status: 'Activo',
-      dependency_id: '',
-      name: ''
-    })
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
   }
 
   getDependencies() {
@@ -75,23 +81,70 @@ export class FuncionariosComponent implements OnInit {
         r.selected = true;
         return r
       })
-      this.getPeople();
+      this.route.queryParamMap
+        .subscribe((params) => {
+          this.orderObj = { ...params.keys, ...params };
+          for (let i in this.orderObj.params) {
+            if (this.orderObj.params[i]) {
+              if (Object.keys(this.orderObj).length > 2) {
+                this.filtrosActivos = true
+              }
+              this.filtros[i] = this.orderObj.params[i]
+
+            }
+          }
+
+          if (this.orderObj.params.pag) {
+            this.getPeople(this.orderObj.params.pag);
+          } else {
+            this.getPeople()
+          }
+        }
+        );
     })
   }
+
+  resetFiltros() {
+    for (let i in this.filtros) {
+      this.filtros[i] = ''
+    }
+    this.filtrosActivos = false
+    this.getPeople()
+  }
+
+  handlePageEvent(event: PageEvent) {
+    console.log(event)
+    this.pagination.pageSize = event.pageSize
+    this.getPeople(event.pageIndex + 1)
+  }
+
+  SetFiltros(paginacion) {
+    let params: any = {};
+
+    this.filtros.pag = paginacion;
+    for (let i in this.filtros) {
+        if (this.filtros[i] != "") {
+            params[i] = this.filtros[i];
+        }
+    }
+    console.log(params)
+    let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    return queryString;
+}
 
   getPeople(page = 1) {
     this.pagination.page = page;
     let params: any = {
-      ...this.pagination, ...this.form.value
+      ...this.pagination, ...this.filtros
     }
     this.loading = true;
-    /* params.status = this.statusFilter();
-    params.dependencies = this.dependenciesFilter();
-    params.name = name ? name : '' */
+    var paramsurl = this.SetFiltros(this.pagination.page);
+    this.location.replaceState('/ajustes/informacion-base/funcionarios', paramsurl);
     this._person.getPeople(params)
       .subscribe((res: any) => {
         this.loading = false;
         this.people = res.data.data
+        this.paginacion = res.data
         this.pagination.collectionSize = res.data.total
       })
   }

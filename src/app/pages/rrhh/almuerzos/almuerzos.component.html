@@ -211,38 +211,33 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <div class="col-md-6 mb-4">
-          <ng-select
-            name="group_id"
-            (change)="getDependencies($event.value)"
-            [items]="groups"
-            bindLabel="text"
-            bindValue="value"
-            loadingText="loading"
-            ngDefaultControl
-            appearance="outline"
-            [appendTo]="'body'"
-            placeholder="Grupo (*)"
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Grupo</mat-label>
+          <mat-select
+            (selectionChange)="getDependencies($event.value)"
             formControlName="group_id"
+            required
           >
-          </ng-select>
-        </div>
-        <div class="col-md-6 mb-4">
-          <ng-select
-            name="dependency_id"
-            (change)="Dependencia_Cargo($event.value)"
-            [items]="dependencies"
-            bindLabel="text"
-            bindValue="value"
-            loadingText="loading"
-            ngDefaultControl
-            appearance="outline"
-            [appendTo]="'body'"
-            placeholder="Dependencia (*)"
+            <mat-option *ngFor="let item of groups" [value]="item.value"
+              >{{ item.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Dependencia</mat-label>
+          <mat-select
+            (selectionChange)="Dependencia_Cargo($event.value)"
             formControlName="dependency_id"
+            required
           >
-          </ng-select>
-        </div>
+            <mat-option *ngFor="let item of dependencies" [value]="item.value"
+              >{{ item.text }}
+            </mat-option>
+
+          </mat-select>
+          <mat-hint>Selecciona un grupo</mat-hint>
+        </mat-form-field>
+
         <div class="col-md-12 mb-4">
           <ng-select
             formControlName="people_id"
@@ -253,26 +248,20 @@
             bindValue="value"
             appearance="outline"
             [appendTo]="'body'"
-            placeholder="Funcionario (*)"
+            placeholder="Funcionario *"
+            [closeOnSelect]="false"
             [multiple]="true"
           >
           </ng-select>
         </div>
-        <div class="col-md-12 mb-4">
-          <ng-select
-            appearance="outline"
-            [appendTo]="'body'"
-            placeholder="Valor del almuerzo"
-            [searchable]="false"
-            [clearable]="false"
-            labelForId="value"
-            formControlName="value"
-          >
-            <ng-option *ngFor="let item of lunchvalues" [value]="item.value">
-              {{ item.value | currency: "":"" }}
-            </ng-option>
-          </ng-select>
-        </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor del almuerzo</mat-label>
+          <mat-select formControlName="value" required>
+            <mat-option *ngFor="let item of lunchvalues" [value]="item.value"
+              >${{ item.value | currency: "":"" }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </form>
   </div>

@@ -1,1 +1,303 @@
-<p>cotizacion works!</p>
+<div class="row" *ngIf="!loading">
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-success">
+            {{
+              count_pendiente +
+                count_aprobada +
+                count_no_aprobada +
+                count_anulada
+            }}
+          </h2>
+          <i class="fas fa-envelope-open fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Enviadas</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-primary">{{ count_aprobada }}</h2>
+          <i class="fas fa-thumbs-up fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Aprobadas</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-info">{{ count_pendiente }}</h2>
+          <i class="fas fa-hourglass fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Pendientes</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-warning">{{ count_no_aprobada }}</h2>
+          <i class="fas fa-thumbs-down fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">No aprobadas</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-danger">{{ count_anulada }}</h2>
+          <i class="fas fa-ban fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Anuladas</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-success">
+            {{
+              (count_aprobada /
+                (count_pendiente +
+                  count_aprobada +
+                  count_no_aprobada +
+                  count_anulada)) *
+                100
+            }}%
+          </h2>
+          <i class="fas fa-chart-pie fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">% aprobación</small>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-9">
+    <div class="card">
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Cotizaciones</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button
+                class="btn btn-primary btn-sm"
+                [routerLink]="['/crm/cotizacion/crear']"
+              >
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+              <button class="btn btn-info btn-sm" (click)="openClose()">
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr class="line" />
+        <mat-accordion multi>
+          <mat-expansion-panel class="mat-elevation-z0">
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Fecha</mat-label>
+                <input
+                  type="date"
+                  matInput
+                  [(ngModel)]="filters.date"
+                  (input)="getQuotation()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Ciudad</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  [(ngModel)]="filters.city"
+                  (input)="getQuotation()"
+                  autocomplete="off"
+                  placeholder="Busca por ciudad"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Código</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  [(ngModel)]="filters.code"
+                  (input)="getQuotation()"
+                  autocomplete="off"
+                  placeholder="Busca por código"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Estado</mat-label>
+                <mat-select
+                  [(ngModel)]="filters.status"
+                  (selectionChange)="getQuotation()"
+                >
+                  <mat-option value="">Todas</mat-option>
+                  <mat-option value="Pendiente">Pendientes</mat-option>
+                  <mat-option value="Aprobada">Aprobadas</mat-option>
+                  <mat-option value="No aprobada">No aprobadas</mat-option>
+                  <mat-option value="Anulada">Anuladas</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Cliente</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  [(ngModel)]="filters.client"
+                  (input)="getQuotation()"
+                  autocomplete="off"
+                  placeholder="Busca por cliente"
+                />
+              </mat-form-field>
+
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Descripción</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  [(ngModel)]="filters.description"
+                  (input)="getQuotation()"
+                  autocomplete="off"
+                  placeholder="Busca por descripción"
+                />
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <div class="rounded-top table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            *ngIf="!loading && quotations.length > 0; else notData"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Fecha</th>
+                <th>Ciudad</th>
+                <th>Código</th>
+                <th>Cliente</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of quotations"
+                class="text-center"
+                [ngClass]="{
+                  'text-danger font-weight-bold': item.status === 'Inactivo'
+                }"
+              >
+                <td>{{ item.date | date: "MMM d, y, h:mm a" }}</td>
+                <td>{{ item.municipality.name }}</td>
+                <td>{{ item.code }}</td>
+                <td>{{ item.client.social_reason }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.status }}</td>
+                <td>
+                  <div ngbDropdown container="body" class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm waves-light"
+                      type="button"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        class="dropdown-item waves-light text-info caja-botones"
+                        href="javascript: void(0);"
+                        ><i class="far fa-edit"></i> Ver</a
+                      >
+                      <a
+                        class="dropdown-item waves-light text-info caja-botones"
+                        href="javascript: void(0);"
+                        ><i class="far fa-edit"></i> Copiar</a
+                      >
+                      <a
+                        class="dropdown-item waves-light text-info caja-botones"
+                        href="javascript: void(0);"
+                        ><i class="far fa-edit"></i> Editar</a
+                      >
+                      <a
+                        class="dropdown-item waves-light text-info caja-botones"
+                        href="javascript: void(0);"
+                        ><i class="far fa-edit"></i> Anular</a
+                      >
+                      <a
+                        class="dropdown-item waves-light text-info caja-botones"
+                        href="javascript: void(0);"
+                        ><i class="far fa-edit"></i> Comentarios</a
+                      >
+                      <a
+                        class="dropdown-item waves-light text-info caja-botones"
+                        href="javascript: void(0);"
+                        ><i class="far fa-edit"></i> Aprobar</a
+                      >
+                      <a
+                        class="dropdown-item waves-light text-info caja-botones"
+                        href="javascript: void(0);"
+                        ><i class="far fa-edit"></i> No aprobar</a
+                      >
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ngb-pagination
+          class="d-flex justify-content-center pagination-rounded pagination-sm"
+          [collectionSize]="pagination.collectionSize"
+          [pageSize]="pagination.pageSize"
+          [(page)]="pagination.page"
+          (pageChange)="getQuotation($event)"
+          aria-label="Default pagination"
+          maxSize="5"
+          rotate="true"
+          ellipses="false"
+          boundaryLinks="true"
+        >
+        </ngb-pagination>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <h5 class="card-title">Lista</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <p class="card-text">Content</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

@@ -27,12 +27,10 @@ export class SemanaTurnoComponent implements OnInit {
 
   ngOnInit(): void {
     this.changeWeek.subscribe((d: any) => {
-      console.log(d)
       this.diasSemana = [];
       this.diaFinal = d.diaFinalSemana;
       this.diaInicial = d.diaInicialSemana;
       this.diaInicialSemana = this.diaInicial;
-      console.log(this.turnosRotativos)
       this.turnos = this.turnosRotativos.data;
       this.fillDiasSemana();
     });
@@ -40,7 +38,7 @@ export class SemanaTurnoComponent implements OnInit {
   checkAll(ev) {
     this.people.forEach(x => x.selected = ev.target.checked)
   }
-  
+
   isAllChecked() {
     return this.people.every(_ => _.selected);
   }
@@ -49,17 +47,17 @@ export class SemanaTurnoComponent implements OnInit {
     let turn = this.turnos.find((r) => r.id == turnId);
     if (turn) {
       this.masiveTurnId = turn;
-      
+
     }else{
       this.masiveTurnId = {};
 
     }
-    
+
     this.masiveTurnId.rotating_turn_id = turnId;
     this.masiveTurnId = this.getColors(this.masiveTurnId);
   }
   asignarHorariosMasivo() {
-    
+
     if (this.masiveTurnId.rotating_turn_id != 'seleccione') {
       this.people.forEach((r) => {
         if (r.selected) {
@@ -69,7 +67,7 @@ export class SemanaTurnoComponent implements OnInit {
               dia.turno = turnId;
               dia.color = turnId ? this.masiveTurnId.sunday.color : 'black' ;
               return;
-            } 
+            }
             if(dia.dia == 'sábado'){
               let turnId = this.masiveTurnId?.saturday?.id  ? this.masiveTurnId?.saturday?.id : 0;
               dia.turno = turnId;
@@ -95,7 +93,7 @@ export class SemanaTurnoComponent implements OnInit {
         dia,
         fecha: this.diaInicialSemana.format('YYYY-MM-DD'),
         color: dia == 'domingo' ? 'black' : '#9da4ad',
-        turno: dia == 'domingo' ? 0 : 'seleccione', 
+        turno: dia == 'domingo' ? 0 : 'seleccione',
       };
 
       this.diasSemana.push(pur);
@@ -111,7 +109,7 @@ export class SemanaTurnoComponent implements OnInit {
 
       p.fixed_turn_hours.forEach((turn) => {
         turn = this.getColors(turn, true);
-        p.diasSemana.forEach((dia, i) => {          
+        p.diasSemana.forEach((dia, i) => {
           if (turn.date == dia.fecha) {
             dia.turno = turn.rotating_turn_id;
             dia.color = turn.color;
@@ -133,7 +131,7 @@ export class SemanaTurnoComponent implements OnInit {
 
       return turn;
     }
-    
+
     if (!turn.rotating_turn_id) {
       turn.color = '#000';
     } else if (findColor){

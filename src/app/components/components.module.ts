@@ -16,6 +16,7 @@ import { NotDataComponent } from './not-data/not-data.component';
 import { ApplicantComponent } from './applicant/applicant.component';
 import { GetApusComponent } from './get-apus/get-apus.component';
 import { CabeceraComponent } from './cabecera/cabecera.component';
+import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,12 @@ import { CabeceraComponent } from './cabecera/cabecera.component';
     CommonModule,
     NgSelectModule,
     PerfectScrollbarModule,
-    PipesModule
+    PipesModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatIconModule
   ]
 })
 export class ComponentsModule { }

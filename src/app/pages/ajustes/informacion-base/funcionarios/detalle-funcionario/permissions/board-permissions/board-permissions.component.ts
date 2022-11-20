@@ -12,7 +12,7 @@ export class BoardPermissionsComponent implements OnInit {
   @Input('personId') personId: string = ''
 
   boards: any;
-  boardsSelected: any;  
+  boardsSelected: any;
   saving: boolean
 
   constructor(
@@ -30,7 +30,6 @@ export class BoardPermissionsComponent implements OnInit {
       .toPromise()
       .then((b: any) => {
         this.boards = b.data;
-        console.log(this.boards)
       });
   }
 

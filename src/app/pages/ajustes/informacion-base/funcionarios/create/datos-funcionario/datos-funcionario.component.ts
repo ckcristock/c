@@ -85,7 +85,7 @@ export class DatosFuncionarioComponent implements OnInit {
       ],
       birth_date: ['', this._valid.required],
       place_of_birth: ['', this._valid.required],
-      direction: ['', this._valid.required],
+      address: ['', this._valid.required],
       phone: ['', [this._valid.required, this._valid.minLength(7), this._valid.maxLength(10)]],
       gener: ['', this._valid.required],
       blood_type: ['', this._valid.required],
@@ -151,7 +151,7 @@ export class DatosFuncionarioComponent implements OnInit {
   }
   get direction_valid() {
     return (
-      this.form.get('direction').invalid && this.form.get('direction').touched
+      this.form.get('address').invalid && this.form.get('address').touched
     );
   }
   get phone_valid() {

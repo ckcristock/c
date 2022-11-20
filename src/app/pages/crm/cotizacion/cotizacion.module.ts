@@ -9,24 +9,32 @@ import { DirectivesModule } from '../../../core/directives/directives.module';
 import { CotizacionComponent } from './cotizacion.component';
 import { CrearCotizacionComponent } from './crear-cotizacion/crear-cotizacion.component';
 import { CotizacionRoutingModule } from "./cotizacion.routing.module";
+import { MatButtonModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSelectModule } from "@angular/material";
 
 
 @NgModule({
-    declarations: [CotizacionComponent, CrearCotizacionComponent],
-    imports: [
-        CotizacionRoutingModule,
-        CommonModule,
-        NgbPaginationModule,
-        NgbDropdownModule,
-        ComponentsModule,
-        FormsModule,
-        NgSelectModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        NgbTooltipModule,
-        DirectivesModule,
-    ],
-    exports: [],
+  declarations: [CotizacionComponent, CrearCotizacionComponent],
+  imports: [
+    CotizacionRoutingModule,
+    CommonModule,
+    NgbPaginationModule,
+    NgbDropdownModule,
+    ComponentsModule,
+    FormsModule,
+    NgSelectModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    NgbTooltipModule,
+    DirectivesModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatIconModule,
+    MatButtonModule,
+    MatPaginatorModule,
+  ],
+  exports: [],
 })
 
 export class CotizacionModule { }

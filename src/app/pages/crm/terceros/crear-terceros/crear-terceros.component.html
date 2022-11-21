@@ -49,7 +49,7 @@
                 <mat-label>Pais</mat-label>
                 <mat-select
                   formControlName="country_id"
-                  (selectionChange)="locationCountry(); getCities()"
+                  (selectionChange)="filterDepartments($event.value)"
                 >
                   <mat-option
                     *ngFor="let item of countries"
@@ -335,12 +335,11 @@
                     <mat-form-field
                       class="col-lg-6"
                       appearance="outline"
-                      *ngIf="form.get('department_id').enabled"
                     >
                       <mat-label>Departamento</mat-label>
                       <mat-select
                         formControlName="department_id"
-                        (selectionChange)="getMunicipalitites()"
+                        (selectionChange)="filterMunicipalities($event.value)"
                       >
                         <mat-option
                           *ngFor="let department of departments"
@@ -352,7 +351,6 @@
                     <mat-form-field
                       class="col-lg-6"
                       appearance="outline"
-                      *ngIf="form.get('municipality_id').enabled"
                     >
                       <mat-label>Municipio</mat-label>
                       <mat-select formControlName="municipality_id">
@@ -366,23 +364,7 @@
                         Municipio es <strong>obligatorio</strong>
                       </mat-error>
                     </mat-form-field>
-                    <mat-form-field
-                      class="col-lg-6"
-                      appearance="outline"
-                      *ngIf="form.get('city_id').enabled"
-                    >
-                      <mat-label>Ciudad</mat-label>
-                      <mat-select formControlName="city_id">
-                        <mat-option
-                          *ngFor="let item of cities"
-                          [value]="item.value"
-                          >{{ item.text }}</mat-option
-                        >
-                      </mat-select>
-                      <mat-error *ngIf="city_valid">
-                        Campo <strong>obligatorio</strong>
-                      </mat-error>
-                    </mat-form-field>
+
                   </div>
                 </div>
                 <div class="col-md-12">
@@ -396,6 +378,7 @@
                       <input
                         [type]="item.type"
                         matInput
+                        [required]="item.required == 'Si'"
                         [formControlName]="item.name"
                         autocomplete="off"
                       />
@@ -872,6 +855,7 @@
                   placeholder="Ingrese las observaciones"
                   formControlName="observation"
                   [cdkTextareaAutosize]="true"
+                  rows="5"
                 ></textarea>
               </mat-form-field>
               <div

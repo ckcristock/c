@@ -61,11 +61,11 @@ export class CrearTercerosComponent implements OnInit {
     retefuente: 0
   }
   pagos: any = [
-    { clave: 'De Contado', valor: 1 },
-    { clave: '30 Días', valor: 2 },
-    { clave: '60 Días', valor: 3 },
-    { clave: '90 Días', valor: 4 },
-    { clave: '120 Días', valor: 5 },
+    { clave: 'De Contado', valor: '1' },
+    { clave: '30 Días', valor: '2' },
+    { clave: '60 Días', valor: '3' },
+    { clave: '90 Días', valor: '4' },
+    { clave: '120 Días', valor: '5' },
   ];
   file: any = '';
   fileString: any = '';
@@ -91,9 +91,10 @@ export class CrearTercerosComponent implements OnInit {
     //this.getCiiu();
     this.createForm();
     this.getZones();
-    this.getDepartments();
+    //this.getDepartments();
+    //this.getCountries();
     //this.getMunicipalitites();
-    this.getCountries();
+    this.getCountriesWith();
     this.id = this.actRoute.snapshot.params.id;
     this.getWinningLists();
     this.getCiiuCodeLists();
@@ -104,10 +105,14 @@ export class CrearTercerosComponent implements OnInit {
     this.getFields();
     this.getRegimeType();
     this.getFiscalResponsibility();
-    
+
   }
 
-
+  getCountriesWith() {
+    this._terceros.getCountriesWith().subscribe((res: any) => {
+      this.countries = res.data
+    })
+  }
 
   regresar() {
     this.location.back();
@@ -117,7 +122,6 @@ export class CrearTercerosComponent implements OnInit {
     this.form = this.fb.group({
       /* Inicia Datos Básicos */
       id: [''],
-      location: ['', this._validators.required],
       document_type: ['', this._validators.required],
       nit: ['', this._validators.required],
       person_type: ['', this._validators.required],
@@ -141,7 +145,6 @@ export class CrearTercerosComponent implements OnInit {
       department_id: [''],
       municipality_id: ['', this._validators.required],
       country_id: ['', this._validators.required],
-      city_id: ['', this._validators.required],
       image: [''],
       /* Termina Datos Básicos */
       /* Inicia Datos Comerciales */
@@ -241,39 +244,25 @@ export class CrearTercerosComponent implements OnInit {
     person.removeAt(i);
   }
 
-  locationCountry(){
-    if (this.form.get('country_id').value == this.getColombia){
-      this.form.patchValue({
-        location: 'nacional'
-      })
-      this.form.get('municipality_id').enable();
-      this.form.get('department_id').enable();
-      this.form.get('city_id').disable();
-    } else {
-      this.form.patchValue({
-        location: 'internacional'
-      })
-      this.form.get('municipality_id').disable();
-      this.form.get('department_id').disable();
-      this.form.get('city_id').enable();
+  filterDepartments(id) {
+    this.departments = []
+    this.countries.forEach(country => {
+      if (country.id == id) {
+        this.departments = country.departments
+      }
+    });
+    if (this.id) {
+      this.filterMunicipalities(this.third.department_id)
     }
   }
-  cities: any;
-  getCities(){
-    this._terceros.getCities(this.form.value.country_id).subscribe((r: any) => {
-      this.cities = r.data;
-    })
-  }
-  
-  locationThird(){
-    if (this.form.get('location').value == 'nacional') {
-      this.form.patchValue({
-        country_id: this.getColombia
-      })
-      this.form.get('country_id').disable();
-    } else {
-      this.form.get('country_id').enable();
-    }    
+
+  filterMunicipalities(id) {
+    this.municipalities = []
+    this.departments.forEach(department => {
+      if (department.id == id) {
+        this.municipalities = department.municipalities
+      }
+    });
   }
 
   personType() {
@@ -327,33 +316,6 @@ export class CrearTercerosComponent implements OnInit {
     })
   }
 
-  getDepartments() {
-    this._terceros.getDepartments().subscribe((r: any) => {
-      this.departments = r.data;
-    })
-  }
-  getColombia: any
-  getCountries() {
-    this._terceros.getCountries().subscribe((r: any) => {
-      this.countries = r.data;
-      for (let i in this.countries) {
-        if (this.countries[i].text == 'Colombia') {
-          this.getColombia = this.countries[i].value
-        }
-      }
-      this.form.patchValue({
-        country_id: this.getColombia
-      });
-      this.locationCountry()      
-      //console.log(this.getColombia)
-    })
-  }
-
-  getMunicipalitites() {
-    this._terceros.getMunicipalities(this.form.get('department_id').value).subscribe((r: any) => {
-      this.municipalities = r.data;
-    })
-  }
 
   getWinningLists() {
     this._terceros.getWinningList().subscribe((r: any) => {
@@ -364,7 +326,6 @@ export class CrearTercerosComponent implements OnInit {
   getCiiuCodeLists() {
     this._terceros.getCiiuCodesList().subscribe((r: any) => {
       this.ciiuCodes = r.data;
-      console.log(this.ciiuCodes)
     })
   }
   jsonCiiu: any[] = []
@@ -388,7 +349,6 @@ export class CrearTercerosComponent implements OnInit {
           }
         }
       }
-      //console.log(this.jsonCiiu)
     })
   }
 
@@ -407,18 +367,18 @@ export class CrearTercerosComponent implements OnInit {
   getTypeDocuments() {
     this._terceros.getTypeDocuments().subscribe((r: any) => {
       this.documentTypes = r.data;
-      for (let i in this.documentTypes) {
-        if (this.documentTypes[i].code == 31) {
-          this.nitSelected = this.documentTypes[i].value
+      this.documentTypes.forEach(type => {
+        if(type.code == 'NIT') {
+          this.nitSelected = type.value
         }
-      }
+      });
     })
   }
   dv: any;
   validarDV(myNit) {
     if (this.nitSelected == this.form.get('document_type').value) {
       var vpri, x, y, z;
-      myNit = myNit.replace(/\s/g, ""); 
+      myNit = myNit.replace(/\s/g, "");
       myNit = myNit.replace(/,/g, "");
       myNit = myNit.replace(/\./g, "");
       myNit = myNit.replace(/-/g, "");
@@ -446,11 +406,10 @@ export class CrearTercerosComponent implements OnInit {
         x += (y * vpri[z - i]);
       }
       y = x % 11;
-      console.log((y > 1) ? 11 - y : y);
       this.dv = (y > 1) ? 11 - y : y;
       this.form.patchValue({
         nit: this.form.get('nit').value + '-' + this.dv
-      }) 
+      })
     }
   }
 
@@ -526,7 +485,6 @@ export class CrearTercerosComponent implements OnInit {
       this.third = r.data;
       this.form.patchValue({
         id: this.third.id,
-        location: this.third.location,
         document_type: this.third.document_type,
         nit: this.third.nit,
         person_type: this.third.person_type,
@@ -549,7 +507,6 @@ export class CrearTercerosComponent implements OnInit {
         department_id: this.third.department_id,
         municipality_id: this.third.municipality_id,
         country_id: this.third.country_id,
-        city_id: this.third.city_id,
         //winning_list_id: this.third.winning_list_id,
         //apply_iva: this.third.apply_iva,
         contact_payments: this.third.contact_payments,
@@ -601,10 +558,10 @@ export class CrearTercerosComponent implements OnInit {
           observation: third.observation
         }));
       });
-      this.personType();
-      this.locationCountry();
-      this.getCities();
-      this.getMunicipalitites();
+      if (this.id) {
+        this.personType();
+        this.filterDepartments(this.third.country_id)
+      }
     })
   }
 
@@ -703,7 +660,6 @@ export class CrearTercerosComponent implements OnInit {
         text: 'El tercero será acualizado.',
         showCancel: true
       }).then((r) => {
-        console.log(r)
         if (r.isConfirmed) {
           this.values()
           this._terceros.updateThirdParties(this.form.value, this.third.id).subscribe((r: any) => {
@@ -736,20 +692,12 @@ export class CrearTercerosComponent implements OnInit {
     return this.form.get('nit').invalid && this.form.get('nit').touched
   }
 
-  get location_valid() {
-    return this.form.get('location').invalid && this.form.get('location').touched
-  }
-
   get document_type_valid() {
     return this.form.get('document_type').invalid && this.form.get('document_type').touched
   }
 
   get country_valid() {
     return this.form.get('country_id').invalid && this.form.get('country_id').touched
-  }
-  
-  get city_valid() {
-    return this.form.get('city_id').invalid && this.form.get('city_id').touched
   }
 
   get person_type_valid() {

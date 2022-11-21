@@ -28,7 +28,7 @@ export class PrimasComponent implements OnInit {
     this.createForm();
     // this.getPrimasList();
     let year = new Date().getFullYear();
-    for (let index = year - 1; index < year + 5; index++) {
+    for (let index = year - 5; index <= year; index++) {
       this.years.push(index);
     }
   }
@@ -42,7 +42,7 @@ export class PrimasComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
 
   openModal() {
@@ -61,7 +61,7 @@ export class PrimasComponent implements OnInit {
   }
 
   irAPago() {
-    this.modalService.dismissAll(); 
+    this.modalService.dismissAll();
     let periodo = this.form.get('periodo').value;
     let yearSelected = this.form.get('year').value;
     this.router.navigate(['/nomina/prima', yearSelected, periodo])
@@ -72,6 +72,7 @@ export class PrimasComponent implements OnInit {
     this._primas.getPremiumList().subscribe((r: any) => {
       this.loading = false
       this.premiums = r.data;
+      console.log(r.data)
     })
   }
 

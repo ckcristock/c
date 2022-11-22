@@ -82,7 +82,6 @@ export class PresupuestosComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    console.log(event)
     this.getBudgets(event.pageIndex + 1)
   }
 
@@ -115,7 +114,6 @@ export class PresupuestosComponent implements OnInit {
     this._budget.getAllPaginate(params).subscribe((r: any) => {
       this.budgets = r.data.data
       this.pagination.collectionSize = r.data.total;
-      console.log(r)
       this.paginacion = r.data
       this.loading = false;
 

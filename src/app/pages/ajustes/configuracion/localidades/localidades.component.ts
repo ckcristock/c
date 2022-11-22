@@ -96,6 +96,8 @@ export class LocalidadesComponent implements OnInit {
     this.id = '';
     this.dane_code = '';
     this.dian_code = '';
+    this.percentage_product = '';
+    this.percentage_service = '';
     this.operation = 'guardar';
     this.tipo = tipo;
     this.openConfirm(add)
@@ -105,6 +107,8 @@ export class LocalidadesComponent implements OnInit {
     this.name = modelo.name
     this.dian_code = modelo.dian_code
     this.dane_code = modelo.dane_code
+    this.percentage_product = modelo.percentage_product;
+    this.percentage_service = modelo.percentage_service;
     this.openConfirm(add)
     this.tipo = tipo
     this.operation = 'editar';
@@ -259,7 +263,8 @@ export class LocalidadesComponent implements OnInit {
       })
     } */
   }
-
+  percentage_product:any;
+  percentage_service:any;
   save() {
 /*     if (this.tipo == 'ciudades') {
       let selected = this.states.find(r => r.selected == true);
@@ -283,7 +288,9 @@ export class LocalidadesComponent implements OnInit {
         department_id: selected.id,
         name: this.name.toUpperCase(),
         dian_code: this.dian_code,
-        dane_code: this.dane_code
+        dane_code: this.dane_code,
+        percentage_product: this.percentage_product,
+        percentage_service: this.percentage_service,
       }
       params ? params.id = this.id : ''
       this.saveMunicipality(params)
@@ -336,7 +343,7 @@ export class LocalidadesComponent implements OnInit {
   }
 
   saveMunicipality(params: any){
-    this._municipality.createNewMunicipality(params). subscribe((r:any)=>{
+    this._municipality.createNewMunicipality(params).subscribe((r:any)=>{
       if(r.status==false){
         this.getSwal('Error en Municipio', r.err, 'error', false);
       } else {

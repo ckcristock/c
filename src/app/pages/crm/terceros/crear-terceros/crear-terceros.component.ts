@@ -114,10 +114,6 @@ export class CrearTercerosComponent implements OnInit {
     })
   }
 
-  regresar() {
-    this.location.back();
-  }
-
   createForm() {
     this.form = this.fb.group({
       /* Inicia Datos Básicos */
@@ -440,13 +436,6 @@ export class CrearTercerosComponent implements OnInit {
         this.form.get('retefuente_account_id').enable();
       }
     });
-    /* this.form.get('g_contribut').valueChanges.subscribe(value => {
-      if (value == 'Si') {
-        this.form.get('reteiva_account_id').disable();
-      } else {
-        this.form.get('reteiva_account_id').enable();
-      }
-    }); */
     this.form.get('dian_address').valueChanges.subscribe(value => {
       this.addressConcat();
     });
@@ -686,65 +675,6 @@ export class CrearTercerosComponent implements OnInit {
       retefuente_account_id,
       reteiva_account_id
     })
-  }
-
-  get nit_valid() {
-    return this.form.get('nit').invalid && this.form.get('nit').touched
-  }
-
-  get document_type_valid() {
-    return this.form.get('document_type').invalid && this.form.get('document_type').touched
-  }
-
-  get country_valid() {
-    return this.form.get('country_id').invalid && this.form.get('country_id').touched
-  }
-
-  get person_type_valid() {
-    return this.form.get('person_type').invalid && this.form.get('person_type').touched
-  }
-
-  get third_party_type_valid() {
-    return this.form.get('third_party_type').invalid && this.form.get('third_party_type').touched
-  }
-
-  get first_name_valid() {
-    return this.form.get('first_name').invalid && this.form.get('first_name').touched
-  }
-
-  get first_surname_valid() {
-    return this.form.get('first_surname').invalid && this.form.get('first_surname').touched
-  }
-
-  get social_reason_valid() {
-    return this.form.get('social_reason').invalid && this.form.get('social_reason').touched
-  }
-
-  get state_valid() {
-    return this.form.get('state').invalid && this.form.get('state').touched
-  }
-
-  get cod_dian_address_valid() {
-    return this.form.get('cod_dian_address').invalid && this.form.get('cod_dian_address').touched
-  }
-
-  get dian_address_valid() {
-    return this.form.get('dian_address').invalid && this.form.get('dian_address').touched
-  }
-
-  /*  get cell_phone_valid() {
-     return this.form.get('cell_phone').invalid && this.form.get('cell_phone').touched
-   } */
-
-  get landline_valid() {
-    return this.form.get('landline').invalid && this.form.get('landline').touched
-  }
-
-  get municipality_valid() {
-    return this.form.get('municipality_id').invalid && this.form.get('municipality_id').touched
-  }
-  get email_valid() {
-    return this.form.get('email').invalid && this.form.get('email').touched
   }
 
 }

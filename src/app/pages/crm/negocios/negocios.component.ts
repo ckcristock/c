@@ -50,7 +50,7 @@ export class NegociosComponent implements OnInit {
   companySelected: any;
   loading: boolean = true;
   loading2: boolean
-  cities: any;
+  cities: any[] = [];
   city: any;
   orderObj: any
 
@@ -67,12 +67,12 @@ export class NegociosComponent implements OnInit {
     this.route.queryParamMap
       .subscribe((params) => {
         this.orderObj = { ...params.keys, ...params };
-        if (params.keys.length == 0){
+        if (params.keys.length == 0) {
           this.active = 1
           this.changeUrl('?active=1')
-        } else if (this.orderObj.params.active == 2){
+        } else if (this.orderObj.params.active == 2) {
           this.active = 2
-        } else if (this.orderObj.params.active == 1){
+        } else if (this.orderObj.params.active == 1) {
           this.active = 1
         }
       }
@@ -99,12 +99,12 @@ export class NegociosComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset()
-    
+
   }
 
   getNegocios() {
     this.loading = true;
-    this.loading2 = true; 
+    this.loading2 = true;
     this._negocios.getBusinesses().subscribe((resp: any) => {
       this.loading = false;
       this.negocios = resp.data;
@@ -200,9 +200,9 @@ export class NegociosComponent implements OnInit {
   }
 
   getCompanies() {
-    this._negocios.getCompanies().subscribe(
+    this._negocios.getThirds().subscribe(
       (resp: any) => {
-        this.companies = resp.data.data;
+        this.companies = resp.data;
       },
       () => { },
       () => {
@@ -211,10 +211,28 @@ export class NegociosComponent implements OnInit {
     );
   }
 
+
+
   getCountries() {
     this._negocios.getCountries().subscribe((data: any) => {
       this.countries = data.data;
     });
+  }
+
+  filterDepartments(id) {
+    this.cities = []
+    this.countries.forEach(country => {
+      if (country.id == id) {
+        country.departments.forEach(department => {
+          department.municipalities.forEach(municipality => {
+            this.cities.push(municipality)
+          });
+        });
+      }
+    });
+    this.cities.sort((a, b) =>
+      ('' + a.text).localeCompare(b.text)
+    )
   }
 
   getCities() {
@@ -243,8 +261,8 @@ export class NegociosComponent implements OnInit {
     );
 
   getContacts() {
-    this._negocios.getThirdPartyPerson(this.form.value.third_party_id).subscribe((resp: any) => {
-      this.contacts = resp.data.data;
+    this._negocios.getThirdPartyPersonForThird(this.form.value.third_party_id).subscribe((resp: any) => {
+      this.contacts = resp.data;
     });
   }
 

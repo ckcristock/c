@@ -14,7 +14,7 @@
     <hr class="line" />
     <form [formGroup]="form" *ngIf="form">
       <div class="row">
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col-md-4" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
             matInput
@@ -23,31 +23,49 @@
             formControlName="name"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
-          <mat-label>Destino</mat-label>
-          <mat-select formControlName="city_id">
-            <mat-option *ngFor="let item of cities" [value]="item.value">{{
-              item.text
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
-          <mat-label>¿Quién elbaora?</mat-label>
-          <mat-select formControlName="person_id">
-            <mat-option *ngFor="let item of people" [value]="item.value">{{
-              item.text
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
-          <mat-label>Cliente</mat-label>
-          <mat-select formControlName="third_party_id">
-            <mat-option *ngFor="let item of clients" [value]="item.value">{{
-              item.text
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <div class="col-md-4">
+          <ng-select
+            formControlName="city_id"
+            [items]="cities"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Destino"
+            bindValue="value"
+            loadingText="loading"
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
+        <div class="col-md-4">
+          <ng-select
+            formControlName="person_id"
+            [items]="people"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="¿Quién elbaora?"
+            bindValue="value"
+            loadingText="loading"
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
+        <div class="col-md-4">
+          <ng-select
+            formControlName="third_party_id"
+            [items]="clients"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Cliente"
+            bindValue="value"
+            loadingText="loading"
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Línea</mat-label>
           <input
             matInput
@@ -56,7 +74,7 @@
             formControlName="line"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Cantidad</mat-label>
           <input
             matInput

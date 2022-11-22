@@ -259,11 +259,11 @@
             [appendTo]="'body'"
             appearance="outline"
             (change)="getContacts(); getBudgets()"
-            bindValue="id"
-            notFoundText="No hay registros"
+            bindValue="value"
+            bindLabel="text"
             required
           >
-            <ng-template ng-label-tmp let-item="item">
+            <!-- <ng-template ng-label-tmp let-item="item">
               <span>{{
                 item.first_name
                   ? item.first_name + " " + item.first_surname
@@ -281,7 +281,7 @@
                   ? item.first_name + " " + item.first_surname
                   : item.social_reason
               }}</span>
-            </ng-template>
+            </ng-template> -->
           </ng-select>
         </div>
         <div class="col-md-3 mb-4">
@@ -290,10 +290,10 @@
             [items]="contacts"
             formControlName="third_party_person_id"
             placeholder="Contacto"
-            bindLabel="name"
+            bindLabel="text"
             [appendTo]="'body'"
             appearance="outline"
-            bindValue="id"
+            bindValue="value"
             notFoundText="No hay registros"
           >
           </ng-select>
@@ -303,7 +303,7 @@
             [items]="countries"
             formControlName="country_id"
             placeholder="País"
-            (change)="getCities()"
+            (change)="filterDepartments($event.value)"
             bindLabel="text"
             [appendTo]="'body'"
             appearance="outline"
@@ -317,8 +317,8 @@
           <ng-select
             [items]="cities"
             formControlName="city_id"
-            bindLabel="name"
-            bindValue="id"
+            bindLabel="text"
+            bindValue="value"
             ngDefaultControl
             [appendTo]="'body'"
             appearance="outline"

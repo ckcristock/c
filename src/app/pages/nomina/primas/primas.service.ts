@@ -17,4 +17,8 @@ export class PrimasService {
     return this.http.get(`${environment.base_url}/bonuses/${id_prima}`);
   }
 
+  setBonus(params){
+    return this.http.post(`${environment.base_url}/bonuses`, (params));
+  }
+
 }

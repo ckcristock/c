@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,9 +14,12 @@ export class PrimasComponent implements OnInit {
   loading: boolean = false;
   @ViewChild('modal') modal: any;
   @ViewChild('modalFuncionario') modalFuncionario: any;
+  @Input('empleados') empleados;
   years: any[] = [];
   premiums: any[] = [];
   premiumsPeople: any[] = [];
+
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -62,9 +65,14 @@ export class PrimasComponent implements OnInit {
 
   irAPago() {
     this.modalService.dismissAll();
-    let periodo = this.form.get('periodo').value;
-    let yearSelected = this.form.get('year').value;
-    this.router.navigate(['/nomina/prima', yearSelected, periodo])
+    let params = {
+      periodo: this.form.get('periodo').value,
+      yearSelected: this.form.get('year').value,
+      fecha_inicio: new Date("07/01/2022"),
+      fecha_fin: new Date("12/31/2022")
+    }
+
+    this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo])
   }
 
   getPrimasList() {

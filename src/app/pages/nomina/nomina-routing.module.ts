@@ -25,7 +25,7 @@ const routes: Routes = [
     { path: 'prima/:anio/:periodo', component: PrimaFuncionarioComponent},
     { path: 'nomina',   loadChildren : () => import('./nomina/pago-nomina.module').then(m => m.PagoNominaModule )},
     { path: 'historial-pagos', component: HistorialPagosComponent},
-    
+
 ]
 
 @NgModule({

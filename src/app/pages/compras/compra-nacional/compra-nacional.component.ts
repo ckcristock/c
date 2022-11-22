@@ -40,7 +40,7 @@ export class CompraNacionalComponent implements OnInit {
     } else {
       this.firstAccordion.closeAll();
       this.matPanel = false;
-    }    
+    }
   }
   matPanel2 = false;
   openClose2(){
@@ -50,7 +50,7 @@ export class CompraNacionalComponent implements OnInit {
     } else {
       this.secondAccordion.closeAll();
       this.matPanel2 = false;
-    }    
+    }
   }
 
   loadingIndicator = true;
@@ -114,7 +114,7 @@ export class CompraNacionalComponent implements OnInit {
     });
 
   }
-  
+
   imageProfile: any;
   ListarComprasNacionales() {
 
@@ -151,15 +151,15 @@ export class CompraNacionalComponent implements OnInit {
             }
           });
       }
-      
+
   }
   fechita:any;
-  fechitaF(event){    
-    this.fechita = event.target.value;  
+  fechitaF(event){
+    this.fechita = event.target.value;
     if(this.fechita2 !=null){
       this.filtro_fecha = this.fechita + ' - ' + this.fechita2;
       this.filtros();
-    }  
+    }
   }
   fechita2:any;
   fechitaF2(event){
@@ -167,7 +167,7 @@ export class CompraNacionalComponent implements OnInit {
     if(this.fechita !=null){
       this.filtro_fecha = this.fechita + ' - ' + this.fechita2;
       this.filtros();
-    }  
+    }
   }
   dateRangeChanged(event) {
 
@@ -223,7 +223,7 @@ export class CompraNacionalComponent implements OnInit {
       this.filtro_fecha = '';
       this.filtro_prov = '';
       this.filtro_func = '';
-      this.http.get(environment.ruta + '/php/comprasnacionales/lista_compras.php?', this.requiredParams).subscribe((data: any) => {
+      this.http.get(environment.base_url + '/php/comprasnacionales/lista_compras.php?', this.requiredParams).subscribe((data: any) => {
         this.comprasnacionales = data.compras;
         this.TotalItems = data.numReg;
       });

@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { PrimasService } from './primas.service';
 
 @Component({
@@ -18,16 +19,18 @@ export class PrimasComponent implements OnInit {
   years: any[] = [];
   premiums: any[] = [];
   premiumsPeople: any[] = [];
-
+  year = new Date().getFullYear();
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private modalService: NgbModal,
-    private _primas: PrimasService
+    private _primas: PrimasService,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
+    console.log(this.year);
     this.createForm();
     // this.getPrimasList();
     let year = new Date().getFullYear();
@@ -44,8 +47,40 @@ export class PrimasComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  private getDismissReason(reason: any) {
 
+  openConfirm2(){
+    let mes = new Date().getMonth();
+    let semestre = 1;
+    let lapso: string ;
+    if (mes<=6) {
+      semestre = 1;
+      lapso = ' enero - junio ';
+    } else {
+      semestre = 2;
+      lapso = ' julio - diciembre ';
+
+    }
+    let params = {
+      //periodo: this.form.get('periodo').value,
+      //yearSelected: this.form.get('year').value,
+      periodo: semestre,
+      yearSelected: this.year,
+      fecha_inicio: new Date("07/01/2022"),
+      fecha_fin: new Date("12/31/2022")
+    }
+    this._swal.show({
+      title: 'Prima',
+      text: `¿Desea pagar primas del ${semestre} semestre? (periodo: ${lapso})`,
+      icon: 'warning',
+      showCancel: true
+    }, ((res)=>{
+      if (res) {
+        this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo])
+      }
+    }))
+  }
+
+  private getDismissReason(reason: any) {
   }
 
   openModal() {

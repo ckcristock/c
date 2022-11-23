@@ -118,9 +118,9 @@ export class VerNegocioComponent implements OnInit {
     }*/
 
   getTasks() {
-    this._negocio.getTasks(this.business_budget_id).subscribe((resp: any) => {
+    /* this._negocio.getTasks(this.business_budget_id).subscribe((resp: any) => {
       this.tareas = resp.data.data;
-    });
+    }); */
   }
 
   updateListTask() {

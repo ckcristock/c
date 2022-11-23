@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-lg-7">
+  <div class="col-lg-8">
     <div class="card">
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
@@ -86,7 +86,7 @@
       </div>
     </div>
   </div>
-  <div class="col-lg-5">
+  <div class="col-lg-4">
     <div class="card">
       <div class="card-body">
         <div class="d-flex justify-content-between">
@@ -128,10 +128,19 @@
           ngbNav
           #nav="ngbNav"
           [(activeId)]="active"
-          class="nav nav-pills nav-justified border border-primary rounded"
+          class="nav nav-tabs justify-content-center"
+          role="tablist"
         >
-          <li [ngbNavItem]="2">
-            <a ngbNavLink>Tareas</a>
+          <li [ngbNavItem]="1" class="nav-item flex-sm-fill">
+            <a
+              ngbNavLink
+              data-toggle="tab"
+              role="tab"
+              aria-controls="home"
+              aria-selected="true"
+              class="nav-link border-0 text-uppercase font-weight-bold"
+              >Tareas</a
+            >
             <ng-template ngbNavContent>
               <app-tareas-negocio
                 [tareas]="tareas"
@@ -141,8 +150,16 @@
               </app-tareas-negocio>
             </ng-template>
           </li>
-          <li [ngbNavItem]="1">
-            <a ngbNavLink>History</a>
+          <li [ngbNavItem]="2" class="nav-item flex-sm-fill">
+            <a
+              ngbNavLink
+              data-toggle="tab"
+              role="tab"
+              aria-controls="home"
+              aria-selected="true"
+              class="nav-link border-0 text-uppercase font-weight-bold"
+              >History</a
+            >
             <ng-template ngbNavContent>
               <app-historial-negocio></app-historial-negocio>
             </ng-template>
@@ -268,47 +285,49 @@
   </div>
 
   <div class="modal-body">
-    <table class="mt-2 table table-borderless table-striped">
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th>Fecha</th>
-          <th>Cliente</th>
-          <th>Destino</th>
-          <th>Linea</th>
-          <th>Quien elabora</th>
-          <th>Total COP</th>
-          <th>Total USD</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let item of cotizaciones"
-          [ngClass]="{
-            'text-danger font-weight-bold': item.state == 'Inactivo'
-          }"
-        >
-          <td>
-            <input
-              type="checkbox"
-              [selected]="cotizacionesSeleccionadas.includes(item.id)"
-              [change]="guardarCotizacion(item.id)"
-            />
-            <label [for]="item.id" class="ml-1"> PRES {{ item.id }} </label>
-          </td>
-          <!-- <td>{{ item.created_at | date: "longDate" }}</td>
-          <td>{{ item.customer }}</td>
-          <td>{{ item.destiny }}</td>
-          <td>{{ item.line }}</td>
-          <td>
-            {{ item.user.person.first_name }}
-            {{ item.user.person.first_surname }}
-          </td>
-          <td>${{ item.total_cop | currency: "":"" }}</td>
-          <td>${{ item.total_usd | currency: "":"" }}</td> -->
-        </tr>
-      </tbody>
-    </table>
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Item</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Destino</th>
+            <th>Linea</th>
+            <th>Quien elabora</th>
+            <th>Total COP</th>
+            <th>Total USD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of cotizaciones"
+            [ngClass]="{
+              'text-danger font-weight-bold': item.state == 'Inactivo'
+            }"
+          >
+            <td>
+              <input
+                type="checkbox"
+                [selected]="cotizacionesSeleccionadas.includes(item.id)"
+                [change]="guardarCotizacion(item.id)"
+              />
+              <label [for]="item.id" class="ml-1"> PRES {{ item.id }} </label>
+            </td>
+            <td>{{ item.created_at | date: "longDate" }}</td>
+            <td>{{ item.customer }}</td>
+            <td>{{ item.destiny }}</td>
+            <td>{{ item.line }}</td>
+            <td>
+              {{ item.user.person.first_name }}
+              {{ item.user.person.first_surname }}
+            </td>
+            <td>${{ item.total_cop | currency: "":"" }}</td>
+            <td>${{ item.total_usd | currency: "":"" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="_modal.close()">
@@ -323,4 +342,3 @@
     </button>
   </div>
 </ng-template>
-

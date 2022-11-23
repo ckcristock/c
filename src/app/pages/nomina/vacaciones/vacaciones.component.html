@@ -22,26 +22,26 @@
         </thead>
         <tbody>
           <tr *ngFor="let vacation of vacations" class="text-center">
-            <td class="align-middle" class="text-center">
+            <td class="text-center p-0">
               <img
                 src="{{ vacation.person.image | image: 'users' }}"
                 onerror="this.src='../../../../assets/images/noprofile.png'"
                 class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
               />
             </td>
-            <td class="align-middle">
+            <td>
               {{ vacation.person.full_name | titlecase }}
             </td>
-            <td class="align-middle">
+            <td>
               {{ vacation.person.contractultimate.position.dependency.name }}
             </td>
-            <td class="align-middle">
+            <td>
               {{ vacation.date_start | date: "longDate" }}
             </td>
-            <td class="align-middle">
+            <td>
               {{ vacation.date_end | date: "longDate" }}
             </td>
-            <td class="align-middle">
+            <td>
               <span
                 class="badge"
                 [ngClass]="{
@@ -53,7 +53,7 @@
                 }}</span
               >
             </td>
-            <td class="align-middle">
+            <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -64,10 +64,20 @@
                 </button>
                 <div ngbDropdownMenu>
                   <button
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item waves-light caja-botones"
+                    [ngClass]="{
+                      'text-info': vacation.pay_vacations.length > 0,
+                      'text-success': vacation.pay_vacations.length == 0
+                    }"
                     (click)="openConfirm(add); vacationData(vacation)"
                   >
-                    <i class="far fa-eye"></i>
+                    <i
+                      class="fas"
+                      [ngClass]="{
+                        'fa-eye': vacation.pay_vacations.length > 0,
+                        'fa-money-bill': vacation.pay_vacations.length == 0
+                      }"
+                    ></i>
                     {{ vacation.pay_vacations.length > 0 ? "Ver" : "Pagar" }}
                   </button>
                   <button
@@ -103,9 +113,6 @@
       [(page)]="pagination.page"
       aria-label="Default pagination"
       maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
       rotate="true"
       ellipses="false"
       boundaryLinks="true"

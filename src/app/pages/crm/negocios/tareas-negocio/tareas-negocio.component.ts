@@ -25,7 +25,7 @@ export class TareasNegocioComponent implements OnInit {
   status = null
   indexSelected: any
   peopleSelects: any[] = [];
-  tasks: any[];
+  tasks: any[] = [];
   loading: boolean;
 
 
@@ -67,7 +67,7 @@ export class TareasNegocioComponent implements OnInit {
   getTasks() {
     this.loading = true
     this._negocios.getTasks(this.business_budget_id).subscribe((resp: any) => {
-      this.tasks = resp.data.data;
+      this.tasks = resp.data.tasks;
       this.loading = false
     });
   }

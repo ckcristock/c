@@ -1,8 +1,8 @@
 <div class="row card-title d-flex justify-content-between">
-  <div class="col-md-6 px-0">
+  <div class="col-lg-5 px-0">
     <form [formGroup]="form">
       <mat-form-field class="col px-0 edit pb-0" appearance="outline">
-        <mat-label>Agregar nuevo valor</mat-label>
+        <mat-label>{{title}} valor</mat-label>
         <input
           matInput
           type="number"
@@ -20,30 +20,8 @@
           <mat-icon>save</mat-icon>
         </button>
       </mat-form-field>
-      <!-- <div class="form-group col-md-6">
-          <label class="custom-label" for="funcionario_id">Descripción</label>
-          <textarea
-            class="form-control form-control-sm"
-            rows="3"
-            formControlName="description"
-          ></textarea>
-        </div> -->
     </form>
   </div>
-  <!-- <div class="col-md-6 px-0 text-right">
-    <div class="btn-group rounded w-sm-100">
-      <button
-        class="btn btn-primary btn-sm"
-        (click)="save()"
-        [disabled]="!form.valid"
-      >
-        <i class="fa fa-plus"></i> Agregar
-      </button>
-      <button class="btn btn-info btn-sm" (click)="openClose()">
-        <i class="fas fa-sliders-h"></i> Filtros
-      </button>
-    </div>
-  </div> -->
 </div>
 <mat-accordion multi>
   <mat-expansion-panel class="mat-elevation-z0">
@@ -98,7 +76,7 @@
               <a
                 class="dropdown-item waves-light text-info caja-botones"
                 href="javascript: void(0);"
-                (click)="getValue(value); openConfirm(add, 'Editar valor')"
+                (click)="getValue(value)"
               >
                 <i class="far fa-edit"></i> Editar</a
               >
@@ -147,12 +125,27 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
+      (click)="_modal.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body"></div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor"
+            formControlName="value"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
   <div class="modal-footer">
     <button
       type="button"

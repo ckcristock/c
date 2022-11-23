@@ -110,7 +110,7 @@ export class NegociosService {
   }
 
   getTasks(id) {
-    return this.http.get(`${this.url}/get-tasks/${id}`)
+    return this.http.get(`${this.url}/get-tasks-business/${id}`)
   }
 
   saveTask( data:any ){

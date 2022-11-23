@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IMyDrpOptions } from 'mydaterangepicker';
-import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { Location } from "@angular/common";
 import { UserService } from 'src/app/core/services/user.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { DatePipe } from '@angular/common';
+import { DateAdapter } from 'saturn-datepicker';
+import { CompraNacionalService } from './compra-nacional.service';
+import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 
 @Component({
   selector: 'app-compra-nacional',
@@ -13,6 +15,9 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./compra-nacional.component.scss'],
 })
 export class CompraNacionalComponent implements OnInit {
+  datePipe = new DatePipe('es-CO');
+  date: { year: number; month: number };
+
   checkFoto: boolean = true;
   checkFuncionario: boolean = true;
   checkFecha: boolean = true;
@@ -21,6 +26,8 @@ export class CompraNacionalComponent implements OnInit {
   checkEstado: boolean = true;
   checkAprobacion: boolean = true;
   panelOpenState = false;
+
+  public loading: boolean = false;
   public comprasnacionales: any[] = [];
   @ViewChild('Formcomprasnacionacrear') Formcomprasnaciona: any;
   @ViewChild('studentChart') studentChart: ElementRef;
@@ -67,10 +74,18 @@ export class CompraNacionalComponent implements OnInit {
   public TotalItems: number;
   public page = 1;
   public maxSize = 10;
-  public filtro_cod: string = '';
-  public filtro_est: string = '';
-  public filtro_prov: string = '';
-  public filtro_func: string = '';
+  public filtros: any = {
+    cod: '',
+    est: '',
+    prov: '',
+    fecha: '',
+    func: ''
+  }
+  pagination: any = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
   public studentChartData: any;
   public Fecha = new Date();
   public Actas_Pendientes: any = [];
@@ -85,131 +100,125 @@ export class CompraNacionalComponent implements OnInit {
 
 
   public requiredParams: any = { params: { tipo: "todo", funcionario: 1, company_id: '' } };
-  myDateRangePickerOptions: IMyDrpOptions = {
+ /*  myDateRangePickerOptions: IMyDrpOptions = {
     width: '156px',
     height: '27px',
     selectBeginDateTxt: 'Inicio',
     selectEndDateTxt: 'Fin',
     selectionTxtFontSize: '12px',
     dateFormat: 'yyyy-mm-dd',
-  };
-  public filtro_fecha: any = '';
+  }; */
   private mes = [];
   public subtotal = [];
   facturacionChartTag: any;
 
-  constructor(private http: HttpClient, private location: Location, private route: ActivatedRoute, private _user: UserService) {
-    this.requiredParams.params.company_id = this._user.user.person.company_worked.id
-
-    this.ListarComprasNacionales();
-    this.getDiasAnulacion();
-    this.getFuncioriosParaResponsables();
-  }
+  constructor(
+    private http: HttpClient,
+    private location: Location,
+    private _user: UserService,
+    private _compraNacional: CompraNacionalService,
+    private dateAdapter: DateAdapter<any>,
+    private _people: PersonService
+  ) {}
 
 
   ngOnInit() {
+    this.requiredParams.params.company_id = this._user.user.person.company_worked.id
 
-    this.http.get(environment.ruta + 'php/rotativoscompras/lista_pre_compra.php').subscribe((data: any) => {
-      this.Pre_Compras = data;
-    });
-
+    this.dateAdapter.setLocale('es');
+    this.listarComprasNacionales();
+    this.getDiasAnulacion();
+    this.getFuncioriosParaResponsables();
+    /* this.http.get(environment.base_url + '/php/rotativoscompras/lista_pre_compra').subscribe((res: any) => {
+      this.Pre_Compras = res.data;
+    }); */
   }
 
-  imageProfile: any;
-  ListarComprasNacionales() {
+  listarComprasNacionales(page=1) {
 
-    let params = this.route.snapshot.queryParams;
-
-    let queryString = '';
-
-    if (Object.keys(params).length > 0) { // Si existe parametros o filtros
-      this.page = params.pag ? params.pag : 1;
-      this.filtro_cod = params.cod ? params.cod : '';
-      this.filtro_func = params.func ? params.func : '';
-      this.filtro_est = params.est ? params.est : '';
-      this.filtro_prov = params.prov ? params.prov : '';
-      queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filtros
     }
-
-    this.http.get(environment.ruta + 'php/comprasnacionales/lista_compras.php' + queryString,
-
-      this.requiredParams).subscribe((data: any) => {
-        this.comprasnacionales = data.compras;
-        console.log(this.comprasnacionales)
-        this.TotalItems = data.numReg;
-      });
-      for (let i in this.comprasnacionales){
-        this.http.get(this.comprasnacionales[i].Imagen).subscribe(result => {
-          console.log(result)
-        },
-          error => {
-            console.log(error)
-            if(error.status == 500){
-              this.imageProfile = null
-            } else{
-              this.imageProfile = this.comprasnacionales[i].Imagen
-            }
-          });
-      }
-
+    this.loading = true;
+    this._compraNacional.getListaComprasNacionales(params).subscribe((res: any) => {
+      this.comprasnacionales = res.data.data;
+      this.loading = false;
+      this.pagination.collectionSize = res.data.total;
+    });
   }
-  fechita:any;
+
+  selectedDate(fecha) {
+    if (fecha.value){
+      this.filtros.fecha =
+      this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
+      ' - ' +
+      this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
+    } else {
+      this.filtros.fecha = ''
+    }
+    this.listarComprasNacionales();
+  }
+
+ /*  fechita:any;
   fechitaF(event){
     this.fechita = event.target.value;
     if(this.fechita2 !=null){
-      this.filtro_fecha = this.fechita + ' - ' + this.fechita2;
+      this.filtros.fecha = this.fechita + ' - ' + this.fechita2;
       this.filtros();
     }
   }
+
   fechita2:any;
   fechitaF2(event){
     this.fechita2 = event.target.value;
     if(this.fechita !=null){
-      this.filtro_fecha = this.fechita + ' - ' + this.fechita2;
+      this.filtros.fecha = this.fechita + ' - ' + this.fechita2;
       this.filtros();
     }
   }
+
   dateRangeChanged(event) {
 
     if (event.formatted != "") {
-      this.filtro_fecha = event.formatted;
-      console.log(this.filtro_fecha)
+      this.filtros.fecha = event.formatted;
+      console.log(this.filtros.fecha)
     } else {
-      this.filtro_fecha = '';
+      this.filtros.fecha = '';
     }
 
-    this.filtros();
-  }
+    //this.filtros();
+  } */
 
-  filtros() {
+  /* filtros() {
 
     let params: any = {};
 
-    if (this.filtro_fecha != "" || this.filtro_cod != "" || this.filtro_prov != "" || this.filtro_est != '' || this.filtro_func != '') {
+    if (this.filtros.fecha != "" || this.filtros.cod != "" || this.filtros.prov != "" || this.filtros.est != '' || this.filtros.func != '') {
       this.page = 1;
       params.pag = this.page;
 
 
-      if (this.filtro_fecha != "" && this.filtro_fecha != null) {
-        params.fecha = this.filtro_fecha;
+      if (this.filtros.fecha != "" && this.filtros.fecha != null) {
+        params.fecha = this.filtros.fecha;
       }
-      if (this.filtro_cod != "") {
-        params.cod = this.filtro_cod;
+      if (this.filtros.cod != "") {
+        params.cod = this.filtros.cod;
       }
-      if (this.filtro_prov != "") {
-        params.prov = this.filtro_prov;
+      if (this.filtros.prov != "") {
+        params.prov = this.filtros.prov;
       }
-      if (this.filtro_est != "") {
-        params.est = this.filtro_est;
+      if (this.filtros.est != "") {
+        params.est = this.filtros.est;
       }
-      if (this.filtro_func != "") {
-        params.func = this.filtro_func;
+      if (this.filtros.func != "") {
+        params.func = this.filtros.func;
       }
       let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
       this.location.replaceState('/comprasnacionales', queryString); // actualizando URL
 
-      this.http.get(environment.ruta + '/php/comprasnacionales/lista_compras.php?' + queryString, this.requiredParams).subscribe((data: any) => {
+      this.http.get(environment.base_url + '/php/comprasnacionales/lista_compras/' + queryString, this.requiredParams).subscribe((data: any) => {
         this.comprasnacionales = data.compras;
         this.TotalItems = data.numReg;
 
@@ -218,52 +227,52 @@ export class CompraNacionalComponent implements OnInit {
       this.location.replaceState('/comprasnacionales', '');
 
       this.page = 1;
-      this.filtro_cod = '';
-      this.filtro_est = '';
-      this.filtro_fecha = '';
-      this.filtro_prov = '';
-      this.filtro_func = '';
-      this.http.get(environment.base_url + '/php/comprasnacionales/lista_compras.php?', this.requiredParams).subscribe((data: any) => {
+      this.filtros.cod = '';
+      this.filtros.est = '';
+      this.filtros.fecha = '';
+      this.filtros.prov = '';
+      this.filtros.func = '';
+      this.http.get(environment.base_url + '/php/comprasnacionales/lista_compras/', this.requiredParams).subscribe((data: any) => {
         this.comprasnacionales = data.compras;
         this.TotalItems = data.numReg;
       });
     }
 
-  }
+  } */
 
-  paginacion() {
+  /* paginacion() {
 
     let params: any = {
       pag: this.page
     };
 
-    if (this.filtro_fecha != "" && this.filtro_fecha != null) {
-      params.fecha = this.filtro_fecha;
+    if (this.filtros.fecha != "" && this.filtros.fecha != null) {
+      params.fecha = this.filtros.fecha;
     }
-    if (this.filtro_cod != "") {
-      params.cod = this.filtro_cod;
+    if (this.filtros.cod != "") {
+      params.cod = this.filtros.cod;
     }
-    if (this.filtro_est != "") {
-      params.est = this.filtro_est;
+    if (this.filtros.est != "") {
+      params.est = this.filtros.est;
     }
-    if (this.filtro_prov != "") {
-      params.prov = this.filtro_prov;
+    if (this.filtros.prov != "") {
+      params.prov = this.filtros.prov;
     }
-    if (this.filtro_func != "") {
-      params.func = this.filtro_func;
+    if (this.filtros.func != "") {
+      params.func = this.filtros.func;
     }
     let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
     this.location.replaceState('/comprasnacionales', queryString); // actualizando URL
 
-    this.http.get(environment.ruta + '/php/comprasnacionales/lista_compras.php?' + queryString, this.requiredParams).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprasnacionales/lista_compras/' + queryString, this.requiredParams).subscribe((data: any) => {
       this.comprasnacionales = data.compras;
       this.TotalItems = data.numReg;
 
     });
-  }
+  } */
 
-  anularCompra(id, motivo) {
+  /* anularCompra(id, motivo) {
     let datos = new FormData();
     datos.append("id", id);
 
@@ -273,32 +282,32 @@ export class CompraNacionalComponent implements OnInit {
     this.http.post(environment.ruta + 'php/comprasnacionales/actualiza_compra.php', datos).subscribe((data: any) => {
       this.deleteSwal.show();
       this.cargarIndicadores();
-      this.ListarComprasNacionales();
+      this.listarComprasNacionales();
     })
-  }
+  } */
 
-  onPage(event) {
+ /*  onPage(event) {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
       // console.log('paged!', event);
     }, 100);
-  }
+  } */
 
-  tablaLocalstorage() {
+ /*  tablaLocalstorage() {
     if (this.proveedorPreCompra.length > 0) {
       return true;
     } else {
       return false;
     }
-  }
+  } */
 
-  actualiza_filtro(txt) {
+  /* actualiza_filtro(txt) {
     const val = txt.toLowerCase();
     switch (val) {
       case "todos": {
         this.location.replaceState('/comprasnacionales', ''); // Quitar los queryStrings
-        this.filtro_cod = '';
-        this.filtro_est = '';
+        this.filtros.cod = '';
+        this.filtros.est = '';
 
         this.http.get(environment.ruta + '/php/comprasnacionales/lista_compras.php', this.requiredParams).subscribe((data: any) => {
           this.comprasnacionales = data.compras;
@@ -310,15 +319,15 @@ export class CompraNacionalComponent implements OnInit {
       }
       case "pendiente": {
 
-        this.filtro_est = val; // Setear variable global del filtro de estado
+        this.filtros.est = val; // Setear variable global del filtro de estado
 
         let params: any = {
           pag: this.page,
           est: val
         };
 
-        if (this.filtro_cod != "") {
-          params.cod = this.filtro_cod;
+        if (this.filtros.cod != "") {
+          params.cod = this.filtros.cod;
         }
 
         let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
@@ -334,15 +343,15 @@ export class CompraNacionalComponent implements OnInit {
       }
       case "no conforme": {
 
-        this.filtro_est = val; // Setear variable global del filtro de estado
+        this.filtros.est = val; // Setear variable global del filtro de estado
 
         let params: any = {
           pag: this.page,
           est: val
         };
 
-        if (this.filtro_cod != "") {
-          params.cod = this.filtro_cod;
+        if (this.filtros.cod != "") {
+          params.cod = this.filtros.cod;
         }
 
         let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
@@ -359,15 +368,15 @@ export class CompraNacionalComponent implements OnInit {
       }
       case "anulada": {
 
-        this.filtro_est = val; // Setear variable global del filtro de estado
+        this.filtros.est = val; // Setear variable global del filtro de estado
 
         let params: any = {
           pag: this.page,
           est: val
         };
 
-        if (this.filtro_cod != "") {
-          params.cod = this.filtro_cod;
+        if (this.filtros.cod != "") {
+          params.cod = this.filtros.cod;
         }
 
         let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
@@ -388,12 +397,12 @@ export class CompraNacionalComponent implements OnInit {
           pag: this.page
         };
 
-        if (this.filtro_cod != "") {
-          params.cod = this.filtro_cod;
+        if (this.filtros.cod != "") {
+          params.cod = this.filtros.cod;
         }
 
-        if (this.filtro_est != "") {
-          params.est = this.filtro_est;
+        if (this.filtros.est != "") {
+          params.est = this.filtros.est;
         }
 
         let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
@@ -411,15 +420,15 @@ export class CompraNacionalComponent implements OnInit {
         break;
       }
       case 'recibida': {
-        this.filtro_est = val; // Setear variable global del filtro de estado
+        this.filtros.est = val; // Setear variable global del filtro de estado
 
         let params: any = {
           pag: this.page,
           est: val
         };
 
-        if (this.filtro_cod != "") {
-          params.cod = this.filtro_cod;
+        if (this.filtros.cod != "") {
+          params.cod = this.filtros.cod;
         }
 
         let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
@@ -435,15 +444,15 @@ export class CompraNacionalComponent implements OnInit {
         break;
       }
       case 'devuelta': {
-        this.filtro_est = val; // Setear variable global del filtro de estado
+        this.filtros.est = val; // Setear variable global del filtro de estado
 
         let params: any = {
           pag: this.page,
           est: val
         };
 
-        if (this.filtro_cod != "") {
-          params.cod = this.filtro_cod;
+        if (this.filtros.cod != "") {
+          params.cod = this.filtros.cod;
         }
 
         let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
@@ -459,13 +468,13 @@ export class CompraNacionalComponent implements OnInit {
         break;
       }
     }
-  }
+  } */
 
-  cargarIndicadores() {
+  /* cargarIndicadores() {
     this.http.get(environment.ruta + '/php/comprasnacionales/indicadores_conteo_nacional.php').subscribe((data: any) => {
       this.indicadores = data;
     })
-  }
+  } */
 
   getDiasAnulacion() {
     this.http.get(environment.ruta + '/php/comprasnacionales/get_dias_anulacion.php').subscribe((data: any) => {
@@ -475,13 +484,10 @@ export class CompraNacionalComponent implements OnInit {
   }
 
   getFuncioriosParaResponsables() {
-    this.http.get(environment.ruta + 'php/funcionarios/lista_funcionarios.php?depen=sistemas').subscribe((data: any) => {
-      this.funcionarios_anulacion = data['funcionarios'];
+    this.http.get(environment.base_url + '/php/funcionarios/lista_funcionarios?depen=admin').subscribe((res: any) => {
+      this.funcionarios_anulacion = res.data;
     })
   }
-
-
-
 
   setDiasAnulacion() {
 
@@ -504,7 +510,4 @@ export class CompraNacionalComponent implements OnInit {
       this.infoSwal.show();
     })
   }
-
-
-
 }

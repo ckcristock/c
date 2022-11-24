@@ -8,7 +8,7 @@ import {
   NgbPaginationModule,
   NgbDropdownModule,
   NgbTypeaheadModule,
-  NgbNavModule,
+  NgbNavModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { VacantesCrearComponent } from './vacantes/vacantes-crear/vacantes-crear.component';
@@ -32,7 +32,8 @@ import { MatExpansionModule,
   MatCheckboxModule,
   MatPaginatorModule,
   MatRadioModule,
-  MatBadgeModule } from '@angular/material';
+  MatBadgeModule,
+  MatTooltipModule} from '@angular/material';
 
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
@@ -165,7 +166,8 @@ import { TiposModule } from '../ajustes/tipos/tipos.module';
     MatCheckboxModule,
     MatPaginatorModule,
     MatRadioModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatTooltipModule
   ],
   providers: [{ provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' },CurrencyPipe],
   exports: [],

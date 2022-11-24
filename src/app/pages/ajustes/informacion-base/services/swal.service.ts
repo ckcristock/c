@@ -11,6 +11,10 @@ export class SwalService {
     msg: '',
     html: ''
   };
+  public buttonColor = {
+    confirm: '#A3BD30',
+    cancel:'#d33'
+  }
 
   constructor() { }
 
@@ -45,9 +49,9 @@ export class SwalService {
       allowOutsideClick: true,
       allowEscapeKey: true,
       showCancelButton: showCancel,
-      confirmButtonColor: '#A3BD30',
+      confirmButtonColor: this.buttonColor.confirm,
       confirmButtonText: showCancel ? '¡Sí, confirmar!' : 'OK',
-      cancelButtonColor: '#d33',
+      cancelButtonColor: this.buttonColor.cancel,
       cancelButtonText: 'Cancelar',
       reverseButtons: true
 

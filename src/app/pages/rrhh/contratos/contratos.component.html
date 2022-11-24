@@ -266,7 +266,11 @@
                     contractToExpire.date_end | date: "longDate"
                   }}</small>
                 </div>
-                <div>
+                <div #tooltip="matTooltip"
+                    matTooltipPosition="above"
+                    [matTooltip]="(contractToExpire.renewed)?'Ya presenta información para renovación':
+                                  (contractToExpire.cantidad>0)?'Ya ha sido renovado anteriormente':
+                                  (contractToExpire.renewed==null)?'':'Ya ha sido asignado a preliquidación'">
                   <img
                     [src]="contractToExpire.image | image"
                     onerror="this.src='../../../../assets/images/noprofile.png'"
@@ -357,27 +361,27 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de contrato</mat-label>
           <mat-select
-            formControlName="contract_term_id"
+            formControlName="work_contract_type_id"
             placeholder="Término del contrato"
             required
           >
             <mat-option
               *ngFor="let contractType of contractTypes"
-              [value]="contractType.value"
-            >{{ contractType.text }}</mat-option>
+              [value]="contractType.id"
+            >{{ contractType.name }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Término del contrato</mat-label>
           <mat-select
-          formControlName="work_contract_type_id"
+          formControlName="contract_term_id"
           placeholder="Tipo de contrato"
           required
         >
           <mat-option
             *ngFor="let term of terms"
-            [value]="term.value"
-          >{{ term.text }}</mat-option>
+            [value]="term.id"
+          >{{ term.name }}</mat-option>
         </mat-select>
         </mat-form-field>
       </div>

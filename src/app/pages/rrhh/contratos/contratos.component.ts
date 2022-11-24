@@ -145,6 +145,7 @@ export class ContratosComponent implements OnInit {
   calcularDias(event) {
     let date = new Date(event.target.value);
     let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
+    dateInicio.setDate(dateInicio.getDate() - 1);
     let numDias = Math.floor((date.getTime() - dateInicio.getTime()) / (1000 * 60 * 60 * 24));
     this.formContrato.get('date_diff').setValue(numDias);
   }
@@ -152,7 +153,7 @@ export class ContratosComponent implements OnInit {
   calcularFecha(event) {
     if (event.target.value != "") {
       let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
-      dateInicio.setDate(dateInicio.getDate() + parseInt(event.target.value));
+       dateInicio.setDate(dateInicio.getDate() - 1 + parseInt(event.target.value));
       this.formContrato.get('date_end').setValue(dateInicio.toISOString().split('T')[0]);
       if (this.formContrato.controls.date_diff.hasError('min')) {
         this._swal.show({
@@ -319,6 +320,7 @@ export class ContratosComponent implements OnInit {
             'false': 'Liquidar'
           },
           footer: (employee.cantidad>0)?'Renovaciones previas: <strong>'+employee.cantidad+'</strong>':'',
+          confirmButtonColor: this._swal.buttonColor.confirm,
           inputValidator: (value) => {
             if (!value) {
               return 'Debes seleccionar una acción!'
@@ -355,7 +357,8 @@ export class ContratosComponent implements OnInit {
               this.formContrato.addControl('id', this.fb.control(employee.process_id));
             }
             this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
-              Swal.fire({ html: `El contrato será liquidado el día ${employee.date_end}.` });
+              Swal.fire({ html: `El contrato será liquidado el día ${employee.date_end}.`,
+              confirmButtonColor: this._swal.buttonColor.confirm });
               this.getContractsToExpire();
             });
           }
@@ -367,8 +370,8 @@ export class ContratosComponent implements OnInit {
         text: "Este empleado ya presenta un proceso de preliquidación de contrato, desea renovarlo?",
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: this._swal.buttonColor.confirm,
+        cancelButtonColor: this._swal.buttonColor.cancel,
         confirmButtonText: 'Renovar contrato',
         cancelButtonText: 'Cancelar',
         footer: (employee.cantidad>0)?'Renovaciones previas: <strong>'+employee.cantidad+'</strong>':'',
@@ -414,7 +417,7 @@ export class ContratosComponent implements OnInit {
       if(res.data.date_diff >= 365 || employee.cantidad >= 3){
         res.data.date_diff = 365;
         let dateEnd = new Date(res.data.date_of_admission);
-        dateEnd.setDate(dateEnd.getDate() + 365);
+        dateEnd.setDate(dateEnd.getDate() - 1 + res.data.date_diff);
         res.data.date_end = dateEnd.toISOString().split('T')[0];
       }
       this.minRenewalPeriod = { date: res.data.date_end, numDays: res.data.date_diff };

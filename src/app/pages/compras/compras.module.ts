@@ -15,17 +15,43 @@ import { CrearCompraNacionalComponent } from './compra-nacional/crear-compra-nac
 import {
   NgbTypeaheadModule,
   NgbDropdownModule,
+  NgbPaginationModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { PipesModule } from '../../core/pipes/pipes.module';
 import { VerCompraNacionalComponent } from './compra-nacional/ver-compra-nacional/ver-compra-nacional.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicker';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY'
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
 @NgModule({
   declarations: [
     CompraNacionalComponent,
     CrearCompraNacionalComponent,
     VerCompraNacionalComponent,
   ],
+  providers: [
+      {
+        provide: DateAdapter,
+        useClass: MomentDateAdapter,
+        deps: [MAT_DATE_LOCALE],
+      },
+      { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    ],
   imports: [
     NgSelectModule,
     HttpClientModule,
@@ -41,9 +67,14 @@ import { NgSelectModule } from '@ng-select/ng-select';
     MatExpansionModule,
     MatFormFieldModule,
     MatCheckboxModule,
+    NgbPaginationModule,
     MatInputModule,
     MatSelectModule,
     SweetAlert2Module.forRoot(),
+    MatDatepickerModule,
+    MatNativeDateModule,
+    SatDatepickerModule,
+    SatNativeDateModule
   ],
 
 })

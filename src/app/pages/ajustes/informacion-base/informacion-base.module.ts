@@ -75,7 +75,7 @@ import { BodegasComponent } from './bodegas/bodegas.component';
 import { CrearbodegaComponent } from './bodegas/crearbodega/crearbodega.component';
 import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.component';
 import { FilePermissionsComponent } from './funcionarios/detalle-funcionario/permissions/file-permissions/file-permissions.component';
-import { MatTreeModule } from '@angular/material';
+import { MatSlideToggleModule, MatTreeModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -156,6 +156,7 @@ import { MatTreeModule } from '@angular/material';
     MatAutocompleteModule,
     MatPaginatorModule,
     MatTreeModule,
+    MatSlideToggleModule,
     SweetAlert2Module.forRoot(),
   ],
   exports: [

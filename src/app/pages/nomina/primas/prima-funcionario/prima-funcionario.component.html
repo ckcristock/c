@@ -30,6 +30,7 @@
         <table class="table table-bordered table-striped table-sm mb-0">
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
+              <th></th>
               <th>Foto</th>
               <th>Persona</th>
               <th>Salario</th>
@@ -40,9 +41,10 @@
           </thead>
           <tbody>
             <tr
-              *ngFor="let empleado of empleados.empleados"
+              *ngFor="let empleado of empleados.empleados; let i=index"
               class="text-center text-uppercase"
             >
+            <td> {{i+1}} </td>
               <td class="align-middle p-0">
                 <div>
                   <img

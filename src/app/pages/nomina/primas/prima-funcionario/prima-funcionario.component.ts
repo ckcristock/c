@@ -59,7 +59,7 @@ export class PrimaFuncionarioComponent implements OnInit {
     } else {
       params = {
         fecha_inicio: new Date(`07/01/${this.anio}`),
-        fecha_fin: new Date(`12/31/${this.anio}`)
+        fecha_fin: new Date(`12/30/${this.anio}`)
       }
     }
 

@@ -31,13 +31,30 @@
               type="text"
               matInput
               name="nit"
-              [(ngModel)]="filtro_func"
+              [(ngModel)]="filtros.func"
+              (input)="listarComprasNacionales()"
               autocomplete="off"
               placeholder="Busca por funcionario"
-              (blur)="filtros()"
             />
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field appearance="outline" class="col-md-3">
+            <mat-label>Rango de fechas</mat-label>
+            <input
+              matInput
+              [satDatepicker]="picker"
+              [value]="date"
+              (dateChange)="selectedDate($event)"
+              (dateInput)="selectedDate($event)"
+              name="daterange" autocomplete="off"
+              required
+            />
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></sat-datepicker-toggle>
+          </mat-form-field>
+          <!-- <mat-form-field class="col" appearance="outline">
             <mat-label>Fecha de inicio</mat-label>
             <input
               matInput
@@ -58,14 +75,14 @@
               autocomplete="off"
               placeholder="Busca por fecha"
             />
-          </mat-form-field>
+          </mat-form-field> -->
           <mat-form-field class="col" appearance="outline">
             <mat-label>Código</mat-label>
             <input
               matInput
               type="text"
-              [(ngModel)]="filtro_cod"
-              (blur)="filtros()"
+              [(ngModel)]="filtros.cod"
+              (input)="listarComprasNacionales()"
               autocomplete="off"
               placeholder="Busca por código"
             />
@@ -76,15 +93,15 @@
               type="text"
               matInput
               name="nit"
-              [(ngModel)]="filtro_prov"
-              (blur)="filtros()"
+              [(ngModel)]="filtros.prov"
+              (input)="listarComprasNacionales()"
               autocomplete="off"
               placeholder="Busca por proveedor"
             />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
             <mat-label>Estado</mat-label>
-            <mat-select [(ngModel)]="filtro_est" (selectionChange)="filtros()">
+            <mat-select [(ngModel)]="filtros.est" (selectionChange)="listarComprasNacionales()">
               <mat-option value="">Todos</mat-option>
               <mat-option value="Pendiente">Pendiente</mat-option>
               <mat-option value="No conforme">No Conforme</mat-option>
@@ -125,8 +142,8 @@
     </mat-accordion>
     <div class="rounded-top table-responsive">
       <table
-        class="table table-bordered table-striped table-sm mb-0"
-        
+        class="table table-bordered table-striped table-sm"
+
         *ngIf="comprasnacionales.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -138,7 +155,7 @@
             <th *ngIf="checkProveedor">Proveedor</th>
             <th *ngIf="checkEstado">Estado</th>
             <th *ngIf="checkAprobacion">Aprobación</th>
-            <th class="col-sm-1"><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -146,7 +163,7 @@
             <td *ngIf="checkFoto">
               <img
                 class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
-                [src]="imageProfile"
+                [src]="compra.image"
                 onerror="this.src='../../../../assets/images/noprofile.png'"
               />
             </td>
@@ -244,19 +261,19 @@
     </div>
     <ngb-pagination
       *ngIf="comprasnacionales.length > 0"
-      class="pull-right"
-      [collectionSize]="TotalItems"
-      [(page)]="page"
-      [maxSize]="maxSize"
-      [pageSize]="20"
-      size="sm"
-      (pageChange)="paginacion()"
-      [boundaryLinks]="true"
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="listarComprasNacionales($event)"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      aria-label="Default pagination"
     >
     </ngb-pagination>
   </div>
-  <!-- {{ page * maxSize - maxSize + 1 }} al {{ page * maxSize }} de
-  {{ TotalItems }} -->
 </div>
 
 <swal
@@ -343,5 +360,5 @@
 </app-modal-basic>
 
 <ng-template #notData>
-  <app-not-data></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

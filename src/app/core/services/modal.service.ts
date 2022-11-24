@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService {
-  constructor(private modalService: NgbModal) { }
+  constructor(
+    private modalService: NgbModal,
+    config: NgbModalConfig,
+  ) {
+    config.backdrop = true;
+    config.keyboard = true;
+  }
   open(content, size = 'md', scroll = true) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: size, scrollable: scroll });
   }

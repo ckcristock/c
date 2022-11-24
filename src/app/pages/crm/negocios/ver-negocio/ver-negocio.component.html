@@ -1,70 +1,25 @@
-<div class="card">
-  <!-- <div class="card-header">
-        <div class="card-title mt-3 text-center">
-            <h5>Negocios</h5>
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Presupuestos</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                (click)="openConfirm(add)"
+              >
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+            </div>
+          </div>
         </div>
-    </div> -->
-  <div class="card-body">
-    <div class="row align-items-center">
-      <div class="col-md-2 mb-3">
-        <img
-          [src]="negocio?.third_party.image | image"
-          style="max-width: -webkit-fill-available"
-          onerror="this.src='../../../../assets/images/noprofile.png'"
-          class="d-block img-thumbnail rounded-circle mx-auto img-fluid"
-        />
-      </div>
-      <div class="col-md-10">
         <div class="rounded-top table-responsive">
-          <table class="table table-light text-center">
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>País</th>
-                <th>Fecha</th>
-                <th>Tercero</th>
-                <th>Persona</th>
-                <th>Detalles</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ negocio?.code }}</td>
-                <td>{{ negocio?.country.name }}</td>
-                <td>{{ negocio?.date | date }}</td>
-                <td>
-                  {{
-                    negocio?.third_party.first_name
-                      ? negocio?.third_party.first_name +
-                        " " +
-                        negocio?.third_party.first_surname
-                      : negocio?.third_party.social_reason
-                  }}
-                </td>
-                <td>{{ negocio?.third_party_person.name }}</td>
-                <td>{{ negocio?.description }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!-- <div class="col-md-2 mt-3 mb-3">
-        <img
-          [src]="negocio.qr"
-          alt="qrNegocio"
-          style="max-width: -webkit-fill-available"
-        />
-      </div> -->
-    </div>
-    <hr class="line mb-0" />
-    <div class="row">
-      <div class="col-md-8 mt-4">
-        <h6 class="text-center">Presupuestos</h6>
-        <div class="rounded-top table-responsive">
-          <table
-            class="table table-bordered table-striped table-sm"
-            
-          >
+          <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th class="col-md-3">Descripción</th>
@@ -80,7 +35,9 @@
                 <th class="align-middle" scope="row">
                   {{ pres?.budget.observation }}
                 </th>
-                <td class="align-middle">{{ pres?.budget.created_at | date }}</td>
+                <td class="align-middle">
+                  {{ pres?.budget.created_at | date }}
+                </td>
                 <td class="align-middle">
                   $ {{ pres?.budget.total_cop | number }}
                 </td>
@@ -88,52 +45,102 @@
             </tbody>
           </table>
         </div>
-        <div class="d-flex justify-content-end">
-          <button
-            type="button"
-            class="btn btn-sm btn-primary"
-            (click)="openConfirm(add)"
-          >
-            <i class="fa fa-plus"></i> Agregar
-          </button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Cotizaciones</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button
+                class="text-center btn btn-primary btn-sm"
+                role="button"
+                (click)="addCotizacion(); openConfirm(addCotizaciones)"
+              >
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-top table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th class="col-md-8">Descripción</th>
+                <th class="col-md-2">Fecha</th>
+                <th class="col-md-2">Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let coti of cotizaciones">
+                <td scope="row">{{ coti.descripcion }}</td>
+                <td>{{ coti.fecha | date }}</td>
+                <td>$ {{ coti.valor | number }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <!-- <h6>Cotizaciones</h6>
-      <table class="table table-bordered">
-        <thead class="table-dark text-center">
-          <th class="col-md-8">Descripción</th>
-          <th class="col-md-2">Fecha</th>
-          <th class="col-md-2">Valor</th>
-        </thead>
-        <tbody style="font-weight: 100">
-          <tr *ngFor="let coti of negocio.cotizaciones">
-            <td scope="row">{{ coti.descripcion }}</td>
-            <td>{{ coti.fecha | date }}</td>
-            <td>$ {{ coti.valor | number }}</td>
-          </tr>
-          <tr>
-            <td scope="row" colspan="2">
-              <strong>Agregar Cotizacion(es)</strong>
-            </td>
-            <td
-              class="text-center btn btn-success btn-block"
-              role="button"
-              (click)="addCotizacion(); modalPresupuestos.show()"
-            >
-              <i class="fa fa-plus"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table> -->
-      <div class="col-md-4" style="border-left: 1px solid #95c11f">
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div>
+            <span class="badge badge-pill badge-primary">{{
+              negocio?.code
+            }}</span>
+            <h5>
+              {{
+                negocio?.third_party.first_name
+                  ? negocio?.third_party.first_name +
+                    " " +
+                    negocio?.third_party.first_surname
+                  : negocio?.third_party.social_reason
+              }}
+            </h5>
+            <small>
+              {{ negocio?.third_party_person.name | uppercase }}
+            </small>
+            <br />
+            <small>
+              {{ negocio?.date | date }}
+            </small>
+            <h6>{{ negocio?.country.name }}</h6>
+          </div>
+          <img
+            [src]="negocio?.third_party.image | image"
+            id="imageOutput"
+            onerror="this.src='../../../../assets/images/noprofile.png'"
+            class="d-block img-thumbnail rounded-circle img-fluid"
+          />
+        </div>
+        <p>{{ negocio?.description }}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
         <ul
           ngbNav
           #nav="ngbNav"
           [(activeId)]="active"
-          class="nav nav-pills nav-justified border border-primary rounded mt-4"
+          class="nav nav-tabs justify-content-center"
+          role="tablist"
         >
-          <li [ngbNavItem]="2">
-            <a ngbNavLink>Tareas</a>
+          <li [ngbNavItem]="1" class="nav-item flex-sm-fill">
+            <a
+              ngbNavLink
+              data-toggle="tab"
+              role="tab"
+              aria-controls="home"
+              aria-selected="true"
+              class="nav-link border-0 text-uppercase font-weight-bold"
+              >Tareas</a
+            >
             <ng-template ngbNavContent>
               <app-tareas-negocio
                 [tareas]="tareas"
@@ -143,8 +150,16 @@
               </app-tareas-negocio>
             </ng-template>
           </li>
-          <li [ngbNavItem]="1">
-            <a ngbNavLink>History</a>
+          <li [ngbNavItem]="2" class="nav-item flex-sm-fill">
+            <a
+              ngbNavLink
+              data-toggle="tab"
+              role="tab"
+              aria-controls="home"
+              aria-selected="true"
+              class="nav-link border-0 text-uppercase font-weight-bold"
+              >History</a
+            >
             <ng-template ngbNavContent>
               <app-historial-negocio></app-historial-negocio>
             </ng-template>
@@ -173,10 +188,7 @@
   </div>
   <div class="modal-body">
     <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm"
-        
-      >
+      <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Item</th>
@@ -210,7 +222,9 @@
                 </label>
               </div>
             </td>
-            <td class="align-middle">{{ item.created_at | date: "longDate" }}</td>
+            <td class="align-middle">
+              {{ item.created_at | date: "longDate" }}
+            </td>
             <td class="align-middle">{{ item.customer.name }}</td>
             <td class="align-middle">{{ item.destiny.name }}</td>
             <td class="align-middle">{{ item.line }}</td>
@@ -218,14 +232,26 @@
               {{ item.user.person.first_name }}
               {{ item.user.person.first_surname }}
             </td>
-            <td class="align-middle">${{ item.total_cop | currency: "":"" }}</td>
-            <td class="align-middle">${{ item.total_usd | currency: "":"" }}</td>
+            <td class="align-middle">
+              ${{ item.total_cop | currency: "":"" }}
+            </td>
+            <td class="align-middle">
+              ${{ item.total_usd | currency: "":"" }}
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <!-- <ng-select [items]="dataModal " bindLabel="descripcion " [multiple]="true " [closeOnSelect]="false " [selectableGroup]="true " [selectableGroupAsModel]="false " [(ngModel)]="seleccionadas ">
-        </ng-select> -->
+    <!-- <ng-select
+      [items]="dataModal"
+      bindLabel="descripcion "
+      [multiple]="true"
+      [closeOnSelect]="false"
+      [selectableGroup]="true"
+      [selectableGroupAsModel]="false"
+      [(ngModel)]="seleccionadas"
+    >
+    </ng-select> -->
   </div>
   <div class="modal-footer">
     <button
@@ -242,51 +268,77 @@
   </div>
 </ng-template>
 
-<!-- <app-modal-basic #modalCotizaciones [dialogClass]="'modal-lg'">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Seleccionar cotizaciones disponibles</h5>
-        <button type="button" class="close basic-close" (click)="modalCotizaciones.hide()">
-      <span aria-hidden="true">
-        <i class="fas fa-times" (click)="modalCotizaciones.hide()"></i>
-      </span>
+<ng-template #addCotizaciones let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">
+      Seleccionar cotizaciones disponibles
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
     </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Item</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Destino</th>
+            <th>Linea</th>
+            <th>Quien elabora</th>
+            <th>Total COP</th>
+            <th>Total USD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of cotizaciones"
+            [ngClass]="{
+              'text-danger font-weight-bold': item.state == 'Inactivo'
+            }"
+          >
+            <td>
+              <input
+                type="checkbox"
+                [selected]="cotizacionesSeleccionadas.includes(item.id)"
+                [change]="guardarCotizacion(item.id)"
+              />
+              <label [for]="item.id" class="ml-1"> PRES {{ item.id }} </label>
+            </td>
+            <td>{{ item.created_at | date: "longDate" }}</td>
+            <td>{{ item.customer }}</td>
+            <td>{{ item.destiny }}</td>
+            <td>{{ item.line }}</td>
+            <td>
+              {{ item.user.person.first_name }}
+              {{ item.user.person.first_surname }}
+            </td>
+            <td>${{ item.total_cop | currency: "":"" }}</td>
+            <td>${{ item.total_usd | currency: "":"" }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="app-modal-body">
-        <table class="mt-2 table table-borderless table-striped">
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Fecha</th>
-                    <th>Cliente</th>
-                    <th>Destino</th>
-                    <th>Linea</th>
-                    <th>Quien elabora</th>
-                    <th>Total COP</th>
-                    <th>Total USD</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of cotizaciones" [ngClass]="{'text-danger font-weight-bold': ( item.state == 'Inactivo' )}">
-                    <td>
-                        <input type="checkbox" [selected]="cotizacionesSeleccionadas.includes(item.id)" [change]=" guardarCotizacion(item.id) ">
-                        <label [for]=" item.id " class="ml-1 "> PRES {{ item.id }} </label>
-                    </td>
-                    <td> {{ item.created_at | date:'longDate' }} </td>
-                    <td> {{ item.customer.name }} </td>
-                    <td> {{ item.destiny.name }} </td>
-                    <td> {{ item.line }} </td>
-                    <td> {{ item.user.person.first_name }} {{ item.user.person.first_surname }} </td>
-                    <td> ${{ item.total_cop | currency:'':'' }} </td>
-                    <td> ${{ item.total_usd | currency:'':'' }} </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="app-modal-footer ">
-        <div class="form-group text-right ">
-            <button (click)="modalPresupuestos.hide() " type="reset " class="btn btn-danger raised mr-2 btn-sm "> Cerrar
-        </button>
-            <button type="submit " class="btn btn-primary btn-sm raised " (click)="modalCotizaciones.hide(); closeModalCotizaciones() "> Guardar </button>
-        </div>
-    </div>
-</app-modal-basic> -->
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="modalCotizaciones.hide(); closeModalCotizaciones()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>

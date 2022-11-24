@@ -10,6 +10,7 @@ import {
   OTRAS_COTIZACIONES,
 } from './negocio.data';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-ver-negocio',
@@ -49,6 +50,7 @@ export class VerNegocioComponent implements OnInit {
     private ruta: ActivatedRoute,
     private _negocio: NegociosService,
     private modalService: NgbModal,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -68,7 +70,7 @@ export class VerNegocioComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
   getBussines() {
     this._negocio.getBusiness(this.ruta.snapshot.params.id).subscribe((data: any) => {
@@ -116,9 +118,9 @@ export class VerNegocioComponent implements OnInit {
     }*/
 
   getTasks() {
-    this._negocio.getTasks(this.business_budget_id).subscribe((resp: any) => {
+    /* this._negocio.getTasks(this.business_budget_id).subscribe((resp: any) => {
       this.tareas = resp.data.data;
-    });
+    }); */
   }
 
   updateListTask() {
@@ -154,9 +156,8 @@ export class VerNegocioComponent implements OnInit {
     this.modalPresupuestos.show();
   }
   addCotizacion() {
-    this.cotizacionesSeleccionadas = this.negocio.cotizaciones.map((n) => n.id);
+    this.cotizacionesSeleccionadas = this.cotizaciones.map((n) => n.id);
 
-    this.modalCotizaciones.show();
   }
 
   obtenerContactos(thirdCompany: string) {
@@ -182,7 +183,7 @@ export class VerNegocioComponent implements OnInit {
       this.addEventToHistory('Se modificaron los presupuestos del negocio');
       this.getBussines();
       this.getPresupuestos();
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
       //this.modalPresupuestos.hide();
       this.presupuestosSeleccionados = [];
     });

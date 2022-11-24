@@ -5,6 +5,7 @@ import { SwalService } from '../../informacion-base/services/swal.service';
 import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-valor-almuerzos',
@@ -12,7 +13,6 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./valor-almuerzos.component.scss']
 })
 export class ValorAlmuerzosComponent implements OnInit {
-  @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
   values: any[] = [];
@@ -34,17 +34,18 @@ export class ValorAlmuerzosComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
 
-  title: string = '';
+  title: string = 'Agregar';
   form: FormGroup;
   constructor(
-    private _lunchValues: ValorAlmuerzosService, 
+    private _lunchValues: ValorAlmuerzosService,
     private _swal: SwalService,
     private fb: FormBuilder,
     private modalService: NgbModal,
-    
+    private _modal: ModalService
+
   ) { }
 
   ngOnInit(): void {
@@ -59,27 +60,10 @@ export class ValorAlmuerzosComponent implements OnInit {
     })
   }
 
-  openModal() {
-    this.modal.show();
-    
-  }
-  closeResult = '';
-  public openConfirm(confirm, titulo) {
-    this.title = titulo
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
-    this.form.reset();
-    
-  }
   save() {
     this._lunchValues.save(this.form.value).subscribe((r: any) => {
       this.getValues();
-      /* this.modalService.dismissAll();  */
+      this.title = 'Agregar'
       this.form.reset();
       this._swal.show({
         icon: 'success',
@@ -119,13 +103,14 @@ export class ValorAlmuerzosComponent implements OnInit {
               timer: 1000,
               showCancel: false
             })
-            
+
           })
       }
     })
   }
 
   getValue(value) {
+    this.title = 'Editar'
     this.value = { ...value }
     this.form.patchValue({
       value: value.value,

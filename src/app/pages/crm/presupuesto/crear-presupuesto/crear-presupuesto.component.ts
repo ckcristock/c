@@ -38,7 +38,6 @@ export class CrearPresupuestoComponent implements OnInit {
     this.getClients();
 
     /* if (this.dataEdit) {
-      console.log(this.dataEdit, 'aaaaaaaaaa');
 
       this.calculationBase = {
         trm: { value: this.dataEdit.trm },
@@ -61,7 +60,6 @@ export class CrearPresupuestoComponent implements OnInit {
   async getBases() {
     await this._calculationBase.getAll().toPromise().then((r: any) => {
       this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
-      console.log(this.dataEdit, 'asdr2222');
 
       if (this.dataEdit) {
         this.calculationBase.trm.value = this.dataEdit.trm

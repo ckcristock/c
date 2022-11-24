@@ -14,21 +14,39 @@ interface NavItem {
 export class MenuChildComponent implements OnInit {
   /*   @Input('menuItems') menuItems:any; */
   @Input() navItems: NavItem[];
-  title:any = '';
-  checked: boolean = true;
-  collapsed:boolean[] = [];
+  title: any = '';
+  checked2: boolean = true;
+  collapsed: boolean[] = [];
 
-  constructor( private _swal:SwalService ) { }
+  color = 'primary';
+  checked = false;
+  disabled = false;
+
+  constructor(private _swal: SwalService) { }
 
   ngOnInit(): void {
+    console.log(this.navItems)
+    this.orderArray(this.navItems)
+  }
+
+  orderArray(array) {
+    array.sort(function (a, b): any {
+      return a.child.length - b.child.length
+    })
+    array.forEach(element => {
+      if (element.child.length > 0) {
+        console.log(element.child)
+        this.orderArray(element.child)
+      }
+    });
   }
 
   setValues(item: any, position) {
     item['permissions'][position] != item['permissions'][position];
   }
 
-  changeAll(item){
-    item.child.forEach( el => {
+  changeAll(item) {
+    item.child.forEach(el => {
       el.permissions?.forEach(permission => {
         permission.Activo = !permission.Activo
       });
@@ -40,7 +58,7 @@ export class MenuChildComponent implements OnInit {
     });
   }
 
-  changeAllChild(item){
+  changeAllChild(item) {
     item.child.forEach(child => {
       child.permissions.forEach(el => {
         el.Activo = !el.Activo;
@@ -48,10 +66,10 @@ export class MenuChildComponent implements OnInit {
     });
   }
 
-/*
-  save() {
-    let navFilter = [...this.navItems]
+  /*
+    save() {
+      let navFilter = [...this.navItems]
 
-  }
- */
+    }
+   */
 }

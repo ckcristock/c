@@ -54,7 +54,7 @@ export class CrearApuPiezaComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private _calculationBase: CalculationBasesService
     ) { }
-    
+
   async ngOnInit() {
     this.loading = false
     await this.getBases()
@@ -72,7 +72,7 @@ export class CrearApuPiezaComponent implements OnInit {
     this.validateData();
     this.loading = true
   }
-  
+
   collapses(){
     if (!this.data) {
       return null
@@ -88,7 +88,7 @@ export class CrearApuPiezaComponent implements OnInit {
       } */
     })
   }
-  
+
   onSelect(event) {
     this.files.push(...event.addedFiles);
   }
@@ -102,7 +102,7 @@ export class CrearApuPiezaComponent implements OnInit {
       this.people = r.data;
     })
   }
-  
+
   getCities(){
     this._apuPieza.getCities().subscribe((r:any) => {
       this.cities = r.data;
@@ -115,26 +115,25 @@ export class CrearApuPiezaComponent implements OnInit {
       this.cutLaserMaterials = r.data;
     })
   }
-  
+
   getClients(){
     this._apuPieza.getClient().subscribe((r:any) => {
       this.clients = r.data;
     });
   }
-  
+
   getGeometries(){
     this._apuPieza.getGeometries().subscribe((r:any) => {
       this.geometries = r.data;
-      console.log(this.geometries)
     })
   }
-  
+
   getMaterials(){
     this._apuPieza.getMaterials().subscribe((r:any) => {
       this.materials = r.data;
     })
   }
-  
+
   getUnits(){
     this._units.getUnits().subscribe((r:any) => {
       this.units = r.data;
@@ -146,7 +145,7 @@ export class CrearApuPiezaComponent implements OnInit {
       this.thicknesses = r.data;
     })
   }
-  
+
   getIndirectCosts(){
     this._apuPieza.getIndirectCosts().subscribe((r:any) => {
       this.indirectCosts = r.data;
@@ -155,7 +154,7 @@ export class CrearApuPiezaComponent implements OnInit {
       }
     })
   }
-  
+
   createForm(){
     this.form = help.functionsApu.createForm(this.fb, this.calculationBase);
     help.functionsApu.listerTotalDirectCost(this.form);
@@ -210,7 +209,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Materiales Comerciales Fin ****************/
 
   /************** Corte de Agua Inicia ****************/
-  
+
   cutWaterControl(): FormGroup{
     let group = help.cutWaterHelper.createCutWaterGroup(this.form, this.fb, this.materials);
     return group;
@@ -280,7 +279,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Maquinas Herramientas termina ****************/
 
   /************** Procesos Internos Inicia ****************/
-  
+
   internalProccessesControl(): FormGroup{
     let group = help.internalProccessesHelper.createInternalProccessesGroup(this.form, this.fb);
     return group;
@@ -347,11 +346,11 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   /************** Otros Termina ****************/
-  
+
   get indirecCostList(){
     return this.form.get('indirect_cost') as FormArray;
   }
-  
+
   indirectCostPush(){
     let indirect_cost = this.form.get('indirect_cost') as FormArray;
     indirect_cost.clear();
@@ -359,7 +358,7 @@ export class CrearApuPiezaComponent implements OnInit {
       indirect_cost.push(this.indirectCostgroup(element, this.fb, this.form));
     });
   }
-  
+
   indirectCostgroup(element, fb: FormBuilder, form: FormGroup){
     let group = fb.group({
       name: [element.text],
@@ -388,7 +387,7 @@ export class CrearApuPiezaComponent implements OnInit {
       files: this.fileArr
     });
     console.log(this.form.value);
-    
+
     this._swal
       .show({
         text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu pieza`,

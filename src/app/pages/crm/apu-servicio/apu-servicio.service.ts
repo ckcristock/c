@@ -14,7 +14,7 @@ export class ApuServicioService {
   }
 
   getCities() {
-    return this.http.get(`${environment.base_url}/city`);
+    return this.http.get(`${environment.base_url}/municipalities`);
   }
 
   getClient(){
@@ -25,11 +25,11 @@ export class ApuServicioService {
     return this.http.get(`${environment.base_url}/apu-profile`);
   }
 
-  
+
   getTravelExpenseEstimation(){
     return this.http.get(`${environment.base_url}/travel-expense-estimation`);
   }
-  
+
   getApuServices( params = {} ){
     return this.http.get(`${environment.base_url}/paginationApuServices`, {params});
   }
@@ -41,7 +41,7 @@ export class ApuServicioService {
   update(data:any, id){
     return this.http.put(`${environment.base_url}/apu-service/${id}`, data);
   }
-  
+
   save(data:any){
     return this.http.post(`${environment.base_url}/apu-service`, data);
   }

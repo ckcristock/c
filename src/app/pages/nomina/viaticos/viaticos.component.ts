@@ -19,7 +19,7 @@ export class ViaticosComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   data:any[] = [];
   people:any[] = [];
@@ -39,7 +39,7 @@ export class ViaticosComponent implements OnInit {
   }
   pagination:any = {
     page: 1,
-    pageSize: 5,
+    pageSize: 10,
     collectionSize: 0
   }
   states:any = [
@@ -63,7 +63,7 @@ export class ViaticosComponent implements OnInit {
   mostrarFiltros(){
     this.estadoFiltros = !this.estadoFiltros
   }
-  
+
   tipo(){
     let value = this.filtros.person_id;
     if (typeof value == 'object') {
@@ -72,7 +72,7 @@ export class ViaticosComponent implements OnInit {
       return;
     }
   }
-  
+
   getAll( page = 1 ){
     this.pagination.page = page;
     let params = {

@@ -13,21 +13,21 @@ import * as help from './helpers/imports';
 })
 export class CrearApuServicioComponent implements OnInit {
   @Input('id') id;
-  @Input('data') data:any;
+  @Input('data') data: any;
   form: FormGroup;
-  date:Date = new Date();
-  loading:boolean = false;
-  people:any[] = [];
-  cities:any[] = [];
-  clients:any[] = [];
-  collapsed:boolean[] = [];
-  mpMcollapsed:boolean[] = [];
-  profiles:any[] = [];
-  tEestimations:any = [];
+  date: Date = new Date();
+  loading: boolean = false;
+  people: any[] = [];
+  cities: any[] = [];
+  clients: any[] = [];
+  collapsed: boolean[] = [];
+  mpMcollapsed: boolean[] = [];
+  profiles: any[] = [];
+  tEestimations: any = [];
   desplazamientos = [
     { text: 'Aero', value: 1 },
     { text: 'Terrestre', value: 2 },
-    { text: 'N/A', value:3 }
+    { text: 'N/A', value: 3 }
   ]
   jornadas = [
     { text: 'Diurna', value: 'Diurna' },
@@ -35,11 +35,11 @@ export class CrearApuServicioComponent implements OnInit {
   ]
 
   constructor(
-                private _apuService: ApuServicioService,
-                private fb: FormBuilder,
-                private _swal: SwalService,
-                private router: Router
-              ) { }
+    private _apuService: ApuServicioService,
+    private fb: FormBuilder,
+    private _swal: SwalService,
+    private router: Router
+  ) { }
 
   async ngOnInit() {
     this.loading = true;
@@ -53,7 +53,7 @@ export class CrearApuServicioComponent implements OnInit {
     this.loading = false;
   }
 
-  createForm(){
+  createForm() {
     this.form = help.functionsApuService.createForm(this.fb, this.clients);
   }
 
@@ -65,81 +65,81 @@ export class CrearApuServicioComponent implements OnInit {
     }
   }
 
-  getPeople(){
-    this._apuService.getPeopleXSelect().subscribe((r:any) => {
+  getPeople() {
+    this._apuService.getPeopleXSelect().subscribe((r: any) => {
       this.people = r.data;
     })
   }
 
-  getProfiles(){
-    this._apuService.getProfiles().subscribe((r:any) => {
+  getProfiles() {
+    this._apuService.getProfiles().subscribe((r: any) => {
       this.profiles = r.data;
     })
   }
 
-  getCities(){
-    this._apuService.getCities().subscribe((r:any) => {
+  getCities() {
+    this._apuService.getCities().subscribe((r: any) => {
       this.cities = r.data;
       help.functionsApuService.cityRetention(this.form, this.cities);
     })
   }
 
-  getClients(){
-    this._apuService.getClient().subscribe((r:any) => {
+  getClients() {
+    this._apuService.getClient().subscribe((r: any) => {
       this.clients = r.data;
     })
   }
 
-  getTravelExpenseEstimation(){
-    this._apuService.getTravelExpenseEstimation().subscribe((r:any) => {
+  getTravelExpenseEstimation() {
+    this._apuService.getTravelExpenseEstimation().subscribe((r: any) => {
       this.tEestimations = r.data;
     })
-  }  
+  }
 
-  cmoControl(): FormGroup{ // cmo = Calculo Mano Obra
+  cmoControl(): FormGroup { // cmo = Calculo Mano Obra
     let group = help.cmoHelper.createcmoGroup(
-          this.form, 
-          this.fb, 
-          this.profiles, 
-          this.tEestimations, 
-          this.cities);
-    return group;
-  }
-
-  get cmoList(){
-    return this.form.get('calculate_labor') as FormArray
-  }
-
-  newCmoList(){
-    this.cmoList.push(this.cmoControl());
-  }
-
-  deleteCmoList(i){
-    this.cmoList.removeAt(i);
-  }
-
-  mpMCalculateLaborControl(): FormGroup{ // cmo = Calculo Mano Obra
-    let group = help.mpmCalculateLaborHelper.createMpmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations, 
+      this.form,
+      this.fb,
+      this.profiles,
+      this.tEestimations,
       this.cities);
     return group;
   }
 
-  get mpMCalculateLaborList(){
+  get cmoList() {
+    return this.form.get('calculate_labor') as FormArray
+  }
+
+  newCmoList() {
+    this.cmoList.push(this.cmoControl());
+  }
+
+  deleteCmoList(i) {
+    this.cmoList.removeAt(i);
+  }
+
+  mpMCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
+    let group = help.mpmCalculateLaborHelper.createMpmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+      this.cities);
+    return group;
+  }
+
+  get mpMCalculateLaborList() {
     return this.form.get('mpm_calculate_labor') as FormArray
   }
 
-  newmpMCalculateLaborList(){
+  newmpMCalculateLaborList() {
     this.mpMCalculateLaborList.push(this.mpMCalculateLaborControl());
   }
 
-  deletempMCalculateLaborList(i){
+  deletempMCalculateLaborList(i) {
     this.mpMCalculateLaborList.removeAt(i);
   }
 
-  save(){
+  save() {
     this._swal
       .show({
-        text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu servicio`,
+        text: `Se dispone a ${this.id ? 'editar' : 'crear'} un apu servicio`,
         title: '¿Está seguro?',
         icon: 'warning',
       })
@@ -163,7 +163,7 @@ export class CrearApuServicioComponent implements OnInit {
   showSuccess() {
     this._swal.show({
       icon: 'success',
-      text: `Apu Servicio ${ this.id ? 'editado' : 'creado' } con éxito`,
+      text: `Apu Servicio ${this.id ? 'editado' : 'creado'} con éxito`,
       title: 'Operación exitosa',
       showCancel: false,
     });

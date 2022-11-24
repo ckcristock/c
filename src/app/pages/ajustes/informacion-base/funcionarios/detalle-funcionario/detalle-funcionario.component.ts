@@ -83,12 +83,10 @@ export class DetalleFuncionarioComponent implements OnInit {
   getUser() {
     this.detalleService.getUser(this.id).subscribe((r: any) => {
       this.user = r.data;
-      console.log(this.user)
     })
   }
 
   bloquear(state) {
-    console.log(state)
     let data = {
       state
     }
@@ -118,7 +116,6 @@ export class DetalleFuncionarioComponent implements OnInit {
     this.detalleService.getBasicData(this.id)
       .subscribe((res: any) => {
         this.funcionario = res.data;
-        console.log(this.funcionario)
         this.url = this.ruta + '/filemanager/filemanager/dialog.php?type=0&car=rrhh%2Ffuncionarios%2F' + this.funcionario.identifier
       });
   }

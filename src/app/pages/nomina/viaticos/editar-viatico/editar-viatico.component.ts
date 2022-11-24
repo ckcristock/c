@@ -10,16 +10,19 @@ import { ActivatedRoute } from '@angular/router';
 export class EditarViaticoComponent implements OnInit {
   id : string
   data:any;
+  loading: boolean;
   constructor( private route:ActivatedRoute, private _viatico:VerViaticosService) { }
-  
+
   ngOnInit(): void {
     this.id = this.route.snapshot.params.id;
     this.getData();
   }
 
   getData(){
+    this.loading = true;
     this._viatico.getAllViaticos(this.id).subscribe( (r:any)=>{
       this.data = r.data;
+      this.loading = false;
     });
   }
 

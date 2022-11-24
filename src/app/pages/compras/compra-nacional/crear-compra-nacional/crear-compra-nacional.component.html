@@ -9,140 +9,126 @@
         <div class="col-md-6 px-0 text-md-right text-center">
           <h4 class="text-primary">Nueva orden de compra</h4>
           <h6>{{ fecha | date: "longDate" }}</h6>
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de compra: </mat-label>
+            <mat-select
+              name="Tipo"
+              [(ngModel)]="Tipo"
+              matInput
+              required
+            >
+              <mat-option value="Recurrente" selected>Recurrente</mat-option>
+              <mat-option value="Ocasional">Ocasional</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
       <hr class="line" />
       <div class="row">
-        <div class="col-md-6">
+       <div class="col-md-6">
           <div class="row">
-            <div class="col-md-5">
-              <div class="form-group">
-                <label>Tipo de compra: </label>
-                <select
-                  name="Tipo"
-                  [(ngModel)]="Tipo"
-                  class="form-control form-control-sm"
-                  required
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Tipo de bodega</mat-label>
+              <mat-select
+                name="TipoBodega"
+                [(ngModel)]="TipoBodega"
+                matInput
+                required
+              >
+                <mat-option value="Bodega" selected>Bodega</mat-option>
+                <mat-option value="Punto">Punto</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline" *ngIf="TipoBodega == 'Bodega'">
+              <mat-label>Bodega</mat-label>
+              <mat-select
+                name="Id_Bodega_Nuevo"
+                matInput
+                required
+                ngModel
+                placeholder="Seleccione una Bodega"
+              >
+                <mat-option [ngValue]="undefined">Seleccione una Bodega</mat-option>
+                <mat-option
+                  *ngFor="let Bodega of Bodegas; let i = index"
+                  [value]="Bodega.Id_Bodega_Nuevo"
                 >
-                  <option value="Recurrente" selected>Recurrente</option>
-                  <option value="Ocasional">Ocasional</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-7">
-              <div class="form-group">
-                <label *ngIf="TipoBodega == 'Bodega'">Bodega</label>
-                <label *ngIf="TipoBodega == 'Punto'">Punto</label>
-                <select
-                  *ngIf="TipoBodega == 'Bodega'"
-                  name="Id_Bodega_Nuevo"
-                  class="form-control form-control-sm"
-                  required
-                  ngModel
+                  {{ Bodega.Nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline" *ngIf="TipoBodega == 'Punto'">
+              <mat-label>Punto</mat-label>
+              <mat-select
+                name="Id_Punto_Dispensacion"
+                matInput
+                required
+                ngModel
+                placeholder="Seleccione un Punto"
+              >
+                <mat-option [ngValue]="undefined">Seleccione un Punto</mat-option>
+                <mat-option
+                  *ngFor="let item of puntos; let i = index"
+                  [value]="item.Id_Punto_Dispensacion"
                 >
-                  <option [ngValue]="undefined">Seleccione una Bodega</option>
-                  <option
-                    *ngFor="let Bodega of Bodegas; let i = index"
-                    [value]="Bodega.Id_Bodega_Nuevo"
-                  >
-                    {{ Bodega.Nombre }}
-                  </option>
-                </select>
-
-                <select
-                  *ngIf="TipoBodega == 'Punto'"
-                  name="Id_Punto_Dispensacion"
-                  class="form-control form-control-sm"
-                  required
-                  ngModel
-                >
-                  <option [ngValue]="undefined">Seleccione un Punto</option>
-                  <option
-                    *ngFor="let item of puntos; let i = index"
-                    [value]="item.Id_Punto_Dispensacion"
-                  >
-                    {{ item.Nombre }}
-                  </option>
-                </select>
-                <input
-                  type="text"
-                  [(ngModel)]="user"
-                  name="Identificacion_Funcionario"
-                  readonly
-                  hidden
-                />
-              </div>
-            </div>
+                  {{ item.Nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <input
+              type="text"
+              [(ngModel)]="user"
+              name="Identificacion_Funcionario"
+              readonly
+              hidden
+            />
           </div>
           <div class="row">
-            <div class="col-md-5">
-              <div class="form-group">
-                <label>Tipo de bodega: </label>
-                <select
-                  name="TipoBodega"
-                  [(ngModel)]="TipoBodega"
-                  class="form-control form-control-sm"
-                  (change)="TipoBodega = $event.target.value"
-                  required
-                >
-                  <option value="Bodega" selected>Bodega</option>
-                  <option value="Punto">Punto</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-7">
-              <div class="form-group">
-                <label>Fecha entrega: </label>
-                <input
-                  ngModel
-                  type="date"
-                  name="Fecha_Entrega_Probable"
-                  placeholder=""
-                  required
-                  class="form-control form-control-sm"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label>Proveedor: </label>
-                <input
-                  type="text"
-                  name="NombreProveedor"
-                  id="NombreProveedor"
-                  class="form-control form-control-sm"
-                  [(ngModel)]="NombreProveedor"
-                  [ngbTypeahead]="search2"
-                  [resultTemplate]="rt2"
-                  [inputFormatter]="formatter2"
-                  (ngModelChange)="BuscarProveedor(NombreProveedor)"
-                  required
-                />
-
-                <input
-                  ngModel="{{ Id_Proveedor }}"
-                  type="hidden"
-                  name="Id_Proveedor"
-                  id="Id_Proveedor"
-                />
-              </div>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Fecha entrega: </mat-label>
+              <input
+                ngModel
+                type="date"
+                name="Fecha_Entrega_Probable"
+                placeholder=""
+                matInput
+                required
+              />
+            </mat-form-field>
+            <div class="col">
+              <ng-select
+                [items]="Proveedores"
+                name="NombreProveedor"
+                [(ngModel)]="NombreProveedor"
+                bindLabel="text"
+                appearance="outline"
+                [appendTo]="'body'"
+                placeholder="Proveedor"
+                bindValue="value"
+                loadingText="Cargando"
+                matInput
+                required
+              >
+              </ng-select>
             </div>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="form-group">
-            <label for="">Observaciones</label>
-            <textarea
+          <mat-form-field
+          class="col-md-12 px-0 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Observaciones</mat-label>
+          <textarea
               ngModel
               name="Observaciones"
               placeholder="Digite detalles importantes de la orden de compra"
               type="text"
               rows="8"
+          matInput
               class="form-control"
             ></textarea>
-          </div>
+          </mat-form-field>
         </div>
       </div>
       <small class="font-weight-bold"
@@ -186,17 +172,6 @@
                   [readonly]="item.producto != ''"
                 />
                 <span *ngIf="item.Id_Producto != ''">{{ item.producto }}</span>
-                <!-- <input
-                  type="text"
-                  name="producto{{ i }}"
-                  id="Producto{{ i }}"
-                  class="form-control form-control-sm f-9 input-product"
-                  [ngModel]="item.producto"
-                  [ngbTypeahead]="search1"
-                  [resultTemplate]="rt"
-                  [inputFormatter]="formatter1"
-                  (ngModelChange)="BuscarLote(item.producto, i)"
-                /> -->
               </td>
               <td class="text-center align-middle">
                 <button
@@ -421,7 +396,7 @@
 
 <ng-template #rt2 let-r="result" let-t="term">
   <span class="f-9"
-    ><strong>{{ r.NombreProveedor }}</strong>
+    ><strong>{{ r.text }}</strong>
   </span>
 </ng-template>
 
@@ -716,7 +691,7 @@
             <label *ngIf="item.Id_Producto != ''">{{
               item.producto
               }}</label>
-          
+
             <button *ngIf="item.producto == ''" class="btn btn-primary btn-xs btn-search" (click)="
                     searchProduct(i, item.editar); modalProductos.show()
                   " title="Buscar Producto" style="display: inline-block">

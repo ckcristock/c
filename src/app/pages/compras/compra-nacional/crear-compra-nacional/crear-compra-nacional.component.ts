@@ -5,11 +5,12 @@ import { HttpClient } from '@angular/common/http';
 
 import swal, { SweetAlertOptions } from 'sweetalert2';
 import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
 
 @Component({
   selector: 'app-crear-compra-nacional',
@@ -26,7 +27,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
   tipoMaterial = ['Activo_Fijo', 'Medicamento', 'Material', 'Dotacion_EPP'];
   public reducer = (accumulator, currentValue) =>
@@ -110,6 +111,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private _user: UserService,
+    private _proveedor: TercerosService,
     private modalService: NgbModal,
   ) {
     this.alertOption = {
@@ -128,50 +130,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       },
       allowOutsideClick: () => !swal.isLoading(),
     };
-
-
-    this.http
-      .get(environment.ruta + 'php/comprasnacionales/proveedor_buscar.php', {
-        params: {
-
-          company_id: this._user.user.person.company_worked.id
-        }
-      })
-      .subscribe((data: any) => {
-        this.Proveedores = data;
-      });
   }
-
-  //INICIA BUCAR LOS PRODUCTO
-  search1 = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      map((term) =>
-        term.length < 4
-          ? []
-          : this.ListaProducto.filter(
-            (v) => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1
-          ).slice(0, 10)
-      )
-    );
-  formatter1 = (x: { Nombre: string }) => x.Nombre;
-  //FIN BUCAR LOS PRODUCTO
-
-  //INICIA BUCAR LOS PROVEEDORES
-  search2 = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      map((term) =>
-        term.length < 4
-          ? []
-          : this.Proveedores.filter(
-            (v) =>
-              v.NombreProveedor.toLowerCase().indexOf(term.toLowerCase()) > -1
-          ).slice(0, 10)
-      )
-    );
-  formatter2 = (x: { NombreProveedor: string }) => x.NombreProveedor;
-  //FIN BUCAR LOS PROVEEDORES
 
   ngOnInit() {
     let params = this.route.snapshot.queryParams;
@@ -281,6 +240,11 @@ export class CrearCompraNacionalComponent implements OnInit {
       .subscribe((data: any) => {
         this.puntos = data.Puntos;
       });
+
+    this._proveedor.getThirdPartyProvider({
+    }).subscribe((res: any) => {
+      this.Proveedores = res.data;
+    });
   }
 
   filtros() {
@@ -343,7 +307,7 @@ export class CrearCompraNacionalComponent implements OnInit {
         });
     }
   }
-  
+
 
   searchProduct(pos, editar) {
     this.ListaProducto = [];
@@ -374,20 +338,6 @@ export class CrearCompraNacionalComponent implements OnInit {
       this.Cargando = false;
     }
   }
-
-  //INICIA BUCAR LOS PROVEEDORES
-  BuscarProveedor(modelo) {
-    console.log(modelo);
-
-    if (typeof modelo == 'object') {
-      this.NombreProveedor = modelo;
-      this.Id_Proveedor = modelo.Id_Proveedor;
-    } else {
-      this.NombreProveedor = '';
-      this.Id_Proveedor = '';
-    }
-  }
-  //FIN BUCAR LOS PROVEEDORES
 
   async GuardarCompra(formulario: NgForm, resolve) {
     let params = this.route.snapshot.queryParams;
@@ -575,7 +525,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       });
     }
 
-    this.modalService.dismissAll(); 
+    this.modalService.dismissAll();
     this.Productos = [];
   }
 

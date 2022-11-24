@@ -29,6 +29,10 @@ export class TercerosService {
     return this.http.post(`${environment.base_url}/third-party-person`, data);
   }
 
+  getThirdPartyProvider( data: any ){
+    return this.http.get(`${environment.base_url}/third-party-provider`, data);
+  }
+
   getThirdParties(params = {}){
     return this.http.get(`${environment.base_url}/third-party`, {params});
   }
@@ -63,7 +67,7 @@ export class TercerosService {
 
   getThirdPartyPerson( params = {} ){
     return this.http.get(`${environment.base_url}/third-party-person`, {params});
-  }  
+  }
 
   getFields(){
     return this.http.get(`${environment.base_url}/fields-third`);
@@ -92,5 +96,5 @@ export class TercerosService {
   getCiiuCodes(){
     return this.http.get("assets/json/ciiu_codes.json")
   }
-  
+
 }

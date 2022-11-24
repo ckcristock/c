@@ -113,7 +113,7 @@ export class AlmuerzosComponent implements OnInit {
   }
 
   openValues(content) {
-    this._modal.open(content, 'lg')
+    this._modal.open(content, 'md')
   }
 
   getPeople() {

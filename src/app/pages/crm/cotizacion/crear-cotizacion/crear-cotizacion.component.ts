@@ -10,11 +10,17 @@ import { ApuPiezaService } from '../../apu-pieza/apu-pieza.service';
   styleUrls: ['./crear-cotizacion.component.scss']
 })
 export class CrearCotizacionComponent implements OnInit {
-  forma: FormGroup
-  cities:any[] = []
+  public datos: any = {
+    Titulo: 'Nueva cotización',
+    Fecha: new Date()
+  }
+  form: FormGroup
+  cities: any[] = []
 
-  constructor(private _apuPieza: ApuPiezaService,
-    private fb: FormBuilder) { }
+  constructor(
+    private _apuPieza: ApuPiezaService,
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit(): void {
     this.createForm()
@@ -50,12 +56,13 @@ export class CrearCotizacionComponent implements OnInit {
 
 
   createForm() {
-    this.forma = this.fb.group({
+    this.form = this.fb.group({
       customer_id: '',
       destinity_id: '',
       line: '',
       trm: '',
       project: '',
+      money_type: '',
       indirect_costs: this.fb.array([]),
       observation: '',
       items: this.fb.array([]),
@@ -73,7 +80,7 @@ export class CrearCotizacionComponent implements OnInit {
       this.cities = r.data;
     })
   }
-  
+
   save() {
 
   }

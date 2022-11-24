@@ -73,7 +73,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && data.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -87,44 +86,47 @@
             <th>Total COP</th>
             <th>Total USD</th>
             <th>Estado</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let item of data"
-            class="text-center"
-            [ngClass]="{
-              'text-primary': item.state == 'Aprobado',
-              'text-danger': item.state == 'Inactivo'
-            }"
-          >
-            <td class="align-middle">
+          <tr *ngFor="let item of data" class="text-center">
+            <td class="align-middle p-0">
               <img
                 onerror="this.src='../../../../assets/images/noprofile.png'"
                 class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
                 src="{{ item.person.image | image: 'users' }}"
               />
             </td>
-            <td class="align-middle">
+            <td>
               {{ item.person.first_name | titlecase }}
               {{ item.person.first_surname | titlecase }}
             </td>
-            <td class="align-middle">
+            <td>
               {{ item.user.person.first_name | titlecase }}
               {{ item.user.person.first_surname | titlecase }}
             </td>
-            <td class="align-middle">
+            <td>
               {{ item.created_at | date: "dd/MM/yyyy" }}
             </td>
-            <td class="align-middle">
+            <td>
               {{ item.departure_date | date: "dd/MM/yyyy" }}
             </td>
-            <td class="align-middle">{{ item.n_nights }}</td>
-            <td class="align-middle">{{ item.total_cop | currency: "":"" }}</td>
-            <td class="align-middle">{{ item.total_usd | currency: "":"" }}</td>
-            <td class="align-middle">{{ item.state }}</td>
-            <td class="align-middle">
+            <td>{{ item.n_nights }}</td>
+            <td>{{ item.total_cop | currency: "":"" }}</td>
+            <td>{{ item.total_usd | currency: "":"" }}</td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'badge-success': item.state == 'Aprobado',
+                  'badge-danger': item.state == 'Inactivo',
+                  'badge-warning': item.state == 'Pendiente'
+                }"
+                >{{ item.state }}</span
+              >
+            </td>
+            <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -170,7 +172,7 @@
                     <i class="far fa-thumbs-up"></i> Legalizar</a
                   >
                   <a
-                    *ngIf="!item.state == ''"
+                    *ngIf="item.state != 'Inactivo'"
                     (click)="changeState(item, 'Inactivo')"
                     href="javascript:void(0)"
                     class="dropdown-item waves-light text-danger caja-botones"

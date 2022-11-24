@@ -7,61 +7,98 @@
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
           <button
-            class="btn btn-primary btn-sm pull-right"
+            class="btn btn-primary btn-sm"
             (click)="abrirModalPrestamo()"
           >
-            <i class="fa fa-plus"></i> Realizar préstamo
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
       </div>
     </div>
     <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <div class="col-md-3 mb-4">
+            <ng-select
+              [(ngModel)]="filters.person"
+              (change)="listaPrestamo()"
+              [items]="people"
+              bindLabel="text"
+              bindValue="value"
+              appearance="outline"
+              [appendTo]="'body'"
+              placeholder="Funcionario"
+              loadingText="loading "
+              ngDefaultControl
+            >
+            </ng-select>
+          </div>
+          <mat-form-field appearance="outline" class="col-md-3">
+            <mat-label>Rango de fechas</mat-label>
+            <input
+              matInput
+              [satDatepicker]="picker"
+              [value]="date"
+              (dateChange)="selectedDate($event)"
+              (dateInput)="selectedDate($event)"
+              name="daterange"
+            />
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></sat-datepicker-toggle>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && Prestamos.length > 0; else notData"
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th class="align-middle">Foto</th>
-            <th class="align-middle">Funcionario</th>
-            <th class="align-middle">Fecha</th>
-            <th class="align-middle">Valor Prestamo</th>
-            <th class="align-middle">Tipo Pago</th>
-            <th class="align-middle">No. Cuotas</th>
-            <th class="align-middle">Cuotas Pagas</th>
-            <th class="align-middle">Valor Cuota</th>
-            <th class="align-middle">% Intereses</th>
-            <th class="align-middle">Saldo</th>
-            <th class="align-middle col-1"><i class="mdi mdi-chevron-down"></i></th>
+            <th>Foto</th>
+            <th>Identificación</th>
+            <th>Funcionario</th>
+            <th>Fecha</th>
+            <th>Valor</th>
+            <th>Tipo</th>
+            <th># Cuotas</th>
+            <th>Pagada</th>
+            <th>Valor Cuota</th>
+            <th>% Intereses</th>
+            <th>Saldo</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of Prestamos" class="text-center">
-            <td class="align-middle" class="text-center">
+            <td class="p-0">
               <img
                 onerror="this.src='../../../../assets/images/noprofile.png'"
                 class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
                 src="{{ item.person.image | image: 'users' }}"
               />
             </td>
-            <td class="align-middle">
-              <strong> {{ item.person.identifier }}</strong> <br />
-              <strong
-                >{{ item.person.first_name }}
-                {{ item.person.second_name }}</strong
-              >
+            <td>{{ item.person.identifier }}</td>
+            <td>{{ item.person.full_name }}</td>
+            <td>{{ item.date | date: "dd/MM/yyyy" }}</td>
+            <td>{{ item.value | currency: "COP" }}</td>
+            <td>{{ item.payment_type }}</td>
+            <td>{{ item.fees.length }}</td>
+            <td>0</td>
+            <td>
+              {{ item.monthly_fee | currency: "COP" }}
             </td>
-            <td class="align-middle">{{ item.date | date: "dd/MM/yyyy" }}</td>
-            <td class="align-middle">{{ item.value | currency: "COP" }}</td>
-            <td class="align-middle">{{ item.payment_type }}</td>
-            <td class="align-middle">{{ item.fees.length }}</td>
-            <td class="align-middle">0</td>
-            <td class="align-middle">{{ item.monthly_fee | currency: "COP" }}</td>
-            <td class="align-middle">{{ item.interest }}%</td>
-            <td class="align-middle">{{ item.value | currency: "COP" }}</td>
-            <td class="align-middle">
+            <td>{{ item.interest }}%</td>
+            <td>{{ item.value | currency: "COP" }}</td>
+            <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -104,6 +141,19 @@
         </tbody>
       </table>
     </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      (pageChange)="listaPrestamo($event)"
+      [(page)]="pagination.page"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
   </div>
 </div>
 <app-modalprestamoylibranzacrear

@@ -63,7 +63,7 @@ export class TercerosService {
 
   getThirdPartyPerson( params = {} ){
     return this.http.get(`${environment.base_url}/third-party-person`, {params});
-  }  
+  }
 
   getFields(){
     return this.http.get(`${environment.base_url}/fields-third`);
@@ -85,12 +85,16 @@ export class TercerosService {
     return this.http.get(`${environment.base_url}/countries`);
   }
 
-  getCities(idCountry){
+ /*  getCities(idCountry){
     return this.http.get(`${environment.base_url}/citiesCountry/${idCountry}`);
-  }
+  } */
 
   getCiiuCodes(){
     return this.http.get("assets/json/ciiu_codes.json")
   }
-  
+
+  getCountriesWith(){
+    return this.http.get(`${environment.base_url}/countries-with-departments`);
+  }
+
 }

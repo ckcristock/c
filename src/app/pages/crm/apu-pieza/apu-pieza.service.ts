@@ -14,7 +14,7 @@ export class ApuPiezaService {
   }
 
   getCities() {
-    return this.http.get(`${environment.base_url}/city`);
+    return this.http.get(`${environment.base_url}/municipalities`);
   }
 
   getGeometries() {

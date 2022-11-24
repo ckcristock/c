@@ -20,7 +20,7 @@ export class ApuConjuntoService {
   }
 
   getCities() {
-    return this.http.get(`${environment.base_url}/city`);
+    return this.http.get(`${environment.base_url}/municipalities`);
   }
 
   getClient(){
@@ -37,7 +37,7 @@ export class ApuConjuntoService {
   getApuSetList( params = {} ){
     return this.http.get(`${environment.base_url}/apu-sets-list`, {params});
   }
-  
+
   getApuSets( params = {} ){
     return this.http.get(`${environment.base_url}/apu-sets`, {params});
   }
@@ -53,7 +53,7 @@ export class ApuConjuntoService {
   update(data:any, id:any){
     return this.http.put(`${environment.base_url}/apu-sets/${id}`, data);
   }
-  
+
   activateOrInactivate( data:any ){
     return this.http.put(`${environment.base_url}/apu-set-activate-Inactive`, data);
   }

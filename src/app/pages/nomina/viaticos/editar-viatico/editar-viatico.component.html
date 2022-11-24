@@ -1,1 +1,9 @@
-<app-crear-viaticos   [data]="data" [id]="id" *ngIf="data" ></app-crear-viaticos>
+<app-crear-viaticos
+  [data]="data"
+  [id]="id"
+  [title]="'Editar viático'"
+  *ngIf="!loading && data; else notData"
+></app-crear-viaticos>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

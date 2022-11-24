@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">Responsabilidades fiscales</h4>
+        <h4 class="text-primary">Resp. fiscales</h4>
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
@@ -24,8 +24,30 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <div class="alert alert-danger" role="alert">
-          Aún no tenemos filtros para esta sección.
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filters.name"
+              (input)="getFiscalResponsibility()"
+              name="name"
+              autocomplete="off"
+              placeholder="Busca por nombre"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select
+              [(ngModel)]="filters.state"
+              (selectionChange)="getFiscalResponsibility()"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Activo">Activo</mat-option>
+              <mat-option value="Inactivo">Inactivo</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
@@ -33,7 +55,7 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
+
         *ngIf="!loading && fiscalR.length > 0; else notData"
       >
         <thead class="bg-light">

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { from } from 'rxjs';
+import { from, Subject } from 'rxjs';
 import { PersonService } from '../../../ajustes/informacion-base/persons/person.service';
 import { NegociosService } from '../negocios.service';
 import Swal from 'sweetalert2';
@@ -13,6 +13,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./tareas-negocio.component.scss']
 })
 export class TareasNegocioComponent implements OnInit {
+  public open: Subject<any> = new Subject;
   @ViewChild("modal") modal: any;
   @Input('tareas') tareas: any[];
   @Input('business_budget_id') business_budget_id: any;
@@ -24,7 +25,8 @@ export class TareasNegocioComponent implements OnInit {
   status = null
   indexSelected: any
   peopleSelects: any[] = [];
-  tasks: any[];
+  tasks: any[] = [];
+  loading: boolean;
 
 
 
@@ -36,6 +38,9 @@ export class TareasNegocioComponent implements OnInit {
     this.createForm()
     this.getPeople()
     this.getTasks()
+  }
+  openModal() {
+    this.open.next()
   }
   closeResult = '';
   public openConfirm(confirm) {
@@ -51,7 +56,7 @@ export class TareasNegocioComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
   getPeople() {
     this._people.getPeopleIndex().subscribe((r: any) => {
@@ -60,8 +65,10 @@ export class TareasNegocioComponent implements OnInit {
     });
   }
   getTasks() {
+    this.loading = true
     this._negocios.getTasks(this.business_budget_id).subscribe((resp: any) => {
-      this.tasks = resp.data.data;
+      this.tasks = resp.data.tasks;
+      this.loading = false
     });
   }
 
@@ -99,7 +106,7 @@ export class TareasNegocioComponent implements OnInit {
           text: '',
         });
         this.updateListTask.emit();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
       });
     } else {
 
@@ -111,7 +118,7 @@ export class TareasNegocioComponent implements OnInit {
           text: '',
         });
         this.updateListTask.emit();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
       });
     }
   }
@@ -129,7 +136,7 @@ export class TareasNegocioComponent implements OnInit {
    * @param data ? on edit mode
    * @param index ? index of value
    */
- 
+
 
   closeModal() {
     this.form.reset();

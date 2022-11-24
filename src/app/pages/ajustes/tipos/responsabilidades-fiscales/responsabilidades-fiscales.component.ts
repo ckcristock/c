@@ -42,6 +42,11 @@ export class ResponsabilidadesFiscalesComponent implements OnInit {
     collectionSize: 0
   }
 
+  filters:any = {
+    name:'',
+    state:'',
+  };
+
   ngOnInit(): void {
     this.createForm();
     this.getFiscalResponsibility()
@@ -68,7 +73,7 @@ export class ResponsabilidadesFiscalesComponent implements OnInit {
 
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   createForm() {
@@ -82,7 +87,10 @@ export class ResponsabilidadesFiscalesComponent implements OnInit {
   getFiscalResponsibility(page = 1) {
     this.pagination.page = page;
     this.loading = true;
-    this._responsabilidades.getFiscalResponsibility(this.pagination).subscribe((r: any) => {
+    let params = {
+      ...this.pagination, ...this.filters
+    }
+    this._responsabilidades.getFiscalResponsibility(params).subscribe((r: any) => {
       this.fiscalR = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
@@ -100,7 +108,7 @@ export class ResponsabilidadesFiscalesComponent implements OnInit {
 
   save() {
     this._responsabilidades.updateOrCreategetFiscalResponsibility(this.form.value).subscribe((r: any) => {
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
       this.form.reset();
       this.getFiscalResponsibility();
       this._swal.show({

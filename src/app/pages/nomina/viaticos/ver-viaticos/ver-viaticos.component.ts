@@ -13,7 +13,7 @@ import { LegalizarDataService } from '../legalizar/legalizar-data.service';
 export class VerViaticosComponent implements OnInit {
   data: any;
   id: string;
-  loading = false;
+  loading: boolean;
   viaticos$: Subscription;
   constructor(
     private _viaticos: VerViaticosService,
@@ -36,8 +36,8 @@ export class VerViaticosComponent implements OnInit {
   getViatico() {
     this.loading = true;
     this._viaticos.getAllViaticos(this.id).subscribe((r: any) => {
-      this.loading = false;
       this._viaticosData.viaticos.next(r.data);
+      this.loading = false;
     });
   }
   regresar() {

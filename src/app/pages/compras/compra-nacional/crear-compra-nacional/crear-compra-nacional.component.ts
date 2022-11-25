@@ -11,6 +11,8 @@ import { NgForm } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
+import { BodegasService } from 'src/app/pages/ajustes/informacion-base/bodegas/bodegas.service.';
+import { ProductoService } from 'src/app/pages/inventario/services/producto.service';
 
 @Component({
   selector: 'app-crear-compra-nacional',
@@ -112,6 +114,8 @@ export class CrearCompraNacionalComponent implements OnInit {
     private router: Router,
     private _user: UserService,
     private _proveedor: TercerosService,
+    private _producto: ProductoService,
+    private _bodegas: BodegasService,
     private modalService: NgbModal,
   ) {
     this.alertOption = {
@@ -139,13 +143,11 @@ export class CrearCompraNacionalComponent implements OnInit {
     this.Cargando = true
     if (params.Pre_Compra != undefined) {
       this.http
-        .get(environment.ruta + 'php/rotativoscompras/detalle_pre_compra.php', {
-          params: { id: params.Pre_Compra },
-        })
-        .subscribe((data: any) => {
-          this.Lista_Productos = data.Productos;
+        .get(environment.base_url + '/php/rotativoscompras/detalle_pre_compra/' + params.Pre_Compra)
+        .subscribe((res: any) => {
+          this.Lista_Productos = res.data.Productos;
           this.Cargando = false
-          this.Id_Proveedor = data.Datos.Id_Proveedor;
+          this.Id_Proveedor = res.data.Datos.Id_Proveedor;
           this.Lista_Productos.push({
             producto: '',
             Costo: 0,
@@ -158,22 +160,19 @@ export class CrearCompraNacionalComponent implements OnInit {
             Presentacion: 0,
             Iva_Acu: 0,
           });
-          this.NombreProveedor = data.Proveedor;
+          this.NombreProveedor = res.data.Proveedor;
           this.ActualizaValores();
           this.Tipo = 'Recurrente';
         });
     }
 
-    this.http
-      .get(environment.ruta + 'php/bodega_nuevo/get_bodegas.php', {
-        params: {
-          company_id: this._user.user.person.company_worked.id
-        }
-      })
-      .subscribe((data: any) => {
-        this.Bodegas = data.Bodegas;
-        this.Impuestos = data.impuestoli;
-      });
+    this._bodegas.getAllBodegas().subscribe((res: any) => {
+      this.Bodegas = res.data;
+    });
+
+    this.http.get(environment.base_url + '/impuestos').subscribe((res: any) => {
+      this.Impuestos = res.data;
+    });
 
     if (this.id != undefined) {
       this.Rotativo = true;
@@ -231,14 +230,8 @@ export class CrearCompraNacionalComponent implements OnInit {
     }
     /* TODO ACTUALIZAR FUNCIONARIO */
 
-    this.http
-      .get(
-        environment.ruta +
-        'php/inventario_fisico_puntos/lista_punto_funcionario.php',
-        { params: { id: '1' } }
-      )
-      .subscribe((data: any) => {
-        this.puntos = data.Puntos;
+    this.http.get( environment.base_url + '/php/inventario_fisico_puntos/lista_punto_funcionario').subscribe((res: any) => {
+        this.puntos = res.data;
       });
 
     this._proveedor.getThirdPartyProvider({
@@ -279,16 +272,12 @@ export class CrearCompraNacionalComponent implements OnInit {
         .map((key) => key + '=' + params[key])
         .join('&');
 
-      this.http
-        .get(
-          environment.ruta +
-          'php/comprasnacionales/lista_productos.php?' +
-          queryString, { params: { company_id: this._user.user.person.company_worked.id } }
-        )
-        .subscribe((data: any) => {
-          this.Cargando = false;
-          this.ListaProducto = data;
-        });
+      this.http.get(environment.base_url + '/php/comprasnacionales/lista_productos?' +
+        queryString, { params: { company_id: this._user.user.person.company_worked.id } }
+      ).subscribe((res: any) => {
+        this.Cargando = false;
+        this.ListaProducto = res.data;
+      });
     } else {
       this.filtro_lab_com = '';
       this.filtro_lab_gen = '';
@@ -297,13 +286,12 @@ export class CrearCompraNacionalComponent implements OnInit {
       this.Cargando = true;
       this.ListaProducto = [];
 
-      this.http
-        .get(environment.ruta + 'php/comprasnacionales/lista_productos.php', {
+      this.http.get(environment.base_url + '/php/comprasnacionales/lista_productos', {
           params: { nom: this.filtro_nombre, company_id: this._user.user.person.company_worked.id },
         })
-        .subscribe((data: any) => {
+        .subscribe((res: any) => {
           this.Cargando = false;
-          this.ListaProducto = data;
+          this.ListaProducto = res.data;
         });
     }
   }
@@ -327,12 +315,12 @@ export class CrearCompraNacionalComponent implements OnInit {
 
     if (producto != '') {
       this.http
-        .get(environment.ruta + 'php/comprasnacionales/lista_productos.php', {
+        .get(environment.base_url + '/php/comprasnacionales/lista_productos', {
           params: { nom: producto, company_id: this._user.user.person.company_worked.id },
         })
-        .subscribe((data: any) => {
+        .subscribe((res: any) => {
           this.Cargando = false;
-          this.ListaProducto = data;
+          this.ListaProducto = res.data;
         });
     } else {
       this.Cargando = false;

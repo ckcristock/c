@@ -43,7 +43,6 @@ export class FilePermissionsComponent implements OnInit {
 
   getFolderPermission() {
     this._person.getFilePermission(this.personId).subscribe((res:any) => {
-      console.log(res)
       this.form.patchValue({
         folder_id: res.data
       })

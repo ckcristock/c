@@ -157,6 +157,7 @@ import { MatSlideToggleModule, MatTreeModule } from '@angular/material';
     MatPaginatorModule,
     MatTreeModule,
     MatSlideToggleModule,
+    MatExpansionModule,
     SweetAlert2Module.forRoot(),
   ],
   exports: [

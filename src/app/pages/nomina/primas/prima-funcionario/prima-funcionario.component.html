@@ -85,17 +85,21 @@
           </table>
         </div>
       </div>
+      <mat-paginator
+        *ngIf="paginacion"
+        [length]="paginacion.total"
+        [pageSize]="paginacion.per_page"
+        [pageIndex]="paginacion.current_page - 1"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="handlePageEvent($event)"
+        aria-label="Select page"
+      ></mat-paginator>
+      <button
+        class="btn btn-primary btn-block"
+        (click)="pagar(empleados)"
+        [disabled]=" empleados.status =='pagado'"
+      >Pagar</button>
     </ng-container>
-    <mat-paginator
-      *ngIf="paginacion"
-      [length]="paginacion.total"
-      [pageSize]="paginacion.per_page"
-      [pageIndex]="paginacion.current_page - 1"
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      (page)="handlePageEvent($event)"
-      aria-label="Select page"
-    ></mat-paginator>
-    <button class="btn btn-primary btn-block">Pagar</button>
   </div>
 </div>
 

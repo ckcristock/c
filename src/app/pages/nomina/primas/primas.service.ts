@@ -9,8 +9,12 @@ export class PrimasService {
 
   constructor( private http: HttpClient ) { }
 
-  getPremiumList(){
+  getBonusList(){
     return this.http.get(`${environment.base_url}/bonuses`);
+  }
+
+  checkBonuses(params){
+    return this.http.get(`${environment.base_url}/check-bonuses/${params}`)
   }
 
   getPremiumPeople(id_prima){
@@ -18,6 +22,10 @@ export class PrimasService {
   }
 
   setBonus(params){
+    return this.http.post(`${environment.base_url}/query-bonuses`, (params));
+  }
+
+  saveBonus(params){
     return this.http.post(`${environment.base_url}/bonuses`, (params));
   }
 

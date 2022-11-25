@@ -28,6 +28,8 @@
           <tr class="text-center text-uppercase">
             <th>Prima</th>
             <th>Fecha</th>
+            <th>Responsable</th>
+            <th>Status</th>
             <th>Total Prima</th>
             <th>Total Empleados</th>
             <th ><i class="mdi mdi-chevron-down"></i></th>
@@ -35,9 +37,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of premiums" class="text-center">
-            <td>{{ item.premium }}</td>
-            <td>{{ item.created_at }}</td>
-            <td>{{ item.total_premium }}</td>
+            <td>Periodo {{ item.period }}</td>
+            <td>{{ item.payment_date }}</td>
+            <td> {{item.payer}} </td>
+            <td> {{item.status}} </td>
+            <td>$ {{ item.total_bonuses | currency: "":"" }}</td>
             <td>{{ item.total_employees }}</td>
             <td>
               <button
@@ -131,17 +135,17 @@
           <th></th>
           <th>Persona</th>
           <th>Salario</th>
-          <th>Dias Trabajados</th>
-          <th>Total Prima</th>
+          <th>Total tabajadores</th>
+          <th>Total prima</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td> {{premiumsPeople['payer']}} </td>
+          <td> {{premiumsPeople['total_bonuses']}} </td>
+          <td> {{premiumsPeople['total_employees']}} </td>
+          <td> {{premiumsPeople['period']}} </td>
+          <td> {{premiumsPeople['status']}} </td>
         </tr>
       </tbody>
     </table>

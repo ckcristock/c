@@ -30,7 +30,7 @@ export class PrimasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.year);
+    this.getPrimasList();
     this.createForm();
     // this.getPrimasList();
     let year = new Date().getFullYear();
@@ -49,6 +49,8 @@ export class PrimasComponent implements OnInit {
   }
 
   openConfirm2(){
+
+    //chequear que no exista prima en ese periodo
     let mes = new Date().getMonth();
     let semestre = 1;
     let lapso: string ;
@@ -61,14 +63,31 @@ export class PrimasComponent implements OnInit {
 
     }
     let params = {
-      //periodo: this.form.get('periodo').value,
-      //yearSelected: this.form.get('year').value,
       periodo: semestre,
       yearSelected: this.year,
       fecha_inicio: new Date("07/01/2022"),
       fecha_fin: new Date("12/31/2022")
     }
-    this._swal.show({
+    this._primas.checkBonuses(this.year+'-'+semestre).subscribe(res=>{
+      console.log(res)
+      if (res['data'] == null) {
+        console.log('es nulo');
+      } else {
+        this._swal.show({
+          title: 'Prima',
+          text: `Ya se ha generado un listado ¿Desea regenerar las primas del ${semestre} semestre? (periodo: ${lapso})`,
+          icon: 'warning',
+          showCancel: true
+        }, (res: any) =>{
+          if (res) {
+            if (res) {
+              this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo])
+            }
+          }
+        })
+      }
+    });
+    /* this._swal.show({
       title: 'Prima',
       text: `¿Desea pagar primas del ${semestre} semestre? (periodo: ${lapso})`,
       icon: 'warning',
@@ -77,7 +96,7 @@ export class PrimasComponent implements OnInit {
       if (res) {
         this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo])
       }
-    }))
+    })) */
   }
 
   private getDismissReason(reason: any) {
@@ -112,17 +131,18 @@ export class PrimasComponent implements OnInit {
 
   getPrimasList() {
     this.loading = true
-    this._primas.getPremiumList().subscribe((r: any) => {
+    this._primas.getBonusList().subscribe((r: any) => {
       this.loading = false
       this.premiums = r.data;
-      console.log(r.data)
+      console.log(r)
     })
   }
 
   VerPrimaFuncionarios(id_prima) {
-    this._primas.getPremiumPeople(id_prima).subscribe((r: any) => {
-      this.premiumsPeople = r.data;
-      this.modalFuncionario.show();
+    this._primas.getPremiumPeople(id_prima)
+      .subscribe((r: any) => {
+        this.premiumsPeople = r.data;
+        this.modalFuncionario.show();
     })
   }
 

@@ -3,6 +3,8 @@ import { MatPaginatorIntl } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { UserService } from 'src/app/core/services/user.service';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { PrimasService } from '../primas.service';
 
 @Component({
@@ -27,16 +29,21 @@ export class PrimaFuncionarioComponent implements OnInit {
   parametros: Observable<string>
   anio: any;
   periodo: any;
+  lapso: any;
+  funcionario: any;
 
   constructor(
     private _primas: PrimasService,
     private paginator: MatPaginatorIntl,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _swal: SwalService,
+    private _user: UserService
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
 
     this.anioObs = route.params.pipe(map(p=> p.anio));
     this.periodoObs = route.params.pipe(map(p=> p.periodo));
+    this.funcionario = this._user.user.person.id
   }
 
   ngOnInit(): void {
@@ -56,11 +63,13 @@ export class PrimaFuncionarioComponent implements OnInit {
         fecha_inicio: new Date(`01/01/${this.anio}`),
         fecha_fin: new Date(`06/30/${this.anio}`)
       }
+      this.lapso = ' enero - junio '
     } else {
       params = {
         fecha_inicio: new Date(`07/01/${this.anio}`),
         fecha_fin: new Date(`12/30/${this.anio}`)
       }
+      this.lapso = ' julio - diciembre '
     }
 
     this._primas.setBonus(params)
@@ -72,4 +81,34 @@ export class PrimaFuncionarioComponent implements OnInit {
     });
   }
 
+  pagar(empleados){
+    this._swal.show({
+      title: 'Prima',
+      text: `¿Desea pagar primas del ${this.periodo} semestre? (periodo: ${this.lapso})`,
+      icon: 'warning',
+      showCancel: true
+    }, ((res: any)=>{
+      if (res) {
+        console.log('pagada');
+        console.log(empleados);
+        console.log(this.funcionario);
+        empleados['period'] = this.anio+'-'+this.periodo;
+        empleados['funcionario'] = this.funcionario;
+        empleados['status'] = 'pagado'
+        //enviar petición para guardar tanto el detalle como el general,
+        //primero guarda el general y con ese indice se guarda el detalle de cada funcionario
+        //guardar el periodo para facilitar las revisiones futuras año-semestre
+        this._primas.saveBonus(empleados)
+            .subscribe((res:any)=>{
+              console.log(res)
+              this._swal.show({
+                title: 'Prima',
+                text: res.data,
+                icon: 'success',
+                showCancel: false,
+              })
+            })
+      }
+    }))
+  }
 }

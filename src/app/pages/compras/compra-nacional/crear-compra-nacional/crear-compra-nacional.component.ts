@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -13,6 +13,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
 import { BodegasService } from 'src/app/pages/ajustes/informacion-base/bodegas/bodegas.service.';
 import { ProductoService } from 'src/app/pages/inventario/services/producto.service';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-crear-compra-nacional',
@@ -21,16 +22,6 @@ import { ProductoService } from 'src/app/pages/inventario/services/producto.serv
 })
 export class CrearCompraNacionalComponent implements OnInit {
   closeResult = '';
-  public openConfirm(confirm){
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
-
-  }
   tipoMaterial = ['Activo_Fijo', 'Medicamento', 'Material', 'Dotacion_EPP'];
   public reducer = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Cantidad);
@@ -43,8 +34,8 @@ export class CrearCompraNacionalComponent implements OnInit {
 
   public alertOption: SweetAlertOptions = {};
   public Cargando: boolean = true;
-  public ListaProductos: any[] = [];
-  public Lista_Productos: any = [
+  public listaProductos: any[] = [];
+  public listaProductosPorAgregar: any = [
     {
       producto: '',
       Presentacion: '',
@@ -90,11 +81,13 @@ export class CrearCompraNacionalComponent implements OnInit {
   public product: any[] = [];
   public Productos: any = [];
   private band_editar: boolean = false;
-  public filtro_nombre: string = '';
-  public filtro_lab_com: string = '';
-  public filtro_lab_gen: string = '';
-  public filtro_cum: string = '';
-  public filtro_catalogo: string = '';
+  public filtroProducto:any = {
+    nombre: '',
+    lab_com: '',
+    lab_gen: '',
+    cum: '',
+    catalogo: ''
+};
 
   public Tipo: any = '';
 
@@ -107,6 +100,10 @@ export class CrearCompraNacionalComponent implements OnInit {
   public user = '';
   posicion: any = '';
   puntos: any = [];
+  public datosCabecera:any = {
+    Titulo: 'Nueva orden de compra',
+    Fecha: new Date()
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -115,6 +112,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     private _user: UserService,
     private _proveedor: TercerosService,
     private _producto: ProductoService,
+    private _modal: ModalService,
     private _bodegas: BodegasService,
     private modalService: NgbModal,
   ) {
@@ -145,10 +143,10 @@ export class CrearCompraNacionalComponent implements OnInit {
       this.http
         .get(environment.base_url + '/php/rotativoscompras/detalle_pre_compra/' + params.Pre_Compra)
         .subscribe((res: any) => {
-          this.Lista_Productos = res.data.Productos;
+          this.listaProductosPorAgregar = res.data.Productos;
           this.Cargando = false
           this.Id_Proveedor = res.data.Datos.Id_Proveedor;
-          this.Lista_Productos.push({
+          this.listaProductosPorAgregar.push({
             producto: '',
             Costo: 0,
             Total: 0,
@@ -177,7 +175,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     if (this.id != undefined) {
       this.Rotativo = true;
       //debo llamar al localstore, y decirle cual es el que quiero listar
-      this.Lista_Productos.splice(0, 1);
+      this.listaProductosPorAgregar.splice(0, 1);
       const proveedor = this.precompra.find(
         (lista) => lista.Id_Proveedor === this.id
       );
@@ -187,7 +185,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       var productos = this.precompra[index].Productos;
       productos.forEach((element) => {
         if (element != null) {
-          this.Lista_Productos.push({
+          this.listaProductosPorAgregar.push({
             producto: element,
             Costo: element.Costo,
             Total: parseFloat(element.Costo) * parseFloat(element.Cantidad),
@@ -201,7 +199,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       });
 
       //
-      this.Lista_Productos.push({
+      this.listaProductosPorAgregar.push({
         producto: '',
         Costo: 0,
         Total: 0,
@@ -212,18 +210,18 @@ export class CrearCompraNacionalComponent implements OnInit {
         Iva_Disa: true,
       });
       this.Cantidad_v = parseFloat(
-        this.Lista_Productos.reduce(this.reducer, 0)
+        this.listaProductosPorAgregar.reduce(this.reducer, 0)
       );
-      this.Costo_v = parseFloat(this.Lista_Productos.reduce(this.reducer1, 0));
-      //this.Iva_v = parseFloat(this.Lista_Productos.reduce(this.reducer2, 0));
+      this.Costo_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer1, 0));
+      //this.Iva_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer2, 0));
       this.Subtotal_v = parseFloat(
-        this.Lista_Productos.reduce(this.reducer3, 0)
+        this.listaProductosPorAgregar.reduce(this.reducer3, 0)
       );
 
       this.Subtotal_F = this.Subtotal_v;
       //this.Iva_F=(this.Subtotal_v*this.Iva_v)/100;
       this.Total_F = this.Subtotal_v + this.Iva_v;
-      /*var subtotal = parseFloat(this.Lista_Productos.reduce(this.reducer, 0));
+      /*var subtotal = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer, 0));
         this.Subtotal = subtotal - (subtotal * 0.19)
         this.Iva = (subtotal * 0.19);
         this.Total = subtotal;*/
@@ -240,32 +238,44 @@ export class CrearCompraNacionalComponent implements OnInit {
     });
   }
 
-  filtros() {
+  public openConfirm(confirm){
+    this._modal.open(confirm, 'xl')
+    /* this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    }); */
+  }
+  /* private getDismissReason(reason: any) {
+
+  } */
+
+  filtrosOld() {
     let params: any = {};
 
     if (
-      this.filtro_lab_com != '' ||
-      this.filtro_lab_gen != '' ||
-      this.filtro_cum != '' ||
-      this.filtro_catalogo
+      this.filtroProducto.lab_com != '' ||
+      this.filtroProducto.lab_gen != '' ||
+      this.filtroProducto.cum != '' ||
+      this.filtroProducto.catalogo
     ) {
       this.Cargando = true;
       this.ListaProducto = [];
 
-      if (this.filtro_nombre != '') {
-        params.nom = this.filtro_nombre;
+      if (this.filtroProducto.nombre != '') {
+        params.nom = this.filtroProducto.nombre;
       }
-      if (this.filtro_lab_com != '') {
-        params.lab_com = this.filtro_lab_com;
+      if (this.filtroProducto.lab_com != '') {
+        params.lab_com = this.filtroProducto.lab_com;
       }
-      if (this.filtro_lab_gen != '') {
-        params.lab_gen = this.filtro_lab_gen;
+      if (this.filtroProducto.lab_gen != '') {
+        params.lab_gen = this.filtroProducto.lab_gen;
       }
-      if (this.filtro_cum != '') {
-        params.cum = this.filtro_cum;
+      if (this.filtroProducto.cum != '') {
+        params.cum = this.filtroProducto.cum;
       }
-      if (this.filtro_catalogo != '') {
-        params.catalogo = this.filtro_catalogo;
+      if (this.filtroProducto.catalogo != '') {
+        params.catalogo = this.filtroProducto.catalogo;
       }
 
       let queryString = Object.keys(params)
@@ -279,15 +289,15 @@ export class CrearCompraNacionalComponent implements OnInit {
         this.ListaProducto = res.data;
       });
     } else {
-      this.filtro_lab_com = '';
-      this.filtro_lab_gen = '';
-      this.filtro_cum = '';
-      this.filtro_catalogo = '';
+      this.filtroProducto.lab_com = '';
+      this.filtroProducto.lab_gen = '';
+      this.filtroProducto.cum = '';
+      this.filtroProducto.catalogo = '';
       this.Cargando = true;
       this.ListaProducto = [];
 
       this.http.get(environment.base_url + '/php/comprasnacionales/lista_productos', {
-          params: { nom: this.filtro_nombre, company_id: this._user.user.person.company_worked.id },
+          params: { nom: this.filtroProducto.nombre, company_id: this._user.user.person.company_worked.id },
         })
         .subscribe((res: any) => {
           this.Cargando = false;
@@ -296,32 +306,37 @@ export class CrearCompraNacionalComponent implements OnInit {
     }
   }
 
+  filtros(){
+    let params = {...this.filtroProducto, company_id: this._user.user.person.company_worked.id }
+    this.Cargando = true;
+    this._producto.getProductos(params).subscribe((res: any) => {
+      this.ListaProducto = res.data;
+      this.Cargando = false;
+    })
+  }
 
   searchProduct(pos, editar) {
     this.ListaProducto = [];
     this.Productos = [];
-    this.filtro_nombre = '';
-    this.filtro_lab_com = '';
-    this.filtro_lab_gen = '';
-    this.filtro_cum = '';
-    this.filtro_catalogo = '';
+    this.filtroProducto.nombre = '';
+    this.filtroProducto.lab_com = '';
+    this.filtroProducto.lab_gen = '';
+    this.filtroProducto.cum = '';
+    this.filtroProducto.catalogo = '';
     let producto = (
       document.getElementById('Producto' + pos) as HTMLInputElement
     ).value;
-    this.filtro_nombre = producto;
+    this.filtroProducto.nombre = producto;
     this.posicion = pos;
     this.band_editar = editar;
     this.Cargando = true;
 
     if (producto != '') {
-      this.http
-        .get(environment.base_url + '/php/comprasnacionales/lista_productos', {
-          params: { nom: producto, company_id: this._user.user.person.company_worked.id },
-        })
-        .subscribe((res: any) => {
-          this.Cargando = false;
-          this.ListaProducto = res.data;
-        });
+      this._producto.getProductos({ nombre: producto, company_id: this._user.user.person.company_worked.id})
+      .subscribe((res: any) => {
+        this.Cargando = false;
+        this.ListaProducto = res.data;
+      });
     } else {
       this.Cargando = false;
     }
@@ -342,9 +357,9 @@ export class CrearCompraNacionalComponent implements OnInit {
         .subscribe((data: any) => { });
     }
 
-    if (this.Lista_Productos.length > 1) {
+    if (this.listaProductosPorAgregar.length > 1) {
       let info = JSON.stringify(formulario.value);
-      let prod = JSON.stringify(this.Lista_Productos);
+      let prod = JSON.stringify(this.listaProductosPorAgregar);
       let datos = new FormData();
 
       params.Pre_Compra != undefined
@@ -427,52 +442,52 @@ export class CrearCompraNacionalComponent implements OnInit {
 
     this.Productos.forEach((valor, i) => {
       if (
-        this.Lista_Productos.length == 1 &&
-        this.Lista_Productos[0].Id_Producto == ''
+        this.listaProductosPorAgregar.length == 1 &&
+        this.listaProductosPorAgregar[0].Id_Producto == ''
       ) {
         // Cuando la lista de productos está vacía o inicializada por primera vez.
-        this.Lista_Productos[0].Costo = valor.Costo;
-        this.Lista_Productos[0].Presentacion = valor.Presentacion;
-        this.Lista_Productos[0].Id_Producto = valor.Id_Producto;
-        this.Lista_Productos[0].producto = valor.producto;
-        this.Lista_Productos[0].Iva_Disa = valor.Iva_Disa;
-        this.Lista_Productos[0].editar = true;
-        this.Lista_Productos[0].delete = true;
-        this.Lista_Productos[0].Embalaje = valor.Embalaje;
+        this.listaProductosPorAgregar[0].Costo = valor.Costo;
+        this.listaProductosPorAgregar[0].Presentacion = valor.Presentacion;
+        this.listaProductosPorAgregar[0].Id_Producto = valor.Id_Producto;
+        this.listaProductosPorAgregar[0].producto = valor.producto;
+        this.listaProductosPorAgregar[0].Iva_Disa = valor.Iva_Disa;
+        this.listaProductosPorAgregar[0].editar = true;
+        this.listaProductosPorAgregar[0].delete = true;
+        this.listaProductosPorAgregar[0].Embalaje = valor.Embalaje;
       } else if (this.band_editar) {
         // Cuando se quiere editar un producto.
-        this.Lista_Productos[this.posicion].Costo = valor.Costo;
-        this.Lista_Productos[this.posicion].Presentacion = valor.Presentacion;
-        this.Lista_Productos[this.posicion].Id_Producto = valor.Id_Producto;
-        this.Lista_Productos[this.posicion].producto = valor.producto;
-        this.Lista_Productos[this.posicion].Iva_Disa = valor.Iva_Disa;
-        this.Lista_Productos[this.posicion].Embalaje = valor.Embalaje;
-        this.Lista_Productos[this.posicion].delete = true;
+        this.listaProductosPorAgregar[this.posicion].Costo = valor.Costo;
+        this.listaProductosPorAgregar[this.posicion].Presentacion = valor.Presentacion;
+        this.listaProductosPorAgregar[this.posicion].Id_Producto = valor.Id_Producto;
+        this.listaProductosPorAgregar[this.posicion].producto = valor.producto;
+        this.listaProductosPorAgregar[this.posicion].Iva_Disa = valor.Iva_Disa;
+        this.listaProductosPorAgregar[this.posicion].Embalaje = valor.Embalaje;
+        this.listaProductosPorAgregar[this.posicion].delete = true;
         this.band_editar = false;
       } else {
         // Cuando se quiere agregar nuevos productos.
 
         if (
-          this.Lista_Productos.length > 1 &&
-          this.Lista_Productos[this.posicion].Id_Producto == ''
+          this.listaProductosPorAgregar.length > 1 &&
+          this.listaProductosPorAgregar[this.posicion].Id_Producto == ''
         ) {
           // Si la lista de productos estaba llena y la posicion donde se está buscando el producto estaba vacía, edita el campo actual.
-          this.Lista_Productos[this.posicion].Costo = valor.Costo;
-          this.Lista_Productos[this.posicion].Presentacion = valor.Presentacion;
-          this.Lista_Productos[this.posicion].Id_Producto = valor.Id_Producto;
-          this.Lista_Productos[this.posicion].producto = valor.producto;
-          this.Lista_Productos[this.posicion].Iva_Disa = valor.Iva_Disa;
-          this.Lista_Productos[this.posicion].Embalaje = valor.Embalaje;
-          this.Lista_Productos[this.posicion].delete = true;
+          this.listaProductosPorAgregar[this.posicion].Costo = valor.Costo;
+          this.listaProductosPorAgregar[this.posicion].Presentacion = valor.Presentacion;
+          this.listaProductosPorAgregar[this.posicion].Id_Producto = valor.Id_Producto;
+          this.listaProductosPorAgregar[this.posicion].producto = valor.producto;
+          this.listaProductosPorAgregar[this.posicion].Iva_Disa = valor.Iva_Disa;
+          this.listaProductosPorAgregar[this.posicion].Embalaje = valor.Embalaje;
+          this.listaProductosPorAgregar[this.posicion].delete = true;
         } else {
           if (editar_producto) {
             // Si se editó un producto, se declara esta condicional como bandera para que elimine el ultimo campo en blanco y pueda añadir en la lista de productos sin problema.
-            let last_position = this.Lista_Productos.length - 1;
-            this.Lista_Productos.splice(last_position, 1);
+            let last_position = this.listaProductosPorAgregar.length - 1;
+            this.listaProductosPorAgregar.splice(last_position, 1);
             editar_producto = false;
           }
 
-          this.Lista_Productos.push({
+          this.listaProductosPorAgregar.push({
             // Se agregan nuevos productos.
             producto: valor.producto,
             Presentacion: valor.Presentacion,
@@ -492,11 +507,11 @@ export class CrearCompraNacionalComponent implements OnInit {
       }
     });
 
-    let pos = this.Lista_Productos.length - 1;
+    let pos = this.listaProductosPorAgregar.length - 1;
 
-    if (this.Lista_Productos[pos].producto != '') {
+    if (this.listaProductosPorAgregar[pos].producto != '') {
       // Si en la ultima posición del Array ya no es vacío se agrega un nuevo campo para una nueva busqueda.
-      this.Lista_Productos.push({
+      this.listaProductosPorAgregar.push({
         producto: '',
         Presentacion: '',
         Costo: 0,
@@ -519,7 +534,7 @@ export class CrearCompraNacionalComponent implements OnInit {
 
   deleteProduct(posicion, event) {
     if (event.screenX != 0) {
-      this.Lista_Productos.splice(posicion, 1);
+      this.listaProductosPorAgregar.splice(posicion, 1);
       this.ActualizaValores();
     }
   }
@@ -534,8 +549,8 @@ export class CrearCompraNacionalComponent implements OnInit {
 
     var iva = (document.getElementById('Iva' + pos) as HTMLInputElement).value;
 
-    this.Lista_Productos[pos].Iva_Acu = subtotal * (parseInt(iva) / 100);
-    this.Lista_Productos[pos].Total = subtotal;
+    this.listaProductosPorAgregar[pos].Iva_Acu = subtotal * (parseInt(iva) / 100);
+    this.listaProductosPorAgregar[pos].Total = subtotal;
   }
 
   CapturarDigitacion(pos) {
@@ -547,24 +562,24 @@ export class CrearCompraNacionalComponent implements OnInit {
     let iva = (document.getElementById('Iva' + pos) as HTMLInputElement).value;
     let subtotal = parseFloat(cantidad) * parseFloat(costo);
 
-    this.Lista_Productos[pos].Cantidad = cantidad;
-    this.Lista_Productos[pos].Costo = costo;
-    this.Lista_Productos[pos].Iva = iva;
-    this.Lista_Productos[pos].Total = subtotal.toFixed();
+    this.listaProductosPorAgregar[pos].Cantidad = cantidad;
+    this.listaProductosPorAgregar[pos].Costo = costo;
+    this.listaProductosPorAgregar[pos].Iva = iva;
+    this.listaProductosPorAgregar[pos].Total = subtotal.toFixed();
   }
 
   ActualizaValores() {
-    this.Cantidad_v = parseFloat(this.Lista_Productos.reduce(this.reducer, 0));
-    this.Costo_v = parseFloat(this.Lista_Productos.reduce(this.reducer1, 0));
-    this.Iva_F = parseFloat(this.Lista_Productos.reduce(this.reducer2, 0));
-    this.Subtotal_v = parseFloat(this.Lista_Productos.reduce(this.reducer3, 0));
+    this.Cantidad_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer, 0));
+    this.Costo_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer1, 0));
+    this.Iva_F = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer2, 0));
+    this.Subtotal_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer3, 0));
 
     this.Subtotal_F = this.Subtotal_v;
 
     this.Total_F = this.Subtotal_F + this.Iva_F;
   }
 
-  /*ListaProductosBodega(Bodega) {
+  /*listaProductosBodega(Bodega) {
        this.http.get(environment.ruta + 'php/comprasnacionales/producto_bodega_compra_nacional.php').subscribe((data: any) => {
           this.ListaProducto = data;
         });

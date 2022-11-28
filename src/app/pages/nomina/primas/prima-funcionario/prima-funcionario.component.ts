@@ -15,6 +15,7 @@ import { PrimasService } from '../primas.service';
 export class PrimaFuncionarioComponent implements OnInit {
   loading: boolean;
   empleados: any;
+  employees: any[] = [];
   page: number;
   previousPage: number;
   paginacion = true;
@@ -41,21 +42,21 @@ export class PrimaFuncionarioComponent implements OnInit {
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
 
-    this.anioObs = route.params.pipe(map(p=> p.anio));
-    this.periodoObs = route.params.pipe(map(p=> p.periodo));
+    this.anioObs = route.params.pipe(map(p => p.anio));
+    this.periodoObs = route.params.pipe(map(p => p.periodo));
     this.funcionario = this._user.user.person.id
   }
 
   ngOnInit(): void {
     this.page = 1;
-	  this.previousPage = 1;
+    this.previousPage = 1;
     this.calcularPrimas();
   }
 
-  calcularPrimas(){
+  calcularPrimas() {
     this.loading = true;
-    this.anioObs.subscribe(params=>this.anio = params);
-    this.periodoObs.subscribe(params=>this.periodo = params);
+    this.anioObs.subscribe(params => this.anio = params);
+    this.periodoObs.subscribe(params => this.periodo = params);
 
     let params: any;
     if (this.periodo == 1) {
@@ -73,42 +74,58 @@ export class PrimaFuncionarioComponent implements OnInit {
     }
 
     this._primas.setBonus(params)
-    .subscribe((r:any)=>{
-      this.empleados = r.data;
-      this.pagination.collectionSize = r.data.total_empleados;
-      this.totalPag = r.data.total_empleados;
-      this.loading = false;
-    });
+      .subscribe((r: any) => {
+        this.empleados = r.data;
+        this.pagination.collectionSize = r.data.total_empleados;
+        this.totalPag = r.data.total_empleados;
+        this.loading = false;
+        this.employees = this.paginate(this.empleados.empleados, 10)[0]
+      });
   }
 
-  pagar(empleados){
+  pagar(empleados) {
     this._swal.show({
       title: 'Prima',
       text: `¿Desea pagar primas del ${this.periodo} semestre? (periodo: ${this.lapso})`,
       icon: 'warning',
       showCancel: true
-    }, ((res: any)=>{
+    }, ((res: any) => {
       if (res) {
         console.log('pagada');
         console.log(empleados);
         console.log(this.funcionario);
-        empleados['period'] = this.anio+'-'+this.periodo;
+        empleados['period'] = this.anio + '-' + this.periodo;
         empleados['funcionario'] = this.funcionario;
         empleados['status'] = 'pagado'
         //enviar petición para guardar tanto el detalle como el general,
         //primero guarda el general y con ese indice se guarda el detalle de cada funcionario
         //guardar el periodo para facilitar las revisiones futuras año-semestre
         this._primas.saveBonus(empleados)
-            .subscribe((res:any)=>{
-              console.log(res)
-              this._swal.show({
-                title: 'Prima',
-                text: res.data,
-                icon: 'success',
-                showCancel: false,
-              })
+          .subscribe((res: any) => {
+            console.log(res)
+            this._swal.show({
+              title: 'Prima',
+              text: res.data,
+              icon: 'success',
+              showCancel: false,
             })
+          })
       }
     }))
+  }
+  changePage(e) {
+    console.log(e)
+    this.employees = this.paginate(this.empleados.empleados, e.pageSize)[e.pageIndex]
+  }
+
+
+  paginate(arr, size) {
+    return arr.reduce((acc, val, i) => {
+      let idx = Math.floor(i / size)
+      let page = acc[idx] || (acc[idx] = [])
+      page.push(val)
+
+      return acc
+    }, [])
   }
 }

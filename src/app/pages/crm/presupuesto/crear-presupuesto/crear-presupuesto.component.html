@@ -1,10 +1,10 @@
-<div *ngIf="!loading">
-  <div class="card">
-    <div class="card-body">
-      <div class="card-title">
-        <h4 class="text-primary">Nuevo presupuesto</h4>
-      </div>
-      <hr class="line" />
+<div class="card">
+  <div class="card-body">
+    <div class="card-title">
+      <h4 class="text-primary">Nuevo presupuesto</h4>
+    </div>
+    <hr class="line" />
+    <ng-container *ngIf="!loading; else notDataLoading">
       <form [formGroup]="forma" (submit)="save()">
         <div class="row">
           <div class="col-md-3 mb-4">
@@ -63,7 +63,6 @@
           </mat-form-field>
         </div>
         <!-- END HEADER -->
-
         <!-- Configuracion presupuestal -->
         <h6 class="text-center">Porcentaje de configuración presupuestal</h6>
         <div class="rounded-top table-responsive">
@@ -115,7 +114,6 @@
           [calculationBase]="calculationBase"
         >
         </app-items>
-
         <div *ngIf="hasItems">
           <h5 class="text-center">PRESUPUESTO TOTAL</h5>
           <div class="rounded-top table-responsive">
@@ -149,17 +147,20 @@
             </table>
           </div>
         </div>
-
         <!-- END ITEMS -->
         <!--  -->
         <button class="btn btn-block btn-primary" type="submit">Guardar</button>
       </form>
-    </div>
+    </ng-container>
   </div>
 </div>
 
 <ng-template #notData>
   <div class="alert alert-warning" role="alert">¡Aquí no hay datos!</div>
+</ng-template>
+
+<ng-template #notDataLoading>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
 <!-- <div class="col-sm-10">

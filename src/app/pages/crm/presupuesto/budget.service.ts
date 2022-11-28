@@ -19,8 +19,8 @@ export class BudgetService {
     return this.http.patch(`${environment.base_url}/budgets/${id}`, body);
   }
 
-  getAll() {
-    return this.http.get(`${environment.base_url}/budgets`);
+  getAll(params = {}) {
+    return this.http.get(`${environment.base_url}/budgets`, { params });
   }
   getAllPaginate(params = {}) {
     return this.http.get(`${environment.base_url}/budgets-paginate`, { params });

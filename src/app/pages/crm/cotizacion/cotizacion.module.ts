@@ -10,10 +10,19 @@ import { CotizacionComponent } from './cotizacion.component';
 import { CrearCotizacionComponent } from './crear-cotizacion/crear-cotizacion.component';
 import { CotizacionRoutingModule } from "./cotizacion.routing.module";
 import { MatButtonModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSelectModule } from "@angular/material";
+import { ItemsQuotationComponent } from "./crear-cotizacion/components/items-quotation/items-quotation.component";
+import { SubitemsQuotationComponent } from "./crear-cotizacion/components/subitems-quotation/subitems-quotation.component";
+import { GetBudgetsComponent } from "./crear-cotizacion/components/get-budgets/get-budgets.component";
 
 
 @NgModule({
-  declarations: [CotizacionComponent, CrearCotizacionComponent],
+  declarations: [
+    CotizacionComponent,
+    CrearCotizacionComponent,
+    ItemsQuotationComponent,
+    SubitemsQuotationComponent,
+    GetBudgetsComponent
+  ],
   imports: [
     CotizacionRoutingModule,
     CommonModule,

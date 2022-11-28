@@ -14,13 +14,12 @@
   <div class="modal-body">
     <form #FormPrestamo="ngForm" (ngSubmit)="save()">
       <div class="row">
-        <mat-form-field class="col-md-3" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Empleado</mat-label>
           <input
             matInput
             type="text"
             placeholder="Ingresa el empleado"
-            id="Funcionario"
             name="Funcionario"
             [ngbTypeahead]="search4"
             [resultTemplate]="rt3"
@@ -30,14 +29,11 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-3" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo</mat-label>
           <mat-select
-            name="Tipo"
-            id="tipo"
-            (selectionChange)="
-              changeTipo($event.value); ComprobarPrestamo($event.value)
-            "
+            name="type"
+            (selectionChange)="ComprobarPrestamo($event.value)"
             [(ngModel)]="modelo.type"
             required
           >
@@ -46,10 +42,13 @@
             <!-- <option value="Sancion">Sancion</option> -->
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-md-3" appearance="outline">
+        <mat-form-field
+          class="col"
+          appearance="outline"
+          *ngIf="modelo.type != 'Libranza' && modelo.type != ''"
+        >
           <mat-label>Intereses a</mat-label>
           <mat-select
-            [disabled]="modelo.type != 'Prestamo'"
             (selectionChange)="SinInteres($event.value)"
             name="Interes"
             id="interes"
@@ -61,14 +60,21 @@
             <mat-option value="Sin">Sin interes</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-md-3" appearance="outline">
+        <mat-form-field
+          class="col"
+          appearance="outline"
+          *ngIf="
+            modelo.interest_type != 'Sin' &&
+            modelo.interest_type != '' &&
+            modelo.type != 'Libranza'
+          "
+        >
           <mat-label>% Interes</mat-label>
           <input
             matInput
             type="number"
             placeholder="Ingresa el porcentaje"
             id="Porcentaje_Interes"
-            [disabled]="modelo.interest_type == 'Sin'"
             name="Porcentaje_Interes"
             [(ngModel)]="modelo.interest"
             required
@@ -76,7 +82,7 @@
           />
         </mat-form-field>
         <mat-form-field
-          class="col-md-12"
+          class="col"
           appearance="outline"
           *ngIf="modelo.type == 'Prestamo'"
         >
@@ -88,13 +94,13 @@
             name="PlanCuenta"
             requied
             [(ngModel)]="modelo.account_plain_id"
-            [ngbTypeahead]="search1"
-            [resultTemplate]="rt1"
-            [inputFormatter]="formatter1"
+            [ngbTypeahead]="search_cuenta_niif"
+            [resultTemplate]="rt2"
+            [inputFormatter]="formatter2"
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-4" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Valor del préstamo</mat-label>
           <input
             matInput
@@ -108,7 +114,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-3" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Pago a cuotas</mat-label>
           <mat-select
             name="pay_fees"
@@ -121,7 +127,7 @@
             <mat-option value="No">No</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>N° de cuotas</mat-label>
           <input
             matInput
@@ -136,7 +142,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-3" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Cuota mensual</mat-label>
           <input
             matInput
@@ -150,7 +156,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-6" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de descuento</mat-label>
           <mat-select
             name="Tipo_Descuento"
@@ -162,7 +168,7 @@
             <mat-option value="Mensual">Mensual</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-md-6" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Quincena primer descuento</mat-label>
           <mat-select
             name="payment_date"
@@ -217,4 +223,7 @@
 </ng-template>
 <ng-template #rt1 let-r="result " let-t="term ">
   <span class="f-9">{{ r.code }} </span>
+</ng-template>
+<ng-template #rt2 let-r="result" let-t="term">
+  <span class="f-9">{{ r.Codigo_Niif }} - {{ r.Nombre_Niif }}</span>
 </ng-template>

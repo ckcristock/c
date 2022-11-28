@@ -1,0 +1,79 @@
+<ng-container [formGroup]="form">
+  <div formArrayName="items">
+    <h5 class="text-center">Elementos</h5>
+    <ng-container *ngIf="items.controls.length; else notData">
+      <ng-container *ngFor="let item of items.controls; let i = index">
+        <div class="d-flex align-items-center justify-content-between">
+          <h5>
+            <span class="badge badge-primary">ITEM {{ i + 1 }}</span>
+          </h5>
+          <span class="text-center">
+            <i
+              ngbTooltip="Eliminar elemento {{ i + 1 }}"
+              (click)="deleteItem(i)"
+              role="button"
+              class="text-danger fas fa-trash-alt bg-white"
+            ></i>
+          </span>
+        </div>
+        <div class="rounded-top table-responsive">
+          <table
+            [formGroupName]="i"
+            class="table table-bordered table-striped table-sm text-nowrap"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Línea</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="100%">
+                  <div class="btn-group btn-block w-sm-100" role="group">
+                    <button
+                      ngbTooltip="Agregar subitem manual"
+                      type="button"
+                      (click)="addSubItem(item)"
+                      class="btn btn-success btn-sm"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    <button
+                      ngbTooltip="Agregar subitem"
+                      type="button"
+                      (click)="findApus(item)"
+                      class="btn btn-info btn-sm"
+                    >
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+    </ng-container>
+    <div class="my-3 text-right">
+      <button
+        (click)="addItems()"
+        class="btn btn-primary btn-sm btn-block"
+        type="button"
+        ngbTooltip="Agregar item"
+      >
+        <i class="fas fa-plus"></i>
+      </button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #notData>
+  <div class="alert alert-warning text-center" role="alert">
+    ¡No hay datos aquí!
+  </div>
+</ng-template>
+
+<app-get-budgets #budgets_modal (sendBudgets)="getBudgets($event)"> </app-get-budgets>

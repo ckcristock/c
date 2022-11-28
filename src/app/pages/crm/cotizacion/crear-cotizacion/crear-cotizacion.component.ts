@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { of, Observable, Subject, concat } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap, map, catchError, filter } from 'rxjs/operators';
 import { ApuPiezaService } from '../../apu-pieza/apu-pieza.service';
+import { BudgetService } from '../../presupuesto/budget.service';
 
 @Component({
   selector: 'app-crear-cotizacion',
@@ -14,24 +15,25 @@ export class CrearCotizacionComponent implements OnInit {
     Titulo: 'Nueva cotización',
     Fecha: new Date()
   }
-  form: FormGroup
-  cities: any[] = []
-
-  constructor(
-    private _apuPieza: ApuPiezaService,
-    private fb: FormBuilder
-  ) { }
-
-  ngOnInit(): void {
-    this.createForm()
-    this.getCities()
-    this.loadApuParts()
-  }
-
+  form: FormGroup;
+  cities: any[] = [];
   apuPart$: Observable<any>;
   apuPartLoading = false;
   apuPartInput$ = new Subject<string>();
   minLengthTerm = 3;
+
+  constructor(
+    private _apuPieza: ApuPiezaService,
+    private fb: FormBuilder,
+  ) { }
+
+  ngOnInit(): void {
+    this.createForm();
+    this.getCities();
+    this.loadApuParts();
+  }
+
+
 
   loadApuParts() {
     this.apuPart$ = concat(
@@ -57,8 +59,8 @@ export class CrearCotizacionComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      customer_id: '',
-      destinity_id: '',
+      customer_id: ['', Validators.required],
+      destinity_id: ['', Validators.required],
       line: '',
       trm: '',
       project: '',
@@ -71,8 +73,6 @@ export class CrearCotizacionComponent implements OnInit {
       unit_value_prorrateado_cop: 0,
       unit_value_prorrateado_usd: 0,
     });
-
-
   }
 
   getCities() {

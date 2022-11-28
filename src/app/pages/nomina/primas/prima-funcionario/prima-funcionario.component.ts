@@ -14,7 +14,10 @@ import { PrimasService } from '../primas.service';
 })
 export class PrimaFuncionarioComponent implements OnInit {
   loading: boolean;
-  empleados: any;
+  empleados = {
+    status: 'pendiente',
+    empleados: []
+  };
   employees: any[] = [];
   page: number;
   previousPage: number;
@@ -62,13 +65,15 @@ export class PrimaFuncionarioComponent implements OnInit {
     if (this.periodo == 1) {
       params = {
         fecha_inicio: new Date(`01/01/${this.anio}`),
-        fecha_fin: new Date(`06/30/${this.anio}`)
+        fecha_fin: new Date(`06/30/${this.anio}`),
+        period: this.anio+'-'+this.periodo
       }
       this.lapso = ' enero - junio '
     } else {
       params = {
         fecha_inicio: new Date(`07/01/${this.anio}`),
-        fecha_fin: new Date(`12/30/${this.anio}`)
+        fecha_fin: new Date(`12/30/${this.anio}`),
+        period: this.anio+'-'+this.periodo
       }
       this.lapso = ' julio - diciembre '
     }
@@ -86,14 +91,11 @@ export class PrimaFuncionarioComponent implements OnInit {
   pagar(empleados) {
     this._swal.show({
       title: 'Prima',
-      text: `¿Desea pagar primas del ${this.periodo} semestre? (periodo: ${this.lapso})`,
+      text: `¿Desea pagar primas del ${this.periodo} semestre ${this.anio}? (periodo: ${this.lapso})`,
       icon: 'warning',
       showCancel: true
     }, ((res: any) => {
       if (res) {
-        console.log('pagada');
-        console.log(empleados);
-        console.log(this.funcionario);
         empleados['period'] = this.anio + '-' + this.periodo;
         empleados['funcionario'] = this.funcionario;
         empleados['status'] = 'pagado'
@@ -102,7 +104,6 @@ export class PrimaFuncionarioComponent implements OnInit {
         //guardar el periodo para facilitar las revisiones futuras año-semestre
         this._primas.saveBonus(empleados)
           .subscribe((res: any) => {
-            console.log(res)
             this._swal.show({
               title: 'Prima',
               text: res.data,
@@ -113,11 +114,10 @@ export class PrimaFuncionarioComponent implements OnInit {
       }
     }))
   }
+
   changePage(e) {
-    console.log(e)
     this.employees = this.paginate(this.empleados.empleados, e.pageSize)[e.pageIndex]
   }
-
 
   paginate(arr, size) {
     return arr.reduce((acc, val, i) => {
@@ -127,5 +127,25 @@ export class PrimaFuncionarioComponent implements OnInit {
 
       return acc
     }, [])
+  }
+
+  donwloading: boolean
+  getReport() {
+    let params = {
+      anio: 2022,
+      period: 2
+    }
+    this.donwloading = true;
+    this._primas.getReport(params)
+      .subscribe((response: BlobPart) => {
+        let blob = new Blob([response], { type: 'application/excel' });
+        let link = document.createElement("a");
+        const filename = 'reporte-primas';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.xlsx`;
+        link.click();
+      }),
+      error => { console.log('Error downloading the file'); this.loading = false },
+      () => { console.info('File downloaded successfully'); this.loading = false };
   }
 }

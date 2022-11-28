@@ -6,22 +6,16 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-sm btn-primary" (click)="openConfirm2()">
+          <button class="btn btn-sm btn-primary" (click)="openConfirm()">
             <i class="fas fa-money-bill"></i> Generar prima
           </button>
         </div>
-        <!-- <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-sm btn-primary" (click)="openConfirm(add)">
-            <i class="fas fa-money-bill"></i> Pagar prima
-          </button>
-        </div> -->
       </div>
     </div>
     <hr class="line" />
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-
         *ngIf="!loading && premiums.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -29,29 +23,29 @@
             <th>Prima</th>
             <th>Fecha</th>
             <th>Responsable</th>
-            <th>Status</th>
+            <th>Estatus</th>
             <th>Total Prima</th>
             <th>Total Empleados</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of premiums" class="text-center">
             <td>Periodo {{ item.period }}</td>
             <td>{{ item.payment_date }}</td>
-            <td> {{item.payer}} </td>
-            <td> {{item.status}} </td>
+            <td>{{ item.payer_fullname }}</td>
+            <td>{{ item.status }}</td>
             <td>$ {{ item.total_bonuses | currency: "":"" }}</td>
             <td>{{ item.total_employees }}</td>
             <td>
               <button
-                class="btn btn-lg"
-                (click)="VerPrimaFuncionarios(item.id)"
+                class="btn btn-primary btn-sm"
+                (click)="VerPrimaFuncionarios(item.period)"
                 placement="right"
                 ngbTooltip="Ver"
               >
                 <span aria-hidden="true">
-                  <i class="far fa-eye fa-lg"></i>
+                  <i class="far fa-eye fa-sm"></i>
                 </span>
               </button>
             </td>
@@ -62,7 +56,7 @@
   </div>
 </div>
 
-<ng-template #add let-modal>
+<!-- <ng-template #add let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Ingrese datos</h4>
     <button
@@ -113,9 +107,9 @@
       Pagar
     </button>
   </div>
-</ng-template>
+</ng-template> -->
 
-<app-modal-basic #modalFuncionario [dialogClass]="'modal-xl'">
+<!-- <app-modal-basic #modalFuncionario [dialogClass]="'modal-xl'">
   <div class="app-modal-header">
     <h5 class="modal-title">Todos los funcionarios</h5>
     <button
@@ -151,6 +145,8 @@
     </table>
   </div>
 </app-modal-basic>
+ -->
+
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

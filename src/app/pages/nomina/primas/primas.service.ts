@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -27,6 +27,11 @@ export class PrimasService {
 
   saveBonus(params){
     return this.http.post(`${environment.base_url}/bonuses`, (params));
+  }
+
+  getReport(params){
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/bonuses-report/${params.anio}/${params.period}`, {headers, responseType: 'blob' as 'json'})
   }
 
 }

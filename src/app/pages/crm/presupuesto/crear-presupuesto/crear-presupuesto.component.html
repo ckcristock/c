@@ -7,7 +7,7 @@
     <ng-container *ngIf="!loading; else notDataLoading">
       <form [formGroup]="forma" (submit)="save()">
         <div class="row">
-          <div class="col-md-3 mb-4">
+          <div class="col-md-6 mb-4">
             <ng-select
               bindLabel="text"
               [items]="clients"
@@ -20,7 +20,7 @@
               [appendTo]="'body'"
             ></ng-select>
           </div>
-          <div class="col-md-3 mb-4">
+          <div class="col-md-6 mb-4">
             <ng-select
               [items]="cities"
               placeholder="Destino"
@@ -31,7 +31,7 @@
               formControlName="destinity_id"
             ></ng-select>
           </div>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Línea</mat-label>
             <input
               matInput
@@ -41,7 +41,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>TRM</mat-label>
             <input
               matInput
@@ -51,7 +51,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Proyecto</mat-label>
             <input
               matInput

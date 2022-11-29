@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from '@angular/common';
-import { NgbPaginationModule, NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPaginationModule, NgbDropdownModule, NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpClientModule } from '@angular/common/http';
@@ -12,7 +12,6 @@ import { CotizacionRoutingModule } from "./cotizacion.routing.module";
 import { MatButtonModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSelectModule } from "@angular/material";
 import { ItemsQuotationComponent } from "./crear-cotizacion/components/items-quotation/items-quotation.component";
 import { SubitemsQuotationComponent } from "./crear-cotizacion/components/subitems-quotation/subitems-quotation.component";
-import { GetBudgetsComponent } from "./crear-cotizacion/components/get-budgets/get-budgets.component";
 
 
 @NgModule({
@@ -20,8 +19,7 @@ import { GetBudgetsComponent } from "./crear-cotizacion/components/get-budgets/g
     CotizacionComponent,
     CrearCotizacionComponent,
     ItemsQuotationComponent,
-    SubitemsQuotationComponent,
-    GetBudgetsComponent
+    SubitemsQuotationComponent
   ],
   imports: [
     CotizacionRoutingModule,
@@ -42,6 +40,7 @@ import { GetBudgetsComponent } from "./crear-cotizacion/components/get-budgets/g
     MatIconModule,
     MatButtonModule,
     MatPaginatorModule,
+    NgbTypeaheadModule
   ],
   exports: [],
 })

@@ -21,10 +21,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { AutoFocusDirectiveDirective } from './crear-presupuesto/components/items/auto-focus-directive.directive';
 
 
 @NgModule({
-    declarations: [PresupuestosComponent, CrearPresupuestoComponent, SubItemsComponent, ItemsComponent, EditarPresupuestoComponent, VerPresupuestoComponent, ShowItemsPresupuestoComponent],
+    declarations: [PresupuestosComponent, CrearPresupuestoComponent, SubItemsComponent, ItemsComponent, EditarPresupuestoComponent, VerPresupuestoComponent, ShowItemsPresupuestoComponent, AutoFocusDirectiveDirective],
     imports: [
         PresupuestoRoutingModule,
         CommonModule,

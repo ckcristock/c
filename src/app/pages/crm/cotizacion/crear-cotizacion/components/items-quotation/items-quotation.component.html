@@ -2,34 +2,74 @@
   <div formArrayName="items">
     <h5 class="text-center">Elementos</h5>
     <ng-container *ngIf="items.controls.length; else notData">
-      <ng-container *ngFor="let item of items.controls; let i = index">
-        <div class="d-flex align-items-center justify-content-between">
-          <h5>
-            <span class="badge badge-primary">ITEM {{ i + 1 }}</span>
-          </h5>
-          <span class="text-center">
-            <i
-              ngbTooltip="Eliminar elemento {{ i + 1 }}"
-              (click)="deleteItem(i)"
-              role="button"
-              class="text-danger fas fa-trash-alt bg-white"
-            ></i>
-          </span>
-        </div>
-        <div class="rounded-top table-responsive">
+      <ng-container>
+        <table class="table table-light">
+          <thead class="thead-light">
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Total COP</th>
+              <th>Total USD</th>
+              <th>Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of items.controls; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ item.value.name }}</td>
+              <td>{{ item.value.value_cop }}</td>
+              <td>{{ item.value.value_usd }}</td>
+              <td>
+                <i
+                  ngbTooltip="Eliminar elemento {{ i + 1 }}"
+                  (click)="deleteItem(i)"
+                  role="button"
+                  class="text-danger fas fa-trash-alt bg-white"
+                ></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div class="rounded-top table-responsive">
           <table
             [formGroupName]="i"
             class="table table-bordered table-striped table-sm text-nowrap"
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
-                <th>Línea</th>
+                <th>#</th>
+                <th>DELETE</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td></td>
-              </tr>
+              <ng-container
+                *ngIf="
+                  item.controls.subItems.controls.length;
+                  else notDataSubitems
+                "
+              >
+                <ng-container formArrayName="subItems">
+                  <ng-container
+                    [formGroupName]="y"
+                    *ngFor="
+                      let subItem of item.controls.subItems.controls;
+                      let y = index
+                    "
+                  >
+                    <tr>
+                      <td>{{ i + 1 }}.{{ y + 1 }}</td>
+                      <td>
+                        <i
+                          ngbTooltip="Eliminar subitem"
+                          (click)="deleteSubItem(item, y)"
+                          role="button"
+                          class="text-danger far fa-trash-alt"
+                        ></i>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
               <tr>
                 <td colspan="100%">
                   <div class="btn-group btn-block w-sm-100" role="group">
@@ -54,17 +94,15 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> -->
       </ng-container>
     </ng-container>
-    <div class="my-3 text-right">
-      <button
-        (click)="addItems()"
-        class="btn btn-primary btn-sm btn-block"
-        type="button"
-        ngbTooltip="Agregar item"
-      >
-        <i class="fas fa-plus"></i>
+    <div class="btn-group btn-block" role="group">
+      <button (click)="addItems()" class="btn btn-primary btn-sm" type="button">
+        <i class="fas fa-plus"></i> Agregar subtítulo
+      </button>
+      <button (click)="addItems()" class="btn btn-warning btn-sm" type="button">
+        <i class="fas fa-plus"></i> Agregar fila
       </button>
     </div>
   </div>
@@ -75,5 +113,12 @@
     ¡No hay datos aquí!
   </div>
 </ng-template>
-
-<app-get-budgets #budgets_modal (sendBudgets)="getBudgets($event)"> </app-get-budgets>
+<ng-template #notDataSubitems>
+  <tr>
+    <td colspan="100%" class="text-center p-0">
+      <div class="alert alert-warning text-center" role="alert">
+        ¡No hay datos aquí!
+      </div>
+    </td>
+  </tr>
+</ng-template>

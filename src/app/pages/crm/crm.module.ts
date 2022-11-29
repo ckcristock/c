@@ -143,7 +143,8 @@ import { PagesModule } from '../pages.module';
     MatRadioModule,
     MatPaginatorModule,
     MatTableModule,
-    PagesModule
+    PagesModule,
+    NgbTypeaheadModule,
   ]
 })
 export class CrmModule { }

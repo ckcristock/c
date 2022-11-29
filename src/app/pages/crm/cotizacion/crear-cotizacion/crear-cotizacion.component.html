@@ -6,7 +6,7 @@
       <div class="row">
         <mat-form-field class="col" appearance="outline">
           <mat-label>Moneda</mat-label>
-          <mat-select formControlName="money_type">
+          <mat-select formControlName="money_type" required>
             <mat-option value="cop">Pesos</mat-option>
             <mat-option value="usd">Dólares</mat-option>
           </mat-select>
@@ -44,6 +44,7 @@
             formControlName="line"
             autocomplete="off"
             placeholder="Ingresa la línea"
+            required
           />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
@@ -54,6 +55,7 @@
             formControlName="trm"
             autocomplete="off"
             placeholder="Ingresa TRM"
+            required
           />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
@@ -64,17 +66,58 @@
             formControlName="project"
             autocomplete="off"
             placeholder="Ingresa el proyecto"
+            required
           />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>¿Incluye presupuesto?</mat-label>
+          <mat-select required formControlName="budget_included">
+            <mat-option value="si">Sí</mat-option>
+            <mat-option value="no">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field
+          class="col"
+          appearance="outline"
+          *ngIf="form.controls.budget_included.value == 'si'"
+        >
+          <mat-label>Presupuesto</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="budget"
+            autocomplete="off"
+            [ngbTypeahead]="search"
+            (selectItem)="budgetSelected($event.item)"
+            [resultTemplate]="rt"
+            [inputFormatter]="formatter"
+            placeholder="Ingresa el proyecto"
+          />
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Observaciones</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa las observaciones"
+            rows="5"
+            formControlName="observation"
+            [cdkTextareaAutosize]="true"
+          ></textarea>
         </mat-form-field>
       </div>
       <hr />
-      <app-items-quotation
-        [form]="form"
-      ></app-items-quotation>
+      <app-items-quotation #itemsQuotation [form]="form"></app-items-quotation>
     </form>
   </div>
 </div>
 
 <ng-template #notDataElements>
   <div class="alert alert-warning text-center" role="alert">Eli</div>
+</ng-template>
+
+<ng-template #rt let-r="result" let-t="term">
+  <span>{{ r?.project }} - {{ r?.line }}</span>
 </ng-template>

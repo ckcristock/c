@@ -9,8 +9,12 @@ export class PrimasService {
 
   constructor( private http: HttpClient ) { }
 
-  getBonusList(){
+  getPrimasList(){
     return this.http.get(`${environment.base_url}/bonuses`);
+  }
+
+  getPrimasPaginated(params={}){
+    return this.http.get(`${environment.base_url}/paginate-bonuses`, {params});
   }
 
   checkBonuses(params){
@@ -32,6 +36,11 @@ export class PrimasService {
   getReport(params){
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
     return this.http.get(`${environment.base_url}/bonuses-report/${params.anio}/${params.period}`, {headers, responseType: 'blob' as 'json'})
+  }
+
+  getReportPdfs(params){
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/bonus-stubs/${params.anio}/${params.period}`, {headers, responseType: 'blob' as 'json'});
   }
 
 }

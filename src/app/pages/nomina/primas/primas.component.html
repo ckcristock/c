@@ -34,7 +34,7 @@
             <td>Periodo {{ item.period }}</td>
             <td>{{ item.payment_date }}</td>
             <td>{{ item.payer_fullname }}</td>
-            <td>{{ item.status }}</td>
+            <td class="text-capitalize">{{ item.status }}</td>
             <td>$ {{ item.total_bonuses | currency: "":"" }}</td>
             <td>{{ item.total_employees }}</td>
             <td>
@@ -53,6 +53,20 @@
         </tbody>
       </table>
     </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="getPrimasList($event)"
+      [pageSize]="pagination.pageSize"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      [(page)]="pagination.page"
+      aria-label="Default pagination"
+    >
+
+    </ngb-pagination>
   </div>
 </div>
 

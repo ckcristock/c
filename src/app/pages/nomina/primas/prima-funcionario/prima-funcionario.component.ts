@@ -16,8 +16,16 @@ export class PrimaFuncionarioComponent implements OnInit {
   loading: boolean;
   empleados = {
     status: 'pendiente',
-    empleados: []
+    empleados: [],
+    person_payer: {
+      first_name: '',
+      second_name: '',
+      first_surname: '',
+      second_surname: '',
+    }
   };
+
+
   employees: any[] = [];
   page: number;
   previousPage: number;
@@ -104,10 +112,13 @@ export class PrimaFuncionarioComponent implements OnInit {
         //guardar el periodo para facilitar las revisiones futuras año-semestre
         this._primas.saveBonus(empleados)
           .subscribe((res: any) => {
+            this.empleados.person_payer = res.data.responsable
+
             this._swal.show({
               title: 'Prima',
-              text: res.data,
+              text: res.data.message,
               icon: 'success',
+              timer: 2000,
               showCancel: false,
             })
           })
@@ -148,4 +159,24 @@ export class PrimaFuncionarioComponent implements OnInit {
       error => { console.log('Error downloading the file'); this.loading = false },
       () => { console.info('File downloaded successfully'); this.loading = false };
   }
+
+  donwloadingPdfs: boolean
+  getReportPdfs(){
+    let params = {
+      anio: 2022,
+      period: 2
+    }
+    this._primas.getReportPdfs(params)
+      .subscribe( (res:BlobPart)=>{
+        let blob = new Blob([res], {type: 'applicarion/pdf'});
+        let link = document.createElement("a");
+        const filename = 'colilla-primas';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.pdf`;
+        link.click();
+      }),
+      err=> { console.log('Error downloading the file'); this.loading = false },
+      () => { console.info('File downloaded successfully'); this.loading = false };
+  }
+
 }

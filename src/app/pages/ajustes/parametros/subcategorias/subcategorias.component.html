@@ -10,10 +10,53 @@
             <i class="fa fa-plus"></i>
             Agregar
           </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
       </div>
     </div>
     <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Categoría</mat-label>
+            <mat-select
+              [(ngModel)]="filters.categoria"
+              (selectionChange)="getSubcategory()"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option
+                *ngFor="let categoria of categorias_filtro"
+                [value]="categoria.value">{{ categoria.text }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              [(ngModel)]="filters.nombre"
+              (input)="getSubcategory()"
+              matInput
+              autocomplete="off"
+              placeholder="Busca por nombre"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Separable?</mat-label>
+            <mat-select
+              [(ngModel)]="filters.separable"
+              (selectionChange)="getSubcategory()"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Si">Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
     <div
       class="rounded-top table-responsive"
       *ngIf="!Cargando && Sucategories.length > 0; else notData"
@@ -61,6 +104,22 @@
         </tbody>
       </table>
     </div>
+
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.maxSize"
+      [(page)]="pagination.pag"
+      (pageChange)="getSubcategory($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    ></ngb-pagination>
   </div>
 </div>
 

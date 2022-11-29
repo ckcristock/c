@@ -9,6 +9,10 @@ export class SubcategoryService {
 
   constructor( private http: HttpClient ) { }
 
+  getSubCategorias(params = {}) {
+    return this.http.get(`${environment.base_url}/subcategory`, {params})
+  }
+
   save( data:any ){
     return this.http.post(`${environment.base_url}/subcategory`, data);
   }

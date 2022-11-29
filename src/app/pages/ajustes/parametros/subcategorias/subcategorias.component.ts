@@ -11,6 +11,8 @@ import { SubcategoryService } from './subcategory.service';
 import { UserService } from 'src/app/core/services/user.service';
 import Swal from 'sweetalert2';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { MatAccordion } from '@angular/material/expansion';
+import { CategoriasService } from '../categorias/categorias.service';
 
 @Component({
   selector: 'app-subcategorias',
@@ -24,7 +26,19 @@ export class SubcategoriasComponent implements OnInit {
   @ViewChild('FormTipoServicio') FormTipoServicio: any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('modal') modal: any;
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  filters = {
+    categoria: '',
+    nombre: '',
+    separable: ''
+  }
+  pagination: any = {
+    pag: 1,
+    maxSize: 10,
+    collectionSize: 0
+  }
+  matPanel = false;
+  public categorias_filtro: any = [];
   public PuntosSeleccionados = [];
   public Cuenta = [];
   public Modelo_Cuenta: any;
@@ -47,6 +61,7 @@ export class SubcategoriasComponent implements OnInit {
 
   constructor(
     private _subcategory: SubcategoryService,
+    private _category: CategoriasService,
     private http: HttpClient,
     private _user: UserService,
     private location: Location,
@@ -57,7 +72,6 @@ export class SubcategoriasComponent implements OnInit {
   ) {
     this.company_id = this._user.user.person.company_worked.id;
   }
-
 
   search1 = (text$: Observable<string>) =>
     text$.pipe(
@@ -70,12 +84,23 @@ export class SubcategoriasComponent implements OnInit {
   ngOnInit() {
     this.createForm();
     this.getSubcategory();
+    this.listCategories();
     this.http.get(environment.ruta + 'php/lista_generales.php', {
       params: { modulo: 'Bodega_Nuevo' },
     })
       .subscribe((data: any) => {
         this.Bodegas = data;
       });
+  }
+
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
   }
 
   openModal(content) {
@@ -127,14 +152,24 @@ export class SubcategoriasComponent implements OnInit {
 
   }
 
-  getSubcategory() {
+  listCategories() {
+    this._category.listarCategorias().subscribe((res: any) => {
+      this.categorias_filtro = res.data;
+    });
+  }
+
+  getSubcategory(page=1) {
+    this.pagination.pag = page;
     this.Cargando = true;
-    this.http
-      .get(environment.ruta + 'php/parametros/lista_subcategoria.php', { params: { company_id: this._user.user.person.company_worked.id } })
-      .subscribe((data: any) => {
+    /* this.http
+      .get(environment.ruta + 'php/parametros/lista_subcategoria.php', { params: { company_id: this._user.user.person.company_worked.id } }) */
+    let param = { ...this.pagination, ...this.filters, company_id: this._user.user.person.company_worked.id };
+    this._subcategory.getSubCategorias(param)
+      .subscribe((res: any) => {
         this.Cargando = false;
-        this.Sucategories = data;
-        console.log(this.Sucategories)
+        this.Sucategories = res.data.data;
+        this.pagination.collectionSize = res.data.total;
+        /* this.Sucategories = data; */
       });
   }
 
@@ -260,5 +295,5 @@ export class SubcategoriasComponent implements OnInit {
     })
   }
 
-  
+
 }

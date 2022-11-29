@@ -8,6 +8,9 @@ import { MatAccordion } from '@angular/material';
 import { CategoriasService } from './categorias.service';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
+import { MunicipiosService } from '../../configuracion/departamentos-municipios/municipios/municipios.service';
+import { DepartamentosService } from '../../configuracion/departamentos-municipios/departamentos/departamentos.service';
+import { SubcategoryService } from '../subcategorias/subcategory.service';
 
 @Component({
   selector: 'app-categorias',
@@ -22,7 +25,7 @@ export class CategoriasComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   filters = {
-    categoria: '',
+    nombre: '',
     departamento: '',
     municipio: '',
     direccion: '',
@@ -30,11 +33,10 @@ export class CategoriasComponent implements OnInit {
   }
   form: FormGroup;
   //Variables para filtros
-  public categorias_filtro: any = '';
   public SubcategoriasSeleccionadas: any = [];
   public Subcategorias: any = [];
 
-  public Departamentos: any = '';
+  public Departamentos: any = [];
   public company_id: any = '';
   public categoriaDepartamento: any;
   public Municipios: any = '';
@@ -57,7 +59,10 @@ export class CategoriasComponent implements OnInit {
     private http: HttpClient,
     private location: Location,
     private _user: UserService,
+    private _municipio: MunicipiosService,
+    private _departamento: DepartamentosService,
     private _categorias: CategoriasService,
+    private _subcategoria: SubcategoryService,
     private fb: FormBuilder,
     private _modal: ModalService,
     private _swal: SwalService
@@ -68,10 +73,20 @@ export class CategoriasComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
-    this.paginacion()
+    this.paginacion();
     this.getDepartamentos();
-    this.getCategoriasDep();
+    /* this.getCategoriasDep(); */
     this.cargarSubcategorias();
+  }
+
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
   }
 
   openModal(content) {
@@ -97,46 +112,32 @@ export class CategoriasComponent implements OnInit {
     this.loading = true;
     let param = { ...this.pagination, ...this.filters }
     this._categorias.paginacionCategorias(param)
-      .subscribe((data: any) => {
-        this.categorias = data.Categorias;
-        this.pagination.collectionSize = data.numReg;
+      .subscribe((res: any) => {
+        /* this.categorias = data.Categorias; */
+        this.categorias = res.data.data;
+        this.pagination.collectionSize = res.data.total;
+       /*  this.pagination.collectionSize = data.numReg; */
         this.loading = false;
       });
   }
 
-  getDepartamentos() {
-    let params = { modulo: 'Departamento' }
-    this._categorias.getDepartamentos(params)
-      .subscribe((data: any) => {
-        this.Departamentos = data;
-      });
-  }
-
-  getCategoriasDep() {
+  /* getCategoriasDep() {
     this._categorias.getCategoriasDep()
       .subscribe((data: any) => {
         this.categoriaDepartamento = data;
       });
-  }
+  } */
 
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
+  getDepartamentos() {
+    this._departamento.getDepartment().subscribe((res: any) => {
+      this.Departamentos = res.data.data;
+    });
   }
 
   Municipios_Departamento(Departamento) {
-    this.http
-      .get(environment.ruta + 'php/genericos/municipios_departamento.php', {
-        params: { id: Departamento },
-      })
-      .subscribe((data: any) => {
-        this.Municipios = data;
-      });
+    this._municipio.getMunicipalitiesByDepartment(Departamento).subscribe((res: any) => {
+      this.Municipios = res.data;
+    });
   }
 
   saveCategory() {
@@ -162,7 +163,7 @@ export class CategoriasComponent implements OnInit {
         this.paginacion();
         this._modal.close();
       });
-    this.getCategoriasDep();
+    this.paginacion();
   }
 
   EditarCategoria(id) {
@@ -215,10 +216,11 @@ export class CategoriasComponent implements OnInit {
 
 
   cargarSubcategorias() {
-    this.http
-      .get(environment.ruta + 'php/subcategoria/get_subcategorias.php')
-      .subscribe((data: any) => {
-        this.Subcategorias = data;
+    /* this.http
+      .get(environment.ruta + 'php/subcategoria/get_subcategorias.php') */
+    this._subcategoria.getSubCategorias()
+      .subscribe((res: any) => {
+        this.Subcategorias = res.data.data;
       });
   }
 }

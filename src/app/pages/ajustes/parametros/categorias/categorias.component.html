@@ -21,34 +21,26 @@
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
           <mat-form-field class="col" appearance="outline">
-            <mat-label>Categoría</mat-label>
-            <mat-select
-              [(ngModel)]="filters.categoria"
-              (selectionChange)="paginacion()"
-            >
-              <mat-option value="">Todos</mat-option>
-              <mat-option
-                *ngFor="let categoria of categorias_filtro"
-                [value]="categoria.Id_Categoria_Nueva"
-              >
-                {{ categoria.Nombre }}</mat-option
-              >
-            </mat-select>
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              [(ngModel)]="filters.nombre"
+              (input)="paginacion()"
+              matInput
+              autocomplete="off"
+              placeholder="Busca por nombre"
+            />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
             <mat-label>Departamento</mat-label>
-            <mat-select
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por departamento"
               [(ngModel)]="filters.departamento"
-              (selectionChange)="paginacion()"
-            >
-              <mat-option value="">Todos</mat-option>
-              <mat-option
-                *ngFor="let departamento of Departamentos"
-                [value]="departamento.Id_Departamento"
-              >
-                {{ departamento.Nombre }}</mat-option
-              >
-            </mat-select>
+              (input)="paginacion()"
+              autocomplete="off"
+            />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
             <mat-label>Municipio</mat-label>
@@ -61,6 +53,8 @@
               autocomplete="off"
             />
           </mat-form-field>
+        </div>
+        <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Dirección</mat-label>
             <input
@@ -199,9 +193,9 @@
           >
             <mat-option
               *ngFor="let Departamento of Departamentos"
-              [value]="Departamento.Id_Departamento"
+              [value]="Departamento.id"
             >
-              {{ Departamento.Nombre }}
+              {{ Departamento.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -210,9 +204,9 @@
           <mat-select formControlName="Municipio" required>
             <mat-option
               *ngFor="let Municipio of Municipios"
-              [value]="Municipio.Id_Municipio"
+              [value]="Municipio.value"
             >
-              {{ Municipio.Nombre }}
+              {{ Municipio.text }}
             </mat-option>
           </mat-select>
         </mat-form-field>

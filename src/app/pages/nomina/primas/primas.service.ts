@@ -43,4 +43,9 @@ export class PrimasService {
     return this.http.get(`${environment.base_url}/bonus-stubs/${params.anio}/${params.period}`, {headers, responseType: 'blob' as 'json'});
   }
 
+  getOneReportPdfs(params){
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/bonus-stub/${params.id}/${params.period}`,{headers, responseType: 'blob' as 'json'});
+  }
+
 }

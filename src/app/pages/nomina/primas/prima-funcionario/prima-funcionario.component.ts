@@ -140,13 +140,13 @@ export class PrimaFuncionarioComponent implements OnInit {
     }, [])
   }
 
-  donwloading: boolean
+  donwloadingExcel: boolean
   getReport() {
     let params = {
       anio: 2022,
       period: 2
     }
-    this.donwloading = true;
+    this.donwloadingExcel = true;
     this._primas.getReport(params)
       .subscribe((response: BlobPart) => {
         let blob = new Blob([response], { type: 'application/excel' });
@@ -158,10 +158,12 @@ export class PrimaFuncionarioComponent implements OnInit {
       }),
       error => { console.log('Error downloading the file'); this.loading = false },
       () => { console.info('File downloaded successfully'); this.loading = false };
+      this.donwloadingExcel = false
   }
 
   donwloadingPdfs: boolean
   getReportPdfs(){
+    this.donwloadingPdfs = true;
     let params = {
       anio: 2022,
       period: 2
@@ -174,9 +176,31 @@ export class PrimaFuncionarioComponent implements OnInit {
         link.href = window.URL.createObjectURL(blob);
         link.download = `${filename}.pdf`;
         link.click();
+        this.donwloadingPdfs = false;
       }),
       err=> { console.log('Error downloading the file'); this.loading = false },
       () => { console.info('File downloaded successfully'); this.loading = false };
+  }
+
+  donwloadingOne:boolean;
+  getOneReportPdfs(id, period) {
+    this.donwloadingOne = true;
+    let params = {
+      id,
+      period
+    }
+    this._primas.getOneReportPdfs(params)
+      .subscribe( (res:BlobPart)=>{
+        let blob = new Blob([res], {type: 'applicarion/pdf'});
+        let link = document.createElement("a");
+        const filename = 'colilla-prima'+params.period;
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.pdf`;
+        link.click();
+      }),
+      err=> { console.log('Error downloading the file'); this.loading = false },
+      () => { console.info('File downloaded successfully'); this.loading = false };
+      this.donwloadingOne = false;
   }
 
 }

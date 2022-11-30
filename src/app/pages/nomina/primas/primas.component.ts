@@ -70,8 +70,6 @@ export class PrimasComponent implements OnInit {
     let params = {
       periodo: semestre,
       yearSelected: this.year,
-     /*  fecha_inicio: new Date("01/01/2022"),
-      fecha_fin: new Date("06/30/2022") */
     }
     /* let params = {
       periodo: 1,
@@ -100,7 +98,6 @@ export class PrimasComponent implements OnInit {
             confirmButtonText: 'Sí, confirmar'
           })
         } else {
-
           this._swal.show({
             title: 'Prima',
             text: `Ya se ha generado un listado ¿Desea regenerar las primas del ${semestre} semestre ${params.yearSelected}?(periodo: ${lapso})`,

@@ -11,8 +11,19 @@
             <i class="far fa-file-excel"></i> Reporte
           </button>
           <button (click)="getReportPdfs()" class="btn btn-danger btn-sm">
-            <i class="far fa-file-pdf"></i> PDF
+            <span *ngIf="!donwloadingPdfs; else statusAll"
+                        ><i class="fas fa-file-pdf"></i> Descargar</span
+                      >
           </button>
+          <ng-template #statusAll>
+            <div
+              class="spinner-border spinner-border-sm"
+              role="status"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+            Descargando
+          </ng-template>
 
         </div>
       </div>
@@ -52,7 +63,7 @@
               <th>Salario</th>
               <th>Días Trabajados</th>
               <th>Monto</th>
-              <th>Acciones</th>
+              <th *ngIf="empleados.status=='pagado'"><i class="mdi mdi-chevron-down"></i></th>
             </tr>
           </thead>
           <tbody>
@@ -81,15 +92,67 @@
               <td class="text-right">
                 ${{ empleado.bonus | currency: "":"" }}
               </td>
-              <td class="align-middle">
+              <!-- <td class="align-middle" *ngIf="empleados.status=='pagado'">
                 <button
                   type="button"
-                  class="btn btn-primary btn-sm"
-                  (click)="getReportPdfs()"
+                  class="btn btn-danger btn-sm"
+                  (click)="getOneReportPdfs(empleados.bonus_person[i].bonus_id)"
                 >
-                  <i class="fas fa-eye"></i>
+                  <i class="fas fa-file-pdf"></i>
                 </button>
+              </td> -->
+
+              <td  *ngIf="empleados.status=='pagado'">
+                <div ngbDropdown container="body" class="dropdown-primary">
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-primary btn-sm waves-light"
+                    type="button"
+                  >
+                    <i class="mdi mdi-chevron-down"></i>
+                    <ng-template #statusOne>
+                      <div
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                      >
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                      Descargando
+                    </ng-template>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <!-- <button
+                      class="dropdown-item waves-light caja-botones"
+                      [ngClass]="{
+                        'text-info': vacation.pay_vacations.length > 0,
+                        'text-success': vacation.pay_vacations.length == 0
+                      }"
+                      (click)="openConfirm(add); vacationData(vacation)"
+                    >
+                      <i
+                        class="fas"
+                        [ngClass]="{
+                          'fa-eye': vacation.pay_vacations.length > 0,
+                          'fa-money-bill': vacation.pay_vacations.length == 0
+                        }"
+                      ></i>
+                      {{ vacation.pay_vacations.length > 0 ? "Ver" : "Pagar" }}
+                    </button> -->
+                    <button
+                      class="dropdown-item text-danger waves-light caja-botones"
+                      *ngIf="empleados.status=='pagado'"
+                      (click)="getOneReportPdfs(empleado.id, empleados.period)"
+                    >
+                      <span *ngIf="!donwloadingOne; else statusOne"
+                        ><i class="fas fa-file-pdf"></i> Descargar</span
+                      >
+
+                    </button>
+                  </div>
+                </div>
               </td>
+
+
 
 
             </tr>

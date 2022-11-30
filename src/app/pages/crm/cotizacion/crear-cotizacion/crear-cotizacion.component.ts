@@ -6,10 +6,14 @@ import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swa
 import { ApuPiezaService } from '../../apu-pieza/apu-pieza.service';
 import { BudgetService } from '../../presupuesto/budget.service';
 import Swal from 'sweetalert2';
+import { QuotationService } from '../quotation.service';
+import { HttpClient } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-crear-cotizacion',
   templateUrl: './crear-cotizacion.component.html',
-  styleUrls: ['./crear-cotizacion.component.scss']
+  styleUrls: ['./crear-cotizacion.component.scss'],
+  providers: [DatePipe]
 })
 export class CrearCotizacionComponent implements OnInit {
   @ViewChild('itemsQuotation') itemsQuotation;
@@ -24,19 +28,32 @@ export class CrearCotizacionComponent implements OnInit {
   apuPartInput$ = new Subject<string>();
   minLengthTerm = 3;
   budgets: any[] = []
+  trm:any;
 
   constructor(
     private _apuPieza: ApuPiezaService,
     private fb: FormBuilder,
     private _budgets: BudgetService,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private _quotation: QuotationService,
+    private http: HttpClient,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
+    this.getTRM();
     this.createForm();
     this.getCities();
     this.loadApuParts();
     this.getBudgets();
+  }
+
+  getTRM(){
+    let today = this.datePipe.transform(new Date(), 'yyyy-MM-dd')
+    this.http.get('https://www.datos.gov.co/resource/ceyp-9c7c.json', {params: {vigenciadesde: today}}).subscribe((res:any) => {
+      this.trm = res[0].valor
+      this.form.patchValue({trm: this.trm})
+    })
   }
 
   //*Typeahead que filtra el presupuesto
@@ -74,7 +91,7 @@ export class CrearCotizacionComponent implements OnInit {
         //console.log('si')
       } else if (choice && choice == 'no') {
         item.items.forEach(element => {
-          this.itemsQuotation.addItems(element)
+          this.itemsQuotation.addItems(element, 'only_item')
         });
       }
     })()
@@ -107,7 +124,22 @@ export class CrearCotizacionComponent implements OnInit {
       )
     );
   }
-
+  viewElements: boolean
+  disabledMoney() {
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: 'Esta acción no podrá cambiarse más adelante',
+      icon: 'question',
+    }).then((r) => {
+      if(r.isConfirmed){
+        this.form.controls.money_type.disable()
+        this.viewElements = true
+      } else {
+        this.form.get('money_type').reset()
+        this.viewElements = false
+      }
+    })
+  }
 
   createForm() {
     this.form = this.fb.group({
@@ -115,7 +147,7 @@ export class CrearCotizacionComponent implements OnInit {
       customer_id: ['', Validators.required],
       destinity_id: ['', Validators.required],
       line: ['', Validators.required],
-      trm: ['', Validators.required],
+      trm: [this.trm, Validators.required],
       project: ['', Validators.required],
       budget_included: ['', Validators.required],
       budget: [''],

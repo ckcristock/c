@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NumberPipePipe } from 'src/app/core/pipes/number-pipe.pipe';
 import { BudgetService } from 'src/app/pages/crm/presupuesto/budget.service';
 
 @Component({
@@ -12,27 +13,105 @@ export class ItemsQuotationComponent implements OnInit {
   itemsTodelete: Array<number> = [];
   subItemsToDelete: Array<number> = [];
   tempItem: FormGroup;
+  numberInput: any = '500000';
   constructor(
     private fb: FormBuilder,
+    private _numberPipe: NumberPipePipe
   ) { }
 
   ngOnInit(): void {
   }
 
 
-  addItems(item_to_add = null) {
-    console.log(item_to_add)
+  addItems(item_to_add = null, type) {
     let item = this.fb.group({
       subItems: this.fb.array([]),
       id: item_to_add ? item_to_add.id : '',
       name: item_to_add ? item_to_add.name : '',
-      value_cop: item_to_add ? item_to_add.value_cop : '',
-      value_usd: item_to_add ? item_to_add.value_usd : '',
+      ammount: 1,
+      value_cop: item_to_add ? this._numberPipe.transform(item_to_add.value_cop.toString(), '$') : 0,
+      value_usd: item_to_add ? this._numberPipe.transform(((item_to_add.value_cop / this.form.get('trm').value).toString()), '$') : 0,
+      total_cop: item_to_add ? this._numberPipe.transform(item_to_add.value_cop.toString(), '$') : 0,
+      total_usd: item_to_add ? item_to_add.value_usd : 0,
+      type: type == 'only_item' ? true : false,
     })
+
+
     const subItems = item.get('subItems') as FormArray
+    const ammount = item.get('ammount')
+
+    const money_type = this.form.get('money_type') //?CAMBIOS DE TRM
+    const money_type_value = this.form.get('money_type').value
+    this.changesValues(item, money_type_value)
+    ammount.valueChanges.subscribe(r => {
+      if (typeof r === 'string') {
+        const maskedVal = this._numberPipe.transform(r, '');
+        if (r !== maskedVal) {
+          item.patchValue({ ammount: maskedVal });
+        }
+      }
+      let value_cop = item.get('value_cop').value.toString().split(/[,$]+/).join('')
+      let value_usd = item.get('value_usd').value.toString().split(/[,$]+/).join('')
+
+      let total_cop = value_cop * r.split(',').join('')
+      let total_usd = value_usd * r.split(',').join('')
+      item.patchValue({
+        total_cop: this._numberPipe.transform(total_cop.toString(), '$'),
+        total_usd: total_usd
+      })
+    })
     this.items.push(item)
     return item;
   }
+
+  changesValues(item, money_type_value) {
+    const value_cop = item.get('value_cop')
+    const value_usd = item.get('value_usd')
+    if (money_type_value == 'cop') {
+      value_cop.valueChanges.subscribe(r => {
+        if (typeof r === 'string') {
+          const maskedVal = this._numberPipe.transform(r, '$');
+          if (r !== maskedVal) {
+            item.patchValue({ value_cop: maskedVal });
+          }
+        }
+        let trm = this.form.get('trm').value
+        let value_cop = item.get('value_cop').value.toString().split(/[,$]+/).join('')
+        let ammount = item.get('ammount').value.toString().split(',').join('')
+        let value_usd = value_cop / trm
+        let total_cop = value_cop * ammount
+        let total_usd = value_usd * ammount
+        item.patchValue({
+          value_usd: this._numberPipe.transform(value_usd.toString(), '$'),
+          total_cop: this._numberPipe.transform(total_cop.toString(), '$'),
+          total_usd: this._numberPipe.transform(total_usd.toString(), '$'),
+        })
+      })
+    }
+
+    if (money_type_value == 'usd') {
+      value_usd.valueChanges.subscribe(r => {
+        if (typeof r === 'string') {
+          const maskedVal = this._numberPipe.transform(r, '$');
+          if (r !== maskedVal) {
+            item.patchValue({ value_cop: maskedVal });
+          }
+        }
+        let trm = this.form.get('trm').value
+        let value_usd = item.get('value_usd').value.toString().split(/[,$]+/).join('')
+        let ammount = item.get('ammount').value.toString().split(',').join('')
+        let value_cop = value_usd * trm
+        let total_usd = value_usd * ammount
+        let total_cop = value_cop * ammount
+        item.patchValue({
+          value_cop: this._numberPipe.transform(value_cop.toString(), '$'),
+          total_usd: this._numberPipe.transform(total_usd.toString(), '$'),
+          total_cop: this._numberPipe.transform(total_cop.toString(), '$'),
+        })
+      })
+    }
+  }
+
 
   addSubItem(group: FormGroup) {
     const subItems = group.get('subItems') as FormArray
@@ -64,6 +143,10 @@ export class ItemsQuotationComponent implements OnInit {
       id: ((edit && pre?.id) ? pre.id : ''),
     })
   }
+
+  /* console() {
+    console.log(this.form.value)
+  } */
 
   deleteItem(pos) {
     const id = this.items.at(pos).get('id').value;

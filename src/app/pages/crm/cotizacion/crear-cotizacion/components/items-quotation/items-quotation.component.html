@@ -3,33 +3,75 @@
     <h5 class="text-center">Elementos</h5>
     <ng-container *ngIf="items.controls.length; else notData">
       <ng-container>
-        <table class="table table-light">
-          <thead class="thead-light">
-            <tr>
-              <th>#</th>
-              <th>Nombre</th>
-              <th>Total COP</th>
-              <th>Total USD</th>
-              <th>Eliminar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of items.controls; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ item.value.name }}</td>
-              <td>{{ item.value.value_cop }}</td>
-              <td>{{ item.value.value_usd }}</td>
-              <td>
-                <i
-                  ngbTooltip="Eliminar elemento {{ i + 1 }}"
-                  (click)="deleteItem(i)"
-                  role="button"
-                  class="text-danger fas fa-trash-alt bg-white"
-                ></i>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="rounded-top table-responsive">
+          <table
+            class="table table-bordered table-sm text-nowrap table-custom-quotation"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th rowspan="2">#</th>
+                <th rowspan="2">Descripción</th>
+                <th rowspan="2">Cantidad</th>
+                <th colspan="2">Valor unitario</th>
+                <th colspan="2">Valor total</th>
+                <th rowspan="2"><i class="fas fa-trash"></i></th>
+              </tr>
+              <tr class="text-center text-uppercase">
+                <th>COP</th>
+                <th>USD</th>
+                <th>COP</th>
+                <th>USD</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container
+                [formGroupName]="i"
+                *ngFor="let item of items.controls; let i = index"
+              >
+                <tr
+                  class="text-center"
+                  [class]="item.value.type ? 'table-primary' : 'bg-white'"
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <input
+                      type="text"
+                      class="text-left"
+                      formControlName="name"
+                    />
+                  </td>
+                  <td>
+                    <input formControlName="ammount" />
+                  </td>
+                  <!-- [(ngModel)]="form.value.items[i]." [ngModelOptions]="{
+                  standalone: true, updateOn: 'blur' }"
+                  [ngModel]="form.value.items[i].ammount | numberPipe"
+                  (ngModelChange)="form.value.items[i].ammount = $event" -->
+                  <td>
+                    <input formControlName="value_cop" [readOnly]="this.form.get('money_type').value == 'usd'"/>
+                  </td>
+                  <td>
+                    <input formControlName="value_usd" [readOnly]="this.form.get('money_type').value == 'cop'"/>
+                  </td>
+                  <td>
+                    <input formControlName="total_cop" disabled />
+                  </td>
+                  <td>
+                    <input formControlName="total_usd" disabled />
+                  </td>
+                  <td>
+                    <i
+                      ngbTooltip="Eliminar elemento {{ i + 1 }}"
+                      (click)="deleteItem(i)"
+                      role="button"
+                      class="text-danger fas fa-trash-alt bg-white"
+                    ></i>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
         <!-- <div class="rounded-top table-responsive">
           <table
             [formGroupName]="i"
@@ -98,10 +140,18 @@
       </ng-container>
     </ng-container>
     <div class="btn-group btn-block" role="group">
-      <button (click)="addItems()" class="btn btn-primary btn-sm" type="button">
+      <button
+        (click)="addItems(null, 'only_item')"
+        class="btn btn-primary btn-sm"
+        type="button"
+      >
         <i class="fas fa-plus"></i> Agregar subtítulo
       </button>
-      <button (click)="addItems()" class="btn btn-warning btn-sm" type="button">
+      <button
+        (click)="addItems(null, 'subitem')"
+        class="btn btn-warning btn-sm"
+        type="button"
+      >
         <i class="fas fa-plus"></i> Agregar fila
       </button>
     </div>

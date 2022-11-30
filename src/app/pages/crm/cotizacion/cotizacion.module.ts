@@ -12,6 +12,7 @@ import { CotizacionRoutingModule } from "./cotizacion.routing.module";
 import { MatButtonModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSelectModule } from "@angular/material";
 import { ItemsQuotationComponent } from "./crear-cotizacion/components/items-quotation/items-quotation.component";
 import { SubitemsQuotationComponent } from "./crear-cotizacion/components/subitems-quotation/subitems-quotation.component";
+import { NumberPipePipe } from "src/app/core/pipes/number-pipe.pipe";
 
 
 @NgModule({
@@ -40,9 +41,11 @@ import { SubitemsQuotationComponent } from "./crear-cotizacion/components/subite
     MatIconModule,
     MatButtonModule,
     MatPaginatorModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    DirectivesModule,
   ],
   exports: [],
+  providers: [NumberPipePipe]
 })
 
 export class CotizacionModule { }

@@ -25,8 +25,8 @@ export class SubcategoryService {
     return this.http.put(`${environment.base_url}/subcategory/${id}`, data);
   }
 
-  deleteVariable( id, data = {} ){
-    return this.http.post(`${environment.base_url}/subcategory-variable/${id}`, data)
+  deleteVariable( id){
+    return this.http.delete(`${environment.base_url}/subcategory-variable/${id}`);
 }
 
 

@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-primary btn-sm" (click)="openModal(add)">
+          <button class="btn btn-primary btn-sm" (click)="openModal(add,'Agregar')">
             <i class="fa fa-plus"></i>
             Agregar
           </button>
@@ -86,7 +86,7 @@
                   <a
                     class="dropdown-item text-info waves-light"
                     href="javascript: void(0);"
-                    (click)="openModal(add); EditSubcategory(item)"
+                    (click)="openModal(add,'Editar'); EditSubcategory(item)"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
@@ -190,38 +190,42 @@
             *ngFor="let item of fieldDinamic.controls; let i = index"
             [formGroupName]="i"
           >
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Nombre</mat-label>
-              <input
-                matInput
-                type="text"
-                placeholder="Ingresa el nombre"
-                formControlName="label"
-                required
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Tipo</mat-label>
-              <mat-select formControlName="type" required>
-                <mat-option value="number">Number</mat-option>
-                <mat-option value="text">Text</mat-option>
-                <mat-option value="date">Date</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Requerido</mat-label>
-              <mat-select formControlName="required" required>
-                <mat-option value="Si">Sí</mat-option>
-                <mat-option value="No">No</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <div class="col-md-12 d-flex justify-content-end">
-              <button
-                class="btn btn-danger btn-sm"
-                (click)="deleteField(i, item)"
-              >
-                <i class="fas fa-trash-alt"></i>
-              </button>
+            <div class="col-md-11">
+              <mat-form-field class="col-4" appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Ingresa el nombre"
+                  formControlName="label"
+                  required
+                />
+              </mat-form-field>
+              <mat-form-field class="col-4" appearance="outline">
+                <mat-label>Tipo</mat-label>
+                <mat-select formControlName="type" required>
+                  <mat-option value="number">Number</mat-option>
+                  <mat-option value="text">Text</mat-option>
+                  <mat-option value="date">Date</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col-4" appearance="outline">
+                <mat-label>Requerido</mat-label>
+                <mat-select formControlName="required" required>
+                  <mat-option value="Si">Sí</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-1 d-flex justify-content-end align-items-center">
+              <div class="btn-group rounded w-sm-100 mat-form-field-wrapper">
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="deleteField(i, item)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
             </div>
           </ng-container>
         </ng-container>

@@ -73,24 +73,24 @@ export class SubcategoriasComponent implements OnInit {
     this.company_id = this._user.user.person.company_worked.id;
   }
 
-  search1 = (text$: Observable<string>) =>
+  /* search1 = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       map((term) =>
         term.length < 4 ? [] : this.Cuenta.filter((v) => v.Codigo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
     );
-  formatter1 = (x: { Codigo: string }) => x.Codigo;
+  formatter1 = (x: { Codigo: string }) => x.Codigo; */
 
   ngOnInit() {
     this.createForm();
     this.getSubcategory();
     this.listCategories();
-    this.http.get(environment.ruta + 'php/lista_generales.php', {
+   /*  this.http.get(environment.ruta + 'php/lista_generales.php', {
       params: { modulo: 'Bodega_Nuevo' },
     })
       .subscribe((data: any) => {
         this.Bodegas = data;
-      });
+      }); */
   }
 
   openClose() {
@@ -103,8 +103,13 @@ export class SubcategoriasComponent implements OnInit {
     }
   }
 
-  openModal(content) {
-    this._modal.open(content, 'lg')
+  openModal(content,accion) {
+    if(accion=="Agregar"){
+      this.createForm();
+      this.title = 'Agregar Subcategoria';
+    }
+    this._modal.open(content, 'lg');
+    this.fieldDinamic.clear();
   }
 
   createForm() {
@@ -181,7 +186,6 @@ export class SubcategoriasComponent implements OnInit {
       Nombre: this.Subcategory.Nombre,
       Separable: this.Subcategory.Separable,
     });
-    this.fieldDinamic.clear();
     console.log(this.Subcategory)
     /* this.Subcategory.Variables.forEach((element) => {
       let group = this.fb.group({
@@ -248,7 +252,7 @@ export class SubcategoriasComponent implements OnInit {
     };
   })();
 
-  EliminarRetencion(id) {
+ /*  EliminarRetencion(id) {
     let info = id;
     let datos = new FormData();
     datos.append('id', info);
@@ -262,16 +266,20 @@ export class SubcategoriasComponent implements OnInit {
         this.confirmacionSwal.show();
         this.getSubcategory();
       });
-  }
+  } */
 
   public GetDetallesCategoria(id_subcategoria: string) {
-    this.http
+    /* this.http
       .get(environment.ruta + 'php/parametros/get_detalles_subcategoria.php', {
         params: { id_subcategoria: id_subcategoria },
       })
       .subscribe((data: any) => {
         if (data.codigo == 'success') {
-          this.Retencion = data.query_result;
+          this.Retencion = data.query_result; */
+    this._subcategory.getSubCategorias( { idSubcategoria: id_subcategoria })
+      .subscribe((res: any) => {
+        if(res.code == 200){
+          this.Retencion = res.data.data;
           this.EditFlag = true;
           this.modal.show();
         } else {
@@ -281,19 +289,20 @@ export class SubcategoriasComponent implements OnInit {
             Id_Bodega: '',
             Separable: 'No',
           };
-          this._swalService.ShowMessage(data);
+          /* this._swalService.ShowMessage(data); */
+          this._swalService.ShowMessage(res.data.data);
         }
       });
   }
 
-  deleteSubcategory(id) {
+  /* deleteSubcategory(id) {
     this._swalService.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
       showCancel: true,
       text: ''
     })
-  }
+  } */
 
 
 }

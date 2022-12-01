@@ -1,9 +1,9 @@
 <div class="card">
   <div class="card-body">
-    <div class="row card-title d-flex justify-content-between" *ngIf="paginacion">
+    <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
         <h4 class="text-primary">
-          APU<span style="font-size: smaller">
+          APU<span style="font-size: smaller" *ngIf="paginacion">
             <small class="pb-2 text-secondary text-muted">
               pág. {{ paginacion.current_page }}
             </small>
@@ -185,7 +185,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm mb-0"
-        
         *ngIf="!loading && apus.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -198,7 +197,7 @@
             <th *ngIf="checkLinea">Linea</th>
             <th *ngIf="checkTipo">Tipo</th>
             <th>Descripción</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -209,7 +208,9 @@
             <td class="align-middle">{{ item.code }}</td>
             <td class="align-middle" *ngIf="checkNombre">{{ item.name }}</td>
             <td class="align-middle" *ngIf="checkDestino">{{ item.city }}</td>
-            <td class="align-middle" *ngIf="checkCliente">{{ item.custumer }}</td>
+            <td class="align-middle" *ngIf="checkCliente">
+              {{ item.custumer }}
+            </td>
             <td class="align-middle" *ngIf="checkLinea">{{ item.line }}</td>
             <td class="align-middle" *ngIf="checkTipo">{{ item.type_name }}</td>
             <td class="align-middle">{{ item.observation }}</td>
@@ -217,7 +218,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm  waves-light"
+                  class="btn btn-primary btn-sm waves-light"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -225,42 +226,42 @@
                 <div ngbDropdownMenu>
                   <a
                     *ngIf="item.type == 'S'"
-                    class="dropdown-item waves-light text-success  caja-botones"
+                    class="dropdown-item waves-light text-success caja-botones"
                     [routerLink]="['/crm/apu/ver-apu-servicio', item.apu_id]"
                   >
                     <i class="far fa-eye"></i> Ver
                   </a>
                   <a
                     *ngIf="item.type == 'P'"
-                    class="dropdown-item waves-light text-success  caja-botones"
+                    class="dropdown-item waves-light text-success caja-botones"
                     [routerLink]="['/crm/apu/ver-apu-pieza', item.apu_id]"
                   >
                     <i class="far fa-eye"></i> Ver
                   </a>
                   <a
                     *ngIf="item.type == 'C'"
-                    class="dropdown-item waves-light text-success  caja-botones"
+                    class="dropdown-item waves-light text-success caja-botones"
                     [routerLink]="['/crm/apu/ver-apu-conjunto', item.apu_id]"
                   >
                     <i class="far fa-eye"></i> Ver
                   </a>
                   <a
                     *ngIf="item.type == 'S'"
-                    class="dropdown-item waves-light text-info  caja-botones"
+                    class="dropdown-item waves-light text-info caja-botones"
                     [routerLink]="['/crm/apu/editar-apu-servicio', item.apu_id]"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
                   <a
                     *ngIf="item.type == 'P'"
-                    class="dropdown-item waves-light text-info  caja-botones"
+                    class="dropdown-item waves-light text-info caja-botones"
                     [routerLink]="['/crm/apu/editar-apu-pieza', item.apu_id]"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
                   <a
                     *ngIf="item.type == 'C'"
-                    class="dropdown-item waves-light text-info  caja-botones"
+                    class="dropdown-item waves-light text-info caja-botones"
                     [routerLink]="['/crm/apu/editar-apu-conjunto', item.apu_id]"
                   >
                     <i class="far fa-edit"></i> Editar

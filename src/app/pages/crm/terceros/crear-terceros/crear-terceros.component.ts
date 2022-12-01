@@ -17,10 +17,11 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./crear-terceros.component.scss'],
 })
 export class CrearTercerosComponent implements OnInit {
-
+  loading: boolean = true
   @ViewChild('stepper') stepper: MatHorizontalStepper;
   ngAfterViewInit() {
     this.stepper._getIndicatorType = () => 'number';
+
   }
   goBack() {
     this.stepper.previous();
@@ -294,6 +295,8 @@ export class CrearTercerosComponent implements OnInit {
       });
       if (this.id) {
         this.getThirdParty();
+      } else {
+        this.loading = false
       }
     })
   }
@@ -364,7 +367,7 @@ export class CrearTercerosComponent implements OnInit {
     this._terceros.getTypeDocuments().subscribe((r: any) => {
       this.documentTypes = r.data;
       this.documentTypes.forEach(type => {
-        if(type.code == 'NIT') {
+        if (type.code == 'NIT') {
           this.nitSelected = type.value
         }
       });
@@ -470,6 +473,7 @@ export class CrearTercerosComponent implements OnInit {
 
 
   getThirdParty() {
+    this.loading = true
     this._terceros.showThirdParty(this.id).subscribe((r: any) => {
       this.third = r.data;
       this.form.patchValue({
@@ -551,6 +555,7 @@ export class CrearTercerosComponent implements OnInit {
         this.personType();
         this.filterDepartments(this.third.country_id)
       }
+      this.loading = false
     })
   }
 

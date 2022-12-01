@@ -19,10 +19,10 @@
 <div *ngIf="menues.length > 0">
   <button
     [disabled]="saving"
-    class="btn-block btn btn-lg btn-primary"
+    class="btn-block btn btn-primary mt-3"
     (click)="save()"
   >
-    <span *ngIf="!saving; else status">Guardar Permisos</span>
+    <span *ngIf="!saving; else status">Actualizar permisos</span>
     <ng-template #status>
       <span
         class="spinner-border spinner-border-sm"

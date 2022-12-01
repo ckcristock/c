@@ -141,10 +141,11 @@ export class PrimaFuncionarioComponent implements OnInit {
   }
 
   donwloadingExcel: boolean
-  getReport() {
+  getReport(status) {
     let params = {
-      anio: 2022,
-      period: 2
+      anio: this.anio,
+      period: this.periodo,
+      status: (status=='pendiente') ? 0 : 1
     }
     this.donwloadingExcel = true;
     this._primas.getReport(params)
@@ -165,8 +166,8 @@ export class PrimaFuncionarioComponent implements OnInit {
   getReportPdfs(){
     this.donwloadingPdfs = true;
     let params = {
-      anio: 2022,
-      period: 2
+      anio: this.anio,
+      period: this.periodo
     }
     this._primas.getReportPdfs(params)
       .subscribe( (res:BlobPart)=>{

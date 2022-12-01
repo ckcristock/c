@@ -71,18 +71,13 @@ export class PrimasComponent implements OnInit {
       periodo: semestre,
       yearSelected: this.year,
     }
-    /* let params = {
-      periodo: 1,
-      yearSelected: 2022,
-      fecha_inicio: new Date("01/01/2022"),
-      fecha_fin: new Date("06/30/2022")
-    } */
+
     //console.log(params)
 
     this._primas.checkBonuses(params.yearSelected + '-' + params.periodo).subscribe(res => {
       //chequea en la DB si existe prima de este periodo
       if (res['data'] == null) {
-        this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo])
+        this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 0])
       } else {
         //si existe, si está paga o no
         if (res['data']['status'] == 'pagado') {
@@ -96,6 +91,10 @@ export class PrimasComponent implements OnInit {
             cancelButtonText: 'Cancelar',
             reverseButtons: true,
             confirmButtonText: 'Sí, confirmar'
+          }).then((res)=>{
+            if(res.isConfirmed){
+              this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 0])
+            }
           })
         } else {
           this._swal.show({
@@ -106,7 +105,7 @@ export class PrimasComponent implements OnInit {
           }, (res: any) => {
             if (res) {
               if (res) {
-                this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo])
+                this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 1])
               }
             }
           })
@@ -156,7 +155,7 @@ export class PrimasComponent implements OnInit {
     this._primas.setBonus(params)
       .subscribe((r: any) => {
         if (r.data != null) {
-          this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo])
+          this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 1])
         }
       })
   }

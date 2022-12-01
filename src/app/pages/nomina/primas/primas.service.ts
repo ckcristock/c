@@ -35,7 +35,7 @@ export class PrimasService {
 
   getReport(params){
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
-    return this.http.get(`${environment.base_url}/bonuses-report/${params.anio}/${params.period}`, {headers, responseType: 'blob' as 'json'})
+    return this.http.get(`${environment.base_url}/bonuses-report/${params.anio}/${params.period}/${params.status}`, {headers, responseType: 'blob' as 'json'})
   }
 
   getReportPdfs(params){

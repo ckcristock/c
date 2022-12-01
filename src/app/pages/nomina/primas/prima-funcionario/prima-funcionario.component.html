@@ -2,56 +2,56 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">{{empleados.status=='pagado' ? 'Resumen' : 'Pago'}} de prima</h4>
+        <h4 class="text-primary">
+          {{ empleados.status == "pagado" ? "Resumen" : "Pago" }} de prima
+        </h4>
       </div>
 
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button (click)="getReport()" class="btn btn-success btn-sm">
+          <button
+            (click)="getReport(empleados.status)"
+            class="btn btn-success btn-sm"
+          >
             <i class="far fa-file-excel"></i> Reporte
           </button>
-          <button (click)="getReportPdfs()" class="btn btn-danger btn-sm">
-            <span *ngIf="!donwloadingPdfs; else statusAll"
-                        ><i class="fas fa-file-pdf"></i> Descargar</span
-                      >
-          </button>
-          <ng-template #statusAll>
-            <div
-              class="spinner-border spinner-border-sm"
-              role="status"
+          <button
+            *ngIf="empleados.status == 'pagado'"
+            (click)="getReportPdfs()"
+            class="btn btn-danger btn-sm"
+          >
+            <span
+              ><i
+                class="fas"
+                [class]="!donwloadingPdfs ? 'fa-file-pdf' : 'fa-spinner fa-spin'"
+              ></i>
+              {{ !donwloadingPdfs ? "Descargar" : "Descargando" }}</span
             >
-              <span class="sr-only">Loading...</span>
-            </div>
-            Descargando
-          </ng-template>
-
+          </button>
         </div>
       </div>
     </div>
     <hr class="line" />
     <ng-container *ngIf="!loading && employees.length > 0; else notData">
-    <div
-      *ngIf="empleados.status=='pagado'">
-      <div
-        class="alert alert-success text-center m-0"
-        role="alert">
-        <b>Este listado ya se encuentra pago</b>
-      </div>
-      <div class="row">
-        <div class="col-lg-6 text-center py-3">
-          <b>Responsable del pago:
-            {{empleados.person_payer?.first_name}}
-            {{empleados.person_payer?.second_name}}
-            {{empleados.person_payer?.first_surname}}
-            {{empleados.person_payer?.second_surname}}
-          </b>
+      <div *ngIf="empleados.status == 'pagado'">
+        <div class="alert alert-success text-center m-0" role="alert">
+          <b>Este listado ya se encuentra pago</b>
         </div>
-        <div class="col-lg-6 text-center py-3">
-          <b>Periodo {{empleados.period}}</b>
+        <div class="row">
+          <div class="col-lg-6 text-center py-3">
+            <b
+              >Responsable del pago:
+              {{ empleados.person_payer?.first_name }}
+              {{ empleados.person_payer?.second_name }}
+              {{ empleados.person_payer?.first_surname }}
+              {{ empleados.person_payer?.second_surname }}
+            </b>
+          </div>
+          <div class="col-lg-6 text-center py-3">
+            <b>Periodo {{ empleados.period }}</b>
+          </div>
         </div>
       </div>
-
-    </div>
 
       <div class="rounded-top table-responsive">
         <table class="table table-bordered table-striped table-sm mb-0">
@@ -63,12 +63,14 @@
               <th>Salario</th>
               <th>Días Trabajados</th>
               <th>Monto</th>
-              <th *ngIf="empleados.status=='pagado'"><i class="mdi mdi-chevron-down"></i></th>
+              <th *ngIf="empleados.status == 'pagado'">
+                <i class="mdi mdi-chevron-down"></i>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr
-              *ngFor="let empleado of employees; let i=index"
+              *ngFor="let empleado of employees; let i = index"
               class="text-center text-uppercase"
             >
               <td>{{ i + 1 }}</td>
@@ -86,11 +88,11 @@
                 {{ empleado.first_surname }} {{ empleado.second_surname }}
               </td>
               <td class="text-right">
-                ${{ empleado.avg_salary | currency: "":"" }}
+                ${{ empleado.avg_salary | currency : "" : "" }}
               </td>
               <td class="text-center">{{ empleado.worked_days }}</td>
               <td class="text-right">
-                ${{ empleado.bonus | currency: "":"" }}
+                ${{ empleado.bonus | currency : "" : "" }}
               </td>
               <!-- <td class="align-middle" *ngIf="empleados.status=='pagado'">
                 <button
@@ -102,7 +104,7 @@
                 </button>
               </td> -->
 
-              <td  *ngIf="empleados.status=='pagado'">
+              <td *ngIf="empleados.status == 'pagado'">
                 <div ngbDropdown container="body" class="dropdown-primary">
                   <button
                     ngbDropdownToggle
@@ -140,21 +142,16 @@
                     </button> -->
                     <button
                       class="dropdown-item text-danger waves-light caja-botones"
-                      *ngIf="empleados.status=='pagado'"
+                      *ngIf="empleados.status == 'pagado'"
                       (click)="getOneReportPdfs(empleado.id, empleados.period)"
                     >
                       <span *ngIf="!donwloadingOne; else statusOne"
                         ><i class="fas fa-file-pdf"></i> Descargar</span
                       >
-
                     </button>
                   </div>
                 </div>
               </td>
-
-
-
-
             </tr>
           </tbody>
         </table>
@@ -169,14 +166,16 @@
       ></mat-paginator>
 
       <div class="alert alert-warning text-center" role="alert">
-        <b>TOTAL PRIMA: </b>$ {{ empleados.total_primas | currency: "":"" }}
+        <b>TOTAL PRIMA: </b>$ {{ empleados.total_primas | currency : "" : "" }}
       </div>
     </ng-container>
     <button
       class="btn btn-primary btn-block"
-      *ngIf="empleados.status!='pagado'"
+      *ngIf="empleados.status != 'pagado'"
       (click)="pagar(empleados)"
-      >Pagar</button>
+    >
+      Pagar
+    </button>
   </div>
 </div>
 

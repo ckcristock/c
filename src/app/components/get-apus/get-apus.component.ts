@@ -42,7 +42,7 @@ export class GetApusComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
 
   show() {
@@ -76,8 +76,8 @@ export class GetApusComponent implements OnInit {
       default:
         break;
     }
-    const url = this.href + `${uri}/${id}` ;   
-    
+    const url = this.href + `${uri}/${id}` ;
+
     window.open(url, '_blank');
   }
 
@@ -89,7 +89,6 @@ export class GetApusComponent implements OnInit {
     } else {
       this.state.push(apu)
     }
-
   }
 
   send() {

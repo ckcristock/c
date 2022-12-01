@@ -14,6 +14,22 @@ export class BodegasService {
     return this.http.get(`${environment.base_url}/paginateBodegas`, {params});
   }
 
+  getAllBodegas() {
+    return this.http.get(`${environment.base_url}/bodegas`);
+  }
+
+  getBodega( id:any ) {
+    return this.http.get(`${environment.base_url}/bodegas/${id}`);
+  }
+
+  getGruposBodega( id:any, params = {} ) {
+    return this.http.get(`${environment.base_url}/bodegas-with-estibas/${id}`, {params});
+  }
+
+  getEstibasGrupo( id:any, params = {} ) {
+    return this.http.get(`${environment.base_url}/grupos-with-estibas/${id}`, {params});
+  }
+
   createBodega( data:any ) {
     return this.http.post(`${environment.base_url}/bodegas`, data);
   }
@@ -28,17 +44,6 @@ export class BodegasService {
 
   activarInactivar( data:any ) {
     return this.http.post(`${environment.base_url}/bodegas-activar-inactivar`, data);
-  }
-
-  getBodega( id:any ) {
-    return this.http.get(`${environment.base_url}/bodegas/${id}`);
-  }
-
-  getGruposBodega( id:any, params = {} ) {
-    return this.http.get(`${environment.base_url}/bodegas-with-estibas/${id}`, {params});
-  }
-  getEstibasGrupo( id:any, params = {} ) {
-    return this.http.get(`${environment.base_url}/grupos-with-estibas/${id}`, {params});
   }
 
 }

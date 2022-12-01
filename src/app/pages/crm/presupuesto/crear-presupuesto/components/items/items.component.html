@@ -4,24 +4,24 @@
     <ng-container *ngIf="items.controls.length; else notData">
       <div *ngFor="let item of items.controls; let i = index">
         <div class="d-flex align-items-center justify-content-between">
-          <h4>
-            <span class="badge badge-primary">{{ i + 1 }}</span>
+          <h4 class="h4-custom">
+            <span class="badge badge-primary badge-custom">{{ i + 1 }}</span>
           </h4>
-          <span class="text-center">
-            <strong>ITEM {{ i + 1 }} </strong></span
-          >
-          <span class="text-center">
+          <div class="text-center w-100" [formGroupName]="i">
+            <input appAutoFocusDirective type="text" class="input-custom w-100" formControlName="name"/>
+          </div>
+          <div class="text-center span-custom">
             <i
               ngbTooltip="Eliminar Item"
               (click)="deleteItem(i)"
-              class="text-danger fas fa-trash-alt bg-white"
+              class="text-white fas fa-trash fa-xs"
             ></i>
-          </span>
+          </div>
         </div>
         <div class="rounded-top table-responsive">
           <table
             [formGroupName]="i"
-            class="table table-bordered table-striped table-sm text-nowrap"
+            class="table table-bordered table-sm text-nowrap table-custom"
           >
             <thead>
               <tr class="text-center text-uppercase table-primary">
@@ -88,7 +88,7 @@
                 <th></th>
                 <th></th>
               </tr>
-              <tr class="text-center text-uppercase">
+              <tr class="text-center text-uppercase bg-light">
                 <th class="align-middle">#</th>
                 <th class="align-middle">Tipo</th>
                 <th class="align-middle">Descripción</th>
@@ -421,7 +421,7 @@
                 </ng-container>
                 <tr class="bg-gray">
                   <td class="align-middle" colspan="6">
-                    SUBTOTAL ITEM {{ i + 1 }}
+                    SUBTOTAL
                   </td>
                   <td class="align-middle">
                     <div class="values">
@@ -571,10 +571,7 @@
           </table>
         </div>
         <div class="text-right">
-          <div
-            class="btn-group w-sm-100"
-            role="group"
-          >
+          <div class="btn-group w-sm-100" role="group">
             <button
               ngbTooltip="Agregar subitem manual"
               type="button"

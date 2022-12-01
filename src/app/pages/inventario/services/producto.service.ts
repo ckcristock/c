@@ -19,6 +19,12 @@ export class ProductoService {
     // private globales:Globales
   ) { }
 
+  getProductos( params = {} ) {
+    return this.client.get(environment.base_url + '/php/comprasnacionales/lista_productos', {params});
+  }
+
+  // ------------------------------------------------------------------------------------------
+
   getListaProductos(p: any): Observable<any> {
     return this.client.get(this._rutaBase + 'get_lista_productos.php', { params: p });
   }

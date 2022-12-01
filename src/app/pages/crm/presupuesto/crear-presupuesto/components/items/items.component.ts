@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { diffDates } from '@fullcalendar/core/util/misc';
 import { concat, Observable, of, OperatorFunction, Subject } from 'rxjs';
@@ -56,8 +56,9 @@ export class ItemsComponent implements OnInit {
       });
     }
   }
+  count = 0;
   addItems(itemToAdd = null) {
-
+    this.count++
     let item = this.fb.group(
       {
         shows: {
@@ -68,6 +69,7 @@ export class ItemsComponent implements OnInit {
         },
         subItems: this.fb.array([]),
         id: itemToAdd ? itemToAdd.id : '',
+        name: itemToAdd ? itemToAdd.name : 'ITEM ' + this.count,
         total_cost: itemToAdd ? itemToAdd.total_cost : 0,
         subtotal_indirect_cost_dynamic: this.makeTotalIndirectCost(),
         subtotal_indirect_cost: itemToAdd ? itemToAdd.subtotal_indirect_cost : 0,

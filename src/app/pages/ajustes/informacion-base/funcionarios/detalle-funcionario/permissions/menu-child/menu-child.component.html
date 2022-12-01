@@ -2,21 +2,30 @@
 <ng-template #titleTemplate let-navItems2>
   <div *ngFor="let item of navItems; let x = index">
     <ul class="list-group list-group-flush">
-      <li *ngIf="item.child && item.child.length > 0" class="list-group-item">
-        <details>
-          <summary>
-            <mat-slide-toggle
-              [color]="color"
-              [checked]="checked"
-              [disabled]="disabled"
-              class="font-weight-bold"
-              (change)="changeAll(item)"
-            >
-              {{ item.name }}
-            </mat-slide-toggle>
-          </summary>
-          <ul class="list-group list-group-flush">
-            <div [ngClass]="{ row: item.child.length == 0 }">
+      <li
+        *ngIf="item.child && item.child.length > 0"
+        class="list-group-item p-0"
+      >
+        <mat-accordion class="accordion-custom" multi>
+          <mat-expansion-panel class="mat-elevation-z0">
+            <mat-expansion-panel-header #panel1>
+              <mat-panel-title>
+                <mat-slide-toggle
+                  [color]="color"
+                  [checked]="item.checked"
+                  [disabled]="disabled"
+                  class="font-weight-bold"
+                  (change)="changeAll(item, $event); panel1._toggle()"
+                >
+                  {{ item.name }}
+                </mat-slide-toggle>
+              </mat-panel-title>
+              <mat-panel-description>
+                <span></span>
+                <i [class]="item.icon"></i>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ul class="list-group list-group-flush tree">
               <ng-container *ngIf="item.child.length > 0">
                 <ng-container *ngFor="let subitem of item.child">
                   <ng-container
@@ -28,9 +37,9 @@
                   </ng-container>
                 </ng-container>
               </ng-container>
-            </div>
-          </ul>
-        </details>
+            </ul>
+          </mat-expansion-panel>
+        </mat-accordion>
       </li>
     </ul>
   </div>
@@ -38,59 +47,64 @@
 
 <ng-template #sectionTemplate let-subitem>
   <ng-container *ngIf="subitem.parent_id && subitem.child.length == 0">
-    <div class="col col-md-3 d-flex align-items-stretch">
-      <div class="card border border-3 border-light w-100">
-        <div class="card-body">
-          <div class="card-title">
-            <h4 class="card-title">{{ subitem.name }}</h4>
-          </div>
-          <div class="row">
-            <div
-              *ngFor="let permit of subitem.permissions; let i = index"
-              class="col"
-            >
-              <mat-slide-toggle
-                [color]="color"
-                [checked]="permit.Activo == 1"
-                [disabled]="disabled"
-                (change)="permit.Activo = !permit.Activo"
-                id="{{ permit.menu_id + '-' + permit.permission_id }}"
-              >
-                {{ permit.public_name }}
-              </mat-slide-toggle>
-            </div>
-          </div>
+    <li class="d-flex justify-content-between mt-2 mx-5 item-permission">
+      <div
+        class="d-flex justify-content-between w-100"
+        (click)="activateAll(subitem.permissions)"
+      >
+        <div class="text-nowrap title-permission">
+          <i class="fas fa-dot-circle"></i> {{ subitem.name }}
         </div>
+        <div class="line-separator mx-1"></div>
       </div>
-    </div>
+      <div
+        *ngFor="let permit of subitem.permissions; let i = index"
+        class="text-nowrap d-inline"
+      >
+        <mat-slide-toggle
+          [color]="color"
+          [checked]="permit.Activo == 1"
+          class="mr-1"
+          [disabled]="disabled"
+          (change)="permit.Activo = !permit.Activo; isChecked(navItems)"
+          id="{{ permit.menu_id + '-' + permit.permission_id }}"
+        >
+          {{ permit.public_name }}
+        </mat-slide-toggle>
+      </div>
+    </li>
   </ng-container>
   <ng-container
     *ngIf="subitem.parent_id && subitem.child && subitem.child.length > 0"
   >
-    <li class="list-group-item">
-      <details>
-        <summary>
-          <mat-slide-toggle
-            [color]="color"
-            [checked]="checked"
-            [disabled]="disabled"
-            (change)="changeAll(subitem)"
-          >
-            {{ subitem.name }}
-          </mat-slide-toggle>
-        </summary>
-        <ng-container *ngFor="let subitem_ of subitem.child">
+    <li class="list-group-item p-0 ml-4">
+      <mat-accordion class="accordion-custom" multi>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header #panel2>
+            <mat-panel-title>
+              <mat-slide-toggle
+                [color]="color"
+                [checked]="subitem.checked"
+                [disabled]="disabled"
+                (change)="changeAll(subitem, $event); panel2._toggle()"
+              >
+                {{ subitem.name }}
+              </mat-slide-toggle>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
           <ul class="list-group list-group-flush">
-            <ng-container
-              *ngTemplateOutlet="
-                sectionTemplate;
-                context: { $implicit: subitem_ }
-              "
-            >
+            <ng-container *ngFor="let subitem_ of subitem.child">
+              <ng-container
+                *ngTemplateOutlet="
+                  sectionTemplate;
+                  context: { $implicit: subitem_ }
+                "
+              >
+              </ng-container>
             </ng-container>
           </ul>
-        </ng-container>
-      </details>
+        </mat-expansion-panel>
+      </mat-accordion>
     </li>
   </ng-container>
 </ng-template>

@@ -28,7 +28,7 @@ export class CrearCotizacionComponent implements OnInit {
   apuPartInput$ = new Subject<string>();
   minLengthTerm = 3;
   budgets: any[] = []
-  trm:any;
+  trm: any;
 
   constructor(
     private _apuPieza: ApuPiezaService,
@@ -48,11 +48,11 @@ export class CrearCotizacionComponent implements OnInit {
     this.getBudgets();
   }
 
-  getTRM(){
+  getTRM() {
     let today = this.datePipe.transform(new Date(), 'yyyy-MM-dd')
-    this.http.get('https://www.datos.gov.co/resource/ceyp-9c7c.json', {params: {vigenciadesde: today}}).subscribe((res:any) => {
+    this.http.get('https://www.datos.gov.co/resource/ceyp-9c7c.json', { params: { vigenciadesde: today } }).subscribe((res: any) => {
       this.trm = res[0].valor
-      this.form.patchValue({trm: this.trm})
+      this.form.patchValue({ trm: this.trm })
     })
   }
 
@@ -70,31 +70,52 @@ export class CrearCotizacionComponent implements OnInit {
   //*Fin del typeahead
 
   budgetSelected(item) {
-    (async () => {
-      const { value: choice } = await Swal.fire({
-        input: 'radio',
-        icon: 'question',
-        title: '¿Incluir detalles?',
-        inputOptions: {
-          'si': 'Sí',
-          'no': 'No',
-        },
-        confirmButtonColor: '#A3BD30',
-        confirmButtonText: 'Confirmar',
-        inputValidator: (value) => {
-          if (!value) {
-            return 'Debes seleccionar una acción!'
+    if (this.form.controls.money_type.value != '') {
+      (async () => {
+        const { value: choice } = await Swal.fire({
+          input: 'radio',
+          icon: 'question',
+          title: '¿Incluir detalles?',
+          text: 'La cotización estará ligada a este presupuesto y no podrá ser cambiada más adelante.',
+          inputOptions: {
+            'si': 'Sí',
+            'no': 'No',
+          },
+          confirmButtonColor: '#A3BD30',
+          confirmButtonText: 'Confirmar',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Debes seleccionar una acción!'
+            }
           }
+        })
+        if (choice && choice == 'si') {
+          this.form.controls.budget.disable()
+          this.form.controls.budget_included.disable()
+          item.items.forEach(element => {
+            this.itemsQuotation.addItems(element, 'subitems')
+          });
+        } else if (choice && choice == 'no') {
+          this.form.controls.budget.disable()
+          this.form.controls.budget_included.disable()
+          item.items.forEach(element => {
+            this.itemsQuotation.addItems(element, 'only_item')
+          });
+        } else {
+          this.form.controls.budget.reset()
         }
+      })()
+    } else {
+
+      this._swal.show({
+        icon: 'warning',
+        title: 'Faltan datos',
+        text: 'Elige el tipo de moneda antes de agregar un presupuesto',
+        showCancel: false
+      }).then(r=>{
+        this.form.get('budget').reset()
       })
-      if (choice && choice == 'si') {
-        //console.log('si')
-      } else if (choice && choice == 'no') {
-        item.items.forEach(element => {
-          this.itemsQuotation.addItems(element, 'only_item')
-        });
-      }
-    })()
+    }
   }
 
   getBudgets() {
@@ -131,7 +152,7 @@ export class CrearCotizacionComponent implements OnInit {
       text: 'Esta acción no podrá cambiarse más adelante',
       icon: 'question',
     }).then((r) => {
-      if(r.isConfirmed){
+      if (r.isConfirmed) {
         this.form.controls.money_type.disable()
         this.viewElements = true
       } else {

@@ -13,8 +13,6 @@ export class NumberPipePipe implements PipeTransform {
   }
 
   format_number(number, prefix) {
-    /* number = Number(number).toFixed(2)
-    number = number.toString() */
     let thousand_separator = ',',
       decimal_separator = '.',
       regex = new RegExp('[^' + decimal_separator + '\\d]', 'g'),
@@ -29,6 +27,11 @@ export class NumberPipePipe implements PipeTransform {
       result += separator + thousands.join(thousand_separator);
     }
     result = split[1] != undefined ? result + decimal_separator + split[1] : result;
+
+    let part1 = result.split('.')[0]
+    let part2length = result.split('.')[1]?.length ? result.split('.')[1]?.length : 0
+    let part2 = result.split('.')[1]?.slice(0, -part2length + 2) ? result.split('.')[1]?.slice(0, -part2length + 2) : 0
+    result = part2 ? part1 + '.' + part2 : part1
     return prefix == undefined ? result : (result ? prefix + result : '');
   };
 

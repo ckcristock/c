@@ -22,8 +22,13 @@ export class ItemsQuotationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  addSubItem(group: FormGroup, type) {
+    const subItems = group.get('subItems') as FormArray
+    subItems.push(this.makeSubItem(null, false, type))
+  }
 
   addItems(item_to_add = null, type) {
+    console.log(item_to_add)
     let item = this.fb.group({
       subItems: this.fb.array([]),
       id: item_to_add ? item_to_add.id : '',
@@ -32,16 +37,37 @@ export class ItemsQuotationComponent implements OnInit {
       value_cop: item_to_add ? this._numberPipe.transform(item_to_add.value_cop.toString(), '$') : 0,
       value_usd: item_to_add ? this._numberPipe.transform(((item_to_add.value_cop / this.form.get('trm').value).toString()), '$') : 0,
       total_cop: item_to_add ? this._numberPipe.transform(item_to_add.value_cop.toString(), '$') : 0,
-      total_usd: item_to_add ? item_to_add.value_usd : 0,
-      type: type == 'only_item' ? true : false,
+      total_usd: item_to_add ? this._numberPipe.transform(((item_to_add.value_cop / this.form.get('trm').value).toString()), '$') : 0,
+      type: type == 'only_item' ? false : true,
     })
 
-
     const subItems = item.get('subItems') as FormArray
+    /* if (type == 'subitems') {
+      this.addSubItem(item_to_add.subitem)
+    } */
     const ammount = item.get('ammount')
 
-    const money_type = this.form.get('money_type') //?CAMBIOS DE TRM
     const money_type_value = this.form.get('money_type').value
+    const trm = this.form.get('trm') //?CAMBIOS DE TRM
+    trm.valueChanges.subscribe(r => {
+      if (money_type_value == 'cop') {
+        let value_cop = item.get('value_cop').value.toString().split(/[,$]+/).join('')
+        let trm = this.form.get('trm').value
+        let value_usd = value_cop / trm
+        item.patchValue({
+          value_usd: this._numberPipe.transform(value_usd.toString(), '$'),
+          value_cop: this._numberPipe.transform(value_cop.toString(), '$'),
+        })
+      } else if (money_type_value == 'usd') {
+        let value_usd = item.get('value_usd').value.toString().split(/[,$]+/).join('')
+        let trm = this.form.get('trm').value
+        let value_cop = value_usd * trm
+        item.patchValue({
+          value_usd: this._numberPipe.transform(value_usd.toString(), '$'),
+          value_cop: this._numberPipe.transform(value_cop.toString(), '$'),
+        })
+      }
+    })
     this.changesValues(item, money_type_value)
     ammount.valueChanges.subscribe(r => {
       if (typeof r === 'string') {
@@ -52,15 +78,24 @@ export class ItemsQuotationComponent implements OnInit {
       }
       let value_cop = item.get('value_cop').value.toString().split(/[,$]+/).join('')
       let value_usd = item.get('value_usd').value.toString().split(/[,$]+/).join('')
+      let ammount = item.get('ammount').value.toString().split(/[,$]+/).join('')
 
-      let total_cop = value_cop * r.split(',').join('')
-      let total_usd = value_usd * r.split(',').join('')
+      let total_cop = value_cop * ammount.split(',').join('')
+      let total_usd = value_usd * ammount.split(',').join('')
       item.patchValue({
         total_cop: this._numberPipe.transform(total_cop.toString(), '$'),
-        total_usd: total_usd
+        total_usd: this._numberPipe.transform(total_usd.toString(), '$')
       })
     })
     this.items.push(item)
+    if (item_to_add && type == 'subitems') {
+      const subItems = item.get('subItems') as FormArray
+      item_to_add.subitems.forEach(subi => {
+
+        subItems.push(this.makeSubItem(subi, true, type))
+      });
+
+    }
     return item;
   }
 
@@ -113,13 +148,10 @@ export class ItemsQuotationComponent implements OnInit {
   }
 
 
-  addSubItem(group: FormGroup) {
-    const subItems = group.get('subItems') as FormArray
-    subItems.push(this.makeSubItem())
-  }
 
-  makeSubItem(pre = null, edit = false) {
-    const subItemGroup = this.makeSubItemGroup(pre, edit)
+
+  makeSubItem(pre = null, edit = false, type = '') {
+    const subItemGroup = this.makeSubItemGroup(pre, edit, type)
     return subItemGroup;
   }
 
@@ -138,15 +170,20 @@ export class ItemsQuotationComponent implements OnInit {
 
 
 
-  makeSubItemGroup(pre, edit = null) {
+  makeSubItemGroup(pre, edit = null, type) {
     return this.fb.group({
       id: ((edit && pre?.id) ? pre.id : ''),
+      description: ((edit && pre?.description) ? pre.description : ''),
+      cuantity: ((edit && pre?.cuantity) ? pre.cuantity : ''),
+      value_cop: ((edit && pre?.value_cop) ? pre.value_cop : ''),
+      value_usd: ((edit && pre?.value_usd) ? pre.value_usd : ''),
+      type: type == 'only_item' ? true : false,
     })
   }
 
-  /* console() {
+  printForm() {
     console.log(this.form.value)
-  } */
+  }
 
   deleteItem(pos) {
     const id = this.items.at(pos).get('id').value;

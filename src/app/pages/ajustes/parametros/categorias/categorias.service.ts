@@ -14,15 +14,15 @@ export class CategoriasService {
     /* return this.http.get(`${environment.base_url}/php/categoria_nueva/detalle_categoria_nueva_general.php`, {params}) */
   }
 
+  getCategorias() {
+    return this.http.get(`${environment.base_url}/category`)
+  }
+
   listarCategorias() {
     return this.http.get(`${environment.base_url}/list-categories`)
   }
 
-  /* getDepartamentos( params = {} ) {
-    return this.http.get(`${environment.base_url}/php/genericos/departamentos.php`, {params})
+  saveCategoria( data:any ) {
+    return this.http.post(`${environment.base_url}/category`, data);
   }
-
-  getCategoriasDep() {
-    return this.http.get(`${environment.base_url}/php/categoria_nueva/detalle_categoria_nueva_departamento.php`)
-  } */
 }

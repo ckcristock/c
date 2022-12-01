@@ -106,7 +106,7 @@ export class SubcategoriasComponent implements OnInit {
   openModal(content,accion) {
     if(accion=="Agregar"){
       this.createForm();
-      this.title = 'Agregar Subcategoria';
+      this.title = 'Agregar subcategoria';
     }
     this._modal.open(content, 'lg');
     this.fieldDinamic.clear();
@@ -148,10 +148,10 @@ export class SubcategoriasComponent implements OnInit {
       text: 'Vamos a eliminar este campo, esta acción no se puede revertir'
     }).then((result) => {
       if (result.isConfirmed) {
+        if(item.controls.id.value){
+          this._subcategory.deleteVariable(item.controls.id.value).subscribe((data: any) => { });
+        }
         this.fieldDinamic.removeAt(i);
-        this._subcategory
-          .deleteVariable(item.controls.id.value)
-          .subscribe((data: any) => { });
       }
     })
 
@@ -180,14 +180,14 @@ export class SubcategoriasComponent implements OnInit {
 
   EditSubcategory(data) {
     this.Subcategory = { ...data };
-    this.title = 'Editar Subcategoria';
+    this.title = 'Editar subcategoria';
     this.form.patchValue({
       Id_Subcategoria: this.Subcategory.Id_Subcategoria,
       Nombre: this.Subcategory.Nombre,
       Separable: this.Subcategory.Separable,
     });
-    console.log(this.Subcategory)
-    /* this.Subcategory.Variables.forEach((element) => {
+    //console.log(this.Subcategory);
+    this.Subcategory.subcategory_variables.forEach((element) => {
       let group = this.fb.group({
         id: element.id,
         label: element.label,
@@ -195,33 +195,42 @@ export class SubcategoriasComponent implements OnInit {
         required: element.required,
       });
       this.fieldDinamic.push(group);
-    }); */
+    });
   }
 
   SaveSubcategory() {
-    if (this.form.get('Id_Subcategoria').value) {
-      this._subcategory
-        .update(this.form.value, this.Subcategory.Id_Subcategoria)
-        .subscribe((r: any) => {
+    if(this.form.valid){
+      if (this.form.get('Id_Subcategoria').value) {
+        this._subcategory
+          .update(this.form.value, this.Subcategory.Id_Subcategoria)
+          .subscribe((r: any) => {
+            this.dataClear();
+            this._swalService.show({
+              icon: 'success',
+              title: 'Subcategoria actualizada con éxito',
+              text: '',
+              showCancel: false,
+              timer: 1000
+            });
+          });
+      } else {
+        this._subcategory.save(this.form.value).subscribe((r: any) => {
           this.dataClear();
           this._swalService.show({
             icon: 'success',
-            title: 'Subcategoria actualizada con éxito',
+            title: 'Subcategoria creada con éxito',
             text: '',
             showCancel: false,
             timer: 1000
           });
         });
+      }
     } else {
-      this._subcategory.save(this.form.value).subscribe((r: any) => {
-        this.dataClear();
-        this._swalService.show({
-          icon: 'success',
-          title: 'Subcategoria creada con éxito',
-          text: '',
-          showCancel: false,
-          timer: 1000
-        });
+      this._swalService.show({
+        icon: 'error',
+        title: 'Validación no superada',
+        text: 'Por favor verifique de nuevo la información.',
+        showCancel: false
       });
     }
   }

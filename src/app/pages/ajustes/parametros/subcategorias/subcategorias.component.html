@@ -191,31 +191,33 @@
             [formGroupName]="i"
           >
             <div class="col-md-11">
-              <mat-form-field class="col-4" appearance="outline">
-                <mat-label>Nombre</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Ingresa el nombre"
-                  formControlName="label"
-                  required
-                />
-              </mat-form-field>
-              <mat-form-field class="col-4" appearance="outline">
-                <mat-label>Tipo</mat-label>
-                <mat-select formControlName="type" required>
-                  <mat-option value="number">Number</mat-option>
-                  <mat-option value="text">Text</mat-option>
-                  <mat-option value="date">Date</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field class="col-4" appearance="outline">
-                <mat-label>Requerido</mat-label>
-                <mat-select formControlName="required" required>
-                  <mat-option value="Si">Sí</mat-option>
-                  <mat-option value="No">No</mat-option>
-                </mat-select>
-              </mat-form-field>
+              <div class="row">
+                <mat-form-field class="col-4" appearance="outline">
+                  <mat-label>Nombre</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Ingresa el nombre"
+                    formControlName="label"
+                    required
+                  />
+                </mat-form-field>
+                <mat-form-field class="col-4" appearance="outline">
+                  <mat-label>Tipo</mat-label>
+                  <mat-select formControlName="type" required>
+                    <mat-option value="number">Number</mat-option>
+                    <mat-option value="text">Text</mat-option>
+                    <mat-option value="date">Date</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-4" appearance="outline">
+                  <mat-label>Requerido</mat-label>
+                  <mat-select formControlName="required" required>
+                    <mat-option value="Si">Sí</mat-option>
+                    <mat-option value="No">No</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
             </div>
             <div class="col-md-1 d-flex justify-content-end align-items-center">
               <div class="btn-group rounded w-sm-100 mat-form-field-wrapper">
@@ -238,12 +240,12 @@
     </button>
     <button
       type="button"
-      [disabled]="!form.valid"
       (click)="SaveSubcategory()"
       class="btn btn-primary"
     >
       Guardar
     </button>
+      <!-- [disabled]="!form.valid" -->
   </div>
 </ng-template>
 

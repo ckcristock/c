@@ -13,6 +13,10 @@ export class SubcategoryService {
     return this.http.get(`${environment.base_url}/subcategory`, {params})
   }
 
+  listarSubCategorias(params = {}) {
+    return this.http.get(`${environment.base_url}/list-subcategories`, {params})
+  }
+
   save( data:any ){
     return this.http.post(`${environment.base_url}/subcategory`, data);
   }

@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-primary btn-sm" (click)="openModal(add)">
+          <button class="btn btn-primary btn-sm" (click)="openModal(add,'Agregar')">
             <i class="fa fa-plus"></i>
             Agregar
           </button>
@@ -31,51 +31,33 @@
               placeholder="Busca por nombre"
             />
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Departamento</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por departamento"
-              [(ngModel)]="filters.departamento"
-              (input)="paginacion()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Municipio</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por municipio"
-              [(ngModel)]="filters.municipio"
-              (input)="paginacion()"
-              autocomplete="off"
-            />
-          </mat-form-field>
         </div>
         <div class="row">
           <mat-form-field class="col" appearance="outline">
-            <mat-label>Dirección</mat-label>
-            <input
+            <mat-label>Compra internacional</mat-label>
+            <mat-select
+              (selectionChange)="paginacion()"
+              [(ngModel)]="filters.compraInternacional"
               matInput
-              type="text"
-              placeholder="Busca por dirección"
-              [(ngModel)]="filters.direccion"
-              (input)="paginacion()"
-              autocomplete="off"
-            />
+              placeholder="Busca por compra internacional"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Si">Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
-            <mat-label>Teléfono</mat-label>
-            <input
+            <mat-label>Separación de categorias</mat-label>
+            <mat-select
+              (selectionChange)="paginacion()"
+              [(ngModel)]="filters.separacionCategorias"
               matInput
-              type="text"
-              placeholder="Busca por teléfono"
-              [(ngModel)]="filters.telefono"
-              (input)="paginacion()"
-              autocomplete="off"
-            />
+              placeholder="Busca por separación de categorias"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Si">Sí</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -88,20 +70,16 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Categoría</th>
-            <th>Departamento</th>
-            <th>Municipio</th>
-            <th>Dirección</th>
-            <th>Telefono</th>
+            <th>Compra internacional</th>
+            <th>Separacion de categorias</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr class="text-center" *ngFor="let categoria of categorias">
             <td>{{ categoria.Nombre }}</td>
-            <td>{{ categoria.NombreDepartamento }}</td>
-            <td>{{ categoria.NombreMunicipio }}</td>
-            <td>{{ categoria.Direccion }}</td>
-            <td>{{ categoria.Telefono }}</td>
+            <td>{{ categoria.Compra_Internacional }}</td>
+            <td>{{ categoria.Aplica_Separacion_Categorias }}</td>
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -115,7 +93,7 @@
                   <a
                     class="dropdown-item text-info waves-light caja-botones"
                     href="javascript: void(0);"
-                    (click)="EditarCategoria(categoria.Id_Categoria_Nueva)"
+                    (click)="EditarCategoria(categoria); openModal(add,'Editar')"
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
@@ -158,7 +136,7 @@
 
 <ng-template #add let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Nueva categoría</h4>
+    <h4 class="text-primary modal-title">{{ title }} categoría</h4>
     <button
       type="button"
       class="close"
@@ -185,57 +163,21 @@
           />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
-          <mat-label>Departamento</mat-label>
+          <mat-label>Compra internacional</mat-label>
           <mat-select
-            formControlName="Departamento"
-            (selectionChange)="Municipios_Departamento($event.value)"
+            formControlName="compraInternacional"
+            matInput
             required
           >
-            <mat-option
-              *ngFor="let Departamento of Departamentos"
-              [value]="Departamento.id"
-            >
-              {{ Departamento.name }}
-            </mat-option>
+            <mat-option value="Si">Sí</mat-option>
+            <mat-option value="No">No</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
-          <mat-label>Municipio</mat-label>
-          <mat-select formControlName="Municipio" required>
-            <mat-option
-              *ngFor="let Municipio of Municipios"
-              [value]="Municipio.value"
-            >
-              {{ Municipio.text }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Dirección</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Ingresa la dirección"
-            formControlName="Direccion"
-            required
-            autocomplete="off"
-          />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Teléfono</mat-label>
-          <input
-            matInput
-            type="number"
-            placeholder="Ingresa el teléfono"
-            formControlName="Telefono"
-            required
-            autocomplete="off"
-          />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Separación</mat-label>
+          <mat-label>Separación de categorias</mat-label>
           <mat-select
-            formControlName="Aplica_Separacion_Subcategorias"
+            formControlName="separacionCategorias"
+            matInput
             required
           >
             <mat-option value="Si">Sí</mat-option>
@@ -273,7 +215,7 @@
     </button>
   </div>
 </ng-template>
-
+<!--
 <app-modal-basic #modalCategoriaEditar [dialogClass]="'modal-lg'">
   <div class="app-modal-header">
     <h4 class="modal-title">Editar Categoria</h4>
@@ -311,73 +253,36 @@
         </div>
 
         <div class="col-md-3">
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">¿Aplica separación por Subcategorias?</label>
+              <select
+                name="Aplica_Separacion_Categorias"
+                id="Aplica_Separacion_Subcategorias"
+                [ngModel]="Categoria.Aplica_Separacion_Categorias"
+                class="form-control form-control-sm"
+                required
+              >
+                <option value="Si">Si</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+
+        <div class="col-md-6">
           <div class="form-group">
-            <label>Departamento</label>
+            <label for="">¿Aplica separación por Subcategorias?</label>
             <select
-              ngModel="{{ Categoria.Departamento }}"
-              class="form-control"
-              name="Departamento"
-              #SelectDepartamento
-              (change)="Municipios_Departamento($event.target.value)"
+              name="Aplica_Separacion_Categorias"
+              id="Aplica_Separacion_Subcategorias"
+              [ngModel]="Categoria.Aplica_Separacion_Categorias"
+              class="form-control form-control-sm"
               required
             >
-              <option>Seleccione Departamento</option>
-              <option
-                *ngFor="let Departamento of Departamentos"
-                [value]="Departamento.Id_Departamento"
-              >
-                {{ Departamento.Nombre }}
-              </option>
+              <option value="Si">Si</option>
+              <option value="No">No</option>
             </select>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Municipio</label>
-            <select
-              name="Municipio"
-              ngModel="{{ Categoria.Municipio }}"
-              class="form-control"
-            >
-              <option>Seleccione Municipio</option>
-              <option
-                *ngFor="let Municipio of Municipios"
-                [value]="Municipio.Id_Municipio"
-              >
-                {{ Municipio.Nombre }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-9">
-          <div class="form-group">
-            <label>Direccion</label>
-            <input
-              type="text"
-              name="Direccion"
-              placeholder=""
-              class="form-control"
-              ngModel="{{ Categoria.Direccion }}"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Telefono</label>
-            <input
-              type="text"
-              name="Telefono"
-              placeholder=""
-              class="form-control"
-              ngModel="{{ Categoria.Telefono }}"
-              required
-            />
           </div>
         </div>
       </div>
@@ -396,22 +301,6 @@
               [(ngModel)]="SubcategoriasSeleccionadas"
               [multiple]="true"
             ></ng-select>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label for="">¿Aplica separación por Subcategorias?</label>
-            <select
-              name="Aplica_Separacion_Categorias"
-              id="Aplica_Separacion_Subcategorias"
-              [ngModel]="Categoria.Aplica_Separacion_Categorias"
-              class="form-control form-control-sm"
-              required
-            >
-              <option value="Si">Si</option>
-              <option value="No">No</option>
-            </select>
           </div>
         </div>
       </div>
@@ -446,7 +335,7 @@
       </button>
     </div>
   </div>
-</app-modal-basic>
+</app-modal-basic> -->
 
 <swal #deleteSwal title="" text="" type="">
   <!-- <swal #deleteSwal title="Seleccione Opción" text="Debes seleccionar la Bodega" html="" icon="warning"></swal> -->

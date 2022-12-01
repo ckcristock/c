@@ -82,6 +82,7 @@ export class CategoriasComponent implements OnInit {
 
   openModal(content,action) {
     this.title = action;
+    if(action=="Agregar"){this.createForm();}
     this._modal.open(content, 'lg');
   }
 
@@ -144,7 +145,7 @@ export class CategoriasComponent implements OnInit {
       Id_Categoria_Nueva: this.Categoria.Id_Categoria_Nueva,
       Nombre:  this.Categoria.Nombre,
       compraInternacional: this.Categoria.Compra_Internacional,
-      separacionCategorias: this.Categoria.Compra_Internacional,
+      separacionCategorias: this.Categoria.Aplica_Separacion_Categorias,
       Subcategorias: this.Categoria.subcategories
     });
     /* this.http

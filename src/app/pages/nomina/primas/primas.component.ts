@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { PrimasService } from './primas.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-primas',
@@ -20,6 +21,11 @@ export class PrimasComponent implements OnInit {
   premiums: any[] = [];
   premiumsPeople: any[] = [];
   year = new Date().getFullYear();
+  pagination = {
+    pageSize: 5,
+    page: 1,
+    collectionSize: 0
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +36,7 @@ export class PrimasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.year);
+    this.getPrimasList();
     this.createForm();
     // this.getPrimasList();
     let year = new Date().getFullYear();
@@ -40,7 +46,7 @@ export class PrimasComponent implements OnInit {
   }
 
   closeResult = '';
-  public openConfirm(confirm) {
+  public openConfirmOld(confirm) {
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -48,11 +54,12 @@ export class PrimasComponent implements OnInit {
     });
   }
 
-  openConfirm2(){
+  openConfirm() {
+    //chequear que no exista prima en ese periodo
     let mes = new Date().getMonth();
     let semestre = 1;
-    let lapso: string ;
-    if (mes<=6) {
+    let lapso: string;
+    if (mes <= 6) {
       semestre = 1;
       lapso = ' enero - junio ';
     } else {
@@ -61,23 +68,50 @@ export class PrimasComponent implements OnInit {
 
     }
     let params = {
-      //periodo: this.form.get('periodo').value,
-      //yearSelected: this.form.get('year').value,
       periodo: semestre,
       yearSelected: this.year,
-      fecha_inicio: new Date("07/01/2022"),
-      fecha_fin: new Date("12/31/2022")
     }
-    this._swal.show({
-      title: 'Prima',
-      text: `¿Desea pagar primas del ${semestre} semestre? (periodo: ${lapso})`,
-      icon: 'warning',
-      showCancel: true
-    }, ((res)=>{
-      if (res) {
-        this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo])
+
+    //console.log(params)
+
+    this._primas.checkBonuses(params.yearSelected + '-' + params.periodo).subscribe(res => {
+      //chequea en la DB si existe prima de este periodo
+      if (res['data'] == null) {
+        this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 0])
+      } else {
+        //si existe, si está paga o no
+        if (res['data']['status'] == 'pagado') {
+          Swal.fire({
+            title: 'Prima',
+            html: 'Ya se ha pagado las primas del ' + semestre + ' semestre (periodo: ' + lapso + ' ' + this.year + ').' + '<br>' + 'Solo podrá visualizar',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#A3BD30',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true,
+            confirmButtonText: 'Sí, confirmar'
+          }).then((res)=>{
+            if(res.isConfirmed){
+              this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 0])
+            }
+          })
+        } else {
+          this._swal.show({
+            title: 'Prima',
+            text: `Ya se ha generado un listado ¿Desea regenerar las primas del ${semestre} semestre ${params.yearSelected}?(periodo: ${lapso})`,
+            icon: 'warning',
+            showCancel: true
+          }, (res: any) => {
+            if (res) {
+              if (res) {
+                this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 1])
+              }
+            }
+          })
+        }
       }
-    }))
+    });
   }
 
   private getDismissReason(reason: any) {
@@ -98,32 +132,32 @@ export class PrimasComponent implements OnInit {
     this.modalFuncionario.show();
   }
 
-  irAPago() {
-    this.modalService.dismissAll();
-    let params = {
-      periodo: this.form.get('periodo').value,
-      yearSelected: this.form.get('year').value,
-      fecha_inicio: new Date("07/01/2022"),
-      fecha_fin: new Date("12/31/2022")
-    }
-
-    this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo])
-  }
-
-  getPrimasList() {
+  getPrimasList(page = 1) {
     this.loading = true
-    this._primas.getPremiumList().subscribe((r: any) => {
-      this.loading = false
-      this.premiums = r.data;
-      console.log(r.data)
-    })
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination
+    }
+    this._primas.getPrimasPaginated(params)
+      .subscribe((r: any) => {
+        this.loading = false
+        this.premiums = r.data.data;
+        this.pagination.collectionSize = r.data.total
+      })
   }
 
-  VerPrimaFuncionarios(id_prima) {
-    this._primas.getPremiumPeople(id_prima).subscribe((r: any) => {
-      this.premiumsPeople = r.data;
-      this.modalFuncionario.show();
-    })
+  VerPrimaFuncionarios(period) {
+    let params = {
+      period: period,
+      yearSelected: period.split('-')[0],
+      periodo: period.split('-')[1],
+    }
+    this._primas.setBonus(params)
+      .subscribe((r: any) => {
+        if (r.data != null) {
+          this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 1])
+        }
+      })
   }
 
 }

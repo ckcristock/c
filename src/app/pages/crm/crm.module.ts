@@ -68,6 +68,7 @@ import { HistorialNegocioComponent } from './negocios/historial-negocio/historia
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material';
 import { ConfiguracionModule } from '../ajustes/configuracion/configuracion.module';
+import { PagesModule } from '../pages.module';
 
 @NgModule({
   declarations: [
@@ -141,7 +142,9 @@ import { ConfiguracionModule } from '../ajustes/configuracion/configuracion.modu
     MatAutocompleteModule,
     MatRadioModule,
     MatPaginatorModule,
-    MatTableModule
+    MatTableModule,
+    PagesModule,
+    NgbTypeaheadModule,
   ]
 })
 export class CrmModule { }

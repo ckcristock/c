@@ -12,10 +12,7 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -24,8 +21,30 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <div class="alert alert-danger" role="alert">
-          Aún no tenemos filtros para esta sección.
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="filters.name"
+              (input)="getRegimeTypes()"
+              name="name"
+              autocomplete="off"
+              placeholder="Busca por nombre"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select
+              [(ngModel)]="filters.state"
+              (selectionChange)="getRegimeTypes()"
+            >
+              <mat-option value="">Todos</mat-option>
+              <mat-option value="Activo">Activo</mat-option>
+              <mat-option value="Inactivo">Inactivo</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
@@ -33,14 +52,13 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && regimeTypes.length > 0; else notData"
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
             <th class="col-1">Estado</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -65,7 +83,8 @@
                 <div ngbDropdownMenu>
                   <a
                     (click)="
-                      getRegime(item); openConfirm(add, 'Editar tipo de régimen')
+                      getRegime(item);
+                      openConfirm(add, 'Editar tipo de régimen')
                     "
                     href="javascript: void(0);"
                     class="dropdown-item waves-light text-info caja-botones"

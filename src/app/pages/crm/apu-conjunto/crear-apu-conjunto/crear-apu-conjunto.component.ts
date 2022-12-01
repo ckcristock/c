@@ -25,45 +25,45 @@ interface ApuPart {
 })
 export class CrearApuConjuntoComponent implements OnInit {
   @Input('id') id;
-  @Input('data') data:any;
+  @Input('data') data: any;
   form: FormGroup;
   formGroup: FormGroup;
-  date:Date = new Date();
-  indirectCosts:any[] = [];
+  date: Date = new Date();
+  indirectCosts: any[] = [];
   files: File[] = [];
-  fileString:any = '';
+  fileString: any = '';
   file = '';
-  fileArr:any[] = [];
-  people:any[] = [];
-  cities:any[] = [];
-  clients:any[] = [];
-  apuParts:any[] = [];
-  apuSets:any[] = [];
-  otherCollapsed:boolean;
-  indirectCollapsed:boolean;
-  auiCollapsed:boolean;
+  fileArr: any[] = [];
+  people: any[] = [];
+  cities: any[] = [];
+  clients: any[] = [];
+  apuParts: any[] = [];
+  apuSets: any[] = [];
+  otherCollapsed: boolean;
+  indirectCollapsed: boolean;
+  auiCollapsed: boolean;
   people$: Observable<any>;
   peopleLoading = false;
   peopleInput$ = new Subject<string>();
   minLengthTerm = 3;
-  searching:boolean;
-  searchFailed:boolean;
-  searchingSet:boolean;
-  searchFailedSet:boolean;
+  searching: boolean;
+  searchFailed: boolean;
+  searchingSet: boolean;
+  searchFailedSet: boolean;
   calculationBase: any = {}
   @ViewChild('apus') apus: any
-    
-  constructor( 
-                private fb: FormBuilder,
-                private router: Router,
-                private _apuConjunto: ApuConjuntoService,
-                private _swal: SwalService,
-                private _calculationBase: CalculationBasesService
-              ) {
-                
-              }
 
-  ngOnInit():void {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private _apuConjunto: ApuConjuntoService,
+    private _swal: SwalService,
+    private _calculationBase: CalculationBasesService
+  ) {
+
+  }
+
+  ngOnInit(): void {
     // await this.getBases()
     this.getPeople();
     this.getCities();
@@ -75,24 +75,24 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.validateData();
     this.collapses();
     this.loadPeople();
-    
+
   }
 
-  collapses(){
+  collapses() {
     if (this.data == undefined) {
       return null;
     }
     (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
   }
 
-  getApuSets(){
-    this._apuConjunto.getApuSetList().subscribe((r:any) => {
+  getApuSets() {
+    this._apuConjunto.getApuSetList().subscribe((r: any) => {
       this.apuSets = r.data;
     })
   }
 
-  getApuPart(){
-    this._apuConjunto.getApuParts().subscribe((r:any) => {
+  getApuPart() {
+    this._apuConjunto.getApuParts().subscribe((r: any) => {
       this.apuParts = r.data;
     })
   }
@@ -110,7 +110,7 @@ export class CrearApuConjuntoComponent implements OnInit {
         switchMap(term => {
           let param = { name: term }
           return this._apuConjunto.getPeopleXSelect(param).pipe(
-            map( (r:any) => { return  r.data }),
+            map((r: any) => { return r.data }),
             catchError(() => of([])), // empty list on error
             tap(() => this.peopleLoading = false)
           )
@@ -130,7 +130,7 @@ export class CrearApuConjuntoComponent implements OnInit {
         catchError(() => {
           this.searchFailedSet = true;
           return of([]);
-      }))
+        }))
 
     ),
     tap(() => this.searchingSet = false)
@@ -149,7 +149,7 @@ export class CrearApuConjuntoComponent implements OnInit {
         catchError(() => {
           this.searchFailed = true;
           return of([]);
-      }))
+        }))
 
     ),
     tap(() => this.searching = false)
@@ -158,15 +158,15 @@ export class CrearApuConjuntoComponent implements OnInit {
   formatter = (x: { name: string }) => x.name;
 
   select(group: FormGroup, key, toUpdate) {
- 
+
     let control = group.get(key).value
     if (typeof control == 'object') {
       group.patchValue({ [toUpdate]: control['id'] })
     } else {
       group.patchValue({ [toUpdate]: '' })
     }
-/*         group.patchValue({ [key]: e.target.value })
-     return e.preventDefault() */
+    /*         group.patchValue({ [key]: e.target.value })
+         return e.preventDefault() */
   }
 
   findApus() {
@@ -201,15 +201,15 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.files.splice(this.files.indexOf(event), 1);
   }
 
-  createForm(){
+  createForm() {
     this.form = help.functionsApuConjunto.createForm(this.fb);
     help.functionsApuConjunto.listerTotalDirectCost(this.form);
   }
 
-  getIndirectCosts(){
-    this._apuConjunto.getIndirectCosts().subscribe((r:any) => {
+  getIndirectCosts() {
+    this._apuConjunto.getIndirectCosts().subscribe((r: any) => {
       this.indirectCosts = r.data;
-      if(!this.data){
+      if (!this.data) {
         this.indirectCostPush();
       }
     })
@@ -223,59 +223,59 @@ export class CrearApuConjuntoComponent implements OnInit {
     }
   }
 
-  getPeople(){
-    this._apuConjunto.getPeopleXSelect().subscribe((r:any) => {
+  getPeople() {
+    this._apuConjunto.getPeopleXSelect().subscribe((r: any) => {
       this.people = r.data;
     })
   }
 
-  getCities(){
-    this._apuConjunto.getCities().subscribe((r:any) => {
+  getCities() {
+    this._apuConjunto.getCities().subscribe((r: any) => {
       this.cities = r.data;
       help.functionsApuConjunto.cityRetention(this.form, this.cities);
     })
   }
 
-  getClients(){
-    this._apuConjunto.getClient().subscribe((r:any) => {
+  getClients() {
+    this._apuConjunto.getClient().subscribe((r: any) => {
       this.clients = r.data;
     })
   }
 
-  piecesSetsControl(item): FormGroup{
+  piecesSetsControl(item): FormGroup {
     let group = help.piecesSetsHelper.createPiecesSetsGroup(this.form, this.fb, item);
     return group;
   }
 
-  get piecesSetsList(){
+  get piecesSetsList() {
     return this.form.get('list_pieces_sets') as FormArray;
   }
 
-  newPiecesSets(){
+  newPiecesSets() {
     let machine = this.piecesSetsList;
     machine.push(this.piecesSetsControl(''))
   }
 
-  deletePiecesSets(i){
+  deletePiecesSets(i) {
     this.piecesSetsList.removeAt(i);
     piecesSetsHelper.subtotalPieceSets(this.piecesSetsList, this.form);
   }
 
-  machineToolsControl(): FormGroup{
+  machineToolsControl(): FormGroup {
     let group = help.machineToolHelper.createMachineToolGroup(this.form, this.fb);
     return group;
   }
 
-  get machineToolList(){
+  get machineToolList() {
     return this.form.get('machine_tools') as FormArray;
   }
 
-  newMachineTool(){
+  newMachineTool() {
     let machine = this.machineToolList;
     machine.push(this.machineToolsControl())
   }
 
-  deleteMachineTool(i){
+  deleteMachineTool(i) {
     this.machineToolList.removeAt(i);
     machineToolHelper.subtotalMachine(this.machineToolList, this.form);
   }
@@ -283,22 +283,22 @@ export class CrearApuConjuntoComponent implements OnInit {
   /************** Maquinas Herramientas termina ****************/
 
   /************** Procesos Internos Inicia ****************/
-  
-  internalProcessesControl(): FormGroup{
+
+  internalProcessesControl(): FormGroup {
     let group = help.internalProcessesHelper.createInternalProcessesGroup(this.form, this.fb);
     return group;
   }
 
-  get internalProcessList(){
+  get internalProcessList() {
     return this.form.get('internal_processes') as FormArray;
   }
 
-  newInternalProccesses(){
+  newInternalProccesses() {
     let internalProccess = this.internalProcessList;
     internalProccess.push(this.internalProcessesControl())
   }
 
-  deleteInternalProccess(i){
+  deleteInternalProccess(i) {
     this.internalProcessList.removeAt(i);
     internalProcessesHelper.subtotalInternalProcesses(this.internalProcessList, this.form)
   }
@@ -307,21 +307,21 @@ export class CrearApuConjuntoComponent implements OnInit {
 
   /************** Procesos Externos Inicia ****************/
 
-  externalProcessesControl(): FormGroup{
+  externalProcessesControl(): FormGroup {
     let group = help.externalProcessesHelper.createExternalProcessesGroup(this.form, this.fb);
     return group;
   }
 
-  get externalProcessList(){
+  get externalProcessList() {
     return this.form.get('external_processes') as FormArray;
   }
 
-  newExternalProccesses(){
+  newExternalProccesses() {
     let exteranlProccess = this.externalProcessList;
     exteranlProccess.push(this.externalProcessesControl())
   }
 
-  deleteExternalProccess(i){
+  deleteExternalProccess(i) {
     this.externalProcessList.removeAt(i);
     externalProcessesHelper.subtotalExternalProcesses(this.externalProcessList, this.form);
   }
@@ -330,40 +330,40 @@ export class CrearApuConjuntoComponent implements OnInit {
 
   /************** Otros Inicia ****************/
 
-  othersControl(): FormGroup{
+  othersControl(): FormGroup {
     let group = help.othersHelper.createOthersGroup(this.form, this.fb);
     return group;
   }
 
-  get othersList(){
+  get othersList() {
     return this.form.get('others') as FormArray;
   }
 
-  newOthersList(){
+  newOthersList() {
     let others = this.othersList;
     others.push(this.othersControl())
   }
 
-  deleteOthers(i){
+  deleteOthers(i) {
     this.othersList.removeAt(i);
     othersHelper.subtotalOthers(this.othersList, this.form);
   }
 
   /************** Otros Termina ****************/
-  
-  get indirecCostList(){
+
+  get indirecCostList() {
     return this.form.get('indirect_cost') as FormArray;
   }
-  
-  indirectCostPush(){
+
+  indirectCostPush() {
     let indirect_cost = this.form.get('indirect_cost') as FormArray;
     indirect_cost.clear();
     this.indirectCosts.forEach(element => {
       indirect_cost.push(this.indirectCostgroup(element, this.fb, this.form));
     });
   }
-  
-  indirectCostgroup(element, fb: FormBuilder, form: FormGroup){
+
+  indirectCostgroup(element, fb: FormBuilder, form: FormGroup) {
     let group = fb.group({
       name: [element.text],
       percentage: [element.percentage],
@@ -373,7 +373,7 @@ export class CrearApuConjuntoComponent implements OnInit {
     return group;
   }
 
-  save(){
+  save() {
     let filess = this.files;
     filess.forEach(elem => {
       let file = elem;
@@ -391,10 +391,10 @@ export class CrearApuConjuntoComponent implements OnInit {
       files: this.fileArr
     });
     console.log(this.form.value);
-    
+
     this._swal
       .show({
-        text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu conjunto`,
+        text: `Se dispone a ${this.id ? 'editar' : 'crear'} un apu conjunto`,
         title: '¿Está seguro?',
         icon: 'warning',
       })
@@ -415,7 +415,7 @@ export class CrearApuConjuntoComponent implements OnInit {
       });
   }
 
-  apuIdToCreateOrEdit(){
+  apuIdToCreateOrEdit() {
     let pieces_sets = this.form.get('list_pieces_sets') as FormArray;
     pieces_sets.controls.forEach(element => {
       let apu_id = element.get('apu_id').value.id
@@ -428,7 +428,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   showSuccess() {
     this._swal.show({
       icon: 'success',
-      text: `Apu conjunto ${ this.id ? 'editado' : 'creado' } con éxito`,
+      text: `Apu conjunto ${this.id ? 'editado' : 'creado'} con éxito`,
       title: 'Operación exitosa',
       showCancel: false,
     });

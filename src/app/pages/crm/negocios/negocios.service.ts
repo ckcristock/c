@@ -19,6 +19,10 @@ export class NegociosService {
     return this.http.get(`${this.url}/third-party`, { params })
   }
 
+  getThirds() {
+    return this.http.get(`${this.url}/third-parties-list`)
+  }
+
   saveNeg(data) {
     return this.http.post(`${this.url}/business`, data);
     // return new Observable(() => {
@@ -44,8 +48,12 @@ export class NegociosService {
     return this.http.get(`${this.url}/third-party-person`, { params });
   }
 
+  getThirdPartyPersonForThird(id) {
+    return this.http.get(`${this.url}/third-party-person-for-third/${id}`,);
+  }
+
   getCountries() {
-    return this.http.get(`${this.url}/countries`)
+    return this.http.get(`${this.url}/countries-with-departments`)
   }
 
   getCities(params = {}) {
@@ -102,7 +110,7 @@ export class NegociosService {
   }
 
   getTasks(id) {
-    return this.http.get(`${this.url}/get-tasks/${id}`)
+    return this.http.get(`${this.url}/get-tasks-business/${id}`)
   }
 
   saveTask( data:any ){

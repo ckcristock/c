@@ -41,6 +41,10 @@ export class TiposRegimenComponent implements OnInit {
     pageSize: 5,
     collectionSize: 0
   }
+  filters:any = {
+    name:'',
+    state:'',
+  };
 
   ngOnInit(): void {
     this.createForm();
@@ -68,7 +72,7 @@ export class TiposRegimenComponent implements OnInit {
 
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   createForm() {
@@ -81,7 +85,10 @@ export class TiposRegimenComponent implements OnInit {
   getRegimeTypes(page = 1) {
     this.pagination.page = page;
     this.loading = true;
-    this._regimeType.getRegimeType(this.pagination).subscribe((r: any) => {
+    let params = {
+      ...this.pagination, ...this.filters
+    }
+    this._regimeType.getRegimeType(params).subscribe((r: any) => {
       this.regimeTypes = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
@@ -98,7 +105,7 @@ export class TiposRegimenComponent implements OnInit {
 
   save() {
     this._regimeType.updateOrCreateRegimeType(this.form.value).subscribe((r: any) => {
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
       this.form.reset();
       this.getRegimeTypes();
       this._swal.show({

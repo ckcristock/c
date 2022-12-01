@@ -85,7 +85,6 @@ export class DatosBasicosComponent implements OnInit {
     this.basicDataService.getBasicsData(this.id)
       .subscribe((res: any) => {
         this.funcionario = res.data;
-        console.log(this.funcionario)
         this.loading = false;
         this.form.patchValue({
           address: this.funcionario.address,

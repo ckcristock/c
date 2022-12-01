@@ -6,12 +6,12 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class PayRollPaymentsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
 
-  getPayrollHistory() {
-    return this.http.get(`${environment.base_url}/payroll/history/payments`);
+  getPayrollHistory(params = {}) {
+    return this.http.get(`${environment.base_url}/payroll/history/payments`, { params });
   }
-  
-  
+
+
 }

@@ -7,30 +7,30 @@ import { environment } from 'src/environments/environment';
 })
 export class LoanService {
 
-  constructor( private http : HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  getAll(){
-    return this.http.get( `${environment.base_url}/loan`  )
+  getAll(params = {}) {
+    return this.http.get(`${environment.base_url}/loan-paginate`, { params })
   }
-  
-  save( body ){
-    return this.http.post( `${environment.base_url}/loan` ,  body )
+
+  save(body) {
+    return this.http.post(`${environment.base_url}/loan`, body)
   }
-  
-  getNextPayrolls(){
-    return this.http.get( `${environment.base_url}/payroll-nex-mouths`  )
+
+  getNextPayrolls() {
+    return this.http.get(`${environment.base_url}/payroll-nex-mouths`)
   }
-  accountPlains(){
-    return this.http.get( `${environment.base_url}/account-plan-list`  )
+  accountPlains() {
+    return this.http.get(`${environment.base_url}/account-plan-list`)
   }
-  
-  getBankList(){
-    return this.http.get( `${environment.base_url}/banks`  )
+
+  getBankList() {
+    return this.http.get(`${environment.base_url}/banks`)
   }
-  
+
   download(id, params = {}) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
-    return this.http.get(`${environment.base_url}/proyeccion_pdf/${id}`, {params, headers, responseType: 'blob' as 'json' });
+    return this.http.get(`${environment.base_url}/proyeccion_pdf/${id}`, { params, headers, responseType: 'blob' as 'json' });
   }
 
 }

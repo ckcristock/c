@@ -1,13 +1,10 @@
 <div class="card">
   <div class="card-body">
-    <div
-      class="row card-title d-flex justify-content-between"
-      *ngIf="paginacion"
-    >
+    <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
         <h4 class="text-primary">
           Terceros
-          <span style="font-size: smaller"
+          <span style="font-size: smaller" *ngIf="paginacion"
             ><small class="pb-2 text-secondary text-muted"
               >pág. {{ paginacion.current_page }}</small
             ></span
@@ -22,7 +19,10 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button class="btn btn-warning btn-sm" [routerLink]="['/ajustes/configuracion/campos-terceros']">
+          <button
+            class="btn btn-warning btn-sm"
+            [routerLink]="['/ajustes/configuracion/campos-terceros']"
+          >
             <i class="fas fa-user-edit"></i> Campos
           </button>
           <button class="btn btn-info btn-sm" (click)="openClose()">

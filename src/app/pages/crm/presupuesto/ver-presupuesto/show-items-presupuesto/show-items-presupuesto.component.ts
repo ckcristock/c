@@ -18,8 +18,6 @@ export class ShowItemsPresupuestoComponent implements OnInit {
 
   ngOnInit(): void {
     this.items = this.data.items.reduce((acc, el) => [...acc, { ...el, shows: this.shows }], [])
-    console.log(this.items);
-
   }
 
 }

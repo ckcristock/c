@@ -14,4 +14,16 @@ export class QuotationService {
   getQuotations( params = {} ) {
     return this.http.get(`${environment.base_url}/paginateQuotations`, {params});
   }
+
+  getAllQuotations() {
+    return this.http.get(`${environment.base_url}/quotations`);
+  }
+
+  updateQuotation(data:any, id){
+    return this.http.put(`${environment.base_url}/quotations/${id}`, data);
+  }
+
+  getTRM(params ={}){
+    return this.http.get('https://www.datos.gov.co/resource/ceyp-9c7c.json', {params})
+  }
 }

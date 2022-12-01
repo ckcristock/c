@@ -1,4 +1,4 @@
-<div class="row" *ngIf="!loading">
+<div class="row" *ngIf="!loading_cards && quotations_cards.length > 0">
   <div class="col-md-2">
     <div class="card">
       <div class="card-body p-3">
@@ -83,7 +83,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-lg-9">
+  <div [ngClass]="view_list ? 'col-lg-9' : 'col-lg-12'">
     <div class="card">
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
@@ -191,7 +191,7 @@
                 <th>Ciudad</th>
                 <th>Código</th>
                 <th>Cliente</th>
-                <th>Descripción</th>
+                <th class="col-4">Descripción</th>
                 <th>Estado</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
@@ -199,17 +199,25 @@
             <tbody>
               <tr
                 *ngFor="let item of quotations"
+                role="button"
                 class="text-center"
                 [ngClass]="{
-                  'text-danger font-weight-bold': item.status === 'Inactivo'
+                  'text-danger font-weight-bold': item.status === 'Inactivo',
+                  'text-info': item.selected
                 }"
               >
-                <td>{{ item.date | date: "MMM d, y, h:mm a" }}</td>
-                <td>{{ item.municipality.name }}</td>
-                <td>{{ item.code }}</td>
-                <td>{{ item.client.social_reason }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.status }}</td>
+                <td (click)="openList(item.id)">
+                  {{ item.date | date: "MMM d, y, h:mm a" }}
+                </td>
+                <td (click)="openList(item.id)">
+                  {{ item.municipality.name }}
+                </td>
+                <td (click)="openList(item.id)">{{ item.code }}</td>
+                <td (click)="openList(item.id)">
+                  {{ item.client.social_reason }}
+                </td>
+                <td (click)="openList(item.id)">{{ item.description }}</td>
+                <td (click)="openList(item.id)">{{ item.status }}</td>
                 <td>
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
@@ -221,39 +229,47 @@
                     </button>
                     <div ngbDropdownMenu>
                       <a
-                        class="dropdown-item waves-light text-info caja-botones"
+                        class="dropdown-item waves-light text-success caja-botones"
                         href="javascript: void(0);"
-                        ><i class="far fa-edit"></i> Ver</a
+                      >
+                        <i class="fas fa-eye"></i> Ver</a
+                      >
+                      <a
+                        class="dropdown-item waves-light text-primary caja-botones"
+                        href="javascript: void(0);"
+                        ><i class="fas fa-copy"></i> Copiar</a
                       >
                       <a
                         class="dropdown-item waves-light text-info caja-botones"
                         href="javascript: void(0);"
-                        ><i class="far fa-edit"></i> Copiar</a
+                        ><i class="fas fa-edit"></i> Editar</a
                       >
                       <a
-                        class="dropdown-item waves-light text-info caja-botones"
+                        class="dropdown-item waves-light text-secondary caja-botones"
                         href="javascript: void(0);"
-                        ><i class="far fa-edit"></i> Editar</a
+                        (click)="comments_quotation(comments, item.id)"
+                        ><i class="fas fa-comment"></i> Comentarios</a
                       >
                       <a
-                        class="dropdown-item waves-light text-info caja-botones"
+                        class="dropdown-item waves-light text-danger caja-botones"
                         href="javascript: void(0);"
-                        ><i class="far fa-edit"></i> Anular</a
+                        *ngIf="item.status != 'Anulada'"
+                        (click)="updateStatus('Anulada', item.id)"
+                        ><i class="fas fa-trash"></i> Anular</a
                       >
                       <a
-                        class="dropdown-item waves-light text-info caja-botones"
+                        class="dropdown-item waves-light text-primary caja-botones"
+                        *ngIf="item.status != 'Aprobada'"
                         href="javascript: void(0);"
-                        ><i class="far fa-edit"></i> Comentarios</a
+                        (click)="updateStatus('Aprobada', item.id)"
+                        ><i class="fas fa-thumbs-up"></i> Aprobar</a
                       >
                       <a
-                        class="dropdown-item waves-light text-info caja-botones"
+                        class="dropdown-item waves-light text-warning caja-botones"
+                        *ngIf="item.status != 'No aprobada'"
+                        (click)="updateStatus('No aprobada', item.id)"
                         href="javascript: void(0);"
-                        ><i class="far fa-edit"></i> Aprobar</a
-                      >
-                      <a
-                        class="dropdown-item waves-light text-info caja-botones"
-                        href="javascript: void(0);"
-                        ><i class="far fa-edit"></i> No aprobar</a
+                        ><i class="fas fa-thumbs-down"></i> No aprobar</a
                       >
                     </div>
                   </div>
@@ -278,14 +294,21 @@
       </div>
     </div>
   </div>
-  <div class="col-lg-3">
+  <div class="col-lg-3" *ngIf="view_list">
     <div class="card">
       <div class="card-body">
         <div class="d-flex justify-content-between">
-          <h5 class="card-title">Lista</h5>
+          <h5 class="card-title">
+            <span
+              class="badge badge-pill font-weight-normal"
+              [ngClass]="quotation.status == 'Aprobada' ? 'badge-primary' : ''"
+              >{{ quotation.status }}</span
+            >
+          </h5>
           <button
             type="button"
             class="close"
+            (click)="closeList()"
             data-dismiss="modal"
             aria-label="Close"
           >
@@ -300,4 +323,27 @@
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #comments let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Comentarios</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body"></div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button type="button" class="btn btn-primary">Guardar</button>
+  </div>
 </ng-template>

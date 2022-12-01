@@ -97,7 +97,6 @@ export class SalarioComponent implements OnInit {
       .subscribe((res: any) => {
         this.loading = false;
         this.salary_info = res.data;
-        console.log(this.salary_info)
         this.form.patchValue({
           id: this.salary_info.id,
           salary: this.salary_info.salary,

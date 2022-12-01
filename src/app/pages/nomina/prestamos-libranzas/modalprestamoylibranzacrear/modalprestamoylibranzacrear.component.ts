@@ -7,14 +7,17 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { Observable } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
 import { PrestamoModel } from './PrestamoModel';
 import { PersonService } from '../../../ajustes/informacion-base/persons/person.service';
 import { LoanService } from '../loan.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
-import { error } from '@angular/compiler/src/util';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-modalprestamoylibranzacrear',
@@ -22,14 +25,13 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./modalprestamoylibranzacrear.component.scss'],
 })
 export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
-  @ViewChild('modalPrestamoylibranza') modalPrestamoylibranza: any;
   @ViewChild('addPrestamoylibranza') addPrestamoylibranza: any;
   @Input() abrirModal: Observable<any> = new Observable();
   @Output() recargarLista: EventEmitter<any> = new EventEmitter();
 
   private _suscription: any;
   public Meses: any = [];
-  public Empleados: any = [];
+  public people: any = [];
   public modelo: PrestamoModel = new PrestamoModel();
   public cuotaDisabled: boolean = true;
   public inter: boolean = true;
@@ -38,36 +40,48 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
   public Bancos: any = [];
   public Comprobar: any = [];
   public PlanesCuenta: any = [];
+  form: FormGroup;
 
   constructor(
     private _person: PersonService,
     private _loan: LoanService,
     private modalService: NgbModal,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private _modal: ModalService,
+    private http: HttpClient,
+    private fb: FormBuilder,
   ) { }
 
   ngOnInit() {
     this._suscription = this.abrirModal.subscribe((data: any) =>
-      //this.modalPrestamoylibranza.show()
-      this.openConfirm(this.addPrestamoylibranza)
+      this.openModal(this.addPrestamoylibranza)
     );
+    this.createForm();
     this.getPlains();
     this.getEmpleados();
     this.getProximasQuincenas();
-    
   }
 
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.limpiarCampos()
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  createForm() {
+    this.form = this.fb.group({
+
+    })
   }
-  private getDismissReason(reason: any) {
-    
+  ngOnDestroy() {
+    if (this._suscription != null && this._suscription != undefined) {
+      this._suscription.unsubscribe();
+    }
+  }
+
+  openModal(modal) {
+    this.limpiarCampos();
+    this._modal.open(modal, 'lg');
+  }
+
+  getEmpleados() {
+    this._person.getAll({}).subscribe((r: any) => {
+      this.people = r.data;
+    });
   }
 
   getPlains() {
@@ -76,8 +90,6 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
     });
   }
 
-  changePerson() { }
-
   formatter4 = (x: { text: string }) => x.text;
   search4 = (text$: Observable<string>) =>
     text$.pipe(
@@ -85,7 +97,7 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
       map((term) =>
         term.length < 3
           ? []
-          : this.Empleados.filter(
+          : this.people.filter(
             (v) => v.text.toLowerCase().indexOf(term.toLowerCase()) > -1
           ).slice(0, 100)
       )
@@ -105,54 +117,65 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
 
   formatter1 = (x: { code: string }) => x.code;
 
-  ngOnDestroy() {
-    if (this._suscription != null && this._suscription != undefined) {
-      this._suscription.unsubscribe();
-    }
-  }
-  getEmpleados() {
-    this._person.getAll({}).subscribe((r: any) => {
-      this.Empleados = r.data;
-    });
-  }
+  formatter2 = (x: { Nombre_Niif: string }) => x.Nombre_Niif;
+  searchPC
+  search_cuenta_niif = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.searchPC = true)),
+      switchMap(term =>
+        this.http.get<readonly string[]>(environment.ruta + "php/plancuentas/filtrar_cuentas.php", { params: { coincidencia: term, tipo: 'niif' } }).pipe(
+          tap(() => this.searchPC = false),
+          catchError(() => {
+            this.searchPC = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.searchPC = false))
+    );
+
   ComprobarPrestamo(tipo) {
-    let empleado = this.modelo.person.id;
-    let Tipo = tipo;
-    /*  this.http.get(this.globales.ruta + 'php/prestamoylibranza/comprobar_prestamo.php', {params: { empleado: empleado,tipo: Tipo }}).subscribe((data: any) => {
-    this.Comprobar = data;
-    if(this.Comprobar.length > 0){
-    this.Comprobar.forEach(lista => {
-      if (lista.Estado == 'Pendiente') {
-        let swal = {
-          codigo: 'warning',
-          mensaje: 'El Empleado tiene un(a) ' + lista.Tipo + ' Activo(a)',
-          titulo: 'Empleado con ' + lista.Tipo + ' Vigente'
-        }
-        this.modelo.Empleado = '';
-        this.modelo.type = '';
-        this.swalService.ShowMessage(swal);
-      }
-    })
-    }
-
-
-    }); */
-  }
-  changeTipo(tipo) {
-    console.log(tipo)
     if (this.modelo.person.id) {
       /* this.modelo.type = tipo; */
       if (tipo == 'Libranza') {
         /*   this._loan.getBankList().subscribe((r: any) => (this.Bancos = r.data)); */
       }
+      let empleado = this.modelo.person.id;
+      let Tipo = tipo;
+      this.http.get(environment.ruta + 'php/prestamoylibranza/comprobar_prestamo.php', { params: { empleado: empleado, tipo: Tipo } }).subscribe((data: any) => {
+        this.Comprobar = data;
+        if (this.Comprobar.length > 0) {
+          this.Comprobar.forEach(lista => {
+            if (lista.state == 'Pendiente') {
+              this._swal.show({
+                icon: 'warning',
+                title: 'Empleado con ' + lista.type + ' vigente',
+                text: 'El empleado tiene un(a) ' + lista.type + ' activo(a)',
+                showCancel: false
+              })
+              this.modelo.person = '';
+              this.modelo.type = null;
+            }
+          })
+        }
+      });
     } else {
+      console.log(this.modelo.type)
+      this.modelo.type = ''
+      console.log(this.modelo.type)
       this._swal.show({
-        title: 'Falta Seleccionar el funcionario',
+        title: 'Selecciona un funcionario',
         icon: 'error',
-        text: 'Debe seleccionar un funcionario',
+        text: '',
         showCancel: false,
       });
     }
+
+  }
+  changeTipo(tipo) {
+
   }
   interesA(interes) {
     if (this.modelo.person.id) {
@@ -188,7 +211,6 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
           text: 'Prestamo/Libranza Creado con éxito',
           icon: 'success', showCancel: false
         })
-      //this.modalPrestamoylibranza.hide();
       this.modalService.dismissAll();
       this.recargarLista.next()
     }, err => {

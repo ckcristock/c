@@ -1,0 +1,187 @@
+<ng-container [formGroup]="form">
+  <div formArrayName="items">
+    <h5 class="text-center">Elementos</h5>
+    <ng-container *ngIf="items.controls.length; else notData">
+      <ng-container>
+        <div class="rounded-top table-responsive">
+          <table
+            class="table table-bordered table-sm text-nowrap table-custom-quotation"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th rowspan="2">#</th>
+                <th rowspan="2">Descripción</th>
+                <th rowspan="2">Cantidad</th>
+                <th colspan="2">Valor unitario</th>
+                <th colspan="2">Valor total</th>
+                <th rowspan="2"><i class="fas fa-trash"></i></th>
+              </tr>
+              <tr class="text-center text-uppercase">
+                <th>COP</th>
+                <th>USD</th>
+                <th>COP</th>
+                <th>USD</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container
+                [formGroupName]="i"
+                *ngFor="let item of items.controls; let i = index"
+              >
+                <tr
+                  class="text-center"
+                  [class]="item.value.type ? 'table-primary' : 'bg-white'"
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <div class="row">
+                      <div class="col">
+                        <input
+                          type="text"
+                          class="text-left"
+                          formControlName="name"
+                        />
+                      </div>
+                      <div class="col">
+                        <button
+                          (click)="addSubItem(item, 'subitem')"
+                          class="btn btn-warning btn-sm"
+                          type="button"
+                        >
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <input formControlName="ammount" />
+                  </td>
+                  <td>
+                    <input
+                      formControlName="value_cop"
+                      [readOnly]="this.form.get('money_type').value == 'usd'"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      formControlName="value_usd"
+                      [readOnly]="this.form.get('money_type').value == 'cop'"
+                    />
+                  </td>
+                  <td>
+                    <input formControlName="total_cop" disabled />
+                  </td>
+                  <td>
+                    <input formControlName="total_usd" disabled />
+                  </td>
+                  <td>
+                    <i
+                      ngbTooltip="Eliminar elemento {{ i + 1 }}"
+                      (click)="deleteItem(i)"
+                      role="button"
+                      class="text-danger fas fa-trash-alt bg-white"
+                    ></i>
+                  </td>
+                </tr>
+                <ng-container
+                  *ngIf="item.controls.subItems.controls.length; else notData2"
+                >
+                  <ng-container formArrayName="subItems">
+                    <ng-container
+                      [formGroupName]="y"
+                      *ngFor="
+                        let subItem of item.controls.subItems.controls;
+                        let y = index
+                      "
+                    >
+                      <tr
+                        [class]="
+                          subItem.value.type ? 'table-primary' : 'bg-white'
+                        "
+                      >
+                        <td class="align-middle">{{ i + 1 }}.{{ y + 1 }}</td>
+                        <td>
+                          <input
+                            type="text"
+                            class="text-left"
+                            formControlName="description"
+                          />
+                        </td>
+                        <td><input formControlName="cuantity" /></td>
+                        <td>
+                          <input
+                            formControlName="value_cop"
+                            [readOnly]="
+                              this.form.get('money_type').value == 'usd'
+                            "
+                          />
+                        </td>
+                        <td>
+                          <input
+                            formControlName="value_usd"
+                            [readOnly]="
+                              this.form.get('money_type').value == 'cop'
+                            "
+                          />
+                        </td>
+                        <td>
+                          <input
+                            formControlName="value_cop"
+                            [readOnly]="
+                              this.form.get('money_type').value == 'usd'
+                            "
+                          />
+                        </td>
+                        <td>
+                          <input
+                            formControlName="value_usd"
+                            [readOnly]="
+                              this.form.get('money_type').value == 'cop'
+                            "
+                          />
+                        </td>
+                        <td>
+                          <i
+                            ngbTooltip="Eliminar subitem {{ y + 1 }}"
+                            (click)="deleteSubItem(item, y)"
+                            role="button"
+                            class="text-danger fas fa-trash-alt bg-white"
+                          ></i>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </tbody>
+          </table>
+          <button (click)="printForm()">A</button>
+        </div>
+      </ng-container>
+    </ng-container>
+    <div class="btn-group btn-block" role="group">
+      <button
+        (click)="addItems(null, 'subitem')"
+        class="btn btn-primary btn-sm"
+        type="button"
+      >
+        <i class="fas fa-plus"></i> Agregar subtítulo
+      </button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #notData>
+  <div class="alert alert-warning text-center" role="alert">
+    ¡No hay datos aquí!
+  </div>
+</ng-template>
+<ng-template #notDataSubitems>
+  <tr>
+    <td colspan="100%" class="text-center p-0">
+      <div class="alert alert-warning text-center" role="alert">
+        ¡No hay datos aquí!
+      </div>
+    </td>
+  </tr>
+</ng-template>

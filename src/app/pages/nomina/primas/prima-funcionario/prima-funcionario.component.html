@@ -1,52 +1,184 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <span style="float: right;">
-                <a href="#" class="text-success ml-4 mt-2">
-                    <i class="far fa-file-excel"></i> Resumen Prima
-                </a>
-            </span>
-            <h4 style="float: right;">Empleados () </h4>
-            <h4>Pago de Prima</h4>
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">
+          {{ empleados.status == "pagado" ? "Resumen" : "Pago" }} de prima
+        </h4>
+      </div>
+
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            (click)="getReport(empleados.status)"
+            class="btn btn-success btn-sm"
+          >
+            <i class="far fa-file-excel"></i> Reporte
+          </button>
+          <button
+            *ngIf="empleados.status == 'pagado'"
+            (click)="getReportPdfs()"
+            class="btn btn-danger btn-sm"
+          >
+            <span
+              ><i
+                class="fas"
+                [class]="!donwloadingPdfs ? 'fa-file-pdf' : 'fa-spinner fa-spin'"
+              ></i>
+              {{ !donwloadingPdfs ? "Descargar" : "Descargando" }}</span
+            >
+          </button>
         </div>
-        <div class="mt-5">
-            <table class="table table-borderless table-striped">
-                <thead>
-                    <tr>
-                        <th>Persona</th>
-                        <th>Salario</th>
-                        <th>Formula Prima</th>
-                        <th>Calculos</th>
-                        <th>Pago a Empleado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+      </div>
+    </div>
+    <hr class="line" />
+    <ng-container *ngIf="!loading && employees.length > 0; else notData">
+      <div *ngIf="empleados.status == 'pagado'">
+        <div class="alert alert-success text-center m-0" role="alert">
+          <b>Este listado ya se encuentra pago</b>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <table class="table table-borderless table-striped">
-                    <tbody>
-                        <tr>
-                            <td class="text-left">
-                                Total Prima: {{ 0 | currency }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+          <div class="col-lg-6 text-center py-3">
+            <b
+              >Responsable del pago:
+              {{ empleados.person_payer?.first_name }}
+              {{ empleados.person_payer?.second_name }}
+              {{ empleados.person_payer?.first_surname }}
+              {{ empleados.person_payer?.second_surname }}
+            </b>
+          </div>
+          <div class="col-lg-6 text-center py-3">
+            <b>Periodo {{ empleados.period }}</b>
+          </div>
         </div>
-        <button class="btn btn-sm btn-info col-12 mt-3">Pagar Prima</button>
-    </div>
+      </div>
+
+      <div class="rounded-top table-responsive">
+        <table class="table table-bordered table-striped table-sm mb-0">
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th>#</th>
+              <th>Foto</th>
+              <th>Persona</th>
+              <th>Salario</th>
+              <th>Días Trabajados</th>
+              <th>Monto</th>
+              <th *ngIf="empleados.status == 'pagado'">
+                <i class="mdi mdi-chevron-down"></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let empleado of employees; let i = index"
+              class="text-center text-uppercase"
+            >
+              <td>{{ i + 1 }}</td>
+              <td class="align-middle p-0">
+                <div>
+                  <img
+                    [src]="empleado.image | image"
+                    onerror="this.src='../../../../assets/images/noprofile.png'"
+                    class="rounded-circle mx-auto img-fluid header-profile-user"
+                  />
+                </div>
+              </td>
+              <td class="text-left">
+                {{ empleado.first_name }} {{ empleado.second_name }}
+                {{ empleado.first_surname }} {{ empleado.second_surname }}
+              </td>
+              <td class="text-right">
+                ${{ empleado.avg_salary | currency : "" : "" }}
+              </td>
+              <td class="text-center">{{ empleado.worked_days }}</td>
+              <td class="text-right">
+                ${{ empleado.bonus | currency : "" : "" }}
+              </td>
+              <!-- <td class="align-middle" *ngIf="empleados.status=='pagado'">
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="getOneReportPdfs(empleados.bonus_person[i].bonus_id)"
+                >
+                  <i class="fas fa-file-pdf"></i>
+                </button>
+              </td> -->
+
+              <td *ngIf="empleados.status == 'pagado'">
+                <div ngbDropdown container="body" class="dropdown-primary">
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-primary btn-sm waves-light"
+                    type="button"
+                  >
+                    <i class="mdi mdi-chevron-down"></i>
+                    <ng-template #statusOne>
+                      <div
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                      >
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                      Descargando
+                    </ng-template>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <!-- <button
+                      class="dropdown-item waves-light caja-botones"
+                      [ngClass]="{
+                        'text-info': vacation.pay_vacations.length > 0,
+                        'text-success': vacation.pay_vacations.length == 0
+                      }"
+                      (click)="openConfirm(add); vacationData(vacation)"
+                    >
+                      <i
+                        class="fas"
+                        [ngClass]="{
+                          'fa-eye': vacation.pay_vacations.length > 0,
+                          'fa-money-bill': vacation.pay_vacations.length == 0
+                        }"
+                      ></i>
+                      {{ vacation.pay_vacations.length > 0 ? "Ver" : "Pagar" }}
+                    </button> -->
+                    <button
+                      class="dropdown-item text-danger waves-light caja-botones"
+                      *ngIf="empleados.status == 'pagado'"
+                      (click)="getOneReportPdfs(empleado.id, empleados.period)"
+                    >
+                      <span *ngIf="!donwloadingOne; else statusOne"
+                        ><i class="fas fa-file-pdf"></i> Descargar</span
+                      >
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <mat-paginator
+        [length]="empleados.empleados.length"
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="changePage($event)"
+        aria-label="Select page"
+      ></mat-paginator>
+
+      <div class="alert alert-warning text-center" role="alert">
+        <b>TOTAL PRIMA: </b>$ {{ empleados.total_primas | currency : "" : "" }}
+      </div>
+    </ng-container>
+    <button
+      class="btn btn-primary btn-block"
+      *ngIf="empleados.status != 'pagado'"
+      (click)="pagar(empleados)"
+    >
+      Pagar
+    </button>
+  </div>
 </div>
+
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

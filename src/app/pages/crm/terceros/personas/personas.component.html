@@ -1,13 +1,10 @@
 <div class="card">
   <div class="card-body">
-    <div
-      class="row card-title d-flex justify-content-between"
-      *ngIf="paginacion"
-    >
+    <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
         <h4 class="text-primary">
           Personas
-          <span style="font-size: smaller"
+          <span style="font-size: smaller" *ngIf="paginacion"
             ><small class="pb-2 text-secondary text-muted"
               >pág. {{ paginacion.current_page }}</small
             ></span
@@ -141,7 +138,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm mb-0"
-        
         *ngIf="!loading && people.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -166,7 +162,9 @@
               {{ person.cell_phone }}
             </td>
             <td class="align-middle" *ngIf="checkEmail">{{ person.email }}</td>
-            <td class="align-middle" *ngIf="checkCargo">{{ person.position }}</td>
+            <td class="align-middle" *ngIf="checkCargo">
+              {{ person.position }}
+            </td>
             <td class="align-middle" *ngIf="checkObservacion">
               {{ person.observation }}
             </td>

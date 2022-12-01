@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { diffDates } from '@fullcalendar/core/util/misc';
 import { concat, Observable, of, OperatorFunction, Subject } from 'rxjs';
@@ -33,7 +33,6 @@ export class ItemsComponent implements OnInit {
 
   ) { }
   ngOnInit(): void {
-    console.log(this.calculationBase);
 
     this.fillData();
 
@@ -47,7 +46,6 @@ export class ItemsComponent implements OnInit {
   }
 
   fillData() {
-    console.log(this.dataEdit, 'daaaaaaaaaaaa');
 
     if (this.dataEdit) {
       this.dataEdit.items.forEach(item => {
@@ -58,9 +56,9 @@ export class ItemsComponent implements OnInit {
       });
     }
   }
+  count = 0;
   addItems(itemToAdd = null) {
-    console.log(itemToAdd, 'ite,,');
-
+    this.count++
     let item = this.fb.group(
       {
         shows: {
@@ -71,6 +69,7 @@ export class ItemsComponent implements OnInit {
         },
         subItems: this.fb.array([]),
         id: itemToAdd ? itemToAdd.id : '',
+        name: itemToAdd ? itemToAdd.name : 'ITEM ' + this.count,
         total_cost: itemToAdd ? itemToAdd.total_cost : 0,
         subtotal_indirect_cost_dynamic: this.makeTotalIndirectCost(),
         subtotal_indirect_cost: itemToAdd ? itemToAdd.subtotal_indirect_cost : 0,
@@ -184,7 +183,6 @@ export class ItemsComponent implements OnInit {
 
   deleteSubItem(group: FormGroup, pos: number) {
     const subItems = group.get('subItems') as FormArray
-    console.log(subItems.at(pos));
 
     const id = subItems.at(pos).get('id').value;
     id ? this.subItemsToDelete.push(id) : ''
@@ -232,7 +230,6 @@ export class ItemsComponent implements OnInit {
     }
     /*     group.patchValue({ [key]: e.target.value }) */
     /*  return e.preventDefault() */
-    console.log(control);
 
     group.patchValue({ 'unit_cost': control.unit_direct_cost })
 
@@ -244,10 +241,8 @@ export class ItemsComponent implements OnInit {
     this.apus.openConfirm()
   }
   getApus(e: any[]) {
-    console.log(e);
 
     let subItems = this.tempItem.get('subItems') as FormArray
-    console.log(subItems.value);
 
     e.forEach(apu => {
       const exist = subItems.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
@@ -268,7 +263,6 @@ export class ItemsComponent implements OnInit {
     } else {
       description = (apu ? apu.name : '')
     }
-    console.log({ apu });
 
     return this.fb.group({
       id: ((edit && apu?.id) ? apu.id : ''),
@@ -352,7 +346,7 @@ export class ItemsComponent implements OnInit {
     const valueUtility = subItemGroup.get('value_utility')
 
     /* totalCost.valueChanges.subscribe(r => {
-     
+
     }) */
 
     perAmd.valueChanges.subscribe(r => {
@@ -470,7 +464,7 @@ export class ItemsComponent implements OnInit {
     })
 
     /*   const percentage = subItem.get('percentage_sale').value
-        let value_prorrota_usd = 0 
+        let value_prorrota_usd = 0
         if (percentage > 0 && trm.value >0) {
           value_prorrota_usd = (percentage / 100 * r) * trm.value
         } */
@@ -589,7 +583,6 @@ export class ItemsComponent implements OnInit {
           const indirectCosts: Array<any> = subItem.get('indirect_costs').value
           total += indirectCosts.find(x => x.indirect_cost_id == id).value
         });
-        console.log(indirectTotals);
 
 
         const toUpdate = indirectTotals.controls.find(r => r.get('indirect_cost_id').value == id);

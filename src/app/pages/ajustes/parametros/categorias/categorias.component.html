@@ -69,14 +69,14 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th>Categoría</th>
+            <th>Nombre</th>
             <th>Compra internacional</th>
             <th>Separacion de categorias</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
-          <tr class="text-center" *ngFor="let categoria of categorias">
+          <tr class="text-center" [ngClass]="(categoria.Activo==0)?'text-danger':''" *ngFor="let categoria of categorias">
             <td>{{ categoria.Nombre }}</td>
             <td>{{ categoria.Compra_Internacional }}</td>
             <td>{{ categoria.Aplica_Separacion_Categorias }}</td>
@@ -92,17 +92,24 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item text-info waves-light caja-botones"
-                    href="javascript: void(0);"
+                    role="button"
                     (click)="EditarCategoria(categoria); openModal(add,'Editar')"
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
-                  <a
+                  <a *ngIf="categoria.Activo==1"
                     class="dropdown-item text-danger waves-light caja-botones"
-                    href="javascript: void(0);"
-                    (click)="inOff(categoria.Id_Categoria_Nueva)"
+                    role="button"
+                    (click)="inOff(categoria.Id_Categoria_Nueva,0)"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
+                  >
+                  <a *ngIf="categoria.Activo==0"
+                    class="dropdown-item text-primary waves-light caja-botones"
+                    role="button"
+                    (click)="inOff(categoria.Id_Categoria_Nueva,1)"
+                  >
+                    <i class="far fa-trash-alt"></i> Reactivar</a
                   >
                 </div>
               </div>
@@ -115,8 +122,8 @@
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"
-      [pageSize]="pagination.maxSize"
-      [(page)]="pagination.pag"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
       (pageChange)="paginacion($event)"
       aria-label="Default pagination"
       maxSize="5"
@@ -183,7 +190,7 @@
             <mat-option value="Si">Sí</mat-option>
             <mat-option value="No">No</mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field><!--
         <div class="col-md-12">
           <ng-select
             appearance="outline"
@@ -197,7 +204,7 @@
             loadingText="loading"
             ngDefaultControl
           ></ng-select>
-        </div>
+        </div> -->
       </div>
     </form>
   </div>

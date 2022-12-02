@@ -4,13 +4,6 @@
     <hr class="line" />
     <form [formGroup]="form">
       <div class="row">
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Moneda</mat-label>
-          <mat-select formControlName="money_type" required (selectionChange)="disabledMoney()">
-            <mat-option value="cop">Pesos</mat-option>
-            <mat-option value="usd">Dólares</mat-option>
-          </mat-select>
-        </mat-form-field>
         <div class="col-md-3">
           <ng-select
             [items]="apuPart$ | async"
@@ -110,7 +103,7 @@
         </mat-form-field>
       </div>
       <hr />
-      <app-items-quotation *ngIf="viewElements" #itemsQuotation [form]="form"></app-items-quotation>
+      <app-items-quotation #itemsQuotation [form]="form"></app-items-quotation>
     </form>
   </div>
 </div>

@@ -164,7 +164,7 @@ export class CrearCotizacionComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      money_type: ['', Validators.required],
+      money_type: ['cop', Validators.required],
       customer_id: ['', Validators.required],
       destinity_id: ['', Validators.required],
       line: ['', Validators.required],

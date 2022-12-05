@@ -14,6 +14,7 @@ import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
 import { BodegasService } from 'src/app/pages/ajustes/informacion-base/bodegas/bodegas.service.';
 import { ProductoService } from 'src/app/pages/inventario/services/producto.service';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { CategoriasService } from 'src/app/pages/ajustes/parametros/categorias/categorias.service';
 
 @Component({
   selector: 'app-crear-compra-nacional',
@@ -55,6 +56,7 @@ export class CrearCompraNacionalComponent implements OnInit {
   public Bodegas: any = [];
   public TipoBodega: string = 'Bodega';
   public Proveedores: any = [];
+  public Categorias: any = [];
   public id = this.route.snapshot.params['id'];
   public precompra = JSON.parse(localStorage.getItem('Compra'));
 
@@ -105,6 +107,12 @@ export class CrearCompraNacionalComponent implements OnInit {
     Fecha: new Date()
   }
 
+  public selectedCategory:any = {
+    categoria: '',
+    subcategoria: ''
+  }
+  subcategorias:[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -112,6 +120,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     private _user: UserService,
     private _proveedor: TercerosService,
     private _producto: ProductoService,
+    private _categoria: CategoriasService,
     private _modal: ModalService,
     private _bodegas: BodegasService,
     private modalService: NgbModal,
@@ -236,6 +245,16 @@ export class CrearCompraNacionalComponent implements OnInit {
     }).subscribe((res: any) => {
       this.Proveedores = res.data;
     });
+
+    this._categoria.getCategorias().subscribe((res: any) => {
+      this.Categorias = res.data;
+      console.log(this.Categorias);
+    });
+  }
+
+  getSubCategories(event){
+    this.subcategorias=event.subcategory;
+    this.selectedCategory.subcategoria='';
   }
 
   public openConfirm(confirm){

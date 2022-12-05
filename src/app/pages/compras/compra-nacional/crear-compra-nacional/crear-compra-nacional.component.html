@@ -1,22 +1,19 @@
 <form #FormCompra="ngForm">
   <div class="card">
     <div class="card-body">
-
       <div class="row card-title d-flex justify-content-between">
-        <app-cabecera class="col" [datosCabecera]="datosCabecera"></app-cabecera>
+        <app-cabecera
+          class="col"
+          [datosCabecera]="datosCabecera"
+        ></app-cabecera>
       </div>
       <hr class="line" />
       <div class="row">
-       <div class="col-md-6">
+        <div class="col-md-6">
           <div class="row">
             <mat-form-field class="col" appearance="outline">
               <mat-label>Tipo de compra:</mat-label>
-              <mat-select
-                name="Tipo"
-                [(ngModel)]="Tipo"
-                matInput
-                required
-              >
+              <mat-select name="Tipo" [(ngModel)]="Tipo" matInput required>
                 <mat-option value="Recurrente" selected>Recurrente</mat-option>
                 <mat-option value="Ocasional">Ocasional</mat-option>
               </mat-select>
@@ -46,7 +43,11 @@
                 <mat-option value="Punto">Punto</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col" appearance="outline" *ngIf="TipoBodega == 'Bodega'">
+            <mat-form-field
+              class="col"
+              appearance="outline"
+              *ngIf="TipoBodega == 'Bodega'"
+            >
               <mat-label>Bodega</mat-label>
               <mat-select
                 name="Id_Bodega_Nuevo"
@@ -55,7 +56,9 @@
                 ngModel
                 placeholder="Seleccione una Bodega"
               >
-                <mat-option [ngValue]="undefined">Seleccione una Bodega</mat-option>
+                <mat-option [ngValue]="undefined"
+                  >Seleccione una Bodega</mat-option
+                >
                 <mat-option
                   *ngFor="let Bodega of Bodegas; let i = index"
                   [value]="Bodega.Id_Bodega_Nuevo"
@@ -64,7 +67,11 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col" appearance="outline" *ngIf="TipoBodega == 'Punto'">
+            <mat-form-field
+              class="col"
+              appearance="outline"
+              *ngIf="TipoBodega == 'Punto'"
+            >
               <mat-label>Punto</mat-label>
               <mat-select
                 name="Id_Punto_Dispensacion"
@@ -73,7 +80,9 @@
                 ngModel
                 placeholder="Seleccione un Punto"
               >
-                <mat-option [ngValue]="undefined">Seleccione un Punto</mat-option>
+                <mat-option [ngValue]="undefined"
+                  >Seleccione un Punto</mat-option
+                >
                 <mat-option
                   *ngFor="let item of puntos; let i = index"
                   [value]="item.Id_Punto_Dispensacion"
@@ -111,11 +120,11 @@
         </div>
         <div class="col-md-6">
           <mat-form-field
-          class="col-md-12 px-0 mat-form-field-no-padding textarea"
-          appearance="outline"
-        >
-          <mat-label>Observaciones</mat-label>
-          <textarea
+            class="col-md-12 px-0 mat-form-field-no-padding textarea"
+            appearance="outline"
+          >
+            <mat-label>Observaciones</mat-label>
+            <textarea
               ngModel
               name="Observaciones"
               placeholder="Digite detalles importantes de la orden de compra"
@@ -131,6 +140,37 @@
           *Nota: Para hacer más efectiva la busqueda, por favor digite el nombre
           completo del producto.
         </small>
+      </div>
+      <div class="row">
+        <div class="col mat-form-field-wrapper">
+          <ng-select
+            name="Categoria"
+            [items]="Categorias"
+            bindLabel="Nombre"
+            bindValue="Id_Categoria_Nueva"
+            [(ngModel)]="selectedCategory.categoria"
+            (change)="getSubCategories($event)"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Categoria"
+            matInput
+          >
+          </ng-select>
+        </div>
+        <div class="col-6 mat-form-field-wrapper">
+          <ng-select
+            name="Subcategoria"
+            [items]="subcategorias"
+            bindLabel="Nombre"
+            bindValue="Id_Subcategoria"
+            [(ngModel)]="selectedCategory.subcategoria"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Subcategoria"
+            matInput
+          >
+          </ng-select>
+        </div>
       </div>
       <div class="rounded-top table-responsive">
         <table class="table table-bordered table-striped table-sm">
@@ -328,7 +368,7 @@
                   "
                   readonly
                 >
-                  $ {{ item.Total | currency: "COP":"symbol" }}
+                  $ {{ item.Total | currency : "COP" : "symbol" }}
                 </span>
               </td>
               <td class="align-middle">
@@ -351,19 +391,19 @@
               <tr>
                 <th>( = ) Subtotal :</th>
                 <td class="d-flex justify-content-end">
-                  $ {{ Subtotal_F | currency: "COP" }}
+                  $ {{ Subtotal_F | currency : "COP" }}
                 </td>
               </tr>
               <tr>
                 <th>( + ) Iva :</th>
                 <td class="d-flex justify-content-end">
-                  $ {{ Iva_F | currency: "COP" }}
+                  $ {{ Iva_F | currency : "COP" }}
                 </td>
               </tr>
               <tr>
                 <th>( = ) Total :</th>
                 <td class="d-flex justify-content-end">
-                  $ {{ Total_F | currency: "COP" }}
+                  $ {{ Total_F | currency : "COP" }}
                 </td>
               </tr>
             </tbody>
@@ -415,7 +455,10 @@
     <div class="row">
       <mat-form-field class="col" appearance="outline">
         <mat-label>Catálogo</mat-label>
-        <mat-select (selectionChange)="filtros()" [(ngModel)]="filtroProducto.catalogo">
+        <mat-select
+          (selectionChange)="filtros()"
+          [(ngModel)]="filtroProducto.catalogo"
+        >
           <mat-option *ngFor="let item of tipoMaterial" [value]="item">
             {{ item }}
           </mat-option>
@@ -479,8 +522,12 @@
             <td>Foto</td>
             <td>Catalogo</td>
             <th>Nombre</th>
-            <th *ngIf="filtroProducto.catalogo == 'Medicamento'">Lab. Comercial</th>
-            <th *ngIf="filtroProducto.catalogo == 'Medicamento'">Lab. Generico</th>
+            <th *ngIf="filtroProducto.catalogo == 'Medicamento'">
+              Lab. Comercial
+            </th>
+            <th *ngIf="filtroProducto.catalogo == 'Medicamento'">
+              Lab. Generico
+            </th>
             <th *ngIf="filtroProducto.catalogo == 'Medicamento'">Cum</th>
             <th>Embalaje</th>
           </tr>
@@ -517,13 +564,22 @@
                 {{ producto.Nombre }}
               </span>
             </td>
-            <td class="align-middle" *ngIf="filtroProducto.catalogo == 'Medicamento'">
+            <td
+              class="align-middle"
+              *ngIf="filtroProducto.catalogo == 'Medicamento'"
+            >
               {{ producto.Laboratorio_Comercial }}
             </td>
-            <td class="align-middle" *ngIf="filtroProducto.catalogo == 'Medicamento'">
+            <td
+              class="align-middle"
+              *ngIf="filtroProducto.catalogo == 'Medicamento'"
+            >
               {{ producto.Laboratorio_Generico }}
             </td>
-            <td class="align-middle" *ngIf="filtroProducto.catalogo == 'Medicamento'">
+            <td
+              class="align-middle"
+              *ngIf="filtroProducto.catalogo == 'Medicamento'"
+            >
               {{ producto.Codigo_Cum }}
             </td>
             <td class="align-middle">

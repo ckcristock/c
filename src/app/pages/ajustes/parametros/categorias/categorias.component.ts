@@ -16,7 +16,7 @@ import { SubcategoryService } from '../subcategorias/subcategory.service';
   styleUrls: ['./categorias.component.scss'],
 })
 export class CategoriasComponent implements OnInit {
-  @Output() reloadSubcategories = new EventEmitter<Event>();
+  @Output() requestReload = new EventEmitter<Event>();
 
   title: string = "";
   @ViewChild('FormCategoria') FormCategoria: any;
@@ -165,7 +165,7 @@ export class CategoriasComponent implements OnInit {
       }); */
   }
 
-  inOff(id,state) {
+  inOff(id,state,event: Event) {
     this._swal.show({
       title: '¿Estás seguro(a)?',
       text: '¡Esta categoría y las subcategorías asociadas a ella se '+((state==0)?'anularán!':'reactivarán!'),
@@ -180,8 +180,8 @@ export class CategoriasComponent implements OnInit {
           ) */
         this._categorias.changeActive(id,{activo: state})
           .subscribe((res: any) => {
+            this.requestReload.emit(event);
             this.paginacion();
-            this.reloadSubcategories.emit();
             this._swal.show({
               icon: 'success',
               title: '¡Operación exitosa!',

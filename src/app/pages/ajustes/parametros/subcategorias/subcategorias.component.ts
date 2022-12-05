@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
@@ -27,6 +27,15 @@ export class SubcategoriasComponent implements OnInit {
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
+
+  @Input()
+  set reloadSubcategories(event: Event) {
+    if (event) {
+      this.getSubcategory();
+      this.listCategories();
+    }
+  }
+
   filters = {
     categoria: '',
     nombre: '',

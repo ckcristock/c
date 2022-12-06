@@ -22,8 +22,10 @@ import { CategoriasService } from 'src/app/pages/ajustes/parametros/categorias/c
   styleUrls: ['./crear-compra-nacional.component.scss'],
 })
 export class CrearCompraNacionalComponent implements OnInit {
-  closeResult = '';
-  tipoMaterial = ['Activo_Fijo', 'Medicamento', 'Material', 'Dotacion_EPP'];
+  @ViewChild('confirmacionSwal') confirmacionSwal: any;
+  @ViewChild('modalProductos') modalProductos: any;
+  @ViewChild('FormCompra') FormCompra: NgForm;
+
   public reducer = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Cantidad);
   public reducer1 = (accumulator, currentValue) =>
@@ -37,20 +39,20 @@ export class CrearCompraNacionalComponent implements OnInit {
   public Cargando: boolean = true;
   public listaProductos: any[] = [];
   public listaProductosPorAgregar: any = [
-    {
-      producto: '',
-      Presentacion: '',
-      Costo: 0,
-      Total: 0,
-      Cantidad: null,
-      Iva: 0,
-      Rotativo: 0,
-      Id_Producto: '',
-      Iva_Disa: true,
-      editar: false,
-      delete: false,
-      Iva_Acu: 0,
-    },
+    /*  {
+       producto: '',
+       Presentacion: '',
+       Costo: 0,
+       Total: 0,
+       Cantidad: null,
+       Iva: 0,
+       Rotativo: 0,
+       Id_Producto: '',
+       Iva_Disa: true,
+       editar: false,
+       delete: false,
+       Iva_Acu: 0,
+     }, */
   ];
   public fecha = new Date();
   public Bodegas: any = [];
@@ -59,15 +61,12 @@ export class CrearCompraNacionalComponent implements OnInit {
   public Categorias: any = [];
   public id = this.route.snapshot.params['id'];
   public precompra = JSON.parse(localStorage.getItem('Compra'));
-
   public Id_Proveedor: any = '';
-
   public TamanoPrecompra: any;
   public Rotativo = false;
   public Subtotal = 0;
   public Iva = 0;
   public Total = 0;
-
   public Cantidad_v = 0;
   public Costo_v = 0;
   public Iva_v: any = 0;
@@ -75,7 +74,6 @@ export class CrearCompraNacionalComponent implements OnInit {
   public Iva_F = 0;
   public Total_F = 0;
   public Subtotal_v = 0;
-
   public Nombre: string = '';
   public NombreProveedor: string = '';
   public Impuestos: any;
@@ -83,35 +81,32 @@ export class CrearCompraNacionalComponent implements OnInit {
   public product: any[] = [];
   public Productos: any = [];
   private band_editar: boolean = false;
-  public filtroProducto:any = {
+  public filtroProducto: any = {
     nombre: '',
-    lab_com: '',
-    lab_gen: '',
-    cum: '',
-    catalogo: ''
-};
-
+    categoria: '',
+    subcategoria: ''
+  };
   public Tipo: any = '';
 
-  @ViewChild('confirmacionSwal') confirmacionSwal: any;
-  @ViewChild('modalProductos') modalProductos: any;
-  @ViewChild('FormCompra') FormCompra: NgForm;
+  closeResult = '';
+  tipoMaterial = ['Activo_Fijo', 'Medicamento', 'Material', 'Dotacion_EPP'];
   deleteSwal: any;
   ListaProducto: any[] = [];
+  productoFiltro: any = '';
 
   public user = '';
   posicion: any = '';
   puntos: any = [];
-  public datosCabecera:any = {
+  public datosCabecera: any = {
     Titulo: 'Nueva orden de compra',
     Fecha: new Date()
   }
 
-  public selectedCategory:any = {
+  public selectedCategory: any = {
     categoria: '',
     subcategoria: ''
   }
-  subcategorias:[] = [];
+  subcategorias: [] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -146,7 +141,6 @@ export class CrearCompraNacionalComponent implements OnInit {
   ngOnInit() {
     let params = this.route.snapshot.queryParams;
     this.user = this._user.user.person.id;
-    console.log(this.user)
     this.Cargando = true
     if (params.Pre_Compra != undefined) {
       this.http
@@ -237,9 +231,9 @@ export class CrearCompraNacionalComponent implements OnInit {
     }
     /* TODO ACTUALIZAR FUNCIONARIO */
 
-    this.http.get( environment.base_url + '/php/inventario_fisico_puntos/lista_punto_funcionario').subscribe((res: any) => {
-        this.puntos = res.data;
-      });
+    this.http.get(environment.base_url + '/php/inventario_fisico_puntos/lista_punto_funcionario').subscribe((res: any) => {
+      this.puntos = res.data;
+    });
 
     this._proveedor.getThirdPartyProvider({
     }).subscribe((res: any) => {
@@ -248,16 +242,17 @@ export class CrearCompraNacionalComponent implements OnInit {
 
     this._categoria.getCategorias().subscribe((res: any) => {
       this.Categorias = res.data;
-      console.log(this.Categorias);
     });
   }
 
-  getSubCategories(event){
-    this.subcategorias=event.subcategory;
-    this.selectedCategory.subcategoria='';
+  getSubCategories(event) {
+    if(event){
+      this.subcategorias = event.subcategory;
+      this.selectedCategory.subcategoria = '';
+    }
   }
 
-  public openConfirm(confirm){
+  public openConfirm(confirm) {
     this._modal.open(confirm, 'xl')
     /* this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -268,73 +263,81 @@ export class CrearCompraNacionalComponent implements OnInit {
   /* private getDismissReason(reason: any) {
 
   } */
+  /*
+    filtrosOld() {
+      let params: any = {};
 
-  filtrosOld() {
-    let params: any = {};
+      if (
+        this.filtroProducto.lab_com != '' ||
+        this.filtroProducto.lab_gen != '' ||
+        this.filtroProducto.cum != '' ||
+        this.filtroProducto.catalogo
+      ) {
+        this.Cargando = true;
+        this.ListaProducto = [];
 
-    if (
-      this.filtroProducto.lab_com != '' ||
-      this.filtroProducto.lab_gen != '' ||
-      this.filtroProducto.cum != '' ||
-      this.filtroProducto.catalogo
-    ) {
-      this.Cargando = true;
-      this.ListaProducto = [];
+        if (this.filtroProducto.nombre != '') {
+          params.nom = this.filtroProducto.nombre;
+        }
+        if (this.filtroProducto.lab_com != '') {
+          params.lab_com = this.filtroProducto.lab_com;
+        }
+        if (this.filtroProducto.lab_gen != '') {
+          params.lab_gen = this.filtroProducto.lab_gen;
+        }
+        if (this.filtroProducto.cum != '') {
+          params.cum = this.filtroProducto.cum;
+        }
+        if (this.filtroProducto.catalogo != '') {
+          params.catalogo = this.filtroProducto.catalogo;
+        }
 
-      if (this.filtroProducto.nombre != '') {
-        params.nom = this.filtroProducto.nombre;
-      }
-      if (this.filtroProducto.lab_com != '') {
-        params.lab_com = this.filtroProducto.lab_com;
-      }
-      if (this.filtroProducto.lab_gen != '') {
-        params.lab_gen = this.filtroProducto.lab_gen;
-      }
-      if (this.filtroProducto.cum != '') {
-        params.cum = this.filtroProducto.cum;
-      }
-      if (this.filtroProducto.catalogo != '') {
-        params.catalogo = this.filtroProducto.catalogo;
-      }
+        let queryString = Object.keys(params)
+          .map((key) => key + '=' + params[key])
+          .join('&');
 
-      let queryString = Object.keys(params)
-        .map((key) => key + '=' + params[key])
-        .join('&');
-
-      this.http.get(environment.base_url + '/php/comprasnacionales/lista_productos?' +
-        queryString, { params: { company_id: this._user.user.person.company_worked.id } }
-      ).subscribe((res: any) => {
-        this.Cargando = false;
-        this.ListaProducto = res.data;
-      });
-    } else {
-      this.filtroProducto.lab_com = '';
-      this.filtroProducto.lab_gen = '';
-      this.filtroProducto.cum = '';
-      this.filtroProducto.catalogo = '';
-      this.Cargando = true;
-      this.ListaProducto = [];
-
-      this.http.get(environment.base_url + '/php/comprasnacionales/lista_productos', {
-          params: { nom: this.filtroProducto.nombre, company_id: this._user.user.person.company_worked.id },
-        })
-        .subscribe((res: any) => {
+        this.http.get(environment.base_url + '/php/comprasnacionales/lista_productos?' +
+          queryString, { params: { company_id: this._user.user.person.company_worked.id } }
+        ).subscribe((res: any) => {
           this.Cargando = false;
           this.ListaProducto = res.data;
         });
-    }
-  }
+      } else {
+        this.filtroProducto.lab_com = '';
+        this.filtroProducto.lab_gen = '';
+        this.filtroProducto.cum = '';
+        this.filtroProducto.catalogo = '';
+        this.Cargando = true;
+        this.ListaProducto = [];
 
-  filtros(){
-    let params = {...this.filtroProducto, company_id: this._user.user.person.company_worked.id }
-    this.Cargando = true;
+        this.http.get(environment.base_url + '/php/comprasnacionales/lista_productos', {
+            params: { nom: this.filtroProducto.nombre, company_id: this._user.user.person.company_worked.id },
+          })
+          .subscribe((res: any) => {
+            this.Cargando = false;
+            this.ListaProducto = res.data;
+          });
+      }
+    } */
+
+  filtros() {
+    let params = { ...this.selectedCategory, company_id: this._user.user.person.company_worked.id };
     this._producto.getProductos(params).subscribe((res: any) => {
-      this.ListaProducto = res.data;
-      this.Cargando = false;
+        /* this.ListaProducto = res.data; */
+      let productIds= this.listaProductosPorAgregar.map(x => x = x.Id_Producto);
+      this.Productos = res.data.filter((v) => productIds.every((valor) => valor != v.Id_Producto));
+      this.Productos.forEach((valor) => {
+        valor['Iva_Disa'] =  valor.Gravado == 'Si' ? false : true;
+        valor['Presentacion'] =  valor.Cantidad_Presentacion;
+        valor['producto'] =  valor.Nombre;
+        delete valor.Gravado;
+        delete valor.Cantidad_Presentacion;
+        delete valor.Nombre;
+      });
     })
   }
 
-  searchProduct(pos, editar) {
+  /* searchProduct(pos, editar) {
     this.ListaProducto = [];
     this.Productos = [];
     this.filtroProducto.nombre = '';
@@ -359,7 +362,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     } else {
       this.Cargando = false;
     }
-  }
+  } */
 
   async GuardarCompra(formulario: NgForm, resolve) {
     let params = this.route.snapshot.queryParams;
@@ -437,30 +440,51 @@ export class CrearCompraNacionalComponent implements OnInit {
     this.router.navigate(['/compras/nacional']);
   }
 
-  addProduct(pos) {
-    let checkbox = (document.getElementById('check' + pos) as HTMLInputElement)
-      .checked;
-    let modelo: any = {
-      Costo: this.ListaProducto[pos].Costo,
-      Presentacion: this.ListaProducto[pos].Cantidad_Presentacion,
-      Id_Producto: this.ListaProducto[pos].Id_Producto,
-      producto: this.ListaProducto[pos].Nombre,
-      Iva_Disa: this.ListaProducto[pos].Gravado == 'Si' ? false : true,
-      Embalaje: this.ListaProducto[pos].Embalaje,
-    };
-    if (checkbox == true) {
-      this.Productos.push(modelo);
-    } else {
-      let posicion = this.Productos.indexOf(modelo);
-      this.Productos.splice(posicion, 1);
+  /*  addProduct(pos) {
+     let checkbox = (document.getElementById('check' + pos) as HTMLInputElement)
+       .checked;
+     let modelo: any = {
+       Costo: this.ListaProducto[pos].Costo,
+       Presentacion: this.ListaProducto[pos].Cantidad_Presentacion,
+       Id_Producto: this.ListaProducto[pos].Id_Producto,
+       producto: this.ListaProducto[pos].Nombre,
+       Iva_Disa: this.ListaProducto[pos].Gravado == 'Si' ? false : true,
+       Embalaje: this.ListaProducto[pos].Embalaje,
+     };
+     if (checkbox == true) {
+       this.Productos.push(modelo);
+     } else {
+       let posicion = this.Productos.indexOf(modelo);
+       this.Productos.splice(posicion, 1);
+     }
+   } */
+
+  AgregarProducto(valor) {
+    //let editar_producto = this.band_editar;
+    if (valor) {
+      this.listaProductosPorAgregar.push({
+          // Se agregan nuevos productos.
+          producto: valor.producto,
+          Presentacion: valor.Presentacion,
+          Costo: valor.Costo,
+          Total: 0,
+          Cantidad: 1,
+          Iva: 0,
+          Rotativo: 0,
+          Id_Producto: valor.Id_Producto,
+          Iva_Disa: valor.Iva_Disa,
+          editar: true,
+          delete: true,
+          Iva_Acu: 0,
+          Embalaje: valor.Embalaje,
+        });
     }
-  }
+    //this.productoFiltro = {};
+    this.filtros();
+    //});
 
-  AgregarProducto() {
-    let editar_producto = this.band_editar;
-
-    this.Productos.forEach((valor, i) => {
-      if (
+     //this.Productos.forEach((valor, i) => {
+      /* if (
         this.listaProductosPorAgregar.length == 1 &&
         this.listaProductosPorAgregar[0].Id_Producto == ''
       ) {
@@ -504,29 +528,8 @@ export class CrearCompraNacionalComponent implements OnInit {
             let last_position = this.listaProductosPorAgregar.length - 1;
             this.listaProductosPorAgregar.splice(last_position, 1);
             editar_producto = false;
-          }
-
-          this.listaProductosPorAgregar.push({
-            // Se agregan nuevos productos.
-            producto: valor.producto,
-            Presentacion: valor.Presentacion,
-            Costo: valor.Costo,
-            Total: 0,
-            Cantidad: null,
-            Iva: 0,
-            Rotativo: 0,
-            Id_Producto: valor.Id_Producto,
-            Iva_Disa: valor.Iva_Disa,
-            editar: true,
-            delete: true,
-            Iva_Acu: 0,
-            Embalaje: valor.Embalaje,
-          });
-        }
-      }
-    });
-
-    let pos = this.listaProductosPorAgregar.length - 1;
+          } */
+    /* let pos = this.listaProductosPorAgregar.length - 1;
 
     if (this.listaProductosPorAgregar[pos].producto != '') {
       // Si en la ultima posición del Array ya no es vacío se agrega un nuevo campo para una nueva busqueda.
@@ -547,14 +550,15 @@ export class CrearCompraNacionalComponent implements OnInit {
       });
     }
 
-    this.modalService.dismissAll();
-    this.Productos = [];
+    this.modalService.dismissAll(); */
+
   }
 
   deleteProduct(posicion, event) {
     if (event.screenX != 0) {
       this.listaProductosPorAgregar.splice(posicion, 1);
       this.ActualizaValores();
+      this.filtros();
     }
   }
 

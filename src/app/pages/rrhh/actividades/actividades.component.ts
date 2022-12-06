@@ -13,7 +13,7 @@ import {
 /* import swal,{ SweetAlertOptions } from 'sweetalert2'; */
 /* import { SwalComponent } from '@toverux/ngx-sweetalert2'; */
 import { HttpClient } from '@angular/common/http';
-
+import esLocale from '@fullcalendar/core/locales/es';
 import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGrigPlugin from '@fullcalendar/timegrid';
@@ -70,7 +70,7 @@ export class ActividadesComponent {
   }
   daysOfWeek = consts.diasSemana;
   Id_Dependencia = 1;
-
+  locales = [esLocale];
   Departamentos: any = [];
   Municipios: any = [];
   Actividades: Array<any> = [];

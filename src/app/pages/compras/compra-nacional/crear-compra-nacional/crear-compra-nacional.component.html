@@ -1,4 +1,5 @@
-<form #FormCompra="ngForm">
+<!-- <form [formGroup]=" -->
+  <form [formGroup]="formCompra">
   <div class="card">
     <div class="card-body">
       <div class="row card-title d-flex justify-content-between">
@@ -13,7 +14,7 @@
           <div class="row">
             <mat-form-field class="col" appearance="outline">
               <mat-label>Tipo de compra:</mat-label>
-              <mat-select name="Tipo" [(ngModel)]="Tipo" matInput required>
+              <mat-select name="Tipo" [(value)]="Tipo" matInput required>
                 <mat-option value="Recurrente" selected>Recurrente</mat-option>
                 <mat-option value="Ocasional">Ocasional</mat-option>
               </mat-select>
@@ -21,9 +22,8 @@
             <mat-form-field class="col" appearance="outline">
               <mat-label>Fecha de entrega probable: </mat-label>
               <input
-                ngModel
                 type="date"
-                name="Fecha_Entrega_Probable"
+                formControlName="Fecha_Entrega_Probable"
                 placeholder=""
                 matInput
                 required
@@ -35,12 +35,12 @@
               <mat-label>Tipo de bodega</mat-label>
               <mat-select
                 name="TipoBodega"
-                [(ngModel)]="TipoBodega"
+                [(value)]="TipoBodega"
                 matInput
                 required
               >
                 <mat-option value="Bodega" selected>Bodega</mat-option>
-                <mat-option value="Punto">Punto</mat-option>
+                <mat-option value="Punto">Punto de dispensación</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field
@@ -50,15 +50,14 @@
             >
               <mat-label>Bodega</mat-label>
               <mat-select
-                name="Id_Bodega_Nuevo"
+                formControlName="Id_Bodega_Nuevo"
                 matInput
                 required
-                ngModel
                 placeholder="Seleccione una Bodega"
               >
-                <mat-option [ngValue]="undefined"
+                <!-- <mat-option [ngValue]="undefined"
                   >Seleccione una Bodega</mat-option
-                >
+                > -->
                 <mat-option
                   *ngFor="let Bodega of Bodegas; let i = index"
                   [value]="Bodega.Id_Bodega_Nuevo"
@@ -72,17 +71,16 @@
               appearance="outline"
               *ngIf="TipoBodega == 'Punto'"
             >
-              <mat-label>Punto</mat-label>
+              <mat-label>Punto de dispensación</mat-label>
               <mat-select
-                name="Id_Punto_Dispensacion"
+                formControlName="Id_Punto_Dispensacion"
                 matInput
                 required
-                ngModel
-                placeholder="Seleccione un Punto"
+                placeholder="Seleccione un Punto de dispensación"
               >
-                <mat-option [ngValue]="undefined"
+                <!-- <mat-option [ngValue]="undefined"
                   >Seleccione un Punto</mat-option
-                >
+                > -->
                 <mat-option
                   *ngFor="let item of puntos; let i = index"
                   [value]="item.Id_Punto_Dispensacion"
@@ -93,8 +91,8 @@
             </mat-form-field>
             <input
               type="text"
-              [(ngModel)]="user"
-              name="Identificacion_Funcionario"
+              [(value)]="user"
+              formControlName="Identificacion_Funcionario"
               readonly
               hidden
             />
@@ -103,8 +101,7 @@
             <div class="col mat-form-field-wrapper">
               <ng-select
                 [items]="Proveedores"
-                name="NombreProveedor"
-                [(ngModel)]="NombreProveedor"
+                formControlName="Id_Proveedor"
                 bindLabel="text"
                 appearance="outline"
                 [appendTo]="'body'"
@@ -125,11 +122,10 @@
           >
             <mat-label>Observaciones</mat-label>
             <textarea
-              ngModel
-              name="Observaciones"
+              formControlName="Observaciones"
               placeholder="Digite detalles importantes de la orden de compra"
               type="text"
-              rows="8"
+              rows="9"
               matInput
             ></textarea>
           </mat-form-field>
@@ -142,54 +138,71 @@
         </small>
       </div>
       <div class="row">
-        <div class="col mat-form-field-wrapper">
-          <ng-select
-            name="Categoria"
-            [items]="Categorias"
-            bindLabel="Nombre"
-            bindValue="Id_Categoria_Nueva"
-            [(ngModel)]="selectedCategory.categoria"
-            (change)="getSubCategories($event)"
-            [disabled]="listaProductosPorAgregar.length > 0"
-            appearance="outline"
-            autocomplete="off"
-            [appendTo]="'body'"
-            placeholder="Categoria"
-            matInput
-          >
-          </ng-select>
+        <div class="col-10">
+          <div class="row">
+            <div class="col mat-form-field-wrapper">
+              <ng-select
+                name="Categoria"
+                [items]="Categorias"
+                bindLabel="Nombre"
+                bindValue="Id_Categoria_Nueva"
+                [(ngModel)]="selectedCategory.categoria"
+                [ngModelOptions]="{standalone: true}"
+                (change)="getSubCategories($event)"
+                [disabled]="listaProductosPorAgregar.length > 0"
+                appearance="outline"
+                autocomplete="off"
+                [appendTo]="'body'"
+                placeholder="Categoria"
+                matInput
+              >
+              </ng-select>
+            </div>
+            <div class="col mat-form-field-wrapper">
+              <ng-select
+                name="Subcategoria"
+                [items]="subcategorias"
+                bindLabel="Nombre"
+                bindValue="Id_Subcategoria"
+                [(ngModel)]="selectedCategory.subcategoria"
+                [ngModelOptions]="{standalone: true}"
+                (change)="filtros()"
+                [disabled]="listaProductosPorAgregar.length > 0"
+                appearance="outline"
+                autocomplete="off"
+                [appendTo]="'body'"
+                placeholder="Subcategoria"
+                matInput
+              >
+              </ng-select>
+            </div>
+            <div class="col mat-form-field-wrapper">
+              <ng-select
+                name="Producto"
+                [(ngModel)]="productoFiltro"
+                [ngModelOptions]="{standalone: true}"
+                [items]="Productos"
+                bindLabel="producto"
+                (change)="AgregarProducto($event)"
+                (click)="productoFiltro={}"
+                [editableSearchTerm]="true"
+                appearance="outline"
+                autocomplete="off"
+                [appendTo]="'body'"
+                placeholder="Producto"
+                matInput
+              >
+              </ng-select>
+            </div>
         </div>
-        <div class="col mat-form-field-wrapper">
-          <ng-select
-            name="Subcategoria"
-            [items]="subcategorias"
-            bindLabel="Nombre"
-            bindValue="Id_Subcategoria"
-            [(ngModel)]="selectedCategory.subcategoria"
-            (change)="filtros()"
-            [disabled]="listaProductosPorAgregar.length > 0"
-            appearance="outline"
-            autocomplete="off"
-            [appendTo]="'body'"
-            placeholder="Subcategoria"
-            matInput
+      </div>
+        <div class="col mat-form-field-wrapper d-flex align-items-center justify-content-center">
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="listaProductosPorAgregar=[]; filtros(); ActualizaValores();"
           >
-          </ng-select>
-        </div>
-        <div class="col mat-form-field-wrapper">
-          <ng-select
-            name="Producto"
-            [(ngModel)]="productoFiltro"
-            [items]="Productos"
-            bindLabel="producto"
-            (change)="AgregarProducto($event)"
-            appearance="outline"
-            autocomplete="off"
-            [appendTo]="'body'"
-            placeholder="Producto"
-            matInput
-          >
-          </ng-select>
+            <i class="fa fa-trash"></i> Vaciar lista
+          </button>
         </div>
       </div>
       <div class="row" *ngIf="listaProductosPorAgregar.length > 0">
@@ -265,7 +278,7 @@
                 <input
                   type="hidden"
                   name="PresentacionModel{{ i }}"
-                  [ngModel]="item.Presentacion"
+                  [value]="item.Presentacion"
                 />
                 <span id="Presentacion{{ i }}" name="Presentacion{{ i }}">
                   {{ item.Presentacion }}
@@ -276,7 +289,7 @@
                   readonly
                   id="Rotativo{{ i }}"
                   name="Rotativo{{ i }}"
-                  [ngModel]="item.Rotativo"
+                  [value]="item.Rotativo"
                   type="number"
                   min="1"
                   class="form-control form-control-sm text-right f-9"
@@ -288,7 +301,7 @@
                 <input
                   type="hidden"
                   name="CantidadModel{{ i }}"
-                  [ngModel]="item.Cantidad"
+                  [value]="item.Cantidad"
                 />
                 <input
                   id="Cantidad{{ i }}"
@@ -307,7 +320,7 @@
                 <input
                   type="hidden"
                   name="CostoModel{{ i }}"
-                  [ngModel]="item.Costo"
+                  [value]="item.Costo"
                 />
                 <input
                   id="Costo{{ i }}"
@@ -338,7 +351,7 @@
                 <input
                   type="hidden"
                   name="IvaModel{{ i }}"
-                  [ngModel]="item.Iva"
+                  [value]="item.Iva"
                 />
                 <!-- <mat-form-field class="pb-0" appearance="outline">
                   <mat-select
@@ -358,7 +371,7 @@
                   </mat-select>
                 </mat-form-field> -->
                 <select
-                  [ngModel]="item.Iva"
+                  [value]="item.Iva"
                   id="Iva{{ i }}"
                   name="Iva{{ i }}"
                   class="form-control form-control-sm"
@@ -378,7 +391,7 @@
                 <input
                   type="hidden"
                   name="TotalModel{{ i }}"
-                  [ngModel]="item.Total"
+                  [value]="item.Total"
                 />
                 <span
                   name="Total{{ i }}"
@@ -434,7 +447,7 @@
         <div class="col-sm-12 text-center">
           <button
             type="button"
-            [disabled]="!FormCompra.valid"
+            [disabled]="!formCompra.valid"
             class="btn btn-primary btn-lg btn-block"
           >
             <i class="fas fa-save"></i>

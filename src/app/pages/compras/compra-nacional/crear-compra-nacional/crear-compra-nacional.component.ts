@@ -7,7 +7,7 @@ import swal, { SweetAlertOptions } from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
@@ -24,7 +24,7 @@ import { CategoriasService } from 'src/app/pages/ajustes/parametros/categorias/c
 export class CrearCompraNacionalComponent implements OnInit {
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('modalProductos') modalProductos: any;
-  @ViewChild('FormCompra') FormCompra: NgForm;
+  //@ViewChild('FormCompra') FormCompra: NgForm;
 
   public reducer = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Cantidad);
@@ -35,7 +35,23 @@ export class CrearCompraNacionalComponent implements OnInit {
   public reducer3 = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Total);
 
-  public alertOption: SweetAlertOptions = {};
+  public alertOption: SweetAlertOptions = {
+    title: '¿Está Seguro?',
+    text: 'Se dispone a Generar esta Compra',
+    showCancelButton: true,
+    cancelButtonText: 'No, Dejame Comprobar!',
+    confirmButtonText: 'Si, Guardar',
+    showLoaderOnConfirm: true,
+    focusCancel: true,
+    icon: 'info',
+    preConfirm: () => {
+      return new Promise((resolve) => {
+        /* return this.GuardarCompra(this.FormCompra, resolve); */
+        return this.GuardarCompra(this.formCompra, resolve);
+      });
+    },
+    allowOutsideClick: () => !swal.isLoading(),
+  };
   public Cargando: boolean = true;
   public listaProductos: any[] = [];
   public listaProductosPorAgregar: any = [
@@ -88,6 +104,7 @@ export class CrearCompraNacionalComponent implements OnInit {
   };
   public Tipo: any = '';
 
+  formCompra: FormGroup;
   closeResult = '';
   tipoMaterial = ['Activo_Fijo', 'Medicamento', 'Material', 'Dotacion_EPP'];
   deleteSwal: any;
@@ -119,24 +136,8 @@ export class CrearCompraNacionalComponent implements OnInit {
     private _modal: ModalService,
     private _bodegas: BodegasService,
     private modalService: NgbModal,
-  ) {
-    this.alertOption = {
-      title: '¿Está Seguro?',
-      text: 'Se dispone a Generar esta Compra',
-      showCancelButton: true,
-      cancelButtonText: 'No, Dejame Comprobar!',
-      confirmButtonText: 'Si, Guardar',
-      showLoaderOnConfirm: true,
-      focusCancel: true,
-      icon: 'info',
-      preConfirm: () => {
-        return new Promise((resolve) => {
-          return this.GuardarCompra(this.FormCompra, resolve);
-        });
-      },
-      allowOutsideClick: () => !swal.isLoading(),
-    };
-  }
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     let params = this.route.snapshot.queryParams;
@@ -212,7 +213,8 @@ export class CrearCompraNacionalComponent implements OnInit {
         Id_Producto: '',
         Iva_Disa: true,
       });
-      this.Cantidad_v = parseFloat(
+      this. ActualizaValores();
+      /* this.Cantidad_v = parseFloat(
         this.listaProductosPorAgregar.reduce(this.reducer, 0)
       );
       this.Costo_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer1, 0));
@@ -223,7 +225,7 @@ export class CrearCompraNacionalComponent implements OnInit {
 
       this.Subtotal_F = this.Subtotal_v;
       //this.Iva_F=(this.Subtotal_v*this.Iva_v)/100;
-      this.Total_F = this.Subtotal_v + this.Iva_v;
+      this.Total_F = this.Subtotal_v + this.Iva_v; */
       /*var subtotal = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer, 0));
         this.Subtotal = subtotal - (subtotal * 0.19)
         this.Iva = (subtotal * 0.19);
@@ -242,6 +244,20 @@ export class CrearCompraNacionalComponent implements OnInit {
 
     this._categoria.getCategorias().subscribe((res: any) => {
       this.Categorias = res.data;
+    });
+
+    this.createForm();
+  }
+
+  createForm() {
+    this.formCompra = this.fb.group({
+      Id_Orden_Compra_Nacional: [''],
+      Fecha_Entrega_Probable: ['', Validators.required],
+      Identificacion_Funcionario: [this.user, Validators.required],
+      Id_Bodega_Nuevo: ['', Validators.required],
+      Id_Punto_Dispensacion: ['', Validators.required],
+      Id_Proveedor: ['', Validators.required],
+      Observaciones: ['']
     });
   }
 
@@ -321,20 +337,23 @@ export class CrearCompraNacionalComponent implements OnInit {
     } */
 
   filtros() {
-    let params = { ...this.selectedCategory, company_id: this._user.user.person.company_worked.id };
-    this._producto.getProductos(params).subscribe((res: any) => {
-        /* this.ListaProducto = res.data; */
-      let productIds= this.listaProductosPorAgregar.map(x => x = x.Id_Producto);
-      this.Productos = res.data.filter((v) => productIds.every((valor) => valor != v.Id_Producto));
-      this.Productos.forEach((valor) => {
-        valor['Iva_Disa'] =  valor.Gravado == 'Si' ? false : true;
-        valor['Presentacion'] =  valor.Cantidad_Presentacion;
-        valor['producto'] =  valor.Nombre;
-        delete valor.Gravado;
-        delete valor.Cantidad_Presentacion;
-        delete valor.Nombre;
-      });
-    })
+    // Si no se ha seleccionado categoria ni subcategoria, pase de largo.
+    if([0,''].indexOf(this.selectedCategory.categoria + this.selectedCategory.subcategoria)==-1){
+      let params = { ...this.selectedCategory, company_id: this._user.user.person.company_worked.id };
+      this._producto.getProductos(params).subscribe((res: any) => {
+          /* this.ListaProducto = res.data; */
+        let productIds= this.listaProductosPorAgregar.map(x => x = x.Id_Producto);
+        this.Productos = res.data.filter((v) => productIds.every((valor) => valor != v.Id_Producto));
+        this.Productos.forEach((valor) => {
+          valor['Iva_Disa'] =  valor.Gravado == 'Si' ? false : true;
+          valor['Presentacion'] =  valor.Cantidad_Presentacion;
+          valor['producto'] =  valor.Nombre;
+          delete valor.Gravado;
+          delete valor.Cantidad_Presentacion;
+          delete valor.Nombre;
+        });
+      })
+    }
   }
 
   /* searchProduct(pos, editar) {
@@ -364,22 +383,21 @@ export class CrearCompraNacionalComponent implements OnInit {
     }
   } */
 
-  async GuardarCompra(formulario: NgForm, resolve) {
+  /* async GuardarCompra(formulario: NgForm, resolve) { */
+  async GuardarCompra(formulario: FormGroup, resolve) {
     let params = this.route.snapshot.queryParams;
 
     //Se  actualiza la precompra con el estado Solicitada
     if (params.Pre_Compra != undefined) {
       let datos = new FormData();
       datos.append('id_pre_compra', params.Pre_Compra);
-      this.http
-        .post(
-          environment.ruta + '/php/rotativoscompras/actualizar_estado.php',
-          datos
-        )
-        .subscribe((data: any) => { });
+      this.http.post(
+        environment.base_url + '/php/rotativoscompras/actualizar_estado',
+        datos
+      ).subscribe((data: any) => { });
     }
 
-    if (this.listaProductosPorAgregar.length > 1) {
+    if (this.listaProductosPorAgregar.length > 0) {
       let info = JSON.stringify(formulario.value);
       let prod = JSON.stringify(this.listaProductosPorAgregar);
       let datos = new FormData();
@@ -393,12 +411,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       datos.append('tipoBodega', this.TipoBodega);
       datos.append('company_id', this._user.user.person.company_worked.id);
 
-      return await this.http
-        .post(
-          environment.ruta +
-          'php/comprasnacionales/guardar_compra_nacional.php',
-          datos
-        )
+      return await this.http.post( environment.base_url + '/php/comprasnacionales/guardar_compra_nacional', datos )
         .toPromise()
         .then(
           (data: any) => {
@@ -430,7 +443,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     } else {
       this.confirmacionSwal.title = 'Error ';
       this.confirmacionSwal.text =
-        'No se puede guardar un orden de compra si productos';
+        'No se puede guardar un orden de compra sin productos';
       this.confirmacionSwal.icon = 'error';
       this.confirmacionSwal.fire();
     }
@@ -563,11 +576,8 @@ export class CrearCompraNacionalComponent implements OnInit {
   }
 
   CalculoTotal(pos) {
-    var cantidad = (
-      document.getElementById('Cantidad' + pos) as HTMLInputElement
-    ).value;
-    var Costo = (document.getElementById('Costo' + pos) as HTMLInputElement)
-      .value;
+    var cantidad = (document.getElementById('Cantidad' + pos) as HTMLInputElement).value;
+    var Costo = (document.getElementById('Costo' + pos) as HTMLInputElement).value;
     var subtotal = parseFloat(Costo) * parseFloat(cantidad);
 
     var iva = (document.getElementById('Iva' + pos) as HTMLInputElement).value;

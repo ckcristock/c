@@ -15,7 +15,7 @@ export class ListaFijosComponent implements OnInit {
   personData: any;
   loading: boolean = false;
   ngOnInit(): void {
-      
+
     this.getData();
   }
   dayswork: any[] = []
@@ -29,11 +29,12 @@ export class ListaFijosComponent implements OnInit {
     };
     this._extraHour.getDetailPeople(data).subscribe((r: any) => {
       this.personData = r.data;
+      console.log(r.data)
       console.log(this.personData)
-      this.dayswork = this.personData.daysWork
+      this.dayswork = this.personData.days_work
       this.loading = false;
     });
 
-    
+
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -7,14 +7,14 @@ import swal, { SweetAlertOptions } from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
 import { BodegasService } from 'src/app/pages/ajustes/informacion-base/bodegas/bodegas.service.';
 import { ProductoService } from 'src/app/pages/inventario/services/producto.service';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { CategoriasService } from 'src/app/pages/ajustes/parametros/categorias/categorias.service';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-crear-compra-nacional',
@@ -35,7 +35,7 @@ export class CrearCompraNacionalComponent implements OnInit {
   public reducer3 = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Total);
 
-  public alertOption: SweetAlertOptions = {
+  /* public alertOption: SweetAlertOptions = {
     title: '¿Está Seguro?',
     text: 'Se dispone a Generar esta Compra',
     showCancelButton: true,
@@ -46,12 +46,12 @@ export class CrearCompraNacionalComponent implements OnInit {
     icon: 'info',
     preConfirm: () => {
       return new Promise((resolve) => {
-        /* return this.GuardarCompra(this.FormCompra, resolve); */
-        return this.GuardarCompra(this.formCompra, resolve);
+        // return this.GuardarCompra(this.FormCompra, resolve);
+        return this.GuardarCompra(this.formCompra);
       });
     },
     allowOutsideClick: () => !swal.isLoading(),
-  };
+  }; */
   public Cargando: boolean = true;
   public listaProductos: any[] = [];
   public listaProductosPorAgregar: any = [
@@ -135,7 +135,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     private _categoria: CategoriasService,
     private _modal: ModalService,
     private _bodegas: BodegasService,
-    private modalService: NgbModal,
+    public _swal: SwalService,
     private fb: FormBuilder
   ) {}
 
@@ -251,14 +251,19 @@ export class CrearCompraNacionalComponent implements OnInit {
 
   createForm() {
     this.formCompra = this.fb.group({
-      Id_Orden_Compra_Nacional: [''],
+      Id_Orden_Compra_Nacional: [null],
       Fecha_Entrega_Probable: ['', Validators.required],
       Identificacion_Funcionario: [this.user, Validators.required],
-      Id_Bodega_Nuevo: ['', Validators.required],
-      Id_Punto_Dispensacion: ['', Validators.required],
+      Id_Bodega_Nuevo: [''],
+      Id_Punto_Dispensacion: [''],
       Id_Proveedor: ['', Validators.required],
-      Observaciones: ['']
+      Observaciones: [''],
+      Productos: this.fb.array([])
     });
+  }
+
+  get products() : FormArray {
+    return this.formCompra.get("Productos") as FormArray
   }
 
   getSubCategories(event) {
@@ -384,69 +389,83 @@ export class CrearCompraNacionalComponent implements OnInit {
   } */
 
   /* async GuardarCompra(formulario: NgForm, resolve) { */
-  async GuardarCompra(formulario: FormGroup, resolve) {
-    let params = this.route.snapshot.queryParams;
+ GuardarCompra() {
+  this._swal.show({
+    title: '¿Estás seguro(a)?',
+    text: '¡La compra será registrada! Si ya verificó la información a enviar, por favor proceda.',
+    icon: 'question',
+    showCancel: true
+  })
+    .then((result) => {
+      if (result.isConfirmed) {
+        let formulario = this.formCompra;
+        //if(formulario.value.Id_Orden_Compra_Nacional==null){ delete formulario.value.Id_Orden_Compra_Nacional;}
+        let params = this.route.snapshot.queryParams;
 
-    //Se  actualiza la precompra con el estado Solicitada
-    if (params.Pre_Compra != undefined) {
-      let datos = new FormData();
-      datos.append('id_pre_compra', params.Pre_Compra);
-      this.http.post(
-        environment.base_url + '/php/rotativoscompras/actualizar_estado',
-        datos
-      ).subscribe((data: any) => { });
-    }
+        //Se  actualiza la precompra con el estado Solicitada
+        if (params.Pre_Compra != undefined) {
+          let datos = new FormData();
+          datos.append('id_pre_compra', params.Pre_Compra);
+          this.http.post(
+            environment.base_url + '/php/rotativoscompras/actualizar_estado',
+            datos
+          ).subscribe((data: any) => { });
+        }
 
-    if (this.listaProductosPorAgregar.length > 0) {
-      let info = JSON.stringify(formulario.value);
-      let prod = JSON.stringify(this.listaProductosPorAgregar);
-      let datos = new FormData();
+        if (this.listaProductosPorAgregar.length > 0) {
+          let info = JSON.stringify(formulario.value);
+          let prod = JSON.stringify(this.listaProductosPorAgregar);
+          let datos = new FormData();
 
-      params.Pre_Compra != undefined
-        ? datos.append('id_pre_compra', params.Pre_Compra)
-        : '';
-      datos.append('modulo', 'Orden_Compra_Nacional');
-      datos.append('datos', info);
-      datos.append('productos', prod);
-      datos.append('tipoBodega', this.TipoBodega);
-      datos.append('company_id', this._user.user.person.company_worked.id);
+          params.Pre_Compra != undefined
+            ? datos.append('id_pre_compra', params.Pre_Compra)
+            : '';
+          datos.append('modulo', 'Orden_Compra_Nacional');
+          /* datos.append('datos', info); */
+          datos.append('datos', formulario.value);
+          datos.append('productos', prod);
+          //datos.append('tipoBodega', this.TipoBodega);
+          datos.append('company_id', this._user.user.person.company_worked.id);
 
-      return await this.http.post( environment.base_url + '/php/comprasnacionales/guardar_compra_nacional', datos )
-        .toPromise()
-        .then(
-          (data: any) => {
-            this.confirmacionSwal.title = 'Creacion de Orden de Compras';
-            this.confirmacionSwal.text = data.mensaje;
-            this.confirmacionSwal.icon = data.tipo;
-            this.confirmacionSwal.fire();
-            formulario.reset();
-            // this.NombreProveedor='';
-            this.VerPantallaLista();
-            //buscar posición proveedor
-            const proveedor = this.precompra.find(
-              (lista) => lista.Id_Proveedor === this.id
+          /* return await  */this.http.post( environment.base_url + '/php/comprasnacionales/guardar_compra_nacional', datos )
+            /* .toPromise()
+            .then( */
+            .subscribe(
+              (data: any) => {
+                this.confirmacionSwal.title = 'Creacion de Orden de Compras';
+                this.confirmacionSwal.text = data.mensaje;
+                this.confirmacionSwal.icon = data.tipo;
+                this.confirmacionSwal.fire();
+                formulario.reset();
+                // this.NombreProveedor='';
+                this.VerPantallaLista();
+                //buscar posición proveedor
+                const proveedor = this.precompra.find(
+                  (lista) => lista.Id_Proveedor === this.id
+                );
+                const index = this.precompra.indexOf(proveedor);
+                //eliminar ese provvedor de la lista
+                this.precompra.splice(index, 1);
+                //decir al localstore que lo que tengo en lista producto será el nuevo localstorage
+                localStorage.setItem('Compra', JSON.stringify(this.precompra));
+              },
+              (error) => {
+                this.confirmacionSwal.title = 'Error';
+                this.confirmacionSwal.text =
+                  'Ha ocurrido un error inesperado de conexión.';
+                this.confirmacionSwal.icon = 'error';
+                this.confirmacionSwal.fire();
+              }
             );
-            const index = this.precompra.indexOf(proveedor);
-            //eliminar ese provvedor de la lista
-            this.precompra.splice(index, 1);
-            //decir al localstore que lo que tengo en lista producto será el nuevo localstorage
-            localStorage.setItem('Compra', JSON.stringify(this.precompra));
-          },
-          (error) => {
-            this.confirmacionSwal.title = 'Error';
-            this.confirmacionSwal.text =
-              'Ha ocurrido un error inesperado de conexión.';
-            this.confirmacionSwal.icon = 'error';
-            this.confirmacionSwal.fire();
-          }
-        );
-    } else {
-      this.confirmacionSwal.title = 'Error ';
-      this.confirmacionSwal.text =
-        'No se puede guardar un orden de compra sin productos';
-      this.confirmacionSwal.icon = 'error';
-      this.confirmacionSwal.fire();
-    }
+        } else {
+          this.confirmacionSwal.title = 'Error ';
+          this.confirmacionSwal.text =
+            'No se puede guardar un orden de compra sin productos';
+          this.confirmacionSwal.icon = 'error';
+          this.confirmacionSwal.fire();
+        }
+      }
+    });
   }
 
   VerPantallaLista() {
@@ -479,18 +498,21 @@ export class CrearCompraNacionalComponent implements OnInit {
           // Se agregan nuevos productos.
           producto: valor.producto,
           Presentacion: valor.Presentacion,
-          Costo: valor.Costo,
-          Total: 0,
-          Cantidad: 1,
-          Iva: 0,
           Rotativo: 0,
-          Id_Producto: valor.Id_Producto,
           Iva_Disa: valor.Iva_Disa,
           editar: true,
           delete: true,
           Iva_Acu: 0,
           Embalaje: valor.Embalaje,
         });
+
+        this.products.push(this.fb.group({
+          Costo: valor.Costo,
+          Total: 0,
+          Cantidad: 1,
+          Iva: 0,
+          Id_Producto: valor.Id_Producto
+        }));
     }
     //this.productoFiltro = {};
     this.filtros();
@@ -576,17 +598,33 @@ export class CrearCompraNacionalComponent implements OnInit {
   }
 
   CalculoTotal(pos) {
-    var cantidad = (document.getElementById('Cantidad' + pos) as HTMLInputElement).value;
-    var Costo = (document.getElementById('Costo' + pos) as HTMLInputElement).value;
+    /* var cantidad = (document.getElementById('Cantidad' + pos) as HTMLInputElement).value;
+    var Costo = (document.getElementById('Costo' + pos) as HTMLInputElement).value; */
+    var cantidad = this.formCompra.value.Productos[pos].value.Cantidad.value;
+    var Costo = this.formCompra.value.Productos[pos].value.Costo.value;
     var subtotal = parseFloat(Costo) * parseFloat(cantidad);
 
-    var iva = (document.getElementById('Iva' + pos) as HTMLInputElement).value;
+    /* var iva = (document.getElementById('Iva' + pos) as HTMLInputElement).value; */
+    var iva = this.formCompra.value.Productos[pos].value.Iva.value;
 
     this.listaProductosPorAgregar[pos].Iva_Acu = subtotal * (parseInt(iva) / 100);
-    this.listaProductosPorAgregar[pos].Total = subtotal;
+    /* this.listaProductosPorAgregar[pos].Total = subtotal; */
+    this.formCompra.value.Productos[pos].value.Total.setvalue(subtotal);
   }
 
   CapturarDigitacion(pos) {
+   /*  let cantidad = (
+      document.getElementById('Cantidad' + pos) as HTMLInputElement
+    ).value;
+    let costo = (document.getElementById('Costo' + pos) as HTMLInputElement)
+      .value;
+    let iva = (document.getElementById('Iva' + pos) as HTMLInputElement).value;
+    let subtotal = parseFloat(cantidad) * parseFloat(costo);
+
+    this.listaProductosPorAgregar[pos].Cantidad = cantidad;
+    this.listaProductosPorAgregar[pos].Costo = costo;
+    this.listaProductosPorAgregar[pos].Iva = iva;
+    this.listaProductosPorAgregar[pos].Total = subtotal.toFixed(); */
     let cantidad = (
       document.getElementById('Cantidad' + pos) as HTMLInputElement
     ).value;

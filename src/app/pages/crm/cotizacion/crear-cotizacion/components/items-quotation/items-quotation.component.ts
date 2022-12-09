@@ -28,17 +28,16 @@ export class ItemsQuotationComponent implements OnInit {
       group.patchValue({
         value_cop: 0,
         value_usd: 0,
-        total_cop: 0,
-        total_usd: 0,
+        total_cop: {value: 0, disabled: true},
+        total_usd: {value: 0, disabled: true},
       })
     }
     group.get('value_cop').disable()
     group.get('value_usd').disable()
-    subItems.push(this.makeSubItem(null, false, type))
+    subItems.push(this.makeSubItem(null, false, type, group))
   }
 
   addItems(item_to_add = null, type) {
-    console.log(item_to_add)
     let item = this.fb.group({
       subItems: this.fb.array([]),
       id: item_to_add ? item_to_add.id : '',
@@ -131,7 +130,7 @@ export class ItemsQuotationComponent implements OnInit {
       const subItems = item.get('subItems') as FormArray
       item_to_add.subitems.forEach(subi => {
 
-        subItems.push(this.makeSubItem(subi, true, type))
+        subItems.push(this.makeSubItem(subi, true, type, item))
       });
 
     }
@@ -185,20 +184,37 @@ export class ItemsQuotationComponent implements OnInit {
     })
     //}
   }
-
-  recalculate() {
-
-    this.form.getRawValue().items.forEach(item => {
-      item.subItems.forEach(subItem => {
-        let value_cop = item.value_cop + subItem.total_cop
-        console.log(item)
-      });
+  value_cop_temp: number
+  value_usd_temp: number
+  recalculate(subItemGroup, item_pre) {
+    console.log(item_pre)
+    this.value_cop_temp = 0
+    this.value_usd_temp = 0
+    item_pre.getRawValue().subItems.forEach(subItem => {
+      this.value_cop_temp += Number(subItem.total_cop.toString().split(/[,$]+/).join(''))
+      this.value_usd_temp += Number(subItem.total_usd.toString().split(/[,$]+/).join(''))
     });
+    let value_cop = this.value_cop_temp * Number(item_pre.controls.ammount.value.toString().split(/[,$]+/).join(''))
+    item_pre.patchValue({
+      value_cop : this._numberPipe.transform(this.value_cop_temp.toString(), '$'),
+      value_usd : this._numberPipe.transform(this.value_usd_temp.toString(), '$'),
+    })
+
+  }
+
+  updateSubTotals(itemGroup: FormArray, keysToUpdate: Array<string>) {
+    const subItems = itemGroup.value;
+
+    keysToUpdate.forEach(keyToUpdate => {
+      const total: number = subItems.reduce((acc, el) => acc + el[keyToUpdate], 0);
+      const parent: FormGroup = itemGroup.parent as FormGroup
+      parent.patchValue({ [keyToUpdate]: total })
+    });
+
   }
 
 
-  makeSubItem(pre = null, edit = false, type = '') {
-    console.log(pre)
+  makeSubItem(pre = null, edit = false, type = '', group = null) {
     const subItemGroup = this.makeSubItemGroup(pre, edit, type)
     const cuantity = subItemGroup.get('cuantity')
     const value_cop = subItemGroup.get('value_cop')
@@ -224,7 +240,7 @@ export class ItemsQuotationComponent implements OnInit {
         total_cop: this._numberPipe.transform(total_cop.toString(), '$'),
         total_usd: this._numberPipe.transform(total_usd.toString(), '$'),
       })
-      this.recalculate()
+      this.recalculate(subItemGroup, group)
     })
     value_cop.valueChanges.subscribe(r => {
       if (typeof r === 'string') {
@@ -239,6 +255,7 @@ export class ItemsQuotationComponent implements OnInit {
       subItemGroup.patchValue({
         total_cop: this._numberPipe.transform(total_cop.toString(), '$'),
       })
+      this.recalculate(subItemGroup, group)
     })
     value_usd.valueChanges.subscribe(r => {
       if (typeof r === 'string') {
@@ -247,12 +264,13 @@ export class ItemsQuotationComponent implements OnInit {
           subItemGroup.patchValue({ value_usd: maskedVal });
         }
       }
-      let cuantity = subItemGroup.get('ammount').value.toString().split(',').join('')
+      let cuantity = subItemGroup.get('cuantity').value.toString().split(',').join('')
       let value_usd = subItemGroup.get('value_usd').value.toString().split(/[,$]+/).join('')
       let total_usd = value_usd * cuantity
       subItemGroup.patchValue({
         total_usd: this._numberPipe.transform(total_usd.toString(), '$'),
       })
+      this.recalculate(subItemGroup, group)
     })
 
     return subItemGroup;
@@ -263,11 +281,11 @@ export class ItemsQuotationComponent implements OnInit {
   }
 
   getBudgets(e: any[]) {
-    console.log(e)
+    console.log('llegando')
     let subItems = this.tempItem.get('subItems') as FormArray;
     e.forEach(budget => {
       const exist = subItems.value.some(x => (x.id == budget.id && x.type_module == budget.type_module))
-      !exist ? subItems.push(this.makeSubItem(budget)) : ''
+      !exist ? subItems.push(this.makeSubItem(budget, null, '', this.tempItem)) : ''
     });
   }
 
@@ -280,8 +298,8 @@ export class ItemsQuotationComponent implements OnInit {
       cuantity: ((edit && pre?.cuantity) ? pre.cuantity : 1),
       value_cop: ((edit && pre?.value_cop) ? this._numberPipe.transform((pre.value_cop / pre.cuantity).toString(), '$') : 0),
       value_usd: ((edit && pre?.value_usd) ? this._numberPipe.transform((pre.value_usd / pre.cuantity).toString(), '$') : 0),
-      total_cop: ((edit && pre?.value_cop) ? this._numberPipe.transform((pre.value_cop).toString(), '$') : 0),
-      total_usd: ((edit && pre?.value_usd) ? this._numberPipe.transform((pre.value_usd).toString(), '$') : 0),
+      total_cop: { value: ((edit && pre?.value_cop) ? this._numberPipe.transform((pre.value_cop).toString(), '$') : 0), disabled: true },
+      total_usd: { value: ((edit && pre?.value_usd) ? this._numberPipe.transform((pre.value_usd).toString(), '$') : 0), disabled: true },
       type: type == 'only_item' ? true : false,
     })
   }

@@ -49,7 +49,8 @@ export class CrearCotizacionComponent implements OnInit {
   }
 
   getTRM() {
-    let today = this.datePipe.transform(new Date(), 'yyyy-MM-dd')
+    let d = new Date();
+    let today = this.datePipe.transform(d.setDate(d.getDate() - 1), 'yyyy-MM-dd')
     this.http.get('https://www.datos.gov.co/resource/ceyp-9c7c.json', { params: { vigenciadesde: today } }).subscribe((res: any) => {
       this.trm = res[0].valor
       this.form.patchValue({ trm: this.trm })
@@ -112,7 +113,7 @@ export class CrearCotizacionComponent implements OnInit {
         title: 'Faltan datos',
         text: 'Elige el tipo de moneda antes de agregar un presupuesto',
         showCancel: false
-      }).then(r=>{
+      }).then(r => {
         this.form.get('budget').reset()
       })
     }

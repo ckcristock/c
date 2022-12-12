@@ -35,6 +35,5 @@ export class ListaFijosComponent implements OnInit {
       this.loading = false;
     });
 
-
   }
 }

@@ -138,7 +138,7 @@ export class CompraNacionalComponent implements OnInit {
 
     this.pagination.page = page;
     let params = {
-      ...this.pagination, ...this.filtros
+      ...this.pagination, ...this.filtros, ...this.requiredParams.params
     }
     this.loading = true;
     this._compraNacional.getListaComprasNacionales(params).subscribe((res: any) => {

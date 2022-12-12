@@ -199,7 +199,7 @@
         <div class="col mat-form-field-wrapper d-flex align-items-center justify-content-center">
           <button
             class="btn btn-danger btn-sm"
-            (click)="listaProductosPorAgregar=[]; filtros(); ActualizaValores();"
+            (click)="listaProductosPorAgregar=[]; products.clear(); filtros(); ActualizaValores();"
           >
             <i class="fa fa-trash"></i> Vaciar lista
           </button>
@@ -227,6 +227,7 @@
             <tr
               *ngFor="let item of listaProductosPorAgregar; let i = index"
               id="fila{{ i }}"
+              [formGroupName]="i"
             >
               <td class="align-middle">
                 <!-- <input
@@ -244,7 +245,7 @@
                   [value]="item.producto"
                   [readonly]="item.producto != ''"
                 /> -->
-                <span *ngIf="item.Id_Producto != ''">{{ item.producto }}</span>
+                <span>{{ item.producto }}</span>
               </td>
               <td class="text-center align-middle">
                 <!-- <button
@@ -295,124 +296,112 @@
                   class="form-control form-control-sm text-right f-9"
                 />
               </td>
-              <div [formGroupName]="i">
-                <td>
-                  <!--<input id="Cantidad{{i}}" name="Cantidad{{i}}" [ngModel]="item.Cantidad" type="number" min="1" class="form-control form-control-sm text-right f-9"
-                          (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
-                  <!-- <input
-                    type="hidden"
-                    name="CantidadModel{{ i }}"
-                    [value]="item.Cantidad"
-                  /> -->
-                  <input
-                    formControlName="Cantidad"
-                    type="number"
-                    min="1"
-                    class="form-control form-control-sm text-right f-9"
-                    (change)="
-                      CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                    "
-                    (keyup)="ActualizaValores(); CapturarDigitacion(i)"
-                  />
-                </td>
-                <td>
-                  <!-- <input
-                    type="hidden"
-                    name="CostoModel{{ i }}"
-                    [value]="item.Costo"
-                  /> -->
-                  <input
-                    formControlName="Costo"
-                    type="text"
-                    min="1"
-                    class="form-control form-control-sm text-right f-9"
-                    (change)="
-                      CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                    "
-                    (keyup)="ActualizaValores(); CapturarDigitacion(i)"
-                    pattern="[0-9\.]*"
-                  />
-                </td>
-                <td>
-                  <!-- <input
+              <td>
+                <!--<input id="Cantidad{{i}}" name="Cantidad{{i}}" [ngModel]="item.Cantidad" type="number" min="1" class="form-control form-control-sm text-right f-9"
+                        (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
+                <!-- <input
+                  type="hidden"
+                  name="CantidadModel{{ i }}"
+                  [value]="item.Cantidad"
+                /> -->
+                <input
+                  formControlName="Cantidad"
+                  type="number"
+                  min="1"
+                  class="form-control form-control-sm text-right f-9"
+                  (input)="CalculoTotal(i)"
+                /><!-- ; CapturarDigitacion(i) (keyup)="ActualizaValores()"-->
+              </td>
+              <td>
+                <!-- <input
+                  type="hidden"
+                  name="CostoModel{{ i }}"
+                  [value]="item.Costo"
+                /> -->
+                <input
+                  formControlName="Costo"
+                  type="text"
+                  min="1"
+                  class="form-control form-control-sm text-right f-9"
+                  (input)="CalculoTotal(i)"
+                  pattern="[0-9\.]*"
+                /><!-- ; CapturarDigitacion(i) -->
+              </td>
+              <td>
+                <!-- <input
+                  id="Iva{{ i }}"
+                  name="Iva{{ i }}"
+                  [ngModel]="item.Iva"
+                  type="number"
+                  min="1"
+                  class="form-control form-control-sm text-right f-9"
+                  (change)="
+                    CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
+                  "
+                /> -->
+                <!-- <input
+                  type="hidden"
+                  name="IvaModel{{ i }}"
+                  [value]="item.Iva"
+                /> -->
+                <!-- <mat-form-field class="pb-0" appearance="outline">
+                  <mat-select
+                    [ngModel]="item.Iva"
                     id="Iva{{ i }}"
                     name="Iva{{ i }}"
-                    [ngModel]="item.Iva"
-                    type="number"
-                    min="1"
-                    class="form-control form-control-sm text-right f-9"
-                    (change)="
-                      CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                    "
-                  /> -->
-                  <!-- <input
-                    type="hidden"
-                    name="IvaModel{{ i }}"
-                    [value]="item.Iva"
-                  /> -->
-                  <!-- <mat-form-field class="pb-0" appearance="outline">
-                    <mat-select
-                      [ngModel]="item.Iva"
-                      id="Iva{{ i }}"
-                      name="Iva{{ i }}"
-                      (selectionChange)="
-                        CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                      "
-                    >
-                      <mat-option
-                        *ngFor="let Impuesto of Impuestos; let i = index"
-                        [value]="Impuesto.Valor"
-                      >
-                        {{ Impuesto.Valor }}</mat-option
-                      >
-                    </mat-select>
-                  </mat-form-field> -->
-                  <select
-                    formControlName="Iva"
-                    class="form-control form-control-sm"
-                    (change)="
+                    (selectionChange)="
                       CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
                     "
                   >
-                    <option
+                    <mat-option
                       *ngFor="let Impuesto of Impuestos; let i = index"
                       [value]="Impuesto.Valor"
                     >
-                      {{ Impuesto.Valor }}
-                    </option>
-                  </select>
-                </td>
-                <td class="text-center align-middle">
-                  <input
-                    type="hidden"
-                    formControlName="Total"
-                  />
-                  <!-- <input
-                    type="hidden"
-                    name="TotalModel{{ i }}"
-                    [value]="item.Total"
-                  /> -->
-                  <span
-                    name="Total{{ i }}"
-                    id="Total{{ i }}"
-                    type="text"
-                    min="1"
-                    (change)=" CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)"
-                    readonly
+                      {{ Impuesto.Valor }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field> -->
+                <select
+                  formControlName="Iva"
+                  class="form-control form-control-sm"
+                  (change)="CalculoTotal(i)"
+                ><!-- ; CapturarDigitacion(i) -->
+                  <option
+                    *ngFor="let Impuesto of Impuestos; let i = index"
+                    [value]="Impuesto.Valor"
                   >
-                    $ {{ item.Total | currency : "COP" : "symbol" }}
-                  </span>
-                </td>
-                <td class="align-middle">
-                  <button
-                    class="btn btn-danger btn-sm"
-                    (click)="deleteProduct(i, $event)"
-                    *ngIf="item.producto != ''"
-                  >
-                    <i class="fa fa-trash"></i>
-                  </button>
-                </td>
-              </div>
+                    {{ Impuesto.Valor }}
+                  </option>
+                </select>
+              </td>
+              <td class="text-center align-middle">
+                <input
+                  type="hidden"
+                  formControlName="Total"
+                />
+                <!-- <input
+                  type="hidden"
+                  name="TotalModel{{ i }}"
+                  [value]="item.Total"
+                /> -->
+                <span
+                  name="Total{{ i }}"
+                  id="Total{{ i }}"
+                  type="text"
+                  readonly
+                ><!-- (change)=" CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)" -->
+                  $ {{ item.Total | currency : "COP" : "symbol" }}
+                </span>
+              </td>
+              <td class="align-middle">
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="deleteProduct(i, $event)"
+                  *ngIf="item.producto != ''"
+                >
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>

@@ -26,14 +26,22 @@ export class CrearCompraNacionalComponent implements OnInit {
   @ViewChild('modalProductos') modalProductos: any;
   //@ViewChild('FormCompra') FormCompra: NgForm;
 
-  public reducer = (accumulator, currentValue) =>
+  public reducerCantidad = (accumulator, currentValue) =>
+    accumulator + parseFloat(currentValue.Cantidad);
+  public reducerCosto = (accumulator, currentValue) =>
+    accumulator + parseFloat(currentValue.Costo);
+  public reducerIva = (accumulator, currentValue) =>
+    accumulator + parseFloat(currentValue.Iva_Acu);
+  public reducerTotal = (accumulator, currentValue) =>
+    accumulator + parseFloat(currentValue.Total);
+ /*  public reducer = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Cantidad);
   public reducer1 = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Costo);
   public reducer2 = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Iva_Acu);
   public reducer3 = (accumulator, currentValue) =>
-    accumulator + parseFloat(currentValue.Total);
+    accumulator + parseFloat(currentValue.Total); */
 
   /* public alertOption: SweetAlertOptions = {
     title: '¿Está Seguro?',
@@ -148,20 +156,26 @@ export class CrearCompraNacionalComponent implements OnInit {
         .get(environment.base_url + '/php/rotativoscompras/detalle_pre_compra/' + params.Pre_Compra)
         .subscribe((res: any) => {
           this.listaProductosPorAgregar = res.data.Productos;
+          this.products.push(this.fb.group(res.data.Productos));
           this.Cargando = false
           this.Id_Proveedor = res.data.Datos.Id_Proveedor;
           this.listaProductosPorAgregar.push({
             producto: '',
-            Costo: 0,
             Total: 0,
-            Cantidad: null,
-            Iva: 0,
             Rotativo: 0,
-            Id_Producto: '',
             Iva_Disa: true,
             Presentacion: 0,
             Iva_Acu: 0,
           });
+
+          this.products.push(this.fb.group({
+            Costo: 0,
+            Total: 0,
+            Cantidad: 1,
+            Iva: 0,
+            Id_Producto: ''
+          }));
+
           this.NombreProveedor = res.data.Proveedor;
           this.ActualizaValores();
           this.Tipo = 'Recurrente';
@@ -179,7 +193,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     if (this.id != undefined) {
       this.Rotativo = true;
       //debo llamar al localstore, y decirle cual es el que quiero listar
-      this.listaProductosPorAgregar.splice(0, 1);
+      //this.listaProductosPorAgregar.splice(0, 1);
       const proveedor = this.precompra.find(
         (lista) => lista.Id_Proveedor === this.id
       );
@@ -191,19 +205,23 @@ export class CrearCompraNacionalComponent implements OnInit {
         if (element != null) {
           this.listaProductosPorAgregar.push({
             producto: element,
+            Total: parseFloat(element.Costo) * parseFloat(element.Cantidad),
+            Rotativo: 0,
+            Iva_Disa: true,
+          });
+
+          this.products.push(this.fb.group({
             Costo: element.Costo,
             Total: parseFloat(element.Costo) * parseFloat(element.Cantidad),
             Cantidad: element.Cantidad,
             Iva: element.Iva,
-            Rotativo: 0,
-            Id_Producto: element.Id_Producto,
-            Iva_Disa: true,
-          });
+            Id_Producto: element.Id_Producto
+          }));
         }
       });
 
       //
-      this.listaProductosPorAgregar.push({
+      /* this.listaProductosPorAgregar.push({
         producto: '',
         Costo: 0,
         Total: 0,
@@ -212,7 +230,7 @@ export class CrearCompraNacionalComponent implements OnInit {
         Rotativo: 0,
         Id_Producto: '',
         Iva_Disa: true,
-      });
+      }); */
       this. ActualizaValores();
       /* this.Cantidad_v = parseFloat(
         this.listaProductosPorAgregar.reduce(this.reducer, 0)
@@ -237,8 +255,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       this.puntos = res.data;
     });
 
-    this._proveedor.getThirdPartyProvider({
-    }).subscribe((res: any) => {
+    this._proveedor.getThirdPartyProvider({}).subscribe((res: any) => {
       this.Proveedores = res.data;
     });
 
@@ -347,7 +364,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       let params = { ...this.selectedCategory, company_id: this._user.user.person.company_worked.id };
       this._producto.getProductos(params).subscribe((res: any) => {
           /* this.ListaProducto = res.data; */
-        let productIds= this.listaProductosPorAgregar.map(x => x = x.Id_Producto);
+        let productIds= this.formCompra.value.Productos.map(x => x = x.Id_Producto);
         this.Productos = res.data.filter((v) => productIds.every((valor) => valor != v.Id_Producto));
         this.Productos.forEach((valor) => {
           valor['Iva_Disa'] =  valor.Gravado == 'Si' ? false : true;
@@ -395,11 +412,9 @@ export class CrearCompraNacionalComponent implements OnInit {
     text: '¡La compra será registrada! Si ya verificó la información a enviar, por favor proceda.',
     icon: 'question',
     showCancel: true
-  })
-    .then((result) => {
+  }).then((result) => {
       if (result.isConfirmed) {
         let formulario = this.formCompra;
-        //if(formulario.value.Id_Orden_Compra_Nacional==null){ delete formulario.value.Id_Orden_Compra_Nacional;}
         let params = this.route.snapshot.queryParams;
 
         //Se  actualiza la precompra con el estado Solicitada
@@ -414,62 +429,77 @@ export class CrearCompraNacionalComponent implements OnInit {
 
         if (this.listaProductosPorAgregar.length > 0) {
           let info = JSON.stringify(formulario.value);
-          let prod = JSON.stringify(this.listaProductosPorAgregar);
+          /* let prod = JSON.stringify(this.listaProductosPorAgregar); */
           let datos = new FormData();
 
-          params.Pre_Compra != undefined
-            ? datos.append('id_pre_compra', params.Pre_Compra)
-            : '';
-          datos.append('modulo', 'Orden_Compra_Nacional');
-          /* datos.append('datos', info); */
-          datos.append('datos', formulario.value);
-          datos.append('productos', prod);
+          if(params.Pre_Compra != undefined){
+            datos.append('id_pre_compra', params.Pre_Compra);
+          }
+          //datos.append('modulo', 'Orden_Compra_Nacional');
+          datos.append('datos', info);
+          //datos.append('productos', prod);
           //datos.append('tipoBodega', this.TipoBodega);
           datos.append('company_id', this._user.user.person.company_worked.id);
 
           /* return await  */this.http.post( environment.base_url + '/php/comprasnacionales/guardar_compra_nacional', datos )
             /* .toPromise()
-            .then( */
-            .subscribe(
-              (data: any) => {
-                this.confirmacionSwal.title = 'Creacion de Orden de Compras';
-                this.confirmacionSwal.text = data.mensaje;
-                this.confirmacionSwal.icon = data.tipo;
-                this.confirmacionSwal.fire();
-                formulario.reset();
-                // this.NombreProveedor='';
-                this.VerPantallaLista();
-                //buscar posición proveedor
-                const proveedor = this.precompra.find(
-                  (lista) => lista.Id_Proveedor === this.id
-                );
-                const index = this.precompra.indexOf(proveedor);
-                //eliminar ese provvedor de la lista
-                this.precompra.splice(index, 1);
-                //decir al localstore que lo que tengo en lista producto será el nuevo localstorage
-                localStorage.setItem('Compra', JSON.stringify(this.precompra));
-              },
-              (error) => {
-                this.confirmacionSwal.title = 'Error';
-                this.confirmacionSwal.text =
-                  'Ha ocurrido un error inesperado de conexión.';
-                this.confirmacionSwal.icon = 'error';
-                this.confirmacionSwal.fire();
-              }
-            );
-        } else {
-          this.confirmacionSwal.title = 'Error ';
-          this.confirmacionSwal.text =
-            'No se puede guardar un orden de compra sin productos';
+            .then((data: any) => { */
+            .subscribe((res: any) => {
+              this._swal.show({
+                title : 'Creación de orden de compras',
+                text : res.data,
+                icon : (res.err == null)?'success':'error',
+                timer: 1000
+              });
+              /* this.confirmacionSwal.title = 'Creacion de Orden de Compras';
+              this.confirmacionSwal.text = data.mensaje;
+              this.confirmacionSwal.icon = data.tipo;
+              this.confirmacionSwal.fire(); */
+              formulario.reset();
+              // this.NombreProveedor='';
+              this.VerPantallaLista();
+              //buscar posición proveedor
+              const proveedor = this.precompra.find(
+                (lista) => lista.Id_Proveedor === this.id
+              );
+              const index = this.precompra.indexOf(proveedor);
+              //eliminar ese proveedor de la lista
+              this.precompra.splice(index, 1);
+              //decir al localstore que lo que tengo en lista producto será el nuevo localstorage
+              localStorage.setItem('Compra', JSON.stringify(this.precompra));
+            },
+            (error) => {
+              this._swal.show({
+                title : 'Error',
+                text : (error.err != null)?error.data:'Ha ocurrido un error inesperado de conexión.',
+                icon : 'error',
+                timer: 1000
+              });
+              /* this.confirmacionSwal.title = 'Error';
+              this.confirmacionSwal.text =
+                'Ha ocurrido un error inesperado de conexión.';
+              this.confirmacionSwal.icon = 'error';
+              this.confirmacionSwal.fire(); */
+            }
+          );
+        } else {this._swal.show({
+          title : 'Error',
+          text : 'No se puede guardar una orden de compra sin productos',
+          icon : 'error',
+          timer: 1000
+        });
+          /* this.confirmacionSwal.title = 'Error ';
+          this.confirmacionSwal.text ='No se puede guardar una orden de compra sin productos';
           this.confirmacionSwal.icon = 'error';
-          this.confirmacionSwal.fire();
+          this.confirmacionSwal.fire(); */
         }
       }
     });
   }
 
   VerPantallaLista() {
-    this.router.navigate(['/compras/nacional']);
+    this.router.navigate(['/compras/compra-nacional']);
+    /* this.router.navigate(['/compras/nacional']); */
   }
 
   /*  addProduct(pos) {
@@ -503,6 +533,7 @@ export class CrearCompraNacionalComponent implements OnInit {
           editar: true,
           delete: true,
           Iva_Acu: 0,
+          Total: 0,
           Embalaje: valor.Embalaje,
         });
 
@@ -592,6 +623,7 @@ export class CrearCompraNacionalComponent implements OnInit {
   deleteProduct(posicion, event) {
     if (event.screenX != 0) {
       this.listaProductosPorAgregar.splice(posicion, 1);
+      this.products.removeAt(posicion);
       this.ActualizaValores();
       this.filtros();
     }
@@ -600,19 +632,20 @@ export class CrearCompraNacionalComponent implements OnInit {
   CalculoTotal(pos) {
     /* var cantidad = (document.getElementById('Cantidad' + pos) as HTMLInputElement).value;
     var Costo = (document.getElementById('Costo' + pos) as HTMLInputElement).value; */
-    var cantidad = this.formCompra.value.Productos[pos].value.Cantidad.value;
-    var Costo = this.formCompra.value.Productos[pos].value.Costo.value;
+    var cantidad = this.formCompra.value.Productos[pos].Cantidad;
+    var Costo = this.formCompra.value.Productos[pos].Costo;
     var subtotal = parseFloat(Costo) * parseFloat(cantidad);
 
     /* var iva = (document.getElementById('Iva' + pos) as HTMLInputElement).value; */
-    var iva = this.formCompra.value.Productos[pos].value.Iva.value;
+    var iva = this.formCompra.value.Productos[pos].Iva;
 
     this.listaProductosPorAgregar[pos].Iva_Acu = subtotal * (parseInt(iva) / 100);
-    /* this.listaProductosPorAgregar[pos].Total = subtotal; */
-    this.formCompra.value.Productos[pos].value.Total.setvalue(subtotal);
+    this.listaProductosPorAgregar[pos].Total = subtotal.toFixed();
+    this.formCompra.value.Productos[pos].Total = subtotal;
+    this.ActualizaValores();
   }
 
-  CapturarDigitacion(pos) {
+  //CapturarDigitacion(pos) {
    /*  let cantidad = (
       document.getElementById('Cantidad' + pos) as HTMLInputElement
     ).value;
@@ -625,7 +658,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     this.listaProductosPorAgregar[pos].Costo = costo;
     this.listaProductosPorAgregar[pos].Iva = iva;
     this.listaProductosPorAgregar[pos].Total = subtotal.toFixed(); */
-    let cantidad = (
+    /* let cantidad = (
       document.getElementById('Cantidad' + pos) as HTMLInputElement
     ).value;
     let costo = (document.getElementById('Costo' + pos) as HTMLInputElement)
@@ -637,13 +670,17 @@ export class CrearCompraNacionalComponent implements OnInit {
     this.listaProductosPorAgregar[pos].Costo = costo;
     this.listaProductosPorAgregar[pos].Iva = iva;
     this.listaProductosPorAgregar[pos].Total = subtotal.toFixed();
-  }
+  } */
 
   ActualizaValores() {
-    this.Cantidad_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer, 0));
+    this.Cantidad_v = parseFloat(this.formCompra.value.Productos.reduce(this.reducerCantidad, 0));
+    this.Costo_v = parseFloat(this.formCompra.value.Productos.reduce(this.reducerCosto, 0));
+    this.Iva_F = parseFloat(this.listaProductosPorAgregar.reduce(this.reducerIva, 0));
+    this.Subtotal_v = parseFloat(this.formCompra.value.Productos.reduce(this.reducerTotal, 0));
+    /* this.Cantidad_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer, 0));
     this.Costo_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer1, 0));
     this.Iva_F = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer2, 0));
-    this.Subtotal_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer3, 0));
+    this.Subtotal_v = parseFloat(this.listaProductosPorAgregar.reduce(this.reducer3, 0)); */
 
     this.Subtotal_F = this.Subtotal_v;
 

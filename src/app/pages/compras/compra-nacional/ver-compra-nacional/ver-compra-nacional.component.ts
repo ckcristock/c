@@ -9,7 +9,11 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./ver-compra-nacional.component.scss']
 })
 export class VerCompraNacionalComponent implements OnInit {
-  public objeto:any = { 'Costo Incorrecto' : 'Costo Incorrecto', 'Proveedor Incorrecto' : 'Proveedor Incorrecto', 'Productos Incorrectos' : 'Productos Incorrectos'};
+  public objeto:any = {
+    'Costo Incorrecto' : 'Costo Incorrecto',
+    'Proveedor Incorrecto' : 'Proveedor Incorrecto',
+    'Productos Incorrectos' : 'Productos Incorrectos'
+  };
   public Compra:any = [];
   public Productos:any = [];
   public Rechazo:any = [];
@@ -26,17 +30,25 @@ export class VerCompraNacionalComponent implements OnInit {
   public Lista_Rechazo:any={};
   @ViewChild('confirmacionSwal') confimracionSwal:any;
 
-  constructor(private http: HttpClient, private router: ActivatedRoute) {
- 
-    this.id = this.router.snapshot.params["id"]; 
-    this.http.get(environment.ruta + 'php/comprasnacionales/datos_compras_nacionales.php', {params: { id: this.id }}).subscribe((data: any) => {
+  constructor(private http: HttpClient, private router: ActivatedRoute) {}
+
+  ngOnInit() {
+
+    this.id = this.router.snapshot.params["id"];
+    this.http.get(environment.base_url + '/php/comprasnacionales/datos_compras_nacionales', {params: { id: this.id }}).subscribe((data: any) => {
       this.Compra = data;
       console.log(this.Compra)
     });
-    this.http.get(environment.ruta + 'php/comprasnacionales/detalles_compras_nacionales.php', {params: { id: this.id }}).subscribe((data: any) => {
-      this.Productos = data.Productos;
+    /* this.http.get(environment.ruta + 'php/comprasnacionales/datos_compras_nacionales.php', {params: { id: this.id }}).subscribe((data: any) => {
+      this.Compra = data;
+      console.log(this.Compra)
+    }); */
+    this.http.get(environment.base_url + '/php/comprasnacionales/detalles_compras_nacionales', {params: { id: this.id }}).subscribe((res: any) => {
+      this.Productos = res.data;
+    /* this.http.get(environment.ruta + 'php/comprasnacionales/detalles_compras_nacionales.php', {params: { id: this.id }}).subscribe((data: any) => {
+      this.Productos = data.Productos; */
       // console.log(this.Productos);
-      
+
       let subtotal = 0;
       let iva = 0;
       let subt_acumulada = 0;
@@ -46,7 +58,7 @@ export class VerCompraNacionalComponent implements OnInit {
       this.Productos.forEach(p => {
         this.Total += parseInt(p.Total);
         subtotal = parseFloat(p.Cantidad) * parseFloat(p.Costo);
-        iva = ((parseFloat(p.Cantidad) * parseFloat(p.Costo)) * (parseFloat(p.Iva)/100)); 
+        iva = ((parseFloat(p.Cantidad) * parseFloat(p.Costo)) * (parseFloat(p.Iva)/100));
         subt_acumulada += subtotal;
         iva_acumulada += iva;
         total += subtotal + iva;
@@ -55,37 +67,39 @@ export class VerCompraNacionalComponent implements OnInit {
       this.SubTotalFinal = this.formatMoney(subt_acumulada);
       this.TotalFinal = this.formatMoney(total);
     });
-  }
 
-  ngOnInit() {
-    this.http.get(environment.ruta+'php/comprasnacionales/actividad_orden_compra.php',{
-      params : { id : this.id }
-    }).subscribe((data:any)=>{
-      this.Actividades=data;
-      // console.log(this.Actividades);            
+    this.http.get(environment.base_url+'/php/comprasnacionales/actividad_orden_compra',{params : { id : this.id }}).subscribe((res:any)=>{
+      this.Actividades=res.data;
+    /* this.http.get(environment.ruta+'php/comprasnacionales/actividad_orden_compra.php',{params : { id : this.id }}).subscribe((data:any)=>{
+      this.Actividades=data; */
+      // console.log(this.Actividades);
     });
 
-    this.http.get(environment.ruta+'php/comprasnacionales/detalle_perfil.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data:any) => {
+    this.http.get(environment.base_url+'/php/comprasnacionales/detalle_perfil', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((res:any) => {
+      this.permiso = res.data.status;
+      console.log(res.data)
+    })
+   /*  this.http.get(environment.ruta+'php/comprasnacionales/detalle_perfil.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data:any) => {
       this.permiso = data.status;
       console.log(data)
-    })
+    }) */
     this.http.get(environment.ruta+'php/comprasnacionales/detalle_rechazo.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data:any) => {
       for (let i = 0; i < data.length; i++) {
         this.Lista_Rechazo[data[i].Id_Tipo_Rechazo] = data[i].Nombre;
-        
-      }
-    }); 
 
-    
+      }
+    });
+
 
   }
+
   EstadoAprobacion(valor, Estado){
     let datos = new FormData();
     datos.append('id', this.id);
     datos.append('estado', Estado);
     datos.append('funcionario', this.user.Identificacion_Funcionario);
     datos.append("motivo",valor)
-    
+
     this.http.post(environment.ruta+'php/comprasnacionales/actualiza_compra.php', datos).subscribe((data:any) => {
       this.confimracionSwal.title = data.titulo;
       this.confimracionSwal.text = data.mensaje;
@@ -103,7 +117,7 @@ export class VerCompraNacionalComponent implements OnInit {
       params : { id : this.id }
     }).subscribe((data:any)=>{
       this.Actividades=data;
-      // console.log(this.Actividades);            
+      // console.log(this.Actividades);
     });
 
     this.http.get(environment.ruta+'php/comprasnacionales/detalle_perfil.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data:any) => {

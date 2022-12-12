@@ -52,7 +52,7 @@
                       />
                       <button
                         (click)="addSubItem(item, 'subitem')"
-                        class="btn btn-outline-warning btn-sm"
+                        class="btn btn-warning btn-sm"
                         type="button"
                       >
                         <i class="fas fa-plus"></i>
@@ -60,19 +60,19 @@
                     </div>
                   </td>
                   <td>
-                    <input formControlName="ammount" />
+                    <input formControlName="cuantity_aux" />
                   </td>
                   <td>
-                    <input formControlName="value_cop" />
+                    <input formControlName="value_cop_aux" />
                   </td>
                   <td>
-                    <input formControlName="value_usd" />
+                    <input formControlName="value_usd_aux" />
                   </td>
                   <td>
-                    <input formControlName="total_cop" />
+                    <input formControlName="total_cop_aux" />
                   </td>
                   <td>
-                    <input formControlName="total_usd" />
+                    <input formControlName="total_usd_aux" />
                   </td>
                   <td>
                     <i
@@ -107,18 +107,18 @@
                             formControlName="description"
                           />
                         </td>
-                        <td><input formControlName="cuantity" /></td>
+                        <td><input formControlName="cuantity_aux" /></td>
                         <td>
-                          <input formControlName="value_cop" />
+                          <input formControlName="value_cop_aux" />
                         </td>
                         <td>
-                          <input formControlName="value_usd" />
+                          <input formControlName="value_usd_aux" />
                         </td>
                         <td>
-                          <input formControlName="total_cop" />
+                          <input formControlName="total_cop_aux" />
                         </td>
                         <td>
-                          <input formControlName="total_usd" />
+                          <input formControlName="total_usd_aux" />
                         </td>
                         <td>
                           <i
@@ -135,11 +135,11 @@
               </ng-container>
             </tbody>
           </table>
-          <button (click)="printForm()">A</button>
+          <!-- <button (click)="printForm()">A</button> -->
         </div>
       </ng-container>
     </ng-container>
-    <div class="btn-group btn-block" role="group">
+    <div class="d-flex justify-content-end">
       <button
         (click)="addItems(null, 'subitem')"
         class="btn btn-primary btn-sm"
@@ -147,6 +147,28 @@
       >
         <i class="fas fa-plus"></i> Agregar subtítulo
       </button>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-end mt-3">
+    <div class="col-md-6">
+      <ul class="list-group list-group-flush">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          Total COP
+          <span class="badge badge-danger badge-pill"
+            >${{ form.controls.total_cop.value | currency : "COP" }}</span
+          >
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          Total USD
+          <span class="badge badge-danger badge-pill"
+            >${{ form.controls.total_usd.value | currency }}</span
+          >
+        </li>
+      </ul>
     </div>
   </div>
 </ng-container>

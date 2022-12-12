@@ -26,4 +26,8 @@ export class QuotationService {
   getTRM(params ={}){
     return this.http.get('https://www.datos.gov.co/resource/ceyp-9c7c.json', {params})
   }
+
+  save(data){
+    return this.http.post(`${environment.base_url}/quotations`, data)
+  }
 }

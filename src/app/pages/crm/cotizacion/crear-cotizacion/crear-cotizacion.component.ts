@@ -47,13 +47,17 @@ export class CrearCotizacionComponent implements OnInit {
     this.loadApuParts();
     this.getBudgets();
   }
-
+  d = new Date();
+  today = this.datePipe.transform(this.d.setDate(this.d.getDate()), 'yyyy-MM-dd')
   getTRM() {
-    let d = new Date();
-    let today = this.datePipe.transform(d.setDate(d.getDate() - 1), 'yyyy-MM-dd')
-    this.http.get('https://www.datos.gov.co/resource/ceyp-9c7c.json', { params: { vigenciadesde: today } }).subscribe((res: any) => {
-      this.trm = res[0].valor
-      this.form.patchValue({ trm: this.trm })
+    this.http.get('https://www.datos.gov.co/resource/ceyp-9c7c.json', { params: { vigenciadesde: this.today } }).subscribe((res: any) => {
+      if (!res[0]) {
+        this.today = this.datePipe.transform(this.d.setDate(this.d.getDate() - 1), 'yyyy-MM-dd')
+        this.getTRM()
+      } else {
+        this.trm = res[0].valor
+        this.form.patchValue({ trm: this.trm })
+      }
     })
   }
 
@@ -90,20 +94,16 @@ export class CrearCotizacionComponent implements OnInit {
             }
           }
         })
-        if (choice && choice == 'si') {
-          this.form.controls.budget.disable()
-          this.form.controls.budget_included.disable()
+        if (choice) {
+          const action = choice === 'si' ? 'subitems' : 'withSub';
+          this.form.patchValue({ budget_id: this.form.controls.budget.value.id });
+          this.form.controls.budget.disable();
+          this.form.controls.budget_included.disable();
           item.items.forEach(element => {
-            this.itemsQuotation.addItems(element, 'subitems')
-          });
-        } else if (choice && choice == 'no') {
-          this.form.controls.budget.disable()
-          this.form.controls.budget_included.disable()
-          item.items.forEach(element => {
-            this.itemsQuotation.addItems(element, 'only_item')
+            this.itemsQuotation.addItems(element, action);
           });
         } else {
-          this.form.controls.budget.reset()
+          this.form.controls.budget.reset();
         }
       })()
     } else {
@@ -173,6 +173,7 @@ export class CrearCotizacionComponent implements OnInit {
       project: ['', Validators.required],
       budget_included: ['', Validators.required],
       budget: [''],
+      budget_id: [''],
       //indirect_costs: this.fb.array([]),
       observation: '',
       items: this.fb.array([]),
@@ -190,7 +191,10 @@ export class CrearCotizacionComponent implements OnInit {
   }
 
   save() {
-
+    console.log(this.form.getRawValue())
+    this._quotation.save(this.form.getRawValue()).subscribe((res: any) => {
+      console.log(res)
+    });
   }
 
 }

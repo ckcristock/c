@@ -50,6 +50,7 @@
             placeholder="Ingresa TRM"
             required
           />
+          <mat-hint>TRM del {{ today | date }}</mat-hint>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Proyecto</mat-label>
@@ -105,6 +106,9 @@
       <hr />
       <app-items-quotation #itemsQuotation [form]="form"></app-items-quotation>
     </form>
+    <button type="button" class="btn btn-primary btn-block" (click)="save()">
+      Guardar
+    </button>
   </div>
 </div>
 

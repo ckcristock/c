@@ -62,7 +62,7 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            
+
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
@@ -95,7 +95,7 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            
+
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
@@ -113,7 +113,7 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            
+
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
@@ -189,7 +189,9 @@
         >
           <button
             class="btn btn-danger"
-            [swal]="{
+            (click)="EstadoAprobacion('Rechazada')"
+            type="button"
+          ><!-- [swal]="{
               title: '¿Está Seguro?',
               text: 'Se dispone a rechazar esta Orden de Compra, por favor seleccione un motivo',
               icon: 'warning',
@@ -200,14 +202,14 @@
               confirmButtonText: 'Si, Rechazar',
               cancelButtonText: 'No, Dejame Comprobar!'
             }"
-            (confirm)="EstadoAprobacion($event, 'Rechazada')"
-            type="button"
-          >
+            (confirm)="EstadoAprobacion($event, 'Rechazada')" -->
             <i class="fa fa-thumbs-down"></i> Rechazar
           </button>
           <button
             class="btn btn-primary rounded-right"
-            [swal]="{
+            (click)="EstadoAprobacion('Aprobada')"
+            type="button"
+          ><!-- [swal]="{
               title: '¿Está Seguro?',
               text: 'Se dispone a aprobar esta Orden de Compra para Proceder a Solicitarla',
               icon: 'warning',
@@ -215,9 +217,7 @@
               confirmButtonText: 'Si, Aprobar',
               cancelButtonText: 'No, Dejame Comprobar!'
             }"
-            (confirm)="EstadoAprobacion('', 'Aprobada')"
-            type="button"
-          >
+            (confirm)="EstadoAprobacion('', 'Aprobada')" -->
             <i class="fa fa-thumbs-up"></i> Aprobar y proceder
           </button>
         </div>

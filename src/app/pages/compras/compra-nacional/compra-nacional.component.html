@@ -188,7 +188,11 @@
               </span>
             </td>
             <td class="align-middle" *ngIf="checkAprobacion">
-              <span class="badge badge-success">{{ compra.Aprobacion }}</span>
+              <span class="badge {{
+                compra.Aprobacion == 'Rechazada' ? 'badge-danger' : ''
+              }} {{ compra.Aprobacion == 'Aprobada' ? 'badge-success' : '' }} {{
+                compra.Aprobacion == 'Pendiente' ? 'badge-warning' : ''
+              }}">{{ compra.Aprobacion }}</span>
             </td>
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -200,7 +204,7 @@
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
-                  <a
+                  <!-- <a
                     *ngIf="
                       compra.Estado != 'Anulada' &&
                       compra.Estado != 'Recibida' &&
@@ -214,7 +218,7 @@
                     ]"
                   >
                     <i class="fas fa-edit"></i> Editar</a
-                  >
+                  > -->
                   <a
                     class="dropdown-item text-success waves-light  caja-botones"
                     href=""
@@ -226,22 +230,22 @@
                     <i class="fas fa-eye"></i> Ver</a
                   >
                   <!-- TODO Imprimir Orden Compra -->
-                  <!--  <a
-                                class="
-                                  dropdown-item
-                                  waves-light
-                                  caja-botones
-                                "
-                                href="{{
-                                  environment.ruta
-                                }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_Nacional&id={{
-                                  compra.Id_Orden_Compra_Nacional
-                                }}"
-                                target="_blank"
-                              >
-                                <i class="ti-printer"></i>Imprimir</a
-                              > -->
-                  <a
+                  <!-- <a
+                    class="
+                      dropdown-item
+                      waves-light
+                      caja-botones
+                    "
+                    href="{{
+                      environment.ruta
+                    }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_Nacional&id={{
+                      compra.Id_Orden_Compra_Nacional
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="ti-printer"></i>Imprimir
+                  </a> -->
+                  <!-- <a
                     *ngIf="compra.Estado != 'Anulada'"
                     class="dropdown-item text-danger waves-light  caja-botones"
                     href=""
@@ -251,7 +255,7 @@
                     "
                   >
                     <i class="fa fa-times"></i> Anular</a
-                  >
+                  > -->
                 </div>
               </div>
             </td>

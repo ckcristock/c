@@ -148,8 +148,10 @@ export class CrearCompraNacionalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    let params = this.route.snapshot.queryParams;
     this.user = this._user.user.person.id;
+    this.createForm();
+
+    let params = this.route.snapshot.queryParams;
     this.Cargando = true
     if (params.Pre_Compra != undefined) {
       this.http
@@ -263,7 +265,6 @@ export class CrearCompraNacionalComponent implements OnInit {
       this.Categorias = res.data;
     });
 
-    this.createForm();
   }
 
   createForm() {
@@ -271,9 +272,10 @@ export class CrearCompraNacionalComponent implements OnInit {
       Id_Orden_Compra_Nacional: [null],
       Fecha_Entrega_Probable: ['', Validators.required],
       Identificacion_Funcionario: [this.user, Validators.required],
-      Id_Bodega_Nuevo: [''],
+      Id_Bodega_Nuevo: ['', Validators.required],
       Id_Punto_Dispensacion: [''],
       Id_Proveedor: ['', Validators.required],
+      Tipo: ['Recurrente'],
       Observaciones: [''],
       Productos: this.fb.array([])
     });
@@ -376,6 +378,7 @@ export class CrearCompraNacionalComponent implements OnInit {
         });
       })
     }
+    console.log(this.formCompra.value);
   }
 
   /* searchProduct(pos, editar) {
@@ -449,7 +452,8 @@ export class CrearCompraNacionalComponent implements OnInit {
                 title : 'Creación de orden de compras',
                 text : res.data,
                 icon : (res.err == null)?'success':'error',
-                timer: 1000
+                timer: 1000,
+                showCancel: false
               });
               /* this.confirmacionSwal.title = 'Creacion de Orden de Compras';
               this.confirmacionSwal.text = data.mensaje;
@@ -473,7 +477,8 @@ export class CrearCompraNacionalComponent implements OnInit {
                 title : 'Error',
                 text : (error.err != null)?error.data:'Ha ocurrido un error inesperado de conexión.',
                 icon : 'error',
-                timer: 1000
+                timer: 1000,
+                showCancel: false
               });
               /* this.confirmacionSwal.title = 'Error';
               this.confirmacionSwal.text =
@@ -538,11 +543,11 @@ export class CrearCompraNacionalComponent implements OnInit {
         });
 
         this.products.push(this.fb.group({
-          Costo: valor.Costo,
-          Total: 0,
-          Cantidad: 1,
-          Iva: 0,
-          Id_Producto: valor.Id_Producto
+          Costo: [valor.Costo],
+          Total:[ 0],
+          Cantidad: [1],
+          Iva: [0],
+          Id_Producto: [valor.Id_Producto]
         }));
     }
     //this.productoFiltro = {};

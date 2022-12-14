@@ -540,6 +540,7 @@ export class CrearCompraNacionalComponent implements OnInit {
           Iva_Acu: 0,
           Total: 0,
           Embalaje: valor.Embalaje,
+          editCosto: false
         });
 
         this.products.push(this.fb.group({

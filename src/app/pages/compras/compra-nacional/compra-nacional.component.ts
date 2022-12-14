@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { DateAdapter } from 'saturn-datepicker';
 import { CompraNacionalService } from './compra-nacional.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-compra-nacional',
@@ -118,6 +119,7 @@ export class CompraNacionalComponent implements OnInit {
     private _user: UserService,
     private _compraNacional: CompraNacionalService,
     private dateAdapter: DateAdapter<any>,
+    private _swal: SwalService,
     private _people: PersonService
   ) {}
 
@@ -272,19 +274,26 @@ export class CompraNacionalComponent implements OnInit {
     });
   } */
 
-  /* anularCompra(id, motivo) {
+  setEstadoCompra(id, estado, motivo='') {
     let datos = new FormData();
     datos.append("id", id);
-
-    datos.append("funcionario", '1');
-    datos.append("estado", "Anulada");
+    datos.append("funcionario", this._user.user.id);
+    datos.append("estado", estado);
     datos.append("motivo", motivo);
-    this.http.post(environment.ruta + 'php/comprasnacionales/actualiza_compra.php', datos).subscribe((data: any) => {
-      this.deleteSwal.show();
-      this.cargarIndicadores();
+    this._compraNacional.setEstadoCompra(datos).subscribe((res: any) => {
+      this._swal.show({
+        icon: res.data.tipo,
+        title: res.data.titulo,
+        text: res.data.mensaje,
+        timer: 1000,
+        showCancel: false
+      })
+    /* this.http.post(environment.ruta + 'php/comprasnacionales/actualiza_compra.php', datos).subscribe((data: any) => { */
+      /* this.deleteSwal.show();
+      this.cargarIndicadores(); */
       this.listarComprasNacionales();
     })
-  } */
+  }
 
  /*  onPage(event) {
     clearTimeout(this.timeout);

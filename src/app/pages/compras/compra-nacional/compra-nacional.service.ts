@@ -24,4 +24,9 @@ export class CompraNacionalService {
   getDetallePerfil(params = {}){
     return this.http.get(environment.base_url + '/php/comprasnacionales/detalle_perfil', params);
   }
+
+  setEstadoCompra(params:any){
+    console.log(params);
+    return this.http.post(environment.base_url + '/php/comprasnacionales/actualiza_compra', params);
+  }
 }

@@ -1,10 +1,12 @@
 import { Component, Directive, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { CompraNacionalService } from '../compra-nacional.service';
 import Swal from 'sweetalert2';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-ver-compra-nacional',
@@ -28,20 +30,23 @@ export class VerCompraNacionalComponent implements OnInit {
   public TotalFinal:any = 0;
   public Actividades: any[]=[];
   /* TODO USR AuTH */
-  public user = {Identificacion_Funcionario:'1'} ;
+  public user = {Identificacion_Funcionario: this._user.user.id} ;
   public permiso: boolean = false;
   public Lista_Rechazo:any={};
   @ViewChild('confirmacionSwal') confimracionSwal:any;
 
   constructor(
     private http: HttpClient,
-    private router: ActivatedRoute,
+    private route: ActivatedRoute,
+    private router: Router,
+    private _user: UserService,
     private _swal: SwalService,
-    private _compras: CompraNacionalService) {}
+    private _compras: CompraNacionalService
+  ) {}
 
   ngOnInit() {
 
-    this.id = this.router.snapshot.params["id"];
+    this.id = this.route.snapshot.params["id"];
     this.init();
     this.http.get(environment.base_url + '/php/comprasnacionales/detalles_compras_nacionales', {params: { id: this.id }}).subscribe((res: any) => {
       this.Productos = res.data;
@@ -82,6 +87,11 @@ export class VerCompraNacionalComponent implements OnInit {
 
   async EstadoAprobacion(Estado){
     /* EstadoAprobacion(valor, Estado){ */
+    const MENSAJE_ACCION = {
+      Anulada: 'anular',
+      Pendiente: 'activar',
+      Aprobada: 'aprobar'
+    }
     let decision = (Estado=="Rechazada")?
       Swal.fire({
         title: '¿Está Seguro?',
@@ -109,21 +119,23 @@ export class VerCompraNacionalComponent implements OnInit {
     :
       this._swal.show({
         title: '¿Está Seguro?',
-        text: 'Se dispone a aprobar esta Orden de Compra para Proceder a Solicitarla',
+        text: 'Se dispone a '+MENSAJE_ACCION[Estado]+' esta Orden de Compra para Proceder a Solicitarla',
         icon: 'warning',
         showCancel: true
       })
 
     decision.then((result => {
       if (result.isConfirmed) {
-        let datos = new FormData();
-        datos.append('id', this.id);
-        datos.append('estado', Estado);
-        datos.append('funcionario', this.user.Identificacion_Funcionario);
-        datos.append("motivo",(Estado=="Rechazada")?result.value:'')
-        /* datos.append("motivo",valor) */
 
-        this.http.post(environment.base_url+'/php/comprasnacionales/actualiza_compra', datos).subscribe((res:any) => {
+        let datos = {
+          id:  this.id,
+          estado:  Estado,
+          funcionario:  this.user.Identificacion_Funcionario,
+          motivo: (Estado=="Rechazada")?result.value:''
+        }
+          /* datos.append("motivo",valor) */
+
+        this._compras.setEstadoCompra(datos).subscribe((res:any) => {
         /* this.http.post(environment.ruta+'php/comprasnacionales/actualiza_compra.php', datos).subscribe((data:any) => {
           this.confimracionSwal.title = data.titulo;
           this.confimracionSwal.text = data.mensaje;
@@ -136,7 +148,7 @@ export class VerCompraNacionalComponent implements OnInit {
             timer: 1000,
             showCancel: false
           })
-          this.init();
+          this.ngOnInit();
         })
       }
     }))

@@ -1,5 +1,5 @@
 <!-- <form [formGroup]=" -->
-  <form [formGroup]="formCompra">
+<form [formGroup]="formCompra">
   <div class="card">
     <div class="card-body">
       <div class="row card-title d-flex justify-content-between">
@@ -147,7 +147,7 @@
                 bindLabel="Nombre"
                 bindValue="Id_Categoria_Nueva"
                 [(ngModel)]="selectedCategory.categoria"
-                [ngModelOptions]="{standalone: true}"
+                [ngModelOptions]="{ standalone: true }"
                 (change)="getSubCategories($event)"
                 [disabled]="listaProductosPorAgregar.length > 0"
                 appearance="outline"
@@ -165,7 +165,7 @@
                 bindLabel="Nombre"
                 bindValue="Id_Subcategoria"
                 [(ngModel)]="selectedCategory.subcategoria"
-                [ngModelOptions]="{standalone: true}"
+                [ngModelOptions]="{ standalone: true }"
                 (change)="filtros()"
                 [disabled]="listaProductosPorAgregar.length > 0"
                 appearance="outline"
@@ -180,11 +180,11 @@
               <ng-select
                 name="Producto"
                 [(ngModel)]="productoFiltro"
-                [ngModelOptions]="{standalone: true}"
+                [ngModelOptions]="{ standalone: true }"
                 [items]="Productos"
                 bindLabel="producto"
                 (change)="AgregarProducto($event)"
-                (click)="productoFiltro={}"
+                (click)="productoFiltro = {}"
                 [editableSearchTerm]="true"
                 appearance="outline"
                 autocomplete="off"
@@ -194,19 +194,29 @@
               >
               </ng-select>
             </div>
+          </div>
         </div>
-      </div>
-        <div class="col mat-form-field-wrapper d-flex align-items-center justify-content-center">
+        <div
+          class="col mat-form-field-wrapper d-flex align-items-center justify-content-center"
+        >
           <button
             class="btn btn-danger btn-sm"
-            (click)="listaProductosPorAgregar=[]; products.clear(); filtros(); ActualizaValores();"
+            (click)="
+              listaProductosPorAgregar = [];
+              products.clear();
+              filtros();
+              ActualizaValores()
+            "
           >
             <i class="fa fa-trash"></i> Vaciar lista
           </button>
         </div>
       </div>
       <div class="row" *ngIf="listaProductosPorAgregar.length > 0">
-        <small class="font-weight-bold col text-danger text-center">No puede cambiar de categoría mientras que la lista de productos no esté vacía.</small>
+        <small class="font-weight-bold col text-danger text-center"
+          >No puede cambiar de categoría mientras que la lista de productos no
+          esté vacía.</small
+        >
       </div>
       <div class="rounded-top table-responsive">
         <table class="table table-bordered table-striped table-sm">
@@ -259,7 +269,7 @@
                 <span
                   *ngIf="item.producto != ''"
                   class="mytooltip tooltip-effect-2"
-                  >
+                >
                   <span class="tooltip-item2">Embalaje</span>
                   <span class="tooltip-content4 clearfix">
                     <span class="tooltip-text2">{{ item.Embalaje }}</span>
@@ -318,14 +328,25 @@
                   name="CostoModel{{ i }}"
                   [value]="item.Costo"
                 /> -->
-                <input
-                  formControlName="Costo"
-                  type="text"
-                  min="1"
-                  class="form-control form-control-sm text-right f-9"
-                  (input)="CalculoTotal(i)"
-                  pattern="[0-9\.]*"
-                /><!-- ; CapturarDigitacion(i) -->
+                <ng-container *ngIf="!item.editCosto; else inputEditCosto">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <i role="button" (click)="item.editCosto = true" class="fas fa-pen fa-sm"></i>
+                    <span>${{ formCompra.value.Productos[i].Costo | currency : "COP" : "symbol" }}</span>
+                  </div>
+                </ng-container>
+
+                <ng-template #inputEditCosto>
+                  <input
+                    appAutoFocusDirective
+                    (blur)="item.editCosto = false"
+                    formControlName="Costo"
+                    type="number"
+                    min="1"
+                    class="form-control form-control-sm text-right f-9"
+                    (input)="CalculoTotal(i)"
+
+                  /><!-- pattern="[0-9\.]*" ; CapturarDigitacion(i) -->
+                </ng-template>
               </td>
               <td>
                 <!-- <input
@@ -365,7 +386,8 @@
                   formControlName="Iva"
                   class="form-control form-control-sm"
                   (change)="CalculoTotal(i)"
-                ><!-- ; CapturarDigitacion(i) -->
+                >
+                  <!-- ; CapturarDigitacion(i) -->
                   <option
                     *ngFor="let Impuesto of Impuestos; let i = index"
                     [value]="Impuesto.Valor"
@@ -375,21 +397,14 @@
                 </select>
               </td>
               <td class="text-center align-middle">
-                <input
-                  type="hidden"
-                  formControlName="Total"
-                />
+                <input type="hidden" formControlName="Total" />
                 <!-- <input
                   type="hidden"
                   name="TotalModel{{ i }}"
                   [value]="item.Total"
                 /> -->
-                <span
-                  name="Total{{ i }}"
-                  id="Total{{ i }}"
-                  type="text"
-                  readonly
-                ><!-- (change)=" CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)" -->
+                <span name="Total{{ i }}" id="Total{{ i }}" type="text" readonly
+                  ><!-- (change)=" CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)" -->
                   $ {{ item.Total | currency : "COP" : "symbol" }}
                 </span>
               </td>
@@ -448,7 +463,6 @@
     </div>
   </div>
 </form>
-
 
 <div class="row invoice-contact" style="align-items: flex-start !important">
   <div class="col-md-8">

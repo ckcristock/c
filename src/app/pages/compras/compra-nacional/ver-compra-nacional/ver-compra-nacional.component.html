@@ -23,10 +23,10 @@
                     Actividad.Estado == 'Rechazada'
                       ? 'badge-danger'
                       : ''
-                  }}{{ Actividad.Estado == 'Recepcion' ? 'badge-dark' : '' }} {{
+                  }} {{
                     Actividad.Estado == 'Aprobacion' ? 'badge-success ' : ''
                   }}"
-                >
+                ><!-- {{ Actividad.Estado == 'Recepcion' ? 'badge-dark' : '' }} -->
                   {{ Actividad.Estado }}</span
                 >
               </h6>
@@ -181,47 +181,69 @@
         </div>
 
         <!-- TODO APROBAR COMPRA -->
-        <div
-          class="btn-group btn-block"
-          role="group"
-          aria-label="Button group"
-          *ngIf="permiso && Compra.Aprobacion == 'Pendiente'"
-        >
-          <button
-            class="btn btn-danger"
-            (click)="EstadoAprobacion('Rechazada')"
-            type="button"
-          ><!-- [swal]="{
-              title: '¿Está Seguro?',
-              text: 'Se dispone a rechazar esta Orden de Compra, por favor seleccione un motivo',
-              icon: 'warning',
-              input: 'select',
-              inputOptions: Lista_Rechazo,
-              inputPlaceholder: 'Seleccione un Motivo',
-              showCancelButton: true,
-              confirmButtonText: 'Si, Rechazar',
-              cancelButtonText: 'No, Dejame Comprobar!'
-            }"
-            (confirm)="EstadoAprobacion($event, 'Rechazada')" -->
-            <i class="fa fa-thumbs-down"></i> Rechazar
-          </button>
-          <button
-            class="btn btn-primary rounded-right"
-            (click)="EstadoAprobacion('Aprobada')"
-            type="button"
-          ><!-- [swal]="{
-              title: '¿Está Seguro?',
-              text: 'Se dispone a aprobar esta Orden de Compra para Proceder a Solicitarla',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Si, Aprobar',
-              cancelButtonText: 'No, Dejame Comprobar!'
-            }"
-            (confirm)="EstadoAprobacion('', 'Aprobada')" -->
-            <i class="fa fa-thumbs-up"></i> Aprobar y proceder
-          </button>
-        </div>
-
+        <ng-container *ngIf="permiso && Compra.Estado == 'Pendiente'">
+          <div
+            class="btn-group btn-block"
+            role="group"
+            aria-label="Button group"
+          >
+            <button
+              class="btn btn-danger"
+              (click)="EstadoAprobacion('Rechazada')"
+              type="button"
+            ><!-- [swal]="{
+                title: '¿Está Seguro?',
+                text: 'Se dispone a rechazar esta Orden de Compra, por favor seleccione un motivo',
+                icon: 'warning',
+                input: 'select',
+                inputOptions: Lista_Rechazo,
+                inputPlaceholder: 'Seleccione un Motivo',
+                showCancelButton: true,
+                confirmButtonText: 'Si, Rechazar',
+                cancelButtonText: 'No, Dejame Comprobar!'
+              }"
+              (confirm)="EstadoAprobacion($event, 'Rechazada')" -->
+              <i class="fa fa-thumbs-down"></i> Rechazar
+            </button>
+            <button
+              class="btn btn-primary rounded-right"
+              (click)="EstadoAprobacion('Aprobada')"
+              type="button"
+            ><!-- [swal]="{
+                title: '¿Está Seguro?',
+                text: 'Se dispone a aprobar esta Orden de Compra para Proceder a Solicitarla',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, Aprobar',
+                cancelButtonText: 'No, Dejame Comprobar!'
+              }"
+              (confirm)="EstadoAprobacion('', 'Aprobada')" -->
+              <i class="fa fa-thumbs-up"></i> Aprobar y proceder
+            </button>
+            <button
+              class="btn btn-danger rounded-right"
+              (click)="EstadoAprobacion('Anulada')"
+              type="button"
+            >
+              <i class="fa fa-ban"></i> Anular
+            </button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="permiso && Compra.Estado == 'Anulada'">
+          <div
+            class="btn-group btn-block"
+            role="group"
+            aria-label="Button group"
+          >
+            <button
+              class="btn btn-info rounded-right"
+              (click)="EstadoAprobacion('Pendiente')"
+              type="button"
+            >
+              <i class="fa fa-check"></i> Activar
+            </button>
+          </div>
+        </ng-container>
         <!-- TODO PENDIENTE IMPRIMIR -->
         <!-- <a href="{{environment.ruta}}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_Nacional&id={{id}}" target="_blank" class="btn btn-success btn-sm m-l-5 pull-right" style="margin-right: 10px;">
               <i class="fa fa-print"></i> IMPRIMIR DOCUMENTO</a> -->

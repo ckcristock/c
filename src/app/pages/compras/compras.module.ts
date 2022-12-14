@@ -26,6 +26,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicker';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { PresupuestoModule } from '../crm/presupuesto/presupuesto.module';
 
 export const MY_FORMATS = {
   parse: {
@@ -53,6 +54,7 @@ export const MY_FORMATS = {
       { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
   imports: [
+    PresupuestoModule,
     NgSelectModule,
     HttpClientModule,
     PipesModule,

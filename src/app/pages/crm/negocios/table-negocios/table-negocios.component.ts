@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NegociosService } from '../negocios.service';
 
 @Component({
   selector: 'app-table-negocios',
@@ -7,13 +8,19 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TableNegociosComponent implements OnInit {
 
-  @Input("negocios") negocios:any[]
-  @Input("loading") loading:any
-  
+  @Input("negocios") negocios: any[]
+  @Input("loading") loading: any
 
-  constructor() { }
+
+  constructor(private _negocios: NegociosService,) { }
 
   ngOnInit(): void {
+  }
+
+  nextState(state, id) {
+    console.log(state)
+    this._negocios.changeState({ status: state }, id).subscribe();
+
   }
 
 }

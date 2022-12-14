@@ -12,14 +12,23 @@
         </div>
       </div>
     </div>
-    <ul
+    <hr class="line" />
+    <app-table-negocios
+      [negocios]="negocios"
+      [loading]="loading"
+    ></app-table-negocios>
+    <!-- <ul
       ngbNav
       #nav="ngbNav"
       [(activeId)]="active"
       class="nav nav-pills nav-justified border border-primary rounded"
     >
       <li [ngbNavItem]="1">
-        <a ngbNavLink (click)="getNegocios(); changeUrl('?active=1')" class="h-100">
+        <a
+          ngbNavLink
+          (click)="getNegocios(); changeUrl('?active=1')"
+          class="h-100"
+        >
           <i class="fa fa-list"></i> Tabla de negocios
         </a>
         <ng-template ngbNavContent>
@@ -30,11 +39,18 @@
         </ng-template>
       </li>
       <li [ngbNavItem]="2">
-        <a ngbNavLink (click)="getNegocios(); changeUrl('?active=2')" class="h-100">
+        <a
+          ngbNavLink
+          (click)="getNegocios(); changeUrl('?active=2')"
+          class="h-100"
+        >
           <i class="fa fa-th"></i> Etapas
         </a>
         <ng-template ngbNavContent>
-          <div class="row mt-3" *ngIf="!loading2 && negocios.length > 0; else notData">
+          <div
+            class="row mt-3"
+            *ngIf="!loading2 && negocios.length > 0; else notData"
+          >
             <div class="col-md-4">
               <div class="card bg-light">
                 <div class="card-body border-bottom">
@@ -63,7 +79,6 @@
                         </ng-template>
                       </div>
                     </ng-container>
-                    <!-- end task card -->
                   </div>
                 </div>
               </div>
@@ -97,7 +112,6 @@
                         </ng-template>
                       </div>
                     </ng-container>
-                    <!-- end task card -->
                   </div>
                 </div>
               </div>
@@ -130,7 +144,6 @@
                         </ng-template>
                       </div>
                     </ng-container>
-                    <!-- end task card -->
                   </div>
                 </div>
               </div>
@@ -139,7 +152,7 @@
         </ng-template>
       </li>
     </ul>
-    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div> -->
   </div>
 </div>
 
@@ -158,7 +171,7 @@
       </div>
       <div class="d-flex justify-content-between my-2">
         <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{ neg.code }}</a>
-        <span>{{ neg.date | date: "mediumDate" }}</span>
+        <span>{{ neg.date | date : "mediumDate" }}</span>
       </div>
       <div>
         <h5 class="font-size-16">
@@ -230,8 +243,9 @@
             formControlName="cotizacion_id"
             id="cotizacion"
           >
-            <mat-option value="null">cotizacion...</mat-option>
-            <mat-option value="coti">cotizacion</mat-option>
+            <mat-option *ngFor="let item of quotations" [value]="item.id">{{
+              item.name
+            }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field
@@ -364,7 +378,7 @@
                   <span class="ml-1">PRES {{ item.id }}</span>
                 </td>
                 <td class="align-middle">
-                  {{ item.created_at | date: "longDate" }}
+                  {{ item.created_at | date : "longDate" }}
                 </td>
                 <td class="align-middle">{{ item.customer.name }}</td>
                 <td class="align-middle">{{ item.destiny.name }}</td>
@@ -374,10 +388,10 @@
                   {{ item.user.person.first_surname }}
                 </td>
                 <td class="align-middle">
-                  ${{ item.total_cop | currency: "":"" }}
+                  ${{ item.total_cop | currency : "" : "" }}
                 </td>
                 <td class="align-middle">
-                  ${{ item.total_usd | currency: "":"" }}
+                  ${{ item.total_usd | currency : "" : "" }}
                 </td>
               </tr>
             </tbody>

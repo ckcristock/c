@@ -153,11 +153,17 @@ export class ItemsQuotationComponent implements OnInit {
       item.get('value_cop_aux').disable()
       item.get('value_usd_aux').disable()
       const subItems = item.get('subItems') as FormArray
-      item_to_add.subitems.forEach(subi => {
 
-        subItems.push(this.makeSubItem(subi, true, type, item))
-      });
-
+      if (item_to_add.subitems) {
+        item_to_add.subitems.forEach(subi => {
+          subItems.push(this.makeSubItem(subi, true, type, item))
+        });
+      }
+      if (item_to_add.sub_items) {
+        item_to_add.sub_items.forEach(subi => {
+          subItems.push(this.makeSubItem(subi, true, type, item))
+        });
+      }
     }
     this.updateTotal()
     return item;

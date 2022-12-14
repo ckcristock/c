@@ -13,6 +13,7 @@ import { Negocio } from './negocio.interface';
 import { NegociosService } from './negocios.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { QuotationService } from '../cotizacion/quotation.service';
 
 @Component({
   selector: 'app-negocios',
@@ -53,6 +54,7 @@ export class NegociosComponent implements OnInit {
   cities: any[] = [];
   city: any;
   orderObj: any
+  quotations: any[] =[]
 
   constructor(
     private _reactiveValid: ValidatorsService,
@@ -61,6 +63,7 @@ export class NegociosComponent implements OnInit {
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private location: Location,
+    private _quotation: QuotationService
   ) { }
 
   ngOnInit(): void {
@@ -83,6 +86,13 @@ export class NegociosComponent implements OnInit {
     this.getLists();
     this.calcularTotal();
     this.getCountries();
+    this.getQuotations();
+  }
+
+  getQuotations(){
+    this._quotation.getAllQuotations().subscribe((res:any) => {
+      this.quotations = res.data;
+    })
   }
 
   changeUrl(url) {

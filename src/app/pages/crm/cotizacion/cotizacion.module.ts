@@ -11,8 +11,8 @@ import { CrearCotizacionComponent } from './crear-cotizacion/crear-cotizacion.co
 import { CotizacionRoutingModule } from "./cotizacion.routing.module";
 import { MatButtonModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSlideToggleModule } from "@angular/material";
 import { ItemsQuotationComponent } from "./crear-cotizacion/components/items-quotation/items-quotation.component";
-import { SubitemsQuotationComponent } from "./crear-cotizacion/components/subitems-quotation/subitems-quotation.component";
 import { NumberPipePipe } from "src/app/core/pipes/number-pipe.pipe";
+import { ViewQuotationComponent } from "./view-quotation/view-quotation.component";
 
 
 @NgModule({
@@ -20,7 +20,7 @@ import { NumberPipePipe } from "src/app/core/pipes/number-pipe.pipe";
     CotizacionComponent,
     CrearCotizacionComponent,
     ItemsQuotationComponent,
-    SubitemsQuotationComponent
+    ViewQuotationComponent,
   ],
   imports: [
     CotizacionRoutingModule,
@@ -44,7 +44,7 @@ import { NumberPipePipe } from "src/app/core/pipes/number-pipe.pipe";
     NgbTypeaheadModule,
     DirectivesModule,
     MatSlideToggleModule,
-    MatRadioModule
+    MatRadioModule,
   ],
   exports: [],
   providers: [NumberPipePipe]

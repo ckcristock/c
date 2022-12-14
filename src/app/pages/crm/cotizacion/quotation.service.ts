@@ -30,4 +30,8 @@ export class QuotationService {
   save(data){
     return this.http.post(`${environment.base_url}/quotations`, data)
   }
+
+  getQuotation(id) {
+    return this.http.get(`${environment.base_url}/quotations/${id}`);
+  }
 }

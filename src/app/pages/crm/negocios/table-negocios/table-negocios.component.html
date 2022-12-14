@@ -1,28 +1,64 @@
 <div class="rounded-top table-responsive mt-3">
-    <table class="table table-bordered table-striped table-sm" 
-        *ngIf="!loading && negocios.length > 0; else notData">
-        <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-                <th>Código</th>
-                <th>Empresa</th>
-                <th>Desripcion</th>
-                <th>Presupuesto</th>
-                <th>Fecha</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let neg of negocios" class="text-center">
-                <th class="align-middle" scope="row"> <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{neg.code}}</a> </th>
-                <td class="align-middle">{{neg.third_party.first_name ? neg.third_party.first_name + " " + neg.third_party.first_surname :
-                    neg.third_party.social_reason}}</td>
-                <td class="align-middle">{{neg.name}}</td>
-                <td class="align-middle">$ {{neg.budget_value |number}}</td>
-                <td class="align-middle">{{neg.date | date}}</td>
-            </tr>
-    
-        </tbody>
-    </table>
+  <table
+    class="table table-bordered table-striped table-sm"
+    *ngIf="!loading && negocios.length > 0; else notData"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Código</th>
+        <th>Empresa</th>
+        <th>Desripcion</th>
+        <th>Presupuesto</th>
+        <th>Fecha</th>
+        <th>Etapa</th>
+        <th><i class="mdi mdi-chevron-down"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let neg of negocios" class="text-center">
+        <td class="align-middle" scope="row">{{ neg.code }}</td>
+        <td class="align-middle">
+          {{
+            neg.third_party.first_name
+              ? neg.third_party.first_name + " " + neg.third_party.first_surname
+              : neg.third_party.social_reason
+          }}
+        </td>
+        <td class="align-middle">{{ neg.name }}</td>
+        <td class="align-middle">$ {{ neg.budget_value | number }}</td>
+        <td class="align-middle">{{ neg.date | date }}</td>
+        <td class="align-middle">{{ neg.status }}</td>
+        <td>
+          <div ngbDropdown container="body" class="dropdown-primary">
+            <button
+              ngbDropdownToggle
+              class="btn btn-primary btn-sm waves-light"
+              type="button"
+            >
+              <i class="mdi mdi-chevron-down"></i>
+            </button>
+            <div ngbDropdownMenu>
+              <a
+                class="dropdown-item waves-light text-success caja-botones"
+                href="javascript: void(0);"
+                [routerLink]="['/crm/negocios/', neg.id]"
+              >
+                <i class="fas fa-eye"></i> Ver</a
+              >
+              <a
+                class="dropdown-item waves-light text-warning caja-botones"
+                href="javascript: void(0);"
+                (click)="nextState(neg.status, neg.id)"
+              >
+                <i class="fas fa-forward"></i> Siguiente etapa</a
+              >
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

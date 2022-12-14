@@ -101,4 +101,7 @@ export class TercerosService {
     return this.http.get(`${environment.base_url}/countries-with-departments`);
   }
 
+  getThirds() {
+    return this.http.get(`${environment.base_url}/third-parties-list`)
+  }
 }

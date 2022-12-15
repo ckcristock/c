@@ -103,11 +103,13 @@
             <mat-label>Estado</mat-label>
             <mat-select [(ngModel)]="filtros.est" (selectionChange)="listarComprasNacionales()">
               <mat-option value="">Todos</mat-option>
-              <mat-option value="Pendiente">Pendiente</mat-option>
-              <mat-option value="No conforme">No Conforme</mat-option>
+              <mat-option *ngFor="let item of estadosCompra" [value]="item.estado">
+                {{ item.estado }}</mat-option>
+              <!-- <mat-option value="Pendiente">Pendiente</mat-option>
+              <mat-option value="No conforme">No Conforme</mat-option>estadosCompra
               <mat-option value="Anulada">Anulada</mat-option>
               <mat-option value="Recibida">Recibida</mat-option>
-              <mat-option value="Devuelta">Devuelta</mat-option>
+              <mat-option value="Devuelta">Devuelta</mat-option> -->
             </mat-select>
           </mat-form-field>
         </div>
@@ -116,25 +118,25 @@
     <mat-accordion multi #secondAccordion="matAccordion">
       <mat-expansion-panel class="mat-elevation-z0">
         <section class="d-flex justify-content-between mx-1">
-          <mat-checkbox color="primary" [(ngModel)]="checkFoto"
+          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Foto"
             >Foto</mat-checkbox
           >
-          <mat-checkbox color="primary" [(ngModel)]="checkFuncionario"
+          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Funcionario"
             >Funcionario</mat-checkbox
           >
-          <mat-checkbox color="primary" [(ngModel)]="checkFecha"
+          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Fecha"
             >Fecha</mat-checkbox
           >
-          <mat-checkbox color="primary" [(ngModel)]="checkCodigo"
+          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Codigo"
             >Código</mat-checkbox
           >
-          <mat-checkbox color="primary" [(ngModel)]="checkProveedor"
+          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Proveedor"
             >Proveedor</mat-checkbox
           >
-          <mat-checkbox color="primary" [(ngModel)]="checkEstado"
+          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Estado"
             >Estado</mat-checkbox
           >
-          <!-- <mat-checkbox color="primary" [(ngModel)]="checkAprobacion"
+          <!-- <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Aprobacion"
             >Aprobación</mat-checkbox
           > -->
         </section>
@@ -148,36 +150,36 @@
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th *ngIf="checkFoto">Foto</th>
-            <th *ngIf="checkFuncionario">Funcionario</th>
-            <th *ngIf="checkFecha">Fecha</th>
-            <th *ngIf="checkCodigo">Código</th>
-            <th *ngIf="checkProveedor">Proveedor</th>
-            <th *ngIf="checkEstado">Estado</th>
-            <!-- <th *ngIf="checkAprobacion">Aprobación</th> -->
+            <th *ngIf="checkVerCols.Foto">Foto</th>
+            <th *ngIf="checkVerCols.Funcionario">Funcionario</th>
+            <th *ngIf="checkVerCols.Fecha">Fecha</th>
+            <th *ngIf="checkVerCols.Codigo">Código</th>
+            <th *ngIf="checkVerCols.Proveedor">Proveedor</th>
+            <th *ngIf="checkVerCols.Estado">Estado</th>
+            <!-- <th *ngIf="checkVerCols.Aprobacion">Aprobación</th> -->
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let compra of comprasnacionales" class="text-center">
-            <td *ngIf="checkFoto">
+            <td *ngIf="checkVerCols.Foto">
               <img
                 class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
                 [src]="compra.image"
                 onerror="this.src='../../../../assets/images/noprofile.png'"
               />
             </td>
-            <td class="align-middle" *ngIf="checkFuncionario">
+            <td class="align-middle" *ngIf="checkVerCols.Funcionario">
               {{ compra.Funcionario }}
             </td>
-            <td class="align-middle" *ngIf="checkFecha">
+            <td class="align-middle" *ngIf="checkVerCols.Fecha">
               {{ compra.Fecha | date: "longDate" }}
             </td>
-            <td class="align-middle" *ngIf="checkCodigo">{{ compra.Codigo }}</td>
-            <td class="align-middle" *ngIf="checkProveedor">
+            <td class="align-middle" *ngIf="checkVerCols.Codigo">{{ compra.Codigo }}</td>
+            <td class="align-middle" *ngIf="checkVerCols.Proveedor">
               {{ compra.Proveedor }}
             </td>
-            <td class="align-middle" *ngIf="checkEstado">
+            <td class="align-middle" *ngIf="checkVerCols.Estado">
               <span
                 class="badge {{
                   (compra.Estado == 'Anulada') ? 'badge-danger' :
@@ -188,7 +190,7 @@
                 >{{ compra.Estado }}
               </span>
             </td>
-            <!-- <td class="align-middle" *ngIf="checkAprobacion">
+            <!-- <td class="align-middle" *ngIf="checkVerCols.Aprobacion">
               <span class="badge {{
                 compra.Aprobacion == 'Rechazada' ? 'badge-danger' : ''
               }} {{ compra.Aprobacion == 'Aprobada' ? 'badge-success' : '' }} {{
@@ -250,7 +252,7 @@
                     *ngIf="compra.Estado == 'Anulada'"
                     class="dropdown-item text-success waves-light caja-botones"
                     role="button"
-                    (confirm)="setEstadoCompra(compra.Id_Orden_Compra_Nacional, 'Pendiente')"
+                    (click)="setEstadoCompra(compra.Id_Orden_Compra_Nacional, 'Pendiente')"
                   >
                     <i class="fa fa-check"></i> Activar</a
                   >
@@ -258,7 +260,7 @@
                     *ngIf="compra.Estado == 'Pendiente'"
                     class="dropdown-item text-danger waves-light caja-botones"
                     role="button"
-                    (confirm)="anularCompra(compra.Id_Orden_Compra_Nacional, 'Anulada')"
+                    (click)="setEstadoCompra(compra.Id_Orden_Compra_Nacional, 'Anulada')"
                   >
                     <i class="fa fa-ban"></i> Anular</a
                   >

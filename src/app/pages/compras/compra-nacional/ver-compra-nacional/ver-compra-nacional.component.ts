@@ -52,7 +52,6 @@ export class VerCompraNacionalComponent implements OnInit {
       this.Productos = res.data;
     /* this.http.get(environment.ruta + 'php/comprasnacionales/detalles_compras_nacionales.php', {params: { id: this.id }}).subscribe((data: any) => {
       this.Productos = data.Productos; */
-      // console.log(this.Productos);
 
       let subtotal = 0;
       let iva = 0;
@@ -76,7 +75,6 @@ export class VerCompraNacionalComponent implements OnInit {
 
     this.http.get(environment.base_url+'/php/comprasnacionales/detalle_rechazo', { params: {} }).subscribe((res:any) => {
       res.data.forEach(value => {this.Lista_Rechazo[value.Id_Tipo_Rechazo]= value.Nombre});
-      console.log(this.Lista_Rechazo);
     });
     /* this.http.get(environment.ruta+'php/comprasnacionales/detalle_rechazo.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data:any) => {
       for (let i = 0; i < data.length; i++) {
@@ -95,7 +93,7 @@ export class VerCompraNacionalComponent implements OnInit {
     let decision = (Estado=="Rechazada")?
       Swal.fire({
         title: '¿Está Seguro?',
-        text: 'Se dispone a rechazar esta Orden de Compra, por favor seleccione un motivo',
+        text: 'Se dispone a rechazar esta orden de compra, por favor seleccione un motivo',
         icon: 'warning',
         input: 'select',
         inputOptions: this.Lista_Rechazo,
@@ -119,12 +117,12 @@ export class VerCompraNacionalComponent implements OnInit {
     :
       this._swal.show({
         title: '¿Está Seguro?',
-        text: 'Se dispone a '+MENSAJE_ACCION[Estado]+' esta Orden de Compra para Proceder a Solicitarla',
+        text: 'Se dispone a '+MENSAJE_ACCION[Estado]+' esta orden de compra'+((Estado=='Aprobada')?' para proceder a solicitarla':''),
         icon: 'warning',
         showCancel: true
       })
 
-    decision.then((result => {
+    decision.then((result) => {
       if (result.isConfirmed) {
 
         let datos = {
@@ -151,33 +149,28 @@ export class VerCompraNacionalComponent implements OnInit {
           this.ngOnInit();
         })
       }
-    }))
+    })
   }
 
   init() {
     this._compras.getDatosComprasNacionales({params: { id: this.id }}).subscribe((res: any) => {
       this.Compra = res.data;
-      console.log(this.Compra)
     });
     /* this.http.get(environment.ruta + 'php/comprasnacionales/datos_compras_nacionales.php', {params: { id: this.id }}).subscribe((data: any) => {
       this.Compra = data;
     }); */
     this._compras.getActividadOrdenCompra({params : { id : this.id }}).subscribe((res:any)=>{
       this.Actividades=res.data;
-      // console.log(this.Actividades);
     });
     /* this.http.get(environment.ruta+'php/comprasnacionales/actividad_orden_compra.php',{params : { id : this.id }}).subscribe((data:any)=>{
       this.Actividades=data;
-      // console.log(this.Actividades);
     });
  */
     this._compras.getDetallePerfil({ params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((res:any) => {
       this.permiso = res.data.status;
-      console.log(res.data)
     })
    /*  this.http.get(environment.ruta+'php/comprasnacionales/detalle_perfil.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data:any) => {
       this.permiso = data.status;
-      console.log(data)
     }) */
   }
   formatMoney = (n,c=undefined,d=undefined,t=undefined) => {

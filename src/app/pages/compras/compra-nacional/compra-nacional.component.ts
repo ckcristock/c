@@ -19,13 +19,15 @@ export class CompraNacionalComponent implements OnInit {
   datePipe = new DatePipe('es-CO');
   date: { year: number; month: number };
 
-  checkFoto: boolean = true;
-  checkFuncionario: boolean = true;
-  checkFecha: boolean = true;
-  checkCodigo: boolean = true;
-  checkProveedor: boolean = true;
-  checkEstado: boolean = true;
-  checkAprobacion: boolean = true;
+  checkVerCols: any = {
+    Foto: true,
+    Funcionario: true,
+    Fecha: true,
+    Codigo: true,
+    Proveedor: true,
+    Estado: true,
+    Aprobacion: true
+  }
   panelOpenState = false;
 
   public loading: boolean = false;
@@ -63,6 +65,14 @@ export class CompraNacionalComponent implements OnInit {
 
   loadingIndicator = true;
   timeout: any;
+  pagination: any = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  estadosCompra: any[] = [];
+  facturacionChartTag: any;
+
   public dias_anulacion: any = '';
   public funcionario_anulacion: any = '';
   public funcionarios_anulacion: any = [];
@@ -81,11 +91,6 @@ export class CompraNacionalComponent implements OnInit {
     prov: '',
     fecha: '',
     func: ''
-  }
-  pagination: any = {
-    page: 1,
-    pageSize: 10,
-    collectionSize: 0
   }
   public studentChartData: any;
   public Fecha = new Date();
@@ -111,7 +116,6 @@ export class CompraNacionalComponent implements OnInit {
   }; */
   private mes = [];
   public subtotal = [];
-  facturacionChartTag: any;
 
   constructor(
     private http: HttpClient,
@@ -128,6 +132,7 @@ export class CompraNacionalComponent implements OnInit {
     this.requiredParams.params.company_id = this._user.user.person.company_worked.id
 
     this.dateAdapter.setLocale('es');
+    this.getEstadoscompra();
     this.listarComprasNacionales();
     this.getDiasAnulacion();
     this.getFuncioriosParaResponsables();
@@ -162,7 +167,7 @@ export class CompraNacionalComponent implements OnInit {
     this.listarComprasNacionales();
   }
 
- /*  fechita:any;
+  /*  fechita:any;
   fechitaF(event){
     this.fechita = event.target.value;
     if(this.fechita2 !=null){
@@ -184,7 +189,6 @@ export class CompraNacionalComponent implements OnInit {
 
     if (event.formatted != "") {
       this.filtros.fecha = event.formatted;
-      console.log(this.filtros.fecha)
     } else {
       this.filtros.fecha = '';
     }
@@ -274,25 +278,45 @@ export class CompraNacionalComponent implements OnInit {
     });
   } */
 
-  setEstadoCompra(id, estado, motivo='') {
-    let datos = new FormData();
-    datos.append("id", id);
-    datos.append("funcionario", this._user.user.id);
-    datos.append("estado", estado);
-    datos.append("motivo", motivo);
-    this._compraNacional.setEstadoCompra(datos).subscribe((res: any) => {
-      this._swal.show({
-        icon: res.data.tipo,
-        title: res.data.titulo,
-        text: res.data.mensaje,
-        timer: 1000,
-        showCancel: false
-      })
-    /* this.http.post(environment.ruta + 'php/comprasnacionales/actualiza_compra.php', datos).subscribe((data: any) => { */
-      /* this.deleteSwal.show();
-      this.cargarIndicadores(); */
-      this.listarComprasNacionales();
-    })
+  getEstadoscompra(){
+    this._compraNacional.getEstadosCompra().subscribe((res: any) => {
+      this.estadosCompra = res.data;
+    });
+  }
+
+  setEstadoCompra(id, estado) {
+    const MENSAJE_ACCION = {
+      Anulada: 'anular',
+      Pendiente: 'activar'
+    }
+    this._swal.show({
+      title: '¿Está Seguro?',
+      text: 'Se dispone a '+MENSAJE_ACCION[estado]+' esta orden de compra',
+      icon: 'warning',
+      showCancel: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let datos = {
+          id: id,
+          funcionario: this._user.user.id,
+          estado: estado,
+          motivo: ''
+        }
+        this._compraNacional.setEstadoCompra(datos).subscribe((res: any) => {
+          this._swal.show({
+            icon: res.data.tipo,
+            title: res.data.titulo,
+            text: res.data.mensaje,
+            timer: 1000,
+            showCancel: false
+          });
+        /* this.http.post(environment.ruta + 'php/comprasnacionales/actualiza_compra.php', datos).subscribe((data: any) => { */
+          /* this.deleteSwal.show();
+          this.cargarIndicadores(); */
+          this.listarComprasNacionales();
+        });
+      }
+    });
   }
 
  /*  onPage(event) {

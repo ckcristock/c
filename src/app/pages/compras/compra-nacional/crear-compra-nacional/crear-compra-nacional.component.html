@@ -200,6 +200,7 @@
           class="col mat-form-field-wrapper d-flex align-items-center justify-content-center"
         >
           <button
+            type="button"
             class="btn btn-danger btn-sm"
             (click)="
               listaProductosPorAgregar = [];
@@ -234,193 +235,208 @@
             </tr>
           </thead>
           <tbody formArrayName="Productos">
-            <tr
-              *ngFor="let item of listaProductosPorAgregar; let i = index"
-              id="fila{{ i }}"
-              [formGroupName]="i"
-            >
-              <td class="align-middle">
-                <!-- <input
-                  type="hidden"
-                  name="productoModel{{ i }}"
-                  [ngModel]="item.producto"
-                />
-                <input
-                  *ngIf="item.Id_Producto == ''"
-                  type="text"
-                  name="producto{{ i }}"
-                  id="Producto{{ i }}"
-                  class="form-control form-control-sm"
-                  autocomplete="off"
-                  [value]="item.producto"
-                  [readonly]="item.producto != ''"
-                /> -->
-                <span>{{ item.producto }}</span>
-              </td>
-              <td class="text-center align-middle">
-                <!-- <button
-                  *ngIf="item.producto == ''"
-                  class="btn btn-primary btn-sm"
-                  (click)="searchProduct(i, item.editar); openConfirm(add)"
-                  title="Buscar Producto"
-                >
-                  <i class="fa fa-search"></i>
-                </button> -->
-                <span
-                  *ngIf="item.producto != ''"
-                  class="mytooltip tooltip-effect-2"
-                >
-                  <span class="tooltip-item2">Embalaje</span>
-                  <span class="tooltip-content4 clearfix">
-                    <span class="tooltip-text2">{{ item.Embalaje }}</span>
-                  </span>
-                </span>
-                <!-- <button
-                  *ngIf="item.delete"
-                  class="btn btn-danger btn-xs btn-search"
-                  (click)="deleteProduct(i)"
-                  title="Eliminar producto"
-                  style="display: inline-block"
-                >
-                  &nbsp;<i class="fa fa-trash"></i>
-                </button> -->
-              </td>
-              <td class="text-center align-middle">
-                <input
-                  type="hidden"
-                  name="PresentacionModel{{ i }}"
-                  [value]="item.Presentacion"
-                />
-                <span id="Presentacion{{ i }}" name="Presentacion{{ i }}">
-                  {{ item.Presentacion }}
-                </span>
-              </td>
-              <td *ngIf="Rotativo">
-                <input
-                  readonly
-                  id="Rotativo{{ i }}"
-                  name="Rotativo{{ i }}"
-                  [value]="item.Rotativo"
-                  type="number"
-                  min="1"
-                  class="form-control form-control-sm text-right f-9"
-                />
-              </td>
-              <td>
-                <!--<input id="Cantidad{{i}}" name="Cantidad{{i}}" [ngModel]="item.Cantidad" type="number" min="1" class="form-control form-control-sm text-right f-9"
-                        (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
-                <!-- <input
-                  type="hidden"
-                  name="CantidadModel{{ i }}"
-                  [value]="item.Cantidad"
-                /> -->
-                <input
-                  formControlName="Cantidad"
-                  type="number"
-                  min="1"
-                  class="form-control form-control-sm text-right f-9"
-                  (input)="CalculoTotal(i)"
-                /><!-- ; CapturarDigitacion(i) (keyup)="ActualizaValores()"-->
-              </td>
-              <td>
-                <!-- <input
-                  type="hidden"
-                  name="CostoModel{{ i }}"
-                  [value]="item.Costo"
-                /> -->
-                <ng-container *ngIf="!item.editCosto; else inputEditCosto">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <i role="button" (click)="item.editCosto = true" class="fas fa-pen fa-sm"></i>
-                    <span>${{ formCompra.value.Productos[i].Costo | currency : "COP" : "symbol" }}</span>
-                  </div>
-                </ng-container>
-
-                <ng-template #inputEditCosto>
+            <ng-container *ngFor="let item of listaProductosPorAgregar; let i = index">
+              <tr
+                *ngIf="item.mostrarProductoEnTabla"
+                id="fila{{ i }}"
+                [formGroupName]="i"
+              >
+                <td class="align-middle">
+                  <!-- <input
+                    type="hidden"
+                    name="productoModel{{ i }}"
+                    [ngModel]="item.producto"
+                  />
                   <input
-                    appAutoFocusDirective
-                    (blur)="item.editCosto = false"
-                    formControlName="Costo"
+                    *ngIf="item.Id_Producto == ''"
+                    type="text"
+                    name="producto{{ i }}"
+                    id="Producto{{ i }}"
+                    class="form-control form-control-sm"
+                    autocomplete="off"
+                    [value]="item.producto"
+                    [readonly]="item.producto != ''"
+                  /> -->
+                  <span>{{ item.producto }}</span>
+                </td>
+                <td class="text-center align-middle">
+                  <!-- <button
+                    *ngIf="item.producto == ''"
+                    class="btn btn-primary btn-sm"
+                    (click)="searchProduct(i, item.editar); openConfirm(add)"
+                    title="Buscar Producto"
+                  >
+                    <i class="fa fa-search"></i>
+                  </button> -->
+                  <span
+                    *ngIf="item.producto != ''"
+                    class="mytooltip tooltip-effect-2"
+                  >
+                    <span class="tooltip-item2">Embalaje</span>
+                    <span class="tooltip-content4 clearfix">
+                      <span class="tooltip-text2">{{ item.Embalaje }}</span>
+                    </span>
+                  </span>
+                  <!-- <button
+                    *ngIf="item.delete"
+                    class="btn btn-danger btn-xs btn-search"
+                    (click)="deleteProduct(i)"
+                    title="Eliminar producto"
+                    style="display: inline-block"
+                  >
+                    &nbsp;<i class="fa fa-trash"></i>
+                  </button> -->
+                </td>
+                <td class="text-center align-middle">
+                  <input
+                    type="hidden"
+                    name="PresentacionModel{{ i }}"
+                    [value]="item.Presentacion"
+                  />
+                  <span id="Presentacion{{ i }}" name="Presentacion{{ i }}">
+                    {{ item.Presentacion }}
+                  </span>
+                </td>
+                <td *ngIf="Rotativo">
+                  <input
+                    readonly
+                    id="Rotativo{{ i }}"
+                    name="Rotativo{{ i }}"
+                    [value]="item.Rotativo"
+                    type="number"
+                    min="1"
+                    class="form-control form-control-sm text-right f-9"
+                  />
+                </td>
+                <td>
+                  <!--<input id="Cantidad{{i}}" name="Cantidad{{i}}" [ngModel]="item.Cantidad" type="number" min="1" class="form-control form-control-sm text-right f-9"
+                          (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
+                  <!-- <input
+                    type="hidden"
+                    name="CantidadModel{{ i }}"
+                    [value]="item.Cantidad"
+                  /> -->
+                  <input
+                    formControlName="Cantidad"
                     type="number"
                     min="1"
                     class="form-control form-control-sm text-right f-9"
                     (input)="CalculoTotal(i)"
-
-                  /><!-- pattern="[0-9\.]*" ; CapturarDigitacion(i) -->
-                </ng-template>
-              </td>
-              <td>
-                <!-- <input
-                  id="Iva{{ i }}"
-                  name="Iva{{ i }}"
-                  [ngModel]="item.Iva"
-                  type="number"
-                  min="1"
-                  class="form-control form-control-sm text-right f-9"
-                  (change)="
-                    CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                  "
-                /> -->
-                <!-- <input
-                  type="hidden"
-                  name="IvaModel{{ i }}"
-                  [value]="item.Iva"
-                /> -->
-                <!-- <mat-form-field class="pb-0" appearance="outline">
-                  <mat-select
-                    [ngModel]="item.Iva"
+                  /><!-- ; CapturarDigitacion(i) (keyup)="ActualizaValores()"-->
+                </td>
+                <td>
+                  <!-- <input
+                    type="hidden"
+                    name="CostoModel{{ i }}"
+                    [value]="item.Costo"
+                  /> -->
+                  <ng-container *ngIf="!item.editCosto; else inputEditCosto">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <i role="button" (click)="item.editCosto = true" class="fas fa-pen fa-sm"></i>
+                      <span>${{ formCompra.value.Productos[i].Costo | currency : "COP" : "symbol" }}</span>
+                    </div>
+                  </ng-container>
+                  <ng-template #inputEditCosto>
+                    <input
+                      appAutoFocusDirective
+                      (blur)="item.editCosto = false"
+                      formControlName="Costo"
+                      type="number"
+                      min="1"
+                      class="form-control form-control-sm text-right f-9"
+                      (input)="CalculoTotal(i)"
+                    /><!-- pattern="[0-9\.]*" ; CapturarDigitacion(i) -->
+                  </ng-template>
+                </td>
+                <td>
+                  <!-- <input
                     id="Iva{{ i }}"
                     name="Iva{{ i }}"
-                    (selectionChange)="
+                    [ngModel]="item.Iva"
+                    type="number"
+                    min="1"
+                    class="form-control form-control-sm text-right f-9"
+                    (change)="
                       CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
                     "
+                  /> -->
+                  <!-- <input
+                    type="hidden"
+                    name="IvaModel{{ i }}"
+                    [value]="item.Iva"
+                  /> -->
+                  <!-- <mat-form-field class="pb-0" appearance="outline">
+                    <mat-select
+                      [ngModel]="item.Iva"
+                      id="Iva{{ i }}"
+                      name="Iva{{ i }}"
+                      (selectionChange)="
+                        CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
+                      "
+                    >
+                      <mat-option
+                        *ngFor="let Impuesto of Impuestos; let i = index"
+                        [value]="Impuesto.Valor"
+                      >
+                        {{ Impuesto.Valor }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field> -->
+                  <select
+                    formControlName="Iva"
+                    class="form-control form-control-sm"
+                    (change)="CalculoTotal(i)"
                   >
-                    <mat-option
+                    <!-- ; CapturarDigitacion(i) -->
+                    <option
                       *ngFor="let Impuesto of Impuestos; let i = index"
                       [value]="Impuesto.Valor"
                     >
-                      {{ Impuesto.Valor }}</mat-option
-                    >
-                  </mat-select>
-                </mat-form-field> -->
-                <select
-                  formControlName="Iva"
-                  class="form-control form-control-sm"
-                  (change)="CalculoTotal(i)"
-                >
-                  <!-- ; CapturarDigitacion(i) -->
-                  <option
-                    *ngFor="let Impuesto of Impuestos; let i = index"
-                    [value]="Impuesto.Valor"
+                      {{ Impuesto.Valor }}
+                    </option>
+                  </select>
+                </td>
+                <td class="text-center align-middle">
+                  <input type="hidden" formControlName="Total" />
+                  <!-- <input
+                    type="hidden"
+                    name="TotalModel{{ i }}"
+                    [value]="item.Total"
+                  /> -->
+                  <span name="Total{{ i }}" id="Total{{ i }}" type="text" readonly
+                    ><!-- (change)=" CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)" -->
+                    $ {{ item.Total | currency : "COP" : "symbol" }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteProduct(i, $event)"
+                    *ngIf="item.producto != ''"
                   >
-                    {{ Impuesto.Valor }}
-                  </option>
-                </select>
-              </td>
-              <td class="text-center align-middle">
-                <input type="hidden" formControlName="Total" />
-                <!-- <input
-                  type="hidden"
-                  name="TotalModel{{ i }}"
-                  [value]="item.Total"
-                /> -->
-                <span name="Total{{ i }}" id="Total{{ i }}" type="text" readonly
-                  ><!-- (change)=" CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)" -->
-                  $ {{ item.Total | currency : "COP" : "symbol" }}
-                </span>
-              </td>
-              <td class="align-middle">
-                <button
-                  class="btn btn-danger btn-sm"
-                  (click)="deleteProduct(i, $event)"
-                  *ngIf="item.producto != ''"
-                >
-                  <i class="fa fa-trash"></i>
-                </button>
-              </td>
-            </tr>
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
       </div>
+      <ngb-pagination
+      *ngIf="listaProductosPorAgregar.length > 0"
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="paginarProductos($event)"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      aria-label="Default pagination"
+    >
+    </ngb-pagination>
       <div class="row d-flex justify-content-end">
         <div class="col-sm-5">
           <table class="table table-hover">
@@ -450,7 +466,6 @@
       <div class="row d-flex justify-content-center">
         <div class="col-sm-12 text-center">
           <button
-            type="button"
             [disabled]="!formCompra.valid"
             class="btn btn-primary btn-lg btn-block"
             (click)="GuardarCompra()"

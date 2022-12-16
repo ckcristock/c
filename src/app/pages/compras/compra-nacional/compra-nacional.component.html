@@ -15,9 +15,9 @@
           <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
-          <button class="btn btn-secondary btn-sm" (click)="openClose2()">
+          <!-- <button class="btn btn-secondary btn-sm" (click)="openClose2()">
             <i class="fas fa-eye"></i>
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
@@ -162,7 +162,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let compra of comprasnacionales" class="text-center">
-            <td *ngIf="checkVerCols.Foto">
+            <td *ngIf="checkVerCols.Foto" class="p-0">
               <img
                 class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
                 [src]="compra.image"

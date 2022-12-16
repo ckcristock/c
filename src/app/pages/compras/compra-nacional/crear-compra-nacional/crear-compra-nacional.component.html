@@ -34,68 +34,67 @@
             <mat-form-field class="col" appearance="outline">
               <mat-label>Tipo de bodega</mat-label>
               <mat-select
-                name="TipoBodega"
-                [(value)]="TipoBodega"
+                name="Tipo_Bodega"
+                formControlName="Tipo_Bodega"
                 matInput
                 required
               >
-                <mat-option value="Bodega" selected>Bodega</mat-option>
+                <mat-option value="Bodega">Bodega</mat-option>
                 <mat-option value="Punto">Punto de dispensación</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field
-              class="col"
-              appearance="outline"
-              *ngIf="TipoBodega == 'Bodega'"
-            >
-              <mat-label>Bodega</mat-label>
-              <mat-select
-                formControlName="Id_Bodega_Nuevo"
-                matInput
-                required
-                placeholder="Seleccione una Bodega"
+            <ng-container *ngIf="formCompra.controls.Tipo_Bodega.value == 'Bodega'; else selectPuntoDispensacion">
+              <mat-form-field
+                class="col"
+                appearance="outline"
               >
-                <!-- <mat-option [ngValue]="undefined"
-                  >Seleccione una Bodega</mat-option
-                > -->
-                <mat-option
-                  *ngFor="let Bodega of Bodegas; let i = index"
-                  [value]="Bodega.Id_Bodega_Nuevo"
+                <mat-label>Bodega</mat-label>
+                <mat-select
+                  formControlName="Id_Bodega_Nuevo"
+                  matInput
+                  required
+                  placeholder="Seleccione una Bodega"
                 >
-                  {{ Bodega.Nombre }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field
-              class="col"
-              appearance="outline"
-              *ngIf="TipoBodega == 'Punto'"
-            >
-              <mat-label>Punto de dispensación</mat-label>
-              <mat-select
-                formControlName="Id_Punto_Dispensacion"
-                matInput
-                required
-                placeholder="Seleccione un Punto de dispensación"
-              >
-                <!-- <mat-option [ngValue]="undefined"
-                  >Seleccione un Punto</mat-option
-                > -->
-                <mat-option
-                  *ngFor="let item of puntos; let i = index"
-                  [value]="item.Id_Punto_Dispensacion"
+                  <!-- <mat-option [ngValue]="undefined"
+                    >Seleccione una Bodega</mat-option
+                  > -->
+                  <mat-option
+                    *ngFor="let Bodega of Bodegas"
+                    [value]="Bodega.Id_Bodega_Nuevo"
+                  >
+                    {{ Bodega.Nombre }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+            <ng-template #selectPuntoDispensacion>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Punto de dispensación</mat-label>
+                <mat-select
+                  formControlName="Id_Punto_Dispensacion"
+                  matInput
+                  required
+                  placeholder="Seleccione un Punto de dispensación"
                 >
-                  {{ item.Nombre }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <input
+                  <!-- <mat-option [ngValue]="undefined"
+                    >Seleccione un Punto</mat-option
+                  > -->
+                  <mat-option
+                    *ngFor="let item of puntos"
+                    [value]="item.Id_Punto_Dispensacion"
+                  >
+                    {{ item.Nombre }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-template>
+            <!-- <input
               type="text"
               [(value)]="user"
               formControlName="Identificacion_Funcionario"
               readonly
               hidden
-            />
+            /> -->
           </div>
           <div class="row">
             <div class="col mat-form-field-wrapper">
@@ -105,7 +104,7 @@
                 bindLabel="text"
                 appearance="outline"
                 [appendTo]="'body'"
-                placeholder="Proveedor"
+                placeholder="Proveedor *"
                 bindValue="value"
                 loadingText="Cargando"
                 matInput
@@ -138,79 +137,59 @@
         </small>
       </div>
       <div class="row">
-        <div class="col-10">
-          <div class="row">
-            <div class="col mat-form-field-wrapper">
-              <ng-select
-                name="Categoria"
-                [items]="Categorias"
-                bindLabel="Nombre"
-                bindValue="Id_Categoria_Nueva"
-                [(ngModel)]="selectedCategory.categoria"
-                [ngModelOptions]="{ standalone: true }"
-                (change)="getSubCategories($event)"
-                [disabled]="listaProductosPorAgregar.length > 0"
-                appearance="outline"
-                autocomplete="off"
-                [appendTo]="'body'"
-                placeholder="Categoria"
-                matInput
-              >
-              </ng-select>
-            </div>
-            <div class="col mat-form-field-wrapper">
-              <ng-select
-                name="Subcategoria"
-                [items]="subcategorias"
-                bindLabel="Nombre"
-                bindValue="Id_Subcategoria"
-                [(ngModel)]="selectedCategory.subcategoria"
-                [ngModelOptions]="{ standalone: true }"
-                (change)="filtros()"
-                [disabled]="listaProductosPorAgregar.length > 0"
-                appearance="outline"
-                autocomplete="off"
-                [appendTo]="'body'"
-                placeholder="Subcategoria"
-                matInput
-              >
-              </ng-select>
-            </div>
-            <div class="col mat-form-field-wrapper">
-              <ng-select
-                name="Producto"
-                [(ngModel)]="productoFiltro"
-                [ngModelOptions]="{ standalone: true }"
-                [items]="Productos"
-                bindLabel="producto"
-                (change)="AgregarProducto($event)"
-                (click)="productoFiltro = {}"
-                [editableSearchTerm]="true"
-                appearance="outline"
-                autocomplete="off"
-                [appendTo]="'body'"
-                placeholder="Producto"
-                matInput
-              >
-              </ng-select>
-            </div>
-          </div>
-        </div>
-        <div
-          class="col mat-form-field-wrapper d-flex align-items-center justify-content-center"
-        >
-          <button
-            type="button"
-            class="btn btn-danger btn-sm"
-            (click)="
-              listaProductosPorAgregar = [];
-              products.clear();
-              filtros();
-              ActualizaValores()
-            "
+        <div class="col mat-form-field-wrapper">
+          <ng-select
+            name="Categoria"
+            [items]="Categorias"
+            bindLabel="Nombre"
+            bindValue="Id_Categoria_Nueva"
+            [(ngModel)]="selectedCategory.categoria"
+            [ngModelOptions]="{ standalone: true }"
+            (change)="getSubCategories($event)"
+            [disabled]="listaProductosPorAgregar.length > 0"
+            appearance="outline"
+            autocomplete="off"
+            [appendTo]="'body'"
+            placeholder="Categoria"
+            matInput
           >
-            <i class="fa fa-trash"></i> Vaciar lista
-          </button>
+          </ng-select>
+        </div>
+        <div class="col mat-form-field-wrapper">
+          <ng-select
+            name="Subcategoria"
+            [items]="subcategorias"
+            bindLabel="Nombre"
+            bindValue="Id_Subcategoria"
+            [(ngModel)]="selectedCategory.subcategoria"
+            [ngModelOptions]="{ standalone: true }"
+            (change)="filtros()"
+            [disabled]="listaProductosPorAgregar.length > 0"
+            appearance="outline"
+            autocomplete="off"
+            [appendTo]="'body'"
+            placeholder="Subcategoria"
+            matInput
+          >
+          </ng-select>
+        </div>
+        <div class="col mat-form-field-wrapper">
+          <ng-select
+            name="Producto"
+            [(ngModel)]="productoFiltro"
+            [ngModelOptions]="{ standalone: true }"
+            [items]="Productos"
+            bindLabel="producto"
+            (change)="AgregarProducto($event)"
+            (click)="productoFiltro = {}"
+            [editableSearchTerm]="true"
+            appearance="outline"
+            autocomplete="off"
+            [appendTo]="'body'"
+            placeholder="Producto"
+            matInput
+          >
+          </ng-select>
         </div>
       </div>
       <div class="row" *ngIf="listaProductosPorAgregar.length > 0">
@@ -219,7 +198,10 @@
           esté vacía.</small
         >
       </div>
-      <div class="rounded-top table-responsive">
+      <div
+        class="rounded-top table-responsive"
+        *ngIf="listaProductosPorAgregar.length > 0; else notData3"
+      >
         <table class="table table-bordered table-striped table-sm">
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
@@ -231,11 +213,24 @@
               <th class="col-2">Costo</th>
               <th class="col-1">IVA</th>
               <th class="col-2">Subtotal</th>
-              <th></th>
+              <th>
+                <i
+                  role="button"
+                  class="fa fa-trash text-danger"
+                  (click)="
+                    listaProductosPorAgregar = [];
+                    products.clear();
+                    filtros();
+                    ActualizaValores()
+                  "
+                ></i>
+              </th>
             </tr>
           </thead>
           <tbody formArrayName="Productos">
-            <ng-container *ngFor="let item of listaProductosPorAgregar; let i = index">
+            <ng-container
+              *ngFor="let item of listaProductosPorAgregar; let i = index"
+            >
               <tr
                 *ngIf="item.mostrarProductoEnTabla"
                 id="fila{{ i }}"
@@ -268,14 +263,8 @@
                   >
                     <i class="fa fa-search"></i>
                   </button> -->
-                  <span
-                    *ngIf="item.producto != ''"
-                    class="mytooltip tooltip-effect-2"
-                  >
-                    <span class="tooltip-item2">Embalaje</span>
-                    <span class="tooltip-content4 clearfix">
-                      <span class="tooltip-text2">{{ item.Embalaje }}</span>
-                    </span>
+                  <span *ngIf="item.Embalaje > 0">
+                    Embalaje: {{ item.Embalaje }}
                   </span>
                   <!-- <button
                     *ngIf="item.delete"
@@ -331,9 +320,20 @@
                     [value]="item.Costo"
                   /> -->
                   <ng-container *ngIf="!item.editCosto; else inputEditCosto">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <i role="button" (click)="item.editCosto = true" class="fas fa-pen fa-sm"></i>
-                      <span>${{ formCompra.value.Productos[i].Costo | currency : "COP" : "symbol" }}</span>
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <i
+                        role="button"
+                        (click)="item.editCosto = true"
+                        class="fas fa-pen fa-sm"
+                      ></i>
+                      <span
+                        >${{
+                          formCompra.value.Productos[i].Costo
+                            | currency : "COP" : "symbol"
+                        }}</span
+                      >
                     </div>
                   </ng-container>
                   <ng-template #inputEditCosto>
@@ -403,12 +403,16 @@
                     name="TotalModel{{ i }}"
                     [value]="item.Total"
                   /> -->
-                  <span name="Total{{ i }}" id="Total{{ i }}" type="text" readonly
+                  <span
+                    name="Total{{ i }}"
+                    id="Total{{ i }}"
+                    type="text"
+                    readonly
                     ><!-- (change)=" CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)" -->
                     $ {{ item.Total | currency : "COP" : "symbol" }}
                   </span>
                 </td>
-                <td class="align-middle">
+                <td class="align-middle text-center">
                   <button
                     type="button"
                     class="btn btn-danger btn-sm"
@@ -424,54 +428,55 @@
         </table>
       </div>
       <ngb-pagination
-      *ngIf="listaProductosPorAgregar.length > 0"
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      (pageChange)="paginarProductos($event)"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      aria-label="Default pagination"
-    >
-    </ngb-pagination>
-      <div class="row d-flex justify-content-end">
-        <div class="col-sm-5">
-          <table class="table table-hover">
-            <tbody>
-              <tr>
-                <th>( = ) Subtotal :</th>
-                <td class="d-flex justify-content-end">
-                  $ {{ Subtotal_F | currency : "COP" }}
-                </td>
-              </tr>
-              <tr>
-                <th>( + ) Iva :</th>
-                <td class="d-flex justify-content-end">
-                  $ {{ Iva_F | currency : "COP" }}
-                </td>
-              </tr>
-              <tr>
-                <th>( = ) Total :</th>
-                <td class="d-flex justify-content-end">
-                  $ {{ Total_F | currency : "COP" }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        *ngIf="listaProductosPorAgregar.length > 0"
+        class="d-flex justify-content-center pagination-rounded pagination-sm"
+        [collectionSize]="pagination.collectionSize"
+        (pageChange)="paginarProductos($event)"
+        maxSize="5"
+        rotate="true"
+        ellipses="false"
+        boundaryLinks="true"
+        [pageSize]="pagination.pageSize"
+        [(page)]="pagination.page"
+        aria-label="Default pagination"
+      >
+      </ngb-pagination>
+      <ng-container *ngIf="Total_F != 0">
+        <div class="row d-flex justify-content-end">
+          <div class="col-sm-5">
+            <table class="table table-hover">
+              <tbody>
+                <tr>
+                  <th>( = ) Subtotal :</th>
+                  <td class="d-flex justify-content-end">
+                    $ {{ Subtotal_F | currency : "COP" }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>( + ) Iva :</th>
+                  <td class="d-flex justify-content-end">
+                    $ {{ Iva_F | currency : "COP" }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>( = ) Total :</th>
+                  <td class="d-flex justify-content-end">
+                    $ {{ Total_F | currency : "COP" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </ng-container>
       <div class="row d-flex justify-content-center">
         <div class="col-sm-12 text-center">
           <button
             [disabled]="!formCompra.valid"
-            class="btn btn-primary btn-lg btn-block"
+            class="btn btn-primary btn-block"
             (click)="GuardarCompra()"
           >
-            <i class="fas fa-save"></i>
-            Realizar Compra
+            Realizar compra
           </button>
         </div>
       </div>
@@ -509,4 +514,9 @@
 
 <ng-template #notData>
   <app-not-data [loading]="Cargando"></app-not-data>
+</ng-template>
+<ng-template #notData3>
+  <div class="alert alert-warning text-center" role="alert">
+    ¡No has agregado productos!
+  </div>
 </ng-template>

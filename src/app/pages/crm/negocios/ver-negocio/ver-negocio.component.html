@@ -1,4 +1,54 @@
-<div class="row">
+<div class="row" *ngIf="!loading && negocio; else notData">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-2 d-flex justify-content-center">
+            <img
+              [src]="negocio?.third_party.image | image"
+              id="imageOutput"
+              onerror="this.src='../../../../assets/images/noprofile.png'"
+              class="d-block img-thumbnail rounded-circle img-fluid"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <span class="badge badge-pill badge-primary">{{
+              negocio?.code
+            }}</span>
+            <h6>
+              {{
+                negocio?.third_party.social_reason
+                  ? negocio?.third_party.social_reason
+                  : negocio?.third_party.full_name
+              }}
+            </h6>
+            <small>
+              <p>
+                {{ negocio?.third_party_person.name | uppercase }} <br />
+                {{ negocio?.date | date | uppercase }} <br />
+                {{ negocio?.name | uppercase }} <br />
+                {{ negocio?.country.name | uppercase }} <br />
+              </p>
+            </small>
+          </div>
+          <div class="col-md-5">
+            <h6>Detalles:</h6>
+            <p>
+              <small>{{ negocio?.description }}</small>
+            </p>
+          </div>
+          <div class="col-md-2">
+            <img
+              class="img-fluid"
+              [src]="qr.changingThisBreaksApplicationSecurity"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="col-lg-8">
     <div class="card">
       <div class="card-body">
@@ -11,14 +61,17 @@
               <button
                 type="button"
                 class="btn btn-sm btn-primary"
-                (click)="openConfirm(add)"
+                (click)="openConfirm(add); getPresupuestos()"
               >
                 <i class="fa fa-plus"></i> Agregar
               </button>
             </div>
           </div>
         </div>
-        <div class="rounded-top table-responsive">
+        <div
+          class="rounded-top table-responsive"
+          *ngIf="!loading && negocio.business_budget.length > 0; else notData"
+        >
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
@@ -33,7 +86,7 @@
                 class="text-center"
               >
                 <th class="align-middle" scope="row">
-                  {{ pres?.budget.observation }}
+                  {{ pres?.budget.line }} - {{ pres?.budget.project }}
                 </th>
                 <td class="align-middle">
                   {{ pres?.budget.created_at | date }}
@@ -58,27 +111,30 @@
               <button
                 class="text-center btn btn-primary btn-sm"
                 role="button"
-                (click)="addCotizacion(); openConfirm(addCotizaciones)"
+                (click)="openConfirm(addCotizaciones); getQuotations()"
               >
                 <i class="fa fa-plus"></i> Agregar
               </button>
             </div>
           </div>
         </div>
-        <div class="rounded-top table-responsive">
+        <div
+          class="rounded-top table-responsive"
+          *ngIf="!loading && negocio?.quotations.length > 0; else notData"
+        >
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
-                <th class="col-md-8">Descripción</th>
-                <th class="col-md-2">Fecha</th>
-                <th class="col-md-2">Valor</th>
+                <th>Descripción</th>
+                <th>Fecha</th>
+                <th>Valor</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let coti of cotizaciones">
-                <td scope="row">{{ coti.descripcion }}</td>
-                <td>{{ coti.fecha | date }}</td>
-                <td>$ {{ coti.valor | number }}</td>
+              <tr *ngFor="let item of negocio?.quotations" class="text-center">
+                <th scope="row">{{ item.name }}</th>
+                <td>{{ item.created_at | date }}</td>
+                <td>$ {{ item.total_cop | number }}</td>
               </tr>
             </tbody>
           </table>
@@ -87,41 +143,6 @@
     </div>
   </div>
   <div class="col-lg-4">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <div>
-            <span class="badge badge-pill badge-primary">{{
-              negocio?.code
-            }}</span>
-            <h5>
-              {{
-                negocio?.third_party.first_name
-                  ? negocio?.third_party.first_name +
-                    " " +
-                    negocio?.third_party.first_surname
-                  : negocio?.third_party.social_reason
-              }}
-            </h5>
-            <small>
-              {{ negocio?.third_party_person.name | uppercase }}
-            </small>
-            <br />
-            <small>
-              {{ negocio?.date | date }}
-            </small>
-            <h6>{{ negocio?.country.name }}</h6>
-          </div>
-          <img
-            [src]="negocio?.third_party.image | image"
-            id="imageOutput"
-            onerror="this.src='../../../../assets/images/noprofile.png'"
-            class="d-block img-thumbnail rounded-circle img-fluid"
-          />
-        </div>
-        <p>{{ negocio?.description }}</p>
-      </div>
-    </div>
     <div class="card">
       <div class="card-body">
         <ul
@@ -187,7 +208,10 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="rounded-top table-responsive">
+    <div
+      class="rounded-top table-responsive"
+      *ngIf="!loadingBudgets && presupuestos.length > 0; else notDataBudgets"
+    >
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
@@ -223,7 +247,7 @@
               </div>
             </td>
             <td class="align-middle">
-              {{ item.created_at | date: "longDate" }}
+              {{ item.created_at | date : "longDate" }}
             </td>
             <td class="align-middle">{{ item.customer.name }}</td>
             <td class="align-middle">{{ item.destiny.name }}</td>
@@ -233,25 +257,27 @@
               {{ item.user.person.first_surname }}
             </td>
             <td class="align-middle">
-              ${{ item.total_cop | currency: "":"" }}
+              ${{ item.total_cop | currency : "" : "" }}
             </td>
             <td class="align-middle">
-              ${{ item.total_usd | currency: "":"" }}
+              ${{ item.total_usd | currency : "" : "" }}
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <!-- <ng-select
-      [items]="dataModal"
-      bindLabel="descripcion "
-      [multiple]="true"
-      [closeOnSelect]="false"
-      [selectableGroup]="true"
-      [selectableGroupAsModel]="false"
-      [(ngModel)]="seleccionadas"
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="paginationBudgets.collectionSize"
+      [pageSize]="paginationBudgets.pageSize"
+      [(page)]="paginationBudgets.page"
+      (pageChange)="getPresupuestos($event)"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
     >
-    </ng-select> -->
+    </ngb-pagination>
   </div>
   <div class="modal-footer">
     <button
@@ -285,7 +311,10 @@
   </div>
 
   <div class="modal-body">
-    <div class="rounded-top table-responsive">
+    <div
+      class="rounded-top table-responsive"
+      *ngIf="!loadingQuotation && quotations.length > 0; else notDataQuotations"
+    >
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
@@ -294,36 +323,32 @@
             <th>Cliente</th>
             <th>Destino</th>
             <th>Linea</th>
-            <th>Quien elabora</th>
             <th>Total COP</th>
             <th>Total USD</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let item of cotizaciones"
-            [ngClass]="{
-              'text-danger font-weight-bold': item.state == 'Inactivo'
-            }"
-          >
+          <tr *ngFor="let item of quotations" class="text-center">
             <td>
               <input
                 type="checkbox"
-                [selected]="cotizacionesSeleccionadas.includes(item.id)"
-                [change]="guardarCotizacion(item.id)"
+                (change)="guardarCotizacion(item.id, item.total_cop)"
+                [id]="item.id"
               />
-              <label [for]="item.id" class="ml-1"> PRES {{ item.id }} </label>
+              <label [for]="item.id" class="ml-1"> COT {{ item.id }} </label>
             </td>
-            <td>{{ item.created_at | date: "longDate" }}</td>
-            <td>{{ item.customer }}</td>
-            <td>{{ item.destiny }}</td>
-            <td>{{ item.line }}</td>
+            <td>{{ item.created_at | date : "longDate" }}</td>
             <td>
-              {{ item.user.person.first_name }}
-              {{ item.user.person.first_surname }}
+              {{
+                item.client.social_reason
+                  ? item.client.social_reason
+                  : item.client.full_name
+              }}
             </td>
-            <td>${{ item.total_cop | currency: "":"" }}</td>
-            <td>${{ item.total_usd | currency: "":"" }}</td>
+            <td>{{ item.municipality.name }}</td>
+            <td>{{ item.line }}</td>
+            <td>${{ item.total_cop | currency : "" : "" }}</td>
+            <td>${{ item.total_usd | currency : "" : "" }}</td>
           </tr>
         </tbody>
       </table>
@@ -341,4 +366,13 @@
       Guardar
     </button>
   </div>
+</ng-template>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<ng-template #notDataBudgets>
+  <app-not-data [loading]="loadingBudgets"></app-not-data>
+</ng-template>
+<ng-template #notDataQuotations>
+  <app-not-data [loading]="loadingQuotation"></app-not-data>
 </ng-template>

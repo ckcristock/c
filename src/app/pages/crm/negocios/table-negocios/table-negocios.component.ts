@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NegociosService } from '../negocios.service';
 
 @Component({
@@ -10,7 +10,8 @@ export class TableNegociosComponent implements OnInit {
 
   @Input("negocios") negocios: any[]
   @Input("loading") loading: any
-
+  @Input("pagination") pagination: any
+  @Output() getNegocios = new EventEmitter<string>();
 
   constructor(private _negocios: NegociosService,) { }
 
@@ -18,9 +19,11 @@ export class TableNegociosComponent implements OnInit {
   }
 
   nextState(state, id) {
-    console.log(state)
     this._negocios.changeState({ status: state }, id).subscribe();
+  }
 
+  getNegociosParent($event) {
+    this.getNegocios.emit($event)
   }
 
 }

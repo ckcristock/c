@@ -333,7 +333,7 @@ export class ItemsQuotationComponent implements OnInit {
   makeSubItemGroup(pre, edit = null, type) {
     return this.fb.group({
       id: ((edit && pre?.id) ? pre.id : ''),
-      description: ((edit && pre?.description) ? pre.description : ''),
+      description: [((edit && pre?.description) ? pre.description : ''), Validators.required],
       cuantity_aux: ((edit && pre?.cuantity) ? pre.cuantity : 1),
       cuantity: ((edit && pre?.cuantity) ? pre.cuantity : 1),
       value_cop_aux: ((edit && pre?.value_cop) ? this._numberPipe.transform((pre.value_cop / pre.cuantity).toString(), '$') : 0),

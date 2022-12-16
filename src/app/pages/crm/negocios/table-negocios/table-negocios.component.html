@@ -5,9 +5,10 @@
   >
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
+        <th>Foto</th>
         <th>Código</th>
+        <th>Nombre</th>
         <th>Empresa</th>
-        <th>Desripcion</th>
         <th>Presupuesto</th>
         <th>Fecha</th>
         <th>Etapa</th>
@@ -16,7 +17,15 @@
     </thead>
     <tbody>
       <tr *ngFor="let neg of negocios" class="text-center">
+        <td class="p-0">
+          <img
+            [src]="neg.third_party.image | image"
+            onerror="this.src='../../../../assets/images/noprofile.png'"
+            class="rounded-circle mx-auto img-fluid header-profile-user"
+          />
+        </td>
         <td class="align-middle" scope="row">{{ neg.code }}</td>
+        <td class="align-middle" scope="row">{{ neg.name }}</td>
         <td class="align-middle">
           {{
             neg.third_party.first_name
@@ -24,7 +33,6 @@
               : neg.third_party.social_reason
           }}
         </td>
-        <td class="align-middle">{{ neg.name }}</td>
         <td class="align-middle">$ {{ neg.budget_value | number }}</td>
         <td class="align-middle">{{ neg.date | date }}</td>
         <td class="align-middle">{{ neg.status }}</td>
@@ -59,6 +67,19 @@
     </tbody>
   </table>
 </div>
+<ngb-pagination
+  class="d-flex justify-content-center pagination-rounded pagination-sm"
+  [collectionSize]="pagination.collectionSize"
+  [pageSize]="pagination.pageSize"
+  [(page)]="pagination.page"
+  (pageChange)="getNegociosParent($event)"
+  aria-label="Default pagination"
+  maxSize="5"
+  rotate="true"
+  ellipses="false"
+  boundaryLinks="true"
+>
+</ngb-pagination>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

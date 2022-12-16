@@ -14,6 +14,9 @@ import { NegociosService } from './negocios.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { QuotationService } from '../cotizacion/quotation.service';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
+import { MatAccordion } from '@angular/material';
 
 @Component({
   selector: 'app-negocios',
@@ -22,13 +25,24 @@ import { QuotationService } from '../cotizacion/quotation.service';
 })
 export class NegociosComponent implements OnInit {
   @ViewChild('modal') modal: any;
-
-  negocios: any[] = [];
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  matPanel = false;
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
+  }
+  business: any[] = [];
 
   negocios_tercera_etapa: Negocio[];
   negocios_segunda_etapa: Negocio[];
   negocios_primera_etapa: Negocio[];
   form: FormGroup;
+  formFiltersBusiness: FormGroup;
 
   active = 1;
   contacts: any[];
@@ -39,12 +53,47 @@ export class NegociosComponent implements OnInit {
 
   budgets: any[] = [];
   budgetsSelected: any[] = [];
+  quotationSelected: any[] = [];
 
   total = {
     first: 0,
     second: 0,
     third: 0,
   };
+
+  paginationBusiness: any = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  paginationBudgets: any = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  paginationQuotations: any = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+
+  filtersBudgets = {
+    date: '',
+    city: '',
+    code: '',
+    client: '',
+    description: '',
+    status: '',
+  }
+
+  filtersQuotations = {
+    date: '',
+    city: '',
+    code: '',
+    client: '',
+    description: '',
+    status: '',
+  }
 
   today = new Date().toISOString().slice(0, 10);
   companies: any[];
@@ -54,7 +103,7 @@ export class NegociosComponent implements OnInit {
   cities: any[] = [];
   city: any;
   orderObj: any
-  quotations: any[] =[]
+  quotations: any[] = []
 
   constructor(
     private _reactiveValid: ValidatorsService,
@@ -63,7 +112,9 @@ export class NegociosComponent implements OnInit {
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private location: Location,
-    private _quotation: QuotationService
+    private _quotation: QuotationService,
+    private _modal: ModalService,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
@@ -81,17 +132,40 @@ export class NegociosComponent implements OnInit {
       }
       );
     this.createForm();
+    this.createFormFiltersBusiness();
     this.getCompanies();
     this.getNegocios();
     this.getLists();
     this.calcularTotal();
     this.getCountries();
-    this.getQuotations();
+    //this.getQuotations();
   }
 
-  getQuotations(){
-    this._quotation.getAllQuotations().subscribe((res:any) => {
-      this.quotations = res.data;
+  createFormFiltersBusiness() {
+    this.formFiltersBusiness = this.fb.group({
+      code: '',
+      name: '',
+      company_name: '',
+      date: '',
+      status: '',
+    });
+    this.formFiltersBusiness.valueChanges.pipe(debounceTime(500)).subscribe(r => {
+      console.log(r)
+      this.getNegocios()
+    })
+  }
+
+  getQuotations(page = 1) {
+    this.quotationSelected = []
+    this.paginationQuotations.page = page;
+    let params = {
+      ...this.paginationQuotations,
+      ...this.filtersQuotations,
+      third_party_id: this.form.value.third_party_id
+    }
+    this._quotation.getQuotations(params).subscribe((res: any) => {
+      this.quotations = res.data.data;
+      this.paginationQuotations.collectionSize = res.data.total;
     })
   }
 
@@ -99,25 +173,21 @@ export class NegociosComponent implements OnInit {
     this.location.replaceState('/crm/negocios', url);
   }
 
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
-    this.form.reset()
-
+  openConfirm(confirm) {
+    this._modal.open(confirm, 'xl')
   }
 
-  getNegocios() {
+  getNegocios(page = 1) {
+    this.paginationBusiness.page = page;
     this.loading = true;
     this.loading2 = true;
-    this._negocios.getBusinesses().subscribe((resp: any) => {
+    let params = {
+      ...this.paginationBusiness, ...this.formFiltersBusiness.value
+    }
+    this._negocios.getBusinesses(params).subscribe((resp: any) => {
       this.loading = false;
-      this.negocios = resp.data;
+      this.business = resp.data.data;
+      this.paginationBusiness.collectionSize = resp.data.total;
       this.getLists()
     });
     // this._negocios.getNeg().subscribe((resp: any) => {
@@ -129,12 +199,12 @@ export class NegociosComponent implements OnInit {
     this.form = this.fb.group({
       name: ['', this._reactiveValid.required],
       description: ['', Validators.required],
-      third_party_id: ['', this._reactiveValid.required],
-      third_party_person_id: ['', this._reactiveValid.required],
-      country_id: ['', Validators.required],
-      city_id: ['', Validators.required],
+      third_party_id: [null, this._reactiveValid.required],
+      third_party_person_id: [null, this._reactiveValid.required],
+      country_id: [null, Validators.required],
+      city_id: [null, Validators.required],
       date: ['', Validators.required],
-      cotizacion_id: [''],
+      //cotizacion_id: [''],
     });
   }
 
@@ -165,13 +235,13 @@ export class NegociosComponent implements OnInit {
   private getLists() {
     this.loading2 = true
     setTimeout(() => {
-      this.negocios_segunda_etapa = this.negocios.filter(
+      this.negocios_segunda_etapa = this.business.filter(
         (t) => t.status === 'second'
       );
-      this.negocios_tercera_etapa = this.negocios.filter(
+      this.negocios_tercera_etapa = this.business.filter(
         (t) => t.status === 'third'
       );
-      this.negocios_primera_etapa = this.negocios.filter(
+      this.negocios_primera_etapa = this.business.filter(
         (t) => t.status === 'first'
       );
       this.loading2 = false
@@ -276,21 +346,29 @@ export class NegociosComponent implements OnInit {
     });
   }
 
-  getBudgets() {
-    this._negocios.getBudgets(this.form.value.third_party_id).subscribe((resp: any) => {
+  getBudgets(page = 1) {
+    this.budgetsSelected = []
+    this.paginationBudgets.page = page;
+    let params = {
+      ...this.paginationBudgets,
+      ...this.filtersBudgets,
+      third_party_id: this.form.value.third_party_id
+    }
+    this._negocios.getBudgets(params).subscribe((resp: any) => {
       this.budgets = resp.data.data;
+      this.paginationBudgets.collectionSize = resp.data.total;
     });
   }
 
   guardarPresupuesto(event, item) {
-    if (event.target.checked) {
+    if (event.checked) {
       // Add the new value in the selected options
       this.budgetsSelected.push((item));
     } else {
       ;
       // removes the unselected option
       this.budgetsSelected = this.budgetsSelected.filter((selected) => {
-        selected.id !== event.target.id
+        return selected.id !== event.source.id
       });
     }
     // if (this.budgetsSelected.includes(value)) {
@@ -303,19 +381,54 @@ export class NegociosComponent implements OnInit {
     // this.budgetsSelected.push(value);
     // return;
   }
+  guardarCotizacion(event, item) {
+    if (event.checked) {
+      this.quotationSelected.push(item);
+    } else {
+      this.quotationSelected = this.quotationSelected.filter((selected) => {
+        return selected.id !== event.source.id
+      });
+    }
+  }
 
-  createNeg() {
-    this.form.addControl('budgets', this.fb.control(this.budgetsSelected));
-    this.budgetsSelected.reduce((a, b) => {
-      return this.form.addControl('budget_value', this.fb.control(a + b.total_cop))
-    }, 0)
-    this._negocios.saveNeg(this.form.value).subscribe(r => {
-      this.modalService.dismissAll();
-      this.budgetsSelected = [];
-      this.budgets = [];
-      this.getNegocios();
-    });
-    this.addEventToHistory('Negocio Creado');
+  saveBusiness() {
+    if (this.form.valid) {
+      this._swal.show({
+        title: '¿Estás seguro(a)?',
+        text: 'Vamos a guardar la cotización',
+        icon: 'question',
+        showCancel: true,
+      }).then((r) => {
+        if (r.isConfirmed) {
+          this.form.addControl('budgets', this.fb.control(this.budgetsSelected));
+          this.form.addControl('quotations', this.fb.control(this.quotationSelected));
+          this.budgetsSelected.reduce((a, b) => {
+            return this.form.addControl('budget_value', this.fb.control(a + b.total_cop))
+          }, 0)
+          this.quotationSelected.reduce((a, b) => {
+            return this.form.addControl('quotation_value', this.fb.control(a + b.total_cop))
+          }, 0)
+          this._negocios.saveNeg(this.form.value).subscribe(r => {
+            this._modal.close()
+            this.form.reset();
+            this.budgetsSelected = [];
+            this.quotationSelected = [];
+            this.budgets = [];
+            this.quotations = [];
+            this.getNegocios();
+          });
+          this.addEventToHistory('Negocio Creado');
+        }
+      })
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'ERROR',
+        text: 'Completa todos los campos requeridos para poder continuar',
+        showCancel: false
+      })
+    }
+
   }
 
   addEventToHistory(desc) {

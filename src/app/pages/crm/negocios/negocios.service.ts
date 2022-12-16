@@ -30,7 +30,7 @@ export class NegociosService {
     // })
   }
 
-  changeState(data, id){
+  changeState(data, id) {
     return this.http.put(`${this.url}/business/${id}`, data);
   }
 
@@ -40,8 +40,12 @@ export class NegociosService {
     )
   }
 
-  getBusinesses(){
+  /* getBusinesses() {
     return this.http.get(`${this.url}/business`);
+  } */
+
+  getBusinesses(params = {}) {
+    return this.http.get(`${this.url}/paginateBusiness`, { params });
   }
 
   getThirdPartyPerson(params = {}) {
@@ -80,16 +84,16 @@ export class NegociosService {
     )
   }*/
 
-  getHistory(){
+  getHistory() {
     return of(
       history
     )
   }
-  addEventToHistroy(event){
+  addEventToHistroy(event) {
     let item = {
-      date: new Date().toISOString().slice(0,10),
+      date: new Date().toISOString().slice(0, 10),
       action: event,
-      autor:'yo'
+      autor: 'yo'
     };
 
     return of(
@@ -97,15 +101,15 @@ export class NegociosService {
     )
   }
 
-  getBudgets(params={}){
-    return this.http.get(`${this.url}/budgets-paginate`)
+  getBudgets(params = {}) {
+    return this.http.get(`${this.url}/budgets-paginate`, { params })
   }
 
-  getBusiness(id){
+  getBusiness(id) {
     return this.http.get(`${this.url}/business/${id}`)
   }
 
-  newBusinessBudget( data ){
+  newBusinessBudget(data) {
     return this.http.post(`${this.url}/new-business-budget`, data);
   }
 
@@ -113,11 +117,11 @@ export class NegociosService {
     return this.http.get(`${this.url}/get-tasks-business/${id}`)
   }
 
-  saveTask( data:any ){
+  saveTask(data: any) {
     return this.http.post(`${environment.base_url}/save-task`, data);
   }
 
-  updateTask( data:any ){
+  updateTask(data: any) {
     return this.http.post(`${environment.base_url}/save-task`, data);
   }
 }

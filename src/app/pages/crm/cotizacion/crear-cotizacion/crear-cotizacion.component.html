@@ -12,7 +12,7 @@
         y no podrá ser cambiada
       </div>
     </ng-container>
-    <form [formGroup]="form">
+    <form [formGroup]="form" novalidate>
       <div class="row">
         <div class="col-md-3">
           <ng-select
@@ -20,8 +20,9 @@
             bindLabel="text"
             bindValue="value"
             appearance="outline"
+            required
             [appendTo]="'body'"
-            placeholder="Cliente"
+            placeholder="Cliente *"
             formControlName="customer_id"
           ></ng-select>
         </div>
@@ -32,7 +33,8 @@
             bindValue="value"
             appearance="outline"
             [appendTo]="'body'"
-            placeholder="Destino"
+            placeholder="Destino *"
+            required
             formControlName="destinity_id"
           ></ng-select>
         </div>
@@ -107,6 +109,7 @@
             matInput
             placeholder="Ingresa las observaciones"
             rows="5"
+            required
             formControlName="observation"
             [cdkTextareaAutosize]="true"
           ></textarea>
@@ -114,7 +117,13 @@
       </div>
       <hr />
       <app-items-quotation #itemsQuotation [form]="form"></app-items-quotation>
-      <div class="row">
+      <ckeditor
+        [editor]="_texteditor.Editor"
+        (ready)="_texteditor.onReady($event)"
+        [config]="_texteditor.configEditor"
+        formControlName="commercial_terms"
+      ></ckeditor>
+      <!-- <div class="row">
         <mat-form-field
           class="col-md-12 mat-form-field-no-padding textarea"
           appearance="outline"
@@ -128,7 +137,7 @@
             [cdkTextareaAutosize]="true"
           ></textarea>
         </mat-form-field>
-      </div>
+      </div> -->
     </form>
     <button type="button" class="btn btn-primary btn-block" (click)="save()">
       Guardar

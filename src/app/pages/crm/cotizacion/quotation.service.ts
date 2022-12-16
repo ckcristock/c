@@ -11,27 +11,31 @@ export class QuotationService {
     private http: HttpClient
   ) { }
 
-  getQuotations( params = {} ) {
-    return this.http.get(`${environment.base_url}/paginateQuotations`, {params});
+  getQuotations(params = {}) {
+    return this.http.get(`${environment.base_url}/paginateQuotations`, { params });
   }
 
   getAllQuotations() {
     return this.http.get(`${environment.base_url}/quotations`);
   }
 
-  updateQuotation(data:any, id){
+  updateQuotation(data: any, id) {
     return this.http.put(`${environment.base_url}/quotations/${id}`, data);
   }
 
-  getTRM(params ={}){
-    return this.http.get('https://www.datos.gov.co/resource/ceyp-9c7c.json', {params})
+  getTRM(params = {}) {
+    return this.http.get('https://www.datos.gov.co/resource/ceyp-9c7c.json', { params })
   }
 
-  save(data){
+  save(data) {
     return this.http.post(`${environment.base_url}/quotations`, data)
   }
 
   getQuotation(id) {
     return this.http.get(`${environment.base_url}/quotations/${id}`);
+  }
+
+  getCommercialTerms(params = {}) {
+    return this.http.get(`${environment.base_url}/commercial-terms`, { params });
   }
 }

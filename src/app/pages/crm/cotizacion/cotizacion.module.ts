@@ -13,6 +13,7 @@ import { MatButtonModule, MatExpansionModule, MatFormFieldModule, MatIconModule,
 import { ItemsQuotationComponent } from "./crear-cotizacion/components/items-quotation/items-quotation.component";
 import { NumberPipePipe } from "src/app/core/pipes/number-pipe.pipe";
 import { ViewQuotationComponent } from "./view-quotation/view-quotation.component";
+import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { ViewQuotationComponent } from "./view-quotation/view-quotation.componen
     DirectivesModule,
     MatSlideToggleModule,
     MatRadioModule,
+    CKEditorModule,
   ],
   exports: [],
   providers: [NumberPipePipe]

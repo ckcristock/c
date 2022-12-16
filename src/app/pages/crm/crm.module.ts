@@ -145,6 +145,7 @@ import { PagesModule } from '../pages.module';
     MatTableModule,
     PagesModule,
     NgbTypeaheadModule,
+    MatCheckboxModule
   ]
 })
 export class CrmModule { }

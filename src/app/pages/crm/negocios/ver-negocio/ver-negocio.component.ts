@@ -17,10 +17,11 @@ export class VerNegocioComponent implements OnInit {
   negocio: any;
   presupuestos: any[];
   presupuestosSeleccionados: any[] = [];
-  cotizaciones: any[];
+  cotizaciones: any;
   cotizacionesSeleccionadas: any[] = [];
   business_budget_id: any = '';
   budget_value: number;
+  quotation_value: number;
   qr;
   loadingBudgets: boolean;
   loadingQuotation: boolean;
@@ -108,12 +109,17 @@ export class VerNegocioComponent implements OnInit {
       total_cop: total_cop
     });
   }
-  guardarCotizacion(id) {
+
+  guardarCotizacion(id, total_cop) {
     if (this.cotizacionesSeleccionadas.includes(id))
       this.cotizacionesSeleccionadas = this.cotizacionesSeleccionadas.filter(
         (cot) => cot !== id
       );
-    else this.cotizacionesSeleccionadas.push(id);
+    else this.cotizacionesSeleccionadas.push({
+      quotation_id: id,
+      business_id: this.ruta.snapshot.params.id,
+      total_cop: total_cop
+    });
   }
 
 
@@ -139,7 +145,21 @@ export class VerNegocioComponent implements OnInit {
 
 
   addCotizacion() {
-    this.cotizacionesSeleccionadas = this.cotizaciones.map((n) => n.id);
+    this.cotizacionesSeleccionadas.reduce((a, b) => {
+      return this.quotation_value = a + b.total_cop;
+    }, this.negocio.quotation_value)
+    let data = {
+      business_id: this.filtros.id,
+      quotation_value: this.quotation_value,
+      quotations: this.cotizacionesSeleccionadas
+    }
+    this._negocio.newBusinessQuotation(data).subscribe(data => {
+      this.addEventToHistory('Se modificaron los presupuestos del negocio');
+      this.getBussines();
+      this.getQuotations();
+      this._modal.close();
+      this.cotizacionesSeleccionadas = [];
+    });
 
   }
 

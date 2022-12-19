@@ -1,19 +1,19 @@
 <ng-container *ngIf="!loading; else notDataL">
-  <div class="card">
-    <div class="card-body">
-      <div class="row card-title d-flex justify-content-between">
-        <div class="col-md-6 px-0">
-          <h4 class="text-primary">Crear APU - Servicio</h4>
-        </div>
-        <div class="col-md-6 px-0 text-md-right text-center">
-          <span>
+  <form [formGroup]="form">
+    <div class="card">
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Crear APU - Servicio</h4>
+          </div>
+          <div class="col-md-6 px-0 text-md-right text-center">
+            <!-- <span>
             {{ date | date: "EEEE, MMMM d, y" | titlecase }} - Bucaramanga -
             Colombia
-          </span>
+          </span> -->
+          </div>
         </div>
-      </div>
-      <hr class="line" />
-      <form [formGroup]="form">
+        <hr class="line" />
         <div class="row">
           <mat-form-field class="col-md-4" appearance="outline">
             <mat-label>Nombre</mat-label>
@@ -22,44 +22,45 @@
               type="text"
               placeholder="Ingresa el nombre"
               formControlName="name"
+              required
             />
           </mat-form-field>
-          <div class="col-md-4">
+          <div class="col-md-4 mb-4">
             <ng-select
               formControlName="city_id"
               [items]="cities"
               bindLabel="text"
               appearance="outline"
               [appendTo]="'body'"
-              placeholder="Destino"
+              placeholder="Destino *"
               bindValue="value"
               loadingText="loading"
               ngDefaultControl
             >
             </ng-select>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 mb-4">
             <ng-select
               formControlName="person_id"
               [items]="people"
               bindLabel="text"
               appearance="outline"
               [appendTo]="'body'"
-              placeholder="¿Quién elbaora?"
+              placeholder="¿Quién elbaora? *"
               bindValue="value"
               loadingText="loading"
               ngDefaultControl
             >
             </ng-select>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 mb-4">
             <ng-select
               formControlName="third_party_id"
               [items]="clients"
               bindLabel="text"
               appearance="outline"
               [appendTo]="'body'"
-              placeholder="Cliente"
+              placeholder="Cliente *"
               bindValue="value"
               loadingText="loading"
               ngDefaultControl
@@ -73,6 +74,7 @@
               type="text"
               placeholder="Ingresa la línea"
               formControlName="line"
+              required
             />
           </mat-form-field>
           <mat-form-field
@@ -84,23 +86,32 @@
               matInput
               placeholder="Ingrese las observaciones"
               rows="5"
+              required
               formControlName="observation"
               [cdkTextareaAutosize]="true"
             ></textarea>
           </mat-form-field>
         </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
         <h5 class="mt-2 text-center">Validación dimensional</h5>
         <hr class="line" />
-        <div class="card-title d-flex justify-content-between">
-          <h6>Cálculo de mano de obra</h6>
-          <div class="btn-group">
-            <button
-              class="btn btn-primary btn-sm"
-              (click)="newCmoList()"
-              type="button"
-            >
-              <i class="fas fa-plus"></i>
-            </button>
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h6>Cálculo de mano de obra</h6>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group w-sm-100">
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="newCmoList()"
+                type="button"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
           </div>
         </div>
         <ng-container *ngIf="cmoList.controls.length; else notData">
@@ -143,7 +154,7 @@
                   <th class="align-middle">Valor Hora</th>
                   <th class="align-middle">Valor Total</th>
                   <th class="align-middle">Valor Salarial</th>
-                  <th class="align-middle">Acc.</th>
+                  <th><i class="mdi mdi-chevron-down"></i></th>
                 </tr>
               </thead>
               <ng-container formArrayName="calculate_labor">
@@ -361,7 +372,7 @@
                           </div>
                         </td>
                       </tr>
-                      <tr>
+                      <tr *ngIf="collapsed[i]">
                         <td colspan="21">
                           <div class="rounded-top table-responsive">
                             <table
@@ -498,20 +509,26 @@
             </div>
           </div>
         </ng-container>
-
-        <hr />
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
         <h5 class="text-center">Montaje y puesta en marcha</h5>
         <hr class="line" />
-        <div class="card-title d-flex justify-content-between">
-          <h6>Cálculo de mano de obra</h6>
-          <div class="btn-group">
-            <button
-              class="btn btn-primary btn-sm"
-              type="button"
-              (click)="newmpMCalculateLaborList()"
-            >
-              <i class="fas fa-plus"></i>
-            </button>
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h6>Cálculo de mano de obra</h6>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group w-sm-100">
+              <button
+                class="btn btn-primary btn-sm"
+                type="button"
+                (click)="newmpMCalculateLaborList()"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
           </div>
         </div>
         <ng-container
@@ -771,7 +788,7 @@
                           </div>
                         </td>
                       </tr>
-                      <tr>
+                      <tr *ngIf="mpMcollapsed[i]">
                         <td colspan="21">
                           <div class="rounded-top table-responsive">
                             <table
@@ -919,7 +936,10 @@
             </div>
           </div>
         </ng-container>
-        <hr />
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
         <h5 class="text-center">AIU</h5>
         <hr class="line" />
         <div class="d-flex justify-content-center">
@@ -1005,7 +1025,9 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-10" colspan="2">Precio venta COP incluye retención</td>
+                  <td class="col-10" colspan="2">
+                    Precio venta COP incluye retención
+                  </td>
                   <td class="col-2">
                     <input
                       type="number"
@@ -1030,7 +1052,9 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-10" colspan="2">Precio venta USD incluye retención</td>
+                  <td class="col-10" colspan="2">
+                    Precio venta USD incluye retención
+                  </td>
                   <td class="col-2">
                     <input
                       type="number"
@@ -1046,12 +1070,10 @@
             </table>
           </div>
         </div>
-        <button class="btn btn-block btn-primary" (click)="save()">
-          Guardar
-        </button>
-      </form>
+      </div>
     </div>
-  </div>
+    <button class="btn btn-block btn-primary mb-3" (click)="save()">Guardar</button>
+  </form>
 </ng-container>
 <ng-template #notData>
   <div class="alert alert-warning text-center" role="alert">

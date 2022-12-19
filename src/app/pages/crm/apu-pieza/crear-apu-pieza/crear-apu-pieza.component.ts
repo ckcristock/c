@@ -135,7 +135,7 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   getUnits(){
-    this._units.getUnits().subscribe((r:any) => {
+    this._units.selectUnits().subscribe((r:any) => {
       this.units = r.data;
     })
   }

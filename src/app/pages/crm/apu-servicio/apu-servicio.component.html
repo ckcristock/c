@@ -1,68 +1,111 @@
 <div class="card">
-    <div class="card-body">
-        <div class="card-title">
-            <button class="btn btn-sm btn-primary" type="button" style="float: right;" [routerLink]="['/crm/apu/crear-apu-servicio']">
-                <i class="fa fa-plus"></i> Agregar
-            </button>
-            <h5 class="text-primary">APU SERVICIOS</h5>
-        </div>
+  <div class="card-body">
+    <div class="card-title">
+      <button
+        class="btn btn-sm btn-primary"
+        type="button"
+        style="float: right"
+        [routerLink]="['/crm/apu/crear-apu-servicio']"
+      >
+        <i class="fa fa-plus"></i> Agregar
+      </button>
+      <h5 class="text-primary">APU SERVICIOS</h5>
     </div>
+  </div>
 </div>
 <div class="card">
-    <div class="card-body">
-        <table class="table table-borderless table-striped" *ngIf="!loading && apuService.length > 0; else notData">
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Nombre</th>
-                    <th>Cliente</th>
-                    <th>Destino</th>
-                    <th>Linea</th>
-                    <th>Quien elabora</th>
-                    <th>F. Creación</th>
-                    <th class="text-center col-1"><i class="mdi mdi-chevron-down"></i></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of apuService" [ngClass]="{'text-danger font-weight-bold': ( item.state == 'Inactivo' )}">
-                    <td> {{ item.code }} </td>
-                    <td> {{ item.name }} </td>
-                    <td> {{ item.thirdparty.name }} </td>
-                    <td> {{ item.city.name }} </td>
-                    <td> {{ item.line }} </td>
-                    <td> {{ item.person.name }} </td>
-                    <td> {{ item.created_at | date: 'longDate' }} </td>
-                    <td>
-                        <div class="text-center">
-                            <div ngbDropdown container="body" class="dropdown-primary">
-                                <button ngbDropdownToggle class="btn btn-primary btn-sm  waves-light " type="button">
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <a class="dropdown-item waves-light text-dark  caja-botones" [routerLink]="['/crm/apu/ver-apu-servicio', item.id]">
-                                        <i class="far fa-eye"></i> Ver
-                                    </a>
-                                    <a class="dropdown-item waves-light text-info  caja-botones" [routerLink]="['/crm/apu/editar-apu-servicio', item.id]">
-                                        <i class="far fa-edit"></i> editar
-                                    </a>
-                                    <a *ngIf="item.state == 'Activo'" (click)="activateOrInactive('Inactivo', item.id)" class="dropdown-item waves-light text-danger  caja-botones">
-                                        <i class="far fa-trash-alt"></i> Anular
-                                    </a>
-                                    <a *ngIf="item.state == 'Inactivo'" (click)="activateOrInactive('Activo', item.id)" class="dropdown-item waves-light text-success  caja-botones">
-                                        <i class="fas fa-check"></i> Activar
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getApuServices($event)" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize"
-            [(page)]="pagination.page" aria-label="Default pagination">
-        </ngb-pagination>
-    </div>
+  <div class="card-body">
+    <table
+      class="table table-borderless table-striped"
+      *ngIf="!loading && apuService.length > 0; else notData"
+    >
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Nombre</th>
+          <th>Cliente</th>
+          <th>Destino</th>
+          <th>Linea</th>
+          <th>Quien elabora</th>
+          <th>F. Creación</th>
+          <th class="text-center col-1">
+            <i class="mdi mdi-chevron-down"></i>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of apuService"
+          [ngClass]="{
+            'text-danger font-weight-bold': item.state == 'Inactivo'
+          }"
+        >
+          <td>{{ item.code }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.thirdparty.name }}</td>
+          <td>{{ item.city.name }}</td>
+          <td>{{ item.line }}</td>
+          <td>{{ item.person.name }}</td>
+          <td>{{ item.created_at | date : "longDate" }}</td>
+          <td>
+            <div class="text-center">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-dark caja-botones"
+                    [routerLink]="['/crm/apu/ver-apu-servicio', item.id]"
+                  >
+                    <i class="far fa-eye"></i> Ver
+                  </a>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    [routerLink]="['/crm/apu/editar-apu-servicio', item.id]"
+                  >
+                    <i class="far fa-edit"></i> editar
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Activo'"
+                    (click)="activateOrInactive('Inactivo', item.id)"
+                    class="dropdown-item waves-light text-danger caja-botones"
+                  >
+                    <i class="far fa-trash-alt"></i> Anular
+                  </a>
+                  <a
+                    *ngIf="item.state == 'Inactivo'"
+                    (click)="activateOrInactive('Activo', item.id)"
+                    class="dropdown-item waves-light text-success caja-botones"
+                  >
+                    <i class="fas fa-check"></i> Activar
+                  </a>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="getApuServices($event)"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      aria-label="Default pagination"
+    >
+    </ngb-pagination>
+  </div>
 </div>
 <ng-template #notData>
-    <app-not-data [loading]="loading"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

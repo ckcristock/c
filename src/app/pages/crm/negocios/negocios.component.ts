@@ -26,41 +26,35 @@ import { MatAccordion } from '@angular/material';
 export class NegociosComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
-  matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
+  today = new Date().toISOString().slice(0, 10);
+  form: FormGroup;
+  formFiltersBusiness: FormGroup;
+  formFiltersBudgets: FormGroup;
+  matPanel: boolean = false;
+  quotationSelected: any[] = [];
+  budgetsSelected: any[] = [];
+  budgets: any[] = [];
   business: any[] = [];
-
+  cities: any[] = [];
+  quotations: any[] = []
+  contacts: any[];
+  companies: any[];
+  countries: any[];
   negocios_tercera_etapa: Negocio[];
   negocios_segunda_etapa: Negocio[];
   negocios_primera_etapa: Negocio[];
-  form: FormGroup;
-  formFiltersBusiness: FormGroup;
-
-  active = 1;
-  contacts: any[];
   selectedContact: any;
-
-  countries: any[];
   selectedCountry: any;
-
-  budgets: any[] = [];
-  budgetsSelected: any[] = [];
-  quotationSelected: any[] = [];
-
+  companySelected: any;
+  orderObj: any
+  city: any;
+  loading: boolean;
+  active = 1;
   total = {
     first: 0,
     second: 0,
     third: 0,
   };
-
   paginationBusiness: any = {
     page: 1,
     pageSize: 10,
@@ -76,16 +70,6 @@ export class NegociosComponent implements OnInit {
     pageSize: 10,
     collectionSize: 0
   }
-
-  filtersBudgets = {
-    date: '',
-    city: '',
-    code: '',
-    client: '',
-    description: '',
-    status: '',
-  }
-
   filtersQuotations = {
     date: '',
     city: '',
@@ -94,16 +78,6 @@ export class NegociosComponent implements OnInit {
     description: '',
     status: '',
   }
-
-  today = new Date().toISOString().slice(0, 10);
-  companies: any[];
-  companySelected: any;
-  loading: boolean = true;
-  loading2: boolean
-  cities: any[] = [];
-  city: any;
-  orderObj: any
-  quotations: any[] = []
 
   constructor(
     private _reactiveValid: ValidatorsService,
@@ -133,12 +107,37 @@ export class NegociosComponent implements OnInit {
       );
     this.createForm();
     this.createFormFiltersBusiness();
+    this.createFormFiltersBudgets();
     this.getCompanies();
     this.getNegocios();
     this.getLists();
     this.calcularTotal();
     this.getCountries();
     //this.getQuotations();
+  }
+
+
+  createFormFiltersBudgets() {
+    this.formFiltersBudgets = this.fb.group({
+      item: '',
+      date: '',
+      customer: '',
+      destiny: '',
+      line: '',
+      person: '',
+    })
+    this.formFiltersBudgets.valueChanges
+      .pipe(debounceTime(500)).subscribe(r => this.getBudgets())
+  }
+
+  openClose() {
+    if (this.matPanel == false) {
+      this.accordion.openAll()
+      this.matPanel = true;
+    } else {
+      this.accordion.closeAll()
+      this.matPanel = false;
+    }
   }
 
   createFormFiltersBusiness() {
@@ -150,7 +149,6 @@ export class NegociosComponent implements OnInit {
       status: '',
     });
     this.formFiltersBusiness.valueChanges.pipe(debounceTime(500)).subscribe(r => {
-      console.log(r)
       this.getNegocios()
     })
   }
@@ -180,7 +178,6 @@ export class NegociosComponent implements OnInit {
   getNegocios(page = 1) {
     this.paginationBusiness.page = page;
     this.loading = true;
-    this.loading2 = true;
     let params = {
       ...this.paginationBusiness, ...this.formFiltersBusiness.value
     }
@@ -190,9 +187,6 @@ export class NegociosComponent implements OnInit {
       this.paginationBusiness.collectionSize = resp.data.total;
       this.getLists()
     });
-    // this._negocios.getNeg().subscribe((resp: any) => {
-    //   this.negocios = resp;
-    // });
   }
 
   createForm() {
@@ -233,7 +227,6 @@ export class NegociosComponent implements OnInit {
   }
 
   private getLists() {
-    this.loading2 = true
     setTimeout(() => {
       this.negocios_segunda_etapa = this.business.filter(
         (t) => t.status === 'second'
@@ -244,7 +237,6 @@ export class NegociosComponent implements OnInit {
       this.negocios_primera_etapa = this.business.filter(
         (t) => t.status === 'first'
       );
-      this.loading2 = false
     }, 1000);
 
   }
@@ -351,7 +343,7 @@ export class NegociosComponent implements OnInit {
     this.paginationBudgets.page = page;
     let params = {
       ...this.paginationBudgets,
-      ...this.filtersBudgets,
+      ...this.formFiltersBudgets.value,
       third_party_id: this.form.value.third_party_id
     }
     this._negocios.getBudgets(params).subscribe((resp: any) => {

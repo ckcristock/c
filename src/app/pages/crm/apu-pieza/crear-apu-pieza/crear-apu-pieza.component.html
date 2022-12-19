@@ -1,18 +1,18 @@
-<div class="card">
-  <div class="card-body">
-    <div class="row card-title d-flex justify-content-between">
-      <div class="col-md-6 px-0">
-        <h4 class="text-primary">Crear APU - Pieza</h4>
-      </div>
-      <div class="col-md-6 px-0 text-md-right text-center">
-        <span>
-          {{ date | date: "EEEE, MMMM d, y" | titlecase }} - Bucaramanga -
+<form [formGroup]="form" *ngIf="form; else wait">
+  <div class="card">
+    <div class="card-body">
+      <div class="row card-title d-flex justify-content-between">
+        <div class="col-md-6 px-0">
+          <h4 class="text-primary">Crear APU - Pieza</h4>
+        </div>
+        <div class="col-md-6 px-0 text-md-right text-center">
+          <!-- <span>
+          {{ date | date : "EEEE, MMMM d, y" | titlecase }} - Bucaramanga -
           Colombia
-        </span>
+        </span> -->
+        </div>
       </div>
-    </div>
-    <hr class="line" />
-    <form [formGroup]="form" *ngIf="form">
+      <hr class="line" />
       <div class="row">
         <mat-form-field class="col-md-4" appearance="outline">
           <mat-label>Nombre</mat-label>
@@ -21,44 +21,45 @@
             type="text"
             placeholder="Ingresa el nombre"
             formControlName="name"
+            required
           />
         </mat-form-field>
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <ng-select
             formControlName="city_id"
             [items]="cities"
             bindLabel="text"
             appearance="outline"
             [appendTo]="'body'"
-            placeholder="Destino"
+            placeholder="Destino *"
             bindValue="value"
             loadingText="loading"
             ngDefaultControl
           >
           </ng-select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <ng-select
             formControlName="person_id"
             [items]="people"
             bindLabel="text"
             appearance="outline"
             [appendTo]="'body'"
-            placeholder="¿Quién elbaora?"
+            placeholder="¿Quién elbaora? *"
             bindValue="value"
             loadingText="loading"
             ngDefaultControl
           >
           </ng-select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
           <ng-select
             formControlName="third_party_id"
             [items]="clients"
             bindLabel="text"
             appearance="outline"
             [appendTo]="'body'"
-            placeholder="Cliente"
+            placeholder="Cliente *"
             bindValue="value"
             loadingText="loading"
             ngDefaultControl
@@ -70,6 +71,7 @@
           <input
             matInput
             type="text"
+            required
             placeholder="Ingresa la línea"
             formControlName="line"
           />
@@ -80,6 +82,7 @@
             matInput
             type="number"
             min="0"
+            required
             placeholder="Ingresa la cantidad"
             formControlName="amount"
           />
@@ -93,11 +96,16 @@
             matInput
             placeholder="Ingrese las observaciones"
             rows="5"
+            required
             formControlName="observation"
             [cdkTextareaAutosize]="true"
           ></textarea>
         </mat-form-field>
       </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
       <h5 class="mt-2 text-center">Costos directos</h5>
       <hr class="line" />
       <h6>Plano</h6>
@@ -338,8 +346,8 @@
                       id="unidad_materiales"
                       formControlName="unit_id"
                     >
-                      <option *ngFor="let item of units" [value]="item.id">
-                        {{ item.name }}
+                      <option *ngFor="let item of units" [value]="item.value">
+                        {{ item.text }}
                       </option>
                     </select>
                   </td>
@@ -891,8 +899,8 @@
                       id="unidad_maquinas_herra"
                       formControlName="unit_id"
                     >
-                      <option *ngFor="let item of units" [value]="item.id">
-                        {{ item.name }}
+                      <option *ngFor="let item of units" [value]="item.value">
+                        {{ item.text }}
                       </option>
                     </select>
                   </td>
@@ -1022,8 +1030,8 @@
                       id="unidad_proceso_interno"
                       formControlName="unit_id"
                     >
-                      <option *ngFor="let item of units" [value]="item.id">
-                        {{ item.name }}
+                      <option *ngFor="let item of units" [value]="item.value">
+                        {{ item.text }}
                       </option>
                     </select>
                   </td>
@@ -1157,8 +1165,8 @@
                       id="unidad_proceso_externo"
                       formControlName="unit_id"
                     >
-                      <option *ngFor="let item of units" [value]="item.id">
-                        {{ item.name }}
+                      <option *ngFor="let item of units" [value]="item.value">
+                        {{ item.text }}
                       </option>
                     </select>
                   </td>
@@ -1302,8 +1310,8 @@
                         id="unidad_otros"
                         formControlName="unit_id"
                       >
-                        <option *ngFor="let item of units" [value]="item.id">
-                          {{ item.name }}
+                        <option *ngFor="let item of units" [value]="item.value">
+                          {{ item.text }}
                         </option>
                       </select>
                     </td>
@@ -1745,9 +1753,9 @@
       <button class="btn btn-block btn-primary" (click)="save()">
         Guardar
       </button>
-    </form>
+    </div>
   </div>
-</div>
+</form>
 <ng-template #notData>
   <div class="alert alert-warning text-center" role="alert">
     ¡No hay datos aquí!
@@ -1755,4 +1763,9 @@
 </ng-template>
 <ng-template #notDataLoading>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<ng-template #wait>
+  <div class="container p-4 text-center">
+    <i class="fas fa-sync fa-spin fa-7x text-primary"></i>
+  </div>
 </ng-template>

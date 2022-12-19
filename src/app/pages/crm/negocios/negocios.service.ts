@@ -113,6 +113,10 @@ export class NegociosService {
     return this.http.post(`${this.url}/new-business-budget`, data);
   }
 
+  newBusinessQuotation(data) {
+    return this.http.post(`${this.url}/new-business-quotation`, data);
+  }
+
   getTasks(id) {
     return this.http.get(`${this.url}/get-tasks-business/${id}`)
   }

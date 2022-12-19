@@ -9,9 +9,11 @@
           <button class="btn btn-primary btn-sm" (click)="openConfirm(add)">
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button class="btn btn-info btn-sm" (click)="openClose()">
-            <i class="fas fa-sliders-h"></i> Filtros
-          </button>
+          <ng-container *ngIf="this.active == 1">
+            <button class="btn btn-info btn-sm" (click)="openClose()">
+              <i class="fas fa-sliders-h"></i> Filtros
+            </button>
+          </ng-container>
         </div>
       </div>
     </div>
@@ -96,7 +98,7 @@
         <ng-template ngbNavContent>
           <div
             class="row mt-3"
-            *ngIf="!loading2 && business.length > 0; else notData"
+            *ngIf="!loading && business.length > 0; else notData"
           >
             <div class="col-md-4">
               <div class="card bg-light">
@@ -358,6 +360,30 @@
       </div>
       <div class="mt-3">
         <h6>Presupuestos disponibles</h6>
+        <form [formGroup]="formFiltersBudgets">
+          <div class="row">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Item</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por item"
+                formControlName="item"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Cliente</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Busca por cliente"
+                formControlName="customer"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </div>
+        </form>
         <ng-container *ngIf="budgets.length > 0; else notDataAd">
           <div class="rounded-top table-responsive">
             <table
@@ -391,12 +417,6 @@
                       [id]="item.id"
                       >PRES {{ item.id }}</mat-checkbox
                     >
-                    <!-- <input
-                      type="checkbox"
-                      (change)="guardarPresupuesto($event, item)"
-                      [id]="item.id"
-                    />
-                    <span class="ml-1"></span> -->
                   </td>
                   <td class="align-middle">
                     {{ item.created_at | date : "longDate" }}
@@ -505,7 +525,7 @@
   </div>
 </ng-template>
 <ng-template #notData>
-  <app-not-data [loading]="loading2"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 <ng-template #notDataAd>
   <div class="alert alert-warning" role="alert">

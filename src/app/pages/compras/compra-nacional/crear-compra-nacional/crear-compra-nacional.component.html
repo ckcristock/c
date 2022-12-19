@@ -194,14 +194,15 @@
       </div>
       <div class="row" *ngIf="listaProductosPorAgregar.length > 0">
         <small class="font-weight-bold col text-danger text-center"
-          >No puede cambiar de categoría mientras que la lista de productos no
-          esté vacía.</small
+          >Sólo puede agregar productos pertenecientes a la misma subcategoría.</small
         >
       </div>
+
       <div
         class="rounded-top table-responsive"
         *ngIf="listaProductosPorAgregar.length > 0; else notData3"
       >
+
         <table class="table table-bordered table-striped table-sm">
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
@@ -209,8 +210,16 @@
               <th></th>
               <th class="col-1">Presentación</th>
               <th class="col-1" *ngIf="Rotativo">Rotativo</th>
-              <th class="col-1">Cantidad</th>
-              <th class="col-2">Costo</th>
+              <th class="col-1"
+                [ngbTooltip]="erroresProductos"
+                container="body"
+		            triggers="manual"
+		            #colCantidad="ngbTooltip">Cantidad</th>
+              <th class="col-2"
+                [ngbTooltip]="erroresProductos"
+                container="body"
+		            triggers="manual"
+		            #colCosto="ngbTooltip">Costo</th>
               <th class="col-1">IVA</th>
               <th class="col-2">Subtotal</th>
               <th>
@@ -308,6 +317,7 @@
                   <input
                     formControlName="Cantidad"
                     type="number"
+                    matInput
                     min="1"
                     class="form-control form-control-sm text-right f-9"
                     (input)="CalculoTotal(i)"
@@ -342,6 +352,7 @@
                       (blur)="item.editCosto = false"
                       formControlName="Costo"
                       type="number"
+                      matInput
                       min="1"
                       class="form-control form-control-sm text-right f-9"
                       (input)="CalculoTotal(i)"
@@ -385,6 +396,7 @@
                   <select
                     formControlName="Iva"
                     class="form-control form-control-sm"
+                    matInput
                     (change)="CalculoTotal(i)"
                   >
                     <!-- ; CapturarDigitacion(i) -->
@@ -472,10 +484,10 @@
       <div class="row d-flex justify-content-center">
         <div class="col-sm-12 text-center">
           <button
-            [disabled]="!formCompra.valid"
+
             class="btn btn-primary btn-block"
             (click)="GuardarCompra()"
-          >
+          ><!-- [disabled]="!formCompra.valid" -->
             Realizar compra
           </button>
         </div>
@@ -519,4 +531,9 @@
   <div class="alert alert-warning text-center" role="alert">
     ¡No has agregado productos!
   </div>
+</ng-template>
+<ng-template #erroresProductos let-campo="campo">
+  <ul>
+    <li *ngFor="let item of productsValidation[campo]">{{item}}</li>
+  </ul>
 </ng-template>

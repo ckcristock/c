@@ -16,6 +16,7 @@ import {
   NgbTypeaheadModule,
   NgbDropdownModule,
   NgbPaginationModule,
+  NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { PipesModule } from '../../core/pipes/pipes.module';
@@ -76,7 +77,8 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatNativeDateModule,
     SatDatepickerModule,
-    SatNativeDateModule
+    SatNativeDateModule,
+    NgbTooltipModule
   ],
 
 })

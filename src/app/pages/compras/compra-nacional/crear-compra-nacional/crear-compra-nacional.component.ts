@@ -7,7 +7,7 @@ import swal, { SweetAlertOptions } from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
 import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
 import { BodegasService } from 'src/app/pages/ajustes/informacion-base/bodegas/bodegas.service.';
@@ -15,6 +15,7 @@ import { ProductoService } from 'src/app/pages/inventario/services/producto.serv
 import { ModalService } from 'src/app/core/services/modal.service';
 import { CategoriasService } from 'src/app/pages/ajustes/parametros/categorias/categorias.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-crear-compra-nacional',
@@ -24,6 +25,8 @@ import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swa
 export class CrearCompraNacionalComponent implements OnInit {
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('modalProductos') modalProductos: any;
+  @ViewChild('colCantidad') colCantidad: NgbTooltip;
+  @ViewChild('colCosto') colCosto: NgbTooltip;
   //@ViewChild('FormCompra') FormCompra: NgForm;
 
   public reducerCantidad = (accumulator, currentValue) =>
@@ -121,6 +124,17 @@ export class CrearCompraNacionalComponent implements OnInit {
     subcategoria: null
   }
 
+  mensajesError = {
+    Fecha_Entrega_Probable: 'Es necesario seleccionar una fecha válida',
+    Id_Bodega_Nuevo: 'Por favor seleccione una bodega',
+    Id_Punto_Dispensacion: 'Por favor seleccione un punto de dispensación',
+    Id_Proveedor: 'Por favor seleccione un proveedor',
+    Productos: 'No se puede guardar una orden de compra sin productos',
+    Costo: 'El costo debe ser mayor que 0',
+    Total: 'El total debe ser mayor que 0',
+    Cantidad: 'La cantidad debe ser mayor que 0'
+  }
+  productsValidation: any[] = [];
   formCompra: FormGroup;
   closeResult = '';
   tipoMaterial = ['Activo_Fijo', 'Medicamento', 'Material', 'Dotacion_EPP'];
@@ -429,80 +443,76 @@ export class CrearCompraNacionalComponent implements OnInit {
   /* async GuardarCompra(formulario: NgForm, resolve) { */
   GuardarCompra() {
     console.log(this.formCompra)
-    if (this.products.valid) {
+    if (this.formCompra.valid) {
       /* if (this.listaProductosPorAgregar.length > 0) { */
+        this._swal.show({
+          title: '¿Estás seguro(a)?',
+          text: '¡La compra será registrada! Si ya verificó la información a enviar, por favor proceda.',
+          icon: 'question',
+          showCancel: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+              let formulario = this.formCompra.value;
+              let params = this.route.snapshot.queryParams;
 
-      this._swal.show({
-        title: '¿Estás seguro(a)?',
-        text: '¡La compra será registrada! Si ya verificó la información a enviar, por favor proceda.',
-        icon: 'question',
-        showCancel: true
-      }).then((result) => {
-        if (result.isConfirmed) {
+              //Se  actualiza la precompra con el estado Solicitada
+              if (params.Pre_Compra != undefined) {
+                let datos = new FormData();
+                datos.append('id_pre_compra', params.Pre_Compra);
+                this.http.post(
+                  environment.base_url + '/php/rotativoscompras/actualizar_estado',
+                  datos
+                ).subscribe((data: any) => { });
+              }
 
-          if (this.formCompra.valid && this.subformvalid) {
-            let formulario = this.formCompra.value;
-            let params = this.route.snapshot.queryParams;
+              //let info = JSON.stringify(formulario.value);
+              /* let prod = JSON.stringify(this.listaProductosPorAgregar); */
+              /* let datos = new FormData();
 
-            //Se  actualiza la precompra con el estado Solicitada
-            if (params.Pre_Compra != undefined) {
-              let datos = new FormData();
-              datos.append('id_pre_compra', params.Pre_Compra);
-              this.http.post(
-                environment.base_url + '/php/rotativoscompras/actualizar_estado',
-                datos
-              ).subscribe((data: any) => { });
-            }
+              if(params.Pre_Compra != undefined){
+                datos.append('id_pre_compra', params.Pre_Compra);
+              }
+              //datos.append('modulo', 'Orden_Compra_Nacional');
+              datos.append('datos', info);
+              //datos.append('productos', prod);
+              //datos.append('Tipo_Bodega', this.Tipo_Bodega);
+              datos.append('company_id', this._user.user.person.company_worked.id); */
 
-            //let info = JSON.stringify(formulario.value);
-            /* let prod = JSON.stringify(this.listaProductosPorAgregar); */
-            /* let datos = new FormData();
-
-            if(params.Pre_Compra != undefined){
-              datos.append('id_pre_compra', params.Pre_Compra);
-            }
-            //datos.append('modulo', 'Orden_Compra_Nacional');
-            datos.append('datos', info);
-            //datos.append('productos', prod);
-            //datos.append('Tipo_Bodega', this.Tipo_Bodega);
-            datos.append('company_id', this._user.user.person.company_worked.id); */
-
-            let datos = {
-              'datos': formulario,
-              'company_id': this._user.user.person.company_worked.id
-            }
-            if (params.Pre_Compra != undefined) {
-              datos['id_pre_compra'] = params.Pre_Compra;
-            }
-
+              let datos = {
+                'datos': formulario,
+                'company_id': this._user.user.person.company_worked.id
+              }
+              if (params.Pre_Compra != undefined) {
+                datos['id_pre_compra'] = params.Pre_Compra;
+              }
                 /* return await  */this.http.post(environment.base_url + '/php/comprasnacionales/guardar_compra_nacional', datos)
-              /* .toPromise()
-              .then((data: any) => { */
-              .subscribe((res: any) => {
-                this._swal.show({
-                  title: 'Creación de orden de compras',
-                  text: res.data,
-                  icon: (res.err == null) ? 'success' : 'error',
-                  timer: 1000,
-                  showCancel: false
-                });
-                /* this.confirmacionSwal.title = 'Creacion de Orden de Compras';
-                this.confirmacionSwal.text = data.mensaje;
-                this.confirmacionSwal.icon = data.tipo;
-                this.confirmacionSwal.fire(); */
-                this.formCompra.reset();
-                // this.NombreProveedor='';
-                this.VerPantallaLista();
-                //buscar posición proveedor
-                const proveedor = this.precompra.find(
-                  (lista) => lista.Id_Proveedor === this.id
-                );
-                const index = this.precompra.indexOf(proveedor);
-                //eliminar ese proveedor de la lista
-                this.precompra.splice(index, 1);
-                //decir al localstore que lo que tengo en lista producto será el nuevo localstorage
-                localStorage.setItem('Compra', JSON.stringify(this.precompra));
-              },
+                /* .toPromise()
+                .then((data: any) => { */
+                .subscribe((res: any) => {
+                  this._swal.show({
+                    title: 'Creación de orden de compras',
+                    text: res.data,
+                    icon: (res.err == null) ? 'success' : 'error',
+                    timer: 1000,
+                    showCancel: false
+                  });
+                  /* this.confirmacionSwal.title = 'Creacion de Orden de Compras';
+                  this.confirmacionSwal.text = data.mensaje;
+                  this.confirmacionSwal.icon = data.tipo;
+                  this.confirmacionSwal.fire(); */
+                  this.formCompra.reset();
+                  // this.NombreProveedor='';
+                  this.VerPantallaLista();
+                  //buscar posición proveedor
+                  const proveedor = this.precompra.find(
+                    (lista) => lista.Id_Proveedor === this.id
+                  );
+                  const index = this.precompra.indexOf(proveedor);
+                  //eliminar ese proveedor de la lista
+                  this.precompra.splice(index, 1);
+                  //decir al localstore que lo que tengo en lista producto será el nuevo localstorage
+                  localStorage.setItem('Compra', JSON.stringify(this.precompra));
+                },
                 (error) => {
                   this._swal.show({
                     title: 'Error',
@@ -518,23 +528,36 @@ export class CrearCompraNacionalComponent implements OnInit {
                   this.confirmacionSwal.fire(); */
                 }
               );
+            }
           }
-        }
-      });
+        );
     } else {
-      this._swal.show({
-        title: 'Error',
-        text: 'No se puede guardar una orden de compra sin productos',
-        icon: 'error',
-        showCancel: false
-      });
-      let productsValidation = [];
-      let a = this.formCompra.controls.Productos as FormArray;
-      a.controls.forEach((prod) => {
-        productsValidation.push(prod.value);
-        //productsValidation.forEach(campo => Object.keys(campo).forEach((y) => campo[y] = prod.controls.))
-      });
-      console.log(this.products.controls);
+      this.formCompra.updateValueAndValidity();
+      if(this.formCompra.controls['Productos'].hasError('required')){
+        this._swal.show({
+          title: 'Error',
+          text: this.mensajesError['Productos'],
+          icon: 'error',
+          showCancel: false
+        });
+      }else{
+        this.productsValidation = Object.create(this.mensajesError);
+        this.products.controls.forEach((prod,id) => {
+          //this.productsValidation.push(Object.create(prod.value));
+          let listaControles = this.products.controls[id] as FormGroup;
+          Object.keys(prod.value).forEach((y) => {
+            if(!Array.isArray(this.productsValidation[y])){this.productsValidation[y]=[];}
+            if(!listaControles.controls[y].valid){
+              this.productsValidation[y].push(this.mensajesError[y]+' en la fila número '+(id+1)+' (Ver pág. '+(Math.ceil(id/this.pagination.pageSize)+1)+')');
+            }
+          });
+          /* Object.keys(prod.value).forEach((y) => this.productsValidation[id][y] = (!listaControles.controls[y].valid)?y+': '+this.mensajesError[y]+'(Ver pág. '+Math.ceil(this.products.controls.length/this.pagination.pageSize)+')':''); */
+        });
+        if(this.productsValidation['Cantidad'].length>0){
+          this.colCantidad.open({campo: 'Cantidad'});}
+        if(this.productsValidation['Costo'].length>0){
+          this.colCosto.open({campo: 'Costo'});}
+      }
       /* this.confirmacionSwal.title = 'Error ';
       this.confirmacionSwal.text ='No se puede guardar una orden de compra sin productos';
       this.confirmacionSwal.icon = 'error';
@@ -565,7 +588,6 @@ export class CrearCompraNacionalComponent implements OnInit {
        this.Productos.splice(posicion, 1);
      }
    } */
-  subformvalid: boolean;
   AgregarProducto(valor) {
     //let editar_producto = this.band_editar;
     if (valor) {
@@ -591,19 +613,6 @@ export class CrearCompraNacionalComponent implements OnInit {
         Cantidad: [1, [Validators.min(1)]],
         Iva: [0, Validators.required],
         Id_Producto: [valor.Id_Producto, Validators.required]
-      })
-      if (formSub.valid) {
-        this.subformvalid = true
-        //variable que sea booleana que luego va a validar en el if de guardar
-      } else {
-        this.subformvalid = false
-      }
-      formSub.valueChanges.subscribe(r => {
-        if (r.valid) {
-          this.subformvalid = true
-        } else {
-          this.subformvalid = false
-        }
       })
 
       this.products.push(formSub);
@@ -704,7 +713,7 @@ export class CrearCompraNacionalComponent implements OnInit {
 
     this.listaProductosPorAgregar[pos].Iva_Acu = subtotal * (parseInt(iva) / 100);
     this.listaProductosPorAgregar[pos].Total = subtotal.toFixed();
-    this.formCompra.value.Productos[pos].Total = subtotal;
+    this.products.controls[pos].patchValue({ Total: subtotal });
     this.ActualizaValores();
   }
 

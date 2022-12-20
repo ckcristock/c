@@ -69,7 +69,24 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material';
 import { ConfiguracionModule } from '../ajustes/configuracion/configuracion.module';
 import { PagesModule } from '../pages.module';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicker';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { ViewThirdComponent } from './terceros/view-third/view-third.component';
 
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY'
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
 @NgModule({
   declarations: [
     TercerosComponent,
@@ -108,6 +125,15 @@ import { PagesModule } from '../pages.module';
     TareasNegocioComponent,
     HistorialNegocioComponent,
     TableNegociosComponent,
+    ViewThirdComponent,
+  ],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
   imports: [
     CommonModule,
@@ -145,7 +171,11 @@ import { PagesModule } from '../pages.module';
     MatTableModule,
     PagesModule,
     NgbTypeaheadModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    SatDatepickerModule,
+    SatNativeDateModule,
   ]
 })
 export class CrmModule { }

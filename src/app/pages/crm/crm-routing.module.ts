@@ -18,9 +18,11 @@ import { VerApuServicioComponent } from './apu-servicio/ver-apu-servicio/ver-apu
 import { ApusComponent } from './apus/apus.component';
 import { NegociosComponent } from './negocios/negocios.component';
 import { VerNegocioComponent } from './negocios/ver-negocio/ver-negocio.component';
+import { ViewThirdComponent } from './terceros/view-third/view-third.component';
 
 const routes: Routes = [
   { path: 'terceros', component: TercerosComponent },
+  { path: 'terceros/ver/:id', component: ViewThirdComponent },
   { path: 'terceros/crear-tercero', component: CrearTercerosComponent },
   { path: 'terceros/editar-tercero/:id', component: CrearTercerosComponent },
   { path: 'personas', component: PersonasComponent },

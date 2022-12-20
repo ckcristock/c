@@ -56,7 +56,7 @@ export class PersonasComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
   form: FormGroup;
   people: any[] = [];
@@ -112,6 +112,15 @@ export class PersonasComponent implements OnInit {
       }
       );
     this.createForm();
+    this.getThirds();
+  }
+  thirds: any[] = []
+  getThirds() {
+    this._terceros.getThirds().subscribe((r:any) => {
+      this.thirds = r.data
+      this.thirds.unshift({ text: 'Sin tercero', value: null });
+      this.thirds.unshift({ text: 'Todos', value: '' });
+    })
   }
   resetFiltros() {
     for (let i in this.filtros) {
@@ -149,7 +158,7 @@ export class PersonasComponent implements OnInit {
     let params: any = {};
 
     params.pag = paginacion;
-    for (let i in this.filtros){
+    for (let i in this.filtros) {
       if (this.filtros[i] != "") {
         params[i] = this.filtros[i];
       }
@@ -157,7 +166,7 @@ export class PersonasComponent implements OnInit {
     let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     return queryString;
   }
-  
+
   getPerson(page = 1) {
     this.pagination.page = page;
     let params = {

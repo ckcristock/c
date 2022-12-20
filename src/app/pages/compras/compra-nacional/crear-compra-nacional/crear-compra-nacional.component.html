@@ -97,7 +97,7 @@
             /> -->
           </div>
           <div class="row">
-            <div class="col mat-form-field-wrapper">
+            <div class="col mat-form-field-wrapper" [ngClass]="(!proveedorValido)?'text-danger':''">
               <ng-select
                 [items]="Proveedores"
                 formControlName="Id_Proveedor"
@@ -109,8 +109,10 @@
                 loadingText="Cargando"
                 matInput
                 required
+                [ngClass]="(!proveedorValido)?'text-danger':''"
               >
               </ng-select>
+              <small class="text-danger" *ngIf="!proveedorValido">Seleccione un Proveedor</small>
             </div>
           </div>
         </div>
@@ -210,16 +212,8 @@
               <th></th>
               <th class="col-1">Presentación</th>
               <th class="col-1" *ngIf="Rotativo">Rotativo</th>
-              <th class="col-1"
-                [ngbTooltip]="erroresProductos"
-                container="body"
-		            triggers="manual"
-		            #colCantidad="ngbTooltip">Cantidad</th>
-              <th class="col-2"
-                [ngbTooltip]="erroresProductos"
-                container="body"
-		            triggers="manual"
-		            #colCosto="ngbTooltip">Costo</th>
+              <th class="col-1">Cantidad</th>
+              <th class="col-2">Costo</th>
               <th class="col-1">IVA</th>
               <th class="col-2">Subtotal</th>
               <th>
@@ -481,6 +475,24 @@
           </div>
         </div>
       </ng-container>
+
+      <ng-container #erroresProductos *ngIf="mostrarAlertas">
+        <div class="alert alert-danger" role="alert" *ngFor="let campo of Object.keys(productsValidation)">
+          <strong>{{ campo }}</strong>
+          <ul>
+            <li *ngFor="let item of productsValidation[campo]">{{item.texto}}
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                (click)="paginarProductos(item.pagina)"
+              >
+                <i class="fa-regular fa-square-arrow-up-right"></i> Ir a la página
+              </button>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+
       <div class="row d-flex justify-content-center">
         <div class="col-sm-12 text-center">
           <button
@@ -531,9 +543,4 @@
   <div class="alert alert-warning text-center" role="alert">
     ¡No has agregado productos!
   </div>
-</ng-template>
-<ng-template #erroresProductos let-campo="campo">
-  <ul>
-    <li *ngFor="let item of productsValidation[campo]">{{item}}</li>
-  </ul>
 </ng-template>

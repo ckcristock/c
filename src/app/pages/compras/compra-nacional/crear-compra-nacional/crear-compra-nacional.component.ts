@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -16,6 +16,18 @@ import { ModalService } from 'src/app/core/services/modal.service';
 import { CategoriasService } from 'src/app/pages/ajustes/parametros/categorias/categorias.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { ItemsComponent } from 'src/app/pages/crm/presupuesto/crear-presupuesto/components/items/items.component';
+
+
+const MENSAJES_ERROR: any = {
+  Fecha_Entrega_Probable: 'Es necesario seleccionar una fecha válida',
+  Id_Bodega_Nuevo: 'Por favor seleccione una bodega',
+  Id_Punto_Dispensacion: 'Por favor seleccione un punto de dispensación',
+  Id_Proveedor: 'Por favor seleccione un proveedor',
+  Productos: 'No se puede guardar una orden de compra sin productos',
+  Costo: 'El costo debe ser mayor que 0',
+  Cantidad: 'La cantidad debe ser mayor que 0'
+};
 
 @Component({
   selector: 'app-crear-compra-nacional',
@@ -124,17 +136,9 @@ export class CrearCompraNacionalComponent implements OnInit {
     subcategoria: null
   }
 
-  mensajesError = {
-    Fecha_Entrega_Probable: 'Es necesario seleccionar una fecha válida',
-    Id_Bodega_Nuevo: 'Por favor seleccione una bodega',
-    Id_Punto_Dispensacion: 'Por favor seleccione un punto de dispensación',
-    Id_Proveedor: 'Por favor seleccione un proveedor',
-    Productos: 'No se puede guardar una orden de compra sin productos',
-    Costo: 'El costo debe ser mayor que 0',
-    Total: 'El total debe ser mayor que 0',
-    Cantidad: 'La cantidad debe ser mayor que 0'
-  }
+  Object = Object;
   productsValidation: any[] = [];
+  mostrarAlertas: boolean = false;
   formCompra: FormGroup;
   closeResult = '';
   tipoMaterial = ['Activo_Fijo', 'Medicamento', 'Material', 'Dotacion_EPP'];
@@ -150,6 +154,7 @@ export class CrearCompraNacionalComponent implements OnInit {
   posicion: any = '';
   puntos: any = [];
   subcategorias: [] = [];
+  proveedorValido: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -231,11 +236,11 @@ export class CrearCompraNacionalComponent implements OnInit {
           });
 
           this.products.push(this.fb.group({
+            Id_Producto: [element.Id_Producto, Validators.required],
             Costo: [parseFloat(element.Costo), Validators.min(1)],
-            Total: [parseFloat(element.Costo) * parseFloat(element.Cantidad), [Validators.min(1)]],
             Cantidad: [element.Cantidad, [Validators.min(1)]],
             Iva: [element.Iva, Validators.required],
-            Id_Producto: [element.Id_Producto, Validators.required]
+            Total: [parseFloat(element.Costo) * parseFloat(element.Cantidad)]
           }));
         }
       });
@@ -536,28 +541,44 @@ export class CrearCompraNacionalComponent implements OnInit {
       if(this.formCompra.controls['Productos'].hasError('required')){
         this._swal.show({
           title: 'Error',
-          text: this.mensajesError['Productos'],
+          text: MENSAJES_ERROR['Productos'],
           icon: 'error',
           showCancel: false
         });
       }else{
-        this.productsValidation = Object.create(this.mensajesError);
+        this.productsValidation = Object.create(MENSAJES_ERROR);
         this.products.controls.forEach((prod,id) => {
           //this.productsValidation.push(Object.create(prod.value));
           let listaControles = this.products.controls[id] as FormGroup;
           Object.keys(prod.value).forEach((y) => {
             if(!Array.isArray(this.productsValidation[y])){this.productsValidation[y]=[];}
             if(!listaControles.controls[y].valid){
-              this.productsValidation[y].push(this.mensajesError[y]+' en la fila número '+(id+1)+' (Ver pág. '+(Math.ceil(id/this.pagination.pageSize)+1)+')');
+              let numFila = ((((id+1)%this.pagination.pageSize)==0)?this.pagination.pageSize:((id+1)%this.pagination.pageSize));
+              let numPag = Math.ceil((id+1)/this.pagination.pageSize);
+              this.productsValidation[y].push({
+                texto: MENSAJES_ERROR[y]+' en la fila número '+numFila+' de la página '+numPag+'.',
+                pagina: numPag
+              });
             }
           });
-          /* Object.keys(prod.value).forEach((y) => this.productsValidation[id][y] = (!listaControles.controls[y].valid)?y+': '+this.mensajesError[y]+'(Ver pág. '+Math.ceil(this.products.controls.length/this.pagination.pageSize)+')':''); */
+          /* Object.keys(prod.value).forEach((y) => this.productsValidation[id][y] = (!listaControles.controls[y].valid)?y+': '+MENSAJES_ERROR[y]+'(Ver pág. '+Math.ceil(this.products.controls.length/this.pagination.pageSize)+')':''); */
         });
-        if(this.productsValidation['Cantidad'].length>0){
+
+        Object.keys(this.productsValidation).forEach((campo) => {
+          if(this.productsValidation[campo].length == 0){ delete this.productsValidation[campo]; }
+        });
+        this.mostrarAlertas = true;
+        /* if(this.productsValidation['Cantidad'].length>0){
           this.colCantidad.open({campo: 'Cantidad'});}
         if(this.productsValidation['Costo'].length>0){
-          this.colCosto.open({campo: 'Costo'});}
+          this.colCosto.open({campo: 'Costo'});} */
       }
+
+      this.proveedorValido=this.formCompra.get('Id_Proveedor').valid;
+      this.formCompra.get('Id_Proveedor').statusChanges.subscribe((res: any) => {
+        this.proveedorValido=(res=="VALID");
+      });
+
       /* this.confirmacionSwal.title = 'Error ';
       this.confirmacionSwal.text ='No se puede guardar una orden de compra sin productos';
       this.confirmacionSwal.icon = 'error';
@@ -608,11 +629,11 @@ export class CrearCompraNacionalComponent implements OnInit {
       });
 
       let formSub = this.fb.group({
-        Costo: [parseFloat(valor.Costo), Validators.min(1)],
-        Total: [0, [Validators.min(1)]],
+        Id_Producto: [valor.Id_Producto, Validators.required],
         Cantidad: [1, [Validators.min(1)]],
+        Costo: [parseFloat(valor.Costo), Validators.min(1)],
         Iva: [0, Validators.required],
-        Id_Producto: [valor.Id_Producto, Validators.required]
+        Total: [0]
       })
 
       this.products.push(formSub);

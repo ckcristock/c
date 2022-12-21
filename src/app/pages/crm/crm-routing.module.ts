@@ -18,13 +18,15 @@ import { VerApuServicioComponent } from './apu-servicio/ver-apu-servicio/ver-apu
 import { ApusComponent } from './apus/apus.component';
 import { NegociosComponent } from './negocios/negocios.component';
 import { VerNegocioComponent } from './negocios/ver-negocio/ver-negocio.component';
+import { ViewThirdComponent } from './terceros/view-third/view-third.component';
 
 const routes: Routes = [
   { path: 'terceros', component: TercerosComponent },
+  { path: 'terceros/ver/:id', component: ViewThirdComponent },
   { path: 'terceros/crear-tercero', component: CrearTercerosComponent },
   { path: 'terceros/editar-tercero/:id', component: CrearTercerosComponent },
   { path: 'personas', component: PersonasComponent },
-  
+
   { path: 'apus', component: ApusComponent },
   // { path: 'apu/apu-pieza', component: ApuPiezaComponent },
   { path: 'negocios', component: NegociosComponent },
@@ -40,7 +42,7 @@ const routes: Routes = [
   { path: 'apu/editar-apu-conjunto/:id', component: EditarApuConjuntoComponent },
   { path: 'apu/ver-apu-conjunto/:id', component: VerApuConjuntoComponent },
 
-  // { path: 'apu/apu-servicio', component: ApuServicioComponent },
+  { path: 'apu/apu-servicio', component: ApuServicioComponent },
   { path: 'apu/crear-apu-servicio', component: CrearApuServicioComponent },
   { path: 'apu/editar-apu-servicio/:id', component: EditarApuServicioComponent },
   { path: 'apu/ver-apu-servicio/:id', component: VerApuServicioComponent },

@@ -4,6 +4,8 @@ import Swal from 'sweetalert2';
 import { PreliquidadosService } from './preliquidados.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import * as moment from 'moment';
+import { MatAccordion } from '@angular/material';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-preliquidados',
@@ -12,8 +14,12 @@ import * as moment from 'moment';
 })
 export class PreliquidadosComponent implements OnInit {
   @ViewChild('modal') modal: any;
-  preliquidados: any = []
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  preliquidados: any = [];
+  filters: FormGroup;
   loading: boolean = false;
+  matPanel: boolean;
+  people: any[] = [];
   diffDays: any;
   pagination: any = {
     page: 1,
@@ -23,15 +29,28 @@ export class PreliquidadosComponent implements OnInit {
   constructor(
     private router: Router,
     private _preliquidadosService: PreliquidadosService,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
     this.getPreliquidados();
+    this.createForm();
+  }
+
+  createForm(){
+    this.filters = this.fb.group({
+      person_id: null
+    })
   }
 
   openModal() {
     this.modal.show();
+  }
+
+  openClose() {
+    this.matPanel = !this.matPanel;
+    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
   }
 
   getPreliquidados(page= 1) {

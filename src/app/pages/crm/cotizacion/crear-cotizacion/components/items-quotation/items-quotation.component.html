@@ -1,4 +1,14 @@
 <ng-container [formGroup]="form">
+  <div class="d-flex justify-content-end">
+    <mat-radio-group formControlName="money_type">
+      <mat-radio-button color="primary" class="ml-2" value="cop"
+        >COP</mat-radio-button
+      >
+      <mat-radio-button color="primary" class="ml-2" value="usd"
+        >USD</mat-radio-button
+      >
+    </mat-radio-group>
+  </div>
   <div formArrayName="items">
     <h5 class="text-center">Elementos</h5>
     <ng-container *ngIf="items.controls.length; else notData">
@@ -11,10 +21,10 @@
               <tr class="text-center text-uppercase">
                 <th rowspan="2">#</th>
                 <th rowspan="2">Descripción</th>
-                <th rowspan="2">Cantidad</th>
+                <th rowspan="2" class="col-1">Cantidad</th>
                 <th colspan="2">Valor unitario</th>
                 <th colspan="2">Valor total</th>
-                <th rowspan="2"><i class="fas fa-trash"></i></th>
+                <th rowspan="2"></th>
               </tr>
               <tr class="text-center text-uppercase">
                 <th>COP</th>
@@ -34,45 +44,35 @@
                 >
                   <td>{{ i + 1 }}</td>
                   <td>
-                    <div class="row">
-                      <div class="col">
-                        <input
-                          type="text"
-                          class="text-left"
-                          formControlName="name"
-                        />
-                      </div>
-                      <div class="col">
-                        <button
-                          (click)="addSubItem(item, 'subitem')"
-                          class="btn btn-warning btn-sm"
-                          type="button"
-                        >
-                          <i class="fas fa-plus"></i>
-                        </button>
-                      </div>
+                    <div class="d-flex justify-content-between">
+                      <input
+                        type="text"
+                        class="text-left"
+                        formControlName="name"
+                      />
+                      <button
+                        (click)="addSubItem(item, 'subitem')"
+                        class="btn btn-warning btn-sm"
+                        type="button"
+                      >
+                        <i class="fas fa-plus"></i>
+                      </button>
                     </div>
                   </td>
                   <td>
-                    <input formControlName="ammount" />
+                    <input formControlName="cuantity_aux" />
                   </td>
                   <td>
-                    <input
-                      formControlName="value_cop"
-                      [readOnly]="this.form.get('money_type').value == 'usd'"
-                    />
+                    <input formControlName="value_cop_aux" />
                   </td>
                   <td>
-                    <input
-                      formControlName="value_usd"
-                      [readOnly]="this.form.get('money_type').value == 'cop'"
-                    />
+                    <input formControlName="value_usd_aux" />
                   </td>
                   <td>
-                    <input formControlName="total_cop" disabled />
+                    <input formControlName="total_cop_aux" />
                   </td>
                   <td>
-                    <input formControlName="total_usd" disabled />
+                    <input formControlName="total_usd_aux" />
                   </td>
                   <td>
                     <i
@@ -107,38 +107,18 @@
                             formControlName="description"
                           />
                         </td>
-                        <td><input formControlName="cuantity" /></td>
+                        <td><input formControlName="cuantity_aux" /></td>
                         <td>
-                          <input
-                            formControlName="value_cop"
-                            [readOnly]="
-                              this.form.get('money_type').value == 'usd'
-                            "
-                          />
+                          <input formControlName="value_cop_aux" />
                         </td>
                         <td>
-                          <input
-                            formControlName="value_usd"
-                            [readOnly]="
-                              this.form.get('money_type').value == 'cop'
-                            "
-                          />
+                          <input formControlName="value_usd_aux" />
                         </td>
                         <td>
-                          <input
-                            formControlName="value_cop"
-                            [readOnly]="
-                              this.form.get('money_type').value == 'usd'
-                            "
-                          />
+                          <input formControlName="total_cop_aux" />
                         </td>
                         <td>
-                          <input
-                            formControlName="value_usd"
-                            [readOnly]="
-                              this.form.get('money_type').value == 'cop'
-                            "
-                          />
+                          <input formControlName="total_usd_aux" />
                         </td>
                         <td>
                           <i
@@ -155,11 +135,11 @@
               </ng-container>
             </tbody>
           </table>
-          <button (click)="printForm()">A</button>
+          <!-- <button (click)="printForm()">A</button> -->
         </div>
       </ng-container>
     </ng-container>
-    <div class="btn-group btn-block" role="group">
+    <div class="d-flex justify-content-end">
       <button
         (click)="addItems(null, 'subitem')"
         class="btn btn-primary btn-sm"
@@ -167,6 +147,32 @@
       >
         <i class="fas fa-plus"></i> Agregar subtítulo
       </button>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-end mt-3">
+    <div class="col-md-6">
+      <ul class="list-group list-group-flush">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          Total COP
+          <h4>
+            <span class="badge badge-danger badge-pill"
+              >${{ form.controls.total_cop.value | currency : "COP" }}</span
+            >
+          </h4>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          Total USD
+          <h4>
+            <span class="badge badge-danger badge-pill"
+              >${{ form.controls.total_usd.value | currency }}</span
+            >
+          </h4>
+        </li>
+      </ul>
     </div>
   </div>
 </ng-container>

@@ -65,13 +65,15 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
+            <th>Categoría</th>
             <th>¿Es Separable?</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of Sucategories" class="text-center">
+          <tr *ngFor="let item of Sucategories" class="text-center" [ngClass]="(item.Activo==0)?'text-danger':''">
             <td class="text-left">{{ item.Nombre }}</td>
+            <td class="text-left">{{ item.categoria }}</td>
             <td>{{ item.Separable }}</td>
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -90,12 +92,19 @@
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
-                  <a
+                  <a *ngIf="item.Activo==1"
                     class="dropdown-item text-danger waves-light"
                     href="javascript: void(0);"
-                    (click)="deleteSubcategory(item.Id_subcategoria)"
+                    (click)="activateSubcategory(item.Id_Subcategoria,0)"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
+                  >
+                  <a *ngIf="item.Activo==0"
+                    class="dropdown-item text-primary waves-light"
+                    href="javascript: void(0);"
+                    (click)="activateSubcategory(item.Id_Subcategoria,1)"
+                  >
+                    <i class="far fa-trash-alt"></i> Reactivar</a
                   >
                 </div>
               </div>
@@ -108,8 +117,8 @@
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"
-      [pageSize]="pagination.maxSize"
-      [(page)]="pagination.pag"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
       (pageChange)="getSubcategory($event)"
       aria-label="Default pagination"
       maxSize="5"
@@ -169,6 +178,22 @@
             <mat-option value="No">No</mat-option>
           </mat-select>
         </mat-form-field>
+      </div>
+      <div class="row">
+        <div class="col">
+          <ng-select
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Categorías asociadas"
+            formControlName="Id_Categoria_Nueva"
+            bindLabel="text"
+            bindValue="value"
+            [items]="categorias_filtro"
+            [multiple]="false"
+            loadingText="loading"
+            ngDefaultControl
+          ></ng-select>
+        </div>
       </div>
       <div class="row card-title d-flex justify-content-between">
         <div class="col-md-6 px-0">

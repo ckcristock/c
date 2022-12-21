@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NumberPipePipe } from 'src/app/core/pipes/number-pipe.pipe';
 import { BudgetService } from 'src/app/pages/crm/presupuesto/budget.service';
 
@@ -24,31 +24,45 @@ export class ItemsQuotationComponent implements OnInit {
 
   addSubItem(group: FormGroup, type) {
     const subItems = group.get('subItems') as FormArray
-    subItems.push(this.makeSubItem(null, false, type))
+    if (subItems.controls.length == 0) {
+      group.patchValue({
+        value_cop_aux: 0,
+        value_cop: 0,
+        value_usd_aux: 0,
+        value_usd: 0,
+        total_cop_aux: { value: 0, disabled: true },
+        total_cop: { value: 0, disabled: true },
+        total_usd_aux: { value: 0, disabled: true },
+        total_usd: { value: 0, disabled: true },
+      })
+    }
+    group.get('value_cop_aux').disable()
+    group.get('value_usd_aux').disable()
+    subItems.push(this.makeSubItem(null, false, type, group))
   }
 
   addItems(item_to_add = null, type) {
-    console.log(item_to_add)
     let item = this.fb.group({
       subItems: this.fb.array([]),
       id: item_to_add ? item_to_add.id : '',
-      name: item_to_add ? item_to_add.name : '',
-      ammount: 1,
-      value_cop: item_to_add ? this._numberPipe.transform(item_to_add.value_cop.toString(), '$') : 0,
-      value_usd: item_to_add ? this._numberPipe.transform(((item_to_add.value_cop / this.form.get('trm').value).toString()), '$') : 0,
-      total_cop: item_to_add ? this._numberPipe.transform(item_to_add.value_cop.toString(), '$') : 0,
-      total_usd: item_to_add ? this._numberPipe.transform(((item_to_add.value_cop / this.form.get('trm').value).toString()), '$') : 0,
-      type: type == 'only_item' ? false : true,
+      name: [item_to_add ? item_to_add.name : '', Validators.required],
+      cuantity_aux: [1, Validators.required],
+      cuantity: 1,
+      value_cop_aux: item_to_add ? this._numberPipe.transform(item_to_add.value_cop.toString(), '$') : 0,
+      value_cop: item_to_add ? item_to_add.value_cop : 0,
+      value_usd_aux: item_to_add ? this._numberPipe.transform(item_to_add.value_usd.toString(), '$') : 0,
+      value_usd: item_to_add ? item_to_add.value_usd : 0,
+      total_cop_aux: { value: item_to_add ? this._numberPipe.transform(item_to_add.value_cop.toString(), '$') : 0, disabled: true },
+      total_cop: { value: item_to_add ? item_to_add.value_cop : 0, disabled: true },
+      total_usd_aux: { value: item_to_add ? this._numberPipe.transform(item_to_add.value_usd.toString(), '$') : 0, disabled: true },
+      total_usd: { value: item_to_add ? item_to_add.value_usd : 0, disabled: true },
+      type: type == 'only_item' ? false : type == 'withSub' ? true : true,
     })
 
     const subItems = item.get('subItems') as FormArray
-    /* if (type == 'subitems') {
-      this.addSubItem(item_to_add.subitem)
-    } */
-    const ammount = item.get('ammount')
-
+    const cuantity_aux = item.get('cuantity_aux')
     const money_type_value = this.form.get('money_type').value
-    const trm = this.form.get('trm') //?CAMBIOS DE TRM
+    /* const trm = this.form.get('trm') //?CAMBIOS DE TRM
     trm.valueChanges.subscribe(r => {
       if (money_type_value == 'cop') {
         let value_cop = item.get('value_cop').value.toString().split(/[,$]+/).join('')
@@ -67,91 +81,238 @@ export class ItemsQuotationComponent implements OnInit {
           value_cop: this._numberPipe.transform(value_cop.toString(), '$'),
         })
       }
+    }) */
+    const value_cop_aux = item.get('value_cop_aux')
+    const value_usd_aux = item.get('value_usd_aux')
+    const total_cop_aux = item.get('total_cop_aux')
+    const total_usd_aux = item.get('total_usd_aux')
+    value_cop_aux.valueChanges.subscribe(r => {
+      if (typeof r === 'string') {
+        const maskedVal = this._numberPipe.transform(r, '$');
+        if (r !== maskedVal) {
+          item.patchValue({ value_cop_aux: maskedVal });
+        }
+      }
+      let cuantity_aux = item.get('cuantity_aux').value.toString().split(',').join('')
+      let value_cop_aux = item.get('value_cop_aux').value.toString().split(/[,$]+/).join('')
+      let total_cop_aux = value_cop_aux * cuantity_aux
+      item.patchValue({
+        total_cop_aux: this._numberPipe.transform(total_cop_aux.toString(), '$'),
+        value_cop: value_cop_aux,
+        total_cop: total_cop_aux,
+      })
     })
-    this.changesValues(item, money_type_value)
-    ammount.valueChanges.subscribe(r => {
+
+    value_usd_aux.valueChanges.subscribe(r => {
+      if (typeof r === 'string') {
+        const maskedVal = this._numberPipe.transform(r, '$');
+        if (r !== maskedVal) {
+          item.patchValue({ value_usd_aux: maskedVal });
+        }
+      }
+      let cuantity_aux = item.get('cuantity_aux').value.toString().split(',').join('')
+      let value_usd_aux = item.get('value_usd_aux').value.toString().split(/[,$]+/).join('')
+      let total_usd_aux = value_usd_aux * cuantity_aux
+      item.patchValue({
+        total_usd_aux: this._numberPipe.transform(total_usd_aux.toString(), '$'),
+        value_usd: total_usd_aux,
+        total_usd: total_usd_aux,
+      })
+    })
+    /* this.changesValues(item, money_type_value) */
+    cuantity_aux.valueChanges.subscribe(r => {
       if (typeof r === 'string') {
         const maskedVal = this._numberPipe.transform(r, '');
         if (r !== maskedVal) {
-          item.patchValue({ ammount: maskedVal });
+          item.patchValue({ cuantity_aux: maskedVal });
         }
       }
-      let value_cop = item.get('value_cop').value.toString().split(/[,$]+/).join('')
-      let value_usd = item.get('value_usd').value.toString().split(/[,$]+/).join('')
-      let ammount = item.get('ammount').value.toString().split(/[,$]+/).join('')
+      let value_cop_aux = item.get('value_cop_aux').value.toString().split(/[,$]+/).join('')
+      let value_usd_aux = item.get('value_usd_aux').value.toString().split(/[,$]+/).join('')
+      let cuantity_aux = item.get('cuantity_aux').value.toString().split(/[,$]+/).join('')
 
-      let total_cop = value_cop * ammount.split(',').join('')
-      let total_usd = value_usd * ammount.split(',').join('')
+      let total_cop_aux = value_cop_aux * cuantity_aux.split(',').join('')
+      let total_usd_aux = value_usd_aux * cuantity_aux.split(',').join('')
       item.patchValue({
-        total_cop: this._numberPipe.transform(total_cop.toString(), '$'),
-        total_usd: this._numberPipe.transform(total_usd.toString(), '$')
+        total_cop_aux: this._numberPipe.transform(total_cop_aux.toString(), '$'),
+        total_cop: total_cop_aux,
+        total_usd_aux: this._numberPipe.transform(total_usd_aux.toString(), '$'),
+        total_usd: total_usd_aux,
+        cuantity: cuantity_aux,
       })
+    })
+
+    total_cop_aux.valueChanges.subscribe(r => {
+      this.updateTotal()
+    })
+    total_usd_aux.valueChanges.subscribe(r => {
+      this.updateTotal()
     })
     this.items.push(item)
     if (item_to_add && type == 'subitems') {
+      item.get('value_cop_aux').disable()
+      item.get('value_usd_aux').disable()
       const subItems = item.get('subItems') as FormArray
-      item_to_add.subitems.forEach(subi => {
 
-        subItems.push(this.makeSubItem(subi, true, type))
-      });
-
+      if (item_to_add.subitems) {
+        item_to_add.subitems.forEach(subi => {
+          subItems.push(this.makeSubItem(subi, true, type, item))
+        });
+      }
+      if (item_to_add.sub_items) {
+        item_to_add.sub_items.forEach(subi => {
+          subItems.push(this.makeSubItem(subi, true, type, item))
+        });
+      }
     }
+    this.updateTotal()
     return item;
   }
 
-  changesValues(item, money_type_value) {
-    const value_cop = item.get('value_cop')
-    const value_usd = item.get('value_usd')
-    if (money_type_value == 'cop') {
-      value_cop.valueChanges.subscribe(r => {
-        if (typeof r === 'string') {
-          const maskedVal = this._numberPipe.transform(r, '$');
-          if (r !== maskedVal) {
-            item.patchValue({ value_cop: maskedVal });
-          }
-        }
-        let trm = this.form.get('trm').value
-        let value_cop = item.get('value_cop').value.toString().split(/[,$]+/).join('')
-        let ammount = item.get('ammount').value.toString().split(',').join('')
-        let value_usd = value_cop / trm
-        let total_cop = value_cop * ammount
-        let total_usd = value_usd * ammount
-        item.patchValue({
-          value_usd: this._numberPipe.transform(value_usd.toString(), '$'),
-          total_cop: this._numberPipe.transform(total_cop.toString(), '$'),
-          total_usd: this._numberPipe.transform(total_usd.toString(), '$'),
-        })
-      })
-    }
-
-    if (money_type_value == 'usd') {
-      value_usd.valueChanges.subscribe(r => {
-        if (typeof r === 'string') {
-          const maskedVal = this._numberPipe.transform(r, '$');
-          if (r !== maskedVal) {
-            item.patchValue({ value_cop: maskedVal });
-          }
-        }
-        let trm = this.form.get('trm').value
-        let value_usd = item.get('value_usd').value.toString().split(/[,$]+/).join('')
-        let ammount = item.get('ammount').value.toString().split(',').join('')
-        let value_cop = value_usd * trm
-        let total_usd = value_usd * ammount
-        let total_cop = value_cop * ammount
-        item.patchValue({
-          value_cop: this._numberPipe.transform(value_cop.toString(), '$'),
-          total_usd: this._numberPipe.transform(total_usd.toString(), '$'),
-          total_cop: this._numberPipe.transform(total_cop.toString(), '$'),
-        })
-      })
-    }
+  updateTotal() {
+    let total_cop: number = 0
+    let total_usd: number = 0
+    let form = this.form.getRawValue()
+    form.items.forEach(item => {
+      total_cop += Number(item.total_cop_aux.toString().split(/[,$]+/).join(''))
+      total_usd += Number(item.total_usd_aux.toString().split(/[,$]+/).join(''))
+    });
+    this.form.patchValue({
+      total_cop: total_cop,
+      total_usd: total_usd
+    })
   }
 
+  /* changesValues(item, money_type_value) {
+    const value_cop_aux = item.get('value_cop_aux')
+    const value_usd_aux = item.get('value_usd_aux')
+    //if (money_type_value == 'cop') {
+    value_cop_aux.valueChanges.subscribe(r => {
+      if (typeof r === 'string') {
+        const maskedVal = this._numberPipe.transform(r, '$');
+        if (r !== maskedVal) {
+          item.patchValue({ value_cop_aux: maskedVal });
+        }
+      }
+      //let trm = this.form.get('trm').value
+      //let value_cop = item.get('value_cop').value.toString().split(/[,$]+/).join('')
+      let cuantity_aux = item.get('cuantity_aux').value.toString().split(',').join('')
+      //let value_usd = value_cop / trm
+      let total_cop_aux = value_cop_aux * cuantity_aux
+      //let total_usd = value_usd * cuantity
+      item.patchValue({
+        //value_usd: this._numberPipe.transform(value_usd.toString(), '$'),
+        total_cop_aux: this._numberPipe.transform(total_cop_aux.toString(), '$'),
+        //total_usd: this._numberPipe.transform(total_usd.toString(), '$'),
+      })
+    })
+    //}
 
+    //if (money_type_value == 'usd') {
+    value_usd_aux.valueChanges.subscribe(r => {
+      if (typeof r === 'string') {
+        const maskedVal = this._numberPipe.transform(r, '$');
+        if (r !== maskedVal) {
+          item.patchValue({ value_usd_aux: maskedVal });
+        }
+      }
+      //let trm = this.form.get('trm').value
+      let value_usd_aux = item.get('value_usd_aux').value.toString().split(/[,$]+/).join('')
+      let cuantity_aux = item.get('cuantity_aux').value.toString().split(',').join('')
+      //let value_cop = value_usd * trm
+      let total_usd_aux = value_usd_aux * cuantity_aux
+      //let total_cop = value_cop * cuantity
+      item.patchValue({
+        //value_cop: this._numberPipe.transform(value_cop.toString(), '$'),
+        total_usd_aux: this._numberPipe.transform(total_usd_aux.toString(), '$'),
+        //total_cop: this._numberPipe.transform(total_cop.toString(), '$'),
+      })
+    })
+    //}
+  } */
+  value_cop_temp: number
+  value_usd_temp: number
+  recalculate(subItemGroup, item_pre) {
+    this.value_cop_temp = 0
+    this.value_usd_temp = 0
+    item_pre.getRawValue().subItems.forEach(subItem => {
+      this.value_cop_temp += Number(subItem.total_cop_aux.toString().split(/[,$]+/).join(''))
+      this.value_usd_temp += Number(subItem.total_usd_aux.toString().split(/[,$]+/).join(''))
+    });
+    let value_cop = this.value_cop_temp * Number(item_pre.controls.cuantity_aux.value.toString().split(/[,$]+/).join(''))
+    item_pre.patchValue({
+      value_cop_aux: this._numberPipe.transform(this.value_cop_temp.toString(), '$'),
+      value_usd_aux: this._numberPipe.transform(this.value_usd_temp.toString(), '$'),
+    })
 
+  }
 
-  makeSubItem(pre = null, edit = false, type = '') {
+  makeSubItem(pre = null, edit = false, type = '', group = null) {
     const subItemGroup = this.makeSubItemGroup(pre, edit, type)
+    const cuantity_aux = subItemGroup.get('cuantity_aux')
+    const value_cop_aux = subItemGroup.get('value_cop_aux')
+    const value_usd_aux = subItemGroup.get('value_usd_aux')
+    const total_cop_aux = subItemGroup.get('total_cop_aux')
+    const total_usd_aux = subItemGroup.get('total_usd_aux')
+    const suma = (a, b) => parseFloat(a) * parseFloat(b);
+    cuantity_aux.valueChanges.subscribe(r => {
+      if (typeof r === 'string') {
+        const maskedVal = this._numberPipe.transform(r, '');
+        if (r !== maskedVal) {
+          subItemGroup.patchValue({ cuantity_aux: maskedVal });
+        }
+      }
+      let value_cop_aux = subItemGroup.get('value_cop_aux').value.toString().split(/[,$]+/).join('')
+      let value_usd_aux = subItemGroup.get('value_usd_aux').value.toString().split(/[,$]+/).join('')
+      let cuantity_aux = subItemGroup.get('cuantity_aux').value.toString().split(/[,$]+/).join('')
+
+      let total_cop_aux = value_cop_aux * cuantity_aux.split(',').join('')
+      let total_usd_aux = value_usd_aux * cuantity_aux.split(',').join('')
+
+      subItemGroup.patchValue({
+        total_cop_aux: this._numberPipe.transform(total_cop_aux.toString(), '$'),
+        total_cop: total_cop_aux,
+        total_usd_aux: this._numberPipe.transform(total_usd_aux.toString(), '$'),
+        total_usd: total_usd_aux,
+        cuantity: cuantity_aux,
+      })
+      this.recalculate(subItemGroup, group)
+    })
+    value_cop_aux.valueChanges.subscribe(r => {
+      if (typeof r === 'string') {
+        const maskedVal = this._numberPipe.transform(r, '$');
+        if (r !== maskedVal) {
+          subItemGroup.patchValue({ value_cop_aux: maskedVal });
+        }
+      }
+      let cuantity_aux = subItemGroup.get('cuantity_aux').value.toString().split(',').join('')
+      let value_cop_aux = subItemGroup.get('value_cop_aux').value.toString().split(/[,$]+/).join('')
+      let total_cop_aux = value_cop_aux * cuantity_aux
+      subItemGroup.patchValue({
+        total_cop_aux: this._numberPipe.transform(total_cop_aux.toString(), '$'),
+        value_cop: value_cop_aux,
+        total_cop: total_cop_aux,
+      })
+      this.recalculate(subItemGroup, group)
+    })
+    value_usd_aux.valueChanges.subscribe(r => {
+      if (typeof r === 'string') {
+        const maskedVal = this._numberPipe.transform(r, '$');
+        if (r !== maskedVal) {
+          subItemGroup.patchValue({ value_usd_aux: maskedVal });
+        }
+      }
+      let cuantity_aux = subItemGroup.get('cuantity_aux').value.toString().split(',').join('')
+      let value_usd_aux = subItemGroup.get('value_usd_aux').value.toString().split(/[,$]+/).join('')
+      let total_usd_aux = value_usd_aux * cuantity_aux
+      subItemGroup.patchValue({
+        total_usd_aux: this._numberPipe.transform(total_usd_aux.toString(), '$'),
+        value_usd: value_usd_aux,
+        total_usd: total_usd_aux,
+      })
+      this.recalculate(subItemGroup, group)
+    })
+
     return subItemGroup;
   }
 
@@ -160,11 +321,10 @@ export class ItemsQuotationComponent implements OnInit {
   }
 
   getBudgets(e: any[]) {
-    console.log(e)
     let subItems = this.tempItem.get('subItems') as FormArray;
     e.forEach(budget => {
       const exist = subItems.value.some(x => (x.id == budget.id && x.type_module == budget.type_module))
-      !exist ? subItems.push(this.makeSubItem(budget)) : ''
+      !exist ? subItems.push(this.makeSubItem(budget, null, '', this.tempItem)) : ''
     });
   }
 
@@ -173,10 +333,17 @@ export class ItemsQuotationComponent implements OnInit {
   makeSubItemGroup(pre, edit = null, type) {
     return this.fb.group({
       id: ((edit && pre?.id) ? pre.id : ''),
-      description: ((edit && pre?.description) ? pre.description : ''),
-      cuantity: ((edit && pre?.cuantity) ? pre.cuantity : ''),
-      value_cop: ((edit && pre?.value_cop) ? pre.value_cop : ''),
-      value_usd: ((edit && pre?.value_usd) ? pre.value_usd : ''),
+      description: [((edit && pre?.description) ? pre.description : ''), Validators.required],
+      cuantity_aux: ((edit && pre?.cuantity) ? pre.cuantity : 1),
+      cuantity: ((edit && pre?.cuantity) ? pre.cuantity : 1),
+      value_cop_aux: ((edit && pre?.value_cop) ? this._numberPipe.transform((pre.value_cop / pre.cuantity).toString(), '$') : 0),
+      value_cop: ((edit && pre?.value_cop) ? pre.value_cop / pre.cuantity : 0),
+      value_usd_aux: ((edit && pre?.value_usd) ? this._numberPipe.transform((pre.value_usd / pre.cuantity).toString(), '$') : 0),
+      value_usd: ((edit && pre?.value_usd) ? pre.value_usd / pre.cuantity : 0),
+      total_cop_aux: { value: ((edit && pre?.value_cop) ? this._numberPipe.transform((pre.value_cop).toString(), '$') : 0), disabled: true },
+      total_cop: { value: ((edit && pre?.value_cop) ? pre.value_cop : 0), disabled: true },
+      total_usd_aux: { value: ((edit && pre?.value_usd) ? this._numberPipe.transform((pre.value_usd).toString(), '$') : 0), disabled: true },
+      total_usd: { value: ((edit && pre?.value_usd) ? pre.value_usd : 0), disabled: true },
       type: type == 'only_item' ? true : false,
     })
   }
@@ -194,7 +361,10 @@ export class ItemsQuotationComponent implements OnInit {
 
   deleteSubItem(group: FormGroup, pos: number) {
     const subItems = group.get('subItems') as FormArray
-
+    if (subItems.controls.length == 1) {
+      group.controls.value_cop_aux.enable()
+      group.controls.value_usd_aux.enable()
+    }
     const id = subItems.at(pos).get('id').value;
     id ? this.subItemsToDelete.push(id) : ''
 

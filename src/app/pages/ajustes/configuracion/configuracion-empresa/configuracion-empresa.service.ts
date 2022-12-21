@@ -40,4 +40,9 @@ export class ConfiguracionEmpresaService {
   public getTypeDocuments() {
     return this.http.get(`${environment.base_url}/documentTypes`)
   }
+
+  saveCommercialTerms(data, id){
+    return this.http.post(`${environment.base_url}/commercial-terms/${id}`, data)
+  }
+
 }

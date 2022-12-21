@@ -4,14 +4,17 @@ import { ApusService } from './apus.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
-
+import { DatePipe } from '@angular/common';
+import { DateAdapter } from 'saturn-datepicker';
 @Component({
   selector: 'app-apus',
   templateUrl: './apus.component.html',
   styleUrls: ['./apus.component.scss']
 })
 export class ApusComponent implements OnInit {
+  datePipe = new DatePipe('es-CO');
   checkTipo: boolean = true
+  date: any;
   checkNombre: boolean = true
   checkCliente: boolean = true
   checkDestino: boolean = true
@@ -26,8 +29,9 @@ export class ApusComponent implements OnInit {
     collectionSize: 0
   }
   filtros: any = {
-    date: '',
     code: '',
+    date_one:'',
+    date_two: '',
     name: '',
     city: '',
     client: '',
@@ -40,8 +44,10 @@ export class ApusComponent implements OnInit {
     private paginator: MatPaginatorIntl,
     private route: ActivatedRoute,
     private location: Location,
+    private dateAdapter: DateAdapter<any>
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
+    this.dateAdapter.setLocale('es');
   }
   orderObj: any
   filtrosActivos: boolean = false
@@ -60,6 +66,11 @@ export class ApusComponent implements OnInit {
 
           }
         }
+        let date_one = new Date(this.filtros.date_one)
+        let date_two = new Date(this.filtros.date_two)
+        date_one.setDate(date_one.getDate() + 1)
+        date_two.setDate(date_two.getDate() + 1)
+        this.date = {begin: date_one, end: date_two}
 
         if (this.orderObj.params.pag) {
           this.getApus(this.orderObj.params.pag);
@@ -70,6 +81,18 @@ export class ApusComponent implements OnInit {
       }
       );
   }
+
+  selectedDate(fecha) {
+    if (fecha.value){
+      this.filtros.date_one = this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd')
+      this.filtros.date_two = this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
+    } else {
+      this.filtros.date_one = ''
+      this.filtros.date_two = ''
+    }
+    this.getApus();
+  }
+
   resetFiltros() {
     for (let i in this.filtros) {
       this.filtros[i] = ''

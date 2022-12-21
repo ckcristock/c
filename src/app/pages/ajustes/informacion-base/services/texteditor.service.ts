@@ -10,7 +10,7 @@ import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 export class TexteditorService {
 
     constructor() { }
-    public Editor = ClassicEditor;
+    public Editor = DecoupledEditor;
     public onReady(editor) {
         editor.ui.view.editable.element.parentElement.insertBefore(
             editor.ui.view.toolbar.element,

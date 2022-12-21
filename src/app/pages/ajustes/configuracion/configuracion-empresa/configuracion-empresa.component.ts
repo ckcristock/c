@@ -14,6 +14,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { SwalService } from '../../informacion-base/services/swal.service';
+import { Texteditor2Service } from '../../informacion-base/services/texteditor2.service';
 @Component({
   selector: 'app-configuracion-empresa',
   templateUrl: './configuracion-empresa.component.html',
@@ -25,6 +26,8 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   @ViewChild(DatosNominaComponent) datNomina: DatosNominaComponent;
   @ViewChild(DatosPagoComponent) datPago: DatosPagoComponent;
   @ViewChild(DatosPilaComponent) datPila: DatosPilaComponent;
+  event2: Event;
+
   form: FormGroup;
   dataCompany: any;
   companies: Array<Object>;
@@ -40,6 +43,7 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   payment_transport_subsidy = '';
   affects_transportation_subsidy = '';
   pay_vacations = '';
+  commercial_terms_ = new FormControl();
 
 
   constructor(
@@ -47,6 +51,7 @@ export class ConfiguracionEmpresaComponent implements OnInit {
     private fb: FormBuilder,
     public rutaActiva: ActivatedRoute,
     private _modal: ModalService,
+    private _texteditor: Texteditor2Service,
     private _swal: SwalService
   ) { }
 
@@ -75,6 +80,7 @@ export class ConfiguracionEmpresaComponent implements OnInit {
     this._configuracionEmpresaService
       .getCompanyData()
       .subscribe((res: any) => {
+        console.log(res)
         res.data.page_heading ? this.page_heading = true : false
         this.company_name = res.data.name
         this.datBasic.company = res.data;
@@ -83,6 +89,7 @@ export class ConfiguracionEmpresaComponent implements OnInit {
         this.datPago.bank = res?.data?.bank?.name;
         this.datPila.pilas = res.data;
         this.datPila.arl = res?.data?.arl?.name;
+        this.commercial_terms_.setValue(res.data.commercial_terms)
         this.datBasic.getBasicData();
         this.datPila.getPilaData();
         this.datNomina.getNominaData();
@@ -90,21 +97,49 @@ export class ConfiguracionEmpresaComponent implements OnInit {
       });
   }
 
-  openModal(modal) {
-    this._modal.open(modal);
+  openModal(modal, size) {
+    this._modal.open(modal, size);
     this.createForm();
   }
 
-  getData(){
+  getData() {
     this._configuracionEmpresaService.getPaymentConfiguration()
-    .subscribe((res:any)=>{
-      this.affects_transportation_subsidy = res.affects_transportation_subsidy;
-      this.calculate_work_disability = res.calculate_work_disability;
-      this.pay_deductions = res.pay_deductions;
-      this.pay_vacations = res.pay_vacations;
-      this.payment_transport_subsidy = res.payment_transport_subsidy;
-      this.recurring_payment = res.recurring_payment;
-    });
+      .subscribe((res: any) => {
+        this.affects_transportation_subsidy = res.affects_transportation_subsidy;
+        this.calculate_work_disability = res.calculate_work_disability;
+        this.pay_deductions = res.pay_deductions;
+        this.pay_vacations = res.pay_vacations;
+        this.payment_transport_subsidy = res.payment_transport_subsidy;
+        this.recurring_payment = res.recurring_payment;
+      });
+  }
+
+  saveCommercialTerms() {
+    this._swal
+      .show({
+        title: '¿Estás seguro(a)?',
+        text: 'Vamos a guardar las condiciones comernciales',
+        icon: 'question',
+        showCancel: true,
+      })
+      .then((r) => {
+        if (r.isConfirmed) {
+          let data = {
+            commercial_terms: this.commercial_terms_.value
+          }
+          this._configuracionEmpresaService.saveCommercialTerms(data, 1).subscribe((res: any) => {
+            this._swal.show({
+              title: res.data,
+              text: '',
+              icon: 'success',
+              showCancel: false,
+              timer: 1000
+            })
+            this._modal.close();
+          })
+        }
+      });
+
   }
 
   createForm() {

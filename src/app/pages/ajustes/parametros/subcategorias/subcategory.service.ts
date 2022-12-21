@@ -17,6 +17,10 @@ export class SubcategoryService {
     return this.http.get(`${environment.base_url}/list-subcategories`, {params})
   }
 
+  changeActive( id:any, data:any ) {
+    return this.http.put(`${environment.base_url}/subcategory-active/${id}`, data);
+  }
+
   save( data:any ){
     return this.http.post(`${environment.base_url}/subcategory`, data);
   }

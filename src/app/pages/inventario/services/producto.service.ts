@@ -19,7 +19,7 @@ export class ProductoService {
     // private globales:Globales
   ) { }
 
-  getProductos( params = {} ) {
+  getProductos(params = {}) {
     return this.client.get(environment.base_url + '/php/comprasnacionales/lista_productos', {params});
   }
 

@@ -26,6 +26,8 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   @ViewChild(DatosNominaComponent) datNomina: DatosNominaComponent;
   @ViewChild(DatosPagoComponent) datPago: DatosPagoComponent;
   @ViewChild(DatosPilaComponent) datPila: DatosPilaComponent;
+  event2: Event;
+
   form: FormGroup;
   dataCompany: any;
   companies: Array<Object>;

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
@@ -16,6 +16,8 @@ import { SubcategoryService } from '../subcategorias/subcategory.service';
   styleUrls: ['./categorias.component.scss'],
 })
 export class CategoriasComponent implements OnInit {
+  @Output() requestReload = new EventEmitter<Event>();
+
   title: string = "";
   @ViewChild('FormCategoria') FormCategoria: any;
   @ViewChild('modalCategoria') modalCategoria: any;
@@ -41,8 +43,8 @@ export class CategoriasComponent implements OnInit {
   public tempFilter = [];
   public rowsFilter = [];
   pagination: any = {
-    pag: 1,
-    maxSize: 10,
+    page: 1,
+    pageSize: 10,
     collectionSize: 0
   }
   public page = 1;
@@ -82,6 +84,7 @@ export class CategoriasComponent implements OnInit {
 
   openModal(content,action) {
     this.title = action;
+    if(action=="Agregar"){this.createForm();}
     this._modal.open(content, 'lg');
   }
 
@@ -91,12 +94,12 @@ export class CategoriasComponent implements OnInit {
       Nombre: ['', Validators.required],
       compraInternacional: ['', Validators.required],
       separacionCategorias: ['', Validators.required],
-      Subcategorias: [[], Validators.required]
+      /* Subcategorias: [[], Validators.required] */
     });
   }
 
   paginacion(page = 1) {
-    this.pagination.pag = page;
+    this.pagination.page = page;
     this.loading = true;
     let param = { ...this.pagination, ...this.filters }
     this._categorias.paginacionCategorias(param)
@@ -139,13 +142,13 @@ export class CategoriasComponent implements OnInit {
 
   EditarCategoria(categoria /* id */) {
     this.Categoria = { ...categoria };
-    this.Categoria.subcategories=this.Categoria.subcategories.map(v => v=v.Id_Subcategoria)
+    /* this.Categoria.subcategories=this.Categoria.subcategories.map(v => v=v.Id_Subcategoria); */
     this.form.patchValue({
       Id_Categoria_Nueva: this.Categoria.Id_Categoria_Nueva,
       Nombre:  this.Categoria.Nombre,
       compraInternacional: this.Categoria.Compra_Internacional,
-      separacionCategorias: this.Categoria.Compra_Internacional,
-      Subcategorias: this.Categoria.subcategories
+      separacionCategorias: this.Categoria.Aplica_Separacion_Categorias,
+      /* Subcategorias: this.Categoria.subcategories */
     });
     /* this.http
       .get(
@@ -162,28 +165,27 @@ export class CategoriasComponent implements OnInit {
       }); */
   }
 
-  inOff(id) {
-    let datos = new FormData();
-    datos.append('modulo', 'Categoria');
-    datos.append('id', id);
+  inOff(id,state,event: Event) {
     this._swal.show({
       title: '¿Estás seguro(a)?',
-      text: '¡La categoría se anulará!',
+      text: '¡Esta categoría y las subcategorías asociadas a ella se '+((state==0)?'anularán!':'reactivarán!'),
       icon: 'question',
       showCancel: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http
+        /* this.http
           .post(
             environment.ruta + 'php/categoria_nueva/eliminar_categoria_nueva.php',
             datos
-          )
-          .subscribe((data: any) => {
+          ) */
+        this._categorias.changeActive(id,{activo: state})
+          .subscribe((res: any) => {
+            this.requestReload.emit(event);
             this.paginacion();
             this._swal.show({
               icon: 'success',
-              title: '¡Categoría anulada!',
-              text: '',
+              title: '¡Operación exitosa!',
+              text: res.data,
               timer: 1000,
               showCancel: false
             })

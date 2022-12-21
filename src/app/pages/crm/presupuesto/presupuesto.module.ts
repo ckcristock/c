@@ -46,7 +46,7 @@ import { AutoFocusDirectiveDirective } from './crear-presupuesto/components/item
         MatCheckboxModule,
         MatPaginatorModule
     ],
-    exports: [],
+    exports: [AutoFocusDirectiveDirective],
 })
 
 export class PresupuestoModule { }

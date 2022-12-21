@@ -148,7 +148,7 @@ export class CrearCompraNacionalComponent implements OnInit {
   pagination: any = {
     paginateData: [],
     page: 1,
-    pageSize: 1,
+    pageSize: 5,
     collectionSize: 0
   }
   posicion: any = '';
@@ -215,7 +215,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       this.Impuestos = res.data;
     });
 
-    if (this.id != undefined) {
+    if (this.id != undefined && this.precompra != undefined) {
       this.Rotativo = true;
       //debo llamar al localstore, y decirle cual es el que quiero listar
       //this.listaProductosPorAgregar.splice(0, 1);
@@ -293,7 +293,7 @@ export class CrearCompraNacionalComponent implements OnInit {
   createForm() {
     this.formCompra = this.fb.group({
       Id_Orden_Compra_Nacional: [null],
-      Fecha_Entrega_Probable: ['', Validators.required],
+      Fecha_Entrega_Probable: [this.fecha.toISOString().slice(0, 10), [Validators.required,ValidadoresEspeciales.fechaMin(this.fecha)]],
       Identificacion_Funcionario: [this.user, Validators.required],
       Id_Bodega_Nuevo: ['', Validators.required],
       Tipo_Bodega: ['Bodega', Validators.required],
@@ -314,6 +314,9 @@ export class CrearCompraNacionalComponent implements OnInit {
         this.formCompra.get('Id_Punto_Dispensacion').disable()
       }
     })
+    this.formCompra.get('Id_Proveedor').statusChanges.subscribe((res: any) => {
+      this.proveedorValido=(res=="VALID");
+    });
   }
 
 
@@ -447,7 +450,6 @@ export class CrearCompraNacionalComponent implements OnInit {
 
   /* async GuardarCompra(formulario: NgForm, resolve) { */
   GuardarCompra() {
-    console.log(this.formCompra)
     if (this.formCompra.valid) {
       /* if (this.listaProductosPorAgregar.length > 0) { */
         this._swal.show({
@@ -509,14 +511,16 @@ export class CrearCompraNacionalComponent implements OnInit {
                   // this.NombreProveedor='';
                   this.VerPantallaLista();
                   //buscar posición proveedor
-                  const proveedor = this.precompra.find(
+                  if (this.id != undefined && this.precompra != undefined) {
+                    const proveedor = this.precompra.find(
                     (lista) => lista.Id_Proveedor === this.id
-                  );
-                  const index = this.precompra.indexOf(proveedor);
-                  //eliminar ese proveedor de la lista
-                  this.precompra.splice(index, 1);
-                  //decir al localstore que lo que tengo en lista producto será el nuevo localstorage
-                  localStorage.setItem('Compra', JSON.stringify(this.precompra));
+                    );
+                    const index = this.precompra.indexOf(proveedor);
+                    //eliminar ese proveedor de la lista
+                    this.precompra.splice(index, 1);
+                    //decir al localstore que lo que tengo en lista producto será el nuevo localstorage
+                    localStorage.setItem('Compra', JSON.stringify(this.precompra));
+                  }
                 },
                 (error) => {
                   this._swal.show({
@@ -546,27 +550,7 @@ export class CrearCompraNacionalComponent implements OnInit {
           showCancel: false
         });
       }else{
-        this.productsValidation = Object.create(MENSAJES_ERROR);
-        this.products.controls.forEach((prod,id) => {
-          //this.productsValidation.push(Object.create(prod.value));
-          let listaControles = this.products.controls[id] as FormGroup;
-          Object.keys(prod.value).forEach((y) => {
-            if(!Array.isArray(this.productsValidation[y])){this.productsValidation[y]=[];}
-            if(!listaControles.controls[y].valid){
-              let numFila = ((((id+1)%this.pagination.pageSize)==0)?this.pagination.pageSize:((id+1)%this.pagination.pageSize));
-              let numPag = Math.ceil((id+1)/this.pagination.pageSize);
-              this.productsValidation[y].push({
-                texto: MENSAJES_ERROR[y]+' en la fila número '+numFila+' de la página '+numPag+'.',
-                pagina: numPag
-              });
-            }
-          });
-          /* Object.keys(prod.value).forEach((y) => this.productsValidation[id][y] = (!listaControles.controls[y].valid)?y+': '+MENSAJES_ERROR[y]+'(Ver pág. '+Math.ceil(this.products.controls.length/this.pagination.pageSize)+')':''); */
-        });
-
-        Object.keys(this.productsValidation).forEach((campo) => {
-          if(this.productsValidation[campo].length == 0){ delete this.productsValidation[campo]; }
-        });
+        this.validarProductos();
         this.mostrarAlertas = true;
         /* if(this.productsValidation['Cantidad'].length>0){
           this.colCantidad.open({campo: 'Cantidad'});}
@@ -575,15 +559,36 @@ export class CrearCompraNacionalComponent implements OnInit {
       }
 
       this.proveedorValido=this.formCompra.get('Id_Proveedor').valid;
-      this.formCompra.get('Id_Proveedor').statusChanges.subscribe((res: any) => {
-        this.proveedorValido=(res=="VALID");
-      });
 
       /* this.confirmacionSwal.title = 'Error ';
       this.confirmacionSwal.text ='No se puede guardar una orden de compra sin productos';
       this.confirmacionSwal.icon = 'error';
       this.confirmacionSwal.fire(); */
     }
+  }
+
+  validarProductos(){
+    this.productsValidation = Object.create(MENSAJES_ERROR);
+    this.products.controls.forEach((prod,id) => {
+      //this.productsValidation.push(Object.create(prod.value));
+      let listaControles = this.products.controls[id] as FormGroup;
+      Object.keys(prod.value).forEach((y) => {
+        if(!Array.isArray(this.productsValidation[y])){this.productsValidation[y]=[];}
+        if(!listaControles.controls[y].valid){
+          let numFila = ((((id+1)%this.pagination.pageSize)==0)?this.pagination.pageSize:((id+1)%this.pagination.pageSize));
+          let numPag = Math.ceil((id+1)/this.pagination.pageSize);
+          this.productsValidation[y].push({
+            texto: MENSAJES_ERROR[y]+' en la fila número '+numFila+' de la página '+numPag+'.',
+            pagina: numPag
+          });
+        }
+      });
+      /* Object.keys(prod.value).forEach((y) => this.productsValidation[id][y] = (!listaControles.controls[y].valid)?y+': '+MENSAJES_ERROR[y]+'(Ver pág. '+Math.ceil(this.products.controls.length/this.pagination.pageSize)+')':''); */
+    });
+
+    Object.keys(this.productsValidation).forEach((campo) => {
+      if(this.productsValidation[campo].length == 0){ delete this.productsValidation[campo]; }
+    });
   }
 
   VerPantallaLista() {
@@ -713,13 +718,19 @@ export class CrearCompraNacionalComponent implements OnInit {
 
   }
 
-  deleteProduct(posicion, event) {
-    if (event.screenX != 0) {
-      this.listaProductosPorAgregar.splice(posicion, 1);
-      this.products.removeAt(posicion);
-      this.ActualizaValores();
-      this.filtros();
+  deleteProduct(posicion?, event?) {
+    if(posicion !== undefined && event !== undefined){
+      if (event.screenX != 0) {
+        this.listaProductosPorAgregar.splice(posicion, 1);
+        this.products.removeAt(posicion);
+      }
+    }else{
+       this.listaProductosPorAgregar = [];
+       this.products.clear();
     }
+    this.ActualizaValores();
+    this.filtros();
+    this.validarProductos();
   }
 
   CalculoTotal(pos) {
@@ -794,4 +805,19 @@ export class CrearCompraNacionalComponent implements OnInit {
           this.ListaProducto = data;
         });
     }*/
+}
+
+/**
+ * Validadores personalizados:
+ * -> fechamin => Validar que no se envíe una fecha anterior a la señalada.
+ */
+class ValidadoresEspeciales{
+  public static fechaMin(valor: Date){
+    return (elemento: FormControl) =>{
+      let fechaElemento = new Date(elemento.value), fechaMinina = new Date(valor.toISOString().split('T')[0]);
+      let numDias = Math.floor((fechaElemento.getTime() - fechaMinina.getTime()) / (1000 * 60 * 60 * 24));
+      let invalido:boolean = (numDias < 0);
+      return invalido? {fechaMin:fechaMinina.toISOString().split('T')[0],actual: elemento.value}:null;
+    };
+  }
 }

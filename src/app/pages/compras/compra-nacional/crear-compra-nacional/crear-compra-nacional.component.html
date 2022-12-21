@@ -10,113 +10,108 @@
       </div>
       <hr class="line" />
       <div class="row">
-        <div class="col-md-6">
-          <div class="row">
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Tipo de compra:</mat-label>
-              <mat-select name="Tipo" formControlName="Tipo" matInput required>
-                <mat-option value="Recurrente" selected>Recurrente</mat-option>
-                <mat-option value="Ocasional">Ocasional</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Fecha de entrega probable: </mat-label>
-              <input
-                type="date"
-                formControlName="Fecha_Entrega_Probable"
-                placeholder=""
-                matInput
-                required
-              />
-            </mat-form-field>
-          </div>
-          <div class="row">
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Tipo de bodega</mat-label>
-              <mat-select
-                name="Tipo_Bodega"
-                formControlName="Tipo_Bodega"
-                matInput
-                required
+        <mat-form-field class="col-lg-2" appearance="outline">
+          <mat-label>Tipo de compra:</mat-label>
+          <mat-select name="Tipo" formControlName="Tipo" matInput required>
+            <mat-option value="Recurrente" selected>Recurrente</mat-option>
+            <mat-option value="Ocasional">Ocasional</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-lg-2" appearance="outline">
+          <mat-label>Fecha de entrega probable: </mat-label>
+          <input
+            type="date"
+            [min]="fecha.toISOString().slice(0, 10)"
+            formControlName="Fecha_Entrega_Probable"
+            placeholder=""
+            matInput
+            required
+          />
+          <mat-error class="text-danger" *ngIf="formCompra.get('Fecha_Entrega_Probable').hasError('fechaMin')">
+            La fecha señalada debe ser posterior a la actual.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-lg-2" appearance="outline">
+          <mat-label>Tipo de bodega</mat-label>
+          <mat-select
+            name="Tipo_Bodega"
+            formControlName="Tipo_Bodega"
+            matInput
+            required
+          >
+            <mat-option value="Bodega">Bodega</mat-option>
+            <mat-option value="Punto">Punto de dispensación</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <ng-container *ngIf="formCompra.controls.Tipo_Bodega.value == 'Bodega'; else selectPuntoDispensacion">
+          <mat-form-field class="col-lg-3" appearance="outline">
+            <mat-label>Bodega</mat-label>
+            <mat-select
+              formControlName="Id_Bodega_Nuevo"
+              matInput
+              required
+              placeholder="Seleccione una Bodega"
+            >
+              <!-- <mat-option [ngValue]="undefined"
+                >Seleccione una Bodega</mat-option
+              > -->
+              <mat-option
+                *ngFor="let Bodega of Bodegas"
+                [value]="Bodega.Id_Bodega_Nuevo"
               >
-                <mat-option value="Bodega">Bodega</mat-option>
-                <mat-option value="Punto">Punto de dispensación</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <ng-container *ngIf="formCompra.controls.Tipo_Bodega.value == 'Bodega'; else selectPuntoDispensacion">
-              <mat-form-field
-                class="col"
-                appearance="outline"
+                {{ Bodega.Nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+        <ng-template #selectPuntoDispensacion>
+          <mat-form-field class="col-lg-3" appearance="outline">
+            <mat-label>Punto de dispensación</mat-label>
+            <mat-select
+              formControlName="Id_Punto_Dispensacion"
+              matInput
+              required
+              placeholder="Seleccione un Punto de dispensación"
+            >
+              <!-- <mat-option [ngValue]="undefined"
+                >Seleccione un Punto</mat-option
+              > -->
+              <mat-option
+                *ngFor="let item of puntos"
+                [value]="item.Id_Punto_Dispensacion"
               >
-                <mat-label>Bodega</mat-label>
-                <mat-select
-                  formControlName="Id_Bodega_Nuevo"
-                  matInput
-                  required
-                  placeholder="Seleccione una Bodega"
-                >
-                  <!-- <mat-option [ngValue]="undefined"
-                    >Seleccione una Bodega</mat-option
-                  > -->
-                  <mat-option
-                    *ngFor="let Bodega of Bodegas"
-                    [value]="Bodega.Id_Bodega_Nuevo"
-                  >
-                    {{ Bodega.Nombre }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ng-container>
-            <ng-template #selectPuntoDispensacion>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Punto de dispensación</mat-label>
-                <mat-select
-                  formControlName="Id_Punto_Dispensacion"
-                  matInput
-                  required
-                  placeholder="Seleccione un Punto de dispensación"
-                >
-                  <!-- <mat-option [ngValue]="undefined"
-                    >Seleccione un Punto</mat-option
-                  > -->
-                  <mat-option
-                    *ngFor="let item of puntos"
-                    [value]="item.Id_Punto_Dispensacion"
-                  >
-                    {{ item.Nombre }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ng-template>
-            <!-- <input
-              type="text"
-              [(value)]="user"
-              formControlName="Identificacion_Funcionario"
-              readonly
-              hidden
-            /> -->
-          </div>
-          <div class="row">
-            <div class="col mat-form-field-wrapper" [ngClass]="(!proveedorValido)?'text-danger':''">
-              <ng-select
-                [items]="Proveedores"
-                formControlName="Id_Proveedor"
-                bindLabel="text"
-                appearance="outline"
-                [appendTo]="'body'"
-                placeholder="Proveedor *"
-                bindValue="value"
-                loadingText="Cargando"
-                matInput
-                required
-                [ngClass]="(!proveedorValido)?'text-danger':''"
-              >
-              </ng-select>
-              <small class="text-danger" *ngIf="!proveedorValido">Seleccione un Proveedor</small>
-            </div>
-          </div>
+                {{ item.Nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-template>
+        <!-- <input
+          type="text"
+          [(value)]="user"
+          formControlName="Identificacion_Funcionario"
+          readonly
+          hidden
+        /> -->
+        <div class="col-lg-3 mat-form-field-wrapper" [ngClass]="(!proveedorValido)?'text-danger':''">
+          <ng-select
+            [items]="Proveedores"
+            formControlName="Id_Proveedor"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Proveedor *"
+            bindValue="value"
+            loadingText="Cargando"
+            matInput
+            required
+            [ngClass]="(!proveedorValido)?'text-danger':''"
+          >
+          </ng-select>
+          <small class="text-danger position-absolute" *ngIf="!proveedorValido">Seleccione un Proveedor</small>
         </div>
-        <div class="col-md-6">
+      </div>
+      <div class="row">
+        <div class="col">
           <mat-form-field
             class="col-md-12 px-0 mat-form-field-no-padding textarea"
             appearance="outline"
@@ -126,7 +121,7 @@
               formControlName="Observaciones"
               placeholder="Digite detalles importantes de la orden de compra"
               type="text"
-              rows="9"
+              rows="5"
               matInput
             ></textarea>
           </mat-form-field>
@@ -139,7 +134,7 @@
         </small>
       </div>
       <div class="row">
-        <div class="col mat-form-field-wrapper">
+        <div class="col-lg-4 mat-form-field-wrapper">
           <ng-select
             name="Categoria"
             [items]="Categorias"
@@ -157,7 +152,7 @@
           >
           </ng-select>
         </div>
-        <div class="col mat-form-field-wrapper">
+        <div class="col-lg-4 mat-form-field-wrapper">
           <ng-select
             name="Subcategoria"
             [items]="subcategorias"
@@ -175,7 +170,7 @@
           >
           </ng-select>
         </div>
-        <div class="col mat-form-field-wrapper">
+        <div class="col-lg-4 mat-form-field-wrapper">
           <ng-select
             name="Producto"
             [(ngModel)]="productoFiltro"
@@ -208,6 +203,7 @@
         <table class="table table-bordered table-striped table-sm">
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
+              <th>#</th>
               <th class="col-4">Producto</th>
               <th></th>
               <th class="col-1">Presentación</th>
@@ -220,12 +216,7 @@
                 <i
                   role="button"
                   class="fa fa-trash text-danger"
-                  (click)="
-                    listaProductosPorAgregar = [];
-                    products.clear();
-                    filtros();
-                    ActualizaValores()
-                  "
+                  (click)="deleteProduct()"
                 ></i>
               </th>
             </tr>
@@ -239,6 +230,9 @@
                 id="fila{{ i }}"
                 [formGroupName]="i"
               >
+                <td class="text-center align-middle">
+                  {{ ((((i+1)%pagination.pageSize)==0)?pagination.pageSize:((i+1)%pagination.pageSize)) }}
+                </td>
                 <td class="align-middle">
                   <!-- <input
                     type="hidden"

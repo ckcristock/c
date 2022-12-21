@@ -29,13 +29,14 @@ export class RotativoComponent implements OnInit {
   constructor(private _swal: SwalService, private _extra: ExtraHoursService) { }
 
   ngOnInit(): void {
-    console.log(this.day, this.info, this.diario, this.person)
-    
-    this.funcionarioDato = this.diario;
+  /*   console.log(this.day, this.info, this.diario, this.person)
+    console.log(this.info.extras[0].hours_extra) */
+    let aux = Object.assign(this.info.extras[0].hours_extra, this.info.extras[0].hours_recharge)
+    this.funcionarioDato = this.info.id;
     this.diarioDato = this.day;
 
     this.lista = {
-      horasTrabajadas: this.day['tiempoLaborado'],
+      /* horasTrabajadas: this.day['tiempoLaborado'],
       horasExtrasDiurnas: this.day['HorasExtrasDiurnas'],
       horasExtrasNocturnas: this.day['HorasExtrasNocturnas'],
       horasExtrasDiurnasFestivasDom: this.day['HorasExtrasDiurnasDominicales'],
@@ -43,11 +44,18 @@ export class RotativoComponent implements OnInit {
         this.day['HorasExtrasNocturnasDominicales'],
       recargosNocturnos: this.day['horasRecargoNocturna'],
       recargosDiurnosFestivos:this.day['horasRecargoDominicalDiurno'],
-      recargosNocturnosFestivos: this.day['horasRecargoDominicalNocturna'],
+      recargosNocturnosFestivos: this.day['horasRecargoDominicalNocturna'], */
 
+      horasTrabajadas: aux.ht,
+      horasExtrasDiurnas: aux.hed,
+      horasExtrasNocturnas: aux.hen,
+      horasExtrasDiurnasFestivasDom: aux.heddf,
+      horasExtrasNocturnasFestivasDom: aux.hendf,
+      recargosNocturnos: aux.hrn,
+      recargosDiurnosFestivos:aux.hrddf,
+      recargosNocturnosFestivos: aux.hrndf,
     };
-
-    this.cargarExtrasValidadas(this.funcionarioDato.id);
+    //this.cargarExtrasValidadas(this.funcionarioDato); //se elimino la asignacion previa de HE
     this.relacionarConHoraTurno();
     this.asignacionDatosReales();
   }
@@ -106,12 +114,15 @@ export class RotativoComponent implements OnInit {
   cargarExtrasValidadas(funcionario) {
     if (this.diarioDato['date'] != undefined) {
       this._extra
-        .getExtraHoursValids(funcionario, this.diarioDato['date'])
+        .getExtraHoursValids(funcionario, this.diarioDato[0].day.date)
         .subscribe((r: any) => {
           this.extrasValidadas = r.data;
+          console.log(r);
+          console.log(this.diarioDato[0].day.date);
           this.validada =
-            this.extrasValidadas.date === this.diarioDato['date']
-              ? true
+          //this.extrasValidadas.date === this.diarioDato['date']
+          this.extrasValidadas.date === this.diarioDato[0].day.date
+            ? true
               : false;
           if (this.validada) {
             this.lista.horasTrabajadas = this.extrasValidadas.ht;
@@ -156,7 +167,6 @@ export class RotativoComponent implements OnInit {
   }
 
   saved() {
-    //this.calcularHorasTrabajadas();
     this.updateDates.emit();
   }
 

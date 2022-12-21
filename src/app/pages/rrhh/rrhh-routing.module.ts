@@ -66,7 +66,7 @@ const routes: Routes = [
   { path: 'procesos/memorandos', component: MemorandosComponent },
   { path: 'certificados', component: CertificadosComponent },
   { path: 'fondo-empleado', component: FondoEmpleadoComponent },
-  { path: 'asignar-horas-extras', component: AsignarHorasExtrasComponent },
+  //{ path: 'asignar-horas-extras', component: AsignarHorasExtrasComponent },
   { path: 'almuerzos', component: AlmuerzosComponent }
 ];
 

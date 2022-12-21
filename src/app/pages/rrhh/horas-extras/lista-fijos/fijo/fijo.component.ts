@@ -29,7 +29,7 @@ export class FijoComponent implements OnInit {
   constructor(private _swal: SwalService, private _extra: ExtraHoursService) {}
 
   ngOnInit(): void {
-    //console.log(this.hasDay)
+
     this.cargarExtrasValidadas(this.funcionarioDato.id);
     this.relacionarConHoraTurno();
     this.asignacionDatosReales();
@@ -48,7 +48,7 @@ export class FijoComponent implements OnInit {
       recargosNocturnosFestivos: this.day['horasRecargoDominicalNocturna'],
     };
 
-    
+
   }
   get hasDay() {
     return this.diario['0']?.day;

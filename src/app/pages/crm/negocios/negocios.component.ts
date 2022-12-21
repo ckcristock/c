@@ -25,6 +25,7 @@ import { MatAccordion } from '@angular/material';
 })
 export class NegociosComponent implements OnInit {
   @ViewChild('modal') modal: any;
+  @ViewChild('add') add: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   today = new Date().toISOString().slice(0, 10);
   form: FormGroup;
@@ -88,7 +89,7 @@ export class NegociosComponent implements OnInit {
     private location: Location,
     private _quotation: QuotationService,
     private _modal: ModalService,
-    private _swal: SwalService
+    private _swal: SwalService,
   ) { }
 
   ngOnInit(): void {

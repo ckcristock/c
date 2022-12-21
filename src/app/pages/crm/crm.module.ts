@@ -75,6 +75,7 @@ import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicker';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { ViewThirdComponent } from './terceros/view-third/view-third.component';
+import { ModalNuevoNegocioComponent } from './negocios/modal-nuevo-negocio/modal-nuevo-negocio.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -126,6 +127,7 @@ export const MY_FORMATS = {
     HistorialNegocioComponent,
     TableNegociosComponent,
     ViewThirdComponent,
+    ModalNuevoNegocioComponent,
   ],
   providers: [
     {

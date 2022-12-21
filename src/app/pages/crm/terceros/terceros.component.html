@@ -163,14 +163,12 @@
               'text-danger font-weight-bold': third.state == 'Inactivo'
             }"
           >
-            <td *ngIf="listaCampos[0].selected">
-              <div>
-                <img
-                  [src]="third.image | image"
-                  onerror="this.src='../../../../assets/images/noprofile.png'"
-                  class="rounded-circle mx-auto img-fluid header-profile-user"
-                />
-              </div>
+            <td class="p-0" *ngIf="listaCampos[0].selected">
+              <img
+                [src]="third.image | image"
+                onerror="this.src='../../../../assets/images/noprofile.png'"
+                class="rounded-circle mx-auto img-fluid header-profile-user"
+              />
             </td>
             <td class="align-middle" *ngIf="listaCampos[1].selected">
               {{ third.name }}
@@ -204,7 +202,7 @@
                 {{ third.state }}
               </span>
             </td>
-            <td class="align-middle">
+            <td class="p-0 align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -215,17 +213,18 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
-                    [routerLink]="['/crm/terceros/editar-tercero', third.id]"
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
-                  <a
                     class="dropdown-item waves-light text-success caja-botones"
                     [routerLink]="['/crm/terceros/ver', third.id]"
                   >
                     <i class="fas fa-eye"></i> Ver
                   </a>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    [routerLink]="['/crm/terceros/editar-tercero', third.id]"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+
                   <a
                     *ngIf="third.state == 'Activo'"
                     (click)="changeState(third, 'Inactivo')"

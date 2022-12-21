@@ -40,6 +40,7 @@ import { MatCheckboxModule, MatSlideToggleModule } from '@angular/material';
 import { LiquidacionConfigComponent } from './nomina/components/liquidacion-config/liquidacion-config.component';
 import { SalariosConfigComponent } from './nomina/components/salarios-config/salarios-config.component';
 import { TypeaheadPersonComponent } from './nomina/components/responsables-nomina-config/typeahead-person/typeahead-person.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 
 @NgModule({
@@ -94,7 +95,8 @@ import { TypeaheadPersonComponent } from './nomina/components/responsables-nomin
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    CKEditorModule,
   ],
   exports: [
     CamposTercerosComponent

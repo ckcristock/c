@@ -7,6 +7,7 @@ import { PuntosPipe } from './puntos';
 import { SafePipe } from './safe.pipe';
 import { TimePipe } from './time.pipe';
 import { NumberPipePipe } from './number-pipe.pipe';
+import { SanitizeHtmlPipe } from './sanitize-html.pipe';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { NumberPipePipe } from './number-pipe.pipe';
     MinWordsPipe,
     ObjToArraykeysPipe,
     SafePipe,
-    NumberPipePipe
+    NumberPipePipe,
+    SanitizeHtmlPipe
   ],
   exports: [
     ImagePipe,
@@ -27,7 +29,8 @@ import { NumberPipePipe } from './number-pipe.pipe';
     MinWordsPipe,
     ObjToArraykeysPipe,
     SafePipe,
-    NumberPipePipe
+    NumberPipePipe,
+    SanitizeHtmlPipe
   ],
 })
 export class PipesModule { }

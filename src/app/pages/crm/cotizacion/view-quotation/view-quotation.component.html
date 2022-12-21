@@ -1,0 +1,83 @@
+<div class="card">
+  <ng-container *ngIf="!loading && quotation; else notData">
+    <div class="card-body" #printPDF>
+      <app-cabecera [datosCabecera]="headerData"></app-cabecera>
+      <hr class="line" />
+      <h5 class="card-title">Señores:</h5>
+      <p class="card-text">
+        {{
+          quotation.client.social_reason
+            ? quotation.client.social_reason
+            : quotation.client.full_name
+        }}
+        <br />
+        {{ quotation.municipality.name }}
+      </p>
+      <div class="alert alert-info" role="alert">
+        <i class="fas fa-cogs"></i> {{ quotation.line }} {{ quotation.project }}
+      </div>
+      <div class="rounded-top table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th>#</th>
+              <th>Descripción</th>
+              <th>Cantidad</th>
+              <th>Valor unitario</th>
+              <th>Valor total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of quotation.items; let i = index"
+              class="text-center"
+            >
+              <td>{{ i + 1 }}</td>
+              <td class="text-left">
+                <b>{{ item.name }}</b>
+                <p>Comprende:</p>
+                <ul class="mb-0">
+                  <ng-container *ngFor="let sub_item of item.sub_items">
+                    <li>{{ sub_item.description }}</li>
+                  </ng-container>
+                </ul>
+              </td>
+              <td>{{ item.cuantity }}</td>
+              <ng-container *ngIf="quotation.money_type == 'cop'; else usd">
+                <td>${{ item.value_cop | currency : "COP" }}</td>
+                <td>${{ item.total_cop | currency : "COP" }}</td>
+              </ng-container>
+              <ng-template #usd>
+                <td>{{ item.value_usd | currency }}</td>
+                <td>{{ item.total_usd | currency }}</td>
+              </ng-template>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-end">
+        <ng-container *ngIf="quotation.money_type == 'cop'; else usd_total">
+          <h5>TOTAL: ${{ quotation.total_cop | currency : "COP" }}</h5>
+        </ng-container>
+        <ng-template #usd_total>
+          <h5>TOTAL: {{ quotation.total_usd | currency }}</h5>
+        </ng-template>
+      </div>
+      <div
+        class="alert alert-warning alert-custom-quotation pb-0"
+        [innerHTML]="quotation.commercial_terms"
+        role="alert"
+        [ngClass]="'alert-p-0'"
+      ></div>
+      <div class="btn-group btn-block" role="group" aria-label="Button group">
+        <button type="button" class="btn btn-success" (click)="print()">
+          Imprimir
+        </button>
+        <button type="button" class="btn btn-info">Enviar</button>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

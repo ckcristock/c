@@ -49,16 +49,22 @@
               (input)="getPerson()"
             />
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Tercero</mat-label>
-            <input
-              type="text"
-              matInput
-              placeholder="Busca por tercero"
+          <div class="col-md-3 mb-4">
+            <ng-select
               [(ngModel)]="filtros.third"
-              (input)="getPerson()"
-            />
-          </mat-form-field>
+              [items]="thirds"
+              bindLabel="text"
+              appearance="outline"
+              [appendTo]="'body'"
+              placeholder="Tercero *"
+              bindValue="value"
+              [clearable]="false"
+              (change)="getPerson()"
+              loadingText="loading"
+              ngDefaultControl
+            >
+            </ng-select>
+          </div>
           <mat-form-field class="col" appearance="outline">
             <mat-label>Celular</mat-label>
             <input
@@ -156,7 +162,11 @@
             <td class="align-middle" *ngIf="checkPersona">{{ person.name }}</td>
             <td class="align-middle">{{ person.n_document }}</td>
             <td class="align-middle" *ngIf="checkTercero">
-              {{ person.third_party }}
+              {{
+                person.third_party
+                  ? person.third_party.full_name
+                  : "Sin tercero"
+              }}
             </td>
             <td class="align-middle" *ngIf="checkTelefono">
               {{ person.cell_phone }}

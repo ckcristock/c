@@ -7,45 +7,49 @@ import { environment } from 'src/environments/environment';
 })
 export class TercerosService {
 
-  constructor( private http: HttpClient ) { }
+  constructor(private http: HttpClient) { }
 
-  getZones(){
+  getZones() {
     return this.http.get(`${environment.base_url}/all-zones`);
   }
 
-  getDepartments(){
+  getDepartments() {
     return this.http.get(`${environment.base_url}/departments`);
   }
 
-  getMunicipalities( id ){
+  getMunicipalities(id) {
     return this.http.get(`${environment.base_url}/municipalities-for-dep/${id}`);
   }
 
-  saveInformation( data:any ){
+  saveInformation(data: any) {
     return this.http.post(`${environment.base_url}/third-party`, data);
   }
 
-  addThirdPartyPerson( data: any ){
+  addThirdPartyPerson(data: any) {
     return this.http.post(`${environment.base_url}/third-party-person`, data);
   }
 
-  getThirdPartyProvider( data: any ){
+  getThirdPartyProvider(data: any) {
     return this.http.get(`${environment.base_url}/third-party-provider`, data);
   }
 
-  getThirdParties(params = {}){
-    return this.http.get(`${environment.base_url}/third-party`, {params});
+  getThirdParties(params = {}) {
+    return this.http.get(`${environment.base_url}/third-party`, { params });
   }
 
-  showThirdParty(id){
-    return this.http.get(`${environment.base_url}/third-party/${id}`);
+  showThirdParty(id, params = {}) {
+    return this.http.get(`${environment.base_url}/third-party/${id}`, { params });
   }
 
-  updateThirdParties( data:any, id ){
+  editThirdParty(id) {
+    return this.http.get(`${environment.base_url}/third-party/${id}/edit`);
+  }
+
+  updateThirdParties(data: any, id) {
     return this.http.put(`${environment.base_url}/third-party/${id}`, data);
   }
 
-  getWinningList(){
+  getWinningList() {
     return this.http.get(`${environment.base_url}/winnings-list`);
   }
 
@@ -53,52 +57,55 @@ export class TercerosService {
     return this.http.get(`${environment.base_url}/ciiu-code`);
   }
 
-  getDianAddress(){
+  getDianAddress() {
     return this.http.get(`${environment.base_url}/dian-address`);
   }
 
-  getAccountPlan(){
+  getAccountPlan() {
     return this.http.get(`${environment.base_url}/account-plan`);
   }
 
-  changeState( data:any ){
+  changeState(data: any) {
     return this.http.put(`${environment.base_url}/activate-inactivate`, data);
   }
 
-  getThirdPartyPerson( params = {} ){
-    return this.http.get(`${environment.base_url}/third-party-person`, {params});
+  getThirdPartyPerson(params = {}) {
+    return this.http.get(`${environment.base_url}/third-party-person`, { params });
   }
 
-  getFields(){
+  getFields() {
     return this.http.get(`${environment.base_url}/fields-third`);
   }
 
-  getTypeDocuments(){
+  getTypeDocuments() {
     return this.http.get(`${environment.base_url}/documentTypes`);
   }
 
-  getRegimeType(){
+  getRegimeType() {
     return this.http.get(`${environment.base_url}/regime-type`);
   }
 
-  getFiscalResponsibility(){
+  getFiscalResponsibility() {
     return this.http.get(`${environment.base_url}/fiscal-responsibility`);
   }
 
-  getCountries(){
+  getCountries() {
     return this.http.get(`${environment.base_url}/countries`);
   }
 
- /*  getCities(idCountry){
-    return this.http.get(`${environment.base_url}/citiesCountry/${idCountry}`);
-  } */
+  /*  getCities(idCountry){
+     return this.http.get(`${environment.base_url}/citiesCountry/${idCountry}`);
+   } */
 
-  getCiiuCodes(){
+  getCiiuCodes() {
     return this.http.get("assets/json/ciiu_codes.json")
   }
 
-  getCountriesWith(){
+  getCountriesWith() {
     return this.http.get(`${environment.base_url}/countries-with-departments`);
   }
 
+  getThirds() {
+    return this.http.get(`${environment.base_url}/third-parties-list`)
+  }
 }

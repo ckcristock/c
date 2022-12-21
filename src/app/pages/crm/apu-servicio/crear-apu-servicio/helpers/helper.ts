@@ -41,9 +41,9 @@ export const functionsApuService = {
   createForm(fb: FormBuilder, clients:Array<any>) {
     let group = fb.group({
       name: [''],
-      city_id: [''],
-      person_id: [''],
-      third_party_id:[''],
+      city_id: [null],
+      person_id: [null],
+      third_party_id:[null],
       line: [''],
       observation: [''],
       subtotal_labor: [0],
@@ -141,8 +141,8 @@ export const functionsApuService = {
       let unforeseen_percentage = form.get('unforeseen_percentage')
       let resultAdministrative = (value * (administrative_percentage.value / 100));
       let resultUnforeseen = (value * (unforeseen_percentage.value / 100));
-      form.patchValue({ 
-        administrative_value: Math.round(resultAdministrative), 
+      form.patchValue({
+        administrative_value: Math.round(resultAdministrative),
         unforeseen_value: Math.round(resultUnforeseen)
       })
     });

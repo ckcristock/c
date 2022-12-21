@@ -63,9 +63,9 @@ export const functionsApuConjunto = {
   createForm(fb: FormBuilder) {
     let group = fb.group({
       name: [''],
-      city_id: [''],
-      person_id: [''],
-      third_party_id:[''],
+      city_id: [null],
+      person_id: [null],
+      third_party_id:[null],
       line: [''],
       files: [''],
       observation: [''],
@@ -125,10 +125,10 @@ export const functionsApuConjunto = {
       let data = cities.find(c => c.value == value);
       if (data) {
         let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
-        let result = (typeof admin_unforeseen_utility_subtotal.value == 'number' && typeof data.percentage_product == 'number' 
+        let result = (typeof admin_unforeseen_utility_subtotal.value == 'number' && typeof data.percentage_product == 'number'
         ?
         admin_unforeseen_utility_subtotal.value / ( 1 - (data.percentage_product / 100))
-        : 
+        :
         0);
         group.patchValue({ sale_price_cop_withholding_total: Math.round(result) })
       }
@@ -137,8 +137,8 @@ export const functionsApuConjunto = {
       let city = group.get('city_id');
       let data = cities.find(c => c.value == city.value);
       if (data) {
-        let result = (typeof data.percentage_product == 'number' 
-        && 
+        let result = (typeof data.percentage_product == 'number'
+        &&
         typeof value == 'number' ? value / ( 1 - (data.percentage_product / 100)) : 0);
         group.patchValue({
           sale_price_cop_withholding_total: Math.round(result)
@@ -213,10 +213,10 @@ export const functionsApuConjunto = {
     group.get('administrative_value').valueChanges.subscribe(value => {
       let direct_costs_indirect_costs_total = group.get('direct_costs_indirect_costs_total');
       let unforeseen_value = group.get('unforeseen_value');
-      let result = (typeof direct_costs_indirect_costs_total.value == 'number' 
-      && 
-      typeof unforeseen_value.value == 'number' 
-      && 
+      let result = (typeof direct_costs_indirect_costs_total.value == 'number'
+      &&
+      typeof unforeseen_value.value == 'number'
+      &&
       typeof value == 'number' ?
       (direct_costs_indirect_costs_total.value + unforeseen_value.value + value):
       0)
@@ -225,10 +225,10 @@ export const functionsApuConjunto = {
     group.get('unforeseen_value').valueChanges.subscribe(value => {
       let direct_costs_indirect_costs_total = group.get('direct_costs_indirect_costs_total');
       let administrative_value = group.get('administrative_value');
-      let result = (typeof direct_costs_indirect_costs_total.value == 'number' 
+      let result = (typeof direct_costs_indirect_costs_total.value == 'number'
       &&
-      typeof administrative_value.value == 'number' 
-      && typeof value == 'number' ? (direct_costs_indirect_costs_total.value + administrative_value.value + value) 
+      typeof administrative_value.value == 'number'
+      && typeof value == 'number' ? (direct_costs_indirect_costs_total.value + administrative_value.value + value)
       : 0)
       group.patchValue({ administrative_unforeseen_subtotal: result });
     });
@@ -244,19 +244,19 @@ export const functionsApuConjunto = {
       );
       form.patchValue({
         indirect_cost_total: total
-      }) 
+      })
     }, 100);
   },
 
   sumarTotalDirectCost(form: FormGroup){
     setTimeout(() => {
-      let forma = form.value; 
-      let result = 
+      let forma = form.value;
+      let result =
       parseFloat(forma.list_pieces_sets_subtotal) +
       parseFloat(forma.machine_tools_subtotal) +
       parseFloat(forma.internal_processes_subtotal) +
       parseFloat(forma.external_processes_subtotal) +
-      parseFloat(forma.others_subtotal);      
+      parseFloat(forma.others_subtotal);
       form.patchValue({
         total_direct_cost: result
       });
@@ -286,7 +286,7 @@ export const functionsApuConjunto = {
 
   sumarDirectCostIndirectCost(form:FormGroup){
     let forma = form.value;
-    let result = 
+    let result =
     forma.indirect_cost_total + forma.total_direct_cost;
     form.patchValue({
       direct_costs_indirect_costs_total: result

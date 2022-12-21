@@ -35,90 +35,76 @@
     <mat-accordion multi #firstAccordion="matAccordion">
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>R.S/Nombre</mat-label>
-            <input
-              type="text"
-              matInput
-              name="name"
-              [(ngModel)]="filtros.name"
-              autocomplete="off"
-              placeholder="Busca por R.S/Nombre"
-              (input)="getThirdParties()"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Documento</mat-label>
-            <input
-              type="text"
-              matInput
-              name="nit"
-              [(ngModel)]="filtros.nit"
-              autocomplete="off"
-              placeholder="Busca por documento"
-              (input)="getThirdParties()"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Dirección</mat-label>
-            <input
-              type="text"
-              matInput
-              name="cod_dian_address"
-              [(ngModel)]="filtros.cod_dian_address"
-              autocomplete="off"
-              placeholder="Busca por dirección"
-              (input)="getThirdParties()"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Ciudad</mat-label>
-            <input
-              type="text"
-              matInput
-              name="municipio"
-              [(ngModel)]="filtros.municipio"
-              autocomplete="off"
-              placeholder="Busca por ciudad"
-              (input)="getThirdParties()"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Tel</mat-label>
-            <input
-              type="text"
-              matInput
-              name="phone"
-              [(ngModel)]="filtros.phone"
-              autocomplete="off"
-              placeholder="Busca por teléfono"
-              (input)="getThirdParties()"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Tipo de tercero</mat-label>
-            <mat-select
-              name="third"
-              [(ngModel)]="filtros.third_party_type"
-              (selectionChange)="getThirdParties()"
-            >
-              <mat-option value="Todos">Todos</mat-option>
-              <mat-option value="Cliente">Cliente</mat-option>
-              <mat-option value="Proveedor">Proveedor</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Email</mat-label>
-            <input
-              type="email"
-              matInput
-              name="email"
-              [(ngModel)]="filtros.email"
-              autocomplete="off"
-              placeholder="Busca por email"
-              (input)="getThirdParties()"
-            />
-          </mat-form-field>
+          <ng-container [formGroup]="form_filters">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Razón social o nombre</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="name"
+                autocomplete="off"
+                placeholder="Busca por razón social o nombre"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Documento</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="nit"
+                autocomplete="off"
+                placeholder="Busca por documento"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Dirección</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="cod_dian_address"
+                autocomplete="off"
+                placeholder="Busca por dirección"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Ciudad</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="municipio"
+                autocomplete="off"
+                placeholder="Busca por ciudad"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Teléfono</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="phone"
+                autocomplete="off"
+                placeholder="Busca por teléfono"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Tipo de tercero</mat-label>
+              <mat-select formControlName="third_party_type">
+                <mat-option value="">Todos</mat-option>
+                <mat-option value="Cliente">Cliente</mat-option>
+                <mat-option value="Proveedor">Proveedor</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="email"
+                autocomplete="off"
+                placeholder="Busca por email"
+              />
+            </mat-form-field>
+          </ng-container>
           <mat-form-field class="col" appearance="outline">
             <mat-label>Campos</mat-label>
             <mat-select
@@ -177,14 +163,12 @@
               'text-danger font-weight-bold': third.state == 'Inactivo'
             }"
           >
-            <td *ngIf="listaCampos[0].selected">
-              <div>
-                <img
-                  [src]="third.image | image"
-                  onerror="this.src='../../../../assets/images/noprofile.png'"
-                  class="rounded-circle mx-auto img-fluid header-profile-user"
-                />
-              </div>
+            <td class="p-0" *ngIf="listaCampos[0].selected">
+              <img
+                [src]="third.image | image"
+                onerror="this.src='../../../../assets/images/noprofile.png'"
+                class="rounded-circle mx-auto img-fluid header-profile-user"
+              />
             </td>
             <td class="align-middle" *ngIf="listaCampos[1].selected">
               {{ third.name }}
@@ -218,7 +202,7 @@
                 {{ third.state }}
               </span>
             </td>
-            <td class="align-middle">
+            <td class="p-0 align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -229,11 +213,18 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
+                    class="dropdown-item waves-light text-success caja-botones"
+                    [routerLink]="['/crm/terceros/ver', third.id]"
+                  >
+                    <i class="fas fa-eye"></i> Ver
+                  </a>
+                  <a
                     class="dropdown-item waves-light text-info caja-botones"
                     [routerLink]="['/crm/terceros/editar-tercero', third.id]"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
+
                   <a
                     *ngIf="third.state == 'Activo'"
                     (click)="changeState(third, 'Inactivo')"

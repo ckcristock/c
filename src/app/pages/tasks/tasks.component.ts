@@ -13,6 +13,7 @@ import { Subject } from 'rxjs';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SwalService } from '../ajustes/informacion-base/services/swal.service';
+import esLocale from '@fullcalendar/core/locales/es';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class TasksComponent implements OnInit {
   @ViewChild('list') list: ElementRef;
   public open: Subject<any> = new Subject;
   active = 1;
+  locales = [esLocale];
   pendientes: any[] = [];
   ejecucion: any[] = [];
   espera: any[] = [];

@@ -2,27 +2,28 @@
   <div class="card-body">
     <app-cabecera [datosCabecera]="datos"></app-cabecera>
     <hr class="line" />
-    <form [formGroup]="form">
+    <ng-container *ngIf="path != 'crear'">
+      <div class="alert alert-warning" role="alert">
+        Esta cotización está ligada a un
+        <a
+          [routerLink]="['/crm/presupuesto/ver', form.controls.budget_id.value]"
+          >presupuesto</a
+        >
+        y no podrá ser cambiada
+      </div>
+    </ng-container>
+    <form [formGroup]="form" novalidate>
       <div class="row">
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Moneda</mat-label>
-          <mat-select formControlName="money_type" required (selectionChange)="disabledMoney()">
-            <mat-option value="cop">Pesos</mat-option>
-            <mat-option value="usd">Dólares</mat-option>
-          </mat-select>
-        </mat-form-field>
         <div class="col-md-3">
           <ng-select
-            [items]="apuPart$ | async"
+            [items]="thirdParties"
             bindLabel="text"
             bindValue="value"
             appearance="outline"
+            required
             [appendTo]="'body'"
-            placeholder="Cliente"
-            [loading]="apuPartLoading"
-            [typeahead]="apuPartInput$"
+            placeholder="Cliente *"
             formControlName="customer_id"
-            typeToSearchText="Por favor escriba para buscar"
           ></ng-select>
         </div>
         <div class="col-md-3">
@@ -32,7 +33,8 @@
             bindValue="value"
             appearance="outline"
             [appendTo]="'body'"
-            placeholder="Destino"
+            placeholder="Destino *"
+            required
             formControlName="destinity_id"
           ></ng-select>
         </div>
@@ -57,6 +59,7 @@
             placeholder="Ingresa TRM"
             required
           />
+          <mat-hint>TRM del {{ today | date }}</mat-hint>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Proyecto</mat-label>
@@ -76,25 +79,27 @@
             <mat-option value="no">No</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field
-          class="col"
-          appearance="outline"
-          *ngIf="form.controls.budget_included.value == 'si'"
-        >
-          <mat-label>Presupuesto</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="budget"
-            autocomplete="off"
-            [ngbTypeahead]="search"
-            (selectItem)="budgetSelected($event.item)"
-            [resultTemplate]="rt"
-            [inputFormatter]="formatter"
-            placeholder="Ingresa el proyecto"
-          />
-          <mat-hint>Escribe para obtener resultados</mat-hint>
-        </mat-form-field>
+        <ng-container *ngIf="path == 'crear'">
+          <mat-form-field
+            class="col"
+            appearance="outline"
+            *ngIf="form.controls.budget_included.value == 'si'"
+          >
+            <mat-label>Presupuesto</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="budget"
+              autocomplete="off"
+              [ngbTypeahead]="search"
+              (selectItem)="budgetSelected($event.item)"
+              [resultTemplate]="rt"
+              [inputFormatter]="formatter"
+              placeholder="Ingresa el proyecto"
+            />
+            <mat-hint>Escribe para obtener resultados</mat-hint>
+          </mat-form-field>
+        </ng-container>
         <mat-form-field
           class="col-md-12 mat-form-field-no-padding textarea"
           appearance="outline"
@@ -104,14 +109,39 @@
             matInput
             placeholder="Ingresa las observaciones"
             rows="5"
+            required
             formControlName="observation"
             [cdkTextareaAutosize]="true"
           ></textarea>
         </mat-form-field>
       </div>
       <hr />
-      <app-items-quotation *ngIf="viewElements" #itemsQuotation [form]="form"></app-items-quotation>
+      <app-items-quotation #itemsQuotation [form]="form"></app-items-quotation>
+      <ckeditor
+        [editor]="_texteditor.Editor"
+        (ready)="_texteditor.onReady($event)"
+        [config]="_texteditor.configEditor"
+        formControlName="commercial_terms"
+      ></ckeditor>
+      <!-- <div class="row">
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Condiciones comerciales</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa las condiciones comerciales"
+            rows="15"
+            [innerHtml]="commercial_terms | sanitizeHtml"
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+        </mat-form-field>
+      </div> -->
     </form>
+    <button type="button" class="btn btn-primary btn-block" (click)="save()">
+      Guardar
+    </button>
   </div>
 </div>
 

@@ -15,7 +15,7 @@ export const functionsApu = {
   },
 
   fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>, cutLmaterials:Array<any>) {
-    
+
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
@@ -85,9 +85,9 @@ export const functionsApu = {
   createForm(fb: FormBuilder, calculationBase) {
     let group = fb.group({
       name: [''],
-      city_id: [''],
-      person_id: [''],
-      third_party_id:[''],
+      city_id: [null],
+      person_id: [null],
+      third_party_id:[null],
       line: [''],
       amount: [0],
       files: [''],
@@ -284,15 +284,15 @@ export const functionsApu = {
       );
       form.patchValue({
         indirect_cost_total: total
-      }) 
+      })
     }, 100);
   },
 
   sumarTotalDirectCost(form: FormGroup){
     setTimeout(() => {
-      let forma = form.value; 
-      let result = 
-      forma.subtotal_raw_material + 
+      let forma = form.value;
+      let result =
+      forma.subtotal_raw_material +
       forma.commercial_materials_subtotal +
       forma.cut_water_subtotal +
       forma.cut_laser_subtotal +
@@ -364,7 +364,7 @@ export const functionsApu = {
 
   sumarAmindImpr(form:FormGroup){
     let forma = form.value;
-    let resultAminImp = 
+    let resultAminImp =
     forma.direct_costs_indirect_costs_total + forma.administrative_value +
     forma.unforeseen_value;
     form.patchValue({

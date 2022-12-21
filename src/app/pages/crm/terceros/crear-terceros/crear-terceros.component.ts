@@ -474,7 +474,7 @@ export class CrearTercerosComponent implements OnInit {
 
   getThirdParty() {
     this.loading = true
-    this._terceros.showThirdParty(this.id).subscribe((r: any) => {
+    this._terceros.editThirdParty(this.id).subscribe((r: any) => {
       this.third = r.data;
       this.form.patchValue({
         id: this.third.id,

@@ -1,0 +1,636 @@
+<h4 class="text-dark text-center">
+  {{ third_data?.full_name | uppercase }}
+</h4>
+
+<ul
+  ngbNav
+  #nav="ngbNav"
+  [(activeId)]="active"
+  class="nav nav-tabs justify-content-center"
+  role="tablist"
+>
+  <li [ngbNavItem]="1" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Resumen</a
+    >
+    <ng-template ngbNavContent>
+      <div class="row d-flex align-items-stretch">
+        <div class="col-lg-9 d-flex align-items-stretch">
+          <div class="card w-100">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3 pt-2 text-center">
+                  <img
+                    class="img-fluid img-third"
+                    [src]="third_data.image"
+                    alt=""
+                  />
+                </div>
+                <div class="col-md-9 pt-2">
+                  <div class="d-flex justify-content-between overflow-auto">
+                    <div class="d-flex align-items-center text-truncate">
+                      <mat-icon class="mat-icon-font d-flex align-items-center"
+                        >location_on</mat-icon
+                      >
+                      {{ third_data.country.name }}
+                    </div>
+                    <div class="d-flex align-items-center text-truncate">
+                      <mat-icon
+                        color="primary"
+                        class="mat-icon-font d-flex align-items-center"
+                        >mail</mat-icon
+                      >
+                      {{ third_data.email }}
+                    </div>
+                    <div class="d-flex align-items-center text-truncate">
+                      <mat-icon
+                        color="primary"
+                        class="mat-icon-font d-flex align-items-center"
+                        >call</mat-icon
+                      >
+                      {{ third_data.landline }} / {{ third_data.cell_phone }}
+                    </div>
+                    <div class="d-flex align-items-center text-truncate">
+                      <mat-icon
+                        color="primary"
+                        class="mat-icon-font d-flex align-items-center"
+                        >{{
+                          third_data.third_party_type == "Cliente"
+                            ? "person_add"
+                            : "manage_accounts"
+                        }}</mat-icon
+                      >
+                      {{ third_data.third_party_type }}
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col-lg-6">
+                      <div class="table-responsive">
+                        <table class="table table-borderless">
+                          <tbody>
+                            <tr>
+                              <th>Documento:</th>
+                              <td>{{ third_data.document_type_.code }}</td>
+                            </tr>
+                            <tr>
+                              <th>Número:</th>
+                              <td>{{ third_data.nit }}</td>
+                            </tr>
+                            <tr>
+                              <th>Persona:</th>
+                              <td>{{ third_data.person_type | uppercase }}</td>
+                            </tr>
+                            <tr>
+                              <th>Dirección:</th>
+                              <td>
+                                {{ third_data.cod_dian_address | uppercase }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="table-responsive">
+                        <table class="table table-borderless">
+                          <tbody>
+                            <tr>
+                              <th>Departamento:</th>
+                              <td>{{ third_data.department.name }}</td>
+                            </tr>
+                            <tr>
+                              <th>Municipio:</th>
+                              <td>{{ third_data.municipality.name }}</td>
+                            </tr>
+                            <tr>
+                              <th>Teléfono pagos:</th>
+                              <td>
+                                {{ third_data.phone_payments | uppercase }}
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Correo pagos:</th>
+                              <td>
+                                {{ third_data.email_payments | uppercase }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-end">
+                <button type="button" (click)="openModal(fields)" class="btn btn-primary btn-sm">
+                  Ver campos especiales
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 d-flex align-items-stretch">
+          <div class="card w-100">
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item font-weight-bold text-center">
+                  ESTADÍSTICAS
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center py-2 px-0 list-custom"
+                >
+                  ÓRDENES DE TRABAJO
+                  <h4 class="text-info mb-0">0</h4>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center py-2 px-0 list-custom"
+                >
+                  COTIZACIONES
+                  <h4 class="text-info mb-0">
+                    {{ pagination.collectionSizeQuotation }}
+                  </h4>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center py-2 px-0 list-custom"
+                >
+                  PRESUPUESTOS
+                  <h4 class="text-info mb-0">
+                    {{ pagination.collectionSizeBudgets }}
+                  </h4>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center py-2 px-0 list-custom"
+                >
+                  NEGOCIOS
+                  <h4 class="text-info mb-0">
+                    {{ pagination.collectionSizeBusiness }}
+                  </h4>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center text-dark font-weight-bold">PERSONAS</h4>
+              <div class="rounded-top table-responsive">
+                <table
+                  class="table table-bordered table-striped table-sm mb-0"
+                  *ngIf="!loading && people.length > 0; else notData"
+                >
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Nombre</th>
+                      <th>Documento</th>
+                      <th>Teléfono</th>
+                      <th>Email</th>
+                      <th>Cargo</th>
+                      <th>Observación</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let person of people" class="text-center">
+                      <td class="align-middle">
+                        {{ person.name }}
+                      </td>
+                      <td class="align-middle">{{ person.n_document }}</td>
+                      <td class="align-middle">
+                        {{ person.cell_phone }}
+                      </td>
+                      <td class="align-middle">
+                        {{ person.email }}
+                      </td>
+                      <td class="align-middle">
+                        {{ person.position }}
+                      </td>
+                      <td class="align-middle">
+                        {{ person.observation }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <ngb-pagination
+              class="d-flex justify-content-center pagination-rounded pagination-sm"
+              [collectionSize]="pagination.collectionSizePeople"
+              [pageSize]="pagination.pageSizePeople"
+              [(page)]="pagination.pagePeople"
+              (pageChange)="getThird($event)"
+              aria-label="Default pagination"
+              maxSize="5"
+              rotate="true"
+              ellipses="false"
+              boundaryLinks="true"
+            >
+            </ngb-pagination>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="2" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Órdenes de trabajo</a
+    >
+    <ng-template ngbNavContent>
+      <div class="card">
+        <div class="card-body">
+          <div class="text-center p-5">
+            <i class="fas fa-paint-roller fa-9x text-warning"></i>
+            <h2 class="mt-2">ESTAMOS TRABAJANDO EN ESTO.</h2>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="3" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Cotizaciones</a
+    >
+    <ng-template ngbNavContent>
+      <div class="card">
+        <div class="card-body">
+          <div class="row d-flex justify-content-between">
+            <div class="col-md">
+              <h3>
+                <span class="badge badge-pill badge-danger"
+                  >{{ pagination.collectionSizeQuotation }} cotizaciones</span
+                >
+              </h3>
+            </div>
+            <div class="col-md text-right">
+              <div class="btn-group rounded w-sm-100">
+                <button
+                  class="btn btn-primary btn-sm"
+                  [routerLink]="['/crm/cotizacion/crear']"
+                >
+                  <i class="fa fa-plus"></i> Agregar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-top table-responsive">
+            <table
+              class="table table-bordered table-striped table-sm"
+              *ngIf="!loading && quotations.length > 0; else notData"
+            >
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Fecha</th>
+                  <th>Ciudad</th>
+                  <th>Código</th>
+                  <th class="col-4">Descripción</th>
+                  <th>Estado</th>
+                  <th><i class="mdi mdi-chevron-down"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of quotations"
+                  class="text-center"
+                  [ngClass]="{
+                    'text-danger font-weight-bold': item.status === 'Inactivo'
+                  }"
+                >
+                  <td>{{ item.created_at | date : "MMM d, y, h:mm a" }}</td>
+                  <td>{{ item.municipality.name }}</td>
+                  <td>COT{{ item.id }}</td>
+                  <td>{{ item.observation }}</td>
+                  <td>
+                    <span
+                      class="badge"
+                      [class]="
+                        item.status == 'Pendiente'
+                          ? 'badge-info'
+                          : item.status == 'Aprobada'
+                          ? 'badge-primary'
+                          : item.status == 'No aprobada'
+                          ? 'badge-warning'
+                          : item.status == 'Anulada'
+                          ? 'badge-danger'
+                          : 'badge-dark'
+                      "
+                      >{{ item.status }}</span
+                    >
+                  </td>
+                  <td>
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm waves-light"
+                        type="button"
+                      >
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item waves-light text-success caja-botones"
+                          href="javascript: void(0);"
+                          [routerLink]="['/crm/cotizacion/ver', item.id]"
+                        >
+                          <i class="fas fa-eye"></i> Ver</a
+                        >
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ngb-pagination
+            class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="pagination.collectionSizeQuotation"
+            [pageSize]="pagination.pageSizeQuotation"
+            [(page)]="pagination.pageQuotation"
+            (pageChange)="getThird($event)"
+            aria-label="Default pagination"
+            maxSize="5"
+            rotate="true"
+            ellipses="false"
+            boundaryLinks="true"
+          >
+          </ngb-pagination>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="4" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Presupuestos</a
+    >
+    <ng-template ngbNavContent>
+      <div class="card">
+        <div class="card-body">
+          <div class="row d-flex justify-content-between">
+            <div class="col-md">
+              <h3>
+                <span class="badge badge-pill badge-danger"
+                  >{{ pagination.collectionSizeBudgets }} presupuestos</span
+                >
+              </h3>
+            </div>
+            <div class="col-md text-right">
+              <div class="btn-group rounded w-sm-100">
+                <button
+                  class="btn btn-primary btn-sm"
+                  [routerLink]="['/crm/presupuesto/crear']"
+                >
+                  <i class="fa fa-plus"></i> Agregar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-top table-responsive">
+            <table
+              class="table table-bordered table-striped table-sm"
+              *ngIf="!loading && budgets.length > 0; else notData"
+            >
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Item</th>
+                  <th>Fecha</th>
+                  <th>Destino</th>
+                  <th>Linea</th>
+                  <th>Quien elabora</th>
+                  <th>Total COP</th>
+                  <th>Total USD</th>
+                  <th><i class="mdi mdi-chevron-down"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of budgets" class="text-center">
+                  <td class="align-middle">PRES {{ item.id }}</td>
+                  <td class="align-middle">
+                    {{ item.created_at | date : "longDate" }}
+                  </td>
+                  <td class="align-middle">
+                    {{ item.destiny.name }}
+                  </td>
+                  <td class="align-middle">{{ item.line }}</td>
+                  <td class="align-middle">
+                    {{ item.user.person.first_name }}
+                    {{ item.user.person.first_surname }}
+                  </td>
+                  <td class="align-middle">
+                    ${{ item.total_cop | currency : "" : "" }}
+                  </td>
+                  <td class="align-middle">
+                    ${{ item.total_usd | currency : "" : "" }}
+                  </td>
+                  <td class="align-middle">
+                    <div
+                      ngbDropdown
+                      container="body"
+                      class="d-inline-block dropdown-primary"
+                    >
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm"
+                        type="button"
+                        id="dropdownBasic1"
+                      >
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <a
+                          class="dropdown-item waves-light text-success caja-botones"
+                          [routerLink]="['/crm/presupuesto/ver', item.id]"
+                        >
+                          <i class="far fa-eye"></i> Ver
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ngb-pagination
+            class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="pagination.collectionSizeBudgets"
+            [pageSize]="pagination.pageSizeBudgets"
+            [(page)]="pagination.pageBudgets"
+            (pageChange)="getThird($event)"
+            aria-label="Default pagination"
+            maxSize="5"
+            rotate="true"
+            ellipses="false"
+            boundaryLinks="true"
+          >
+          </ngb-pagination>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="5" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Negocios</a
+    >
+    <ng-template ngbNavContent>
+      <div class="card">
+        <div class="card-body">
+          <div class="row d-flex justify-content-between">
+            <div class="col-md">
+              <h3>
+                <span class="badge badge-pill badge-danger"
+                  >{{ pagination.collectionSizeBusiness }} negocios</span
+                >
+              </h3>
+            </div>
+            <div class="col-md text-right">
+              <div class="btn-group rounded w-sm-100">
+                <button class="btn btn-primary btn-sm" >
+                  <i class="fa fa-plus"></i> Agregar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-top table-responsive">
+            <table
+              class="table table-bordered table-striped table-sm"
+              *ngIf="!loading && business.length > 0; else notData"
+            >
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Foto</th>
+                  <th>Código</th>
+                  <th>Nombre</th>
+                  <th>Presupuesto</th>
+                  <th>Fecha</th>
+                  <th>Etapa</th>
+                  <th><i class="mdi mdi-chevron-down"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of business" class="text-center">
+                  <td class="p-0">
+                    <img
+                      [src]="item.third_party.image | image"
+                      onerror="this.src='../../../../assets/images/noprofile.png'"
+                      class="rounded-circle mx-auto img-fluid header-profile-user"
+                    />
+                  </td>
+                  <td class="align-middle" scope="row">{{ item.code }}</td>
+                  <td class="align-middle" scope="row">{{ item.name }}</td>
+                  <td class="align-middle">
+                    $ {{ item.budget_value | number }}
+                  </td>
+                  <td class="align-middle">{{ item.date | date }}</td>
+                  <td class="align-middle">{{ item.status }}</td>
+                  <td>
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm waves-light"
+                        type="button"
+                      >
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item waves-light text-success caja-botones"
+                          href="javascript: void(0);"
+                          [routerLink]="['/crm/negocios/', item.id]"
+                        >
+                          <i class="fas fa-eye"></i> Ver</a
+                        >
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ngb-pagination
+            class="d-flex justify-content-center pagination-rounded pagination-sm"
+            [collectionSize]="pagination.collectionSizeBusiness"
+            [pageSize]="pagination.pageSizeBusiness"
+            [(page)]="pagination.pageBusiness"
+            (pageChange)="getThird($event)"
+            aria-label="Default pagination"
+            maxSize="5"
+            rotate="true"
+            ellipses="false"
+            boundaryLinks="true"
+          >
+          </ngb-pagination>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+</ul>
+
+<ng-template #fields let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Campos especiales</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="table-responsive">
+      <table class="table table-borderless">
+        <tbody>
+          <tr *ngFor="let item of third_party_fields">
+            <ng-container *ngIf="third_data[item.name]">
+              <th>{{item.name | uppercase}}</th>
+              <td>{{third_data[item.name]}}</td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+
+<ng-container *ngIf="!loading && third_data; else notData">
+  <div [ngbNavOutlet]="nav" class="mt-2"></div>
+</ng-container>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+

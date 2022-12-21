@@ -39,7 +39,8 @@ import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule } fr
     NotDataComponent,
     ApplicantComponent,
     GetApusComponent,
-    CabeceraComponent
+    CabeceraComponent,
+    PipesModule
   ],
   imports: [
     NgbAccordionModule,

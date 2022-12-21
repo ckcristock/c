@@ -94,34 +94,6 @@ export class TareasNegocioComponent implements OnInit {
     });
 
   }
-
-
-
-  saveTask() {
-    if (this.form.get('id').value) {
-      this._negocios.updateTask(this.form.value).subscribe((r: any) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Tarea creada con éxito',
-          text: '',
-        });
-        this.updateListTask.emit();
-        this.modalService.dismissAll();
-      });
-    } else {
-
-      this._negocios.saveTask(this.form.value).subscribe((r: any) => {
-        /*this.dataClear();*/
-        Swal.fire({
-          icon: 'success',
-          title: 'Tarea creada con éxito',
-          text: '',
-        });
-        this.updateListTask.emit();
-        this.modalService.dismissAll();
-      });
-    }
-  }
   /*
     createTask(){
       this.indexSelected? this.editTask.next({

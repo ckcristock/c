@@ -46,17 +46,22 @@
     <mat-accordion multi #secondAccordion="matAccordion">
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Fecha</mat-label>
+          <mat-form-field appearance="outline" class="col">
+            <mat-label>Rango de fechas</mat-label>
             <input
               matInput
-              type="date"
-              placeholder=""
-              [(ngModel)]="filtros.date"
-              (input)="getApus()"
-              name="date"
-              autocomplete="off"
+              [satDatepicker]="picker"
+              [value]="date"
+              (dateChange)="selectedDate($event)"
+              (dateInput)="selectedDate($event)"
+              name="daterange" autocomplete="off"
+              required
             />
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></sat-datepicker-toggle>
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
             <mat-label>Código</mat-label>
@@ -207,9 +212,9 @@
             </td>
             <td class="align-middle">{{ item.code }}</td>
             <td class="align-middle" *ngIf="checkNombre">{{ item.name }}</td>
-            <td class="align-middle" *ngIf="checkDestino">{{ item.city }}</td>
+            <td class="align-middle" *ngIf="checkDestino">{{ item.city.name }}</td>
             <td class="align-middle" *ngIf="checkCliente">
-              {{ item.custumer }}
+              {{ item.third_party.full_name}}
             </td>
             <td class="align-middle" *ngIf="checkLinea">{{ item.line }}</td>
             <td class="align-middle" *ngIf="checkTipo">{{ item.type_name }}</td>

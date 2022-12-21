@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NegociosService } from '../negocios.service';
 
 @Component({
   selector: 'app-table-negocios',
@@ -7,13 +8,22 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TableNegociosComponent implements OnInit {
 
-  @Input("negocios") negocios:any[]
-  @Input("loading") loading:any
-  
+  @Input("negocios") negocios: any[]
+  @Input("loading") loading: any
+  @Input("pagination") pagination: any
+  @Output() getNegocios = new EventEmitter<string>();
 
-  constructor() { }
+  constructor(private _negocios: NegociosService,) { }
 
   ngOnInit(): void {
+  }
+
+  nextState(state, id) {
+    this._negocios.changeState({ status: state }, id).subscribe();
+  }
+
+  getNegociosParent($event) {
+    this.getNegocios.emit($event)
   }
 
 }

@@ -13,6 +13,7 @@ export class RotativoComponent implements OnInit {
   @Input('info') info;
   @Input('diario') diario;
   @Input('person') person;
+  @Input('extras') extras;
   @Output('updateDates') updateDates = new EventEmitter<any>();
 
   funcionarioDato: any;
@@ -31,10 +32,27 @@ export class RotativoComponent implements OnInit {
   ngOnInit(): void {
   /*   console.log(this.day, this.info, this.diario, this.person)
     console.log(this.info.extras[0].hours_extra) */
-    let aux = Object.assign(this.info.extras[0].hours_extra, this.info.extras[0].hours_recharge)
+    console.log('diarioDato', this.day);
+    let aux = {
+      ht:0,
+      hed:0,
+      hen:0,
+      heddf:0,
+      hendf:0,
+      hrn:0,
+      hrddf:0,
+      hrndf:0
+    };
+    //console.log('aux', aux);
+    //if (this.info.extras[0].extras!='No hay asistencia este día') {
+      //console.log('extras', this.extras)
+    if (this.extras!='' && this.extras!= undefined ) {
+      //console.log('si trabajó ese día')
+      aux = Object.assign(this.extras.hours_extra, this.extras.hours_recharge)
+    }
+    //let aux = Object.assign(this.diario.extras[0].hours_extra, this.diario.extras[0].hours_recharge)
     this.funcionarioDato = this.info.id;
     this.diarioDato = this.day;
-
     this.lista = {
       /* horasTrabajadas: this.day['tiempoLaborado'],
       horasExtrasDiurnas: this.day['HorasExtrasDiurnas'],
@@ -52,7 +70,7 @@ export class RotativoComponent implements OnInit {
       horasExtrasDiurnasFestivasDom: aux.heddf,
       horasExtrasNocturnasFestivasDom: aux.hendf,
       recargosNocturnos: aux.hrn,
-      recargosDiurnosFestivos:aux.hrddf,
+      recargosDiurnosFestivos: aux.hrddf,
       recargosNocturnosFestivos: aux.hrndf,
     };
     //this.cargarExtrasValidadas(this.funcionarioDato); //se elimino la asignacion previa de HE
@@ -117,8 +135,8 @@ export class RotativoComponent implements OnInit {
         .getExtraHoursValids(funcionario, this.diarioDato[0].day.date)
         .subscribe((r: any) => {
           this.extrasValidadas = r.data;
-          console.log(r);
-          console.log(this.diarioDato[0].day.date);
+          //console.log(r);
+          //console.log(this.diarioDato[0].day.date);
           this.validada =
           //this.extrasValidadas.date === this.diarioDato['date']
           this.extrasValidadas.date === this.diarioDato[0].day.date
@@ -152,7 +170,8 @@ export class RotativoComponent implements OnInit {
   }
 
   relacionarConHoraTurno() {
-    this.turnoDato = this.diario.turnoOficial;
+    this.turnoDato = this.diario;
+    //console.log('turnoDato', this.turnoDato);
   }
 
   asignacionDatosReales() {

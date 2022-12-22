@@ -3,17 +3,17 @@
     <div *ngIf="day.date" class="text-primary font-weight-bold">
       {{ day.date | date : "EEEE" | uppercase }}
     </div>
-    <div *ngIf="turnoDato != '' && turnoDato != undefined">
+    <div *ngIf="diarioDato != '' && diarioDato != undefined">
       Turno:
       <b>
-        {{ turnoDato.entry_time | time }} - {{ turnoDato.leave_time | time }}
+        {{ diarioDato.turno_rotativo.entry_time | time }} - {{ diarioDato.turno_rotativo.leave_time | time }}
       </b>
     </div>
     <div>
       Real:
-      <b *ngIf="diario.entry_time_one; else descanso">
-        {{ diario.entry_time_one | time }} -
-        {{ diario.leave_time_one | time }}
+      <b *ngIf="turnoDato[0] != '' && turnoDato[0] != undefined ; else descanso">
+        {{ turnoDato[0].day.entry_time_one | time }} -
+        {{ turnoDato[0].day.leave_time_one | time }}
       </b>
       <ng-template #descanso>
         <b>Descanso</b>
@@ -27,6 +27,7 @@
   </td> -->
   <td class="col-1">
     {{ lista.horasTrabajadas }}
+    <br>
     <a *ngIf="diario.entry_time_one" (click)="modal.show()" title="Editar">
       <i class="fa fa-pencil-alt"></i>
     </a>

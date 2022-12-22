@@ -112,7 +112,7 @@ export class HorasExtrasComponent implements OnInit {
       .subscribe((r: any) => {
 
         this.loading = false;
-        console.log(r.data)
+        console.log('response getPeople' ,r.data)
         this.horasExtras = r.data;
       });
   }

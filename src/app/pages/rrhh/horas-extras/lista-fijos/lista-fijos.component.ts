@@ -28,10 +28,11 @@ export class ListaFijosComponent implements OnInit {
       ud: this.ultimodiaDia,
     };
     this._extraHour.getDetailPeople(data).subscribe((r: any) => {
-      this.personData = r.data;
-      console.log(r.data)
-      console.log(this.personData)
+      this.personData = r.data
+      //console.log('reponse', r.data)
+      //console.log( 'personData', this.personData.extras[0])
       this.dayswork = this.personData.days_work
+      //console.log('dayswork', this.dayswork)
       this.loading = false;
     });
 

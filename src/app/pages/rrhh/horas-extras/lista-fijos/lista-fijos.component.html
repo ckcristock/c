@@ -88,14 +88,15 @@
       <tbody>
         <tr>
           <td colspan="100%">
-            <ng-container *ngFor="let diario of personData.days_work">
+            <ng-container *ngFor="let diario of dayswork; let i = index">
               <app-rotativo
                 *ngIf="turnType == 'Rotativo'"
                 [person]="person"
                 (updateDates)="getData()"
-                [diario]="diario[0] != undefined ? diario[0].day : {}"
+                [diario]="diario != undefined ? diario : {}"
                 [info]="personData"
                 [day]="diario"
+                [extras]="personData.extras[i]"
               ></app-rotativo>
               <app-fijo
                 *ngIf="turnType == 'fijo'"

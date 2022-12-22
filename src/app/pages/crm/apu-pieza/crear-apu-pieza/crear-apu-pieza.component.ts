@@ -16,6 +16,9 @@ import { SwalService } from '../../../ajustes/informacion-base/services/swal.ser
 import { Router, ActivatedRoute } from '@angular/router';
 import { functionsApu } from './helpers/helper';
 import { CalculationBasesService } from '../../../ajustes/configuracion/base-calculos/calculation-bases.service';
+import { ProcesosExternosService } from 'src/app/pages/ajustes/parametros/apu/procesos-externos/procesos-externos.service';
+import { ProcesosInternosService } from 'src/app/pages/ajustes/parametros/apu/procesos-internos/procesos-internos.service';
+import { MaquinasHerramientasService } from 'src/app/pages/ajustes/parametros/apu/maquinas-herramientas/maquinas-herramientas.service';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -27,23 +30,26 @@ export class CrearApuPiezaComponent implements OnInit {
   @Input('data') data;
   form: FormGroup;
   date: Date = new Date();
-  people:any[] = [];
-  cities:any[] = [];
-  geometries:any[] = [];
-  materials:any[] = [];
-  clients:any[] = [];
-  units:any[] = [];
-  indirectCosts:any[] = [];
-  thicknesses:any[] = [];
+  people: any[] = [];
+  cities: any[] = [];
+  geometries: any[] = [];
+  procesos_internos: any[] = [];
+  procesos_externos: any[] = [];
+  maquinas_herramientas: any[] = [];
+  materials: any[] = [];
+  clients: any[] = [];
+  units: any[] = [];
+  indirectCosts: any[] = [];
+  thicknesses: any[] = [];
   files: File[] = [];
-  fileString:any = '';
+  fileString: any = '';
   file = '';
-  fileArr:any[] = [];
-  cutLaserMaterials:any[] = [];
-  otherCollapsed:boolean;
-  indirectCollapsed:boolean;
-  auiCollapsed:boolean;
-  loading:boolean;
+  fileArr: any[] = [];
+  cutLaserMaterials: any[] = [];
+  otherCollapsed: boolean;
+  indirectCollapsed: boolean;
+  auiCollapsed: boolean;
+  loading: boolean;
   calculationBase: any = {}
   constructor(
     private _apuPieza: ApuPiezaService,
@@ -52,8 +58,11 @@ export class CrearApuPiezaComponent implements OnInit {
     private _swal: SwalService,
     private router: Router,
     private actRoute: ActivatedRoute,
-    private _calculationBase: CalculationBasesService
-    ) { }
+    private _calculationBase: CalculationBasesService,
+    private _externos: ProcesosExternosService,
+    private _internos: ProcesosInternosService,
+    private _maquinas: MaquinasHerramientasService
+  ) { }
 
   async ngOnInit() {
     this.loading = false
@@ -70,14 +79,27 @@ export class CrearApuPiezaComponent implements OnInit {
     this.getThicknesses();
     await this.getCutLaserMaterial();
     this.validateData();
-    this.loading = true
+    this.loading = true;
+    this.getVariablesApu();
   }
 
-  collapses(){
+  collapses() {
     if (!this.data) {
       return null
     }
     (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
+  }
+
+  getVariablesApu() {
+    this._externos.getExternos().subscribe((res:any) => {
+      this.procesos_externos = res.data
+    })
+    this._maquinas.getMaquinas().subscribe((res:any) => {
+      this.maquinas_herramientas = res.data
+    })
+    this._internos.getExternos().subscribe((res:any) => {
+      this.procesos_internos = res.data
+    })
   }
 
   async getBases() {
@@ -97,65 +119,65 @@ export class CrearApuPiezaComponent implements OnInit {
     this.files.splice(this.files.indexOf(event), 1);
   }
 
-  getPeople(){
-    this._apuPieza.getPeopleXSelect().subscribe((r:any) => {
+  getPeople() {
+    this._apuPieza.getPeopleXSelect().subscribe((r: any) => {
       this.people = r.data;
     })
   }
 
-  getCities(){
-    this._apuPieza.getCities().subscribe((r:any) => {
+  getCities() {
+    this._apuPieza.getCities().subscribe((r: any) => {
       this.cities = r.data;
       help.functionsApu.cityRetention(this.form, this.cities);
     })
   }
 
-  async getCutLaserMaterial(){
-    await this._apuPieza.cutLaserMaterial().toPromise().then((r:any) => {
+  async getCutLaserMaterial() {
+    await this._apuPieza.cutLaserMaterial().toPromise().then((r: any) => {
       this.cutLaserMaterials = r.data;
     })
   }
 
-  getClients(){
-    this._apuPieza.getClient().subscribe((r:any) => {
+  getClients() {
+    this._apuPieza.getClient().subscribe((r: any) => {
       this.clients = r.data;
     });
   }
 
-  getGeometries(){
-    this._apuPieza.getGeometries().subscribe((r:any) => {
+  getGeometries() {
+    this._apuPieza.getGeometries().subscribe((r: any) => {
       this.geometries = r.data;
     })
   }
 
-  getMaterials(){
-    this._apuPieza.getMaterials().subscribe((r:any) => {
+  getMaterials() {
+    this._apuPieza.getMaterials().subscribe((r: any) => {
       this.materials = r.data;
     })
   }
 
-  getUnits(){
-    this._units.selectUnits().subscribe((r:any) => {
+  getUnits() {
+    this._units.selectUnits().subscribe((r: any) => {
       this.units = r.data;
     })
   }
 
-  getThicknesses(){
-    this._apuPieza.getThicknesses().subscribe((r:any) => {
+  getThicknesses() {
+    this._apuPieza.getThicknesses().subscribe((r: any) => {
       this.thicknesses = r.data;
     })
   }
 
-  getIndirectCosts(){
-    this._apuPieza.getIndirectCosts().subscribe((r:any) => {
+  getIndirectCosts() {
+    this._apuPieza.getIndirectCosts().subscribe((r: any) => {
       this.indirectCosts = r.data;
-      if(!this.data){
+      if (!this.data) {
         this.indirectCostPush();
       }
     })
   }
 
-  createForm(){
+  createForm() {
     this.form = help.functionsApu.createForm(this.fb, this.calculationBase);
     help.functionsApu.listerTotalDirectCost(this.form);
   }
@@ -166,42 +188,42 @@ export class CrearApuPiezaComponent implements OnInit {
     }
   }
   /************** Materia Prima Inicio ****************/
-  basicControl(): FormGroup{
+  basicControl(): FormGroup {
     let group = help.materiaHelper.createMateriaGroup(this.form, this.fb, this.geometries, this.materials);
     return group;
   }
 
-  get materiaList(){
+  get materiaList() {
     return this.form.get('materia_prima') as FormArray;
   }
 
-  newMateria(){
+  newMateria() {
     let materia = this.materiaList;
     materia.push(this.basicControl())
   }
 
-  deleteMateria(i){
+  deleteMateria(i) {
     this.materiaList.removeAt(i);
     materiaHelper.subtotalMateria(this.materiaList, this.form);
   }
   /************** Materia Prima Fin ****************/
 
   /************** Materiales Comerciales Inicia ****************/
-  materialsControl(): FormGroup{
+  materialsControl(): FormGroup {
     let group = help.materialsHelper.createMaterialsGroup(this.form, this.fb);
     return group;
   }
 
-  get materialsList(){
+  get materialsList() {
     return this.form.get('commercial_materials') as FormArray;
   }
 
-  newMaterial(){
+  newMaterial() {
     let materials = this.materialsList;
     materials.push(this.materialsControl())
   }
 
-  deleteMaterial(i){
+  deleteMaterial(i) {
     this.materialsList.removeAt(i);
     materialsHelper.subtotalMaterials(this.materialsList, this.form);
   }
@@ -210,21 +232,21 @@ export class CrearApuPiezaComponent implements OnInit {
 
   /************** Corte de Agua Inicia ****************/
 
-  cutWaterControl(): FormGroup{
+  cutWaterControl(): FormGroup {
     let group = help.cutWaterHelper.createCutWaterGroup(this.form, this.fb, this.materials);
     return group;
   }
 
-  get cutWaterList(){
+  get cutWaterList() {
     return this.form.get('cut_water') as FormArray;
   }
 
-  newCutWater(){
+  newCutWater() {
     let water = this.cutWaterList;
     water.push(this.cutWaterControl())
   }
 
-  deleteCutWater(i){
+  deleteCutWater(i) {
     this.cutWaterList.removeAt(i);
     cutWaterHelper.subtotalUnit(this.cutWaterList, this.form);
   }
@@ -234,21 +256,21 @@ export class CrearApuPiezaComponent implements OnInit {
 
   /************** Corte laser Termina ****************/
 
-  cutLaserControl(): FormGroup{
+  cutLaserControl(): FormGroup {
     let group = help.cutLaserHelper.createCutLaserGroup(this.form, this.fb, this.cutLaserMaterials);
     return group;
   }
 
-  get cutLaserList(){
+  get cutLaserList() {
     return this.form.get('cut_laser') as FormArray;
   }
 
-  newCutLaser(){
+  newCutLaser() {
     let laser = this.cutLaserList;
     laser.push(this.cutLaserControl());
   }
 
-  deleteCutLaser(i){
+  deleteCutLaser(i) {
     this.cutLaserList.removeAt(i);
     cutLaserHelper.subtotalUnit(this.cutLaserList, this.form);
   }
@@ -257,21 +279,67 @@ export class CrearApuPiezaComponent implements OnInit {
 
   /************** Maquinas Herramientas Inicia ****************/
 
-  machineToolsControl(): FormGroup{
+  machineToolsControl(): FormGroup {
     let group = help.machineToolHelper.createMachineToolGroup(this.form, this.fb);
     return group;
   }
 
-  get machineToolList(){
+  get machineToolList() {
     return this.form.get('machine_tools') as FormArray;
   }
 
-  newMachineTool(){
+  machineSet(item, event) {
+    let machine_item = item as FormGroup;
+    this.maquinas_herramientas.forEach(element => {
+      if (element.value == event.target.value) {
+        let machine = element
+        machine_item.patchValue({
+          unit_id: machine.unit.id,
+          unit_cost: machine.unit_cost
+        })
+        /* machine_item.controls.unit_id.disable()
+        machine_item.controls.unit_cost.disable() */
+      }
+    });
+  }
+
+  internalSet(item, event) {
+    let internal_item = item as FormGroup;
+    this.procesos_internos.forEach(element => {
+      if (element.value == event.target.value) {
+        let internal = element
+        internal_item.patchValue({
+          unit_id: internal.unit.id,
+          unit_cost: internal.unit_cost
+        })
+        /* internal_item.controls.unit_id.disable()
+        internal_item.controls.unit_cost.disable() */
+      }
+    });
+  }
+  externalSet(item, event) {
+    let external_item = item as FormGroup;
+    this.procesos_externos.forEach(element => {
+      if (element.value == event.target.value) {
+        let external = element
+        external_item.patchValue({
+          unit_id: external.unit.id,
+          unit_cost: external.unit_cost
+        })
+        /* external_item.controls.unit_id.disable()
+        external_item.controls.unit_cost.disable() */
+      }
+    });
+  }
+
+
+
+  newMachineTool() {
     let machine = this.machineToolList;
     machine.push(this.machineToolsControl())
   }
 
-  deleteMachineTool(i){
+  deleteMachineTool(i) {
     this.machineToolList.removeAt(i);
     machineToolHelper.subtotalMachine(this.machineToolList, this.form);
   }
@@ -280,21 +348,21 @@ export class CrearApuPiezaComponent implements OnInit {
 
   /************** Procesos Internos Inicia ****************/
 
-  internalProccessesControl(): FormGroup{
+  internalProccessesControl(): FormGroup {
     let group = help.internalProccessesHelper.createInternalProccessesGroup(this.form, this.fb);
     return group;
   }
 
-  get internalProccessList(){
+  get internalProccessList() {
     return this.form.get('internal_proccesses') as FormArray;
   }
 
-  newInternalProccesses(){
+  newInternalProccesses() {
     let internalProccess = this.internalProccessList;
     internalProccess.push(this.internalProccessesControl())
   }
 
-  deleteInternalProccess(i){
+  deleteInternalProccess(i) {
     this.internalProccessList.removeAt(i);
     internalProccessesHelper.subtotalInternalProcesses(this.internalProccessList, this.form)
   }
@@ -303,21 +371,21 @@ export class CrearApuPiezaComponent implements OnInit {
 
   /************** Procesos Externos Inicia ****************/
 
-  externalProccessesControl(): FormGroup{
+  externalProccessesControl(): FormGroup {
     let group = help.externalProccessesHelper.createExternalProccessesGroup(this.form, this.fb);
     return group;
   }
 
-  get externalProccessList(){
+  get externalProccessList() {
     return this.form.get('external_proccesses') as FormArray;
   }
 
-  newExternalProccesses(){
+  newExternalProccesses() {
     let exteranlProccess = this.externalProccessList;
     exteranlProccess.push(this.externalProccessesControl())
   }
 
-  deleteExternalProccess(i){
+  deleteExternalProccess(i) {
     this.externalProccessList.removeAt(i);
     externalProccessesHelper.subtotalExternalProcesses(this.externalProccessList, this.form);
   }
@@ -326,32 +394,32 @@ export class CrearApuPiezaComponent implements OnInit {
 
   /************** Otros Inicia ****************/
 
-  othersControl(): FormGroup{
+  othersControl(): FormGroup {
     let group = help.othersHelper.createOthersGroup(this.form, this.fb);
     return group;
   }
 
-  get othersList(){
+  get othersList() {
     return this.form.get('others') as FormArray;
   }
 
-  newOthersList(){
+  newOthersList() {
     let others = this.othersList;
     others.push(this.othersControl())
   }
 
-  deleteOthers(i){
+  deleteOthers(i) {
     this.othersList.removeAt(i);
     othersHelper.subtotalOthers(this.othersList, this.form);
   }
 
   /************** Otros Termina ****************/
 
-  get indirecCostList(){
+  get indirecCostList() {
     return this.form.get('indirect_cost') as FormArray;
   }
 
-  indirectCostPush(){
+  indirectCostPush() {
     let indirect_cost = this.form.get('indirect_cost') as FormArray;
     indirect_cost.clear();
     this.indirectCosts.forEach(element => {
@@ -359,7 +427,7 @@ export class CrearApuPiezaComponent implements OnInit {
     });
   }
 
-  indirectCostgroup(element, fb: FormBuilder, form: FormGroup){
+  indirectCostgroup(element, fb: FormBuilder, form: FormGroup) {
     let group = fb.group({
       name: [element.text],
       percentage: [element.percentage],
@@ -369,7 +437,7 @@ export class CrearApuPiezaComponent implements OnInit {
     return group;
   }
 
-  save(){
+  save() {
     let filess = this.files;
     filess.forEach(elem => {
       let file = elem;
@@ -390,7 +458,7 @@ export class CrearApuPiezaComponent implements OnInit {
 
     this._swal
       .show({
-        text: `Se dispone a ${ this.id ? 'editar' : 'crear' } un apu pieza`,
+        text: `Se dispone a ${this.id ? 'editar' : 'crear'} un apu pieza`,
         title: '¿Está seguro?',
         icon: 'warning',
       })
@@ -415,7 +483,7 @@ export class CrearApuPiezaComponent implements OnInit {
   showSuccess() {
     this._swal.show({
       icon: 'success',
-      text: `Apu Pieza ${ this.id ? 'editado' : 'creado' } con éxito`,
+      text: `Apu Pieza ${this.id ? 'editado' : 'creado'} con éxito`,
       title: 'Operación exitosa',
       showCancel: false,
     });

@@ -208,6 +208,16 @@
     </button>
   </div>
   <div class="modal-body">
+    <div class="d-flex justify-content-end mb-3">
+      <button
+        class="btn btn-primary btn-sm"
+        type="button"
+        (click)="_modal.close()"
+        [routerLink]="['/crm/presupuesto/crear']"
+      >
+        <i class="fa fa-plus"></i> Agregar
+      </button>
+    </div>
     <div
       class="rounded-top table-responsive"
       *ngIf="!loadingBudgets && presupuestos.length > 0; else notDataBudgets"
@@ -309,8 +319,16 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-
   <div class="modal-body">
+    <div class="d-flex justify-content-end mb-3">
+      <button
+        class="btn btn-primary btn-sm"
+        (click)="_modal.close()"
+        [routerLink]="['/crm/cotizacion/crear']"
+      >
+        <i class="fa fa-plus"></i> Agregar
+      </button>
+    </div>
     <div
       class="rounded-top table-responsive"
       *ngIf="!loadingQuotation && quotations.length > 0; else notDataQuotations"
@@ -353,6 +371,18 @@
         </tbody>
       </table>
     </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="paginationQuotations.collectionSize"
+      [pageSize]="paginationQuotations.pageSize"
+      [(page)]="paginationQuotations.page"
+      (pageChange)="getQuotations($event)"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="_modal.close()">

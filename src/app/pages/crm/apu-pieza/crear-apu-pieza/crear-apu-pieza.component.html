@@ -885,18 +885,22 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="text"
+                    <select
                       class="form-control form-control-sm"
-                      id="descripcion"
                       formControlName="description"
-                    />
+                      (change)="machineSet(item, $event)"
+                    >
+                      <option
+                        *ngFor="let maquina of maquinas_herramientas"
+                        [value]="maquina.value"
+                      >
+                        {{ maquina.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
                     <select
-                      name=""
                       class="form-control form-control-sm"
-                      id="unidad_maquinas_herra"
                       formControlName="unit_id"
                     >
                       <option *ngFor="let item of units" [value]="item.value">
@@ -1016,12 +1020,18 @@
                 <tr [formGroupName]="i" class="text-center">
                   <td class="align-middle">{{ i + 1 }}</td>
                   <td class="align-middle">
-                    <input
-                      type="text"
+                    <select
                       class="form-control form-control-sm"
-                      id="descripcion_proceso_interno"
                       formControlName="description"
-                    />
+                      (change)="internalSet(item, $event)"
+                    >
+                      <option
+                        *ngFor="let interno of procesos_internos"
+                        [value]="interno.value"
+                      >
+                        {{ interno.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
                     <select
@@ -1151,12 +1161,18 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="text"
+                    <select
                       class="form-control form-control-sm"
-                      id="descripcion_proceso_externo"
                       formControlName="description"
-                    />
+                      (change)="externalSet(item, $event)"
+                    >
+                      <option
+                        *ngFor="let externo of procesos_externos"
+                        [value]="externo.value"
+                      >
+                        {{ externo.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
                     <select
@@ -1259,14 +1275,16 @@
       <a
         class="h6"
         data-toggle="collapse"
-        href="#collapseExample"
+        data-target="#collapseExample"
         role="button"
         aria-expanded="false"
         (click)="otherCollapsed = !otherCollapsed"
         aria-controls="collapseExample"
       >
-        <i *ngIf="!otherCollapsed" class="fas fa-chevron-right"></i>
-        <i *ngIf="otherCollapsed" class="fas fa-chevron-down"></i>
+        <i
+          class="fas"
+          [class]="otherCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'"
+        ></i>
         Otros
       </a>
       <div class="collapse" id="collapseExample">
@@ -1429,14 +1447,18 @@
           <a
             class="h6"
             data-toggle="collapse"
-            href="#collapseIndirecto"
+            data-target="#collapseIndirecto"
             role="button"
             aria-expanded="true"
             (click)="indirectCollapsed = !indirectCollapsed"
             aria-controls="collapseIndirecto"
           >
-            <i *ngIf="indirectCollapsed" class="fas fa-chevron-right"></i>
-            <i *ngIf="!indirectCollapsed" class="fas fa-chevron-down"></i>
+            <i
+              class="fas"
+              [class]="
+                indirectCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'
+              "
+            ></i>
             Costos indirectos
           </a>
           <hr />
@@ -1532,14 +1554,16 @@
           <a
             class="h6"
             data-toggle="collapse"
-            href="#collapseAUI"
+            data-target="#collapseAUI"
             role="button"
             aria-expanded="true"
             (click)="auiCollapsed = !auiCollapsed"
             aria-controls="collapseAUI"
           >
-            <i *ngIf="auiCollapsed" class="fas fa-chevron-right"></i>
-            <i *ngIf="!auiCollapsed" class="fas fa-chevron-down"></i>
+            <i
+              class="fas"
+              [class]="auiCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'"
+            ></i>
             AIU
           </a>
           <hr />

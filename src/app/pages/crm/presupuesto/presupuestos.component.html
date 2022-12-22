@@ -20,6 +20,9 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
+          <button class="btn btn-info btn-sm" (click)="openClose2()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
           <button class="btn btn-secondary btn-sm" (click)="openClose()">
             <i class="fas fa-eye"></i>
           </button>
@@ -27,6 +30,76 @@
       </div>
     </div>
     <hr class="line" />
+    <mat-accordion multi #secondAccordion="matAccordion">
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Item</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por item"
+              [(ngModel)]="filtros.item"
+              (input)="getBudgets()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por fecha"
+              [(ngModel)]="filtros.date"
+              (input)="getBudgets()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cliente</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por cliente"
+              [(ngModel)]="filtros.customer"
+              (input)="getBudgets()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Destino</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por destino"
+              [(ngModel)]="filtros.municipality_id"
+              (input)="getBudgets()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Línea</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Busca por línea"
+              [(ngModel)]="filtros.line"
+              (input)="getBudgets()"
+            />
+          </mat-form-field>
+          <div class="col mat-form-field-wrapper">
+            <ng-select
+              [items]="people"
+              [(ngModel)]="filtros.person_id"
+              bindLabel="text"
+              appearance="outline"
+              [appendTo]="'body'"
+              [clearable]="false"
+              placeholder="Quién elabora"
+              bindValue="value"
+              (change)="getBudgets()"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
     <mat-accordion multi #firstAccordion="matAccordion">
       <mat-expansion-panel class="mat-elevation-z0">
         <section class="d-flex justify-content-between mx-1">
@@ -94,7 +167,7 @@
           >
             <td *ngIf="checkItem" class="align-middle">PRES {{ item.id }}</td>
             <td *ngIf="checkFecha" class="align-middle">
-              {{ item.created_at | date: "longDate" }}
+              {{ item.created_at | date : "longDate" }}
             </td>
             <td *ngIf="checkCliente" class="align-middle">
               {{ item.customer.name }}
@@ -108,10 +181,10 @@
               {{ item.user.person.first_surname }}
             </td>
             <td *ngIf="checkTCop" class="align-middle">
-              ${{ item.total_cop | currency: "":"" }}
+              ${{ item.total_cop | currency : "" : "" }}
             </td>
             <td *ngIf="checkTUsd" class="align-middle">
-              ${{ item.total_usd | currency: "":"" }}
+              ${{ item.total_usd | currency : "" : "" }}
             </td>
             <td class="align-middle">
               <div

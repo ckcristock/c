@@ -9,13 +9,13 @@ export const internalProcessesHelper = {
   consts: {},
 
   createFillInInternal(form: FormGroup, fb: FormBuilder, data) {
-    
+
     if (data.internal) {
       let internal_processes = form.get('internal_processes') as FormArray;
       data.internal.forEach((r) => {
         let group = fb.group({
           description: [r.description],
-          unit: [r.unit],
+          unit_id: [r.unit_id],
           amount: [r.amount],
           unit_cost: [r.unit_cost],
           total: [r.total]
@@ -29,7 +29,7 @@ export const internalProcessesHelper = {
   createInternalProcessesGroup(form: FormGroup, fb: FormBuilder) {
     let internal = fb.group({
       description: [''],
-      unit: [''],
+      unit_id: [''],
       amount: [0],
       unit_cost: [0],
       total: [0]
@@ -61,7 +61,7 @@ export const internalProcessesHelper = {
 
   subtotalInternalProcesses(list: FormArray, form: FormGroup){
     setTimeout(() => {
-      let total = 
+      let total =
       list.value.reduce(
         (a, b) => {
           return  a + b.total
@@ -69,7 +69,7 @@ export const internalProcessesHelper = {
       );
       form.patchValue({
         internal_processes_subtotal: total
-      }) 
+      })
     }, 100);
   }
 };

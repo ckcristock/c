@@ -13,6 +13,10 @@ import { functionsUtils } from '../../../../core/utils/functionsUtils';
 import { concat, Observable, Subject, of } from 'rxjs';
 import { map, filter, distinctUntilChanged, debounceTime, tap, switchMap, catchError } from 'rxjs/operators';
 import { CalculationBasesService } from '../../../ajustes/configuracion/base-calculos/calculation-bases.service';
+import { ProcesosExternosService } from 'src/app/pages/ajustes/parametros/apu/procesos-externos/procesos-externos.service';
+import { ProcesosInternosService } from 'src/app/pages/ajustes/parametros/apu/procesos-internos/procesos-internos.service';
+import { MaquinasHerramientasService } from 'src/app/pages/ajustes/parametros/apu/maquinas-herramientas/maquinas-herramientas.service';
+import { UnidadesMedidasService } from 'src/app/pages/ajustes/parametros/apu/unidades-medidas/unidades-medidas.service';
 interface ApuPart {
   name: string;
   id: number;
@@ -28,6 +32,9 @@ export class CrearApuConjuntoComponent implements OnInit {
   @Input('data') data: any;
   form: FormGroup;
   formGroup: FormGroup;
+  filters_apu = {
+    type_multiple: 'pyc'
+  }
   date: Date = new Date();
   indirectCosts: any[] = [];
   files: File[] = [];
@@ -39,6 +46,10 @@ export class CrearApuConjuntoComponent implements OnInit {
   clients: any[] = [];
   apuParts: any[] = [];
   apuSets: any[] = [];
+  procesos_internos: any[] = [];
+  procesos_externos: any[] = [];
+  maquinas_herramientas: any[] = [];
+  units: any[] = [];
   otherCollapsed: boolean;
   indirectCollapsed: boolean;
   auiCollapsed: boolean;
@@ -58,7 +69,11 @@ export class CrearApuConjuntoComponent implements OnInit {
     private router: Router,
     private _apuConjunto: ApuConjuntoService,
     private _swal: SwalService,
-    private _calculationBase: CalculationBasesService
+    private _calculationBase: CalculationBasesService,
+    private _externos: ProcesosExternosService,
+    private _internos: ProcesosInternosService,
+    private _maquinas: MaquinasHerramientasService,
+    private _units: UnidadesMedidasService,
   ) {
 
   }
@@ -70,12 +85,76 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.getClients();
     this.getApuSets();
     this.getApuPart();
+    this.getUnits();
     this.createForm();
     this.getIndirectCosts();
     this.validateData();
     this.collapses();
     this.loadPeople();
+    this.getVariablesApu();
 
+  }
+
+  getUnits() {
+    this._units.selectUnits().subscribe((r: any) => {
+      this.units = r.data;
+    })
+  }
+
+  getVariablesApu() {
+    this._externos.getExternos().subscribe((res: any) => {
+      this.procesos_externos = res.data
+    })
+    this._maquinas.getMaquinas().subscribe((res: any) => {
+      this.maquinas_herramientas = res.data
+    })
+    this._internos.getExternos().subscribe((res: any) => {
+      this.procesos_internos = res.data
+    })
+  }
+
+  machineSet(item, event) {
+    let machine_item = item as FormGroup;
+    this.maquinas_herramientas.forEach(element => {
+      if (element.value == event.target.value) {
+        let machine = element
+        machine_item.patchValue({
+          unit_id: machine.unit.id,
+          unit_cost: machine.unit_cost
+        })
+        /* machine_item.controls.unit_id.disable()
+        machine_item.controls.unit_cost.disable() */
+      }
+    });
+  }
+
+  internalSet(item, event) {
+    let internal_item = item as FormGroup;
+    this.procesos_internos.forEach(element => {
+      if (element.value == event.target.value) {
+        let internal = element
+        internal_item.patchValue({
+          unit_id: internal.unit.id,
+          unit_cost: internal.unit_cost
+        })
+        /* internal_item.controls.unit_id.disable()
+        internal_item.controls.unit_cost.disable() */
+      }
+    });
+  }
+  externalSet(item, event) {
+    let external_item = item as FormGroup;
+    this.procesos_externos.forEach(element => {
+      if (element.value == event.target.value) {
+        let external = element
+        external_item.patchValue({
+          unit_id: external.unit.id,
+          unit_cost: external.unit_cost
+        })
+        /* external_item.controls.unit_id.disable()
+        external_item.controls.unit_cost.disable() */
+      }
+    });
   }
 
   collapses() {

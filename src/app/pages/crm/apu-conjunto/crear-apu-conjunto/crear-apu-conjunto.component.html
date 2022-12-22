@@ -5,7 +5,7 @@
         <h4 class="text-primary">Crear APU - Conjunto</h4>
       </div>
       <div class="col-md-6 px-0 text-md-right text-center">
-       <!--  <span>
+        <!--  <span>
           {{ date | date: "EEEE, MMMM d, y" | titlecase }} - Bucaramanga -
           Colombia
         </span> -->
@@ -175,20 +175,38 @@
                         "
                       />
                     </div>
-                    <!-- <ng-select [items]="apuPart$ | async" bindLabel="name" bindValue="id" [loading]="apuPartLoading" [typeahead]="apuPartInput$" typeToSearchText="Por favor para buscar" formControlName="apu_part_id">
-                                                      </ng-select> -->
+                    <!-- <ng-select
+                      [items]="apuPart$ | async"
+                      bindLabel="name"
+                      bindValue="id"
+                      [loading]="apuPartLoading"
+                      [typeahead]="apuPartInput$"
+                      typeToSearchText="Por favor para buscar"
+                      formControlName="apu_part_id"
+                    >
+                    </ng-select> -->
                   </td>
                   <!-- <td>
-                                                      <ng-select [items]="apuSets$ | async" bindLabel="name" bindValue="id" [loading]="apuSetsLoading" [typeahead]="apuSetsInput$" typeToSearchText="Por favor para buscar" formControlName="apu_set_child_id">
-                                                      </ng-select>
-                                                  </td> -->
+                    <ng-select
+                      [items]="apuSets$ | async"
+                      bindLabel="name"
+                      bindValue="id"
+                      [loading]="apuSetsLoading"
+                      [typeahead]="apuSetsInput$"
+                      typeToSearchText="Por favor para buscar"
+                      formControlName="apu_set_child_id"
+                    >
+                    </ng-select>
+                  </td> -->
                   <td class="align-middle">
-                    <input
-                      type="text"
+                    <select
                       class="form-control form-control-sm"
-                      id="unidad_maquinas_herra"
-                      formControlName="unit"
-                    />
+                      formControlName="unit_id"
+                    >
+                      <option *ngFor="let item of units" [value]="item.value">
+                        {{ item.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
                     <input
@@ -301,20 +319,28 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="text"
+                    <select
                       class="form-control form-control-sm"
-                      id="descripcion"
                       formControlName="description"
-                    />
+                      (change)="machineSet(item, $event)"
+                    >
+                      <option
+                        *ngFor="let maquina of maquinas_herramientas"
+                        [value]="maquina.value"
+                      >
+                        {{ maquina.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="text"
+                    <select
                       class="form-control form-control-sm"
-                      id="unidad_maquinas_herra"
-                      formControlName="unit"
-                    />
+                      formControlName="unit_id"
+                    >
+                      <option *ngFor="let item of units" [value]="item.value">
+                        {{ item.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
                     <input
@@ -415,20 +441,28 @@
                 <tr [formGroupName]="i" class="text-center">
                   <td class="align-middle">{{ i + 1 }}</td>
                   <td class="align-middle">
-                    <input
-                      type="text"
+                    <select
                       class="form-control form-control-sm"
-                      id="descripcion_proceso_interno"
                       formControlName="description"
-                    />
+                      (change)="internalSet(item, $event)"
+                    >
+                      <option
+                        *ngFor="let interno of procesos_internos"
+                        [value]="interno.value"
+                      >
+                        {{ interno.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="text"
+                    <select
                       class="form-control form-control-sm"
-                      id="descripcion_proceso_interno"
-                      formControlName="unit"
-                    />
+                      formControlName="unit_id"
+                    >
+                      <option *ngFor="let item of units" [value]="item.value">
+                        {{ item.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
                     <input
@@ -533,20 +567,28 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="text"
+                    <select
                       class="form-control form-control-sm"
-                      id="descripcion_proceso_externo"
                       formControlName="description"
-                    />
+                      (change)="externalSet(item, $event)"
+                    >
+                      <option
+                        *ngFor="let externo of procesos_externos"
+                        [value]="externo.value"
+                      >
+                        {{ externo.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="text"
+                    <select
                       class="form-control form-control-sm"
-                      id="descripcion_proceso_externo"
-                      formControlName="unit"
-                    />
+                      formControlName="unit_id"
+                    >
+                      <option *ngFor="let item of units" [value]="item.value">
+                        {{ item.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
                     <input
@@ -628,13 +670,16 @@
       <a
         class="h6"
         data-toggle="collapse"
+        data-target="#collapseExample"
         role="button"
         aria-expanded="false"
         (click)="otherCollapsed = !otherCollapsed"
         aria-controls="collapseExample"
       >
-        <i *ngIf="!otherCollapsed" class="fas fa-chevron-right"></i>
-        <i *ngIf="otherCollapsed" class="fas fa-chevron-down"></i>
+        <i
+          class="fas"
+          [class]="otherCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'"
+        ></i>
         Otros
       </a>
       <div class="collapse" id="collapseExample">
@@ -777,13 +822,18 @@
           <a
             class="h6"
             data-toggle="collapse"
+            data-target="#collapseIndirecto"
             role="button"
             aria-expanded="true"
             (click)="indirectCollapsed = !indirectCollapsed"
             aria-controls="collapseIndirecto"
           >
-            <i *ngIf="indirectCollapsed" class="fas fa-chevron-right"></i>
-            <i *ngIf="!indirectCollapsed" class="fas fa-chevron-down"></i>
+            <i
+              class="fas"
+              [class]="
+                indirectCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'
+              "
+            ></i>
             Costos indirectos
           </a>
           <hr />
@@ -822,7 +872,9 @@
                     </ng-container>
                   </ng-container>
                   <tr>
-                    <td colspan="2" class="text-uppercase col-10">Costos Indirectos</td>
+                    <td colspan="2" class="text-uppercase col-10">
+                      Costos Indirectos
+                    </td>
                     <td>
                       <input
                         type="number"
@@ -841,7 +893,9 @@
               <table class="table table-hover">
                 <tbody>
                   <tr>
-                    <td class="col-10">Costos directos + costos indirectos totales</td>
+                    <td class="col-10">
+                      Costos directos + costos indirectos totales
+                    </td>
                     <td class="col-2">
                       <input
                         type="number"
@@ -861,13 +915,16 @@
           <a
             class="h6"
             data-toggle="collapse"
+            data-target="#collapseAUI"
             role="button"
             aria-expanded="true"
             (click)="auiCollapsed = !auiCollapsed"
             aria-controls="collapseAUI"
           >
-            <i *ngIf="auiCollapsed" class="fas fa-chevron-right"></i>
-            <i *ngIf="!auiCollapsed" class="fas fa-chevron-down"></i>
+            <i
+              class="fas"
+              [class]="auiCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'"
+            ></i>
             AIU
           </a>
           <hr />
@@ -1040,7 +1097,11 @@
   </div>
 </ng-template>
 
-<app-get-apus #apus (sendApus)="getApus($event)"></app-get-apus>
+<app-get-apus
+  #apus
+  [filter]="filters_apu"
+  (sendApus)="getApus($event)"
+></app-get-apus>
 
 <ng-template #rt let-r="result" let-t="term">
   <span class="f-9">{{ r.name }} </span>

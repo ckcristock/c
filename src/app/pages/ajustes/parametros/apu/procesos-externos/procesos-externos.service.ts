@@ -8,13 +8,17 @@ import { environment } from 'src/environments/environment';
 export class ProcesosExternosService {
 
   constructor( private http: HttpClient ) { }
-  
+
   getExternalProcesses(params = {}){
     return this.http.get(`${environment.base_url}/paginateExternalProcesses`, {params});
   }
 
   save( data ){
     return this.http.post(`${environment.base_url}/externalprocesses`, data);
+  }
+
+  getExternos(){
+    return this.http.get(`${environment.base_url}/externalprocesses`);
   }
 
 }

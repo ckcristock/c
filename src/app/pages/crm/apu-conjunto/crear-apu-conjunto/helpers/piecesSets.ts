@@ -14,7 +14,7 @@ export const piecesSetsHelper = {
           apu_type: [r.apu_type],
           apu_part_id: [r.apu_part_id],
           apu_set_child_id: [r.apu_set_child_id],
-          unit: [r.unit],
+          unit_id: [r.unit_id],
           amount: [r.amount],
           unit_cost: [r.unit_cost],
           total: [r.total],
@@ -31,7 +31,7 @@ export const piecesSetsHelper = {
       apu_type: (item ? item.type : 'P'),
       apu_part_id: (item ? item.apu_id : 0),
       apu_set_child_id: (item ? item.apu_id : 0),
-      unit: [''],
+      unit_id: [''],
       amount: [0],
       unit_cost: (item ? item.unit_cost : 0),
       total: [0],
@@ -53,7 +53,7 @@ export const piecesSetsHelper = {
         amount: 0,
         unit_cost: 0,
         total: 0
-      }) 
+      })
       :
       group.patchValue({
         description: '',
@@ -84,7 +84,7 @@ export const piecesSetsHelper = {
     });
     group.get('unit_cost').valueChanges.subscribe(value => {
       let amount = group.get('amount');
-      let result = (typeof value == 'number' && typeof amount.value == 'number' ? (value * amount.value) : 0); 
+      let result = (typeof value == 'number' && typeof amount.value == 'number' ? (value * amount.value) : 0);
       group.patchValue({
         total: Math.round(result)
       })
@@ -96,7 +96,7 @@ export const piecesSetsHelper = {
 
   subtotalPieceSets(list: FormArray, form: FormGroup){
     setTimeout(() => {
-      let total = 
+      let total =
       list.value.reduce(
         (a, b) => {
           return  a + b.total
@@ -104,7 +104,7 @@ export const piecesSetsHelper = {
       );
       form.patchValue({
         list_pieces_sets_subtotal: total
-      }) 
+      })
     }, 100);
   }
 };

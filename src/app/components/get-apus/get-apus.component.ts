@@ -1,9 +1,9 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalBasicComponent } from '../modal-basic/modal-basic.component';
-import { ApusService } from '../../core/services/ups.service';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location, PlatformLocation } from '@angular/common';
+import { ApusService } from 'src/app/pages/crm/apus/apus.service';
 
 @Component({
   selector: 'app-get-apus',
@@ -11,21 +11,39 @@ import { Location, PlatformLocation } from '@angular/common';
   styleUrls: ['./get-apus.component.scss']
 })
 export class GetApusComponent implements OnInit {
-
+  @Input('filter') filter:any;
   @ViewChild('modal') modal: any;
   @Output('sendApus') sendApus = new EventEmitter()
   loading = false;
   apus: any[] = []
   state = []
+  pagination = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  filtros: any = {
+    code: '',
+    date_one:'',
+    date_two: '',
+    name: '',
+    city: '',
+    client: '',
+    line: '',
+    type: '',
+    description: ''
+  }
   public href: string = "";
 
   constructor(
-    private _apus: ApusService,
+    //private _apus: ApusService,
     private router: Router,
     private modalService: NgbModal,
-    private platformLocation: PlatformLocation
+    private platformLocation: PlatformLocation,
+    private _apu: ApusService
   ) { }
   ngOnInit(): void {
+    console.log(this.filter)
     this.href = (this.platformLocation as any).location.origin
   }
 
@@ -51,9 +69,14 @@ export class GetApusComponent implements OnInit {
     this.modal.show();
     this.getApus()
   }
-  getApus() {
-    this._apus.getAll().subscribe((r: any) => {
-      this.apus = r.data
+  getApus(page = 1) {
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination, ...this.filter, ...this.filtros
+    }
+    this._apu.getApus(params).subscribe((r: any) => {
+      this.apus = r.data.data
+      this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
   }

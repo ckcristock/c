@@ -511,7 +511,7 @@
             </div>
             <div class="col-md text-right">
               <div class="btn-group rounded w-sm-100">
-                <button class="btn btn-primary btn-sm" >
+                <button class="btn btn-primary btn-sm" (click)="modalNuevoNegocio.openModal()" >
                   <i class="fa fa-plus"></i> Agregar
                 </button>
               </div>
@@ -634,3 +634,4 @@
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
+<app-modal-nuevo-negocio (updated)="getThird()" #modalNuevoNegocio></app-modal-nuevo-negocio>

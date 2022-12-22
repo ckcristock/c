@@ -1,110 +1,110 @@
-<div *ngIf="data && !loading">
-  <div class="card">
-    <div class="card-body">
-      <div class="card-title">
-        <h4 class="text-primary">Vista del presupuesto</h4>
-      </div>
-      <hr class="line" />
-      <div class="rounded-top table-responsive">
-        <table class="table table-bordered table-striped table-sm text-center">
-          <thead class="bg-light">
-            <tr class="text-uppercase">
-              <th>Cliente</th>
-              <th>Destino</th>
-              <th>Línea</th>
-              <th>TRM</th>
-              <th>Proyecto</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ data.customer.name }}</td>
-              <td>{{ data.destiny.name }}</td>
-              <td>{{ data.line }}</td>
-              <td>{{ data.trm }}</td>
-              <td>{{ data.project }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- END HEADER -->
+<div class="card">
+  <div class="card-body" *ngIf="data && !loading; else notData2">
+    <div class="card-title">
+      <h4 class="text-primary">Vista del presupuesto</h4>
+    </div>
+    <hr class="line" />
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm text-center">
+        <thead class="bg-light">
+          <tr class="text-uppercase">
+            <th>Cliente</th>
+            <th>Destino</th>
+            <th>Línea</th>
+            <th>TRM</th>
+            <th>Proyecto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ data.customer.name }}</td>
+            <td>{{ data.destiny.name }}</td>
+            <td>{{ data.line }}</td>
+            <td>{{ data.trm }}</td>
+            <td>{{ data.project }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- END HEADER -->
 
-      <!-- Configuracion presupuestal -->
-      <h5 class="text-center">Porcentaje de configuración presupuestal</h5>
-      <div class="rounded-top table-responsive">
-        <table class="table table-striped table-sm">
-          <tbody>
-            <ng-container
-              *ngFor="let item of data.indirect_costs; let i = index"
-            >
-              <tr>
-                <td>{{ item.indirect_cost.name }}</td>
-                <td class="text-right">
-                  {{ item.percentage }}
-                </td>
-              </tr>
-            </ng-container>
-          </tbody>
-        </table>
-      </div>
-      <!--  END  Configuracion presupuestal -->
-      <div class="rounded-top table-responsive">
-        <table class="table table-bordered table-striped table-sm text-center">
-          <thead class="bg-light">
-            <tr class="text-uppercase">
-              <th>Observaciones</th>
-            </tr>
-          </thead>
-          <tbody>
+    <!-- Configuracion presupuestal -->
+    <h5 class="text-center">Porcentaje de configuración presupuestal</h5>
+    <div class="rounded-top table-responsive">
+      <table class="table table-striped table-sm">
+        <tbody>
+          <ng-container *ngFor="let item of data.indirect_costs; let i = index">
             <tr>
-              <td>{{ data.observation }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <app-show-items-presupuesto [data]="data"></app-show-items-presupuesto>
-      <hr>
-      <h5 class="text-center">PRESUPUESTO TOTAL</h5>
-      <div class="rounded-top table-responsive">
-        <table class="table table-sm table-hover">
-          <tbody>
-            <tr>
-              <td class="col-10">TOTAL COP</td>
-              <td class="col-2 text-right">
-                ${{ data.total_cop | currency: "":"" }}
+              <td>{{ item.indirect_cost.name }}</td>
+              <td class="text-right">
+                {{ item.percentage }}
               </td>
             </tr>
-            <tr>
-              <td class="col-10">TOTAL USD</td>
-              <td class="col-2 text-right">
-                ${{ data.total_usd | currency: "":"" }}
-              </td>
-            </tr>
-            <tr>
-              <td class="col-10">V/U VENTA PRORRATEADO COP</td>
-              <td class="col-2 text-right">
-                ${{ data.unit_value_prorrateado_cop | currency: "":"" }}
-              </td>
-            </tr>
-            <tr>
-              <td class="col-10">V/U VENTA PRORRATEADO USD</td>
-              <td class="col-2 text-right">
-                ${{ data.unit_value_prorrateado_usd | currency: "":"" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="btn-group btn-block" role="group" aria-label="Button group">
-        <button class="btn btn-primary">Descargar</button>
-        <button class="btn btn-info" (click)="downloadClient()">
-          Descargar cliente
-        </button>
-      </div>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <!--  END  Configuracion presupuestal -->
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm text-center">
+        <thead class="bg-light">
+          <tr class="text-uppercase">
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ data.observation }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-show-items-presupuesto [data]="data"></app-show-items-presupuesto>
+    <hr />
+    <h5 class="text-center">PRESUPUESTO TOTAL</h5>
+    <div class="rounded-top table-responsive">
+      <table class="table table-sm table-hover">
+        <tbody>
+          <tr>
+            <td class="col-10">TOTAL COP</td>
+            <td class="col-2 text-right">
+              ${{ data.total_cop | currency : "" : "" }}
+            </td>
+          </tr>
+          <tr>
+            <td class="col-10">TOTAL USD</td>
+            <td class="col-2 text-right">
+              ${{ data.total_usd | currency : "" : "" }}
+            </td>
+          </tr>
+          <tr>
+            <td class="col-10">V/U VENTA PRORRATEADO COP</td>
+            <td class="col-2 text-right">
+              ${{ data.unit_value_prorrateado_cop | currency : "" : "" }}
+            </td>
+          </tr>
+          <tr>
+            <td class="col-10">V/U VENTA PRORRATEADO USD</td>
+            <td class="col-2 text-right">
+              ${{ data.unit_value_prorrateado_usd | currency : "" : "" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-group btn-block" role="group" aria-label="Button group">
+      <!-- <button class="btn btn-primary">Descargar</button> -->
+      <button class="btn btn-info" (click)="downloadClient()">
+        Descargar cliente
+      </button>
     </div>
   </div>
 </div>
 
 <ng-template #notData>
   <div class="alert alert-warning" role="alert">¡Aquí no hay datos!</div>
+</ng-template>
+
+<ng-template #notData2>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

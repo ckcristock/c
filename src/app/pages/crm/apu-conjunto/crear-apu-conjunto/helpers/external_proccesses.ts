@@ -13,7 +13,7 @@ export const externalProcessesHelper = {
       data.external.forEach((r) => {
         let group = fb.group({
           description: [r.description],
-          unit: [r.unit],
+          unit_id: [r.unit_id],
           amount: [r.amount],
           unit_cost: [r.unit_cost],
           total: [r.total]
@@ -27,7 +27,7 @@ export const externalProcessesHelper = {
   createExternalProcessesGroup(form:FormGroup, fb: FormBuilder) {
     let external = fb.group({
       description: [''],
-      unit: [''],
+      unit_id: [''],
       amount: [0],
       unit_cost: [0],
       total: [0]
@@ -59,7 +59,7 @@ export const externalProcessesHelper = {
 
   subtotalExternalProcesses(list: FormArray, form: FormGroup){
     setTimeout(() => {
-      let total = 
+      let total =
       list.value.reduce(
         (a, b) => {
           return  a + b.total
@@ -67,7 +67,7 @@ export const externalProcessesHelper = {
       );
       form.patchValue({
         external_processes_subtotal: total
-      }) 
+      })
     }, 100);
   }
 

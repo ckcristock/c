@@ -4,6 +4,7 @@ import { BudgetService } from './budget.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 
 @Component({
   selector: 'app-presupuestos',
@@ -12,6 +13,7 @@ import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 })
 export class PresupuestosComponent implements OnInit {
   @ViewChild('firstAccordion') firstAccordion: MatAccordion;
+  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
   matPanel = false;
   openClose() {
     if (this.matPanel == false) {
@@ -20,6 +22,16 @@ export class PresupuestosComponent implements OnInit {
     } else {
       this.firstAccordion.closeAll();
       this.matPanel = false;
+    }
+  }
+  matPanel2 = false;
+  openClose2() {
+    if (this.matPanel2 == false) {
+      this.secondAccordion.openAll();
+      this.matPanel2 = true;
+    } else {
+      this.secondAccordion.closeAll();
+      this.matPanel2 = false;
     }
   }
   checkItem: boolean = true
@@ -36,7 +48,14 @@ export class PresupuestosComponent implements OnInit {
     pageSize: 10,
     collectionSize: 0
   }
-  filtros: any = {}
+  filtros: any = {
+    item: '',
+    date: '',
+    customer: '',
+    municipality_id: '',
+    line: '',
+    person_id: ''
+  }
   orderObj: any
   filtrosActivos: boolean = false
   paginacion: any
@@ -45,12 +64,14 @@ export class PresupuestosComponent implements OnInit {
     private paginator: MatPaginatorIntl,
     private route: ActivatedRoute,
     private location: Location,
-    private _budget: BudgetService
+    private _budget: BudgetService,
+    private _person: PersonService
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
   }
 
   ngOnInit(): void {
+    this.getPeople();
     this.route.queryParamMap
       .subscribe((params) => {
         this.orderObj = { ...params.keys, ...params };
@@ -73,6 +94,16 @@ export class PresupuestosComponent implements OnInit {
       }
       );
   }
+
+  people: any[] = []
+
+  getPeople() {
+    this._person.getPeopleIndex().subscribe((res:any) => {
+      this.people = res.data
+      this.people.unshift({ text: 'Todos ', value: '' });
+    })
+  }
+
   resetFiltros() {
     for (let i in this.filtros) {
       this.filtros[i] = ''

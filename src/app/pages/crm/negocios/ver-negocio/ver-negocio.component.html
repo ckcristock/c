@@ -243,18 +243,13 @@
               'text-danger font-weight-bold': item.state == 'Inactivo'
             }"
           >
-            <td class="align-middle">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  (change)="guardarPresupuesto(item.id, item.total_cop)"
-                  [id]="item.id"
-                />
-                <label class="form-check-label" [for]="item.id">
-                  PRES {{ item.id }}
-                </label>
-              </div>
+            <td class="align-middle pb-0">
+              <mat-checkbox
+                color="primary"
+                (change)="guardarPresupuesto(item.id, item.total_cop)"
+                [id]="item.id"
+                >PRES {{ item.id }}</mat-checkbox
+              >
             </td>
             <td class="align-middle">
               {{ item.created_at | date : "longDate" }}
@@ -347,13 +342,13 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of quotations" class="text-center">
-            <td>
-              <input
-                type="checkbox"
+            <td class="pb-0">
+              <mat-checkbox
+                color="primary"
                 (change)="guardarCotizacion(item.id, item.total_cop)"
                 [id]="item.id"
-              />
-              <label [for]="item.id" class="ml-1"> COT {{ item.id }} </label>
+                >PRES {{ item.id }}</mat-checkbox
+              >
             </td>
             <td>{{ item.created_at | date : "longDate" }}</td>
             <td>

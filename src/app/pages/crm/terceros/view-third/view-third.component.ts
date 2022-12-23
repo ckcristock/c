@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { NegociosComponent } from '../../negocios/negocios.component';
 import { TercerosService } from '../terceros.service';
+import { ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-view-third',
@@ -10,6 +11,17 @@ import { TercerosService } from '../terceros.service';
   styleUrls: ['./view-third.component.scss']
 })
 export class ViewThirdComponent implements OnInit {
+  public barChartOptions = {
+    scaleShowVerticalLines: false,
+    responsive: true
+  };
+  public barChartLabels = ['Enero', 'Febrero', 'Marzo', 'Abril'];
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = true;
+
+  public barChartData = [
+    { data: [12, 19, 3, 5], label: 'Ventas' }
+  ];
   third_id;
   third_data;
   quotations: any[] = [];
@@ -33,6 +45,7 @@ export class ViewThirdComponent implements OnInit {
     collectionSizeBudgets: 0,
     collectionSizePeople: 0
   }
+
   constructor(
     private _tercero: TercerosService,
     private route: ActivatedRoute,

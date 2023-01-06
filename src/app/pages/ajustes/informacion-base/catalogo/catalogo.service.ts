@@ -13,4 +13,8 @@ export class CatalogoService {
     return this.http.get(`${environment.base_url}/product`, {params});
   }
 
+  getEstados(){
+    return this.http.get(`${environment.base_url}/get-estados-producto`);
+  }
+
 }

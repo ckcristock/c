@@ -29,18 +29,16 @@
                       ? 'bg-soft-primary'
                       : ''
                   "
-                  (click)="moveToTop();
-                    selectedCategory = {
-                      categoria:{
-                        id: subcategoria.Id_Categoria_Nueva,
-                        nombre: categoria.Nombre
-                      },
-                      subcategoria: {
-                        id: subcategoria.Id_Subcategoria,
-                        nombre: subcategoria.Nombre
-                      }
-                    };
-                  "
+                  (click)="selectCategoria(
+                    {
+                      id: subcategoria.Id_Categoria_Nueva,
+                      nombre: categoria.Nombre
+                    },
+                    {
+                      id: subcategoria.Id_Subcategoria,
+                      nombre: subcategoria.Nombre
+                    }
+                  )"
                 >
                   {{ subcategoria.Nombre }}
                 </li>
@@ -59,20 +57,59 @@
             <h4 class="text-primary">Productos</h4>
           </div>
           <div class="col-md-6 px-0 text-right">
-            <div class="btn-group rounded w-sm-100">
+            <div class="btn-group rounded w-sm-100" *ngIf="selectedCategory.categoria.id!==null">
               <button
                 class="btn btn-sm btn-primary"
 
               ><!-- (click)="openConfirm(addGrupo, 'Agregar', 'grupo')" -->
                 <i class="fa fa-plus"></i> Agregar
               </button>
-              <button class="btn btn-info btn-sm" ><!-- (click)="openCloseGrupo()" -->
+              <button class="btn btn-info btn-sm" (click)="openClose()">
                 <i class="fas fa-sliders-h"></i> Filtros
               </button>
             </div>
           </div>
         </div>
         <hr class="line" />
+        <mat-accordion multi>
+          <mat-expansion-panel class="mat-elevation-z0">
+            <form [formGroup]="formFiltros">
+              <div class="row">
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Nombre producto</mat-label>
+                  <input
+                    type="text"
+                    formControlName="Nombre_Comercial"
+                    matInput
+                    placeholder="Nombre del producto"
+                    autocomplete="off"
+                  />
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Tipo de catálogo</mat-label>
+                  <input
+                    type="text"
+                    formControlName="Tipo_Catalogo"
+                    matInput
+                    placeholder="Busca por tipo de catálogo"
+                    autocomplete="off"
+                  />
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Estado</mat-label>
+                  <mat-select
+                    formControlName="Estado"
+                    matInput
+                    placeholder="Busca por estado"
+                  >
+                    <mat-option value="">Todos</mat-option>
+                    <mat-option *ngFor="let estado of estados" [value]="estado.estado">{{ estado.estado }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
         <h5 class="text-dark" *ngIf="selectedCategory.categoria.id!==null">Categoría: {{ selectedCategory.categoria.nombre + ' > ' + selectedCategory.subcategoria.nombre | lowercase }}</h5>
         <div class="rounded-top table-responsive">
           <table

@@ -30,40 +30,28 @@ export class RotativoComponent implements OnInit {
   constructor(private _swal: SwalService, private _extra: ExtraHoursService) { }
 
   ngOnInit(): void {
-  /*   console.log(this.day, this.info, this.diario, this.person)
-    console.log(this.info.extras[0].hours_extra) */
-    console.log('diarioDato', this.day);
     let aux = {
-      ht:0,
-      hed:0,
-      hen:0,
-      heddf:0,
-      hendf:0,
-      hrn:0,
-      hrddf:0,
-      hrndf:0
+      ht: 0,
+      hed: 0,
+      hen: 0,
+      heddf: 0,
+      hendf: 0,
+      hrn: 0,
+      hrddf: 0,
+      hrndf: 0
     };
-    //console.log('aux', aux);
-    //if (this.info.extras[0].extras!='No hay asistencia este día') {
-      //console.log('extras', this.extras)
-    if (this.extras!='' && this.extras!= undefined ) {
-      //console.log('si trabajó ese día')
-      aux = Object.assign(this.extras.hours_extra, this.extras.hours_recharge)
+
+    if (this.extras != '' && this.extras != undefined) {
+      //('si trabajó ese día')
+      if (this.extras.extras !== "No hay asistencia este día") {
+        aux = Object.assign(this.extras.hours_extra, this.extras.hours_recharge);
+      }
     }
-    //let aux = Object.assign(this.diario.extras[0].hours_extra, this.diario.extras[0].hours_recharge)
     this.funcionarioDato = this.info.id;
     this.diarioDato = this.day;
-    this.lista = {
-      /* horasTrabajadas: this.day['tiempoLaborado'],
-      horasExtrasDiurnas: this.day['HorasExtrasDiurnas'],
-      horasExtrasNocturnas: this.day['HorasExtrasNocturnas'],
-      horasExtrasDiurnasFestivasDom: this.day['HorasExtrasDiurnasDominicales'],
-      horasExtrasNocturnasFestivasDom:
-        this.day['HorasExtrasNocturnasDominicales'],
-      recargosNocturnos: this.day['horasRecargoNocturna'],
-      recargosDiurnosFestivos:this.day['horasRecargoDominicalDiurno'],
-      recargosNocturnosFestivos: this.day['horasRecargoDominicalNocturna'], */
 
+    this.lista = {
+      horasTurno: this.extras?.hours_schedule?.horas,
       horasTrabajadas: aux.ht,
       horasExtrasDiurnas: aux.hed,
       horasExtrasNocturnas: aux.hen,
@@ -138,9 +126,9 @@ export class RotativoComponent implements OnInit {
           //console.log(r);
           //console.log(this.diarioDato[0].day.date);
           this.validada =
-          //this.extrasValidadas.date === this.diarioDato['date']
-          this.extrasValidadas.date === this.diarioDato[0].day.date
-            ? true
+            //this.extrasValidadas.date === this.diarioDato['date']
+            this.extrasValidadas.date === this.diarioDato[0].day.date
+              ? true
               : false;
           if (this.validada) {
             this.lista.horasTrabajadas = this.extrasValidadas.ht;
@@ -171,7 +159,6 @@ export class RotativoComponent implements OnInit {
 
   relacionarConHoraTurno() {
     this.turnoDato = this.diario;
-    //console.log('turnoDato', this.turnoDato);
   }
 
   asignacionDatosReales() {
@@ -188,6 +175,5 @@ export class RotativoComponent implements OnInit {
   saved() {
     this.updateDates.emit();
   }
-
 
 }

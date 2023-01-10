@@ -17,8 +17,8 @@ export class FijoComponent implements OnInit {
 
   funcionarioDato: any;
   diarioDato: any;
-  horaInicioNoche = moment.utc('21:00:00', 'HH:mm:ss');
-  horaFinNoche = moment.utc('06:00:00', 'HH:mm:ss');
+  /* horaInicioNoche = moment.utc('21:00:00', 'HH:mm:ss');
+  horaFinNoche = moment.utc('06:00:00', 'HH:mm:ss'); */
   turnoDato: any = {};
   lista: any = {};
 
@@ -29,11 +29,11 @@ export class FijoComponent implements OnInit {
   constructor(private _swal: SwalService, private _extra: ExtraHoursService) {}
 
   ngOnInit(): void {
-
+//console.log(this.diario);
+    this.funcionarioDato = this.person;
     this.cargarExtrasValidadas(this.funcionarioDato.id);
     this.relacionarConHoraTurno();
     this.asignacionDatosReales();
-    this.funcionarioDato = this.person;
     this.diarioDato = this.diario;
 
     this.lista = {

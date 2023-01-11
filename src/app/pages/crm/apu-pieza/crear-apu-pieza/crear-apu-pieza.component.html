@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="row card-title d-flex justify-content-between">
         <div class="col-md-6 px-0">
-          <h4 class="text-primary">Crear APU - Pieza</h4>
+          <h4 class="text-primary">{{ title }}</h4>
         </div>
         <div class="col-md-6 px-0 text-md-right text-center">
           <!-- <span>
@@ -280,7 +280,10 @@
                     <tr>
                       <td>SUBTOTAL</td>
                       <td class="text-right">
-                        ${{ this.form.get("subtotal_raw_material").value }}
+                        ${{
+                          this.form.get("subtotal_raw_material").value
+                            | currency : "" : ""
+                        }}
                       </td>
                     </tr>
                   </tbody>
@@ -414,6 +417,7 @@
                       <td class="text-right">
                         ${{
                           this.form.get("commercial_materials_subtotal").value
+                            | currency : "" : ""
                         }}
                       </td>
                     </tr>
@@ -610,19 +614,28 @@
                     <tr>
                       <td>SUBTOTAL UNITARIO</td>
                       <td class="text-right">
-                        ${{ this.form.get("cut_water_unit_subtotal").value }}
+                        ${{
+                          this.form.get("cut_water_unit_subtotal").value
+                            | currency : "" : ""
+                        }}
                       </td>
                     </tr>
                     <tr>
                       <td>CANTIDAD TOTAL</td>
                       <td class="text-right">
-                        ${{ this.form.get("cut_water_total_amount").value }}
+                        ${{
+                          this.form.get("cut_water_total_amount").value
+                            | currency : "" : ""
+                        }}
                       </td>
                     </tr>
                     <tr>
                       <td>SUBTOTAL</td>
                       <td class="text-right">
-                        ${{ this.form.get("cut_water_subtotal").value }}
+                        ${{
+                          this.form.get("cut_water_subtotal").value
+                            | currency : "" : ""
+                        }}
                       </td>
                     </tr>
                   </tbody>
@@ -824,19 +837,28 @@
                     <tr>
                       <td>SUBTOTAL UNITARIO</td>
                       <td class="text-right">
-                        ${{ this.form.get("cut_laser_unit_subtotal").value }}
+                        ${{
+                          this.form.get("cut_laser_unit_subtotal").value
+                            | currency : "" : ""
+                        }}
                       </td>
                     </tr>
                     <tr>
                       <td>CANTIDAD TOTAL</td>
                       <td class="text-right">
-                        ${{ this.form.get("cut_laser_total_amount").value }}
+                        ${{
+                          this.form.get("cut_laser_total_amount").value
+                            | currency : "" : ""
+                        }}
                       </td>
                     </tr>
                     <tr>
                       <td>SUBTOTAL</td>
                       <td class="text-right">
-                        ${{ this.form.get("cut_laser_subtotal").value }}
+                        ${{
+                          this.form.get("cut_laser_subtotal").value
+                            | currency : "" : ""
+                        }}
                       </td>
                     </tr>
                   </tbody>
@@ -970,7 +992,10 @@
                     <tr>
                       <td>SUBTOTAL</td>
                       <td class="text-right">
-                        ${{ this.form.get("machine_tools_subtotal").value }}
+                        ${{
+                          this.form.get("machine_tools_subtotal").value
+                            | currency : "" : ""
+                        }}
                       </td>
                     </tr>
                   </tbody>
@@ -1109,6 +1134,7 @@
                       <td class="text-right">
                         ${{
                           this.form.get("internal_proccesses_subtotal").value
+                            | currency : "" : ""
                         }}
                       </td>
                     </tr>
@@ -1250,6 +1276,7 @@
                       <td class="text-right">
                         ${{
                           this.form.get("external_proccesses_subtotal").value
+                            | currency : "" : ""
                         }}
                       </td>
                     </tr>
@@ -1395,7 +1422,10 @@
                       <tr>
                         <td>SUBTOTAL</td>
                         <td class="text-right">
-                          ${{ this.form.get("others_subtotal").value }}
+                          ${{
+                            this.form.get("others_subtotal").value
+                              | currency : "" : ""
+                          }}
                         </td>
                       </tr>
                     </tbody>
@@ -1427,13 +1457,19 @@
                   <tr>
                     <td>COSTO DIRECTO TOTAL</td>
                     <td class="text-right">
-                      ${{ this.form.get("total_direct_cost").value }}
+                      ${{
+                        this.form.get("total_direct_cost").value
+                          | currency : "" : ""
+                      }}
                     </td>
                   </tr>
                   <tr>
                     <td>COSTO DIRECTO UNITARIO</td>
                     <td class="text-right">
-                      ${{ this.form.get("unit_direct_cost").value }}
+                      ${{
+                        this.form.get("unit_direct_cost").value
+                          | currency : "" : ""
+                      }}
                     </td>
                   </tr>
                 </tbody>

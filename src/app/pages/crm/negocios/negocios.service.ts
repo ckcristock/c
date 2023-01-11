@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { observable, Observable, of, Subscriber } from 'rxjs';
 import { ObserveOnSubscriber } from 'rxjs/internal/operators/observeOn';
 import { environment } from 'src/environments/environment';
-import { history, negocios } from './data';
-import { tareas } from './ver-negocio/tareas.data';
+/* import { history, negocios } from './data';
+import { tareas } from './ver-negocio/tareas.data'; */
 
 @Injectable({
   providedIn: 'root'
@@ -83,6 +83,9 @@ export class NegociosService {
     return this.http.get(`${this.url}/get-history-business/${id}`)
   }
 
+  changeStatusQyB(data) {
+    return this.http.post(`${this.url}/change-status-in-business`, data)
+  }
   /* createTask(data) {
     //TODO backend
     return of(
@@ -90,13 +93,13 @@ export class NegociosService {
     )
   } */
 
-  editTask(index, data) {
+  /* editTask(index, data) {
     return of(
       tareas[index] = data
     )
-  }
+  } */
 
-  addEventToHistroy(event) {
+  /* addEventToHistroy(event) {
     let item = {
       icon: '',
       title: '',
@@ -111,7 +114,7 @@ export class NegociosService {
     return of(
       history.push(item)
     )
-  }
+  } */
 
 
 }

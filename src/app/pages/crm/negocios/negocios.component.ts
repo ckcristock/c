@@ -479,7 +479,6 @@ export class NegociosComponent implements OnInit {
             this.quotations = [];
             this.getNegocios();
           });
-          this.addEventToHistory('Negocio Creado');
         }
       })
     } else {
@@ -493,11 +492,6 @@ export class NegociosComponent implements OnInit {
 
   }
 
-  addEventToHistory(desc) {
-    this._negocios.addEventToHistroy(desc).subscribe((data) => {
-      console.log(data);
-    });
-  }
   get process_description_valid() {
     return (
       this.form.get('request_description').invalid &&

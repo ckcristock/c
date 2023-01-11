@@ -5,7 +5,7 @@
         <div class="d-flex justify-content-center">
           <h5>{{ task_data.titulo | uppercase }}</h5>
         </div>
-        <div class="card border border-primary border-3">
+        <div class="card card-shadow">
           <div class="card-body pb-0">
             <div class="card-text" [innerHTML]="task_data.descripcion"></div>
           </div>
@@ -60,11 +60,11 @@
         <ng-container
           *ngIf="!loading && task_data.comment.length > 0; else notData"
         >
-          <div class="card bg-light" *ngFor="let item of task_data.comment">
+          <div class="card card-shadow bg-light" *ngFor="let item of task_data.comment">
             <div class="card-body pb-0">
               <div class="d-flex justify-content-between">
                 <h6 class="card-title">
-                  {{ item.autor.full_name }}
+                  {{ item.autor.full_names }}
                   <small>{{
                     item.created_at | date: "MMM d, y, h:mm a"
                   }}</small>

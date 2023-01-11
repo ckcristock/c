@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">Crear APU - Conjunto</h4>
+        <h4 class="text-primary">{{ title }}</h4>
       </div>
       <div class="col-md-6 px-0 text-md-right text-center">
         <!--  <span>
@@ -260,7 +260,10 @@
                     <tr>
                       <td>SUBTOTAL</td>
                       <td class="text-right">
-                        ${{ this.form.get("list_pieces_sets_subtotal").value }}
+                        ${{
+                          this.form.get("list_pieces_sets_subtotal").value
+                            | currency : "" : ""
+                        }}
                       </td>
                     </tr>
                   </tbody>
@@ -395,7 +398,10 @@
                     <tr>
                       <td>SUBTOTAL</td>
                       <td class="text-right">
-                        ${{ this.form.get("machine_tools_subtotal").value }}
+                        ${{
+                          this.form.get("machine_tools_subtotal").value
+                            | currency : "" : ""
+                        }}
                       </td>
                     </tr>
                   </tbody>
@@ -519,6 +525,7 @@
                       <td class="text-right">
                         ${{
                           this.form.get("internal_processes_subtotal").value
+                            | currency : "" : ""
                         }}
                       </td>
                     </tr>
@@ -645,6 +652,7 @@
                       <td class="text-right">
                         ${{
                           this.form.get("external_processes_subtotal").value
+                            | currency : "" : ""
                         }}
                       </td>
                     </tr>
@@ -776,7 +784,10 @@
                       <tr>
                         <td>SUBTOTAL</td>
                         <td class="text-right">
-                          ${{ this.form.get("others_subtotal").value }}
+                          ${{
+                            this.form.get("others_subtotal").value
+                              | currency : "" : ""
+                          }}
                         </td>
                       </tr>
                     </tbody>
@@ -808,7 +819,10 @@
                   <tr>
                     <td>COSTO DIRECTO TOTAL</td>
                     <td class="text-right">
-                      ${{ this.form.get("total_direct_cost").value }}
+                      ${{
+                        this.form.get("total_direct_cost").value
+                          | currency : "" : ""
+                      }}
                     </td>
                   </tr>
                 </tbody>

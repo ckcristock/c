@@ -116,14 +116,21 @@
           <mat-expansion-panel class="mat-elevation-z0">
             <div class="row">
               <ng-container [formGroup]="form_filters">
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>Fecha</mat-label>
+                <mat-form-field appearance="outline" class="col">
+                  <mat-label>Rango de fechas</mat-label>
                   <input
-                    type="date"
                     matInput
-                    formControlName="date"
+                    [satDatepicker]="picker"
+                    [value]="date"
+                    (dateChange)="selectedDate($event)"
+                    name="daterange"
                     autocomplete="off"
                   />
+                  <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+                  <sat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></sat-datepicker-toggle>
                 </mat-form-field>
                 <mat-form-field class="col" appearance="outline">
                   <mat-label>Ciudad</mat-label>
@@ -331,19 +338,6 @@
           aria-label="Select page"
         >
         </mat-paginator>
-        <!-- <ngb-pagination
-          class="d-flex justify-content-center pagination-rounded pagination-sm"
-          [collectionSize]="pagination.collectionSize"
-          [pageSize]="pagination.pageSize"
-          [(page)]="pagination.page"
-          (pageChange)="getQuotation($event)"
-          aria-label="Default pagination"
-          maxSize="5"
-          rotate="true"
-          ellipses="false"
-          boundaryLinks="true"
-        >
-        </ngb-pagination> -->
       </div>
     </div>
   </div>

@@ -131,13 +131,26 @@
             </div>
           </div>
         </div>
-        <form [formGroup]="formFiltersBudgets">
-          <div class="row">
+        <div class="row">
+          <ng-container [formGroup]="formFiltersBudgets">
+            <div class="col-md-3 mat-form-field-wrapper">
+              <ng-select
+                [items]="people"
+                formControlName="person_id"
+                bindLabel="text"
+                appearance="outline"
+                [appendTo]="'body'"
+                [clearable]="false"
+                placeholder="Quién elabora"
+                bindValue="value"
+              >
+              </ng-select>
+            </div>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Item</mat-label>
               <input
-                matInput
                 type="text"
+                matInput
                 placeholder="Busca por item"
                 formControlName="item"
                 autocomplete="off"
@@ -146,81 +159,138 @@
             <mat-form-field class="col" appearance="outline">
               <mat-label>Cliente</mat-label>
               <input
-                matInput
                 type="text"
+                matInput
                 placeholder="Busca por cliente"
                 formControlName="customer"
                 autocomplete="off"
               />
             </mat-form-field>
-          </div>
-        </form>
-        <ng-container *ngIf="budgets.length > 0; else notDataAd">
-          <div class="rounded-top table-responsive">
-            <table
-              class="table table-bordered table-striped table-sm mt-2"
-              style="font-size: smaller"
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Destino</mat-label>
+              <input
+                type="text"
+                matInput
+                placeholder="Busca por destino"
+                formControlName="municipality_id"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Línea</mat-label>
+              <input
+                type="text"
+                matInput
+                placeholder="Busca por línea"
+                formControlName="line"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </ng-container>
+        </div>
+        <ng-container
+          *ngIf="!loadingBudgets && budgets.length > 0; else notDataBudgets"
+        >
+          <ng-container *ngIf="budgets.length > 0; else notDataAd">
+            <div class="rounded-top table-responsive">
+              <table
+                class="table table-bordered table-striped table-sm mt-2"
+                style="font-size: smaller"
+              >
+                <thead class="bg-light">
+                  <tr class="text-center text-uppercase">
+                    <th>Item</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Destino</th>
+                    <th>Linea</th>
+                    <th>Quien elabora</th>
+                    <th>Total COP</th>
+                    <th>Total USD</th>
+                    <th><i class="mdi mdi-chevron-down"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let item of budgets"
+                    class="text-center"
+                    [ngClass]="{
+                      'text-danger font-weight-bold': item.state == 'Inactivo'
+                    }"
+                  >
+                    <td class="align-middle pb-0">
+                      <mat-checkbox
+                        color="primary"
+                        (change)="guardarPresupuesto($event, item)"
+                        [id]="item.id"
+                        >PRES {{ item.id }}</mat-checkbox
+                      >
+                    </td>
+                    <td class="align-middle">
+                      {{ item.created_at | date : "longDate" }}
+                    </td>
+                    <td class="align-middle">{{ item.customer.name }}</td>
+                    <td class="align-middle">{{ item.destiny.name }}</td>
+                    <td class="align-middle">{{ item.line }}</td>
+                    <td class="align-middle">
+                      {{ item.user.person.first_name }}
+                      {{ item.user.person.first_surname }}
+                    </td>
+                    <td class="align-middle">
+                      ${{ item.total_cop | currency : "" : "" }}
+                    </td>
+                    <td class="align-middle">
+                      ${{ item.total_usd | currency : "" : "" }}
+                    </td>
+                    <td class="align-middle">
+                      <div
+                        ngbDropdown
+                        container="body"
+                        class="d-inline-block dropdown-primary"
+                      >
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-primary btn-sm"
+                          type="button"
+                          id="dropdownBasic1"
+                        >
+                          <i class="mdi mdi-chevron-down"></i>
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                          <a
+                            class="dropdown-item waves-light text-success caja-botones"
+                            [routerLink]="['/crm/presupuesto/ver', item.id]"
+                            (click)="_modal.close()"
+                          >
+                            <i class="far fa-eye"></i> Ver
+                          </a>
+                          <a
+                            class="dropdown-item waves-light text-info caja-botones"
+                            [routerLink]="['/crm/presupuesto/editar', item.id]"
+                            (click)="_modal.close()"
+                          >
+                            <i class="far fa-edit"></i> Editar
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ngb-pagination
+              class="d-flex justify-content-center pagination-rounded pagination-sm"
+              [collectionSize]="paginationBudgets.collectionSize"
+              [pageSize]="paginationBudgets.pageSize"
+              [(page)]="paginationBudgets.page"
+              (pageChange)="getBudgets($event)"
+              maxSize="5"
+              rotate="true"
+              ellipses="false"
+              boundaryLinks="true"
             >
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
-                  <th>Item</th>
-                  <th>Fecha</th>
-                  <th>Cliente</th>
-                  <th>Destino</th>
-                  <th>Linea</th>
-                  <th>Quien elabora</th>
-                  <th>Total COP</th>
-                  <th>Total USD</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="let item of budgets"
-                  class="text-center"
-                  [ngClass]="{
-                    'text-danger font-weight-bold': item.state == 'Inactivo'
-                  }"
-                >
-                  <td class="align-middle pb-0">
-                    <mat-checkbox
-                      color="primary"
-                      (change)="guardarPresupuesto($event, item)"
-                      [id]="item.id"
-                      >PRES {{ item.id }}</mat-checkbox
-                    >
-                  </td>
-                  <td class="align-middle">
-                    {{ item.created_at | date : "longDate" }}
-                  </td>
-                  <td class="align-middle">{{ item.customer.name }}</td>
-                  <td class="align-middle">{{ item.destiny.name }}</td>
-                  <td class="align-middle">{{ item.line }}</td>
-                  <td class="align-middle">
-                    {{ item.user.person.first_name }}
-                    {{ item.user.person.first_surname }}
-                  </td>
-                  <td class="align-middle">
-                    ${{ item.total_cop | currency : "" : "" }}
-                  </td>
-                  <td class="align-middle">
-                    ${{ item.total_usd | currency : "" : "" }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <ngb-pagination
-            class="d-flex justify-content-center pagination-rounded pagination-sm"
-            [collectionSize]="paginationBudgets.collectionSize"
-            [pageSize]="paginationBudgets.pageSize"
-            [(page)]="paginationBudgets.page"
-            (pageChange)="getBudgets($event)"
-            maxSize="5"
-            rotate="true"
-            ellipses="false"
-            boundaryLinks="true"
-          >
-          </ngb-pagination>
+            </ngb-pagination>
+          </ng-container>
         </ng-container>
       </div>
       <div class="mt-3">
@@ -240,59 +310,162 @@
             </div>
           </div>
         </div>
-        <ng-container *ngIf="quotations.length > 0; else notDataAd">
-          <div class="rounded-top table-responsive">
-            <table
-              class="table table-bordered table-striped table-sm mt-2"
-              style="font-size: smaller"
+        <div class="row">
+          <ng-container [formGroup]="form_filters_quotations">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Ciudad</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="city"
+                autocomplete="off"
+                placeholder="Busca por ciudad"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Código</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="code"
+                autocomplete="off"
+                placeholder="Busca por código"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Línea</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="line"
+                autocomplete="off"
+                placeholder="Busca por línea"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Cliente</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="client"
+                autocomplete="off"
+                placeholder="Busca por cliente"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Descripción</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="description"
+                autocomplete="off"
+                placeholder="Busca por descripción"
+              />
+            </mat-form-field>
+          </ng-container>
+        </div>
+        <ng-container
+          *ngIf="
+            !loadingQuotations && quotations.length > 0;
+            else notDataQuotations
+          "
+        >
+          <ng-container *ngIf="quotations.length > 0; else notDataAd">
+            <div class="rounded-top table-responsive">
+              <table
+                class="table table-bordered table-striped table-sm mt-2"
+                style="font-size: smaller"
+              >
+                <thead class="bg-light">
+                  <tr class="text-center text-uppercase">
+                    <th>Item</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Destino</th>
+                    <th>Linea</th>
+                    <th>Total COP</th>
+                    <th>Total USD</th>
+                    <th><i class="mdi mdi-chevron-down"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of quotations" class="text-center">
+                    <td class="align-middle pb-0">
+                      <mat-checkbox
+                        color="primary"
+                        (change)="guardarCotizacion($event, item)"
+                        [id]="item.id"
+                        >COT {{ item.id }}</mat-checkbox
+                      >
+                    </td>
+                    <td class="align-middle">
+                      {{ item.created_at | date : "longDate" }}
+                    </td>
+                    <td class="align-middle">{{ item.client.full_name }}</td>
+                    <td>{{ item.municipality.name }}</td>
+                    <td class="align-middle">{{ item.line }}</td>
+                    <td class="align-middle">
+                      ${{ item.total_cop | currency : "" : "" }}
+                    </td>
+                    <td class="align-middle">
+                      ${{ item.total_usd | currency : "" : "" }}
+                    </td>
+                    <td>
+                      <div
+                        ngbDropdown
+                        container="body"
+                        class="dropdown-primary"
+                      >
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-primary btn-sm waves-light"
+                          type="button"
+                        >
+                          <i class="mdi mdi-chevron-down"></i>
+                        </button>
+                        <div ngbDropdownMenu>
+                          <a
+                            class="dropdown-item waves-light text-success caja-botones"
+                            href="javascript: void(0);"
+                            [routerLink]="['/crm/cotizacion/ver/', item.id]"
+                            (click)="_modal.close()"
+                          >
+                            <i class="fas fa-eye"></i> Ver</a
+                          >
+                          <a
+                            class="dropdown-item waves-light text-primary caja-botones"
+                            href="javascript: void(0);"
+                            [routerLink]="['/crm/cotizacion/copiar/', item.id]"
+                            (click)="_modal.close()"
+                            ><i class="fas fa-copy"></i> Copiar</a
+                          >
+                          <a
+                            class="dropdown-item waves-light text-info caja-botones"
+                            href="javascript: void(0);"
+                            [routerLink]="['/crm/cotizacion/editar/', item.id]"
+                            (click)="_modal.close()"
+                            ><i class="fas fa-edit"></i> Editar</a
+                          >
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ngb-pagination
+              class="d-flex justify-content-center pagination-rounded pagination-sm"
+              [collectionSize]="paginationQuotations.collectionSize"
+              [pageSize]="paginationQuotations.pageSize"
+              [(page)]="paginationQuotations.page"
+              (pageChange)="getQuotations($event)"
+              maxSize="5"
+              rotate="true"
+              ellipses="false"
+              boundaryLinks="true"
             >
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
-                  <th>Item</th>
-                  <th>Fecha</th>
-                  <th>Cliente</th>
-                  <th>Linea</th>
-                  <th>Total COP</th>
-                  <th>Total USD</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of quotations" class="text-center">
-                  <td class="align-middle pb-0">
-                    <mat-checkbox
-                      color="primary"
-                      (change)="guardarCotizacion($event, item)"
-                      [id]="item.id"
-                      >COT {{ item.id }}</mat-checkbox
-                    >
-                  </td>
-                  <td class="align-middle">
-                    {{ item.created_at | date : "longDate" }}
-                  </td>
-                  <td class="align-middle">{{ item.client.full_name }}</td>
-                  <td class="align-middle">{{ item.line }}</td>
-                  <td class="align-middle">
-                    ${{ item.total_cop | currency : "" : "" }}
-                  </td>
-                  <td class="align-middle">
-                    ${{ item.total_usd | currency : "" : "" }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <ngb-pagination
-            class="d-flex justify-content-center pagination-rounded pagination-sm"
-            [collectionSize]="paginationQuotations.collectionSize"
-            [pageSize]="paginationQuotations.pageSize"
-            [(page)]="paginationQuotations.page"
-            (pageChange)="getQuotations($event)"
-            maxSize="5"
-            rotate="true"
-            ellipses="false"
-            boundaryLinks="true"
-          >
-          </ngb-pagination>
+            </ngb-pagination>
+          </ng-container>
         </ng-container>
       </div>
     </form>
@@ -311,7 +484,6 @@
   </div>
 </ng-template>
 
-
 <ng-template #notDataAd>
   <div class="alert alert-warning" role="alert">
     {{
@@ -321,4 +493,11 @@
         : "Selecciona un cliente para listar la información"
     }}
   </div>
+</ng-template>
+
+<ng-template #notDataBudgets>
+  <app-not-data [loading]="loadingBudgets"></app-not-data>
+</ng-template>
+<ng-template #notDataQuotations>
+  <app-not-data [loading]="loadingQuotations"></app-not-data>
 </ng-template>

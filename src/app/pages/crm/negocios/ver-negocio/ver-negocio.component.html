@@ -78,6 +78,8 @@
                 <th class="col-md-3">Descripción</th>
                 <th class="col-md-3">Fecha</th>
                 <th class="col-md-3">Valor</th>
+                <th class="col-md-3">Estado</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -93,6 +95,78 @@
                 </td>
                 <td class="align-middle">
                   $ {{ pres?.budget.total_cop | number }}
+                </td>
+
+                <td class="align-middle">
+                  <span
+                    class="badge"
+                    [class]="
+                      pres?.status == 'Pendiente'
+                        ? 'badge-warning'
+                        : pres?.status == 'Rechazado'
+                        ? 'badge-danger'
+                        : pres?.status == 'Aprobado'
+                        ? 'badge-success'
+                        : ''
+                    "
+                    >{{ pres?.status }}</span
+                  >
+                </td>
+                <td>
+                  <div ngbDropdown container="body" class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm waves-light"
+                      type="button"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        class="dropdown-item waves-light text-success caja-botones"
+                        href="javascript: void(0);"
+                        [routerLink]="[
+                          '/crm/presupuesto/ver/',
+                          pres?.budget.id
+                        ]"
+                      >
+                        <i class="fas fa-eye"></i> Ver</a
+                      >
+                      <ng-container
+                        *ngIf="pres?.status == 'Pendiente'; else pendiente2"
+                      >
+                        <a
+                          class="dropdown-item waves-light text-success caja-botones"
+                          href="javascript: void(0);"
+                          (click)="
+                            changeStatusInBusiness('Aprobado', pres, 'budget')
+                          "
+                        >
+                          <i class="fas fa-thumbs-up"></i> Aprobar</a
+                        >
+                        <a
+                          class="dropdown-item waves-light text-danger caja-botones"
+                          href="javascript: void(0);"
+                          (click)="
+                            changeStatusInBusiness('Rechazado', pres, 'budget')
+                          "
+                        >
+                          <i class="fas fa-thumbs-down"></i> Rechazar</a
+                        >
+                      </ng-container>
+                      <ng-template #pendiente2>
+                        <a
+                          class="dropdown-item waves-light text-warning caja-botones"
+                          href="javascript: void(0);"
+                          (click)="
+                            changeStatusInBusiness('Pendiente', pres, 'budget')
+                          "
+                        >
+                          <i class="fas fa-clock"></i> Pendiente</a
+                        >
+                      </ng-template>
+                    </div>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -128,6 +202,8 @@
                 <th>Descripción</th>
                 <th>Fecha</th>
                 <th>Valor</th>
+                <th>Estado</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -135,6 +211,89 @@
                 <th scope="row">{{ item.name }}</th>
                 <td>{{ item.created_at | date }}</td>
                 <td>$ {{ item.total_cop | number }}</td>
+                <td>
+                  <span
+                    class="badge"
+                    [class]="
+                      item.pivot.status == 'Pendiente'
+                        ? 'badge-warning'
+                        : item.pivot.status == 'Rechazada'
+                        ? 'badge-danger'
+                        : item.pivot.status == 'Aprobada'
+                        ? 'badge-success'
+                        : ''
+                    "
+                    >{{ item.pivot.status }}</span
+                  >
+                </td>
+                <td>
+                  <div ngbDropdown container="body" class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm waves-light"
+                      type="button"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        class="dropdown-item waves-light text-success caja-botones"
+                        href="javascript: void(0);"
+                        [routerLink]="[
+                          '/crm/cotizacion/ver/',
+                          item.pivot.quotation_id
+                        ]"
+                      >
+                        <i class="fas fa-eye"></i> Ver</a
+                      >
+                      <ng-container
+                        *ngIf="item.pivot.status == 'Pendiente'; else pendiente"
+                      >
+                        <a
+                          class="dropdown-item waves-light text-success caja-botones"
+                          href="javascript: void(0);"
+                          (click)="
+                            changeStatusInBusiness(
+                              'Aprobada',
+                              item,
+                              'quotation'
+                            )
+                          "
+                        >
+                          <i class="fas fa-thumbs-up"></i> Aprobar</a
+                        >
+                        <a
+                          class="dropdown-item waves-light text-danger caja-botones"
+                          href="javascript: void(0);"
+                          (click)="
+                            changeStatusInBusiness(
+                              'Rechazada',
+                              item,
+                              'quotation'
+                            )
+                          "
+                        >
+                          <i class="fas fa-thumbs-down"></i> Rechazar</a
+                        >
+                      </ng-container>
+                      <ng-template #pendiente>
+                        <a
+                          class="dropdown-item waves-light text-warning caja-botones"
+                          href="javascript: void(0);"
+                          (click)="
+                            changeStatusInBusiness(
+                              'Pendiente',
+                              item,
+                              'quotation'
+                            )
+                          "
+                        >
+                          <i class="fas fa-clock"></i> Pendiente</a
+                        >
+                      </ng-template>
+                    </div>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -208,15 +367,67 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="d-flex justify-content-end mb-3">
-      <button
-        class="btn btn-primary btn-sm"
-        type="button"
-        (click)="_modal.close()"
-        [routerLink]="['/crm/presupuesto/crear']"
-      >
-        <i class="fa fa-plus"></i> Agregar
-      </button>
+    <div class="row">
+      <ng-container [formGroup]="form_filters_budget">
+        <div class="col-md-3 mat-form-field-wrapper">
+          <ng-select
+            [items]="people"
+            formControlName="person_id"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            [clearable]="false"
+            placeholder="Quién elabora"
+            bindValue="value"
+          >
+          </ng-select>
+        </div>
+        <!-- <mat-form-field class="col" appearance="outline">
+          <mat-label>Item</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por item"
+            formControlName="item"
+          />
+        </mat-form-field> -->
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por fecha"
+            formControlName="date"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cliente</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por cliente"
+            formControlName="customer"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Destino</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por destino"
+            formControlName="municipality_id"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Línea</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por línea"
+            formControlName="line"
+          />
+        </mat-form-field>
+      </ng-container>
     </div>
     <div
       class="rounded-top table-responsive"
@@ -233,6 +444,7 @@
             <th>Quien elabora</th>
             <th>Total COP</th>
             <th>Total USD</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -267,12 +479,58 @@
             <td class="align-middle">
               ${{ item.total_usd | currency : "" : "" }}
             </td>
+            <td class="align-middle">
+              <div
+                ngbDropdown
+                container="body"
+                class="d-inline-block dropdown-primary"
+              >
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm"
+                  type="button"
+                  id="dropdownBasic1"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <a
+                    class="dropdown-item waves-light text-success caja-botones"
+                    [routerLink]="['/crm/presupuesto/ver', item.id]"
+                    (click)="_modal.close()"
+                  >
+                    <i class="far fa-eye"></i> Ver
+                  </a>
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    [routerLink]="['/crm/presupuesto/editar', item.id]"
+                    (click)="_modal.close()"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="100%">
+              <div class="float-right">
+                <button
+                  class="btn btn-primary btn-sm"
+                  type="button"
+                  (click)="_modal.close()"
+                  [routerLink]="['/crm/presupuesto/crear']"
+                >
+                  <i class="fa fa-plus"></i> Agregar
+                </button>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
     <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      class="d-flex justify-content-center pagination-rounded pagination-sm mb-0"
       [collectionSize]="paginationBudgets.collectionSize"
       [pageSize]="paginationBudgets.pageSize"
       [(page)]="paginationBudgets.page"
@@ -315,14 +573,59 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="d-flex justify-content-end mb-3">
-      <button
-        class="btn btn-primary btn-sm"
-        (click)="_modal.close()"
-        [routerLink]="['/crm/cotizacion/crear']"
-      >
-        <i class="fa fa-plus"></i> Agregar
-      </button>
+    <div class="row">
+      <ng-container [formGroup]="form_filters_quotations">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Ciudad</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="city"
+            autocomplete="off"
+            placeholder="Busca por ciudad"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="code"
+            autocomplete="off"
+            placeholder="Busca por código"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Línea</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="line"
+            autocomplete="off"
+            placeholder="Busca por línea"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cliente</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="client"
+            autocomplete="off"
+            placeholder="Busca por cliente"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="description"
+            autocomplete="off"
+            placeholder="Busca por descripción"
+          />
+        </mat-form-field>
+      </ng-container>
     </div>
     <div
       class="rounded-top table-responsive"
@@ -338,6 +641,7 @@
             <th>Linea</th>
             <th>Total COP</th>
             <th>Total USD</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -362,6 +666,54 @@
             <td>{{ item.line }}</td>
             <td>${{ item.total_cop | currency : "" : "" }}</td>
             <td>${{ item.total_usd | currency : "" : "" }}</td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-success caja-botones"
+                    href="javascript: void(0);"
+                    [routerLink]="['/crm/cotizacion/ver/', item.id]"
+                    (click)="_modal.close()"
+                  >
+                    <i class="fas fa-eye"></i> Ver</a
+                  >
+                  <a
+                    class="dropdown-item waves-light text-primary caja-botones"
+                    href="javascript: void(0);"
+                    [routerLink]="['/crm/cotizacion/copiar/', item.id]"
+                    (click)="_modal.close()"
+                    ><i class="fas fa-copy"></i> Copiar</a
+                  >
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
+                    [routerLink]="['/crm/cotizacion/editar/', item.id]"
+                    (click)="_modal.close()"
+                    ><i class="fas fa-edit"></i> Editar</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="100%">
+              <div class="float-right">
+                <button
+                  class="btn btn-primary btn-sm"
+                  (click)="_modal.close()"
+                  [routerLink]="['/crm/cotizacion/crear']"
+                >
+                  <i class="fa fa-plus"></i> Agregar
+                </button>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>

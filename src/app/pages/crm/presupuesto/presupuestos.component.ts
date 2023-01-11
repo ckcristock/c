@@ -54,14 +54,6 @@ export class PresupuestosComponent implements OnInit {
     pageSize: 10,
     collectionSize: 0
   }
-  filtros: any = {
-    item: '',
-    date: '',
-    customer: '',
-    municipality_id: '',
-    line: '',
-    person_id: ''
-  }
   orderObj: any
   filtrosActivos: boolean = false
   paginacion: any

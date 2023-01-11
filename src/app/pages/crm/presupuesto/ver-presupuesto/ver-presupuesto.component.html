@@ -1,7 +1,27 @@
 <div class="card">
   <div class="card-body" *ngIf="data && !loading; else notData2">
-    <div class="card-title">
-      <h4 class="text-primary">Vista del presupuesto</h4>
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Vista del presupuesto</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-info btn-sm"
+            type="button"
+            [routerLink]="['/crm/presupuesto/editar', data.id]"
+          >
+            <i class="fas fa-edit"></i> Editar
+          </button>
+          <button
+            class="btn btn-primary btn-sm"
+            type="button"
+            [routerLink]="['/crm/presupuesto/copiar', data.id]"
+          >
+            <i class="fas fa-copy"></i> Copiar
+          </button>
+        </div>
+      </div>
     </div>
     <hr class="line" />
     <div class="rounded-top table-responsive">

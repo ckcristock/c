@@ -1,10 +1,11 @@
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatAccordion, MatPaginatorIntl, PageEvent } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
+import { DateAdapter } from 'saturn-datepicker';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { PermissionService } from 'src/app/core/services/permission.service';
@@ -20,6 +21,7 @@ import { QuotationService } from './quotation.service';
 export class CotizacionComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
+  datePipe = new DatePipe('es-CO');
   quotations: any;
   filtrosActivos: boolean = false
   quotations_cards: any;
@@ -28,6 +30,7 @@ export class CotizacionComponent implements OnInit {
   loading: boolean;
   loading_cards: boolean;
   view_list: boolean;
+  date: any;
   count_pendiente = 0;
   count_aprobada = 0;
   count_no_aprobada = 0;
@@ -63,7 +66,9 @@ export class CotizacionComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private _permission: PermissionService,
+    private dateAdapter: DateAdapter<any>
   ) {
+    this.dateAdapter.setLocale('es');
     this.paginator.itemsPerPageLabel = "Items por página:";
     this.permission = this._permission.validatePermissions(this.permission)
   }
@@ -97,9 +102,26 @@ export class CotizacionComponent implements OnInit {
 
   }
 
+  selectedDate(fecha) {
+    if (fecha.value) {
+      this.form_filters.patchValue({
+        date_start: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
+        date_end: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+      })
+    } else {
+      this.form_filters.patchValue({
+        date_start: '',
+        date_end: ''
+      })
+    }
+    /* this.getQuotation(); */
+  }
+
   createFormFilters() {
     this.form_filters = this.fb.group({
       date: '',
+      date_start: '',
+      date_end: '',
       city: '',
       code: '',
       client: '',

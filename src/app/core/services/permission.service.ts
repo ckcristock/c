@@ -16,15 +16,12 @@ export class PermissionService {
   validatePermissions(perms) {
     this.itemToFind = perms.menu;
     this.findMenuItem(this._user.user.menu);
-    console.log(this._user.user.menu)
-    console.log(this.itemFinded)
     if (this.itemFinded) {
       for (const iterator in perms.permissions) {
         if (this.itemFinded?.name) {
           let finded = this.itemFinded.permissions.some(d => (d.name == iterator && d.Activo) )
           perms.permissions[iterator] = finded;
         } else {
-          console.log('llegando')
           perms.permissions[iterator] = false;
         }
       }

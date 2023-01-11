@@ -55,6 +55,7 @@
                   matInput
                   placeholder="Busca por item"
                   formControlName="item"
+                  autocomplete="off"
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
@@ -64,6 +65,7 @@
                   matInput
                   placeholder="Busca por fecha"
                   formControlName="date"
+                  autocomplete="off"
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
@@ -73,6 +75,7 @@
                   matInput
                   placeholder="Busca por cliente"
                   formControlName="customer"
+                  autocomplete="off"
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
@@ -82,6 +85,7 @@
                   matInput
                   placeholder="Busca por destino"
                   formControlName="municipality_id"
+                  autocomplete="off"
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
@@ -91,6 +95,7 @@
                   matInput
                   placeholder="Busca por línea"
                   formControlName="line"
+                  autocomplete="off"
                 />
               </mat-form-field>
             </ng-container>
@@ -155,6 +160,7 @@
               <th *ngIf="checkQuien">Quien elabora</th>
               <th *ngIf="checkTCop">Total COP</th>
               <th *ngIf="checkTUsd">Total USD</th>
+              <th>Estado</th>
               <th><i class="mdi mdi-chevron-down"></i></th>
             </tr>
           </thead>
@@ -187,6 +193,14 @@
               <td *ngIf="checkTUsd" class="align-middle">
                 ${{ item.total_usd | currency : "" : "" }}
               </td>
+              <td>
+                <span
+                  class="badge"
+                  [class]="item.state == 'Activo' ? 'badge-success' : 'badge-danger'"
+                >
+                {{item.state}}
+                </span>
+              </td>
               <td class="align-middle">
                 <div
                   ngbDropdown
@@ -216,6 +230,7 @@
                     </a>
                     <a
                       *ngIf="item.state == 'Activo'"
+                      href="javascript: void(0);"
                       (click)="activateOrInactive('Inactivo', item.id)"
                       class="dropdown-item waves-light text-danger caja-botones"
                     >
@@ -223,11 +238,18 @@
                     </a>
                     <a
                       *ngIf="item.state == 'Inactivo'"
+                      href="javascript: void(0);"
                       (click)="activateOrInactive('Activo', item.id)"
                       class="dropdown-item waves-light text-primary caja-botones"
                     >
                       <i class="fas fa-check"></i> Activar
                     </a>
+                    <a
+                      class="dropdown-item waves-light text-primary caja-botones"
+                      href="javascript: void(0);"
+                      [routerLink]="['copiar', item.id]"
+                      ><i class="fas fa-copy"></i> Copiar</a
+                    >
                   </div>
                 </div>
               </td>

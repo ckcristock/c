@@ -5,22 +5,19 @@
         <div class="timeline-5 right-5">
           <div class="card bg-light">
             <div class="card-body p-4">
-              <div class="row d-flex justify-content-between">
+              <div class="d-flex justify-content-between">
                 <h6>
-                  <i [class]="item.icon"></i>
-                  {{ item.title }} <br />
+                  <i [class]="item.icon"></i> {{ item.title }} <br />
                   <div class="text-muted" style="font-size: x-small">
                     <i class="fas fa-clock me-1"></i>
-                    {{ item.created_at | date: "MMM d, y, h:mm a" }}
+                    {{ item.created_at | date : "MMM d, y, h:mm a" }}
                   </div>
                 </h6>
-                <div>
-                  <img
-                    [src]="item.person.image"
-                    onerror="this.src='../../../../assets/images/noprofile.png'"
-                    class="rounded-circle mx-auto img-fluid header-profile-user"
-                  />
-                </div>
+                <img
+                  [src]="item.person.image"
+                  onerror="this.src='../../../../assets/images/noprofile.png'"
+                  class="float-right rounded-circle img-fluid header-profile-user"
+                />
               </div>
               <small>
                 {{ item.description }}

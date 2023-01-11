@@ -7,7 +7,6 @@ import { NegociosService } from '../negocios.service';
   styleUrls: ['./historial-negocio.component.scss'],
 })
 export class HistorialNegocioComponent implements OnInit {
-  //historial: any[];
   @Input('historial') historial: any[];
   @Input('id') id: any[];
   loading: boolean;
@@ -54,8 +53,4 @@ export class HistorialNegocioComponent implements OnInit {
     });
   }
 
-  addItemToHistory(action: string) {
-
-    this._negocio.addEventToHistroy(action);
-  }
 }

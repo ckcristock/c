@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { QuotationService } from '../../cotizacion/quotation.service';
 import { NegociosService } from '../negocios.service';
@@ -21,11 +22,14 @@ export class ModalNuevoNegocioComponent implements OnInit {
   contacts: any[];
   form: FormGroup;
   formFiltersBudgets: FormGroup;
+  loadingBudgets: boolean;
+  loadingQuotations: boolean;
   budgetsSelected: any[] = [];
   quotationSelected: any[] = [];
   quotations: any[] = [];
   budgets: any[] = [];
   cities: any[] = [];
+  people: any[] = []
   countries: any[];
   paginationBudgets: any = {
     page: 1,
@@ -37,21 +41,15 @@ export class ModalNuevoNegocioComponent implements OnInit {
     pageSize: 10,
     collectionSize: 0
   }
-  filtersQuotations = {
-    date: '',
-    city: '',
-    code: '',
-    client: '',
-    description: '',
-    status: '',
-  }
+  form_filters_quotations: FormGroup;
   constructor(
     private _modal: ModalService,
     private fb: FormBuilder,
     private _negocios: NegociosService,
     private _quotation: QuotationService,
     private _swal: SwalService,
-    private _user: UserService
+    private _user: UserService,
+    private _person: PersonService,
   ) {
     this.id = this._user.user.person.id;
   }
@@ -64,8 +62,17 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this._modal.open(this.newBusiness, 'xl')
     this.createForm();
     this.createFormFiltersBudgets();
+    this.createFormFiltersQuotations();
     this.getCompanies();
     this.getCountries();
+    this.getPeople();
+  }
+
+  getPeople() {
+    this._person.getPeopleIndex().subscribe((res: any) => {
+      this.people = res.data
+      this.people.unshift({ text: 'Todos ', value: '' });
+    })
   }
 
   createForm() {
@@ -79,6 +86,21 @@ export class ModalNuevoNegocioComponent implements OnInit {
       date: ['', Validators.required],
       person_id: [this.id]
     });
+  }
+
+  createFormFiltersQuotations() {
+    this.form_filters_quotations = this.fb.group({
+      city: '',
+      code: '',
+      client: '',
+      description: '',
+      line: '',
+    })
+    this.form_filters_quotations.valueChanges.pipe(
+      debounceTime(500),
+    ).subscribe(r => {
+      this.getQuotations();
+    })
   }
 
   getCountries() {
@@ -131,15 +153,16 @@ export class ModalNuevoNegocioComponent implements OnInit {
       item: '',
       date: '',
       customer: '',
-      destiny: '',
+      municipality_id: '',
       line: '',
-      person: '',
+      person_id: ''
     })
     this.formFiltersBudgets.valueChanges
       .pipe(debounceTime(500)).subscribe(r => this.getBudgets())
   }
 
   getBudgets(page = 1) {
+    this.loadingBudgets = true
     this.budgetsSelected = []
     this.paginationBudgets.page = page;
     let params = {
@@ -149,20 +172,23 @@ export class ModalNuevoNegocioComponent implements OnInit {
     }
     this._negocios.getBudgets(params).subscribe((resp: any) => {
       this.budgets = resp.data.data;
+      this.loadingBudgets = false
       this.paginationBudgets.collectionSize = resp.data.total;
     });
   }
 
   getQuotations(page = 1) {
     this.quotationSelected = []
+    this.loadingQuotations = true
     this.paginationQuotations.page = page;
     let params = {
       ...this.paginationQuotations,
-      ...this.filtersQuotations,
+      ...this.form_filters_quotations.value,
       third_party_id: this.form.value.third_party_id
     }
     this._quotation.getQuotations(params).subscribe((res: any) => {
       this.quotations = res.data.data;
+      this.loadingQuotations = false;
       this.paginationQuotations.collectionSize = res.data.total;
     })
   }

@@ -13,6 +13,7 @@ export class FijoComponent implements OnInit {
   @Input('info') info;
   @Input('diario') diario;
   @Input('person') person;
+  @Input('extras') extras;
   @Output('updateDates') updateDates = new EventEmitter<any>();
 
   funcionarioDato: any;
@@ -29,14 +30,33 @@ export class FijoComponent implements OnInit {
   constructor(private _swal: SwalService, private _extra: ExtraHoursService) {}
 
   ngOnInit(): void {
-//console.log(this.diario);
+console.log(this.diario);
+console.log(this.day);
     this.funcionarioDato = this.person;
-    this.cargarExtrasValidadas(this.funcionarioDato.id);
+    //this.cargarExtrasValidadas(this.funcionarioDato.id);
     this.relacionarConHoraTurno();
     this.asignacionDatosReales();
     this.diarioDato = this.diario;
 
-    this.lista = {
+    let aux = {
+      ht: 0,
+      hed: 0,
+      hen: 0,
+      heddf: 0,
+      hendf: 0,
+      hrn: 0,
+      hrddf: 0,
+      hrndf: 0
+    };
+
+    if (this.extras != '' && this.extras != undefined) {
+      //('si trabajó ese día')
+      if (this.extras.extras !== "No hay asistencia este día") {
+        aux = Object.assign(this.extras.hours_extra, this.extras.hours_recharge);
+      }
+    }
+
+/*     this.lista = {
       horasTrabajadas: this.day['tiempoLaborado'],
       horasExtrasDiurnas: this.day['HorasExtrasDiurnas'],
       horasExtrasNocturnas: this.day['HorasExtrasNocturnas'],
@@ -46,6 +66,18 @@ export class FijoComponent implements OnInit {
       recargosNocturnos: this.day['horasRecargoNocturna'],
       recargosDiurnosFestivos:this.day['horasRecargoDominicalDiurno'],
       recargosNocturnosFestivos: this.day['horasRecargoDominicalNocturna'],
+    }; */
+
+    this.lista = {
+      horasTurno: this.extras?.hours_schedule?.horas,
+      horasTrabajadas: aux.ht,
+      horasExtrasDiurnas: aux.hed,
+      horasExtrasNocturnas: aux.hen,
+      horasExtrasDiurnasFestivasDom: aux.heddf,
+      horasExtrasNocturnasFestivasDom: aux.hendf,
+      recargosNocturnos: aux.hrn,
+      recargosDiurnosFestivos: aux.hrddf,
+      recargosNocturnosFestivos: aux.hrndf,
     };
 
 
@@ -126,7 +158,7 @@ export class FijoComponent implements OnInit {
         .getExtraHoursValids(funcionario, this.diario['0']?.day.date)
         .subscribe((r: any) => {
           this.extrasValidadas = r.data;
-          console.log(this.extrasValidadas)
+          //console.log(this.extrasValidadas)
           if (this.extrasValidadas) {
             if (
               this.hasDay &&

@@ -97,14 +97,15 @@
                 [info]="personData"
                 [day]="diario"
                 [extras]="personData.extras[i]"
-              ></app-rotativo>
-              <app-fijo
+                ></app-rotativo>
+                <app-fijo
                 *ngIf="turnType == 'fijo'"
                 [person]="person"
                 (updateDates)="getData()"
-                [diario]="diario"
+                [diario]="diario != undefined ? diario : {} "
                 [info]="personData"
                 [day]="diario"
+                [extras]="personData.extras[i]"
               ></app-fijo>
             </ng-container>
           </td>

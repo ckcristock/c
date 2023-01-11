@@ -1,251 +1,256 @@
-<div class="card">
-  <div class="card-body">
-    <div class="row card-title d-flex justify-content-between">
-      <div class="col-md-6 px-0">
-        <h4 class="text-primary">
-          Presupuestos
-          <span style="font-size: smaller" *ngIf="paginacion">
-            <small class="pb-2 text-secondary text-muted">
-              pág. {{ paginacion.current_page }}
-            </small>
-          </span>
-        </h4>
-      </div>
-      <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100">
-          <button
-            class="btn btn-primary btn-sm"
-            type="button"
-            [routerLink]="['crear']"
-          >
-            <i class="fa fa-plus"></i> Agregar
-          </button>
-          <button class="btn btn-info btn-sm" (click)="openClose2()">
-            <i class="fas fa-sliders-h"></i> Filtros
-          </button>
-          <button class="btn btn-secondary btn-sm" (click)="openClose()">
-            <i class="fas fa-eye"></i>
-          </button>
+<ng-container *ngIf="this.permission.permissions.show; else noPermissions">
+  <div class="card">
+    <div class="card-body">
+      <div class="row card-title d-flex justify-content-between">
+        <div class="col-md-6 px-0">
+          <h4 class="text-primary">
+            Presupuestos
+            <span style="font-size: smaller" *ngIf="paginacion">
+              <small class="pb-2 text-secondary text-muted">
+                pág. {{ paginacion.current_page }}
+              </small>
+            </span>
+          </h4>
         </div>
-      </div>
-    </div>
-    <hr class="line" />
-    <mat-accordion multi #secondAccordion="matAccordion">
-      <mat-expansion-panel class="mat-elevation-z0">
-        <div class="row">
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Item</mat-label>
-            <input
-              type="text"
-              matInput
-              placeholder="Busca por item"
-              [(ngModel)]="filtros.item"
-              (input)="getBudgets()"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Fecha</mat-label>
-            <input
-              type="text"
-              matInput
-              placeholder="Busca por fecha"
-              [(ngModel)]="filtros.date"
-              (input)="getBudgets()"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Cliente</mat-label>
-            <input
-              type="text"
-              matInput
-              placeholder="Busca por cliente"
-              [(ngModel)]="filtros.customer"
-              (input)="getBudgets()"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Destino</mat-label>
-            <input
-              type="text"
-              matInput
-              placeholder="Busca por destino"
-              [(ngModel)]="filtros.municipality_id"
-              (input)="getBudgets()"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Línea</mat-label>
-            <input
-              type="text"
-              matInput
-              placeholder="Busca por línea"
-              [(ngModel)]="filtros.line"
-              (input)="getBudgets()"
-            />
-          </mat-form-field>
-          <div class="col mat-form-field-wrapper">
-            <ng-select
-              [items]="people"
-              [(ngModel)]="filtros.person_id"
-              bindLabel="text"
-              appearance="outline"
-              [appendTo]="'body'"
-              [clearable]="false"
-              placeholder="Quién elabora"
-              bindValue="value"
-              (change)="getBudgets()"
+        <div class="col-md-6 px-0 text-right">
+          <div class="btn-group rounded w-sm-100">
+            <button
+              class="btn btn-primary btn-sm"
+              type="button"
+              [routerLink]="['crear']"
             >
-            </ng-select>
+              <i class="fa fa-plus"></i> Agregar
+            </button>
+            <button class="btn btn-info btn-sm" (click)="openClose2()">
+              <i class="fas fa-sliders-h"></i> Filtros
+            </button>
+            <!-- <button class="btn btn-secondary btn-sm" (click)="openClose()">
+            <i class="fas fa-eye"></i>
+          </button> -->
           </div>
         </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-accordion multi #firstAccordion="matAccordion">
-      <mat-expansion-panel class="mat-elevation-z0">
-        <section class="d-flex justify-content-between mx-1">
-          <mat-checkbox color="primary" [(ngModel)]="checkItem"
-            >Item</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkFecha"
-            >Fecha</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkCliente"
-            >Cliente</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkDestino"
-            >Destino</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkLinea"
-            >Linea</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkQuien"
-            >Quien Elabora</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkTCop"
-            >Total COP</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkTUsd"
-            >Total USD</mat-checkbox
-          >
-        </section>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
-      <strong>
-        Hay filtros de búsqueda activos, para mostrar todos los resultados haz
-        click
-      </strong>
-      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link">
-        aquí
-      </a>
-    </div>
-    <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm mb-0"
-        *ngIf="!loading && budgets.length > 0; else notData"
-      >
-        <thead class="bg-light">
-          <tr class="text-center text-uppercase">
-            <th *ngIf="checkItem">Item</th>
-            <th *ngIf="checkFecha">Fecha</th>
-            <th *ngIf="checkCliente">Cliente</th>
-            <th *ngIf="checkDestino">Destino</th>
-            <th *ngIf="checkLinea">Linea</th>
-            <th *ngIf="checkQuien">Quien elabora</th>
-            <th *ngIf="checkTCop">Total COP</th>
-            <th *ngIf="checkTUsd">Total USD</th>
-            <th><i class="mdi mdi-chevron-down"></i></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let item of budgets"
-            class="text-center"
-            [ngClass]="{
-              'text-danger font-weight-bold': item.state == 'Inactivo'
-            }"
-          >
-            <td *ngIf="checkItem" class="align-middle">PRES {{ item.id }}</td>
-            <td *ngIf="checkFecha" class="align-middle">
-              {{ item.created_at | date : "longDate" }}
-            </td>
-            <td *ngIf="checkCliente" class="align-middle">
-              {{ item.customer.name }}
-            </td>
-            <td *ngIf="checkDestino" class="align-middle">
-              {{ item.destiny.name }}
-            </td>
-            <td *ngIf="checkLinea" class="align-middle">{{ item.line }}</td>
-            <td *ngIf="checkQuien" class="align-middle">
-              {{ item.user.person.first_name }}
-              {{ item.user.person.first_surname }}
-            </td>
-            <td *ngIf="checkTCop" class="align-middle">
-              ${{ item.total_cop | currency : "" : "" }}
-            </td>
-            <td *ngIf="checkTUsd" class="align-middle">
-              ${{ item.total_usd | currency : "" : "" }}
-            </td>
-            <td class="align-middle">
-              <div
-                ngbDropdown
-                container="body"
-                class="d-inline-block dropdown-primary"
-              >
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm"
-                  type="button"
-                  id="dropdownBasic1"
+      </div>
+      <hr class="line" />
+      <mat-accordion multi #secondAccordion="matAccordion">
+        <mat-expansion-panel class="mat-elevation-z0">
+          <div class="row">
+            <ng-container [formGroup]="form_filters">
+              <div class="col-md-3 mat-form-field-wrapper">
+                <ng-select
+                  [items]="people"
+                  formControlName="person_id"
+                  bindLabel="text"
+                  appearance="outline"
+                  [appendTo]="'body'"
+                  [clearable]="false"
+                  placeholder="Quién elabora"
+                  bindValue="value"
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <a
-                    class="dropdown-item waves-light text-success caja-botones"
-                    [routerLink]="['/crm/presupuesto/ver', item.id]"
-                  >
-                    <i class="far fa-eye"></i> Ver
-                  </a>
-                  <a
-                    class="dropdown-item waves-light text-info caja-botones"
-                    [routerLink]="['/crm/presupuesto/editar', item.id]"
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
-                  <a
-                    *ngIf="item.state == 'Activo'"
-                    (click)="activateOrInactive('Inactivo', item.id)"
-                    class="dropdown-item waves-light text-danger caja-botones"
-                  >
-                    <i class="far fa-trash-alt"></i> Anular
-                  </a>
-                  <a
-                    *ngIf="item.state == 'Inactivo'"
-                    (click)="activateOrInactive('Activo', item.id)"
-                    class="dropdown-item waves-light text-primary caja-botones"
-                  >
-                    <i class="fas fa-check"></i> Activar
-                  </a>
-                </div>
+                </ng-select>
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Item</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Busca por item"
+                  formControlName="item"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Fecha</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Busca por fecha"
+                  formControlName="date"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Cliente</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Busca por cliente"
+                  formControlName="customer"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Destino</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Busca por destino"
+                  formControlName="municipality_id"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Línea</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Busca por línea"
+                  formControlName="line"
+                />
+              </mat-form-field>
+            </ng-container>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion multi #firstAccordion="matAccordion">
+        <mat-expansion-panel class="mat-elevation-z0">
+          <section class="d-flex justify-content-between mx-1">
+            <mat-checkbox color="primary" [(ngModel)]="checkItem"
+              >Item</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkFecha"
+              >Fecha</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkCliente"
+              >Cliente</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkDestino"
+              >Destino</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkLinea"
+              >Linea</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkQuien"
+              >Quien Elabora</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkTCop"
+              >Total COP</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkTUsd"
+              >Total USD</mat-checkbox
+            >
+          </section>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
+        <strong>
+          Hay filtros de búsqueda activos, para mostrar todos los resultados haz
+          click
+        </strong>
+        <a
+          href="javascript: void(0)"
+          (click)="resetFiltros()"
+          class="alert-link"
+        >
+          aquí
+        </a>
+      </div>
+      <div class="rounded-top table-responsive">
+        <table
+          class="table table-bordered table-striped table-sm mb-0"
+          *ngIf="!loading && budgets.length > 0; else notData"
+        >
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th *ngIf="checkItem">Item</th>
+              <th *ngIf="checkFecha">Fecha</th>
+              <th *ngIf="checkCliente">Cliente</th>
+              <th *ngIf="checkDestino">Destino</th>
+              <th *ngIf="checkLinea">Linea</th>
+              <th *ngIf="checkQuien">Quien elabora</th>
+              <th *ngIf="checkTCop">Total COP</th>
+              <th *ngIf="checkTUsd">Total USD</th>
+              <th><i class="mdi mdi-chevron-down"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of budgets"
+              class="text-center"
+              [ngClass]="{
+                'text-danger font-weight-bold': item.state == 'Inactivo'
+              }"
+            >
+              <td *ngIf="checkItem" class="align-middle">PRES {{ item.id }}</td>
+              <td *ngIf="checkFecha" class="align-middle">
+                {{ item.created_at | date : "longDate" }}
+              </td>
+              <td *ngIf="checkCliente" class="align-middle">
+                {{ item.customer.name }}
+              </td>
+              <td *ngIf="checkDestino" class="align-middle">
+                {{ item.destiny.name }}
+              </td>
+              <td *ngIf="checkLinea" class="align-middle">{{ item.line }}</td>
+              <td *ngIf="checkQuien" class="align-middle">
+                {{ item.user.person.first_name }}
+                {{ item.user.person.first_surname }}
+              </td>
+              <td *ngIf="checkTCop" class="align-middle">
+                ${{ item.total_cop | currency : "" : "" }}
+              </td>
+              <td *ngIf="checkTUsd" class="align-middle">
+                ${{ item.total_usd | currency : "" : "" }}
+              </td>
+              <td class="align-middle">
+                <div
+                  ngbDropdown
+                  container="body"
+                  class="d-inline-block dropdown-primary"
+                >
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-primary btn-sm"
+                    type="button"
+                    id="dropdownBasic1"
+                  >
+                    <i class="mdi mdi-chevron-down"></i>
+                  </button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <a
+                      class="dropdown-item waves-light text-success caja-botones"
+                      [routerLink]="['/crm/presupuesto/ver', item.id]"
+                    >
+                      <i class="far fa-eye"></i> Ver
+                    </a>
+                    <a
+                      class="dropdown-item waves-light text-info caja-botones"
+                      [routerLink]="['/crm/presupuesto/editar', item.id]"
+                    >
+                      <i class="far fa-edit"></i> Editar
+                    </a>
+                    <a
+                      *ngIf="item.state == 'Activo'"
+                      (click)="activateOrInactive('Inactivo', item.id)"
+                      class="dropdown-item waves-light text-danger caja-botones"
+                    >
+                      <i class="far fa-trash-alt"></i> Anular
+                    </a>
+                    <a
+                      *ngIf="item.state == 'Inactivo'"
+                      (click)="activateOrInactive('Activo', item.id)"
+                      class="dropdown-item waves-light text-primary caja-botones"
+                    >
+                      <i class="fas fa-check"></i> Activar
+                    </a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <mat-paginator
-      *ngIf="paginacion"
-      [length]="paginacion.total"
-      [pageSize]="paginacion.per_page"
-      [pageIndex]="paginacion.current_page - 1"
-      (page)="handlePageEvent($event)"
-      aria-label="Select page"
-    >
-    </mat-paginator>
+      <mat-paginator
+        *ngIf="paginacion"
+        [length]="paginacion.total"
+        [pageSize]="paginacion.per_page"
+        [pageIndex]="paginacion.current_page - 1"
+        (page)="handlePageEvent($event)"
+        aria-label="Select page"
+      >
+      </mat-paginator>
+    </div>
   </div>
-</div>
+</ng-container>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<ng-template #noPermissions>
+  <app-no-permissions></app-no-permissions>
 </ng-template>

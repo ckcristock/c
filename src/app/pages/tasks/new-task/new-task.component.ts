@@ -18,7 +18,7 @@ import Swal from 'sweetalert2'
 export class NewTaskComponent implements OnInit {
   @ViewChild('newtask') newtask;
   @Input() open: Observable<any> = new Observable();
-  @Input() type_task: any;
+  @Input() category: any;
   @Input() business_id: any = '';
   @Output() refresh: EventEmitter<any> = new EventEmitter();
   private _suscription: any;
@@ -61,14 +61,14 @@ export class NewTaskComponent implements OnInit {
     this.loadingTypes = true;
     this._task.getTypes().subscribe((res: any) => {
       this.types = res.data;
-      if (this.type_task) {
+      /* if (this.category) {
         this.types.forEach(type => {
           if (type.text == 'Negocios') {
             this.form.patchValue({ type_id: type.value })
-            /* this.form.get('type_id'). */
+            this.form.get('type_id')
           }
         });
-      }
+      } */
       this.loadingTypes = false;
     })
   }
@@ -86,6 +86,7 @@ export class NewTaskComponent implements OnInit {
       id_asignador: this._user.user.person.id,
       hora: ['', Validators.required],
       business_id: [this.business_id],
+      category: [this.category]
     })
   }
 

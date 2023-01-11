@@ -2,9 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { BudgetService } from './budget.service';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { PermissionService } from 'src/app/core/services/permission.service';
+import { debounceTime } from 'rxjs/operators';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-presupuestos',
@@ -15,6 +20,7 @@ export class PresupuestosComponent implements OnInit {
   @ViewChild('firstAccordion') firstAccordion: MatAccordion;
   @ViewChild('secondAccordion') secondAccordion: MatAccordion;
   matPanel = false;
+  form_filters: FormGroup;
   openClose() {
     if (this.matPanel == false) {
       this.firstAccordion.openAll();
@@ -60,56 +66,84 @@ export class PresupuestosComponent implements OnInit {
   filtrosActivos: boolean = false
   paginacion: any
   budgets: any[] = []
+  permission: Permissions = {
+    menu: 'Presupuesto',
+    permissions: {
+      show: true
+    }
+  };
   constructor(
     private paginator: MatPaginatorIntl,
     private route: ActivatedRoute,
     private location: Location,
     private _budget: BudgetService,
-    private _person: PersonService
+    private _person: PersonService,
+    private fb: FormBuilder,
+    private _permission: PermissionService,
+    private router: Router,
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
+    this.permission = this._permission.validatePermissions(this.permission)
   }
 
   ngOnInit(): void {
-    this.getPeople();
-    this.route.queryParamMap
-      .subscribe((params) => {
-        this.orderObj = { ...params.keys, ...params };
-        for (let i in this.orderObj.params) {
-          if (this.orderObj.params[i]) {
-            if (Object.keys(this.orderObj).length > 2) {
-              this.filtrosActivos = true
+    if (this.permission.permissions.show) {
+      this.createFormFilters();
+      this.getPeople();
+      this.route.queryParamMap
+        .subscribe((params) => {
+          this.orderObj = { ...params.keys, ...params };
+          if (Object.keys(this.orderObj).length > 2) {
+            this.filtrosActivos = true
+            const formValues = {};
+            for (const param in params) {
+              formValues[param] = params[param];
             }
-            this.filtros[i] = this.orderObj.params[i]
-
+            this.form_filters.patchValue(formValues['params']);
           }
-        }
+          if (this.orderObj.params.pag) {
+            this.getBudgets(this.orderObj.params.pag);
+          } else {
+            this.getBudgets()
+          }
 
-        if (this.orderObj.params.pag) {
-          this.getBudgets(this.orderObj.params.pag);
-        } else {
-          this.getBudgets()
         }
+        );
+    } else {
+      this.router.navigate(['/notauthorized'])
+    }
+  }
 
-      }
-      );
+  createFormFilters() {
+    this.form_filters = this.fb.group({
+      item: '',
+      date: '',
+      customer: '',
+      municipality_id: '',
+      line: '',
+      person_id: ''
+    })
+    this.form_filters.valueChanges.pipe(
+      debounceTime(500),
+    ).subscribe(r => {
+      this.getBudgets();
+    })
   }
 
   people: any[] = []
 
   getPeople() {
-    this._person.getPeopleIndex().subscribe((res:any) => {
+    this._person.getPeopleIndex().subscribe((res: any) => {
       this.people = res.data
       this.people.unshift({ text: 'Todos ', value: '' });
     })
   }
 
   resetFiltros() {
-    for (let i in this.filtros) {
-      this.filtros[i] = ''
+    for (const controlName in this.form_filters.controls) {
+      this.form_filters.get(controlName).setValue('');
     }
     this.filtrosActivos = false
-    this.getBudgets()
   }
 
   handlePageEvent(event: PageEvent) {
@@ -117,16 +151,15 @@ export class PresupuestosComponent implements OnInit {
   }
 
   SetFiltros(paginacion) {
-    let params: any = {};
-
-    params.pag = paginacion;
-    for (let i in this.filtros) {
-      if (this.filtros[i] != "") {
-        params[i] = this.filtros[i];
+    let params = new HttpParams;
+    params = params.set('pag', paginacion)
+    for (const controlName in this.form_filters.controls) {
+      const control = this.form_filters.get(controlName);
+      if (control.value) {
+        params = params.set(controlName, control.value);
       }
     }
-    let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
-    return queryString;
+    return params;
   }
   estadoFiltros = false;
   mostrarFiltros() {
@@ -138,10 +171,10 @@ export class PresupuestosComponent implements OnInit {
 
     this.pagination.page = page;
     let params = {
-      ...this.pagination, ...this.filtros
+      ...this.pagination, ...this.form_filters.value
     }
     var paramsurl = this.SetFiltros(this.pagination.page);
-    this.location.replaceState('/crm/presupuesto', paramsurl);
+    this.location.replaceState('/crm/presupuesto', paramsurl.toString());
     this._budget.getAllPaginate(params).subscribe((r: any) => {
       this.budgets = r.data.data
       this.pagination.collectionSize = r.data.total;

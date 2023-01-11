@@ -51,4 +51,4 @@ registerLocaleData(localeEs, 'es');
   bootstrap: [AppComponent],
   exports: [BrowserModule, BrowserAnimationsModule]
 })
-export class AppModule {}
+export class AppModule { }

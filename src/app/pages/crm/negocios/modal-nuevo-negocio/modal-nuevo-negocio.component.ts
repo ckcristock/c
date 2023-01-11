@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { UserService } from 'src/app/core/services/user.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { QuotationService } from '../../cotizacion/quotation.service';
 import { NegociosService } from '../negocios.service';
@@ -16,6 +17,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
   @Output() updated = new EventEmitter<any>();
   today = new Date().toISOString().slice(0, 10);
   companies: any[];
+  id;
   contacts: any[];
   form: FormGroup;
   formFiltersBudgets: FormGroup;
@@ -49,7 +51,10 @@ export class ModalNuevoNegocioComponent implements OnInit {
     private _negocios: NegociosService,
     private _quotation: QuotationService,
     private _swal: SwalService,
-  ) { }
+    private _user: UserService
+  ) {
+    this.id = this._user.user.person.id;
+  }
 
   ngOnInit(): void {
 
@@ -72,6 +77,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
       country_id: [null, Validators.required],
       city_id: [null, Validators.required],
       date: ['', Validators.required],
+      person_id: [this.id]
     });
   }
 

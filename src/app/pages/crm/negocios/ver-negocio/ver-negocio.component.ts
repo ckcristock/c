@@ -196,11 +196,12 @@ export class VerNegocioComponent implements OnInit {
     this.addEventToHistory('se modificaron las cotizaciones del negocio');
   }
 
-  createTask(event) {
+  /* createTask(event) {
     this._negocio.createTask(event).subscribe(() => {
       this.addEventToHistory('Se creó una tarea en la seccion de tareas');
     });
-  }
+  } */
+
   editTask(event) {
     this._negocio.editTask(event.index - 1, event.value).subscribe((data) => {
       this.addEventToHistory(

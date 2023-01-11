@@ -23,7 +23,13 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre</mat-label>
-            <input (input)="getMeasures()" [(ngModel)]="filtro.name" type="text" matInput placeholder="Busca por nombre" />
+            <input
+              (input)="getMeasures()"
+              [(ngModel)]="filtro.name"
+              type="text"
+              matInput
+              placeholder="Busca por nombre"
+            />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -32,15 +38,14 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && measures.length > 0; else notData"
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
             <th>Variable</th>
-            <th class="col-md-1">Estado</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th>Estado</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>

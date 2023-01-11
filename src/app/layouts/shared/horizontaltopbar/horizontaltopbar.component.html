@@ -113,18 +113,11 @@
           id="page-header-user-dropdown"
         >
           <img
-            *ngIf="imageProfile != null"
             class="rounded-circle header-profile-user"
+            onerror="this.src='../../../../assets/images/noprofile.png'"
             [src]="imageProfile"
             alt="Header Avatar"
           />
-          <img
-            *ngIf="imageProfile == null"
-            class="rounded-circle header-profile-user"
-            src="../../../../assets/images/noprofile.png"
-            alt="Header Avatar"
-          />
-
           <span class="d-none d-xl-inline-block ml-1"
             >{{ user.person.first_name }} {{ user.person.first_surname }}</span
           >

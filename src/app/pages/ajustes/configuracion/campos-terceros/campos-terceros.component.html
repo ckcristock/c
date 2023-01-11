@@ -18,8 +18,17 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <div class="alert alert-danger" role="alert">
-          Aún no tenemos filtros para esta sección.
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por nombre"
+              (change)="getFields()"
+              [(ngModel)]="filtro.name"
+            />
+          </mat-form-field>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
@@ -36,7 +45,7 @@
             <th>Requerido</th>
             <th>Longitud</th>
             <th class="col-1">Estado</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -95,6 +104,19 @@
         </tbody>
       </table>
     </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="getFields($event)"
+      [pageSize]="pagination.pageSize"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+      [(page)]="pagination.page"
+      aria-label="Default pagination"
+    >
+    </ngb-pagination>
   </div>
 </div>
 
@@ -106,7 +128,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
+      (click)="_modal.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -155,11 +177,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
     <button

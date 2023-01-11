@@ -25,24 +25,11 @@ export class NegociosService {
 
   saveNeg(data) {
     return this.http.post(`${this.url}/business`, data);
-    // return new Observable(() => {
-    //   localStorage.setItem(`negocio ${data.request_name}`, JSON.stringify(data))
-    // })
   }
 
   changeState(data, id) {
     return this.http.put(`${this.url}/business/${id}`, data);
   }
-
-  getNeg() {
-    return of(
-      negocios
-    )
-  }
-
-  /* getBusinesses() {
-    return this.http.get(`${this.url}/business`);
-  } */
 
   getBusinesses(params = {}) {
     return this.http.get(`${this.url}/paginateBusiness`, { params });
@@ -62,43 +49,6 @@ export class NegociosService {
 
   getCities(params = {}) {
     return this.http.get(`${this.url}/cities`, { params })
-  }
-
-  createTask(data) {
-    //TODO backend
-    return of(
-      tareas.push(data)
-    )
-  }
-  editTask(index, data) {
-
-    return of(
-      tareas[index] = data
-    )
-
-  }
-  /*
-  getTasks(){
-    return of(
-      tareas
-    )
-  }*/
-
-  getHistory() {
-    return of(
-      history
-    )
-  }
-  addEventToHistroy(event) {
-    let item = {
-      date: new Date().toISOString().slice(0, 10),
-      action: event,
-      autor: 'yo'
-    };
-
-    return of(
-      history.push(item)
-    )
   }
 
   getBudgets(params = {}) {
@@ -128,4 +78,40 @@ export class NegociosService {
   updateTask(data: any) {
     return this.http.post(`${environment.base_url}/save-task`, data);
   }
+
+  getHistory(id) {
+    return this.http.get(`${this.url}/get-history-business/${id}`)
+  }
+
+  /* createTask(data) {
+    //TODO backend
+    return of(
+      tareas.push(data)
+    )
+  } */
+
+  editTask(index, data) {
+    return of(
+      tareas[index] = data
+    )
+  }
+
+  addEventToHistroy(event) {
+    let item = {
+      icon: '',
+      title: '',
+      created_at: '2020-11-2',
+      person: {
+        full_name: 'Marcos Fuentes',
+        image: ''
+      },
+      description: 'Creacion del negocio',
+    };
+
+    return of(
+      history.push(item)
+    )
+  }
+
+
 }

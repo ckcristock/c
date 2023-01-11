@@ -77,14 +77,24 @@ const negocios: any[] = [
 
 const historial = [
   {
-    date: '2020-11-2',
-    autor: 'Marcos Fuentes',
-    action: 'Creacion del negocio',
+    icon: 'fas fa-file',
+    title: 'Acción',
+    created_at: '2020-11-2',
+    person: {
+      full_name: 'Marcos Fuentes',
+      image: ''
+    },
+    description: 'Creacion del negocio',
   },
   {
-    date: '2020-11-3',
-    autor: 'Martha Rios',
-    action: 'Agregado Cotizacion por 5000',
+    icon: 'fas fa-file',
+    title: 'Acción',
+    created_at: '2020-11-2',
+    person: {
+      full_name: 'Marcos Fuentes',
+      image: ''
+    },
+    description: 'Creacion del negocio',
   },
 ];
 export { negocios, historial as history };

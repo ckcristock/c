@@ -3,6 +3,8 @@ export interface Permissions {
     permissions: {
         approve?: boolean,
         close?: boolean,
-        open?: boolean
+        open?: boolean,
+        show?: boolean,
+        add?: boolean,
     }
 }

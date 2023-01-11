@@ -16,26 +16,26 @@ const negocioData={
     cotizaciones:[{
       descripcion:'descripcion de prueba Cotizacion 1',
       fecha:'2020-05-31',
-      valor:20000000 
+      valor:20000000
     }],
     qr:'https://previews.123rf.com/images/newromashka/newromashka1309/newromashka130900017/22777706-c%C3%B3digo-qr-dice-prueba-gratuita-.jpg'
   }
 
 const OTRAS_COTIZACIONES:any[]=[{
     id:787,
-    empresa:'20', 
+    empresa:'20',
     descripcion:'Cotizacion 2 (maq)',
     valor:'3000000',
     fecha:'2021-02-16'
 },{
     id:888,
-    empresa:'20', 
+    empresa:'20',
     descripcion:'Cotizacion 2 (maq)',
     valor:'3000000',
     fecha:'2015-10-25'
 },{
     id:9999,
-    empresa:'20', 
+    empresa:'20',
     descripcion:'Cotizacion 2 (maq)',
     valor:'3000000',
     fecha:'2019-12-01'
@@ -44,19 +44,19 @@ const OTRAS_COTIZACIONES:any[]=[{
 
 const OTROS_PRESUPUESTOS:any[]=[{
     id:230,
-    empresa:'20', 
+    empresa:'20',
     descripcion:'Presupuesto 2 (maq1)',
     valor:'3000000',
     fecha:'2021-02-16'
 },{
     id:650,
-    empresa:'20', 
+    empresa:'20',
     descripcion:'Presupuesto 2 (maq2)',
     valor:'3000000',
     fecha:'2015-10-25'
 },{
     id:444,
-    empresa:'20', 
+    empresa:'20',
     descripcion:'Presupuesto 2 (maq3)',
     valor:'3000000',
     fecha:'2019-12-01'

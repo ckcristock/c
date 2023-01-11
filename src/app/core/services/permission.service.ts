@@ -14,13 +14,19 @@ export class PermissionService {
   constructor(private _user: UserService, private HttpClient: HttpClient) { }
 
   validatePermissions(perms) {
-    console.log(perms)
     this.itemToFind = perms.menu;
     this.findMenuItem(this._user.user.menu);
+    console.log(this._user.user.menu)
+    console.log(this.itemFinded)
     if (this.itemFinded) {
       for (const iterator in perms.permissions) {
-         let finded = this.itemFinded.permissions.some(d => (d.name == iterator && d.Activo) )
-         perms.permissions[iterator] = finded;
+        if (this.itemFinded?.name) {
+          let finded = this.itemFinded.permissions.some(d => (d.name == iterator && d.Activo) )
+          perms.permissions[iterator] = finded;
+        } else {
+          console.log('llegando')
+          perms.permissions[iterator] = false;
+        }
       }
     }
     return perms
@@ -33,8 +39,9 @@ export class PermissionService {
         if (element.child) { this.findMenuItem(element.child) }
         if (element.name == this.itemToFind) {
           this.itemFinded = element;
-          console.log(this.itemFinded)
-        }
+        }/*  else {
+          this.itemFinded = false
+        } */
       }
     } catch (finded) {};
   }

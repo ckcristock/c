@@ -5,6 +5,7 @@ import { CamposTercerosService } from './campos-terceros.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-campos-terceros',
@@ -15,25 +16,24 @@ export class CamposTercerosComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
-
   loading: boolean = false;
   form: FormGroup;
   tipos = camposTerceros.tipos;
   fields: any[] = [];
+  pagination = {
+    pageSize: 10,
+    page: 1,
+    collectionSize: 0
+  }
+  filtro: any = {
+    code: '',
+  }
+
   constructor(
     private fb: FormBuilder,
     private _field: CamposTercerosService,
     private _swal: SwalService,
-    private modalService: NgbModal,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -45,17 +45,13 @@ export class CamposTercerosComponent implements OnInit {
     this.modal.show();
   }
 
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  openClose() {
+    this.matPanel = !this.matPanel;
+    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
   }
-  private getDismissReason(reason: any) {
-    this.form.reset()
-    
+
+  openConfirm(content) {
+    this._modal.open(content)
   }
 
   createForm() {
@@ -67,18 +63,22 @@ export class CamposTercerosComponent implements OnInit {
     })
   }
 
-  getFields() {
+  getFields(page = 1) {
+    this.pagination.page = page
+    let params = {
+      ...this.pagination, ...this.filtro
+    }
     this.loading = true;
-    this._field.getFields().subscribe((r: any) => {
+    this._field.getFields(params).subscribe((r: any) => {
       this.loading = false;
-      this.fields = r.data;
+      this.fields = r.data.data;
+      this.pagination.collectionSize = r.data.total
     })
   }
 
   save() {
     this._field.save(this.form.value).subscribe((r: any) => {
-      console.log(r);
-      this.modalService.dismissAll();
+      this._modal.close();
       this.form.reset();
       this.getFields();
       this._swal.show({

@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-6 px-0 text-md-right text-center">
         <h4 class="text-primary">{{ title }}</h4>
-        <strong> {{ date | date: "longDate" }} </strong>
+        <strong> {{ date | date : "longDate" }} </strong>
       </div>
     </div>
     <hr class="line" />
@@ -15,7 +15,7 @@
         <mat-horizontal-stepper #stepper [linear]="false">
           <mat-step>
             <ng-template matStepLabel>Datos básicos</ng-template>
-            <div class="row">
+            <div class="row mt-4">
               <div class="col-md-3 mx-auto">
                 <div class="form-group text-center">
                   <img
@@ -82,7 +82,9 @@
                     >{{ municipality.text }}</mat-option
                   >
                 </mat-select>
-                <mat-error> Municipio es <strong>obligatorio</strong> </mat-error>
+                <mat-error>
+                  Municipio es <strong>obligatorio</strong>
+                </mat-error>
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Tipo de persona</mat-label>
@@ -349,7 +351,7 @@
           <mat-step>
             <ng-template matStepLabel>Datos financieros</ng-template>
             <div class="example-container">
-              <div class="row">
+              <div class="row mt-4">
                 <mat-form-field class="col" appearance="outline">
                   <mat-label>Tipo de régimen</mat-label>
                   <mat-select formControlName="regime">
@@ -400,7 +402,7 @@
                     >
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field class="col-md-2" appearance="outline">
+                <mat-form-field class="col-md-3" appearance="outline">
                   <mat-label>Animo lucro</mat-label>
                   <mat-select formControlName="encourage_profit">
                     <mat-option value="Si">Sí</mat-option>
@@ -422,7 +424,7 @@
                   </ng-select>
                   <!-- <small>Actividad económica</small> -->
                 </div>
-                <mat-form-field class="col-md-2" appearance="outline">
+                <mat-form-field class="col-md-3" appearance="outline">
                   <mat-label>Agente de retención</mat-label>
                   <mat-select formControlName="withholding_agent">
                     <mat-option value="Si">Sí</mat-option>
@@ -594,10 +596,12 @@
                     <mat-option value="Activo">Activo</mat-option>
                     <mat-option value="Inactivo">Inactivo</mat-option>
                   </mat-select>
-                  <mat-error> Estado es <strong>obligatorio</strong> </mat-error>
+                  <mat-error>
+                    Estado es <strong>obligatorio</strong>
+                  </mat-error>
                 </mat-form-field>
                 <div class="col-md-4">
-                  <div class="form-group text-center ml-2">
+                  <div class="form-group text-center">
                     <div class="custom-input-file col-md-12">
                       <input
                         type="file"
@@ -636,129 +640,135 @@
           </mat-step>
           <mat-step>
             <ng-template matStepLabel>Personas</ng-template>
-            <div class="mx-0" *ngIf="personList.controls.length; else notData">
-              <div
-                class="mx-0"
+            <ng-container *ngIf="personList.controls.length; else notData">
+              <ng-container
                 formArrayName="person"
                 *ngFor="let item of personList.controls; let i = index"
               >
-                <div class="row">
-                  <mat-form-field
-                    class="col"
-                    appearance="outline"
-                    [formGroupName]="i"
-                  >
-                    <mat-label>Nombre</mat-label>
-                    <input
-                      matInput
-                      type="text"
-                      placeholder="Ingrese el nombre"
-                      formControlName="name"
-                    />
-                    <mat-icon matSuffix>perm_identity</mat-icon>
-                  </mat-form-field>
-                  <mat-form-field
-                    class="col"
-                    appearance="outline"
-                    [formGroupName]="i"
-                  >
-                    <mat-label>Documento</mat-label>
-                    <input
-                      matInput
-                      type="text"
-                      placeholder="Ingresa el nombre"
-                      formControlName="n_document"
-                    />
-                    <mat-icon matSuffix>badge</mat-icon>
-                  </mat-form-field>
-                  <mat-form-field
-                    class="col"
-                    appearance="outline"
-                    [formGroupName]="i"
-                  >
-                    <mat-label>Teléfono fijo</mat-label>
-                    <input
-                      matInput
-                      type="number"
-                      placeholder="Ingresa el número fijo"
-                      formControlName="landline"
-                    />
-                    <mat-icon matSuffix>phone</mat-icon>
-                  </mat-form-field>
-                  <mat-form-field
-                    class="col"
-                    appearance="outline"
-                    [formGroupName]="i"
-                  >
-                    <mat-label>Celular</mat-label>
-                    <input
-                      matInput
-                      type="number"
-                      placeholder="Ingresa el número de celular"
-                      formControlName="cell_phone"
-                    />
-                    <mat-icon matSuffix>phone_iphone</mat-icon>
-                  </mat-form-field>
-                  <mat-form-field
-                    class="col"
-                    appearance="outline"
-                    [formGroupName]="i"
-                  >
-                    <mat-label>Email</mat-label>
-                    <input
-                      matInput
-                      type="email"
-                      placeholder="Ingresa el email"
-                      formControlName="email"
-                    />
-                    <mat-icon matSuffix>email</mat-icon>
-                  </mat-form-field>
-                  <mat-form-field
-                    class="col"
-                    appearance="outline"
-                    [formGroupName]="i"
-                  >
-                    <mat-label>Cargo</mat-label>
-                    <input
-                      matInput
-                      type="text"
-                      placeholder="Ingresa el cargo"
-                      formControlName="position"
-                    />
-                    <mat-icon matSuffix>assignment_ind</mat-icon>
-                  </mat-form-field>
-                  <mat-form-field
-                    class="col-md-12 mat-form-field-no-padding textarea"
-                    appearance="outline"
-                    [formGroupName]="i"
-                  >
-                    <mat-label>Observaciones</mat-label>
-                    <textarea
-                      matInput
-                      placeholder="Ingrese las observaciones"
-                      formControlName="observation"
-                      [cdkTextareaAutosize]="true"
-                      rows="5"
-                    ></textarea>
-                  </mat-form-field>
-                  <div
-                    class="col d-flex justify-content-end mb-3"
-                    [formGroupName]="i"
-                  >
-                    <button
-                      class="btn btn-sm btn-danger"
-                      placement="top"
-                      (click)="deletePerson(i)"
-                    >
-                      <i class="fas fa-trash-alt"></i> Borrar persona
-                    </button>
+                <div class="card card-shadow mt-3">
+                  <div class="card-body">
+                    <div class="row mt-4">
+                      <mat-form-field
+                        class="col"
+                        appearance="outline"
+                        [formGroupName]="i"
+                      >
+                        <mat-label>Nombre</mat-label>
+                        <input
+                          matInput
+                          type="text"
+                          placeholder="Ingrese el nombre"
+                          formControlName="name"
+                          required
+                        />
+                        <mat-icon matSuffix>perm_identity</mat-icon>
+                      </mat-form-field>
+                      <mat-form-field
+                        class="col"
+                        appearance="outline"
+                        [formGroupName]="i"
+                      >
+                        <mat-label>Documento</mat-label>
+                        <input
+                          matInput
+                          type="text"
+                          required
+                          placeholder="Ingresa el nombre"
+                          formControlName="n_document"
+                        />
+                        <mat-icon matSuffix>badge</mat-icon>
+                      </mat-form-field>
+                      <mat-form-field
+                        class="col"
+                        appearance="outline"
+                        [formGroupName]="i"
+                      >
+                        <mat-label>Teléfono fijo</mat-label>
+                        <input
+                          matInput
+                          type="number"
+                          placeholder="Ingresa el número fijo"
+                          formControlName="landline"
+                        />
+                        <mat-icon matSuffix>phone</mat-icon>
+                      </mat-form-field>
+                      <mat-form-field
+                        class="col"
+                        appearance="outline"
+                        [formGroupName]="i"
+                      >
+                        <mat-label>Celular</mat-label>
+                        <input
+                          matInput
+                          type="number"
+                          placeholder="Ingresa el número de celular"
+                          formControlName="cell_phone"
+                        />
+                        <mat-icon matSuffix>phone_iphone</mat-icon>
+                      </mat-form-field>
+                      <mat-form-field
+                        class="col"
+                        appearance="outline"
+                        [formGroupName]="i"
+                      >
+                        <mat-label>Email</mat-label>
+                        <input
+                          matInput
+                          type="email"
+                          placeholder="Ingresa el email"
+                          formControlName="email"
+                          required
+                        />
+                        <mat-icon matSuffix>email</mat-icon>
+                      </mat-form-field>
+                      <mat-form-field
+                        class="col"
+                        appearance="outline"
+                        [formGroupName]="i"
+                      >
+                        <mat-label>Cargo</mat-label>
+                        <input
+                          matInput
+                          type="text"
+                          placeholder="Ingresa el cargo"
+                          formControlName="position"
+                        />
+                        <mat-icon matSuffix>assignment_ind</mat-icon>
+                      </mat-form-field>
+                      <mat-form-field
+                        class="col-md-12 mat-form-field-no-padding textarea"
+                        appearance="outline"
+                        [formGroupName]="i"
+                      >
+                        <mat-label>Observaciones</mat-label>
+                        <textarea
+                          matInput
+                          placeholder="Ingrese las observaciones"
+                          formControlName="observation"
+                          [cdkTextareaAutosize]="true"
+                          rows="5"
+                        ></textarea>
+                      </mat-form-field>
+                      <div
+                        class="col d-flex justify-content-end mb-3"
+                        [formGroupName]="i"
+                      >
+                        <button
+                          class="btn btn-sm btn-danger"
+                          placement="top"
+                          type="button"
+                          (click)="deletePerson(i)"
+                        >
+                          <i class="fas fa-trash-alt"></i> Borrar persona
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <hr class="my-2">
-              </div>
-            </div>
+              </ng-container>
+            </ng-container>
             <div class="d-flex justify-content-end">
-              <button class="btn btn-sm btn-primary" (click)="createPerson()">
+              <button type="button" class="btn btn-sm btn-primary" (click)="createPerson()">
                 <i class="fa fa-plus"></i> Agregar persona
               </button>
             </div>
@@ -770,7 +780,10 @@
               >
                 Anterior
               </button>
-              <button class="btn btn-sm btn-primary" (click)="saveInformation()">
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="saveInformation()"
+              >
                 Guardar
               </button>
             </div>
@@ -781,15 +794,14 @@
   </div>
 </div>
 <ng-template #notData>
-  <div class="alert alert-warning text-center" role="alert">
-    Sin datos agregados
+  <div class="alert alert-warning text-center mt-4" role="alert">
+    Sin personas agregados
   </div>
 </ng-template>
 
 <ng-template #notDataLoading>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
-
 
 <div class="row">
   <div class="col-12">

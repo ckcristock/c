@@ -78,7 +78,7 @@
             <div class="row">
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Nombre</mat-label>
-                <input #filtroNombre
+                <input
                   type="text"
                   formControlName="nombre"
                   matInput
@@ -111,7 +111,7 @@
               <tr class="text-center text-uppercase">
                 <th>Nombre</th>
                 <th>Embalaje</th>
-                <th>Tipo de catalogo</th>
+                <th>Tipo</th>
                 <th class="col-1"><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
@@ -138,8 +138,8 @@
                         <a
                           role="button"
                           class="dropdown-item waves-light caja-botones text-info"
-
-                        ><!-- (click)="openConfirm(addGrupo, 'Editar', 'grupo'); getGrupo(grupo)" -->
+                          (click)="openConfirm(add, 'Editar', producto)"
+                        ><!-- getGrupo(grupo)" -->
                           <i class="far fa-edit"></i> Editar</a
                         >
                         <a
@@ -151,10 +151,7 @@
                             'text-success': grupo.Estado == 'Inactivo'
                           }"
                           (click)=" cambiarEstado(grupo, grupo.Estado == 'Activo' ? 'Inactivo' : 'Activo')" -->
-                          <i
-                            class="fas fa-check"
-
-                          ></i><!-- [ngClass]="{
+                          <i class="fas fa-check"></i><!-- [ngClass]="{
                               'fa-trash-alt': grupo.Estado == 'Activo',
                               'fa-check': grupo.Estado == 'Inactivo'
                             }"
@@ -203,7 +200,97 @@
     </button>
   </div>
   <div class="modal-body">
-
+    <form [formGroup]="formProductos">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            type="text"
+            formControlName="Nombre_Comercial"
+            matInput
+            placeholder="Nombre del producto"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Presentación</mat-label>
+          <input
+            type="text"
+            formControlName="Presentacion"
+            matInput
+            placeholder="Presentación del producto"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Embalaje</mat-label>
+          <input
+            type="text"
+            formControlName="Embalaje"
+            matInput
+            placeholder="Embalaje"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Codigo de barras</mat-label>
+          <input
+            type="text"
+            formControlName="Codigo_Barras"
+            matInput
+            placeholder="Codigo de barras"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Unidad de medida</mat-label>
+          <mat-select
+            formControlName="Unidad_Medida"
+            matInput
+            placeholder="Unidad de medida"
+            required
+          >
+            <mat-option *ngFor="let unidad of unidades_medida" [value]="unidad.value">{{ unidad.text }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select
+            formControlName="Tipo_Catalogo"
+            matInput
+            placeholder="Tipo del catálogo"
+            required
+          >
+            <mat-option *ngFor="let tipo of tipos_catalogo" [value]="tipo.value">{{ tipo.text }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <hr class="line">
+      <div class="row">
+        <h6 class="text-primary">Variables de la subcategoría</h6>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="_modal.close()"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="setProductos()"
+      [disabled]="formProductos.invalid"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
   </div>
 </ng-template>
 

@@ -17,4 +17,8 @@ export class CatalogoService {
     return this.http.get(`${environment.base_url}/lista-tipos-catalogo`);
   }
 
+  getCampos(params = {}){
+    return this.http.get(`${environment.base_url}/vars-subcategoria-producto`,{params});
+  }
+
 }

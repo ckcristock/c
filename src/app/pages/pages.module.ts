@@ -36,9 +36,7 @@ import { NoautorizadoComponent } from './noautorizado/noautorizado.component';
 import { NewTaskComponent } from './tasks/new-task/new-task.component';
 import { CardTaskComponent } from './tasks/card-task/card-task.component';
 import { MatButtonModule, MatIconModule } from '@angular/material';
-
 registerLocaleData(localeEs, 'es');
-
 
 @NgModule({
     declarations: [

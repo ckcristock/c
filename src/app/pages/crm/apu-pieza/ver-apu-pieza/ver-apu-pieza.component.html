@@ -377,16 +377,13 @@
         </div>
       </div>
       <button (click)="download()" class="btn btn-primary btn-block">
-        <i class="fas fa-file-download"></i>
-        <span *ngIf="!donwloading; else status"> Descargar</span>
-        <ng-template #status>
-          <span
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          Generando...
-        </ng-template>
+        <span
+          ><i
+            class="fas"
+            [class]="!donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'"
+          ></i>
+          {{ !donwloading ? "Descargar" : "Descargando" }}</span
+        >
       </button>
     </div>
   </div>

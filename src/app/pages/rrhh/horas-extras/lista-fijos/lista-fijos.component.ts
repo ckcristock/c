@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { ExtraHoursService } from '../extra-hours.service';
 
 @Component({
@@ -11,7 +12,12 @@ export class ListaFijosComponent implements OnInit {
   @Input('turnType') turnType;
   @Input('primerDia') primerDia;
   @Input('ultimodiaDia') ultimodiaDia;
-  constructor(private _extraHour: ExtraHoursService) {}
+
+  constructor(
+    private _extraHour: ExtraHoursService,
+    private _swal: SwalService,
+    ) {}
+
   personData: any;
   loading: boolean = false;
   ngOnInit(): void {
@@ -29,12 +35,18 @@ export class ListaFijosComponent implements OnInit {
     };
     this._extraHour.getDetailPeople(data).subscribe((r: any) => {
       this.personData = r.data
-      //console.log('reponse', r.data)
-      //console.log( 'personData', this.personData.extras[0])
       this.dayswork = this.personData.days_work
-      //console.log('dayswork', this.dayswork)
       this.loading = false;
     });
+  }
 
+  validarExtras = () => {
+    this._swal.show({
+      title: 'En Proceso',
+      text: 'Estaré trabajando en ello',
+      icon: 'warning',
+      showCancel: false,
+    });
+    console.log("valida toooodas las horas extras");
   }
 }

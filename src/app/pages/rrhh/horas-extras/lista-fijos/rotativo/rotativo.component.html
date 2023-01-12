@@ -1,7 +1,7 @@
 <tr class="text-center" [ngClass]="{ extra: validada }">
   <td class="col-3 text-left">
     <div *ngIf="day.date" class="text-primary font-weight-bold">
-      {{ day.date | date : "EEEE" | uppercase }}
+      {{ day.date | date : "EEEE" | uppercase }} - {{ diario.date | date:'longDate' }}
     </div>
 
     <div *ngIf="diarioDato?.turno_rotativo != null && diarioDato != undefined">
@@ -37,20 +37,16 @@
     </div>
 
   </td>
-  <!--   <td class="col-1" *ngIf="diario.entry_time_one">
-    <a (click)="modal.show()" title="Editar">
-      <i class="fa fa-pencil-alt"></i>
-    </a>
-  </td> -->
+
   <td class="col-1">
     <div *ngIf="lista.horasTrabajadas!='' && lista.horasTrabajadas!= undefined ">
-      Turno: <b>{{ lista.horasTurno }}</b> h
+      Turno: <b>{{ lista.horasTurno }}</b> horas
       <br />
-      Real: <b>{{ lista.horasTrabajadas }}</b> h
+      Real: <b>{{ lista.horasTrabajadas }}</b> horas
       <br />
-      <a *ngIf="diario.entry_time_one" (click)="modal.show()" title="Editar">
+      <!-- <a *ngIf=" turnoDato[0].day.entry_time_one" (click)="modal.show()" title="Editar">
         <i class="fa fa-pencil-alt"></i>
-      </a>
+      </a> -->
     </div>
   </td>
 
@@ -102,7 +98,7 @@
       name="recargosFestivos"
       class="form-control"
       placeholder="HRDDF"
-      [(ngModel)]="lista.recargosDiurnosFestivos"
+      [(ngModel)]="lista.recargosFestivos"
     />
   </td>
   <td class="col-1">

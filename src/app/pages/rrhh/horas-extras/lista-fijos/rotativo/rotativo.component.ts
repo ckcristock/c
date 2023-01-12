@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import * as moment from 'moment';
 import { SwalService } from '../../../../ajustes/informacion-base/services/swal.service';
 import { ExtraHoursService } from '../../extra-hours.service';
 
@@ -18,11 +17,8 @@ export class RotativoComponent implements OnInit {
 
   funcionarioDato: any;
   diarioDato: any;
-  horaInicioNoche = moment.utc('21:00:00', 'HH:mm:ss');
-  horaFinNoche = moment.utc('06:00:00', 'HH:mm:ss');
   turnoDato: any = {};
   lista: any = {};
-
   extrasValidadas: any = {};
   validada = false;
   esVisible = false;
@@ -49,7 +45,6 @@ export class RotativoComponent implements OnInit {
     }
     this.funcionarioDato = this.info.id;
     this.diarioDato = this.day;
-
     this.lista = {
       horasTurno: this.extras?.hours_schedule?.horas,
       horasTrabajadas: aux.ht,
@@ -58,10 +53,10 @@ export class RotativoComponent implements OnInit {
       horasExtrasDiurnasFestivasDom: aux.heddf,
       horasExtrasNocturnasFestivasDom: aux.hendf,
       recargosNocturnos: aux.hrn,
-      recargosDiurnosFestivos: aux.hrddf,
+      recargosFestivos: aux.hrddf,
       recargosNocturnosFestivos: aux.hrndf,
     };
-    //this.cargarExtrasValidadas(this.funcionarioDato); //se elimino la asignacion previa de HE
+    this.cargarExtrasValidadas(this.funcionarioDato); //se elimino la asignacion previa de HE
     this.relacionarConHoraTurno();
     this.asignacionDatosReales();
   }
@@ -75,9 +70,8 @@ export class RotativoComponent implements OnInit {
       })
       .then((res) => {
         if (res.isConfirmed) {
-
           let reporte = {
-            person_id: this.funcionarioDato.id,
+            person_id: this.funcionarioDato,
             date: this.diarioDato.date,
             ht: this.lista.horasTrabajadas,
             hed: this.lista.horasExtrasDiurnas,
@@ -86,12 +80,14 @@ export class RotativoComponent implements OnInit {
             hedfn: this.lista.horasExtrasNocturnasFestivasDom,
             rn: this.lista.recargosNocturnos,
             rf: this.lista.recargosFestivos,
+            rnf: this.lista.recargosNocturnosFestivos,
             hed_reales: this.lista.horasExtrasDiurnasReales,
             hen_reales: this.lista.horasExtrasNocturnasReales,
             hedfd_reales: this.lista.horasExtrasDiurnasFestivasDomReales,
             hedfn_reales: this.lista.horasExtrasNocturnasFestivasDomReales,
             rn_reales: this.lista.recargosNocturnosReales,
             rf_reales: this.lista.recargosFestivosReales,
+            rnf_reales: this.lista.recargosNocturnosFestivosReales,
           };
           if (this.validada === true) {
             //Actualizar
@@ -102,58 +98,77 @@ export class RotativoComponent implements OnInit {
             this._extra.createExtraHours(reporte).subscribe(this.res);
           }
           //Actualizar datos en vista
+        } else {
+          this._swal.show({
+            title: 'Ocurrió un error',
+            text: res.isConfirmed,
+            icon: 'error',
+            showCancel: false,
+          });
+          this.cargarExtrasValidadas(this.person.id);
         }
-      });
+      })
   }
 
   res = (r: any) => {
-    this._swal.show({
-      title: 'Guardado con éxito',
-      text: `La validación de horas extras para ${this.funcionarioDato.first_name} se generó con éxito`,
-      icon: 'success',
-      showCancel: false,
-    });
-    this.cargarExtrasValidadas(this.funcionarioDato.id);
+    if (r.status) {
+      this._swal.show({
+        title: 'Guardado con éxito',
+        text: `La validación de horas extras para ${this.person.first_name} se generó con éxito`,
+        icon: 'success',
+        showCancel: false,
+      });
+      this.cargarExtrasValidadas(this.person.id);
+    } else {
+      this._swal.show({
+        title: 'Ocurrió un error de status',
+        text: r.err,
+        icon: 'error',
+        showCancel: false,
+      });
+    }
   };
+
   mostrarModalDiarioFijo(diario) { }
 
   cargarExtrasValidadas(funcionario) {
     if (this.diarioDato['date'] != undefined) {
       this._extra
-        .getExtraHoursValids(funcionario, this.diarioDato[0].day.date)
+        .getExtraHoursValids(funcionario, this.diarioDato['date'])
         .subscribe((r: any) => {
-          this.extrasValidadas = r.data;
-          //console.log(r);
-          //console.log(this.diarioDato[0].day.date);
-          this.validada =
-            //this.extrasValidadas.date === this.diarioDato['date']
-            this.extrasValidadas.date === this.diarioDato[0].day.date
-              ? true
-              : false;
-          if (this.validada) {
-            this.lista.horasTrabajadas = this.extrasValidadas.ht;
-            this.lista.horasExtrasDiurnas = this.extrasValidadas.hed;
-            this.lista.horasExtrasNocturnas = this.extrasValidadas.hen;
-            this.lista.horasExtrasDiurnasFestivasDom =
-              this.extrasValidadas.hedfd;
-            this.lista.horasExtrasNocturnasFestivasDom =
-              this.extrasValidadas.hedfn;
-            this.lista.recargosNocturnos = this.extrasValidadas.rn;
-            this.lista.recargosFestivos = this.extrasValidadas.rf;
-            this.lista.horasExtrasDiurnasReales =
-              this.extrasValidadas.hed_reales;
-            this.lista.horasExtrasNocturnasReales =
-              this.extrasValidadas.hen_reales;
-            this.lista.horasExtrasDiurnasFestivasDomReales =
-              this.extrasValidadas.hedfd_reales;
-            this.lista.horasExtrasNocturnasFestivasDomReales =
-              this.extrasValidadas.hedfn_reales;
-            this.lista.recargosNocturnosReales = this.extrasValidadas.rn_reales;
-            this.lista.recargosFestivosReales = this.extrasValidadas.rf_reales;
+          if (r.status) {
+            this.extrasValidadas = r.data ?? {};
+            this.validada =
+              this.extrasValidadas.date === this.diarioDato['date']
+                //this.extrasValidadas.date === this.diarioDato[0]?.day?.date
+                ? true
+                : false;
+            if (this.validada) {
+              this.lista.horasTrabajadas = this.extrasValidadas.ht;
+              this.lista.horasExtrasDiurnas = this.extrasValidadas.hed;
+              this.lista.horasExtrasNocturnas = this.extrasValidadas.hen;
+              this.lista.horasExtrasDiurnasFestivasDom =
+                this.extrasValidadas.heddf;
+              this.lista.horasExtrasNocturnasFestivasDom =
+                this.extrasValidadas.hendf;
+              this.lista.recargosNocturnos = this.extrasValidadas.hrn;
+              this.lista.recargosFestivos = this.extrasValidadas.hrddf;
+              this.lista.recargosNocturnosFestivos = this.extrasValidadas.hrndf
+              this.lista.horasExtrasDiurnasReales =
+                this.extrasValidadas.hed_reales;
+              this.lista.horasExtrasNocturnasReales =
+                this.extrasValidadas.hen_reales;
+              this.lista.horasExtrasDiurnasFestivasDomReales =
+                this.extrasValidadas.hedfd_reales;
+              this.lista.horasExtrasNocturnasFestivasDomReales =
+                this.extrasValidadas.hedfn_reales;
+              this.lista.recargosNocturnosReales = this.extrasValidadas.rn_reales;
+              this.lista.recargosFestivosReales = this.extrasValidadas.rf_reales;
+              this.lista.recargosNocturnosFestivosReales = this.extrasValidadas.rnf_reales;
+            }
           }
         }
         );
-
     }
   }
 
@@ -170,6 +185,7 @@ export class RotativoComponent implements OnInit {
       this.lista.horasExtrasNocturnasFestivasDom;
     this.lista.recargosFestivosReales = this.lista.recargosFestivos;
     this.lista.recargosNocturnosReales = this.lista.recargosNocturnos;
+    this.lista.recargosNocturnosFestivosReales = this.lista.recargosNocturnosFestivos;
   }
 
   saved() {

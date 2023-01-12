@@ -270,9 +270,26 @@
         </mat-form-field>
       </div>
       <hr class="line">
-      <div class="row">
-        <h6 class="text-primary">Variables de la subcategoría</h6>
-      </div>
+      <span class="text-primary">Variables de la subcategoría</span>
+      <ng-container formArrayName="FormCamposSubcategoria">
+        <ng-container *ngFor="let campoControl of arrayCamposSubcat.controls; let i = index">
+          <div class="row" [formGroupName]="i">
+            <ng-container *ngFor="let campo of camposSubcat">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>{{campo.label}}</mat-label>
+                <input
+                  type="{{campo.type}}"
+                  formControlName="{{campo.label}}"
+                  matInput
+                  placeholder=""
+                  autocomplete="off"
+                  [required]="campo.required=='Si'"
+                />
+              </mat-form-field>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
     </form>
   </div>
   <div class="modal-footer">

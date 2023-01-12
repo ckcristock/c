@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
@@ -22,7 +22,7 @@ export class CatalogoComponent implements OnInit {
   public Subcategorias: any[] = [];
   public Productos: any[] = [];
   public tipos_catalogo: any[] = [];
-  public campos: any[] = [];
+  public camposSubcat: any[] = [];
   public unidades_medida: any[] = [];
   public selectedCategory: any = {
     categoria: {
@@ -51,6 +51,7 @@ export class CatalogoComponent implements OnInit {
   ) { }
 
   //ngbNavItem
+  Object = Object;
   formFiltros: FormGroup;
   formProductos: FormGroup;
   filtroDefault: any = {};
@@ -118,38 +119,40 @@ export class CatalogoComponent implements OnInit {
       Codigo_Barras: ['', Validators.required],
       Embalaje: ['', Validators.required],
       Tipo_Catalogo: ['', Validators.required],
-      dynamic: this.fb.array([])
+      FormCamposSubcategoria: this.fb.array([])
     });
   }
 
-  dinamicFields() {
-    const formVacio = this.campos.map((campo) => [ campo.label, (campo.required == "Si")?[campo.valor]:[campo.valor,Validators.required]]);
-    let field = this.fb.group(formVacio);
-    return field;
+  subcatCampos() {
+    const formCampos = {};
+    this.camposSubcat.forEach(campo => {
+      formCampos[campo.label] = campo.required=="Si" ?
+        new FormControl(campo.valor || '',Validators.required):
+        new FormControl(campo.valor || '')
+    });
+
+    return this.fb.group(formCampos);
   }
 
-  newField() {
-    let field = this.fieldDinamic;
-    field.push(this.dinamicFields());
+  newCampoSubcat() {
+    let field = this.arrayCamposSubcat;
+    field.push(this.subcatCampos());
   }
 
-  get fieldDinamic() {
-    return this.formProductos.get('dynamic') as FormArray;
+  get arrayCamposSubcat() {
+    return this.formProductos.get('FormCamposSubcategoria') as FormArray;
   }
-
-  /* deleteField(i: number) {
-    this.fieldDinamic.removeAt(i);
-  } */
 
   openConfirm(confirm: any, titulo: string, data?: any ) {
     this.formProductos.reset();
+    this.arrayCamposSubcat.removeAt(0);
     let params={};
     if(titulo == "Agregar"){
       this.formProductos.patchValue({
         Id_Categoria: this.selectedCategory.categoria.id,
         Id_Subcategoria: this.selectedCategory.subcategoria.id
       });
-      params={ id:this.selectedCategory.subcategoria.id};
+      params={ subcategoria:this.selectedCategory.subcategoria.id };
     }else{
       this.formProductos.patchValue({
         Id_Producto: data.Id_Producto,
@@ -162,11 +165,11 @@ export class CatalogoComponent implements OnInit {
         Embalaje: data.Embalaje,
         Tipo_Catalogo: data.Tipo_Catalogo
       });
-      params={ id:data.Id_Producto, valor: 1 };
+      params={ producto:data.Id_Producto };
     }
     this._catalogo.getCampos(params).subscribe((res: any) => {
-      this.campos = res.data;
-      this.newField();
+      this.camposSubcat = res.data;
+      this.newCampoSubcat();
       this._modal.open(confirm, 'lg');
     })
   }
@@ -206,13 +209,34 @@ export class CatalogoComponent implements OnInit {
 
   setProductos(){
     if(this.formProductos.valid){
-      this._swal.show({
-        icon: 'success',
-        title: "Nice!",
-        text: 'Se ha agregado la bodega con éxito.',
-        timer: 1000,
-        showCancel: false
+      let camposSubcategoria = this.camposSubcat.map((campo) => campo={
+        id:campo.vp_id || "",
+        subcategory_variables_id:campo.sv_id,
+        valor:this.arrayCamposSubcat.value[0][campo.label]
       });
+      this.formProductos.value["camposSubcategoria"] = camposSubcategoria;
+      delete this.formProductos.value.FormCamposSubcategoria;
+      this._swal.show({
+        title: '¿Estás seguro(a)?',
+        text: 'Si ya verificó la información y está de acuerdo, por favor proceda.',
+        icon: 'question',
+        showCancel: true
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._catalogo.saveProduct(this.formProductos.value).subscribe((r: any) => {
+            this.getProducts(this.pagination.page);
+            this._swal.show({
+              icon: 'success',
+              title: 'Tarea completada con éxito!',
+              text: 'El producto ha sido registrado con éxito.',
+              timer: 1000,
+              showCancel: false
+            });
+            this._modal.close();
+          });
+        }
+      })
     }
   }
 }

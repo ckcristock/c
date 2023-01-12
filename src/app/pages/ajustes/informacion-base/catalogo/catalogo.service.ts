@@ -21,4 +21,8 @@ export class CatalogoService {
     return this.http.get(`${environment.base_url}/vars-subcategoria-producto`,{params});
   }
 
+  saveProduct( data:any ) {
+    return this.http.post(`${environment.base_url}/product`, data);
+  }
+
 }

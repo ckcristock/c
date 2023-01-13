@@ -15,19 +15,15 @@
             [disabled]="categoria.subcategory.length == 0"
           >
             <mat-expansion-panel-header>
-                {{ categoria.Nombre }}
+              {{ categoria.Nombre }}
             </mat-expansion-panel-header>
             <ng-container *ngIf="categoria.subcategory.length > 0; else noSub">
-              <ul class="small ml-4 list-group my-0">
-                <li
-                  role="button"
+              <mat-action-list dense class="small ml-4 my-0">
+                <button mat-list-item
                   *ngFor="let subcategoria of categoria.subcategory"
-                  class="list-group-item list-group-item-action"
                   [ngClass]="
-                    (selectedCategory.categoria.id == subcategoria.Id_Categoria_Nueva &&
-                      selectedCategory.subcategoria.id == subcategoria.Id_Subcategoria)
-                      ? 'bg-soft-primary'
-                      : ''
+                    {'bg-soft-primary' :(selectedCategory.categoria.id == subcategoria.Id_Categoria_Nueva &&
+                      selectedCategory.subcategoria.id == subcategoria.Id_Subcategoria)}
                   "
                   (click)="getProductosBySubcategoria(
                     {
@@ -43,8 +39,8 @@
                   )"
                 >
                   {{ subcategoria.Nombre }}
-                </li>
-              </ul>
+                </button>
+              </mat-action-list>
             </ng-container>
           </mat-expansion-panel>
         </mat-accordion>
@@ -66,41 +62,62 @@
               >
                 <i class="fa fa-plus"></i> Agregar
               </button>
-              <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
+              <button class="btn btn-info btn-sm" (click)="openClose()">
                 <i class="fas fa-sliders-h"></i> Filtros
               </button>
             </div>
           </div>
         </div>
         <hr class="line" />
-        <mat-expansion-panel #matPanel="matExpansionPanel" class="mat-elevation-z0">
-          <form [formGroup]="formFiltros" id="formFiltros">
-            <div class="row">
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Nombre</mat-label>
-                <input
-                  type="text"
-                  formControlName="nombre"
-                  matInput
-                  placeholder="Nombre del producto"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Tipo</mat-label>
-                <mat-select
-                  formControlName="tipo_catalogo"
-                  matInput
-                  placeholder="Tipo del catálogo"
-                  (selectionChange)="getProducts()"
-                >
-                  <mat-option value="">Todos</mat-option>
-                  <mat-option *ngFor="let tipo of tipos_catalogo" [value]="tipo.value">{{ tipo.text }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </form>
-        </mat-expansion-panel>
+        <mat-accordion>
+          <mat-expansion-panel #matPanel="matExpansionPanel" class="mat-elevation-z0">
+            <form [formGroup]="formFiltros" id="formFiltros">
+              <div class="row">
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Nombre</mat-label>
+                  <input
+                    type="text"
+                    formControlName="nombre"
+                    matInput
+                    placeholder="Nombre del producto"
+                    autocomplete="off"
+                  />
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Tipo</mat-label>
+                  <mat-select
+                    formControlName="tipo_catalogo"
+                    matInput
+                    placeholder="Tipo del catálogo"
+                    (selectionChange)="getProducts()"
+                  >
+                    <mat-option value="">Todos</mat-option>
+                    <mat-option *ngFor="let tipo of tipos_catalogo" [value]="tipo.value">{{ tipo.text }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Estado</mat-label>
+                  <mat-select
+                    formControlName="estado"
+                    matInput
+                    placeholder="Estado del producto"
+                    (selectionChange)="getProducts()"
+                  >
+                    <mat-option value="">Todos</mat-option>
+                    <mat-option *ngFor="let estado of estados" [value]="estado.estado">{{ estado.estado }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+          </mat-expansion-panel>
+          <mat-expansion-panel #matPanelAlert="matExpansionPanel">
+            <ng-template matExpansionPanelContent *ngIf="filtroActivado">
+              <div class="alert alert-warning text-center" role="alert">
+                ¡Hay filtros aplicados!
+              </div>
+            </ng-template>
+          </mat-expansion-panel>
+        </mat-accordion>
         <h5 class="text-dark" *ngIf="selectedCategory.categoria.id!==null">Categoría: {{ selectedCategory.categoria.nombre + ' > ' + selectedCategory.subcategoria.nombre | lowercase }}</h5>
         <div class="rounded-top table-responsive">
           <table
@@ -119,6 +136,7 @@
               <tr
                 class="text-center"
                 *ngFor="let producto of Productos"
+                [ngClass]="{'text-danger':(producto.Estado == 'Inactivo')}"
               >
                 <td class="align-middle">{{ producto.Nombre_Comercial }}</td>
                 <td class="align-middle">{{ producto.Embalaje }}</td>
@@ -139,23 +157,24 @@
                           role="button"
                           class="dropdown-item waves-light caja-botones text-info"
                           (click)="openConfirm(add, 'Editar', producto)"
-                        ><!-- getGrupo(grupo)" -->
-                          <i class="far fa-edit"></i> Editar</a
                         >
+                          <i class="far fa-edit"></i> Editar
+                        </a>
                         <a
                           role="button"
-                          class="dropdown-item waves-light caja-botones text-success"
-
-                        ><!-- [ngClass]="{
-                            'text-danger': grupo.Estado == 'Activo',
-                            'text-success': grupo.Estado == 'Inactivo'
+                          class="dropdown-item waves-light caja-botones"
+                          [ngClass]="{
+                            'text-danger': (producto.Estado == 'Activo'),
+                            'text-success': (producto.Estado == 'Inactivo')
                           }"
-                          (click)=" cambiarEstado(grupo, grupo.Estado == 'Activo' ? 'Inactivo' : 'Activo')" -->
-                          <i class="fas fa-check"></i><!-- [ngClass]="{
-                              'fa-trash-alt': grupo.Estado == 'Activo',
-                              'fa-check': grupo.Estado == 'Inactivo'
-                            }"
-                          {{ grupo.Estado == "Activo" ? " Inactivar" : " Activar" }} -->Activar
+                          (click)="cambiarEstado(producto, producto.Estado == 'Activo' ? 'Inactivo' : 'Activo')"
+                        >
+                          <i class="fas" [ngClass]="{
+                              'Activo': 'fa-ban',
+                              'Inactivo': 'fa-check'
+                            }[producto.Estado]"
+                          ></i>
+                          {{ producto.Estado == "Activo" ? " Inactivar" : " Activar" }}
                         </a>
                       </div>
                     </div>

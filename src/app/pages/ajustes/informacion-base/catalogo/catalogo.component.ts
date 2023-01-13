@@ -17,11 +17,13 @@ import { CatalogoService } from './catalogo.service';
 })
 export class CatalogoComponent implements OnInit {
   @ViewChild('matPanel') matPanel: MatExpansionPanel;
+  @ViewChild('matPanelAlert') matPanelAlert: MatExpansionPanel;
 
   public Categorias: any[] = [];
   public Subcategorias: any[] = [];
   public Productos: any[] = [];
   public tipos_catalogo: any[] = [];
+  public estados: any[] = [];
   public camposSubcat: any[] = [];
   public unidades_medida: any[] = [];
   public selectedCategory: any = {
@@ -58,6 +60,7 @@ export class CatalogoComponent implements OnInit {
   active = 1;
   loadingCategorias: boolean = false;
   loadingProductos: boolean = false;
+  filtroActivado: boolean = false;
 
   ngOnInit(): void {
     this.getCategorias();
@@ -68,6 +71,9 @@ export class CatalogoComponent implements OnInit {
     })
     this._unit.selectUnits().subscribe((res: any) => {
       this.unidades_medida = res.data;
+    })
+    this._catalogo.getEstados().subscribe((res: any) => {
+      this.estados = res.data;
     })
   }
 
@@ -91,6 +97,14 @@ export class CatalogoComponent implements OnInit {
       .subscribe(data => console.log({data}));
   } */
 
+  openClose(){
+    this.matPanel.toggle();
+    if(!this.matPanel.expanded){
+      this.matPanelAlert.open();
+    }
+    this.filtroActivado = (JSON.stringify(this.formFiltros.value)!==JSON.stringify(this.filtroDefault));
+  }
+
   moveToTop() {
     // window.scroll(0,0);
     window.scroll({
@@ -102,10 +116,9 @@ export class CatalogoComponent implements OnInit {
 
   createForms() {
     this.formFiltros = this.fb.group({
-      categoria: [''],
-      subcategoria: [''],
       nombre: [''],
-      tipo_catalogo: ['']
+      tipo_catalogo: [''],
+      estado: ['']
     });
     this.filtroDefault = this.formFiltros.value;
 
@@ -183,13 +196,13 @@ export class CatalogoComponent implements OnInit {
   }
 
   getProducts(page = 1) {
-    this.formFiltros.patchValue({
+    this.pagination.page = page;
+
+    let params = {
+      ...this.pagination,
+      ...this.formFiltros.value,
       categoria: this.selectedCategory.categoria.id,
       subcategoria: this.selectedCategory.subcategoria.id
-    })
-    this.pagination.page = page;
-    let params = {
-      ...this.pagination, ...this.formFiltros.value
     }
     this.loadingProductos = true;
     this._catalogo.getData(params).subscribe((res: any) => {
@@ -202,10 +215,39 @@ export class CatalogoComponent implements OnInit {
   getProductosBySubcategoria(categoria){
     this.moveToTop();
     this.formFiltros.reset(this.filtroDefault);
-    this.matPanel.close();
+    this.matPanel.accordion.closeAll();
     this.selectedCategory = categoria;
     this.getProducts();
   }
+
+  cambiarEstado(producto, state) {
+    let data = {
+      id: producto.Id_Producto,
+      estado: state
+    }
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: '¡El producto será ' + (producto.Estado == 'Activo' ? 'inactivado!' : 'activado!'),
+      icon: 'question',
+      showCancel: true
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._catalogo.changeEstado(data).subscribe((r: any) => {
+            this.getProducts(this.pagination.page);
+          })
+          this._swal.show({
+            icon: 'success',
+            title: 'Tarea completada con éxito!',
+            text: 'El producto ha sido ' + (producto.Estado == 'Inactivo' ? 'activado' : 'inactivado') + ' con éxito.',
+            timer: 1000,
+            showCancel: false
+          })
+        }
+      })
+  }
+
+
 
   setProductos(){
     if(this.formProductos.valid){
@@ -221,8 +263,7 @@ export class CatalogoComponent implements OnInit {
         text: 'Si ya verificó la información y está de acuerdo, por favor proceda.',
         icon: 'question',
         showCancel: true
-      })
-      .then((result) => {
+      }).then((result) => {
         if (result.isConfirmed) {
           this._catalogo.saveProduct(this.formProductos.value).subscribe((r: any) => {
             this.getProducts(this.pagination.page);
@@ -234,9 +275,25 @@ export class CatalogoComponent implements OnInit {
               showCancel: false
             });
             this._modal.close();
+          },(error) => {
+            this._swal.show({
+              icon: 'error',
+              title: 'Se presentó un error!',
+              text: error.message,
+              timer: 1000,
+              showCancel: false
+            });
           });
         }
       })
+    }else{
+      this._swal.show({
+        icon: 'success',
+        title: 'Tarea completada con éxito!',
+        text: 'El producto ha sido registrado con éxito.',
+        timer: 1000,
+        showCancel: false
+      });
     }
   }
 }

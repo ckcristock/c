@@ -1,14 +1,82 @@
+<div class="row">
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-success">0</h2>
+          <i class="fas fa-tachometer-alt fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Total</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-primary">0</h2>
+          <i class="fas fa-clock fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Activas</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-info">0</h2>
+          <i class="fas fa-thumbs-up fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Terminadas</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-warning">0</h2>
+          <i class="fas fa-hourglass fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Terminadas parciales</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-danger">0</h2>
+          <i class="fas fa-ban fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Anuladas</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-success">0%</h2>
+          <i class="fas fa-chart-pie fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">% cumplimiento</small>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="card">
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
         <h4 class="text-primary">
           Órdenes de producción
-          <!-- <span style="font-size: smaller" *ngIf="paginacion"
+          <span style="font-size: smaller" *ngIf="paginationMaterial"
             ><small class="pb-2 text-secondary text-muted"
-              >pág. {{ paginacion.current_page }}</small
+              >pág. {{ paginationMaterial.current_page }}</small
             ></span
-          > -->
+          >
         </h4>
       </div>
       <div class="col-md-6 px-0 text-right">
@@ -16,7 +84,7 @@
           <button
             class="btn btn-primary btn-sm"
             *ngIf="permission.permissions.add"
-            [routerLink]="['/crm/terceros/crear-tercero']"
+            [routerLink]="['crear']"
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
@@ -134,6 +202,15 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
+    <div class="alert alert-info" *ngIf="active_filters" role="alert">
+      <strong
+        >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
+        click
+      </strong>
+      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
+        >aquí</a
+      >
+    </div>
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
@@ -158,11 +235,16 @@
             <td>{{ item.date | date : "MMM d, y, h:mm a" }}</td>
             <td>{{ item.city?.name }}</td>
             <td>
-              {{
-                item.third_party.social_reason
-              }}
+              {{ item.third_party.social_reason }}
             </td>
-            <td>{{ item.description }}</td>
+            <td
+              role="button"
+              class="text-primary"
+              matTooltipClass="tooltip-custom"
+              [matTooltip]="item.description"
+            >
+              Ver detalles
+            </td>
             <td>{{ item.observation }}</td>
             <td>{{ item.delivery_date }}</td>
             <td>
@@ -231,6 +313,16 @@
         </tbody>
       </table>
     </div>
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial.total"
+      [pageSize]="paginationMaterial.per_page"
+      [pageIndex]="paginationMaterial.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
   </div>
 </div>
 <ng-template #notData>

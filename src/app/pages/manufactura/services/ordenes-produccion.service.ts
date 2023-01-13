@@ -14,4 +14,12 @@ export class OrdenesProduccionService {
   getWorkOrders(params = {}) {
     return this.http.get(`${environment.base_url}/paginate-work-orders`, { params });
   }
+
+  getLastId() {
+    return this.http.get(`${environment.base_url}/last-id-work-orders`);
+  }
+
+  saveWorkOrder(data) {
+    return this.http.post(`${environment.base_url}/work-orders`, data);
+  }
 }

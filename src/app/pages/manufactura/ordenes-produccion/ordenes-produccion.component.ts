@@ -1,8 +1,9 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatAccordion } from '@angular/material';
-import { Router } from '@angular/router';
+import { MatAccordion, PageEvent } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { DateAdapter } from 'saturn-datepicker';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
@@ -20,8 +21,11 @@ export class OrdenesProduccionComponent implements OnInit {
   date: any;
   matPanel: boolean;
   loading: boolean;
+  paginationMaterial: any;
   workOrders: any[] = []
   formFilters: FormGroup;
+  orderObj: any
+  active_filters: boolean = false
   permission: Permissions = {
     menu: 'Órdenes de producción',
     permissions: {
@@ -29,11 +33,17 @@ export class OrdenesProduccionComponent implements OnInit {
       add: true
     }
   };
+  pagination: any = {
+    page: '',
+    pageSize: '',
+  }
   constructor(
     private _permission: PermissionService,
     public router: Router,
     private fb: FormBuilder,
     private _work_orders: OrdenesProduccionService,
+    private route: ActivatedRoute,
+    private location: Location,
     private dateAdapter: DateAdapter<any>
   ) {
     this.permission = this._permission.validatePermissions(this.permission);
@@ -43,7 +53,29 @@ export class OrdenesProduccionComponent implements OnInit {
   ngOnInit(): void {
     if (this.permission.permissions.show) {
       this.createFormFilters();
-      this.getWorkOrders();
+      this.route.queryParamMap.subscribe((params: any) => {
+        if (params.params.pageSize) {
+          this.pagination.pageSize = params.params.pageSize
+        } else {
+          this.pagination.pageSize = 10
+        }
+        if (params.params.pag) {
+          this.pagination.page = params.params.pag
+        } else {
+          this.pagination.page = 1
+        }
+        this.orderObj = { ...params.keys, ...params }
+        console.log(Object.keys(this.orderObj).length)
+        if (Object.keys(this.orderObj).length > 4) {
+          this.active_filters = true
+          const formValues = {};
+          for (const param in params) {
+            formValues[param] = params[param];
+          }
+          this.formFilters.patchValue(formValues['params']);
+        }
+        this.getWorkOrders();
+      })
     } else {
       this.router.navigate(['/notauthorized'])
     }
@@ -52,6 +84,33 @@ export class OrdenesProduccionComponent implements OnInit {
   openClose() {
     this.matPanel = !this.matPanel;
     this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
+  }
+
+  handlePageEvent(event: PageEvent) {
+    this.pagination.pageSize = event.pageSize
+    this.pagination.page = event.pageIndex + 1
+    this.getWorkOrders()
+  }
+
+  resetFiltros() {
+    for (const controlName in this.formFilters.controls) {
+      this.formFilters.get(controlName).setValue('');
+    }
+    this.active_filters = false
+  }
+
+  SetFiltros(paginacion) {
+    console.log(paginacion)
+    let params = new HttpParams;
+    params = params.set('pag', paginacion)
+    params = params.set('pageSize', this.pagination.pageSize)
+    for (const controlName in this.formFilters.controls) {
+      const control = this.formFilters.get(controlName);
+      if (control.value) {
+        params = params.set(controlName, control.value);
+      }
+    }
+    return params;
   }
 
   createFormFilters() {
@@ -77,13 +136,21 @@ export class OrdenesProduccionComponent implements OnInit {
   getWorkOrders() {
     this.loading = true;
     let params = {
+      ...this.pagination,
       ...this.formFilters.value
     }
-    this._work_orders.getWorkOrders(params).subscribe((res:any) => {
+    var paramsurl = this.SetFiltros(this.pagination.page);
+    this.location.replaceState('/manufactura/ordenes-produccion', paramsurl.toString());
+    this._work_orders.getWorkOrders(params).subscribe((res: any) => {
       this.workOrders = res.data.data;
       this.loading = false;
+      this.paginationMaterial = res.data
+      if (this.paginationMaterial.last_page < this.pagination.page) {
+        this.paginationMaterial.current_page = 1
+        this.pagination.page = 1
+        this.getWorkOrders()
+      }
     })
-    console.log('pruebas')
   }
 
   selectedDate(fecha, type_date) {

@@ -12,9 +12,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpClientModule } from '@angular/common/http';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
-import { MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatNativeDateModule, MatPaginatorModule, MatRadioModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatNativeDateModule, MatPaginatorModule, MatRadioModule, MatSelectModule, MatTooltipModule } from '@angular/material';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { CrearOrdenProduccionComponent } from './ordenes-produccion/crear-orden-produccion/crear-orden-produccion.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -32,7 +34,8 @@ export const MY_FORMATS = {
     OrdenesProduccionComponent,
     IngenieriaComponent,
     DisenoComponent,
-    ProduccionComponent
+    ProduccionComponent,
+    CrearOrdenProduccionComponent
   ],
   imports: [
     CommonModule,
@@ -59,6 +62,8 @@ export const MY_FORMATS = {
     MatNativeDateModule,
     SatDatepickerModule,
     SatNativeDateModule,
+    MatTooltipModule,
+    CKEditorModule
   ],
   providers: [
     {

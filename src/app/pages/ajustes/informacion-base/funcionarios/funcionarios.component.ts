@@ -113,7 +113,6 @@ export class FuncionariosComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    console.log(event)
     this.pagination.pageSize = event.pageSize
     this.getPeople(event.pageIndex + 1)
   }

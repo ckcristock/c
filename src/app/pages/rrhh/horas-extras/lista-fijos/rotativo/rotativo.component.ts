@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { SwalService } from '../../../../ajustes/informacion-base/services/swal.service';
 import { ExtraHoursService } from '../../extra-hours.service';
+import { FijoComponent } from '../fijo/fijo.component';
 
 @Component({
   selector: 'app-rotativo',
@@ -8,12 +9,11 @@ import { ExtraHoursService } from '../../extra-hours.service';
   styleUrls: ['./rotativo.component.scss'],
 })
 export class RotativoComponent implements OnInit {
-  @Input('day') day;
-  @Input('info') info;
   @Input('diario') diario;
   @Input('person') person;
   @Input('extras') extras;
   @Output('updateDates') updateDates = new EventEmitter<any>();
+  @Output('data') data = new EventEmitter<any>();
 
   funcionarioDato: any;
   diarioDato: any;
@@ -23,7 +23,10 @@ export class RotativoComponent implements OnInit {
   validada = false;
   esVisible = false;
 
-  constructor(private _swal: SwalService, private _extra: ExtraHoursService) { }
+  constructor(
+    private _swal: SwalService,
+    private _extra: ExtraHoursService
+  ) { }
 
   ngOnInit(): void {
     let aux = {
@@ -43,8 +46,8 @@ export class RotativoComponent implements OnInit {
         aux = Object.assign(this.extras.hours_extra, this.extras.hours_recharge);
       }
     }
-    this.funcionarioDato = this.info.id;
-    this.diarioDato = this.day;
+    this.funcionarioDato = this.person.id;
+    this.diarioDato = this.diario;
     this.lista = {
       horasTurno: this.extras?.hours_schedule?.horas,
       horasTrabajadas: aux.ht,
@@ -55,10 +58,14 @@ export class RotativoComponent implements OnInit {
       recargosNocturnos: aux.hrn,
       recargosFestivos: aux.hrddf,
       recargosNocturnosFestivos: aux.hrndf,
+      person_id: this.person.id,
+      date: this.extras?.date,
+      validada: this.validada
     };
-    this.cargarExtrasValidadas(this.funcionarioDato); //se elimino la asignacion previa de HE
+    this.cargarExtrasValidadas(this.funcionarioDato, this.diarioDato['date']); //se elimino la asignacion previa de HE
     this.relacionarConHoraTurno();
     this.asignacionDatosReales();
+    this.data.emit(this.lista);
   }
 
   guardarReporteDeExtras() {
@@ -78,9 +85,9 @@ export class RotativoComponent implements OnInit {
             hen: this.lista.horasExtrasNocturnas,
             hedfd: this.lista.horasExtrasDiurnasFestivasDom,
             hedfn: this.lista.horasExtrasNocturnasFestivasDom,
-            rn: this.lista.recargosNocturnos,
-            rf: this.lista.recargosFestivos,
-            rnf: this.lista.recargosNocturnosFestivos,
+            hrn: this.lista.recargosNocturnos,
+            hrddf: this.lista.recargosFestivos,
+            hrndf: this.lista.recargosNocturnosFestivos,
             hed_reales: this.lista.horasExtrasDiurnasReales,
             hen_reales: this.lista.horasExtrasNocturnasReales,
             hedfd_reales: this.lista.horasExtrasDiurnasFestivasDomReales,
@@ -105,7 +112,7 @@ export class RotativoComponent implements OnInit {
             icon: 'error',
             showCancel: false,
           });
-          this.cargarExtrasValidadas(this.person.id);
+          this.cargarExtrasValidadas(this.person.id, this.diarioDato['date']);
         }
       })
   }
@@ -118,7 +125,7 @@ export class RotativoComponent implements OnInit {
         icon: 'success',
         showCancel: false,
       });
-      this.cargarExtrasValidadas(this.person.id);
+      this.cargarExtrasValidadas(this.person.id, this.diarioDato['date']);
     } else {
       this._swal.show({
         title: 'Ocurrió un error de status',
@@ -131,15 +138,15 @@ export class RotativoComponent implements OnInit {
 
   mostrarModalDiarioFijo(diario) { }
 
-  cargarExtrasValidadas(funcionario) {
-    if (this.diarioDato['date'] != undefined) {
+  cargarExtrasValidadas(funcionario, fecha) {
+    if (fecha != undefined) {
       this._extra
-        .getExtraHoursValids(funcionario, this.diarioDato['date'])
+        .getExtraHoursValids(funcionario, fecha)
         .subscribe((r: any) => {
           if (r.status) {
             this.extrasValidadas = r.data ?? {};
             this.validada =
-              this.extrasValidadas.date === this.diarioDato['date']
+              this.extrasValidadas.date === fecha
                 //this.extrasValidadas.date === this.diarioDato[0]?.day?.date
                 ? true
                 : false;
@@ -165,6 +172,7 @@ export class RotativoComponent implements OnInit {
               this.lista.recargosNocturnosReales = this.extrasValidadas.rn_reales;
               this.lista.recargosFestivosReales = this.extrasValidadas.rf_reales;
               this.lista.recargosNocturnosFestivosReales = this.extrasValidadas.rnf_reales;
+              this.lista.validada = this.validada
             }
           }
         }
@@ -188,6 +196,8 @@ export class RotativoComponent implements OnInit {
     this.lista.recargosNocturnosFestivosReales = this.lista.recargosNocturnosFestivos;
   }
 
+  //esta función es para modificar el horario, que a la fecha (13-01-2023) no se debe realizar
+  //
   saved() {
     this.updateDates.emit();
   }

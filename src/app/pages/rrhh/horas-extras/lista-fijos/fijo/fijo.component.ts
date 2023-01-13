@@ -8,12 +8,11 @@ import { ExtraHoursService } from '../../extra-hours.service';
   styleUrls: ['./fijo.component.scss'],
 })
 export class FijoComponent implements OnInit {
-  @Input('day') day;
-  @Input('info') info;
   @Input('diario') diario;
   @Input('person') person;
   @Input('extras') extras;
   @Output('updateDates') updateDates = new EventEmitter<any>();
+  @Output('data') data = new EventEmitter<any>();
 
   funcionarioDato: any;
   diarioDato: any;
@@ -23,7 +22,10 @@ export class FijoComponent implements OnInit {
   validada = false;
   esVisible = false;
 
-  constructor(private _swal: SwalService, private _extra: ExtraHoursService) { }
+  constructor(
+    private _swal: SwalService,
+    private _extra: ExtraHoursService
+    ) { }
 
   ngOnInit(): void {
     let aux = {
@@ -52,12 +54,16 @@ export class FijoComponent implements OnInit {
       recargosNocturnos: aux.hrn,
       recargosFestivos: aux.hrddf,
       recargosNocturnosFestivos: aux.hrndf,
+      person_id: this.person.id,
+      date: this.extras?.date,
+      validada: this.validada
     };
     this.funcionarioDato = this.person;
     this.cargarExtrasValidadas(this.funcionarioDato.id);
     this.relacionarConHoraTurno();
     this.asignacionDatosReales();
     this.diarioDato = this.diario;
+    this.data.emit(this.lista)
   }
 
   get hasDay() {
@@ -79,11 +85,11 @@ export class FijoComponent implements OnInit {
             ht: this.lista.horasTrabajadas,
             hed: this.lista.horasExtrasDiurnas,
             hen: this.lista.horasExtrasNocturnas,
-            hedfd: this.lista.horasExtrasDiurnasFestivasDom,
-            hedfn: this.lista.horasExtrasNocturnasFestivasDom,
-            rnf: this.lista.recargosNocturnosFestivos,
-            rn: this.lista.recargosNocturnos,
-            rf: this.lista.recargosFestivos,
+            heddf: this.lista.horasExtrasDiurnasFestivasDom,
+            hendf: this.lista.horasExtrasNocturnasFestivasDom,
+            hrndf: this.lista.recargosNocturnosFestivos,
+            hrn: this.lista.recargosNocturnos,
+            hrddf: this.lista.recargosFestivos,
 
             hed_reales: this.lista.horasExtrasDiurnasReales,
             hen_reales: this.lista.horasExtrasNocturnasReales,
@@ -92,6 +98,7 @@ export class FijoComponent implements OnInit {
             rn_reales: this.lista.recargosNocturnosReales,
             rf_reales: this.lista.recargosFestivosReales,
             rnf_reales: this.lista.recargosNocturnosFestivosReales,
+
           };
 
           if (this.validada === true) {
@@ -122,7 +129,6 @@ export class FijoComponent implements OnInit {
         icon: 'success',
         showCancel: false,
       });
-      console.log(this.funcionarioDato.id)
       this.cargarExtrasValidadas(this.funcionarioDato.id);
     } else {
       this._swal.show({
@@ -166,6 +172,7 @@ export class FijoComponent implements OnInit {
               this.lista.recargosNocturnosReales = this.extrasValidadas.rn_reales;
               this.lista.recargosFestivosReales = this.extrasValidadas.rf_reales;
               this.lista.recargosNocturnosFestivosReales = this.extrasValidadas.rnf_reales;
+              this.lista.validada = this.validada
             }
           }
         });

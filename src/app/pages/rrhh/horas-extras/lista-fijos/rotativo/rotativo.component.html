@@ -1,7 +1,7 @@
 <tr class="text-center" [ngClass]="{ extra: validada }">
   <td class="col-3 text-left">
-    <div *ngIf="day.date" class="text-primary font-weight-bold">
-      {{ day.date | date : "EEEE" | uppercase }} - {{ diario.date | date:'longDate' }}
+    <div *ngIf="diario.date" class="text-primary font-weight-bold">
+      {{ diario.date | date : "EEEE" | uppercase }} - {{ diario.date | date:'longDate' }}
     </div>
 
     <div *ngIf="diarioDato?.turno_rotativo != null && diarioDato != undefined">
@@ -59,6 +59,7 @@
       class="form-control"
       placeholder="HED"
       [(ngModel)]="lista.horasExtrasDiurnas"
+      disabled="{{validada}}"
     />
   </td>
   <td class="col-1">
@@ -69,6 +70,7 @@
       class="form-control"
       placeholder="HEN"
       [(ngModel)]="lista.horasExtrasNocturnas"
+      disabled="{{validada}}"
     />
   </td>
   <td class="col-1">
@@ -79,6 +81,7 @@
       name="recargosNocturnos"
       placeholder="HRN"
       [(ngModel)]="lista.recargosNocturnos"
+      disabled="{{validada}}"
     />
   </td>
   <td class="col-1">
@@ -89,6 +92,7 @@
       name="horasExtrasDiurnasFestivasDom"
       placeholder="HEDDF"
       [(ngModel)]="lista.horasExtrasDiurnasFestivasDom"
+      disabled="{{validada}}"
     />
   </td>
   <td class="col-1">
@@ -99,6 +103,7 @@
       class="form-control"
       placeholder="HRDDF"
       [(ngModel)]="lista.recargosFestivos"
+      disabled="{{validada}}"
     />
   </td>
   <td class="col-1">
@@ -109,6 +114,8 @@
       class="form-control"
       placeholder="HENDF"
       [(ngModel)]="lista.horasExtrasNocturnasFestivasDom"
+      disabled="{{validada}}"
+      disabled="{{validada}}"
     />
   </td>
   <td class="col-1">
@@ -119,10 +126,11 @@
       class="form-control"
       placeholder="HRNDF"
       [(ngModel)]="lista.recargosNocturnosFestivos"
+      disabled="{{validada}}"
     />
   </td>
   <td class="col-1">
-    <a (click)="guardarReporteDeExtras()" class="toCheck" title="Validar">
+    <a (click)="guardarReporteDeExtras()" class="toCheck" title="Validar"  *ngIf="!validada">
       <i class="fa fa-check-circle"></i>
     </a>
     <div class="text-success font-weight-bold text-muted" *ngIf="validada">

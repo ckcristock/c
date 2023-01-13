@@ -57,6 +57,7 @@
         class="form-control"
         placeholder="HED"
         [(ngModel)]="lista.horasExtrasDiurnas"
+        disabled="{{validada}}"
       />
     </td>
     <td class="col-1">
@@ -67,6 +68,7 @@
         class="form-control"
         placeholder="HEN"
         [(ngModel)]="lista.horasExtrasNocturnas"
+        disabled="{{validada}}"
       />
     </td>
     <td class="col-1">
@@ -77,6 +79,7 @@
         name="recargosNocturnos"
         placeholder="HRN"
         [(ngModel)]="lista.recargosNocturnos"
+        disabled="{{validada}}"
       />
     </td>
     <td class="col-1">
@@ -87,6 +90,7 @@
         name="horasExtrasDiurnasFestivasDom"
         placeholder="HEDDF"
         [(ngModel)]="lista.horasExtrasDiurnasFestivasDom"
+        disabled="{{validada}}"
       />
     </td>
     <td class="col-1">
@@ -97,6 +101,7 @@
         class="form-control"
         placeholder="HRDDF"
         [(ngModel)]="lista.recargosFestivos"
+        disabled="{{validada}}"
       />
     </td>
     <td class="col-1">
@@ -107,6 +112,7 @@
         class="form-control"
         placeholder="HENDF"
         [(ngModel)]="lista.horasExtrasDiurnasFestivasDom"
+        disabled="{{validada}}"
       />
     </td>
     <td class="col-1">
@@ -117,10 +123,11 @@
         class="form-control"
         placeholder="HRNDF"
         [(ngModel)]="lista.recargosNocturnosFestivos"
+        disabled="{{validada}}"
       />
     </td>
     <td class="col-1">
-      <a (click)="guardarReporteDeExtras()" class="toCheck" title="Validar">
+      <a (click)="guardarReporteDeExtras()" class="toCheck" title="Validar" *ngIf="!validada">
         <i class="fa fa-check-circle"></i>
       </a>
       <div class="text-success font-weight-bold text-muted" *ngIf="validada">

@@ -33,7 +33,7 @@ export class EditDiarioFixedComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
- 
+
   }
 
   createForm() {

@@ -17,6 +17,7 @@ import { ApplicantComponent } from './applicant/applicant.component';
 import { GetApusComponent } from './get-apus/get-apus.component';
 import { CabeceraComponent } from './cabecera/cabecera.component';
 import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule } from '@angular/material';
+import { NoPermissionsComponent } from './no-permissions/no-permissions.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, Mat
     ApplicantComponent,
     GetApusComponent,
     CabeceraComponent,
+    NoPermissionsComponent,
   ],
   exports: [
     ModalBasicComponent,
@@ -40,7 +42,8 @@ import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, Mat
     ApplicantComponent,
     GetApusComponent,
     CabeceraComponent,
-    PipesModule
+    PipesModule,
+    NoPermissionsComponent
   ],
   imports: [
     NgbAccordionModule,

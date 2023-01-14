@@ -28,6 +28,7 @@ import { MaquinasHerramientasService } from 'src/app/pages/ajustes/parametros/ap
 export class CrearApuPiezaComponent implements OnInit {
   @Input('id') id;
   @Input('data') data;
+  @Input('title') title = 'Crear APU - Pieza';
   form: FormGroup;
   date: Date = new Date();
   people: any[] = [];

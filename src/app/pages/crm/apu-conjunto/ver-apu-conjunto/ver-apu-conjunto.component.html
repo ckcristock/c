@@ -4,11 +4,16 @@
       <div class="col-md-6 px-0">
         <h4 class="text-primary">APU conjunto - {{ data.name }}</h4>
       </div>
-      <div class="col-md-6 px-0 text-md-right text-center">
-        <span>
-          {{ data.created_at | date: "EEEE, MMMM d, y" | titlecase }} -
-          Bucaramanga - Colombia
-        </span>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-info btn-sm"
+            type="button"
+            [routerLink]="['/crm/apu/editar-apu-conjunto/', data.id]"
+          >
+            <i class="fas fa-edit"></i> Editar
+          </button>
+        </div>
       </div>
     </div>
     <hr class="line" />
@@ -29,6 +34,12 @@
                 <th scope="row">Quién elabora</th>
                 <td>
                   {{ data.person.name }}
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Fecha</th>
+                <td>
+                  {{ data.created_at | date : "EEEE, MMMM d, y" | titlecase }}
                 </td>
               </tr>
             </tbody>
@@ -97,7 +108,9 @@
               <tbody>
                 <tr>
                   <td>COSTO DIRECTO TOTAL</td>
-                  <td class="text-right">${{ data.total_direct_cost }}</td>
+                  <td class="text-right">
+                    ${{ data.total_direct_cost | currency : "" : "" }}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -116,10 +129,10 @@
               <ng-container *ngFor="let item of data.indirect; let i = index">
                 <tr>
                   <td>{{ item.name }}</td>
-                  <td>{{ item.percentage }}</td>
+                  <td>{{ item.percentage }}$</td>
                   <td>
                     <span class="text-right">
-                      {{ item.value }}
+                      ${{ item.value | currency : "" : "" }}
                     </span>
                   </td>
                 </tr>
@@ -127,9 +140,7 @@
               <tr>
                 <td class="text-center">Costos Indirectos</td>
                 <td></td>
-                <td>
-                  {{ data.indirect_cost_total }}
-                </td>
+                <td>${{ data.indirect_cost_total | currency : "" : "" }}</td>
               </tr>
             </tbody>
           </table>
@@ -142,7 +153,10 @@
                 <td>Costos Directos + Costos Indirectos Totales</td>
                 <td>
                   <div class="col-9" style="float: right">
-                    {{ data.direct_costs_indirect_costs_total }}
+                    ${{
+                      data.direct_costs_indirect_costs_total
+                        | currency : "" : ""
+                    }}
                   </div>
                 </td>
               </tr>
@@ -158,23 +172,19 @@
             <tbody class="bg-light">
               <tr>
                 <td>Administrativos</td>
-                <td>
-                  {{ data.administrative_percentage }}
-                </td>
+                <td>{{ data.administrative_percentage }}%</td>
                 <td>
                   <div style="float: right">
-                    {{ data.administrative_value }}
+                    ${{ data.administrative_value | currency : "" : "" }}
                   </div>
                 </td>
               </tr>
               <tr>
                 <td>Imprevistos</td>
-                <td>
-                  {{ data.unforeseen_percentage }}
-                </td>
+                <td>{{ data.unforeseen_percentage }}%</td>
                 <td>
                   <div style="float: right">
-                    {{ data.unforeseen_value }}
+                    ${{ data.unforeseen_value | currency : "" : "" }}
                   </div>
                 </td>
               </tr>
@@ -183,7 +193,10 @@
                 <td></td>
                 <td>
                   <div style="float: right">
-                    {{ data.administrative_unforeseen_subtotal }}
+                    ${{
+                      data.administrative_unforeseen_subtotal
+                        | currency : "" : ""
+                    }}
                   </div>
                 </td>
               </tr>
@@ -198,9 +211,7 @@
                 <td class="text-center">Utilidad</td>
                 <td></td>
                 <td>
-                  <div style="float: right">
-                    {{ data.utility_percentage }}
-                  </div>
+                  <div style="float: right">{{ data.utility_percentage }}%</div>
                 </td>
               </tr>
               <tr>
@@ -208,7 +219,10 @@
                 <td></td>
                 <td>
                   <div style="float: right">
-                    {{ data.admin_unforeseen_utility_subtotal }}
+                    ${{
+                      data.admin_unforeseen_utility_subtotal
+                        | currency : "" : ""
+                    }}
                   </div>
                 </td>
               </tr>
@@ -224,7 +238,9 @@
                 <td></td>
                 <td>
                   <div style="float: right">
-                    {{ data.sale_price_cop_withholding_total }}
+                    ${{
+                      data.sale_price_cop_withholding_total | currency : "" : ""
+                    }}
                   </div>
                 </td>
               </tr>
@@ -239,7 +255,7 @@
                 <td>TRM</td>
                 <td>
                   <div style="float: right">
-                    {{ data.trm }}
+                    ${{ data.trm | currency : "" : "" }}
                   </div>
                 </td>
               </tr>
@@ -254,7 +270,9 @@
                 <td>Precio Venta Total USD + Retención</td>
                 <td>
                   <div style="float: right">
-                    {{ data.sale_price_usd_withholding_total }}
+                    ${{
+                      data.sale_price_usd_withholding_total | currency : "" : ""
+                    }}
                   </div>
                 </td>
               </tr>
@@ -268,16 +286,13 @@
       (click)="download()"
       type="button"
     >
-      <i class="fas fa-file-download"></i>
-      <span *ngIf="!donwloading; else status"> Descargar</span>
-      <ng-template #status>
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Generando...
-      </ng-template>
+      <span
+        ><i
+          class="fas"
+          [class]="!donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'"
+        ></i>
+        {{ !donwloading ? "Descargar" : "Descargando" }}</span
+      >
     </button>
   </div>
 </div>

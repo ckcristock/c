@@ -18,20 +18,16 @@
           <tr class="text-center">
             <td>{{ i + 1 }}</td>
             <td>
-              {{ item.internal.name }}
+              {{ item.internal?.name }}
             </td>
             <td>
-              {{ item.unit.name }}
+              {{ item.unit?.name }}
             </td>
             <td>
               {{ item.amount }}
             </td>
-            <td>
-              {{ item.unit_cost }}
-            </td>
-            <td>
-              {{ item.total }}
-            </td>
+            <td>${{ item.unit_cost | currency : "" : "" }}</td>
+            <td>${{ item.total | currency : "" : "" }}</td>
           </tr>
         </ng-container>
       </ng-container>
@@ -46,7 +42,9 @@
           <tbody>
             <tr>
               <td>SUBTOTAL</td>
-              <td class="text-right">${{ internal_processes_subtotal }}</td>
+              <td class="text-right">
+                ${{ internal_processes_subtotal | currency : "" : "" }}
+              </td>
             </tr>
           </tbody>
         </table>

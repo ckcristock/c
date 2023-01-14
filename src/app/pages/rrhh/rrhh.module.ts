@@ -84,6 +84,22 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ParametrosModule } from '../ajustes/parametros/parametros.module';
 import { TiposModule } from '../ajustes/tipos/tipos.module';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicker';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY'
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
 @NgModule({
   declarations: [
     VacantesComponent,
@@ -167,9 +183,23 @@ import { TiposModule } from '../ajustes/tipos/tipos.module';
     MatPaginatorModule,
     MatRadioModule,
     MatBadgeModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    SatDatepickerModule,
+    SatNativeDateModule,
+    MatExpansionModule,
   ],
-  providers: [{ provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' },CurrencyPipe],
+  providers: [
+    { provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' },
+    CurrencyPipe,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
   exports: [],
 })
 export class RrhhModule { }

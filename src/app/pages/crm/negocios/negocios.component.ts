@@ -12,11 +12,14 @@ import { ValidatorsService } from '../../ajustes/informacion-base/services/react
 import { Negocio } from './negocio.interface';
 import { NegociosService } from './negocios.service';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QuotationService } from '../cotizacion/quotation.service';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
-import { MatAccordion } from '@angular/material';
+import { MatAccordion, MatPaginatorIntl, PageEvent } from '@angular/material';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { PermissionService } from 'src/app/core/services/permission.service';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-negocios',
@@ -47,6 +50,7 @@ export class NegociosComponent implements OnInit {
   selectedContact: any;
   selectedCountry: any;
   companySelected: any;
+  filtrosActivos: boolean = false
   orderObj: any
   city: any;
   loading: boolean;
@@ -80,43 +84,98 @@ export class NegociosComponent implements OnInit {
     status: '',
   }
 
+  permission: Permissions = {
+    menu: 'Negocios',
+    permissions: {
+      show: true
+    }
+  };
+
   constructor(
     private _reactiveValid: ValidatorsService,
     private fb: FormBuilder,
     private _negocios: NegociosService,
     private route: ActivatedRoute,
+    private router: Router,
     private modalService: NgbModal,
     private location: Location,
     private _quotation: QuotationService,
     private _modal: ModalService,
+    private paginator: MatPaginatorIntl,
     private _swal: SwalService,
-  ) { }
-
-  ngOnInit(): void {
-    this.route.queryParamMap
-      .subscribe((params) => {
-        this.orderObj = { ...params.keys, ...params };
-        if (params.keys.length == 0) {
-          this.active = 1
-          this.changeUrl('?active=1')
-        } else if (this.orderObj.params.active == 2) {
-          this.active = 2
-        } else if (this.orderObj.params.active == 1) {
-          this.active = 1
-        }
-      }
-      );
-    this.createForm();
-    this.createFormFiltersBusiness();
-    this.createFormFiltersBudgets();
-    this.getCompanies();
-    this.getNegocios();
-    this.getLists();
-    this.calcularTotal();
-    this.getCountries();
-    //this.getQuotations();
+    private _permission: PermissionService,
+  ) {
+    this.paginator.itemsPerPageLabel = "Items por página:";
+    this.permission = this._permission.validatePermissions(this.permission)
   }
 
+  ngOnInit(): void {
+    if (this.permission.permissions.show) {
+      this.createForm();
+      this.createFormFiltersBusiness();
+      this.createFormFiltersBudgets();
+      this.getCompanies();
+      this.getLists();
+      this.calcularTotal();
+      this.getCountries();
+      this.route.queryParamMap
+        .subscribe((params) => {
+          this.orderObj = { ...params.keys, ...params };
+          if (Object.keys(this.orderObj).length > 2) {
+            this.filtrosActivos = true
+            const formValues = {};
+            for (const param in params) {
+              formValues[param] = params[param];
+            }
+            this.formFiltersBusiness.patchValue(formValues['params']);
+          }
+          if (this.orderObj.params.pag) {
+            this.getNegocios(this.orderObj.params.pag);
+          } else {
+            this.getNegocios()
+          }
+          /* if (params.keys.length == 0) {
+            this.active = 1
+            this.changeUrl('?active=1')
+          } else if (this.orderObj.params.active == 2) {
+            this.active = 2
+            this.getNegocios()
+          } else if (this.orderObj.params.active == 1) {
+            this.active = 1
+            if (Object.keys(this.orderObj).length > 2) {
+              this.filtrosActivos = true
+              const formValues = {};
+              for (const param in params) {
+                formValues[param] = params[param];
+              }
+              this.formFiltersBusiness.patchValue(formValues['params']);
+            }
+            if (this.orderObj.params.pag) {
+              this.getNegocios(this.orderObj.params.pag);
+            } else {
+              this.getNegocios()
+            }
+          } */
+        }
+        );
+
+      //this.getQuotations();
+    } else {
+      this.router.navigate(['/notauthorized'])
+    }
+  }
+
+  SetFiltros(paginacion) {
+    let params = new HttpParams;
+    params = params.set('pag', paginacion)
+    for (const controlName in this.formFiltersBusiness.controls) {
+      const control = this.formFiltersBusiness.get(controlName);
+      if (control.value) {
+        params = params.set(controlName, control.value);
+      }
+    }
+    return params;
+  }
 
   createFormFiltersBudgets() {
     this.formFiltersBudgets = this.fb.group({
@@ -132,13 +191,20 @@ export class NegociosComponent implements OnInit {
   }
 
   openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
+    this.matPanel = !this.matPanel;
+    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
+  }
+
+  resetFiltros() {
+    for (const controlName in this.formFiltersBusiness.controls) {
+      this.formFiltersBusiness.get(controlName).setValue('');
     }
+    this.filtrosActivos = false
+  }
+
+  paginacion: any
+  handlePageEvent(event: PageEvent) {
+    this.getNegocios(event.pageIndex + 1)
   }
 
   createFormFiltersBusiness() {
@@ -182,8 +248,11 @@ export class NegociosComponent implements OnInit {
     let params = {
       ...this.paginationBusiness, ...this.formFiltersBusiness.value
     }
+    var paramsurl = this.SetFiltros(this.paginationBusiness.page);
+    this.location.replaceState('/crm/negocios', paramsurl.toString());
     this._negocios.getBusinesses(params).subscribe((resp: any) => {
       this.loading = false;
+      this.paginacion = resp.data
       this.business = resp.data.data;
       this.paginationBusiness.collectionSize = resp.data.total;
       this.getLists()
@@ -410,7 +479,6 @@ export class NegociosComponent implements OnInit {
             this.quotations = [];
             this.getNegocios();
           });
-          this.addEventToHistory('Negocio Creado');
         }
       })
     } else {
@@ -424,11 +492,6 @@ export class NegociosComponent implements OnInit {
 
   }
 
-  addEventToHistory(desc) {
-    this._negocios.addEventToHistroy(desc).subscribe((data) => {
-      console.log(data);
-    });
-  }
   get process_description_valid() {
     return (
       this.form.get('request_description').invalid &&

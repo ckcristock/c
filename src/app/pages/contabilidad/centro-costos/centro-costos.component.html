@@ -28,10 +28,7 @@
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <mat-form-field
-            class="col"
-            appearance="outline"
-          >
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Código</mat-label>
             <input
               matInput
@@ -41,10 +38,7 @@
               [(ngModel)]="Filtros.Codigo"
             />
           </mat-form-field>
-          <mat-form-field
-            class="col"
-            appearance="outline"
-          >
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre</mat-label>
             <input
               matInput
@@ -190,16 +184,14 @@
 
 <!--VISTA MODAL DEL FORMULARIO DE CENTRO DE COSTOS-->
 <ng-template #centroCostoN let-modal>
-  <div class="modal-content">
-    <div class="modal-header">
-      <h4 class="text-primary modal-title">Nuevo centro de costo</h4>
-      <button
-        type="button"
-        class="btn btn-sm btn-flash-border-primary ri-close-fill"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      ></button>
-    </div>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nuevo centro de costo</h4>
+    <button
+      type="button"
+      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body row">
     <form #FormCentroCosto="ngForm">

@@ -5,11 +5,16 @@
         <div class="col-md-6 px-0">
           <h4 class="text-primary">APU servicio - {{ data.name }}</h4>
         </div>
-        <div class="col-md-6 px-0 text-md-right text-center">
-          <!-- <span>
-            {{ data.created_at | date: "EEEE, MMMM d, y" | titlecase }} -
-            Bucaramanga - Colombia
-          </span> -->
+        <div class="col-md-6 px-0 text-right">
+          <div class="btn-group rounded w-sm-100">
+            <button
+              class="btn btn-info btn-sm"
+              type="button"
+              [routerLink]="['/crm/apu/editar-apu-servicio/', data.id]"
+            >
+              <i class="fas fa-edit"></i> Editar
+            </button>
+          </div>
         </div>
       </div>
       <hr class="line" />
@@ -30,6 +35,12 @@
                   <th scope="row">Quién elabora</th>
                   <td>
                     {{ data.person.name }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Fecha</th>
+                  <td>
+                    {{ data.created_at | date : "EEEE, MMMM d, y" | titlecase }}
                   </td>
                 </tr>
               </tbody>
@@ -77,18 +88,23 @@
                 <tbody>
                   <tr>
                     <td>SUBTOTAL MANO DE OBRA</td>
-                    <td class="text-right">${{ data.subtotal_labor }}</td>
+                    <td class="text-right">
+                      ${{ data.subtotal_labor | currency : "" : "" }}
+                    </td>
                   </tr>
                   <tr>
                     <td>SUBTOTAL VIÁTICOS</td>
                     <td class="text-right">
-                      ${{ data.subtotal_travel_expense }}
+                      ${{ data.subtotal_travel_expense | currency : "" : "" }}
                     </td>
                   </tr>
                   <tr>
                     <td>SUBTOTAL VALID DIMENSIONAL</td>
                     <td class="text-right">
-                      ${{ data.subtotal_dimensional_validation }}
+                      ${{
+                        data.subtotal_dimensional_validation
+                          | currency : "" : ""
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -113,24 +129,34 @@
                 <tbody>
                   <tr>
                     <td>SUBTOTAL MANO DE OBRA</td>
-                    <td class="text-right">${{ data.subtotal_labor_mpm }}</td>
+                    <td class="text-right">
+                      ${{ data.subtotal_labor_mpm | currency : "" : "" }}
+                    </td>
                   </tr>
                   <tr>
                     <td>SUBTOTAL VIÁTICOS</td>
                     <td class="text-right">
-                      ${{ data.subtotal_travel_expense_mpm }}
+                      ${{
+                        data.subtotal_travel_expense_mpm | currency : "" : ""
+                      }}
                     </td>
                   </tr>
                   <tr>
                     <td>SUBTOTAL MONTAJE Y PUESTA EN MARCHA</td>
                     <td class="text-right">
-                      ${{ data.subtotal_assembly_commissioning }}
+                      ${{
+                        data.subtotal_assembly_commissioning
+                          | currency : "" : ""
+                      }}
                     </td>
                   </tr>
                   <tr>
                     <td>SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA</td>
                     <td class="text-right">
-                      ${{ data.general_subtotal_travel_expense_labor }}
+                      ${{
+                        data.general_subtotal_travel_expense_labor
+                          | currency : "" : ""
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -144,61 +170,60 @@
       <hr />
       <div class="d-flex justify-content-center">
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-striped table-sm text-center">
+          <table
+            class="table table-bordered table-striped table-sm text-center"
+          >
             <tbody>
               <tr>
                 <td class="text-left">Administrativos</td>
-                <td>
-                  {{ data.administrative_percentage }}
-                </td>
-                <td>
-                  {{ data.administrative_value }}
-                </td>
+                <td>{{ data.administrative_percentage }}%</td>
+                <td>${{ data.administrative_value | currency : "" : "" }}</td>
               </tr>
               <tr>
                 <td class="text-left">Imprevistos</td>
-                <td>
-                  {{ data.unforeseen_percentage }}
-                </td>
-                <td>
-                  {{ data.unforeseen_value }}
-                </td>
+                <td>{{ data.unforeseen_percentage }}%</td>
+                <td>${{ data.unforeseen_value | currency : "" : "" }}</td>
               </tr>
               <tr>
                 <td class="text-left" colspan="2">Subtotal A + I</td>
                 <td>
-                  {{ data.subtotal_administrative_unforeseen }}
+                  ${{
+                    data.subtotal_administrative_unforeseen | currency : "" : ""
+                  }}
                 </td>
               </tr>
               <tr>
                 <td class="text-left" colspan="2">Utilidad</td>
-                <td>
-                  {{ data.utility_percentage }}
-                </td>
+                <td>{{ data.utility_percentage }}%</td>
               </tr>
               <tr>
                 <td class="text-left" colspan="2">SubTotal A + I + U</td>
                 <td>
-                  {{ data.subtotal_administrative_unforeseen_utility }}
+                  ${{
+                    data.subtotal_administrative_unforeseen_utility
+                      | currency : "" : ""
+                  }}
                 </td>
               </tr>
               <tr>
-                <td class="text-left" colspan="2">Precio venta COP incluye retención</td>
+                <td class="text-left" colspan="2">
+                  Precio venta COP incluye retención
+                </td>
                 <td>
-                  {{ data.sale_price_cop_withholding_total }}
+                  ${{
+                    data.sale_price_cop_withholding_total | currency : "" : ""
+                  }}
                 </td>
               </tr>
               <tr>
                 <td class="text-left" colspan="2">TRM</td>
-                <td>
-                  {{ data.trm }}
-                </td>
+                <td>${{ data.trm | currency : "" : "" }}</td>
               </tr>
               <tr>
-                <td class="text-left" colspan="2">Precio venta USD incluye retención</td>
-                <td>
-                  {{ data.sale_price_usd_withholding_total }}
+                <td class="text-left" colspan="2">
+                  Precio venta USD incluye retención
                 </td>
+                <td>${{ data.sale_price_usd_withholding_total | currency }}</td>
               </tr>
             </tbody>
           </table>

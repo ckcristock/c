@@ -59,10 +59,10 @@
             {{ item.hours_displacement }}
           </td>
           <td class="align-middle">
-            {{ item.hours_value_displacement }}
+            ${{ item.hours_value_displacement | currency : "" : "" }}
           </td>
           <td class="align-middle">
-            {{ item.total_value_displacement }}
+            ${{ item.total_value_displacement | currency : "" : "" }}
           </td>
           <td class="align-middle">
             {{ item.days_number_ordinary }}
@@ -74,10 +74,10 @@
             {{ item.hours_ordinary }}
           </td>
           <td class="align-middle">
-            {{ item.hours_value_ordinary }}
+            ${{ item.hours_value_ordinary | currency : "" : "" }}
           </td>
           <td class="align-middle">
-            {{ item.total_value_ordinary }}
+            ${{ item.total_value_ordinary | currency : "" : "" }}
           </td>
           <td class="align-middle">
             {{ item.days_number_festive }}
@@ -89,13 +89,13 @@
             {{ item.hours_festive }}
           </td>
           <td class="align-middle">
-            {{ item.hours_value_festive }}
+            ${{ item.hours_value_festive | currency : "" : "" }}
           </td>
           <td class="align-middle">
-            {{ item.total_value_festive }}
+            ${{ item.total_value_festive | currency : "" : "" }}
           </td>
           <td class="align-middle">
-            {{ item.salary_value }}
+            ${{ item.salary_value | currency : "" : "" }}
           </td>
           <td class="align-middle">
             <button
@@ -151,12 +151,8 @@
                     <td>
                       {{ itemx.amount }}
                     </td>
-                    <td>
-                      {{ itemx.unit_value }}
-                    </td>
-                    <td>
-                      {{ itemx.total_value }}
-                    </td>
+                    <td>${{ itemx.unit_value | currency : "" : "" }}</td>
+                    <td>${{ itemx.total_value | currency : "" : "" }}</td>
                   </tr>
                 </tbody>
                 <tfoot>
@@ -165,7 +161,7 @@
                       Subtotal
                     </td>
                     <td colspan="6" class="text-center">
-                      {{ item.subtotal }}
+                      ${{ item.subtotal | currency : "" : "" }}
                     </td>
                   </tr>
                 </tfoot>

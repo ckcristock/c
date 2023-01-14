@@ -30,6 +30,7 @@ interface ApuPart {
 export class CrearApuConjuntoComponent implements OnInit {
   @Input('id') id;
   @Input('data') data: any;
+  @Input('title') title= 'Crear APU - Conjunto';
   form: FormGroup;
   formGroup: FormGroup;
   filters_apu = {

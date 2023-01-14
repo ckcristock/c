@@ -4,6 +4,11 @@ import { NegociosService } from '../negocios.service';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { QuotationService } from '../../cotizacion/quotation.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
+import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 @Component({
   selector: 'app-ver-negocio',
   templateUrl: './ver-negocio.component.html',
@@ -15,6 +20,8 @@ export class VerNegocioComponent implements OnInit {
   loading: boolean;
   contactos: any[];
   negocio: any;
+  person_id;
+  people: any[] = []
   presupuestos: any[];
   presupuestosSeleccionados: any[] = [];
   cotizaciones: any;
@@ -28,14 +35,6 @@ export class VerNegocioComponent implements OnInit {
   filtros = {
     id: '',
   };
-  filtersQuotations = {
-    date: '',
-    city: '',
-    code: '',
-    client: '',
-    description: '',
-    status: '',
-  }
   paginationQuotations: any = {
     page: 1,
     pageSize: 10,
@@ -46,30 +45,96 @@ export class VerNegocioComponent implements OnInit {
     pageSize: 10,
     collectionSize: 0
   }
-  filtersBudgets = {
-    date: '',
-    city: '',
-    code: '',
-    client: '',
-    description: '',
-    status: '',
-  }
+  form_filters_budget: FormGroup;
+  form_filters_quotations: FormGroup;
   constructor(
     private ruta: ActivatedRoute,
     private _negocio: NegociosService,
     private _modal: ModalService,
     private _sanitizer: DomSanitizer,
     private _quotation: QuotationService,
+    private _user: UserService,
+    private _swal: SwalService,
+    private _person: PersonService,
+    private fb: FormBuilder
   ) {
     this.filtros.id = this.ruta.snapshot.params.id;
+    this.person_id = this._user.user.person.id
   }
 
   ngOnInit(): void {
     this.getBussines();
+    this.createFormFiltersBudgets();
+    this.createFormFiltersQuotations();
+    this.getPeople();
+  }
+
+  getPeople() {
+    this._person.getPeopleIndex().subscribe((res: any) => {
+      this.people = res.data
+      this.people.unshift({ text: 'Todos ', value: '' });
+    })
+  }
+
+  createFormFiltersBudgets() {
+    this.form_filters_budget = this.fb.group({
+      item: '',
+      date: '',
+      customer: '',
+      municipality_id: '',
+      line: '',
+      person_id: ''
+    })
+    this.form_filters_budget.valueChanges.pipe(
+      debounceTime(500),
+    ).subscribe(r => {
+      this.getPresupuestos();
+    })
+  }
+
+  createFormFiltersQuotations() {
+    this.form_filters_quotations = this.fb.group({
+      city: '',
+      code: '',
+      client: '',
+      description: '',
+      line: '',
+    })
+    this.form_filters_quotations.valueChanges.pipe(
+      debounceTime(500),
+    ).subscribe(r => {
+      this.getQuotations();
+    })
   }
 
   openConfirm(confirm) {
     this._modal.open(confirm, 'xl')
+  }
+
+  changeStatusInBusiness(status, item, label) {
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      text: 'Vamos a cambiar el estado',
+    }).then(r => {
+      if (r.isConfirmed) {
+        let data = {
+          item: item,
+          status: status,
+          label: label
+        }
+        this._negocio.changeStatusQyB(data).subscribe((r:any) => {
+          this._swal.show({
+            icon: 'success',
+            title: 'Correcto',
+            text: 'Se ha cambiado el estado correctamente',
+            showCancel: false,
+            timer: 1000
+          })
+          this.getBussines()
+        })
+      }
+    })
   }
 
   getBussines() {
@@ -87,7 +152,7 @@ export class VerNegocioComponent implements OnInit {
     this.paginationBudgets.page = page;
     let params = {
       ...this.paginationBudgets,
-      ...this.filtersBudgets,
+      ...this.form_filters_budget.value,
       third_party_id: this.negocio.third_party_id
     }
     this.loadingBudgets = true;
@@ -122,15 +187,13 @@ export class VerNegocioComponent implements OnInit {
     });
   }
 
-
-
   quotations: any[] = []
   getQuotations(page = 1) {
     this.cotizacionesSeleccionadas = []
     this.paginationQuotations.page = page;
     let params = {
       ...this.paginationQuotations,
-      ...this.filtersQuotations,
+      ...this.form_filters_quotations.value,
       third_party_id: this.negocio.third_party_id
     }
     this.loadingQuotation = true;
@@ -141,9 +204,6 @@ export class VerNegocioComponent implements OnInit {
     })
   }
 
-
-
-
   addCotizacion() {
     this.cotizacionesSeleccionadas.reduce((a, b) => {
       return this.quotation_value = a + b.total_cop;
@@ -151,10 +211,10 @@ export class VerNegocioComponent implements OnInit {
     let data = {
       business_id: this.filtros.id,
       quotation_value: this.quotation_value,
-      quotations: this.cotizacionesSeleccionadas
+      quotations: this.cotizacionesSeleccionadas,
+      person_id: this.person_id
     }
     this._negocio.newBusinessQuotation(data).subscribe(data => {
-      this.addEventToHistory('Se modificaron los presupuestos del negocio');
       this.getBussines();
       this.getQuotations();
       this._modal.close();
@@ -180,10 +240,10 @@ export class VerNegocioComponent implements OnInit {
     let data = {
       business_id: this.filtros.id,
       budget_value: this.budget_value,
-      budgets: this.presupuestosSeleccionados
+      budgets: this.presupuestosSeleccionados,
+      person_id: this.person_id
     }
     this._negocio.newBusinessBudget(data).subscribe(data => {
-      this.addEventToHistory('Se modificaron los presupuestos del negocio');
       this.getBussines();
       this.getPresupuestos();
       this._modal.close();
@@ -193,25 +253,6 @@ export class VerNegocioComponent implements OnInit {
 
   closeModalCotizaciones() {
     this.negocio.cotizaciones = this.cotizacionesSeleccionadas;
-    this.addEventToHistory('se modificaron las cotizaciones del negocio');
   }
 
-  createTask(event) {
-    this._negocio.createTask(event).subscribe(() => {
-      this.addEventToHistory('Se creó una tarea en la seccion de tareas');
-    });
-  }
-  editTask(event) {
-    this._negocio.editTask(event.index - 1, event.value).subscribe((data) => {
-      this.addEventToHistory(
-        'Se ha editado la tarea de ' + event.value.responsable
-      );
-    });
-  }
-
-  addEventToHistory(desc) {
-    this._negocio.addEventToHistroy(desc).subscribe(() => {
-      console.log('Evento añadido');
-    });
-  }
 }

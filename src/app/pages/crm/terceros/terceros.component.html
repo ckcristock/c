@@ -1,149 +1,154 @@
-<div class="card">
-  <div class="card-body">
-    <div class="row card-title d-flex justify-content-between">
-      <div class="col-md-6 px-0">
-        <h4 class="text-primary">
-          Terceros
-          <span style="font-size: smaller" *ngIf="paginacion"
-            ><small class="pb-2 text-secondary text-muted"
-              >pág. {{ paginacion.current_page }}</small
-            ></span
-          >
-        </h4>
-      </div>
-      <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100">
-          <button
-            class="btn btn-primary btn-sm"
-            [routerLink]="['/crm/terceros/crear-tercero']"
-          >
-            <i class="fa fa-plus"></i> Agregar
-          </button>
-          <button
-            class="btn btn-warning btn-sm"
-            [routerLink]="['/ajustes/configuracion/campos-terceros']"
-          >
-            <i class="fas fa-user-edit"></i> Campos
-          </button>
-          <button class="btn btn-info btn-sm" (click)="openClose()">
-            <i class="fas fa-sliders-h"></i> Filtros
-          </button>
+<ng-container *ngIf="this.permission.permissions.show; else noPermissions">
+  <div class="card">
+    <div class="card-body">
+      <div class="row card-title d-flex justify-content-between">
+        <div class="col-md-6 px-0">
+          <h4 class="text-primary">
+            Terceros
+            <span style="font-size: smaller" *ngIf="paginacion"
+              ><small class="pb-2 text-secondary text-muted"
+                >pág. {{ paginacion.current_page }}</small
+              ></span
+            >
+          </h4>
+        </div>
+        <div class="col-md-6 px-0 text-right">
+          <div class="btn-group rounded w-sm-100">
+            <button
+              class="btn btn-primary btn-sm"
+              *ngIf="permission.permissions.add"
+              [routerLink]="['/crm/terceros/crear-tercero']"
+            >
+              <i class="fa fa-plus"></i> Agregar
+            </button>
+            <button
+              class="btn btn-warning btn-sm"
+              [routerLink]="['/ajustes/configuracion/campos-terceros']"
+            >
+              <i class="fas fa-user-edit"></i> Campos
+            </button>
+            <button class="btn btn-info btn-sm" (click)="openClose()">
+              <i class="fas fa-sliders-h"></i> Filtros
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <hr class="line" />
-    <mat-accordion multi #firstAccordion="matAccordion">
-      <mat-expansion-panel class="mat-elevation-z0">
-        <div class="row">
-          <ng-container [formGroup]="form_filters">
+      <hr class="line" />
+      <mat-accordion multi #firstAccordion="matAccordion">
+        <mat-expansion-panel class="mat-elevation-z0">
+          <div class="row">
+            <ng-container [formGroup]="form_filters">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Razón social o nombre</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="name"
+                  autocomplete="off"
+                  placeholder="Busca por razón social o nombre"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Documento</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="nit"
+                  autocomplete="off"
+                  placeholder="Busca por documento"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Dirección</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="cod_dian_address"
+                  autocomplete="off"
+                  placeholder="Busca por dirección"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Ciudad</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="municipio"
+                  autocomplete="off"
+                  placeholder="Busca por ciudad"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Teléfono</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="phone"
+                  autocomplete="off"
+                  placeholder="Busca por teléfono"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Tipo de tercero</mat-label>
+                <mat-select formControlName="third_party_type">
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option value="Cliente">Cliente</mat-option>
+                  <mat-option value="Proveedor">Proveedor</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Email</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="email"
+                  autocomplete="off"
+                  placeholder="Busca por email"
+                />
+              </mat-form-field>
+            </ng-container>
             <mat-form-field class="col" appearance="outline">
-              <mat-label>Razón social o nombre</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="name"
-                autocomplete="off"
-                placeholder="Busca por razón social o nombre"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Documento</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="nit"
-                autocomplete="off"
-                placeholder="Busca por documento"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Dirección</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="cod_dian_address"
-                autocomplete="off"
-                placeholder="Busca por dirección"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Ciudad</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="municipio"
-                autocomplete="off"
-                placeholder="Busca por ciudad"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Teléfono</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="phone"
-                autocomplete="off"
-                placeholder="Busca por teléfono"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Tipo de tercero</mat-label>
-              <mat-select formControlName="third_party_type">
-                <mat-option value="">Todos</mat-option>
-                <mat-option value="Cliente">Cliente</mat-option>
-                <mat-option value="Proveedor">Proveedor</mat-option>
+              <mat-label>Campos</mat-label>
+              <mat-select
+                [formControl]="camposForm"
+                multiple
+                (selectionChange)="cambiarCampo($event)"
+              >
+                <mat-option
+                  *ngFor="let item of listaCampos"
+                  [value]="item.value"
+                  >{{ item.text }}</mat-option
+                >
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Email</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="email"
-                autocomplete="off"
-                placeholder="Busca por email"
-              />
-            </mat-form-field>
-          </ng-container>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Campos</mat-label>
-            <mat-select
-              [formControl]="camposForm"
-              multiple
-              (selectionChange)="cambiarCampo($event)"
-            >
-              <mat-option
-                *ngFor="let item of listaCampos"
-                [value]="item.value"
-                >{{ item.text }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
 
-    <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
-      <strong
-        >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
-        click
-      </strong>
-      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
-        >aquí</a
-      >
-    </div>
+      <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
+        <strong
+          >Hay filtros de búsqueda activos, para mostrar todos los resultados
+          haz click
+        </strong>
+        <a
+          href="javascript: void(0)"
+          (click)="resetFiltros()"
+          class="alert-link"
+          >aquí</a
+        >
+      </div>
 
-    <div class="rounded-top table-responsive">
-      <table
-        class="table table-striped table-bordered table-sm mb-0"
-        *ngIf="!loading && thirdParties.length > 0; else notData"
-      >
-        <thead class="bg-light">
-          <tr class="text-center text-uppercase">
-            <ng-container *ngFor="let item of listaCampos; let i = index">
-              <th *ngIf="item.selected">{{ item.text }}</th>
-            </ng-container>
-            <!-- <th *ngIf="listaCampos[0].selected">Foto</th>
+      <div class="rounded-top table-responsive">
+        <table
+          class="table table-striped table-bordered table-sm mb-0"
+          *ngIf="!loading && thirdParties.length > 0; else notData"
+        >
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <ng-container *ngFor="let item of listaCampos; let i = index">
+                <th *ngIf="item.selected">{{ item.text }}</th>
+              </ng-container>
+              <!-- <th *ngIf="listaCampos[0].selected">Foto</th>
             <th *ngIf="checkNombre">R.S/Nombre</th>
             <th *ngIf="checkNIT">Documento</th>
             <th *ngIf="checkDireccion">Dirección</th>
@@ -152,113 +157,117 @@
             <th *ngIf="checkTipo">Tipo</th>
             <th *ngIf="checkEmail">Correo electrónico</th>
             <th *ngIf="checkEstado" class="col-md-1">Estado</th> -->
-            <th><i class="mdi mdi-chevron-down"></i></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let third of thirdParties"
-            class="text-center"
-            [ngClass]="{
-              'text-danger font-weight-bold': third.state == 'Inactivo'
-            }"
-          >
-            <td class="p-0" *ngIf="listaCampos[0].selected">
-              <img
-                [src]="third.image | image"
-                onerror="this.src='../../../../assets/images/noprofile.png'"
-                class="rounded-circle mx-auto img-fluid header-profile-user"
-              />
-            </td>
-            <td class="align-middle" *ngIf="listaCampos[1].selected">
-              {{ third.name }}
-            </td>
-            <td class="align-middle" *ngIf="listaCampos[2].selected">
-              {{ third.nit }}
-            </td>
-            <td class="align-middle" *ngIf="listaCampos[3].selected">
-              {{ third.cod_dian_address }}
-            </td>
-            <td class="align-middle" *ngIf="listaCampos[4].selected">
-              {{ third.municipality.name }}
-            </td>
-            <td class="align-middle" *ngIf="listaCampos[5].selected">
-              {{ third.landline }} - {{ third.cell_phone }}
-            </td>
-            <td class="align-middle" *ngIf="listaCampos[6].selected">
-              {{ third.third_party_type }}
-            </td>
-            <td class="align-middle" *ngIf="listaCampos[7].selected">
-              {{ third.email }}
-            </td>
-            <td class="align-middle" *ngIf="listaCampos[8].selected">
-              <span
-                [ngClass]="
-                  third.state == 'Inactivo'
-                    ? 'badge badge-danger'
-                    : 'badge badge-success'
-                "
-              >
-                {{ third.state }}
-              </span>
-            </td>
-            <td class="p-0 align-middle">
-              <div ngbDropdown container="body" class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
-                  type="button"
+              <th><i class="mdi mdi-chevron-down"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let third of thirdParties"
+              class="text-center"
+              [ngClass]="{
+                'text-danger font-weight-bold': third.state == 'Inactivo'
+              }"
+            >
+              <td class="p-0" *ngIf="listaCampos[0].selected">
+                <img
+                  [src]="third.image | image"
+                  onerror="this.src='../../../../assets/images/noprofile.png'"
+                  class="rounded-circle mx-auto img-fluid header-profile-user"
+                />
+              </td>
+              <td class="align-middle" *ngIf="listaCampos[1].selected">
+                {{ third.name }}
+              </td>
+              <td class="align-middle" *ngIf="listaCampos[2].selected">
+                {{ third.nit }}
+              </td>
+              <td class="align-middle" *ngIf="listaCampos[3].selected">
+                {{ third.cod_dian_address }}
+              </td>
+              <td class="align-middle" *ngIf="listaCampos[4].selected">
+                {{ third.municipality.name }}
+              </td>
+              <td class="align-middle" *ngIf="listaCampos[5].selected">
+                {{ third.landline }} - {{ third.cell_phone }}
+              </td>
+              <td class="align-middle" *ngIf="listaCampos[6].selected">
+                {{ third.third_party_type }}
+              </td>
+              <td class="align-middle" *ngIf="listaCampos[7].selected">
+                {{ third.email }}
+              </td>
+              <td class="align-middle" *ngIf="listaCampos[8].selected">
+                <span
+                  [ngClass]="
+                    third.state == 'Inactivo'
+                      ? 'badge badge-danger'
+                      : 'badge badge-success'
+                  "
                 >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item waves-light text-success caja-botones"
-                    [routerLink]="['/crm/terceros/ver', third.id]"
+                  {{ third.state }}
+                </span>
+              </td>
+              <td class="p-0 align-middle">
+                <div ngbDropdown container="body" class="dropdown-primary">
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-primary btn-sm waves-light"
+                    type="button"
                   >
-                    <i class="fas fa-eye"></i> Ver
-                  </a>
-                  <a
-                    class="dropdown-item waves-light text-info caja-botones"
-                    [routerLink]="['/crm/terceros/editar-tercero', third.id]"
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
+                    <i class="mdi mdi-chevron-down"></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <a
+                      class="dropdown-item waves-light text-success caja-botones"
+                      [routerLink]="['/crm/terceros/ver', third.id]"
+                    >
+                      <i class="fas fa-eye"></i> Ver
+                    </a>
+                    <a
+                      class="dropdown-item waves-light text-info caja-botones"
+                      [routerLink]="['/crm/terceros/editar-tercero', third.id]"
+                    >
+                      <i class="far fa-edit"></i> Editar
+                    </a>
 
-                  <a
-                    *ngIf="third.state == 'Activo'"
-                    (click)="changeState(third, 'Inactivo')"
-                    href="javascript:void(0)"
-                    class="dropdown-item waves-light text-danger caja-botones"
-                  >
-                    <i class="far fa-trash-alt"></i> Anular
-                  </a>
-                  <a
-                    *ngIf="third.state == 'Inactivo'"
-                    href="javascript:void(0)"
-                    (click)="changeState(third, 'Activo')"
-                    class="dropdown-item waves-light text-success caja-botones"
-                  >
-                    <i class="fas fa-check"></i> Activar
-                  </a>
+                    <a
+                      *ngIf="third.state == 'Activo'"
+                      (click)="changeState(third, 'Inactivo')"
+                      href="javascript:void(0)"
+                      class="dropdown-item waves-light text-danger caja-botones"
+                    >
+                      <i class="far fa-trash-alt"></i> Anular
+                    </a>
+                    <a
+                      *ngIf="third.state == 'Inactivo'"
+                      href="javascript:void(0)"
+                      (click)="changeState(third, 'Activo')"
+                      class="dropdown-item waves-light text-success caja-botones"
+                    >
+                      <i class="fas fa-check"></i> Activar
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator
+        *ngIf="paginacion"
+        [length]="paginacion.total"
+        [pageSize]="paginacion.per_page"
+        [pageIndex]="paginacion.current_page - 1"
+        (page)="handlePageEvent($event)"
+        aria-label="Select page"
+      >
+      </mat-paginator>
     </div>
-    <mat-paginator
-      *ngIf="paginacion"
-      [length]="paginacion.total"
-      [pageSize]="paginacion.per_page"
-      [pageIndex]="paginacion.current_page - 1"
-      (page)="handlePageEvent($event)"
-      aria-label="Select page"
-    >
-    </mat-paginator>
   </div>
-</div>
+</ng-container>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<ng-template #noPermissions>
+  <app-no-permissions></app-no-permissions>
 </ng-template>

@@ -6,7 +6,6 @@ import { ActivatedRoute } from "@angular/router";
 import { Globales } from '../../shared/globales/globales'; */
 import swal, { SweetAlertOptions } from 'sweetalert2';
 import { Subject } from 'rxjs';
-
 @Component({
   selector: 'app-board-rrhh',
   templateUrl: './board-rrhh.component.html',
@@ -41,15 +40,19 @@ export class BoardRrhhComponent implements OnInit {
   public alertOption: SweetAlertOptions = {};
   public Id_Contrato: any = '';
 
-  public AbrirModalOtrosi:Subject<any> = new Subject();
+  public AbrirModalOtrosi: Subject<any> = new Subject();
 
   public ActividadModel: any = {};
   @ViewChild('ModalCambioEstado') ModalCambioEstado: any;
   mes_actual: string;
   public meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-  globales = {ruta: 'https://inventario.sigmaqmo.com/'}
-  constructor(private http: HttpClient, private location: Location, private route: ActivatedRoute) {
-    
+  globales = { ruta: 'https://inventario.sigmaqmo.com/' }
+  constructor(
+    private http: HttpClient,
+    private location: Location,
+    private route: ActivatedRoute
+  ) {
+
     this.LlegadasTardeMes();
     this.CumpleanosMes();
     this.CargarGraficaTorta();
@@ -78,9 +81,7 @@ export class BoardRrhhComponent implements OnInit {
       },
       allowOutsideClick: () => !swal.isLoading()
     }
-
   }
-
 
   ListarPermisos() {
     this.http.get(this.globales.ruta + 'php/recursos_humanos/permisos.php').subscribe((data: any) => {
@@ -153,7 +154,7 @@ export class BoardRrhhComponent implements OnInit {
       this.Contratos = data.Contratos;
     });
   }
-  CargarContratosPrueba(){
+  CargarContratosPrueba() {
     this.http.get(this.globales.ruta + 'php/recursos_humanos/contratos.php').subscribe((data: any) => {
       // this.Contratos = data.Contratos;
       this.ContratosPrueba = data.ContratosPrueba;
@@ -165,7 +166,7 @@ export class BoardRrhhComponent implements OnInit {
       this.ContratosPreliquidados = data.ContratosPreliquidados;
     });
   }
-  ListarOtroSi(){
+  ListarOtroSi() {
     this.http.get(this.globales.ruta + 'php/recursos_humanos/otrosi.php').subscribe((data: any) => {
       this.OtroSi = data;
     });
@@ -262,9 +263,9 @@ export class BoardRrhhComponent implements OnInit {
       });
     }
   }
-  ConvertToStringDate (date:string){
+  ConvertToStringDate(date: string) {
     let splittedDate = date.split("-");
-    let returnedValue = splittedDate[1]+" de "+this.meses[parseInt(splittedDate[0]) - 1];
+    let returnedValue = splittedDate[1] + " de " + this.meses[parseInt(splittedDate[0]) - 1];
     return returnedValue;
   }
 
@@ -275,7 +276,7 @@ export class BoardRrhhComponent implements OnInit {
   }
   normalize = (function () {
     var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇçÂ®Ã\n",
-      to =     "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuuNnccARA ",
+      to = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuuNnccARA ",
       mapping = {};
 
     for (var i = 0, j = from.length; i < j; i++)
@@ -331,7 +332,7 @@ export class BoardRrhhComponent implements OnInit {
 
   }
 
-  AbrirModal(data:any){
+  AbrirModal(data: any) {
     this.AbrirModalOtrosi.next(data);
   }
 }

@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
           <div class="col-md-6 px-0">
-            <h4 class="text-primary">Crear APU - Servicio</h4>
+            <h4 class="text-primary">{{ title }}</h4>
           </div>
           <div class="col-md-6 px-0 text-md-right text-center">
             <!-- <span>
@@ -484,13 +484,19 @@
                       <tr>
                         <td>SUBTOTAL MANO DE OBRA</td>
                         <td class="text-right">
-                          ${{ this.form.get("subtotal_labor").value }}
+                          ${{
+                            this.form.get("subtotal_labor").value
+                              | currency : "" : ""
+                          }}
                         </td>
                       </tr>
                       <tr>
                         <td>SUBTOTAL VIÁTICOS</td>
                         <td class="text-right">
-                          ${{ this.form.get("subtotal_travel_expense").value }}
+                          ${{
+                            this.form.get("subtotal_travel_expense").value
+                              | currency : "" : ""
+                          }}
                         </td>
                       </tr>
                       <tr>
@@ -498,7 +504,7 @@
                         <td class="text-right">
                           ${{
                             this.form.get("subtotal_dimensional_validation")
-                              .value
+                              .value | currency : "" : ""
                           }}
                         </td>
                       </tr>
@@ -899,7 +905,10 @@
                       <tr>
                         <td>SUBTOTAL MANO DE OBRA</td>
                         <td class="text-right">
-                          ${{ this.form.get("subtotal_labor_mpm").value }}
+                          ${{
+                            this.form.get("subtotal_labor_mpm").value
+                              | currency : "" : ""
+                          }}
                         </td>
                       </tr>
                       <tr>
@@ -907,6 +916,7 @@
                         <td class="text-right">
                           ${{
                             this.form.get("subtotal_travel_expense_mpm").value
+                              | currency : "" : ""
                           }}
                         </td>
                       </tr>
@@ -915,7 +925,7 @@
                         <td class="text-right">
                           ${{
                             this.form.get("subtotal_assembly_commissioning")
-                              .value
+                              .value | currency : "" : ""
                           }}
                         </td>
                       </tr>
@@ -925,7 +935,7 @@
                           ${{
                             this.form.get(
                               "general_subtotal_travel_expense_labor"
-                            ).value
+                            ).value | currency : "" : ""
                           }}
                         </td>
                       </tr>
@@ -1072,7 +1082,9 @@
         </div>
       </div>
     </div>
-    <button class="btn btn-block btn-primary mb-3" (click)="save()">Guardar</button>
+    <button class="btn btn-block btn-primary mb-3" (click)="save()">
+      Guardar
+    </button>
   </form>
 </ng-container>
 <ng-template #notData>

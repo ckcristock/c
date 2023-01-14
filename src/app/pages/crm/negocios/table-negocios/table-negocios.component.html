@@ -67,7 +67,16 @@
     </tbody>
   </table>
 </div>
-<ngb-pagination
+<mat-paginator
+  *ngIf="paginacion"
+  [length]="paginacion.total"
+  [pageSize]="paginacion.per_page"
+  [pageIndex]="paginacion.current_page - 1"
+  (page)="handlePageEventParent($event)"
+  aria-label="Select page"
+>
+</mat-paginator>
+<!-- <ngb-pagination
   class="d-flex justify-content-center pagination-rounded pagination-sm"
   [collectionSize]="pagination.collectionSize"
   [pageSize]="pagination.pageSize"
@@ -79,7 +88,7 @@
   ellipses="false"
   boundaryLinks="true"
 >
-</ngb-pagination>
+</ngb-pagination> -->
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

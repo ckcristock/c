@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
 import { TercerosService } from '../terceros.service';
@@ -16,7 +16,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './crear-terceros.component.html',
   styleUrls: ['./crear-terceros.component.scss'],
 })
-export class CrearTercerosComponent implements OnInit {
+export class CrearTercerosComponent implements OnInit, AfterViewInit {
   loading: boolean = true
   @ViewChild('stepper') stepper: MatHorizontalStepper;
   ngAfterViewInit() {
@@ -89,12 +89,8 @@ export class CrearTercerosComponent implements OnInit {
 
   ciiu: any[] = [];
   ngOnInit(): void {
-    //this.getCiiu();
     this.createForm();
     this.getZones();
-    //this.getDepartments();
-    //this.getCountries();
-    //this.getMunicipalitites();
     this.getCountriesWith();
     this.id = this.actRoute.snapshot.params.id;
     this.getWinningLists();
@@ -106,6 +102,10 @@ export class CrearTercerosComponent implements OnInit {
     this.getFields();
     this.getRegimeType();
     this.getFiscalResponsibility();
+    //this.getCiiu();
+    //this.getDepartments();
+    //this.getCountries();
+    //this.getMunicipalitites();
 
   }
 
@@ -216,11 +216,11 @@ export class CrearTercerosComponent implements OnInit {
 
   personControl() {
     let group = this.fb.group({
-      name: [''],
-      n_document: [''],
+      name: ['', Validators.required],
+      n_document: ['', Validators.required],
       landline: [''],
       cell_phone: [''],
-      email: [''],
+      email: ['', Validators.required],
       position: [''],
       observation: ['']
     });

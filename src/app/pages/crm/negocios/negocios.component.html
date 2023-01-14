@@ -1,209 +1,248 @@
-<div class="card">
-  <div class="card-body">
-    <div class="row card-title d-flex justify-content-between">
-      <div class="col-md-6 px-0">
-        <h4 class="text-primary">Panel de negocios</h4>
-      </div>
-      <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-primary btn-sm" (click)="modalNuevoNegocio.openModal()">
-            <i class="fa fa-plus"></i> Agregar
-          </button>
-          <ng-container *ngIf="this.active == 1">
-            <button class="btn btn-info btn-sm" (click)="openClose()">
-              <i class="fas fa-sliders-h"></i> Filtros
+<ng-container *ngIf="this.permission.permissions.show; else noPermissions">
+  <div class="card">
+    <div class="card-body">
+      <div class="row card-title d-flex justify-content-between">
+        <div class="col-md-6 px-0">
+          <h4 class="text-primary">
+            Panel de negocios
+            <span style="font-size: smaller" *ngIf="paginacion"
+              ><small class="pb-2 text-secondary text-muted"
+                >pág. {{ paginacion.current_page }}</small
+              ></span
+            >
+          </h4>
+        </div>
+        <div class="col-md-6 px-0 text-right">
+          <div class="btn-group rounded w-sm-100">
+            <button
+              class="btn btn-primary btn-sm"
+              (click)="modalNuevoNegocio.openModal()"
+            >
+              <i class="fa fa-plus"></i> Agregar
             </button>
-          </ng-container>
+            <ng-container *ngIf="this.active == 1">
+              <button class="btn btn-info btn-sm" (click)="openClose()">
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+            </ng-container>
+          </div>
         </div>
       </div>
-    </div>
-    <hr class="line" />
-    <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
-        <form [formGroup]="formFiltersBusiness">
-          <div class="row">
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Código</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="code"
-                autocomplete="off"
-                placeholder="Busca por código"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Nombre</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="name"
-                autocomplete="off"
-                placeholder="Busca por nombre"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Empresa</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="company_name"
-                autocomplete="off"
-                placeholder="Busca por empresa"
-              />
-            </mat-form-field>
-          </div>
-        </form>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <ul
-      ngbNav
-      #nav="ngbNav"
-      [(activeId)]="active"
-      class="nav nav-tabs justify-content-center mb-0"
-    >
-      <li [ngbNavItem]="1">
-        <a
-          ngbNavLink
-          (click)="getNegocios(); changeUrl('?active=1')"
-          data-toggle="tab"
-          role="tab"
-          aria-controls="home"
-          aria-selected="true"
-          class="nav-link border-0 text-uppercase font-weight-bold"
-        >
-          Tabla de negocios
-        </a>
-        <ng-template ngbNavContent>
-          <app-table-negocios
-            [negocios]="business"
-            [pagination]="paginationBusiness"
-            (getNegocios)="getNegocios($event)"
-            [loading]="loading"
-          ></app-table-negocios>
-        </ng-template>
-      </li>
-      <li [ngbNavItem]="2">
-        <a
-          ngbNavLink
-          (click)="getNegocios(); changeUrl('?active=2')"
-          data-toggle="tab"
-          role="tab"
-          aria-controls="home"
-          aria-selected="true"
-          class="nav-link border-0 text-uppercase font-weight-bold"
-        >
-          Etapas
-        </a>
-        <ng-template ngbNavContent>
-          <div
-            class="row mt-3"
-            *ngIf="!loading && business.length > 0; else notData"
-          >
-            <div class="col-md-4">
-              <div class="card bg-light">
-                <div class="card-body border-bottom">
-                  <h4 class="card-title text-center">Etapa 1</h4>
-                  <div class="d-flex justify-content-between mb-3">
-                    <span>{{ negocios_primera_etapa.length }} Negocio(s)</span>
-                    <span>$ {{ total.first | number }}</span>
-                  </div>
-                  <div
-                    id="Todo-task"
-                    class="task-list"
-                    dndDropzone
-                    dndEffectAllowed="move"
-                    (dndDrop)="onDrop($event, negocios_primera_etapa, 'first')"
-                  >
-                    <ng-container *ngFor="let task of negocios_primera_etapa">
-                      <div
-                        [dndDraggable]="task"
-                        dndEffectAllowed="move"
-                        (dndMoved)="onDragged(task, negocios_primera_etapa)"
-                      >
-                        <ng-template
-                          [ngTemplateOutlet]="NegocioContent"
-                          [ngTemplateOutletContext]="{ neg: task }"
-                        >
-                        </ng-template>
-                      </div>
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
+      <hr class="line" />
+      <mat-accordion multi>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <form [formGroup]="formFiltersBusiness">
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Código</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="code"
+                  autocomplete="off"
+                  placeholder="Busca por código"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="name"
+                  autocomplete="off"
+                  placeholder="Busca por nombre"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Empresa</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="company_name"
+                  autocomplete="off"
+                  placeholder="Busca por empresa"
+                />
+              </mat-form-field>
             </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
 
-            <div class="col-md-4">
-              <div class="card bg-light">
-                <div class="card-body border-bottom">
-                  <h4 class="card-title text-center">Etapa 2</h4>
-                  <div class="d-flex justify-content-between mb-3">
-                    <span>{{ negocios_segunda_etapa.length }} Negocio(s)</span>
-                    <span>$ {{ total.second | number }}</span>
-                  </div>
-                  <div
-                    id="Progress-task"
-                    class="task-list"
-                    dndDropzone
-                    dndEffectAllowed="move"
-                    (dndDrop)="onDrop($event, negocios_segunda_etapa, 'second')"
-                  >
-                    <ng-container *ngFor="let task of negocios_segunda_etapa">
-                      <div
-                        [dndDraggable]="task"
-                        dndEffectAllowed="move"
-                        (dndMoved)="onDragged(task, negocios_segunda_etapa)"
+      <ul
+        ngbNav
+        #nav="ngbNav"
+        [(activeId)]="active"
+        class="nav nav-tabs justify-content-center mb-0"
+      >
+        <li [ngbNavItem]="1">
+          <a
+            ngbNavLink
+            (click)="getNegocios(); changeUrl('?active=1')"
+            data-toggle="tab"
+            role="tab"
+            aria-controls="home"
+            aria-selected="true"
+            class="nav-link border-0 text-uppercase font-weight-bold"
+          >
+            Tabla de negocios
+          </a>
+          <ng-template ngbNavContent>
+            <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
+              <strong
+                >Hay filtros de búsqueda activos, para mostrar todos los
+                resultados haz click
+              </strong>
+              <a
+                href="javascript: void(0)"
+                (click)="resetFiltros()"
+                class="alert-link"
+                >aquí</a
+              >
+            </div>
+            <app-table-negocios
+              [negocios]="business"
+              [pagination]="paginationBusiness"
+              [paginacion]="paginacion"
+              (getNegocios)="getNegocios($event)"
+              (handlePageEvent)="handlePageEvent($event)"
+              [loading]="loading"
+            ></app-table-negocios>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a
+            ngbNavLink
+            (click)="getNegocios(); changeUrl('?active=2')"
+            data-toggle="tab"
+            role="tab"
+            aria-controls="home"
+            aria-selected="true"
+            class="nav-link border-0 text-uppercase font-weight-bold"
+          >
+            Etapas
+          </a>
+          <ng-template ngbNavContent>
+            <div
+              class="row mt-3"
+              *ngIf="!loading && business.length > 0; else notData"
+            >
+              <div class="col-md-4">
+                <div class="card bg-light">
+                  <div class="card-body border-bottom">
+                    <h4 class="card-title text-center">Etapa 1</h4>
+                    <div class="d-flex justify-content-between mb-3">
+                      <span
+                        >{{ negocios_primera_etapa.length }} Negocio(s)</span
                       >
-                        <ng-template
-                          [ngTemplateOutlet]="NegocioContent"
-                          [ngTemplateOutletContext]="{ neg: task }"
+                      <span>$ {{ total.first | number }}</span>
+                    </div>
+                    <div
+                      id="Todo-task"
+                      class="task-list"
+                      dndDropzone
+                      dndEffectAllowed="move"
+                      (dndDrop)="
+                        onDrop($event, negocios_primera_etapa, 'first')
+                      "
+                    >
+                      <ng-container *ngFor="let task of negocios_primera_etapa">
+                        <div
+                          [dndDraggable]="task"
+                          dndEffectAllowed="move"
+                          (dndMoved)="onDragged(task, negocios_primera_etapa)"
                         >
-                        </ng-template>
-                      </div>
-                    </ng-container>
+                          <ng-template
+                            [ngTemplateOutlet]="NegocioContent"
+                            [ngTemplateOutletContext]="{ neg: task }"
+                          >
+                          </ng-template>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card bg-light">
+                  <div class="card-body border-bottom">
+                    <h4 class="card-title text-center">Etapa 2</h4>
+                    <div class="d-flex justify-content-between mb-3">
+                      <span
+                        >{{ negocios_segunda_etapa.length }} Negocio(s)</span
+                      >
+                      <span>$ {{ total.second | number }}</span>
+                    </div>
+                    <div
+                      id="Progress-task"
+                      class="task-list"
+                      dndDropzone
+                      dndEffectAllowed="move"
+                      (dndDrop)="
+                        onDrop($event, negocios_segunda_etapa, 'second')
+                      "
+                    >
+                      <ng-container *ngFor="let task of negocios_segunda_etapa">
+                        <div
+                          [dndDraggable]="task"
+                          dndEffectAllowed="move"
+                          (dndMoved)="onDragged(task, negocios_segunda_etapa)"
+                        >
+                          <ng-template
+                            [ngTemplateOutlet]="NegocioContent"
+                            [ngTemplateOutletContext]="{ neg: task }"
+                          >
+                          </ng-template>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card bg-light">
+                  <div class="card-body border-bottom">
+                    <h4 class="card-title text-center">Etapa 3</h4>
+                    <div class="d-flex justify-content-between mb-3">
+                      <span
+                        >{{ negocios_tercera_etapa.length }} Negocio(s)</span
+                      >
+                      <span>$ {{ total.third | number }}</span>
+                    </div>
+                    <div
+                      id="Progress-task"
+                      class="task-list"
+                      dndDropzone
+                      dndEffectAllowed="move"
+                      (dndDrop)="
+                        onDrop($event, negocios_tercera_etapa, 'third')
+                      "
+                    >
+                      <ng-container *ngFor="let neg of negocios_tercera_etapa">
+                        <div
+                          [dndDraggable]="neg"
+                          dndEffectAllowed="move"
+                          (dndMoved)="onDragged(neg, negocios_tercera_etapa)"
+                        >
+                          <ng-template
+                            [ngTemplateOutlet]="NegocioContent"
+                            [ngTemplateOutletContext]="{ neg: neg }"
+                          >
+                          </ng-template>
+                        </div>
+                      </ng-container>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="card bg-light">
-                <div class="card-body border-bottom">
-                  <h4 class="card-title text-center">Etapa 3</h4>
-                  <div class="d-flex justify-content-between mb-3">
-                    <span>{{ negocios_tercera_etapa.length }} Negocio(s)</span>
-                    <span>$ {{ total.third | number }}</span>
-                  </div>
-                  <div
-                    id="Progress-task"
-                    class="task-list"
-                    dndDropzone
-                    dndEffectAllowed="move"
-                    (dndDrop)="onDrop($event, negocios_tercera_etapa, 'third')"
-                  >
-                    <ng-container *ngFor="let neg of negocios_tercera_etapa">
-                      <div
-                        [dndDraggable]="neg"
-                        dndEffectAllowed="move"
-                        (dndMoved)="onDragged(neg, negocios_tercera_etapa)"
-                      >
-                        <ng-template
-                          [ngTemplateOutlet]="NegocioContent"
-                          [ngTemplateOutletContext]="{ neg: neg }"
-                        >
-                        </ng-template>
-                      </div>
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-      </li>
-    </ul>
-    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+          </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    </div>
   </div>
-</div>
+</ng-container>
 
 <ng-template #NegocioContent let-neg="neg">
   <div class="card task-box">
@@ -243,14 +282,18 @@
   </div>
 </ng-template>
 
-<app-modal-nuevo-negocio (updated)="getNegocios()" #modalNuevoNegocio></app-modal-nuevo-negocio>
-
+<app-modal-nuevo-negocio
+  (updated)="getNegocios()"
+  #modalNuevoNegocio
+></app-modal-nuevo-negocio>
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
-
+<ng-template #noPermissions>
+  <app-no-permissions></app-no-permissions>
+</ng-template>
 <!-- <ng-template ng-label-tmp let-item="item">
   <span>{{
     item.first_name

@@ -14,6 +14,7 @@ import * as help from './helpers/imports';
 export class CrearApuServicioComponent implements OnInit {
   @Input('id') id;
   @Input('data') data: any;
+  @Input('title') title = 'Crear APU - Servicio';
   form: FormGroup;
   date: Date = new Date();
   loading: boolean = false;

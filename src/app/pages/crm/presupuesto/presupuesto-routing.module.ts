@@ -9,7 +9,8 @@ const routes: Routes = [
     { path: '', component: PresupuestosComponent },
     { path: 'crear', component: CrearPresupuestoComponent },
     { path: 'editar/:id', component: EditarPresupuestoComponent },
-    { path: 'ver/:id', component: VerPresupuestoComponent }
+    { path: 'ver/:id', component: VerPresupuestoComponent },
+    { path: 'copiar/:id', component: EditarPresupuestoComponent }
 ]
 
 @NgModule({

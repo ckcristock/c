@@ -13,16 +13,16 @@ export class EditarApuConjuntoComponent implements OnInit {
   data: any;
 
   constructor(
-              private actRoute: ActivatedRoute, private _apuConjunto: ApuConjuntoService
-              ) { }
+    private actRoute: ActivatedRoute, private _apuConjunto: ApuConjuntoService
+  ) { }
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.params.id;
     this.getData();
   }
 
-  getData(){
-    this._apuConjunto.getApuSet(this.id).subscribe((r:any) => {
+  getData() {
+    this._apuConjunto.getApuSet(this.id).subscribe((r: any) => {
       this.data = r.data;
     })
   }

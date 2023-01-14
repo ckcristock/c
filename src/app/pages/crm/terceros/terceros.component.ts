@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/pag
 import { UserService } from 'src/app/core/services/user.service';
 import { debounceTime, filter, pairwise } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { PermissionService } from 'src/app/core/services/permission.service';
 
 
 @Component({
@@ -35,6 +37,13 @@ export class TercerosComponent implements OnInit {
     pageSize: 10,
     collectionSize: 0
   }
+  permission: Permissions = {
+    menu: 'Terceros',
+    permissions: {
+      show: true,
+      add: true
+    }
+  };
   listaCampos: any[] = [
     { value: 0, text: 'Foto', selected: true },
     { value: 2, text: 'Nombre', selected: true },
@@ -56,17 +65,16 @@ export class TercerosComponent implements OnInit {
     private route: ActivatedRoute,
     private paginator: MatPaginatorIntl,
     private _swal: SwalService,
-    private _user: UserService
+    private _permission: PermissionService,
+    private _user: UserService,
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
+    this.permission = this._permission.validatePermissions(this.permission)
   }
 
   ngOnInit(): void {
-    this.createFormFilters();
-    let estado = this.sacarMenu(this._user.user.menu, this.router)
-    if (!estado) {
-      this.router.navigateByUrl('/notauthorized');
-    } else {
+    if (this.permission.permissions.show) {
+      this.createFormFilters();
       for (let i in this.listaCampos) {
         if (this.listaCampos[i].selected) {
           this.selectedCampos.push(this.listaCampos[i].value)
@@ -90,6 +98,8 @@ export class TercerosComponent implements OnInit {
           }
         }
         );
+    } else {
+      this.router.navigate(['/notauthorized'])
     }
   }
 
@@ -108,17 +118,6 @@ export class TercerosComponent implements OnInit {
     ).subscribe(r => {
       this.getThirdParties();
     })
-  }
-
-  public sacarMenu(menu, state) {
-    for (let i in menu) {
-      if (menu[i]['child'].length > 0) {
-        this.sacarMenu(menu[i]['child'], state)
-      } else if (menu[i]['link'] && state.url.split('?')[0].match(menu[i]['link'])) {
-        this.estado = true
-      }
-    }
-    return this.estado
   }
 
   cambiarCampo(event) {
@@ -156,7 +155,6 @@ export class TercerosComponent implements OnInit {
 
   getThirdParties(page = 1) {
     this.pagination.page = page;
-    console.log(page)
     let params = {
       ...this.pagination, ...this.form_filters.value
     }

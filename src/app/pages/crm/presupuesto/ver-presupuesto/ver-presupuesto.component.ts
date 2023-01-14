@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 export class VerPresupuestoComponent implements OnInit {
   id: string;
   data: any;
-  loading = false
+  loading:boolean;
   constructor(private _budget: BudgetService, private actRoute: ActivatedRoute, private _swal: SwalService) { }
 
   ngOnInit(): void {
@@ -21,8 +21,10 @@ export class VerPresupuestoComponent implements OnInit {
   }
 
   getBudget() {
+    this.loading = true;
     this._budget.get(this.id).subscribe((r: any) => {
       this.data = r.data
+      this.loading = false;
     })
   }
 

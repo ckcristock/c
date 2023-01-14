@@ -1,5 +1,5 @@
 <div class="card-title">
-  <div class="row invoice-contact" style="align-items: flex-start !important">
+  <div class="row invoice-contact d-flex align-self-start">
     <div class="col-md-6">
       <table class="table table-responsive invoice-table table-borderless mb-0">
         <tbody>
@@ -7,26 +7,27 @@
             <td class="p-0">
               <img
                 src="{{ Empresa.logo }}"
-                class="mb-1 img-thumbnail"
-                style="width: 250px"
+                class="mb-1 img-fluid img-cabecera"
               />
               <br /><strong>{{ Empresa.name }}</strong> <br /><strong
                 >NIT:</strong
               >
-              {{ Empresa.document_number | number | puntos }}-{{ Empresa.verification_digit }}
+              {{ Empresa.document_number | number | puntos }}-{{
+                Empresa.verification_digit
+              }}
             </td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="col-md-6 text-right">
-      <h4 class="text-primary">{{ datosCabecera.Titulo || "Sin Titulo" }}</h4>
+      <h4 class="text-primary">{{ datosCabecera.Titulo || "Sin título" }}</h4>
       <h4
         *ngIf="datosCabecera.Codigo != undefined && datosCabecera.Codigo != ''"
       >
         {{ datosCabecera.Codigo }}
       </h4>
-      <h6>{{ datosCabecera.Fecha | date: "longDate" }}</h6>
+      <h6>{{ datosCabecera.Fecha | date : "longDate" }}</h6>
       <div class="clearfix"></div>
     </div>
   </div>

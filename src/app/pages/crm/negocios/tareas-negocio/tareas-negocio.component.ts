@@ -28,8 +28,6 @@ export class TareasNegocioComponent implements OnInit {
   tasks: any[] = [];
   loading: boolean;
 
-
-
   constructor(private _people: PersonService, private _negocios: NegociosService,
     private fb: FormBuilder, private modalService: NgbModal,
   ) { }

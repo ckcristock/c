@@ -67,12 +67,12 @@
         <div class="d-flex justify-content-between">
           <h2 class="text-success">
             {{
-              ((count_aprobada /
+              (count_aprobada /
                 (count_pendiente +
                   count_aprobada +
                   count_no_aprobada +
                   count_anulada)) *
-                100) | number: '.1-1'
+                100 | number : ".1-1"
             }}%
           </h2>
           <i class="fas fa-chart-pie fa-2x text-muted"></i>
@@ -88,7 +88,14 @@
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
           <div class="col-md-6 px-0">
-            <h4 class="text-primary">Cotizaciones</h4>
+            <h4 class="text-primary">
+              Cotizaciones
+              <span style="font-size: smaller" *ngIf="paginacion"
+                ><small class="pb-2 text-secondary text-muted"
+                  >pág. {{ paginacion.current_page }}</small
+                ></span
+              >
+            </h4>
           </div>
           <div class="col-md-6 px-0 text-right">
             <div class="btn-group rounded w-sm-100">
@@ -108,78 +115,89 @@
         <mat-accordion multi>
           <mat-expansion-panel class="mat-elevation-z0">
             <div class="row">
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Fecha</mat-label>
-                <input
-                  type="date"
-                  matInput
-                  [(ngModel)]="filters.date"
-                  (input)="getQuotation()"
-                  autocomplete="off"
-                />
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Ciudad</mat-label>
-                <input
-                  type="text"
-                  matInput
-                  [(ngModel)]="filters.city"
-                  (input)="getQuotation()"
-                  autocomplete="off"
-                  placeholder="Busca por ciudad"
-                />
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Código</mat-label>
-                <input
-                  type="text"
-                  matInput
-                  [(ngModel)]="filters.code"
-                  (input)="getQuotation()"
-                  autocomplete="off"
-                  placeholder="Busca por código"
-                />
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Estado</mat-label>
-                <mat-select
-                  [(ngModel)]="filters.status"
-                  (selectionChange)="getQuotation()"
-                >
-                  <mat-option value="">Todas</mat-option>
-                  <mat-option value="Pendiente">Pendientes</mat-option>
-                  <mat-option value="Aprobada">Aprobadas</mat-option>
-                  <mat-option value="No aprobada">No aprobadas</mat-option>
-                  <mat-option value="Anulada">Anuladas</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Cliente</mat-label>
-                <input
-                  type="text"
-                  matInput
-                  [(ngModel)]="filters.client"
-                  (input)="getQuotation()"
-                  autocomplete="off"
-                  placeholder="Busca por cliente"
-                />
-              </mat-form-field>
-
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Descripción</mat-label>
-                <input
-                  type="text"
-                  matInput
-                  [(ngModel)]="filters.description"
-                  (input)="getQuotation()"
-                  autocomplete="off"
-                  placeholder="Busca por descripción"
-                />
-              </mat-form-field>
+              <ng-container [formGroup]="form_filters">
+                <mat-form-field appearance="outline" class="col">
+                  <mat-label>Rango de fechas</mat-label>
+                  <input
+                    matInput
+                    [satDatepicker]="picker"
+                    [value]="date"
+                    (dateChange)="selectedDate($event)"
+                    name="daterange"
+                    autocomplete="off"
+                  />
+                  <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+                  <sat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></sat-datepicker-toggle>
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Ciudad</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="city"
+                    autocomplete="off"
+                    placeholder="Busca por ciudad"
+                  />
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Código</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="code"
+                    autocomplete="off"
+                    placeholder="Busca por código"
+                  />
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Estado</mat-label>
+                  <mat-select formControlName="status">
+                    <mat-option value="">Todas</mat-option>
+                    <mat-option value="Pendiente">Pendientes</mat-option>
+                    <mat-option value="Aprobada">Aprobadas</mat-option>
+                    <mat-option value="No aprobada">No aprobadas</mat-option>
+                    <mat-option value="Anulada">Anuladas</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Cliente</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="client"
+                    autocomplete="off"
+                    placeholder="Busca por cliente"
+                  />
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Descripción</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="description"
+                    autocomplete="off"
+                    placeholder="Busca por descripción"
+                  />
+                </mat-form-field>
+              </ng-container>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
-
+        <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
+          <strong
+            >Hay filtros de búsqueda activos, para mostrar todos los resultados
+            haz click
+          </strong>
+          <a
+            href="javascript: void(0)"
+            (click)="resetFiltros()"
+            class="alert-link"
+            >aquí</a
+          >
+        </div>
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
@@ -274,12 +292,12 @@
                         ><i class="fas fa-comment"></i> Comentarios</a
                       >
                       <a
-                          class="dropdown-item waves-light text-success caja-botones"
-                          href="javascript: void(0);"
-                          *ngIf="item.status == 'Anulada'"
-                          (click)="updateStatus('Pendiente', item.id)"
-                          ><i class="fas fa-check"></i> Activar</a
-                        >
+                        class="dropdown-item waves-light text-success caja-botones"
+                        href="javascript: void(0);"
+                        *ngIf="item.status == 'Anulada'"
+                        (click)="updateStatus('Pendiente', item.id)"
+                        ><i class="fas fa-check"></i> Activar</a
+                      >
                       <ng-container *ngIf="item.status == 'Pendiente'">
                         <a
                           class="dropdown-item waves-light text-danger caja-botones"
@@ -311,19 +329,15 @@
             </tbody>
           </table>
         </div>
-        <ngb-pagination
-          class="d-flex justify-content-center pagination-rounded pagination-sm"
-          [collectionSize]="pagination.collectionSize"
-          [pageSize]="pagination.pageSize"
-          [(page)]="pagination.page"
-          (pageChange)="getQuotation($event)"
-          aria-label="Default pagination"
-          maxSize="5"
-          rotate="true"
-          ellipses="false"
-          boundaryLinks="true"
+        <mat-paginator
+          *ngIf="paginacion"
+          [length]="paginacion.total"
+          [pageSize]="paginacion.per_page"
+          [pageIndex]="paginacion.current_page - 1"
+          (page)="handlePageEvent($event)"
+          aria-label="Select page"
         >
-        </ngb-pagination>
+        </mat-paginator>
       </div>
     </div>
   </div>

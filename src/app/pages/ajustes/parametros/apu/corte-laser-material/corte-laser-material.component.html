@@ -23,7 +23,13 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre</mat-label>
-            <input (input)="getMaterials()" [(ngModel)]="filtro.name" type="text" matInput placeholder="Busca por nombre" />
+            <input
+              (input)="getMaterials()"
+              [(ngModel)]="filtro.name"
+              type="text"
+              matInput
+              placeholder="Busca por nombre"
+            />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -38,14 +44,14 @@
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
             <th>F. Creación</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of materials" class="text-center">
             <td class="align-middle">{{ item.name | uppercase }}</td>
             <td class="align-middle">
-              {{ item.created_at | date: "longDate" }}
+              {{ item.created_at | date : "longDate" }}
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">

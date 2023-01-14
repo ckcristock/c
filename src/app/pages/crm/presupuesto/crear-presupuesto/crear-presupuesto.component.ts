@@ -6,7 +6,7 @@ import { debounceTime, distinctUntilChanged, filter, switchMap, tap, catchError,
 import { CalculationBasesService } from '../../../ajustes/configuracion/base-calculos/calculation-bases.service';
 import { BudgetService } from '../budget.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-crear-presupuesto',
@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 export class CrearPresupuestoComponent implements OnInit {
   @Input('id') id;
   @Input('dataEdit') dataEdit;
+  @Input('title') title = 'Nuevo presupuesto';
 
   indirectCosts: any = [];
   clients: any = [];
@@ -24,6 +25,7 @@ export class CrearPresupuestoComponent implements OnInit {
   cities: any[] = []
   calculationBase: any = {}
   loading = false;
+  path: string;
 
   constructor(
     private _apuPieza: ApuPiezaService,
@@ -31,8 +33,11 @@ export class CrearPresupuestoComponent implements OnInit {
     private _calculationBase: CalculationBasesService,
     private _budget: BudgetService,
     private _swal: SwalService,
-    private router: Router) { }
+    private router: Router,
+    private route: ActivatedRoute,
+  ) { }
   async ngOnInit() {
+    this.path = this.route.snapshot.url[0].path;
     this.loading = true;
     /*   this.getCustumers(); */
     this.getClients();
@@ -121,7 +126,7 @@ export class CrearPresupuestoComponent implements OnInit {
 
   createForm() {
     this.forma = this.fb.group({
-      id: (this.dataEdit ? this.dataEdit.id : ''),
+      id: (this.dataEdit && this.path != 'copiar' ? this.dataEdit.id : ''),
       customer_id: (this.dataEdit ? this.dataEdit.customer_id : ''),
       destinity_id: (this.dataEdit ? this.dataEdit.destinity_id : ''),
       line: (this.dataEdit ? this.dataEdit.line : ''),
@@ -208,7 +213,7 @@ export class CrearPresupuestoComponent implements OnInit {
       text: 'Se dispone a guardar un presupuesto',
       icon: 'question'
     },
-      this.dataEdit ? this.updateData : this.saveData
+      this.dataEdit && this.path != 'copiar' ? this.updateData : this.saveData
 
     ).then(r => {
       if (r.isConfirmed) {

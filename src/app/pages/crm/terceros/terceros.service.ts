@@ -108,4 +108,12 @@ export class TercerosService {
   getThirds() {
     return this.http.get(`${environment.base_url}/third-parties-list`)
   }
+
+  getClient(){
+    return this.http.get(`${environment.base_url}/thirdPartyClient`);
+  }
+
+  getThirdPartyPersonForThird(id) {
+    return this.http.get(`${environment.base_url}/third-party-person-for-third/${id}`,);
+  }
 }

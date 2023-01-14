@@ -11,11 +11,14 @@ export class TableNegociosComponent implements OnInit {
   @Input("negocios") negocios: any[]
   @Input("loading") loading: any
   @Input("pagination") pagination: any
+  @Input("paginacion") paginacion: any
   @Output() getNegocios = new EventEmitter<string>();
+  @Output() handlePageEvent = new EventEmitter<string>();
 
   constructor(private _negocios: NegociosService,) { }
 
   ngOnInit(): void {
+    console.log(this.paginacion)
   }
 
   nextState(state, id) {
@@ -24,6 +27,9 @@ export class TableNegociosComponent implements OnInit {
 
   getNegociosParent($event) {
     this.getNegocios.emit($event)
+  }
+  handlePageEventParent($event) {
+    this.handlePageEvent.emit($event)
   }
 
 }

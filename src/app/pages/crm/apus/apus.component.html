@@ -1,294 +1,297 @@
-<div class="card">
-  <div class="card-body">
-    <div class="row card-title d-flex justify-content-between">
-      <div class="col-md-6 px-0">
-        <h4 class="text-primary">
-          APU<span style="font-size: smaller" *ngIf="paginacion">
-            <small class="pb-2 text-secondary text-muted">
-              pág. {{ paginacion.current_page }}
-            </small>
-          </span>
-        </h4>
-      </div>
-      <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100">
-          <button
-            class="btn btn-primary btn-sm"
-            type="button"
-            [routerLink]="['/crm/apu/crear-apu-pieza']"
-          >
-            <i class="fa fa-plus"></i> Pieza
-          </button>
-          <button
-            class="btn btn-primary btn-sm"
-            type="button"
-            [routerLink]="['/crm/apu/crear-apu-conjunto']"
-          >
-            <i class="fa fa-plus"></i> Conjunto
-          </button>
-          <button
-            class="btn btn-primary btn-sm"
-            type="button"
-            [routerLink]="['/crm/apu/crear-apu-servicio']"
-          >
-            <i class="fa fa-plus"></i> Servicio
-          </button>
-          <button class="btn btn-info btn-sm" (click)="openClose2()">
-            <i class="fas fa-sliders-h"></i> Filtros
-          </button>
-          <button class="btn btn-secondary btn-sm" (click)="openClose()">
-            <i class="fas fa-eye"></i>
-          </button>
+<ng-container *ngIf="this.permission.permissions.show; else noPermissions">
+  <div class="card">
+    <div class="card-body">
+      <div class="row card-title d-flex justify-content-between">
+        <div class="col-md-6 px-0">
+          <h4 class="text-primary">
+            APU<span style="font-size: smaller" *ngIf="paginacion">
+              <small class="pb-2 text-secondary text-muted">
+                pág. {{ paginacion.current_page }}
+              </small>
+            </span>
+          </h4>
         </div>
-      </div>
-    </div>
-    <hr class="line" />
-    <mat-accordion multi #secondAccordion="matAccordion">
-      <mat-expansion-panel class="mat-elevation-z0">
-        <div class="row">
-          <mat-form-field appearance="outline" class="col">
-            <mat-label>Rango de fechas</mat-label>
-            <input
-              matInput
-              [satDatepicker]="picker"
-              [value]="date"
-              (dateChange)="selectedDate($event)"
-              (dateInput)="selectedDate($event)"
-              name="daterange" autocomplete="off"
-              required
-            />
-            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
-            <sat-datepicker-toggle
-              matSuffix
-              [for]="picker"
-            ></sat-datepicker-toggle>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Código</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por código"
-              [(ngModel)]="filtros.code"
-              (input)="getApus()"
-              name="code"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Nombre</mat-label>
-            <input
-              matInput
-              type="text"
-              [(ngModel)]="filtros.name"
-              placeholder="Busca por nombre"
-              (input)="getApus()"
-              name="name"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Ciudad</mat-label>
-            <input
-              matInput
-              type="text"
-              [(ngModel)]="filtros.city"
-              placeholder="Busca por ciudad"
-              (input)="getApus()"
-              name="city"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Cliente</mat-label>
-            <input
-              matInput
-              type="text"
-              [(ngModel)]="filtros.client"
-              placeholder="Busca por cliente"
-              (input)="getApus()"
-              name="client"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Línea</mat-label>
-            <input
-              matInput
-              type="text"
-              [(ngModel)]="filtros.line"
-              placeholder="Busca por línea"
-              (input)="getApus()"
-              name="line"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Tipo</mat-label>
-            <mat-select
-              name="type"
-              [(ngModel)]="filtros.type"
-              (selectionChange)="getApus()"
+        <div class="col-md-6 px-0 text-right">
+          <div class="btn-group rounded w-sm-100">
+            <button
+              class="btn btn-primary btn-sm"
+              type="button"
+              [routerLink]="['/crm/apu/crear-apu-pieza']"
             >
-              <mat-option value="">Todos</mat-option>
-              <mat-option value="Pieza">Pieza</mat-option>
-              <mat-option value="Conjunto">Conjunto</mat-option>
-              <mat-option value="Servicio">Servicio</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Descripción</mat-label>
-            <input
-              matInput
-              type="text"
-              [(ngModel)]="filtros.description"
-              placeholder="Busca por descripción"
-              (input)="getApus()"
-              name="description"
-              autocomplete="off"
-            />
-          </mat-form-field>
+              <i class="fa fa-plus"></i> Pieza
+            </button>
+            <button
+              class="btn btn-primary btn-sm"
+              type="button"
+              [routerLink]="['/crm/apu/crear-apu-conjunto']"
+            >
+              <i class="fa fa-plus"></i> Conjunto
+            </button>
+            <button
+              class="btn btn-primary btn-sm"
+              type="button"
+              [routerLink]="['/crm/apu/crear-apu-servicio']"
+            >
+              <i class="fa fa-plus"></i> Servicio
+            </button>
+            <button class="btn btn-info btn-sm" (click)="openClose2()">
+              <i class="fas fa-sliders-h"></i> Filtros
+            </button>
+            <!--  <button class="btn btn-secondary btn-sm" (click)="openClose()">
+            <i class="fas fa-eye"></i>
+          </button> -->
+          </div>
         </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-accordion multi #firstAccordion="matAccordion">
-      <mat-expansion-panel class="mat-elevation-z0">
-        <section class="d-flex justify-content-between mx-1">
-          <mat-checkbox color="primary" [(ngModel)]="checkTipo"
-            >Tipo</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkNombre"
-            >Nombre</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkCliente"
-            >Cliente</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkDestino"
-            >Ciudad</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkLinea"
-            >Linea</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkQuien"
-            >Quien elabora</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkFecha"
-            >Fecha</mat-checkbox
-          >
-        </section>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
-      <strong
-        >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
-        click
-      </strong>
-      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
-        >aquí</a
-      >
-    </div>
-    <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm mb-0"
-        *ngIf="!loading && apus.length > 0; else notData"
-      >
-        <thead class="bg-light">
-          <tr class="text-center text-uppercase">
-            <th *ngIf="checkFecha">Fecha de Creación</th>
-            <th>Código</th>
-            <th *ngIf="checkNombre">Nombre</th>
-            <th *ngIf="checkDestino">Ciudad</th>
-            <th *ngIf="checkCliente">Cliente</th>
-            <th *ngIf="checkLinea">Linea</th>
-            <th *ngIf="checkTipo">Tipo</th>
-            <th>Descripción</th>
-            <th><i class="mdi mdi-chevron-down"></i></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of apus" class="text-center">
-            <td class="align-middle" *ngIf="checkFecha">
-              {{ item.created_at | date: "shortDate" }}
-            </td>
-            <td class="align-middle">{{ item.code }}</td>
-            <td class="align-middle" *ngIf="checkNombre">{{ item.name }}</td>
-            <td class="align-middle" *ngIf="checkDestino">{{ item.city.name }}</td>
-            <td class="align-middle" *ngIf="checkCliente">
-              {{ item.third_party.full_name}}
-            </td>
-            <td class="align-middle" *ngIf="checkLinea">{{ item.line }}</td>
-            <td class="align-middle" *ngIf="checkTipo">{{ item.type_name }}</td>
-            <td class="align-middle">{{ item.observation }}</td>
-            <td class="align-middle">
-              <div ngbDropdown container="body" class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
-                  type="button"
-                >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    *ngIf="item.type == 'S'"
-                    class="dropdown-item waves-light text-success caja-botones"
-                    [routerLink]="['/crm/apu/ver-apu-servicio', item.apu_id]"
+      </div>
+      <hr class="line" />
+      <mat-accordion multi #secondAccordion="matAccordion">
+        <mat-expansion-panel class="mat-elevation-z0">
+          <div class="row">
+            <ng-container [formGroup]="form_filters">
+              <mat-form-field appearance="outline" class="col">
+                <mat-label>Rango de fechas</mat-label>
+                <input
+                  matInput
+                  [satDatepicker]="picker"
+                  [value]="date"
+                  (dateChange)="selectedDate($event)"
+                  name="daterange"
+                  autocomplete="off"
+                />
+                <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+                <sat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></sat-datepicker-toggle>
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Código</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por código"
+                  formControlName="code"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="name"
+                  placeholder="Busca por nombre"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Ciudad</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="city"
+                  placeholder="Busca por ciudad"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Cliente</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="client"
+                  placeholder="Busca por cliente"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Línea</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="line"
+                  placeholder="Busca por línea"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Tipo</mat-label>
+                <mat-select name="type" formControlName="type">
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option value="Pieza">Pieza</mat-option>
+                  <mat-option value="Conjunto">Conjunto</mat-option>
+                  <mat-option value="Servicio">Servicio</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Descripción</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="description"
+                  placeholder="Busca por descripción"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </ng-container>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion multi #firstAccordion="matAccordion">
+        <mat-expansion-panel class="mat-elevation-z0">
+          <section class="d-flex justify-content-between mx-1">
+            <mat-checkbox color="primary" [(ngModel)]="checkTipo"
+              >Tipo</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkNombre"
+              >Nombre</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkCliente"
+              >Cliente</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkDestino"
+              >Ciudad</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkLinea"
+              >Linea</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkQuien"
+              >Quien elabora</mat-checkbox
+            >
+            <mat-checkbox color="primary" [(ngModel)]="checkFecha"
+              >Fecha</mat-checkbox
+            >
+          </section>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
+        <strong
+          >Hay filtros de búsqueda activos, para mostrar todos los resultados
+          haz click
+        </strong>
+        <a
+          href="javascript: void(0)"
+          (click)="resetFiltros()"
+          class="alert-link"
+          >aquí</a
+        >
+      </div>
+      <div class="rounded-top table-responsive">
+        <table
+          class="table table-bordered table-striped table-sm mb-0"
+          *ngIf="!loading && apus.length > 0; else notData"
+        >
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th *ngIf="checkFecha">Fecha de Creación</th>
+              <th>Código</th>
+              <th *ngIf="checkNombre">Nombre</th>
+              <th *ngIf="checkDestino">Ciudad</th>
+              <th *ngIf="checkCliente">Cliente</th>
+              <th *ngIf="checkLinea">Linea</th>
+              <th *ngIf="checkTipo">Tipo</th>
+              <th>Descripción</th>
+              <th><i class="mdi mdi-chevron-down"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of apus" class="text-center">
+              <td class="align-middle" *ngIf="checkFecha">
+                {{ item.created_at | date : "shortDate" }}
+              </td>
+              <td class="align-middle">{{ item.code }}</td>
+              <td class="align-middle" *ngIf="checkNombre">{{ item.name }}</td>
+              <td class="align-middle" *ngIf="checkDestino">
+                {{ item.city.name }}
+              </td>
+              <td class="align-middle" *ngIf="checkCliente">
+                {{ item.third_party.full_name }}
+              </td>
+              <td class="align-middle" *ngIf="checkLinea">{{ item.line }}</td>
+              <td class="align-middle" *ngIf="checkTipo">
+                {{ item.type_name }}
+              </td>
+              <td class="align-middle">{{ item.observation }}</td>
+              <td class="align-middle">
+                <div ngbDropdown container="body" class="dropdown-primary">
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-primary btn-sm waves-light"
+                    type="button"
                   >
-                    <i class="far fa-eye"></i> Ver
-                  </a>
-                  <a
-                    *ngIf="item.type == 'P'"
-                    class="dropdown-item waves-light text-success caja-botones"
-                    [routerLink]="['/crm/apu/ver-apu-pieza', item.apu_id]"
-                  >
-                    <i class="far fa-eye"></i> Ver
-                  </a>
-                  <a
-                    *ngIf="item.type == 'C'"
-                    class="dropdown-item waves-light text-success caja-botones"
-                    [routerLink]="['/crm/apu/ver-apu-conjunto', item.apu_id]"
-                  >
-                    <i class="far fa-eye"></i> Ver
-                  </a>
-                  <a
-                    *ngIf="item.type == 'S'"
-                    class="dropdown-item waves-light text-info caja-botones"
-                    [routerLink]="['/crm/apu/editar-apu-servicio', item.apu_id]"
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
-                  <a
-                    *ngIf="item.type == 'P'"
-                    class="dropdown-item waves-light text-info caja-botones"
-                    [routerLink]="['/crm/apu/editar-apu-pieza', item.apu_id]"
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
-                  <a
-                    *ngIf="item.type == 'C'"
-                    class="dropdown-item waves-light text-info caja-botones"
-                    [routerLink]="['/crm/apu/editar-apu-conjunto', item.apu_id]"
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
+                    <i class="mdi mdi-chevron-down"></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <a
+                      *ngIf="item.type == 'S'"
+                      class="dropdown-item waves-light text-success caja-botones"
+                      [routerLink]="['/crm/apu/ver-apu-servicio', item.apu_id]"
+                    >
+                      <i class="far fa-eye"></i> Ver
+                    </a>
+                    <a
+                      *ngIf="item.type == 'P'"
+                      class="dropdown-item waves-light text-success caja-botones"
+                      [routerLink]="['/crm/apu/ver-apu-pieza', item.apu_id]"
+                    >
+                      <i class="far fa-eye"></i> Ver
+                    </a>
+                    <a
+                      *ngIf="item.type == 'C'"
+                      class="dropdown-item waves-light text-success caja-botones"
+                      [routerLink]="['/crm/apu/ver-apu-conjunto', item.apu_id]"
+                    >
+                      <i class="far fa-eye"></i> Ver
+                    </a>
+                    <a
+                      *ngIf="item.type == 'S'"
+                      class="dropdown-item waves-light text-info caja-botones"
+                      [routerLink]="[
+                        '/crm/apu/editar-apu-servicio',
+                        item.apu_id
+                      ]"
+                    >
+                      <i class="far fa-edit"></i> Editar
+                    </a>
+                    <a
+                      *ngIf="item.type == 'P'"
+                      class="dropdown-item waves-light text-info caja-botones"
+                      [routerLink]="['/crm/apu/editar-apu-pieza', item.apu_id]"
+                    >
+                      <i class="far fa-edit"></i> Editar
+                    </a>
+                    <a
+                      *ngIf="item.type == 'C'"
+                      class="dropdown-item waves-light text-info caja-botones"
+                      [routerLink]="[
+                        '/crm/apu/editar-apu-conjunto',
+                        item.apu_id
+                      ]"
+                    >
+                      <i class="far fa-edit"></i> Editar
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator
+        *ngIf="paginacion"
+        [length]="paginacion.total"
+        [pageSize]="paginacion.per_page"
+        [pageIndex]="paginacion.current_page - 1"
+        (page)="handlePageEvent($event)"
+        aria-label="Select page"
+      >
+      </mat-paginator>
     </div>
-    <mat-paginator
-      *ngIf="paginacion"
-      [length]="paginacion.total"
-      [pageSize]="paginacion.per_page"
-      [pageIndex]="paginacion.current_page - 1"
-      (page)="handlePageEvent($event)"
-      aria-label="Select page"
-    >
-    </mat-paginator>
   </div>
-</div>
+</ng-container>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<ng-template #noPermissions>
+  <app-no-permissions></app-no-permissions>
 </ng-template>

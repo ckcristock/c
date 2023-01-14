@@ -17,4 +17,8 @@ export class MaquinasHerramientasService {
     return this.http.post(`${environment.base_url}/machinestools`, data)
   }
 
+  getMaquinas(){
+    return this.http.get(`${environment.base_url}/machinestools`)
+  }
+
 }

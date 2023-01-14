@@ -14,6 +14,7 @@ import {
   NgbDropdownModule,
   NgbCollapseModule,
   NgbNavModule,
+  NgbAccordionModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { ComponentsModule } from 'src/app/components/components.module';
@@ -59,23 +60,27 @@ import { MaterialesComponent } from './catalogo/components/materiales/materiales
 import { DotacionCrearComponent } from './catalogo/components/dotacion-crear/dotacion-crear.component';
 import { BoardPermissionsComponent } from './funcionarios/detalle-funcionario/permissions/board-permissions/board-permissions.component';
 //import { MaterialesComponent } from '../parametros/apu/materiales/materiales.component';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { SedesComponent } from './sedes/sedes.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatAutocompleteModule,
+  MatPaginatorModule,
+  MatSlideToggleModule,
+  MatTreeModule,
+  MatListModule
+} from '@angular/material';
 import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';
 import { BodegasComponent } from './bodegas/bodegas.component';
 import { CrearbodegaComponent } from './bodegas/crearbodega/crearbodega.component';
 import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.component';
 import { FilePermissionsComponent } from './funcionarios/detalle-funcionario/permissions/file-permissions/file-permissions.component';
-import { MatSlideToggleModule, MatTreeModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -144,6 +149,7 @@ import { MatSlideToggleModule, MatTreeModule } from '@angular/material';
     NgbNavModule,
     NgbTooltipModule,
     NgbTypeaheadModule,
+    NgbAccordionModule,
     PerfectScrollbarModule,
     MatExpansionModule,
     MatFormFieldModule,
@@ -158,6 +164,7 @@ import { MatSlideToggleModule, MatTreeModule } from '@angular/material';
     MatTreeModule,
     MatSlideToggleModule,
     MatExpansionModule,
+    MatListModule,
     SweetAlert2Module.forRoot(),
   ],
   exports: [

@@ -23,6 +23,8 @@ export function createTranslateLoader(http: HttpClient): any {
 
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
+import { MatPaginatorIntl } from '@angular/material';
+import { getEspañolPaginatorIntl } from './core/utils/español-paginator-intl';
 registerLocaleData(localeEs, 'es');
 
 @NgModule({
@@ -47,8 +49,9 @@ registerLocaleData(localeEs, 'es');
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: 'es' },
+    { provide: MatPaginatorIntl, useValue: getEspañolPaginatorIntl() }
   ],
   bootstrap: [AppComponent],
   exports: [BrowserModule, BrowserAnimationsModule]
 })
-export class AppModule {}
+export class AppModule { }

@@ -14,7 +14,22 @@ import { ItemsQuotationComponent } from "./crear-cotizacion/components/items-quo
 import { NumberPipePipe } from "src/app/core/pipes/number-pipe.pipe";
 import { ViewQuotationComponent } from "./view-quotation/view-quotation.component";
 import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicker';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY'
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
 
 @NgModule({
   declarations: [
@@ -47,9 +62,22 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
     MatSlideToggleModule,
     MatRadioModule,
     CKEditorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    SatDatepickerModule,
+    SatNativeDateModule,
+    MatExpansionModule,
   ],
   exports: [],
-  providers: [NumberPipePipe]
+  providers: [
+    NumberPipePipe,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ]
 })
 
 export class CotizacionModule { }

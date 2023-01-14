@@ -29,6 +29,7 @@
                   <img
                     class="img-fluid img-third"
                     [src]="third_data.image"
+                    onerror="this.src='../../../../assets/images/noprofile.png'"
                     alt=""
                   />
                 </div>
@@ -128,7 +129,11 @@
                 </div>
               </div>
               <div class="d-flex justify-content-end">
-                <button type="button" (click)="openModal(fields)" class="btn btn-primary btn-sm">
+                <button
+                  type="button"
+                  (click)="openModal(fields)"
+                  class="btn btn-primary btn-sm"
+                >
                   Ver campos especiales
                 </button>
               </div>
@@ -179,7 +184,9 @@
         <div class="col-12">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title text-center text-dark font-weight-bold">PERSONAS</h4>
+              <h4 class="card-title text-center text-dark font-weight-bold">
+                PERSONAS
+              </h4>
               <div class="rounded-top table-responsive">
                 <table
                   class="table table-bordered table-striped table-sm mb-0"
@@ -217,20 +224,41 @@
                   </tbody>
                 </table>
               </div>
+              <mat-paginator
+                *ngIf="paginacionPeople"
+                [length]="paginacionPeople.total"
+                [pageSize]="paginacionPeople.per_page"
+                [pageIndex]="paginacionPeople.current_page - 1"
+                (page)="handlePageEvent($event, 'people')"
+                aria-label="Select page"
+              >
+              </mat-paginator>
             </div>
-            <ngb-pagination
-              class="d-flex justify-content-center pagination-rounded pagination-sm"
-              [collectionSize]="pagination.collectionSizePeople"
-              [pageSize]="pagination.pageSizePeople"
-              [(page)]="pagination.pagePeople"
-              (pageChange)="getThird($event)"
-              aria-label="Default pagination"
-              maxSize="5"
-              rotate="true"
-              ellipses="false"
-              boundaryLinks="true"
-            >
-            </ngb-pagination>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body px-5">
+              <canvas
+                baseChart
+                [datasets]="barChartData"
+                [labels]="barChartLabels"
+                [options]="barChartOptions"
+                [legend]="barChartLegend"
+                [chartType]="barChartType"
+              ></canvas>
+              <mat-form-field appearance="outline" class="pb-0">
+                <mat-label>Cantidad de meses</mat-label>
+                <mat-select
+                  [(ngModel)]="monthValue"
+                  (selectionChange)="graficar()"
+                >
+                  <ng-container *ngFor="let item of numberMonth">
+                    <mat-option [value]="item"> {{ item }} </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
         </div>
       </div>
@@ -357,19 +385,15 @@
               </tbody>
             </table>
           </div>
-          <ngb-pagination
-            class="d-flex justify-content-center pagination-rounded pagination-sm"
-            [collectionSize]="pagination.collectionSizeQuotation"
-            [pageSize]="pagination.pageSizeQuotation"
-            [(page)]="pagination.pageQuotation"
-            (pageChange)="getThird($event)"
-            aria-label="Default pagination"
-            maxSize="5"
-            rotate="true"
-            ellipses="false"
-            boundaryLinks="true"
+          <mat-paginator
+            *ngIf="paginacionQuotation"
+            [length]="paginacionQuotation.total"
+            [pageSize]="paginacionQuotation.per_page"
+            [pageIndex]="paginacionQuotation.current_page - 1"
+            (page)="handlePageEvent($event, 'quotations')"
+            aria-label="Select page"
           >
-          </ngb-pagination>
+          </mat-paginator>
         </div>
       </div>
     </ng-template>
@@ -471,19 +495,15 @@
               </tbody>
             </table>
           </div>
-          <ngb-pagination
-            class="d-flex justify-content-center pagination-rounded pagination-sm"
-            [collectionSize]="pagination.collectionSizeBudgets"
-            [pageSize]="pagination.pageSizeBudgets"
-            [(page)]="pagination.pageBudgets"
-            (pageChange)="getThird($event)"
-            aria-label="Default pagination"
-            maxSize="5"
-            rotate="true"
-            ellipses="false"
-            boundaryLinks="true"
+          <mat-paginator
+            *ngIf="paginacionBudgets"
+            [length]="paginacionBudgets.total"
+            [pageSize]="paginacionBudgets.per_page"
+            [pageIndex]="paginacionBudgets.current_page - 1"
+            (page)="handlePageEvent($event, 'budgets')"
+            aria-label="Select page"
           >
-          </ngb-pagination>
+          </mat-paginator>
         </div>
       </div>
     </ng-template>
@@ -511,7 +531,10 @@
             </div>
             <div class="col-md text-right">
               <div class="btn-group rounded w-sm-100">
-                <button class="btn btn-primary btn-sm" >
+                <button
+                  class="btn btn-primary btn-sm"
+                  (click)="modalNuevoNegocio.openModal()"
+                >
                   <i class="fa fa-plus"></i> Agregar
                 </button>
               </div>
@@ -573,19 +596,15 @@
               </tbody>
             </table>
           </div>
-          <ngb-pagination
-            class="d-flex justify-content-center pagination-rounded pagination-sm"
-            [collectionSize]="pagination.collectionSizeBusiness"
-            [pageSize]="pagination.pageSizeBusiness"
-            [(page)]="pagination.pageBusiness"
-            (pageChange)="getThird($event)"
-            aria-label="Default pagination"
-            maxSize="5"
-            rotate="true"
-            ellipses="false"
-            boundaryLinks="true"
+          <mat-paginator
+            *ngIf="paginacionBusiness"
+            [length]="paginacionBusiness.total"
+            [pageSize]="paginacionBusiness.per_page"
+            [pageIndex]="paginacionBusiness.current_page - 1"
+            (page)="handlePageEvent($event, 'business')"
+            aria-label="Select page"
           >
-          </ngb-pagination>
+          </mat-paginator>
         </div>
       </div>
     </ng-template>
@@ -611,8 +630,8 @@
         <tbody>
           <tr *ngFor="let item of third_party_fields">
             <ng-container *ngIf="third_data[item.name]">
-              <th>{{item.name | uppercase}}</th>
-              <td>{{third_data[item.name]}}</td>
+              <th>{{ item.name | uppercase }}</th>
+              <td>{{ third_data[item.name] }}</td>
             </ng-container>
           </tr>
         </tbody>
@@ -634,3 +653,7 @@
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
+<app-modal-nuevo-negocio
+  (updated)="getThird()"
+  #modalNuevoNegocio
+></app-modal-nuevo-negocio>

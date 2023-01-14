@@ -1,59 +1,407 @@
-<div class="card">
-  <div class="card-header p-0">
-    <ul
-      ngbNav
-      #nav="ngbNav"
-      [(activeId)]="active"
-      class="nav nav-pills nav-justified border border-primary rounded"
-    >
-      <li [ngbNavItem]="1">
-        <a ngbNavLink class="h-100">Materiales</a>
-        <ng-template ngbNavContent>
-          <!-- <app-productos [user]="_user.user" [type]="'Material'"></app-productos>-->
-          <app-materiales [cardBorder]="true"></app-materiales>
-        </ng-template>
-      </li>
-      <li [ngbNavItem]="2">
-        <a ngbNavLink class="h-100">Activos fijos</a>
-        <ng-template ngbNavContent>
-          <app-activo-fijo-catalogo [user]="_user.user">
-          </app-activo-fijo-catalogo>
-        </ng-template>
-      </li>
-      <li [ngbNavItem]="3">
-        <a ngbNavLink class="h-100">Dotacion EPP</a>
-        <ng-template ngbNavContent>
-          <app-dotacion-crear [user]="_user.user"></app-dotacion-crear>
-        </ng-template>
-      </li>
-      <!-- <li [ngbNavItem]="4">
-        <a ngbNavLink>Servicios</a>
-        <ng-template ngbNavContent>
-
-          <app-table-inventary></app-table-inventary>
-
-        </ng-template>
-      </li>
-      <li [ngbNavItem]="5">
-        <a ngbNavLink>CUPS</a>
-        <ng-template ngbNavContent>
-
-          <app-table-inventary></app-table-inventary>
-
-        </ng-template>
-      </li> -->
-    </ul>
+<div class="row">
+  <div class="col-md-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col px-0">
+            <h4 class="text-primary">Categorías</h4>
+          </div>
+        </div>
+        <hr class="line" />
+        <mat-accordion *ngIf="Categorias.length > 0; else loadDataCategorias">
+          <mat-expansion-panel
+            class="mat-elevation-z0 my-0"
+            *ngFor="let categoria of Categorias"
+            [disabled]="categoria.subcategory.length == 0"
+          >
+            <mat-expansion-panel-header>
+              {{ categoria.Nombre }}
+            </mat-expansion-panel-header>
+            <ng-container *ngIf="categoria.subcategory.length > 0; else noSub">
+              <mat-action-list dense class="small ml-4 my-0">
+                <button mat-list-item
+                  *ngFor="let subcategoria of categoria.subcategory"
+                  [ngClass]="
+                    {'bg-soft-primary' :(selectedCategory.categoria.id == subcategoria.Id_Categoria_Nueva &&
+                      selectedCategory.subcategoria.id == subcategoria.Id_Subcategoria)}
+                  "
+                  (click)="getProductosBySubcategoria(
+                    {
+                      categoria:{
+                        id: subcategoria.Id_Categoria_Nueva,
+                        nombre: categoria.Nombre
+                      },
+                      subcategoria: {
+                        id: subcategoria.Id_Subcategoria,
+                        nombre: subcategoria.Nombre
+                      }
+                    }
+                  )"
+                >
+                  {{ subcategoria.Nombre }}
+                </button>
+              </mat-action-list>
+            </ng-container>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
   </div>
-  <div [ngbNavOutlet]="nav" class="mx-0"></div>
+  <div class="col-md-9">
+    <div class="card">
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Productos</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100" *ngIf="selectedCategory.categoria.id!==null">
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="openConfirm(add, 'Agregar')"
+              >
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+              <button class="btn btn-info btn-sm" (click)="openClose()">
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr class="line" />
+        <mat-accordion>
+          <mat-expansion-panel #matPanel="matExpansionPanel" class="mat-elevation-z0">
+            <form [formGroup]="formFiltros" id="formFiltros">
+              <div class="row">
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Nombre</mat-label>
+                  <input
+                    type="text"
+                    formControlName="nombre"
+                    matInput
+                    placeholder="Nombre del producto"
+                    autocomplete="off"
+                  />
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Tipo</mat-label>
+                  <mat-select
+                    formControlName="tipo_catalogo"
+                    matInput
+                    placeholder="Tipo del catálogo"
+                    (selectionChange)="getProducts()"
+                  >
+                    <mat-option value="">Todos</mat-option>
+                    <mat-option *ngFor="let tipo of tipos_catalogo" [value]="tipo.value">{{ tipo.text }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Estado</mat-label>
+                  <mat-select
+                    formControlName="estado"
+                    matInput
+                    placeholder="Estado del producto"
+                    (selectionChange)="getProducts()"
+                  >
+                    <mat-option value="">Todos</mat-option>
+                    <mat-option *ngFor="let estado of estados" [value]="estado.estado">{{ estado.estado }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+          </mat-expansion-panel>
+          <mat-expansion-panel #matPanelAlert="matExpansionPanel">
+            <ng-template matExpansionPanelContent *ngIf="filtroActivado">
+              <div class="alert alert-warning text-center" role="alert">
+                ¡Hay filtros aplicados!
+              </div>
+            </ng-template>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <h5 class="text-dark" *ngIf="selectedCategory.categoria.id!==null">Categoría: {{ selectedCategory.categoria.nombre + ' > ' + selectedCategory.subcategoria.nombre | lowercase }}</h5>
+        <div class="rounded-top table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            *ngIf="!loadingProductos && selectedCategory.categoria.id!==null && Productos.length > 0; else notDataProductos"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Nombre</th>
+                <th>Embalaje</th>
+                <th>Tipo</th>
+                <th class="col-1"><i class="mdi mdi-chevron-down"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="text-center"
+                *ngFor="let producto of Productos"
+                [ngClass]="{'text-danger':(producto.Estado == 'Inactivo')}"
+              >
+                <td class="align-middle">{{ producto.Nombre_Comercial }}</td>
+                <td class="align-middle">{{ producto.Embalaje }}</td>
+                <td class="align-middle">{{ producto.Tipo_Catalogo }}</td>
+                <td class="align-middle">
+                  <div class="text-center">
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm waves-light"
+
+                        type="button"
+                      ><!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          role="button"
+                          class="dropdown-item waves-light caja-botones text-info"
+                          (click)="openConfirm(add, 'Editar', producto)"
+                        >
+                          <i class="far fa-edit"></i> Editar
+                        </a>
+                        <a
+                          role="button"
+                          class="dropdown-item waves-light caja-botones"
+                          [ngClass]="{
+                            'text-danger': (producto.Estado == 'Activo'),
+                            'text-success': (producto.Estado == 'Inactivo')
+                          }"
+                          (click)="cambiarEstado(producto, producto.Estado == 'Activo' ? 'Inactivo' : 'Activo')"
+                        >
+                          <i class="fas" [ngClass]="{
+                              'Activo': 'fa-ban',
+                              'Inactivo': 'fa-check'
+                            }[producto.Estado]"
+                          ></i>
+                          {{ producto.Estado == "Activo" ? " Inactivar" : " Activar" }}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ngb-pagination *ngIf="pagination.collectionSize > 0"
+          #paginationProductos
+          class="d-flex justify-content-center pagination-rounded pagination-sm"
+          [collectionSize]="pagination.collectionSize"
+          (pageChange)="getProductos($event)"
+          maxSize="5"
+          rotate="true"
+          ellipses="false"
+          boundaryLinks="true"
+          [pageSize]="pagination.pageSize"
+          [(page)]="pagination.page"
+          aria-label="Default pagination"
+        >
+        </ngb-pagination>
+      </div>
+    </div>
+  </div>
 </div>
-<ng-template #notData>
-  <app-not-data [loading]="loading"></app-not-data>
+
+<!-- Modals -->
+
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Registrar Producto</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formProductos">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            type="text"
+            formControlName="Nombre_Comercial"
+            matInput
+            placeholder="Nombre del producto"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Presentación</mat-label>
+          <input
+            type="text"
+            formControlName="Presentacion"
+            matInput
+            placeholder="Presentación del producto"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Embalaje</mat-label>
+          <input
+            type="text"
+            formControlName="Embalaje"
+            matInput
+            placeholder="Embalaje"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Codigo de barras</mat-label>
+          <input
+            type="text"
+            formControlName="Codigo_Barras"
+            matInput
+            placeholder="Codigo de barras"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Unidad de medida</mat-label>
+          <mat-select
+            formControlName="Unidad_Medida"
+            matInput
+            placeholder="Unidad de medida"
+            required
+          >
+            <mat-option *ngFor="let unidad of unidades_medida" [value]="unidad.value">{{ unidad.text }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select
+            formControlName="Tipo_Catalogo"
+            matInput
+            placeholder="Tipo del catálogo"
+            required
+          >
+            <mat-option *ngFor="let tipo of tipos_catalogo" [value]="tipo.value">{{ tipo.text }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <hr class="line">
+      <span class="text-primary">Variables de la subcategoría</span>
+      <ng-container formArrayName="FormCamposSubcategoria">
+        <ng-container *ngFor="let campoControl of arrayCamposSubcat.controls; let i = index">
+          <div class="row" [formGroupName]="i">
+            <ng-container *ngFor="let campo of camposSubcat">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>{{campo.label}}</mat-label>
+                <input
+                  type="{{campo.type}}"
+                  formControlName="{{campo.label}}"
+                  matInput
+                  placeholder=""
+                  autocomplete="off"
+                  [required]="campo.required=='Si'"
+                />
+              </mat-form-field>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="_modal.close()"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      (click)="setProductos()"
+      [disabled]="formProductos.invalid"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
 </ng-template>
 
-<ng-template #notDataTable>
-  <tr>
-    <td colspan="10">
-      <app-not-data [loading]="loading"></app-not-data>
-    </td>
-  </tr>
+<div *ngIf="false">
+  <div class="card">
+    <div class="card-header p-0">
+      <ul
+        ngbNav
+        #nav="ngbNav"
+        [(activeId)]="active"
+        class="nav nav-pills nav-justified border border-primary rounded"
+      >
+        <li [ngbNavItem]="1">
+          <a ngbNavLink class="h-100">Materiales</a>
+          <ng-template ngbNavContent>
+            <!-- <app-productos [user]="_user.user" [type]="'Material'"></app-productos>-->
+            <app-materiales [cardBorder]="true"></app-materiales>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a ngbNavLink class="h-100">Activos fijos</a>
+          <ng-template ngbNavContent>
+            <app-activo-fijo-catalogo [user]="_user.user">
+            </app-activo-fijo-catalogo>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <a ngbNavLink class="h-100">Dotacion EPP</a>
+          <ng-template ngbNavContent>
+            <app-dotacion-crear [user]="_user.user"></app-dotacion-crear>
+          </ng-template>
+        </li>
+        <!-- <li [ngbNavItem]="4">
+          <a ngbNavLink>Servicios</a>
+          <ng-template ngbNavContent>
+
+            <app-table-inventary></app-table-inventary>
+
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="5">
+          <a ngbNavLink>CUPS</a>
+          <ng-template ngbNavContent>
+
+            <app-table-inventary></app-table-inventary>
+
+          </ng-template>
+        </li> -->
+      </ul>
+    </div>
+    <div [ngbNavOutlet]="nav" class="mx-0"></div>
+  </div>
+  <ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+  </ng-template>
+
+  <ng-template #notDataTable>
+    <tr>
+      <td colspan="10">
+        <app-not-data [loading]="loading"></app-not-data>
+      </td>
+    </tr>
+  </ng-template>
+</div>
+<ng-template #noSub>
+  <ul class="list-group">
+    <li class="list-group-item">No tiene subcategorias asignadas</li>
+  </ul>
+</ng-template>
+
+<ng-template #loadDataCategorias>
+  <app-not-data [loading]="loadingCategorias"></app-not-data>
+</ng-template>
+
+<ng-template #notDataProductos>
+  <app-not-data *ngIf="selectedCategory.categoria.id!== null" [loading]="loadingProductos"></app-not-data>
+  <app-not-data *ngIf="selectedCategory.categoria.id=== null" text="Seleccione una subcategoría para ver los productos en dicha subcategoría"></app-not-data>
 </ng-template>

@@ -28,6 +28,7 @@
               [appendTo]="'body'"
               placeholder="Empresa"
               name="company"
+              [clearable]="false"
               [(ngModel)]="company_id"
               (change)="filtrar()"
               ngDefaultControl
@@ -44,6 +45,7 @@
               [appendTo]="'body'"
               placeholder="Grupo"
               name="group"
+              [clearable]="false"
               [(ngModel)]="group_id"
               ngDefaultControl
             >
@@ -57,6 +59,7 @@
               bindValue="value"
               appearance="outline"
               [appendTo]="'body'"
+              [clearable]="false"
               placeholder="Dependencia"
               ngDefaultControl
               (change)="filtrar()"
@@ -71,31 +74,28 @@
               bindValue="value"
               appearance="outline"
               [appendTo]="'body'"
+              [clearable]="false"
               placeholder="Funcionario"
               ngDefaultControl
               (change)="filtrar()"
             >
             </ng-select>
           </div>
-          <mat-form-field class="col-md-2" appearance="outline">
-            <mat-label>Fecha inicio</mat-label>
+          <mat-form-field appearance="outline" class="col">
+            <mat-label>Rango de fechas</mat-label>
             <input
               matInput
-              type="date"
-              [(ngModel)]="firstDay"
-              id="Fecha_Inicio"
-              (change)="filtrar()"
+              [satDatepicker]="picker"
+              [value]="date"
+              (dateChange)="selectedDate($event)"
+              name="daterange"
+              autocomplete="off"
             />
-          </mat-form-field>
-          <mat-form-field class="col-md-2" appearance="outline">
-            <mat-label>Fecha fin</mat-label>
-            <input
-              matInput
-              type="date"
-              [(ngModel)]="lastDay"
-              id="Fecha_Fin"
-              (change)="filtrar()"
-            />
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></sat-datepicker-toggle>
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -130,8 +130,10 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="card border border-3 border-light">
+      </div>
+      <div class="row">
+        <div class="col-md-6 d-flex align-items-stretch">
+          <div class="card border border-3 border-light w-100">
             <div class="card-body">
               <h4 class="weight-bold text-center">
                 Llegadas tarde en los últimos 15 días
@@ -156,8 +158,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="card border border-3 border-light">
+        <div class="col-md-6 d-flex align-items-stretch">
+          <div class="card border border-3 border-light w-100">
             <div class="card-body">
               <h4 class="d-block weight-bold mb-3 text-center">Estadisticas</h4>
               <div #studentChart>
@@ -196,18 +198,17 @@
                       (click)="downloadLateArrivals()"
                       class="btn btn-success btn-sm"
                     >
-                      <span *ngIf="!donwloading; else status"
-                        ><i class="fas fa-file-download"></i> Descargar</span
+                      <span
+                        ><i
+                          class="fas"
+                          [class]="
+                            !donwloading
+                              ? 'fa-file-download'
+                              : 'fa-spinner fa-spin'
+                          "
+                        ></i>
+                        {{ !donwloading ? "Descargar" : "Descargando" }}</span
                       >
-                      <ng-template #status>
-                        <div
-                          class="spinner-border spinner-border-sm"
-                          role="status"
-                        >
-                          <span class="sr-only">Loading...</span>
-                        </div>
-                        Generando...
-                      </ng-template>
                     </button>
                   </div>
                 </div>
@@ -224,68 +225,42 @@
                     <h6 class="font-weight-bold text-center text-uppercase">
                       {{ dependency.name }}
                     </h6>
-                    <div *ngIf="dependency.people.length > 0; else alertNoData">
-                      <div>
-                        <div class="rounded-top table-responsive">
-                          <table class="table table-hover table-sm">
-                            <tbody>
-                              <ng-container
-                                *ngFor="let person of dependency.people"
-                              >
-                                <tr
-                                  class="text-center"
-                                  (click)="person.selected = !person.selected"
-                                  role="button"
-                                >
-                                  <td>
-                                    <img
-                                      src="{{ person?.image | image: 'users' }}"
-                                      onerror="this.src='../../../../assets/images/noprofile.png'"
-                                      class="rounded-circle mx-auto header-profile-user"
-                                    />
-                                  </td>
-                                  <td>
-                                    {{ person.first_name }}
-                                    {{ person.first_surname }}
-                                  </td>
-                                  <td>
-                                    <div class="text-center font-weight-bold">
-                                      <i class="fas fa-clock"></i>
-                                      {{ person?.late_arrivals?.length }} -
-                                      <strong>
-                                        ACUMULADO: {{ person.averageTime }}
-                                      </strong>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <i
-                                      [ngClass]="
-                                        person.selected
-                                          ? 'fa-angle-up'
-                                          : 'fa-angle-down'
-                                      "
-                                      class="fas text-primary"
-                                      role="button"
-                                      (click)="
-                                        person.selected = !person.selected
-                                      "
-                                    ></i>
-                                  </td>
-                                </tr>
-                                <ng-container *ngIf="this.person.selected">
-                                  <tr>
-                                    <td class="p-0" colspan="100%">
-                                      <app-detalle-llegada
-                                        [person]="person"
-                                      ></app-detalle-llegada>
-                                    </td>
-                                  </tr>
-                                </ng-container>
-                              </ng-container>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
+                    <div
+                      class="mb-3"
+                      *ngIf="dependency.people.length > 0; else alertNoData"
+                    >
+                      <mat-accordion class="mb-3">
+                        <mat-expansion-panel
+                          class="mat-elevation-z0"
+                          *ngFor="let person of dependency.people"
+                        >
+                          <mat-expansion-panel-header>
+                            <div class="col-1">
+                              <img
+                                src="{{ person?.image | image : 'users' }}"
+                                onerror="this.src='../../../../assets/images/noprofile.png'"
+                                class="rounded-circle mx-auto header-profile-user"
+                              />
+                            </div>
+                            <div class="col d-flex align-items-center">
+                              {{ person.first_name | uppercase }}
+                              {{ person.first_surname | uppercase }}
+                            </div>
+                            <div class="col d-flex align-items-center">
+                              <div class="font-weight-bold">
+                                <i class="fas fa-clock"></i>
+                                {{ person?.late_arrivals?.length }} -
+                                <strong>
+                                  ACUMULADO: {{ person.averageTime }}
+                                </strong>
+                              </div>
+                            </div>
+                          </mat-expansion-panel-header>
+                          <app-detalle-llegada
+                            [person]="person"
+                          ></app-detalle-llegada>
+                        </mat-expansion-panel>
+                      </mat-accordion>
                     </div>
                   </div>
                 </div>

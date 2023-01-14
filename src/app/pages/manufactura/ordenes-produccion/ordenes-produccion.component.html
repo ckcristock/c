@@ -1,0 +1,330 @@
+<div class="row">
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-success">0</h2>
+          <i class="fas fa-tachometer-alt fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Total</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-primary">0</h2>
+          <i class="fas fa-clock fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Activas</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-info">0</h2>
+          <i class="fas fa-thumbs-up fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Terminadas</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-warning">0</h2>
+          <i class="fas fa-hourglass fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Terminadas parciales</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-danger">0</h2>
+          <i class="fas fa-ban fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">Anuladas</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between">
+          <h2 class="text-success">0%</h2>
+          <i class="fas fa-chart-pie fa-2x text-muted"></i>
+        </div>
+        <small class="text-muted">% cumplimiento</small>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">
+          Órdenes de producción
+          <span style="font-size: smaller" *ngIf="paginationMaterial"
+            ><small class="pb-2 text-secondary text-muted"
+              >pág. {{ paginationMaterial.current_page }}</small
+            ></span
+          >
+        </h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            *ngIf="permission.permissions.add"
+            [routerLink]="['crear']"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
+      </div>
+    </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <ng-container [formGroup]="formFilters">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Código</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="code"
+                autocomplete="off"
+                placeholder="Busca por código"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Fecha</mat-label>
+              <input
+                matInput
+                [satDatepicker]="pickerDate"
+                [value]="date"
+                (dateChange)="selectedDate($event, 'date')"
+                name="daterange"
+                autocomplete="off"
+              />
+              <sat-datepicker #pickerDate [rangeMode]="true"></sat-datepicker>
+              <sat-datepicker-toggle
+                matSuffix
+                [for]="pickerDate"
+              ></sat-datepicker-toggle>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Ciudad</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="city"
+                autocomplete="off"
+                placeholder="Busca por ciudad"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Descripción</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="description"
+                autocomplete="off"
+                placeholder="Busca por descripción"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Observación</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="observation"
+                autocomplete="off"
+                placeholder="Busca por observación"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Fecha de entrega</mat-label>
+              <input
+                matInput
+                [satDatepicker]="pickerDelivery"
+                [value]="date"
+                (dateChange)="selectedDate($event, 'delivery')"
+                name="daterange"
+                autocomplete="off"
+              />
+              <sat-datepicker
+                #pickerDelivery
+                [rangeMode]="true"
+              ></sat-datepicker>
+              <sat-datepicker-toggle
+                matSuffix
+                [for]="pickerDelivery"
+              ></sat-datepicker-toggle>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Estado</mat-label>
+              <mat-select formControlName="status">
+                <mat-option value="todos_sin_terminadas"
+                  >Todas menos las terminadas</mat-option
+                >
+                <mat-option value="espera_info"
+                  >En espera de información</mat-option
+                >
+                <mat-option value="inicial">Inicial</mat-option>
+                <mat-option value="activa">Activa</mat-option>
+                <mat-option value="desarrollo">Desarrollo</mat-option>
+                <mat-option value="revision">En revisión</mat-option>
+                <mat-option value="espera_materiales"
+                  >En espera de materiales</mat-option
+                >
+                <mat-option value="produccion">En producción</mat-option>
+                <mat-option value="terminadas">Terminadas</mat-option>
+                <mat-option value="terminadas_parciales"
+                  >Terminadas parciales</mat-option
+                >
+                <mat-option value="">Todas</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="alert alert-info" *ngIf="active_filters" role="alert">
+      <strong
+        >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
+        click
+      </strong>
+      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
+        >aquí</a
+      >
+    </div>
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && workOrders.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Código</th>
+            <th>Fecha</th>
+            <th>Ciudad</th>
+            <th>Cliente</th>
+            <th>Descripción</th>
+            <th>Observaciones</th>
+            <th>Entrega</th>
+            <th>Estado</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of workOrders" class="text-center">
+            <td>{{ item.code }}</td>
+            <td>{{ item.date | date : "MMM d, y, h:mm a" }}</td>
+            <td>{{ item.city?.name }}</td>
+            <td>
+              {{ item.third_party.social_reason }}
+            </td>
+            <td
+              role="button"
+              class="text-primary"
+              matTooltipClass="tooltip-custom"
+              [matTooltip]="item.description"
+            >
+              Ver detalles
+            </td>
+            <td>{{ item.observation }}</td>
+            <td>{{ item.delivery_date }}</td>
+            <td>
+              <span
+                class="badge"
+                [class]="
+                  item.status == 'Pendiente'
+                    ? 'badge-info'
+                    : item.status == 'Aprobada'
+                    ? 'badge-primary'
+                    : item.status == 'No aprobada'
+                    ? 'badge-warning'
+                    : item.status == 'Anulada'
+                    ? 'badge-danger'
+                    : 'badge-dark'
+                "
+                >{{ item.status }}</span
+              >
+            </td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm waves-light"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item waves-light text-success caja-botones"
+                    href="javascript: void(0);"
+                    [routerLink]="['ver', item.id]"
+                  >
+                    <i class="fas fa-eye"></i> Ver</a
+                  >
+                  <a
+                    class="dropdown-item waves-light text-primary caja-botones"
+                    href="javascript: void(0);"
+                    [routerLink]="['copiar', item.id]"
+                    ><i class="fas fa-copy"></i> Copiar</a
+                  >
+                  <a
+                    class="dropdown-item waves-light text-info caja-botones"
+                    href="javascript: void(0);"
+                    [routerLink]="['editar', item.id]"
+                    ><i class="fas fa-edit"></i> Editar</a
+                  >
+                  <a
+                    class="dropdown-item waves-light text-success caja-botones"
+                    href="javascript: void(0);"
+                    *ngIf="item.status == 'Anulada'"
+                    (click)="updateStatus('Pendiente', item.id)"
+                    ><i class="fas fa-check"></i> Activar</a
+                  >
+                  <a
+                    class="dropdown-item waves-light text-danger caja-botones"
+                    href="javascript: void(0);"
+                    (click)="updateStatus('Anulada', item.id)"
+                    ><i class="fas fa-trash"></i> Anular</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial.total"
+      [pageSize]="paginationMaterial.per_page"
+      [pageIndex]="paginationMaterial.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </div>
+</div>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

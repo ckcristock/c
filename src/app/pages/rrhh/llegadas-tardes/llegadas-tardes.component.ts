@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-
 import { donutChart } from './data';
 import { ChartDataSets } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
@@ -10,6 +9,8 @@ import { GroupService } from '../../ajustes/informacion-base/services/group.serv
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { DatePipe } from '@angular/common';
+import { DateAdapter } from 'saturn-datepicker';
 @Component({
   selector: 'app-llegadas-tardes',
   templateUrl: './llegadas-tardes.component.html',
@@ -18,23 +19,16 @@ import { MatAccordion } from '@angular/material/expansion';
 export class LlegadasTardesComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  datePipe = new DatePipe('es-CO');
   matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
   donutChart = donutChart;
   group_id: any;
   people_id = '';
   dependency_id: any;
   loading = false;
   donwloading = false;
-
+  date: any;
+  estadoFiltros = false;
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'Llegadas tardes' },
   ];
@@ -86,16 +80,13 @@ export class LlegadasTardesComponent implements OnInit {
     private _companies: CompanyService,
     private _grups: GroupService,
     private _dependencies: DependenciesService,
-    private _people: PersonService
+    private _people: PersonService,
+    private dateAdapter: DateAdapter<any>
   ) {
+    this.dateAdapter.setLocale('es');
     this.getGroup();
     this.getPeople();
     this.getCompanies();
-  }
-
-  estadoFiltros = false;
-  mostrarFiltros() {
-    this.estadoFiltros = !this.estadoFiltros
   }
 
   ngOnInit() {
@@ -109,13 +100,35 @@ export class LlegadasTardesComponent implements OnInit {
     this.getLinearDataset();
     this.getStatisticsByDays();
   }
+
+  mostrarFiltros() {
+    this.estadoFiltros = !this.estadoFiltros
+  }
+
+  openClose() {
+    this.matPanel = !this.matPanel;
+    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
+  }
+
+  selectedDate(fecha) {
+    if (fecha.value) {
+      this.firstDay = this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd');
+      this.lastDay = this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
+    } else {
+      this.firstDay = '';
+      this.lastDay = '';
+    }
+    this.filtrar();
+  }
+
   getData() { }
 
   filtrar() {
-    this.getLateArrivals(); 
-    this.getStatisticsByDays(); 
+    this.getLateArrivals();
+    this.getStatisticsByDays();
     this.getLinearDataset()
   }
+
   getLateArrivals() {
     let params = this.getParams();
     this.loading = true;
@@ -127,14 +140,12 @@ export class LlegadasTardesComponent implements OnInit {
         this.transformData();
       });
   }
+
   downloadLateArrivals() {
     let params = this.getParams();
     this.donwloading = true;
     this._lateArrivals.downloadLateArrivals(this.firstDay, this.lastDay, params).subscribe((response: BlobPart) => {
-
-
       let blob = new Blob([response], { type: 'application/excel' });
-
       let link = document.createElement('a');
       const filename = 'reporte_llegadas_tarde';
       link.href = window.URL.createObjectURL(blob);
@@ -158,6 +169,7 @@ export class LlegadasTardesComponent implements OnInit {
       this.people.unshift({ text: 'Todos', value: '' });
     });
   }
+
   getCompanies() {
     this._companies.getCompanies().subscribe((r: any) => {
       this.companyList = r.data;
@@ -169,6 +181,7 @@ export class LlegadasTardesComponent implements OnInit {
       }
     });
   }
+
   getGroup() {
     this._grups.getGroup().subscribe((r: any) => {
       this.groupList = r.data;
@@ -177,19 +190,21 @@ export class LlegadasTardesComponent implements OnInit {
       this.getDependencies(0);
     });
   }
+
   getDependencies(group_id) {
     this._dependencies.getDependencies({ group_id }).subscribe((r: any) => {
       this.dependencyList = r.data;
       this.addElement();
     });
   }
+
   addElement() {
     this.dependencyList.unshift({ value: 0, text: 'Todas' });
     this.dependency_id = 0;
   }
+
   getLinearDataset() {
     let params = this.getParams();
-
     let fecha_inicio = moment().subtract(15, 'days').format('YYYY-MM-DD');
     let fecha_final = moment().format('YYYY-MM-DD');
     this._lateArrivals
@@ -200,17 +215,11 @@ export class LlegadasTardesComponent implements OnInit {
   }
 
   getParams() {
-
     let params: any = {};
-
     this.company_id != '0' && this.company_id ? (params.company_id = this.company_id) : '';
-
     this.group_id && this.group_id != '0' ? (params.group_id = this.group_id) : '';
-
     this.dependency_id != '0' && this.dependency_id ? (params.dependency_id = this.dependency_id) : '';
-
     this.people_id != '0' && this.people_id ? (params.person_id = this.people_id) : '';
-
     return params;
   }
 
@@ -228,7 +237,6 @@ export class LlegadasTardesComponent implements OnInit {
   getStatisticsByDays() {
     let params: any = this.getParams();
     params.type = 'diary';
-
     this._lateArrivals
       .getStatistcs(this.firstDay, this.lastDay, params)
       .subscribe((r: any) => {
@@ -238,7 +246,6 @@ export class LlegadasTardesComponent implements OnInit {
           this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
         }
         this.dataDiary.percentage = r.data.percentage;
-
         let d = r.data.allByDependency.reduce(
           (acc, el) => {
             return {
@@ -248,7 +255,6 @@ export class LlegadasTardesComponent implements OnInit {
           },
           { labels: [], datasets: [] }
         );
-
         this.donutChart.datasets[0].data = d.datasets;
         this.donutChart.labels = d.labels;
       });
@@ -260,7 +266,7 @@ export class LlegadasTardesComponent implements OnInit {
         if (Array.isArray(g.dependencies)) {
         } else {
           g.dependencies = Object.values(g.dependencies)
-        }        
+        }
         g.dependencies.forEach((d) => {
           d.people.forEach((pr) => {
             pr.averageTime = this.tiempoTotal(pr.late_arrivals);
@@ -276,7 +282,6 @@ export class LlegadasTardesComponent implements OnInit {
     if (horaFinal.isBefore(horaInicial)) {
       horaFinal.add(1, 'd');
     }
-
     let duracion = moment.duration(horaFinal.diff(horaInicial));
     return duracion.as('milliseconds');
   }
@@ -285,7 +290,6 @@ export class LlegadasTardesComponent implements OnInit {
     let total = llegadasTarde.length;
     let suma = 0;
     let promedio = 0;
-
     llegadasTarde.forEach((llegada) => {
       suma += this.tiempoEnMilisegundos(llegada.entry, llegada.real_entry);
     });

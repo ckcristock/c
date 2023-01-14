@@ -7,17 +7,17 @@ import { environment } from 'src/environments/environment';
 })
 export class CamposTercerosService {
 
-  constructor( private http: HttpClient ) { }
+  constructor(private http: HttpClient) { }
 
-  getFields(){
-    return this.http.get(`${environment.base_url}/third-party-fields`);
+  getFields(params = {}) {
+    return this.http.get(`${environment.base_url}/third-party-fields`, { params });
   }
 
-  save( data ){
+  save(data) {
     return this.http.post(`${environment.base_url}/third-party-fields`, data);
   }
 
-  changeState(data, id){
+  changeState(data, id) {
     return this.http.put(`${environment.base_url}/changeStateField/${id}`, data);
   }
 

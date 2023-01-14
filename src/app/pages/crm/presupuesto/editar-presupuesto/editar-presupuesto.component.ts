@@ -13,12 +13,12 @@ export class EditarPresupuestoComponent implements OnInit {
   data: any;
   loading = false
   constructor( private actRoute: ActivatedRoute,private _budget: BudgetService ) { }
-  
+
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.params.id;
     this.getData();
   }
-  
+
   getData(){
     this.loading = true
     this._budget.get(this.id).subscribe((r:any) => {

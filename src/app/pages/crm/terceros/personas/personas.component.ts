@@ -1,14 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from 'src/app/pages/ajustes/informacion-base/services/reactive-validation/validators.service';
 import { TercerosService } from '../terceros.service';
 import swal from 'sweetalert2';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { debounceTime } from 'rxjs/operators';
+import { HttpParams } from '@angular/common/http';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { PermissionService } from 'src/app/core/services/permission.service';
 
 @Component({
   selector: 'app-personas',
@@ -16,37 +20,124 @@ import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swa
   styleUrls: ['./personas.component.scss']
 })
 export class PersonasComponent implements OnInit {
+  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
+  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
+  checkObservacion: boolean = true
   checkPersona: boolean = true
   checkTercero: boolean = true
   checkTelefono: boolean = true
   checkEmail: boolean = true
   checkCargo: boolean = true
-  checkObservacion: boolean = true
-  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
-  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
+  paginacion: any
+  estadoFiltros = false;
   matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.firstAccordion.openAll();
-      this.matPanel = true;
-    } else {
-      this.firstAccordion.closeAll();
-      this.matPanel = false;
-    }
-  }
   matPanel2 = false;
-  openClose2() {
-    if (this.matPanel2 == false) {
-      this.secondAccordion.openAll();
-      this.matPanel2 = true;
+  person: any = {};
+  thirds: any[] = []
+  closeResult = '';
+  form: FormGroup;
+  form_filters: FormGroup;
+  people: any[] = [];
+  loading: boolean = false;
+  pagination = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
+  orderObj: any
+  filtrosActivos: boolean = false
+  permission: Permissions = {
+    menu: 'Personas',
+    permissions: {
+      show: true
+    }
+  };
+
+  constructor(
+    private _terceros: TercerosService,
+    private modalService: NgbModal,
+    private location: Location,
+    private fb: FormBuilder,
+    private _validators: ValidatorsService,
+    private _permission: PermissionService,
+    private route: ActivatedRoute,
+    private paginator: MatPaginatorIntl,
+    private _swal: SwalService,
+    private router: Router,
+  ) {
+    this.paginator.itemsPerPageLabel = "Items por página:";
+    this.permission = this._permission.validatePermissions(this.permission)
+  }
+
+  ngOnInit(): void {
+    if (this.permission.permissions.show) {
+      this.createFormFilters();
+      this.route.queryParamMap
+        .subscribe((params) => {
+          this.orderObj = { ...params.keys, ...params };
+          if (Object.keys(this.orderObj).length > 2) {
+            this.filtrosActivos = true
+            const formValues = {};
+            for (const param in params) {
+              formValues[param] = params[param];
+            }
+            this.form_filters.patchValue(formValues['params']);
+          }
+          if (this.orderObj.params.pag) {
+            this.getPerson(this.orderObj.params.pag);
+          } else {
+            this.getPerson()
+          }
+        }
+        );
+      this.createForm();
+      this.getThirds();
     } else {
-      this.secondAccordion.closeAll();
-      this.matPanel2 = false;
+      this.router.navigate(['/notauthorized'])
     }
   }
 
+  createFormFilters() {
+    this.form_filters = this.fb.group({
+      name: '',
+      third: '',
+      phone: '',
+      email: '',
+      cargo: '',
+      observacion: '',
+      documento: ''
+    })
+    this.form_filters.valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe(r => {
+      this.getPerson()
+    })
+  }
 
-  closeResult = '';
+  openClose() {
+    this.matPanel = !this.matPanel;
+    this.matPanel ? this.firstAccordion.openAll() : this.firstAccordion.closeAll();
+  }
+  openClose2() {
+    this.matPanel2 = !this.matPanel2;
+    this.matPanel2 ? this.secondAccordion.openAll() : this.secondAccordion.closeAll();
+  }
+
+  personForm(person) {
+    this.person = { ...person };
+    this.form.patchValue({
+      id: this.person.id,
+      name: this.person.name,
+      n_document: this.person.n_document,
+      landline: this.person.landline,
+      cell_phone: this.person.cell_phone,
+      email: this.person.email,
+      position: this.person.position,
+      observation: this.person.observation,
+      third_party_id: this.person.third_party_id,
+    })
+  }
+
   public openConfirm(confirm) {
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -58,84 +149,25 @@ export class PersonasComponent implements OnInit {
     this.form.reset();
 
   }
-  form: FormGroup;
-  people: any[] = [];
-  loading: boolean = false;
-  pagination = {
-    page: 1,
-    pageSize: 10,
-    collectionSize: 0
-  }
-  filtros = {
-    name: '',
-    third: '',
-    phone: '',
-    email: '',
-    cargo: '',
-    observacion: '',
-    documento: ''
-  }
-  constructor(
-    private _terceros: TercerosService,
-    private modalService: NgbModal,
-    private location: Location,
-    private fb: FormBuilder,
-    private _validators: ValidatorsService,
-    private route: ActivatedRoute,
-    private paginator: MatPaginatorIntl,
-    private _swal: SwalService,
-  ) {
-    this.paginator.itemsPerPageLabel = "Items por página:";
-  }
-  orderObj: any
-  filtrosActivos: boolean = false
-  ngOnInit(): void {
-    this.route.queryParamMap
-      .subscribe((params) => {
-        this.orderObj = { ...params.keys, ...params };
-        for (let i in this.orderObj.params) {
-          if (this.orderObj.params[i]) {
-            if (Object.keys(this.orderObj).length > 2) {
-              this.filtrosActivos = true
-            }
-            this.filtros[i] = this.orderObj.params[i]
 
-          }
-        }
-
-        if (this.orderObj.params.pag) {
-          this.getPerson(this.orderObj.params.pag);
-        } else {
-          this.getPerson()
-        }
-
-      }
-      );
-    this.createForm();
-    this.getThirds();
-  }
-  thirds: any[] = []
   getThirds() {
-    this._terceros.getThirds().subscribe((r:any) => {
+    this._terceros.getThirds().subscribe((r: any) => {
       this.thirds = r.data
       this.thirds.unshift({ text: 'Sin tercero', value: null });
       this.thirds.unshift({ text: 'Todos', value: '' });
     })
   }
+
   resetFiltros() {
-    for (let i in this.filtros) {
-      this.filtros[i] = ''
+    for (const controlName in this.form_filters.controls) {
+      this.form_filters.get(controlName).setValue('');
     }
     this.filtrosActivos = false
-    this.getPerson()
   }
 
-  paginacion: any
   handlePageEvent(event: PageEvent) {
-    console.log(event)
     this.getPerson(event.pageIndex + 1)
   }
-  estadoFiltros = false;
 
   createForm() {
     this.form = this.fb.group({
@@ -147,6 +179,7 @@ export class PersonasComponent implements OnInit {
       email: ['', Validators.email],
       position: [''],
       observation: [''],
+      third_party_id: [''],
     });
   }
 
@@ -155,26 +188,25 @@ export class PersonasComponent implements OnInit {
   }
 
   SetFiltros(paginacion) {
-    let params: any = {};
-
-    params.pag = paginacion;
-    for (let i in this.filtros) {
-      if (this.filtros[i] != "") {
-        params[i] = this.filtros[i];
+    let params = new HttpParams;
+    params = params.set('pag', paginacion)
+    for (const controlName in this.form_filters.controls) {
+      const control = this.form_filters.get(controlName);
+      if (control.value) {
+        params = params.set(controlName, control.value);
       }
     }
-    let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
-    return queryString;
+    return params;
   }
 
   getPerson(page = 1) {
     this.pagination.page = page;
     let params = {
-      ...this.pagination, ...this.filtros
+      ...this.pagination, ...this.form_filters.value
     }
     this.loading = true;
     var paramsurl = this.SetFiltros(this.pagination.page);
-    this.location.replaceState('/crm/personas', paramsurl);
+    this.location.replaceState('/crm/personas', paramsurl.toString());
     this._terceros.getThirdPartyPerson(params).subscribe((r: any) => {
       this.people = r.data.data;
       this.paginacion = r.data
@@ -184,18 +216,28 @@ export class PersonasComponent implements OnInit {
   }
 
   addPerson() {
-    this._terceros.addThirdPartyPerson(this.form.value)
-      .subscribe((res: any) => {
-        this._swal.show({
-          title: res.data,
-          icon: 'success',
-          text: '',
-          timer: 1000,
-          showCancel: false
-        })
-        this.getPerson();
-        this.modalService.dismissAll();
-      });
+    if (this.form.valid) {
+      this._terceros.addThirdPartyPerson(this.form.value)
+        .subscribe((res: any) => {
+          this._swal.show({
+            title: res.data,
+            icon: 'success',
+            text: '',
+            timer: 1000,
+            showCancel: false
+          })
+          this.getPerson();
+          this.modalService.dismissAll();
+        });
+    } else {
+      this.form.touched
+      this._swal.show({
+        icon: 'error',
+        title: 'Tuvimos un problema',
+        text: 'Revisa toda la información ingresada y vuelve a intentarlo',
+        showCancel: false
+      })
+    }
   }
 
   get name_valid() {

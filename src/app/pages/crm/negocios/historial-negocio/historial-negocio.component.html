@@ -1,4 +1,35 @@
-<div
+<ng-container *ngIf="!loading && historial.length > 0; else notData">
+  <ng-container *ngFor="let item of historial">
+    <section class="gradient-custom-5">
+      <div class="main-timeline-5">
+        <div class="timeline-5 right-5">
+          <div class="card bg-light">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between">
+                <h6>
+                  <i [class]="item.icon"></i> {{ item.title }} <br />
+                  <div class="text-muted" style="font-size: x-small">
+                    <i class="fas fa-clock me-1"></i>
+                    {{ item.created_at | date : "MMM d, y, h:mm a" }}
+                  </div>
+                </h6>
+                <img
+                  [src]="item.person.image"
+                  onerror="this.src='../../../../assets/images/noprofile.png'"
+                  class="float-right rounded-circle img-fluid header-profile-user"
+                />
+              </div>
+              <small>
+                {{ item.description }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+</ng-container>
+<!-- <div
   class="card mt-3"
   *ngFor="let task of historial; let i = index"
   style="box-shadow: 0px 0px 5px 5px rgb(0 0 0 / 8%); border-color: #95c11f"
@@ -13,6 +44,10 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
 
 <!-- <i*ngIf="task.completed" class="col-2 fa fa-check-circle" style="align-self: center"></i> -->

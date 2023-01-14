@@ -76,6 +76,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicke
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { ViewThirdComponent } from './terceros/view-third/view-third.component';
 import { ModalNuevoNegocioComponent } from './negocios/modal-nuevo-negocio/modal-nuevo-negocio.component';
+import { ChartModule } from 'angular2-chartjs';
+import { ChartsModule } from 'ng2-charts';
 
 export const MY_FORMATS = {
   parse: {
@@ -178,6 +180,8 @@ export const MY_FORMATS = {
     MatNativeDateModule,
     SatDatepickerModule,
     SatNativeDateModule,
+    ChartModule,
+    ChartsModule
   ]
 })
 export class CrmModule { }

@@ -52,6 +52,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ParametrosNominaComponent } from './params-nomina/parametros-nomina/parametros-nomina.component';
 import { TiposModule } from "../tipos/tipos.module";
 import { MatCard, MatRadioGroup } from "@angular/material";
+import { AccommodationsComponent } from './viaticos/hoteles/accommodations/accommodations.component';
 
 
 
@@ -90,6 +91,7 @@ import { MatCard, MatRadioGroup } from "@angular/material";
         VacantesComponent,
         TercerosComponent,
         ParametrosNominaComponent,
+        AccommodationsComponent,
 
 
     ],

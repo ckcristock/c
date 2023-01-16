@@ -6,6 +6,9 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-warning btn-sm" (click)="openValues(accommodation)">
+            <i class="fas fa-hotel"></i>Tipo de alojamientos
+          </button>
           <button
             class="btn btn-sm btn-primary"
             (click)="openConfirm(add, 'Nuevo hotel')"
@@ -47,11 +50,12 @@
             <th>Tipo</th>
             <th>Hotel</th>
             <th>Dirección</th>
+            <th>Ciudad</th>
             <th>Teléfono</th>
             <th>Tel. Fijo</th>
             <th>Acomodación</th>
-            <th>T. Sencilla</th>
-            <th>T. Doble</th>
+            <th>Sencilla</th>
+            <th>Doble</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
@@ -60,6 +64,7 @@
             <td class="align-middle">{{ hotel.type }}</td>
             <td class="align-middle">{{ hotel.name }}</td>
             <td class="align-middle">{{ hotel.address }}</td>
+            <td class="align-middle">{{ hotel.city!= undefined ? hotel.city.name : '' }}</td>
             <td class="align-middle">{{ hotel.phone }}</td>
             <td class="align-middle">{{ hotel.landline }}</td>
             <td class="align-middle">{{ hotel.accommodation }}</td>
@@ -215,15 +220,32 @@
             <mat-option value="No">No</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+     <!--    <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de acomodacióm</mat-label>
           <mat-select formControlName="accommodation" required>
             <mat-option value="Sencilla">Sencilla</mat-option>
             <mat-option value="Doble">Doble</mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
+
+        <div class="col">
+          <ng-select
+            [items]="['Sencilla', 'Doble']"
+            formControlName="accommodation"
+            bindLabel="text"
+            bindValue="value"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Tipo Acomodación"
+            [multiple]="true"
+            loadingText="loading "
+            ngDefaultControl
+          >
+          </ng-select>
+        </div>
+
         <mat-form-field class="col" appearance="outline">
-          <mat-label>Tasa simple</mat-label>
+          <mat-label>Valor simple</mat-label>
           <input
             matInput
             type="number"
@@ -233,7 +255,7 @@
           />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
-          <mat-label>Tasa doble</mat-label>
+          <mat-label>Valor doble</mat-label>
           <input
             matInput
             type="text"
@@ -263,6 +285,35 @@
     </button>
   </div>
 </ng-template>
+
+<ng-template #accommodation let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Tipos de alojamiento</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <app-accommodations
+      [data]="accommodations"
+    ></app-accommodations>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cerrar
+    </button>
+    <!-- <button type="button" class="btn btn-primary">Guardar</button> -->
+  </div>
+</ng-template>
+
+
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

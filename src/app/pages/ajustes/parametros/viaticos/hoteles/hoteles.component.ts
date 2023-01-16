@@ -7,6 +7,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-hoteles',
@@ -40,12 +41,15 @@ export class HotelesComponent implements OnInit {
   filtro = {
     tipo: ''
   }
+  accommodations: any = ''
+
   constructor(
     private fb: FormBuilder,
     private _hoteles: HotelesService,
     private _swal: SwalService,
     private _validators: ValidatorsService,
     private modalService: NgbModal,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -70,7 +74,7 @@ export class HotelesComponent implements OnInit {
   displayFn(country: any): string {
     return country ? country : undefined;
   } */
-  
+
 
   closeResult = '';
   public openConfirm(confirm, titulo) {
@@ -81,9 +85,21 @@ export class HotelesComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
   private getDismissReason(reason: any) {
     this.form.reset();
 
+  }
+
+  getAccommodation () {
+    this._hoteles.getAccommodation()
+      .subscribe((res:any)=>{
+        if(res.status){
+          this.accommodations = res.data
+        }else{
+          console.log('error', res.err);
+        }
+      })
   }
 
   createForm() {
@@ -139,9 +155,11 @@ export class HotelesComponent implements OnInit {
   }
 
   save() {
-    this.form.patchValue({
+    //console.log(this.form.get('city_id').value)
+    /* this.form.patchValue({
       city_id: this.form.get('city_id').value.value
-    }) 
+    }) */
+    //console.log(this.form.value)
     this._hoteles.createHotel(this.form.value).subscribe((r: any) => {
       this.modalService.dismissAll();
       console.log(r)
@@ -155,6 +173,12 @@ export class HotelesComponent implements OnInit {
         showCancel: false
       })
     })
+  }
+
+  openValues(content) {
+    console.log(content)
+    this.getAccommodation()
+    this._modal.open(content, 'md')
   }
 
 }

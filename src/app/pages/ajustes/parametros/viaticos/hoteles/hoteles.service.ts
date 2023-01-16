@@ -12,9 +12,13 @@ export class HotelesService {
   getCities(){
     return this.http.get(`${environment.base_url}/municipalities`);
   }
-  
+
   getHotels( params = {} ){
     return this.http.get(`${environment.base_url}/paginateHotels`, {params});
+  }
+
+  getAccommodation(){
+    return this.http.get(`${environment.base_url}/accommodations`);
   }
 
   createHotel(data:any){

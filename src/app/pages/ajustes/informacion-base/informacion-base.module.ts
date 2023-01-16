@@ -48,7 +48,7 @@ import { FondoPensionComponent } from './fondo-pension/fondo-pension.component';
 import { ArlComponent } from './arl/arl.component';
 import { CajaCompensacionComponent } from './caja-compensacion/caja-compensacion.component';
 import { FondoCesantiasComponent } from './fondo-cesantias/fondo-cesantias.component';
-import { NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTooltipModule, NgbTypeaheadModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CatalogoComponent } from './catalogo/catalogo.component';
 import { TableProductosCatalogoComponent } from './catalogo/components/table-productos-catalogo/table-productos-catalogo.component';
 import { ActivoFijoCatalogoComponent } from './catalogo/components/activo-fijo-catalogo/activo-fijo-catalogo.component';
@@ -74,7 +74,8 @@ import {
   MatPaginatorModule,
   MatSlideToggleModule,
   MatTreeModule,
-  MatListModule
+  MatListModule,
+  MatBadgeModule
 } from '@angular/material';
 import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';
 import { BodegasComponent } from './bodegas/bodegas.component';
@@ -150,6 +151,7 @@ import { FilePermissionsComponent } from './funcionarios/detalle-funcionario/per
     NgbTooltipModule,
     NgbTypeaheadModule,
     NgbAccordionModule,
+    NgbModule,
     PerfectScrollbarModule,
     MatExpansionModule,
     MatFormFieldModule,
@@ -165,6 +167,7 @@ import { FilePermissionsComponent } from './funcionarios/detalle-funcionario/per
     MatSlideToggleModule,
     MatExpansionModule,
     MatListModule,
+    MatBadgeModule,
     SweetAlert2Module.forRoot(),
   ],
   exports: [

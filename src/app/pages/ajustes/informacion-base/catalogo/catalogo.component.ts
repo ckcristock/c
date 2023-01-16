@@ -17,7 +17,6 @@ import { CatalogoService } from './catalogo.service';
 })
 export class CatalogoComponent implements OnInit {
   @ViewChild('matPanel') matPanel: MatExpansionPanel;
-  @ViewChild('matPanelAlert') matPanelAlert: MatExpansionPanel;
 
   public Categorias: any[] = [];
   public Subcategorias: any[] = [];
@@ -41,6 +40,10 @@ export class CatalogoComponent implements OnInit {
     pageSize: 5,
     collectionSize: 0
   }
+  public alerta: any = {
+    senyal: "",
+    texto: ""
+  }
 
   constructor(
     private _categoria: CategoriasService,
@@ -60,7 +63,6 @@ export class CatalogoComponent implements OnInit {
   active = 1;
   loadingCategorias: boolean = false;
   loadingProductos: boolean = false;
-  filtroActivado: boolean = false;
 
   ngOnInit(): void {
     this.getCategorias();
@@ -99,10 +101,14 @@ export class CatalogoComponent implements OnInit {
 
   openClose(){
     this.matPanel.toggle();
-    if(!this.matPanel.expanded){
-      this.matPanelAlert.open();
+    let filtroActivado = (JSON.stringify(this.formFiltros.value)!==JSON.stringify(this.filtroDefault));
+    this.alerta=(!this.matPanel.expanded && filtroActivado)? {
+      senyal: "!",
+      texto: "¡Hay filtros aplicados!"
+    }: {
+      senyal: "",
+      texto: ""
     }
-    this.filtroActivado = (JSON.stringify(this.formFiltros.value)!==JSON.stringify(this.filtroDefault));
   }
 
   moveToTop() {
@@ -215,7 +221,11 @@ export class CatalogoComponent implements OnInit {
   getProductosBySubcategoria(categoria){
     this.moveToTop();
     this.formFiltros.reset(this.filtroDefault);
-    this.matPanel.accordion.closeAll();
+    this.matPanel.close();
+    this.alerta =  {
+      senyal: "",
+      texto: ""
+    };
     this.selectedCategory = categoria;
     this.getProducts();
   }

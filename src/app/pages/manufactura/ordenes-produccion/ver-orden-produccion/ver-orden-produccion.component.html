@@ -1,0 +1,171 @@
+<div class="card">
+  <div class="card-body">
+    <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+    <hr class="line" />
+    <ng-container *ngIf="!loading && work_order; else notData">
+      <mat-accordion class="accordion-custom">
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Programación </mat-panel-title>
+            <mat-panel-description>
+              <span></span>
+              <mat-icon>today</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Detalles </mat-panel-title>
+            <mat-panel-description>
+              <span></span>
+              <mat-icon>info</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="row mx-3">
+            <div class="col-md-3 d-flex justify-content-between border py-2">
+              <b>Fecha elab.</b>
+              <span>{{ work_order.created_at | date }}</span>
+            </div>
+            <div class="col-md-3 d-flex justify-content-between border py-2">
+              <b>Orden pedido</b>
+              <span>{{ work_order.purchase_order }}</span>
+            </div>
+            <div class="col-md-3 d-flex justify-content-between border py-2">
+              <b>Cotización</b>
+              <span
+                ><a
+                  [routerLink]="[
+                    '/crm/cotizacion/ver',
+                    work_order.quotation_id
+                  ]"
+                  href=""
+                  >{{ work_order.quotation.line }} -
+                  {{ work_order.quotation.project }}</a
+                ></span
+              >
+            </div>
+            <div class="col-md-3 d-flex justify-content-between border py-2">
+              <b>Ciudad</b>
+              <span>{{ work_order.city.name }}</span>
+            </div>
+            <div class="col-md-3 d-flex justify-content-between border py-2">
+              <b>Elabora</b>
+              <span>????</span>
+            </div>
+            <div class="col-md-3 d-flex justify-content-between border py-2">
+              <b>Entrega pactada</b>
+              <span>{{ work_order.delivery_date | date }}</span>
+            </div>
+            <div class="col-md-3 d-flex justify-content-between border py-2">
+              <b>Entrega real</b>
+              <span></span>
+            </div>
+            <div class="col-md-3 d-flex justify-content-between border py-2">
+              <b>Tipo proyecto</b>
+              <span>{{ work_order.type | uppercase }}</span>
+            </div>
+            <div class="col-md-6 d-flex justify-content-between border py-2">
+              <b>Cliente</b>
+              <span>{{ work_order.third_party.text | uppercase }}</span>
+            </div>
+            <div class="col-md-6 d-flex justify-content-between border py-2">
+              <b>Solicitado por</b>
+              <span>{{ work_order.third_party_person.name | uppercase }}</span>
+            </div>
+            <div class="col-md-12 border py-2">
+              <b>Detalles generales</b>
+              <ul class="mb-0">
+                <li>
+                  <a
+                    (click)="
+                      openModal(
+                        view_requirements,
+                        1,
+                        work_order.technical_requirements
+                      )
+                    "
+                    href="javascript:void(0)"
+                    >Requisitos técnicos, funcionales y desempeño</a
+                  >
+                </li>
+                <li>
+                  <a
+                    (click)="
+                      openModal(
+                        view_requirements,
+                        2,
+                        work_order.legal_requirements
+                      )
+                    "
+                    href="javascript:void(0)"
+                    >Requisitos legales o reglamentos aplicacbles</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-12 border py-2">
+              <b>Descripción</b>
+              <div [innerHTML]="work_order.description"></div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Planos y archivos </mat-panel-title>
+            <mat-panel-description>
+              <span></span>
+              <mat-icon>folder</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          sdfsdfsdfsd
+        </mat-expansion-panel>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Acciones </mat-panel-title>
+            <mat-panel-description>
+              <span></span>
+              <mat-icon>warning</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          sdfsdfsdfsd
+        </mat-expansion-panel>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Costos y materiales </mat-panel-title>
+            <mat-panel-description>
+              <span></span>
+              <mat-icon>attach_money</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          sdfsdfsdfsd
+        </mat-expansion-panel>
+      </mat-accordion>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #view_requirements let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">{{ modal_title }}</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div [innerHTML]="modal_content"></div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

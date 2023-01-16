@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { MunicipiosService } from 'src/app/pages/ajustes/configuracion/departamentos-municipios/municipios/municipios.service';
@@ -17,11 +17,15 @@ import { OrdenesProduccionService } from '../../services/ordenes-produccion.serv
 })
 export class CrearOrdenProduccionComponent implements OnInit {
   form: FormGroup;
+  loading: boolean;
+  work_order;
+  id: number;
   thirds: any[] = [];
   quotations: any[] = [];
   third_people: any[] = [];
   last_id: number;
   cities: any[] = [];
+  path: string;
   datosCabecera = {
     Titulo: 'Nueva orden de producción',
     Fecha: new Date(),
@@ -36,20 +40,34 @@ export class CrearOrdenProduccionComponent implements OnInit {
     public _texteditor: Texteditor2Service,
     private _swal: SwalService,
     public router: Router,
-  ) { }
+    private route: ActivatedRoute,
+  ) {
+    this.path = this.route.snapshot.url[1].path;
+  }
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.id = params['id'];
+    })
     this.createForm();
     this.getData();
+    if (this.path == 'editar') {
+      this.getWorkOrder(this.id, 'editar')
+    } else if (this.path == 'copiar') {
+      this.getWorkOrder(this.id, 'copiar')
+    }
   }
 
   getData() {
-    this._work_order.getLastId().subscribe((res: any) => {
-      this.datosCabecera.Codigo = 'O.P' + (res.data.id + 1)
-      this.form.patchValue({
-        code: this.datosCabecera.Codigo
+    this.loading = true;
+    if (this.path != 'editar') {
+      this._work_order.getLastId().subscribe((res: any) => {
+        this.datosCabecera.Codigo = 'O.P' + (res.data.id + 1)
+        this.form.patchValue({
+          code: this.datosCabecera.Codigo
+        })
       })
-    })
+    }
     this._quotation.getAllQuotations().subscribe((res: any) => {
       this.quotations = res.data
     })
@@ -58,11 +76,42 @@ export class CrearOrdenProduccionComponent implements OnInit {
     })
     this._city.getAllMunicipalities().subscribe((res: any) => {
       this.cities = res.data
+      this.loading = false
+    })
+  }
+
+  getWorkOrder(id, param) {
+    this.loading = true
+    this._work_order.getWorkOrder(id).subscribe((res: any) => {
+      this.work_order = res.data;
+      this.loading = false
+      this.form.patchValue({
+        id: param == 'editar' ? res.data.id : '',
+        purchase_order: this.work_order.purchase_order,
+        type: this.work_order.type,
+        third_party_id: this.work_order.third_party,
+        quotation_id: this.work_order.quotation,
+        delivery_date: this.work_order.delivery_date,
+        municipality_id: this.work_order.city,
+        observation: this.work_order.observation,
+        third_party_person_id: this.work_order.third_party_person,
+        description: this.work_order.description,
+        technical_requirements: this.work_order.technical_requirements,
+        legal_requirements: this.work_order.legal_requirements,
+        date: param == 'editar' ? this.work_order.date : new Date(),
+      });
+      if (this.path == 'editar') {
+        this.form.patchValue({
+          code: this.work_order.code
+        })
+        this.datosCabecera.Codigo = this.work_order.code
+      }
     })
   }
 
   createForm() {
     this.form = this.fb.group({
+      id: [''],
       purchase_order: ['', Validators.required],
       type: ['', Validators.required],
       third_party_id: ['', Validators.required],

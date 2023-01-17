@@ -24,7 +24,7 @@
             <mat-label>Categoría</mat-label>
             <mat-select
               [(ngModel)]="filters.categoria"
-              (selectionChange)="getSubcategory()"
+              (selectionChange)="getSubcategories()"
             >
               <mat-option value="">Todos</mat-option>
               <mat-option
@@ -37,7 +37,7 @@
             <input
               type="text"
               [(ngModel)]="filters.nombre"
-              (input)="getSubcategory()"
+              (input)="getSubcategories()"
               matInput
               autocomplete="off"
               placeholder="Busca por nombre"
@@ -47,7 +47,7 @@
             <mat-label>Separable?</mat-label>
             <mat-select
               [(ngModel)]="filters.separable"
-              (selectionChange)="getSubcategory()"
+              (selectionChange)="getSubcategories()"
             >
               <mat-option value="">Todos</mat-option>
               <mat-option value="Si">Sí</mat-option>
@@ -88,7 +88,7 @@
                   <a
                     class="dropdown-item text-info waves-light"
                     href="javascript: void(0);"
-                    (click)="openModal(add,'Editar'); EditSubcategory(item)"
+                    (click)="openModal(add,'Editar',item)"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
@@ -119,7 +119,7 @@
       [collectionSize]="pagination.collectionSize"
       [pageSize]="pagination.pageSize"
       [(page)]="pagination.page"
-      (pageChange)="getSubcategory($event)"
+      (pageChange)="getSubcategories($event)"
       aria-label="Default pagination"
       maxSize="5"
       rotate="true"
@@ -180,7 +180,7 @@
         </mat-form-field>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col mat-form-field-wrapper">
           <ng-select
             appearance="outline"
             [appendTo]="'body'"
@@ -195,20 +195,20 @@
           ></ng-select>
         </div>
       </div>
-      <div class="row card-title d-flex justify-content-between">
-        <div class="col-md-6 px-0">
-          <h6 class="modal-title">Campos subcategoria</h6>
+      <div class="row d-flex justify-content-between">
+        <div class="col-md-6">
+          <span class="text-primary">Campos de la subcategoría</span>
         </div>
-        <div class="col-md-6 px-0 text-right">
-          <div class="btn-group rounded w-sm-100">
-            <button class="btn btn-primary btn-sm" (click)="newField()">
+        <div class="col-md-6 text-right">
+          <div class="btn-group rounded w-sm-100 mat-form-field-wrapper">
+            <button type="button" class="btn btn-primary btn-sm" (click)="newField()">
               <i class="fa fa-plus"></i>
             </button>
           </div>
         </div>
       </div>
 
-      <hr />
+      <hr class="line" />
       <div class="row" formArrayName="dynamic">
         <ng-container *ngIf="fieldDinamic.controls.length; else sinDatos">
           <ng-container
@@ -246,7 +246,7 @@
             </div>
             <div class="col-md-1 d-flex justify-content-end align-items-center">
               <div class="btn-group rounded w-sm-100 mat-form-field-wrapper">
-                <button
+                <button type="button"
                   class="btn btn-danger btn-sm"
                   (click)="deleteField(i, item)"
                 >

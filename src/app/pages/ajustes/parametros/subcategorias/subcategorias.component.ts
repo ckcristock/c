@@ -20,9 +20,7 @@ import { CategoriasService } from '../categorias/categorias.service';
   styleUrls: ['./subcategorias.component.scss'],
 })
 export class SubcategoriasComponent implements OnInit {
-  form: FormGroup;
 
-  public servicios: any[];
   @ViewChild('FormTipoServicio') FormTipoServicio: any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('modal') modal: any;
@@ -31,11 +29,12 @@ export class SubcategoriasComponent implements OnInit {
   @Input()
   set reloadSubcategories(event: Event) {
     if (event) {
-      this.getSubcategory();
+      this.getSubcategories();
       this.listCategories();
     }
   }
 
+  form: FormGroup;
   filters = {
     categoria: '',
     nombre: '',
@@ -47,6 +46,8 @@ export class SubcategoriasComponent implements OnInit {
     collectionSize: 0
   }
   matPanel = false;
+
+  public servicios: any[];
   public categorias_filtro: any = [];
   public PuntosSeleccionados = [];
   public Cuenta = [];
@@ -92,7 +93,7 @@ export class SubcategoriasComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
-    this.getSubcategory();
+    this.getSubcategories();
     this.listCategories();
    /*  this.http.get(environment.ruta + 'php/lista_generales.php', {
       params: { modulo: 'Bodega_Nuevo' },
@@ -112,13 +113,15 @@ export class SubcategoriasComponent implements OnInit {
     }
   }
 
-  openModal(content,accion) {
+  openModal(content,accion,data?) {
+    this.title = accion+' subcategoria';
+    this.fieldDinamic.clear();
     if(accion=="Agregar"){
       this.createForm();
-      this.title = 'Agregar subcategoria';
+    }else{
+      this.EditSubcategory(data);
     }
     this._modal.open(content, 'lg');
-    this.fieldDinamic.clear();
   }
 
   createForm() {
@@ -126,7 +129,8 @@ export class SubcategoriasComponent implements OnInit {
       Id_Subcategoria: [''],
       Nombre: ['', Validators.required],
       Separable: ['', Validators.required],
-      Id_Categoria_Nueva: ['',Validators.required],
+      Id_Categoria_Nueva: [null,Validators.required],
+      Fijo: [0],
       dynamic: this.fb.array([]),
     });
   }
@@ -173,7 +177,7 @@ export class SubcategoriasComponent implements OnInit {
     });
   }
 
-  getSubcategory(page=1) {
+  getSubcategories(page=1) {
     this.pagination.page = page;
     this.Cargando = true;
     /* this.http
@@ -200,6 +204,7 @@ export class SubcategoriasComponent implements OnInit {
       /* Categorias: this.Subcategory.categories */
     });
     //console.log(this.Subcategory);
+
     this.Subcategory.subcategory_variables.forEach((element) => {
       let group = this.fb.group({
         id: element.id,
@@ -251,7 +256,7 @@ export class SubcategoriasComponent implements OnInit {
   dataClear() {
     this.form.reset();
     this.fieldDinamic.clear();
-    this.getSubcategory();
+    this.getSubcategories(this.pagination.page);
     this._modal.close();
   }
 
@@ -286,7 +291,7 @@ export class SubcategoriasComponent implements OnInit {
         this.confirmacionSwal.text = data.mensaje;
         this.confirmacionSwal.type = data.tipo;
         this.confirmacionSwal.show();
-        this.getSubcategory();
+        this.getSubcategories();
       });
   } */
 
@@ -327,7 +332,7 @@ export class SubcategoriasComponent implements OnInit {
       if (result.isConfirmed) {
         this._subcategory.changeActive(id,{activo: state})
           .subscribe((res: any) => {
-            this.getSubcategory();
+            this.getSubcategories();
             this._swalService.show({
               icon: 'success',
               title: '¡Operación exitosa!',

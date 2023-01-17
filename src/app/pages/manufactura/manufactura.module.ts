@@ -37,7 +37,7 @@ export const MY_FORMATS = {
     DisenoComponent,
     ProduccionComponent,
     CrearOrdenProduccionComponent,
-    VerOrdenProduccionComponent
+    VerOrdenProduccionComponent,
   ],
   imports: [
     CommonModule,
@@ -65,7 +65,7 @@ export const MY_FORMATS = {
     SatDatepickerModule,
     SatNativeDateModule,
     MatTooltipModule,
-    CKEditorModule
+    CKEditorModule,
   ],
   providers: [
     {

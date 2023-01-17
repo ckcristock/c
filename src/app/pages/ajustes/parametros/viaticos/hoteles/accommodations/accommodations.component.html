@@ -29,7 +29,7 @@
       <mat-form-field class="col" appearance="outline">
         <mat-label>Valor</mat-label>
         <input
-          (input)="getValues()"
+          (input)="getValues($event)"
           [(ngModel)]="filtro.value"
           type="text"
           matInput
@@ -59,7 +59,10 @@
           'text-danger font-weight-bold': value.name === 'Inactivo'
         }"
       >
-        <td class="align-middle" scope="row">
+        <td class="align-middle" scope="row" [ngClass]="{
+                  'text-success': value.deleted_at == undefined,
+                  'text-danger': value.deleted_at != undefined}"
+        >
           {{ value.name }}
         </td>
         <td class="align-middle">{{ value.created_at | date }}</td>
@@ -77,11 +80,11 @@
                 class="dropdown-item waves-light text-info caja-botones"
                 href="javascript: void(0);"
                 (click)="getValue(value)"
-              >
+              > <!--Revisar por qué no se está enviando el id cuando se da editar-->
                 <i class="far fa-edit"></i> Editar</a
               >
               <a
-                *ngIf="value.state === 'Activo'"
+                *ngIf="value.deleted_at == undefined "
                 href="javascript: void(0);"
                 class="dropdown-item text-danger waves-light caja-botones"
                 (click)="anularOActivar(value, 'Inactivo')"
@@ -89,7 +92,7 @@
                 <i class="far fa-trash-alt"></i> Anular</a
               >
               <a
-                *ngIf="value.state === 'Inactivo'"
+                *ngIf="value.deleted_at != undefined "
                 href="javascript: void(0);"
                 class="dropdown-item text-success waves-light caja-botones"
                 (click)="anularOActivar(value, 'Activo')"
@@ -106,6 +109,7 @@
 <ngb-pagination
   class="d-flex justify-content-center pagination-rounded pagination-sm"
   [collectionSize]="pagination.collectionSize"
+  (pageChange)="getValues($event)"
   [pageSize]="pagination.pageSize"
   [(page)]="pagination.page"
   aria-label="Default pagination"

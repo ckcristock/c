@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { data } from 'jquery';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-accommodations',
@@ -9,12 +10,16 @@ import { data } from 'jquery';
 })
 export class AccommodationsComponent implements OnInit {
   @Input('data') values : any;
+  @Input('pagination') pagination: any;
+  @Output() saveEvent = new EventEmitter<any> ();
+  @Output() paginationEvent = new EventEmitter<any> ();
+  @Output() anularOActivarEvent = new EventEmitter<any> ();
   loading: boolean = false;
-  pagination = {
+  /* pagination = {
     pageSize: 10,
     page: 1,
     collectionSize: 0
-  }
+  } */
   filtro: any = {
     value: ''
   }
@@ -23,7 +28,8 @@ export class AccommodationsComponent implements OnInit {
   title: string = 'Agregar';
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
@@ -37,11 +43,28 @@ export class AccommodationsComponent implements OnInit {
     })
   }
 
-  getValues(){
-    console.log('getValues');
+  getValue(value: any){
+    this.title = 'Editar'
+    this.value = {...value}
+    console.log('value', value);
+    this.form.patchValue({
+      id: value.id,
+      name: value.name
+    })
+  }
+
+  getValues($event){
+    console.log('getValues', this.pagination);
+    console.log('event', $event);
+    this.paginationEvent.emit($event);
   }
 
   save(){
-    console.log('guardando')
+    this.saveEvent.emit(this.form.value)
+  }
+
+  anularOActivar(value: any, action: any){
+    let params = { value, action}
+    this.anularOActivarEvent.emit(params)
   }
 }

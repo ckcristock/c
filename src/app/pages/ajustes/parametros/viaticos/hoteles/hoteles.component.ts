@@ -6,7 +6,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, reduce, startWith } from 'rxjs/operators';
 import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
@@ -33,7 +33,12 @@ export class HotelesComponent implements OnInit {
   hotels: any[] = [];
   hotel: any = {};
   title: any = '';
-  pagination = {
+  paginationHotel = {
+    page: 1,
+    pageSize: 5,
+    collectionSize: 0
+  }
+  paginationAccomodations = {
     page: 1,
     pageSize: 5,
     collectionSize: 0
@@ -41,7 +46,8 @@ export class HotelesComponent implements OnInit {
   filtro = {
     tipo: ''
   }
-  accommodations: any = ''
+  accommodationsPaginate: any = {}
+  accommodations: any = {}
 
   constructor(
     private fb: FormBuilder,
@@ -56,6 +62,7 @@ export class HotelesComponent implements OnInit {
     this.createForm();
     this.getCities();
     this.getHotels();
+    this.getAccommodation();
 
     /* this.filteredOptions = this.form.get('city_id').valueChanges
       .pipe(
@@ -87,16 +94,29 @@ export class HotelesComponent implements OnInit {
   }
 
   private getDismissReason(reason: any) {
+    console.log('reason_onClose', reason);
     this.form.reset();
-
   }
 
-  getAccommodation () {
+  getAccommodation(page = 1) {
+    this.paginationAccomodations.page = page;
+    let params = {
+      ...this.paginationAccomodations, ...this.filtro
+    }
+    this._hoteles.getAccommodationPaginate(params)
+      .subscribe((res: any) => {
+        if (res.status) {
+          this.accommodationsPaginate = res.data.data
+          this.paginationAccomodations.collectionSize = res.data.total
+        } else {
+          console.log('error', res.err);
+        }
+      })
     this._hoteles.getAccommodation()
-      .subscribe((res:any)=>{
-        if(res.status){
+      .subscribe((res: any) => {
+        if (res.status) {
           this.accommodations = res.data
-        }else{
+        } else {
           console.log('error', res.err);
         }
       })
@@ -114,7 +134,8 @@ export class HotelesComponent implements OnInit {
       simple_rate: ['', Validators.required],
       double_rate: ['', Validators.required],
       breakfast: ['', Validators.required],
-      accommodation: ['', Validators.required]
+      accommodation: ['', Validators.required],
+      alojamientos: [[], Validators.required]
     })
   }
 
@@ -125,14 +146,14 @@ export class HotelesComponent implements OnInit {
   }
 
   getHotels(page = 1) {
-    this.pagination.page = page;
+    this.paginationHotel.page = page;
     let params = {
-      ...this.pagination, ...this.filtro
+      ...this.paginationHotel, ...this.filtro
     }
     this.loading = true;
     this._hoteles.getHotels(params).subscribe((r: any) => {
       this.hotels = r.data.data;
-      this.pagination.collectionSize = r.data.total;
+      this.paginationHotel.collectionSize = r.data.total;
       this.loading = false;
     });
   }
@@ -150,8 +171,11 @@ export class HotelesComponent implements OnInit {
       simple_rate: this.hotel.simple_rate,
       double_rate: this.hotel.double_rate,
       breakfast: this.hotel.breakfast,
-      accommodation: this.hotel.accommodation
+      accommodation: this.hotel.accommodations.map(x => x.id),
+      alojamientos: this.hotel.accommodations
     })
+    console.log('hotel', this.hotel);
+    console.log('form', this.form.value);
   }
 
   save() {
@@ -174,10 +198,78 @@ export class HotelesComponent implements OnInit {
       })
     })
   }
+  saveAccommodation($event) {
+    console.log('event', $event);
+    this._hoteles.createUpdateAccomodation($event)
+      .subscribe((res: any) => {
+        if (res.status) {
+          this._swal.show({
+            title: 'Alojamiento',
+            text: res.data,
+            icon: 'success',
+            showCancel: false
+          })
+          this.getAccommodation();
+        } else {
+          this._swal.show({
+            title: 'Alojamiento',
+            text: res.err,
+            icon: 'error',
+            showCancel: false
+          })
+        }
+      })
+  }
+
+  deleteAccommodation($event) {
+    console.log('event', $event)
+
+    if ($event.action == 'Inactivo') {
+      this._hoteles.deleteAccommodation($event.value.id)
+        .subscribe((res: any) => {
+          if (res.status) {
+            this._swal.show({
+              title: 'Alojamiento',
+              text: res.data,
+              icon: 'success',
+              showCancel: false
+            })
+            this.getAccommodation();
+          } else {
+            this._swal.show({
+              title: 'Alojamiento',
+              text: res.err,
+              icon: 'error',
+              showCancel: false
+            })
+          }
+        })
+    } else {
+      console.log('value', $event.value);
+      this._hoteles.restoreAccommodation($event.value)
+        .subscribe((res: any) => {
+          console.log(res)
+          if (res.status) {
+            this._swal.show({
+              title: 'Alojamiento',
+              text: res.data,
+              icon: 'success',
+              showCancel: false
+            })
+            this.getAccommodation();
+          } else {
+            this._swal.show({
+              title: 'Alojamiento',
+              text: res.err,
+              icon: 'error',
+              showCancel: false
+            })
+          }
+        })
+    }
+  }
 
   openValues(content) {
-    console.log(content)
-    this.getAccommodation()
     this._modal.open(content, 'md')
   }
 

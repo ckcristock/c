@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HotelesService } from './hoteles.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { MatAccordion } from '@angular/material/expansion';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { Observable } from 'rxjs';
-import { map, reduce, startWith } from 'rxjs/operators';
 import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
@@ -47,7 +46,7 @@ export class HotelesComponent implements OnInit {
     tipo: ''
   }
   accommodationsPaginate: any = {}
-  accommodations: any = {}
+  accommodations: any[] = []
 
   constructor(
     private fb: FormBuilder,
@@ -85,17 +84,28 @@ export class HotelesComponent implements OnInit {
 
   closeResult = '';
   public openConfirm(confirm, titulo) {
+    console.log('confirm', confirm);
     this.title = titulo
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    if (titulo == 'Ver hotel') {
+      this._modal.open(
+        confirm,
+        'md',
+        true
+      );
+    }else {
+      this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
   }
 
   private getDismissReason(reason: any) {
     console.log('reason_onClose', reason);
     this.form.reset();
+    this.form.removeControl('alojamientos')
+    this.form.setControl('alojamientos', this.fb.array([]))
   }
 
   getAccommodation(page = 1) {
@@ -131,11 +141,45 @@ export class HotelesComponent implements OnInit {
       landline: ['', Validators.required],
       address: ['', Validators.required],
       phone: ['', Validators.required],
-      simple_rate: ['', Validators.required],
-      double_rate: ['', Validators.required],
+      /* simple_rate: ['', Validators.required],
+      double_rate: ['', Validators.required], */
       breakfast: ['', Validators.required],
       accommodation: ['', Validators.required],
-      alojamientos: [[], Validators.required]
+      alojamientos: this.fb.array([])
+    })
+    const accommodation = this.form.get('accommodation')
+    accommodation.valueChanges.subscribe(r => {
+
+    })
+  }
+
+  aux(e) {
+    console.log('e', e);
+    if (e._selected) {
+      let subItems = this.form.get('alojamientos') as FormArray
+      let elem = this.accommodations.find(ele=>ele.id==e.value)
+      console.log('ele', elem);
+      subItems.push(this.patchValues(elem.id,elem.name, null))
+    } else {
+      this.form.controls.alojamientos.value.forEach((element, index) => {
+        if (element.id == e.value) {
+          let a = this.form.get('alojamientos') as FormArray;
+          //let b = a.controls[index] as FormGroup
+          a.removeAt(index)
+        }
+      });
+      console.log('alojam', this.form.value.alojamientos);
+    }
+    console.log('alojamientos', this.form.get('alojamientos'));
+    /* this.accommodations
+    this.form.removeControl('alojamientos')
+    this.form.setControl('alojamientos', this.fb.array([])) */
+  }
+  patchValues(id, name, price) {
+    return this.fb.group({
+      id: [id],
+      name: name,
+      price: [price ? price : ''],
     })
   }
 
@@ -171,11 +215,18 @@ export class HotelesComponent implements OnInit {
       simple_rate: this.hotel.simple_rate,
       double_rate: this.hotel.double_rate,
       breakfast: this.hotel.breakfast,
-      accommodation: this.hotel.accommodations.map(x => x.id),
-      alojamientos: this.hotel.accommodations
+      accommodation: this.hotel.accommodations.map((x: any) => x.id),
+      //accommodation2: this.hotel.accommodations.map(({id, name, pivot}) => ({id, name, price: pivot.price!= undefined ? pivot.price : 0})),
+      //accommodation: this.hotel.accommodations.map(x => x.id),
     })
+    this.hotel.accommodations.forEach(element => {
+      let subItems = this.form.get('alojamientos') as FormArray
+      subItems.push(this.patchValues(element.id, element.name, element.pivot.price))
+    });
+    /* this.patch() */
     console.log('hotel', this.hotel);
     console.log('form', this.form.value);
+    console.log('alojamientos', this.form.value.accommodation);
   }
 
   save() {
@@ -183,7 +234,7 @@ export class HotelesComponent implements OnInit {
     /* this.form.patchValue({
       city_id: this.form.get('city_id').value.value
     }) */
-    //console.log(this.form.value)
+    console.log(this.form.value)
     this._hoteles.createHotel(this.form.value).subscribe((r: any) => {
       this.modalService.dismissAll();
       console.log(r)
@@ -198,6 +249,16 @@ export class HotelesComponent implements OnInit {
       })
     })
   }
+
+  /* patch() {
+    const control = <FormArray>this.form.get('alojamientos');
+    this.form.value.alojamientos.forEach(x => {
+      control.push(this.patchValues(x.price))
+    })
+  } */
+
+
+
   saveAccommodation($event) {
     console.log('event', $event);
     this._hoteles.createUpdateAccomodation($event)

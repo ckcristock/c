@@ -6,7 +6,10 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-warning btn-sm" (click)="openValues(alojamiento)">
+          <button
+            class="btn btn-warning btn-sm"
+            (click)="openValues(alojamiento)"
+          >
             <i class="fas fa-hotel"></i>Tipo de alojamientos
           </button>
           <button
@@ -54,8 +57,6 @@
             <th>Teléfono</th>
             <th>Tel. Fijo</th>
             <th>Alojamiento</th>
-            <th>Sencilla</th>
-            <th>Doble</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
@@ -64,20 +65,16 @@
             <td class="align-middle">{{ hotel.type }}</td>
             <td class="align-middle">{{ hotel.name }}</td>
             <td class="align-middle">{{ hotel.address }}</td>
-            <td class="align-middle">{{ hotel.city!= undefined ? hotel.city.name : '' }}</td>
+            <td class="align-middle">
+              {{ hotel.city != undefined ? hotel.city.name : "" }}
+            </td>
             <td class="align-middle">{{ hotel.phone }}</td>
             <td class="align-middle">{{ hotel.landline }}</td>
             <td class="align-middle">
               <span *ngFor="let item of hotel.accommodations"
                 >{{ item.name }}.
               </span>
-<!--               <div *ngFor="let tipoAloj of hotel.accommodation">{{ tipoAloj.name }}</div> -->
-            </td>
-            <td class="align-middle">
-              {{ hotel.simple_rate | currency: "COP" }}
-            </td>
-            <td class="align-middle">
-              {{ hotel.double_rate | currency: "COP" }}
+              <!--               <div *ngFor="let tipoAloj of hotel.accommodation">{{ tipoAloj.name }}</div> -->
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -95,6 +92,13 @@
                     (click)="openConfirm(add, 'Editar hotel'); getHotel(hotel)"
                   >
                     <i class="far fa-edit"></i> Editar
+                  </a>
+                  <a
+                    class="dropdown-item waves-light text-success caja-botones"
+                    href="javascript: void(0);"
+                    (click)="openConfirm(add, 'Ver hotel'); getHotel(hotel)"
+                  >
+                    <i class="far fa-eye"></i> Ver
                   </a>
                 </div>
               </div>
@@ -224,7 +228,7 @@
             <mat-option value="No">No</mat-option>
           </mat-select>
         </mat-form-field>
-<!--         <div class="col">
+        <!--         <div class="col">
           <ng-select
             [items]="accommodations"
             formControlName="accommodation"
@@ -240,41 +244,44 @@
         </div> -->
 
         <mat-form-field class="col" appearance="outline">
-          <mat-label>Tipo de Alojamiento</mat-label>
+          <mat-label>Tipo de alojamiento</mat-label>
           <mat-select formControlName="accommodation" required multiple>
-            <mat-option *ngFor="let tipo of accommodations" [value]="tipo.id">
+            <mat-option
+              #matOption
+              *ngFor="let tipo of accommodations"
+              (click)="aux(matOption)"
+              [value]="tipo.id"
+            >
               {{ tipo.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <ng-container *ngFor="let aloja of hotel.accommodations">
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Valor {{aloja.name}}</mat-label>
-            <input
-              matInput
-              type="number"
-              placeholder="Ingresa la tasa"
-              autocomplete="off"
-            />
-          </mat-form-field>
+        <ng-container formArrayName="alojamientos">
+          <ng-container
+            [formGroupName]="i"
+            *ngFor="
+              let item of form.controls.alojamientos.controls;
+              let i = index
+            "
+          >
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Valor {{ item.value.name }}</mat-label>
+              <input
+                matInput
+                type="number"
+                placeholder="Ingresa la tasa {{ item.value.name }}"
+                formControlName="price"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </ng-container>
         </ng-container>
-
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Valor doble</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Ingresa la tasa doble"
-            formControlName="double_rate"
-            autocomplete="off"
-          />
-        </mat-form-field>
 
       </div>
     </form>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer" *ngIf=" title!='Ver hotel' " >
     <button
       type="button"
       class="btn btn-danger"
@@ -323,8 +330,6 @@
     <!-- <button type="button" class="btn btn-primary">Guardar</button> -->
   </div>
 </ng-template>
-
-
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

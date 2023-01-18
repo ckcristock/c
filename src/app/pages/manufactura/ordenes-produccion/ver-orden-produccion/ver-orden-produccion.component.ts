@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 export class VerOrdenProduccionComponent implements OnInit {
   @ViewChild('gantt_here', { static: true }) ganttContainer!: ElementRef;
   ruta;
+  ruta2;
   datosCabecera = {
     Titulo: 'Orden de trabajo'
   }
@@ -48,8 +49,8 @@ export class VerOrdenProduccionComponent implements OnInit {
     gantt.init(this.ganttContainer.nativeElement);
     this.route.paramMap.subscribe(params => {
       this.work_order_id = params.get('id');
-      this.ruta = environment.url_assets + '/tinyfilemanager/tinyfilemanager.php?p=&fijo=op' + this.work_order_id;
-      console.log(this.ruta)
+      //this.ruta2 = environment.url_assets + '/tinyfilemanager/tinyfilemanager.php?p=&fijo=op' + this.work_order_id;
+      this.ruta = environment.url_assets + '/filemanager/filemanager/dialog.php?config=2&car=ordenes-produccion/op' + this.work_order_id;
       this.getWorkOrder();
     })
   }

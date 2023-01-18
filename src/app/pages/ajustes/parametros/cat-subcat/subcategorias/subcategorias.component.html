@@ -136,7 +136,7 @@
   <app-not-data [loading]="Cargando"></app-not-data>
 </ng-template>
 
-<ng-template #add let-modal>
+<ng-template #add let-modalSubategoria>
   <div class="modal-header">
     <h4 class="text-primary modal-title">{{ title }}</h4>
     <button
@@ -144,7 +144,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="modalSubategoria.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -260,7 +260,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="modalSubategoria.close()">
       Cancelar
     </button>
     <button

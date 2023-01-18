@@ -150,7 +150,7 @@
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
-<ng-template #add let-modal>
+<ng-template #add let-modalCategoria>
   <div class="modal-header">
     <h4 class="text-primary modal-title">{{ title }}</h4>
     <button
@@ -158,7 +158,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="modalCategoria.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -209,7 +209,7 @@
           ></ng-select>
         </div> -->
       </div>
-      <div class="row justify-content-center">
+      <div class="row justify-content-center" *ngIf="permission.permissions.approve_product_categories">
         <div class="col-auto">
           <mat-slide-toggle
             color="primary"
@@ -288,7 +288,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="modalCategoria.close()">
       Cancelar
     </button>
     <button

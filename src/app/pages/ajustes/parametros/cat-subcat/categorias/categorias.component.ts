@@ -7,8 +7,10 @@ import { UserService } from 'src/app/core/services/user.service';
 import { MatAccordion } from '@angular/material';
 import { CategoriasService } from './categorias.service';
 import { ModalService } from 'src/app/core/services/modal.service';
-import { SwalService } from '../../informacion-base/services/swal.service';
+import { SwalService } from '../../../informacion-base/services/swal.service';
 import { SubcategoryService } from '../subcategorias/subcategory.service';
+import { PermissionService } from 'src/app/core/services/permission.service';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 
 @Component({
   selector: 'app-categorias',
@@ -39,6 +41,12 @@ export class CategoriasComponent implements OnInit {
   public page = 1;
   public maxSize = 10;
 
+  permission: Permissions = {
+    menu: 'Empresa',
+    permissions: {
+      approve_product_categories: true
+    }
+  };
   pagination: any = {
     page: 1,
     pageSize: 10,
@@ -61,13 +69,16 @@ export class CategoriasComponent implements OnInit {
     private _categorias: CategoriasService,
     private _subcategoria: SubcategoryService,
     private fb: FormBuilder,
-    private _modal: ModalService,
-    private _swal: SwalService
+    private _modalCat: ModalService,
+    private _swal: SwalService,
+    private _permission: PermissionService
   ) {
+    this.permission = this._permission.validatePermissions(this.permission);
     this.company_id = this._user.user.person.company_worked.id;
   }
 
   ngOnInit() {
+    console.log(this.permission)
     this.createForm();
     this.getCategories();
     /* this.getCategoriasDep(); */
@@ -94,7 +105,7 @@ export class CategoriasComponent implements OnInit {
       this.EditarCategoria(data);
       this.visible=(data.Fijo==0);
     }
-    this._modal.open(content, 'lg');
+    this._modalCat.open(content, 'lg');
   }
 
   createForm() {
@@ -183,7 +194,7 @@ export class CategoriasComponent implements OnInit {
         this.form.reset();
         this.fieldDinamic.clear();
         this.getCategories(this.pagination.page);
-        this._modal.close();
+        this._modalCat.close();
       });
     this.getCategories();
   }

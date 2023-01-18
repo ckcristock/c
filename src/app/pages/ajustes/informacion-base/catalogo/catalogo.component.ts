@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { noUndefined } from '@angular/compiler/src/util';
+import { Component, ElementRef, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { fromEvent } from 'rxjs';
@@ -6,7 +7,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { UnidadesMedidasService } from '../../parametros/apu/unidades-medidas/unidades-medidas.service';
-import { CategoriasService } from '../../parametros/categorias/categorias.service';
+import { CategoriasService } from '../../parametros/cat-subcat/categorias/categorias.service';
 import { SwalService } from '../services/swal.service';
 import { CatalogoService } from './catalogo.service';
 
@@ -23,7 +24,7 @@ export class CatalogoComponent implements OnInit {
   public Productos: any[] = [];
   public tipos_catalogo: any[] = [];
   public estados: any[] = [];
-  public camposSubcat: any[] = [];
+  public campos: any = {cat: [], subcat: []};
   public unidades_medida: any[] = [];
   public selectedCategory: any = {
     categoria: {
@@ -50,19 +51,21 @@ export class CatalogoComponent implements OnInit {
     private _user: UserService,
     private _swal: SwalService,
     private _catalogo: CatalogoService,
-    private _modal: ModalService,
+    private _modalCatalogo: ModalService,
     private _unit: UnidadesMedidasService,
     private fb: FormBuilder
   ) { }
 
   //ngbNavItem
   Object = Object;
+  event = new EventEmitter<Event>();
   formFiltros: FormGroup;
   formProductos: FormGroup;
   filtroDefault: any = {};
   active = 1;
   loadingCategorias: boolean = false;
   loadingProductos: boolean = false;
+  title:string = "";
 
   ngOnInit(): void {
     this.getCategorias();
@@ -138,13 +141,22 @@ export class CatalogoComponent implements OnInit {
       Codigo_Barras: ['', Validators.required],
       Embalaje: ['', Validators.required],
       Tipo_Catalogo: ['', Validators.required],
+      FormCamposCategoria: this.fb.array([]),
       FormCamposSubcategoria: this.fb.array([])
     });
   }
 
-  subcatCampos() {
+  get arrayCamposCat() {
+    return this.formProductos.get('FormCamposCategoria') as FormArray;
+  }
+
+  get arrayCamposSubcat() {
+    return this.formProductos.get('FormCamposSubcategoria') as FormArray;
+  }
+
+  catSubcatCampos(tipo:string) {
     const formCampos = {};
-    this.camposSubcat.forEach(campo => {
+    this.campos[tipo].forEach(campo => {
       formCampos[campo.label] = campo.required=="Si" ?
         new FormControl(campo.valor || '',Validators.required):
         new FormControl(campo.valor || '')
@@ -153,17 +165,25 @@ export class CatalogoComponent implements OnInit {
     return this.fb.group(formCampos);
   }
 
-  newCampoSubcat() {
-    let field = this.arrayCamposSubcat;
-    field.push(this.subcatCampos());
+  newCampoCatSubcat(tipo:string) {
+    let field = (tipo=="cat")?this.arrayCamposCat:this.arrayCamposSubcat;
+    field.push(this.catSubcatCampos(tipo));
   }
 
-  get arrayCamposSubcat() {
-    return this.formProductos.get('FormCamposSubcategoria') as FormArray;
+  mostrarCampos(param,tipo:string,template?:any){
+    this._catalogo.getCampos(param,tipo).subscribe((res: any) => {
+      this.campos[tipo] = res.data;
+      this.newCampoCatSubcat(tipo);
+      if(template != undefined){
+        this._modalCatalogo.open(template, 'lg');
+      }
+    })
   }
 
   openConfirm(confirm: any, titulo: string, data?: any ) {
+    this.title = titulo;
     this.formProductos.reset();
+    this.arrayCamposCat.removeAt(0);
     this.arrayCamposSubcat.removeAt(0);
     let params={};
     if(titulo == "Agregar"){
@@ -171,7 +191,10 @@ export class CatalogoComponent implements OnInit {
         Id_Categoria: this.selectedCategory.categoria.id,
         Id_Subcategoria: this.selectedCategory.subcategoria.id
       });
-      params={ subcategoria:this.selectedCategory.subcategoria.id };
+      params={
+        subcategoria:this.selectedCategory.categoria.id ,
+        categoria:this.selectedCategory.subcategoria.id
+      };
     }else{
       this.formProductos.patchValue({
         Id_Producto: data.Id_Producto,
@@ -186,11 +209,26 @@ export class CatalogoComponent implements OnInit {
       });
       params={ producto:data.Id_Producto };
     }
-    this._catalogo.getCampos(params).subscribe((res: any) => {
-      this.camposSubcat = res.data;
-      this.newCampoSubcat();
-      this._modal.open(confirm, 'lg');
-    })
+    this.mostrarCampos(params,"cat",confirm);
+    this.mostrarCampos(params,"subcat",confirm);
+  }
+
+  openSubcatModal(template: any){
+    let params=(this.title == "Agregar")?
+      { subcategoria:this.selectedCategory.subcategoria.id }
+    :
+      { producto:this.formProductos.value.Id_Producto };
+
+    this.arrayCamposCat.removeAt(0);
+    this.arrayCamposSubcat.removeAt(0);
+    this._modalCatalogo.open(template, 'md');
+    this._modalCatalogo.modalRef.result.then((res: any) => {
+      this.mostrarCampos(params,"cat");
+      this.mostrarCampos(params,"subcat");
+    }, (reason) => {
+      this.mostrarCampos(params,"cat");
+      this.mostrarCampos(params,"subcat");
+    });
   }
 
   getCategorias() {
@@ -257,16 +295,18 @@ export class CatalogoComponent implements OnInit {
       })
   }
 
-
-
-  setProductos(){
+  saveProductos(){
     if(this.formProductos.valid){
-      let camposSubcategoria = this.camposSubcat.map((campo) => campo={
-        id:campo.vp_id || "",
-        subcategory_variables_id:campo.sv_id,
-        valor:this.arrayCamposSubcat.value[0][campo.label]
+      ["cat","subcat"].forEach(tipo => {
+        let campos = this.campos[tipo].map((campo) => campo={
+          id:campo.vp_id || "",
+          subcategory_variables_id:campo.sv_id,
+          category_variables_id:campo.cv_id,
+          valor:((tipo=="cat")?this.arrayCamposCat:this.arrayCamposSubcat).value[0][campo.label]
+        });
+        this.formProductos.value[(tipo=="cat")?"camposCategoria":"camposSubcategoria"] = campos;
       });
-      this.formProductos.value["camposSubcategoria"] = camposSubcategoria;
+      delete this.formProductos.value.FormCamposCategoria;
       delete this.formProductos.value.FormCamposSubcategoria;
       this._swal.show({
         title: '¿Estás seguro(a)?',
@@ -284,7 +324,7 @@ export class CatalogoComponent implements OnInit {
               timer: 1000,
               showCancel: false
             });
-            this._modal.close();
+            this._modalCatalogo.close();
           },(error) => {
             this._swal.show({
               icon: 'error',

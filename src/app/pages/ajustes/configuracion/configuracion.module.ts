@@ -41,6 +41,7 @@ import { LiquidacionConfigComponent } from './nomina/components/liquidacion-conf
 import { SalariosConfigComponent } from './nomina/components/salarios-config/salarios-config.component';
 import { TypeaheadPersonComponent } from './nomina/components/responsables-nomina-config/typeahead-person/typeahead-person.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
 
 
 @NgModule({
@@ -97,6 +98,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     MatIconModule,
     MatSlideToggleModule,
     CKEditorModule,
+    CatSubcatModule,
   ],
   exports: [
     CamposTercerosComponent

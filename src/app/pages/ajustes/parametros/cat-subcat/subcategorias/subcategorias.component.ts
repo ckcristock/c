@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { SwalService } from '../../informacion-base/services/swal.service';
+import { SwalService } from '../../../informacion-base/services/swal.service';
 import { environment } from 'src/environments/environment';
 import { Location } from '@angular/common';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
@@ -27,8 +27,9 @@ export class SubcategoriasComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
   @Input()
-  set reloadSubcategories(event: Event) {
-    if (event) {
+  set reloadSubcategories(param:{evento: Event,filtro?:string | ''}) {
+    if (param.evento) {
+      this.filters.nombre=param.filtro;
       this.getSubcategories();
       this.listCategories();
     }
@@ -78,7 +79,7 @@ export class SubcategoriasComponent implements OnInit {
     private route: ActivatedRoute,
     private _swalService: SwalService,
     private fb: FormBuilder,
-    private _modal: ModalService
+    private _modalSubcat: ModalService
   ) {
     this.company_id = this._user.user.person.company_worked.id;
   }
@@ -121,7 +122,7 @@ export class SubcategoriasComponent implements OnInit {
     }else{
       this.EditSubcategory(data);
     }
-    this._modal.open(content, 'lg');
+    this._modalSubcat.open(content, 'lg');
   }
 
   createForm() {
@@ -257,7 +258,7 @@ export class SubcategoriasComponent implements OnInit {
     this.form.reset();
     this.fieldDinamic.clear();
     this.getSubcategories(this.pagination.page);
-    this._modal.close();
+    this._modalSubcat.close();
   }
 
   normalize = (function () {

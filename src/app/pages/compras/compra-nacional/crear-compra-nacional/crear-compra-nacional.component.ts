@@ -13,10 +13,10 @@ import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
 import { BodegasService } from 'src/app/pages/ajustes/informacion-base/bodegas/bodegas.service.';
 import { ProductoService } from 'src/app/pages/inventario/services/producto.service';
 import { ModalService } from 'src/app/core/services/modal.service';
-import { CategoriasService } from 'src/app/pages/ajustes/parametros/categorias/categorias.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { ItemsComponent } from 'src/app/pages/crm/presupuesto/crear-presupuesto/components/items/items.component';
+import { CategoriasService } from 'src/app/pages/ajustes/parametros/cat-subcat/categorias/categorias.service';
 
 
 const MENSAJES_ERROR: any = {

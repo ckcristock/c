@@ -248,15 +248,15 @@
 
 <!-- Modals -->
 
-<ng-template #add let-modal>
+<ng-template #add let-modalCatalogo>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Registrar Producto</h4>
+    <h4 class="text-primary modal-title">{{ title }} Producto</h4>
     <button
       type="button"
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="modalCatalogo.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -340,7 +340,32 @@
         </mat-form-field>
       </div>
       <hr class="line" />
-      <span class="text-primary">Campos de la subcategoría</span>
+      <!-- <span class="text-primary">Campos de la subcategoría</span> -->
+      <ng-container formArrayName="FormCamposCategoria">
+        <ng-container
+          *ngFor="let campoControl of arrayCamposCat.controls; let i = index"
+        >
+          <div
+            class="row"
+            [formGroupName]="i"
+            *ngIf="campos.cat.length > 0; else notCatForm"
+          >
+            <ng-container *ngFor="let campo of campos.cat">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>{{ campo.label }}</mat-label>
+                <input
+                  type="{{ campo.type }}"
+                  formControlName="{{ campo.label }}"
+                  matInput
+                  placeholder=""
+                  autocomplete="off"
+                  [required]="campo.required == 'Si'"
+                />
+              </mat-form-field>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
       <ng-container formArrayName="FormCamposSubcategoria">
         <ng-container
           *ngFor="let campoControl of arrayCamposSubcat.controls; let i = index"
@@ -348,9 +373,9 @@
           <div
             class="row"
             [formGroupName]="i"
-            *ngIf="camposSubcat.length > 0; else notForm"
+            *ngIf="campos.subcat.length > 0; else notSubcatForm"
           >
-            <ng-container *ngFor="let campo of camposSubcat">
+            <ng-container *ngFor="let campo of campos.subcat">
               <mat-form-field class="col" appearance="outline">
                 <mat-label>{{ campo.label }}</mat-label>
                 <input
@@ -369,12 +394,12 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="modalCatalogo.close()">
       Cancelar
     </button>
     <button
       type="button"
-      (click)="setProductos()"
+      (click)="saveProductos()"
       [disabled]="formProductos.invalid"
       class="btn btn-primary"
     >
@@ -450,20 +475,25 @@
   </ul>
 </ng-template>
 
-<ng-template #openSubcat let-modalSubcat>
-  <div class="modal-header">
-    <button
-      type="button"
-      class="close"
-      data-dismiss="modal"
-      aria-label="Close"
-      (click)="modalSubcat.close()"
-    >
-      <span aria-hidden="true">&times;</span>
+<ng-template #openCat let-modalCat>
+  <div class="modal-body">
+    <app-categorias [reloadCategories]="{evento:event,filtro:selectedCategory.categoria.nombre}"></app-categorias>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modalCat.close()">
+      Salir
     </button>
   </div>
+</ng-template>
+
+<ng-template #openSubcat let-modalSubcat>
   <div class="modal-body">
-    <app-subcategorias></app-subcategorias>
+    <app-subcategorias [reloadSubcategories]="{evento:event,filtro:selectedCategory.subcategoria.nombre}"></app-subcategorias>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modalSubcat.close()">
+      Salir
+    </button>
   </div>
 </ng-template>
 
@@ -471,12 +501,22 @@
   <app-not-data [loading]="loadingCategorias"></app-not-data>
 </ng-template>
 
-<ng-template #notForm>
+<ng-template #notCatForm>
+  <div class="alert alert-warning" role="alert">
+    La categoría selecionada no tiene campos asignados. Por favor vaya al
+    <a type="button" class="alert-link" (click)="openCatModal(openCcat)">
+      módulo de Categorías
+    </a>
+    y verifique.
+  </div>
+</ng-template>
+
+<ng-template #notSubcatForm>
   <div class="alert alert-warning" role="alert">
     La subcategoría selecionada no tiene campos asignados. Por favor vaya al
-    <button type="button" (click)="_modal.open(openSubcat, 'md')">
+    <a type="button" class="alert-link" (click)="openSubcatModal(openSubcat)">
       módulo de Subcategorías
-    </button>
+    </a>
     y verifique.
   </div>
 </ng-template>

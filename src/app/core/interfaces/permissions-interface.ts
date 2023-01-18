@@ -6,5 +6,6 @@ export interface Permissions {
         open?: boolean,
         show?: boolean,
         add?: boolean,
+        approve_product_categories?: boolean,
     }
 }

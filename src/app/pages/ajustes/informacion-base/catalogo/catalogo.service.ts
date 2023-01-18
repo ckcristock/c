@@ -21,8 +21,9 @@ export class CatalogoService {
     return this.http.get(`${environment.base_url}/get-estados-producto`);
   }
 
-  getCampos(params = {}){
-    return this.http.get(`${environment.base_url}/vars-subcategoria-producto`,{params});
+  getCampos(params = {},tipo = ""){
+    let ruta = (tipo == "cat")?"":"sub"
+    return this.http.get(`${environment.base_url}/vars-${ruta}categoria-producto`,{params});
   }
 
   changeEstado( data:any ) {

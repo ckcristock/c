@@ -38,6 +38,9 @@ export class CrearViaticosComponent implements OnInit {
   person_selected: any;
   form: FormGroup;
   value: any;
+  acomodation_for_hotel: any[] = []
+  hotels_list: any[] = []
+
   constructor(
     private roter: Router,
     private _swal: SwalService,
@@ -68,7 +71,6 @@ export class CrearViaticosComponent implements OnInit {
   getPeople() {
     this._viatico.getPeople().subscribe((res: any) => {
       this.people = res.data;
-      console.log(this.people)
     });
   }
 
@@ -121,6 +123,9 @@ export class CrearViaticosComponent implements OnInit {
       .getHotels()
       .toPromise()
       .then((res: any) => {
+        this.hotels_list = Array.from(new
+          Set([...res.data.nacional, ...res.data.internacional])
+        )
         help.hospedajeHelper.consts.national_hotels = res.data.nacional;
         help.hospedajeHelper.consts.international_hotels =
           res.data.internacional;
@@ -148,6 +153,20 @@ export class CrearViaticosComponent implements OnInit {
           ? help.hospedajeHelper.consts.national_hotels
           : help.hospedajeHelper.consts.international_hotels,
     });
+  }
+
+  seleccionHotel(e, item) {
+    this.hotels_list.forEach(element => {
+      if (element.id == e.target.value) {
+        this.acomodation_for_hotel = element.accommodations
+      }
+    });
+    item.get('accommodation').valueChanges.subscribe(r => {
+      let rate = this.acomodation_for_hotel.find(e => e.id == r)
+      item.patchValue({
+        rate: rate.pivot.price
+      })
+    })
   }
 
   /***************** TRANSPORTE TERRESTRE ****************/
@@ -229,22 +248,22 @@ export class CrearViaticosComponent implements OnInit {
       title: '¿Estás seguro(a)?',
       showCancel: true,
       text: `Vamos a ${this.id ? 'editar' : 'crear'
-    } una solicitud de viático`,
+        } una solicitud de viático`,
     }).then((r) => {
-        if (r.isConfirmed) {
-          if (this.id) {
-            this._viatico.actualizarViatico(this.id, this.form.value).subscribe(
-              (res: any) => this.showSucess(),
-              (err) => this.showError(err)
-            );
-          } else {
-            this._viatico.crearViatico(this.form.value).subscribe(
-              (res: any) => this.showSucess(),
-              (err) => this.showError(err)
-            );
-          }
+      if (r.isConfirmed) {
+        if (this.id) {
+          this._viatico.actualizarViatico(this.id, this.form.value).subscribe(
+            (res: any) => this.showSucess(),
+            (err) => this.showError(err)
+          );
+        } else {
+          this._viatico.crearViatico(this.form.value).subscribe(
+            (res: any) => this.showSucess(),
+            (err) => this.showError(err)
+          );
         }
-      });
+      }
+    });
   }
 
   showSucess() {

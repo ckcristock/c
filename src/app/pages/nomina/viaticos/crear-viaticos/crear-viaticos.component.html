@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-body">
     <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">{{title}}</h4>
+      <h4 class="text-primary">{{ title }}</h4>
       <mat-form-field class="col-md-3 pr-0 pb-0" appearance="outline">
         <mat-label>Orden de trabajo</mat-label>
         <mat-select>
@@ -189,7 +189,7 @@
               <th class="col-md-2 align-middle">Hotel</th>
               <th class="col-md-2 align-middle">Dirección</th>
               <th class="col-md-1 align-middle">Teléfono</th>
-              <th class="col-md-1 align-middle">T. Acom.</th>
+              <th class="col-md-1 align-middle">T. Alojam.</th>
               <th class="col-md-1 align-middle">Tarifa</th>
               <th class="col-md-1 align-middle"># Días</th>
               <th class="col-md-1 align-middle">Desayuno</th>
@@ -219,7 +219,9 @@
                     class="form-control form-control-sm"
                     id="hotel_hospedaje"
                     formControlName="hotel_id"
+                    (change)="seleccionHotel($event, item)"
                   >
+                    <!-- vas a buscar las acomodaciones de ese hotel y vas a llenar el ngfor de las acomodaciones con ese array -->
                     <option
                       *ngFor="let d of item['controls']['hoteles']['value']"
                       [value]="d.id"
@@ -250,8 +252,12 @@
                     formControlName="accommodation"
                     id="tipo_acomodacion_hospedaje"
                   >
-                    <option value="Doble">Doble</option>
-                    <option value="Sencilla" selected>Sencilla</option>
+                    <option
+                      *ngFor="let item of acomodation_for_hotel"
+                      [value]="item.id"
+                    >
+                      {{ item.name }}
+                    </option>
                   </select>
                 </td>
                 <td [formGroupName]="i">
@@ -664,9 +670,11 @@
           <tbody>
             <tr class="text-center">
               <th class="align-middle col-2">Hospedaje</th>
-              <td class="col-2">{{ form.get("total_hotels_usd").value | currency }}</td>
               <td class="col-2">
-                {{ form.get("total_hotels_cop").value | currency: "COP" }}
+                {{ form.get("total_hotels_usd").value | currency }}
+              </td>
+              <td class="col-2">
+                {{ form.get("total_hotels_cop").value | currency : "COP" }}
               </td>
               <th class="align-middle col-2">Lavanderia</th>
               <td class="col-2">
@@ -686,9 +694,9 @@
             </tr>
             <tr class="text-center">
               <th class="align-middle">Transporte terrestre</th>
-              <td>{{0 | currency}}</td>
+              <td>{{ 0 | currency }}</td>
               <td>
-                {{ form.get("total_transports_cop").value | currency: "COP" }}
+                {{ form.get("total_transports_cop").value | currency : "COP" }}
               </td>
               <th class="align-middle">Sobre equipaje</th>
               <td>
@@ -709,7 +717,9 @@
             <tr class="text-center">
               <th class="align-middle">Taxis</th>
               <td>{{ form.get("total_taxis_usd").value | currency }}</td>
-              <td>{{ form.get("total_taxis_cop").value | currency: "COP" }}</td>
+              <td>
+                {{ form.get("total_taxis_cop").value | currency : "COP" }}
+              </td>
               <th class="align-middle">Otros gastos</th>
               <td>
                 <input
@@ -732,12 +742,12 @@
                 {{ form.get("total_feedings_usd").value | currency }}
               </td>
               <td>
-                {{ form.get("total_feedings_cop").value | currency: "COP" }}
+                {{ form.get("total_feedings_cop").value | currency : "COP" }}
               </td>
 
               <th class="align-middle">Total</th>
               <th>{{ form.get("total_usd").value | currency }}</th>
-              <th>{{ form.get("total_cop").value | currency: "COP" }}</th>
+              <th>{{ form.get("total_cop").value | currency : "COP" }}</th>
             </tr>
             <tr></tr>
           </tbody>

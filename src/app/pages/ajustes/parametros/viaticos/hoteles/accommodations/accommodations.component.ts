@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { data } from 'jquery';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
@@ -14,12 +13,8 @@ export class AccommodationsComponent implements OnInit {
   @Output() saveEvent = new EventEmitter<any> ();
   @Output() paginationEvent = new EventEmitter<any> ();
   @Output() anularOActivarEvent = new EventEmitter<any> ();
+
   loading: boolean = false;
-  /* pagination = {
-    pageSize: 10,
-    page: 1,
-    collectionSize: 0
-  } */
   filtro: any = {
     value: ''
   }
@@ -46,7 +41,6 @@ export class AccommodationsComponent implements OnInit {
   getValue(value: any){
     this.title = 'Editar'
     this.value = {...value}
-    console.log('value', value);
     this.form.patchValue({
       id: value.id,
       name: value.name
@@ -54,13 +48,11 @@ export class AccommodationsComponent implements OnInit {
   }
 
   getValues($event){
-    console.log('getValues', this.pagination);
-    console.log('event', $event);
     this.paginationEvent.emit($event);
   }
 
   save(){
-    this.saveEvent.emit(this.form.value)
+    this.saveEvent.emit(this.form)
   }
 
   anularOActivar(value: any, action: any){

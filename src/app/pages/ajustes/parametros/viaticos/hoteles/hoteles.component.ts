@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { Observable } from 'rxjs';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { AccommodationsComponent } from './accommodations/accommodations.component';
 
 @Component({
   selector: 'app-hoteles',
@@ -15,6 +16,7 @@ import { ModalService } from 'src/app/core/services/modal.service';
 })
 export class HotelesComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  @ViewChild(AccommodationsComponent) childAlojamiento: AccommodationsComponent;
   matPanel = false;
   filteredOptions: Observable<string[]>;
   openClose() {
@@ -84,7 +86,6 @@ export class HotelesComponent implements OnInit {
 
   closeResult = '';
   public openConfirm(confirm, titulo) {
-    console.log('confirm', confirm);
     this.title = titulo
     if (titulo == 'Ver hotel') {
       this._modal.open(
@@ -102,7 +103,6 @@ export class HotelesComponent implements OnInit {
   }
 
   private getDismissReason(reason: any) {
-    console.log('reason_onClose', reason);
     this.form.reset();
     this.form.removeControl('alojamientos')
     this.form.setControl('alojamientos', this.fb.array([]))
@@ -141,8 +141,6 @@ export class HotelesComponent implements OnInit {
       landline: ['', Validators.required],
       address: ['', Validators.required],
       phone: ['', Validators.required],
-      /* simple_rate: ['', Validators.required],
-      double_rate: ['', Validators.required], */
       breakfast: ['', Validators.required],
       accommodation: ['', Validators.required],
       alojamientos: this.fb.array([])
@@ -153,28 +151,24 @@ export class HotelesComponent implements OnInit {
     })
   }
 
-  aux(e) {
-    console.log('e', e);
+  /**
+   * se recibe solo el evento, porque el objeto como tal no señala si fue checked o no
+   */
+  selectAccommodation(e) {
     if (e._selected) {
       let subItems = this.form.get('alojamientos') as FormArray
       let elem = this.accommodations.find(ele=>ele.id==e.value)
-      console.log('ele', elem);
       subItems.push(this.patchValues(elem.id,elem.name, null))
     } else {
       this.form.controls.alojamientos.value.forEach((element, index) => {
         if (element.id == e.value) {
           let a = this.form.get('alojamientos') as FormArray;
-          //let b = a.controls[index] as FormGroup
           a.removeAt(index)
         }
       });
-      console.log('alojam', this.form.value.alojamientos);
     }
-    console.log('alojamientos', this.form.get('alojamientos'));
-    /* this.accommodations
-    this.form.removeControl('alojamientos')
-    this.form.setControl('alojamientos', this.fb.array([])) */
   }
+
   patchValues(id, name, price) {
     return this.fb.group({
       id: [id],
@@ -216,28 +210,16 @@ export class HotelesComponent implements OnInit {
       double_rate: this.hotel.double_rate,
       breakfast: this.hotel.breakfast,
       accommodation: this.hotel.accommodations.map((x: any) => x.id),
-      //accommodation2: this.hotel.accommodations.map(({id, name, pivot}) => ({id, name, price: pivot.price!= undefined ? pivot.price : 0})),
-      //accommodation: this.hotel.accommodations.map(x => x.id),
     })
     this.hotel.accommodations.forEach(element => {
       let subItems = this.form.get('alojamientos') as FormArray
       subItems.push(this.patchValues(element.id, element.name, element.pivot.price))
     });
-    /* this.patch() */
-    console.log('hotel', this.hotel);
-    console.log('form', this.form.value);
-    console.log('alojamientos', this.form.value.accommodation);
   }
 
   save() {
-    //console.log(this.form.get('city_id').value)
-    /* this.form.patchValue({
-      city_id: this.form.get('city_id').value.value
-    }) */
-    console.log(this.form.value)
     this._hoteles.createHotel(this.form.value).subscribe((r: any) => {
       this.modalService.dismissAll();
-      console.log(r)
       this.getHotels();
       this.form.reset();
       this._swal.show({
@@ -250,18 +232,9 @@ export class HotelesComponent implements OnInit {
     })
   }
 
-  /* patch() {
-    const control = <FormArray>this.form.get('alojamientos');
-    this.form.value.alojamientos.forEach(x => {
-      control.push(this.patchValues(x.price))
-    })
-  } */
-
-
-
+  //el event está enviando el this.form del hijo
   saveAccommodation($event) {
-    console.log('event', $event);
-    this._hoteles.createUpdateAccomodation($event)
+    this._hoteles.createUpdateAccomodation($event.value)
       .subscribe((res: any) => {
         if (res.status) {
           this._swal.show({
@@ -271,6 +244,7 @@ export class HotelesComponent implements OnInit {
             showCancel: false
           })
           this.getAccommodation();
+          $event.reset();
         } else {
           this._swal.show({
             title: 'Alojamiento',
@@ -283,8 +257,6 @@ export class HotelesComponent implements OnInit {
   }
 
   deleteAccommodation($event) {
-    console.log('event', $event)
-
     if ($event.action == 'Inactivo') {
       this._hoteles.deleteAccommodation($event.value.id)
         .subscribe((res: any) => {
@@ -306,10 +278,8 @@ export class HotelesComponent implements OnInit {
           }
         })
     } else {
-      console.log('value', $event.value);
       this._hoteles.restoreAccommodation($event.value)
         .subscribe((res: any) => {
-          console.log(res)
           if (res.status) {
             this._swal.show({
               title: 'Alojamiento',

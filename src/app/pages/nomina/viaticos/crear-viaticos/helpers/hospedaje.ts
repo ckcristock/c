@@ -3,7 +3,6 @@ import {
   FormGroup,
   FormBuilder,
   FormArray,
-  FormGroupName,
 } from '@angular/forms';
 
 export const hospedajeHelper = {
@@ -44,14 +43,14 @@ export const hospedajeHelper = {
       tipo: ['Seleccione'],
       hotel_id: [],
       phone: [],
-      rate: [],
+      rate: [0],
       hoteles: [],
       address: [],
       n_night: [0],
       total: [0],
       breakfast: [],
       who_cancels: [],
-      accommodation: ['Sencilla'],
+      accommodation: [''],
     });
   },
 
@@ -61,26 +60,25 @@ export const hospedajeHelper = {
       group.patchValue({
         address: hotel.address,
         phone: hotel.phone,
-        rate: hotel.simple_rate,
         breakfast: hotel.breakfast,
       });
     });
     group.get('n_night').valueChanges.subscribe((value) => {
       this.subtotalHotel(group, value, group.value.rate, form, list);
     });
-    group.get('accommodation').valueChanges.subscribe((value) => {
+    /* group.get('accommodation').valueChanges.subscribe((value) => {
       let hotel = group
         .get('hoteles')
         .value.find((res) => res.accommodation == value);
       group.patchValue({
         rate: value == 'Sencilla' ? hotel.simple_rate : hotel.double_rate,
       });
-    });
+    }); */
     group.get('rate').valueChanges.subscribe((value) => {
       this.subtotalHotel(group, value, group.value.n_night, form, list);
     });
     group.get('n_night').valueChanges.subscribe((value) => {
-      this.subtotalHotel(group, value, group.value.rate);
+      this.subtotalHotel(group, value, group.value.rate, form, list);
     });
     /* group.get('who_cancels').valueChanges.subscribe((value) => {
       if (value == 'agencia') {

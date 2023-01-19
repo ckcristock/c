@@ -74,7 +74,6 @@
               <span *ngFor="let item of hotel.accommodations"
                 >{{ item.name }}.
               </span>
-              <!--               <div *ngFor="let tipoAloj of hotel.accommodation">{{ tipoAloj.name }}</div> -->
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -158,6 +157,7 @@
             formControlName="name"
             required
             autocomplete="off"
+
           />
         </mat-form-field>
         <!-- <mat-form-field class="col" appearance="outline">
@@ -228,20 +228,6 @@
             <mat-option value="No">No</mat-option>
           </mat-select>
         </mat-form-field>
-        <!--         <div class="col">
-          <ng-select
-            [items]="accommodations"
-            formControlName="accommodation"
-            bindLabel="name"
-            bindValue="id"
-            appearance="outline"
-            [appendTo]="'body'"
-            placeholder="Tipo de alojamiento"
-            [multiple]="true"
-            loadingText="loading "
-          >
-          </ng-select>
-        </div> -->
 
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de alojamiento</mat-label>
@@ -249,7 +235,7 @@
             <mat-option
               #matOption
               *ngFor="let tipo of accommodations"
-              (click)="aux(matOption)"
+              (click)="selectAccommodation(matOption)"
               [value]="tipo.id"
             >
               {{ tipo.name }}
@@ -281,19 +267,20 @@
       </div>
     </form>
   </div>
-  <div class="modal-footer" *ngIf=" title!='Ver hotel' " >
+  <div class="modal-footer"  >
     <button
       type="button"
       class="btn btn-danger"
       (click)="modal.dismiss('Cross click')"
     >
-      Cancelar
+      {{(title=='Ver hotel') ? 'Cerrar' : 'Cancelar'}}
     </button>
     <button
       type="button"
       (click)="save()"
       [disabled]="!form.valid"
       class="btn btn-primary"
+      *ngIf=" title!='Ver hotel' "
     >
       Guardar
     </button>

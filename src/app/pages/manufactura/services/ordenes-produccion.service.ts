@@ -30,4 +30,8 @@ export class OrdenesProduccionService {
   updateWorkOrder(id, data) {
     return this.http.put(`${environment.base_url}/work-orders/${id}`, data);
   }
+
+  uploadBlueprint(data) {
+    return this.http.post(`${environment.base_url}/work-orders-blueprints`, data)
+  }
 }

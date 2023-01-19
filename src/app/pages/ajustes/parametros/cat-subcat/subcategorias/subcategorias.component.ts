@@ -139,9 +139,9 @@ export class SubcategoriasComponent implements OnInit {
   dinamicFields() {
     let field = this.fb.group({
       id: [''],
-      label: [''],
-      type: [''],
-      required: [''],
+      label: ['',Validators.required],
+      type: ['',Validators.required],
+      required: ['',Validators.required],
     });
     return field;
   }

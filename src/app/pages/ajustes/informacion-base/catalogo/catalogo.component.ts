@@ -1,7 +1,9 @@
+import { Template } from '@angular/compiler/src/render3/r3_ast';
 import { noUndefined } from '@angular/compiler/src/util';
-import { Component, ElementRef, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { ModalService } from 'src/app/core/services/modal.service';
@@ -18,6 +20,8 @@ import { CatalogoService } from './catalogo.service';
 })
 export class CatalogoComponent implements OnInit {
   @ViewChild('matPanel') matPanel: MatExpansionPanel;
+
+  private modalRef: NgbModalRef;
 
   public Categorias: any[] = [];
   public Subcategorias: any[] = [];
@@ -66,6 +70,7 @@ export class CatalogoComponent implements OnInit {
   loadingCategorias: boolean = false;
   loadingProductos: boolean = false;
   title:string = "";
+
 
   ngOnInit(): void {
     this.getCategorias();
@@ -170,21 +175,26 @@ export class CatalogoComponent implements OnInit {
     field.push(this.catSubcatCampos(tipo));
   }
 
-  mostrarCampos(param,tipo:string,template?:any){
-    this._catalogo.getCampos(param,tipo).subscribe((res: any) => {
-      this.campos[tipo] = res.data;
-      this.newCampoCatSubcat(tipo);
-      if(template != undefined){
-        this._modalCatalogo.open(template, 'lg');
-      }
-    })
+  mostrarCampos(param,tipos:string[],template?:any){
+      this._catalogo.getCampos(param).subscribe((res: any) => {
+        this.campos = res.data;
+        tipos.forEach(tipo =>{
+          if(tipo=="cat"){
+            this.arrayCamposCat.removeAt(0);
+          }else{
+            this.arrayCamposSubcat.removeAt(0);
+          }
+          this.newCampoCatSubcat(tipo);
+        });
+        if(template != undefined){
+          this._modalCatalogo.open(template, 'lg');
+        }
+    });
   }
 
   openConfirm(confirm: any, titulo: string, data?: any ) {
     this.title = titulo;
     this.formProductos.reset();
-    this.arrayCamposCat.removeAt(0);
-    this.arrayCamposSubcat.removeAt(0);
     let params={};
     if(titulo == "Agregar"){
       this.formProductos.patchValue({
@@ -192,8 +202,8 @@ export class CatalogoComponent implements OnInit {
         Id_Subcategoria: this.selectedCategory.subcategoria.id
       });
       params={
-        subcategoria:this.selectedCategory.categoria.id ,
-        categoria:this.selectedCategory.subcategoria.id
+        categoria:this.selectedCategory.categoria.id ,
+        subcategoria:this.selectedCategory.subcategoria.id
       };
     }else{
       this.formProductos.patchValue({
@@ -209,25 +219,24 @@ export class CatalogoComponent implements OnInit {
       });
       params={ producto:data.Id_Producto };
     }
-    this.mostrarCampos(params,"cat",confirm);
-    this.mostrarCampos(params,"subcat",confirm);
+    this.mostrarCampos(params,["cat","subcat"],confirm);
   }
 
-  openSubcatModal(template: any){
+  openCatSubcatModal(template: any,tipo:string){
     let params=(this.title == "Agregar")?
-      { subcategoria:this.selectedCategory.subcategoria.id }
+      {
+        categoria:this.selectedCategory.categoria.id ,
+        subcategoria:this.selectedCategory.subcategoria.id
+      }
     :
       { producto:this.formProductos.value.Id_Producto };
 
-    this.arrayCamposCat.removeAt(0);
-    this.arrayCamposSubcat.removeAt(0);
     this._modalCatalogo.open(template, 'md');
-    this._modalCatalogo.modalRef.result.then((res: any) => {
-      this.mostrarCampos(params,"cat");
-      this.mostrarCampos(params,"subcat");
+    this.modalRef=this._modalCatalogo.modalRef;
+    this.modalRef.result.then((res: any) => {
+      this.mostrarCampos(params,[tipo]);
     }, (reason) => {
-      this.mostrarCampos(params,"cat");
-      this.mostrarCampos(params,"subcat");
+      this.mostrarCampos(params,[tipo]);
     });
   }
 
@@ -295,7 +304,7 @@ export class CatalogoComponent implements OnInit {
       })
   }
 
-  saveProductos(){
+  saveProductos(modal: any){
     if(this.formProductos.valid){
       ["cat","subcat"].forEach(tipo => {
         let campos = this.campos[tipo].map((campo) => campo={
@@ -317,6 +326,7 @@ export class CatalogoComponent implements OnInit {
         if (result.isConfirmed) {
           this._catalogo.saveProduct(this.formProductos.value).subscribe((r: any) => {
             this.getProducts(this.pagination.page);
+            modal.close();
             this._swal.show({
               icon: 'success',
               title: 'Tarea completada con éxito!',
@@ -324,7 +334,6 @@ export class CatalogoComponent implements OnInit {
               timer: 1000,
               showCancel: false
             });
-            this._modalCatalogo.close();
           },(error) => {
             this._swal.show({
               icon: 'error',
@@ -338,9 +347,9 @@ export class CatalogoComponent implements OnInit {
       })
     }else{
       this._swal.show({
-        icon: 'success',
-        title: 'Tarea completada con éxito!',
-        text: 'El producto ha sido registrado con éxito.',
+        icon: 'error',
+        title: 'Validación no superada!',
+        text: 'El producto no ha sido registrado correctamente. Por favor verifique la información y vuelva a intentarlo.',
         timer: 1000,
         showCancel: false
       });

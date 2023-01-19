@@ -340,55 +340,57 @@
         </mat-form-field>
       </div>
       <hr class="line" />
-      <!-- <span class="text-primary">Campos de la subcategoría</span> -->
-      <ng-container formArrayName="FormCamposCategoria">
-        <ng-container
-          *ngFor="let campoControl of arrayCamposCat.controls; let i = index"
-        >
-          <div
-            class="row"
-            [formGroupName]="i"
-            *ngIf="campos.cat.length > 0; else notCatForm"
+  <!-- <span class="text-primary">Campos de la subcategoría</span> -->
+      <ng-container
+        *ngIf="(campos.cat.length + campos.subcat.length) > 0; else notCatSubcatForm"
+      >
+        <ng-container formArrayName="FormCamposCategoria" *ngIf="campos.cat.length > 0; else notCatForm">
+          <ng-container
+            *ngFor="let campoControl of arrayCamposCat.controls; let i = index"
           >
-            <ng-container *ngFor="let campo of campos.cat">
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>{{ campo.label }}</mat-label>
-                <input
-                  type="{{ campo.type }}"
-                  formControlName="{{ campo.label }}"
-                  matInput
-                  placeholder=""
-                  autocomplete="off"
-                  [required]="campo.required == 'Si'"
-                />
-              </mat-form-field>
-            </ng-container>
-          </div>
+              <div
+                class="row"
+                [formGroupName]="i"
+              >
+                <ng-container *ngFor="let campo of campos.cat">
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>{{ campo.label }}</mat-label>
+                    <input
+                      type="{{ campo.type }}"
+                      formControlName="{{ campo.label }}"
+                      matInput
+                      placeholder=""
+                      autocomplete="off"
+                      [required]="campo.required == 'Si'"
+                    />
+                  </mat-form-field>
+                </ng-container>
+              </div>
+          </ng-container>
         </ng-container>
-      </ng-container>
-      <ng-container formArrayName="FormCamposSubcategoria">
-        <ng-container
-          *ngFor="let campoControl of arrayCamposSubcat.controls; let i = index"
-        >
-          <div
-            class="row"
-            [formGroupName]="i"
-            *ngIf="campos.subcat.length > 0; else notSubcatForm"
+        <ng-container formArrayName="FormCamposSubcategoria" *ngIf="campos.subcat.length > 0; else notSubcatForm">
+          <ng-container
+            *ngFor="let campoControl of arrayCamposSubcat.controls; let i = index"
           >
-            <ng-container *ngFor="let campo of campos.subcat">
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>{{ campo.label }}</mat-label>
-                <input
-                  type="{{ campo.type }}"
-                  formControlName="{{ campo.label }}"
-                  matInput
-                  placeholder=""
-                  autocomplete="off"
-                  [required]="campo.required == 'Si'"
-                />
-              </mat-form-field>
-            </ng-container>
-          </div>
+            <div
+              class="row"
+              [formGroupName]="i"
+            >
+              <ng-container *ngFor="let campo of campos.subcat">
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>{{ campo.label }}</mat-label>
+                  <input
+                    type="{{ campo.type }}"
+                    formControlName="{{ campo.label }}"
+                    matInput
+                    placeholder=""
+                    autocomplete="off"
+                    [required]="campo.required == 'Si'"
+                  />
+                </mat-form-field>
+              </ng-container>
+            </div>
+          </ng-container>
         </ng-container>
       </ng-container>
     </form>
@@ -399,7 +401,7 @@
     </button>
     <button
       type="button"
-      (click)="saveProductos()"
+      (click)="saveProductos(modalCatalogo)"
       [disabled]="formProductos.invalid"
       class="btn btn-primary"
     >
@@ -501,23 +503,36 @@
   <app-not-data [loading]="loadingCategorias"></app-not-data>
 </ng-template>
 
+<ng-template #notCatSubcatForm>
+  <div class="alert alert-warning" role="alert">
+    No tiene campos asignados. Si lo desea puede ir al
+    <a type="button" class="alert-link" (click)="openCatSubcatModal(openCat,'cat')">
+      módulo de Categorías
+    </a> o al
+    <a type="button" class="alert-link" (click)="openCatSubcatModal(openSubcat,'subcat')">
+      módulo de Subcategorías
+    </a>
+    y verificar que sean los campos correctos.
+  </div>
+</ng-template>
+
 <ng-template #notCatForm>
   <div class="alert alert-warning" role="alert">
-    La categoría selecionada no tiene campos asignados. Por favor vaya al
-    <a type="button" class="alert-link" (click)="openCatModal(openCcat)">
+    La categoría selecionada no tiene campos asignados. Si lo desea puede ir al
+    <a type="button" class="alert-link" (click)="openCatSubcatModal(openCat,'cat')">
       módulo de Categorías
     </a>
-    y verifique.
+    y verificar que sean los campos correctos.
   </div>
 </ng-template>
 
 <ng-template #notSubcatForm>
   <div class="alert alert-warning" role="alert">
-    La subcategoría selecionada no tiene campos asignados. Por favor vaya al
-    <a type="button" class="alert-link" (click)="openSubcatModal(openSubcat)">
+    La subcategoría selecionada no tiene campos asignados. Si lo desea puede ir al
+    <a type="button" class="alert-link" (click)="openCatSubcatModal(openSubcat,'subcat')">
       módulo de Subcategorías
     </a>
-    y verifique.
+    y verificar que sean los campos correctos.
   </div>
 </ng-template>
 

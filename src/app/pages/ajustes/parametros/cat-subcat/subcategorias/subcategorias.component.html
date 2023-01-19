@@ -213,9 +213,8 @@
         <ng-container *ngIf="fieldDinamic.controls.length; else sinDatos">
           <ng-container
             *ngFor="let item of fieldDinamic.controls; let i = index"
-            [formGroupName]="i"
           >
-            <div class="col-md-11">
+            <div class="col-md-11" [formGroupName]="i">
               <div class="row">
                 <mat-form-field class="col-4" appearance="outline">
                   <mat-label>Nombre</mat-label>
@@ -267,10 +266,10 @@
       type="button"
       (click)="SaveSubcategory()"
       class="btn btn-primary"
+      [disabled]="form.invalid"
     >
       Guardar
     </button>
-      <!-- [disabled]="!form.valid" -->
   </div>
 </ng-template>
 

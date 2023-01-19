@@ -19,7 +19,7 @@ export class ModalService {
   }
   close() {
     /* this.modalService.dismissAll(); */
-    this.modalRef.close(this.modalRef);
+    this.modalRef.dismiss(this.modalRef);
   }
   openSm(content) {
     this.modalService.open(content, { size: 'sm' });

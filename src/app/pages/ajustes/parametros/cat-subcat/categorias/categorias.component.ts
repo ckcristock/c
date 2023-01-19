@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
@@ -27,6 +27,14 @@ export class CategoriasComponent implements OnInit {
   @ViewChild('modalCategoriaEditar') modalCategoriaEditar: any;
   @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
+
+  @Input()
+  set reloadCategories(param:{evento: Event,filtro?:string | ''}) {
+    if (param.evento) {
+      this.filters.nombre=param.filtro;
+      this.getCategories();
+    }
+  }
 
   //Variables para filtros
   public SubcategoriasSeleccionadas: any = [];
@@ -123,9 +131,9 @@ export class CategoriasComponent implements OnInit {
   dinamicFields() {
     let field = this.fb.group({
       id: [''],
-      label: [''],
-      type: [''],
-      required: [''],
+      label: ['',Validators.required],
+      type: ['',Validators.required],
+      required: ['',Validators.required],
     });
     return field;
   }
@@ -171,32 +179,41 @@ export class CategoriasComponent implements OnInit {
   }
 
   saveCategory() {
-    /* let datos = {
-      modulo: 'Categoria',
-      datos: this.form.value,
-      subcategorias: this.form.get('Subcategorias').value
-    }
-    this.http
-      .post(
-        environment.ruta + 'php/categoria_nueva/guardar_categoria_nueva.php',
-        datos
-      ) */
+    if(this.form.valid){
+      /* let datos = {
+        modulo: 'Categoria',
+        datos: this.form.value,
+        subcategorias: this.form.get('Subcategorias').value
+      }
+      this.http
+        .post(
+          environment.ruta + 'php/categoria_nueva/guardar_categoria_nueva.php',
+          datos
+        ) */
 
-    this._categorias.saveCategoria(this.form.value)
-      .subscribe((res: any) => {
-        this._swal.show({
-          icon: 'success',
-          title: 'Categoría creada con éxito',
-          text: res.data,
-          timer: 1000,
-          showCancel: false
-        })
-        this.form.reset();
-        this.fieldDinamic.clear();
-        this.getCategories(this.pagination.page);
-        this._modalCat.close();
+      this._categorias.saveCategoria(this.form.value)
+        .subscribe((res: any) => {
+          this._swal.show({
+            icon: 'success',
+            title: 'Categoría creada con éxito',
+            text: res.data,
+            timer: 1000,
+            showCancel: false
+          })
+          this.form.reset();
+          this.fieldDinamic.clear();
+          this.getCategories(this.pagination.page);
+          this._modalCat.close();
+        });
+      this.getCategories();
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Validación no superada',
+        text: 'Por favor verifique de nuevo la información.',
+        showCancel: false
       });
-    this.getCategories();
+    }
   }
 
   EditarCategoria(categoria /* id */) {

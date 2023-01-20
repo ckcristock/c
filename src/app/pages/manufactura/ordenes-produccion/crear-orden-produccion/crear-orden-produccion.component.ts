@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
+import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { MunicipiosService } from 'src/app/pages/ajustes/configuracion/departamentos-municipios/municipios/municipios.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { Texteditor2Service } from 'src/app/pages/ajustes/informacion-base/services/texteditor2.service';
@@ -29,7 +30,8 @@ export class CrearOrdenProduccionComponent implements OnInit {
   datosCabecera = {
     Titulo: 'Nueva orden de producción',
     Fecha: new Date(),
-    Codigo: ''
+    Codigo: '',
+    CodigoFormato: ''
   }
   constructor(
     private fb: FormBuilder,
@@ -40,6 +42,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
     public _texteditor: Texteditor2Service,
     private _swal: SwalService,
     public router: Router,
+    public _consecutivos: ConsecutivosService,
     private route: ActivatedRoute,
   ) {
     this.path = this.route.snapshot.url[1].path;
@@ -58,16 +61,20 @@ export class CrearOrdenProduccionComponent implements OnInit {
     }
   }
 
+  getConsecutivo() {
+    this._consecutivos.getConsecutivo('work_orders').subscribe((r:any) => {
+      this.datosCabecera.CodigoFormato = r.data.format_code
+      this.form.patchValue({format_code: this.datosCabecera.CodigoFormato})
+      if (this.path != 'editar') {
+        let con = this._consecutivos.construirConsecutivo(r.data);
+        this.datosCabecera.Codigo = con
+      }
+    })
+  }
+
   getData() {
     this.loading = true;
-    if (this.path != 'editar') {
-      this._work_order.getLastId().subscribe((res: any) => {
-        this.datosCabecera.Codigo = 'O.P' + (res.data.id + 1)
-        this.form.patchValue({
-          code: this.datosCabecera.Codigo
-        })
-      })
-    }
+    this.getConsecutivo();
     this._quotation.getAllQuotations().subscribe((res: any) => {
       this.quotations = res.data
     })
@@ -124,7 +131,8 @@ export class CrearOrdenProduccionComponent implements OnInit {
       technical_requirements: ['', Validators.required],
       legal_requirements: ['', Validators.required],
       date: [new Date(), Validators.required],
-      code: ['', Validators.required],
+      code: [''],
+      format_code: [''],
     })
     const type = this.form.get('type')
     const third_party_id = this.form.get('third_party_id')

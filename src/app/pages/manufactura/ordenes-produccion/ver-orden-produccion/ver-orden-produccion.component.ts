@@ -23,7 +23,10 @@ export class VerOrdenProduccionComponent implements OnInit {
   file_name: any = '';
   type: any = '';
   datosCabecera = {
-    Titulo: 'Orden de trabajo'
+    Titulo: 'Orden de trabajo',
+    Fecha: '',
+    Codigo: '',
+    CodigoFormato: ''
   }
   work_order_id;
   work_order;
@@ -150,6 +153,9 @@ export class VerOrdenProduccionComponent implements OnInit {
     this.loading = true
     this._work_order.getWorkOrder(this.work_order_id).subscribe((res: any) => {
       this.work_order = res.data;
+      this.datosCabecera.Codigo = res.data.code;
+      this.datosCabecera.Fecha = res.data.date;
+      this.datosCabecera.CodigoFormato = res.data.format_code;
       this.loading = false
     })
   }

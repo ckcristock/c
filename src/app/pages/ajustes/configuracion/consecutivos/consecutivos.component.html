@@ -88,7 +88,7 @@
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
                     href="javascript: void(0);"
-                    (click)="openModal(edit)"
+                    (click)="openModal(edit, item)"
                     ><i class="fas fa-edit"></i> Editar</a
                   >
                 </div>
@@ -117,7 +117,9 @@
 
 <ng-template #edit let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Editar consecutivo</h4>
+    <h4 class="text-primary modal-title">
+      Editar consecutivo: {{ titulo_consecutivo | lowercase }}
+    </h4>
     <button
       type="button"
       class="close"
@@ -129,11 +131,78 @@
     </button>
   </div>
 
-  <div class="modal-body"></div>
+  <div class="modal-body">
+    <ng-container [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Prefijo</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="Prefijo"
+            autocomplete="off"
+            placeholder="Ingresa el prefijo"
+          />
+          <mat-hint>El prefijo debe ser de 3 dígitos</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Longitud</mat-label>
+          <input
+            type="number"
+            matInput
+            formControlName="longitud"
+            autocomplete="off"
+            placeholder="Ingresa la longitud"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código de formato</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="format_code"
+            autocomplete="off"
+            placeholder="Ingresa el código de formato"
+          />
+        </mat-form-field>
+        <div class="col-12 d-flex justify-content-between">
+          <mat-slide-toggle color="primary" formControlName="Anio"
+            >Año</mat-slide-toggle
+          >
+          <mat-slide-toggle color="primary" formControlName="Mes"
+            >Mes</mat-slide-toggle
+          >
+          <mat-slide-toggle color="primary" formControlName="Dia"
+            >Día</mat-slide-toggle
+          >
+          <mat-slide-toggle color="primary" formControlName="city"
+            >Ciudad</mat-slide-toggle
+          >
+        </div>
+        <div class="col-12 mt-3">
+          <div class="alert alert-info" role="alert">
+            <b>Previsualización: </b> {{ form.controls.Prefijo.value }}{{form.controls.city.value ? '(BGA)' : ''}}-{{
+              consecutivo_numero
+            }}{{
+              form.controls.Anio.value ||
+              form.controls.Mes.value ||
+              form.controls.Dia.value
+                ? "-"
+                : ""
+            }}{{ form.controls.Anio.value ? today_.anio : ""
+            }}{{ form.controls.Mes.value ? today_.mes : ""
+            }}{{ form.controls.Dia.value ? today_.dia : "" }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
-    <button type="button" (click)="saveConsecutivo()" class="btn btn-primary">Guardar</button>
+    <button type="button" (click)="saveConsecutivo()" class="btn btn-primary">
+      Guardar
+    </button>
   </div>
 </ng-template>

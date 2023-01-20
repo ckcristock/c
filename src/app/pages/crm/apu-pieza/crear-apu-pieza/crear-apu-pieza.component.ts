@@ -31,6 +31,12 @@ export class CrearApuPiezaComponent implements OnInit {
   @Input('title') title = 'Crear APU - Pieza';
   form: FormGroup;
   date: Date = new Date();
+  datosCabecera = {
+    Titulo: this.title,
+    Fecha: new Date(),
+    Codigo: '',
+    CodigoFormato: ''
+  }
   people: any[] = [];
   cities: any[] = [];
   geometries: any[] = [];

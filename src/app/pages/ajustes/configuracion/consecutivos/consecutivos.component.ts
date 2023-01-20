@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion, PageEvent } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
@@ -19,10 +19,20 @@ import { ConsecutivosService } from './consecutivos.service';
 export class ConsecutivosComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   active_filters: boolean = false
+  today = new Date();
+  today_ = {
+    anio: '',
+    mes: '',
+    dia: ''
+  }
+  consecutivo_numero;
   matPanel: boolean;
   form_filters: FormGroup;
+  form: FormGroup;
   loading: boolean;
   paginationMaterial: any;
+  id:number;
+  titulo_consecutivo: string;
   orderObj: any
   consecutivos: any[] = [];
   pagination: any = {
@@ -52,6 +62,9 @@ export class ConsecutivosComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.permission.permissions.show) {
+      this.today_.anio = this.today.toLocaleDateString('es', {year: '2-digit'})
+      this.today_.mes = this.today.toLocaleDateString('es', {month: '2-digit'})
+      this.today_.dia = this.today.toLocaleDateString('es', {day: '2-digit'})
       this.createFormFilters();
       this.route.queryParamMap.subscribe((params: any) => {
         if (params.params.pageSize) {
@@ -111,12 +124,46 @@ export class ConsecutivosComponent implements OnInit {
     })
   }
 
-  openModal(content) {
+  openModal(content, item) {
+    this.titulo_consecutivo = item.Tipo
+    this.id = item.Id_Comprobante_Consecutivo
+    this.consecutivo_numero = item.Consecutivo.toString().padStart(item.longitud, 0)
     this._modal.open(content)
+    this.form = this.fb.group({
+      Prefijo: [item.Prefijo, [Validators.required, Validators.minLength(2), Validators.maxLength(3)]],
+      longitud: [item.longitud, [Validators.required, Validators.pattern("^[0-9]*$"),]],
+      format_code: [item.format_code],
+      Anio: [item.Anio, Validators.required],
+      Mes: [item.Mes, Validators.required],
+      Dia: [item.Dia, Validators.required],
+      city: [item.city, Validators.required],
+    })
+    this.form.get('longitud').valueChanges.subscribe(r => {
+      this.consecutivo_numero = item.Consecutivo.toString().padStart(r, 0)
+    })
   }
 
   saveConsecutivo() {
-
+    if (!this.form.valid){
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'Revisa los datos y vuelve a intentarlo',
+        showCancel: false
+      })
+    } else {
+      this._consecutivo.guardarConsecutivo(this.form.value, this.id).subscribe((r:any) => {
+        this._swal.show({
+          icon: 'success',
+          title: 'Correcto',
+          text: r.data,
+          showCancel: false,
+          timer: 1000
+        })
+        this._modal.close();
+        this.paginate();
+      })
+    }
   }
 
   resetFiltros() {

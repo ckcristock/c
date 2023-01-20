@@ -38,7 +38,7 @@ export class CrearViaticosComponent implements OnInit {
   person_selected: any;
   form: FormGroup;
   value: any;
-  acomodation_for_hotel: any[] = []
+  public acomodation_for_hotel: any[] = []
   hotels_list: any[] = []
 
   constructor(
@@ -105,7 +105,7 @@ export class CrearViaticosComponent implements OnInit {
     if (this.data) {
       help.functions.fillInForm(this.form, this.data, this.fb);
       this.func = help.functions.fillInPerson(this.data);
-      this.func = help.functions.fillInPerson(this.data);
+      //this.func = help.functions.fillInPerson(this.data);
     }
   }
   getBasicControl(): FormGroup {
@@ -113,7 +113,7 @@ export class CrearViaticosComponent implements OnInit {
     help.hospedajeHelper.subscribeHospedaje(
       group,
       this.form,
-      this.hospedajeList
+      this.hospedajeList,
     );
     return group;
   }
@@ -159,8 +159,13 @@ export class CrearViaticosComponent implements OnInit {
     this.hotels_list.forEach(element => {
       if (element.id == e.target.value) {
         this.acomodation_for_hotel = element.accommodations
+        //help.hospedajeHelper.consts.acomodationForHotel = element.accommodations
       }
     });
+    this.actualizaTipAlojam(item)
+  }
+
+  actualizaTipAlojam (item) {
     item.get('accommodation').valueChanges.subscribe(r => {
       let rate = this.acomodation_for_hotel.find(e => e.id == r)
       item.patchValue({

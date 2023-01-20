@@ -1,12 +1,17 @@
+import { Location } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
 import { noUndefined } from '@angular/compiler/src/util';
 import { Component, ElementRef, EventEmitter, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { PermissionService } from 'src/app/core/services/permission.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { UnidadesMedidasService } from '../../parametros/apu/unidades-medidas/unidades-medidas.service';
 import { CategoriasService } from '../../parametros/cat-subcat/categorias/categorias.service';
@@ -33,35 +38,27 @@ export class CatalogoComponent implements OnInit {
   public selectedCategory: any = {
     categoria: {
       id: null,
-      nombre: null
+      nombre: ''
     },
     subcategoria: {
       id: null,
-      nombre: null
+      nombre: ''
     }
   }
   public pagination: any = {
     page: 1,
-    pageSize: 5,
-    collectionSize: 0
-  }
+    pageSize: 5
+  }/* ,
+    collectionSize: 0 */
   public alerta: any = {
     senyal: "",
     texto: ""
   }
 
-  constructor(
-    private _categoria: CategoriasService,
-    private _user: UserService,
-    private _swal: SwalService,
-    private _catalogo: CatalogoService,
-    private _modalCatalogo: ModalService,
-    private _unit: UnidadesMedidasService,
-    private fb: FormBuilder
-  ) { }
-
   //ngbNavItem
   Object = Object;
+  orderObj: any;
+  filtroActivado: boolean = false;
   event = new EventEmitter<Event>();
   formFiltros: FormGroup;
   formProductos: FormGroup;
@@ -70,53 +67,99 @@ export class CatalogoComponent implements OnInit {
   loadingCategorias: boolean = false;
   loadingProductos: boolean = false;
   title:string = "";
+  permission: Permissions = {
+    menu: 'Órdenes de producción',
+    permissions: {
+      show: true,
+      add: true
+    }
+  };
 
+  constructor(
+    public router: Router,
+    private route: ActivatedRoute,
+    private location: Location,
+    private _permission: PermissionService,
+    private _categoria: CategoriasService,
+    private _user: UserService,
+    private _swal: SwalService,
+    private _catalogo: CatalogoService,
+    private _modalCatalogo: ModalService,
+    private _unit: UnidadesMedidasService,
+    private fb: FormBuilder
+  ) {
+    this.permission = this._permission.validatePermissions(this.permission);
+  }
 
   ngOnInit(): void {
-    this.getCategorias();
-    this.createForms();
+    if (this.permission.permissions.show) {
+      this.createForms();
+      this.getCategorias();
+      /* this.route.queryParamMap.subscribe((params: any) => {
+        this.pagination.pageSize = (params.params.pageSize)?parseInt(params.params.pageSize):10;
+        this.pagination.page = (params.params.page)?parseInt(params.params.page):1;
+        this.selectedCategory.categoria.id = (params.params.categoria)?parseInt(params.params.categoria[0]):null;
+        this.selectedCategory.subcategoria.id = (params.params.subcategoria)?parseInt(params.params.subcategoria[0]):null;
+        this.selectedCategory.categoria.nombre = (params.params.categoria)?parseInt(params.params.categoria[1]):'';
+        this.selectedCategory.subcategoria.nombre = (params.params.subcategoria)?parseInt(params.params.subcategoria[1]):'';
+        Object.keys(this.formFiltros.value).forEach(campo => this.formFiltros.get(campo).setValue(params.params[campo]))
+        this.filtroActivado = (JSON.stringify(this.formFiltros.value)!==JSON.stringify(this.filtroDefault));
+        if(this.selectedCategory.categoria.id!==null){
+          this.getProductosBySubcategoria(this.selectedCategory);
+        } */
 
-    this._catalogo.getTiposCatalogo().subscribe((res: any) => {
-      this.tipos_catalogo = res.data;
-    })
-    this._unit.selectUnits().subscribe((res: any) => {
-      this.unidades_medida = res.data;
-    })
-    this._catalogo.getEstados().subscribe((res: any) => {
-      this.estados = res.data;
-    })
+        this._catalogo.getTiposCatalogo().subscribe((res: any) => {
+          this.tipos_catalogo = res.data;
+        })
+        this._unit.selectUnits().subscribe((res: any) => {
+          this.unidades_medida = res.data;
+        })
+        this._catalogo.getEstados().subscribe((res: any) => {
+          this.estados = res.data;
+        })
+      //});
+    } else {
+      this.router.navigate(['/notauthorized'])
+    }
   }
-
-  ngAfterViewInit(): void {
-    Object.keys(this.formFiltros.controls).forEach(inputName => {
-      let control=document.querySelector(`#formFiltros [formControlName=${inputName}]`);
-      if(control!==null){
-        fromEvent(control, 'input')
-          .pipe(map((event: Event) => (event.target as HTMLInputElement).value))
-          .pipe(debounceTime(1000))
-          .pipe(distinctUntilChanged())
-          .subscribe(data => this.getProducts());
-      }
-    });
-  }
- /*  ngAfterViewInit(): void {
-    fromEvent(this.filtroNombre.nativeElement, 'input')
-      .pipe(map((event: Event) => (event.target as HTMLInputElement).value))
-      .pipe(debounceTime(3000))
-      .pipe(distinctUntilChanged())
-      .subscribe(data => console.log({data}));
-  } */
 
   openClose(){
     this.matPanel.toggle();
-    let filtroActivado = (JSON.stringify(this.formFiltros.value)!==JSON.stringify(this.filtroDefault));
-    this.alerta=(!this.matPanel.expanded && filtroActivado)? {
+    this.filtroActivado = (JSON.stringify(this.formFiltros.value)!==JSON.stringify(this.filtroDefault));
+    this.alerta=(!this.matPanel.expanded && this.filtroActivado)? {
       senyal: "!",
       texto: "¡Hay filtros aplicados!"
     }: {
       senyal: "",
       texto: ""
     }
+  }
+
+  resetFiltros() {
+    this.formFiltros.reset(this.filtroDefault);
+    this.filtroActivado = false
+    this.alerta =  {
+      senyal: "",
+      texto: ""
+    };
+  }
+
+  SetFiltros(data) {
+    let params = new HttpParams;
+    /* params = params.set('pag', data.page)
+    params = params.set('pageSize', data.pageSize)
+    for (const controlName in this.formFiltros.controls) {
+      const control = this.formFiltros.get(controlName);
+      if (control.value) {
+        params = params.set(controlName, control.value);
+      }
+    } */
+    data.categoria=(this.selectedCategory.categoria.id!==null)?data.categoria:'';
+    data.subcategoria=(this.selectedCategory.subcategoria.id!==null)?data.subcategoria:'';
+    this.Object.keys(data).forEach(control => {
+      params = params.set(control,data[control]);
+    })
+    return params;
   }
 
   moveToTop() {
@@ -135,6 +178,12 @@ export class CatalogoComponent implements OnInit {
       estado: ['']
     });
     this.filtroDefault = this.formFiltros.value;
+
+    this.formFiltros.valueChanges.pipe(
+      debounceTime(500),
+    ).subscribe(r => {
+      this.getProducts();
+    })
 
     this.formProductos = this.fb.group({
       Id_Producto: [''],
@@ -258,21 +307,19 @@ export class CatalogoComponent implements OnInit {
       subcategoria: this.selectedCategory.subcategoria.id
     }
     this.loadingProductos = true;
+
+    var paramsurl = this.SetFiltros(params);
+    this.location.replaceState(this.router.url.split("?")[0], paramsurl.toString());
     this._catalogo.getData(params).subscribe((res: any) => {
       this.Productos = res.data.data;
       this.loadingProductos = false;
-      this.pagination.collectionSize = res.data.total;
-    })
+    })/* this.pagination.collectionSize = res.data.total; */
   }
 
   getProductosBySubcategoria(categoria){
     this.moveToTop();
-    this.formFiltros.reset(this.filtroDefault);
+    this.resetFiltros();
     this.matPanel.close();
-    this.alerta =  {
-      senyal: "",
-      texto: ""
-    };
     this.selectedCategory = categoria;
     this.getProducts();
   }

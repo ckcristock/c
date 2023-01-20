@@ -20,7 +20,6 @@ import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 export class CategoriasComponent implements OnInit {
   @Output() requestReload = new EventEmitter<Event>();
 
-  title: string = "";
   @ViewChild('FormCategoria') FormCategoria: any;
   @ViewChild('modalCategoria') modalCategoria: any;
   @ViewChild('FormCategoriaEditar') FormCategoriaEditar: any;
@@ -28,9 +27,15 @@ export class CategoriasComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
+  /*Variable para evitar que cuando se llame a este componente desde "CatalogoComponent",
+    el usuario haga otras cosas aparte del motivo principal del llamado. */
+  restriccionDesdeCatalogo: boolean = false;
+  title: string = "";
+
   @Input()
   set reloadCategories(param:{evento: Event,filtro?:string | ''}) {
     if (param.evento) {
+      this.restriccionDesdeCatalogo=true;
       this.filters.nombre=param.filtro;
       this.getCategories();
     }
@@ -86,7 +91,6 @@ export class CategoriasComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.permission)
     this.createForm();
     this.getCategories();
     /* this.getCategoriasDep(); */
@@ -120,12 +124,17 @@ export class CategoriasComponent implements OnInit {
     this.form = this.fb.group({
       Id_Categoria_Nueva: [''],
       Nombre: ['', Validators.required],
-      compraInternacional: ['', Validators.required],
-      separacionCategorias: ['', Validators.required],
+      Compra_Internacional: ['', Validators.required],
+      Aplica_Separacion_Categorias: ['', Validators.required],
       /* Subcategorias: [[], Validators.required] */
-      fijo: [0],
+      Fijo: [0],
       dynamic: this.fb.array([]),
     });
+
+    this.form.get("Nombre")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("compraInternacional")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("separacionCategorias")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("fijo")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
   }
 
   dinamicFields() {
@@ -222,9 +231,9 @@ export class CategoriasComponent implements OnInit {
     this.form.patchValue({
       Id_Categoria_Nueva: this.Categoria.Id_Categoria_Nueva,
       Nombre: this.Categoria.Nombre,
-      compraInternacional: this.Categoria.Compra_Internacional,
-      separacionCategorias: this.Categoria.Aplica_Separacion_Categorias,
-      fijo: this.Categoria.Fijo
+      Compra_Internacional: this.Categoria.Compra_Internacional,
+      Aplica_Separacion_Categorias: this.Categoria.Aplica_Separacion_Categorias,
+      Fijo: this.Categoria.Fijo
       /* Subcategorias: this.Categoria.subcategories */
     });
 

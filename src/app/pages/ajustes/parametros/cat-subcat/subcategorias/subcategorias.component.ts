@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { CategoriasService } from '../categorias/categorias.service';
+import { PermissionService } from 'src/app/core/services/permission.service';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 
 @Component({
   selector: 'app-subcategorias',
@@ -29,18 +31,29 @@ export class SubcategoriasComponent implements OnInit {
   @Input()
   set reloadSubcategories(param:{evento: Event,filtro?:string | ''}) {
     if (param.evento) {
+      this.restriccionDesdeCatalogo=true;
       this.filters.nombre=param.filtro;
       this.getSubcategories();
       this.listCategories();
     }
   }
 
+  /*Variable para evitar que cuando se llame a este componente desde "CatalogoComponent",
+    el usuario haga otras cosas aparte del motivo principal del llamado. */
+  restriccionDesdeCatalogo: boolean = false;
   form: FormGroup;
   filters = {
     categoria: '',
     nombre: '',
     separable: ''
   }
+
+  permission: Permissions = {
+    menu: 'Empresa',
+    permissions: {
+      approve_product_categories: true
+    }
+  };
   pagination: any = {
     page: 1,
     pageSize: 10,
@@ -79,8 +92,10 @@ export class SubcategoriasComponent implements OnInit {
     private route: ActivatedRoute,
     private _swalService: SwalService,
     private fb: FormBuilder,
-    private _modalSubcat: ModalService
+    private _modalSubcat: ModalService,
+    private _permission: PermissionService
   ) {
+    this.permission = this._permission.validatePermissions(this.permission);
     this.company_id = this._user.user.person.company_worked.id;
   }
 
@@ -134,6 +149,11 @@ export class SubcategoriasComponent implements OnInit {
       Fijo: [0],
       dynamic: this.fb.array([]),
     });
+
+    this.form.get("Nombre")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Separable")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Id_Categoria_Nueva")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Fijo")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
   }
 
   dinamicFields() {
@@ -201,7 +221,8 @@ export class SubcategoriasComponent implements OnInit {
       Id_Subcategoria: this.Subcategory.Id_Subcategoria,
       Nombre: this.Subcategory.Nombre,
       Separable: this.Subcategory.Separable,
-      Id_Categoria_Nueva: this.Subcategory.Id_Categoria_Nueva
+      Id_Categoria_Nueva: this.Subcategory.Id_Categoria_Nueva,
+      Fijo: this.Subcategory.Fijo,
       /* Categorias: this.Subcategory.categories */
     });
     //console.log(this.Subcategory);

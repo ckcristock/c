@@ -5,7 +5,7 @@
         <h5 class="text-primary">Categorías</h5>
       </div>
       <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100">
+        <div class="btn-group rounded w-sm-100" *ngIf="!restriccionDesdeCatalogo">
           <button
             class="btn btn-primary btn-sm"
             (click)="openModal(add, 'Agregar')"
@@ -72,6 +72,7 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
+            <th></th>
             <th>Nombre</th>
             <th>Compra internacional</th>
             <th>Separacion de categorias</th>
@@ -81,9 +82,13 @@
         <tbody>
           <tr
             class="text-center"
-            [ngClass]="categoria.Activo == 0 ? 'text-danger' : ''"
+            [ngClass]="{
+              'text-danger': (categoria.Activo==0),
+              'font-weight-bold': (categoria.Fijo==1)
+            }"
             *ngFor="let categoria of categorias"
           >
+            <td><span class="badge badge-dark" *ngIf="categoria.Fijo==1">Fija</span></td>
             <td>{{ categoria.Nombre }}</td>
             <td>{{ categoria.Compra_Internacional }}</td>
             <td>{{ categoria.Aplica_Separacion_Categorias }}</td>
@@ -105,7 +110,7 @@
                     <i class="far fa-edit"></i> Editar</a
                   >
                   <a
-                    *ngIf="categoria.Activo == 1 && categoria.Fijo == 0"
+                    *ngIf="categoria.Activo == 1 && categoria.Fijo == 0 && !restriccionDesdeCatalogo"
                     class="dropdown-item text-danger waves-light caja-botones"
                     role="button"
                     (click)="inOff(categoria.Id_Categoria_Nueva, 0, $event)"
@@ -113,7 +118,7 @@
                     <i class="far fa-trash-alt"></i> Anular</a
                   >
                   <a
-                    *ngIf="categoria.Activo == 0 && categoria.Fijo == 0"
+                    *ngIf="categoria.Activo == 0 && categoria.Fijo == 0 && !restriccionDesdeCatalogo"
                     class="dropdown-item text-primary waves-light caja-botones"
                     role="button"
                     (click)="inOff(categoria.Id_Categoria_Nueva, 1, $event)"
@@ -177,19 +182,24 @@
               formControlName="Nombre"
               required
               autocomplete="off"
+              [disabled]="restriccionDesdeCatalogo"
             />
           </mat-form-field>
         </ng-container>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Compra internacional</mat-label>
-          <mat-select formControlName="compraInternacional" matInput required>
+          <mat-select
+          formControlName="Compra_Internacional"
+          matInput required>
             <mat-option value="Si">Sí</mat-option>
             <mat-option value="No">No</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Separación de categorias</mat-label>
-          <mat-select formControlName="separacionCategorias" matInput required>
+          <mat-select
+          formControlName="Aplica_Separacion_Categorias"
+          matInput required>
             <mat-option value="Si">Sí</mat-option>
             <mat-option value="No">No</mat-option>
           </mat-select>
@@ -250,6 +260,7 @@
                     type="text"
                     placeholder="Ingresa el nombre"
                     formControlName="label"
+                    autocomplete="off"
                     required
                   />
                 </mat-form-field>

@@ -13,6 +13,7 @@
             class="mat-elevation-z0 my-0"
             *ngFor="let categoria of Categorias"
             [disabled]="categoria.subcategory.length == 0"
+            [expanded]="selectedCategory.categoria.id == categoria.Id_Categoria_Nueva"
           >
             <mat-expansion-panel-header>
               {{ categoria.Nombre }}
@@ -99,22 +100,6 @@
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
-                <mat-label>Tipo</mat-label>
-                <mat-select
-                  formControlName="tipo_catalogo"
-                  matInput
-                  placeholder="Tipo del catálogo"
-                  (selectionChange)="getProducts()"
-                >
-                  <mat-option value="">Todos</mat-option>
-                  <mat-option
-                    *ngFor="let tipo of tipos_catalogo"
-                    [value]="tipo.value"
-                    >{{ tipo.text }}</mat-option
-                  >
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
                 <mat-label>Estado</mat-label>
                 <mat-select
                   formControlName="estado"
@@ -155,7 +140,6 @@
               <tr class="text-center text-uppercase">
                 <th>Nombre</th>
                 <th>Embalaje</th>
-                <th>Tipo</th>
                 <th class="col-1"><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
@@ -167,7 +151,6 @@
               >
                 <td class="align-middle">{{ producto.Nombre_Comercial }}</td>
                 <td class="align-middle">{{ producto.Embalaje }}</td>
-                <td class="align-middle">{{ producto.Tipo_Catalogo }}</td>
                 <td class="align-middle">
                   <div class="text-center">
                     <div ngbDropdown container="body" class="dropdown-primary">
@@ -323,21 +306,32 @@
             >
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Tipo</mat-label>
-          <mat-select
-            formControlName="Tipo_Catalogo"
-            matInput
-            placeholder="Tipo del catálogo"
+        <div class="col align-items-center">
+          <input
+            hidden
+            (change)="onFileSelected($event)"
+            #photoInput
+            type="file"
+            id="file"
+            accept=".png, .jpg, .jpeg"
             required
+          /><!--
+            formControlName="Foto" -->
+          <button
+            type="button"
+            mat-raised-button
+            class="my-1 w-100 bg-info"
+            (click)="photoInput.click()"
           >
-            <mat-option
-              *ngFor="let tipo of tipos_catalogo"
-              [value]="tipo.value"
-              >{{ tipo.text }}</mat-option
+            <span
+              data-toggle="tooltip"
+              data-placement="top"
+              [title]="foto.name || 'No ha seleccionado ningún archivo'"
+              class="text-white d-inline-block text-truncate"
+              >Cargar <span *ngIf="foto.name || formProductos.value.Foto">nueva</span> foto del producto.</span
             >
-          </mat-select>
-        </mat-form-field>
+          </button>
+        </div>
       </div>
       <hr class="line" />
   <!-- <span class="text-primary">Campos de la subcategoría</span> -->

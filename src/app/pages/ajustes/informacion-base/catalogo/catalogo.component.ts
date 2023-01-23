@@ -13,6 +13,7 @@ import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { PermissionService } from 'src/app/core/services/permission.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { UnidadesMedidasService } from '../../parametros/apu/unidades-medidas/unidades-medidas.service';
 import { CategoriasService } from '../../parametros/cat-subcat/categorias/categorias.service';
 import { SwalService } from '../services/swal.service';
@@ -74,6 +75,12 @@ export class CatalogoComponent implements OnInit {
       add: true
     }
   };
+  foto: any = {
+    name: '',
+    string: '',
+    type: '',
+    file: ''
+  }
 
   constructor(
     public router: Router,
@@ -95,44 +102,47 @@ export class CatalogoComponent implements OnInit {
     if (this.permission.permissions.show) {
       this.createForms();
       this.getCategorias();
-      /* this.route.queryParamMap.subscribe((params: any) => {
+      this.route.queryParamMap.subscribe((params: any) => {
         this.pagination.pageSize = (params.params.pageSize)?parseInt(params.params.pageSize):10;
         this.pagination.page = (params.params.page)?parseInt(params.params.page):1;
-        this.selectedCategory.categoria.id = (params.params.categoria)?parseInt(params.params.categoria[0]):null;
-        this.selectedCategory.subcategoria.id = (params.params.subcategoria)?parseInt(params.params.subcategoria[0]):null;
-        this.selectedCategory.categoria.nombre = (params.params.categoria)?parseInt(params.params.categoria[1]):'';
-        this.selectedCategory.subcategoria.nombre = (params.params.subcategoria)?parseInt(params.params.subcategoria[1]):'';
-        Object.keys(this.formFiltros.value).forEach(campo => this.formFiltros.get(campo).setValue(params.params[campo]))
-        this.filtroActivado = (JSON.stringify(this.formFiltros.value)!==JSON.stringify(this.filtroDefault));
+        this.selectedCategory.categoria.id = (params.params.categoria)?parseInt(params.params.categoria):null;
+        this.selectedCategory.subcategoria.id = (params.params.subcategoria)?parseInt(params.params.subcategoria):null;
+        this.selectedCategory.categoria.nombre = (params.params.nom_categoria)?params.params.nom_categoria:'';
+        this.selectedCategory.subcategoria.nombre = (params.params.nom_subcategoria)?params.params.nom_subcategoria:'';
+        Object.keys(this.formFiltros.value).forEach(campo => this.formFiltros.get(campo).setValue(params.params[campo] || this.filtroDefault[campo]));
+        this.filtroActivado = this.verificarFiltros();
         if(this.selectedCategory.categoria.id!==null){
-          this.getProductosBySubcategoria(this.selectedCategory);
-        } */
+          this.getProductosBySubcategoria(this.selectedCategory,false);
+        }
+      })
 
-        this._catalogo.getTiposCatalogo().subscribe((res: any) => {
-          this.tipos_catalogo = res.data;
-        })
-        this._unit.selectUnits().subscribe((res: any) => {
-          this.unidades_medida = res.data;
-        })
-        this._catalogo.getEstados().subscribe((res: any) => {
-          this.estados = res.data;
-        })
-      //});
+      this._unit.selectUnits().subscribe((res: any) => {
+        this.unidades_medida = res.data;
+      })
+      this._catalogo.getEstados().subscribe((res: any) => {
+        this.estados = res.data;
+      })
     } else {
       this.router.navigate(['/notauthorized'])
     }
   }
 
-  openClose(){
-    this.matPanel.toggle();
-    this.filtroActivado = (JSON.stringify(this.formFiltros.value)!==JSON.stringify(this.filtroDefault));
-    this.alerta=(!this.matPanel.expanded && this.filtroActivado)? {
+  verificarFiltros():boolean {
+    let filtroFlag = (JSON.stringify(this.formFiltros.value)!==JSON.stringify(this.filtroDefault));
+    let panelFlag = (this.matPanel)?this.matPanel.expanded:false;
+    this.alerta=(!panelFlag && filtroFlag)? {
       senyal: "!",
       texto: "¡Hay filtros aplicados!"
     }: {
       senyal: "",
       texto: ""
     }
+    return filtroFlag;
+  }
+
+  openClose(){
+    this.matPanel.toggle();
+    this.filtroActivado = this.verificarFiltros();
   }
 
   resetFiltros() {
@@ -146,18 +156,12 @@ export class CatalogoComponent implements OnInit {
 
   SetFiltros(data) {
     let params = new HttpParams;
-    /* params = params.set('pag', data.page)
-    params = params.set('pageSize', data.pageSize)
-    for (const controlName in this.formFiltros.controls) {
-      const control = this.formFiltros.get(controlName);
-      if (control.value) {
-        params = params.set(controlName, control.value);
-      }
-    } */
     data.categoria=(this.selectedCategory.categoria.id!==null)?data.categoria:'';
     data.subcategoria=(this.selectedCategory.subcategoria.id!==null)?data.subcategoria:'';
+    data.nom_categoria=(this.selectedCategory.categoria.id!==null)?this.selectedCategory.categoria.nombre:'';
+    data.nom_subcategoria=(this.selectedCategory.subcategoria.id!==null)?this.selectedCategory.subcategoria.nombre:'';
     this.Object.keys(data).forEach(control => {
-      params = params.set(control,data[control]);
+      if (data[control]) {params = params.set(control,data[control]);}
     })
     return params;
   }
@@ -174,7 +178,6 @@ export class CatalogoComponent implements OnInit {
   createForms() {
     this.formFiltros = this.fb.group({
       nombre: [''],
-      tipo_catalogo: [''],
       estado: ['']
     });
     this.filtroDefault = this.formFiltros.value;
@@ -194,7 +197,7 @@ export class CatalogoComponent implements OnInit {
       Unidad_Medida: ['', Validators.required],
       Codigo_Barras: ['', Validators.required],
       Embalaje: ['', Validators.required],
-      Tipo_Catalogo: ['', Validators.required],
+      Foto: ['' , Validators.required],
       FormCamposCategoria: this.fb.array([]),
       FormCamposSubcategoria: this.fb.array([])
     });
@@ -244,6 +247,12 @@ export class CatalogoComponent implements OnInit {
   openConfirm(confirm: any, titulo: string, data?: any ) {
     this.title = titulo;
     this.formProductos.reset();
+    this.foto = {
+      name: '',
+      string: '',
+      type: '',
+      file: ''
+    }
     let params={};
     if(titulo == "Agregar"){
       this.formProductos.patchValue({
@@ -264,7 +273,7 @@ export class CatalogoComponent implements OnInit {
         Unidad_Medida: data.Unidad_Medida,
         Codigo_Barras: data.Codigo_Barras,
         Embalaje: data.Embalaje,
-        Tipo_Catalogo: data.Tipo_Catalogo
+        Foto: data.Foto
       });
       params={ producto:data.Id_Producto };
     }
@@ -316,12 +325,42 @@ export class CatalogoComponent implements OnInit {
     })/* this.pagination.collectionSize = res.data.total; */
   }
 
-  getProductosBySubcategoria(categoria){
-    this.moveToTop();
-    this.resetFiltros();
-    this.matPanel.close();
-    this.selectedCategory = categoria;
+  getProductosBySubcategoria(categoria, clickedFlag = true){
+    if(clickedFlag){
+      this.moveToTop();
+      this.resetFiltros();
+      this.matPanel.close();
+      this.selectedCategory = categoria;
+    }
     this.getProducts();
+  }
+
+  onFileSelected(event) {
+    if (event.target.files[0]) {
+      let file = event.target.files[0];
+      const types = ['image/png', 'image/jpg', 'image/jpeg']
+      if (!types.includes(file.type)) {
+        this._swal.show({
+          icon: 'error',
+          title: 'Error de archivo',
+          showCancel: false,
+          text: 'El tipo de archivo no es válido'
+        });
+        return null
+      }
+      this.foto.name = file.name;
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event) => {
+        this.foto.string = (<FileReader>event.target).result;
+        const type = { ext: this.foto.string };
+        this.foto.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+      };
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.foto.file = base64;
+      });
+      this.formProductos.get("Foto").setValue(this.foto.file);
+    }
   }
 
   cambiarEstado(producto, state) {
@@ -364,6 +403,9 @@ export class CatalogoComponent implements OnInit {
       });
       delete this.formProductos.value.FormCamposCategoria;
       delete this.formProductos.value.FormCamposSubcategoria;
+
+      let formData = {...this.formProductos.value };
+      formData["Foto"] = { ...this.foto };
       this._swal.show({
         title: '¿Estás seguro(a)?',
         text: 'Si ya verificó la información y está de acuerdo, por favor proceda.',
@@ -371,7 +413,7 @@ export class CatalogoComponent implements OnInit {
         showCancel: true
       }).then((result) => {
         if (result.isConfirmed) {
-          this._catalogo.saveProduct(this.formProductos.value).subscribe((r: any) => {
+          this._catalogo.saveProduct(formData).subscribe((r: any) => {
             this.getProducts(this.pagination.page);
             modal.close();
             this._swal.show({

@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { SwalService } from '../../informacion-base/services/swal.service';
+import { SwalService } from '../../../informacion-base/services/swal.service';
 import { environment } from 'src/environments/environment';
 import { Location } from '@angular/common';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { CategoriasService } from '../categorias/categorias.service';
+import { PermissionService } from 'src/app/core/services/permission.service';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 
 @Component({
   selector: 'app-subcategorias',
@@ -20,33 +22,46 @@ import { CategoriasService } from '../categorias/categorias.service';
   styleUrls: ['./subcategorias.component.scss'],
 })
 export class SubcategoriasComponent implements OnInit {
-  form: FormGroup;
 
-  public servicios: any[];
   @ViewChild('FormTipoServicio') FormTipoServicio: any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
   @Input()
-  set reloadSubcategories(event: Event) {
-    if (event) {
-      this.getSubcategory();
+  set reloadSubcategories(param:{evento: Event,filtro?:string | ''}) {
+    if (param.evento) {
+      this.restriccionDesdeCatalogo=true;
+      this.filters.nombre=param.filtro;
+      this.getSubcategories();
       this.listCategories();
     }
   }
 
+  /*Variable para evitar que cuando se llame a este componente desde "CatalogoComponent",
+    el usuario haga otras cosas aparte del motivo principal del llamado. */
+  restriccionDesdeCatalogo: boolean = false;
+  form: FormGroup;
   filters = {
     categoria: '',
     nombre: '',
     separable: ''
   }
+
+  permission: Permissions = {
+    menu: 'Empresa',
+    permissions: {
+      approve_product_categories: true
+    }
+  };
   pagination: any = {
     page: 1,
     pageSize: 10,
     collectionSize: 0
   }
   matPanel = false;
+
+  public servicios: any[];
   public categorias_filtro: any = [];
   public PuntosSeleccionados = [];
   public Cuenta = [];
@@ -77,8 +92,10 @@ export class SubcategoriasComponent implements OnInit {
     private route: ActivatedRoute,
     private _swalService: SwalService,
     private fb: FormBuilder,
-    private _modal: ModalService
+    private _modalSubcat: ModalService,
+    private _permission: PermissionService
   ) {
+    this.permission = this._permission.validatePermissions(this.permission);
     this.company_id = this._user.user.person.company_worked.id;
   }
 
@@ -92,7 +109,7 @@ export class SubcategoriasComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
-    this.getSubcategory();
+    this.getSubcategories();
     this.listCategories();
    /*  this.http.get(environment.ruta + 'php/lista_generales.php', {
       params: { modulo: 'Bodega_Nuevo' },
@@ -112,13 +129,15 @@ export class SubcategoriasComponent implements OnInit {
     }
   }
 
-  openModal(content,accion) {
+  openModal(content,accion,data?) {
+    this.title = accion+' subcategoria';
+    this.fieldDinamic.clear();
     if(accion=="Agregar"){
       this.createForm();
-      this.title = 'Agregar subcategoria';
+    }else{
+      this.EditSubcategory(data);
     }
-    this._modal.open(content, 'lg');
-    this.fieldDinamic.clear();
+    this._modalSubcat.open(content, 'lg');
   }
 
   createForm() {
@@ -126,17 +145,23 @@ export class SubcategoriasComponent implements OnInit {
       Id_Subcategoria: [''],
       Nombre: ['', Validators.required],
       Separable: ['', Validators.required],
-      Id_Categoria_Nueva: ['',Validators.required],
+      Id_Categoria_Nueva: [null,Validators.required],
+      Fijo: [0],
       dynamic: this.fb.array([]),
     });
+
+    this.form.get("Nombre")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Separable")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Id_Categoria_Nueva")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Fijo")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
   }
 
   dinamicFields() {
     let field = this.fb.group({
       id: [''],
-      label: [''],
-      type: [''],
-      required: [''],
+      label: ['',Validators.required],
+      type: ['',Validators.required],
+      required: ['',Validators.required],
     });
     return field;
   }
@@ -173,7 +198,7 @@ export class SubcategoriasComponent implements OnInit {
     });
   }
 
-  getSubcategory(page=1) {
+  getSubcategories(page=1) {
     this.pagination.page = page;
     this.Cargando = true;
     /* this.http
@@ -196,10 +221,12 @@ export class SubcategoriasComponent implements OnInit {
       Id_Subcategoria: this.Subcategory.Id_Subcategoria,
       Nombre: this.Subcategory.Nombre,
       Separable: this.Subcategory.Separable,
-      Id_Categoria_Nueva: this.Subcategory.Id_Categoria_Nueva
+      Id_Categoria_Nueva: this.Subcategory.Id_Categoria_Nueva,
+      Fijo: this.Subcategory.Fijo,
       /* Categorias: this.Subcategory.categories */
     });
     //console.log(this.Subcategory);
+
     this.Subcategory.subcategory_variables.forEach((element) => {
       let group = this.fb.group({
         id: element.id,
@@ -251,8 +278,8 @@ export class SubcategoriasComponent implements OnInit {
   dataClear() {
     this.form.reset();
     this.fieldDinamic.clear();
-    this.getSubcategory();
-    this._modal.close();
+    this.getSubcategories(this.pagination.page);
+    this._modalSubcat.close();
   }
 
   normalize = (function () {
@@ -286,7 +313,7 @@ export class SubcategoriasComponent implements OnInit {
         this.confirmacionSwal.text = data.mensaje;
         this.confirmacionSwal.type = data.tipo;
         this.confirmacionSwal.show();
-        this.getSubcategory();
+        this.getSubcategories();
       });
   } */
 
@@ -327,7 +354,7 @@ export class SubcategoriasComponent implements OnInit {
       if (result.isConfirmed) {
         this._subcategory.changeActive(id,{activo: state})
           .subscribe((res: any) => {
-            this.getSubcategory();
+            this.getSubcategories();
             this._swalService.show({
               icon: 'success',
               title: '¡Operación exitosa!',

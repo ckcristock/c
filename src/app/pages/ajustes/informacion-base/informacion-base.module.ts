@@ -74,7 +74,8 @@ import {
   MatPaginatorModule,
   MatSlideToggleModule,
   MatTreeModule,
-  MatListModule
+  MatListModule,
+  MatTooltipModule
 } from '@angular/material';
 import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';
 import { BodegasComponent } from './bodegas/bodegas.component';
@@ -165,6 +166,7 @@ import { FilePermissionsComponent } from './funcionarios/detalle-funcionario/per
     MatSlideToggleModule,
     MatExpansionModule,
     MatListModule,
+    MatTooltipModule,
     SweetAlert2Module.forRoot(),
   ],
   exports: [

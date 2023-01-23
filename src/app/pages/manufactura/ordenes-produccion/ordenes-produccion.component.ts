@@ -2,14 +2,23 @@ import { DatePipe, Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatAccordion, PageEvent } from '@angular/material';
+import { MatAccordion, PageEvent, TooltipComponent } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { DateAdapter } from 'saturn-datepicker';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { PermissionService } from 'src/app/core/services/permission.service';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { OrdenesProduccionService } from '../services/ordenes-produccion.service';
+Object.defineProperty(TooltipComponent.prototype, 'message', {
+  set(v: any) {
+    const el = document.querySelectorAll('.mat-tooltip');
 
+    if (el) {
+      el[el.length - 1].innerHTML = v;
+    }
+  },
+});
 @Component({
   selector: 'app-ordenes-produccion',
   templateUrl: './ordenes-produccion.component.html',
@@ -44,13 +53,17 @@ export class OrdenesProduccionComponent implements OnInit {
     private _work_orders: OrdenesProduccionService,
     private route: ActivatedRoute,
     private location: Location,
-    private dateAdapter: DateAdapter<any>
+    private dateAdapter: DateAdapter<any>,
+    private _swal: SwalService
   ) {
     this.permission = this._permission.validatePermissions(this.permission);
     this.dateAdapter.setLocale('es');
   }
 
+
+
   ngOnInit(): void {
+
     if (this.permission.permissions.show) {
       this.createFormFilters();
       this.route.queryParamMap.subscribe((params: any) => {
@@ -65,7 +78,6 @@ export class OrdenesProduccionComponent implements OnInit {
           this.pagination.page = 1
         }
         this.orderObj = { ...params.keys, ...params }
-        console.log(Object.keys(this.orderObj).length)
         if (Object.keys(this.orderObj).length > 4) {
           this.active_filters = true
           const formValues = {};
@@ -100,7 +112,6 @@ export class OrdenesProduccionComponent implements OnInit {
   }
 
   SetFiltros(paginacion) {
-    console.log(paginacion)
     let params = new HttpParams;
     params = params.set('pag', paginacion)
     params = params.set('pageSize', this.pagination.pageSize)
@@ -179,5 +190,27 @@ export class OrdenesProduccionComponent implements OnInit {
         })
       }
     }
+  }
+
+  updateStatus(status, id) {
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: (status == 'inicial' ? '¡La orden de producción será desactivada!' : '¡La orden de producción será activada!'),
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._swal.show({
+          icon: 'success',
+          title: (status == 'anulada' ? '¡Orden de producción desactivada!' : 'Orden de producción activada!'),
+          text: (status == 'anulada' ? 'La orden de producción ha sido activada con éxito.' : 'La orden de producción ha sido desactivada con éxito.'),
+          timer: 1000,
+          showCancel: false
+        })
+        this.getWorkOrders()
+      }
+    })
+    let param = {status: status}
+    this._work_orders.updateWorkOrder(id, param).subscribe();
   }
 }

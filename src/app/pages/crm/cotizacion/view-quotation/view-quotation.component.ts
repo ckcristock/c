@@ -13,9 +13,10 @@ export class ViewQuotationComponent implements OnInit {
   quotation: any;
   loading: boolean;
   public headerData:any = {
-    Titulo: 'Balance general',
+    Titulo: 'Cotización',
     Codigo: '',
-    Fecha: ''
+    Fecha: '',
+    CodigoFormato: ''
   }
   constructor(
     private route: ActivatedRoute,
@@ -33,8 +34,9 @@ export class ViewQuotationComponent implements OnInit {
     this.loading = true;
     this._quotation.getQuotation(id).subscribe((res:any) => {
       this.quotation = res.data;
-      this.headerData.Codigo = 'COT' + res.data.id
-      this.headerData.Fecha = res.data.created_at
+      this.headerData.Codigo = res.data.code;
+      this.headerData.Fecha = res.data.created_at;
+      this.headerData.CodigoFormato = res.data.format_code;
       this.loading = false;
     })
   }

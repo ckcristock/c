@@ -106,7 +106,7 @@
         <mat-expansion-panel class="mat-elevation-z0">
           <section class="d-flex justify-content-between mx-1">
             <mat-checkbox color="primary" [(ngModel)]="checkItem"
-              >Item</mat-checkbox
+              >Código</mat-checkbox
             >
             <mat-checkbox color="primary" [(ngModel)]="checkFecha"
               >Fecha</mat-checkbox
@@ -152,7 +152,7 @@
         >
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
-              <th *ngIf="checkItem">Item</th>
+              <th *ngIf="checkItem">Código</th>
               <th *ngIf="checkFecha">Fecha</th>
               <th *ngIf="checkCliente">Cliente</th>
               <th *ngIf="checkDestino">Destino</th>
@@ -172,7 +172,7 @@
                 'text-danger font-weight-bold': item.state == 'Inactivo'
               }"
             >
-              <td *ngIf="checkItem" class="align-middle">PRES {{ item.id }}</td>
+              <td *ngIf="checkItem" class="align-middle">{{item.code}}</td>
               <td *ngIf="checkFecha" class="align-middle">
                 {{ item.created_at | date : "longDate" }}
               </td>

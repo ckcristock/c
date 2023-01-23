@@ -65,7 +65,9 @@ export const functionsApuService = {
       sale_price_usd_withholding_total: [0],
       sale_price_cop_withholding_total: [0],
       calculate_labor: fb.array([]),
-      mpm_calculate_labor: fb.array([])
+      mpm_calculate_labor: fb.array([]),
+      format_code: [''],
+      code: ['']
     });
     this.subscribes(group)
     return group;

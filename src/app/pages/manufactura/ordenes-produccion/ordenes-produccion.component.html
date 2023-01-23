@@ -232,10 +232,10 @@
         <tbody>
           <tr *ngFor="let item of workOrders" class="text-center">
             <td>{{ item.code }}</td>
-            <td>{{ item.date | date : "MMM d, y, h:mm a" }}</td>
+            <td>{{ item.date | date : "MMM d, y" }}</td>
             <td>{{ item.city?.name }}</td>
             <td>
-              {{ item.third_party.social_reason }}
+              {{ item.third_party.text }}
             </td>
             <td
               role="button"
@@ -251,17 +251,17 @@
               <span
                 class="badge"
                 [class]="
-                  item.status == 'Pendiente'
+                  item.status == 'inicial'
                     ? 'badge-info'
-                    : item.status == 'Aprobada'
+                    : item.status == 'espera_info'
                     ? 'badge-primary'
-                    : item.status == 'No aprobada'
+                    : item.status == 'desarrollo'
                     ? 'badge-warning'
-                    : item.status == 'Anulada'
+                    : item.status == 'revision'
                     ? 'badge-danger'
                     : 'badge-dark'
                 "
-                >{{ item.status }}</span
+                >{{ item.status | uppercase }}</span
               >
             </td>
             <td>
@@ -296,14 +296,15 @@
                   <a
                     class="dropdown-item waves-light text-success caja-botones"
                     href="javascript: void(0);"
-                    *ngIf="item.status == 'Anulada'"
-                    (click)="updateStatus('Pendiente', item.id)"
+                    *ngIf="item.status == 'anulada'"
+                    (click)="updateStatus('inicial', item.id)"
                     ><i class="fas fa-check"></i> Activar</a
                   >
                   <a
                     class="dropdown-item waves-light text-danger caja-botones"
                     href="javascript: void(0);"
-                    (click)="updateStatus('Anulada', item.id)"
+                    *ngIf="item.status == 'inicial'"
+                    (click)="updateStatus('anulada', item.id)"
                     ><i class="fas fa-trash"></i> Anular</a
                   >
                 </div>

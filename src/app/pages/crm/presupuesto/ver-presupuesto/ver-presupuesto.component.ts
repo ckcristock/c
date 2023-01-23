@@ -12,8 +12,18 @@ import Swal from 'sweetalert2';
 export class VerPresupuestoComponent implements OnInit {
   id: string;
   data: any;
-  loading:boolean;
-  constructor(private _budget: BudgetService, private actRoute: ActivatedRoute, private _swal: SwalService) { }
+  loading: boolean;
+  datosCabecera = {
+    Titulo: 'Presupuesto',
+    Fecha: '',
+    Codigo: '',
+    CodigoFormato: ''
+  }
+  constructor(
+    private _budget: BudgetService,
+    private actRoute: ActivatedRoute,
+    private _swal: SwalService
+  ) { }
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.params.id;
@@ -24,6 +34,9 @@ export class VerPresupuestoComponent implements OnInit {
     this.loading = true;
     this._budget.get(this.id).subscribe((r: any) => {
       this.data = r.data
+      this.datosCabecera.Codigo = r.data.code;
+      this.datosCabecera.Fecha = r.data.created_at;
+      this.datosCabecera.CodigoFormato = r.data.format_code;
       this.loading = false;
     })
   }

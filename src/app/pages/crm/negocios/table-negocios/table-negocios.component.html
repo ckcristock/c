@@ -28,9 +28,7 @@
         <td class="align-middle" scope="row">{{ neg.name }}</td>
         <td class="align-middle">
           {{
-            neg.third_party.first_name
-              ? neg.third_party.first_name + " " + neg.third_party.first_surname
-              : neg.third_party.social_reason
+            neg.third_party.full_name
           }}
         </td>
         <td class="align-middle">$ {{ neg.budget_value | number }}</td>

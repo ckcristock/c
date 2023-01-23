@@ -14,6 +14,12 @@ export class VerApuConjuntoComponent implements OnInit {
   data: any;
   isData: boolean = false;
   loading: boolean = false;
+  datosCabecera = {
+    Titulo: 'APU CONJUNTO',
+    Fecha: '',
+    Codigo: '',
+    CodigoFormato: ''
+  }
   constructor(
     private _apuConjunto: ApuConjuntoService,
     private actRoute: ActivatedRoute
@@ -28,6 +34,9 @@ export class VerApuConjuntoComponent implements OnInit {
     this.loading = true;
     this._apuConjunto.getApuSet(this.id).subscribe((r: any) => {
       this.data = r.data;
+      this.datosCabecera.Codigo = r.data.code;
+      this.datosCabecera.Fecha = r.data.created_at;
+      this.datosCabecera.CodigoFormato = r.data.format_code;
       this.isData = true;
       this.loading = false;
     })

@@ -77,6 +77,7 @@ import {
   MatListModule,
   MatBadgeModule,
   MatButtonModule
+  MatTooltipModule
 } from '@angular/material';
 import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';
 import { BodegasComponent } from './bodegas/bodegas.component';
@@ -172,6 +173,7 @@ import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
     MatBadgeModule,
     MatButtonModule,
     CatSubcatModule,
+    MatTooltipModule,
     SweetAlert2Module.forRoot(),
   ],
   exports: [

@@ -7,6 +7,12 @@
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
           <button
+            class="btn btn-warning btn-sm"
+            (click)="openValues(alojamiento)"
+          >
+            <i class="fas fa-hotel"></i>Tipo de alojamientos
+          </button>
+          <button
             class="btn btn-sm btn-primary"
             (click)="openConfirm(add, 'Nuevo hotel')"
           >
@@ -47,11 +53,10 @@
             <th>Tipo</th>
             <th>Hotel</th>
             <th>Dirección</th>
+            <th>Ciudad</th>
             <th>Teléfono</th>
             <th>Tel. Fijo</th>
-            <th>Acomodación</th>
-            <th>T. Sencilla</th>
-            <th>T. Doble</th>
+            <th>Alojamiento</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
@@ -60,14 +65,15 @@
             <td class="align-middle">{{ hotel.type }}</td>
             <td class="align-middle">{{ hotel.name }}</td>
             <td class="align-middle">{{ hotel.address }}</td>
+            <td class="align-middle">
+              {{ hotel.city != undefined ? hotel.city.name : "" }}
+            </td>
             <td class="align-middle">{{ hotel.phone }}</td>
             <td class="align-middle">{{ hotel.landline }}</td>
-            <td class="align-middle">{{ hotel.accommodation }}</td>
             <td class="align-middle">
-              {{ hotel.simple_rate | currency: "COP" }}
-            </td>
-            <td class="align-middle">
-              {{ hotel.double_rate | currency: "COP" }}
+              <span *ngFor="let item of hotel.accommodations"
+                >{{ item.name }}.
+              </span>
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -86,6 +92,13 @@
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
+                  <a
+                    class="dropdown-item waves-light text-success caja-botones"
+                    href="javascript: void(0);"
+                    (click)="openConfirm(add, 'Ver hotel'); getHotel(hotel)"
+                  >
+                    <i class="far fa-eye"></i> Ver
+                  </a>
                 </div>
               </div>
             </td>
@@ -95,9 +108,9 @@
     </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
+      [collectionSize]="paginationHotel.collectionSize"
+      [pageSize]="paginationHotel.pageSize"
+      [(page)]="paginationHotel.page"
       (pageChange)="getHotels($event)"
       aria-label="Default pagination"
       maxSize="5"
@@ -144,6 +157,7 @@
             formControlName="name"
             required
             autocomplete="off"
+
           />
         </mat-form-field>
         <!-- <mat-form-field class="col" appearance="outline">
@@ -177,7 +191,6 @@
           >
           </ng-select>
         </div>
-
         <mat-form-field class="col" appearance="outline">
           <mat-label>Teléfono fijo</mat-label>
           <input
@@ -215,52 +228,93 @@
             <mat-option value="No">No</mat-option>
           </mat-select>
         </mat-form-field>
+
         <mat-form-field class="col" appearance="outline">
-          <mat-label>Tipo de acomodacióm</mat-label>
-          <mat-select formControlName="accommodation" required>
-            <mat-option value="Sencilla">Sencilla</mat-option>
-            <mat-option value="Doble">Doble</mat-option>
+          <mat-label>Tipo de alojamiento</mat-label>
+          <mat-select formControlName="accommodation" required multiple>
+            <mat-option
+              #matOption
+              *ngFor="let tipo of accommodations"
+              (click)="selectAccommodation(matOption)"
+              [value]="tipo.id"
+            >
+              {{ tipo.name }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Tasa simple</mat-label>
-          <input
-            matInput
-            type="number"
-            placeholder="Ingresa la tasa simple"
-            formControlName="simple_rate"
-            autocomplete="off"
-          />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Tasa doble</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Ingresa la tasa doble"
-            formControlName="double_rate"
-            autocomplete="off"
-          />
-        </mat-form-field>
+
+        <ng-container formArrayName="alojamientos">
+          <ng-container
+            [formGroupName]="i"
+            *ngFor="
+              let item of form.controls.alojamientos.controls;
+              let i = index
+            "
+          >
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Valor {{ item.value.name }}</mat-label>
+              <input
+                matInput
+                type="number"
+                placeholder="Ingresa la tasa {{ item.value.name }}"
+                formControlName="price"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </ng-container>
+        </ng-container>
+
       </div>
     </form>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer"  >
     <button
       type="button"
       class="btn btn-danger"
       (click)="modal.dismiss('Cross click')"
     >
-      Cancelar
+      {{(title=='Ver hotel') ? 'Cerrar' : 'Cancelar'}}
     </button>
     <button
       type="button"
       (click)="save()"
       [disabled]="!form.valid"
       class="btn btn-primary"
+      *ngIf=" title!='Ver hotel' "
     >
       Guardar
     </button>
+  </div>
+</ng-template>
+
+<ng-template #alojamiento let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Tipos de alojamiento</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <app-accommodations
+      [data]="accommodationsPaginate"
+      [pagination]="paginationAccomodations"
+      (saveEvent)="saveAccommodation($event)"
+      (paginationEvent)="getAccommodation($event)"
+      (anularOActivarEvent)="deleteAccommodation($event)"
+    ></app-accommodations>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cerrar
+    </button>
+    <!-- <button type="button" class="btn btn-primary">Guardar</button> -->
   </div>
 </ng-template>
 

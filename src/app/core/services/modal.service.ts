@@ -4,6 +4,9 @@ import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
   providedIn: 'root'
 })
 export class ModalService {
+
+  public modalRef: any;
+
   constructor(
     private modalService: NgbModal,
     config: NgbModalConfig,
@@ -12,10 +15,11 @@ export class ModalService {
     config.keyboard = true;
   }
   open(content, size = 'md', scroll = true) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: size, scrollable: scroll });
+    this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: size, scrollable: scroll });
   }
   close() {
-    this.modalService.dismissAll();
+    /* this.modalService.dismissAll(); */
+    this.modalRef.dismiss(this.modalRef);
   }
   openSm(content) {
     this.modalService.open(content, { size: 'sm' });

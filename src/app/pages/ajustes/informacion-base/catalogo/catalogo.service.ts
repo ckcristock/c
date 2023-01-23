@@ -13,16 +13,12 @@ export class CatalogoService {
     return this.http.get(`${environment.base_url}/product`, {params});
   }
 
-  getTiposCatalogo(){
-    return this.http.get(`${environment.base_url}/lista-tipos-catalogo`);
-  }
-
   getEstados(){
     return this.http.get(`${environment.base_url}/get-estados-producto`);
   }
 
   getCampos(params = {}){
-    return this.http.get(`${environment.base_url}/vars-subcategoria-producto`,{params});
+    return this.http.get(`${environment.base_url}/get-vars-producto`,{params});
   }
 
   changeEstado( data:any ) {

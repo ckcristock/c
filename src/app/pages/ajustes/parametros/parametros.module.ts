@@ -33,8 +33,6 @@ import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component'
 import { EstimacionViaticosComponent } from './apu/estimacion-viaticos/estimacion-viaticos.component';
 import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-values/estimacion-viaticos-values.component';
 import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.component';
-import { CategoriasComponent } from './categorias/categorias.component';
-import { SubcategoriasComponent } from './subcategorias/subcategorias.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -51,7 +49,8 @@ import { MatButtonModule, MatIconModule } from "@angular/material";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ParametrosNominaComponent } from './params-nomina/parametros-nomina/parametros-nomina.component';
 import { TiposModule } from "../tipos/tipos.module";
-import { MatCard, MatRadioGroup } from "@angular/material";
+import { AccommodationsComponent } from './viaticos/hoteles/accommodations/accommodations.component';
+import { MatCard, MatRadioGroup, MatSlideToggleModule } from "@angular/material";
 
 
 
@@ -83,13 +82,12 @@ import { MatCard, MatRadioGroup } from "@angular/material";
         EstimacionViaticosComponent,
         EstimacionViaticosValuesComponent,
         ValorAlmuerzosComponent,
-        CategoriasComponent,
-        SubcategoriasComponent,
         NominaComponent,
         ViaticosComponent,
         VacantesComponent,
         TercerosComponent,
         ParametrosNominaComponent,
+        AccommodationsComponent,
 
 
     ],
@@ -113,6 +111,7 @@ import { MatCard, MatRadioGroup } from "@angular/material";
         MatButtonModule,
         MatAutocompleteModule,
         MatIconModule,
+        MatSlideToggleModule,
         MatPaginatorModule,
         SweetAlert2Module.forRoot(),
         InformacionBaseModule,
@@ -120,8 +119,6 @@ import { MatCard, MatRadioGroup } from "@angular/material";
     ],
     exports: [
         CuentasBancariasComponent,
-        CategoriasComponent,
-        SubcategoriasComponent,
         ValorAlmuerzosComponent
     ]
 })

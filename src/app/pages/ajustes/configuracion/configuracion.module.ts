@@ -41,6 +41,7 @@ import { LiquidacionConfigComponent } from './nomina/components/liquidacion-conf
 import { SalariosConfigComponent } from './nomina/components/salarios-config/salarios-config.component';
 import { TypeaheadPersonComponent } from './nomina/components/responsables-nomina-config/typeahead-person/typeahead-person.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
 import { ConsecutivosComponent } from './consecutivos/consecutivos.component';
 
 
@@ -99,6 +100,7 @@ import { ConsecutivosComponent } from './consecutivos/consecutivos.component';
     MatIconModule,
     MatSlideToggleModule,
     CKEditorModule,
+    CatSubcatModule,
     MatPaginatorModule
   ],
   exports: [

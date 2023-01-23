@@ -25,8 +25,6 @@ import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component'
 import { EstimacionViaticosComponent } from './apu/estimacion-viaticos/estimacion-viaticos.component';
 import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-values/estimacion-viaticos-values.component';
 import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.component';
-import { CategoriasComponent } from './categorias/categorias.component';
-import { SubcategoriasComponent } from './subcategorias/subcategorias.component';
 import { MaterialesComponent } from "../informacion-base/catalogo/components/materiales/materiales.component";
 import { NominaComponent } from "./nomina/nomina.component";
 import { ViaticosComponent } from "./viaticos/viaticos.component";
@@ -64,7 +62,7 @@ const routes : Routes = [
     { path: 'apu/perfiles', component: PerfilesApuComponent },
     { path: 'apu/estimacion-viaticos', component: EstimacionViaticosComponent },
     { path: 'apu/est-viaticos-valores', component: EstimacionViaticosValuesComponent },
-    
+
     // path: 'apu/procesos-internos', component: ProcesosInternosComponent },
     // { path: 'apu/procesos-externos', component: ProcesosExternosComponent },
 

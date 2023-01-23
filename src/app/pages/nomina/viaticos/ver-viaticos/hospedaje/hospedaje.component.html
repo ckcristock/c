@@ -5,7 +5,7 @@
 <div class="rounded-top table-responsive">
   <table
     class="table table-bordered table-striped table-sm"
-    
+
   >
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
@@ -13,7 +13,7 @@
         <th class="align-middle">Hotel</th>
         <th class="align-middle" *ngIf="!legal">Dirección</th>
         <th class="align-middle">Teléfono</th>
-        <th class="align-middle">T. Acom.</th>
+        <th class="align-middle">T. Alojam.</th>
         <th class="align-middle">Tarifa</th>
         <th class="align-middle"># Días</th>
         <th class="align-middle" *ngIf="!legal">Desayuno</th>
@@ -39,10 +39,11 @@
             {{ item.phone }}
           </td>
           <td>
-            {{ item.pivot.accommodation }}
+            <!-- {{ item?.accommodations?.name }} -->
+            {{ data.te_hotel[i]?.accommodation?.name }}
           </td>
           <td>
-            {{ item.pivot.rate }}
+            {{ item?.pivot?.rate }}
           </td>
           <td>
             {{ item.pivot.n_night }}
@@ -53,7 +54,7 @@
           <td>
             {{ item.pivot.who_cancels }}
           </td>
-  
+
           <td class="text-right">
             {{ item.pivot.total }}
           </td>

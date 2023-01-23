@@ -8,26 +8,31 @@
           </div>
         </div>
         <hr class="line" />
-        <mat-accordion *ngIf="Categorias.length > 0; else loadDataCategorias">
+        <mat-accordion displayMode="flat" *ngIf="Categorias.length > 0; else loadDataCategorias">
           <mat-expansion-panel
             class="mat-elevation-z0 my-0"
             *ngFor="let categoria of Categorias"
             [disabled]="categoria.subcategory.length == 0"
+            [expanded]="selectedCategory.categoria.id == categoria.Id_Categoria_Nueva"
           >
             <mat-expansion-panel-header>
               {{ categoria.Nombre }}
             </mat-expansion-panel-header>
             <ng-container *ngIf="categoria.subcategory.length > 0; else noSub">
               <mat-action-list dense class="small ml-4 my-0">
-                <button mat-list-item
+                <button
+                  mat-list-item
                   *ngFor="let subcategoria of categoria.subcategory"
-                  [ngClass]="
-                    {'bg-soft-primary' :(selectedCategory.categoria.id == subcategoria.Id_Categoria_Nueva &&
-                      selectedCategory.subcategoria.id == subcategoria.Id_Subcategoria)}
-                  "
-                  (click)="getProductosBySubcategoria(
-                    {
-                      categoria:{
+                  [ngClass]="{
+                    'bg-soft-primary':
+                      selectedCategory.categoria.id ==
+                        subcategoria.Id_Categoria_Nueva &&
+                      selectedCategory.subcategoria.id ==
+                        subcategoria.Id_Subcategoria
+                  }"
+                  (click)="
+                    getProductosBySubcategoria({
+                      categoria: {
                         id: subcategoria.Id_Categoria_Nueva,
                         nombre: categoria.Nombre
                       },
@@ -35,8 +40,8 @@
                         id: subcategoria.Id_Subcategoria,
                         nombre: subcategoria.Nombre
                       }
-                    }
-                  )"
+                    })
+                  "
                 >
                   {{ subcategoria.Nombre }}
                 </button>
@@ -55,80 +60,86 @@
             <h4 class="text-primary">Productos</h4>
           </div>
           <div class="col-md-6 px-0 text-right">
-            <div class="btn-group rounded w-sm-100" *ngIf="selectedCategory.categoria.id!==null">
+            <div
+              class="btn-group rounded w-sm-100"
+              *ngIf="selectedCategory.categoria.id !== null"
+            >
               <button
                 class="btn btn-sm btn-primary"
                 (click)="openConfirm(add, 'Agregar')"
               >
                 <i class="fa fa-plus"></i> Agregar
               </button>
-              <button class="btn btn-info btn-sm" (click)="openClose()">
+              <button
+                class="btn btn-info btn-sm"
+                (click)="openClose()"
+                [matBadge]="alerta.senyal"
+                matBadgeColor="warn"
+                [ngbTooltip]="alerta.texto"
+              >
                 <i class="fas fa-sliders-h"></i> Filtros
               </button>
             </div>
           </div>
         </div>
         <hr class="line" />
-        <mat-accordion>
-          <mat-expansion-panel #matPanel="matExpansionPanel" class="mat-elevation-z0">
-            <form [formGroup]="formFiltros" id="formFiltros">
-              <div class="row">
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>Nombre</mat-label>
-                  <input
-                    type="text"
-                    formControlName="nombre"
-                    matInput
-                    placeholder="Nombre del producto"
-                    autocomplete="off"
-                  />
-                </mat-form-field>
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>Tipo</mat-label>
-                  <mat-select
-                    formControlName="tipo_catalogo"
-                    matInput
-                    placeholder="Tipo del catálogo"
-                    (selectionChange)="getProducts()"
+        <mat-expansion-panel
+          #matPanel="matExpansionPanel"
+          class="mat-elevation-z0"
+        >
+          <form [formGroup]="formFiltros" id="formFiltros">
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input
+                  type="text"
+                  formControlName="nombre"
+                  matInput
+                  placeholder="Nombre del producto"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Estado</mat-label>
+                <mat-select
+                  formControlName="estado"
+                  matInput
+                  placeholder="Estado del producto"
+                  (selectionChange)="getProducts()"
+                >
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option
+                    *ngFor="let estado of estados"
+                    [value]="estado.estado"
+                    >{{ estado.estado }}</mat-option
                   >
-                    <mat-option value="">Todos</mat-option>
-                    <mat-option *ngFor="let tipo of tipos_catalogo" [value]="tipo.value">{{ tipo.text }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>Estado</mat-label>
-                  <mat-select
-                    formControlName="estado"
-                    matInput
-                    placeholder="Estado del producto"
-                    (selectionChange)="getProducts()"
-                  >
-                    <mat-option value="">Todos</mat-option>
-                    <mat-option *ngFor="let estado of estados" [value]="estado.estado">{{ estado.estado }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </form>
-          </mat-expansion-panel>
-          <mat-expansion-panel #matPanelAlert="matExpansionPanel">
-            <ng-template matExpansionPanelContent *ngIf="filtroActivado">
-              <div class="alert alert-warning text-center" role="alert">
-                ¡Hay filtros aplicados!
-              </div>
-            </ng-template>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <h5 class="text-dark" *ngIf="selectedCategory.categoria.id!==null">Categoría: {{ selectedCategory.categoria.nombre + ' > ' + selectedCategory.subcategoria.nombre | lowercase }}</h5>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </form>
+        </mat-expansion-panel>
+        <h5 class="text-dark" *ngIf="selectedCategory.categoria.id !== null">
+          Categoría:
+          {{
+            selectedCategory.categoria.nombre +
+              " > " +
+              selectedCategory.subcategoria.nombre | lowercase
+          }}
+        </h5>
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            *ngIf="!loadingProductos && selectedCategory.categoria.id!==null && Productos.length > 0; else notDataProductos"
+            *ngIf="
+              !loadingProductos &&
+                selectedCategory.categoria.id !== null &&
+                Productos.length > 0;
+              else notDataProductos
+            "
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>Nombre</th>
                 <th>Embalaje</th>
-                <th>Tipo</th>
                 <th class="col-1"><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
@@ -136,20 +147,19 @@
               <tr
                 class="text-center"
                 *ngFor="let producto of Productos"
-                [ngClass]="{'text-danger':(producto.Estado == 'Inactivo')}"
+                [ngClass]="{ 'text-danger': producto.Estado == 'Inactivo' }"
               >
                 <td class="align-middle">{{ producto.Nombre_Comercial }}</td>
                 <td class="align-middle">{{ producto.Embalaje }}</td>
-                <td class="align-middle">{{ producto.Tipo_Catalogo }}</td>
                 <td class="align-middle">
                   <div class="text-center">
                     <div ngbDropdown container="body" class="dropdown-primary">
                       <button
                         ngbDropdownToggle
                         class="btn btn-primary btn-sm waves-light"
-
                         type="button"
-                      ><!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
+                      >
+                        <!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
                         <i class="mdi mdi-chevron-down"></i>
                       </button>
                       <div ngbDropdownMenu>
@@ -164,17 +174,32 @@
                           role="button"
                           class="dropdown-item waves-light caja-botones"
                           [ngClass]="{
-                            'text-danger': (producto.Estado == 'Activo'),
-                            'text-success': (producto.Estado == 'Inactivo')
+                            'text-danger': producto.Estado == 'Activo',
+                            'text-success': producto.Estado == 'Inactivo'
                           }"
-                          (click)="cambiarEstado(producto, producto.Estado == 'Activo' ? 'Inactivo' : 'Activo')"
+                          (click)="
+                            cambiarEstado(
+                              producto,
+                              producto.Estado == 'Activo'
+                                ? 'Inactivo'
+                                : 'Activo'
+                            )
+                          "
                         >
-                          <i class="fas" [ngClass]="{
-                              'Activo': 'fa-ban',
-                              'Inactivo': 'fa-check'
-                            }[producto.Estado]"
+                          <i
+                            class="fas"
+                            [ngClass]="
+                              {
+                                Activo: 'fa-ban',
+                                Inactivo: 'fa-check'
+                              }[producto.Estado]
+                            "
                           ></i>
-                          {{ producto.Estado == "Activo" ? " Inactivar" : " Activar" }}
+                          {{
+                            producto.Estado == "Activo"
+                              ? " Inactivar"
+                              : " Activar"
+                          }}
                         </a>
                       </div>
                     </div>
@@ -184,7 +209,8 @@
             </tbody>
           </table>
         </div>
-        <ngb-pagination *ngIf="pagination.collectionSize > 0"
+        <ngb-pagination
+          *ngIf="pagination.collectionSize > 0"
           #paginationProductos
           class="d-flex justify-content-center pagination-rounded pagination-sm"
           [collectionSize]="pagination.collectionSize"
@@ -205,15 +231,15 @@
 
 <!-- Modals -->
 
-<ng-template #add let-modal>
+<ng-template #add let-modalCatalogo>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Registrar Producto</h4>
+    <h4 class="text-primary modal-title">{{ title }} Producto</h4>
     <button
       type="button"
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="modalCatalogo.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -273,55 +299,103 @@
             placeholder="Unidad de medida"
             required
           >
-            <mat-option *ngFor="let unidad of unidades_medida" [value]="unidad.value">{{ unidad.text }}</mat-option>
+            <mat-option
+              *ngFor="let unidad of unidades_medida"
+              [value]="unidad.value"
+              >{{ unidad.text }}</mat-option
+            >
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Tipo</mat-label>
-          <mat-select
-            formControlName="Tipo_Catalogo"
-            matInput
-            placeholder="Tipo del catálogo"
+        <div class="col align-items-center">
+          <input
+            hidden
+            (change)="onFileSelected($event)"
+            #photoInput
+            type="file"
+            id="file"
+            accept=".png, .jpg, .jpeg"
             required
+          /><!--
+            formControlName="Foto" -->
+          <button
+            type="button"
+            mat-raised-button
+            class="my-1 w-100 bg-info"
+            (click)="photoInput.click()"
           >
-            <mat-option *ngFor="let tipo of tipos_catalogo" [value]="tipo.value">{{ tipo.text }}</mat-option>
-          </mat-select>
-        </mat-form-field>
+            <span
+              data-toggle="tooltip"
+              data-placement="top"
+              [title]="foto.name || 'No ha seleccionado ningún archivo'"
+              class="text-white d-inline-block text-truncate"
+              >Cargar <span *ngIf="foto.name || formProductos.value.Foto">nueva</span> foto del producto.</span
+            >
+          </button>
+        </div>
       </div>
-      <hr class="line">
-      <span class="text-primary">Variables de la subcategoría</span>
-      <ng-container formArrayName="FormCamposSubcategoria">
-        <ng-container *ngFor="let campoControl of arrayCamposSubcat.controls; let i = index">
-          <div class="row" [formGroupName]="i">
-            <ng-container *ngFor="let campo of camposSubcat">
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>{{campo.label}}</mat-label>
-                <input
-                  type="{{campo.type}}"
-                  formControlName="{{campo.label}}"
-                  matInput
-                  placeholder=""
-                  autocomplete="off"
-                  [required]="campo.required=='Si'"
-                />
-              </mat-form-field>
-            </ng-container>
-          </div>
+      <hr class="line" />
+  <!-- <span class="text-primary">Campos de la subcategoría</span> -->
+      <ng-container
+        *ngIf="(campos.cat.length + campos.subcat.length) > 0; else notCatSubcatForm"
+      >
+        <ng-container formArrayName="FormCamposCategoria" *ngIf="campos.cat.length > 0; else notCatForm">
+          <ng-container
+            *ngFor="let campoControl of arrayCamposCat.controls; let i = index"
+          >
+              <div
+                class="row"
+                [formGroupName]="i"
+              >
+                <ng-container *ngFor="let campo of campos.cat">
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>{{ campo.label }}</mat-label>
+                    <input
+                      type="{{ campo.type }}"
+                      formControlName="{{ campo.label }}"
+                      matInput
+                      placeholder=""
+                      autocomplete="off"
+                      [required]="campo.required == 'Si'"
+                    />
+                  </mat-form-field>
+                </ng-container>
+              </div>
+          </ng-container>
+        </ng-container>
+        <ng-container formArrayName="FormCamposSubcategoria" *ngIf="campos.subcat.length > 0; else notSubcatForm">
+          <ng-container
+            *ngFor="let campoControl of arrayCamposSubcat.controls; let i = index"
+          >
+            <div
+              class="row"
+              [formGroupName]="i"
+            >
+              <ng-container *ngFor="let campo of campos.subcat">
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>{{ campo.label }}</mat-label>
+                  <input
+                    type="{{ campo.type }}"
+                    formControlName="{{ campo.label }}"
+                    matInput
+                    placeholder=""
+                    autocomplete="off"
+                    [required]="campo.required == 'Si'"
+                  />
+                </mat-form-field>
+              </ng-container>
+            </div>
+          </ng-container>
         </ng-container>
       </ng-container>
     </form>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="_modal.close()"
-    >
+    <button type="button" class="btn btn-danger" (click)="modalCatalogo.close()">
       Cancelar
     </button>
     <button
       type="button"
-      (click)="setProductos()"
+      (click)="saveProductos(modalCatalogo)"
       [disabled]="formProductos.invalid"
       class="btn btn-primary"
     >
@@ -397,11 +471,72 @@
   </ul>
 </ng-template>
 
+<ng-template #openCat let-modalCat>
+  <div class="modal-body">
+    <app-categorias [reloadCategories]="{evento:event,filtro:selectedCategory.categoria.nombre}"></app-categorias>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modalCat.close()">
+      Salir
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #openSubcat let-modalSubcat>
+  <div class="modal-body">
+    <app-subcategorias [reloadSubcategories]="{evento:event,filtro:selectedCategory.subcategoria.nombre}"></app-subcategorias>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modalSubcat.close()">
+      Salir
+    </button>
+  </div>
+</ng-template>
+
 <ng-template #loadDataCategorias>
   <app-not-data [loading]="loadingCategorias"></app-not-data>
 </ng-template>
 
+<ng-template #notCatSubcatForm>
+  <div class="alert alert-warning" role="alert">
+    No tiene campos asignados. Si lo desea puede ir al
+    <a type="button" class="alert-link" (click)="openCatSubcatModal(openCat,'cat')">
+      módulo de Categorías
+    </a> o al
+    <a type="button" class="alert-link" (click)="openCatSubcatModal(openSubcat,'subcat')">
+      módulo de Subcategorías
+    </a>
+    y verificar que sean los campos correctos.
+  </div>
+</ng-template>
+
+<ng-template #notCatForm>
+  <div class="alert alert-warning" role="alert">
+    La categoría selecionada no tiene campos asignados. Si lo desea puede ir al
+    <a type="button" class="alert-link" (click)="openCatSubcatModal(openCat,'cat')">
+      módulo de Categorías
+    </a>
+    y verificar que sean los campos correctos.
+  </div>
+</ng-template>
+
+<ng-template #notSubcatForm>
+  <div class="alert alert-warning" role="alert">
+    La subcategoría selecionada no tiene campos asignados. Si lo desea puede ir al
+    <a type="button" class="alert-link" (click)="openCatSubcatModal(openSubcat,'subcat')">
+      módulo de Subcategorías
+    </a>
+    y verificar que sean los campos correctos.
+  </div>
+</ng-template>
+
 <ng-template #notDataProductos>
-  <app-not-data *ngIf="selectedCategory.categoria.id!== null" [loading]="loadingProductos"></app-not-data>
-  <app-not-data *ngIf="selectedCategory.categoria.id=== null" text="Seleccione una subcategoría para ver los productos en dicha subcategoría"></app-not-data>
+  <app-not-data
+    *ngIf="selectedCategory.categoria.id !== null"
+    [loading]="loadingProductos"
+  ></app-not-data>
+  <app-not-data
+    *ngIf="selectedCategory.categoria.id === null"
+    text="Seleccione una subcategoría para ver los productos en dicha subcategoría"
+  ></app-not-data>
 </ng-template>

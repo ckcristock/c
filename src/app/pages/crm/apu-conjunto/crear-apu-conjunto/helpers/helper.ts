@@ -94,6 +94,8 @@ export const functionsApuConjunto = {
       sale_price_cop_withholding_total: [0],
       trm: [0],
       sale_price_usd_withholding_total: [0],
+      format_code: [''],
+      code: ['']
     });
     this.subscribes(group)
     return group;

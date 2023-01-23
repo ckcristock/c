@@ -8,6 +8,8 @@ export interface ApuPart {
 export interface Data {
     id:                                 number;
     name:                               string;
+    code:                               string;
+    format_code:                        string;
     city_id:                            string;
     person_id:                          number;
     user_id:                            number;

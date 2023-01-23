@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { QuotationService } from '../../cotizacion/quotation.service';
@@ -16,6 +17,12 @@ import { NegociosService } from '../negocios.service';
 export class ModalNuevoNegocioComponent implements OnInit {
   @ViewChild('newBusiness') newBusiness;
   @Output() updated = new EventEmitter<any>();
+  datosCabecera = {
+    Titulo: '',
+    Fecha: '',
+    Codigo: '',
+    CodigoFormato: ''
+  }
   today = new Date().toISOString().slice(0, 10);
   companies: any[];
   id;
@@ -50,12 +57,14 @@ export class ModalNuevoNegocioComponent implements OnInit {
     private _swal: SwalService,
     private _user: UserService,
     private _person: PersonService,
+    public _consecutivos: ConsecutivosService,
   ) {
     this.id = this._user.user.person.id;
   }
 
   ngOnInit(): void {
-
+    this.datosCabecera.Fecha = new Date().toString();
+    this.datosCabecera.Titulo = 'Nuevo negocio';
   }
 
   openModal() {
@@ -66,6 +75,33 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.getCompanies();
     this.getCountries();
     this.getPeople();
+    this.getConsecutivo();
+  }
+
+  getConsecutivo() {
+    this._consecutivos.getConsecutivo('businesses').subscribe((r: any) => {
+      this.datosCabecera.CodigoFormato = r.data.format_code
+      this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+      this.construirConsecutivo(r);
+    })
+  }
+
+  construirConsecutivo(r) {
+    let con = this._consecutivos.construirConsecutivo(r.data);
+    this.datosCabecera.Codigo = con
+    this.form.patchValue({
+      code: con
+    })
+    if (r.data.city) {
+      this.form.get('city_id').valueChanges.subscribe(value => {
+        let city = this.cities.find(x => x.value === value)
+        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
+        this.datosCabecera.Codigo = con
+        this.form.patchValue({
+          code: con
+        })
+      });
+    }
   }
 
   getPeople() {
@@ -84,7 +120,9 @@ export class ModalNuevoNegocioComponent implements OnInit {
       country_id: [null, Validators.required],
       city_id: [null, Validators.required],
       date: ['', Validators.required],
-      person_id: [this.id]
+      person_id: [this.id],
+      format_code: [''],
+      code: ['']
     });
   }
 

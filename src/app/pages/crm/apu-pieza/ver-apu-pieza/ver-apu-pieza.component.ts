@@ -14,6 +14,12 @@ export class VerApuPiezaComponent implements OnInit {
   data: Data;
   isData: boolean = false;
   loading: boolean = false;
+  datosCabecera = {
+    Titulo: 'APU PIEZA',
+    Fecha: '',
+    Codigo: '',
+    CodigoFormato: ''
+  }
   constructor(
     private _apuParts: ApuPiezaService,
     private actRoute: ActivatedRoute
@@ -28,6 +34,9 @@ export class VerApuPiezaComponent implements OnInit {
     this.loading = true
     this._apuParts.getApuPart(this.id).subscribe((r: ApuPart) => {
       this.data = r.data;
+      this.datosCabecera.Codigo = r.data.code;
+      this.datosCabecera.Fecha = r.data.created_at.toString();
+      this.datosCabecera.CodigoFormato = r.data.format_code;
       this.isData = true;
       this.loading = false
     })

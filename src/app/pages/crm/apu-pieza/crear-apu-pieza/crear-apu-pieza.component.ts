@@ -19,6 +19,7 @@ import { CalculationBasesService } from '../../../ajustes/configuracion/base-cal
 import { ProcesosExternosService } from 'src/app/pages/ajustes/parametros/apu/procesos-externos/procesos-externos.service';
 import { ProcesosInternosService } from 'src/app/pages/ajustes/parametros/apu/procesos-internos/procesos-internos.service';
 import { MaquinasHerramientasService } from 'src/app/pages/ajustes/parametros/apu/maquinas-herramientas/maquinas-herramientas.service';
+import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -28,12 +29,12 @@ import { MaquinasHerramientasService } from 'src/app/pages/ajustes/parametros/ap
 export class CrearApuPiezaComponent implements OnInit {
   @Input('id') id;
   @Input('data') data;
-  @Input('title') title = 'Crear APU - Pieza';
+  @Input('title') title = 'Crear pieza';
   form: FormGroup;
   date: Date = new Date();
   datosCabecera = {
-    Titulo: this.title,
-    Fecha: new Date(),
+    Titulo: '',
+    Fecha: '',
     Codigo: '',
     CodigoFormato: ''
   }
@@ -68,10 +69,13 @@ export class CrearApuPiezaComponent implements OnInit {
     private _calculationBase: CalculationBasesService,
     private _externos: ProcesosExternosService,
     private _internos: ProcesosInternosService,
+    public _consecutivos: ConsecutivosService,
     private _maquinas: MaquinasHerramientasService
   ) { }
 
   async ngOnInit() {
+    this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
+    this.datosCabecera.Titulo = this.title;
     this.loading = false
     await this.getBases()
     this.createForm();
@@ -82,6 +86,7 @@ export class CrearApuPiezaComponent implements OnInit {
     this.getIndirectCosts();
     this.getPeople();
     this.getCities();
+    this.getConsecutivo();
     this.collapses();
     this.getThicknesses();
     await this.getCutLaserMaterial();
@@ -95,6 +100,39 @@ export class CrearApuPiezaComponent implements OnInit {
       return null
     }
     (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
+  }
+
+  getConsecutivo() {
+    this._consecutivos.getConsecutivo('apu_parts').subscribe((r:any) => {
+      this.datosCabecera.CodigoFormato = r.data.format_code
+      this.form.patchValue({format_code: this.datosCabecera.CodigoFormato})
+      this.construiConsecutivo(r);
+    })
+  }
+
+  construiConsecutivo(r) {
+    if (!this.id) {
+      let con = this._consecutivos.construirConsecutivo(r.data);
+      this.datosCabecera.Codigo = con
+      this.form.patchValue({
+        code: con
+      })
+    } else {
+      this.datosCabecera.Codigo = this.data?.code
+      this.form.patchValue({
+        code: this.data?.code
+      })
+    }
+    if(r.data.city) {
+      this.form.get('city_id').valueChanges.subscribe(value => {
+        let city = this.cities.find(x => x.value === value)
+        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
+        this.datosCabecera.Codigo = con
+        this.form.patchValue({
+          code: con
+        })
+      });
+    }
   }
 
   getVariablesApu() {
@@ -461,8 +499,6 @@ export class CrearApuPiezaComponent implements OnInit {
     this.form.patchValue({
       files: this.fileArr
     });
-    console.log(this.form.value);
-
     this._swal
       .show({
         text: `Se dispone a ${this.id ? 'editar' : 'crear'} un apu pieza`,
@@ -472,7 +508,6 @@ export class CrearApuPiezaComponent implements OnInit {
       .then((r) => {
         if (r.isConfirmed) {
           if (this.id) {
-            console.log(this.id);
             this._apuPieza.update(this.form.value, this.id).subscribe(
               (res: any) => this.showSuccess(),
               (err) => this.showError(err)

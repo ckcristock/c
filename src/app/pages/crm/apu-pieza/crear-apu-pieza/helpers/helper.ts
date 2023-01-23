@@ -131,7 +131,9 @@ export const functionsApu = {
       sale_value_cop_unit: [0],
       trm: [calculationBase.trm.value],
       sale_price_usd_withholding_total: [0],
-      sale_value_usd_unit: [0]
+      sale_value_usd_unit: [0],
+      format_code: [''],
+      code: ['']
     });
     this.subscribes(group)
     return group;
@@ -188,6 +190,7 @@ export const functionsApu = {
         direct_costs_indirect_costs_total: total_direct_cost.value + value
       });
     });
+
     group.get('total_direct_cost').valueChanges.subscribe(value => {
       let indirect_cost_total = group.get('indirect_cost_total');
       let administrative_percentage = group.get('administrative_percentage');

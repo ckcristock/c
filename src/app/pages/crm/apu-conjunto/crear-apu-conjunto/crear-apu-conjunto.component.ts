@@ -17,6 +17,7 @@ import { ProcesosExternosService } from 'src/app/pages/ajustes/parametros/apu/pr
 import { ProcesosInternosService } from 'src/app/pages/ajustes/parametros/apu/procesos-internos/procesos-internos.service';
 import { MaquinasHerramientasService } from 'src/app/pages/ajustes/parametros/apu/maquinas-herramientas/maquinas-herramientas.service';
 import { UnidadesMedidasService } from 'src/app/pages/ajustes/parametros/apu/unidades-medidas/unidades-medidas.service';
+import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 interface ApuPart {
   name: string;
   id: number;
@@ -30,11 +31,17 @@ interface ApuPart {
 export class CrearApuConjuntoComponent implements OnInit {
   @Input('id') id;
   @Input('data') data: any;
-  @Input('title') title= 'Crear APU - Conjunto';
+  @Input('title') title = 'Crear conjunto';
   form: FormGroup;
   formGroup: FormGroup;
   filters_apu = {
     type_multiple: 'pyc'
+  }
+  datosCabecera = {
+    Titulo: '',
+    Fecha: '',
+    Codigo: '',
+    CodigoFormato: ''
   }
   date: Date = new Date();
   indirectCosts: any[] = [];
@@ -75,11 +82,14 @@ export class CrearApuConjuntoComponent implements OnInit {
     private _internos: ProcesosInternosService,
     private _maquinas: MaquinasHerramientasService,
     private _units: UnidadesMedidasService,
+    public _consecutivos: ConsecutivosService,
   ) {
 
   }
 
   ngOnInit(): void {
+    this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
+    this.datosCabecera.Titulo = this.title;
     // await this.getBases()
     this.getPeople();
     this.getCities();
@@ -93,7 +103,40 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.collapses();
     this.loadPeople();
     this.getVariablesApu();
+    this.getConsecutivo();
+  }
 
+  getConsecutivo() {
+    this._consecutivos.getConsecutivo('apu_sets').subscribe((r: any) => {
+      this.datosCabecera.CodigoFormato = r.data.format_code
+      this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+      this.construirConsecutivo(r);
+    })
+  }
+
+  construirConsecutivo(r) {
+    if (!this.id) {
+      let con = this._consecutivos.construirConsecutivo(r.data);
+      this.datosCabecera.Codigo = con
+      this.form.patchValue({
+        code: con
+      })
+    } else {
+      this.datosCabecera.Codigo = this.data?.code
+      this.form.patchValue({
+        code: this.data?.code
+      })
+    }
+    if (r.data.city) {
+      this.form.get('city_id').valueChanges.subscribe(value => {
+        let city = this.cities.find(x => x.value === value)
+        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
+        this.datosCabecera.Codigo = con
+        this.form.patchValue({
+          code: con
+        })
+      });
+    }
   }
 
   getUnits() {

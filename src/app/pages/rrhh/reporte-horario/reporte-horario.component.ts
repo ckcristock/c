@@ -8,6 +8,7 @@ import { ReporteHorarioService } from './reporte-horario.service';
 import { CompanyService } from '../../ajustes/informacion-base/services/company.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-reporte-horario',
@@ -16,6 +17,7 @@ import { MatAccordion } from '@angular/material/expansion';
 })
 export class ReporteHorarioComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  datePipe = new DatePipe('es-CO');
   matPanel = false;
   openClose(){
     if (this.matPanel == false){
@@ -24,7 +26,7 @@ export class ReporteHorarioComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   loading = false;
   reporteHorarios: any[] = [];
@@ -33,6 +35,9 @@ export class ReporteHorarioComponent implements OnInit {
   companies: any[] = [];
   forma: FormGroup;
   people: any[] = [];
+  date: any;
+  firstDay = moment().format('YYYY-MM-DD');
+  lastDay = moment().format('YYYY-MM-DD');
   constructor(
     private _companies: CompanyService,
     private _grups: GroupService,
@@ -60,16 +65,26 @@ export class ReporteHorarioComponent implements OnInit {
       this.people.unshift({ text: 'Todos', value: 0 });
     });
   }
+
+  selectedDate(fecha) {
+    if (fecha.value) {
+      this.firstDay = this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd');
+      this.lastDay =  this.datePipe.transform(fecha.value.end._d, 'yyy-MM-dd')
+    } else {
+      this.firstDay = moment().format('YYYY-MM-DD')
+      this.lastDay = moment().format('YYYY-MM-DD')
+    }
+    this.getDiaries()
+  }
   getDiaries() {
-    let d1 = this.forma.get('first_day').value;
-    let d2 = this.forma.get('last_day').value;
+    let d1 = this.firstDay;
+    let d2 = this.lastDay;
 
     this.loading = true;
     this._reporteHorario
       .getFixedTurnsDiaries(d1, d2, this.getForm() )
       .subscribe((r) => {
         this.reporteHorarios = r.data;
-        //console.log(this.reporteHorarios)
         this.loading = false;
       });
   }
@@ -95,8 +110,6 @@ export class ReporteHorarioComponent implements OnInit {
   createForm() {
     this.forma = this.fb.group({
       turn_type: [''],
-      first_day: [moment().format('YYYY-MM-DD')],
-      last_day: [moment().format('YYYY-MM-DD')],
       group_id: [0],
       dependency_id: [0],
       company_id: [0],
@@ -114,6 +127,7 @@ export class ReporteHorarioComponent implements OnInit {
       }
     });
   }
+
   addElement() {
     this.dependencyList.unshift({ value: 0, text: 'Todas' });
   }
@@ -123,11 +137,13 @@ export class ReporteHorarioComponent implements OnInit {
   }
   donwloading = false;
   download() {
-    let d1 = this.forma.get('first_day').value;
-    let d2 = this.forma.get('last_day').value;
+    /* let d1 = this.forma.get('first_day').value;
+    let d2 = this.forma.get('last_day').value; */
+    let d1 = this.firstDay;
+    let d2 = this.lastDay;
 
     this.donwloading = true;
-   
+
     this._reporteHorario
       .download(d1, d2, this.getForm())
       .subscribe((response: BlobPart) => {

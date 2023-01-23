@@ -358,8 +358,8 @@ export class CatalogoComponent implements OnInit {
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.foto.file = base64;
+        this.formProductos.get("Foto").setValue(this.foto.file);
       });
-      this.formProductos.get("Foto").setValue(this.foto.file);
     }
   }
 
@@ -405,7 +405,10 @@ export class CatalogoComponent implements OnInit {
       delete this.formProductos.value.FormCamposSubcategoria;
 
       let formData = {...this.formProductos.value };
+
       formData["Foto"] = { ...this.foto };
+      delete formData.string;
+      delete formData.name;
       this._swal.show({
         title: '¿Estás seguro(a)?',
         text: 'Si ya verificó la información y está de acuerdo, por favor proceda.',

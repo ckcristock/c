@@ -2,161 +2,161 @@
   <div class="card-body">
     <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
     <hr class="line" />
-    <ng-container [formGroup]="form">
-      <div class="row">
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Órden de pedido</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="purchase_order"
-            autocomplete="off"
-            required
-          />
-          <mat-error>Campo obligatorio</mat-error>
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Tipo</mat-label>
-          <mat-select formControlName="type" required>
-            <mat-option value="externa">Externa</mat-option>
-            <mat-option value="interna">Interna</mat-option>
-          </mat-select>
-          <mat-error>Campo obligatorio</mat-error>
-        </mat-form-field>
-        <ng-container *ngIf="form.controls.type.value == 'externa'">
+    <ng-container *ngIf="!loading && form; else notData">
+      <ng-container [formGroup]="form">
+        <div class="row">
           <mat-form-field class="col" appearance="outline">
-            <mat-label>Cliente</mat-label>
+            <mat-label>Órden de pedido</mat-label>
             <input
               matInput
               type="text"
-              formControlName="third_party_id"
-              [ngbTypeahead]="search_tercero"
-              [inputFormatter]="formatter_tercero"
-              [resultTemplate]="rt_third"
+              formControlName="purchase_order"
+              autocomplete="off"
+              required
+            />
+            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="type" required>
+              <mat-option value="externa">Externa</mat-option>
+              <mat-option value="interna">Interna</mat-option>
+            </mat-select>
+            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+          <ng-container *ngIf="form.controls.type.value == 'externa'">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Cliente</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="third_party_id"
+                [ngbTypeahead]="search_tercero"
+                [inputFormatter]="formatter_tercero"
+                [resultTemplate]="rt_third"
+                [editable]="false"
+                placeholder="Busca por nombre"
+                required
+              />
+              <mat-error>Campo obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Solicitado por</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="third_party_person_id"
+                [ngbTypeahead]="search_person_id"
+                [inputFormatter]="formatter_person_id"
+                [resultTemplate]="rt_person_id"
+                [editable]="false"
+                placeholder="Busca por nombre"
+                required
+              />
+              <mat-error>Campo obligatorio</mat-error>
+            </mat-form-field>
+          </ng-container>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cotización</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="quotation_id"
+              [ngbTypeahead]="search_quotation"
+              [inputFormatter]="formatter_quotation"
+              [resultTemplate]="rt_quotation"
+              [editable]="false"
+              placeholder="Busca por línea o proyecto"
+              required
+            />
+            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de entrega</mat-label>
+            <input
+              formControlName="delivery_date"
+              matInput
+              [matDatepicker]="dp_delivery"
+              disabled
+              [required]="true"
+            />
+            <mat-hint
+              >{{
+                form.controls.delivery_date.value
+                  ? (form.controls.delivery_date.value | date : "fullDate")
+                  : "DD/MM/YYYY"
+              }}
+            </mat-hint>
+            <mat-error>Campo obligatorio</mat-error>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="dp_delivery"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #dp_delivery disabled="false"></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Ciudad</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="municipality_id"
+              [ngbTypeahead]="search_city"
+              [inputFormatter]="formatter_city"
+              [resultTemplate]="rt_city"
               [editable]="false"
               placeholder="Busca por nombre"
               required
             />
             <mat-error>Campo obligatorio</mat-error>
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Solicitado por</mat-label>
-            <input
+          <mat-form-field
+            class="col-12 mat-form-field-no-padding textarea"
+            appearance="outline"
+          >
+            <mat-label>Observaciones</mat-label>
+            <textarea
               matInput
-              type="text"
-              formControlName="third_party_person_id"
-              [ngbTypeahead]="search_person_id"
-              [inputFormatter]="formatter_person_id"
-              [resultTemplate]="rt_person_id"
-              [editable]="false"
-              placeholder="Busca por nombre"
+              placeholder="Ingresa las observaciones"
+              rows="5"
+              formControlName="observation"
               required
-            />
+              [cdkTextareaAutosize]="true"
+            ></textarea>
             <mat-error>Campo obligatorio</mat-error>
           </mat-form-field>
-        </ng-container>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Cotización</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="quotation_id"
-            [ngbTypeahead]="search_quotation"
-            [inputFormatter]="formatter_quotation"
-            [resultTemplate]="rt_quotation"
-            [editable]="false"
-            placeholder="Busca por línea o proyecto"
-            required
-          />
-          <mat-error>Campo obligatorio</mat-error>
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Fecha de entrega</mat-label>
-          <input
-            formControlName="delivery_date"
-            matInput
-            [matDatepicker]="dp_delivery"
-            disabled
-            [required]="true"
-          />
-          <mat-hint
-            >{{
-              form.controls.delivery_date.value
-                ? (form.controls.delivery_date.value | date : "fullDate")
-                : "DD/MM/YYYY"
-            }}
-          </mat-hint>
-          <mat-error>Campo obligatorio</mat-error>
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="dp_delivery"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #dp_delivery disabled="false"></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Ciudad</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="municipality_id"
-            [ngbTypeahead]="search_city"
-            [inputFormatter]="formatter_city"
-            [resultTemplate]="rt_city"
-            [editable]="false"
-            placeholder="Busca por nombre"
-            required
-          />
-          <mat-error>Campo obligatorio</mat-error>
-        </mat-form-field>
-        <mat-form-field
-          class="col-12 mat-form-field-no-padding textarea"
-          appearance="outline"
-        >
-          <mat-label>Observaciones</mat-label>
-          <textarea
-            matInput
-            placeholder="Ingresa las observaciones"
-            rows="5"
-            formControlName="observation"
-            required
-            [cdkTextareaAutosize]="true"
-          ></textarea>
-          <mat-error>Campo obligatorio</mat-error>
-        </mat-form-field>
-      </div>
-      <div class="mb-4">
-        <div>Descripcion</div>
-        <ckeditor
-          [editor]="_texteditor.Editor"
-          (ready)="_texteditor.onReady($event)"
-          [config]="_texteditor.configEditor"
-          formControlName="description"
-        ></ckeditor>
-      </div>
-      <div class="mb-4">
-        <div>Requisitos técnicos, funcionales y desempeño</div>
-        <ckeditor
-          [editor]="_texteditor.Editor"
-          (ready)="_texteditor.onReady($event)"
-          [config]="_texteditor.configEditor"
-          formControlName="technical_requirements"
-        ></ckeditor>
-      </div>
-      <div class="mb-4">
-        <div>Requisitos legales o reglamentos aplicables</div>
-        <ckeditor
-          [editor]="_texteditor.Editor"
-          (ready)="_texteditor.onReady($event)"
-          [config]="_texteditor.configEditor"
-          formControlName="legal_requirements"
-        ></ckeditor>
-      </div>
+        </div>
+        <div class="mb-4">
+          <div>Descripcion</div>
+          <ckeditor
+            [editor]="_texteditor.Editor"
+            (ready)="_texteditor.onReady($event)"
+            [config]="_texteditor.configEditor"
+            formControlName="description"
+          ></ckeditor>
+        </div>
+        <div class="mb-4">
+          <div>Requisitos técnicos, funcionales y desempeño</div>
+          <ckeditor
+            [editor]="_texteditor.Editor"
+            (ready)="_texteditor.onReady($event)"
+            [config]="_texteditor.configEditor"
+            formControlName="technical_requirements"
+          ></ckeditor>
+        </div>
+        <div class="mb-4">
+          <div>Requisitos legales o reglamentos aplicables</div>
+          <ckeditor
+            [editor]="_texteditor.Editor"
+            (ready)="_texteditor.onReady($event)"
+            [config]="_texteditor.configEditor"
+            formControlName="legal_requirements"
+          ></ckeditor>
+        </div>
+      </ng-container>
+      <button type="button" class="btn btn-primary btn-block" (click)="save()">
+        Guardar y enviar
+      </button>
     </ng-container>
-    <button
-      type="button"
-      class="btn btn-primary btn-block"
-      (click)="save()"
-    >Guardar y enviar</button>
   </div>
 </div>
 
@@ -171,4 +171,7 @@
 </ng-template>
 <ng-template #rt_person_id let-r="result" let-t="term">
   <div>{{ r.name }}</div>
+</ng-template>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

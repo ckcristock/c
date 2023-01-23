@@ -7,6 +7,7 @@ import { CalculationBasesService } from '../../../ajustes/configuracion/base-cal
 import { BudgetService } from '../budget.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 
 @Component({
   selector: 'app-crear-presupuesto',
@@ -19,6 +20,10 @@ export class CrearPresupuestoComponent implements OnInit {
   @Input('title') title = 'Nuevo presupuesto';
 
   indirectCosts: any = [];
+  custumer$: Observable<any>;
+  custumerLoading = false;
+  custumerInput$ = new Subject<string>();
+  minLengthTerm = 3;
   clients: any = [];
   forma: FormGroup;
   data = '';
@@ -26,6 +31,12 @@ export class CrearPresupuestoComponent implements OnInit {
   calculationBase: any = {}
   loading = false;
   path: string;
+  datosCabecera = {
+    Titulo: '',
+    Fecha: '',
+    Codigo: '',
+    CodigoFormato: ''
+  }
 
   constructor(
     private _apuPieza: ApuPiezaService,
@@ -34,32 +45,60 @@ export class CrearPresupuestoComponent implements OnInit {
     private _budget: BudgetService,
     private _swal: SwalService,
     private router: Router,
+    public _consecutivos: ConsecutivosService,
     private route: ActivatedRoute,
-  ) { }
-  async ngOnInit() {
+  ) {
     this.path = this.route.snapshot.url[0].path;
+  }
+
+  async ngOnInit() {
+    this.datosCabecera.Fecha = this.path != 'editar' ? new Date() : this.dataEdit?.created_at;
+    this.datosCabecera.Titulo = this.title;
     this.loading = true;
-    /*   this.getCustumers(); */
     this.getClients();
-
-    /* if (this.dataEdit) {
-
-      this.calculationBase = {
-        trm: { value: this.dataEdit.trm },
-        utility_percentage: { value: this.dataEdit.utility_percentage },
-        unforeseen_percentage: { value: this.dataEdit.unforeseen_percentage },
-        administration_percentage: { value: this.dataEdit.administration_percentage },
-      }
-    } else { */
-    await this.getBases()
-    /*   } */
-
+    await this.getBases();
     this.createForm();
     await this.getIndirectCosts();
+    await this.getCities();
+    this.getConsecutivo();
     this.loading = false;
-    this.getCities();
+  }
 
-
+  getConsecutivo() {
+    this._consecutivos.getConsecutivo('budgets').subscribe((r: any) => {
+      this.datosCabecera.CodigoFormato = r.data.format_code
+      this.forma.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+      if (this.path != 'editar') {
+        let con = this._consecutivos.construirConsecutivo(r.data);
+        this.datosCabecera.Codigo = con
+        this.forma.patchValue({
+          code: con
+        })
+      } else {
+        this.datosCabecera.Codigo = this.dataEdit?.code
+        this.forma.patchValue({
+          code: this.dataEdit?.code
+        })
+      }
+      if (this.path == 'copiar') {
+        let city = this.cities.find(x => x.value === this.forma.controls.destinity_id.value)
+        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
+        this.datosCabecera.Codigo = con
+        this.forma.patchValue({
+          code: con
+        })
+      }
+      if (r.data.city) {
+        this.forma.get('destinity_id').valueChanges.subscribe(value => {
+          let city = this.cities.find(x => x.value === value)
+          let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
+          this.datosCabecera.Codigo = con
+          this.forma.patchValue({
+            code: con
+          })
+        });
+      }
+    })
   }
 
   async getBases() {
@@ -79,9 +118,7 @@ export class CrearPresupuestoComponent implements OnInit {
           { text: el.indirect_cost.name, value: el.indirect_cost_id, percentage: el.percentage }
           ]
         }, [])
-
     } else {
-
       await this._apuPieza.getIndirectCosts().toPromise().then((r: any) => {
         this.indirectCosts = r.data;
       });
@@ -94,12 +131,6 @@ export class CrearPresupuestoComponent implements OnInit {
       this.clients = r.data;
     })
   }
-
-
-  custumer$: Observable<any>;
-  custumerLoading = false;
-  custumerInput$ = new Subject<string>();
-  minLengthTerm = 3;
 
   getCustumers() {
     this.custumer$ = concat(
@@ -122,11 +153,9 @@ export class CrearPresupuestoComponent implements OnInit {
     );
   }
 
-
-
   createForm() {
     this.forma = this.fb.group({
-      id: (this.dataEdit && this.path != 'copiar' ? this.dataEdit.id : ''),
+      id: (this.dataEdit && this.path == 'editar' ? this.dataEdit.id : ''),
       customer_id: (this.dataEdit ? this.dataEdit.customer_id : ''),
       destinity_id: (this.dataEdit ? this.dataEdit.destinity_id : ''),
       line: (this.dataEdit ? this.dataEdit.line : ''),
@@ -140,7 +169,9 @@ export class CrearPresupuestoComponent implements OnInit {
       unit_value_prorrateado_cop: (this.dataEdit ? this.dataEdit.unit_value_prorrateado_cop : ''),
       unit_value_prorrateado_usd: (this.dataEdit ? this.dataEdit.unit_value_prorrateado_usd : ''),
       subItemsToDelete: [[]],
-      itemsTodelete: [[]]
+      itemsTodelete: [[]],
+      format_code: [''],
+      code: ['']
     });
   }
 
@@ -197,16 +228,16 @@ export class CrearPresupuestoComponent implements OnInit {
         })
       })
     }
-
-
     /*  help.functionsApu.indirectCostOp(group, form); */
     return group;
   }
-  getCities() {
-    this._apuPieza.getCities().subscribe((r: any) => {
+
+  async getCities() {
+    await this._apuPieza.getCities().toPromise().then((r: any) => {
       this.cities = r.data;
     })
   }
+
   save() {
     this._swal.show({
       title: '¿Está seguro?',
@@ -214,7 +245,6 @@ export class CrearPresupuestoComponent implements OnInit {
       icon: 'question'
     },
       this.dataEdit && this.path != 'copiar' ? this.updateData : this.saveData
-
     ).then(r => {
       if (r.isConfirmed) {
         this._swal.show({
@@ -224,23 +254,17 @@ export class CrearPresupuestoComponent implements OnInit {
           showCancel: false
         })
         this.router.navigate(['crm/presupuesto'])
-
       }
     })
-
-
   }
 
   saveData = () => {
     const data = this.forma.value;
     this._budget.save({ data }).subscribe(r => { })
-
   }
 
   updateData = () => {
     const data = this.forma.value;
-
     this._budget.update(data, this.id).subscribe(r => { })
-
   }
 }

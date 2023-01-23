@@ -20,7 +20,7 @@ import { CiudadesComponent } from './paises-ciudades/ciudades/ciudades.component
 import { PaisesCiudadesComponent } from './paises-ciudades/paises-ciudades.component';
 import { DepartamentosMunicipiosComponent } from './departamentos-municipios/departamentos-municipios.component';
 import { BaseCalculosComponent } from './base-calculos/base-calculos.component';
-import { MatExpansionModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule } from '@angular/material';
+import { MatExpansionModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule, MatPaginatorModule } from '@angular/material';
 import { NominaComponent } from './nomina/nomina.component';
 import { HorasExtrasConfigComponent } from './nomina/components/horas-extras-config/horas-extras-config.component';
 import { SSocialFuncionarioConfigComponent } from './nomina/components/s-social-funcionario-config/s-social-funcionario-config.component';
@@ -41,6 +41,8 @@ import { LiquidacionConfigComponent } from './nomina/components/liquidacion-conf
 import { SalariosConfigComponent } from './nomina/components/salarios-config/salarios-config.component';
 import { TypeaheadPersonComponent } from './nomina/components/responsables-nomina-config/typeahead-person/typeahead-person.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
+import { ConsecutivosComponent } from './consecutivos/consecutivos.component';
 
 
 @NgModule({
@@ -74,6 +76,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     LiquidacionConfigComponent,
     SalariosConfigComponent,
     TypeaheadPersonComponent,
+    ConsecutivosComponent,
   ],
   imports: [
     CommonModule,
@@ -97,6 +100,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     MatIconModule,
     MatSlideToggleModule,
     CKEditorModule,
+    CatSubcatModule,
+    MatPaginatorModule
   ],
   exports: [
     CamposTercerosComponent

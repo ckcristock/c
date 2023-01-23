@@ -17,6 +17,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, SatDatepickerModule, Sa
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { CrearOrdenProduccionComponent } from './ordenes-produccion/crear-orden-produccion/crear-orden-produccion.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { VerOrdenProduccionComponent } from './ordenes-produccion/ver-orden-produccion/ver-orden-produccion.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -35,7 +36,8 @@ export const MY_FORMATS = {
     IngenieriaComponent,
     DisenoComponent,
     ProduccionComponent,
-    CrearOrdenProduccionComponent
+    CrearOrdenProduccionComponent,
+    VerOrdenProduccionComponent,
   ],
   imports: [
     CommonModule,
@@ -63,7 +65,7 @@ export const MY_FORMATS = {
     SatDatepickerModule,
     SatNativeDateModule,
     MatTooltipModule,
-    CKEditorModule
+    CKEditorModule,
   ],
   providers: [
     {

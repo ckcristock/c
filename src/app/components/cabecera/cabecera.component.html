@@ -1,26 +1,18 @@
 <div class="card-title">
-  <div class="row invoice-contact d-flex align-self-start">
-    <div class="col-md-6">
-      <table class="table table-responsive invoice-table table-borderless mb-0">
-        <tbody>
-          <tr>
-            <td class="p-0">
-              <img
-                src="{{ Empresa.logo }}"
-                class="mb-1 img-fluid img-cabecera"
-              />
-              <br /><strong>{{ Empresa.name }}</strong> <br /><strong
-                >NIT:</strong
-              >
-              {{ Empresa.document_number | number | puntos }}-{{
-                Empresa.verification_digit
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-md-6 text-right">
+  <div class="row d-flex justify-content-md-between">
+    <figure class="col-md figure my-auto text-md-left text-center">
+      <img
+        [src]="Empresa.logo"
+        class="figure-img img-fluid rounded img-cabecera"
+      />
+      <figcaption class="figure-caption">
+        <strong>{{ Empresa.name }}</strong> <br /><strong>NIT:</strong>
+        {{ Empresa.document_number | number | puntos }}-{{
+          Empresa.verification_digit
+        }}
+      </figcaption>
+    </figure>
+    <div class="col-md text-md-right text-center">
       <h4 class="text-primary">{{ datosCabecera.Titulo || "Sin título" }}</h4>
       <h4
         *ngIf="datosCabecera.Codigo != undefined && datosCabecera.Codigo != ''"
@@ -28,7 +20,9 @@
         {{ datosCabecera.Codigo }}
       </h4>
       <h6>{{ datosCabecera.Fecha | date : "longDate" }}</h6>
-      <div class="clearfix"></div>
+      <small>{{
+        datosCabecera.CodigoFormato ? datosCabecera.CodigoFormato : ""
+      }}</small>
     </div>
   </div>
 </div>

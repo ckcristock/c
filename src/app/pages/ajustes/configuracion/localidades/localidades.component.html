@@ -243,8 +243,245 @@
           </ngb-pagination>
         </ul>
       </div>
+    </div>
+  </div>
+</div>
 
-      <!-- <div
+<ng-template #add let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Lista de {{ tipo }}</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form changeForm="ngForm">
+      <div class="row">
+        <ng-container *ngIf="tipo != 'paises'">
+          <mat-form-field appearance="outline" class="col">
+            <mat-label>Paises</mat-label>
+            <mat-select
+              (selectionChange)="getStates($event.value)"
+              [(value)]="countrySelected"
+              required
+            >
+              <mat-option
+                *ngFor="let item of countries"
+                [value]="item.id"
+                (click)="selected(countries, item.id)"
+                >{{ item.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+
+          <ng-container *ngIf="tipo == 'municipios'">
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Departamentos</mat-label>
+              <mat-select
+                (selectionChange)="getStates($event.value)"
+                [(value)]="stateSelected"
+                required
+              >
+                <mat-option
+                  *ngFor="let item of states"
+                  [(value)]="item.id"
+                  (click)="selected(states, item.id); stateSelected = item.id"
+                  >{{ item.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>% de retención de productos</mat-label>
+              <input
+                matInput
+                type="number"
+                placeholder="Ingresa el porcentaje"
+                [(ngModel)]="percentage_product"
+                name="percentage_product"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>% de retención de servicios</mat-label>
+              <input
+                matInput
+                type="number"
+                placeholder="Ingresa el porcentaje"
+                [(ngModel)]="percentage_service"
+                name="percentage_service"
+                autocomplete="off"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Abreviatura</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa la abreviatura"
+                [(ngModel)]="abbreviation"
+                name="abbreviation"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </ng-container>
+
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Codigo DANE</mat-label>
+            <input
+              matInput
+              type="text"
+              name="dane_code"
+              autocomplete="off"
+              [(ngModel)]="dane_code"
+              placeholder="Ingrese el codigo DANE"
+              required
+            />
+          </mat-form-field>
+        </ng-container>
+
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Codigo DIAN</mat-label>
+          <input
+            matInput
+            type="text"
+            name="dian_code"
+            autocomplete="off"
+            [(ngModel)]="dian_code"
+            placeholder="Ingrese el codigo DIAN"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            name="name"
+            autocomplete="off"
+            [(ngModel)]="name"
+            placeholder="Ingrese el nombre"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button
+      *ngIf="tipo == 'paises'"
+      [disabled]="name == ''"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+    <button
+      *ngIf="tipo == 'departamentos'"
+      [disabled]="name == '' || countries.length == 0"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+    <button
+      *ngIf="tipo == 'municipios'"
+      [disabled]="name == '' || states.length == 0 || countries.length == 0"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #notDataCountry>
+  <app-not-data [loading]="loadingCountry"></app-not-data>
+</ng-template>
+
+<ng-template #notDataState>
+  <app-not-data [loading]="loadingState"></app-not-data>
+</ng-template>
+
+<ng-template #notDataMunicipality>
+  <app-not-data [loading]="loadingMunicipality"></app-not-data>
+</ng-template>
+
+<!-- <div *ngIf="tipo == 'ciudades' && countrySelected != 1">
+            <mat-form-field appearance="outline" class="col-md-12">
+              <mat-label>Departamentos</mat-label>
+              <mat-select
+                (selectionChange)="getStates($event.value)"
+                [(value)]="stateSelected"
+              >
+                <mat-option
+                  *ngFor="let item of states"
+                  [(value)]="item.id"
+                  (click)="selected(states, item.id)"
+                  >{{ item.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div> -->
+<!--     <button
+      *ngIf="tipo == 'ciudades'"
+      [disabled]="name == '' || states.length == 0 || countries.length == 0"
+      type="button"
+      (click)="save()"
+      class="btn btn-primary"
+    >
+      Guardar
+    </button> -->
+<!-- <ng-template #notDataCity>
+  <app-not-data [loading]="loadingCity"></app-not-data>
+</ng-template> -->
+
+<!-- <div *ngIf="tipo == 'ciudades' && countrySelected == 1">
+            <mat-form-field appearance="outline" class="col-md-12">
+              <mat-label>Departamentos</mat-label>
+              <mat-select
+                (selectionChange)="getStates($event.value)"
+                [(value)]="stateSelected"
+              >
+                <mat-option
+                  *ngFor="let item of states"
+                  [(value)]="item.id"
+                  (click)="
+                    selected(states, item.id); stateSelected = item.id
+                  "
+                  >{{ item.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-md-12">
+              <mat-label>Municipios</mat-label>
+              <mat-select
+                (selectionChange)="getMunicipalities($event.value)"
+                [(value)]="municipalitySelected"
+              >
+                <mat-option
+                  *ngFor="let item of municipalities"
+                  [(value)]="item.id"
+                  (click)="selected(municipalities, item.id)"
+                  >{{ item.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div> -->
+
+<!-- <div
         [ngClass]="{
           'col-lg-3': countrySelected == 1,
           'col-lg-4 mb-3': countrySelected != 1
@@ -323,242 +560,3 @@
           </ngb-pagination>
         </ul>
       </div> -->
-    </div>
-  </div>
-</div>
-
-<!-- <swal
-  #anulacion
-  title="Eliminando item. Presiona sí para continuar"
-  icon="warning"
-  showCancelButton="true"
-  confirmButtonText="Sí"
-  cancelButtonText="No"
-></swal>
-
-<swal #deleteSwal title="Item eliminado con éxito" icon="success"> </swal>
- -->
-<ng-template #add let-modal>
-  <div class="modal-header">
-    <h4 class="text-primary modal-title">Lista de {{ tipo }}</h4>
-    <button
-      type="button"
-      class="close"
-      data-dismiss="modal"
-      aria-label="Close"
-      (click)="_modal.close()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <form changeForm="ngForm">
-      <div class="row">
-        <ng-container *ngIf="tipo != 'paises'">
-          <mat-form-field appearance="outline" class="col">
-            <mat-label>Paises</mat-label>
-            <mat-select
-              (selectionChange)="getStates($event.value)"
-              [(value)]="countrySelected"
-              required
-            >
-              <mat-option
-                *ngFor="let item of countries"
-                [value]="item.id"
-                (click)="selected(countries, item.id)"
-                >{{ item.name }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-
-          <!-- <div *ngIf="tipo == 'ciudades' && countrySelected != 1">
-            <mat-form-field appearance="outline" class="col-md-12">
-              <mat-label>Departamentos</mat-label>
-              <mat-select
-                (selectionChange)="getStates($event.value)"
-                [(value)]="stateSelected"
-              >
-                <mat-option
-                  *ngFor="let item of states"
-                  [(value)]="item.id"
-                  (click)="selected(states, item.id)"
-                  >{{ item.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div> -->
-
-          <ng-container *ngIf="tipo == 'municipios'">
-            <mat-form-field appearance="outline" class="col">
-              <mat-label>Departamentos</mat-label>
-              <mat-select
-                (selectionChange)="getStates($event.value)"
-                [(value)]="stateSelected"
-                required
-              >
-                <mat-option
-                  *ngFor="let item of states"
-                  [(value)]="item.id"
-                  (click)="selected(states, item.id); stateSelected = item.id"
-                  >{{ item.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>% de retención de productos</mat-label>
-              <input
-                matInput
-                type="number"
-                placeholder="Ingresa el porcentaje"
-                [(ngModel)]="percentage_product"
-                name="percentage_product"
-                autocomplete="off"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>% de retención de servicios</mat-label>
-              <input
-                matInput
-                type="number"
-                placeholder="Ingresa el porcentaje"
-                [(ngModel)]="percentage_service"
-                name="percentage_service"
-                autocomplete="off"
-              />
-            </mat-form-field>
-          </ng-container>
-
-          <!-- <div *ngIf="tipo == 'ciudades' && countrySelected == 1">
-            <mat-form-field appearance="outline" class="col-md-12">
-              <mat-label>Departamentos</mat-label>
-              <mat-select
-                (selectionChange)="getStates($event.value)"
-                [(value)]="stateSelected"
-              >
-                <mat-option
-                  *ngFor="let item of states"
-                  [(value)]="item.id"
-                  (click)="
-                    selected(states, item.id); stateSelected = item.id
-                  "
-                  >{{ item.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="col-md-12">
-              <mat-label>Municipios</mat-label>
-              <mat-select
-                (selectionChange)="getMunicipalities($event.value)"
-                [(value)]="municipalitySelected"
-              >
-                <mat-option
-                  *ngFor="let item of municipalities"
-                  [(value)]="item.id"
-                  (click)="selected(municipalities, item.id)"
-                  >{{ item.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div> -->
-
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Codigo DANE</mat-label>
-            <input
-              matInput
-              type="text"
-              name="dane_code"
-              autocomplete="off"
-              [(ngModel)]="dane_code"
-              placeholder="Ingrese el codigo DANE"
-              required
-            />
-          </mat-form-field>
-        </ng-container>
-        <!--fin de ngId paises, departamento-->
-
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Codigo DIAN</mat-label>
-          <input
-            matInput
-            type="text"
-            name="dian_code"
-            autocomplete="off"
-            [(ngModel)]="dian_code"
-            placeholder="Ingrese el codigo DIAN"
-            required
-          />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input
-            matInput
-            type="text"
-            name="name"
-            autocomplete="off"
-            [(ngModel)]="name"
-            placeholder="Ingrese el nombre"
-            required
-          />
-        </mat-form-field>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
-      Cancelar
-    </button>
-    <button
-      *ngIf="tipo == 'paises'"
-      [disabled]="name == ''"
-      type="button"
-      (click)="save()"
-      class="btn btn-primary"
-    >
-      Guardar
-    </button>
-    <button
-      *ngIf="tipo == 'departamentos'"
-      [disabled]="name == '' || countries.length == 0"
-      type="button"
-      (click)="save()"
-      class="btn btn-primary"
-    >
-      Guardar
-    </button>
-    <button
-      *ngIf="tipo == 'municipios'"
-      [disabled]="name == '' || states.length == 0 || countries.length == 0"
-      type="button"
-      (click)="save()"
-      class="btn btn-primary"
-    >
-      Guardar
-    </button>
-    <!--     <button
-      *ngIf="tipo == 'ciudades'"
-      [disabled]="name == '' || states.length == 0 || countries.length == 0"
-      type="button"
-      (click)="save()"
-      class="btn btn-primary"
-    >
-      Guardar
-    </button> -->
-  </div>
-</ng-template>
-
-<ng-template #notDataCountry>
-  <app-not-data [loading]="loadingCountry"></app-not-data>
-</ng-template>
-
-<ng-template #notDataState>
-  <app-not-data [loading]="loadingState"></app-not-data>
-</ng-template>
-
-<ng-template #notDataMunicipality>
-  <app-not-data [loading]="loadingMunicipality"></app-not-data>
-</ng-template>
-
-<!-- <ng-template #notDataCity>
-  <app-not-data [loading]="loadingCity"></app-not-data>
-</ng-template> -->

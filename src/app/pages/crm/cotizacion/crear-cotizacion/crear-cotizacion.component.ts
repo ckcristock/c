@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Texteditor2Service } from 'src/app/pages/ajustes/informacion-base/services/texteditor2.service';
+import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 @Component({
   selector: 'app-crear-cotizacion',
   templateUrl: './crear-cotizacion.component.html',
@@ -52,36 +53,63 @@ export class CrearCotizacionComponent implements OnInit {
     private route: ActivatedRoute,
     private _terceros: TercerosService,
     public _texteditor: Texteditor2Service,
-  ) { }
-
-
-  ngOnInit(): void {
+    public _consecutivos: ConsecutivosService,
+  ) {
     this.path = this.route.snapshot.url[0].path;
+  }
+
+
+  async ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.id = params['id'];
+    })
     this.getCommercialTerms();
     this.getTRM();
     this.createForm();
-    this.getCities();
     this.getThirdParties();
     this.getBudgets();
-    switch (this.path) {
-      case 'crear':
-
-        break;
-      case 'editar':
-        this.route.params.subscribe(params => {
-          this.id = params['id'];
-          this.getQuotation(this.id, 'editar')
-        })
-        break;
-      case 'copiar':
-        this.route.params.subscribe(params => {
-          this.id = params['id'];
-          this.getQuotation(this.id, 'copiar')
-        })
-        break;
-      default:
-        break;
+    if (this.path != 'crear') {
+      this.getQuotation(this.id)
     }
+    await this.getCities();
+    this.getConsecutivo();
+  }
+
+  getConsecutivo() {
+    this._consecutivos.getConsecutivo('quotations').subscribe((r: any) => {
+      this.datos.CodigoFormato = r.data.format_code
+      this.form.patchValue({ format_code: this.datos.CodigoFormato })
+      if (this.path != 'editar') {
+        let con = this._consecutivos.construirConsecutivo(r.data);
+        this.datos.Codigo = con
+        this.form.patchValue({
+          code: con
+        })
+      } else {
+        this.datos.Codigo = this.quotation?.code
+        this.form.patchValue({
+          code: this.quotation?.code
+        })
+      }
+      if (this.path == 'copiar') {
+        let city = this.cities.find(x => x.value === this.form.controls.destinity_id.value)
+        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
+        this.datos.Codigo = con
+        this.form.patchValue({
+          code: con
+        })
+      }
+      if (r.data.city) {
+        this.form.get('destinity_id').valueChanges.subscribe(value => {
+          let city = this.cities.find(x => x.value === value)
+          let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
+          this.datos.Codigo = con
+          this.form.patchValue({
+            code: con
+          })
+        });
+      }
+    })
   }
 
   getThirdParties() {
@@ -99,7 +127,7 @@ export class CrearCotizacionComponent implements OnInit {
     })
   }
 
-  getQuotation(id, param) {
+  getQuotation(id) {
     this.loading = true;
     this._quotation.getQuotation(id).subscribe((res: any) => {
       this.quotation = res.data;
@@ -107,7 +135,7 @@ export class CrearCotizacionComponent implements OnInit {
       this.headerData.Fecha = res.data.created_at */
       this.loading = false;
       this.form.patchValue({
-        id: param == 'editar' ? res.data.id : '',
+        id: this.path == 'editar' ? res.data.id : '',
         money_type: res.data.money_type,
         date: res.data.date,
         customer_id: res.data.customer_id,
@@ -153,6 +181,8 @@ export class CrearCotizacionComponent implements OnInit {
       commercial_terms: [null, Validators.required],
       unit_value_prorrateado_cop: 0,
       unit_value_prorrateado_usd: 0,
+      format_code: [''],
+      code: ['']
     });
   }
 
@@ -251,8 +281,8 @@ export class CrearCotizacionComponent implements OnInit {
     })
   }
 
-  getCities() {
-    this._apuPieza.getCities().subscribe((r: any) => {
+  async getCities() {
+    await this._apuPieza.getCities().toPromise().then((r: any) => {
       this.cities = r.data;
     })
   }

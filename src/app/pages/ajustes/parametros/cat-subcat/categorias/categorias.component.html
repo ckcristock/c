@@ -5,8 +5,11 @@
         <h5 class="text-primary">Categorías</h5>
       </div>
       <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-primary btn-sm" (click)="openModal(add,'Agregar')">
+        <div class="btn-group rounded w-sm-100" *ngIf="!restriccionDesdeCatalogo">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openModal(add, 'Agregar')"
+          >
             <i class="fa fa-plus"></i>
             Agregar
           </button>
@@ -25,7 +28,7 @@
             <input
               type="text"
               [(ngModel)]="filters.nombre"
-              (input)="paginacion()"
+              (input)="getCategories()"
               matInput
               autocomplete="off"
               placeholder="Busca por nombre"
@@ -36,7 +39,7 @@
           <mat-form-field class="col" appearance="outline">
             <mat-label>Compra internacional</mat-label>
             <mat-select
-              (selectionChange)="paginacion()"
+              (selectionChange)="getCategories()"
               [(ngModel)]="filters.compraInternacional"
               matInput
               placeholder="Busca por compra internacional"
@@ -49,7 +52,7 @@
           <mat-form-field class="col" appearance="outline">
             <mat-label>Separación de categorias</mat-label>
             <mat-select
-              (selectionChange)="paginacion()"
+              (selectionChange)="getCategories()"
               [(ngModel)]="filters.separacionCategorias"
               matInput
               placeholder="Busca por separación de categorias"
@@ -69,6 +72,7 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
+            <th></th>
             <th>Nombre</th>
             <th>Compra internacional</th>
             <th>Separacion de categorias</th>
@@ -76,7 +80,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="text-center" [ngClass]="(categoria.Activo==0)?'text-danger':''" *ngFor="let categoria of categorias">
+          <tr
+            class="text-center"
+            [ngClass]="{
+              'text-danger': (categoria.Activo==0),
+              'font-weight-bold': (categoria.Fijo==1)
+            }"
+            *ngFor="let categoria of categorias"
+          >
+            <td><span class="badge badge-dark" *ngIf="categoria.Fijo==1">Fija</span></td>
             <td>{{ categoria.Nombre }}</td>
             <td>{{ categoria.Compra_Internacional }}</td>
             <td>{{ categoria.Aplica_Separacion_Categorias }}</td>
@@ -93,21 +105,23 @@
                   <a
                     class="dropdown-item text-info waves-light caja-botones"
                     role="button"
-                    (click)="EditarCategoria(categoria); openModal(add,'Editar')"
+                    (click)="openModal(add, 'Editar', categoria)"
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
-                  <a *ngIf="categoria.Activo==1"
+                  <a
+                    *ngIf="categoria.Activo == 1 && categoria.Fijo == 0 && !restriccionDesdeCatalogo"
                     class="dropdown-item text-danger waves-light caja-botones"
                     role="button"
-                    (click)="inOff(categoria.Id_Categoria_Nueva,0,$event)"
+                    (click)="inOff(categoria.Id_Categoria_Nueva, 0, $event)"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
                   >
-                  <a *ngIf="categoria.Activo==0"
+                  <a
+                    *ngIf="categoria.Activo == 0 && categoria.Fijo == 0 && !restriccionDesdeCatalogo"
                     class="dropdown-item text-primary waves-light caja-botones"
                     role="button"
-                    (click)="inOff(categoria.Id_Categoria_Nueva,1,$event)"
+                    (click)="inOff(categoria.Id_Categoria_Nueva, 1, $event)"
                   >
                     <i class="far fa-trash-alt"></i> Reactivar</a
                   >
@@ -124,7 +138,7 @@
       [collectionSize]="pagination.collectionSize"
       [pageSize]="pagination.pageSize"
       [(page)]="pagination.page"
-      (pageChange)="paginacion($event)"
+      (pageChange)="getCategories($event)"
       aria-label="Default pagination"
       maxSize="5"
       rotate="true"
@@ -141,15 +155,15 @@
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
-<ng-template #add let-modal>
+<ng-template #add let-modalCategoria>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">{{ title }} categoría</h4>
+    <h4 class="text-primary modal-title">{{ title }}</h4>
     <button
       type="button"
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="modalCategoria.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -158,24 +172,25 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Ingresa el nombre"
-            formControlName="Nombre"
-            required
-            autocomplete="off"
-          />
-        </mat-form-field>
+        <ng-container *ngIf="visible">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa el nombre"
+              formControlName="Nombre"
+              required
+              autocomplete="off"
+              [disabled]="restriccionDesdeCatalogo"
+            />
+          </mat-form-field>
+        </ng-container>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Compra internacional</mat-label>
           <mat-select
-            formControlName="compraInternacional"
-            matInput
-            required
-          >
+          formControlName="Compra_Internacional"
+          matInput required>
             <mat-option value="Si">Sí</mat-option>
             <mat-option value="No">No</mat-option>
           </mat-select>
@@ -183,15 +198,13 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Separación de categorias</mat-label>
           <mat-select
-            formControlName="separacionCategorias"
-            matInput
-            required
-          >
+          formControlName="Aplica_Separacion_Categorias"
+          matInput required>
             <mat-option value="Si">Sí</mat-option>
             <mat-option value="No">No</mat-option>
           </mat-select>
-        </mat-form-field><!--
-        <div class="col-md-12">
+        </mat-form-field>
+        <!-- <div class="col-md-12">
           <ng-select
             appearance="outline"
             [appendTo]="'body'"
@@ -206,20 +219,104 @@
           ></ng-select>
         </div> -->
       </div>
+      <div class="row justify-content-center" *ngIf="permission.permissions.approve_product_categories">
+        <div class="col-auto">
+          <mat-slide-toggle
+            color="primary"
+            formControlName="fijo">
+            Categoría fija
+          </mat-slide-toggle>
+        </div>
+      </div>
+      <div class="row d-flex justify-content-between">
+        <div class="col-md-6">
+          <span class="text-primary">Campos de la categoría</span>
+        </div>
+        <div class="col-md-6 text-right">
+          <div class="btn-group rounded w-sm-100 mat-form-field-wrapper">
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              (click)="newField()"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="line" />
+      <div class="row" formArrayName="dynamic">
+        <ng-container *ngIf="fieldDinamic.controls.length; else sinDatos">
+          <ng-container
+            *ngFor="let item of fieldDinamic.controls; let i = index"
+          >
+            <div class="col-md-11" [formGroupName]="i">
+              <div class="row">
+                <mat-form-field class="col-4" appearance="outline">
+                  <mat-label>Nombre</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Ingresa el nombre"
+                    formControlName="label"
+                    autocomplete="off"
+                    required
+                  />
+                </mat-form-field>
+                <mat-form-field class="col-4" appearance="outline">
+                  <mat-label>Tipo</mat-label>
+                  <mat-select formControlName="type" required>
+                    <mat-option value="number">Number</mat-option>
+                    <mat-option value="text">Text</mat-option>
+                    <mat-option value="date">Date</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-4" appearance="outline">
+                  <mat-label>Requerido</mat-label>
+                  <mat-select formControlName="required" required>
+                    <mat-option value="Si">Sí</mat-option>
+                    <mat-option value="No">No</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-1 d-flex justify-content-end align-items-center">
+              <div class="btn-group rounded w-sm-100 mat-form-field-wrapper">
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="deleteField(i, item)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="modalCategoria.close()">
       Cancelar
     </button>
     <button
       type="button"
       (click)="saveCategory()"
       class="btn btn-primary"
-      [disabled]="!form.valid"
+      [disabled]="form.invalid"
     >
       Guardar
     </button>
+  </div>
+</ng-template>
+
+<ng-template #sinDatos>
+  <div class="col-12">
+    <div class="alert alert-warning text-center" role="alert">
+      No hay campos agregados
+    </div>
   </div>
 </ng-template>
 <!--

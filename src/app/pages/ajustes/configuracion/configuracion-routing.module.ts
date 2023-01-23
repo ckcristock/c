@@ -9,6 +9,7 @@ import { DepartamentosMunicipiosComponent } from './departamentos-municipios/dep
 import { BaseCalculosComponent } from "./base-calculos/base-calculos.component";
 import { NominaComponent } from "./nomina/nomina.component";
 import { LocalidadesComponent } from "./localidades/localidades.component";
+import { ConsecutivosComponent } from "./consecutivos/consecutivos.component";
 
 
 
@@ -18,6 +19,7 @@ const routes : Routes = [
     { path: 'ubicaciones', component: LocalidadesComponent },
     { path: 'base-calculos', component: BaseCalculosComponent },
     { path: 'configuracion-nomina', component: NominaComponent },
+    { path: 'consecutivos', component: ConsecutivosComponent },
 ]
 
 

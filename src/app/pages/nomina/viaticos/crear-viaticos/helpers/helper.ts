@@ -1,4 +1,4 @@
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { taxiHelper } from './taxi';
 import { hospedajeHelper } from './hospedaje';
 import { transporteHelper } from './trasporte';
@@ -37,6 +37,7 @@ export const functions = {
     func = data.person;
     func.position = data.person.contractultimate.position.name;
     func.type = 'Funcionario';
+    console.log(func)
     return func;
   },
 

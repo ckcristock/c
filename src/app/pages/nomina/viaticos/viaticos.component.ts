@@ -94,13 +94,14 @@ export class ViaticosComponent implements OnInit {
   }
 
   changeState( viatico, state ) {
+    let status = state='Dehabilidato' ? 'Inactivo' : state
     let data = {
       id: viatico.id,
-      state
+      status
     }
     this._swal.show({
       title: '¿Estas Seguro?',
-      text: '¡El Viatico será aprobado',
+      text: '¡El Viatico será '+state+'!',
       icon: 'question',
       showCancel: true
     })
@@ -110,8 +111,8 @@ export class ViaticosComponent implements OnInit {
           this.getAll();
           this._swal.show({
             icon: 'success',
-            title: 'El Viatico Ha sido Aprobado!',
-            text: '¡Aprobado!',
+            title: 'El Viatico ha sido '+state+'!',
+            text: '¡'+state+'!',
             timer: 1000,
             showCancel: false
           })

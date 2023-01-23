@@ -27,6 +27,7 @@ export class VerViaticosComponent implements OnInit {
     this.viaticos$ = this._viaticosData.viaticos.subscribe((r) => {
       if (r) {
         this.data = r;
+        console.log(this.data)
       }
     });
 

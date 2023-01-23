@@ -76,7 +76,7 @@ import {
   MatTreeModule,
   MatListModule,
   MatBadgeModule,
-  MatButtonModule
+  MatButtonModule,
   MatTooltipModule
 } from '@angular/material';
 import { VerLiquidacionComponent } from './funcionarios/detalle-funcionario/ver-liquidacion/ver-liquidacion.component';

@@ -1,0 +1,125 @@
+<div class="row card-title d-flex justify-content-between">
+  <div class="col-lg-5 px-0">
+    <form [formGroup]="form">
+      <mat-form-field class="col px-0 edit pb-0" appearance="outline">
+        <mat-label>{{title}} alojamiento</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Ingresa el valor"
+          formControlName="name"
+          autocomplete="off"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="save()"
+          [disabled]="!form.valid"
+          [attr.aria-label]="'Guardar alojamiento'"
+        >
+          <mat-icon>save</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
+  </div>
+</div>
+<mat-accordion multi>
+  <mat-expansion-panel class="mat-elevation-z0">
+    <div class="row">
+      <mat-form-field class="col" appearance="outline">
+        <mat-label>Valor</mat-label>
+        <input
+          (input)="getValues($event)"
+          [(ngModel)]="filtro.value"
+          type="text"
+          matInput
+          placeholder="Busca por valor"
+        />
+      </mat-form-field>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+<div class="rounded-top table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    *ngIf="!loading && values.length > 0; else notData"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th scope="col">Valor</th>
+        <th scope="col">Fecha C.</th>
+        <th scope="col"><i class="mdi mdi-chevron-down"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let value of values"
+        class="text-center"
+        [ngClass]="{
+          'text-danger font-weight-bold': value.name === 'Inactivo'
+        }"
+      >
+        <td class="align-middle" scope="row" [ngClass]="{
+                  'text-success': value.deleted_at == undefined,
+                  'text-danger': value.deleted_at != undefined}"
+        >
+          {{ value.name }}
+        </td>
+        <td class="align-middle">{{ value.created_at | date }}</td>
+        <td class="align-middle">
+          <div ngbDropdown container="body" class="dropdown-primary">
+            <button
+              ngbDropdownToggle
+              class="btn btn-primary btn-sm waves-light"
+              type="button"
+            >
+              <i class="mdi mdi-chevron-down"></i>
+            </button>
+            <div ngbDropdownMenu>
+              <a
+                class="dropdown-item waves-light text-info caja-botones"
+                href="javascript: void(0);"
+                (click)="getValue(value)"
+              >
+                <i class="far fa-edit"></i> Editar</a
+              >
+              <a
+                *ngIf="value.deleted_at == undefined "
+                href="javascript: void(0);"
+                class="dropdown-item text-danger waves-light caja-botones"
+                (click)="anularOActivar(value, 'Inactivo')"
+              >
+                <i class="far fa-trash-alt"></i> Anular</a
+              >
+              <a
+                *ngIf="value.deleted_at != undefined "
+                href="javascript: void(0);"
+                class="dropdown-item text-success waves-light caja-botones"
+                (click)="anularOActivar(value, 'Activo')"
+              >
+                <i class="fas fa-check"></i> Activar</a
+              >
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ngb-pagination
+  class="d-flex justify-content-center pagination-rounded pagination-sm"
+  [collectionSize]="pagination.collectionSize"
+  (pageChange)="getValues($event)"
+  [pageSize]="pagination.pageSize"
+  [(page)]="pagination.page"
+  aria-label="Default pagination"
+  maxSize="5"
+  rotate="true"
+  ellipses="false"
+  boundaryLinks="true"
+>
+</ngb-pagination>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

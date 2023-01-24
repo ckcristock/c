@@ -12,7 +12,7 @@ export const othersHelper = {
       data.other.forEach((r) => {
         let group = fb.group({
           description: [r.description],
-          unit: [r.unit],
+          unit_id: [r.unit_id],
           amount: [r.amount],
           unit_cost: [r.unit_cost],
           total: [r.total]
@@ -26,7 +26,7 @@ export const othersHelper = {
   createOthersGroup(form: FormGroup, fb: FormBuilder) {
     let others = fb.group({
       description: [''],
-      unit: [''],
+      unit_id: [''],
       amount: [0],
       unit_cost: [0],
       total: [0]
@@ -58,7 +58,7 @@ export const othersHelper = {
 
   subtotalOthers(list: FormArray, form: FormGroup){
     setTimeout(() => {
-      let total = 
+      let total =
       list.value.reduce(
         (a, b) => {
           return  a + b.total
@@ -66,7 +66,7 @@ export const othersHelper = {
       );
       form.patchValue({
         others_subtotal: total
-      }) 
+      })
     }, 100);
   }
 };

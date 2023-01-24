@@ -156,8 +156,8 @@ export class CrearPresupuestoComponent implements OnInit {
   createForm() {
     this.forma = this.fb.group({
       id: (this.dataEdit && this.path == 'editar' ? this.dataEdit.id : ''),
-      customer_id: (this.dataEdit ? this.dataEdit.customer_id : ''),
-      destinity_id: (this.dataEdit ? this.dataEdit.destinity_id : ''),
+      customer_id: (this.dataEdit ? this.dataEdit.customer_id : null),
+      destinity_id: (this.dataEdit ? this.dataEdit.destinity_id : null),
       line: (this.dataEdit ? this.dataEdit.line : ''),
       trm: this.calculationBase.trm.value,
       project: (this.dataEdit ? this.dataEdit.project : ''),

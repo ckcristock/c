@@ -40,11 +40,13 @@ export const machineToolHelper = {
     machine.get('amount').valueChanges.subscribe(value => {
       let unit_cost = machine.get('unit_cost');
       let result = (typeof unit_cost.value == 'number' && typeof value == 'number' ? (unit_cost.value * value) : 0 )
+      console.log(typeof unit_cost.value, typeof value);
       machine.patchValue({ total: Math.round(result) })
     });
     machine.get('unit_cost').valueChanges.subscribe(value => {
       let amount = machine.get('amount');
       let result = (typeof amount.value == 'number' && typeof value == 'number' ? (value * amount.value) : 0 );
+      console.log(typeof amount.value, typeof value);
       machine.patchValue({
         total: Math.round(result)
       })

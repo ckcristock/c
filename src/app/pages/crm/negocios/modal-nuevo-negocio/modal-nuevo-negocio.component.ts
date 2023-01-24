@@ -188,7 +188,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
 
   createFormFiltersBudgets() {
     this.formFiltersBudgets = this.fb.group({
-      item: '',
+      code: '',
       date: '',
       customer: '',
       municipality_id: '',

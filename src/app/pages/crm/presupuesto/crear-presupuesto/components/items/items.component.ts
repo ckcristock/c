@@ -24,6 +24,7 @@ export class ItemsComponent implements OnInit {
   types = [
     { name: 'P', value: 'P' },
     { name: 'S', value: 'S' },
+    { name: 'C', value: 'C' },
   ];
   /*  indirectCosts: any[] */
 

@@ -7,6 +7,8 @@ import {
 export const piecesSetsHelper = {
 
   createFillInPiecesSets(form: FormGroup, fb: FormBuilder, data) {
+    console.log(data);
+
     if (data.setpartlist) {
       let list_pieces_sets = form.get('list_pieces_sets') as FormArray;
       data.setpartlist.forEach((r) => {
@@ -18,7 +20,7 @@ export const piecesSetsHelper = {
           amount: [r.amount],
           unit_cost: [r.unit_cost],
           total: [r.total],
-          description: []
+          description: [r.apu_type == 'P' ? r.apupart_th : r.apu_type == 'C' ? r.apuset_th : '']
         });
         this.subscribePiecesSets(group, form, list_pieces_sets);
         list_pieces_sets.push(group);
@@ -48,7 +50,7 @@ export const piecesSetsHelper = {
       ?
       group.patchValue({
         description: '',
-        apu_part_id: '',
+        apu_part_id: 0,
         unit: '',
         amount: 0,
         unit_cost: 0,
@@ -57,7 +59,7 @@ export const piecesSetsHelper = {
       :
       group.patchValue({
         description: '',
-        apu_set_child_id: '',
+        apu_set_child_id: 0,
         unit: '',
         amount: 0,
         unit_cost: 0,

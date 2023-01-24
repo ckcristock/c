@@ -152,7 +152,10 @@ export class CrearCotizacionComponent implements OnInit {
         total_usd: res.data.total_usd,
         commercial_terms: res.data.commercial_terms
       })
-      this.form.get('budget_included').disable()
+      if (res.data.budget_included == 'si') {
+        this.form.get('budget_included').disable()
+        this.form.get('budget').disable()
+      }
       res.data.items.forEach(element => {
         const action = element.sub_items.length > 0 ? 'subitems' : 'withSub';
         this.itemsQuotation.addItems(element, action);
@@ -233,7 +236,6 @@ export class CrearCotizacionComponent implements OnInit {
         })
         if (choice) {
           const action = choice === 'si' ? 'subitems' : 'withSub';
-          console.log(item)
           this.form.patchValue({ budget_id: this.form.controls.budget.value.id });
           this.form.controls.budget.disable();
           this.form.controls.budget_included.disable();

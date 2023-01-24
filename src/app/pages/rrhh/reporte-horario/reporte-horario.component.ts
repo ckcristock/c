@@ -19,15 +19,7 @@ export class ReporteHorarioComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   datePipe = new DatePipe('es-CO');
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
+
   loading = false;
   reporteHorarios: any[] = [];
   groupList: any[] = [];
@@ -38,6 +30,8 @@ export class ReporteHorarioComponent implements OnInit {
   date: any;
   firstDay = moment().format('YYYY-MM-DD');
   lastDay = moment().format('YYYY-MM-DD');
+  estadoFiltros = false;
+
   constructor(
     private _companies: CompanyService,
     private _grups: GroupService,
@@ -55,7 +49,12 @@ export class ReporteHorarioComponent implements OnInit {
     this.getDiaries();
     this.getPeople();
   }
-  estadoFiltros = false;
+
+  openClose(){
+    this.matPanel = !this.matPanel;
+    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
+  }
+
   mostrarFiltros(){
     this.estadoFiltros = !this.estadoFiltros
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { donutChart } from './data';
 import { ChartDataSets } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
@@ -9,8 +9,15 @@ import { GroupService } from '../../ajustes/informacion-base/services/group.serv
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { MatAccordion } from '@angular/material/expansion';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { DateAdapter } from 'saturn-datepicker';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { PermissionService } from 'src/app/core/services/permission.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PageEvent } from '@angular/material';
+import { HttpParams } from '@angular/common/http';
+import { debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'app-llegadas-tardes',
   templateUrl: './llegadas-tardes.component.html',
@@ -20,15 +27,12 @@ export class LlegadasTardesComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
   datePipe = new DatePipe('es-CO');
-  matPanel = false;
   donutChart = donutChart;
   group_id: any;
   people_id = '';
   dependency_id: any;
-  loading = false;
   donwloading = false;
-  date: any;
-  estadoFiltros = false;
+
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'Llegadas tardes' },
   ];
@@ -75,53 +79,155 @@ export class LlegadasTardesComponent implements OnInit {
 
   people: any[];
 
+  loading: boolean;
+  matPanel: boolean;
+  date: any;
+  estadoFiltros = false;
+  formFilters: FormGroup;
+  orderObj: any
+  active_filters: boolean = false
+  permission: Permissions = {
+    menu: 'Llegadas tarde',
+    permissions: {
+      show: true,
+      add: true
+    }
+  };
+  paginationMaterial: any;
+  pagination: any = {
+    page: '',
+    pageSize: '',
+  }
+
   constructor(
     private _lateArrivals: LateArrivalsService,
     private _companies: CompanyService,
     private _grups: GroupService,
     private _dependencies: DependenciesService,
     private _people: PersonService,
-    private dateAdapter: DateAdapter<any>
+    private dateAdapter: DateAdapter<any>,
+    private _permission: PermissionService,
+    private location: Location,
+    private fb: FormBuilder,
+    public router: Router,
+    private route: ActivatedRoute
   ) {
     this.dateAdapter.setLocale('es');
     this.getGroup();
     this.getPeople();
     this.getCompanies();
+    this.permission = this._permission.validatePermissions(this.permission);
   }
 
   ngOnInit() {
-    let fecha = new Date();
-    let hoy = fecha.toISOString().split('T')[0];
-    this.lastDay = hoy;
-    this.firstDay = new Date(fecha.setDate(fecha.getDate() - 2))
-      .toISOString()
-      .split('T')[0];
-    this.getLateArrivals();
-    this.getLinearDataset();
-    this.getStatisticsByDays();
+    if (this.permission.permissions.show){
+      this.createFormFilters();
+
+      this.route.queryParamMap.subscribe((params: any) => {
+        if (params.params.pageSize) {
+          this.pagination.pageSize = params.params.pageSize
+        } else {
+          this.pagination.pageSize = 10
+        }
+        if (params.params.pag) {
+          this.pagination.page = params.params.pag
+        } else {
+          this.pagination.page = 1
+        }
+        this.orderObj = { ...params.keys, ...params }
+        if (Object.keys(this.orderObj).length > 4) {
+          this.active_filters = true
+          const formValues = {};
+          for (const param in params) {
+            formValues[param] = params[param];
+          }
+          this.formFilters.patchValue(formValues['params']);
+        }
+        let fecha = new Date();
+        let hoy = fecha.toISOString().split('T')[0];
+        this.lastDay = hoy;
+        this.firstDay = new Date(fecha.setDate(fecha.getDate() - 2))
+          .toISOString()
+          .split('T')[0];
+        this.getLateArrivals();
+        this.getLinearDataset();
+        this.getStatisticsByDays();
+      })
+
+    }else{
+      this.router.navigate(['/notautorized']);
+    }
   }
 
-  mostrarFiltros() {
+/*   mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
-  }
+  } */
 
   openClose() {
     this.matPanel = !this.matPanel;
     this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
   }
 
-  selectedDate(fecha) {
-    if (fecha.value) {
-      this.firstDay = this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd');
-      this.lastDay = this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
-    } else {
-      this.firstDay = '';
-      this.lastDay = '';
-    }
-    this.filtrar();
+  handlePageEvent(event: PageEvent) {
+    this.pagination.pageSize = event.pageSize
+    this.pagination.page = event.pageIndex + 1
+    this.getLateArrivals()
   }
 
-  getData() { }
+  resetFiltros() {
+    for (const controlName in this.formFilters.controls) {
+      this.formFilters.get(controlName).setValue('');
+    }
+    this.active_filters = false
+  }
+
+  SetFiltros(paginacion) {
+    let params = new HttpParams;
+    params = params.set('pag', paginacion)
+    params = params.set('pageSize', this.pagination.pageSize)
+    for (const controlName in this.formFilters.controls) {
+      const control = this.formFilters.get(controlName);
+      if (control.value) {
+        params = params.set(controlName, control.value);
+      }
+    }
+    return params;
+  }
+
+  createFormFilters() {
+    this.formFilters = this.fb.group({
+      company_id: '',
+      group_id: '',
+      dependency_id: '',
+      people_id: '',
+      date_from: [moment().format('YYYY-MM-DD')],
+      date_to: [moment().format('YYYY-MM-DD')],
+      companyList: this.companyList,
+      groupList: this.groupList,
+      people: this.people,
+    })
+    this.formFilters.valueChanges.pipe(
+      debounceTime(500),
+    ).subscribe(r => {
+      this.getLateArrivals();
+    })
+    console.log('this.formFilters', this.formFilters);
+  }
+
+  selectedDate(fecha) {
+
+    if (fecha.value) {
+      this.formFilters.patchValue({
+        date_from: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
+        date_to: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+      })
+    } else {
+      this.formFilters.patchValue({
+        date_from: '',
+        date_to: ''
+      });
+    }
+  }
 
   filtrar() {
     this.getLateArrivals();
@@ -130,15 +236,39 @@ export class LlegadasTardesComponent implements OnInit {
   }
 
   getLateArrivals() {
-    let params = this.getParams();
     this.loading = true;
+    let params = {
+      ...this.pagination,
+      ...this.formFilters.value
+    }
+    var paramsurl = this.SetFiltros(this.pagination.page);
+    this.location.replaceState('/rrhh/llegadas-tarde', paramsurl.toString());
     this._lateArrivals
+      .getLateArrivalsPaginated(this.formFilters.value.date_from, this.formFilters.value.date_to, params)
+      .subscribe((res: any) => {
+        //debe ir al servicio paginado y no lo está desde el servicio
+      this.companies = res.data;
+      console.log('res',res);
+      console.log('data',res.data);
+      console.log('companies',this.companies);
+      this.loading = false;
+      this.paginationMaterial = res.data
+      if (this.paginationMaterial.last_page < this.pagination.page) {
+        this.paginationMaterial.current_page = 1
+        this.pagination.page = 1
+        this.getLateArrivals()
+      }
+      this.transformData();
+    })
+
+
+    //let params = this.getParams();
+    /* this._lateArrivals
       .getLateArrivals(this.firstDay, this.lastDay, params)
       .subscribe((r: any) => {
         this.companies = r.data
         this.loading = false;
-        this.transformData();
-      });
+      }); */
   }
 
   downloadLateArrivals() {

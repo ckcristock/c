@@ -108,8 +108,8 @@
                   formControlName="estado"
                   matInput
                   placeholder="Estado del producto"
-                  (selectionChange)="getProducts()"
-                >
+                ><!--
+                  (selectionChange)="getProducts()" -->
                   <mat-option value="">Todos</mat-option>
                   <mat-option
                     *ngFor="let estado of estados"
@@ -118,14 +118,19 @@
                   >
                 </mat-select>
               </mat-form-field>
-              <div class="col-auto">
-                <mat-slide-toggle
-                  color="primary"
-                  formControlName="Imagen"
-                >
-                  Con imagen
-                </mat-slide-toggle>
-              </div>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Imagen</mat-label>
+                <mat-select
+                  formControlName="imagen"
+                  matInput
+                  placeholder="Mostrar registros con imagen?"
+                ><!--
+                  (selectionChange)="getProducts()" -->
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option value="con">Mostrar con foto</mat-option>
+                  <mat-option value="sin">Mostrar sin foto</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </form>
         </mat-expansion-panel>
@@ -149,7 +154,7 @@
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
-                <th>Imagen</th>
+                <th class="col-1">Imagen</th>
                 <th>Nombre</th>
                 <th>Embalaje</th>
                 <th class="col-1"><i class="mdi mdi-chevron-down"></i></th>
@@ -161,15 +166,13 @@
                 *ngFor="let producto of Productos"
                 [ngClass]="{ 'text-danger': producto.Estado == 'Inactivo' }"
               >
-                <td class="align-middle">
-                  <div class="text-center">
-                    <img
-                      onerror="this.src='../../../../assets/images/not-available.png'"
-                      [src]="producto.Foto"
-                      class="img-rounded img-thumbnail img-fluid rounded mx-auto d-block mini-img"
-                      alt="Vista previa del producto"
-                    />
-                  </div>
+                <td class="align-middle p-0">
+                  <img
+                    onerror="this.src='../../../../assets/images/not-available.png'"
+                    [src]="producto.Foto"
+                    class="img-fluid img-product"
+                    alt="Vista previa del producto"
+                  />
                 </td>
                 <td class="align-middle">{{ producto.Nombre_Comercial }}</td>
                 <td class="align-middle">{{ producto.Embalaje }}</td>
@@ -191,6 +194,17 @@
                           (click)="openConfirm(add, 'Editar', producto)"
                         >
                           <i class="far fa-edit"></i> Editar
+                        </a>
+                        <a
+                          role="button"
+                          class="dropdown-item waves-light caja-botones"
+
+                          [routerLink]="[
+                            'ver',
+                            producto.Id_Producto
+                          ]"
+                        ><!-- (click)="openConfirm(detalleCatalogo, 'Detalle del', producto)" -->
+                          <i class="fa fa-file-invoice"></i> Ver detalle
                         </a>
                         <a
                           role="button"
@@ -438,9 +452,9 @@
   </div>
 </ng-template>
 
-<ng-template #add let-modalDetalleCatalogo>
+<ng-template #detalleCatalogo let-modalDetalleCatalogo>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">{{ title }} Producto</h4>
+    <h4 class="text-primary modal-title">{{ title }} producto</h4>
     <button
       type="button"
       class="close"
@@ -452,162 +466,20 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="formProductos">
-      <div class="row">
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input
-            type="text"
-            formControlName="Nombre_Comercial"
-            matInput
-            placeholder="Nombre del producto"
-            autocomplete="off"
-            required
-          />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Presentación</mat-label>
-          <input
-            type="text"
-            formControlName="Presentacion"
-            matInput
-            placeholder="Presentación del producto"
-            autocomplete="off"
-            required
-          />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Embalaje</mat-label>
-          <input
-            type="text"
-            formControlName="Embalaje"
-            matInput
-            placeholder="Embalaje"
-            autocomplete="off"
-            required
-          />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Codigo de barras</mat-label>
-          <input
-            type="text"
-            formControlName="Codigo_Barras"
-            matInput
-            placeholder="Codigo de barras"
-            autocomplete="off"
-            required
-          />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Unidad de medida</mat-label>
-          <mat-select
-            formControlName="Unidad_Medida"
-            matInput
-            placeholder="Unidad de medida"
-            required
-          >
-            <mat-option
-              *ngFor="let unidad of unidades_medida"
-              [value]="unidad.value"
-              >{{ unidad.text }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-        <div class="col align-items-center">
-          <input
-            hidden
-            (change)="onFileSelected($event)"
-            #photoInput
-            type="file"
-            id="file"
-            accept=".png, .jpg, .jpeg"
-            required
-          /><!--
-            formControlName="Foto" -->
-          <button
-            type="button"
-            mat-raised-button
-            class="my-1 w-100 bg-info"
-            (click)="photoInput.click()"
-          >
-            <span
-              data-toggle="tooltip"
-              data-placement="top"
-              [title]="foto.name || 'No ha seleccionado ningún archivo'"
-              class="text-white d-inline-block text-truncate"
-              >Cargar
-              <span *ngIf="foto.name || formProductos.value.Foto">nueva</span>
-              foto del producto.</span
-            >
-          </button>
-        </div>
+    <div class="row">
+      <div class="col-md-3">
+        <img class="img-rounded d-block rounded img-fluid"
+          onerror="this.src='../../../../assets/images/not-available.png'"
+          [src]="productoDetalle.Foto"
+          alt="Vista previa del producto"
+        >
       </div>
-      <hr class="line" />
-      <!-- <span class="text-primary">Campos de la subcategoría</span> -->
-      <ng-container
-        *ngIf="
-          campos.cat.length + campos.subcat.length > 0;
-          else notCatSubcatForm
-        "
-      >
-        <ng-container
-          formArrayName="FormCamposCategoria"
-          *ngIf="campos.cat.length > 0; else notCatForm"
-        >
-          <ng-container
-            *ngFor="let campoControl of arrayCamposCat.controls; let i = index"
-          >
-            <div class="row" [formGroupName]="i">
-              <ng-container *ngFor="let campo of campos.cat">
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>{{ campo.label }}</mat-label>
-                  <input
-                    type="{{ campo.type }}"
-                    formControlName="{{ campo.label }}"
-                    matInput
-                    placeholder=""
-                    autocomplete="off"
-                    [required]="campo.required == 'Si'"
-                  />
-                </mat-form-field>
-              </ng-container>
-            </div>
-          </ng-container>
-        </ng-container>
-        <ng-container
-          formArrayName="FormCamposSubcategoria"
-          *ngIf="campos.subcat.length > 0; else notSubcatForm"
-        >
-          <ng-container
-            *ngFor="
-              let campoControl of arrayCamposSubcat.controls;
-              let i = index
-            "
-          >
-            <div class="row" [formGroupName]="i">
-              <ng-container *ngFor="let campo of campos.subcat">
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>{{ campo.label }}</mat-label>
-                  <input
-                    type="{{ campo.type }}"
-                    formControlName="{{ campo.label }}"
-                    matInput
-                    placeholder=""
-                    autocomplete="off"
-                    [required]="campo.required == 'Si'"
-                  />
-                </mat-form-field>
-              </ng-container>
-            </div>
-          </ng-container>
-        </ng-container>
-      </ng-container>
-    </form>
+    </div>
   </div>
   <div class="modal-footer">
     <button
       type="button"
-      class="btn btn-danger"
+      class="btn btn-primary"
       (click)="modalDetalleCatalogo.close()"
     >
       Salir

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { CatalogoService } from '../../catalogo/catalogo.service';
 
 @Component({
   selector: 'app-producto',
@@ -9,19 +10,20 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./producto.component.scss']
 })
 export class ProductoComponent implements OnInit {
-  productover: any = {};
+  productoPorVer: any = {};
   public Actividades:any[]=[];
   public Mostrar=false;
-  constructor(private route: ActivatedRoute, private http: HttpClient ) { }
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private _catalogo: CatalogoService
+  ){}
 
   ngOnInit() {
     let id = this.route.snapshot.params["id"];
-    this.http.get(environment.ruta + 'php/productos/producto_ver.php', {
-      params: { id: id }
-    }).subscribe((data: any) => {
-      this.productover = data;
-     // console.log(this.productover);
-     
+    /* this.http.get(environment.ruta + 'php/productos/producto_ver.php', */
+    this._catalogo.getData({ params: { id: id }}).subscribe((data: any) => {
+      this.productoPorVer = data;
     });
     this.http.get(environment.ruta+'php/productos/actividades.php',{
       params : { id : id }

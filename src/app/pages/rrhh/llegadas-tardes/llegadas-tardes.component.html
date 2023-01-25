@@ -23,6 +23,7 @@
             <div class="col-md-2 mb-4" *ngIf="companyList.length > 1">
               <ng-select
                 [items]="companyList"
+                (change)="getCompanies()"
                 bindLabel="text"
                 bindValue="value"
                 appearance="outline"

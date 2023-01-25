@@ -18,6 +18,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PageEvent } from '@angular/material';
 import { HttpParams } from '@angular/common/http';
 import { debounceTime } from 'rxjs/operators';
+import { User } from 'src/app/core/models/users.model';
+import { UserService } from 'src/app/core/services/user.service';
 @Component({
   selector: 'app-llegadas-tardes',
   templateUrl: './llegadas-tardes.component.html',
@@ -29,7 +31,7 @@ export class LlegadasTardesComponent implements OnInit {
   datePipe = new DatePipe('es-CO');
   donutChart = donutChart;
   group_id: any;
-  people_id = '';
+  people_id: any;
   dependency_id: any;
   donwloading = false;
 
@@ -98,6 +100,7 @@ export class LlegadasTardesComponent implements OnInit {
     page: '',
     pageSize: '',
   }
+  user: User;
 
   constructor(
     private _lateArrivals: LateArrivalsService,
@@ -105,13 +108,16 @@ export class LlegadasTardesComponent implements OnInit {
     private _grups: GroupService,
     private _dependencies: DependenciesService,
     private _people: PersonService,
+
     private dateAdapter: DateAdapter<any>,
     private _permission: PermissionService,
     private location: Location,
     private fb: FormBuilder,
     public router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _user: UserService,
   ) {
+    this.user = _user.user;
     this.dateAdapter.setLocale('es');
     this.getGroup();
     this.getPeople();
@@ -135,6 +141,7 @@ export class LlegadasTardesComponent implements OnInit {
           this.pagination.page = 1
         }
         this.orderObj = { ...params.keys, ...params }
+
         if (Object.keys(this.orderObj).length > 4) {
           this.active_filters = true
           const formValues = {};
@@ -143,12 +150,12 @@ export class LlegadasTardesComponent implements OnInit {
           }
           this.formFilters.patchValue(formValues['params']);
         }
-        let fecha = new Date();
-        let hoy = fecha.toISOString().split('T')[0];
-        this.lastDay = hoy;
+
+        /* let fecha = new Date();
+        this.lastDay = fecha.toISOString().split('T')[0]; //pendiente revisar la funcionalidad y usar las fechas de el formulario de filtros
         this.firstDay = new Date(fecha.setDate(fecha.getDate() - 2))
           .toISOString()
-          .split('T')[0];
+          .split('T')[0]; */
         this.getLateArrivals();
         this.getLinearDataset();
         this.getStatisticsByDays();
@@ -158,10 +165,6 @@ export class LlegadasTardesComponent implements OnInit {
       this.router.navigate(['/notautorized']);
     }
   }
-
-/*   mostrarFiltros() {
-    this.estadoFiltros = !this.estadoFiltros
-  } */
 
   openClose() {
     this.matPanel = !this.matPanel;
@@ -196,26 +199,30 @@ export class LlegadasTardesComponent implements OnInit {
 
   createFormFilters() {
     this.formFilters = this.fb.group({
-      company_id: '',
-      group_id: '',
-      dependency_id: '',
-      people_id: '',
-      date_from: [moment().format('YYYY-MM-DD')],
-      date_to: [moment().format('YYYY-MM-DD')],
-      companyList: this.companyList,
-      groupList: this.groupList,
-      people: this.people,
+      company_id: [1],
+      group_id: [''],
+      dependency_id: [''],
+      people_id: [''],
+      date_from: [''],
+      date_to: [''],
     })
     this.formFilters.valueChanges.pipe(
       debounceTime(500),
     ).subscribe(r => {
       this.getLateArrivals();
     })
-    console.log('this.formFilters', this.formFilters);
+    this.formFilters.get('group_id').valueChanges.subscribe((valor) => {
+      if (valor) {
+        this.formFilters.get('dependency_id').enable();
+        this.getDependencies(valor);
+      } else {
+        this.formFilters.patchValue({ dependency_id: 0 });
+        this.formFilters.get('dependency_id').disable();
+      }
+    });
   }
 
   selectedDate(fecha) {
-
     if (fecha.value) {
       this.formFilters.patchValue({
         date_from: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
@@ -229,12 +236,6 @@ export class LlegadasTardesComponent implements OnInit {
     }
   }
 
-  filtrar() {
-    this.getLateArrivals();
-    this.getStatisticsByDays();
-    this.getLinearDataset()
-  }
-
   getLateArrivals() {
     this.loading = true;
     let params = {
@@ -243,48 +244,50 @@ export class LlegadasTardesComponent implements OnInit {
     }
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/rrhh/llegadas-tarde', paramsurl.toString());
+    const fecha_ini = this.formFilters.controls.date_from.value == ''
+                        ? moment().format('YYYY-MM-DD')
+                        : this.formFilters.controls.date_from.value
+    const fecha_fin = this.formFilters.controls.date_to.value == ''
+                        ? moment().format('YYYY-MM-DD')
+                        : this.formFilters.controls.date_to.value
     this._lateArrivals
-      .getLateArrivalsPaginated(this.formFilters.value.date_from, this.formFilters.value.date_to, params)
+      .getLateArrivalsPaginated(fecha_ini, fecha_fin, params)
       .subscribe((res: any) => {
         //debe ir al servicio paginado y no lo está desde el servicio
-      this.companies = res.data;
-      console.log('res',res);
-      console.log('data',res.data);
-      console.log('companies',this.companies);
-      this.loading = false;
-      this.paginationMaterial = res.data
-      if (this.paginationMaterial.last_page < this.pagination.page) {
-        this.paginationMaterial.current_page = 1
-        this.pagination.page = 1
-        this.getLateArrivals()
-      }
-      this.transformData();
-    })
-
-
-    //let params = this.getParams();
-    /* this._lateArrivals
-      .getLateArrivals(this.firstDay, this.lastDay, params)
-      .subscribe((r: any) => {
-        this.companies = r.data
+        this.companies = res.data;
         this.loading = false;
-      }); */
+        this.paginationMaterial = res.data
+        if (this.paginationMaterial.last_page < this.pagination.page) {
+          this.paginationMaterial.current_page = 1
+          this.pagination.page = 1
+          this.getLateArrivals()
+        }
+        this.transformData();
+    })
   }
 
   downloadLateArrivals() {
-    let params = this.getParams();
+    let params = this.SetFiltros(this.pagination.page);
     this.donwloading = true;
-    this._lateArrivals.downloadLateArrivals(this.firstDay, this.lastDay, params).subscribe((response: BlobPart) => {
-      let blob = new Blob([response], { type: 'application/excel' });
-      let link = document.createElement('a');
-      const filename = 'reporte_llegadas_tarde';
-      link.href = window.URL.createObjectURL(blob);
-      link.download = `${filename}.xlsx`;
-      link.click();
-      this.donwloading = false;
-    }),
+    const fecha_ini = this.formFilters.controls.date_from.value == ''
+                        ? moment().format('YYYY-MM-DD')
+                        : this.formFilters.controls.date_from.value
+    const fecha_fin = this.formFilters.controls.date_to.value == ''
+                        ? moment().format('YYYY-MM-DD')
+                        : this.formFilters.controls.date_to.value
+    this._lateArrivals
+      .downloadLateArrivals(fecha_ini, fecha_fin, params)
+      .subscribe((response: BlobPart) => {
+        let blob = new Blob([response], { type: 'application/excel' });
+        let link = document.createElement('a');
+        const filename = 'reporte_llegadas_tarde';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.xlsx`;
+        link.click();
+        this.donwloading = false;
+      }),
       (error) => {
-        console.log('Error downloading the file');
+        console.log('Error downloading the file', error);
         this.donwloading = false;
       },
       () => {
@@ -301,15 +304,10 @@ export class LlegadasTardesComponent implements OnInit {
   }
 
   getCompanies() {
-    this._companies.getCompanies().subscribe((r: any) => {
-      this.companyList = r.data;
-      if (this.companyList.length > 1) {
-        this.companyList.unshift({ text: 'Todas', value: '0' });
-        this.company_id = 0;
-      } else {
-        this.company_id = this.companyList[0].value;
-      }
-    });
+    //no necesito consultar las companies porque se encuentran en el servicio de user,
+    //solo las formateo para que puedan ser mostradas en el select
+    this.companyList = this.user.person.companies.map((ele)=>({ value: ele.id, text: ele.short_name }))
+    this.company_id = 1;
   }
 
   getGroup() {
@@ -324,17 +322,13 @@ export class LlegadasTardesComponent implements OnInit {
   getDependencies(group_id) {
     this._dependencies.getDependencies({ group_id }).subscribe((r: any) => {
       this.dependencyList = r.data;
-      this.addElement();
+      this.dependencyList.unshift({ value: 0, text: 'Todos' });
+      this.dependency_id = 0;
     });
   }
 
-  addElement() {
-    this.dependencyList.unshift({ value: 0, text: 'Todas' });
-    this.dependency_id = 0;
-  }
-
   getLinearDataset() {
-    let params = this.getParams();
+    let params = this.SetFiltros(this.pagination.page);
     let fecha_inicio = moment().subtract(15, 'days').format('YYYY-MM-DD');
     let fecha_final = moment().format('YYYY-MM-DD');
     this._lateArrivals
@@ -342,15 +336,6 @@ export class LlegadasTardesComponent implements OnInit {
       .subscribe((r: any) => {
         this.getLast15Days(r.data.lates);
       });
-  }
-
-  getParams() {
-    let params: any = {};
-    this.company_id != '0' && this.company_id ? (params.company_id = this.company_id) : '';
-    this.group_id && this.group_id != '0' ? (params.group_id = this.group_id) : '';
-    this.dependency_id != '0' && this.dependency_id ? (params.dependency_id = this.dependency_id) : '';
-    this.people_id != '0' && this.people_id ? (params.person_id = this.people_id) : '';
-    return params;
   }
 
   getLast15Days(lates: any[]) {
@@ -364,29 +349,40 @@ export class LlegadasTardesComponent implements OnInit {
       this.lineChartLabels.unshift(day);
     }
   }
+
   getStatisticsByDays() {
-    let params: any = this.getParams();
+    let params: any = this.SetFiltros(this.pagination.page);
     params.type = 'diary';
+    const fecha_ini = this.formFilters.controls.date_from.value == ''
+                        ? moment().format('YYYY-MM-DD')
+                        : this.formFilters.controls.date_from.value
+    const fecha_fin = this.formFilters.controls.date_to.value == ''
+                        ? moment().format('YYYY-MM-DD')
+                        : this.formFilters.controls.date_to.value
     this._lateArrivals
-      .getStatistcs(this.firstDay, this.lastDay, params)
+      .getStatistcs(fecha_ini, fecha_fin, params)
       .subscribe((r: any) => {
-        //console.log(r.data)
-        this.dataDiary.total = r.data.lates.total;
-        if (r.data.lates.time_diff_total != null) {
-          this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
+        if (r.data.lates.length>0) {
+          this.dataDiary.total = r.data.lates.total;
+          if (r.data.lates.time_diff_total != null) {
+            this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
+          }
+          this.dataDiary.percentage = r.data.percentage;
+          console.log('r', r);
+          //let d = r.data?.lates?.allByDependency.reduce(
+          let d = r.data.lates.reduce(
+            (acc, el) => {
+              return {
+                labels: [...acc.labels, el.day],
+                datasets: [...acc.datasets, el.total],
+              };
+            },
+            { labels: [], datasets: [] }
+          );
+          console.log('d', d);
+          this.donutChart.datasets[0].data = d.datasets;
+          this.donutChart.labels = d.labels;
         }
-        this.dataDiary.percentage = r.data.percentage;
-        let d = r.data.allByDependency.reduce(
-          (acc, el) => {
-            return {
-              labels: [...acc.labels, el.name],
-              datasets: [...acc.datasets, el.total],
-            };
-          },
-          { labels: [], datasets: [] }
-        );
-        this.donutChart.datasets[0].data = d.datasets;
-        this.donutChart.labels = d.labels;
       });
   }
 

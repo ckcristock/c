@@ -43,7 +43,6 @@ export class GetApusComponent implements OnInit {
     private _apu: ApusService
   ) { }
   ngOnInit(): void {
-    console.log(this.filter)
     this.href = (this.platformLocation as any).location.origin
   }
 
@@ -69,6 +68,7 @@ export class GetApusComponent implements OnInit {
     this.modal.show();
     this.getApus()
   }
+
   getApus(page = 1) {
     this.pagination.page = page;
     let params = {
@@ -82,7 +82,6 @@ export class GetApusComponent implements OnInit {
   }
 
   openNewTab(type, id) {
-    console.log(type)
     /*  *ngIf="apu.type=='apu_part'">
                                 <a [routerLink]="['crm/apu/ver-apu-pieza',1]"  */
     let uri = ''
@@ -116,7 +115,6 @@ export class GetApusComponent implements OnInit {
 
   send() {
     this.sendApus.emit(this.state)
-    //this.modal.hide();
     this.modalService.dismissAll();
   }
 }

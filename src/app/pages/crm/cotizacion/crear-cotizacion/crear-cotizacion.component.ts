@@ -290,6 +290,7 @@ export class CrearCotizacionComponent implements OnInit {
   }
 
   save() {
+    console.log(this.form.value);
     if (this.form.valid) {
       this._swal.show({
         title: '¿Estás seguro(a)?',

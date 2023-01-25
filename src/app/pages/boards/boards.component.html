@@ -1,38 +1,12 @@
 <div *ngIf="!loading; else notData">
-  <ng-container *ngIf="board == 0 || !board">
-    <app-building></app-building>
-  </ng-container>
-
-  <ng-container *ngIf="board == 1">
-    <div class="card">
-      <div class="card-body">
-        <app-board-rrhh></app-board-rrhh>
-      </div>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="board == 2">
-    <div class="card">
-      <div class="card-body">
-        <app-board-nomina></app-board-nomina>
-      </div>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="board == 3">
-    <div class="card">
-      <div class="card-body">
-        <app-board-contabilidad></app-board-contabilidad>
-      </div>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="board == 4">
-    <app-building></app-building>
-  </ng-container>
-  <ng-container *ngIf="board == 5">
-    <div class="card">
-      <div class="card-body">
-        <app-board-jefe-bodega></app-board-jefe-bodega>
-      </div>
-    </div>
+  <ng-container [ngSwitch]="board">
+    <app-building *ngSwitchDefault></app-building>
+    <app-board-rrhh *ngSwitchCase="1"></app-board-rrhh>
+    <app-board-nomina *ngSwitchCase="2"></app-board-nomina>
+    <app-board-contabilidad *ngSwitchCase="3"></app-board-contabilidad>
+    <app-building *ngSwitchCase="4"></app-building>
+    <app-board-jefe-bodega *ngSwitchCase="5"></app-board-jefe-bodega>
+    <app-board-jefe-ingenieria *ngSwitchCase="6"></app-board-jefe-ingenieria>
   </ng-container>
 </div>
 

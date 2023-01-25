@@ -65,6 +65,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
   formProductos: FormGroup;
   productoDetalle: any = {};
   filtroDefault: any = {};
+  productoDefault: any = {};
   active = 1;
   loadingCategorias: boolean = false;
   loadingProductos: boolean = false;
@@ -206,6 +207,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       FormCamposCategoria: this.fb.array([]),
       FormCamposSubcategoria: this.fb.array([])
     });
+
   }
 
   get arrayCamposCat() {
@@ -281,9 +283,10 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
         Foto: data.Foto
       });
       params={ producto:data.Id_Producto };
-    }else if(titulo == "Detalle del"){
+    }/* else if(titulo == "Detalle del"){
       this.productoDetalle = data;
-    }
+    } */
+
     this.mostrarCampos(params,["cat","subcat"],confirm);
   }
 

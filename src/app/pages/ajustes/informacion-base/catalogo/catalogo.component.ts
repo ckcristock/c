@@ -66,6 +66,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
   productoDetalle: any = {};
   filtroDefault: any = {};
   productoDefault: any = {};
+  camposFlag: any = {};
   active = 1;
   loadingCategorias: boolean = false;
   loadingProductos: boolean = false;
@@ -246,6 +247,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
           this.newCampoCatSubcat(tipo);
         });
         if(template != undefined){
+          this.camposFlag={cat:this.campos.cat.length, subcat:this.campos.subcat.length }
           this._modalCatalogo.open(template, 'lg');
         }
     });
@@ -414,7 +416,14 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       delete this.formProductos.value.FormCamposCategoria;
       delete this.formProductos.value.FormCamposSubcategoria;
 
-      let formData = {...this.formProductos.value };
+      let formData = {
+        ...this.formProductos.value,
+        user_id: this._user.user.id,
+        camposFlag:{
+          cat:(this.campos.cat.length>this.camposFlag.cat),
+          subcat:(this.campos.subcat.length>this.camposFlag.subcat)
+        }
+      };
 
       formData["Foto"] = { ...this.foto };
       delete formData.string;

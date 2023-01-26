@@ -2,7 +2,14 @@
   <div class="col-md-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-primary">Por asignar</h5>
+        <div class="row d-flex justify-content-between">
+          <h5 class="col card-title text-primary">Por asignar</h5>
+          <div class="col text-right">
+            <span class="badge badge-pill badge-warning">{{
+              work_orders.length
+            }}</span>
+          </div>
+        </div>
         <hr class="line" />
         <div class="d-flex justify-content-end mb-1">
           <small
@@ -61,8 +68,143 @@
   <div class="col-md-8">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center text-primary">Seguimiento</h5>
-        <p class="card-text">Content</p>
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h5 class="text-primary card-title">
+              Seguimiento
+              <span style="font-size: smaller" *ngIf="paginationMaterial"
+                ><small class="pb-2 text-secondary text-muted"
+                  >pág. {{ paginationMaterial.current_page }}</small
+                ></span
+              >
+            </h5>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button class="btn btn-info btn-sm" (click)="openClose()">
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr class="line" />
+        <mat-expansion-panel
+          #matPanel="matExpansionPanel"
+          class="mat-elevation-z0"
+        >
+          <ng-container [formGroup]="formFilters">
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Código</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="code"
+                  autocomplete="off"
+                  placeholder="Busca por código"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="status">
+                  <mat-option value="">Todas</mat-option>
+                  <mat-option value="pendiente">Pendiente</mat-option>
+                  <mat-option value="proceso">En proceso</mat-option>
+                  <mat-option value="completado">Completado</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </ng-container>
+        </mat-expansion-panel>
+        <div class="alert alert-info" *ngIf="active_filters" role="alert">
+          <strong
+            >Hay filtros de búsqueda activos, para mostrar todos los resultados
+            haz click
+          </strong>
+          <a
+            href="javascript: void(0)"
+            (click)="resetFiltros()"
+            class="alert-link"
+            >aquí</a
+          >
+        </div>
+        <ng-container
+          *ngIf="
+            !loading_assigned && work_orders_assigned.length > 0;
+            else notDataAssigned
+          "
+        >
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th scope="col">Código</th>
+                  <th scope="col">Tiempo previsto</th>
+                  <th scope="col">Asignada a</th>
+                  <th scope="col">Transcurrido</th>
+                  <th scope="col">Estado</th>
+                  <th><i class="mdi mdi-chevron-down"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="text-center"
+                  *ngFor="let item of work_orders_assigned"
+                >
+                  <td>{{ item.work_order.code }}</td>
+                  <td>{{ item.hours }}h. {{ item.minutes }}m.</td>
+                  <td>{{ item.person.person }}</td>
+                  <td>{{ item.duration || "Espera..." }}</td>
+                  <td>
+                    <span
+                      class="badge"
+                      [class]="
+                        item.status == 'pendiente'
+                          ? 'badge-danger'
+                          : item.status == 'proceso'
+                          ? 'badge-warning'
+                          : item.status == 'completado'
+                          ? 'badge-success'
+                          : ''
+                      "
+                      >{{ item.status | titlecase }}</span
+                    >
+                  </td>
+                  <td>
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm waves-light"
+                        type="button"
+                      >
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item waves-light text-success caja-botones"
+                          href="javascript: void(0);"
+                          [routerLink]="['/manufactura/ingenieria/ver', item.id]"
+                        >
+                          <i class="fas fa-eye"></i> Ver</a
+                        >
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <mat-paginator
+            *ngIf="paginationMaterial"
+            [length]="paginationMaterial.total"
+            [pageSize]="paginationMaterial.per_page"
+            [pageIndex]="paginationMaterial.current_page - 1"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            (page)="handlePageEvent($event)"
+            aria-label="Select page"
+          >
+          </mat-paginator>
+        </ng-container>
       </div>
     </div>
   </div>
@@ -71,10 +213,13 @@
 <ng-template #notData>
   <app-not-data [loading]="loading_stage"></app-not-data>
 </ng-template>
+<ng-template #notDataAssigned>
+  <app-not-data [loading]="loading_assigned"></app-not-data>
+</ng-template>
 
 <ng-template #forStageModal let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Asignar orden de trabajo</h4>
+    <h4 class="text-primary modal-title">Asignar orden de producción</h4>
     <button
       type="button"
       class="close"

@@ -15,6 +15,10 @@ export class OrdenesProduccionService {
     return this.http.get(`${environment.base_url}/paginate-work-orders`, { params });
   }
 
+  getWorkOrdersEngineering(params = {}) {
+    return this.http.get(`${environment.base_url}/woe-paginate`, { params });
+  }
+
   getForStage(params = {}) {
     return this.http.get(`${environment.base_url}/get-wo-for-stage`, { params });
   }
@@ -38,4 +42,6 @@ export class OrdenesProduccionService {
   assignEngineering (data) {
     return this.http.post(`${environment.base_url}/work-orders-engineering`, data)
   }
+
+
 }

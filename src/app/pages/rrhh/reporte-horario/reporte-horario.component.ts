@@ -193,7 +193,6 @@ export class ReporteHorarioComponent implements OnInit {
     }
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/rrhh/turnos/reporte', paramsurl.toString());
-    console.log('from', this.formFilters.controls.date_from.value);
     const fecha_ini = this.formFilters.controls.date_from.value == ''
                         ? moment().format('YYYY-MM-DD')
                         : this.formFilters.controls.date_from.value
@@ -241,6 +240,7 @@ export class ReporteHorarioComponent implements OnInit {
   get turn_type_value() {
     return this.formFilters.get('turn_type').value;
   }
+
   donwloading = false;
   download() {
     const fecha_ini = this.formFilters.controls.date_from.value == ''
@@ -264,6 +264,7 @@ export class ReporteHorarioComponent implements OnInit {
         this.donwloading = false;
       }),
       (error) => {
+        console.log('Error downloading the file', error);
         this.donwloading = false;
       },
       () => {

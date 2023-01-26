@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import * as moment from 'moment';
 import { AsignacionTurnosService } from '../asignacion-turnos.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
@@ -16,6 +16,7 @@ export class SemanaTurnoComponent implements OnInit {
   @Input('changeWeek') changeWeek: EventEmitter<any>;
   masiveTurnId: any = {};
   diaInicialSemana: any;
+  diaFinalSemana: any;
   diasSemana: any[] = [];
   horariosExistentes: any[] = [];
   turnos: any[] = [];
@@ -25,14 +26,19 @@ export class SemanaTurnoComponent implements OnInit {
     private _swal: SwalService
   ) {}
 
-  ngOnInit(): void {
-    this.changeWeek.subscribe((d: any) => {
+  async ngOnInit() {
+    this.changeWeek.subscribe(async (d: any) => {
       this.diasSemana = [];
       this.diaFinal = d.diaFinalSemana;
       this.diaInicial = d.diaInicialSemana;
       this.diaInicialSemana = this.diaInicial;
+      this.diaFinalSemana = this.diaFinal;
       this.turnos = this.turnosRotativos.data;
-      this.fillDiasSemana();
+      await this.fillDiasSemana();
+      setTimeout(() =>{
+        this.loading = false; //sí, me quedó grande
+      }, 1000)
+      //this.loading = false; //sí, me quedó grande
     });
   }
   checkAll(ev) {
@@ -84,23 +90,25 @@ export class SemanaTurnoComponent implements OnInit {
       });
     }
   }
-  fillDiasSemana() {
+  loading: boolean;
+  async fillDiasSemana() {
+    this.loading = true;
     this.diaInicialSemana.locale('es');
-    while (this.diaInicialSemana < this.diaFinal) {
-      let dia = this.diaInicialSemana.format('dddd');
+    while (this.diaInicial <= this.diaFinal) {
+      let dia = this.diaInicial.format('dddd');
 
       let pur = {
         dia,
-        fecha: this.diaInicialSemana.format('YYYY-MM-DD'),
+        fecha: this.diaInicial.format('YYYY-MM-DD'),
         color: dia == 'domingo' ? 'black' : '#9da4ad',
         turno: dia == 'domingo' ? 0 : 'seleccione',
       };
 
       this.diasSemana.push(pur);
-      this.diaInicialSemana = moment(this.diaInicialSemana).add(1, 'd');
+      this.diaInicial = moment(this.diaInicial).add(1, 'd');
     }
 
-    this.people.forEach((p, i) => {
+    await this.people.forEach((p, i) => {
       let sem = [...this.diasSemana];
       p.diasSemana = [];
       p.diasSemana = sem.map((acc) => {

@@ -205,6 +205,7 @@ export class LlegadasTardesComponent implements OnInit {
       people_id: [''],
       date_from: [''],
       date_to: [''],
+      date: [{begin: new Date(2018, 7, 5), end: new Date(2018, 7, 25)}]
     })
     this.formFilters.valueChanges.pipe(
       debounceTime(500),
